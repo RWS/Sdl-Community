@@ -1,0 +1,960 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.Settings</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.Settings.AbstractSettingsPage">
+            <summary>
+            Abstract base representing an page that can configure settings within an application.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.ISettingsPage">
+            <summary>
+            Represents a settings page, which is displayed in the settings dialog.
+            </summary>
+            <remarks>You can add a new settings page, by extending the <see cref="T:Sdl.Core.Settings.AbstractSettingsPage"/> class.</remarks>
+            <seealso cref="T:Sdl.Core.Settings.AbstractSettingsPage"/>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.GetControl">
+            <summary>
+            Called by the framework to retrieve the control that displays the user interface for the
+            settings page.
+            </summary>
+            <remarks>
+            <para>
+            The implementation should initialize the control from the settings.
+            </para>
+            </remarks>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.OnActivate">
+            <summary>
+            Called when this settings page is activated.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.OnDeactivate">
+            <summary>
+            Called when this settings page is deactivated.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.ValidateInput">
+            <summary>
+            Returns true if the input on this settings page is valid.
+            </summary>
+            <remarks>This method is called when navigating away from a page and before <see cref="M:Sdl.Core.Settings.ISettingsPage.Save"/> is called.</remarks>
+            <returns>True if the input on this settings page is valid.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.Save">
+            <summary>
+            Called when settings should be saved. The implementation is responsible for persisting the settings.
+            </summary>
+            <remarks>This method is called once, after <see cref="M:Sdl.Core.Settings.ISettingsPage.ValidateInput"/> has been called.</remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.AfterSave">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been saved.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.Cancel">
+            <summary>
+            Called when the settings dialog is canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.AfterCancel">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsPage.ResetToDefaults">
+            <summary>
+            Called to reset settings to default values. The implementation is responsible for
+            resetting the settings and updating the user interface accordingly.
+            </summary>
+            <remarks>
+            <para>
+            This method should not save the settings yet. This should be done in <see cref="M:Sdl.Core.Settings.ISettingsPage.Save"/>.
+            </para>
+            <para>This method will not be called if <see cref="P:Sdl.Core.Settings.ISettingsPage.HasDefaultSettings"/> returns <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsPage.DataSource">
+            <summary>
+            The object which the settings page will manipulate the values upon. This is typically an ISettingsBundle.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsPage.HasDefaultSettings">
+            <summary>
+            Called to determine whether the settings page supports the <see cref="M:Sdl.Core.Settings.ISettingsPage.ResetToDefaults"/> method.
+            </summary>
+            <remarks>
+            <para>
+            Determines whether a 'Reset To Default' button should be displayed/enabled in the host application.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.GetControl">
+            <summary>
+            Called by the framework to retrieve the control that displays the user interface for the
+            settings page.
+            </summary>
+            <remarks>
+            <para>
+            The derived class must initialise and return the control.
+            </para>
+            </remarks>
+            <returns>The control that displays the user interface for the settings page.
+            The implementor is also responsible for disposing of this control in their implementation of <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.Dispose"/>
+            </returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.OnActivate">
+            <summary>
+            Called when this settings page is activated.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.OnDeactivate">
+            <summary>
+            Called when this settings page is deactivated.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.ValidateInput">
+            <summary>
+            Returns true if the input on this settings page is valid.
+            </summary>
+            <remarks>This method is called when navigating away from a page and before <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.Save"/> is called.</remarks>
+            <returns>True if the input on this settings page is valid.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.Save">
+            <summary>
+            Called when settings should be saved. The implementation is responsible for persisting the settings.
+            </summary>
+            <remarks>This method is called once, after <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.ValidateInput"/> has been called.</remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.AfterSave">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been saved.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.Cancel">
+            <summary>
+            Called when the settings dialog is canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.AfterCancel">
+            <summary>
+            Called after all settings pages shown on the settings dialog have been canceled.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.ResetToDefaults">
+            <summary>
+            Called to reset settings to default values. The implementation is responsible for
+            resetting the settings and updating the user interface accordingly.
+            </summary>
+            <remarks>
+            <para>
+            This method should not save the settings yet. This should be done in <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.Save"/>.
+            </para>
+            <para>This method will not be called if <see cref="P:Sdl.Core.Settings.AbstractSettingsPage.HasDefaultSettings"/> returns <c>false</c>.</para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.Refresh">
+            <summary>
+            Called to refresh the page to the current <see cref="P:Sdl.Core.Settings.AbstractSettingsPage.DataSource"/> if it has been changed externally. This
+            can happen when a user imports external settings that affect the data source.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.AbstractSettingsPage.Dispose">
+            <summary>
+            Derived classes must implement <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.Dispose"/> to ensure that controls created by <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.GetControl"/> are disposed of.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.AbstractSettingsPage.DataSource">
+            <summary>
+            The object which the settings page will manipulate the values upon. This is typically an ISettingsBundle.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.AbstractSettingsPage.HasDefaultSettings">
+            <summary>
+            Called to determine whether the settings page supports the <see cref="M:Sdl.Core.Settings.AbstractSettingsPage.ResetToDefaults"/> method.
+            </summary>
+            <remarks>
+            <para>
+            Determines whether a 'Reset To Default' button should be displayed/enabled in the host application.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware">
+            <summary>
+            Optional abstract base class for components implementing <see cref="T:Sdl.Core.Settings.ISettingsBundleAware"/>.
+            The settings received are accessible from the <see cref="P:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware.SettingsBundle"/> property.
+            </summary>
+            <remarks>
+            <para>
+            This base class provides a convenient default implementation of this interface that 
+            implementations may (but are not required to) use.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.Core.Settings.ISettingsBundleAware">
+            <summary>
+            Interface used to communicate settings (as a settings bundle) to a component.
+            </summary>
+            <remarks>
+            <para>
+            Implementations may cast an object to this interface to determine
+            if it support settings bundles, and then call <see cref="M:Sdl.Core.Settings.ISettingsBundleAware.SetSettingsBundle(Sdl.Core.Settings.ISettingsBundle)"/>
+            to pass settings to the object if it implements this interface.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundleAware.SetSettingsBundle(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Called by implementations to pass a settings bundle to the component.
+            </summary>
+            <param name="settingsBundle">the ISettingsBundle to use</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware.SetSettingsBundle(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Implementation stores the settings bundle in a member that can be accessed through the
+            <see cref="P:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware.SettingsBundle"/> property.
+            </summary>
+            <param name="settingsBundle">the settingsBundle value to set the property to</param>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware.SettingsBundle">
+            <summary>
+            Access to the settings bundle.
+            </summary>
+            <remarks>
+            <para>
+            Once <see cref="M:Sdl.Core.Settings.Implementation.AbstractSettingsBundleAware.SetSettingsBundle(Sdl.Core.Settings.ISettingsBundle)"/> has been called the settings
+            can be accessed from this property. Before that the value is <c>null</c>.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.ArraySetting`1">
+            <summary>
+            T should be an array type
+            </summary>
+            <typeparam name="T">the type of the ArraySetting</typeparam>
+        </member>
+        <member name="T:Sdl.Core.Settings.Setting`1">
+            <summary>
+            Typed setting with id and value.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Setting`1.op_Implicit(Sdl.Core.Settings.Setting{`0})~`0">
+            <summary>
+            Implicit conversion operator to enable easy access to the value without explicitly accessing the <see cref="P:Sdl.Core.Settings.Setting`1.Value"/> property.
+            </summary>
+            <param name="setting">The setting to convert.</param>
+            <returns>The setting value.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.Setting`1.Reset">
+            <summary>
+            Resets the setting to the inherited or default value.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Setting`1.OnXmlUpdated">
+            <summary>
+            This methods has to be called by sub classes when the Xml document has been changed.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Setting`1.Id">
+            <summary>
+            Gets the Id of the setting retrieved from the XML
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Setting`1.Inherited">
+            <summary>
+            True if this setting was inherited from a parent bundle or if it is a default value.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Setting`1.Value">
+            <summary>
+            Gets or sets the setting value,
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Setting`1.Xml">
+            <summary>
+            The XML document representing this setting's value
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.LanguageSetting">
+            <summary>
+            Specific handling of Language-type settings for backwards compatibility (used to be IXmlSerializable, but this is not the case anymore).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.DataContractSerializableSetting`1.Value">
+            <summary>
+            Strongly typed accessor for the contained value
+            with automatic type conversion thanks to the
+            TypeConverter class
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.RemoveControlCharactersXmlWriter">
+            <summary>
+            A wrapper for the XmlWriter that will remove any control character
+            when writing text elements.
+            Only WriteString method has been redefined for this.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.RemoveControlCharactersXmlWriter.RemoveControlCharacters(System.String)">
+            <summary>
+             Removes all control characters from a given string
+            </summary>
+            <param name="inString">the string to remove control character from</param>
+            <returns>an string similiar to the given one but with no control characters</returns>
+        </member>
+        <member name="T:Sdl.Core.Settings.SettingsGroup">
+            <summary>
+            Abstract class providing common functionality for settings group
+            concrete implementations
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.ISettingsGroup">
+            <summary>
+            A group of individual setting values
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.ContainsSetting(System.String)">
+            <summary>
+            Returns true when this settings group or an ancestor settings group contains a value for the specified setting.
+            </summary>
+            <param name="settingId">The id of the setting.</param>
+            <returns>True if this settings group or an ancestor contains a value for the specified setting.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.GetSetting``1(System.String)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="id">The id of the setting.</param>
+            <returns>The setting.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, the default value provided by the settings group implementation is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.GetSetting``1(System.String,Sdl.Core.Settings.Setting{``0}@)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="setting">The setting, or null if no value was defined.</param>
+            <returns>True if a setting value has been returned.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, null is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.GetSetting``1(System.String,``0@)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="value">The value of the setting.</param>
+            <returns>True if a setting value has been returned.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, null is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.GetSetting``1(System.String,``0)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="defaultValue">The default value for the setting if no value can be found.</param>
+            <returns>The setting.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, the default value provided by the settings group implementation is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.ImportSettings(Sdl.Core.Settings.ISettingsGroup)">
+            <summary>
+            Imports the settings from another group into this one. Resets the current settings in this group before
+            importing the settings from the other group.
+            </summary>
+            <param name="otherGroup">The group which the settings are imported from</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.RemoveSetting(System.String)">
+            <summary>
+            Removes a local setting from the this group. Returns true if the setting was successfully removed, false otherwise.
+            i.e. if the setting doesn't exist, false is returned.
+            </summary>
+            <param name="settingId">The id of the setting to remove</param>
+            <returns>boolean indicating whether the setting was successfully removed</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.Reset">
+            <summary>
+            Resets all settings locally defined in this settings group.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.SuspendEvents">
+            <summary>
+            Suspends event notification.
+            </summary>
+            <remarks>This method can be aclled multiple times. Until the <see cref="M:Sdl.Core.Settings.ISettingsGroup.ResumeEvents"/> has been called the same number of times, 
+            no event will be raised.</remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsGroup.ResumeEvents">
+            <summary>
+            Resumes event notification. This raises the <see cref="E:Sdl.Core.Settings.ISettingsGroup.SettingsChanged"/> event once this method
+            has been called an equal amount of times as <see cref="M:Sdl.Core.Settings.ISettingsGroup.SuspendEvents"/>.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.Settings.ISettingsGroup.SettingsChanged">
+            <summary>
+            Raised when a setting value changes.
+            </summary>
+            <remarks>This event is also raised if an inherited settings value changes.</remarks>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsGroup.Id">
+            <summary>
+            Gets the id of the settings group.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsGroup.SettingsBundle">
+            <summary>
+            Gets the bundle this settings group belongs to
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsGroup.Parent">
+            <summary>
+            Gets the parent settings group in the parent bundle, or null if this settings group belongs to the root settings bundle.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsGroup.EventsSuspended">
+            <summary>
+            True if event notifications have been suspended.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sdl.Core.Settings.SettingsGroup"/> class.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.SuspendEvents">
+            <summary>
+            Suspends event notification.
+            </summary>
+            <remarks>This method can be called multiple times. Until the <see cref="M:Sdl.Core.Settings.SettingsGroup.ResumeEvents"/> has been called the same number of times,
+            no event will be raised.</remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.ResumeEvents">
+            <summary>
+            Resumes event notification. This raises the <see cref="E:Sdl.Core.Settings.SettingsGroup.SettingsChanged"/> event once this method
+            has been called an equal amount of times as <see cref="M:Sdl.Core.Settings.SettingsGroup.SuspendEvents"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.OnSettingsChanged(System.Collections.Generic.IList{System.String},System.Boolean)">
+            <summary>
+            Called when a number of setting values change.
+            </summary>
+            <param name="settingIds">The setting ids.</param>
+            <param name="isResumingEvents">Indicates wheter the call is from ResumeEvents method.</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.OnInit(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Called when SettingsBungle is set.
+            </summary>
+            <param name="settingsBundle">the value of the new ISettingsBundle</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.ContainsSetting(System.String)">
+            <summary>
+            Returns true if settingId is found in the current settings collection
+            or in any ancestor's settings collection
+            </summary>
+            <param name="settingId">the settingsId to find</param>
+            <returns>true if settingId is found in the current settings collection or in any ancestor's settings collection</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetSetting``1(System.String)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <returns>The setting.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, the default value provided by the settings group implementation is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetSetting``1(System.String,Sdl.Core.Settings.Setting{``0}@)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="setting">The setting, or null if no value was defined.</param>
+            <returns>
+            True if a setting value has been returned.
+            </returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, null is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetSetting``1(System.String,``0@)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="value">The value of the setting.</param>
+            <returns>
+            True if a setting value has been returned.
+            </returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, null is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetSetting``1(System.String,``0)">
+            <summary>
+            Gets the setting with the specified id.
+            </summary>
+            <typeparam name="T">The type of the setting value.</typeparam>
+            <param name="settingId">The id of the setting.</param>
+            <param name="defaultValue">The default value for the setting if no value can be found.</param>
+            <returns>The setting.</returns>
+            <remarks>When no value is defined in the settings group itself, the parent chain is searched
+            for an inherited value. If no inherited value can be found, the default value provided by the settings group implementation is returned.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.RemoveSetting(System.String)">
+            <summary>
+            Removes a local setting from the this group. Returns true if the setting was successfully removed, false otherwise.
+            i.e. if the setting doesn't exist, false is returned.
+            </summary>
+            <param name="settingId">The id of the setting to remove</param>
+            <returns>boolean indicating whether the setting was successfully removed</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.Reset">
+            <summary>
+            Resets all settings locally defined in this settings group.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.ImportSettings(Sdl.Core.Settings.ISettingsGroup)">
+            <summary>
+            Imports the settings from another group into this one. Resets the current settings before
+            importing the settings from the other group.
+            </summary>
+            <param name="otherGroup">The group which the settings are imported from</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.BeginEdit">
+            <summary>
+            Begins and edit on an object
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.CancelEdit">
+            <summary>
+            Discards changes since the last System.ComponentModel.IEditableObject.BeginEdit() call.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.EndEdit">
+            <summary>
+            Pushes changes since the last System.ComponentModel.IEditableObject.BeginEdit() or 
+            System.ComponentModel.IBindingList.AddNew() call into the underlying object.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.UpdateSetting(Sdl.Core.Settings.Implementation.Xml.Setting,System.Boolean@)">
+            <summary>
+            Update the setting in the XML representation of the value.
+            This only gets written out when the XML objects are serialized
+            </summary>
+            <param name="updatedSetting">The setting to update, containing ID and XML value</param>
+            <param name="isInherited"></param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.ResetSetting``1(System.String)">
+            <summary>
+            Remove the specified setting ID from the local values
+            causing it to be inherited in future.
+            </summary>
+            <param name="settingId">The setting ID to remove</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.ResetSetting(System.String)">
+            <summary>
+            Remove the specified setting ID from the local values
+            causing it to be inherited in future.
+            </summary>
+            <param name="settingId">The setting ID to remove</param>
+            <returns>boolean indicating if this setting was successfully removed</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetDefaultValue(System.String)">
+            <summary>
+            Gets the default value for the sepcified settings. Always returns null.
+            Override this method in extending classes to define default setting values.
+            </summary>
+            <param name="settingId">The setting id.</param>
+            <returns>The default value, or null if no default value is available.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsGroup.GetXmlSetting(System.String)">
+            <summary>
+            Get the XML setting for the specified setting ID from the
+            Xml.Settings collection
+            </summary>
+            <param name="settingId">The ID of the setting to get</param>
+            <returns>The Xml settings object, or null if not found</returns>
+        </member>
+        <member name="E:Sdl.Core.Settings.SettingsGroup.SettingsChanged">
+            <summary>
+            Raised when a setting value changes.
+            </summary>
+            <remarks>This event is also raised if an inherited settings value changes.</remarks>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsGroup.EventsSuspended">
+            <summary>
+            True if event notifications have been suspended.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsGroup.Id">
+            <summary>
+            Gets the id of the settings group.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsGroup.Parent">
+            <summary>
+            Gets the parent settings group in the parent bundle, or null if this settings group belongs to the root settings bundle.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsGroup.SettingsBundle">
+            <summary>
+            The settings bundle this group belongs to
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsGroup.XmlSettingsGroup">
+            <summary>
+            The XML object this group reads from
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.Settings.SettingsGroup.PropertyChanged">
+            <summary>
+            Raised when a property value changes.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.GuidConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>Gets a value indicating whether this converter can convert an object in the given source type to a GUID object using the context.</summary>
+            <returns>true if this converter can perform the conversion; otherwise, false.</returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context. </param>
+            <param name="sourceType">A <see cref="T:System.Type"></see> that represents the type you wish to convert from. </param>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.GuidConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Globalization.CultureInfo,System.Object)">
+            <summary>Converts the given object to a GUID object.</summary>
+            <returns>An <see cref="T:System.Object"></see> that represents the converted value.</returns>
+            <param name="culture">An optional <see cref="T:System.Globalization.CultureInfo"></see>. If not supplied, the current culture is assumed. </param>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context. </param>
+            <param name="value">The <see cref="T:System.Object"></see> to convert. </param>
+            <exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.NamespaceDoc">
+            <summary>
+            This namespace contains functionality related to the Settings namespace.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.SettingsGroupTypeDescriptionProvider">
+            <summary>
+            Provides supplemental metadata information for SettingsGroup type
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsGroupTypeDescriptionProvider.GetTypeDescriptor(System.Type,System.Object)">
+            <summary>
+            Gets a custom type descriptor for the given type and object.
+            </summary>
+            <param name="objectType">The type of object for which to retrieve the type descriptor.</param>
+            <param name="instance">An instance of the type. Can be null if no instance was passed to the System.ComponentModel.TypeDescriptor.</param>
+            <returns>An System.ComponentModel.ICustomTypeDescriptor that can provide metadata for the type.</returns>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.SettingsGroupTypeDescriptor">
+            <summary>
+            Overrides the implementation of CustomTypeDescriptor
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsGroupTypeDescriptor.#ctor(Sdl.Core.Settings.SettingsGroup)">
+            <summary>
+            Constructs a SettingsGroupTypeDescriptor using the provided SettingsGroup
+            </summary>
+            <param name="settingsGroup">the SettingsGroup to use</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsGroupTypeDescriptor.GetProperties">
+            <summary>
+            Returns a collection of property descriptors for the object represented by this type descriptor.
+            </summary>
+            <returns>A collection of property descriptors for the object represented by this type descriptor.</returns>
+        </member>
+        <member name="T:Sdl.Core.Settings.NamespaceDoc">
+            <summary>
+            This namespace contains functionality to manage Settings.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.ISettingsBundle">
+            <summary>
+            A collection of settings groups, which belongs to a settings hierarchy.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.GetSettingsGroup``1(System.String)">
+            <summary>
+            Get a strongly typed settings group class by ID.
+            </summary>
+            <param name="id">The ID of the settings group to retrieve.</param>
+            <remarks>Creates a new instance of the settings group if it does not exist within this bundle yet.</remarks>
+            <typeparam name="T">The static type to retrieve</typeparam>
+            <returns>An instance of the type, or null if no relevant settings group type could be found</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.GetSettingsGroup``1">
+            <summary>
+            Generic method to return a strongly typed instance of
+            ISettingsGroup representing a single type of group, using the type's name as the unique id.
+            The class must implement ISettingsGroup and have a default
+            constructor.
+            </summary>
+            <typeparam name="T">The type of group to instantiate</typeparam>
+            <returns>An instance of the settings group, or null if no suitable type found</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.GetSettingsGroup(System.String)">
+            <summary>
+            Provides untyped access to a settings group by ID.
+            </summary>
+            <param name="id">The ID of the settings group to retrieve.</param>
+            <remarks>Creates a new instance of the settings group if it does not exist within this bundle yet.</remarks>
+            <returns>The settings group, or null if no relevant settings group type could be found.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.RemoveSettingsGroup(System.String)">
+            <summary>
+            Removes the settings group with the provided ID from this settings bundle.
+            </summary>
+            <param name="id">The ID of the settings group to remove.</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.GetSettingsGroupIds">
+            <summary>
+            The IDs of all settings groups currently contained in this settings bundle and any ancestors.
+            </summary>
+            <returns>The IDs of all settings groups contained in the settings bundle, including parent bundles.</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.ContainsSettingsGroup(System.String)">
+            <summary>
+            Returns true if this group exists in the current bundle (searches the ancestor chain
+            as well)
+            </summary>
+            <param name="id">The id of the settings group to check for</param>
+            <returns>true if this group exists in the current or any ancestor bundle</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.Reset">
+            <summary>
+            Resets all settings locally defined in this settings bundle.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.ISettingsBundle.Assign(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Assigns existing setting to a new setting bundle.
+            </summary>
+            <param name="settings">The settings.</param>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsBundle.IsDefault">
+            <summary>
+            Returns true if this settings bundle defines default settings.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsBundle.Parent">
+            <summary>
+            The settings bundle the groups within inherit from
+            or null if this is a top level bundle.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.ISettingsBundle.IsEmpty">
+            <summary>
+            True if all settings groups in the setting bundle are empty.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.SettingsBundle">
+            <summary>
+            A bundle of distinctly typed settings groups
+            represented in the project XML file
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.GetSettingsGroup``1(System.String)">
+            <summary>
+            Generic method to return a strongly typed instance of
+            ISettingsGroup representing a single type of group with a specific id.
+            The class must implement ISettingsGroup and have a default
+            constructor.
+            </summary>
+            <param name="id">The id of the settings group to retrieve i</param>
+            <typeparam name="T">The type of group to instantiate</typeparam>
+            <returns>An instance of the settings group, or null if no suitable type found</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.GetSettingsGroup``1">
+            <summary>
+            Generic method to return a strongly typed instance of
+            ISettingsGroup representing a single type of group, using the type's name as the unique id.
+            The class must implement ISettingsGroup and have a default
+            constructor.
+            </summary>
+            <typeparam name="T">The type of group to instantiate</typeparam>
+            <returns>An instance of the settings group, or null if no suitable type found</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.GetSettingsGroup(System.String)">
+            <summary>
+            Provides untyped access to a settings group by ID.
+            </summary>
+            <param name="id">The ID of the settings group to retrieve.</param>
+            <returns>
+            The settings group, or null if no relevent settings group type could be found.
+            </returns>
+            <remarks>Creates a new instance of the settings group if it does not exist within this bundle yet.</remarks>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.RemoveSettingsGroup(System.String)">
+            <summary>
+            Removes the settings group with the given ID from the settings bundle.
+            </summary>
+            <param name="id">The ID of the settings group to remove.</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.Reset">
+            <summary>
+            Resets all settings locally defined in this settings bundle.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.SettingsBundle.GetSettingsGroup(System.String,System.Type)">
+            <summary>
+            Internal version of GetSettingsGroup that does not
+            implement type safety. Instead gets groups by type
+            parameter.
+            </summary>
+            <param name="id"></param>
+            <param name="type">The type of group to instantiate</param>
+            <returns>An instance of type t or null if not appropriate</returns>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.SettingsBundle.Parent">
+            <summary>
+            The parent of this bundle, or null for 
+            a top level bundle. Used for inheritance
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.SettingsBundle.IsDefault">
+            <summary>
+            Returns true if this settings bundle defines default settings.
+            </summary>
+            <value></value>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.SettingsBundle.XmlBundle">
+            <summary>
+            Internal method to retrieve the Xml bundle for serialization
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.Xml.Setting.CreateSetting(System.String)">
+            <summary>
+            Create a new setting with the given Id
+            and an empty XML document
+            </summary>
+            <param name="Id">The Id of the new setting</param>
+            <returns>An instance of Setting</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.Implementation.Xml.SettingsGroup.RemoveControlCharacters(System.String)">
+            <summary>
+             Removes all control characters from a given string
+            </summary>
+            <param name="inString">the string to remove control character from</param>
+            <returns>an string similiar to the given one but with no control characters</returns>
+        </member>
+        <member name="T:Sdl.Core.Settings.Implementation.SimpleSetting`1">
+            <summary>
+            Generic class to provide strongly typed versions of XML data
+            for simple single value settings.
+            </summary>
+            <typeparam name="T">The type of value to use</typeparam>
+        </member>
+        <member name="P:Sdl.Core.Settings.Implementation.SimpleSetting`1.Value">
+            <summary>
+            Strongly typed accessor for the contained value
+            with automatic type conversion thanks to the
+            TypeConverter class
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.SettingsChangedEventArgs">
+            <summary>
+            Event argumnet class for setting value chaneg events.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsChangedEventArgs.#ctor(Sdl.Core.Settings.ISettingsGroup,System.Collections.Generic.IList{System.String})">
+            <summary>
+            Creates a new instance.
+            </summary>
+            <param name="settingsGroup">The settings group in which the settings have changed</param>
+            <param name="settingIds">List of IDs of changed settings.</param>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsChangedEventArgs.SettingsGroup">
+            <summary>
+            Gets the settings group in which setting values have changed.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Settings.SettingsChangedEventArgs.SettingIds">
+            <summary>
+            Gets a list of setting values that have changed.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Settings.SettingsUtil">
+            <summary>
+            Provides functionality to serialize and deserialize settings bundles.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.DeserializeSettingsBundle(System.Xml.XmlReader,Sdl.Core.Settings.ISettingsBundle,System.Boolean)">
+            <summary>
+            Deserialize the content pointed to in the specified XmlReader
+            to a SettingsBundle object and give it access to the hierarchy
+            information through the specified provider
+            </summary>
+            <param name="reader">The XML reader, pointing to a valid opening SettingsBundle tag</param>
+            <param name="parent">The hierarchy provider</param>
+            <param name="isDefault">Whether the deserialized settings bundle defines default settings</param>
+            <returns>the desiralized ISettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.DeserializeSettingsBundle(System.Xml.XmlReader,Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Deserialize the content pointed to in the specified XmlReader
+            to a SettingsBundle object and give it access to the hierarchy
+            information through the specified provider
+            </summary>
+            <param name="reader">The XML reader, pointing to a valid opening SettingsBundle tag</param>
+            <param name="parent">The hierarchy provider</param>
+            <returns>the desiralized ISettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.SerializeSettingsBundle(System.Xml.XmlWriter,Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Serialize the given SettingsBundle using the specified XmlWriter
+            </summary>
+            <param name="writer">The XML writer to use</param>
+            <param name="iSettingsBundle">The ISettingsBundle to serialize</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.SerializeSettingsBundle(System.Xml.XmlWriter,Sdl.Core.Settings.ISettingsBundle,System.Boolean)">
+            <summary>
+            Serialize the given SettingsBundle using the specified XmlWriter
+            </summary>
+            <param name="writer">The XML writer to use</param>
+            <param name="iSettingsBundle">The ISettingsBundle to serialize</param>
+            <param name="includeInheritedSettings">Whether to include inherited settings</param>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.CreateSettingsBundle(Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Creates a new SettingsBundle
+            </summary>
+            <param name="parent">the SettingsBundle parent</param>
+            <returns>the created ISettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.CreateSettingsBundle(Sdl.Core.Settings.ISettingsBundle,Sdl.Core.Settings.ISettingsBundle)">
+            <summary>
+            Creates a new SettingsBundle
+            </summary>
+            <param name="parent">the SettingsBundle parent</param>
+            <param name="source">the source implementation</param>
+            <returns>the created ISettingsBundle</returns>
+        </member>
+        <member name="M:Sdl.Core.Settings.SettingsUtil.CreateSettingsBundle(Sdl.Core.Settings.ISettingsBundle,System.Boolean)">
+            <summary>
+            Creates a new SettingsBundle
+            </summary>
+            <param name="parent">the SettingsBundle parent</param>
+            <param name="isDefault">whether the created SettingsBundle uses default settings</param>
+            <returns>the created ISettingsBundle</returns>
+        </member>
+    </members>
+</doc>

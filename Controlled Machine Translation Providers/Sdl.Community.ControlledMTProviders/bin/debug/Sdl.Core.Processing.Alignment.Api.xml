@@ -1,0 +1,582 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.Processing.Alignment.Api</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat">
+            <summary>
+            AlignmentFileFormat enumerates all the different alignment output formats.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat.None">
+            <summary>
+            No output file will be generated; you need to specify a BilingualProcessor in the Align call that will further process the alignment results;
+            otherwise, the alignment results will be lost.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat.Tmx">
+            <summary>
+            Alignment results will be exported into a .tmx file.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat.Sdlxliff">
+            <summary>
+            Alignment results will be exported into a .sdlxliff file.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat.SdlAlign">
+            <summary>
+            An .sdlalign package will be generated, which is an archive containing:
+             - the bilingual document as .sdlxliff and 
+             - the XML serialization of the alignments (AlignmentData nodes)
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair">
+            <summary>
+            An AlignmentFilePair represents the combination of the file paths for the left input file, 
+            the right input file and the output file.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new AlignmentFilePair instance with the supplied values.
+            </summary>
+            <param name="leftInputFilename">Left file to align</param>
+            <param name="rightInputFilename">Right file to align</param>
+            <param name="outputFilename">Output file that will contain the alignment results</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.Equals(System.Object)">
+            <summary>
+            Compares current instance of AlignmentFilePair with the specified object
+            </summary>
+            <param name="obj">Object to compare with</param>
+            <returns>true if the specified object is equal with current instance of AlignmentFilePair; false otherwise</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.GetHashCode">
+            <summary>
+            Hash function for AlignmentFilePair
+            </summary>
+            <returns>The hascode for current AlignmentFilePair instance</returns>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.LeftInputFilename">
+            <summary>
+            Gets or sets the file name of the left input file. The file must exist.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.RightInputFilename">
+            <summary>
+            Gets or sets the file name of the right input file. The file must exist.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentFilePair.OutputFilename">
+            <summary>
+            Gets or sets the file name of the output file. The file will be overwritten if it exists.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentFilePosition">
+            <summary>
+            Indicates the position of the input file for alignment.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFilePosition.Left">
+            <summary>
+            Indicates left file for alignment.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentFilePosition.Right">
+            <summary>
+            Indicates right file for alignment.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentPhase">
+            <summary>
+            The phase the alignment process is in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.Start">
+            <summary>
+            About to start the alignment.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.ReadLeftFile">
+            <summary>
+            Reading/Parsing left file.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.ReadRightFile">
+            <summary>
+            Reading/Parsing right file.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.MergingFiles">
+            <summary>
+            Merging the left and right file into a single PU.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.Aligning">
+            <summary>
+            During alignment.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.PostAlignmentProcessing">
+            <summary>
+            Optional - post alignment, bilingual processors.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentPhase.Finish">
+            <summary>
+            Alignment finished.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs">
+            <summary>
+            AlignmentProgressEventArgs class represents alignment progress event arguments.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.#ctor">
+            <summary>
+            Public parameterless constructor
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.#ctor(Sdl.Core.Processing.Alignment.Api.AlignmentPhase,System.Byte,System.Object[])">
+            <summary>
+            Constructs an AlignmentProgressEventArgs instance using a file pair, an alignment phase and progress percentage.
+            </summary>
+            <param name="alignmentPhase">represents the current AlignmentPhase</param>
+            <param name="progress">progress percent</param>
+            <param name="info">Params - 0:AlignmentFilePair</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.ToString">
+            <summary>
+            String representation of the current event arguments
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.FilePair">
+            <summary>
+            The file pair to which this progress event relates.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.Progress">
+            <summary>
+            Progress property represents the progress as a percentage.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs.Phase">
+            <summary>
+            The phase the alignment process is currently in.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentResults">
+            <summary>
+            AlignmentResults class represents the results returned after an alignment operation.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentResults.#ctor(Sdl.Core.Processing.Alignment.Api.AlignmentFilePair,Sdl.Core.Processing.Alignment.Common.AlignmentStatistics,System.TimeSpan)">
+            <summary>
+            Constructor that takes the given file pair, alignment statistics and duration of alignment process.
+            </summary>
+            <param name="filePair">file pair</param>
+            <param name="alignmentStatistics">alignment statistics</param>
+            <param name="duration">duration of alignment process</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentResults.#ctor(Sdl.Core.Processing.Alignment.Api.AlignmentFilePair,System.Exception)">
+            <summary>
+            Constructor that takes the given file pair and last error.
+            </summary>
+            <param name="filePair">file pair</param>
+            <param name="lastError">last error</param>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentResults.FilePair">
+            <summary>
+            The file pair this result was computed for.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentResults.LastError">
+            <summary>
+            The last exception thrown, if any. If set, all other data apart from the file pair should be 
+            considered invalid.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentResults.Duration">
+            <summary>
+            The time taken to align the file pair.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.AlignmentResults.AlignmentStatistics">
+            <summary>
+            AlignmentStatistics property represents the alignment statistics.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.AlignmentService">
+            <summary>
+            AlignmentService class represents an alignment service that can take two native documents and align them to either produce a tmx/sdlxliff file
+            or feed them to additional BilingualProcessors for further processing.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.AlignmentService._fileTypeManager">
+            <summary>
+            Current FilterManager used to obtain the file type converters
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.#ctor(Sdl.FileTypeSupport.Framework.IntegrationApi.IFileTypeManager)">
+            <summary>
+            Constructor that takes the given file type manager.
+            </summary>
+            <param name="fileTypeManager">file type manager</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.Align(System.String,System.String,System.String,Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat,Sdl.Core.Processing.Alignment.Common.AlignmentSettings,System.Collections.Generic.List{Sdl.FileTypeSupport.Framework.BilingualApi.IBilingualContentProcessor},System.EventHandler{Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Using given alignment settings, aligns the given native documents to either produce an aligned file of the given output file format
+            or feeds the alignment results to specified BilingualProcessors for further processing.
+            </summary>
+            <param name="leftNativeFilePath">left native file path</param>
+            <param name="rightNativeFilePath">right native file path</param>
+            <param name="outputFilePath">output file path</param>
+            <param name="outputFileFormat">output file format</param>
+            <param name="alignmentSettings">alignment settings</param>
+            <param name="bilingualProcessors">list of bilingual processors to be inserted into the processing chain after in-memory aligned document was generated</param>
+            <param name="progressHandler">progress handler for the entire alignment process (includes parsing the files and additional processing)</param>
+            <param name="messageReporter">handler for messages reported by any file type component (during parsing of left and right files)</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.AreParallel(Sdl.FileTypeSupport.Processors.Storage.ParagraphUnitStore,Sdl.FileTypeSupport.Processors.Storage.ParagraphUnitStore)">
+            <summary>
+            Heuristically determines whether two documents are "parallel", i.e. are likely to be literal translations.
+            
+            Numerous implementations (many of them using file type specific clues) can be used. The current
+            implementation only looks at the number of non-structure paragraph unit counts and segment counts.
+            </summary>
+            <returns>true if the documents are likely to be parallel</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.CreateOutputFolderHiearchy(System.String)">
+            <summary>
+            Ensures that the folder hierarchy for the provided file exists. Any missing directories will be created.
+            </summary>
+            <param name="fileName">hierarchy will be created for this file</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.Align(System.Collections.Generic.IList{Sdl.Core.Processing.Alignment.Api.AlignmentFilePair},Sdl.Core.Processing.Alignment.Api.AlignmentFileFormat,Sdl.Core.Processing.Alignment.Common.AlignmentSettings,System.EventHandler{Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs})">
+            <summary>
+            Aligns a number of file pairs to produce aligned files of the given output file format, 
+            using the given alignment settings.
+            
+            If errors are encountered during processing, the aligment results object which corresponds to the file pair
+            contains the exception thrown, but processing will continue.
+            </summary>
+            <param name="filePairs">A list of file pairs to align</param>
+            <param name="outputFileFormat">output file format. Output file names are specified in the file pairs.</param>
+            <param name="alignmentSettings">alignment settings</param>
+            <param name="alignmentProgressHandler">alignment progress handler</param>
+            <returns>A list of aligment results - the number of elements in the list is the same as the number
+            of file pairs, and all elements are non-null.</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.ReadDocument(System.String,System.Globalization.CultureInfo,Sdl.LanguagePlatform.Core.Resources.IResourceDataAccessor,Sdl.Core.Processing.Alignment.Api.AlignmentFilePosition,Sdl.Core.Processing.Alignment.Api.ProgressReporter{Sdl.Core.Processing.Alignment.Api.AlignmentProgressEventArgs,Sdl.Core.Processing.Alignment.Api.AlignmentPhase},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Reads a document with the given filename and culture into a paragraph unit store.
+            </summary>
+            <remarks>
+            The segmentation rules are extracted from the resource data accessor. 
+            </remarks>
+            <param name="filename">filename</param>
+            <param name="culture">cultue</param>
+            <param name="resourceDataAccessor">resource data accessor</param>
+            <param name="filePosition">Indicates which file is currently read</param>
+            <param name="progressReporter">Progress reporting for alignment process</param>
+            <param name="messageReporter">handler for messages reported by any file type component (during parsing of left and right files)</param>
+            <returns>paragraph unit store</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.CreateAlignmentAlgorithmSettings(Sdl.Core.Processing.Alignment.Common.AlignmentSettings,System.Boolean)">
+            <summary>
+            Creates alignment algorithm settings from the given alignment settings.
+            </summary>
+            <param name="alignmentSettings">alignment settings</param>
+            <param name="areParallel">indicates if the documents are parallel</param>
+            <returns>alignment algorithm settings</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.CalculateStatistics(System.Collections.Generic.IEnumerable{Sdl.Core.Processing.Alignment.Core.AlignmentData})">
+            <summary>
+            Calculates the alignment statistics.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.GetAlignmentType(System.Int32,System.Int32)">
+            <summary>
+            Gets the alignment type from the given left and right segment counts.
+            </summary>
+            <param name="leftSegmentsCount">left segment count</param>
+            <param name="rightSegmentsCount">right segment count</param>
+            <returns>alignment type</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.ImportSdlAlignPackage(System.String,System.Collections.Generic.List{Sdl.FileTypeSupport.Framework.BilingualApi.IBilingualContentProcessor},System.Boolean,System.EventHandler{Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs{Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase}},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Processes an .sdlAlign package, by extracting the .sdlxliff file from it, reading the PU and passing it along the processing chain.
+            Additional processors can be passed in and they will each be inserted in the processing chain.
+            </summary>
+            <param name="sdlAlignPackagePath">The path to the .sdlAlign package.</param>
+            <param name="bilingualProcessors">List of bilingual processors to be inserted into the processing chain after the PU have been read.</param>
+            <param name="deleteTempExtractionFolder">Specifies if the temporary folder used for extracting the .sdlAlign package contents should be deleted or not</param>
+            <param name="progressHandler">progress handler for the entire import process (unzipping, reading alignments and content, executing the whole processing chain)</param>
+            <param name="messageReporter">handler for messages reported during the import process (essentially a wrapper to catch any exception)</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.UpdateSdlAlignPackage(Sdl.Core.Processing.Alignment.SdlAlignPackage.SdlAlignPackage,System.String,Sdl.Core.Processing.Alignment.Api.ContentSource,System.EventHandler{Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs{Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase}},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Updates an existing .sdlAlign package, at the same location (overwrite) or as a new package
+            </summary>
+            <param name="existingPackage">existing SdlAlignPackage, that contains updated .sdlxliff path and updated alignments</param>
+            <param name="contentSource">source of the content to be used in alignment</param>
+            <param name="outputSdlAlignPath">location where the new .sdlAlign package file should be saved</param>
+            <param name="progressHandler">progress handler for the entire update process (serializing alignments and settings, creating the new .sdlAlign package)</param>
+            <param name="messageReporter">handler for messages reported during the update process (essentially a wrapper to catch any exception)</param>
+            <returns>true if the update is successfull, false otherwise</returns>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.RealignSdlAlignPackage(Sdl.Core.Processing.Alignment.SdlAlignPackage.SdlAlignPackage,System.EventHandler{Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs{Sdl.Core.Processing.Alignment.Api.RealignSdlAlignPhase}},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Performs realignment on an already populated SdlAlignPackage object; will use confirmed AlignmentData as anchors.
+            </summary>
+            <param name="existingPackage">already populated SdlAlignPackage object; Alignments should be updated with confirmed alignments marked accordingly.</param>
+            <param name="progressHandler">progress handler for this entire call</param>
+            <param name="messageReporter">handler for messages reported during this call (essentially a wrapper to catch any exception)</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.ProcessSdlAlignPackage(Sdl.Core.Processing.Alignment.SdlAlignPackage.SdlAlignPackage,Sdl.Core.Processing.Alignment.Api.ContentSource,System.Collections.Generic.List{Sdl.FileTypeSupport.Framework.BilingualApi.IBilingualContentProcessor},System.EventHandler{Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs{Sdl.Core.Processing.Alignment.Api.ProcessSdlAlignPhase}},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Processes the content populated in the specified SdlAlignPackage, and exposes aligned content to the bilingual processors.
+            If no bilingual processor is specified, this call returns false directly.
+            </summary>
+            <param name="existingPackage">already populated SdlAlignPackage object</param>
+            <param name="contentSource">source of the content to be used in alignment</param>
+            <param name="bilingualProcessors">list of bilingual processors to be inserted into the processing chain after the content has been read and aligned</param>
+            <param name="progressHandler">progress handler for this entire call</param>
+            <param name="messageReporter">handler for messages reported during this call (essentially a wrapper to catch any exception)</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.AlignmentService.GenerateAlignedSdlXliff(Sdl.Core.Processing.Alignment.SdlAlignPackage.SdlAlignPackage,System.String,System.EventHandler{Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs{Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase}},System.EventHandler{Sdl.FileTypeSupport.Framework.IntegrationApi.MessageEventArgs})">
+            <summary>
+            Generates an .sdlxliff file at the specified location, populated with the aligned content.
+            </summary>
+            <param name="existingPackage">already populated SdlAlignPackage object</param>
+            <param name="sdlxliffPath">full path where the aligned sdlxliff file should be generated</param>
+            <param name="progressHandler">progress handler for this entire call</param>
+            <param name="messageReporter">handler for messages reported during this call (essentially a wrapper to catch any exception)</param>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.ContentSource">
+            <summary>
+            ContentSource enum specifies the source for the content to be aligned
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ContentSource.SdlXliffFile">
+            <summary>
+            Content will be read from the SdlXliff file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ContentSource.ParagraphUnit">
+            <summary>
+            The ParagraphUnit in the SdlAlignPackage object will be used as content to be aligned
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase">
+            <summary>
+            Represents the phases for GenerateAlignedSdlXliff call
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase.Start">
+            <summary>
+            About to start the process
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase.ProcessingContent">
+            <summary>
+            Processing content
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase.Aligning">
+            <summary>
+            Aligning and writing the sdlxliff file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.GenerateAlignedSdlxliffPhase.Finish">
+            <summary>
+            Finished
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.ProcessSdlAlignPhase">
+            <summary>
+            The phase the alignment process is in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ProcessSdlAlignPhase.Start">
+            <summary>
+            About to start the process
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ProcessSdlAlignPhase.ProcessingPackage">
+            <summary>
+            Processing content
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ProcessSdlAlignPhase.Finish">
+            <summary>
+            Finished
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.RealignSdlAlignPhase">
+            <summary>
+            The phase the alignment process is in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.RealignSdlAlignPhase.Start">
+            <summary>
+            About to start the process
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.RealignSdlAlignPhase.Realign">
+            <summary>
+            Realigning content
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.RealignSdlAlignPhase.Finish">
+            <summary>
+            Finished
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase">
+            <summary>
+            The phase the alignment process is in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase.Start">
+            <summary>
+            About to start the import process
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase.SerializeAlignments">
+            <summary>
+            Serialize alignments to XML
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase.SerializeSettings">
+            <summary>
+            Serialize settings to XML
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase.CreateNewPackage">
+            <summary>
+            Archive all files and create the new .sdlAlign package
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.UpdateSdlAlignPhase.Finish">
+            <summary>
+            Import finished
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1">
+            <summary>
+            AlignmentProgressEventArgs class represents alignment progress event arguments.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.#ctor">
+            <summary>
+            Generic public parameterless constructor
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.#ctor(`0,System.Byte)">
+            <summary>
+            Constructs and SdlAlignPackageProgressEventArgs instance withouth any additional info, just the alignment phase and progress percentage.
+            </summary>
+            <param name="phase">represents the current import phase</param>
+            <param name="progress">progress percent</param>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.#ctor(`0,System.Byte,System.Object[])">
+            <summary>
+            Constructs an SdlAlignPackageProgressEventArgs instance using a package, an import alignment phase and progress percentage.
+            </summary>
+            <param name="phase">represents the current import phase</param>
+            <param name="progress">progress percent</param>
+            <param name="info">params - 0:path to the package that's being imported</param>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.SdlAlignPackagePath">
+            <summary>
+            The .sdlAlign package this progress event relates to.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.Progress">
+            <summary>
+            Progress property represents the progress as a percentage.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Processing.Alignment.Api.SdlAlignPackageProgressEventArgs`1.Phase">
+            <summary>
+            The phase the import process is currently in.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase">
+            <summary>
+            The phase the alignment process is in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.Start">
+            <summary>
+            About to start the import process
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.ExtractFiles">
+            <summary>
+            Extracting the package files
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.ReadSettings">
+            <summary>
+            Reading the settings file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.ReadAlignments">
+            <summary>
+            Reading the alignments file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.ReadContents">
+            <summary>
+            Reading the bilingual content file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.ProcessData">
+            <summary>
+            Processing data (un-aligned bilingual content)
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.ImportSdlAlignPhase.Finish">
+            <summary>
+            Import finished
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities">
+            <summary>
+            Provides utilities to configure file type manager instances.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities.Configure(Sdl.FileTypeSupport.Framework.IntegrationApi.IFileTypeManager,System.String)">
+            <summary>
+            Configures the provided file type manager instance with the settings stored in the specified
+            configuration file. Any previously specified settings (i.e. any value in <paramref name="fileTypeManager"/>.SettingsBundle)
+            will be overwritten.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities.ConfigurationFileType">
+            <summary>
+            Represents the type of a file type manager configuration file
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities.ConfigurationFileType.Unknown">
+            <summary>
+            Configuration file type cannot be determined.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities.ConfigurationFileType.Template">
+            <summary>
+            A template file (*.sdltpl).
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Processing.Alignment.Api.FileTypeManagerUtilities.ConfigurationFileType.FileTypeSettings">
+            <summary>
+            A file type settings file, overriding one or more file type settings (*.sdlftsettings).
+            </summary>
+        </member>
+    </members>
+</doc>

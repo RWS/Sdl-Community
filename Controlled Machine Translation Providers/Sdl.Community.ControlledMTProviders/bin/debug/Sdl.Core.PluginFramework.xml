@@ -1,0 +1,1749 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.PluginFramework</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.PluginFramework.AuxiliaryExtensionAttribute">
+            <summary>
+            Base class for auxiliary extension attributes, defining additional information that can be specified for an extension point, together with an extension attribute (see <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>).
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.AuxiliaryExtensionAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.AuxiliaryExtensionAttribute.Validate(Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo,Sdl.Core.PluginFramework.Validation.IExtensionValidationContext)">
+            <summary>
+            Validates the use of this auxiliary extnsion attribute in the context of the specified extension.
+            This method is called by the framework while generating the plug-in manifest.
+            </summary>
+            <param name="info">Information about the extension.</param>
+            <param name="context">Provides functionality to validate extensions targeting the extension point
+            and report warning or error messages</param>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.AuxiliaryExtensionAttributeCollection">
+            <summary>
+            Read-only collection of extension info attributes.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.DefaultPluginTypeLoader">
+            <summary>
+            Implementation of a plug-in type loader (<see cref="T:Sdl.Core.PluginFramework.IPluginTypeLoader"/>) which attempts to load types
+            using <see cref="M:System.Type.GetType"/>, assuming the plug-in assembly is available in one of the default assembly locations.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginTypeLoader">
+            <summary>
+            Component that is used by the <see cref="T:Sdl.Core.PluginFramework.IPluginRegistry"/> to load types that are referred to in plug-in
+            manifests.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginTypeLoader.LoadType(Sdl.Core.PluginFramework.IPlugin,System.String)">
+            <summary>
+            Loads the specified type, referred to in the manifest of the specified plug-in.
+            </summary>
+            <param name="plugin">The plug-in which refers to the type.</param>
+            <param name="typeName">The assembly-qualified type name of the requested type.</param>
+            <returns>The loaded type. Throws an exception if the type failes to load.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginTypeLoader.#ctor">
+            <summary>
+            Creates an instance of DefaultPluginTypeLoader that can be used for loading Open Exchange plug-ins.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginTypeLoader.LoadType(Sdl.Core.PluginFramework.IPlugin,System.String)">
+            <summary>
+            Loads the specified type, referred to in the manifest of the specified plug-in.  
+            This type loader will also check for Open Exchange plug-ins in their respective folders.
+            </summary>
+            <param name="plugin">The plug-in which refers to the type.</param>
+            <param name="typeName">The assembly-qualified type name of the requested type.</param>
+            <returns>
+            The loaded type. Throws an exception if the type failes to load.
+            </returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor">
+            <summary>
+            Plug-in descriptor which loads the plug-in manifest and the plug-in's resources from files on the local file system.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor">
+            <summary>
+            Represents a third-party plug-in descriptor, which gives access to a seperate third-party plug-in manifest.
+            </summary>
+            <remarks>The framework includes one implementation, <see cref="T:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor"/>, which loads the plug-in manifest from a file on the local 
+            file system.</remarks>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginDescriptor">
+            <summary>
+            Represents a plug-in descriptor, which gives access to a plug-in manifest and corresponding resources.
+            </summary>
+            <remarks>The framework includes one implementation, <see cref="T:Sdl.Core.PluginFramework.FileBasedPluginDescriptor"/>, which loads the plug-in manifest from a file on the local 
+            file system.</remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginDescriptor.GetPluginManifestStream">
+            <summary>
+            Gets a stream from which the plug-in manifest can be loaded.
+            </summary>
+            <returns>A stream to the plug-in manifest.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginDescriptor.GetPluginResource(System.String)">
+            <summary>
+            Gets the plugin resource.
+            </summary>
+            <param name="name">The name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginDescriptor.Name">
+            <summary>
+            Returns a name for the plug-in. This is not the actual name of the plug-in as defined using the <see cref="T:Sdl.Core.PluginFramework.PluginAttribute"/>,
+            but rather a name specific to this type of plug-in descriptor.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.ThirdPartyManifestFilePath">
+            <summary>
+            Gets the full third-party manifest file path.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.Author">
+            <summary>
+            Returns the author or company name of the plug-in developer as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.Description">
+            <summary>
+            Returns the description of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.PlugInName">
+            <summary>
+            Returns the name of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.Version">
+            <summary>
+            Returns the version of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.Validated">
+            <summary>
+            Returns true if the plug-in validated against the requried installed versions of the SDL Trados Studio APIs.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.InvalidAssemblies">
+            <summary>
+            If plugin is are validated, this contains a list of assemblies that failed verification
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IThirdPartyPluginDescriptor.InvalidSdlAssemblyReferences">
+            <summary>
+            This list contains the SDL API assemblies that failed verification
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.#ctor(System.String)">
+            <summary>
+            Constructs a <see cref="T:Sdl.Core.PluginFramework.FileBasedPluginDescriptor"/> using the specified path of a plug-in manifest path.
+            </summary>
+            <param name="pluginPackageManifestFilePath">The full path to the plug-in manifest.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.GetPluginManifestStream">
+            <summary>
+            Returns a file stream for reading the plug-in manifest file.
+            </summary>
+            <returns>A file stream for reading the plug-in manifest file.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.GetPluginResource(System.String)">
+            <summary>
+            Gets a plug-in resource by name. This only includes resources that are referred to in the plug-in manifest,
+            such as strings and images.
+            </summary>
+            <remarks>When a property of an extsion attribnute or auxiliary extension attribute is merked with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/>
+            attribute, any value assigned to it is assumed to be the name of a plug-in resource and can therefore be retrieved using this method.</remarks>
+            <param name="name">The resource name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.PluginManifestFilePath">
+            <summary>
+            Gets the full plug-in manifest file path.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.Name">
+            <summary>
+            Returns the file name of the plug-in manifest file.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.ResourceManager">
+            <summary>
+            Creates a resource manager containing the plug-in's resources in the UI culture of the current thread. 
+            </summary>
+            <remarks>This implementation creates the resource manager from a file-based 
+            .Net resource file deployed in the same directory as the plug-in manifest file.</remarks>
+            <returns>The resource manager containing the plug-in's resources.</returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.ThirdPartyManifestFilePath">
+            <summary>
+            Gets the full third-party manifest file path.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.Author">
+            <summary>
+            Returns the author or company name of the plug-in developer as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.Description">
+            <summary>
+            Returns the description of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.PlugInName">
+            <summary>
+            Returns the name of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.Version">
+            <summary>
+            Returns the version of the plug-in as defined in the third-party manifest.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.Validated">
+            <summary>
+            Returns true if the plug-in validated against the required installed versions of the SDL Trados Studio APIs.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.InvalidAssemblies">
+            <summary>
+            List of assemblies that failed validation
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedThirdPartyPluginDescriptor.InvalidSdlAssemblyReferences">
+            <summary>
+            List of SDL API assemblies that failed validation
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionAttribute">
+            <summary>
+            Base class extension attributes, defining extension points.
+            </summary>
+            <remarks>
+            <para>To define a new extension point, create a new attribute class, extending <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>. The class must be annotated with the 
+            <see cref="T:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute"/> attribute, which indicates that the class defines an extension point.</para>
+            <para>Users can now create new extension classes annotated with the new extension attribute, and implementing a specified interface.</para>
+            <para>To get access to all the extensions registered with your extension point, use <see cref="M:Sdl.Core.PluginFramework.IPluginRegistry.GetExtensionPoint``1"/>, specifying 
+            the type of your extension attribute. For more information, see <see cref="T:Sdl.Core.PluginFramework.IExtensionPoint"/>.</para>
+            <para>When the plug-in manifest is generated, instances of the extension attribute are saved in the plug-in manifest using
+            XML serialization. For that reason, make sure your extension attribute supports this (e.g. add a default constructor).</para>
+            <para>The framework also provides support for getting property values from the PluginResources.resx resource file, which is deployed together with the plug-in manifest.
+            To specify that the value of a certain string property needs to be retrieved from the resource file, annotate the property definition with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/> attribute. 
+            Users should now specify the name of the resource key, instead of the actual value, as the property value. When no resource string with the specified key can be found,
+            the framework keeps the specified string as the property value. To define non-string properties whose value is stored in the PluginResources.resx resource file, create a string property, which value
+            should be set to a resource key. When consuming the extension, use <see cref="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)"/> tio retriece the resource from 
+            the plug-in resource file.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor with required attributes.
+            </summary>
+            <param name="id">The unique id for the extension.</param>
+            <param name="name">The name for the extension. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="description">The description for the extension. Should typically be a key of a resource string in PluginResources.resx.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionAttribute.Validate(Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo,Sdl.Core.PluginFramework.Validation.IExtensionValidationContext)">
+            <summary>
+            Validates an extension targeting this extension point. This method is called by the framework while generating the plug-in manifest.
+            </summary>
+            <param name="info">Information about the extension.</param>
+            <param name="context">Provides functionality to validate extensions targeting the extension point
+            and report warning or error messages</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionAttribute.ValidateId(Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo,Sdl.Core.PluginFramework.Validation.IExtensionValidationContext)">
+            <summary>
+            Validates the extension Id. Checks whether this is not null or empty. 
+            </summary>
+            <param name="info">Information about the extension.</param>
+            <param name="context">Provides functionality to validate extensions targeting the extension point
+            and report warning or error messages</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionAttribute.ValidateName(Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo,Sdl.Core.PluginFramework.Validation.IExtensionValidationContext)">
+            <summary>
+            Validates the extension Name. Checks whether this is not null or empty. 
+            </summary>
+            <param name="info">Information about the extension.</param>
+            <param name="context">Provides functionality to validate extensions targeting the extension point
+            and report warning or error messages</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionAttribute.Id">
+            <summary>
+            Gets or sets the unique id of the extension.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionAttribute.Name">
+            <summary>
+            Gets or sets the name of the extension.
+            </summary>
+            <remarks>Should typically be a key of a resource string in PluginResources.resx.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionAttribute.Description">
+            <summary>
+            Gets or sets the description of the extension.
+            </summary>
+            <remarks>Should typically be a key of a resource string in PluginResources.resx.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionAttribute.Icon">
+            <summary>
+            Gets or sets the resource key for an the icon representing this extension. Can be null.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionCollection">
+            <summary>
+            Read-only collection of extensions.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionCollection.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:Sdl.Core.PluginFramework.IExtension"/> with the specified extension id.
+            </summary>
+            <value></value>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionPointCollection">
+            <summary>
+            Read-only collection of extension points.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionPointBehavior">
+            <summary>
+            Possible extension point types.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.ExtensionPointBehavior.Static">
+            <summary>
+            Static extension point. Once the extension have been instantiated, enabling or disabling 
+            extensions within this extension point requires a restart of the application.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.ExtensionPointBehavior.Dynamic">
+            <summary>
+            Dynamic extension point. Extensions for this extension point can be enabled or disabled without
+            requiring  an application restart.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute">
+            <summary>
+            Attribute for identifying an extension point attribute definition.
+            </summary>
+            <remarks>To define a new extension point, create an <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>, annotated with
+            an <see cref="T:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute"/>. For more information on how to define extension points, see <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>.</remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute.#ctor(System.String,Sdl.Core.PluginFramework.ExtensionPointBehavior)">
+            <summary>
+            Constructor with a name and behavior.
+            </summary>
+            <param name="name">A name for this extension point.</param>
+            <param name="behavior">The behavior of this extension point.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute.Name">
+            <summary>
+            Gets or sets the name of this extension point.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute.Behavior">
+            <summary>
+            Gets or sets the type of this extension point.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.FileBasedPluginDescriptor">
+            <summary>
+            Plug-in descriptor which loads the plug-in manifest and the plug-in's resources from files on the local file system.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.#ctor(System.String)">
+            <summary>
+            Constructs a <see cref="T:Sdl.Core.PluginFramework.FileBasedPluginDescriptor"/> using the specified path of a plug-in manifest path.
+            </summary>
+            <param name="pluginManifestFilePath">The full path to the plug-in manifest.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.GetPluginManifestStream">
+            <summary>
+            Returns a file stream for reading the plug-in manifest file.
+            </summary>
+            <returns>A file stream for reading the plug-in manifest file.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.GetPluginResource(System.String)">
+            <summary>
+            Gets a plug-in resource by name. This only includes resources that are referred to in the plug-in manifest,
+            such as strings and images.
+            </summary>
+            <remarks>When a property of an extsion attribnute or auxiliary extension attribute is merked with the <see cref="T:Sdl.Core.PluginFramework.PluginResourceAttribute"/>
+            attribute, any value assigned to it is assumed to be the name of a plug-in resource and can therefore be retrieved using this method.</remarks>
+            <param name="name">The resource name.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.PluginManifestFilePath">
+            <summary>
+            Gets the full plug-in manifest file path.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.Name">
+            <summary>
+            Returns the file name of the plug-in manifest file.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.FileBasedPluginDescriptor.ResourceManager">
+            <summary>
+            Creates a resource manager containing the plug-in's resources in the UI culture of the current thread. 
+            </summary>
+            <remarks>This implementation creates the resource manager from a file-based 
+            .Net resource file deployed in the same directory as the plug-in manifest file.</remarks>
+            <returns>The resource manager containing the plug-in's resources.</returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IExtensionAware">
+            <summary>
+            This interface can be implemented by extension types that want to know about the extension meta-data associated with the type.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionAware.Extension">
+            <summary>
+            Gets or sets the extension, representing this type. This property is automatically set by the framework.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Implementation.TypeLoaderUtil.GetType(System.String)">
+            <summary>
+            Loads types from the Load context and falls back to the LoadFrom context if that fails. This ensures types in third-party plugins, which
+            are not in the main app folder are also found.
+            </summary>
+            <param name="typeName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ExtensionBuilderAttribute">
+            <summary>
+            Attribute used to customize the creation of an extension instance
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionBuilderAttribute.#ctor(System.Type,System.Type)">
+            <summary>
+            Initialize an instance of the ExtensionBuilder attribute
+            </summary>
+            <param name="extensionAttributeType">The attribute type of the extension</param>
+            <param name="instanceType">The instance result type created by the builder</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionBuilderAttribute.AttributeType">
+            <summary>
+            The attribute type of the extension
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionBuilderAttribute.InstanceType">
+            <summary>
+            The instance result type created by the builder
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ExtensionsFactory">
+            <summary>
+            Implements the creation of the extension objects
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsFactory.Create``2(Sdl.Core.PluginFramework.Integration.ExtensionArguments,System.Boolean)">
+            <summary>
+            Creates the list of all the extension objects based on there attribute and instance type.
+            </summary>
+            <typeparam name="TAttribute">The attributes which decorates the extension classes.</typeparam>
+            <typeparam name="TResult">The instance result type expected.</typeparam>
+            <param name="arguments">Optional arguments possible required by the object initializer.</param>
+            <param name="useCache">Determines if the instance should be retrieved from the cache if exist or create a new one an store it in the cache.</param>
+            <returns>The extension instance.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsFactory.Create``1(Sdl.Core.PluginFramework.IExtension,Sdl.Core.PluginFramework.Integration.ExtensionArguments,System.Boolean)">
+            <summary>
+            Create an extension instance based on its extension and the result type.
+            </summary>
+            <typeparam name="TResult">The instance result type expected.</typeparam>
+            <param name="extension">The extension for which the instance is created.</param>
+            <param name="arguments">Optional arguments possible required by the object initializer.</param>
+            <param name="useCache">Determines if the instance should be retrieved from the cache if exist or create a new one an store it in the cache.</param>
+            <returns>The extension instance.</returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ExtensionsRepository">
+            <summary>
+            Implements an extensions repository which stores singleton instances of the extensions
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.FirstOrDefault(System.Func{Sdl.Core.PluginFramework.Integration.ExtensionStoreItem,System.Boolean})">
+            <summary>
+            Returns the first element stored in the repository that satisfies a condition or a default value if no such element found.
+            </summary>
+            <param name="predicate">The predicate used for the searching inside the repository.</param>
+            <returns>Returns the first element stored in the repository that contains the instance reference.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.FirstOrDefault(System.Object)">
+            <summary>
+            Returns the first element stored in the repository that contains the extension instance reference.
+            </summary>
+            <param name="extensionInstanceReference">The extension instance reference which is searched in the repository</param>
+            <returns>Returns the first element stored in the repository that contains the instance reference.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.GetAssignableInstanceOrDefault``1(System.Type,System.Type)">
+            <summary>
+            Returns an extension instance from the repository which can be assigned to a specified TResult type or null if none was found.
+            </summary>
+            <typeparam name="TResult">The assignable instance type which is required from the extension store.</typeparam>
+            <param name="extensionAttributeType">The type for an attribute decorating the extension for which the search is done.</param>
+            <param name="extensionType">The extension type for which the search is done.</param>
+            <returns>Returns the extension instance assignable to TResult.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.GetAssignableInstanceOrDefault``3">
+            <summary>
+            Returns an extension instance from the repository which can be assigned to a specified TResult type or null if none was found
+            </summary>
+            <typeparam name="TAttribute">The extension attribute type for which the search is done.</typeparam>
+            <typeparam name="TExtensionType">The extension type for which the search is done.</typeparam>
+            <typeparam name="TResult">The assignable instance type which is required from the extension store.</typeparam>
+            <returns>Returns the extension instance assignable to TResult.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.GetAssignableInstanceOrDefault``1(Sdl.Core.PluginFramework.IExtension)">
+            <summary>
+            Returns an extension instance from the repository which can be assigned to a specified TResult type or null if none was found.
+            </summary>
+            <typeparam name="TResult">The assignable instance type which is required from the extension store.</typeparam>
+            <param name="extension">The extension instance for which the search is done.</param>
+            <returns>Returns the extension instance assignable to TResult.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.AddExtension``1(Sdl.Core.PluginFramework.IExtension,Sdl.Core.PluginFramework.Integration.ExtensionArguments,System.Func{Sdl.Core.PluginFramework.IExtension,System.Object,Sdl.Core.PluginFramework.Integration.ExtensionArguments,System.Object})">
+            <summary>
+            Add an extension to the repository
+            </summary>
+            <typeparam name="TResult">The instance which is stored or was created while storing.</typeparam>
+            <param name="extension">The extension object</param>
+            <param name="arguments">The arguments required by the instance creator for the extension instance initialization</param>
+            <param name="instanceCreator">A delegate passed to initialize a custom extension instance which will get the extension object, default extension instance and the extension initializer arguments</param>
+            <returns>The instance created and stored in the repository or an assignable instance already present in the repository.</returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionsRepository.Instance">
+            <summary>
+            Single instance of the ExtensionsRepository
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem">
+            <summary>
+            Implements an item of the repository collection containing extension informations and its instances
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem.References">
+            <summary>
+            A list which stores all the extension related instances (like the adapted instances) and their type.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem.AttributeType">
+            <summary>
+            Extension attribute type
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem.Extension">
+            <summary>
+            Extension object
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem.ExtensionType">
+            <summary>
+            Extension type
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ExtensionStoreItem.DefaultInstance">
+            <summary>
+            The default instance of the extension
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ValuePairTypeInstance">
+            <summary>
+            Implements a pair value containing the instance of an extension and its type
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ValuePairTypeInstance.ResultType">
+            <summary>
+            Result type of the instance
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Integration.ValuePairTypeInstance.Instance">
+            <summary>
+            Instance of the extension
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.ExtensionArguments">
+            <summary>
+            Extension arguments for the initialization of an extension instance
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Integration.IExtensionBuilder">
+            <summary>
+            Implements a custom extension instance builder
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Integration.IExtensionBuilder.Build(Sdl.Core.PluginFramework.IExtension,System.Object,Sdl.Core.PluginFramework.Integration.ExtensionArguments)">
+            <summary>
+            Builds the custom extension instance
+            </summary>
+            <param name="extension">The extension to be created.</param>        
+            <param name="defaultInstance">The default instance of the extension</param>
+            <param name="arguments">Optional arguments for the extension builder</param>
+            <returns>The custom extension instance created.</returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.SdlAssemblyReferenceError">
+            <summary>
+            Types of validation error that occur when validating SDL assembly references
+            in third party plug-ins.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.SdlAssemblyReferenceError.SdlAssemblyNotPublic">
+            <summary>
+            Referenced SDL assembly is not to be used directly by third party plug-ins. 
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.SdlAssemblyReferenceError.NewerApiVersionInstalled">
+            <summary>
+            Newer version of referenced SDL assembly currently installed.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.SdlAssemblyReferenceError.OlderApiVersionInstalled">
+            <summary>
+            Older version of referenced SDL assembly currently installed. 
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.InvalidSdlAssemblyReference">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.InvalidSdlAssemblyReference.#ctor(System.Reflection.AssemblyName,Sdl.Core.PluginFramework.SdlAssemblyReferenceError)">
+            <summary>
+            
+            </summary>
+            <param name="assemblyReference">Assembly reference</param>
+            <param name="validationError">Validation error</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.InvalidSdlAssemblyReference.AssemblyReference">
+            <summary>
+            Assembly reference information 
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.InvalidSdlAssemblyReference.ValidationError">
+            <summary>
+            Validation error
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginFilter">
+            <summary>
+            Provides control over whether certain plug-ins or individual extensions are loaded.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginFilter.ShouldLoadPlugin(System.String)">
+            <summary>
+            Determines whether the specified plug-in should be loaded.
+            </summary>
+            <param name="pluginName">Name of the plugin.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginFilter.ShouldLoadExtension(Sdl.Core.PluginFramework.IPlugin,System.String)">
+            <summary>
+            Determines whether the specified extension should be loaded.
+            </summary>
+            <param name="plugin">The plugin.</param>
+            <param name="extensionId">The extension id.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.InitializePluginCompletedEventArgs">
+            <summary>
+            Events argument class for plug-in initialization completion events (<see cref="E:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginCompleted"/>), 
+            raised during calls to <see cref="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsync(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.InitializePluginCompletedEventArgs.#ctor(Sdl.Core.PluginFramework.IPlugin,System.Exception,System.Boolean)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="plugin">The plug-in for which initialization was attempted.</param>
+            <param name="exception">If initialization failed, the exception that occurred during initialization.</param>
+            <param name="canceled">true if initialization was canelled.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.InitializePluginCompletedEventArgs.Plugin">
+            <summary>
+            Gets the plug-in for which initialization was attempted.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.InitializePluginProgressChangedEventArgs">
+            <summary>
+            Events argument class for plug-in initialization progress events (<see cref="E:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginProgressChanged"/>), 
+            raised during calls to <see cref="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsync(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.InitializePluginProgressChangedEventArgs.#ctor(Sdl.Core.PluginFramework.IPlugin,System.Int32)">
+            <summary>
+            Cosntructor.
+            </summary>
+            <param name="plugin">The plug-in that is being initialized.</param>
+            <param name="progressPercentage">The percentage of initialization that has been completed so far (0-100).</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.InitializePluginProgressChangedEventArgs.Plugin">
+            <summary>
+            Gets the plug-in that is being initialized.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginInitializer">
+            <summary>
+            Component that is used by a plug-in registry (<see cref="T:Sdl.Core.PluginFramework.IPluginRegistry"/>) to initailize plug-ins.
+            This component ensures that the plug-in is ready to be used; i.e. its extensions are ready to be instantiated.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsync(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})">
+            <summary>
+            Starts the initialization of the specified plug-in.
+            </summary>
+            <param name="plugin">The plug-ins to be initialized.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsyncCancel(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})">
+            <summary>
+            Cancels the initailization of the specified plug-in.
+            </summary>
+            <param name="plugin">The plug-ins for which initialization should be cancelled.</param>
+        </member>
+        <member name="E:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginCompleted">
+            <summary>
+            Raised when a plug-in has been initialized, successfully or not.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginProgressChanged">
+            <summary>
+            Raised while a plug-in is being initailized. Can be used to monitor initialization progress.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo">
+            <summary>
+            Provides information about an extension type, which is marked with an extension attribute and 
+            a number of auxiliary extension attributes.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo.ExtensionType">
+            <summary>
+            Gets the type of the extension.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo.ExtensionAttribute">
+            <summary>
+            Gets the extension attribute with which the extension type is marked.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Validation.IExtensionAttributeInfo.AuxiliaryExtensionAttributes">
+            <summary>
+            Gets the auiliary extension attributes with which the extension type is marked.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginStateHandler">
+            <summary>
+            Represents an object that determines whether the user can enable or disable certain plug-ins.
+            This is typically used in a user interface that allows plug-in management.
+            </summary>
+            <remarks>Assign an instance of this object to <see cref="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginStateHandler"/> to use the handler 
+            for a particular plug-in registry.</remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginStateHandler.CanEnable(Sdl.Core.PluginFramework.IPlugin)">
+            <summary>
+            Called by the framework to determine whether a certain plug-in can be enabled.
+            </summary>
+            <param name="plugin">The plug-in to check.</param>
+            <returns>true if the plug-in can be enabled.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginStateHandler.CanDisable(Sdl.Core.PluginFramework.IPlugin)">
+            <summary>
+            Called by the framework to determine whether a certain plug-in can be disabled.
+            </summary>
+            <param name="plugin">The plug-in to check.</param>
+            <returns>true if the plug-in can be disabled.</returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginCache">
+            <summary>
+            Represents a plug-in cache, which is used to store plug-in state.
+            </summary>
+            <remarks>
+            <para>A default implementationm of this interface is available, <see cref="T:Sdl.Core.PluginFramework.XmlPluginCache"/>: it stores plug-in state in an xml file.</para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginCache.GetPluginState(System.String)">
+            <summary>
+            Gets the plug-in state of the plug-in with the specified id.
+            </summary>
+            <param name="pluginId">The id of the plug-in for which to get the state.</param>
+            <returns>A <see cref="T:Sdl.Core.PluginFramework.PluginState"/> object containing the plug-in's state information. If no state 
+            information is found, a default state object is created.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginCache.StorePluginState(Sdl.Core.PluginFramework.IPlugin)">
+            <summary>
+            Stores the state of the specified plug-in in the plug-in cache.
+            </summary>
+            <param name="plugin">The plug-in for which to store the state.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginCache.Save">
+            <summary>
+            Saves the plug-in cache.
+            </summary>
+            <remarks>This method is called automatically when the corresponding plug-in registry is disposed.</remarks>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IExtension">
+            <summary>
+            Represents an extension registered with a particular extension point within a particular plug-in.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IExtension.SetEnabled(System.Boolean)">
+            <summary>
+            Enables or disables this extension.
+            </summary>
+            <param name="enabled">True to enable the extension.</param>
+            <returns>True if disabling the extension does not require restarting the application, false otherwise.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IExtension.CreateInstance">
+            <summary>
+            Creates a new instance of the extension implementation type.
+            </summary>
+            <returns>The newly created instance.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IExtension.GetAuxiliaryExtensionAttributes``1">
+            <summary>
+            Gets the auxiliary extension attributes of the specified type.
+            </summary>
+            <typeparam name="T">The type of auxiliary extension attributes to return.</typeparam>
+            <returns>The auxiliary extension attributes of the requested type.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IExtension.Validate">
+            <summary>
+            Validates this extension.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.PluginFramework.IExtension.EnabledChanged">
+            <summary>
+            Raised when the <see cref="P:Sdl.Core.PluginFramework.IExtension.Enabled"/> property changes.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.Plugin">
+            <summary>
+            Gets the plug-in providing this extension.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.Enabled">
+            <summary>
+            True when this extension is currently enabled.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.ExtensionPoint">
+            <summary>
+            The extension point to which this extension contributes.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.ExtensionAttribute">
+            <summary>
+            Gets the extension attribute that represents this extension.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.ExtensionType">
+            <summary>
+            Gets the extension implementation type.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtension.AuxiliaryExtensionAttributes">
+            <summary>
+            Returns the read-only collection of auxiliary extension attributes, specifying more information about this extension.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ExtensionEventArgs">
+            <summary>
+            Event arguments class for extenion-related events.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ExtensionEventArgs.#ctor(Sdl.Core.PluginFramework.IExtension)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="extension">The extension to which the event relates.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ExtensionEventArgs.Extension">
+            <summary>
+            Gets the extension to which the event relates.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IExtensionPoint">
+            <summary>
+            Represents an extension point, defined by an extension attribute (see <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>), annotated by
+            an <see cref="T:Sdl.Core.PluginFramework.ExtensionPointInfoAttribute"/>.
+            </summary>
+        </member>
+        <member name="E:Sdl.Core.PluginFramework.IExtensionPoint.ExtensionEnabledChanged">
+            <summary>
+            Raised when a extension within this extension point is enabled or disabled.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionPoint.Name">
+            <summary>
+            Gets the name of this extension point.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionPoint.ExtensionAttributeType">
+            <summary>
+            Gets the type of extension attribute that defines this extension point.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionPoint.IsDynamic">
+            <summary>
+            True if this extension point supports dymically enabling or disabling extensions, without having to restart the application.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionPoint.Extensions">
+            <summary>
+            Returns the read-only collection of enabled extensions registered with this extension point.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IExtensionPoint.AllExtensions">
+            <summary>
+            Returns the read-only collection of extensions registered with this extension point, including extensions that have been disabled.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPlugin">
+            <summary>
+            Represents a plug-in, which provides a number of extensions.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPlugin.SetEnabled(System.Boolean)">
+            <summary>
+            Enables or disables the plug-in.
+            </summary>
+            <param name="enabled">True to enable the plug-in.</param>
+            <returns>True if disabling the plug-in does not require restarting the application, false otherwise.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPlugin.GetPluginResource``1(System.String)">
+            <summary>
+            Retrieves a resource of a specific type from the plug-ins resource file.
+            </summary>
+            <remarks>The plug-in resource file is a .Net resource file, with extension ".plugin.resources". 
+            For instance, when the plug-in manifest XML file is called "Myplugin.plugin.xml", the plug-in resource file should be called "MyPlugin.plugin.resources".
+            Localized resources are supported by deploying additional resource files, following the naming convention "MyPlugin.plugin.LANGUAGECODE.resources".</remarks>
+            <typeparam name="T">The type of the resource.</typeparam>
+            <param name="resourceName">The name of the resource in the resource file.</param>
+            <returns>The resource with the specified name, or null if the resource does not exist.</returns>
+            <exception cref="T:System.InvalidCastException">Thrown when the resource with the specified name is not of the required type.</exception>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPlugin.Validate">
+            <summary>
+            Validates this plug-in.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Id">
+            <summary>
+            Returns the unique id of the plug-in.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Version">
+            <summary>
+            Gets the version of the plug-in.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Name">
+            <summary>
+            Returns the friendly name of the plug-in.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Descriptor">
+            <summary>
+            Returns the descriptor through which this plug-in manifest was loaded.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Enabled">
+            <summary>
+            True if the plug-in is enabled.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.CanEnable">
+            <summary>
+            Returns whether this plugin can be enabled. This uses the <see cref="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginStateHandler"/> to determine this and returns true
+            if no such handler is specified.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.CanDisable">
+            <summary>
+            Returns whether this plugin can be disabled. This uses the <see cref="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginStateHandler"/> to determine this and returns true
+            if no such handler is specified.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.IsDynamic">
+            <summary>
+            True if the plug-in can be enabled or disabled without having to restart the application.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Extensions">
+            <summary>
+            Returns the collection of extensions this plug-in provides.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPlugin.Status">
+            <summary>
+            Gets the status of this plug-in. 
+            </summary>
+            <remarks>Only plug-ins with status <see cref="F:Sdl.Core.PluginFramework.PluginStatus.Initialized"/>
+            are fully functional and can instantiate their extensions. Plug-ins that have not been initialized must be initialized before use 
+            by using <see cref="T:Sdl.Core.PluginFramework.IPluginInitializer"/>.</remarks>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.NamespaceDoc">
+            <summary>
+            This namespace contains the majority of the plug-in framework classes and interfaces.
+            This includes the following:
+            <list type="unordered">
+            <item>The plug-in framework object model, which allows host applications to discover and instantiate extensions.
+            The entry point for this is the <see cref="T:Sdl.Core.PluginFramework.PluginManager"/> class.</item>
+            <item>Support for developing extension points. See <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>.</item>
+            <item></item>
+            </list>
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.DefaultPluginLocator">
+            <summary>
+            Implementation of a plug-in locator (<see cref="T:Sdl.Core.PluginFramework.IPluginLocator"/>) which loads locates plug-ins within
+            a directory on the local file system and an OpenExchange directory that contains sub-folders with individual plug-ins.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginLocator">
+            <summary>
+            Represents a plug-in locator, which is used by a plug-in registry to locate plug-ins.
+            </summary>
+            <remarks>
+            <para>The framework includes one implementation, <see cref="T:Sdl.Core.PluginFramework.DefaultPluginLocator"/>, which loads locates plug-ins within
+            a directory on the local file system.</para>
+            <para>The plug-in locator is automatically disposed when the plug-in registry that owns it is disposed.</para></remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginLocator.GetPluginDescriptors">
+            <summary>
+            Returns an array of plug-in descriptors for plug-ins found.
+            </summary>
+            <returns>An array of plug-in descriptors.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginLocator.#ctor">
+            <summary>
+            Creates a default plug-in locator, which loads plug-ins from a "Plugins" subfolder of the installation folder and
+            will optionally search in a specified Open Exchange plug-in location.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginLocator.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a Open Exchange plug-in locator using the specified plug-in search directory and Open Exchange directory.
+            </summary>
+            <param name="systemPluginsDirectory">The directory in which to look for plug-ins.</param>
+            <param name="thirdPartyPluginsDirectory">The directory in which to look for Open Exchange plug-ins.</param>
+            <param name="thirdPartyPluginsPackagesDirectory">The directory in which to look for plug-in packages to unpack or compare with.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginLocator.GetPluginDescriptors">
+            <summary>
+            Returns an array of plug-in descriptors for plug-ins found.
+            </summary>
+            <remarks>This locator looks for plug-in manifest files with the extension ".plugin.xml".</remarks>
+            <returns>An array of plug-in descriptors.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.DefaultPluginLocator.Dispose">
+            <summary>
+            Disposes the plug-in locator.
+            </summary>
+            <remarks>This method is called automatically when the owning plug-in registry is disposed.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.DefaultPluginLocator.LoadThirdPartyPlugins">
+            <summary>
+            allows you to override the default setting in PluginConfigXml for enabling loading third-party plug-ins.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.DefaultPluginLocator.SystemPluginsDirectory">
+            <summary>
+            Gets the system plug-ins directory.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.DefaultPluginLocator.ThirdPartyPluginsDirectory">
+            <summary>
+            Gets the third-party plug-ins directory.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.DefaultPluginLocator.ThirdPartyPluginsPackagesDirectory">
+            <summary>
+            Gets the directory where plug-in packages are located.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginId">
+            <summary>
+            Unique identity of a plug-in. The id of a plug-in is the name of the plug-in assembly.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginId.#ctor(System.String)">
+            <summary>
+            Creates a <see cref="T:Sdl.Core.PluginFramework.PluginId"/> object with a string id.
+            </summary>
+            <param name="id">The plug-in id.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginId.Equals(System.Object)">
+            <summary>
+            Compares IDs by looking at the underlying <see cref="P:Sdl.Core.PluginFramework.PluginId.Id"/> property.
+            </summary>
+            <param name="obj"></param>
+            <returns>True if the IDs are equal.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginId.GetHashCode">
+            <summary>
+            Overridden to returns a hash of the underlying plug-in <see cref="P:Sdl.Core.PluginFramework.PluginId.Id"/>.
+            </summary>
+            <returns>The hashcode.</returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginId.Id">
+            <summary>
+            returns the underlying id. The id of a plug-in is the name of the plug-in assembly.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginInitializationResultsEventArgs">
+            <summary>
+            Event args providing initialization results for a number of plug-ins. See <see cref="M:Sdl.Core.PluginFramework.IPluginRegistry.EnsurePluginsInitialized(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IExtension},System.EventHandler{Sdl.Core.PluginFramework.PluginInitializationResultsEventArgs})"/>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginInitializationResultsEventArgs.#ctor(Sdl.Core.PluginFramework.PluginInitializationResult[])">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="results">An array of plug-in initialization results, one for each plug-in that was initialized.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginInitializationResultsEventArgs.Results">
+            <summary>
+            Gets the initialization results for all the initialized plug-ins.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginInitializationResult">
+            <summary>
+            Provides result information from plug-in initialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginInitializationResult.#ctor(Sdl.Core.PluginFramework.IPlugin,System.Exception)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="plugin">The plug-in for which initialization was attempted.</param>
+            <param name="exception">The exception that occurred, if initialization failed.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginInitializationResult.Plugin">
+            <summary>
+            Gets the plug-in.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginInitializationResult.Exception">
+            <summary>
+            Gets the exception that occurred if initialization failed. Returns null if initialization was sucessful.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ValidatingPluginLocator">
+            <summary>
+            This class is an extensiton to an existing <see cref="T:Sdl.Core.PluginFramework.IPluginLocator"/> interface and allows installed third party plugins to be
+            validated against their .sdlplugin packages and it's embedded signature.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ValidatingPluginLocator.#ctor(Sdl.Core.PluginFramework.IPluginLocator)">
+            <summary>
+            Constructs a ValidatingPluginLocator class using the supplied <see cref="T:Sdl.Core.PluginFramework.IPluginLocator"/> base class.
+            </summary>
+            <param name="baseLocator">A base class that implements <see cref="T:Sdl.Core.PluginFramework.IPluginLocator"/>.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ValidatingPluginLocator.GetPluginDescriptors">
+            <summary>
+            Returns an array of plug-in descriptors for plug-ins found.
+            </summary>
+            <returns>An array of plug-in descriptors.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ValidatingPluginLocator.Dispose">
+            <summary>
+            Disposes the plug-in locator.
+            </summary>
+            <remarks>This method is called automatically when the owning plug-in registry is disposed.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ValidatingPluginLocator.ValidatedDescriptors">
+            <summary>
+            This property exposes a list of validated plug-in descriptors that can be inspected or added to.
+            </summary>
+            <remarks>If any plug-in descriptors are added to this list then they will also be returned by a call to <see cref="M:Sdl.Core.PluginFramework.ValidatingPluginLocator.GetPluginDescriptors"/>.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ValidatingPluginLocator.InvalidDescriptors">
+            <summary>
+            This property exposes a list of plug-in descriptors that have failed to validate against the original .sdlplugin package and it's embedded signature.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.ExtensionSorter">
+            <summary>
+            Utility class that sorts sortable extensions.
+            </summary>
+            <remarks>This class only supports sortable extensions, i.e. extensions marked with an extension attribute that extends <see cref="T:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute"/>.</remarks>
+            <seealso cref="T:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute"/>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.ExtensionSorter.Sort(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IExtension})">
+            <summary>
+            Sorts the specified extensions according to the according to the <see cref="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertBefore"/>
+            and <see cref="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertAfter"/> properties.
+            </summary>
+            <param name="extensions">The extensions to sort.</param>
+            <returns>A sorted list of extensions.</returns>
+            <exception cref="T:System.ArgumentException">Thrown if one of the extensions specified does not target a sortable extenion point.</exception>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.ITopologicalSortable">
+            <summary>
+            Interface to be implemented by classes that need to support sorting topologically using the <see cref="T:Sdl.Core.PluginFramework.Util.TopologicalSort`1"/> class.
+            </summary>
+            <seealso cref="T:Sdl.Core.PluginFramework.Util.TopologicalSort`1"/>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.ITopologicalSortable.Id">
+            <summary>
+            Gets the id of the item.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.ITopologicalSortable.InsertBefore">
+            <summary>
+            Returns the id of the item before which this item needs to appear. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.ITopologicalSortable.InsertAfter">
+            <summary>
+            Returns the id of the item after which this item needs to appear. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.ITopologicalSortable.Priority">
+            <summary>
+            Returns the sorting priority of this item.
+            </summary>
+            <remarks>When two items specify the same criteria, for example InsertBefore=x, then the item with the highest priority, will be inserted
+            right before x, followed by the item with the lower priority.</remarks>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.NamespaceDoc">
+            <summary>
+            This namespace contains various utility classes that faciliate extension point development.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.SortedObjectRegistry`2">
+            <summary>
+            Helper class for implementers of extension points, which allows easy instantiation of all extensions
+            registered with a sortable extension point (<see cref="T:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute"/>) identified by a specific type of extension attribute.
+            </summary>
+            <typeparam name="TSortableExtensionAttribute">The type of sortable extension attribute, identifying the extension point.</typeparam>
+            <typeparam name="TExtensionType">The type of the extension implementation classes for the extension point.</typeparam>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.ObjectRegistry`2">
+            <summary>
+            Helper class for implementers of extension points, which allows easy instantiation of all extensions
+            registered with an extension point identified by a specific type of extension attribute.
+            </summary>
+            <typeparam name="TExtensionAttribute">The type of extension attribute, identifying the extension point.</typeparam>
+            <typeparam name="TExtensionType">The type of the extension implementation classes for the extension point.</typeparam>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ObjectRegistry`2.#ctor(Sdl.Core.PluginFramework.IPluginRegistry)">
+            <summary>
+            Constructs an object registry for the specified extension attribute.
+            </summary>
+            <param name="pluginRegistry">The plug-in registry from which to retrieve the extensions.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.ObjectRegistry`2.CreateObjects">
+            <summary>
+            Creates an instance of all the objects registered with the extension point an returns them as an array.
+            </summary>
+            <returns>An array, containing a new instance of every object registered with the extension point.</returns>
+            <exception cref="T:System.InvalidCastException">Thrown when any of the created objects cannot be cast to the required type.</exception>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.ObjectRegistry`2.ExtensionPoint">
+            <summary>
+            Returns the id of the extension point from which the objects should be loaded.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.SortedObjectRegistry`2.#ctor(Sdl.Core.PluginFramework.IPluginRegistry)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="pluginRegistry">The plug-in registry from which to retrieve the extensions.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.SortedObjectRegistry`2.CreateObjects">
+            <summary>
+            Creates an instance of all the objects registered with the extension point, sorts them, and returns them as an array.
+            </summary>
+            <returns>An array, containing a new instance of every object registered with the extension point, sorted according to the <see cref="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertBefore"/>
+            and <see cref="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertAfter"/> properties.</returns>
+            <exception cref="T:System.InvalidCastException">Thrown when any of the created objects cannot be cast to the required type.</exception>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute">
+            <summary>
+            Base class for extension attributes that allow specifying topological sort information.
+            </summary>
+            <remarks>
+            <para>
+            Use this attribute as a base when developing extension points that require the ability for their extensions 
+            to specify the order in which they should be used.
+            </para>
+            <para>
+            In order to consume extensions of a sortable extension point, use <see cref="T:Sdl.Core.PluginFramework.Util.SortedObjectRegistry`2"/>
+            if you want to create all extension instances at once. Use the <see cref="T:Sdl.Core.PluginFramework.Util.TopologicalSort`1"/> class if you need more control 
+            over when the extensions are instantiated.
+            </para>
+            </remarks>
+            <see cref="T:Sdl.Core.PluginFramework.Util.TopologicalSort`1"/>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.#ctor">
+            <summary>
+            Default constructor for XML serialization.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructor with required attributes.
+            </summary>
+            <param name="id">The unique id for the extension.</param>
+            <param name="name">The name for the extension. Should typically be a key of a resource string in PluginResources.resx.</param>
+            <param name="description">The description for the extension. Should typically be a key of a resource string in PluginResources.resx.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertBefore">
+            <summary>
+            Gets or sets the id of the extension before which this extension should be inserted.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.Util.SortableExtensionAttribute.InsertAfter">
+            <summary>
+            Gets or sets the id of the extension after which this extension should be inserted.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.TopologicalSort`1">
+            <summary>
+            Class for sorting lists topologically.
+            </summary>
+            <typeparam name="T">The type of item to sort. Needs to implement or extend the <see cref="T:Sdl.Core.PluginFramework.Util.ITopologicalSortable"/> interface.</typeparam>
+            <seealso cref="T:Sdl.Core.PluginFramework.Util.ITopologicalSortable"/>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.TopologicalSort`1.Sort(System.Collections.Generic.IList{`0})">
+            <summary>
+            Sorts the specified list topologically.
+            </summary>
+            <param name="items">List of items to sort.</param>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Util.TopologicalExtensions">
+            <summary>
+            This contains Extension methods for Topological Sorting
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Util.TopologicalExtensions.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Sort an Enumerable by the TopologicalSortable interface
+            </summary>
+            <typeparam name="T">ITopologicalSortable type</typeparam>
+            <param name="items">ITopologicalSortable items</param>
+            <returns>Sorted items</returns>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Validation.IExtensionValidationContext">
+            <summary>
+            Provides functionality for extension point implementers to validate extensions targeting the extension point
+            and report warning or error messages.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Validation.IExtensionValidationContext.ReportError(System.String,System.String)">
+            <summary>
+            Reports an error.
+            </summary>
+            <param name="code">The error code, which serves as a reference for errors of this type.</param>
+            <param name="message">The error message.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Validation.IExtensionValidationContext.ReportWarning(System.String,System.String)">
+            <summary>
+            Reports an warning.
+            </summary>
+            <param name="code">The error code, which serves as a reference for warnings of this type.</param>
+            <param name="message">The warning message.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Validation.IExtensionValidationContext.ValidateRequiredInterface(System.Type)">
+            <summary>
+            Utility method to generate an error if the extension type does not implement the interface of the specified type.
+            </summary>
+            <param name="interfaceType">The interface type to check for.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.Validation.IExtensionValidationContext.ValidateRequiredExtensionAttributeType(Sdl.Core.PluginFramework.AuxiliaryExtensionAttribute,System.Type)">
+            <summary>
+            Utility method for use in auxiliary extension attribute implementations to validate
+            whether the main extension attribute is of the require type.
+            </summary>
+            <param name="auxiliaryExtensionAttribute">The auxiliary extension attribute that is being validated.</param>
+            <param name="extensionAttributeType">The type of extension attribute required by the auxiliary extension attribute.</param>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.Validation.NamespaceDoc">
+            <summary>
+            This namespace contains a couple of interfaces related to compile-time validation of extensions.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.XmlPluginCache">
+            <summary>
+            Default implementation of the plug-in cache interface (see <see cref="T:Sdl.Core.PluginFramework.IPluginCache"/>) that stores plug-in state 
+            into an xml file.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginCache.#ctor(System.String)">
+            <summary>
+            Constructs a plug-in cache using the specified path for persisting plug-in state.
+            </summary>
+            <param name="pluginCacheFilePath">The path to a plug-in cache xml file. A new file is created if it does not exist yet.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginCache.GetPluginState(System.String)">
+            <summary>
+            Gets the plug-in state of the plug-in with the specified id.
+            </summary>
+            <param name="pluginId">The id of the plug-in for which to get the state.</param>
+            <returns>A <see cref="T:Sdl.Core.PluginFramework.PluginState"/> object containing the plug-in's state information. If no state 
+            information is found, a default state object is created.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginCache.StorePluginState(Sdl.Core.PluginFramework.IPlugin)">
+            <summary>
+            Stores the state of the specified plug-in in the plug-in cache.
+            </summary>
+            <param name="plugin">The plug-in for which to store the state.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginCache.Save">
+            <summary>
+            Saves the plug-in cache to the plug-in cache xml file.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginCache.PluginCacheFilePath">
+            <summary>
+            Gets the file path of the plug-in cache xml file.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.IPluginRegistry">
+            <summary>
+            This interface provides the main entry point for working with plug-ins and extensions.
+            </summary>
+            <remarks>Instances of the plugin registry can be created using the various factory methods of the <see cref="T:Sdl.Core.PluginFramework.PluginManager"/> class.</remarks>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginRegistry.GetExtensionPoint``1">
+            <summary>
+            Gets the extension point for a certain type of extension attribute.
+            </summary>
+            <returns>The extension point for the given type of extension attribute.</returns>
+            <typeparam name="T">The extension attribute type identifying the extension point.</typeparam>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.IPluginRegistry.EnsurePluginsInitialized(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IExtension},System.EventHandler{Sdl.Core.PluginFramework.PluginInitializationResultsEventArgs})">
+            <summary>
+            Helper method to asynchronously initialize all the plug-ins that are required to instantiate the specified
+            extensions.
+            </summary>
+            <param name="extensions"></param>
+            <param name="pluginsInitializedCallback"></param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginCache">
+            <summary>
+            Returns the plug-in cache associated with this plug-in registry.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginLocator">
+            <summary>
+            Returns the plug-in locator associated with this plug-in registry.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginTypeLoader">
+            <summary>
+            Gets the plug-in type loader component used by the plug-in registry to load types referred to in plug-in manifests.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginFilter">
+            <summary>
+            Gets the plug-in filter that controls whether certain plug-ins or individual extensions are loaded. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.Plugins">
+            <summary>
+            Returns a collection of all the plug-ins that are available.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginStateHandler">
+            <summary>
+            Gets or sets an plugin state handler, which determines whether plugins can be enabled or disabled. Can be null.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.IPluginRegistry.PluginInitializer">
+            <summary>
+            Gets the <see cref="T:Sdl.Core.PluginFramework.IPluginInitializer"/> used by the plug-in registry to initialize plug-ins.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginState">
+            <summary>
+            Captures the state of a plug-in, which can be saved into a plugin cache (see <see cref="T:Sdl.Core.PluginFramework.IPluginCache"/>).
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginState.#ctor(System.Boolean)">
+            <summary>
+            Constructor with <see cref="P:Sdl.Core.PluginFramework.PluginState.Enabled"/> property.
+            </summary>
+            <param name="enabled">True if the plug-in is enabled</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginState.Enabled">
+            <summary>
+            Gets or sets whether a plug-in is enabled.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginInitializedCallback">
+            <summary>
+            Callback delegate for the <see cref="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsync(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})"/> call.
+            </summary>
+            <param name="plugin">The plug-in for which initialization was attempted.</param>
+            <param name="error">If initialization failed, the exception that occurred during initialization.</param>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginStatus">
+            <summary>
+            Represents the status of a plug-in.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.PluginStatus.NotInitialized">
+            <summary>
+            The initial status of a plug-in when the plug-in registry has been loaded.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.PluginStatus.Initializing">
+            <summary>
+            The plug-in is currently initializing. This is the case during a call to <see cref="M:Sdl.Core.PluginFramework.IPluginInitializer.InitializePluginAsync(System.Collections.Generic.IEnumerable{Sdl.Core.PluginFramework.IPlugin})"/>.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.PluginStatus.Initialized">
+            <summary>
+            The plug-in has been successfully initialized. This means extensions provided by the plug-in can be instantiated.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.PluginFramework.PluginStatus.InitializationFailed">
+            <summary>
+            The plug-in failed to initialize. You cannot instantiate extensions provided by the plug-in.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginAttribute">
+            <summary>
+            Assembly-level attribute that indicates that an assembly contains extension definitions.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginAttribute.#ctor(System.String)">
+            <summary>
+            Constructor with required properties.
+            </summary>
+            <param name="name">A friendly name for this plug-in. Should typically be a key of a resource string in PluginResources.resx.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginAttribute.Name">
+            <summary>
+            Gets or sets the friendly name for this plug-in. Should typically be a key of a resource string in PluginResources.resx.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginCollection">
+            <summary>
+            Read-only collection of plug-ins (<see cref="T:Sdl.Core.PluginFramework.IPlugin"/>).
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginManager">
+            <summary>
+            Main entry point to the plug-in framework.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginManager.CreateDefaultPluginCache">
+            <summary>
+            Creates the default plu-in cache, stored in an XML file in the user's profile.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginManager.ResolvePluginAssemblyReference(System.String)">
+            <summary>
+            Resolve the assembly reference when the version is compatible with the current installed version.
+            </summary>
+            <param name="pluginAssemblyReference">Assembly reference to resolve</param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginManager.CreatePluginRegistry(Sdl.Core.PluginFramework.IPluginLocator,Sdl.Core.PluginFramework.IPluginStateHandler,Sdl.Core.PluginFramework.IPluginInitializer,Sdl.Core.PluginFramework.IPluginTypeLoader,Sdl.Core.PluginFramework.IPluginCache,Sdl.Core.PluginFramework.IPluginFilter,System.Boolean)">
+            <summary>
+            Creates a plug-in registry containing plug-ins from the specified plugin directory.
+            </summary>
+            <remarks>Attach an event handler to this the <see cref="E:Sdl.Core.PluginFramework.PluginManager.PluginLoadException"/> even before calling this method to get
+            notification about plug-ins that fail to load.</remarks>
+            <param name="pluginLocator">A plug-in locator to locate the plug-in manifest files to be loaded.</param>
+            <param name="pluginStateHandler">Determines which plug-ins can or cannot be loaded.</param>
+            <param name="pluginInitializer">Object that initializes plug-ins before any if its extensions is loaded.</param>
+            <param name="pluginTypeLoader">Loads a specific type part of a plug-in.</param>
+            <param name="pluginCache">A plug-in cache object, that can be used to restore plug-in state.</param>
+            <param name="filter">A plug-in filter that controls whether certain plug-ins or individual extensions are loaded. Can be null.</param>
+            <param name="validate">True to validate all the plug-ins detected. Specify false to ensure lazy initialization.</param>
+            <returns>The newly created plug-in registry.</returns>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginManager.CreatePluginRegistry(Sdl.Core.PluginFramework.IPluginLocator,Sdl.Core.PluginFramework.IPluginStateHandler,Sdl.Core.PluginFramework.IPluginInitializer,Sdl.Core.PluginFramework.IPluginTypeLoader,Sdl.Core.PluginFramework.IPluginCache,System.Boolean)">
+            <summary>
+            Creates a plug-in registry containing plug-ins from the specified plugin directory.
+            </summary>
+            <remarks>Attach an event handler to this the <see cref="E:Sdl.Core.PluginFramework.PluginManager.PluginLoadException"/> even before calling this method to get
+            notification about plug-ins that fail to load.</remarks>
+            <param name="pluginLocator">A plug-in locator to locate the plug-in manifest files to be loaded.</param>
+            <param name="pluginStateHandler">Determines which plug-ins can or cannot be loaded.</param>
+            <param name="pluginInitializer">Object that initializes plug-ins before any if its extensions is loaded.</param>
+            <param name="pluginTypeLoader">Loads a specific type part of a plug-in.</param>
+            <param name="pluginCache">A plug-in cache object, that can be used to restore plug-in state.</param>
+            <param name="validate">True to validate all the plug-ins detected. Specify false to ensure lazy initialization.</param>
+            <returns>The newly created plug-in registry.</returns>
+        </member>
+        <member name="E:Sdl.Core.PluginFramework.PluginManager.PluginLoadException">
+            <summary>
+            Raised when an exception occurs while creating a plug-in registry instance using one of the factory methods of this class.
+            </summary>
+            <remarks>Attach an event handler to this event before calling one of the factory methods of this class to get
+            notification about plug-ins that fail to load.</remarks>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginManager.DefaultPluginRegistry">
+            <summary>
+            Returns the default plug-in registry.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginLoadExceptionEventArgs">
+            <summary>
+            EventArgs class for the <see cref="E:Sdl.Core.PluginFramework.PluginManager.PluginLoadException"/> event.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginLoadExceptionEventArgs.#ctor(Sdl.Core.PluginFramework.IPluginDescriptor,System.Exception)">
+            <summary>
+            Initializes a new instance of the PluginLoadExceptionEventArgs class.
+            </summary>
+            <param name="pluginDescriptor">The plug-in descriptor of the plug-in that failed to load.</param>
+            <param name="exception">The exception that occurred while loading the plug-in.</param>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginLoadExceptionEventArgs.PluginDescriptor">
+            <summary>
+            Gets the plug-in descriptor of the plug-in that failed to load.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.PluginLoadExceptionEventArgs.Exception">
+            <summary>
+            Gets the exception that occurred when loading the plug-in.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginFrameworkException">
+            <summary>
+            Exception class for exceptions related to the plugin registry.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginFrameworkException.#ctor">
+            <summary>
+            Default constructor.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginFrameworkException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor wrapping an inner exception.
+            </summary>
+            <param name="message">Message clarifying the exception.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginFrameworkException.#ctor(System.String)">
+            <summary>
+            Constructor with message.
+            </summary>
+            <param name="message">Message clarifying the exception.</param>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.PluginFrameworkException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Constructor for serialization.
+            </summary>
+            <param name="info">Serialization info.</param>
+            <param name="context">Streaming context.</param>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.PluginResourceAttribute">
+            <summary>
+            Attribute for annotation extension attribute string properties to indicate that the value of the property
+            should be retrieved from the plug-in resources file of the plug-in in which the extension is defined.
+            </summary>
+            <remarks>For more information see <see cref="T:Sdl.Core.PluginFramework.ExtensionAttribute"/>.</remarks>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.StringResources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.Plugin_FailedToLoadDefinition">
+            <summary>
+              Looks up a localized string similar to Failed to load plugin manifest file from &apos;{0}&apos;: {1}.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.Plugin_FailedToLoadResources">
+            <summary>
+              Looks up a localized string similar to Failed to load plugin resources for plugin loaded from &apos;{0}&apos;: {1}.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.Plugin_InvalidDefinitionRoot">
+            <summary>
+              Looks up a localized string similar to Invalid plugin definition root element: &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.Plugin_RequiredAttributeMissing">
+            <summary>
+              Looks up a localized string similar to Required attribute &apos;{0}&apos; of element &apos;{1}&apos; is missing in plugin manifest file loaded from &apos;{2}&apos;..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.StringResources.PluginRegistry_ExtensionPointNotFound">
+            <summary>
+              Looks up a localized string similar to Extension point &apos;{0}&apos; does not exist..
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.PluginFramework.XmlPluginConfig">
+            <summary>
+            Loads the third-party configuration settings from an xml file.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginConfig.#ctor">
+            <summary>
+            Constructs a class for reaading plug-in configuration values.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.PluginFramework.XmlPluginConfig.IsValid(Sdl.Core.PluginFramework.PackageSupport.PackageManifest)">
+            <summary>
+            Checks whether the plug-in package described by the specified manifest is valid within the currenmt plug-in configuration.
+            </summary>
+            <param name="packageManifest"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.PluginConfigFilePath">
+            <summary>
+            Gets the file path of the plug-in config xml file.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.ThirdPartyPluginsEnabled">
+            <summary>
+            Gets or sets if third-party plugins are enabled.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.ThirdPartyPluginsRelativePath">
+            <summary>
+            Gets or sets the configured third-party plugin-root folder
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.ThirdPartyPluginPackagesRelativePath">
+            <summary>
+            Gets or sets the configured third-party package storage folder
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.ProductVersions">
+            <summary>
+            Gets the installed product versions.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.PluginFramework.XmlPluginConfig.ApiVersions">
+            <summary>
+            Gets the installed API versions.
+            </summary>
+        </member>
+    </members>
+</doc>
