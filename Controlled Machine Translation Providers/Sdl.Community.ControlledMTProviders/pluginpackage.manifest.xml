@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Sdl.Community.ControlledMTProviders</PlugInName>
+  <Version>2.0</Version>
+  <Description>Sdl.Community.ControlledMTProviders</Description>
+  <Author></Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <Include>
+    <File>Newtonsoft.Json.dll</File>
+  </Include>
+</PluginPackage>
