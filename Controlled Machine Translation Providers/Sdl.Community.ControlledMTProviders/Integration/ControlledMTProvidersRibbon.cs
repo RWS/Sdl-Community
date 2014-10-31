@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.ControlledMTProviders.Integration
 {
-    [RibbonGroup("SDL.Community.ManageMTRibbonGroup", Name = "Controled MT Providers")]
+    [RibbonGroup("SDL.Community.ManageMTRibbonGroup", Name = "Controlled MT Providers")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorAdvancedRibbonTabLocation))]
     class ControlledMTProvidersRibbon : AbstractRibbonGroup
     {

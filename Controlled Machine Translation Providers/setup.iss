@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
 
 [Setup]
-AppName=Controlled Machine Translation
+AppName=Controlled Machine Translation Providers
 AppPublisher=SDL Community Developers
 AppPublisherURL=https://community.sdl.com/
-AppVersion=1.00
+AppVersion=0.1.1.0
 DisableDirPage = yes
 DisableWelcomePage = yes
 AllowNoIcons = yes
