@@ -5,3 +5,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Controlled Machine Translation Providers
 * [Documentation](Controlled Machine Translation Providers)
+
+## Number verifier
+* [Documentation](Number Verifier)
