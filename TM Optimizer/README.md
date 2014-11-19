@@ -1,4 +1,4 @@
-# Number Verifier
+# TM Optimizer
 
 ##Using TM Optimizer
 
