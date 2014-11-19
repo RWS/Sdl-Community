@@ -8,7 +8,7 @@ On the first page of the TM Optimizer wizard, you have two choices, depending on
             
 1. **Convert Workbench translation memory:** Use this option when you have not yet converted your Workbench TM for use in Studio. You will need a TMX export of the Workbench TM you want to convert.
 1. **Optimize already converted Workbench translation memory:** Use this option when you have already converted your Workbench TM to a Studio TM but are having problems caused by excessive formatting tags. You will need your Studio TM and a TMX export of your original Workbench TM.
-![Wizzard Intro](/TM Optimizer/Sdl.Community.TMOptimizer/TMOptimizerHelp/images/wizard_intro.png)
+            ![Wizzard Intro](/TM Optimizer/Sdl.Community.TMOptimizer/TMOptimizerHelp/images/wizard_intro.png)
 
 On the second page, select the TMX files you have exported from your existing TRADOS Workbench TM. The TMX files are analyzed and the number of TUs and languages are displayed. If you had already converted the Workbench TMs to Studio TMs using the Studio TM upgrade wizard (and have selected option 2 on the previous page), you also have to select that Studio TM here.
 ![Wizzard Input](/TM Optimizer/Sdl.Community.TMOptimizer/TMOptimizerHelp/images/wizard_input.png)
