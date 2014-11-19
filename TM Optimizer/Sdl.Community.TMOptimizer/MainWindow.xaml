@@ -1,0 +1,46 @@
+﻿<Window x:Class="Sdl.Community.TMOptimizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:Sdl.Community.TMOptimizer"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        Title="{Binding Title}" Height="600" Width="900" 
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
+        mc:Ignorable="d" Icon="Images/product.ico" WindowStartupLocation="CenterScreen">
+    
+    
+    <xctk:Wizard x:Name="_wizard" FinishButtonClosesWindow="True"  
+                 Next="Wizard_Next"
+                 Previous="Wizard_Previous"
+                 Finish="Wizard_Finish"
+                 Cancel="Wizard_Cancel"
+                 Help="Wizard_Help"
+                 CanFinish="{Binding CanFinish}" Margin="1,0,-1.421,-0.093">
+        <xctk:WizardPage x:Name="IntroPage" 
+                                   Title="TM Optimizer"
+                                   Description="This wizard enables you to optimize translation memories created in TRADOS Workbench for use in SDL Trados Studio. Please choose one of the following options.">
+            <local:IntroWizardPageControl />
+        </xctk:WizardPage>
+        <xctk:WizardPage x:Name="InputPage" PageType="Interior"
+                                   Title="Input Sources"
+                                   Description="Specify one or more Workbench TMX files to clean up and an optional Studio TM that was originally created from those Workbench TMs but needs to be cleaned up."
+                                   NextPage="{Binding ElementName=OutputPage}"
+                                   PreviousPage="{Binding ElementName=IntroPage}"
+                         >
+            <local:InputWizardPageControl />
+        </xctk:WizardPage>
+        <xctk:WizardPage x:Name="OutputPage" PageType="Interior"
+                                   Title="Output Translation Memory"
+                                   Description="Specify whether to create a new TM or update an existing one.">
+            <local:OutputWizardPageControl />
+        </xctk:WizardPage>
+        <xctk:WizardPage x:Name="ProcessingPage" PageType="Interior"
+                                   Title="Processing"
+                                   Description="Please wait while your translation memory is being cleaned and optimized"
+                                   CanFinish="True">
+            <local:ProcessingWizardPageControl />
+        </xctk:WizardPage>
+    </xctk:Wizard>  
+    
+</Window>

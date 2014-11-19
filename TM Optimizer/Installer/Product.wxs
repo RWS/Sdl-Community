@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product
+    Id="*"
+    UpgradeCode="A4BBD8AB-5783-4DAF-BB65-5C4331C82E5F"
+    Name="TM Optimizer 1.1"
+    Language="1033"
+    Version="1.1.0"
+    Manufacturer="SDL" >
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Description="TM Optimizer 1.0" InstallPrivileges="elevated" Manufacturer="SDL" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Icon Id="ProductIcon.exe" SourceFile="$(sys.SOURCEFILEDIR)Bitmaps\Product.ico"/>
+
+    <Property Id="ARPINSTALLLOCATION">
+      <RegistrySearch Id="GetARPInstallLocationFromRegistry" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]" Name="InstallLocation" Type="raw"/>
+    </Property>
+    <!-- Get the INSTALLDIR of Studio if it has been installed (which it should have been). -->
+    <Property Id="STUDIO3INSTALLDIR" Secure="yes">
+      <RegistrySearch Id="GetStudio3InstallLocationFromRegistry" Root="HKLM" Key="Software\SDL\Studio3" Name="InstallLocation" Type="raw"/>
+    </Property>
+
+    <!-- Before running appsearches that require admin access, we must check in a CA if user is admin. LaunchConditions run after AppSearch. -->
+    <CustomAction Error="25003" Id="EnsurePrivileged"/>
+    <!-- Write install dir to ARP. -->
+    <SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" After="CostFinalize" Sequence="execute"/>
+    <!-- Set INSTALLDIR to the same value as Studio's if it was found else keep previous value. -->
+    <CustomAction Id="SetINSTALLDIRFromStudio" Property="INSTALLDIR" Value="[STUDIO3INSTALLDIR]"/>
+    <InstallUISequence>
+      <Custom Action="EnsurePrivileged" Before="FindRelatedProducts">not Privileged</Custom>
+      <Custom Action="SetINSTALLDIRFromStudio" After="AppSearch" Overridable="yes">STUDIO3INSTALLDIR</Custom>
+    </InstallUISequence>
+    <InstallExecuteSequence>
+      <Custom Action="EnsurePrivileged" Before="FindRelatedProducts">not Privileged</Custom>
+      <Custom Action="SetINSTALLDIRFromStudio" After="AppSearch" Overridable="yes">STUDIO3INSTALLDIR</Custom>
+    </InstallExecuteSequence>
+    
+    <Condition Message="This product can only be installed with SDL Trados Studio 2014."><![CDATA[ Installed or STUDIO3INSTALLDIR ]]></Condition>
+
+    <UI Id="WixUI_MinimalNoUla">
+            <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+            <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+            <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+            <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+            <Property Id="WixUI_Mode" Value="Minimal" />
+
+            <DialogRef Id="ErrorDlg" />
+            <DialogRef Id="FatalError" />
+            <DialogRef Id="FilesInUse" />
+            <DialogRef Id="MsiRMFilesInUse" />
+            <DialogRef Id="PrepareDlg" />
+            <DialogRef Id="ProgressDlg" />
+            <DialogRef Id="ResumeDlg" />
+            <DialogRef Id="UserExit" />
+            <DialogRef Id="WelcomeDlg" />
+
+          <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999" >1</Publish>
+
+          <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+          <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+          <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+          <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg" Order="2">1</Publish>
+
+          <Property Id="ARPNOMODIFY" Value="1" />
+        <Error Id="25003">You must be running as an administrator or with elevated rights to install, maintain or remove this product.</Error>
+
+    </UI>
+
+        <UIRef Id="WixUI_Common" />
+
+
+    <Feature Id="ProductFeature" Title="TMOptimizer.WixInstaller" Level="1">
+      <ComponentRef Id="Sdl.TMOptimizer.exe" />
+      <ComponentRef Id="Sdl.TMOptimizer.exe.config" />
+      <ComponentRef Id="Sdl.TMOptimizerLib.dll" />
+      <ComponentRef Id="Xceed.Wpf.Toolkit.dll" />
+      <ComponentRef Id="ProductShortcut" />
+      <ComponentRef Id="RemoveProductShortcutDir" />
+      <ComponentRef Id="RemoveSdlShortcutDir" />
+      <ComponentRef Id="help.htm" />
+      <ComponentRef Id="styles.css" />
+      <ComponentRef Id="tmoptimizer48x48.png" />
+      <ComponentRef Id="wizard_input.png" />
+      <ComponentRef Id="wizard_intro.png" />
+      <ComponentRef Id="wizard_output.png" />
+      <ComponentRef Id="wizard_processing.png" />
+      <ComponentRef Id="analysis_studio_doc_after.png" />
+      <ComponentRef Id="analysis_studio_doc_before.png" />
+      <ComponentRef Id="analysis_studio_docx_after.png" />
+      <ComponentRef Id="analysis_studio_docx_before.png" />
+      <ComponentRef Id="analysis_workbench.png" />
+      <ComponentRef Id="analysis_workbench_docx.png" />
+      <ComponentRef Id="arrow.png" />
+      <ComponentRef Id="banner.png" />
+      <ComponentRef Id="freetrial.png" />
+      <ComponentRef Id="NotOptimized.jpg" />
+      <ComponentRef Id="Optimized.jpg" />
+      <ComponentRef Id="tmoptimizer_download_2014.png" />
+</Feature>
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="CompanyProgramsDir" Name="SDL">
+          <Directory Id="StudioDir" Name="SDL Trados Studio">
+            <Directory Id="INSTALLDIR" Name="Studio3">
+              <Component Guid="6B5876FF-649F-4922-AF8D-EC991C6BF9AC" Id="Sdl.TMOptimizer.exe">
+                <File Source="..\bin\release\Studio2014\Sdl.Community.TMOptimizer.exe" Id="Sdl.TMOptimizer.exe" />
+              </Component>
+              <Component Guid="86B49353-D6AF-48E9-B022-C7B33F09B130" Id="Sdl.TMOptimizer.exe.config">
+                <File Source="..\bin\release\Studio2014\Sdl.Community.TMOptimizer.exe.config" Id="Sdl.TMOptimizer.exe.config" />
+              </Component>
+              <Component Guid="BD353120-BF23-48C6-89F8-47F1C25AFDDC" Id="Sdl.TMOptimizerLib.dll">
+                <File Source="..\bin\release\Studio2014\Sdl.Community.TMOptimizerLib.dll" Id="Sdl.TMOptimizerLib.dll" />
+              </Component>
+              <Directory Id="TMOptimizerHelp" Name="TMOptimizerHelp">
+                <Component Guid="E26AED89-3224-43E0-BF3F-70F8606D618C" Id="help.htm">
+                  <File Source="..\bin\release\Studio2014\TMOptimizerHelp\help.htm" Id="help.htm" />
+                </Component>
+                <Component Guid="D24A0F8D-A44A-494E-B45E-0FA93844872B" Id="styles.css">
+                  <File Source="..\bin\release\Studio2014\TMOptimizerHelp\styles.css" Id="styles.css" />
+                </Component>
+                <Directory Id="images" Name="images">
+                  <Component Guid="A974848E-C75E-4EA6-9C7B-49198476B125" Id="tmoptimizer_download_2014.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\tmoptimizer_download_2014.png"/>
+                </Component>
+                  <Component Guid="{B3D82353-AAE3-460D-B5CB-764C3530B1AC}" Id="tmoptimizer48x48.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\tmoptimizer48x48.png"/>
+                </Component>
+                  <Component Guid="FC37902F-0408-4411-82EE-B75A11C00B91" Id="wizard_input.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\wizard_input.png"/>
+                </Component>
+                  <Component Guid="8428C7C9-47BB-4293-9032-505276D6B898" Id="wizard_intro.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\wizard_intro.png"/>
+                </Component>
+                  <Component Guid="{18B9529C-07DF-489A-8217-C4504849322F}" Id="wizard_output.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\wizard_output.png"/>
+                </Component>
+                  <Component Guid="{FA0E86FC-7962-4C6A-8024-1355495E452E}" Id="wizard_processing.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\wizard_processing.png"/>
+                </Component>
+                  <Component Guid="{66D92962-2632-4798-8131-B7B4429C462A}" Id="analysis_studio_doc_after.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_studio_doc_after.png"/>
+                </Component>
+                  <Component Guid="{C92D9F0C-58E2-4780-BDBA-80BF81938645}" Id="analysis_studio_doc_before.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_studio_doc_before.png"/>
+                </Component>
+                  <Component Guid="{5EDFD57C-792F-48D4-83BD-4BE6C49D22DE}" Id="analysis_studio_docx_after.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_studio_docx_after.png"/>
+                </Component>
+                  <Component Guid="{1DEB5561-71EB-4C0E-964A-2381F3059969}" Id="analysis_studio_docx_before.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_studio_docx_before.png"/>
+                </Component>
+                  <Component Guid="{E934C55B-58F1-4BF2-9DB7-5D83E5141CB0}" Id="analysis_workbench.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_workbench.png"/>
+                </Component>
+                  <Component Guid="{E5808B0E-0D59-4F1B-ADA0-6C741EEF3FD5}" Id="analysis_workbench_docx.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\analysis_workbench_docx.png"/>
+                </Component>
+                  <Component Guid="{5EACAFFC-340C-4AE8-9883-870B0873AD9B}" Id="arrow.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\arrow.png"/>
+                </Component>
+                  <Component Guid="{41DC0B42-9DDA-433E-9268-A65C2409B5E6}" Id="banner.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\banner.png"/>
+                </Component>
+                  <Component Guid="{12D313B4-3DDE-4E1E-ADCF-A95FE4C6AE12}" Id="freetrial.png">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\freetrial.png"/>
+                </Component>
+                  <Component Guid="{681F0880-A41A-4C3D-BAE6-8E54BCDF5F18}" Id="NotOptimized.jpg">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\NotOptimized.jpg"/>
+                </Component>
+                  <Component Guid="{5792AC26-2F56-4524-A97D-E2F7AFEE0A78}" Id="Optimized.jpg">
+                    <File Source="..\bin\release\Studio2014\TMOptimizerHelp\images\Optimized.jpg"/>
+                  </Component>
+                        </Directory>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+
+      <Directory Id="GAC" Name="GAC">
+        <Component Guid="8363FA50-F15C-41E2-BBA8-8FA4A4F10EBC" Id="Xceed.Wpf.Toolkit.dll">
+          <File Source="..\bin\release\Studio2014\Xceed.Wpf.Toolkit.dll" Id="Xceed.Wpf.Toolkit.dll" KeyPath="yes" Assembly=".net" />
+        </Component>
+      </Directory>
+
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="SdlShortcutDir" Name="SDL">
+          <Directory Id="ProductShortcutDir" Name="TM Optimizer">
+
+            <Component Id="ProductShortcut">
+              <RegistryValue Root="HKCU" Key="Software\SDL\TMOptimizer 1.1\Installer" Name="ProductShortcut" Value="KeyPath" KeyPath="yes" Type="string" />
+              <Shortcut Id="ProductShortcut" Name="TM Optimizer" Description="The TM Optimizer application." IconIndex="0" Icon="ProductIcon.exe" Target="[#Sdl.TMOptimizer.exe]"/>
+            </Component>
+
+            <Component Id="RemoveProductShortcutDir">
+              <RegistryValue Root="HKCU" Key="Software\SDL\TMOptimizer 1.1" Name="RemoveProductShortcutDir" Value="KeyPath" KeyPath="yes" Type="string" />
+              <RemoveFolder Id="RemoveProductShortcutDir" On="uninstall"/>
+            </Component>
+          </Directory>
+
+          <Component Id="RemoveSdlShortcutDir">
+            <RegistryValue Root="HKCU" Key="Software\SDL" Name="RemoveSdlShortcutDir" Value="KeyPath" KeyPath="yes" Type="string" />
+            <RemoveFolder Id="RemoveSdlShortcutDir" On="uninstall"/>
+          </Component>
+        </Directory>
+      </Directory>
+    </Directory>
+  </Product>
+
+
+</Wix>

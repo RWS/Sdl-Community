@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.TMOptimizer.Installer", "Installer\Sdl.TMOptimizer.Installer.wixproj", "{E15FA434-967C-4EDC-871E-E0954723A3E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA2AF093-976A-431F-A54B-C86F63C00F5F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OpenExchange", "OpenExchange", "{1D6F8C17-5E28-4A9B-947F-9E12D9036B79}"
+	ProjectSection(SolutionItems) = preProject
+		OpenExchange\tmoptimizer_256.png = OpenExchange\tmoptimizer_256.png
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer", "Sdl.Community.TMOptimizer\Sdl.Community.TMOptimizer.csproj", "{DF84726D-B356-459B-AEA7-2C0731063E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizerLib", "Sdl.Community.TMOptimizerLib\Sdl.Community.TMOptimizerLib.csproj", "{256DB2E3-306A-4AEF-B343-4514ACF6299E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Debug|x86.ActiveCfg = Debug|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Debug|x86.Build.0 = Debug|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Release|Any CPU.ActiveCfg = Release|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Release|x86.ActiveCfg = Release|x86
+		{E15FA434-967C-4EDC-871E-E0954723A3E1}.Release|x86.Build.0 = Release|x86
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DF84726D-B356-459B-AEA7-2C0731063E96}.Release|x86.ActiveCfg = Release|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1D6F8C17-5E28-4A9B-947F-9E12D9036B79} = {AA2AF093-976A-431F-A54B-C86F63C00F5F}
+	EndGlobalSection
+EndGlobal

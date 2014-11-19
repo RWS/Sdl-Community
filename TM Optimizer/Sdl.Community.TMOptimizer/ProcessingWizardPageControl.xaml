@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="Sdl.Community.TMOptimizer.ProcessingWizardPageControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sdl.Community.TMOptimizer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:ProcessingStateToImageConverter x:Key="ProcessingStateToImageConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+    </UserControl.Resources>
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ListBox ItemsSource="{Binding ProcessingSteps}" Background="White" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,5">
+                            <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="16" />
+                            <ColumnDefinition Width="300" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                            </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="{Binding ProcessingState, Converter={StaticResource ProcessingStateToImageConverter}}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Name, Mode=OneWay}"  Margin="8,0,8,0" HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="2" Text="{Binding StatusMessage, Mode=OneWay}"  Margin="8,0,8,0" HorizontalAlignment="Stretch"/>
+                        <ProgressBar Grid.Column="3" Minimum="0" Maximum="100" Value="{Binding Progress, Mode=OneWay}" Margin="0,2,8,2" VerticalAlignment="Stretch" />
+                        </Grid>
+                    </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="1" Visibility="{Binding IsCompleted, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.ColumnSpan="3">TM optimization has completed successfully! Choose one of the following options to access your TM:</Label>
+            <Button Grid.Row="1" Click="OpenContainingFolder_Click">Open containing _folder...</Button>
+            <Button Grid.Row="1" Grid.Column="1" Margin="8,0,0,0" Click="OpenTMInStudio_Click">Open TM in _Studio...</Button>
+        </Grid>
+    </Grid>
+</UserControl>
