@@ -8,3 +8,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Number verifier
 * [Documentation](Number Verifier)
+
+## TM Optimizer
+* [Documentation](TM Optimizer)
