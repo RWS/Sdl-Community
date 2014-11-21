@@ -85,7 +85,17 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                     fileBasedTm.Recognizers |= BuiltinRecognizers.RecognizeAlphaNumeric;
                 }
 
-                var x = fileBasedTm.ShouldRecomputeFuzzyIndexStatistics();
+                int tuCount = fileBasedTm.GetTranslationUnitCount();
+
+                ITranslationMemoryLanguageDirection languageDirection = fileBasedTm.LanguageDirection;
+
+                LanguagePlatform.TranslationMemory.RegularIterator iterator = new LanguagePlatform.TranslationMemory.RegularIterator(100);
+
+                while(languageDirection.ReindexTranslationUnits(ref iterator))
+                {
+                    //report progress
+                }
+
                 fileBasedTm.RecomputeFuzzyIndexStatistics();
                 fileBasedTm.Save();
             }
