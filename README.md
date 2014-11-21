@@ -11,3 +11,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## TM Optimizer
 * [Documentation](TM Optimizer)
+
+## Reindex Translation Memories
+* [Documentation](Reindex Translation Memories)
