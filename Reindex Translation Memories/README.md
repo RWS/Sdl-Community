@@ -21,6 +21,7 @@ You want to add a new functionality or you spot a bug please fill free to create
 * [Studio 2014 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
 * [Visual Studio 2013](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express edition can be used
 * [Inno Setup](http://www.jrsoftware.org/isinfo.php) - if you want to generate the installer
+
 ##Issues
 
 If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
