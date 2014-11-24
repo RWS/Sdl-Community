@@ -2,7 +2,7 @@
 
 ##Introduction
 
-This Studio 2014 application allows you to select file based translation memories and reindex them. This can be handy when you have mutliple translation memories that you would like to reindex since Studio requires you to go manually and reindex each tm.
+This Studio 2014 application allows you to select file based translation memories and reindex them. This can be handy when you have mutliple translation memories that you would like to reindex. 
 
 You can select the tm's to be reindex in the following ways:
 
