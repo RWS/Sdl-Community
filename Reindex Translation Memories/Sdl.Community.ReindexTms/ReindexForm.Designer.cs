@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
+            this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.lstTms = new System.Windows.Forms.ListBox();
-            this.btnBrowse = new System.Windows.Forms.Button();
-            this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
+            this.rtbStatus = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -49,6 +50,27 @@
             this.panel1.Size = new System.Drawing.Size(524, 36);
             this.panel1.TabIndex = 0;
             // 
+            // chkLoadStudioTMs
+            // 
+            this.chkLoadStudioTMs.AutoSize = true;
+            this.chkLoadStudioTMs.Location = new System.Drawing.Point(94, 11);
+            this.chkLoadStudioTMs.Name = "chkLoadStudioTMs";
+            this.chkLoadStudioTMs.Size = new System.Drawing.Size(107, 17);
+            this.chkLoadStudioTMs.TabIndex = 2;
+            this.chkLoadStudioTMs.Text = "Load Studio TMs";
+            this.chkLoadStudioTMs.UseVisualStyleBackColor = true;
+            this.chkLoadStudioTMs.CheckedChanged += new System.EventHandler(this.chkLoadStudioTMs_CheckedChanged);
+            // 
+            // btnBrowse
+            // 
+            this.btnBrowse.Location = new System.Drawing.Point(12, 6);
+            this.btnBrowse.Name = "btnBrowse";
+            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btnBrowse.TabIndex = 1;
+            this.btnBrowse.Text = "Browse ...";
+            this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
+            // 
             // btnReindex
             // 
             this.btnReindex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -62,6 +84,7 @@
             // 
             // panel2
             // 
+            this.panel2.Controls.Add(this.rtbStatus);
             this.panel2.Controls.Add(this.lstTms);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(0, 0);
@@ -72,35 +95,23 @@
             // lstTms
             // 
             this.lstTms.AllowDrop = true;
-            this.lstTms.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstTms.Dock = System.Windows.Forms.DockStyle.Top;
             this.lstTms.FormattingEnabled = true;
             this.lstTms.Location = new System.Drawing.Point(0, 0);
             this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(524, 347);
+            this.lstTms.Size = new System.Drawing.Size(524, 186);
             this.lstTms.TabIndex = 0;
             this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
             this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
             // 
-            // btnBrowse
+            // rtbStatus
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(12, 6);
-            this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
-            this.btnBrowse.TabIndex = 1;
-            this.btnBrowse.Text = "Browse ...";
-            this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
-            // 
-            // chkLoadStudioTMs
-            // 
-            this.chkLoadStudioTMs.AutoSize = true;
-            this.chkLoadStudioTMs.Location = new System.Drawing.Point(94, 11);
-            this.chkLoadStudioTMs.Name = "chkLoadStudioTMs";
-            this.chkLoadStudioTMs.Size = new System.Drawing.Size(107, 17);
-            this.chkLoadStudioTMs.TabIndex = 2;
-            this.chkLoadStudioTMs.Text = "Load Studio TMs";
-            this.chkLoadStudioTMs.UseVisualStyleBackColor = true;
-            this.chkLoadStudioTMs.CheckedChanged += new System.EventHandler(this.chkLoadStudioTMs_CheckedChanged);
+            this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
+            this.rtbStatus.Name = "rtbStatus";
+            this.rtbStatus.Size = new System.Drawing.Size(524, 161);
+            this.rtbStatus.TabIndex = 1;
+            this.rtbStatus.Text = "";
             // 
             // ReindexForm
             // 
@@ -128,6 +139,7 @@
         private System.Windows.Forms.ListBox lstTms;
         private System.Windows.Forms.CheckBox chkLoadStudioTMs;
         private System.Windows.Forms.Button btnBrowse;
+        private System.Windows.Forms.RichTextBox rtbStatus;
     }
 }
 

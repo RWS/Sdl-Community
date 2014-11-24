@@ -2,6 +2,8 @@
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,11 +17,12 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
     public class TranslationMemoryHelper
     {
         private string tmsConfigPath;
-
+        private StringBuilder reindexStatus;
 
         public TranslationMemoryHelper()
         {
             tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\11.0.0.0\TranslationMemoryRepository.xml");
+            reindexStatus = new StringBuilder();
         }
 
         public List<TranslationMemoryInfo> LoadLocalUserTms()
@@ -75,10 +78,12 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
             return tms;
         }
 
-        public void Reindex(List<TranslationMemoryInfo> tms)
+        public void Reindex(List<TranslationMemoryInfo> tms, BackgroundWorker bw)
         {
-            foreach (var tm in tms)
+            Parallel.ForEach(tms, tm =>
             {
+                reindexStatus.AppendLine(string.Format("Start reindex {0} translation memory",tm.Name));
+                bw.ReportProgress(0, reindexStatus.ToString());
                 FileBasedTranslationMemory fileBasedTm = new FileBasedTranslationMemory(tm.FilePath);
                 if ((fileBasedTm.Recognizers & BuiltinRecognizers.RecognizeAlphaNumeric) == 0)
                 {
@@ -91,14 +96,16 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
                 LanguagePlatform.TranslationMemory.RegularIterator iterator = new LanguagePlatform.TranslationMemory.RegularIterator(100);
 
-                while(languageDirection.ReindexTranslationUnits(ref iterator))
+                while (languageDirection.ReindexTranslationUnits(ref iterator))
                 {
-                    //report progress
+                    bw.ReportProgress(0, reindexStatus.ToString());
                 }
 
                 fileBasedTm.RecomputeFuzzyIndexStatistics();
                 fileBasedTm.Save();
-            }
+                reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
+                bw.ReportProgress(0, reindexStatus.ToString());
+            });
         }
     }
 }

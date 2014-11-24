@@ -15,10 +15,42 @@ namespace Sdl.Community.ReindexTms
     public partial class ReindexForm : Form
     {
         private TranslationMemoryHelper tmHelper;
+        private BackgroundWorker bw;
         public ReindexForm()
         {
             InitializeComponent();
             tmHelper = new TranslationMemoryHelper();
+            bw = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            bw.DoWork += bw_DoWork;
+            bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            bw.ProgressChanged += bw_ProgressChanged;
+            
+        }
+
+        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            rtbStatus.Text =e.UserState.ToString();
+        }
+
+        void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            btnReindex.Enabled = true;
+        }
+
+        void bw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            var tms = e.Argument as List<TranslationMemoryInfo>;
+            
+            if (tms == null) return;
+
+            tmHelper.Reindex(tms, bw);
+
         }
 
         private void btnReindex_Click(object sender, EventArgs e)
@@ -35,8 +67,9 @@ namespace Sdl.Community.ReindexTms
                     tms.Add(tmInfo);
                 }
             }
-            tmHelper.Reindex(tms);
-            btnReindex.Enabled = true;
+
+            bw.RunWorkerAsync(tms);
+            
         }
 
         private void chkLoadStudioTMs_CheckedChanged(object sender, EventArgs e)
