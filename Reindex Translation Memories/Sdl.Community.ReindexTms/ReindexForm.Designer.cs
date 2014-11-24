@@ -28,13 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReindexForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lstTms = new System.Windows.Forms.ListBox();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
+            this.lstTms = new System.Windows.Forms.ListBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +93,15 @@
             this.panel2.Size = new System.Drawing.Size(524, 347);
             this.panel2.TabIndex = 1;
             // 
+            // rtbStatus
+            // 
+            this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
+            this.rtbStatus.Name = "rtbStatus";
+            this.rtbStatus.Size = new System.Drawing.Size(524, 161);
+            this.rtbStatus.TabIndex = 1;
+            this.rtbStatus.Text = "";
+            // 
             // lstTms
             // 
             this.lstTms.AllowDrop = true;
@@ -104,15 +114,6 @@
             this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
             this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
             // 
-            // rtbStatus
-            // 
-            this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
-            this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(524, 161);
-            this.rtbStatus.TabIndex = 1;
-            this.rtbStatus.Text = "";
-            // 
             // ReindexForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -120,8 +121,8 @@
             this.ClientSize = new System.Drawing.Size(524, 383);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ReindexForm";
-            this.ShowIcon = false;
             this.Text = "Available Translation Memories";
             this.TopMost = true;
             this.panel1.ResumeLayout(false);
