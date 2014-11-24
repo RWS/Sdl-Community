@@ -4,6 +4,13 @@
 
 This Studio 2014 application allows you to select file based translation memories and reindex them. This can be handy when you have mutliple translation memories that you would like to reindex since Studio requires you to go manually and reindex each tm.
 
+You can select the tm's to be reindex in the following ways:
+
+1. Drag drop tm files
+2. Drag drop a folder which contains tm files. The application will look after tm files in subfolders too.
+3. Use the browse button to select a folder.
+4. Load tm's that are already configured in Studio.
+
 ##Contribution
 
 You want to add a new functionality or you spot a bug please fill free to create a [pull request](https://guides.github.com/activities/contributing-to-open-source/) with your changes.
