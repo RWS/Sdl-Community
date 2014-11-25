@@ -88,13 +88,11 @@ namespace Sdl.Community.ReindexTms
             using(var folderDialog = new FolderBrowserDialog())
             {
                 var dialogResult = folderDialog.ShowDialog();
-                if(dialogResult == DialogResult.OK && !string.IsNullOrEmpty(folderDialog.SelectedPath))
+                if (dialogResult != DialogResult.OK || string.IsNullOrEmpty(folderDialog.SelectedPath)) return;
+                List<TranslationMemoryInfo> tms= _tmHelper.LoadTmsFromPath(folderDialog.SelectedPath);
+                foreach (var tm in tms)
                 {
-                   List<TranslationMemoryInfo> tms= _tmHelper.LoadTmsFromPath(folderDialog.SelectedPath);
-                    foreach (var tm in tms)
-                    {
-                        lstTms.Items.Add(tm);
-                    }
+                    lstTms.Items.Add(tm);
                 }
             }
         }
