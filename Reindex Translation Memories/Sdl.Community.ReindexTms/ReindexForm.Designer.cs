@@ -1,4 +1,6 @@
-﻿namespace Sdl.Community.ReindexTms
+﻿using System.ComponentModel;
+
+namespace Sdl.Community.ReindexTms
 {
     partial class ReindexForm
     {

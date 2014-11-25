@@ -2,34 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sdl.Community.ReindexTms
 {
     public partial class ReindexForm : Form
     {
-        private TranslationMemoryHelper tmHelper;
-        private BackgroundWorker bw;
+        private readonly TranslationMemoryHelper _tmHelper;
+        private readonly BackgroundWorker _bw;
+
         public ReindexForm()
         {
             InitializeComponent();
-            tmHelper = new TranslationMemoryHelper();
-            bw = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+            _tmHelper = new TranslationMemoryHelper();
+            _bw = new BackgroundWorker {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            bw.DoWork += bw_DoWork;
-            bw.RunWorkerCompleted += bw_RunWorkerCompleted;
-            bw.ProgressChanged += bw_ProgressChanged;
+            _bw.DoWork += bw_DoWork;
+            _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
+            _bw.ProgressChanged += bw_ProgressChanged;
             
         }
 
@@ -49,7 +45,7 @@ namespace Sdl.Community.ReindexTms
             
             if (tms == null) return;
 
-            tmHelper.Reindex(tms, bw);
+            _tmHelper.Reindex(tms, _bw);
 
         }
 
@@ -57,18 +53,9 @@ namespace Sdl.Community.ReindexTms
         {
             btnReindex.Enabled = false;
 
-            List<TranslationMemoryInfo> tms = new List<TranslationMemoryInfo>();
+            var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
 
-            foreach (var item in lstTms.Items)
-            {
-                TranslationMemoryInfo tmInfo = item as TranslationMemoryInfo;
-                if(tmInfo != null)
-                {
-                    tms.Add(tmInfo);
-                }
-            }
-
-            bw.RunWorkerAsync(tms);
+            _bw.RunWorkerAsync(tms);
             
         }
 
@@ -76,7 +63,7 @@ namespace Sdl.Community.ReindexTms
         {
             if(chkLoadStudioTMs.Checked)
             {
-                List<TranslationMemoryInfo> tms = tmHelper.LoadLocalUserTms();
+                var tms = _tmHelper.LoadLocalUserTms();
 
                 foreach (var tm in tms)
                 {
@@ -85,15 +72,9 @@ namespace Sdl.Community.ReindexTms
             }
             else
             {
-                List<object> toRemoveItems = new List<object>();
-                foreach (var item in lstTms.Items)
-                {
-                    TranslationMemoryInfo tmInfo = item as TranslationMemoryInfo;
-                    if(tmInfo.IsStudioTm)
-                    {
-                        toRemoveItems.Add(item);
-                    }
-                }
+                var toRemoveItems = (from object item in lstTms.Items
+                                     let tmInfo = item as TranslationMemoryInfo
+                                     where tmInfo.IsStudioTm select item).ToList();
 
                 foreach (var item in toRemoveItems)
                 {
@@ -107,9 +88,9 @@ namespace Sdl.Community.ReindexTms
             using(var folderDialog = new FolderBrowserDialog())
             {
                 var dialogResult = folderDialog.ShowDialog();
-                if(dialogResult == System.Windows.Forms.DialogResult.OK && !string.IsNullOrEmpty(folderDialog.SelectedPath))
+                if(dialogResult == DialogResult.OK && !string.IsNullOrEmpty(folderDialog.SelectedPath))
                 {
-                   List<TranslationMemoryInfo> tms= tmHelper.LoadTmsFromPath(folderDialog.SelectedPath);
+                   List<TranslationMemoryInfo> tms= _tmHelper.LoadTmsFromPath(folderDialog.SelectedPath);
                     foreach (var tm in tms)
                     {
                         lstTms.Items.Add(tm);
@@ -137,7 +118,7 @@ namespace Sdl.Community.ReindexTms
                 return;
             }
 
-            string[] paths = data as string[];
+            var paths = data as string[];
 
             if (paths == null)
             {
@@ -154,11 +135,11 @@ namespace Sdl.Community.ReindexTms
 
             if (data == null) return;
 
-            string[] paths = data as string[];
+            var paths = data as string[];
 
             if (paths == null) return;
 
-            List<TranslationMemoryInfo> tms = tmHelper.LoadTmsFromPath(paths);
+            List<TranslationMemoryInfo> tms = _tmHelper.LoadTmsFromPath(paths);
             foreach (var tm in tms)
             {
                 lstTms.Items.Add(tm);
