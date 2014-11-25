@@ -80,9 +80,15 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
         public void Reindex(List<TranslationMemoryInfo> tms, BackgroundWorker bw)
         {
-            Parallel.ForEach(tms, tm =>
+            //remove possible duplicates based on the URI
+            var distinctTms = tms.GroupBy(k => k.Uri)
+                 .Where(g => g.Count() >= 1)
+                 .Select(g => g.FirstOrDefault())
+                 .ToList();
+
+            Parallel.ForEach(distinctTms, tm =>
             {
-                reindexStatus.AppendLine(string.Format("Start reindex {0} translation memory",tm.Name));
+                reindexStatus.AppendLine(string.Format("Start reindex {0} translation memory", tm.Name));
                 bw.ReportProgress(0, reindexStatus.ToString());
                 FileBasedTranslationMemory fileBasedTm = new FileBasedTranslationMemory(tm.FilePath);
                 if ((fileBasedTm.Recognizers & BuiltinRecognizers.RecognizeAlphaNumeric) == 0)

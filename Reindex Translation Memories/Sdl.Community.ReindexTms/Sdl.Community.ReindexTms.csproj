@@ -87,6 +87,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TranslationMemory\TranslationMemoryHelper.cs" />
     <Compile Include="TranslationMemory\TranslationMemoryInfo.cs" />
+    <Compile Include="TranslationMemory\TranslationMemoryInfoEqualityComparer.cs" />
     <EmbeddedResource Include="ReindexForm.resx">
       <DependentUpon>ReindexForm.cs</DependentUpon>
     </EmbeddedResource>
