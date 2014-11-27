@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Studio.AssemblyResolver;
 
 namespace Sdl.Community.ReindexTms
 {
@@ -14,6 +15,7 @@ namespace Sdl.Community.ReindexTms
         [STAThread]
         static void Main()
         {
+            AssemblyResolver.Resolve();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ReindexForm());

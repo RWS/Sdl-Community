@@ -65,6 +65,10 @@
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
+    <Reference Include="Studio.AssemblyResolver, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Studio.AssemblyResolver.0.1.1.0\lib\Studio.AssemblyResolver.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -100,6 +104,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
