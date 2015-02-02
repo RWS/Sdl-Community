@@ -273,11 +273,10 @@ namespace Sdl.Community.NumberVerifier
                         }
                     }
 
-
                     // find all numbers in source and add to list
                     sourceNumberList.Clear();
                     sourceNormalizedNumberList.Clear();
-                    foreach (Match match in Regex.Matches(sourceText, @"\d+([ \u00A0\u2009\u202F.,]\d+)*"))
+                    foreach (Match match in Regex.Matches(sourceText, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
                     {
                         if (_sourceThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _sourceThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))  // e.g 1,000,000
                         {
@@ -323,7 +322,7 @@ namespace Sdl.Community.NumberVerifier
                     // find all numbers in target and add to list
                     targetNumberList.Clear();
                     targetNormalizedNumberList.Clear();
-                    foreach (Match match in Regex.Matches(targetText, @"\d+([ \u00A0\u2009\u202F.,]\d+)*"))
+                    foreach (Match match in Regex.Matches(targetText, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
                     {
                         if (_targetThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _targetThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                         {
