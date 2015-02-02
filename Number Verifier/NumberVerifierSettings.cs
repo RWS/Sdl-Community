@@ -8,7 +8,7 @@ namespace Sdl.Community.NumberVerifier
     /// is generated for each project that is created in SDL Trados Studio or for 
     /// each file that is opened and translated.
     /// </summary>
-    class NumberVerifierSettings : SettingsGroup
+    public class NumberVerifierSettings : SettingsGroup
     {
         #region "setting"
         // Define the setting constant.
@@ -32,12 +32,14 @@ namespace Sdl.Community.NumberVerifier
         private const string SourceThousandsNobreakThinSpace_Setting = "SourceThousandsNobreakThinSpace";
         private const string SourceThousandsComma_Setting = "SourceThousandsComma";
         private const string SourceThousandsPeriod_Setting = "SourceThousandsPeriod";
+        private const string SourceNoSeparator_Setting = "SourceNoSeparator";
         private const string TargetThousandsSpace_Setting = "TargetThousandsSpace";
         private const string TargetThousandsNobreakSpace_Setting = "TargetThousandsNobreakSpace";
         private const string TargetThousandsThinSpace_Setting = "TargetThousandsThinSpace";
         private const string TargetThousandsNobreakThinSpace_Setting = "TargetThousandsNobreakThinSpace";
         private const string TargetThousandsComma_Setting = "TargetThousandsComma";
         private const string TargetThousandsPeriod_Setting = "TargetThousandsPeriod";
+        private const string TargetNoSeparator_Setting = "TargetNoSeparator";
         private const string SourceDecimalComma_Setting = "SourceDecimalComma";
         private const string SourceDecimalPeriod_Setting = "SourceDecimalPeriod";
         private const string TargetDecimalComma_Setting = "TargetDecimalComma";
@@ -147,6 +149,11 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<bool>(SourceThousandsPeriod_Setting); }
         }
 
+        public Setting<bool> SourceNoSeparator
+        {
+            get { return GetSetting<bool>(SourceNoSeparator_Setting); }
+        }
+
         public Setting<bool> TargetThousandsSpace
         {
             get { return GetSetting<bool>(TargetThousandsSpace_Setting); }
@@ -175,6 +182,11 @@ namespace Sdl.Community.NumberVerifier
         public Setting<bool> TargetThousandsPeriod
         {
             get { return GetSetting<bool>(TargetThousandsPeriod_Setting); }
+        }
+
+        public Setting<bool> TargetNoSeparator
+        {
+            get { return GetSetting<bool>(TargetNoSeparator_Setting); }
         }
         
         public Setting<bool> SourceDecimalComma
@@ -259,6 +271,8 @@ namespace Sdl.Community.NumberVerifier
                     return (bool)true;
                 case "SourceThousandsPeriod":
                     return (bool)true;
+                case SourceNoSeparator_Setting:
+                    return (bool)true;
                 case "TargetThousandsSpace":
                     return (bool)true;
                 case "TargetThousandsNobreakSpace":
@@ -270,6 +284,8 @@ namespace Sdl.Community.NumberVerifier
                 case "TargetThousandsComma":
                     return (bool)true;
                 case "TargetThousandsPeriod":
+                    return (bool)true;
+                case TargetNoSeparator_Setting:
                     return (bool)true;
                 case "SourceDecimalComma":
                     return (bool)true;

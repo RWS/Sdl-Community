@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -77,7 +81,7 @@ namespace Sdl.Community.NumberVerifier
         {
             get { return PluginResources.Verifier_Description; }
         }
-        public System.Drawing.Icon Icon
+        public Icon Icon
         {
             get { return PluginResources.icon; }
         }
@@ -169,7 +173,7 @@ namespace Sdl.Community.NumberVerifier
             _sourceThousandSeparators += VerificationSettings.SourceThousandsComma.Value ? "," : "";
             _sourceThousandSeparators += VerificationSettings.SourceThousandsPeriod.Value ? "." : "";
 
-            _targetThousandSeparators += VerificationSettings.TargetThousandsSpace.Value ? " ": "";
+            _targetThousandSeparators += VerificationSettings.TargetThousandsSpace.Value ? " " : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsNobreakSpace.Value ? "\u00A0" : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsThinSpace.Value ? "\u2009" : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsNobreakThinSpace.Value ? "\u202F" : "";
@@ -203,225 +207,68 @@ namespace Sdl.Community.NumberVerifier
         /// <param name="paragraphUnit"></param>
         private void CheckParagraphUnit(IParagraphUnit paragraphUnit)
         {
-            
+
             var sourceNumberList = new List<string>();
             var targetNumberList = new List<string>();
             var sourceNormalizedNumberList = new List<string>();
             var targetNormalizedNumberList = new List<string>();
-            var sourceAlphanumericsList = new List<string>();
-            var targetAlphanumericsList = new List<string>();
 
             // loop through the whole paragraph unit
-            foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs)) 
+            foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs))
             {
-                string sourceText;
-                string targetText;
-                if (VerificationSettings.ExcludeTagText.Value == false)
-                {
-                    sourceText = segmentPair.Source.ToString();
-                    targetText = segmentPair.Target.ToString();
-                }
-                else
-                {
-                    sourceText = TextGeneratorProcessor.GetPlainText(segmentPair.Source, false);
-                    targetText = TextGeneratorProcessor.GetPlainText(segmentPair.Target, false);
-                }
-
+                var sourceText = GetSegmentText(segmentPair.Source);
+                var targetText = GetSegmentText(segmentPair.Target);
+               
 
                 // find all alphanumeric names in source and add to list
-                sourceAlphanumericsList.Clear();
-                sourceAlphanumericsList.AddRange(from Match match in Regex.Matches(sourceText, @"\d*([A-Z]+\d+)+[A-Z]*") select match.Value);
+                var sourceAlphanumericsList = GetAlphanumericList(sourceText);
 
                 // find all alphanumeric names in target and add to list
-                targetAlphanumericsList.Clear();
-                targetAlphanumericsList.AddRange(from Match match in Regex.Matches(targetText, @"\d*([A-Z]+\d+)+[A-Z]*") select match.Value);
+                var targetAlphanumericsList = GetAlphanumericList(targetText);
 
                 // remove alphanumeric names found both in source and target from respective list
-                int nJ;
-                for (nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
-                {
-                    if (!targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ])) continue;
-
-                    targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
-                    sourceAlphanumericsList.RemoveAt(nJ);
-                }
+                RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
 
                 // find all numbers in source and add to list
                 sourceNumberList.Clear();
                 sourceNormalizedNumberList.Clear();
-                string normalizedNumber;
-                foreach (Match match in Regex.Matches(sourceText, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
-                {
-                    if (_sourceThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _sourceThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))  // e.g 1,000,000
-                    {
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + _sourceThousandSeparators + @"]", "t");
-                    }
-                    else if (_sourceThousandSeparators != string.Empty && _sourceDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _sourceThousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + _sourceDecimalSeparators + @"]\d+$"))  // e.g. 1,000.5
-                    {
-                        var sourceUsedThousandSeparator = Regex.Match(match.Value, @"[" + _sourceThousandSeparators + @"]").Value;
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + sourceUsedThousandSeparator + @"]", "t");
-                        var sourceUsedDecimalSeparator = Regex.Match(normalizedNumber, @"[" + _sourceDecimalSeparators + @"]").Value;
-                        normalizedNumber = sourceUsedDecimalSeparator != string.Empty ? Regex.Replace(normalizedNumber, @"[" + sourceUsedDecimalSeparator + @"]", "d") : match.Value;
-                    }
-                    else if (_sourceThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _sourceThousandSeparators + @"])\d\d\d$"))  // e.g. 1,000
-                    {
-                        if (_sourceDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _sourceDecimalSeparators + @"])\d\d\d$"))
-                        {
-                            normalizedNumber = Regex.Replace(match.Value, @"[" + _sourceThousandSeparators + @"]", "u");
-                        }
-                        else
-                        {
-                            normalizedNumber = Regex.Replace(match.Value, @"[" + _sourceThousandSeparators + @"]", "t");
-                        }
-                    }
-                    else if (_sourceDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^\d+[" + _sourceDecimalSeparators + @"]\d+$"))   // e.g. 0,100
-                    {
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + _sourceDecimalSeparators + @"]", "d");
-                    }
-                    else
-                    {
-                        normalizedNumber = match.Value;
-                    }
-                    sourceNumberList.Add(match.Value);
-                    sourceNormalizedNumberList.Add(normalizedNumber);
-                }
+                NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,_sourceThousandSeparators,_sourceDecimalSeparators, VerificationSettings.SourceNoSeparator);
 
                 // find all numbers in target and add to list
                 targetNumberList.Clear();
                 targetNormalizedNumberList.Clear();
-                foreach (Match match in Regex.Matches(targetText, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
-                {
-                    if (_targetThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _targetThousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
-                    {
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + _targetThousandSeparators + @"]", "t");
-                    }
-                    else if (_targetThousandSeparators != string.Empty && _targetDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _targetThousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + _targetDecimalSeparators + @"]\d+$"))
-                    {
-                        var targetUsedThousandSeparator = Regex.Match(match.Value, @"[" + _targetThousandSeparators + @"]").Value;
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + targetUsedThousandSeparator + @"]", "t");
-                        var targetUsedDecimalSeparator = Regex.Match(normalizedNumber, @"[" + _targetDecimalSeparators + @"]").Value;
-                        normalizedNumber = targetUsedDecimalSeparator != string.Empty ? Regex.Replace(normalizedNumber, @"[" + targetUsedDecimalSeparator + @"]", "d") : match.Value;
-                    }
-                    else if (_targetThousandSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _targetThousandSeparators + @"])\d\d\d$"))
-                    {
-                        if (_targetDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^[1-9]\d{0,2}([" + _targetDecimalSeparators + @"])\d\d\d$"))
-                        {
-                            normalizedNumber = Regex.Replace(match.Value, @"[" + _targetThousandSeparators + @"]", "u");
-                        }
-                        else
-                        {
-                            normalizedNumber = Regex.Replace(match.Value, @"[" + _targetThousandSeparators + @"]", "t");
-                        }
-                    }
-                    else if (_targetDecimalSeparators != string.Empty && Regex.IsMatch(match.Value, @"^\d+[" + _targetDecimalSeparators + @"]\d+$"))
-                    {
-                        normalizedNumber = Regex.Replace(match.Value, @"[" + _targetDecimalSeparators + @"]", "d");
-                    }
-                    else
-                    {
-                        normalizedNumber = match.Value;
-                    }
-                    targetNumberList.Add(match.Value);
-                    targetNormalizedNumberList.Add(normalizedNumber);
-                }
+                NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,_targetThousandSeparators,_targetDecimalSeparators, VerificationSettings.TargetNoSeparator);
 
                 // remove identical numbers found both in source and target from respective list
-                if (VerificationSettings.PreventLocalizations.Value || VerificationSettings.AllowLocalizations.Value)
-                {
-                    for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
-                    {
-                        if (targetNumberList.Contains(sourceNumberList[nJ]))
-                        {
-                            targetNormalizedNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
-                            targetNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
-                            sourceNormalizedNumberList.RemoveAt(nJ);
-                            sourceNumberList.RemoveAt(nJ);
-                        }
-                    }
-                }
+                RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList, sourceNormalizedNumberList);
 
                 // remove numbers found both in source and target from respective list disregarding difference in thousands and decimal separators
-                if (VerificationSettings.AllowLocalizations.Value || VerificationSettings.RequireLocalizations.Value)
-                {
-                    for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
-                    {
-                        if (targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ]))
-                        {
-                            targetNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ]));
-                            targetNormalizedNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ]));
-                            sourceNormalizedNumberList.RemoveAt(nJ);
-                            sourceNumberList.RemoveAt(nJ);
-                        }
-                    }
-                }
+                RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList, sourceNormalizedNumberList, targetNumberList);
 
                 // remove numbers found both in source and target from respective list disregarding difference when thousands and decimal separators are undefined due to ambiguity 
-                if (VerificationSettings.AllowLocalizations.Value || VerificationSettings.RequireLocalizations.Value)
-                {
-                    if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
-                    {
-                        for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
-                        {
-                            if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 && targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "d")))
-                            {
-                                targetNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
-                                targetNormalizedNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
-                                sourceNormalizedNumberList.RemoveAt(nJ);
-                                sourceNumberList.RemoveAt(nJ);
-                            }
-                            else if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 && targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "t")))
-                            {
-                                targetNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
-                                targetNormalizedNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
-                                sourceNormalizedNumberList.RemoveAt(nJ);
-                                sourceNumberList.RemoveAt(nJ);
-                            }
-                        }
-                    }
-
-                    if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
-                    {
-                        for (nJ = targetNumberList.Count - 1; nJ >= 0; nJ--)
-                        {
-                            if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 && sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "d")))
-                            {
-                                sourceNumberList.RemoveAt(sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
-                                sourceNormalizedNumberList.RemoveAt(sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
-                                targetNormalizedNumberList.RemoveAt(nJ);
-                                targetNumberList.RemoveAt(nJ);
-                            }
-                            else if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 && sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "t")))
-                            {
-                                sourceNumberList.RemoveAt(sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
-                                sourceNormalizedNumberList.RemoveAt(sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
-                                targetNormalizedNumberList.RemoveAt(nJ);
-                                targetNumberList.RemoveAt(nJ);
-                            }
-                        }
-                    }
-                }
+                RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList, sourceNormalizedNumberList, targetNormalizedNumberList);
 
 
 
                 var errorLevel = ErrorLevel.Unspecified;
-                string errorMessage = string.Empty;
-                string extendedErrorMessage = string.Empty;
+                var errorMessage = String.Empty;
+                var extendedErrorMessage = String.Empty;
 
                 // check if numbers have been modified and should be reported
                 if (sourceNumberList.Count > 0 && targetNumberList.Count > 0 && VerificationSettings.ReportModifiedNumbers.Value)
                 {
-                    if (VerificationSettings.ModifiedNumbersErrorType.Value == "Error")
+                    switch (VerificationSettings.ModifiedNumbersErrorType.Value)
                     {
-                        errorLevel = ErrorLevel.Error;
+                        case "Error":
+                            errorLevel = ErrorLevel.Error;
+                            break;
+                        case "Warning":
+                            errorLevel = ErrorLevel.Warning;
+                            break;
+                        default:
+                            errorLevel = ErrorLevel.Note;
+                            break;
                     }
-                    else if (VerificationSettings.ModifiedNumbersErrorType.Value == "Warning")
-                    {
-                        errorLevel = ErrorLevel.Warning;
-                    }
-                    else
-                    {
-                        errorLevel = ErrorLevel.Note;
-                    }                            
                     errorMessage = errorMessage + PluginResources.Error_NumbersNotIdentical;
                 }
 
@@ -481,32 +328,29 @@ namespace Sdl.Community.NumberVerifier
 
 
                 // if there are any mismatched numbers or alphanumerics to report, output a warning message
-                if (errorMessage == string.Empty) continue;
+                if (errorMessage == String.Empty) continue;
+
                 // collate remaining numbers and put into string variables for reporting of details
-                var sourceNumberIssues = string.Empty;
+                var sourceNumberIssues = String.Empty;
                 if (sourceNumberList.Count > 0 && (VerificationSettings.ReportAddedNumbers.Value || VerificationSettings.ReportRemovedNumbers.Value || VerificationSettings.ReportModifiedNumbers.Value))
                 {
-                    for (nJ = 0; nJ < sourceNumberList.Count; nJ++)
-                        sourceNumberIssues += sourceNumberList[nJ] + " \r\n";  
+                    sourceNumberIssues = sourceNumberList.Aggregate(sourceNumberIssues, (current, t) => current + (t + " \r\n"));
                 }
 
                 if (sourceAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
                 {
-                    for (nJ = 0; nJ < sourceAlphanumericsList.Count; nJ++)
-                        sourceNumberIssues += sourceAlphanumericsList[nJ] + " \r\n";
+                    sourceNumberIssues = sourceAlphanumericsList.Aggregate(sourceNumberIssues, (current, t) => current + (t + " \r\n"));
                 }
 
-                var targetNumberIssues = string.Empty;
+                var targetNumberIssues = String.Empty;
                 if (targetNumberList.Count > 0 && (VerificationSettings.ReportAddedNumbers.Value || VerificationSettings.ReportRemovedNumbers.Value || VerificationSettings.ReportModifiedNumbers.Value))
                 {
-                    for (nJ = 0; nJ < targetNumberList.Count; nJ++)
-                        targetNumberIssues += targetNumberList[nJ] + " \r\n";
+                    targetNumberIssues = targetNumberList.Aggregate(targetNumberIssues, (current, t) => current + (t + " \r\n"));
                 }
 
                 if (targetAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
                 {
-                    for (nJ = 0; nJ < targetAlphanumericsList.Count; nJ++)
-                        targetNumberIssues += targetAlphanumericsList[nJ] + " \r\n";
+                    targetNumberIssues = targetAlphanumericsList.Aggregate(targetNumberIssues, (current, t) => current + (t + " \r\n"));
                 }
 
 
@@ -546,6 +390,223 @@ namespace Sdl.Community.NumberVerifier
             }
         }
 
+        private void RemoveNumbersUndefinedThousandsAndDecimalSeparator(IList targetNumberList, IList sourceNumberList,
+            IList<string> sourceNormalizedNumberList, IList<string> targetNormalizedNumberList)
+        {
+            if (VerificationSettings.AllowLocalizations.Value || VerificationSettings.RequireLocalizations.Value)
+            {
+                if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
+                {
+                    int nJ;
+                    for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
+                    {
+                        if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
+                            targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "d")))
+                        {
+                            targetNumberList.RemoveAt(
+                                targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
+                            targetNormalizedNumberList.RemoveAt(
+                                targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "d")));
+                            sourceNormalizedNumberList.RemoveAt(nJ);
+                            sourceNumberList.RemoveAt(nJ);
+                        }
+                        else if (sourceNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
+                                 targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ].Replace("u", "t")))
+                        {
+                            targetNumberList.RemoveAt(
+                                targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
+                            targetNormalizedNumberList.RemoveAt(
+                                targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ].Replace("u", "t")));
+                            sourceNormalizedNumberList.RemoveAt(nJ);
+                            sourceNumberList.RemoveAt(nJ);
+                        }
+                    }
+                }
+
+                if (targetNumberList.Count > 0 && sourceNumberList.Count > 0)
+                {
+                    int nJ;
+                    for (nJ = targetNumberList.Count - 1; nJ >= 0; nJ--)
+                    {
+                        if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
+                            sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "d")))
+                        {
+                            sourceNumberList.RemoveAt(
+                                sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
+                            sourceNormalizedNumberList.RemoveAt(
+                                sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "d")));
+                            targetNormalizedNumberList.RemoveAt(nJ);
+                            targetNumberList.RemoveAt(nJ);
+                        }
+                        else if (targetNormalizedNumberList[nJ].IndexOf("u", StringComparison.InvariantCultureIgnoreCase) > 0 &&
+                                 sourceNormalizedNumberList.Contains(targetNormalizedNumberList[nJ].Replace("u", "t")))
+                        {
+                            sourceNumberList.RemoveAt(
+                                sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
+                            sourceNormalizedNumberList.RemoveAt(
+                                sourceNormalizedNumberList.IndexOf(targetNormalizedNumberList[nJ].Replace("u", "t")));
+                            targetNormalizedNumberList.RemoveAt(nJ);
+                            targetNumberList.RemoveAt(nJ);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RemoveNumbersIgnoreThousandsAndDecimalSeparators(IList sourceNumberList, IList<string> targetNormalizedNumberList,
+            IList<string> sourceNormalizedNumberList, IList targetNumberList)
+        {
+            if (VerificationSettings.AllowLocalizations.Value || VerificationSettings.RequireLocalizations.Value)
+            {
+                int nJ;
+                for (nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
+                {
+                    if (!targetNormalizedNumberList.Contains(sourceNormalizedNumberList[nJ])) continue;
+                    targetNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ]));
+                    targetNormalizedNumberList.RemoveAt(targetNormalizedNumberList.IndexOf(sourceNormalizedNumberList[nJ]));
+                    sourceNormalizedNumberList.RemoveAt(nJ);
+                    sourceNumberList.RemoveAt(nJ);
+                }
+            }
+        }
+
+        private void RemoveIdenticalNumbers(IList<string> sourceNumberList, IList<string> targetNumberList, List<string> targetNormalizedNumberList,
+            IList sourceNormalizedNumberList)
+        {
+            if (targetNormalizedNumberList == null) throw new ArgumentNullException("targetNormalizedNumberList");
+            if (VerificationSettings.PreventLocalizations.Value || VerificationSettings.AllowLocalizations.Value)
+            {
+                for (var nJ = sourceNumberList.Count - 1; nJ >= 0; nJ--)
+                {
+                    if (!targetNumberList.Contains(sourceNumberList[nJ])) continue;
+                    targetNormalizedNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
+                    targetNumberList.RemoveAt(targetNumberList.IndexOf(sourceNumberList[nJ]));
+                    sourceNormalizedNumberList.RemoveAt(nJ);
+                    sourceNumberList.RemoveAt(nJ);
+                }
+            }
+        }
+
+        private void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
+        {
+            foreach (Match match in Regex.Matches(text, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
+            {
+                var normalizedNumber = NormalizedNumber(match.Value,thousandSeparators, decimalSeparators, noSeparator);
+
+                numeberCollection.Add(match.Value);
+                normalizedNumberCollection.Add(normalizedNumber);
+            }
+        }
+
+        private string NormalizedNumber( string number, string thousandSeparators, string decimalSeparators, bool noSeparator)
+        {
+            string normalizedNumber;
+            if (thousandSeparators != String.Empty &&
+                Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                // e.g 1,000,000
+            {
+                normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
+            }
+            else if (thousandSeparators != String.Empty && thousandSeparators != String.Empty &&
+                     Regex.IsMatch(number,
+                         @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
+                         @"]\d+$")) // e.g. 1,000.5
+            {
+                var usedThousandSeparator =
+                    Regex.Match(number, @"[" + thousandSeparators + @"]").Value;
+                normalizedNumber = Regex.Replace(number, @"[" + usedThousandSeparator + @"]", "t");
+                var usedDecimalSeparator =
+                    Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
+                normalizedNumber = usedDecimalSeparator != String.Empty
+                    ? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
+                    : number;
+            }
+            else if (thousandSeparators != String.Empty &&
+                     Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
+                // e.g. 1,000
+            {
+                if (_sourceDecimalSeparators != String.Empty &&
+                    Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
+                {
+                    normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
+                }
+                else
+                {
+                    normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
+                }
+            }
+            else
+            {
+                if (_sourceDecimalSeparators != String.Empty &&
+                    Regex.IsMatch(number, @"^\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+                {
+                    normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
+                }
+                else
+                {
+                    normalizedNumber = number;
+                }
+
+                if (noSeparator)
+                {
+                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber);
+                }
+            }
+            return normalizedNumber;
+        }
+
+        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber)
+        {
+            //if there is no separator add comma as separator and run normalize process again
+            if (normalizedNumber.Length > 3 && !(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
+            {
+                var numberElements = Regex.Split(normalizedNumber, "d");
+                var thousands = numberElements[0];
+                var tempNormalized = new StringBuilder();
+                for (var i = thousands.Length - 1; i >= 0; i--)
+                {
+                    if (tempNormalized.Length > 0 && tempNormalized.Length%3 == 0)
+                    {
+                        tempNormalized.Insert(0, string.Format("{0},", thousands[i]));
+                    }
+                    else
+                    {
+                        tempNormalized.Insert(0, thousands[i]);
+                    }
+                }
+                if (numberElements.Length > 1)
+                {
+                    tempNormalized.Append(numberElements[2]);
+                }
+                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false);
+            }
+            return normalizedNumber;
+        }
+
+        private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
+        {
+
+            for (var nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
+            {
+                if (!targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ])) continue;
+
+                targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
+                sourceAlphanumericsList.RemoveAt(nJ);
+            }
+        }
+
+        private List<string> GetAlphanumericList(string text)
+        {
+            var alphaList = new List<string>();
+            alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)+[A-Z]*") select match.Value);
+            return alphaList;
+        }
+
+        private string GetSegmentText(ISegment segment)
+        {
+            return VerificationSettings.ExcludeTagText.Value == false ? segment.ToString() : TextGeneratorProcessor.GetPlainText(segment, false);
+        }
+
         private bool FilterSegmentPairs(ISegmentPair segmentPair)
         {
             return (VerificationSettings.ExcludeLockedSegments.Value == false ||
@@ -555,8 +616,6 @@ namespace Sdl.Community.NumberVerifier
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100));
         }
-        #endregion
-
-
+                #endregion
     }
 }

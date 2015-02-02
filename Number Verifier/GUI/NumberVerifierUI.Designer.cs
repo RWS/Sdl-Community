@@ -71,6 +71,8 @@
             this.cb_ReportRemovedNumbers = new System.Windows.Forms.CheckBox();
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.cb_SourceNoSeparator = new System.Windows.Forms.CheckBox();
+            this.cb_TargetNoSeparator = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -84,8 +86,8 @@
             // 
             // panelNumberVerifierUI
             // 
-            this.panelNumberVerifierUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.panelNumberVerifierUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panelNumberVerifierUI.AutoScroll = true;
             this.panelNumberVerifierUI.Controls.Add(this.groupBox1);
             this.panelNumberVerifierUI.Location = new System.Drawing.Point(0, 0);
@@ -176,7 +178,7 @@
             this.cb_ReportModifiedAlphanumerics.TabIndex = 9;
             this.cb_ReportModifiedAlphanumerics.Text = "Report m&odified alphanumerics";
             this.toolTip1.SetToolTip(this.cb_ReportModifiedAlphanumerics, "Select this to find issues related to uppercase \r\nletters in alphanumeric names l" +
-                    "ike V50. ");
+        "ike V50. ");
             this.cb_ReportModifiedAlphanumerics.UseVisualStyleBackColor = true;
             // 
             // groupBox7
@@ -245,7 +247,7 @@
             this.rb_PreventLocalizations.TabIndex = 18;
             this.rb_PreventLocalizations.Text = "Prevent localizations";
             this.toolTip1.SetToolTip(this.rb_PreventLocalizations, "If this is selected, numbers where separators \r\nhave been changed will be reporte" +
-                    "d.");
+        "d.");
             this.rb_PreventLocalizations.UseVisualStyleBackColor = true;
             // 
             // rb_RequireLocalizations
@@ -257,7 +259,7 @@
             this.rb_RequireLocalizations.TabIndex = 16;
             this.rb_RequireLocalizations.Text = "Require localizations";
             this.toolTip1.SetToolTip(this.rb_RequireLocalizations, "If this is selected, numbers where separators \r\nhave not been changed will be rep" +
-                    "orted.");
+        "orted.");
             this.rb_RequireLocalizations.UseVisualStyleBackColor = true;
             // 
             // rb_AllowLocalizations
@@ -274,6 +276,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.cb_TargetNoSeparator);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsPeriod);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsComma);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakThinSpace);
@@ -282,12 +285,12 @@
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
             this.groupBox6.Location = new System.Drawing.Point(225, 252);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(190, 162);
+            this.groupBox6.Size = new System.Drawing.Size(190, 178);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "&Target thousands separators";
             this.toolTip1.SetToolTip(this.groupBox6, "Select all separators that should be considered thousands separators\r\nwhen they a" +
-                    "ppear in a place which is appropriate for a thousands separator.");
+        "ppear in a place which is appropriate for a thousands separator.");
             // 
             // cb_TargetThousandsPeriod
             // 
@@ -365,14 +368,14 @@
             // 
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(225, 432);
+            this.groupBox5.Location = new System.Drawing.Point(225, 435);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(190, 71);
             this.groupBox5.TabIndex = 36;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Target &decimal separators";
             this.toolTip1.SetToolTip(this.groupBox5, "Select all separators that should be considered decimal separators\r\nwhen they app" +
-                    "ear in a place which is appropriate for a decimal separator.");
+        "ear in a place which is appropriate for a decimal separator.");
             // 
             // cb_TargetDecimalPeriod
             // 
@@ -402,14 +405,14 @@
             // 
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(16, 432);
+            this.groupBox4.Location = new System.Drawing.Point(16, 435);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(190, 71);
             this.groupBox4.TabIndex = 33;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "S&ource decimal separators";
             this.toolTip1.SetToolTip(this.groupBox4, "Select all separators that should be considered decimal separators\r\nwhen they app" +
-                    "ear in a place which is appropriate for a decimal separator.");
+        "ear in a place which is appropriate for a decimal separator.");
             // 
             // cb_SourceDecimalPeriod
             // 
@@ -437,6 +440,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.cb_SourceNoSeparator);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsPeriod);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsComma);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakThinSpace);
@@ -445,12 +449,12 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
             this.groupBox3.Location = new System.Drawing.Point(16, 252);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(190, 162);
+            this.groupBox3.Size = new System.Drawing.Size(190, 178);
             this.groupBox3.TabIndex = 19;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Source thousands separators";
             this.toolTip1.SetToolTip(this.groupBox3, "Select all separators that should be considered thousands separators\r\nwhen they a" +
-                    "ppear in a place which is appropriate for a thousands separator.");
+        "ppear in a place which is appropriate for a thousands separator.");
             // 
             // cb_SourceThousandsPeriod
             // 
@@ -606,6 +610,30 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // cb_SourceNoSeparator
+            // 
+            this.cb_SourceNoSeparator.AutoSize = true;
+            this.cb_SourceNoSeparator.Checked = true;
+            this.cb_SourceNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_SourceNoSeparator.Location = new System.Drawing.Point(17, 157);
+            this.cb_SourceNoSeparator.Name = "cb_SourceNoSeparator";
+            this.cb_SourceNoSeparator.Size = new System.Drawing.Size(89, 17);
+            this.cb_SourceNoSeparator.TabIndex = 26;
+            this.cb_SourceNoSeparator.Text = "No Separator";
+            this.cb_SourceNoSeparator.UseVisualStyleBackColor = true;
+            // 
+            // cb_TargetNoSeparator
+            // 
+            this.cb_TargetNoSeparator.AutoSize = true;
+            this.cb_TargetNoSeparator.Checked = true;
+            this.cb_TargetNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_TargetNoSeparator.Location = new System.Drawing.Point(20, 157);
+            this.cb_TargetNoSeparator.Name = "cb_TargetNoSeparator";
+            this.cb_TargetNoSeparator.Size = new System.Drawing.Size(89, 17);
+            this.cb_TargetNoSeparator.TabIndex = 27;
+            this.cb_TargetNoSeparator.Text = "No Separator";
+            this.cb_TargetNoSeparator.UseVisualStyleBackColor = true;
+            // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -679,6 +707,8 @@
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.RadioButton rb_ReportExtendedMessages;
         private System.Windows.Forms.RadioButton rb_ReportBriefMessages;
+        private System.Windows.Forms.CheckBox cb_TargetNoSeparator;
+        private System.Windows.Forms.CheckBox cb_SourceNoSeparator;
 
     }
 }

@@ -65,12 +65,14 @@ namespace Sdl.Community.NumberVerifier
             _Control.SourceThousandsNobreakThinSpace = _ControlSettings.SourceThousandsNobreakThinSpace;
             _Control.SourceThousandsComma = _ControlSettings.SourceThousandsComma;
             _Control.SourceThousandsPeriod = _ControlSettings.SourceThousandsPeriod;
+            _Control.SourceNoSeparator = _ControlSettings.SourceNoSeparator;
             _Control.TargetThousandsSpace = _ControlSettings.TargetThousandsSpace;
             _Control.TargetThousandsNobreakSpace = _ControlSettings.TargetThousandsNobreakSpace;
             _Control.TargetThousandsThinSpace = _ControlSettings.TargetThousandsThinSpace;
             _Control.TargetThousandsNobreakThinSpace = _ControlSettings.TargetThousandsNobreakThinSpace;
             _Control.TargetThousandsComma = _ControlSettings.TargetThousandsComma;
             _Control.TargetThousandsPeriod = _ControlSettings.TargetThousandsPeriod;
+            _Control.TargetNoSeparator = _ControlSettings.TargetNoSeparator;
             _Control.SourceDecimalComma = _ControlSettings.SourceDecimalComma;
             _Control.SourceDecimalPeriod = _ControlSettings.SourceDecimalPeriod;
             _Control.TargetDecimalComma = _ControlSettings.TargetDecimalComma;
@@ -122,6 +124,8 @@ namespace Sdl.Community.NumberVerifier
             _Control.SourceThousandsComma = _ControlSettings.SourceThousandsComma;
             _ControlSettings.SourceThousandsPeriod.Reset();
             _Control.SourceThousandsPeriod = _ControlSettings.SourceThousandsPeriod;
+            _ControlSettings.SourceNoSeparator.Reset();
+            _Control.SourceNoSeparator = _ControlSettings.SourceNoSeparator;
             _ControlSettings.TargetThousandsSpace.Reset();
             _Control.TargetThousandsSpace = _ControlSettings.TargetThousandsSpace;
             _ControlSettings.TargetThousandsNobreakSpace.Reset();
@@ -134,6 +138,8 @@ namespace Sdl.Community.NumberVerifier
             _Control.TargetThousandsComma = _ControlSettings.TargetThousandsComma;
             _ControlSettings.TargetThousandsPeriod.Reset();
             _Control.TargetThousandsPeriod = _ControlSettings.TargetThousandsPeriod;
+            _ControlSettings.TargetNoSeparator.Reset();
+            _Control.TargetNoSeparator = _ControlSettings.TargetNoSeparator;
             _ControlSettings.SourceDecimalComma.Reset();
             _Control.SourceDecimalComma = _ControlSettings.SourceDecimalComma;
             _ControlSettings.SourceDecimalPeriod.Reset();
@@ -181,6 +187,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.SourceThousandsNobreakThinSpace.Value = _Control.SourceThousandsNobreakThinSpace;
             _ControlSettings.SourceThousandsComma.Value = _Control.SourceThousandsComma;
             _ControlSettings.SourceThousandsPeriod.Value = _Control.SourceThousandsPeriod;
+            _ControlSettings.SourceNoSeparator.Value = _Control.SourceNoSeparator;
             _ControlSettings.TargetThousandsSpace.Value = _Control.TargetThousandsSpace;
             _ControlSettings.TargetThousandsNobreakSpace.Value = _Control.TargetThousandsNobreakSpace;
             _ControlSettings.TargetThousandsThinSpace.Value = _Control.TargetThousandsThinSpace;
@@ -191,6 +198,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.SourceDecimalPeriod.Value = _Control.SourceDecimalPeriod;
             _ControlSettings.TargetDecimalComma.Value = _Control.TargetDecimalComma;
             _ControlSettings.TargetDecimalPeriod.Value = _Control.TargetDecimalPeriod;
+            _ControlSettings.TargetNoSeparator.Value = _Control.TargetNoSeparator;
             _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
             _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
         }

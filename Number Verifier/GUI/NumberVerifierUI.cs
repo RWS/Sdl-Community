@@ -125,6 +125,12 @@ namespace Sdl.Community.NumberVerifier
             set { cb_SourceThousandsPeriod.Checked = value; }
         }
 
+        public bool SourceNoSeparator
+        {
+            get { return cb_SourceNoSeparator.Checked; }
+            set { cb_SourceNoSeparator.Checked = value; }
+        }
+
         public bool TargetThousandsSpace
         {
             get { return cb_TargetThousandsSpace.Checked; }
@@ -159,6 +165,12 @@ namespace Sdl.Community.NumberVerifier
         {
             get { return cb_TargetThousandsPeriod.Checked; }
             set { cb_TargetThousandsPeriod.Checked = value; }
+        }
+
+        public bool TargetNoSeparator
+        {
+            get { return cb_TargetNoSeparator.Checked; }
+            set { cb_TargetNoSeparator.Checked = value; }
         }
 
         public bool SourceDecimalComma
