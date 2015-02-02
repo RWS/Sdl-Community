@@ -212,7 +212,7 @@ namespace Sdl.Community.NumberVerifier
             var targetAlphanumericsList = new List<string>();
 
             // loop through the whole paragraph unit
-            foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(segmentPair => (VerificationSettings.ExcludeLockedSegments.Value == false || segmentPair.Properties.IsLocked == false) && (VerificationSettings.Exclude100Percents.Value == false || ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" && segmentPair.Properties.TranslationOrigin.OriginType != "tm") || segmentPair.Properties.TranslationOrigin.MatchPercent != 100))))
+            foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs)) 
             {
                 string sourceText;
                 string targetText;
@@ -240,11 +240,10 @@ namespace Sdl.Community.NumberVerifier
                 int nJ;
                 for (nJ = sourceAlphanumericsList.Count - 1; nJ >= 0; nJ--)
                 {
-                    if (targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ]))
-                    {
-                        targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
-                        sourceAlphanumericsList.RemoveAt(nJ);
-                    }
+                    if (!targetAlphanumericsList.Contains(sourceAlphanumericsList[nJ])) continue;
+
+                    targetAlphanumericsList.Remove(sourceAlphanumericsList[nJ]);
+                    sourceAlphanumericsList.RemoveAt(nJ);
                 }
 
                 // find all numbers in source and add to list
@@ -545,6 +544,16 @@ namespace Sdl.Community.NumberVerifier
                     #endregion
                 }
             }
+        }
+
+        private bool FilterSegmentPairs(ISegmentPair segmentPair)
+        {
+            return (VerificationSettings.ExcludeLockedSegments.Value == false ||
+                    segmentPair.Properties.IsLocked == false) &&
+                   (VerificationSettings.Exclude100Percents.Value == false ||
+                    ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
+                      segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
+                     segmentPair.Properties.TranslationOrigin.MatchPercent != 100));
         }
         #endregion
 
