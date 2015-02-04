@@ -507,7 +507,7 @@ namespace Sdl.Community.NumberVerifier
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
             }
-            else if (thousandSeparators != String.Empty && thousandSeparators != String.Empty &&
+            else if (thousandSeparators != String.Empty && decimalSeparators != String.Empty &&
                      Regex.IsMatch(number,
                          @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
                          @"]\d+$")) // e.g. 1,000.5
