@@ -489,7 +489,7 @@ namespace Sdl.Community.NumberVerifier
 
         private void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
         {
-            foreach (Match match in Regex.Matches(text, @"^-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
+            foreach (Match match in Regex.Matches(text, @"-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
             {
                 var normalizedNumber = NormalizedNumber(match.Value,thousandSeparators, decimalSeparators, noSeparator);
 
@@ -576,7 +576,7 @@ namespace Sdl.Community.NumberVerifier
                 }
                 if (numberElements.Length > 1)
                 {
-                    tempNormalized.Append(numberElements[2]);
+                    tempNormalized.Append(numberElements[1]);
                 }
                 normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false);
             }
