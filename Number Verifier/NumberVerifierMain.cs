@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using Sdl.Core.Settings;
@@ -25,7 +24,28 @@ namespace Sdl.Community.NumberVerifier
         #region "PrivateMembers"
         private ISharedObjects _sharedObjects;
         private NumberVerifierSettings _verificationSettings;
+        private bool? _enabled; 
         #endregion
+
+        public bool Enabled
+        {
+            get
+            {
+                if (_enabled.HasValue) return _enabled.Value;
+                var settingBundle = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
+                if (settingBundle == null)
+                {
+                    _enabled = false;
+                }
+                else
+                {
+                    var settingGroup = settingBundle.GetSettingsGroup(SettingsId);
+                    _enabled = settingGroup.GetSetting<bool>("Enabled");
+                }
+
+                return _enabled != null && _enabled.Value;
+            }
+        }
 
         /// <summary>
         /// Initializes the settings bundle object from which to retrieve the setting(s)
@@ -39,10 +59,9 @@ namespace Sdl.Community.NumberVerifier
             {
                 if (_verificationSettings != null || _sharedObjects == null) return _verificationSettings;
                 var bundle = _sharedObjects.GetSharedObject<ISettingsBundle>("SettingsBundle");
-                if (bundle != null)
-                {
-                    _verificationSettings = bundle.GetSettingsGroup<NumberVerifierSettings>();
-                }
+                if (bundle == null) return _verificationSettings;
+                _verificationSettings = bundle.GetSettingsGroup<NumberVerifierSettings>();
+                var x = bundle.GetSettingsGroup(this.SettingsId);
                 return _verificationSettings;
             }
         }
@@ -163,6 +182,7 @@ namespace Sdl.Community.NumberVerifier
         private string _sourceDecimalSeparators = "";
         private string _targetDecimalSeparators = "";
 
+
         public void Initialize(IDocumentProperties documentInfo)
         {
 
@@ -192,8 +212,11 @@ namespace Sdl.Community.NumberVerifier
         #region "process"
         public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
-            // Apply the verification logic.
-            CheckParagraphUnit(paragraphUnit);
+            if (Enabled)
+            {
+                // Apply the verification logic.
+                CheckParagraphUnit(paragraphUnit);
+            }
         }
         #endregion
 

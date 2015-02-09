@@ -5,7 +5,7 @@
 AppName=Number Verifier
 AppPublisher=SDL Community Developers
 AppPublisherURL=https://community.sdl.com/
-AppVersion=1.0.3.0
+AppVersion=1.0.4.0
 DisableDirPage = yes
 DisableWelcomePage = yes
 AllowNoIcons = yes
