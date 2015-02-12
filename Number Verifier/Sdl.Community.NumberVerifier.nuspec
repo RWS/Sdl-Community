@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Sdl.Community.NumberVerifier</id>
+        <version>1.0.3.0</version>
+        <title>Number Verifier</title>
+        <authors>Romulus Crisan</authors>
+        <owners>Romulus Crisan</owners>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>While the standard number verification in SDL Trados Studio may often be sufficient there are some occasions when a bit more control would be preferable, for example when translating documents that contain lots of numbers, especially when they are non-standard. This Number Verifier plug-in allows you to fine-tune settings to provide you with the desired balance between amount of false positives and potentially missed errors.</description>
+    </metadata>
+    <files>
+        <file src="bin\release\Sdl.Community.NumberVerifier.sdlplugin" target="Sdl.Community.NumberVerifier.sdlplugin" />
+    </files>
+</package>
