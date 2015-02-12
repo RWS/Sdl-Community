@@ -17,3 +17,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Reindex Translation Memories
 * [Documentation](Reindex Translation Memories)
+
+## Embedded Content Processor
+* [Documentation](Embedded Content Processor)
