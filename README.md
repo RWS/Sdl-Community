@@ -20,3 +20,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Embedded Content Processor
 * [Documentation](Embeded Content Processor)
+
+## Legit
+* [Documentation](Legit)
