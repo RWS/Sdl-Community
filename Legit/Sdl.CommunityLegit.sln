@@ -1,0 +1,66 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D3B4A8D4-DC05-4108-A6D7-0CF2B37F8930}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Legit", "Sdl.Community.Legit\Sdl.Community.Legit.csproj", "{D45E3968-4632-4865-994D-83F4FADB1DB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FBC4D30D-383B-465A-AF2C-5CB9FD9D17CD}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CD_ROM|Any CPU = CD_ROM|Any CPU
+		CD_ROM|Mixed Platforms = CD_ROM|Mixed Platforms
+		CD_ROM|x86 = CD_ROM|x86
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		DVD-5|Any CPU = DVD-5|Any CPU
+		DVD-5|Mixed Platforms = DVD-5|Mixed Platforms
+		DVD-5|x86 = DVD-5|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+		SingleImage|Any CPU = SingleImage|Any CPU
+		SingleImage|Mixed Platforms = SingleImage|Mixed Platforms
+		SingleImage|x86 = SingleImage|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.CD_ROM|x86.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.Release|x86.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Any CPU.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
+		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Ttxr.vsmdi
+	EndGlobalSection
+EndGlobal
