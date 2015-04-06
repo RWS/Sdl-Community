@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Drawing;
 using System.Windows.Forms;
 using Sdl.Community.EmbeddedContentProcessor.Settings;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.EmbeddedContentProcessor.UI
 {
@@ -79,13 +81,23 @@ namespace Sdl.Community.EmbeddedContentProcessor.UI
                 _translateComboBox.Items.Add(NotTranslatable);
             }
 
-            if (_rule.IsContentTranslatable)
+            _translateComboBox.SelectedItem = _rule.IsContentTranslatable ? Translatable : NotTranslatable;
+
+            LoadSegmentationHint();
+        }
+
+        private void LoadSegmentationHint()
+        {
+            _segmentationHintComboBox.DisplayMember = "DisplayValue";
+            var list = new SegmentationHintComboItems();
+            
+            foreach (var item in list)
             {
-                _translateComboBox.SelectedItem = Translatable;
-            }
-            else
-            {
-                _translateComboBox.SelectedItem = NotTranslatable;
+                _segmentationHintComboBox.Items.Add(item);
+                if (item.SegmentationHint == _rule.SegmentationHint)
+                {
+                    _segmentationHintComboBox.SelectedItem = item;
+                }
             }
         }
 
@@ -108,6 +120,9 @@ namespace Sdl.Community.EmbeddedContentProcessor.UI
             _rule.EndTagRegexValue = _endTagTextBox.Text;
 
             _rule.TagType = _ruleTypeComboBox.SelectedItem.ToString() == TagPair ? MatchRule.TagTypeOption.TagPair : MatchRule.TagTypeOption.Placeholder;
+
+            _rule.SegmentationHint =
+                ((SegmentationHintComboItem) _segmentationHintComboBox.SelectedItem).SegmentationHint;
 
             _rule.IsContentTranslatable = _translateComboBox.SelectedItem.ToString() == Translatable;
         }
@@ -141,6 +156,24 @@ namespace Sdl.Community.EmbeddedContentProcessor.UI
                 _errorProvider.SetError(validationBox, "The regular expression is incorrect:" + "\n" + e.Message);
                 validationBox.ForeColor = Color.Red;
             }
+        }
+    }
+
+    class SegmentationHintComboItem
+    {
+        public string DisplayValue { get; set; }
+        public SegmentationHint SegmentationHint { get; set; }
+    }
+
+    class SegmentationHintComboItems : List<SegmentationHintComboItem>
+    {
+        public SegmentationHintComboItems()
+        {
+            Add(new SegmentationHintComboItem { DisplayValue = "Include", SegmentationHint = SegmentationHint.Include });
+            Add(new SegmentationHintComboItem { DisplayValue = "Include with text", SegmentationHint = SegmentationHint.IncludeWithText });
+            Add(new SegmentationHintComboItem { DisplayValue = "Exclude", SegmentationHint = SegmentationHint.Exclude });
+            Add(new SegmentationHintComboItem { DisplayValue = "May Exclude", SegmentationHint = SegmentationHint.MayExclude });
+            Add(new SegmentationHintComboItem { DisplayValue = "Undefined", SegmentationHint = SegmentationHint.Undefined });
         }
     }
 }
