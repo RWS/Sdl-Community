@@ -42,13 +42,32 @@ namespace Sdl.Community.EmbeddedContentProcessor.Processor
         {
             if (_isEnabled)
             {
-                ProcessParagraphUnit(paragraphUnit.Source);
-                ProcessParagraphUnit(paragraphUnit.Target);
+                RemoveSegments(paragraphUnit.Source);
+                ProcessParagraph(paragraphUnit.Source);
+                paragraphUnit.Target.Clear();
+                //ClearSegment(paragraphUnit.Target);
+                //   ProcessParagraphUnit(paragraphUnit.Target);
             }
             base.ProcessParagraphUnit(paragraphUnit);
         }
 
-        private void ProcessParagraphUnit(IParagraph paragraph)
+        private void RemoveSegments(IParagraph paragraph)
+        {
+            var segments = from item in paragraph
+                where item is ISegment
+                select item as ISegment;
+                   
+            segments.ToList().ForEach(item =>
+            {
+                var sourceSegmentPosition = item.IndexInParent;
+
+                item.RemoveFromParent();
+                item.MoveAllItemsTo(paragraph, sourceSegmentPosition);
+            });
+           
+        }
+
+        private void ProcessParagraph(IParagraph paragraph)
         {
             var visitor = GetContentVisitor();
 
