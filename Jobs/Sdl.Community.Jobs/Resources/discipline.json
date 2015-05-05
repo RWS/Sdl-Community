@@ -1,0 +1,438 @@
+[
+  {
+    "disc_spec_id":1,
+    "disc_spec_name":"Accounting"
+  },
+  {
+    "disc_spec_id":2,
+    "disc_spec_name":"Advertising \/ Public Relations"
+  },
+  {
+    "disc_spec_id":3,
+    "disc_spec_name":"Agriculture"
+  },
+  {
+    "disc_spec_id":5,
+    "disc_spec_name":"Anthropology"
+  },
+  {
+    "disc_spec_id":6,
+    "disc_spec_name":"Architecture"
+  },
+  {
+    "disc_spec_id":7,
+    "disc_spec_name":"Art, Arts & Crafts, Painting"
+  },
+  {
+    "disc_spec_id":8,
+    "disc_spec_name":"Astronomy & Space"
+  },
+  {
+    "disc_spec_id":9,
+    "disc_spec_name":"Automotive \/ Cars & Trucks"
+  },
+  {
+    "disc_spec_id":10,
+    "disc_spec_name":"Aerospace \/ Aviation \/ Space"
+  },
+  {
+    "disc_spec_id":12,
+    "disc_spec_name":"Biology (-tech,-chem,micro-)"
+  },
+  {
+    "disc_spec_id":13,
+    "disc_spec_name":"Botany"
+  },
+  {
+    "disc_spec_id":15,
+    "disc_spec_name":"Business\/Commerce (general)"
+  },
+  {
+    "disc_spec_id":16,
+    "disc_spec_name":"Medical: Cardiology"
+  },
+  {
+    "disc_spec_id":19,
+    "disc_spec_name":"Chemistry; Chem Sci\/Eng"
+  },
+  {
+    "disc_spec_id":20,
+    "disc_spec_name":"Cinema, Film, TV, Drama"
+  },
+  {
+    "disc_spec_id":23,
+    "disc_spec_name":"Computers: Hardware"
+  },
+  {
+    "disc_spec_id":24,
+    "disc_spec_name":"Computers: Software"
+  },
+  {
+    "disc_spec_id":25,
+    "disc_spec_name":"Computers: Systems, Networks"
+  },
+  {
+    "disc_spec_id":26,
+    "disc_spec_name":"Construction \/ Civil Engineering"
+  },
+  {
+    "disc_spec_id":28,
+    "disc_spec_name":"Cooking \/ Culinary"
+  },
+  {
+    "disc_spec_id":29,
+    "disc_spec_name":"Cosmetics, Beauty"
+  },
+  {
+    "disc_spec_id":30,
+    "disc_spec_name":"Medical: Dentistry"
+  },
+  {
+    "disc_spec_id":32,
+    "disc_spec_name":"Economics"
+  },
+  {
+    "disc_spec_id":33,
+    "disc_spec_name":"Education \/ Pedagogy"
+  },
+  {
+    "disc_spec_id":34,
+    "disc_spec_name":"Electronics \/ Elect Eng"
+  },
+  {
+    "disc_spec_id":35,
+    "disc_spec_name":"Energy \/ Power Generation"
+  },
+  {
+    "disc_spec_id":40,
+    "disc_spec_name":"Engineering (general)"
+  },
+  {
+    "disc_spec_id":41,
+    "disc_spec_name":"Engineering: Industrial"
+  },
+  {
+    "disc_spec_id":44,
+    "disc_spec_name":"Environment & Ecology"
+  },
+  {
+    "disc_spec_id":45,
+    "disc_spec_name":"Esoteric practices"
+  },
+  {
+    "disc_spec_id":48,
+    "disc_spec_name":"Finance (general)"
+  },
+  {
+    "disc_spec_id":49,
+    "disc_spec_name":"Fisheries"
+  },
+  {
+    "disc_spec_id":50,
+    "disc_spec_name":"Folklore"
+  },
+  {
+    "disc_spec_id":51,
+    "disc_spec_name":"Food & Drink"
+  },
+  {
+    "disc_spec_id":52,
+    "disc_spec_name":"Forestry \/ Wood \/ Timber"
+  },
+  {
+    "disc_spec_id":53,
+    "disc_spec_name":"Furniture \/ Household Appliances"
+  },
+  {
+    "disc_spec_id":54,
+    "disc_spec_name":"Games \/ Video Games \/ Gaming \/ Casino"
+  },
+  {
+    "disc_spec_id":57,
+    "disc_spec_name":"General \/ Conversation \/ Greetings \/ Letters"
+  },
+  {
+    "disc_spec_id":58,
+    "disc_spec_name":"Genealogy"
+  },
+  {
+    "disc_spec_id":59,
+    "disc_spec_name":"Geology"
+  },
+  {
+    "disc_spec_id":60,
+    "disc_spec_name":"Geography"
+  },
+  {
+    "disc_spec_id":62,
+    "disc_spec_name":"Government \/ Politics"
+  },
+  {
+    "disc_spec_id":65,
+    "disc_spec_name":"History"
+  },
+  {
+    "disc_spec_id":67,
+    "disc_spec_name":"Human Resources"
+  },
+  {
+    "disc_spec_id":68,
+    "disc_spec_name":"IT (Information Technology)"
+  },
+  {
+    "disc_spec_id":69,
+    "disc_spec_name":"Insurance"
+  },
+  {
+    "disc_spec_id":70,
+    "disc_spec_name":"International Org\/Dev\/Coop"
+  },
+  {
+    "disc_spec_id":71,
+    "disc_spec_name":"Internet, e-Commerce"
+  },
+  {
+    "disc_spec_id":72,
+    "disc_spec_name":"Investment \/ Securities"
+  },
+  {
+    "disc_spec_id":75,
+    "disc_spec_name":"Law: Contract(s)"
+  },
+  {
+    "disc_spec_id":76,
+    "disc_spec_name":"Law: Patents, Trademarks, Copyright"
+  },
+  {
+    "disc_spec_id":77,
+    "disc_spec_name":"Law (general)"
+  },
+  {
+    "disc_spec_id":80,
+    "disc_spec_name":"Linguistics"
+  },
+  {
+    "disc_spec_id":81,
+    "disc_spec_name":"Livestock \/ Animal Husbandry"
+  },
+  {
+    "disc_spec_id":82,
+    "disc_spec_name":"Poetry & Literature"
+  },
+  {
+    "disc_spec_id":85,
+    "disc_spec_name":"Management"
+  },
+  {
+    "disc_spec_id":87,
+    "disc_spec_name":"Marketing \/ Market Research"
+  },
+  {
+    "disc_spec_id":88,
+    "disc_spec_name":"Materials (Plastics, Ceramics, etc.)"
+  },
+  {
+    "disc_spec_id":89,
+    "disc_spec_name":"Mathematics & Statistics"
+  },
+  {
+    "disc_spec_id":90,
+    "disc_spec_name":"Mechanics \/ Mech Engineering"
+  },
+  {
+    "disc_spec_id":91,
+    "disc_spec_name":"Media \/ Multimedia"
+  },
+  {
+    "disc_spec_id":92,
+    "disc_spec_name":"Medical: Pharmaceuticals"
+  },
+  {
+    "disc_spec_id":93,
+    "disc_spec_name":"Medical: Instruments"
+  },
+  {
+    "disc_spec_id":94,
+    "disc_spec_name":"Medical: Health Care"
+  },
+  {
+    "disc_spec_id":95,
+    "disc_spec_name":"Medical (general)"
+  },
+  {
+    "disc_spec_id":96,
+    "disc_spec_name":"Metallurgy \/ Casting"
+  },
+  {
+    "disc_spec_id":97,
+    "disc_spec_name":"Metrology"
+  },
+  {
+    "disc_spec_id":98,
+    "disc_spec_name":"Military \/ Defense"
+  },
+  {
+    "disc_spec_id":99,
+    "disc_spec_name":"Mining & Minerals \/ Gems"
+  },
+  {
+    "disc_spec_id":101,
+    "disc_spec_name":"Music"
+  },
+  {
+    "disc_spec_id":103,
+    "disc_spec_name":"Nuclear Eng\/Sci"
+  },
+  {
+    "disc_spec_id":104,
+    "disc_spec_name":"Nutrition"
+  },
+  {
+    "disc_spec_id":105,
+    "disc_spec_name":"Other"
+  },
+  {
+    "disc_spec_id":107,
+    "disc_spec_name":"Paper \/ Paper Manufacturing"
+  },
+  {
+    "disc_spec_id":110,
+    "disc_spec_name":"Petroleum Eng\/Sci"
+  },
+  {
+    "disc_spec_id":112,
+    "disc_spec_name":"Philosophy"
+  },
+  {
+    "disc_spec_id":113,
+    "disc_spec_name":"Photography\/Imaging (& Graphic Arts)"
+  },
+  {
+    "disc_spec_id":114,
+    "disc_spec_name":"Physics"
+  },
+  {
+    "disc_spec_id":119,
+    "disc_spec_name":"Printing & Publishing"
+  },
+  {
+    "disc_spec_id":120,
+    "disc_spec_name":"Psychology"
+  },
+  {
+    "disc_spec_id":122,
+    "disc_spec_name":"Real Estate"
+  },
+  {
+    "disc_spec_id":123,
+    "disc_spec_name":"Religion"
+  },
+  {
+    "disc_spec_id":124,
+    "disc_spec_name":"Retail"
+  },
+  {
+    "disc_spec_id":127,
+    "disc_spec_name":"SAP"
+  },
+  {
+    "disc_spec_id":128,
+    "disc_spec_name":"Science (general)"
+  },
+  {
+    "disc_spec_id":129,
+    "disc_spec_name":"Ships, Sailing, Maritime"
+  },
+  {
+    "disc_spec_id":130,
+    "disc_spec_name":"Social Science, Sociology, Ethics, etc."
+  },
+  {
+    "disc_spec_id":133,
+    "disc_spec_name":"Sports \/ Fitness \/ Recreation"
+  },
+  {
+    "disc_spec_id":135,
+    "disc_spec_name":"Surveying"
+  },
+  {
+    "disc_spec_id":136,
+    "disc_spec_name":"Law: Taxation & Customs"
+  },
+  {
+    "disc_spec_id":137,
+    "disc_spec_name":"Telecom(munications)"
+  },
+  {
+    "disc_spec_id":138,
+    "disc_spec_name":"Textiles \/ Clothing \/ Fashion"
+  },
+  {
+    "disc_spec_id":139,
+    "disc_spec_name":"Tourism & Travel"
+  },
+  {
+    "disc_spec_id":140,
+    "disc_spec_name":"Transport \/ Transportation \/ Shipping"
+  },
+  {
+    "disc_spec_id":143,
+    "disc_spec_name":"Wine \/ Oenology \/ Viticulture"
+  },
+  {
+    "disc_spec_id":146,
+    "disc_spec_name":"Zoology"
+  },
+  {
+    "disc_spec_id":147,
+    "disc_spec_name":"Computers (general)"
+  },
+  {
+    "disc_spec_id":149,
+    "disc_spec_name":"Slang"
+  },
+  {
+    "disc_spec_id":150,
+    "disc_spec_name":"Names (personal, company)"
+  },
+  {
+    "disc_spec_id":151,
+    "disc_spec_name":"Archaeology"
+  },
+  {
+    "disc_spec_id":152,
+    "disc_spec_name":"Idioms \/ Maxims \/ Sayings"
+  },
+  {
+    "disc_spec_id":154,
+    "disc_spec_name":"Journalism"
+  },
+  {
+    "disc_spec_id":157,
+    "disc_spec_name":"Manufacturing"
+  },
+  {
+    "disc_spec_id":158,
+    "disc_spec_name":"Certificates, Diplomas, Licenses, CVs"
+  },
+  {
+    "disc_spec_id":159,
+    "disc_spec_name":"Automation & Robotics"
+  },
+  {
+    "disc_spec_id":160,
+    "disc_spec_name":"Genetics"
+  },
+  {
+    "disc_spec_id":170,
+    "disc_spec_name":"Patents"
+  },
+  {
+    "disc_spec_id":173,
+    "disc_spec_name":"Meteorology"
+  },
+  {
+    "disc_spec_id":174,
+    "disc_spec_name":"Safety"
+  }
+]
