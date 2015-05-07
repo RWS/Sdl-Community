@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="Sdl.Community.Jobs.UI.JobsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:model="clr-namespace:Sdl.Community.Jobs.Model"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <DataGrid Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Style="{StaticResource AzureDataGrid}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding (model:JobViewModel.TimePosted)}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Languages" Width="Auto" Binding="{Binding (model:JobViewModel.LanguagePairs)}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn Header="Summary" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                                <TextBlock DockPanel.Dock="Top"  HorizontalAlignment="Center" TextWrapping="Wrap">
+                                    <Hyperlink NavigateUri="{Binding (model:JobViewModel.Url)}" RequestNavigate="Hyperlink_OnRequestNavigate">
+                                        <TextBlock Text="{Binding (model:JobViewModel.Summary)}"></TextBlock>
+                                    </Hyperlink>
+                                </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Description" Width="*" Binding="{Binding (model:JobViewModel.Description)}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Services" Width="Auto" Binding="{Binding (model:JobViewModel.LanguageServices)}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.HorizontalAlignment" Value="Center"></Setter>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap"></Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Volume" Width="Auto" Binding="{Binding (model:JobViewModel.Volume)}"></DataGridTextColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </Grid>
+</UserControl>

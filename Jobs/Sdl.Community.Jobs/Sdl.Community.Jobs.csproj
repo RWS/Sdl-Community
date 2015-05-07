@@ -37,12 +37,22 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MahApps.Metro, Version=1.1.2.0, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net40\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ObjectListView">
-      <HintPath>..\packages\ObjectListView.Official.2.8.1\lib\net20\ObjectListView.dll</HintPath>
+    <Reference Include="PresentationCore">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\3rd Party\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -93,13 +103,30 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.1.1.2.0\lib\net40\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ProzApi.cs" />
     <Compile Include="JobsView.cs" />
     <Compile Include="Model\Discipline.cs" />
+    <Compile Include="Model\JobPosting.cs" />
+    <Compile Include="Model\JobPostingResponse.cs" />
     <Compile Include="Model\JobSearchResult.cs" />
+    <Compile Include="Model\JobViewModel.cs" />
     <Compile Include="Model\Language.cs" />
+    <Compile Include="Model\LanguagePair.cs" />
+    <Compile Include="Model\LanguageService.cs" />
+    <Compile Include="Model\Link.cs" />
+    <Compile Include="Model\Links.cs" />
+    <Compile Include="Model\ProzAccessToken.cs" />
     <Compile Include="Model\SearchCriteria.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -115,6 +142,9 @@
     </Compile>
     <Compile Include="UI\JobsControl.Designer.cs">
       <DependentUpon>JobsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\JobsView.xaml.cs">
+      <DependentUpon>JobsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchCriteriaControl.cs">
       <SubType>UserControl</SubType>
@@ -136,6 +166,7 @@
     <None Include="packages.config" />
     <None Include="Resources\discipline.json" />
     <None Include="Resources\languages.json" />
+    <None Include="Resources\languageServices.json" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +176,12 @@
     <EmbeddedResource Include="UI\SearchCriteriaControl.resx">
       <DependentUpon>SearchCriteriaControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\JobsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Sdl.Community.Jobs.Model;
 using Sdl.Community.Jobs.Services;
 
 namespace Sdl.Community.Jobs.UI
@@ -27,11 +28,13 @@ namespace Sdl.Community.Jobs.UI
         {
             base.OnLoad(e);
             _service.SearchCompleted += _service_SearchCompleted;
+            _service.Search();
         }
+
 
         void _service_SearchCompleted(object sender, SearchCompletedEventArgs e)
         {
-            
+            ((JobsView)elementHost1.Child).SetJobs(e.JobSearchResults);
         }
     }
 }

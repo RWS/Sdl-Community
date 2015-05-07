@@ -7,9 +7,8 @@ namespace Sdl.Community.Jobs.Model
 {
     public class SearchCriteria
     {
-        public Language SourceLanguage { get; set; }
 
-        public Language TargetLanguage { get; set; }
+        public LanguagePair LanguagePair { get; set; }
 
         public Discipline Discipline { get; set; }
 

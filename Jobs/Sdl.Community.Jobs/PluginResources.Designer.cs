@@ -146,6 +146,41 @@ namespace Sdl.Community.Jobs {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  {
+        ///    &quot;lang_service_id&quot;:1,
+        ///    &quot;lang_service_name&quot;:&quot;Translation&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_service_id&quot;:2,
+        ///    &quot;lang_service_name&quot;:&quot;Checking\/editing&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_service_id&quot;:3,
+        ///    &quot;lang_service_name&quot;:&quot;Interpreting, Consecutive&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_service_id&quot;:4,
+        ///    &quot;lang_service_name&quot;:&quot;Interpreting, Simultaneous&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_service_id&quot;:5,
+        ///    &quot;lang_service_name&quot;:&quot;Voiceover&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_service_id&quot;:6,
+        ///    &quot;lang_service_name&quot;:&quot;Summarization&quot;
+        ///  },
+        ///  {
+        ///    &quot;lang_ser [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string languageServices {
+            get {
+                return ResourceManager.GetString("languageServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.Jobs.
         /// </summary>
         public static string Plugin_Name {

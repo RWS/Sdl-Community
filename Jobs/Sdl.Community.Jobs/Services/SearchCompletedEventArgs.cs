@@ -10,7 +10,7 @@ namespace Sdl.Community.Jobs.Services
     {
         public SearchCriteria Criteria { get; set; }
 
-        public List<JobSearchResult> JobSearchResults { get; set; }
+        public List<JobViewModel> JobSearchResults { get; set; }
 
     }
 }

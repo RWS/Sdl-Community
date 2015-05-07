@@ -1,0 +1,50 @@
+[
+  {
+    "lang_service_id":1,
+    "lang_service_name":"Translation"
+  },
+  {
+    "lang_service_id":2,
+    "lang_service_name":"Checking\/editing"
+  },
+  {
+    "lang_service_id":3,
+    "lang_service_name":"Interpreting, Consecutive"
+  },
+  {
+    "lang_service_id":4,
+    "lang_service_name":"Interpreting, Simultaneous"
+  },
+  {
+    "lang_service_id":5,
+    "lang_service_name":"Voiceover"
+  },
+  {
+    "lang_service_id":6,
+    "lang_service_name":"Summarization"
+  },
+  {
+    "lang_service_id":7,
+    "lang_service_name":"Education"
+  },
+  {
+    "lang_service_id":8,
+    "lang_service_name":"Interpreting, Chuchotage\/Whispering"
+  },
+  {
+    "lang_service_id":9,
+    "lang_service_name":"Interpreting, Liaison"
+  },
+  {
+    "lang_service_id":10,
+    "lang_service_name":"Interpreting, Phone"
+  },
+  {
+    "lang_service_id":11,
+    "lang_service_name":"Transcription"
+  },
+  {
+    "lang_service_id":12,
+    "lang_service_name":"Copywriting"
+  }
+]

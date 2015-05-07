@@ -48,8 +48,7 @@ namespace Sdl.Community.Jobs.UI
             var searchCriteria = new SearchCriteria
             {
                 Discipline = cbFields.SelectedItem as Discipline,
-                SourceLanguage = cbSourceLanguages.SelectedItem as Language,
-                TargetLanguage = cbTargetLanguages.SelectedItem as Language,
+                LanguagePair = new LanguagePair(cbSourceLanguages.SelectedItem as Language, cbTargetLanguages.SelectedItem as Language),
                 SearchTerm = txtSearch.Text,
                 Translation = chkTranslation.Checked,
                 Interpreting = chkInterpreting.Checked,
