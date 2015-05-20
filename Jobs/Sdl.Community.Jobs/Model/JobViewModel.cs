@@ -28,5 +28,9 @@ namespace Sdl.Community.Jobs.Model
         public string OtherDiscipline { get; set; }
 
         public string LanguageServices { get; set; }
+
+        public string Next { get; set; }
+
+        public string Previous { get; set; }
     }
 }

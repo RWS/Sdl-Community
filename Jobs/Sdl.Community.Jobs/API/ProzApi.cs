@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 using RestSharp;
@@ -15,19 +16,23 @@ namespace Sdl.Community.Jobs.API
         private const string ClientId = "d09c67edad450fac837cfa38a135f5b62cf7c42d";
         private const string ClientSecret = "f125d5d7bfe2551337f01f9f0f4d539afacfec96";
         private ProzAccessToken _accessToken;
-
+        private int _numberOfRetries;
         public ProzApi()
         {
+            _numberOfRetries = 0;
             _accessToken = new ProzAccessToken();
         }
 
 
         public T Execute<T>(RestRequest request) where T : new()
         {
-          //  if (_accessToken.HasExpired)
+            T typedResponse;
+            try
             {
-                _accessToken = Authenticate();
-            }
+
+           
+            _accessToken = Authenticate();
+
             var client = new RestClient(BaseUrl);
             request.AddParameter("Authorization", string.Format("{0} {1}", _accessToken.Type, _accessToken.AccessToken),
                 ParameterType.HttpHeader);
@@ -40,7 +45,15 @@ namespace Sdl.Community.Jobs.API
                 throw prozException;
             }
 
-            var typedResponse = JsonConvert.DeserializeObject<T>(response.Content);
+            typedResponse = JsonConvert.DeserializeObject<T>(response.Content);
+            }
+            catch (Exception)
+            {
+                if (_numberOfRetries > 3) throw;
+                //try again
+                _numberOfRetries++;
+                typedResponse = Execute<T>(request);
+            }
 
             return typedResponse;
         }

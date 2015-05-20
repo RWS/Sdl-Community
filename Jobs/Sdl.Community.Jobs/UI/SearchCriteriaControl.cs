@@ -56,6 +56,52 @@ namespace Sdl.Community.Jobs.UI
             };
 
             _service.Search(searchCriteria);
+
+            EnableDisablePagingButtons();
+        }
+
+        private void lnkNext_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var searchCriteria = new SearchCriteria
+            {
+                Discipline = cbFields.SelectedItem as Discipline,
+                LanguagePair = new LanguagePair(cbSourceLanguages.SelectedItem as Language, cbTargetLanguages.SelectedItem as Language),
+                SearchTerm = txtSearch.Text,
+                Translation = chkTranslation.Checked,
+                Interpreting = chkInterpreting.Checked,
+                Potential = chkPotential.Checked
+            };
+
+            _service.CurrentPage++;
+            _service.Search(searchCriteria,_service.CurrentPage);
+
+            EnableDisablePagingButtons();
+        }
+
+        private void lnkPrevious_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var searchCriteria = new SearchCriteria
+            {
+                Discipline = cbFields.SelectedItem as Discipline,
+                LanguagePair = new LanguagePair(cbSourceLanguages.SelectedItem as Language, cbTargetLanguages.SelectedItem as Language),
+                SearchTerm = txtSearch.Text,
+                Translation = chkTranslation.Checked,
+                Interpreting = chkInterpreting.Checked,
+                Potential = chkPotential.Checked
+            };
+
+            _service.CurrentPage--;
+            _service.Search(searchCriteria, _service.CurrentPage);
+
+            EnableDisablePagingButtons();
+        }
+
+
+        private void EnableDisablePagingButtons()
+        {
+            lnkNext.Enabled = _service.HasNext;
+            lnkPrevious.Enabled = _service.HasPrevious;
+            lblCurrentPage.Text = _service.CurrentPage.ToString();
         }
     }
 }

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <DataGrid Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Style="{StaticResource AzureDataGrid}">
+        <DataGrid Name="DataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False" Style="{StaticResource AzureDataGrid}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Time" Width="Auto" Binding="{Binding (model:JobViewModel.TimePosted)}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Languages" Width="Auto" Binding="{Binding (model:JobViewModel.LanguagePairs)}">

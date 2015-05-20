@@ -18,6 +18,8 @@ namespace Sdl.Community.Jobs.Services
         private readonly List<Language> _languages;
         private readonly List<LanguageService> _languageServices;
 
+        public int CurrentPage { get; set; }
+
         public List<Discipline> Disciplines
         {
             get { return _disciplineList; }
@@ -32,6 +34,10 @@ namespace Sdl.Community.Jobs.Services
         {
             get { return _languageServices; }
         }
+
+        public bool HasNext { get; set; }
+
+        public bool HasPrevious { get; set; }
 
         public event SearchCompletedEventHandler SearchCompleted;
 
@@ -91,12 +97,20 @@ namespace Sdl.Community.Jobs.Services
                 : new List<LanguagePair>();
 
             var result = new StringBuilder();
-            foreach (var languagePair in languagePairs)
+            for (var i = 0; i < languagePairs.Count; i++)
             {
-                result.AppendLine(string.Format("{0} to {1}", languagePair.Source.LanguageName,
-                    languagePair.Target.LanguageName));
+                var languagePair = languagePairs[i];
+                if (i == languagePairs.Count - 1)
+                {
+                    result.Append(string.Format("{0} to {1}", languagePair.Source.LanguageName,
+                   languagePair.Target.LanguageName));
+                }
+                else
+                {
+                    result.AppendLine(string.Format("{0} to {1}", languagePair.Source.LanguageName,
+                   languagePair.Target.LanguageName));
+                }
             }
-
             return result.ToString();
         }
 
@@ -109,11 +123,19 @@ namespace Sdl.Community.Jobs.Services
                     .Where(lgs => lgs != null)
                     .ToList();
             var result = new StringBuilder();
-            foreach (var langService in langServices)
+            for (int i = 0; i < langServices.Count; i++)
             {
-                result.AppendLine(langService.Name);
+                var langService = langServices[i];
+                if (i == langServices.Count - 1)
+                {
+                    result.Append(langService.Name);
+                    
+                }
+                else
+                {
+                    result.AppendLine(langService.Name);
+                }
             }
-
             return result.ToString();
         }
 
@@ -121,22 +143,29 @@ namespace Sdl.Community.Jobs.Services
         {
             Search(null);
         }
-
-        public void Search(SearchCriteria criteria)
+        
+        public void Search(SearchCriteria criteria, int page = 1)
         {
             var request = new RestRequest(Method.GET) { Resource = "job-postings", RequestFormat = DataFormat.Json };
-            request.Parameters.AddRange(CreateParameters(criteria));
+            request.Parameters.AddRange(CreateParameters(criteria, page));
 
             var pApi = new ProzApi();
 
             var response = pApi.Execute<JobPostingResponse>(request);
 
             List<JobViewModel> results = TransformToJobsView(response);
+
+            CurrentPage = page;
+
+            HasNext = response.Links.Next != null;
+            HasPrevious = CurrentPage > 1;
+
+
             OnSearchCompleted(new SearchCompletedEventArgs {JobSearchResults = results, Criteria = criteria});
 
         }
 
-        private IEnumerable<Parameter> CreateParameters(SearchCriteria criteria)
+        private IEnumerable<Parameter> CreateParameters(SearchCriteria criteria, int page)
         {
             var result = new List<Parameter>();
             if (criteria == null) return result;
@@ -200,6 +229,17 @@ namespace Sdl.Community.Jobs.Services
 
                 result.Add(searchParameter);
             }
+
+           
+                var pageParameter = new Parameter
+                {
+                    Type = ParameterType.QueryString,
+                    Value = page,
+                    Name = "page"
+                };
+
+                result.Add(pageParameter);
+            
             return result;
         }
 

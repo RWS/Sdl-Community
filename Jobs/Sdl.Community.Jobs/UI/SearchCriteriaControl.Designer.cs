@@ -43,8 +43,13 @@
             this.chkInterpreting = new System.Windows.Forms.CheckBox();
             this.chkPotential = new System.Windows.Forms.CheckBox();
             this.chkTranslation = new System.Windows.Forms.CheckBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lnkNext = new System.Windows.Forms.LinkLabel();
+            this.lnkPrevious = new System.Windows.Forms.LinkLabel();
+            this.lblCurrentPage = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -63,6 +68,7 @@
             this.tableLayoutPanel1.Controls.Add(this.txtSearch, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnSearch, 1, 5);
             this.tableLayoutPanel1.Controls.Add(this.panel1, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.panel2, 1, 6);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 10);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -221,6 +227,52 @@
             this.chkTranslation.Text = "Translation";
             this.chkTranslation.UseVisualStyleBackColor = true;
             // 
+            // panel2
+            // 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.Controls.Add(this.lblCurrentPage);
+            this.panel2.Controls.Add(this.lnkPrevious);
+            this.panel2.Controls.Add(this.lnkNext);
+            this.panel2.Location = new System.Drawing.Point(223, 343);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(200, 100);
+            this.panel2.TabIndex = 11;
+            // 
+            // lnkNext
+            // 
+            this.lnkNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkNext.AutoSize = true;
+            this.lnkNext.Location = new System.Drawing.Point(168, 77);
+            this.lnkNext.Name = "lnkNext";
+            this.lnkNext.Size = new System.Drawing.Size(29, 13);
+            this.lnkNext.TabIndex = 0;
+            this.lnkNext.TabStop = true;
+            this.lnkNext.Text = "Next";
+            this.lnkNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkNext_LinkClicked);
+            // 
+            // lnkPrevious
+            // 
+            this.lnkPrevious.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lnkPrevious.AutoSize = true;
+            this.lnkPrevious.Enabled = false;
+            this.lnkPrevious.Location = new System.Drawing.Point(95, 77);
+            this.lnkPrevious.Name = "lnkPrevious";
+            this.lnkPrevious.Size = new System.Drawing.Size(48, 13);
+            this.lnkPrevious.TabIndex = 1;
+            this.lnkPrevious.TabStop = true;
+            this.lnkPrevious.Text = "Previous";
+            this.lnkPrevious.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkPrevious_LinkClicked);
+            // 
+            // lblCurrentPage
+            // 
+            this.lblCurrentPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblCurrentPage.AutoSize = true;
+            this.lblCurrentPage.Location = new System.Drawing.Point(149, 77);
+            this.lblCurrentPage.Name = "lblCurrentPage";
+            this.lblCurrentPage.Size = new System.Drawing.Size(13, 13);
+            this.lblCurrentPage.TabIndex = 2;
+            this.lblCurrentPage.Text = "1";
+            // 
             // SearchCriteriaControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -234,6 +286,8 @@
             this.tableLayoutPanel1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -255,5 +309,9 @@
         private System.Windows.Forms.CheckBox chkInterpreting;
         private System.Windows.Forms.CheckBox chkPotential;
         private System.Windows.Forms.CheckBox chkTranslation;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label lblCurrentPage;
+        private System.Windows.Forms.LinkLabel lnkPrevious;
+        private System.Windows.Forms.LinkLabel lnkNext;
     }
 }
