@@ -13,9 +13,9 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
 {
     public partial class MTProvidersDialog : Form
     {
-        private ControlledMTProvidersProvider _controlledMTProvider;
+        private ControlledMtProvidersProvider _controlledMTProvider;
 
-        public MTProvidersDialog(ControlledMTProvidersProvider controlledMTProvider)
+        public MTProvidersDialog(ControlledMtProvidersProvider controlledMTProvider)
         {
             InitializeComponent();
             _controlledMTProvider = controlledMTProvider;
@@ -42,8 +42,8 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
 
             IList<ITranslationProviderWinFormsUI> uis = TranslationProviderManager.GetTranslationProviderWinFormsUIs();
 
-            var mtProvidersUri = _controlledMTProvider.GetAllMTProvidersUri();
-            var selectedProvidersUri = _controlledMTProvider.GetSelectedMTProvidersUri();
+            var mtProvidersUri = _controlledMTProvider.GetAllMtProvidersUri();
+            var selectedProvidersUri = _controlledMTProvider.GetSelectedMtProvidersUri();
 
             foreach (ITranslationProviderWinFormsUI ui in uis)
             {

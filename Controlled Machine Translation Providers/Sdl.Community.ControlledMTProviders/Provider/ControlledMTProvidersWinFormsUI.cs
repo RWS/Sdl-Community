@@ -22,7 +22,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             List<ITranslationProvider> mtProviders = new List<ITranslationProvider>();
-            ControlledMTProvidersProvider controlledMTProvider = new ControlledMTProvidersProvider();
+            ControlledMtProvidersProvider controlledMTProvider = new ControlledMtProvidersProvider();
 
             using (MTProvidersDialog pd = new MTProvidersDialog(controlledMTProvider))
             {
@@ -46,12 +46,12 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                 }
             }
 
-            return new ITranslationProvider[] { new ControlledMTProvidersProvider(mtProviders) };
+            return new ITranslationProvider[] { new ControlledMtProvidersProvider(mtProviders) };
         }
 
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            var controlledMTProvider = (ControlledMTProvidersProvider)translationProvider;
+            var controlledMTProvider = (ControlledMtProvidersProvider)translationProvider;
 
             List<ITranslationProvider> mtProviders = new List<ITranslationProvider>();
 
@@ -78,7 +78,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                     }
                 }
             }
-            controlledMTProvider.MTProviders = mtProviders;
+            controlledMTProvider.MtProviders = mtProviders;
             return true;
         }
 
@@ -106,7 +106,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return translationProviderUri.Scheme.Equals(new Uri(ControlledMTProvidersProvider.ProviderUri).Scheme);
+            return translationProviderUri.Scheme.Equals(new Uri(ControlledMtProvidersProvider.ProviderUri).Scheme);
         }
 
         public string TypeDescription

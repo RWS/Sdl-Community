@@ -4,42 +4,41 @@ using System.Linq;
 using System.Text;
 
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Newtonsoft.Json;
 
 namespace Sdl.Community.ControlledMTProviders.Provider
 {
-    public class ControlledMTProvidersProvider : ITranslationProvider
+    public class ControlledMtProvidersProvider : ITranslationProvider
     {
         internal const string ProviderUriScheme = "sdlcommunityMMTP";
         internal const string ProviderUri = ProviderUriScheme + "://";
 
-        private IList<ITranslationProvider> mtProviders;
+        private IList<ITranslationProvider> _mtProviders;
 
-        private IList<Uri> mtProvidersUri;
+        private IList<Uri> _mtProvidersUri;
 
-        public IList<ITranslationProvider> MTProviders
+        public IList<ITranslationProvider> MtProviders
         {
-            get { return mtProviders; }
+            get { return _mtProviders; }
 
             set
             {
-                mtProviders = value;
+                _mtProviders = value;
             }
         }
 
-        public ControlledMTProvidersProvider():this(new List<ITranslationProvider>())
+        public ControlledMtProvidersProvider():this(new List<ITranslationProvider>())
         {
 
         }
 
-        public ControlledMTProvidersProvider(List<ITranslationProvider> providers)
+        public ControlledMtProvidersProvider(List<ITranslationProvider> providers)
         {
-            mtProviders = providers;
+            _mtProviders = providers;
         }
 
-        public IList<Uri> GetDefaultMTProvidersUri()
+        public IList<Uri> GetDefaultMtProvidersUri()
         {
             return new List<Uri>
             {
@@ -53,34 +52,27 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             };
         }
 
-        public IList<Uri> GetAllMTProvidersUri()
+        public IList<Uri> GetAllMtProvidersUri()
         {
-            mtProvidersUri = GetDefaultMTProvidersUri();
+            _mtProvidersUri = GetDefaultMtProvidersUri();
 
-            foreach (var mtProvider in mtProviders)
+            foreach (var mtProvider in _mtProviders)
             {
-                if (mtProvider.TranslationMethod == LanguagePlatform.TranslationMemoryApi.TranslationMethod.MachineTranslation)
+                if (mtProvider.TranslationMethod == TranslationMethod.MachineTranslation)
                 {
-                    if (!mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
+                    if (!_mtProvidersUri.Any(uri => uri.Scheme.Equals(mtProvider.Uri.Scheme)))
                     {
-                        mtProvidersUri.Add(mtProvider.Uri);
+                        _mtProvidersUri.Add(mtProvider.Uri);
                     }
                 }
             }
 
-            return mtProvidersUri;
+            return _mtProvidersUri;
         }
 
-        public IList<Uri> GetSelectedMTProvidersUri()
+        public IList<Uri> GetSelectedMtProvidersUri()
         {
-            List<Uri> providersUri = new List<Uri>();
-
-            foreach (var mtProvider in mtProviders)
-            {
-                providersUri.Add(mtProvider.Uri);
-            }
-
-            return providersUri;
+            return _mtProviders.Select(mtProvider => mtProvider.Uri).ToList();
         }
 
         #region ITranslationProvider Members
@@ -97,7 +89,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
 
         public void LoadState(string translationProviderState)
         {
-            foreach (var provider in mtProviders)
+            foreach (var provider in _mtProviders)
             {
                 provider.LoadState(translationProviderState);
             }
@@ -107,13 +99,13 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         {
             get
             {
-                return string.Format("Controlled MT Providers: {0}", string.Join(",", mtProviders.Select(provider => provider.Name).ToArray()));
+                return string.Format("Controlled MT Providers: {0}", string.Join(",", _mtProviders.Select(provider => provider.Name).ToArray()));
             }
         }
 
         public void RefreshStatusInfo()
         {
-            foreach (var provider in mtProviders)
+            foreach (var provider in _mtProviders)
             {
                 provider.RefreshStatusInfo();
             }
@@ -121,19 +113,10 @@ namespace Sdl.Community.ControlledMTProviders.Provider
 
         public string SerializeState()
         {
-            List<ProviderUriInfo> puis = new List<ProviderUriInfo>();
-            foreach (var provider in mtProviders)
+            var puis = _mtProviders.Select(provider => new ProviderUriInfo
             {
-                ProviderUriInfo pui = new ProviderUriInfo
-                {
-                    Name = provider.Name,
-                    Uri = provider.Uri,
-                    SerializedState = provider.SerializeState()
-
-                };
-
-                puis.Add(pui);
-            }
+                Name = provider.Name, Uri = provider.Uri, SerializedState = provider.SerializeState()
+            }).ToList();
             return JsonConvert.SerializeObject(puis);
         }
 
@@ -141,9 +124,9 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         {
             get
             {
-                StringBuilder sb = new StringBuilder();
+                var sb = new StringBuilder();
 
-                foreach (var provider in mtProviders)
+                foreach (var provider in _mtProviders)
                 {
                     var providerInfo = provider.StatusInfo;
                     sb.AppendLine(providerInfo.StatusMessage);
@@ -175,7 +158,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-           return mtProviders.All(provider => provider.SupportsLanguageDirection(languageDirection));
+           return _mtProviders.All(provider => provider.SupportsLanguageDirection(languageDirection));
         }
 
         public bool SupportsMultipleResults
@@ -240,7 +223,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider
 
         public TranslationMethod TranslationMethod
         {
-            get { return LanguagePlatform.TranslationMemoryApi.TranslationMethod.MachineTranslation; }
+            get { return TranslationMethod.MachineTranslation; }
         }
 
         public Uri Uri

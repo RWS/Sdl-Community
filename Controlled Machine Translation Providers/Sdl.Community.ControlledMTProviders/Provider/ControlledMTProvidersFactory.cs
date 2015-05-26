@@ -13,35 +13,34 @@ namespace Sdl.Community.ControlledMTProviders.Provider
         Id = "Sdl.Community.ControlledMTProvidersFactory",
         Name = "ControledMTProviders",
         Description = "ControledMTProviders")]
-    public class ControlledMTProvidersFactory : ITranslationProviderFactory
+    public class ControlledMtProvidersFactory : ITranslationProviderFactory
     {
         #region ITranslationProviderFactory Members
 
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
             var puis = JsonConvert.DeserializeObject<List<ProviderUriInfo>>(translationProviderState);
-            List<ITranslationProvider> managedTranslationProviders = new List<ITranslationProvider>();
+            var managedTranslationProviders = (from pui in puis
+                let providerFactory = TranslationProviderManager.GetTranslationProviderFactory(pui.Uri)
+                select providerFactory.CreateTranslationProvider(pui.Uri, pui.SerializedState, credentialStore))
+                .ToList();
 
-            foreach (var pui in puis)
-            {
-               ITranslationProviderFactory providerFactory = TranslationProviderManager.GetTranslationProviderFactory(pui.Uri);
-               managedTranslationProviders.Add(providerFactory.CreateTranslationProvider(pui.Uri, pui.SerializedState, credentialStore));
-            }
-            
-            return new ControlledMTProvidersProvider(managedTranslationProviders);
+            return new ControlledMtProvidersProvider(managedTranslationProviders);
         }
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
-            TranslationProviderInfo translationProviderInfo = new TranslationProviderInfo();
-            translationProviderInfo.Name = "Controled MT Providers";
-            translationProviderInfo.TranslationMethod = TranslationMethod.MachineTranslation;
+            var translationProviderInfo = new TranslationProviderInfo
+            {
+                Name = "Controled MT Providers",
+                TranslationMethod = TranslationMethod.MachineTranslation
+            };
             return translationProviderInfo;
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return translationProviderUri.Scheme.Equals(new Uri(ControlledMTProvidersProvider.ProviderUri).Scheme);
+            return translationProviderUri.Scheme.Equals(new Uri(ControlledMtProvidersProvider.ProviderUri).Scheme);
         }
 
         #endregion

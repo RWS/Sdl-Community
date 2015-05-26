@@ -13,13 +13,13 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
 {
     public partial class ProvidersDialog : Form
     {
-        private ControlledMTProvidersProvider _controlledMTProvider;
+        private readonly ControlledMtProvidersProvider _controlledMtProvider;
 
 
-        public ProvidersDialog(ControlledMTProvidersProvider controlledMTProvider)
+        public ProvidersDialog(ControlledMtProvidersProvider controlledMtProvider)
         {
             InitializeComponent();
-            _controlledMTProvider = controlledMTProvider;
+            _controlledMtProvider = controlledMtProvider;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -27,17 +27,17 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
             base.OnLoad(e);
 
             IList<ITranslationProviderWinFormsUI> uis = TranslationProviderManager.GetTranslationProviderWinFormsUIs();
-            var selectedMTProviders = _controlledMTProvider.GetSelectedMTProvidersUri();
-            var defaultMTProvidersUri = _controlledMTProvider.GetDefaultMTProvidersUri();
+            var selectedMtProviders = _controlledMtProvider.GetSelectedMtProvidersUri();
+            var defaultMtProvidersUri = _controlledMtProvider.GetDefaultMtProvidersUri();
 
 
             foreach (ITranslationProviderWinFormsUI ui in uis)
             {
                 //exclude the default MT providers
-                if (!CheckIfDefaultMTProvider(ui, defaultMTProvidersUri) && 
-                    !ui.SupportsTranslationProviderUri(new Uri(ControlledMTProvidersProvider.ProviderUri)))
+                if (!CheckIfDefaultMTProvider(ui, defaultMtProvidersUri) && 
+                    !ui.SupportsTranslationProviderUri(new Uri(ControlledMtProvidersProvider.ProviderUri)))
                 {
-                    var isChecked = IsMTProviderChecked(ui, selectedMTProviders);
+                    var isChecked = IsMTProviderChecked(ui, selectedMtProviders);
                     clbProviders.Items.Add(new ProviderItem { Provider = ui }, isChecked);
                 }
             }
@@ -45,26 +45,19 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
             clbProviders.SelectedIndex = 0;
         }
 
-        private bool IsMTProviderChecked(ITranslationProviderWinFormsUI ui, IList<Uri> selectedMTProviders)
+        private bool IsMTProviderChecked(ITranslationProviderWinFormsUI ui, IEnumerable<Uri> selectedMtProviders)
         {
-            return selectedMTProviders.Any(uri => ui.SupportsTranslationProviderUri(uri));
+            return selectedMtProviders.Any(ui.SupportsTranslationProviderUri);
         }
 
-        private bool CheckIfDefaultMTProvider(ITranslationProviderWinFormsUI ui, IList<Uri> defaultMTProvidersUri)
+        private bool CheckIfDefaultMTProvider(ITranslationProviderWinFormsUI ui, IEnumerable<Uri> defaultMtProvidersUri)
         {
-            return defaultMTProvidersUri.Any(uri => ui.SupportsTranslationProviderUri(uri));
+            return defaultMtProvidersUri.Any(ui.SupportsTranslationProviderUri);
         }
 
         public IList<ITranslationProviderWinFormsUI> GetSelectedProviders()
         {
-            List<ITranslationProviderWinFormsUI> mtProviders = new List<ITranslationProviderWinFormsUI>();
-            foreach (var item in clbProviders.CheckedItems)
-            {
-                ProviderItem pi = item as ProviderItem;
-                mtProviders.Add(pi.Provider);
-            }
-
-            return mtProviders;
+            return (from object item in clbProviders.CheckedItems select item as ProviderItem into pi select pi.Provider).ToList();
         }
     }
 }

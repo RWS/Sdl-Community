@@ -29,14 +29,14 @@ namespace Sdl.Community.ControlledMTProviders.Integration
 
         public override void Initialize()
         {
-            string text = CascadeLanguageDirection.DisableMT ? "Enable MT" : "Disable MT";
+            string text = CascadeLanguageDirection.DisableMt ? "Enable MT" : "Disable MT";
             this.Text = text;
         }
 
         protected override void Execute()
         {
-            CascadeLanguageDirection.DisableMT = !CascadeLanguageDirection.DisableMT;
-            string text = CascadeLanguageDirection.DisableMT ? "Enable MT" : "Disable MT";
+            CascadeLanguageDirection.DisableMt = !CascadeLanguageDirection.DisableMt;
+            string text = CascadeLanguageDirection.DisableMt ? "Enable MT" : "Disable MT";
             this.Text = text;
         }
     }
@@ -47,7 +47,7 @@ namespace Sdl.Community.ControlledMTProviders.Integration
     class ControlledMtTranslateViewPartAction : AbstractAction
     {
         private EditorController _editorController;
-        private bool _disableMt = CascadeLanguageDirection.DisableMT;
+        private bool _disableMt = CascadeLanguageDirection.DisableMt;
 
         public ControlledMtTranslateViewPartAction()
         {
@@ -62,18 +62,17 @@ namespace Sdl.Community.ControlledMTProviders.Integration
         {
             if (_editorController.ActiveDocument != null)
             {
-                _editorController.ActiveDocument.ContentChanged += ActiveDocument_ContentChanged;
-
-                _disableMt = CascadeLanguageDirection.DisableMT;
-                CascadeLanguageDirection.DisableMT = false;
+                CascadeLanguageDirection.TranslationFinished += CascadeLanguageDirection_TranslationFinished;
+                _disableMt = CascadeLanguageDirection.DisableMt;
+                CascadeLanguageDirection.DisableMt = false;
                 _editorController.ActiveDocument.TryTranslateActiveSegment();
             }
         }
 
-        void ActiveDocument_ContentChanged(object sender, DocumentContentEventArgs e)
+        void CascadeLanguageDirection_TranslationFinished(object sender, EventArgs e)
         {
-            CascadeLanguageDirection.DisableMT = _disableMt;
-            _editorController.ActiveDocument.ContentChanged -= ActiveDocument_ContentChanged;
+            CascadeLanguageDirection.DisableMt = _disableMt;
+            CascadeLanguageDirection.TranslationFinished -= CascadeLanguageDirection_TranslationFinished;
         }
     }
 }

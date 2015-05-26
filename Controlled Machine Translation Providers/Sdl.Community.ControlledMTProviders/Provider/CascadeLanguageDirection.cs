@@ -3,57 +3,60 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Sdl.Community.ControlledMTProviders.Provider
 {
     public class CascadeLanguageDirection : ITranslationProviderLanguageDirection
     {
-        private ControlledMTProvidersProvider _provider;
-        private LanguagePair _languagePair;
-        private static bool? _disableMT;
-        public static bool DisableMT
+        private readonly ControlledMtProvidersProvider _provider;
+        private readonly LanguagePair _languagePair;
+        private static bool? _disableMt;
+
+        public static event EventHandler TranslationFinished;
+
+        
+
+        public static bool DisableMt
         {
             get
             {
-                if (!_disableMT.HasValue) return false;
-                return _disableMT.Value;
+                if (!_disableMt.HasValue) return false;
+                return _disableMt.Value;
             }
             set
             {
-                _disableMT = value;
+                _disableMt = value;
             }
         }
 
-        public CascadeLanguageDirection(ControlledMTProvidersProvider provider,LanguagePair languagePair)
+        public CascadeLanguageDirection(ControlledMtProvidersProvider provider,LanguagePair languagePair)
         {
             _provider = provider;
             _languagePair = languagePair;
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult[] AddOrUpdateTranslationUnits(LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits, int[] previousTranslationHashes, LanguagePlatform.TranslationMemory.ImportSettings settings)
+        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
         {
             return null;
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult[] AddOrUpdateTranslationUnitsMasked(LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits, int[] previousTranslationHashes, LanguagePlatform.TranslationMemory.ImportSettings settings, bool[] mask)
+        public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
         {
             return null;
 
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult AddTranslationUnit(LanguagePlatform.TranslationMemory.TranslationUnit translationUnit, LanguagePlatform.TranslationMemory.ImportSettings settings)
+        public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
         {
             return null;
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult[] AddTranslationUnits(LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits, LanguagePlatform.TranslationMemory.ImportSettings settings)
+        public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
         {
             return null;
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult[] AddTranslationUnitsMasked(LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits, LanguagePlatform.TranslationMemory.ImportSettings settings, bool[] mask)
+        public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
         {
             return null;
         }
@@ -63,12 +66,12 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             get { return false; }
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults SearchSegment(LanguagePlatform.TranslationMemory.SearchSettings settings, Segment segment)
+        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
         {
-            SearchResults results = new SearchResults();
-            if (DisableMT) return results;
+            var results = new SearchResults();
+            if (DisableMt) return results;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
@@ -77,35 +80,35 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                     SetResultInSearchResults(ref results, innerSearchResult);
                 }
             }
-
+            OnTranslationFinished();
             return results;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults[] SearchSegments(LanguagePlatform.TranslationMemory.SearchSettings settings, Segment[] segments)
+        public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
         {
             if (segments == null)
                 throw new ArgumentNullException("segments");
            
-            Sdl.LanguagePlatform.TranslationMemory.SearchResults[] result
+            var result
                 = new SearchResults[segments.Length];
 
-            if (DisableMT) return result;
+            if (DisableMt) return result;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
                     ITranslationProviderLanguageDirection languageDirection = provider.GetLanguageDirection(_languagePair);
-                    IList<Sdl.LanguagePlatform.TranslationMemory.SearchResults> internalResult = languageDirection.SearchSegments(settings, segments);
+                    IList<SearchResults> internalResult = languageDirection.SearchSegments(settings, segments);
 
                     MergeProviderSearchResults(result, internalResult);
                 }
             }
-
+            OnTranslationFinished();
             return result;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults[] SearchSegmentsMasked(LanguagePlatform.TranslationMemory.SearchSettings settings, Segment[] segments, bool[] mask)
+        public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
         {
             if (segments == null)
                 throw new ArgumentNullException("segments");
@@ -115,31 +118,31 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                 throw new ArgumentException("The length of the mask parameter should match the number segments.", "mask");
 
 
-            Sdl.LanguagePlatform.TranslationMemory.SearchResults[] result
+            var result
                 = new SearchResults[segments.Length];
 
-            if (DisableMT) return result;
+            if (DisableMt) return result;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
-                    ITranslationProviderLanguageDirection languageDirection = provider.GetLanguageDirection(_languagePair);
-                    IList<Sdl.LanguagePlatform.TranslationMemory.SearchResults> internalResult = languageDirection.SearchSegmentsMasked(settings, segments, mask);
+                    var languageDirection = provider.GetLanguageDirection(_languagePair);
+                    IList<SearchResults> internalResult = languageDirection.SearchSegmentsMasked(settings, segments, mask);
 
                     MergeProviderSearchResults(result, internalResult);
                 }
             }
-
+            OnTranslationFinished();
             return result;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults SearchText(LanguagePlatform.TranslationMemory.SearchSettings settings, string segment)
+        public SearchResults SearchText(SearchSettings settings, string segment)
         {
             SearchResults results = null;
-            if (DisableMT) return results;
+            if (DisableMt) return null;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
@@ -149,16 +152,16 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                 }
                 
             }
-
+            OnTranslationFinished();
             return results;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults SearchTranslationUnit(LanguagePlatform.TranslationMemory.SearchSettings settings, LanguagePlatform.TranslationMemory.TranslationUnit translationUnit)
+        public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
         {
             SearchResults results = null;
-            if (DisableMT) return results;
+            if (DisableMt) return null;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
@@ -167,35 +170,36 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                     SetResultInSearchResults(ref results, innerSearchResult);
                 }
             }
-
+            OnTranslationFinished();
             return results;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults[] SearchTranslationUnits(LanguagePlatform.TranslationMemory.SearchSettings settings, LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits)
+        public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
             if (translationUnits == null)
                 throw new ArgumentNullException("translationUnits");
             
-            Sdl.LanguagePlatform.TranslationMemory.SearchResults[] result
+            var result
                = new SearchResults[translationUnits.Length];
 
-            if (DisableMT) return result;
+            if (DisableMt) return result;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
                     ITranslationProviderLanguageDirection languageDirection = provider.GetLanguageDirection(_languagePair);
-                    IList<Sdl.LanguagePlatform.TranslationMemory.SearchResults> providerResult = languageDirection.SearchTranslationUnits(settings, translationUnits);
+                    IList<SearchResults> providerResult = languageDirection.SearchTranslationUnits(settings, translationUnits);
 
                     MergeProviderSearchResults(result, providerResult);
                 }
             }
+            OnTranslationFinished();
 
             return result;
         }
 
-        public LanguagePlatform.TranslationMemory.SearchResults[] SearchTranslationUnitsMasked(LanguagePlatform.TranslationMemory.SearchSettings settings, LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits, bool[] mask)
+        public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
             if (translationUnits == null)
                 throw new ArgumentNullException("translationUnits");
@@ -204,22 +208,23 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             if (mask.Length != translationUnits.Length)
                 throw new ArgumentException("The length of the mask parameter should match the number translation units.", "mask");
 
-            Sdl.LanguagePlatform.TranslationMemory.SearchResults[] result
+            var result
                = new SearchResults[translationUnits.Length];
 
-            if (DisableMT) return result;
+            if (DisableMt) return result;
 
-            foreach (var provider in _provider.MTProviders)
+            foreach (var provider in _provider.MtProviders)
             {
                 if (SearchShouldExecute(provider, settings))
                 {
                     ITranslationProviderLanguageDirection languageDirection = provider.GetLanguageDirection(_languagePair);
-                    IList<Sdl.LanguagePlatform.TranslationMemory.SearchResults> providerResult = languageDirection.SearchTranslationUnitsMasked(settings, translationUnits, mask);
+                    IList<SearchResults> providerResult = languageDirection.SearchTranslationUnitsMasked(settings, translationUnits, mask);
 
                     MergeProviderSearchResults(result, providerResult);
                 }
             }
            
+            OnTranslationFinished();
             return result;
 
         }
@@ -240,12 +245,12 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             get { return _provider; }
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult UpdateTranslationUnit(LanguagePlatform.TranslationMemory.TranslationUnit translationUnit)
+        public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
         {
             return null;
         }
 
-        public LanguagePlatform.TranslationMemory.ImportResult[] UpdateTranslationUnits(LanguagePlatform.TranslationMemory.TranslationUnit[] translationUnits)
+        public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
         {
             return null;
         }
@@ -273,19 +278,6 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             return true;
         }
 
-        private bool AddShouldExecute(ITranslationProvider provider, ImportSettings settings)
-        {
-            if (provider.IsReadOnly)
-            {
-                return false;
-            }
-            if (!provider.SupportsUpdate)
-            {
-                return false;
-            }
-            return true;
-        }
-
         private void MergeProviderSearchResults(SearchResults[] result, IList<SearchResults> providerResult)
         {
             for (int i = 0; i < providerResult.Count; ++i)
@@ -306,6 +298,12 @@ namespace Sdl.Community.ControlledMTProviders.Provider
             {
                 result.Results.AddRange(tmpProviderResult);
             }
+        }
+
+        private static void OnTranslationFinished()
+        {
+            var handler = TranslationFinished;
+            if (handler != null) handler(null, EventArgs.Empty);
         }
 
     }
