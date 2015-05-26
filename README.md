@@ -5,7 +5,7 @@ This repository will contain the source code for applications and plugins develo
 
 ## Jobs
 * [Documentation](Jobs)
-* 
+
 ## Word Cloud
 * [Documentation](Word Cloud)
 
