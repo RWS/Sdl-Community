@@ -17,9 +17,11 @@ namespace Sdl.Community.Productivity.Services.Persistence
         {
             get
             {
+                var currentDate = DateTime.UtcNow;
                 return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                    @"SDL Community\Productivity\productivity.json");
+                    string.Format(@"SDL Community\Productivity\productivity-{0}-{1}.json",currentDate.Year, currentDate.Month));
             }
         }
+
     }
 }

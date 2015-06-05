@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using Newtonsoft.Json;
 using NLog;
 
@@ -29,20 +31,16 @@ namespace Sdl.Community.Productivity.Services.Persistence
                     {
                         Directory.CreateDirectory(directory);
                     }
-
-                    using (var stream = new FileStream(PersistencePath, FileMode.Create))
-                    {
-                        using (var writer = new StreamWriter(stream))
-                        {
-                            string json1 = JsonConvert.SerializeObject(toSave, Formatting.Indented);
-
-                            writer.Write(json1);
-                        }
-                    }
                 }
-                string json = JsonConvert.SerializeObject(toSave, Formatting.Indented);
+                using (var stream = new FileStream(PersistencePath, FileMode.OpenOrCreate))
+                {
+                    byte[] entropy = GetEntropy();
+                    string json1 = JsonConvert.SerializeObject(toSave, Formatting.Indented);
+                    var toEncrypt = Encoding.ASCII.GetBytes(json1);
+                    byte[] encryptedData = ProtectedData.Protect(toEncrypt, entropy, DataProtectionScope.CurrentUser);
 
-                File.WriteAllText(PersistencePath, json);
+                    stream.Write(encryptedData, 0, encryptedData.Length);
+                }
             }
             catch (Exception exception)
             {
@@ -58,7 +56,11 @@ namespace Sdl.Community.Productivity.Services.Persistence
             {
 
                 if (!File.Exists(PersistencePath)) return new T();
-                var json = File.ReadAllText(PersistencePath);
+                var encryptedData = File.ReadAllBytes(PersistencePath);
+                var rawData = ProtectedData.Unprotect(encryptedData, GetEntropy(), DataProtectionScope.CurrentUser);
+
+                var json = Encoding.ASCII.GetString(rawData);
+                
                 result = JsonConvert.DeserializeObject<T>(json);
             }
             catch (Exception exception)
@@ -67,6 +69,11 @@ namespace Sdl.Community.Productivity.Services.Persistence
 
             }
             return result;
+        }
+
+        private byte[] GetEntropy()
+        {
+            return Encoding.ASCII.GetBytes("Sdl Studio Productivity");
         }
     }
 }

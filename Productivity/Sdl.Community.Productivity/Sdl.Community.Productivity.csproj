@@ -62,10 +62,6 @@
     <Reference Include="ObjectListView">
       <HintPath>..\packages\ObjectListView.Official.2.8.1\lib\net20\ObjectListView.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Common.Licensing.Manager, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Common.Licensing.Manager.dll</HintPath>
-    </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.Core.Globalization.dll</HintPath>
@@ -76,15 +72,15 @@
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.EditorApi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.DesktopEditor.EditorApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.DesktopEditor.EditorApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <SpecificVersion>False</SpecificVersion>
@@ -108,11 +104,11 @@
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi, Version=4.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio3\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -135,6 +131,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
     </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core">
