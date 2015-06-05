@@ -45,6 +45,7 @@ namespace Sdl.Community.Productivity.UI
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
             var twitterPersistenceService = new TwitterPersistenceService(logger);
+            var tweetMessageService = new TweetMessageService();
             if (!ProductivityUiHelper.IsTwitterAccountConfigured(twitterPersistenceService,logger))
             {
                 MessageBox.Show(
@@ -65,8 +66,13 @@ namespace Sdl.Community.Productivity.UI
                 
             }
 
-            var shareService = new ShareService(productivityService, twitterPersistenceService, logger);
-            shareService.Share();
+            var shareService = new ShareService(productivityService, twitterPersistenceService, tweetMessageService, logger);
+            using (var tf = new TweetForm(shareService))
+            {
+                tf.ShowDialog();
+            }
+
+            
 
         }
 

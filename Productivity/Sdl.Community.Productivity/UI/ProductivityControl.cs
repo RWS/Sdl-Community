@@ -88,13 +88,13 @@ namespace Sdl.Community.Productivity.UI
 
         private void lblScore_Click(object sender, EventArgs e)
         {
-            var sInfo = new ProcessStartInfo("http://google.com/");
+            var sInfo = new ProcessStartInfo(PluginResources.Leaderboard_Link);
             Process.Start(sInfo);
         }
 
         private void pbScore_Click(object sender, EventArgs e)
         {
-            var sInfo = new ProcessStartInfo("http://google.com/");
+            var sInfo = new ProcessStartInfo(PluginResources.Leaderboard_Link);
             Process.Start(sInfo);
         }
 

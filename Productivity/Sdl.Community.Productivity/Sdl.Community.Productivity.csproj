@@ -198,6 +198,7 @@
     <Compile Include="Services\Persistence\TwitterPersistenceService.cs" />
     <Compile Include="Services\ProductivityService.cs" />
     <Compile Include="Services\ShareService.cs" />
+    <Compile Include="Services\TweetMessageService.cs" />
     <Compile Include="Test\Startup.cs" />
     <Compile Include="UI\ProductivityForm.cs">
       <SubType>Form</SubType>
@@ -214,6 +215,12 @@
     <Compile Include="UI\ProductivityReportViewPart.cs" />
     <Compile Include="UI\ProductivityRibbon.cs" />
     <Compile Include="UI\ProductivityUiHelper.cs" />
+    <Compile Include="UI\TweetForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\TweetForm.Designer.cs">
+      <DependentUpon>TweetForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\TwitterAccountSetup.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -249,6 +256,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProductivityControl.resx">
       <DependentUpon>ProductivityControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\TweetForm.resx">
+      <DependentUpon>TweetForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\TwitterAccountSetup.resx">
       <DependentUpon>TwitterAccountSetup.cs</DependentUpon>

@@ -14,14 +14,18 @@ namespace Sdl.Community.Productivity.Services
     {
         private readonly ProductivityService _productivityService;
         private readonly TwitterPersistenceService _twitterPersistenceService;
+        private readonly TweetMessageService _tweetMessageService;
         private Logger _logger;
         private ILoggedUser _loggedUser;
 
-        public ShareService(ProductivityService productivityService, TwitterPersistenceService twitterPersistenceService,
+        public ShareService(ProductivityService productivityService,
+            TwitterPersistenceService twitterPersistenceService,
+            TweetMessageService tweetMessageService,
             Logger logger)
         {
             _productivityService = productivityService;
             _twitterPersistenceService = twitterPersistenceService;
+            _tweetMessageService = tweetMessageService;
             _logger = logger;
 
             Initialize();
@@ -37,6 +41,11 @@ namespace Sdl.Community.Productivity.Services
             _loggedUser = User.GetLoggedUser();
         }
 
+        public string GetTwitterMessage()
+        {
+            return _tweetMessageService.GetTwitterMessage(_productivityService.Score);
+        }
+
         public void Share()
         {
             var leaderboardInfo = new LeaderboardInfo
@@ -47,13 +56,15 @@ namespace Sdl.Community.Productivity.Services
             };
 
             //TODO: post to leaderboard
-
-            ShareOnTwitter(leaderboardInfo);
+            if (bool.FalseString.Equals(PluginResources.IsStaging, StringComparison.InvariantCultureIgnoreCase))
+            {
+                ShareOnTwitter(leaderboardInfo);
+            }
         }
 
         private void ShareOnTwitter(LeaderboardInfo leaderboardInfo)
         {
-            var newTweet = Tweet.CreateTweet(string.Format(Constants.TweetMessage, leaderboardInfo.Score));
+            var newTweet = Tweet.CreateTweet(_tweetMessageService.GetTwitterMessage(leaderboardInfo.Score));
             newTweet.Publish();
         }
 

@@ -4,7 +4,7 @@
   <Version>0.0.3.0</Version>
   <Description>Sdl.Community.Productivity</Description>
   <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="11.2" />
   <Include>
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
