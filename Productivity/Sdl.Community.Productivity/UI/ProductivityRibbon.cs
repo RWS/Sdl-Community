@@ -1,5 +1,6 @@
 ﻿using System.Windows.Forms;
 using NLog;
+using Sdl.Community.Productivity.API;
 using Sdl.Community.Productivity.Services;
 using Sdl.Community.Productivity.Services.Persistence;
 using Sdl.Desktop.IntegrationApi;
@@ -9,7 +10,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.Productivity.UI
 {
     [RibbonGroup("Sdl.Community.Productivity", Name = "Community Productivity")]
-    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorAdvancedRibbonTabLocation))]
     public class ProductivityRibbon : AbstractRibbonGroup
     {
     }
@@ -38,6 +39,7 @@ namespace Sdl.Community.Productivity.UI
 
     [Action("Sdl.Community.ProductivityShare",  Icon = "twitter", Name = "Share", Description = "Community Productivity")]
     [ActionLayout(typeof(ProductivityRibbon), 20, DisplayType.Normal)]
+    [Shortcut(Keys.Alt | Keys.S)]
     class ProductivityShareViewPartAction : AbstractAction
     {
         protected override void Execute()
@@ -45,6 +47,7 @@ namespace Sdl.Community.Productivity.UI
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
             var twitterPersistenceService = new TwitterPersistenceService(logger);
+            var leaderboardApi = new LeaderboardApi(twitterPersistenceService);
             var tweetMessageService = new TweetMessageService();
             if (!ProductivityUiHelper.IsTwitterAccountConfigured(twitterPersistenceService,logger))
             {
@@ -66,7 +69,7 @@ namespace Sdl.Community.Productivity.UI
                 
             }
 
-            var shareService = new ShareService(productivityService, twitterPersistenceService, tweetMessageService, logger);
+            var shareService = new ShareService(productivityService, twitterPersistenceService, tweetMessageService,leaderboardApi, logger);
             using (var tf = new TweetForm(shareService))
             {
                 tf.ShowDialog();

@@ -12,5 +12,9 @@ namespace Sdl.Community.Productivity.Model
         public double Score { get; set; }
 
         public string Language { get; set; }
+
+        public string LastTranslationAt { get; set; }
+
+        public string AppVersion { get; set; }
     }
 }

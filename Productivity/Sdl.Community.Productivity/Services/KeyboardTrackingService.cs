@@ -41,7 +41,7 @@ namespace Sdl.Community.Productivity.Services
                     {
                         FileId = document.ActiveFile.Id,
                         FileName = document.ActiveFile.Name,
-                        Language = document.ActiveFile.Language.CultureInfo.DisplayName,
+                        Language = document.ActiveFile.Language.CultureInfo.Name,
                         FileType = document.ActiveFile.FileTypeId,
                         SegmentTrackInfos = new List<SegmentTrackInfo>()
                     };

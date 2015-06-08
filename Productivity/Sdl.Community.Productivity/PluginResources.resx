@@ -152,7 +152,7 @@
     <value>In order to share your score you need to translate at least {0} characters</value>
   </data>
   <data name="Leaderboard_Link" xml:space="preserve">
-    <value>https://leaderboard.translationzone.com</value>
+    <value>http://staging-leaderboard.sdl.dev.dotlabel.net/</value>
   </data>
   <data name="IsStaging" xml:space="preserve">
     <value>true</value>

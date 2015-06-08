@@ -100,7 +100,7 @@ namespace Sdl.Community.Productivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to https://leaderboard.translationzone.com.
+        ///   Looks up a localized string similar to http://staging-leaderboard.sdl.dev.dotlabel.net/.
         /// </summary>
         public static string Leaderboard_Link {
             get {

@@ -18,6 +18,7 @@ namespace Sdl.Community.Productivity.Services
         public long Bonus { get; set; }
         public long Score { get; set; }
         public string Language { get; set; }
+        public DateTime LastTranslationDate { get; set; }
         public List<TrackInfoView> TrackInfoViews { get; set; }
 
         public ProductivityService(Logger logger)
@@ -59,6 +60,7 @@ namespace Sdl.Community.Productivity.Services
                 Bonus = CalculateBonus(_trackingInfos);
                 Score = CalculateScore();
                 Language = GetMostUsedTargetLanguage(_trackingInfos);
+                LastTranslationDate = GetLastTranslationDate();
                 TrackInfoViews = GetTrackInfoView(_trackingInfos);
             }
             catch (Exception exception)
@@ -85,6 +87,11 @@ namespace Sdl.Community.Productivity.Services
         private long CalculateScore()
         {
             return Convert.ToInt64(TotalNumberOfCharacters*ProductivityScore) + Bonus;
+        }
+
+        private DateTime GetLastTranslationDate()
+        {
+            return _trackingInfos.Max(x => x.SegmentTrackInfos.Max(y => y.UtcDateTime));
         }
 
         private double CalculateProductivityScore(IEnumerable<TrackInfo> trackingInfos)
