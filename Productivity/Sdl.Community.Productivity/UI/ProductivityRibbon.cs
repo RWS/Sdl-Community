@@ -5,12 +5,13 @@ using Sdl.Community.Productivity.Services;
 using Sdl.Community.Productivity.Services.Persistence;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.Productivity.UI
 {
-    [RibbonGroup("Sdl.Community.Productivity", Name = "Community Productivity")]
-    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.EditorAdvancedRibbonTabLocation))]
+    [RibbonGroup("Sdl.Community.Productivity", Name = "Community Productivity", ContextByType = typeof(EditorController))]
+    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
     public class ProductivityRibbon : AbstractRibbonGroup
     {
     }
