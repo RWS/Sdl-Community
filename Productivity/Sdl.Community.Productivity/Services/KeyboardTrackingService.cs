@@ -53,8 +53,7 @@ namespace Sdl.Community.Productivity.Services
             }
             catch (Exception exception)
             {
-                _logger.DebugException(@"Error appeared when UnregisterDocument", exception);
-
+                _logger.Debug(exception, @"Error appeared when UnregisterDocument");
             }
 
         }
@@ -69,8 +68,8 @@ namespace Sdl.Community.Productivity.Services
             }
             catch (Exception exception)
             {
-                _logger.DebugException(@"Error appeared when UnregisterDocument", exception);
-
+                _logger.Debug(exception, @"Error appeared when UnregisterDocument");
+                throw;
             }
         }
 

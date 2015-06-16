@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 using NLog;
 using NLog.Config;
@@ -23,27 +25,36 @@ namespace Sdl.Community.Productivity
 
         public void Execute()
         {
-            Application.AddMessageFilter(KeyboardTracking.Instance);
-            SdlTradosStudio.Application.Closing += Application_Closing;
-
-            InitializeLoggingConfiguration();
-
             _logger = LogManager.GetLogger("log");
-            _service = new KeyboardTrackingService(_logger);
-            _editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            _editorController.Opened += _editorController_Opened;
-            _editorController.ActiveDocumentChanged += _editorController_ActiveDocumentChanged;
-            _editorController.Closing += _editorController_Closing;
 
-            var twitterPersistenceService = new TwitterPersistenceService(_logger);
-            if (twitterPersistenceService.HasAccountConfigured) return;
-            using (var tForm = new TwitterAccountSetup(twitterPersistenceService))
+            try
             {
-                tForm.ShowDialog();
+
+                InitializeLoggingConfiguration();
+
+                Application.AddMessageFilter(KeyboardTracking.Instance);
+                SdlTradosStudio.Application.Closing += Application_Closing;
+
+                _service = new KeyboardTrackingService(_logger);
+                _editorController = SdlTradosStudio.Application.GetController<EditorController>();
+                _editorController.Opened += _editorController_Opened;
+                _editorController.ActiveDocumentChanged += _editorController_ActiveDocumentChanged;
+                _editorController.Closing += _editorController_Closing;
+
+                var twitterPersistenceService = new TwitterPersistenceService(_logger);
+                if (twitterPersistenceService.HasAccountConfigured) return;
+                using (var tForm = new TwitterAccountSetup(twitterPersistenceService))
+                {
+                    tForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _logger.Debug(ex,"Unexpected exception when intializing the app");
+                throw;
             }
         }
-
-       
         
         void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -69,9 +80,17 @@ namespace Sdl.Community.Productivity
 
         private void _editorController_Closing(object sender, CancelDocumentEventArgs e)
         {
-            _logger.Info(string.Format("Closed document: {0}", e.Document.ActiveFile.Name));
+            try
+            {
+                _logger.Info(string.Format("Closed document: {0}", e.Document.ActiveFile.Name));
 
-            _service.UnregisterDocument(e.Document);
+                _service.UnregisterDocument(e.Document);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex, "Unexpected exception when closing the editor");
+                throw;
+            }
 
         }
 
@@ -82,9 +101,17 @@ namespace Sdl.Community.Productivity
 
         private void _editorController_Opened(object sender, DocumentEventArgs e)
         {
-            _logger.Info(string.Format("Opened document: {0}", e.Document.ActiveFile.Name));
+            try
+            {
+                _logger.Info(string.Format("Opened document: {0}", e.Document.ActiveFile.Name));
 
-            _service.RegisterDocument(e.Document);
+                _service.RegisterDocument(e.Document);
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex, "Unexpected exception when changing the active document");
+                throw;
+            }
 
         }
 

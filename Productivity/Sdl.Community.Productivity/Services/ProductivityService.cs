@@ -65,7 +65,7 @@ namespace Sdl.Community.Productivity.Services
             }
             catch (Exception exception)
             {
-                _logger.DebugException("Error when initialize productivity service", exception);
+                _logger.Debug(exception, "Error when initialize productivity service");
             }
         }
 

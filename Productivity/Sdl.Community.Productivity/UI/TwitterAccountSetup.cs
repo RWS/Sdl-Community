@@ -4,14 +4,14 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using Sdl.Community.Productivity.Model;
 using Sdl.Community.Productivity.Services.Persistence;
-using Tweetinvi;
-using Tweetinvi.Core.Interfaces.Credentials;
+using TweetSharp;
 
 namespace Sdl.Community.Productivity.UI
 {
     public partial class TwitterAccountSetup : Form
     {
-        private ITemporaryCredentials _applicationCredentials;
+        private OAuthRequestToken _requestToken;
+        private TwitterService _twitterService;
         private readonly TwitterPersistenceService _twitterPersistenceService;
         private string _url;
         public TwitterAccountSetup(TwitterPersistenceService twitterPersistenceService)
@@ -23,9 +23,11 @@ namespace Sdl.Community.Productivity.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            _applicationCredentials = CredentialsCreator.GenerateApplicationCredentials(Constants.ConsumerKey,
+            _twitterService = new TwitterService(Constants.ConsumerKey,
                 Constants.ConsumerSecret);
-            _url = CredentialsCreator.GetAuthorizationURL(_applicationCredentials);
+            _requestToken = _twitterService.GetRequestToken();
+            //_applicationCredentials = CredentialsCreator.GenerateApplicationCredentials);
+            _url = _twitterService.GetAuthorizationUri(_requestToken).ToString();
         }
 
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -42,18 +44,19 @@ namespace Sdl.Community.Productivity.UI
             }
             var pin = txtPin.Text;
 
-            var newCredentials = CredentialsCreator.GetCredentialsFromVerifierCode(pin, _applicationCredentials);
-            if (newCredentials == null)
+            var accessToken = _twitterService.GetAccessToken(_requestToken, pin);
+            if (accessToken == null)
             {
                 error = "The pin entered is invalid";
                 e.Cancel = true;
                 errPin.SetError(txtPin, error);
                 return;
             }
+
             _twitterPersistenceService.Save(new TwitterAccountInfo
             {
-                AccessToken = newCredentials.AccessToken,
-                AccessTokenSecret = newCredentials.AccessTokenSecret
+                AccessToken = accessToken.Token,
+                AccessTokenSecret = accessToken.TokenSecret
             });
         }
 

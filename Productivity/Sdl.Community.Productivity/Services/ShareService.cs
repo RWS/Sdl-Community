@@ -7,8 +7,7 @@ using RestSharp;
 using Sdl.Community.Productivity.API;
 using Sdl.Community.Productivity.Model;
 using Sdl.Community.Productivity.Services.Persistence;
-using Tweetinvi;
-using Tweetinvi.Core.Interfaces;
+using TweetSharp;
 
 namespace Sdl.Community.Productivity.Services
 {
@@ -19,7 +18,8 @@ namespace Sdl.Community.Productivity.Services
         private readonly TweetMessageService _tweetMessageService;
         private readonly LeaderboardApi _leaderboardApi;
         private Logger _logger;
-        private ILoggedUser _loggedUser;
+        private TwitterService _twitterService;
+        private TwitterAccount _twitterAccount;
 
         public ShareService(ProductivityService productivityService,
             TwitterPersistenceService twitterPersistenceService,
@@ -39,11 +39,11 @@ namespace Sdl.Community.Productivity.Services
         private void Initialize()
         {
             var twitterAccountInformation = _twitterPersistenceService.Load();
-
-            TwitterCredentials.SetCredentials(twitterAccountInformation.AccessToken,
-                twitterAccountInformation.AccessTokenSecret, Constants.ConsumerKey,
+            _twitterService = new TwitterService(Constants.ConsumerKey,
                 Constants.ConsumerSecret);
-            _loggedUser = User.GetLoggedUser();
+            _twitterService.AuthenticateWith(twitterAccountInformation.AccessToken,
+                twitterAccountInformation.AccessTokenSecret);
+            _twitterAccount = _twitterService.GetAccountSettings();
         }
 
         public string GetTwitterMessage()
@@ -55,7 +55,7 @@ namespace Sdl.Community.Productivity.Services
         {
             var leaderboardInfo = new LeaderboardInfo
             {
-                TwitterHandle = _loggedUser.ScreenName,
+                TwitterHandle = _twitterAccount.ScreenName,
                 Score = _productivityService.Score,
                 Language = _productivityService.Language,
                 LastTranslationAt = _productivityService.LastTranslationDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
@@ -120,8 +120,11 @@ namespace Sdl.Community.Productivity.Services
 
         private void ShareOnTwitter(LeaderboardInfo leaderboardInfo)
         {
-            var newTweet = Tweet.CreateTweet(_tweetMessageService.GetTwitterMessage(leaderboardInfo.Score));
-            newTweet.Publish();
+            var tweetOptions = new SendTweetOptions
+            {
+                Status = _tweetMessageService.GetTwitterMessage(leaderboardInfo.Score)
+            };
+            _twitterService.SendTweet(tweetOptions);
         }
 
     }

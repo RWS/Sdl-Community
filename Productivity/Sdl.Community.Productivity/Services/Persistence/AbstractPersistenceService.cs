@@ -44,8 +44,8 @@ namespace Sdl.Community.Productivity.Services.Persistence
             }
             catch (Exception exception)
             {
-                _logger.DebugException(@"Error appeared when Save tracking info", exception);
-                
+                _logger.Debug(exception, @"Error appeared when Save tracking info");
+
             }
         }
 
@@ -65,7 +65,7 @@ namespace Sdl.Community.Productivity.Services.Persistence
             }
             catch (Exception exception)
             {
-                _logger.DebugException(@"Error appeared when Load tracking info", exception);
+                _logger.Debug(exception, @"Error appeared when Load tracking info");
 
             }
             return result;

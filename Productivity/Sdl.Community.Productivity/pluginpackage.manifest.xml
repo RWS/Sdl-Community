@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.Productivity</PlugInName>
-  <Version>0.1.5.0</Version>
+  <Version>0.2.2.0</Version>
   <Description>Sdl.Community.Productivity</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="11.2" />
@@ -9,19 +9,8 @@
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
     <File>NLog.dll</File>
-    <File>Tweetinvi.dll</File>
-    <File>Tweetinvi.Controllers.dll</File>
-    <File>Tweetinvi.Core.dll</File>
-    <File>Tweetinvi.Credentials.dll</File>
-    <File>Tweetinvi.Factories.dll</File>
-    <File>Tweetinvi.Logic.dll</File>
-    <File>Tweetinvi.Security.dll</File>
-    <File>Tweetinvi.Streams.dll</File>
-    <File>Tweetinvi.WebLogic.dll</File>
-    <File>Autofac.dll</File>
-    <File>Microsoft.Threading.Tasks.dll</File>
-    <File>Microsoft.Threading.Extensions.dll</File>
-    <File>Microsoft.Threading.Extensions.Desktop.dll</File>
+    <File>TweetSharp.dll</File>
+    <File>Hammock.ClientProfile.dll</File>
     <File>RestSharp.dll</File>
   </Include>
 </PluginPackage>
