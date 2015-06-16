@@ -25,6 +25,7 @@ namespace Sdl.Community.Productivity.Services
         {
             _logger = logger;
             _persistance = new TrackInfoPersistanceService(_logger);
+            TrackInfoViews = new List<TrackInfoView>();
             Initialize();
         }
 
@@ -51,7 +52,6 @@ namespace Sdl.Community.Productivity.Services
                     Bonus = 0;
                     Score = 0;
                     Language = string.Empty;
-                    TrackInfoViews = new List<TrackInfoView>();
                     return;
                 }
 
