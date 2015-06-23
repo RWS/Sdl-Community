@@ -91,7 +91,7 @@ namespace Sdl.Community.Productivity.Services
 
         private DateTime GetLastTranslationDate()
         {
-            return _trackingInfos.Max(x => x.SegmentTrackInfos.Max(y => y.UtcDateTime));
+            return _trackingInfos.Max(x => x.SegmentTrackInfos.Select(y => y.UtcDateTime).DefaultIfEmpty().Max());
         }
 
         private double CalculateProductivityScore(IEnumerable<TrackInfo> trackingInfos)
