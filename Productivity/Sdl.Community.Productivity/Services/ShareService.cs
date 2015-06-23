@@ -20,6 +20,7 @@ namespace Sdl.Community.Productivity.Services
         private Logger _logger;
         private TwitterService _twitterService;
         private TwitterAccount _twitterAccount;
+        private TwitterAccountInfo _twitterAccountInformation;
 
         public ShareService(ProductivityService productivityService,
             TwitterPersistenceService twitterPersistenceService,
@@ -38,11 +39,11 @@ namespace Sdl.Community.Productivity.Services
 
         private void Initialize()
         {
-            var twitterAccountInformation = _twitterPersistenceService.Load();
+            _twitterAccountInformation = _twitterPersistenceService.Load();
             _twitterService = new TwitterService(Constants.ConsumerKey,
                 Constants.ConsumerSecret);
-            _twitterService.AuthenticateWith(twitterAccountInformation.AccessToken,
-                twitterAccountInformation.AccessTokenSecret);
+            _twitterService.AuthenticateWith(_twitterAccountInformation.AccessToken,
+                _twitterAccountInformation.AccessTokenSecret);
             _twitterAccount = _twitterService.GetAccountSettings();
         }
 
@@ -59,7 +60,7 @@ namespace Sdl.Community.Productivity.Services
                 Score = _productivityService.Score,
                 Language = _productivityService.Language,
                 LastTranslationAt = _productivityService.LastTranslationDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
-                AppVersion = "3"
+                AppVersion = "0.2.1"
             };
 
             var isSharedOnTheLeaderboard = ShareOnLeaderboard(leaderboardInfo);
@@ -113,6 +114,19 @@ namespace Sdl.Community.Productivity.Services
                 Name = "appVersion",
                 Type = ParameterType.GetOrPost,
                 Value = leaderboardInfo.AppVersion
+            });
+
+            result.Add(new Parameter
+            {
+                Name = "accessToken",
+                Type = ParameterType.GetOrPost,
+                Value = _twitterAccountInformation.AccessToken
+            });
+            result.Add(new Parameter
+            {
+                Name = "accessTokenSecret",
+                Type = ParameterType.GetOrPost,
+                Value = _twitterAccountInformation.AccessTokenSecret
             });
 
             return result;
