@@ -29,3 +29,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Wordfast TXML
 * [Documentation](Wordfast TXML)
+
+## Studio InQuote
+* [Documentation](InvoiceAndQuotes)
