@@ -8,7 +8,7 @@ This plug-in allows you to apply settings from a template (.sdltpl) or project (
 - Verification
 - File Types
 
-* - it's possible to merge the lists of translation and terminology providers
+*it's possible to merge the lists of translation and terminology providers
 
 The settings can be applied to either the active project or all selected projects in the projects view.
 
