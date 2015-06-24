@@ -31,11 +31,11 @@ namespace Sdl.Community.Productivity.Model
 
             if (NumberOfKeys > 0 && numberOfCharacters > 0)
             {
-                if (NumberOfKeys == numberOfCharacters)
-                {
-                    return ProductivityScore = 100;
-                }
-                if (NumberOfKeys > numberOfCharacters)
+                //if (NumberOfKeys == numberOfCharacters)
+                //{
+                //    return ProductivityScore = 100;
+                //}
+                if (NumberOfKeys >= numberOfCharacters)
                 {
                     return ProductivityScore = 0;
                 }
