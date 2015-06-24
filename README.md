@@ -6,6 +6,9 @@ This repository will contain the source code for applications and plugins develo
 ## Jobs
 * [Documentation](Jobs)
 
+## Apply Studio Project Template
+* [Documentation](ApplyStudioProjectTemplate)
+
 ## Word Cloud
 * [Documentation](Word Cloud)
 
