@@ -26,3 +26,6 @@ This repository will contain the source code for applications and plugins develo
 
 ## Legit
 * [Documentation](Legit)
+
+## Wordfast TXML
+* [Documentation](Wordfast TXML)
