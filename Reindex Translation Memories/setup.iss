@@ -5,14 +5,15 @@
 AppName=Reindex Translation Memories
 AppPublisher=SDL Community Developers
 AppPublisherURL=https://community.sdl.com/
-AppVersion=0.2.1.0
+AppVersion=0.2.2.0
 DisableDirPage = yes
 DisableWelcomePage = yes
 AllowNoIcons = yes
-DefaultDirName={pf32}\SDL\SDL Trados Studio\Studio3\
+DefaultDirName={pf32}\SDL\SDL Trados Studio\Studio4\
 Compression=lzma2
 SolidCompression=yes
 OutputDir=userdocs:Inno Setup Examples Output
+DefaultGroupName=SDL\SDL Community
 
 [Files]
 Source: "c:\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Community.ReindexTms.exe"; DestDir: "{app}"
