@@ -4,5 +4,5 @@
   <Version>1.0.4.0</Version>
   <Description>Verifies that numbers have not been changed during translation/editing.</Description>
   <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 </PluginPackage>

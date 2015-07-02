@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C68E53F4-62E0-4C6E-8D96-55F59A106607}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.InvoiceAndQuotes</RootNamespace>
+    <AssemblyName>Sdl.Community.StudioInQuote</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Invoice.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.0.5022.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase">
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Customers\AddOrEditCustomer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customers\AddOrEditCustomer.Designer.cs">
+      <DependentUpon>AddOrEditCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customers\Customer.cs" />
+    <Compile Include="Customers\Customers.cs" />
+    <Compile Include="Customers\CustomersDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Customers\CustomersDialog.Designer.cs">
+      <DependentUpon>CustomersDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Customers\User.cs" />
+    <Compile Include="OpenXML\Excel\GroupedExcelHelper.cs" />
+    <Compile Include="OpenXML\Excel\ExcelHelperBase.cs" />
+    <Compile Include="OpenXML\Excel\SimpleWordExcelHelper.cs" />
+    <Compile Include="OpenXML\Excel\StandardLinesExcelHelper.cs" />
+    <Compile Include="OpenXML\TokenConstants.cs" />
+    <Compile Include="OpenXML\TokensProvider.cs" />
+    <Compile Include="OpenXML\Token.cs" />
+    <Compile Include="OpenXML\Word\WordHelperBase.cs" />
+    <Compile Include="Projects\Project.cs" />
+    <Compile Include="Projects\ProjectFile.cs" />
+    <Compile Include="Projects\ProjectProperty.cs" />
+    <Compile Include="Projects\Projects.cs" />
+    <Compile Include="Projects\StandardType.cs" />
+    <Compile Include="ResourceManager\UIResources.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Templates\Office Templates\ExcelTemplates.cs" />
+    <Compile Include="Templates\GroupedAnalysisTemplate.cs" />
+    <Compile Include="Templates\Office Templates\IOfficeTemplates.cs" />
+    <Compile Include="Templates\ITemplateRates.cs" />
+    <Compile Include="Templates\Office Templates\OfficeTemplates.cs" />
+    <Compile Include="Templates\SimpleWordTemplate.cs" />
+    <Compile Include="Templates\StandardLinesTemplate.cs" />
+    <Compile Include="Templates\TemplateRatesBase.cs" />
+    <Compile Include="Templates\Templates.cs" />
+    <Compile Include="Templates\Office Templates\WordTemplates.cs" />
+    <Compile Include="User Controls\FolderSelect\FolderSelect.cs" />
+    <Compile Include="User Controls\FolderSelect\Utils.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User Controls\NoLabelTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="User Controls\NoLabelTextBox.Designer.cs">
+      <DependentUpon>NoLabelTextBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="User Controls\RateValue.cs" />
+    <Compile Include="User Controls\Rates.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="User Controls\Rates.Designer.cs">
+      <DependentUpon>Rates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StudioInQuote.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StudioInQuote.Designer.cs">
+      <DependentUpon>StudioInQuote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="app.config" />
+    <None Include="InvoiceAndQuotes.en-US.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="InvoiceAndQuotes.fr-FR.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="InvoiceAndQuotes.de-DE.resx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="Customers\AddOrEditCustomer.resx">
+      <DependentUpon>AddOrEditCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Customers\CustomersDialog.resx">
+      <DependentUpon>CustomersDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="User Controls\Rates.resx">
+      <DependentUpon>Rates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StudioInQuote.resx">
+      <DependentUpon>StudioInQuote.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Office Templates\Grouped AnalysisTemplate.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Office Templates\Grouped AnalysisTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Office Templates\Simple Excel Template.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Office Templates\Simple Word Template.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Office Templates\Standard Lines Template.docx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Office Templates\Standard Lines Template.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Invoice.ico" />
+    <None Include="InvoicesAndQuotes.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

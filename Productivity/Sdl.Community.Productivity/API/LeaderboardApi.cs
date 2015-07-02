@@ -43,7 +43,7 @@ namespace Sdl.Community.Productivity.API
         private IRestResponse InternalExecute(RestRequest request)
         {
             var client = new RestClient(new Uri(new Uri(_baseUrl), "api"));
-            request.AddParameter("Authorization", _twitterAccountInfo.AccessToken, ParameterType.HttpHeader);
+          //  request.AddParameter("Authorization", _twitterAccountInfo.AccessToken, ParameterType.HttpHeader);
             var response = client.Execute(request);
 
             if (response.ErrorException != null)
