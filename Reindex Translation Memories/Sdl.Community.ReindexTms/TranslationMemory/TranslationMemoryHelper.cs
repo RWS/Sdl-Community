@@ -19,7 +19,7 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
         public TranslationMemoryHelper()
         {
-            _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\11.0.0.0\TranslationMemoryRepository.xml");
+            _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\12.0.0.0\TranslationMemoryRepository.xml");
             _reindexStatus = new StringBuilder();
         }
 

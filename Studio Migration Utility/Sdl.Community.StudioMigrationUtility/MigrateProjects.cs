@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using Sdl.Community.Controls;
 using Sdl.Community.StudioMigrationUtility.Model;
 using Sdl.Community.StudioMigrationUtility.Properties;
@@ -129,15 +130,16 @@ namespace Sdl.Community.StudioMigrationUtility
 
                 var projects = migrateProjects.GetProjectsToBeMigrated();
 
-                projectsToBeMoved.BooleanCheckStateGetter = delegate(Object rowObject)
-                {
-                    var project = (Project)rowObject;
-
-                    return !Path.IsPathRooted(project.ProjectFilePath);
-                };
-
                 projectsToBeMoved.SetObjects(projects);
-                projectsToBeMoved.BooleanCheckStateGetter = null;
+
+                foreach (OLVListItem item in projectsToBeMoved.Items)
+                {
+                    var project = (Project)item.RowObject;
+                    if (!Path.IsPathRooted(project.ProjectFilePath))
+                    {
+                        item.Checked = true;
+                    }
+                }
             }
 
         }
