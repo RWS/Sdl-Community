@@ -132,13 +132,9 @@ namespace Sdl.Community.StudioMigrationUtility
 
                 projectsToBeMoved.SetObjects(projects);
 
-                foreach (OLVListItem item in projectsToBeMoved.Items)
+                foreach (OLVListItem item in from OLVListItem item in projectsToBeMoved.Items let project = (Project)item.RowObject where !Path.IsPathRooted(project.ProjectFilePath) select item)
                 {
-                    var project = (Project)item.RowObject;
-                    if (!Path.IsPathRooted(project.ProjectFilePath))
-                    {
-                        item.Checked = true;
-                    }
+                    item.Checked = true;
                 }
             }
 
