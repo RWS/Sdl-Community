@@ -61,6 +61,7 @@
     <Compile Include="MigrateProjects.Designer.cs">
       <DependentUpon>MigrateProjects.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\StudioVersion.cs" />
     <Compile Include="Model\TaskArguments.cs" />

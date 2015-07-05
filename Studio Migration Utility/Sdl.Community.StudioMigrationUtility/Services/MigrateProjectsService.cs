@@ -31,6 +31,8 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             var projectTagItem = XName.Get("ProjectListItem");
             var projectInfoTagItem = XName.Get("ProjectInfo");
 
+            var projectCustomerItem = XName.Get("Customer");
+
             foreach (var projectTagItems in projectsXml.Descendants(projectTagItem))
             {
                 var project = new Project
@@ -40,6 +42,12 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 };
                 foreach (var projectInfoTagItems in projectTagItems.Descendants(projectInfoTagItem))
                 {
+                    
+                    if (projectInfoTagItems.Descendants(projectCustomerItem) != null)
+                    {
+                        var CustomerElement = projectInfoTagItems.Descendants(projectCustomerItem);
+                    }
+
                     if (projectInfoTagItems.Attribute("StartedAt") != null)
                     {
                         project.StartedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("StartedAt").Value,
@@ -59,6 +67,26 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                     project.CreatedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("CreatedAt").Value);
                     project.Name = projectInfoTagItems.Attribute("Name").Value;
                     project.Status = projectInfoTagItems.Attribute("Status").Value;
+
+
+
+                    
+                    //Modification ID: PH_2015-07-05T21:12:00
+                    //Date: 2015-07-05
+                    //Added by: Patrick Hartnett
+                    //Begin Edit (PH_2015-07-05T21:12:00)
+                    if (projectInfoTagItems.HasElements)
+                    {
+                        var customerElement = projectInfoTagItems.Element(projectCustomerItem);
+                        if (customerElement != null)
+                        {
+                            Guid c_Guid = new Guid(customerElement.Attribute("Guid").Value);
+                            string c_Name = customerElement.Attribute("Name").Value;
+                            string c_Email = customerElement.Attribute("Email").Value;
+                            project.Customer = new Customer(c_Guid, c_Name, c_Email);
+                        }
+                    }
+                    //End Edit (PH_2015-07-05T21:12:00)
 
                 }
                 projects.Add(project);
@@ -133,6 +161,23 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 {
                     projectInfoItem.Add(new XAttribute("Description", workingProject.Description));
                 }
+
+                //Modification ID: PH_2015-07-05T21:12:00
+                //Date: 2015-07-05
+                //Added by: Patrick Hartnett
+                //Begin Edit (PH_2015-07-05T31:12:00)
+                if (project.Customer != null)
+                {
+                    var customertem = new XElement("Customer");
+
+                    customertem.Add(new XAttribute("Guid", project.Customer.Guid));
+                    customertem.Add(new XAttribute("Name", project.Customer.Name));
+                    customertem.Add(new XAttribute("Email", project.Customer.Email));
+
+                    projectInfoItem.Add(customertem);
+                }
+                //End Edit (PH_2015-07-05T31:12:00)
+
                 var projectItem = new XElement("ProjectListItem", new XAttribute("Guid", workingProject.Guid),
                     new XAttribute("ProjectFilePath", workingProject.ProjectFilePath), projectInfoItem
                     );
