@@ -43,11 +43,6 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 foreach (var projectInfoTagItems in projectTagItems.Descendants(projectInfoTagItem))
                 {
                     
-                    if (projectInfoTagItems.Descendants(projectCustomerItem) != null)
-                    {
-                        var CustomerElement = projectInfoTagItems.Descendants(projectCustomerItem);
-                    }
-
                     if (projectInfoTagItems.Attribute("StartedAt") != null)
                     {
                         project.StartedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("StartedAt").Value,
