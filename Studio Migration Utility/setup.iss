@@ -14,6 +14,7 @@ Compression=lzma2
 SolidCompression=yes
 OutputDir=userdocs:Inno Setup Examples Output
 PrivilegesRequired = admin
+DefaultGroupName=SDL\SDL Community
 
 [Files]
 Source: "c:\Work\Git\SDL-Community\Studio Migration Utility\Sdl.Community.StudioMigrationUtility\bin\Release\Sdl.Community.StudioMigrationUtility.exe"; DestDir: "{app}"
@@ -26,6 +27,6 @@ Source: "c:\Work\Git\SDL-Community\Studio Migration Utility\Sdl.Community.Studio
 Type: filesandordirs; Name: "{pf32}\SDL\SDL Community\Studio Migration Utility"
 
 [Icons]
-Name: {group}\SDL\SDL Community\Studio Migration Utility; Filename: {app}\Sdl.Community.StudioMigrationUtility.exe; WorkingDir: {app}; IconFilename: {app}\migrate.ico; Comment: "Studio Migration Utility";
+Name: {group}\Studio Migration Utility; Filename: {app}\Sdl.Community.StudioMigrationUtility.exe; WorkingDir: {app}; IconFilename: {app}\migrate.ico; Comment: "Studio Migration Utility";
 Name: {commondesktop}\Studio Migration Utility; Filename: {app}\Sdl.Community.StudioMigrationUtility.exe; WorkingDir: {app}; IconFilename: {app}\migrate.ico; Comment: "Studio Migration Utility";
 
