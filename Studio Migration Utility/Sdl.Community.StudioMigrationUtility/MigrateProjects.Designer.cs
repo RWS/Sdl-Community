@@ -30,6 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MigrateUtility));
             this.projectMigrationWizzard = new CristiPotlog.Controls.Wizard();
+            this.translationMemories = new Sdl.Community.Controls.WizardPage();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.chkTranslationMemories = new System.Windows.Forms.CheckBox();
             this.moveProjects = new Sdl.Community.Controls.WizardPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -53,11 +57,9 @@
             this.taskRunnerPage = new Sdl.Community.Controls.WizardPage();
             this.labelProgress = new System.Windows.Forms.Label();
             this.progressLongTask = new System.Windows.Forms.ProgressBar();
-            this.translationMemories = new Sdl.Community.Controls.WizardPage();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.label4 = new System.Windows.Forms.Label();
-            this.chkTranslationMemories = new System.Windows.Forms.CheckBox();
             this.projectMigrationWizzard.SuspendLayout();
+            this.translationMemories.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.moveProjects.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -71,19 +73,17 @@
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkSourceStudioVersions)).BeginInit();
             this.taskRunnerPage.SuspendLayout();
-            this.translationMemories.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // projectMigrationWizzard
             // 
+            this.projectMigrationWizzard.Controls.Add(this.welcomePage);
+            this.projectMigrationWizzard.Controls.Add(this.finalPage);
+            this.projectMigrationWizzard.Controls.Add(this.taskRunnerPage);
             this.projectMigrationWizzard.Controls.Add(this.translationMemories);
             this.projectMigrationWizzard.Controls.Add(this.moveProjects);
             this.projectMigrationWizzard.Controls.Add(this.toStudioVersion);
             this.projectMigrationWizzard.Controls.Add(this.fromStudioVersion);
-            this.projectMigrationWizzard.Controls.Add(this.welcomePage);
-            this.projectMigrationWizzard.Controls.Add(this.finalPage);
-            this.projectMigrationWizzard.Controls.Add(this.taskRunnerPage);
             this.projectMigrationWizzard.HeaderImage = global::Sdl.Community.StudioMigrationUtility.Properties.Resources.migrate;
             this.projectMigrationWizzard.Location = new System.Drawing.Point(0, 0);
             this.projectMigrationWizzard.Name = "projectMigrationWizzard";
@@ -101,12 +101,56 @@
             this.projectMigrationWizzard.BeforeSwitchPages += new CristiPotlog.Controls.Wizard.BeforeSwitchPagesEventHandler(this.projectMigrationWizzard_BeforeSwitchPages);
             this.projectMigrationWizzard.AfterSwitchPages += new CristiPotlog.Controls.Wizard.AfterSwitchPagesEventHandler(this.projectMigrationWizzard_AfterSwitchPages);
             // 
+            // translationMemories
+            // 
+            this.translationMemories.Controls.Add(this.tableLayoutPanel2);
+            this.translationMemories.Location = new System.Drawing.Point(0, 0);
+            this.translationMemories.Name = "translationMemories";
+            this.translationMemories.Size = new System.Drawing.Size(428, 208);
+            this.translationMemories.TabIndex = 16;
+            this.translationMemories.Title = "Translation Memories";
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.chkTranslationMemories, 1, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 78);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(518, 213);
+            this.tableLayoutPanel2.TabIndex = 4;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 61);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(253, 91);
+            this.label4.TabIndex = 3;
+            this.label4.Text = resources.GetString("label4.Text");
+            // 
+            // chkTranslationMemories
+            // 
+            this.chkTranslationMemories.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.chkTranslationMemories.AutoSize = true;
+            this.chkTranslationMemories.Location = new System.Drawing.Point(309, 98);
+            this.chkTranslationMemories.Name = "chkTranslationMemories";
+            this.chkTranslationMemories.Size = new System.Drawing.Size(159, 17);
+            this.chkTranslationMemories.TabIndex = 4;
+            this.chkTranslationMemories.Text = "Update translation memories";
+            this.chkTranslationMemories.UseVisualStyleBackColor = true;
+            // 
             // moveProjects
             // 
             this.moveProjects.Controls.Add(this.tableLayoutPanel1);
             this.moveProjects.Location = new System.Drawing.Point(0, 0);
             this.moveProjects.Name = "moveProjects";
-            this.moveProjects.Size = new System.Drawing.Size(550, 307);
+            this.moveProjects.Size = new System.Drawing.Size(428, 208);
             this.moveProjects.TabIndex = 13;
             this.moveProjects.Title = "Change projects location";
             // 
@@ -177,7 +221,7 @@
             this.toStudioVersion.Description = "Select Studio version to which you want to migrate the projects.";
             this.toStudioVersion.Location = new System.Drawing.Point(0, 0);
             this.toStudioVersion.Name = "toStudioVersion";
-            this.toStudioVersion.Size = new System.Drawing.Size(550, 307);
+            this.toStudioVersion.Size = new System.Drawing.Size(428, 208);
             this.toStudioVersion.TabIndex = 12;
             this.toStudioVersion.Tag = "";
             this.toStudioVersion.Title = "Destination Studio Version";
@@ -247,7 +291,7 @@
             this.fromStudioVersion.Description = "Select Studio version from which you want to migrate the projects.";
             this.fromStudioVersion.Location = new System.Drawing.Point(0, 0);
             this.fromStudioVersion.Name = "fromStudioVersion";
-            this.fromStudioVersion.Size = new System.Drawing.Size(550, 307);
+            this.fromStudioVersion.Size = new System.Drawing.Size(428, 208);
             this.fromStudioVersion.TabIndex = 11;
             this.fromStudioVersion.Title = "Source Studio version";
             // 
@@ -354,54 +398,9 @@
             this.progressLongTask.Size = new System.Drawing.Size(526, 20);
             this.progressLongTask.TabIndex = 4;
             // 
-            // translationMemories
-            // 
-            this.translationMemories.Controls.Add(this.tableLayoutPanel2);
-            this.translationMemories.Location = new System.Drawing.Point(0, 0);
-            this.translationMemories.Name = "translationMemories";
-            this.translationMemories.Size = new System.Drawing.Size(550, 307);
-            this.translationMemories.TabIndex = 16;
-            this.translationMemories.Title = "Translation Memories";
-            // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.chkTranslationMemories, 1, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 78);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(518, 213);
-            this.tableLayoutPanel2.TabIndex = 4;
-            // 
-            // label4
-            // 
-            this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 61);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(253, 91);
-            this.label4.TabIndex = 3;
-            this.label4.Text = resources.GetString("label4.Text");
-            // 
-            // chkTranslationMemories
-            // 
-            this.chkTranslationMemories.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.chkTranslationMemories.AutoSize = true;
-            this.chkTranslationMemories.Location = new System.Drawing.Point(309, 98);
-            this.chkTranslationMemories.Name = "chkTranslationMemories";
-            this.chkTranslationMemories.Size = new System.Drawing.Size(159, 17);
-            this.chkTranslationMemories.TabIndex = 4;
-            this.chkTranslationMemories.Text = "Update translation memories";
-            this.chkTranslationMemories.UseVisualStyleBackColor = true;
-            // 
             // MigrateUtility
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(550, 355);
             this.Controls.Add(this.projectMigrationWizzard);
@@ -412,6 +411,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Studio Migration Utility";
             this.projectMigrationWizzard.ResumeLayout(false);
+            this.translationMemories.ResumeLayout(false);
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.tableLayoutPanel2.PerformLayout();
             this.moveProjects.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -428,9 +430,6 @@
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.chkSourceStudioVersions)).EndInit();
             this.taskRunnerPage.ResumeLayout(false);
-            this.translationMemories.ResumeLayout(false);
-            this.tableLayoutPanel2.ResumeLayout(false);
-            this.tableLayoutPanel2.PerformLayout();
             this.ResumeLayout(false);
 
         }

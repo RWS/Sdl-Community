@@ -5,7 +5,7 @@
 AppName=Studio Migration Utility
 AppPublisher=SDL Community Developers
 AppPublisherURL=https://community.sdl.com/
-AppVersion=1.0.0.0
+AppVersion=1.1.0.0
 DisableDirPage = yes
 DisableWelcomePage = yes
 AllowNoIcons = yes
