@@ -17,6 +17,15 @@ namespace Sdl.Community.StudioMigrationUtility.Model
 
         public string Status { get; set; }
 
+
+
+        //Modification ID: PH_2015-07-05T21:12:00
+        //Date: 2015-07-05
+        //Added by: Patrick Hartnett
+        //Begin Edit (PH_2015-07-05T21:00:00)      
+        public Customer Customer { get; set; }
+        //End Edit (PH_2015-07-05T21:00:00)      
+
         public override string ToString()
         {
             return Name;
