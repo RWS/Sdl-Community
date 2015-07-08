@@ -13,5 +13,7 @@ namespace Sdl.Community.StudioMigrationUtility.Model
         public StudioVersion SourceStudioVersion { get; set; }
 
         public bool MigrateTranslationMemories { get; set; }
+        
+        public bool MigrateCustomers { get; set; }
     }
 }

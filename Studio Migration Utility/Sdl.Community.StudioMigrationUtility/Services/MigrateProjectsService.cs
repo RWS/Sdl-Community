@@ -33,6 +33,8 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
             var projectCustomerItem = XName.Get("Customer");
 
+
+
             foreach (var projectTagItems in projectsXml.Descendants(projectTagItem))
             {
                 var project = new Project
@@ -113,13 +115,20 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             return Path.Combine(appDataPath, string.Format("SDL\\SDL Trados Studio\\{0}\\TranslationMemoryRepository.xml", folderName));
         }
 
-        public void MigrateProjects(List<Project> projects, List<Project> projectToBeMoved, Action<int> reportProgress)
+        public void MigrateProjects(List<Project> projects, List<Project> projectToBeMoved, bool migrateCustomers, Action<int> reportProgress)
         {
             var destinationProjectPath = GetProjectsPath(_destinationStudioVersion);
+            var projectsXml = XElement.Load(destinationProjectPath);
 
+            if (migrateCustomers)
+            {
+                //if there customers associated with projects we need to make sure that we also migrate the customers
+                //otherwise they will not appear
+                MigrateCustomers(projectsXml);
+
+            }
             MoveProjects(projectToBeMoved,reportProgress);
 
-            var projectsXml = XElement.Load(destinationProjectPath);
             var projectsElement = projectsXml.Element("Projects");
             if (projectsElement == null)
             {
@@ -161,7 +170,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 //Date: 2015-07-05
                 //Added by: Patrick Hartnett
                 //Begin Edit (PH_2015-07-05T31:12:00)
-                if (project.Customer != null)
+                if (project.Customer != null && migrateCustomers)
                 {
                     var customertem = new XElement("Customer");
 
@@ -184,11 +193,27 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             reportProgress(95);
         }
 
+        private void MigrateCustomers(XElement destinationProjectsXml)
+        {
+            var sourceProjectsPath = GetProjectsPath(_sourceStudioVersion);
+            var sourceProjectsXml = XElement.Load(sourceProjectsPath);
+
+            if (!sourceProjectsXml.Element("Customers").HasElements) return;
+
+            foreach (var sourceDescendant in from sourceDescendant in sourceProjectsXml.Descendants("Customer") 
+                                             let sourcePath = sourceDescendant.Attribute("Guid")
+                                             where destinationProjectsXml.Element("Customers").Descendants("Customer").All(x => x.Attribute("Guid").Value != sourcePath.Value) 
+                                             select sourceDescendant)
+            {
+                destinationProjectsXml.Element("Customers").Add(sourceDescendant);
+            }
+        }
+
         private void MoveProjects(IEnumerable<Project> projectToBeMoved, Action<int> reportProgress)
         {
             var destinationProjectsPath = Path.GetDirectoryName(GetProjectsPath(_destinationStudioVersion));
             var sourceProjectsPath = Path.GetDirectoryName(GetProjectsPath(_sourceStudioVersion));
-            var chunkSize = 90/projectToBeMoved.Count();
+            var chunkSize = 90/(!projectToBeMoved.Any() ? 1 : projectToBeMoved.Count());
             var progress = 0;
             foreach (var project in projectToBeMoved)
             {

@@ -168,7 +168,8 @@ namespace Sdl.Community.StudioMigrationUtility
                 ProjectToBeMoved = selectedProjectsToBeMoved.Cast<Project>().ToList(),
                 DestinationStudioVersion = (StudioVersion) selectedDestinationStudioVersionsGeneric[0],
                 SourceStudioVersion = (StudioVersion) selectedSourceStudioVersionsGeneric[0],
-                MigrateTranslationMemories = chkTranslationMemories.Checked
+                MigrateTranslationMemories = chkTranslationMemories.Checked,
+                MigrateCustomers = chkCustomers.Checked
             };
 
             _bw.RunWorkerAsync(taskArgument);
@@ -195,7 +196,7 @@ namespace Sdl.Community.StudioMigrationUtility
             var taskArgument = (TaskArgument)e.Argument;
 
             var mpService = new MigrateProjectsService(taskArgument.SourceStudioVersion, taskArgument.DestinationStudioVersion);
-            mpService.MigrateProjects(taskArgument.Projects, taskArgument.ProjectToBeMoved, _bw.ReportProgress);
+            mpService.MigrateProjects(taskArgument.Projects, taskArgument.ProjectToBeMoved, taskArgument.MigrateCustomers, _bw.ReportProgress);
             _bw.ReportProgress(95);
             if (taskArgument.MigrateTranslationMemories)
             {
