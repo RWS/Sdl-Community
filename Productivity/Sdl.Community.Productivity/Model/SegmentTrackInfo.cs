@@ -10,6 +10,11 @@ namespace Sdl.Community.Productivity.Model
 
         public string Text { get; set; }
 
+        public Int64 InsertedCharacters
+        {
+            get { return Text.Length - NumberOfKeys <= 0 ? 0 : Text.Length - NumberOfKeys; }
+        }
+
         public bool Translated { get; set; }
 
         public double ProductivityScore { get; set; }

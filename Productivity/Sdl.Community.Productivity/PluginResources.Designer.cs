@@ -148,6 +148,26 @@ namespace Sdl.Community.Productivity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SDL Leaderboard could not be reached. Please check your internet connectivity and try again..
+        /// </summary>
+        public static string TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again {
+            get {
+                return ResourceManager.GetString("TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_" +
+                        "internet_connectivity_and_try_again", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Twitter could not be reached. Please check your internet connectivity and try again..
+        /// </summary>
+        public static string TweetFactory_CreateTweet_Twitter_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again_ {
+            get {
+                return ResourceManager.GetString("TweetFactory_CreateTweet_Twitter_could_not_be_reached__Please_check_your_internet" +
+                        "_connectivity_and_try_again_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
         public static System.Drawing.Icon twitter {

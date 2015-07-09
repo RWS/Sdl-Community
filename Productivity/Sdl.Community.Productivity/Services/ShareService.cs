@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using NLog;
 using RestSharp;
 using Sdl.Community.Productivity.API;
@@ -21,6 +23,8 @@ namespace Sdl.Community.Productivity.Services
         private TwitterService _twitterService;
         private TwitterAccount _twitterAccount;
         private TwitterAccountInfo _twitterAccountInformation;
+        public Version LeaderboardVersion;
+        public Version PluginVersion;
 
         public ShareService(ProductivityService productivityService,
             TwitterPersistenceService twitterPersistenceService,
@@ -45,6 +49,8 @@ namespace Sdl.Community.Productivity.Services
             _twitterService.AuthenticateWith(_twitterAccountInformation.AccessToken,
                 _twitterAccountInformation.AccessTokenSecret);
             _twitterAccount = _twitterService.GetAccountSettings();
+            LeaderboardVersion = new Version(GetLeaderboardVersion());
+            PluginVersion = new Version(GetVersion());
         }
 
         public string GetTwitterMessage()
@@ -52,15 +58,32 @@ namespace Sdl.Community.Productivity.Services
             return _tweetMessageService.GetTwitterMessage(_productivityService.Score);
         }
 
+        public bool CanShareOnLeaderBoadrd()
+        {
+            return LeaderboardVersion.CompareTo(PluginVersion) <=0;
+        }
+
+        public bool IsLeaderboardAvailable()
+        {
+            return _leaderboardApi.IsAlive();
+        }
+
+        public bool IsTwitterAvailable()
+        {
+            return _twitterAccount != null;
+        }
         public void Share()
         {
+            if (!CanShareOnLeaderBoadrd()) return;
+            if (!IsLeaderboardAvailable()) return;
+            if (!IsTwitterAvailable()) return;
             var leaderboardInfo = new LeaderboardInfo
             {
                 TwitterHandle = _twitterAccount.ScreenName,
                 Score = _productivityService.Score,
                 Language = _productivityService.Language,
                 LastTranslationAt = _productivityService.LastTranslationDate.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'Z'"),
-                AppVersion = "0.2.1"
+                AppVersion = GetVersion()
             };
 
             var isSharedOnTheLeaderboard = ShareOnLeaderboard(leaderboardInfo);
@@ -78,6 +101,14 @@ namespace Sdl.Community.Productivity.Services
             request.Parameters.AddRange(CreateParameters(leaderboardInfo));
 
             return _leaderboardApi.ExecuteWithoutResponse(request);
+        }
+
+        private string GetLeaderboardVersion()
+        {
+            if (!_leaderboardApi.IsAlive()) return GetVersion();
+            var request = new RestRequest(Method.GET) { Resource = "version", RequestFormat = DataFormat.Json };
+            dynamic dVersion = JObject.Parse(_leaderboardApi.Execute(request));
+            return dVersion.version;
         }
 
         private IEnumerable<Parameter> CreateParameters(LeaderboardInfo leaderboardInfo)
@@ -139,6 +170,14 @@ namespace Sdl.Community.Productivity.Services
                 Status = _tweetMessageService.GetTwitterMessage(leaderboardInfo.Score)
             };
             _twitterService.SendTweet(tweetOptions);
+        }
+
+        private string GetVersion()
+        {
+            var assembly = typeof (ShareService).Assembly;
+            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            var fullVersion = versionInfo.FileVersion;
+            return fullVersion;
         }
 
     }

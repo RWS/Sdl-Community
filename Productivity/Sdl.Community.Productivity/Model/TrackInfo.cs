@@ -11,6 +11,10 @@ namespace Sdl.Community.Productivity.Model
 
         public string FileName { get; set; }
 
+        public Guid ProjectId { get; set; }
+
+        public string ProjectName { get; set; }
+
         public string Language { get; set; }
 
         public List<SegmentTrackInfo> SegmentTrackInfos { get; set; }

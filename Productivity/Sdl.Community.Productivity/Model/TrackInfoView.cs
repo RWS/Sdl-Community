@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.Productivity.Model
 {
@@ -9,46 +10,42 @@ namespace Sdl.Community.Productivity.Model
 
         public string FileName { get; set; }
 
+        public Guid ProjectId { get; set; }
+
+        public string ProjectName { get; set; }
+
         public string Language { get; set; }
 
         public string FileType { get; set; }
 
-        public double FileProductivityScore { get; set; }
+        public double Efficiency { get; set; }
 
-        public string SegmentId { get; set; }
+        public Int64 KeystrokesSaved { get; set; }
 
-        public int NumberOfKeys { get; set; }
+        public Int64 InsertedCharacters { get; set; }
 
-        public string Text { get; set; }
-
-        public bool Translated { get; set; }
-
-        public double SegmentProductivityScore { get; set; }
-
-        public DateTime UtcDateTime { get; set; }
 
         public static List<TrackInfoView> CreateFromTrackInfos(List<TrackInfo> trackInfos)
         {
             var trackInfoViews = new List<TrackInfoView>();
-                 
-            trackInfos.ForEach(trackInfo => trackInfo.SegmentTrackInfos.ForEach(segmentTrackInfo =>
+
+
+            trackInfos.ForEach(trackInfo =>
             {
                 var trackInfoView = new TrackInfoView()
                 {
                     FileId = trackInfo.FileId,
                     FileName = trackInfo.FileName,
+                    ProjectName = trackInfo.ProjectName,
+                    ProjectId = trackInfo.ProjectId,
                     FileType = trackInfo.FileType,
                     Language = trackInfo.Language,
-                    FileProductivityScore = trackInfo.ProductivityScore,
-                    SegmentId = segmentTrackInfo.SegmentId,
-                    NumberOfKeys = segmentTrackInfo.NumberOfKeys,
-                    Text = segmentTrackInfo.Text,
-                    Translated =segmentTrackInfo.Translated,
-                    SegmentProductivityScore = segmentTrackInfo.ProductivityScore,
-                    UtcDateTime = segmentTrackInfo.UtcDateTime
+                    Efficiency = trackInfo.ProductivityScore,
+                    KeystrokesSaved = trackInfo.SegmentTrackInfos.Sum(x => x.NumberOfKeys),
+                    InsertedCharacters = trackInfo.SegmentTrackInfos.Sum(x => x.InsertedCharacters),
                 };
                 trackInfoViews.Add(trackInfoView);
-            }));
+            });
 
             return trackInfoViews;
         }

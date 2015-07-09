@@ -157,4 +157,10 @@
   <data name="IsStaging" xml:space="preserve">
     <value>true</value>
   </data>
+  <data name="TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again" xml:space="preserve">
+    <value>SDL Leaderboard could not be reached. Please check your internet connectivity and try again.</value>
+  </data>
+  <data name="TweetFactory_CreateTweet_Twitter_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again_" xml:space="preserve">
+    <value>Twitter could not be reached. Please check your internet connectivity and try again.</value>
+  </data>
 </root>

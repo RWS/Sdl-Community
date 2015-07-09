@@ -16,7 +16,7 @@ namespace Sdl.Community.Productivity.Services
 
         private readonly List<TrackInfo> _trackingInfos; 
         private readonly TrackInfoPersistanceService _persistance;
-        private Logger _logger;
+        private readonly Logger _logger;
 
         public Document ActiveDocument { get; set; }
 
@@ -33,6 +33,7 @@ namespace Sdl.Community.Productivity.Services
             {
                 document.ContentChanged += document_ContentChanged;
                 document.SegmentsConfirmationLevelChanged += document_SegmentsConfirmationLevelChanged;
+                var projectInfo = document.Project.GetProjectInfo();
 
                 var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == document.ActiveFile.Id);
                 if (trackInfo == null)
@@ -41,6 +42,8 @@ namespace Sdl.Community.Productivity.Services
                     {
                         FileId = document.ActiveFile.Id,
                         FileName = document.ActiveFile.Name,
+                        ProjectId = projectInfo.Id,
+                        ProjectName = projectInfo.Name,
                         Language = document.ActiveFile.Language.CultureInfo.Name,
                         FileType = document.ActiveFile.FileTypeId,
                         SegmentTrackInfos = new List<SegmentTrackInfo>()

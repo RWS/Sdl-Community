@@ -44,6 +44,7 @@
     <Reference Include="Hammock.ClientProfile">
       <HintPath>..\packages\TweetMoaSharp.3.0.0.4\lib\4.0\Hammock.ClientProfile.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\TweetMoaSharp.3.0.0.4\lib\4.0\Newtonsoft.Json.dll</HintPath>
@@ -164,6 +165,9 @@
     <Compile Include="UI\ProductivityReportViewPart.cs" />
     <Compile Include="UI\ProductivityRibbon.cs" />
     <Compile Include="UI\ProductivityUiHelper.cs" />
+    <Compile Include="UI\RoundedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\TweetForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -176,6 +180,7 @@
     <Compile Include="UI\TwitterAccountSetup.Designer.cs">
       <DependentUpon>TwitterAccountSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Util\TweetFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="3rd Party\RestSharp.dll" />
