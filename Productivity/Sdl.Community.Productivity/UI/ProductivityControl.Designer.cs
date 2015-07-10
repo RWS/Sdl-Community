@@ -96,6 +96,7 @@
             // insertedCharactersColumn
             // 
             this.insertedCharactersColumn.AspectName = "InsertedCharacters";
+            this.insertedCharactersColumn.AspectToStringFormat = "{0:n0}";
             this.insertedCharactersColumn.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.insertedCharactersColumn.HeaderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(108)))), ((int)(((byte)(122)))));
             this.insertedCharactersColumn.Text = "Inserted Characters";
@@ -113,6 +114,7 @@
             // keyStrokesSavedColumn
             // 
             this.keyStrokesSavedColumn.AspectName = "KeystrokesSaved";
+            this.keyStrokesSavedColumn.AspectToStringFormat = "{0:n0}";
             this.keyStrokesSavedColumn.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.keyStrokesSavedColumn.HeaderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(108)))), ((int)(((byte)(122)))));
             this.keyStrokesSavedColumn.Text = "Keystrokes saved";

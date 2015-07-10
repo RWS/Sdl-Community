@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.Productivity.API;
@@ -11,15 +8,14 @@ using Sdl.Community.Productivity.UI;
 
 namespace Sdl.Community.Productivity.Util
 {
-    public class TweetFactory
+    public class FormFactory
     {
-        public static void CreateTweet(Logger logger)
+        public static void CreateTweetForm(Logger logger)
         {
             try
             {
                 var twitterPersistenceService = new TwitterPersistenceService(logger);
-                var leaderboardApi = new LeaderboardApi(twitterPersistenceService);
-                var tweetMessageService = new TweetMessageService();
+               
                 if (!ProductivityUiHelper.IsTwitterAccountConfigured(twitterPersistenceService, logger))
                 {
                     MessageBox.Show(
@@ -39,22 +35,27 @@ namespace Sdl.Community.Productivity.Util
                     return;
                 }
 
-                var shareService = new ShareService(productivityService, twitterPersistenceService, tweetMessageService,
-                    leaderboardApi, logger);
+                var leaderboardApi = new LeaderboardApi(twitterPersistenceService);
+                var versioningService = new VersioningService(leaderboardApi);
+                var tweetMessageService = new TweetMessageService(versioningService);
+                var leaderBoardShareService = new LeaderboardShareService(leaderboardApi, twitterPersistenceService);
+                var twitterShareService = new TwitterShareService(twitterPersistenceService, tweetMessageService);
+                var shareService = new ShareService(productivityService, twitterShareService, leaderBoardShareService,
+                    versioningService);
 
-                if (!shareService.IsLeaderboardAvailable())
+                if (!leaderboardApi.IsAlive())
                 {
                     MessageBox.Show(PluginResources.TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again);
                     return;
                 }
 
-                if (!shareService.IsTwitterAvailable())
+                if (!twitterShareService.IsAlive())
                 {
                     MessageBox.Show(PluginResources.TweetFactory_CreateTweet_Twitter_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again_);
                     return;
                 }
 
-                if (!shareService.CanShareOnLeaderBoadrd())
+                if (!versioningService.IsPluginVersionCompatibleWithLeaderboardVersion())
                 {
                     MessageBox.Show(
                         string.Format(
@@ -63,7 +64,7 @@ namespace Sdl.Community.Productivity.Util
                     return;
                 }
 
-                using (var tf = new TweetForm(shareService))
+                using (var tf = new TweetForm(shareService,tweetMessageService, productivityService))
                 {
                     tf.ShowDialog();
                 }
@@ -71,6 +72,29 @@ namespace Sdl.Community.Productivity.Util
             catch (Exception ex)
             {
                 logger.Debug(ex, "Unexpected exception when opening the share score");
+                throw;
+            }
+        }
+
+        public static void CreateProductivityForm(Logger logger)
+        {
+            try
+            {
+
+                var productivityService = new ProductivityService(logger);
+                var twitterPersistanceService = new TwitterPersistenceService(logger);
+                var leaderboardApi = new LeaderboardApi(twitterPersistanceService);
+                var versioningService = new VersioningService(leaderboardApi);
+                var tweetMessageService = new TweetMessageService(versioningService);
+                var twitterShareService = new TwitterShareService(twitterPersistanceService, tweetMessageService);
+                using (var pForm = new ProductivityForm(productivityService, twitterShareService))
+                {
+                    pForm.ShowDialog();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Debug(ex, "Unexpected exception when opening the productivity score");
                 throw;
             }
         }

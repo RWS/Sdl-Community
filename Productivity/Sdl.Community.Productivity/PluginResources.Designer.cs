@@ -138,6 +138,17 @@ namespace Sdl.Community.Productivity {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This plugin is compatible with SDL Studio 2014 CU10 or later. In order to enjoy this plugin please upgrade to a newer version..
+        /// </summary>
+        public static string ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_ {
+            get {
+                return ResourceManager.GetString("ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014" +
+                        "_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_" +
+                        "", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You need to configure the twitter account to see your score.
         /// </summary>
         public static string ProductivityViewPartAction_Execute_You_need_to_configure_the_twitter_account_to_see_your_score {

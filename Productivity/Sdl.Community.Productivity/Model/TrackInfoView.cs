@@ -41,7 +41,7 @@ namespace Sdl.Community.Productivity.Model
                     FileType = trackInfo.FileType,
                     Language = trackInfo.Language,
                     Efficiency = trackInfo.ProductivityScore,
-                    KeystrokesSaved = trackInfo.SegmentTrackInfos.Sum(x => x.NumberOfKeys),
+                    KeystrokesSaved = trackInfo.SegmentTrackInfos.Sum(x => x.InsertedCharacters - x.NumberOfKeys < 0 ? 0 : x.InsertedCharacters - x.NumberOfKeys),
                     InsertedCharacters = trackInfo.SegmentTrackInfos.Sum(x => x.InsertedCharacters),
                 };
                 trackInfoViews.Add(trackInfoView);

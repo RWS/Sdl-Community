@@ -25,20 +25,15 @@ namespace Sdl.Community.Productivity.UI
     {
         protected override void Execute()
         {
+            if (!ProductivityUiHelper.IsGreaterThanCu10())
+            {
+                MessageBox.Show(
+                    PluginResources.ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_);
+                return;
+            }
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
-            try
-            {
-                using (var pForm = new ProductivityForm())
-                {
-                    pForm.ShowDialog();
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Debug(ex, "Unexpected exception when opening the productivity score");
-                throw;
-            }
+            FormFactory.CreateProductivityForm(logger);
         }
     }
 
@@ -49,9 +44,15 @@ namespace Sdl.Community.Productivity.UI
     {
         protected override void Execute()
         {
+            if (!ProductivityUiHelper.IsGreaterThanCu10())
+            {
+                MessageBox.Show(
+                    PluginResources.ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_);
+                return;
+            }
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
-            TweetFactory.CreateTweet(logger);
+            FormFactory.CreateTweetForm(logger);
         }
 
 

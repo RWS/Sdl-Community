@@ -2,21 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using NLog;
-using Sdl.Community.Productivity.API;
 using Sdl.Community.Productivity.Model;
 using Sdl.Community.Productivity.Services;
-using Sdl.Community.Productivity.Services.Persistence;
 using Sdl.Community.Productivity.Util;
-using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using TweetSharp;
 
 namespace Sdl.Community.Productivity.UI
 {
@@ -24,63 +18,52 @@ namespace Sdl.Community.Productivity.UI
     {
 
         private ProductivityService _productivityService;
+        private TwitterShareService _twitterShareService;
         private List<TrackInfoView> _trackingInfoVews;
+        private bool _initialized;
         private Logger _logger;
 
  
         public ProductivityControl()
         {
             InitializeComponent();
-          
+            _initialized = false;
+        }
+
+        public void Initialize(ProductivityService productivityService, TwitterShareService twitterShareService)
+        {
+            _productivityService = productivityService;
+            _twitterShareService = twitterShareService;
+
+            _initialized = true;
         }
 
         protected override void OnLoad(EventArgs e)
         {
             _logger = LogManager.GetLogger("log");
 
-            if (!this.DesignMode)
+            if (!DesignMode && _initialized)
             {
-                Initialize();
+                InternalInitialize();
             }
             base.OnLoad(e);
         }
 
-        private void Initialize()
+        private void InternalInitialize()
         {
-            _productivityService = new ProductivityService();
-
             _trackingInfoVews =
                 _productivityService.TrackInfoViews;
 
             btnScore.Text = string.Format("{0}%", _productivityService.ProductivityScore);
             lblScore.Text = _productivityService.Score.ToString(CultureInfo.InvariantCulture);
-
-
-            var twitterPersistenceService = new TwitterPersistenceService(_logger);
             lblScore.Text = string.Format("Your score is:\r\n{0} points!", _productivityService.Score);
 
-
-            if (ProductivityUiHelper.IsTwitterAccountConfigured(twitterPersistenceService, _logger))
+            var twitterAccount = _twitterShareService.GetUserProfile();
+            if (twitterAccount != null)
             {
-                var twitterAccountInformation = twitterPersistenceService.Load();
-
-                var twitterService = new TwitterService(Constants.ConsumerKey,
-                    Constants.ConsumerSecret);
-                twitterService.AuthenticateWith(twitterAccountInformation.AccessToken,
-                    twitterAccountInformation.AccessTokenSecret);
-               
-                var getUpo = new GetUserProfileOptions()
-                {
-                    IncludeEntities = false,
-                    SkipStatus = false
-                };
-                var twitterAccount = twitterService.GetUserProfile(getUpo);
-                if (twitterAccount != null)
-                {
-                    lblScore.Text = string.Format("{0}, your score is:\r\n{1} points!", twitterAccount.Name,
-                        _productivityService.Score);
-                    pbTweetAccountImage.Load(twitterAccount.ProfileImageUrl);
-                }
+                lblScore.Text = string.Format("{0}, your score is:\r\n{1} points!", twitterAccount.Name,
+                    _productivityService.Score);
+                pbTweetAccountImage.Load(twitterAccount.ProfileImageUrl);
             }
 
             InitializeListView();
@@ -99,6 +82,7 @@ namespace Sdl.Community.Productivity.UI
                 var text = x.ToString();
                 return string.IsNullOrEmpty(text) ? "No text" : text;
             };
+
 
             listView.AboutToCreateGroups += listView_AboutToCreateGroups;
 
@@ -126,7 +110,7 @@ namespace Sdl.Community.Productivity.UI
 
                 var efficiency = efficiencies.Average(x => Math.Round(x, 0));
 
-                group.Header = string.Format("{0} {1} (inserted characters) - {2}% (efficiency) - {3} (keystrokes saved)", group.Header, insertedCharacters, efficiency,
+                group.Header = string.Format("{0} {1:n0} (inserted characters) - {2}% (efficiency) - {3:n0} (keystrokes saved)", group.Header, insertedCharacters, efficiency,
                     keystrokesSaved);
             }
         }
@@ -165,7 +149,7 @@ namespace Sdl.Community.Productivity.UI
 
         private void btnTweet_Click(object sender, EventArgs e)
         {
-            TweetFactory.CreateTweet(_logger);
+            FormFactory.CreateTweetForm(_logger);
         }
 
         private void btnLeaderboard_Click(object sender, EventArgs e)

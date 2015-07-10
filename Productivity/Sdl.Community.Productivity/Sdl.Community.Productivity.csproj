@@ -143,13 +143,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\KeyboardTracking.cs" />
     <Compile Include="Services\KeyboardTrackingService.cs" />
+    <Compile Include="Services\LeaderboardShareService.cs" />
     <Compile Include="Services\Persistence\AbstractPersistenceService.cs" />
     <Compile Include="Services\Persistence\TrackInfoPersistanceService.cs" />
     <Compile Include="Services\Persistence\TwitterPersistenceService.cs" />
     <Compile Include="Services\ProductivityService.cs" />
     <Compile Include="Services\ShareService.cs" />
     <Compile Include="Services\TweetMessageService.cs" />
-    <Compile Include="Test\Startup.cs" />
+    <Compile Include="Services\TwitterShareService.cs" />
+    <Compile Include="Services\VersioningService.cs" />
     <Compile Include="UI\ProductivityForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -162,9 +164,8 @@
     <Compile Include="UI\ProductivityControl.Designer.cs">
       <DependentUpon>ProductivityControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProductivityReportViewPart.cs" />
     <Compile Include="UI\ProductivityRibbon.cs" />
-    <Compile Include="UI\ProductivityUiHelper.cs" />
+    <Compile Include="Util\ProductivityUiHelper.cs" />
     <Compile Include="UI\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -180,7 +181,7 @@
     <Compile Include="UI\TwitterAccountSetup.Designer.cs">
       <DependentUpon>TwitterAccountSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Util\TweetFactory.cs" />
+    <Compile Include="Util\FormFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="3rd Party\RestSharp.dll" />

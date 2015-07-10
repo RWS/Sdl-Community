@@ -15,19 +15,13 @@ namespace Sdl.Community.Productivity.Services
         private readonly string _studioVersion;
         private readonly string _leaderboardLink;
 
-        public TweetMessageService()
+        public TweetMessageService(VersioningService versioningService)
         {
-            _studioVersion = GetStudioVersion();
+            _studioVersion = versioningService.GetStudioVersionFriendly();
             _leaderboardLink = PluginResources.Leaderboard_Link;
         }
 
-        private string GetStudioVersion()
-        {
-            var currentDomain = AppDomain.CurrentDomain;
-            var assembly = Assembly.LoadFile(string.Format(@"{0}\{1}", currentDomain.BaseDirectory, "SDLTradosStudio.exe"));
-            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            return versionInfo.FileMajorPart== 11 ? "studio2014" : "studio2015";
-        }
+        
 
         public string GetTwitterMessage(double score)
         {

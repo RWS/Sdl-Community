@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Reflection;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.Productivity.Services.Persistence;
+using Sdl.Community.Productivity.UI;
 
-namespace Sdl.Community.Productivity.UI
+namespace Sdl.Community.Productivity.Util
 {
     public static class ProductivityUiHelper
     {
@@ -23,6 +23,15 @@ namespace Sdl.Community.Productivity.UI
                 }
             }
             return isTwitterAccountConfigured;
+        }
+
+        public static bool IsGreaterThanCu10()
+        {
+            var minimumVersion = new Version("11.2.4409.10");
+            var assembly = Assembly.LoadFile(string.Format(@"{0}\{1}", AppDomain.CurrentDomain.BaseDirectory, "SDLTradosStudio.exe"));
+            var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            var currentVersion = new Version(versionInfo.FileVersion);
+            return currentVersion.CompareTo(minimumVersion) >= 0;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Sdl.Community.Productivity.Model
 
         public Int64 InsertedCharacters
         {
-            get { return Text.Length - NumberOfKeys <= 0 ? 0 : Text.Length - NumberOfKeys; }
+            get { return Text.Length; }
         }
 
         public bool Translated { get; set; }
