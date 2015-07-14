@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProductivityControl));
             this.listView = new BrightIdeasSoftware.ObjectListView();
             this.segmentTextColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.insertedCharactersColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
@@ -37,15 +38,15 @@
             this.pnlMain = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnScore = new Sdl.Community.Productivity.UI.RoundedButton();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.btnLeaderboard = new Sdl.Community.Productivity.UI.RoundedButton();
+            this.btnTweet = new Sdl.Community.Productivity.UI.RoundedButton();
             this.pnlScore = new System.Windows.Forms.Panel();
             this.pbTweetAccountImage = new System.Windows.Forms.PictureBox();
             this.lblScore = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnScore = new Sdl.Community.Productivity.UI.RoundedButton();
-            this.btnLeaderboard = new Sdl.Community.Productivity.UI.RoundedButton();
-            this.btnTweet = new Sdl.Community.Productivity.UI.RoundedButton();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -154,6 +155,20 @@
             this.panel1.Size = new System.Drawing.Size(992, 142);
             this.panel1.TabIndex = 1;
             // 
+            // btnScore
+            // 
+            this.btnScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
+            this.btnScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnScore.ForeColor = System.Drawing.Color.White;
+            this.btnScore.Location = new System.Drawing.Point(868, 3);
+            this.btnScore.Name = "btnScore";
+            this.btnScore.Radius = 70;
+            this.btnScore.Size = new System.Drawing.Size(70, 70);
+            this.btnScore.TabIndex = 7;
+            this.btnScore.Text = "100%";
+            this.btnScore.UseVisualStyleBackColor = false;
+            // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -165,7 +180,7 @@
             this.label2.Size = new System.Drawing.Size(45, 40);
             this.label2.TabIndex = 6;
             this.label2.Text = "[?]";
-            this.toolTip1.SetToolTip(this.label2, "Test explanation");
+            this.toolTip1.SetToolTip(this.label2, resources.GetString("label2.ToolTip"));
             // 
             // label1
             // 
@@ -178,6 +193,36 @@
             this.label1.Size = new System.Drawing.Size(233, 40);
             this.label1.TabIndex = 3;
             this.label1.Text = "Translation eficiency ";
+            // 
+            // btnLeaderboard
+            // 
+            this.btnLeaderboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
+            this.btnLeaderboard.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLeaderboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnLeaderboard.ForeColor = System.Drawing.Color.White;
+            this.btnLeaderboard.Location = new System.Drawing.Point(231, 84);
+            this.btnLeaderboard.Name = "btnLeaderboard";
+            this.btnLeaderboard.Radius = 30;
+            this.btnLeaderboard.Size = new System.Drawing.Size(157, 36);
+            this.btnLeaderboard.TabIndex = 5;
+            this.btnLeaderboard.Text = "Leaderboard";
+            this.btnLeaderboard.UseVisualStyleBackColor = false;
+            this.btnLeaderboard.Click += new System.EventHandler(this.btnLeaderboard_Click);
+            // 
+            // btnTweet
+            // 
+            this.btnTweet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
+            this.btnTweet.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTweet.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnTweet.ForeColor = System.Drawing.Color.White;
+            this.btnTweet.Location = new System.Drawing.Point(65, 84);
+            this.btnTweet.Name = "btnTweet";
+            this.btnTweet.Radius = 30;
+            this.btnTweet.Size = new System.Drawing.Size(157, 36);
+            this.btnTweet.TabIndex = 4;
+            this.btnTweet.Text = "Tweet";
+            this.btnTweet.UseVisualStyleBackColor = false;
+            this.btnTweet.Click += new System.EventHandler(this.btnTweet_Click);
             // 
             // pnlScore
             // 
@@ -220,50 +265,6 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            // 
-            // btnScore
-            // 
-            this.btnScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnScore.ForeColor = System.Drawing.Color.White;
-            this.btnScore.Location = new System.Drawing.Point(868, 3);
-            this.btnScore.Name = "btnScore";
-            this.btnScore.Radius = 70;
-            this.btnScore.Size = new System.Drawing.Size(70, 70);
-            this.btnScore.TabIndex = 7;
-            this.btnScore.Text = "100%";
-            this.btnScore.UseVisualStyleBackColor = false;
-            // 
-            // btnLeaderboard
-            // 
-            this.btnLeaderboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnLeaderboard.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLeaderboard.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLeaderboard.ForeColor = System.Drawing.Color.White;
-            this.btnLeaderboard.Location = new System.Drawing.Point(231, 84);
-            this.btnLeaderboard.Name = "btnLeaderboard";
-            this.btnLeaderboard.Radius = 30;
-            this.btnLeaderboard.Size = new System.Drawing.Size(157, 36);
-            this.btnLeaderboard.TabIndex = 5;
-            this.btnLeaderboard.Text = "Leaderboard";
-            this.btnLeaderboard.UseVisualStyleBackColor = false;
-            this.btnLeaderboard.Click += new System.EventHandler(this.btnLeaderboard_Click);
-            // 
-            // btnTweet
-            // 
-            this.btnTweet.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
-            this.btnTweet.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnTweet.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTweet.ForeColor = System.Drawing.Color.White;
-            this.btnTweet.Location = new System.Drawing.Point(65, 84);
-            this.btnTweet.Name = "btnTweet";
-            this.btnTweet.Radius = 30;
-            this.btnTweet.Size = new System.Drawing.Size(157, 36);
-            this.btnTweet.TabIndex = 4;
-            this.btnTweet.Text = "Tweet";
-            this.btnTweet.UseVisualStyleBackColor = false;
-            this.btnTweet.Click += new System.EventHandler(this.btnTweet_Click);
             // 
             // ProductivityControl
             // 
