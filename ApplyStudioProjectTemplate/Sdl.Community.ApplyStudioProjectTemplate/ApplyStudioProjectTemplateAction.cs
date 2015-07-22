@@ -291,6 +291,19 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         }
                     }
 
+                    // Copy TQA settings where applicable
+                    if (selectedTemplate.TranslationQualityAssessment == ApplyTemplateOptions.Overwrite)
+                    {
+                        try
+                        {
+                            CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationQualityAssessmentSettings", targetProject, null);
+                        }
+                        catch (Exception e)
+                        {
+                            MessageBox.Show(e.Message, PluginResources.TQA_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        }
+                    }
+
                     // Copy QA verification settings where applicable
                     if (selectedTemplate.VerificationQaChecker30 == ApplyTemplateOptions.Overwrite)
                     {

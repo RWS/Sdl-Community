@@ -44,6 +44,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DropDownControls">
+      <HintPath>..\..\..\..\..\Users\DPooley\Documents\Visual Studio 2013\Projects\ClipboardTranslator\ClipboardTranslator\DropDownControls.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
