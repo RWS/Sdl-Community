@@ -178,4 +178,7 @@
   <data name="QAGC_Failed" xml:space="preserve">
     <value>Failed to set the Grammar Checker settings</value>
   </data>
+  <data name="TQA_Failed" xml:space="preserve">
+    <value>Failed to set the Translation Quality Assessment settings</value>
+  </data>
 </root>
