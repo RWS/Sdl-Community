@@ -154,6 +154,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     thisTemplate.TranslationMemoriesSpecificLanguages = newTemplate.TranslationMemoriesSpecificLanguages;
                                     thisTemplate.TerminologyTermbases = newTemplate.TerminologyTermbases;
                                     thisTemplate.TerminologySearchSettings = newTemplate.TerminologySearchSettings;
+                                    thisTemplate.TranslationQualityAssessment = newTemplate.TranslationQualityAssessment;                                  
                                     thisTemplate.VerificationQaChecker30 = newTemplate.VerificationQaChecker30;
                                     thisTemplate.VerificationTagVerifier = newTemplate.VerificationTagVerifier;
                                     thisTemplate.VerificationTerminologyVerifier = newTemplate.VerificationTerminologyVerifier;
@@ -218,6 +219,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             this.TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
             this.TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
             this.TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
+            this.TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
             this.BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
             this.BatchTasksSpecificLanguages.SelectedItem = selectedTemplate.BatchTasksSpecificLanguages.ToString();
             this.VerificationQaChecker30.SelectedItem = selectedTemplate.VerificationQaChecker30.ToString();
@@ -246,6 +248,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     this.TranslationMemoriesSpecificLanguages.SelectedIndex +
                                     this.TerminologyTermbases.SelectedIndex +
                                     this.TerminologySearchSettings.SelectedIndex +
+                                    this.TranslationQualityAssessment.SelectedIndex +
                                     this.BatchTasksAllLanguages.SelectedIndex +
                                     this.BatchTasksSpecificLanguages.SelectedIndex +
                                     this.VerificationQaChecker30.SelectedIndex +
@@ -408,6 +411,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         private void FileTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
             (this.SelectedTemplate.SelectedItem as ApplyTemplate).FileTypes = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.FileTypes.SelectedItem.ToString());
+            this.CheckChanged();
+        }
+
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the TranslationQualityAssessment control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void TranslationQualityAssessment_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationQualityAssessment = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationQualityAssessment.SelectedItem.ToString());
             this.CheckChanged();
         }
 

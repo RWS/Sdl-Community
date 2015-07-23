@@ -72,14 +72,18 @@
             this.DismissButton = new System.Windows.Forms.Button();
             this.OkButton = new System.Windows.Forms.Button();
             this.FormToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.TranslationQualityAssessment = new System.Windows.Forms.ComboBox();
             this.ShowToolTips = new System.Windows.Forms.CheckBox();
             this.AboutButton = new System.Windows.Forms.Button();
+            this.QualityGroup = new System.Windows.Forms.GroupBox();
+            this.TranslationQualityAssessmentLabel = new System.Windows.Forms.Label();
             this.TranslationProvidersGroup.SuspendLayout();
             this.TranslationMemoriesGroup.SuspendLayout();
             this.TerminologyGroup.SuspendLayout();
             this.BatchProcessingGroup.SuspendLayout();
             this.VerificationGroup.SuspendLayout();
             this.TemplateGroup.SuspendLayout();
+            this.QualityGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // TranslationProvidersGroup
@@ -91,7 +95,7 @@
             this.TranslationProvidersGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.TranslationProvidersGroup.Location = new System.Drawing.Point(12, 105);
             this.TranslationProvidersGroup.Name = "TranslationProvidersGroup";
-            this.TranslationProvidersGroup.Size = new System.Drawing.Size(257, 96);
+            this.TranslationProvidersGroup.Size = new System.Drawing.Size(285, 84);
             this.TranslationProvidersGroup.TabIndex = 1;
             this.TranslationProvidersGroup.TabStop = false;
             this.TranslationProvidersGroup.Text = "Translation Memory and Automated Translation";
@@ -116,7 +120,7 @@
             "Keep",
             "Merge",
             "Overwrite"});
-            this.TranslationProvidersSpecificLanguages.Location = new System.Drawing.Point(166, 54);
+            this.TranslationProvidersSpecificLanguages.Location = new System.Drawing.Point(194, 55);
             this.TranslationProvidersSpecificLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationProvidersSpecificLanguages.Name = "TranslationProvidersSpecificLanguages";
             this.TranslationProvidersSpecificLanguages.Size = new System.Drawing.Size(80, 21);
@@ -133,7 +137,7 @@
             this.TranslationProviderAllLanguagesLabel.Location = new System.Drawing.Point(11, 25);
             this.TranslationProviderAllLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationProviderAllLanguagesLabel.Name = "TranslationProviderAllLanguagesLabel";
-            this.TranslationProviderAllLanguagesLabel.Size = new System.Drawing.Size(139, 21);
+            this.TranslationProviderAllLanguagesLabel.Size = new System.Drawing.Size(167, 21);
             this.TranslationProviderAllLanguagesLabel.TabIndex = 0;
             this.TranslationProviderAllLanguagesLabel.Text = "All language pairs";
             this.TranslationProviderAllLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -147,7 +151,7 @@
             "Keep",
             "Merge",
             "Overwrite"});
-            this.TranslationProvidersAllLanguages.Location = new System.Drawing.Point(166, 25);
+            this.TranslationProvidersAllLanguages.Location = new System.Drawing.Point(194, 26);
             this.TranslationProvidersAllLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationProvidersAllLanguages.Name = "TranslationProvidersAllLanguages";
             this.TranslationProvidersAllLanguages.Size = new System.Drawing.Size(80, 21);
@@ -165,9 +169,9 @@
             this.TranslationMemoriesGroup.Controls.Add(this.TranslationMemoriesAllLanguagesLabel);
             this.TranslationMemoriesGroup.Controls.Add(this.TranslationMemoriesAllLanguages);
             this.TranslationMemoriesGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.TranslationMemoriesGroup.Location = new System.Drawing.Point(12, 207);
+            this.TranslationMemoriesGroup.Location = new System.Drawing.Point(12, 195);
             this.TranslationMemoriesGroup.Name = "TranslationMemoriesGroup";
-            this.TranslationMemoriesGroup.Size = new System.Drawing.Size(257, 96);
+            this.TranslationMemoriesGroup.Size = new System.Drawing.Size(285, 84);
             this.TranslationMemoriesGroup.TabIndex = 2;
             this.TranslationMemoriesGroup.TabStop = false;
             this.TranslationMemoriesGroup.Text = "Translation Memory settings";
@@ -178,7 +182,7 @@
             this.TranslationMemoriesSpecificLanguagesLabel.Location = new System.Drawing.Point(11, 54);
             this.TranslationMemoriesSpecificLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationMemoriesSpecificLanguagesLabel.Name = "TranslationMemoriesSpecificLanguagesLabel";
-            this.TranslationMemoriesSpecificLanguagesLabel.Size = new System.Drawing.Size(139, 21);
+            this.TranslationMemoriesSpecificLanguagesLabel.Size = new System.Drawing.Size(167, 21);
             this.TranslationMemoriesSpecificLanguagesLabel.TabIndex = 2;
             this.TranslationMemoriesSpecificLanguagesLabel.Text = "Specific language pairs";
             this.TranslationMemoriesSpecificLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -191,7 +195,7 @@
             this.TranslationMemoriesSpecificLanguages.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.TranslationMemoriesSpecificLanguages.Location = new System.Drawing.Point(166, 54);
+            this.TranslationMemoriesSpecificLanguages.Location = new System.Drawing.Point(194, 55);
             this.TranslationMemoriesSpecificLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationMemoriesSpecificLanguages.Name = "TranslationMemoriesSpecificLanguages";
             this.TranslationMemoriesSpecificLanguages.Size = new System.Drawing.Size(80, 21);
@@ -208,7 +212,7 @@
             this.TranslationMemoriesAllLanguagesLabel.Location = new System.Drawing.Point(11, 25);
             this.TranslationMemoriesAllLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationMemoriesAllLanguagesLabel.Name = "TranslationMemoriesAllLanguagesLabel";
-            this.TranslationMemoriesAllLanguagesLabel.Size = new System.Drawing.Size(139, 21);
+            this.TranslationMemoriesAllLanguagesLabel.Size = new System.Drawing.Size(167, 21);
             this.TranslationMemoriesAllLanguagesLabel.TabIndex = 0;
             this.TranslationMemoriesAllLanguagesLabel.Text = "All language pairs";
             this.TranslationMemoriesAllLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -221,7 +225,7 @@
             this.TranslationMemoriesAllLanguages.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.TranslationMemoriesAllLanguages.Location = new System.Drawing.Point(166, 25);
+            this.TranslationMemoriesAllLanguages.Location = new System.Drawing.Point(194, 26);
             this.TranslationMemoriesAllLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TranslationMemoriesAllLanguages.Name = "TranslationMemoriesAllLanguages";
             this.TranslationMemoriesAllLanguages.Size = new System.Drawing.Size(80, 21);
@@ -239,9 +243,9 @@
             this.TerminologyGroup.Controls.Add(this.TerminologyTermbasesLabel);
             this.TerminologyGroup.Controls.Add(this.TerminologyTermbases);
             this.TerminologyGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.TerminologyGroup.Location = new System.Drawing.Point(12, 309);
+            this.TerminologyGroup.Location = new System.Drawing.Point(12, 285);
             this.TerminologyGroup.Name = "TerminologyGroup";
-            this.TerminologyGroup.Size = new System.Drawing.Size(257, 96);
+            this.TerminologyGroup.Size = new System.Drawing.Size(285, 84);
             this.TerminologyGroup.TabIndex = 3;
             this.TerminologyGroup.TabStop = false;
             this.TerminologyGroup.Text = "Terminology";
@@ -252,7 +256,7 @@
             this.TerminologySearchSettingsLabel.Location = new System.Drawing.Point(11, 54);
             this.TerminologySearchSettingsLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TerminologySearchSettingsLabel.Name = "TerminologySearchSettingsLabel";
-            this.TerminologySearchSettingsLabel.Size = new System.Drawing.Size(139, 21);
+            this.TerminologySearchSettingsLabel.Size = new System.Drawing.Size(167, 21);
             this.TerminologySearchSettingsLabel.TabIndex = 2;
             this.TerminologySearchSettingsLabel.Text = "Search settings";
             this.TerminologySearchSettingsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -265,7 +269,7 @@
             this.TerminologySearchSettings.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.TerminologySearchSettings.Location = new System.Drawing.Point(166, 54);
+            this.TerminologySearchSettings.Location = new System.Drawing.Point(194, 55);
             this.TerminologySearchSettings.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TerminologySearchSettings.Name = "TerminologySearchSettings";
             this.TerminologySearchSettings.Size = new System.Drawing.Size(80, 21);
@@ -281,7 +285,7 @@
             this.TerminologyTermbasesLabel.Location = new System.Drawing.Point(11, 25);
             this.TerminologyTermbasesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TerminologyTermbasesLabel.Name = "TerminologyTermbasesLabel";
-            this.TerminologyTermbasesLabel.Size = new System.Drawing.Size(139, 21);
+            this.TerminologyTermbasesLabel.Size = new System.Drawing.Size(167, 21);
             this.TerminologyTermbasesLabel.TabIndex = 0;
             this.TerminologyTermbasesLabel.Text = "Termbases";
             this.TerminologyTermbasesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -295,7 +299,7 @@
             "Keep",
             "Merge",
             "Overwrite"});
-            this.TerminologyTermbases.Location = new System.Drawing.Point(166, 25);
+            this.TerminologyTermbases.Location = new System.Drawing.Point(194, 26);
             this.TerminologyTermbases.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.TerminologyTermbases.Name = "TerminologyTermbases";
             this.TerminologyTermbases.Size = new System.Drawing.Size(80, 21);
@@ -314,10 +318,10 @@
             this.BatchProcessingGroup.Controls.Add(this.BatchTasksAllLanguagesLabel);
             this.BatchProcessingGroup.Controls.Add(this.BatchTasksAllLanguages);
             this.BatchProcessingGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.BatchProcessingGroup.Location = new System.Drawing.Point(275, 105);
+            this.BatchProcessingGroup.Location = new System.Drawing.Point(303, 105);
             this.BatchProcessingGroup.Name = "BatchProcessingGroup";
-            this.BatchProcessingGroup.Size = new System.Drawing.Size(257, 119);
-            this.BatchProcessingGroup.TabIndex = 4;
+            this.BatchProcessingGroup.Size = new System.Drawing.Size(285, 133);
+            this.BatchProcessingGroup.TabIndex = 5;
             this.BatchProcessingGroup.TabStop = false;
             this.BatchProcessingGroup.Text = "Batch Processing and File Types";
             // 
@@ -327,7 +331,7 @@
             this.FileTypesLabel.Location = new System.Drawing.Point(11, 83);
             this.FileTypesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.FileTypesLabel.Name = "FileTypesLabel";
-            this.FileTypesLabel.Size = new System.Drawing.Size(139, 21);
+            this.FileTypesLabel.Size = new System.Drawing.Size(167, 21);
             this.FileTypesLabel.TabIndex = 4;
             this.FileTypesLabel.Text = "File Types";
             this.FileTypesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -338,7 +342,7 @@
             this.BatchTasksSpecificLanguagesLabel.Location = new System.Drawing.Point(11, 54);
             this.BatchTasksSpecificLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.BatchTasksSpecificLanguagesLabel.Name = "BatchTasksSpecificLanguagesLabel";
-            this.BatchTasksSpecificLanguagesLabel.Size = new System.Drawing.Size(139, 21);
+            this.BatchTasksSpecificLanguagesLabel.Size = new System.Drawing.Size(167, 21);
             this.BatchTasksSpecificLanguagesLabel.TabIndex = 2;
             this.BatchTasksSpecificLanguagesLabel.Text = "Specific language pairs";
             this.BatchTasksSpecificLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -351,7 +355,7 @@
             this.FileTypes.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.FileTypes.Location = new System.Drawing.Point(166, 83);
+            this.FileTypes.Location = new System.Drawing.Point(194, 83);
             this.FileTypes.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.FileTypes.Name = "FileTypes";
             this.FileTypes.Size = new System.Drawing.Size(80, 21);
@@ -369,7 +373,7 @@
             this.BatchTasksSpecificLanguages.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.BatchTasksSpecificLanguages.Location = new System.Drawing.Point(166, 54);
+            this.BatchTasksSpecificLanguages.Location = new System.Drawing.Point(194, 54);
             this.BatchTasksSpecificLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.BatchTasksSpecificLanguages.Name = "BatchTasksSpecificLanguages";
             this.BatchTasksSpecificLanguages.Size = new System.Drawing.Size(80, 21);
@@ -386,7 +390,7 @@
             this.BatchTasksAllLanguagesLabel.Location = new System.Drawing.Point(11, 25);
             this.BatchTasksAllLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.BatchTasksAllLanguagesLabel.Name = "BatchTasksAllLanguagesLabel";
-            this.BatchTasksAllLanguagesLabel.Size = new System.Drawing.Size(139, 21);
+            this.BatchTasksAllLanguagesLabel.Size = new System.Drawing.Size(167, 21);
             this.BatchTasksAllLanguagesLabel.TabIndex = 0;
             this.BatchTasksAllLanguagesLabel.Text = "All language pairs";
             this.BatchTasksAllLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -399,7 +403,7 @@
             this.BatchTasksAllLanguages.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.BatchTasksAllLanguages.Location = new System.Drawing.Point(166, 25);
+            this.BatchTasksAllLanguages.Location = new System.Drawing.Point(194, 25);
             this.BatchTasksAllLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.BatchTasksAllLanguages.Name = "BatchTasksAllLanguages";
             this.BatchTasksAllLanguages.Size = new System.Drawing.Size(80, 21);
@@ -423,10 +427,10 @@
             this.VerificationGroup.Controls.Add(this.VerificationQaChecker30Label);
             this.VerificationGroup.Controls.Add(this.VerificationQaChecker30);
             this.VerificationGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.VerificationGroup.Location = new System.Drawing.Point(275, 232);
+            this.VerificationGroup.Location = new System.Drawing.Point(303, 244);
             this.VerificationGroup.Name = "VerificationGroup";
-            this.VerificationGroup.Size = new System.Drawing.Size(257, 173);
-            this.VerificationGroup.TabIndex = 5;
+            this.VerificationGroup.Size = new System.Drawing.Size(285, 186);
+            this.VerificationGroup.TabIndex = 6;
             this.VerificationGroup.TabStop = false;
             this.VerificationGroup.Text = "Verification";
             // 
@@ -436,7 +440,7 @@
             this.VerificationGrammerCheckerLabel.Location = new System.Drawing.Point(11, 141);
             this.VerificationGrammerCheckerLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationGrammerCheckerLabel.Name = "VerificationGrammerCheckerLabel";
-            this.VerificationGrammerCheckerLabel.Size = new System.Drawing.Size(139, 21);
+            this.VerificationGrammerCheckerLabel.Size = new System.Drawing.Size(167, 21);
             this.VerificationGrammerCheckerLabel.TabIndex = 8;
             this.VerificationGrammerCheckerLabel.Text = "Grammar Checker";
             this.VerificationGrammerCheckerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -449,7 +453,7 @@
             this.VerificationGrammarChecker.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.VerificationGrammarChecker.Location = new System.Drawing.Point(166, 141);
+            this.VerificationGrammarChecker.Location = new System.Drawing.Point(194, 141);
             this.VerificationGrammarChecker.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationGrammarChecker.Name = "VerificationGrammarChecker";
             this.VerificationGrammarChecker.Size = new System.Drawing.Size(80, 21);
@@ -466,7 +470,7 @@
             this.VerificationNumberVerifierLabel.Location = new System.Drawing.Point(11, 112);
             this.VerificationNumberVerifierLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationNumberVerifierLabel.Name = "VerificationNumberVerifierLabel";
-            this.VerificationNumberVerifierLabel.Size = new System.Drawing.Size(139, 21);
+            this.VerificationNumberVerifierLabel.Size = new System.Drawing.Size(167, 21);
             this.VerificationNumberVerifierLabel.TabIndex = 6;
             this.VerificationNumberVerifierLabel.Text = "Number Verifier";
             this.VerificationNumberVerifierLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -479,7 +483,7 @@
             this.VerificationNumberVerifier.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.VerificationNumberVerifier.Location = new System.Drawing.Point(166, 112);
+            this.VerificationNumberVerifier.Location = new System.Drawing.Point(194, 112);
             this.VerificationNumberVerifier.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationNumberVerifier.Name = "VerificationNumberVerifier";
             this.VerificationNumberVerifier.Size = new System.Drawing.Size(80, 21);
@@ -496,7 +500,7 @@
             this.VerificationTagVerifierLabel.Location = new System.Drawing.Point(11, 54);
             this.VerificationTagVerifierLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationTagVerifierLabel.Name = "VerificationTagVerifierLabel";
-            this.VerificationTagVerifierLabel.Size = new System.Drawing.Size(139, 21);
+            this.VerificationTagVerifierLabel.Size = new System.Drawing.Size(167, 21);
             this.VerificationTagVerifierLabel.TabIndex = 2;
             this.VerificationTagVerifierLabel.Text = "Tag Verifier";
             this.VerificationTagVerifierLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -509,7 +513,7 @@
             this.VerificationTagVerifier.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.VerificationTagVerifier.Location = new System.Drawing.Point(166, 54);
+            this.VerificationTagVerifier.Location = new System.Drawing.Point(194, 54);
             this.VerificationTagVerifier.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationTagVerifier.Name = "VerificationTagVerifier";
             this.VerificationTagVerifier.Size = new System.Drawing.Size(80, 21);
@@ -525,7 +529,7 @@
             this.VerificationTerminologyVerifierLabel.Location = new System.Drawing.Point(11, 83);
             this.VerificationTerminologyVerifierLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationTerminologyVerifierLabel.Name = "VerificationTerminologyVerifierLabel";
-            this.VerificationTerminologyVerifierLabel.Size = new System.Drawing.Size(139, 21);
+            this.VerificationTerminologyVerifierLabel.Size = new System.Drawing.Size(167, 21);
             this.VerificationTerminologyVerifierLabel.TabIndex = 4;
             this.VerificationTerminologyVerifierLabel.Text = "Terminology Verifier";
             this.VerificationTerminologyVerifierLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -538,7 +542,7 @@
             this.VerificationTerminologyVerifier.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.VerificationTerminologyVerifier.Location = new System.Drawing.Point(166, 83);
+            this.VerificationTerminologyVerifier.Location = new System.Drawing.Point(194, 83);
             this.VerificationTerminologyVerifier.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationTerminologyVerifier.Name = "VerificationTerminologyVerifier";
             this.VerificationTerminologyVerifier.Size = new System.Drawing.Size(80, 21);
@@ -554,7 +558,7 @@
             this.VerificationQaChecker30Label.Location = new System.Drawing.Point(11, 25);
             this.VerificationQaChecker30Label.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationQaChecker30Label.Name = "VerificationQaChecker30Label";
-            this.VerificationQaChecker30Label.Size = new System.Drawing.Size(139, 21);
+            this.VerificationQaChecker30Label.Size = new System.Drawing.Size(167, 21);
             this.VerificationQaChecker30Label.TabIndex = 0;
             this.VerificationQaChecker30Label.Text = "QA Checker 3.0";
             this.VerificationQaChecker30Label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -567,7 +571,7 @@
             this.VerificationQaChecker30.Items.AddRange(new object[] {
             "Keep",
             "Overwrite"});
-            this.VerificationQaChecker30.Location = new System.Drawing.Point(166, 25);
+            this.VerificationQaChecker30.Location = new System.Drawing.Point(194, 25);
             this.VerificationQaChecker30.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.VerificationQaChecker30.Name = "VerificationQaChecker30";
             this.VerificationQaChecker30.Size = new System.Drawing.Size(80, 21);
@@ -599,7 +603,7 @@
             this.ApplyTo.Location = new System.Drawing.Point(166, 49);
             this.ApplyTo.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.ApplyTo.Name = "ApplyTo";
-            this.ApplyTo.Size = new System.Drawing.Size(247, 21);
+            this.ApplyTo.Size = new System.Drawing.Size(303, 21);
             this.ApplyTo.TabIndex = 4;
             this.ApplyTo.Tag = "Apply To";
             this.FormToolTip.SetToolTip(this.ApplyTo, "Select whether to apply to the settings to the active project or all selected pro" +
@@ -616,7 +620,7 @@
             this.TemplateGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
             this.TemplateGroup.Location = new System.Drawing.Point(12, 12);
             this.TemplateGroup.Name = "TemplateGroup";
-            this.TemplateGroup.Size = new System.Drawing.Size(520, 87);
+            this.TemplateGroup.Size = new System.Drawing.Size(576, 87);
             this.TemplateGroup.TabIndex = 0;
             this.TemplateGroup.TabStop = false;
             this.TemplateGroup.Text = "Template to apply";
@@ -641,7 +645,7 @@
             this.SelectedTemplate.Location = new System.Drawing.Point(166, 20);
             this.SelectedTemplate.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.SelectedTemplate.Name = "SelectedTemplate";
-            this.SelectedTemplate.Size = new System.Drawing.Size(247, 21);
+            this.SelectedTemplate.Size = new System.Drawing.Size(303, 21);
             this.SelectedTemplate.Sorted = true;
             this.SelectedTemplate.TabIndex = 1;
             this.SelectedTemplate.Tag = "Templates";
@@ -652,7 +656,7 @@
             // EditTemplatesButton
             // 
             this.EditTemplatesButton.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.EditTemplatesButton.Location = new System.Drawing.Point(429, 20);
+            this.EditTemplatesButton.Location = new System.Drawing.Point(485, 18);
             this.EditTemplatesButton.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
             this.EditTemplatesButton.Name = "EditTemplatesButton";
             this.EditTemplatesButton.Size = new System.Drawing.Size(80, 23);
@@ -667,22 +671,22 @@
             // DismissButton
             // 
             this.DismissButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.DismissButton.Location = new System.Drawing.Point(450, 412);
+            this.DismissButton.Location = new System.Drawing.Point(506, 435);
             this.DismissButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.DismissButton.Name = "DismissButton";
             this.DismissButton.Size = new System.Drawing.Size(82, 23);
-            this.DismissButton.TabIndex = 9;
+            this.DismissButton.TabIndex = 10;
             this.DismissButton.Text = "Cancel";
             this.DismissButton.UseVisualStyleBackColor = true;
             // 
             // OkButton
             // 
             this.OkButton.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.OkButton.Location = new System.Drawing.Point(362, 412);
+            this.OkButton.Location = new System.Drawing.Point(409, 436);
             this.OkButton.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.OkButton.Name = "OkButton";
             this.OkButton.Size = new System.Drawing.Size(82, 23);
-            this.OkButton.TabIndex = 8;
+            this.OkButton.TabIndex = 9;
             this.OkButton.Text = "OK";
             this.OkButton.UseVisualStyleBackColor = true;
             this.OkButton.Click += new System.EventHandler(this.OkButton_Click);
@@ -695,25 +699,66 @@
             this.FormToolTip.ReshowDelay = 1000;
             this.FormToolTip.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
+            // TranslationQualityAssessment
+            // 
+            this.TranslationQualityAssessment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TranslationQualityAssessment.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.TranslationQualityAssessment.FormattingEnabled = true;
+            this.TranslationQualityAssessment.Items.AddRange(new object[] {
+            "Keep",
+            "Overwrite"});
+            this.TranslationQualityAssessment.Location = new System.Drawing.Point(194, 26);
+            this.TranslationQualityAssessment.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
+            this.TranslationQualityAssessment.Name = "TranslationQualityAssessment";
+            this.TranslationQualityAssessment.Size = new System.Drawing.Size(80, 21);
+            this.TranslationQualityAssessment.TabIndex = 1;
+            this.TranslationQualityAssessment.Tag = "Translation Quality Assessment";
+            this.FormToolTip.SetToolTip(this.TranslationQualityAssessment, "Select the behaviour for applying the Translation Quality Assessment settings");
+            this.TranslationQualityAssessment.SelectedIndexChanged += new System.EventHandler(this.TranslationQualityAssessment_SelectedIndexChanged);
+            this.TranslationQualityAssessment.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
+            // 
             // ShowToolTips
             // 
-            this.ShowToolTips.Location = new System.Drawing.Point(12, 411);
+            this.ShowToolTips.Location = new System.Drawing.Point(12, 436);
             this.ShowToolTips.Name = "ShowToolTips";
             this.ShowToolTips.Size = new System.Drawing.Size(257, 23);
-            this.ShowToolTips.TabIndex = 6;
+            this.ShowToolTips.TabIndex = 7;
             this.ShowToolTips.Text = "Show ToolTips";
             this.ShowToolTips.UseVisualStyleBackColor = true;
             this.ShowToolTips.CheckedChanged += new System.EventHandler(this.ShowToolTips_CheckedChanged);
             // 
             // AboutButton
             // 
-            this.AboutButton.Location = new System.Drawing.Point(274, 412);
+            this.AboutButton.Location = new System.Drawing.Point(303, 435);
             this.AboutButton.Name = "AboutButton";
             this.AboutButton.Size = new System.Drawing.Size(82, 23);
-            this.AboutButton.TabIndex = 7;
+            this.AboutButton.TabIndex = 8;
             this.AboutButton.Text = "About...";
             this.AboutButton.UseVisualStyleBackColor = true;
             this.AboutButton.Click += new System.EventHandler(this.AboutButton_Click);
+            // 
+            // QualityGroup
+            // 
+            this.QualityGroup.Controls.Add(this.TranslationQualityAssessmentLabel);
+            this.QualityGroup.Controls.Add(this.TranslationQualityAssessment);
+            this.QualityGroup.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.QualityGroup.Location = new System.Drawing.Point(12, 375);
+            this.QualityGroup.Name = "QualityGroup";
+            this.QualityGroup.Size = new System.Drawing.Size(285, 55);
+            this.QualityGroup.TabIndex = 4;
+            this.QualityGroup.TabStop = false;
+            this.QualityGroup.Text = "Quality";
+            // 
+            // TranslationQualityAssessmentLabel
+            // 
+            this.TranslationQualityAssessmentLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.TranslationQualityAssessmentLabel.Location = new System.Drawing.Point(11, 25);
+            this.TranslationQualityAssessmentLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
+            this.TranslationQualityAssessmentLabel.Name = "TranslationQualityAssessmentLabel";
+            this.TranslationQualityAssessmentLabel.Size = new System.Drawing.Size(167, 21);
+            this.TranslationQualityAssessmentLabel.TabIndex = 0;
+            this.TranslationQualityAssessmentLabel.Text = "Translation Quality Assessment";
+            this.TranslationQualityAssessmentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ApplyTemplateForm
             // 
@@ -721,7 +766,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.DismissButton;
-            this.ClientSize = new System.Drawing.Size(544, 446);
+            this.ClientSize = new System.Drawing.Size(599, 469);
+            this.Controls.Add(this.QualityGroup);
             this.Controls.Add(this.ShowToolTips);
             this.Controls.Add(this.AboutButton);
             this.Controls.Add(this.DismissButton);
@@ -743,6 +789,7 @@
             this.BatchProcessingGroup.ResumeLayout(false);
             this.VerificationGroup.ResumeLayout(false);
             this.TemplateGroup.ResumeLayout(false);
+            this.QualityGroup.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -793,5 +840,8 @@
         private System.Windows.Forms.Label SelectedTemplateLabel;
         private System.Windows.Forms.Label VerificationGrammerCheckerLabel;
         private System.Windows.Forms.ComboBox VerificationGrammarChecker;
+        private System.Windows.Forms.GroupBox QualityGroup;
+        private System.Windows.Forms.Label TranslationQualityAssessmentLabel;
+        private System.Windows.Forms.ComboBox TranslationQualityAssessment;
     }
 }

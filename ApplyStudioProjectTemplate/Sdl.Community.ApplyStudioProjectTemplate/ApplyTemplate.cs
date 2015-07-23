@@ -38,6 +38,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             this.TranslationMemoriesSpecificLanguages = this.GetApplyTemplateOptions(sourceXml, "tmsl");
             this.TerminologyTermbases = this.GetApplyTemplateOptions(sourceXml, "tbtb");
             this.TerminologySearchSettings = this.GetApplyTemplateOptions(sourceXml, "tbss");
+            this.TranslationQualityAssessment = this.GetApplyTemplateOptions(sourceXml, "tqa");
             this.VerificationQaChecker30 = this.GetApplyTemplateOptions(sourceXml, "qaqa");
             this.VerificationTagVerifier = this.GetApplyTemplateOptions(sourceXml, "qatg");
             this.VerificationTerminologyVerifier = this.GetApplyTemplateOptions(sourceXml, "qatv");
@@ -64,6 +65,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             this.TranslationMemoriesSpecificLanguages = ApplyTemplateOptions.Keep;
             this.TerminologyTermbases = ApplyTemplateOptions.Keep;
             this.TerminologySearchSettings = ApplyTemplateOptions.Keep;
+            this.TranslationQualityAssessment = ApplyTemplateOptions.Keep;
             this.VerificationQaChecker30 = ApplyTemplateOptions.Keep;
             this.VerificationTagVerifier = ApplyTemplateOptions.Keep;
             this.VerificationTerminologyVerifier = ApplyTemplateOptions.Keep;
@@ -321,6 +323,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         }
 
         /// <summary>
+        /// Gets or sets the translation quality assessment settings.
+        /// </summary>
+        /// <value>
+        /// The translation quality assessment settings.
+        /// </value>
+        public ApplyTemplateOptions TranslationQualityAssessment
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
         /// <returns>
@@ -346,6 +360,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             writer.WriteAttributeString("tmal", this.TranslationMemoriesAllLanguages.ToString());
             writer.WriteAttributeString("tmsl", this.TranslationMemoriesSpecificLanguages.ToString());
             writer.WriteAttributeString("tbtb", this.TerminologyTermbases.ToString());
+            writer.WriteAttributeString("tqa", this.TranslationQualityAssessment.ToString());
             writer.WriteAttributeString("tbss", this.TerminologySearchSettings.ToString());
             writer.WriteAttributeString("qaqa", this.VerificationQaChecker30.ToString());
             writer.WriteAttributeString("qatg", this.VerificationTagVerifier.ToString());
