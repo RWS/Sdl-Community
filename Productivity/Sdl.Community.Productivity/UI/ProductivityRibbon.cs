@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
 using Sdl.Community.Productivity.API;
@@ -53,6 +54,26 @@ namespace Sdl.Community.Productivity.UI
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
             FormFactory.CreateTweetForm(logger);
+        }
+
+
+    }
+
+    [Action("Sdl.Community.ProductivityLeaderboard", Icon = "icon", Name = "Leaderboard", Description = "Community Productivity")]
+    [ActionLayout(typeof(ProductivityRibbon), 20, DisplayType.Normal)]
+    class ProductivityLeaderboardViewPartAction : AbstractAction
+    {
+        protected override void Execute()
+        {
+            if (!ProductivityUiHelper.IsGreaterThanCu10())
+            {
+                MessageBox.Show(
+                    PluginResources.ProductivityViewPartAction_Execute_This_plugin_is_compatible_with_SDL_Studio_2014_CU10_or_later__In_order_to_enjoy_this_plugin_please_upgrade_to_a_newer_version_);
+                return;
+            }
+            Application.EnableVisualStyles();
+            var sInfo = new ProcessStartInfo(PluginResources.Leaderboard_Link);
+            Process.Start(sInfo);
         }
 
 

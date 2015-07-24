@@ -45,8 +45,7 @@ namespace Sdl.Community.Productivity.Services
                         ProjectId = projectInfo.Id,
                         ProjectName = projectInfo.Name,
                         Language = document.ActiveFile.Language.CultureInfo.Name,
-                        FileType = document.ActiveFile.FileTypeId,
-                        SegmentTrackInfos = new List<SegmentTrackInfo>()
+                        FileType = document.ActiveFile.FileTypeId
                     };
                     _trackingInfos.Add(trackInfo);
                 }

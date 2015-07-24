@@ -37,7 +37,7 @@ namespace Sdl.Community.AddSourceTM
            
 
             var sourceAttribute = _db.attributes.Find(_db.attributes.name == AtttrName) ??
-                                  AddSourceAttribute(tuId);
+                                  AddSourceAttribute(translationUnit.translation_memory_id);
             var stringAttribute = _db.string_attributes.Find(_db.string_attributes.translation_unit_id == tuId &&
                                      _db.string_attributes.attribute_id == sourceAttribute.id);
             if (stringAttribute != null)
@@ -53,10 +53,10 @@ namespace Sdl.Community.AddSourceTM
 
         }
 
-        private dynamic AddSourceAttribute(int tuId)
+        private dynamic AddSourceAttribute(int tmId)
         {
             var translationMemory =
-               _db.translation_memories.Find(_db.translation_memories.id == tuId);
+               _db.translation_memories.Find(_db.translation_memories.id == tmId);
             var attribute = _db.attributes.Insert(guid: Guid.NewGuid(), name: AtttrName, type: 2, tm_id: translationMemory.id);
 
             return attribute;

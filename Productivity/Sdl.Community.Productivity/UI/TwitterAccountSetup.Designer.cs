@@ -33,11 +33,14 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.lkAuthorizeTwitter = new System.Windows.Forms.LinkLabel();
             this.txtPin = new System.Windows.Forms.TextBox();
-            this.btnOK = new System.Windows.Forms.Button();
             this.lblCopy = new System.Windows.Forms.Label();
             this.errPin = new System.Windows.Forms.ErrorProvider(this.components);
+            this.btnOk = new System.Windows.Forms.Button();
+            this.btnLater = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errPin)).BeginInit();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -48,8 +51,8 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Controls.Add(this.lkAuthorizeTwitter, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.txtPin, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnOK, 1, 3);
             this.tableLayoutPanel1.Controls.Add(this.lblCopy, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 3);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -87,17 +90,6 @@
             this.txtPin.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.txtPin.Validating += new System.ComponentModel.CancelEventHandler(this.txtPin_Validating);
             // 
-            // btnOK
-            // 
-            this.btnOK.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(262, 133);
-            this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 1;
-            this.btnOK.Text = "OK";
-            this.btnOK.UseVisualStyleBackColor = true;
-            // 
             // lblCopy
             // 
             this.lblCopy.Anchor = System.Windows.Forms.AnchorStyles.Top;
@@ -112,6 +104,43 @@
             // errPin
             // 
             this.errPin.ContainerControl = this;
+            // 
+            // btnOk
+            // 
+            this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOk.Location = new System.Drawing.Point(102, 3);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(73, 23);
+            this.btnOk.TabIndex = 4;
+            this.btnOk.Text = "OK";
+            this.btnOk.UseVisualStyleBackColor = true;
+            // 
+            // btnLater
+            // 
+            this.btnLater.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnLater.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnLater.Location = new System.Drawing.Point(379, 3);
+            this.btnLater.Name = "btnLater";
+            this.btnLater.Size = new System.Drawing.Size(73, 23);
+            this.btnLater.TabIndex = 5;
+            this.btnLater.Text = "Later";
+            this.btnLater.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.btnLater, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnOk, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(23, 133);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(554, 37);
+            this.tableLayoutPanel2.TabIndex = 6;
             // 
             // TwitterAccountSetup
             // 
@@ -132,6 +161,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errPin)).EndInit();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -141,8 +171,10 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.LinkLabel lkAuthorizeTwitter;
         private System.Windows.Forms.TextBox txtPin;
-        private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Label lblCopy;
         private System.Windows.Forms.ErrorProvider errPin;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+        private System.Windows.Forms.Button btnLater;
+        private System.Windows.Forms.Button btnOk;
     }
 }

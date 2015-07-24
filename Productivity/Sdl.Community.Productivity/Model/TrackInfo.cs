@@ -7,6 +7,11 @@ namespace Sdl.Community.Productivity.Model
 {
     public class TrackInfo 
     {
+        public TrackInfo()
+        {
+            SegmentTrackInfos = new List<SegmentTrackInfo>();
+        }
+
         public Guid FileId { get; set; }
 
         public string FileName { get; set; }
