@@ -34,13 +34,13 @@
             this.lkAuthorizeTwitter = new System.Windows.Forms.LinkLabel();
             this.txtPin = new System.Windows.Forms.TextBox();
             this.lblCopy = new System.Windows.Forms.Label();
-            this.errPin = new System.Windows.Forms.ErrorProvider(this.components);
-            this.btnOk = new System.Windows.Forms.Button();
-            this.btnLater = new System.Windows.Forms.Button();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnLater = new System.Windows.Forms.Button();
+            this.btnOk = new System.Windows.Forms.Button();
+            this.errPin = new System.Windows.Forms.ErrorProvider(this.components);
             this.tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errPin)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errPin)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -81,6 +81,7 @@
             // 
             // txtPin
             // 
+            this.txtPin.CausesValidation = false;
             this.txtPin.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtPin.Location = new System.Drawing.Point(23, 73);
             this.txtPin.Multiline = true;
@@ -101,32 +102,6 @@
             this.lblCopy.TabIndex = 3;
             this.lblCopy.Text = "After you authorize the app please copy the pin code in the following box";
             // 
-            // errPin
-            // 
-            this.errPin.ContainerControl = this;
-            // 
-            // btnOk
-            // 
-            this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOk.Location = new System.Drawing.Point(102, 3);
-            this.btnOk.Name = "btnOk";
-            this.btnOk.Size = new System.Drawing.Size(73, 23);
-            this.btnOk.TabIndex = 4;
-            this.btnOk.Text = "OK";
-            this.btnOk.UseVisualStyleBackColor = true;
-            // 
-            // btnLater
-            // 
-            this.btnLater.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.btnLater.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnLater.Location = new System.Drawing.Point(379, 3);
-            this.btnLater.Name = "btnLater";
-            this.btnLater.Size = new System.Drawing.Size(73, 23);
-            this.btnLater.TabIndex = 5;
-            this.btnLater.Text = "Later";
-            this.btnLater.UseVisualStyleBackColor = true;
-            // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 2;
@@ -141,6 +116,32 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Size = new System.Drawing.Size(554, 37);
             this.tableLayoutPanel2.TabIndex = 6;
+            // 
+            // btnLater
+            // 
+            this.btnLater.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnLater.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnLater.Location = new System.Drawing.Point(379, 3);
+            this.btnLater.Name = "btnLater";
+            this.btnLater.Size = new System.Drawing.Size(73, 23);
+            this.btnLater.TabIndex = 5;
+            this.btnLater.Text = "Later";
+            this.btnLater.UseVisualStyleBackColor = true;
+            // 
+            // btnOk
+            // 
+            this.btnOk.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.btnOk.Location = new System.Drawing.Point(102, 3);
+            this.btnOk.Name = "btnOk";
+            this.btnOk.Size = new System.Drawing.Size(73, 23);
+            this.btnOk.TabIndex = 4;
+            this.btnOk.Text = "OK";
+            this.btnOk.UseVisualStyleBackColor = true;
+            // 
+            // errPin
+            // 
+            this.errPin.ContainerControl = this;
             // 
             // TwitterAccountSetup
             // 
@@ -160,8 +161,8 @@
             this.TopMost = true;
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errPin)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errPin)).EndInit();
             this.ResumeLayout(false);
 
         }

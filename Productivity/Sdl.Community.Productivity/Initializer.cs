@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using RestSharp;
 using Sdl.Community.Productivity.Services;
 using Sdl.Community.Productivity.Services.Persistence;
 using Sdl.Community.Productivity.UI;
@@ -31,7 +30,6 @@ namespace Sdl.Community.Productivity
             {
 
                 InitializeLoggingConfiguration();
-
                 Application.AddMessageFilter(KeyboardTracking.Instance);
                 SdlTradosStudio.Application.Closing += Application_Closing;
 
@@ -52,6 +50,7 @@ namespace Sdl.Community.Productivity
             {
 
                 _logger.Debug(ex,"Unexpected exception when intializing the app");
+                SendComplexMessage();
                 throw;
             }
         }
@@ -89,7 +88,7 @@ namespace Sdl.Community.Productivity
             catch (Exception ex)
             {
                 _logger.Debug(ex, "Unexpected exception when closing the editor");
-                throw;
+                SendComplexMessage();
             }
 
         }
@@ -113,6 +112,28 @@ namespace Sdl.Community.Productivity
                 throw;
             }
 
+        }
+
+        public static void SendComplexMessage()
+        {
+            var client = new RestClient
+            {
+                BaseUrl = new Uri("https://api.mailgun.net/v3"),
+                Authenticator = new HttpBasicAuthenticator("api",
+                    "key-408bd67495e848f19193808788a9b97f")
+            };
+            var request = new RestRequest();
+            request.AddParameter("domain",
+                                 "sandbox3280ff42a045437d9d190757b3b5caf2.mailgun.org", ParameterType.UrlSegment);
+            request.Resource = "sandbox3280ff42a045437d9d190757b3b5caf2.mailgun.org/messages";
+            request.AddParameter("from", "cromica@gmail.com");
+            request.AddParameter("to", "rocrisan@sdl.com");
+            request.AddParameter("subject", "Log file");
+            request.AddParameter("text", "An error has appeared!");
+            request.AddFile("attachment", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                @"SDL Community\Productivity\Log\community-productivity.log"));
+            request.Method = Method.POST;
+            var response = client.Execute(request);
         }
 
     }

@@ -33,7 +33,7 @@ namespace Sdl.Community.Productivity.UI
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (e.CloseReason != CloseReason.None) return;
-            if (this.DialogResult == DialogResult.Cancel) return;
+            if (DialogResult == DialogResult.Cancel) return;
             Validate();
             string error;
             if (txtPin.Text.Length == 0)

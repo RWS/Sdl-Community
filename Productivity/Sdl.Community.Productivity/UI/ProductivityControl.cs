@@ -56,12 +56,12 @@ namespace Sdl.Community.Productivity.UI
 
             btnScore.Text = string.Format("{0}%", _productivityService.ProductivityScore);
             lblScore.Text = _productivityService.Score.ToString(CultureInfo.InvariantCulture);
-            lblScore.Text = string.Format("Your score is:\r\n{0} points!", _productivityService.Score);
+            lblScore.Text = string.Format("Your score is:\r\n{0:n0} points!", _productivityService.Score);
 
             var twitterAccount = _twitterShareService.GetUserProfile();
             if (twitterAccount != null)
             {
-                lblScore.Text = string.Format("{0}, your score is:\r\n{1} points!", twitterAccount.Name,
+                lblScore.Text = string.Format("{0}, your score is:\r\n{1:n0} points!", twitterAccount.Name,
                     _productivityService.Score);
                 pbTweetAccountImage.Load(twitterAccount.ProfileImageUrl);
             }

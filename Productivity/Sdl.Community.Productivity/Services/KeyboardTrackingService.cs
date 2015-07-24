@@ -97,6 +97,12 @@ namespace Sdl.Community.Productivity.Services
             if (targetSegment == null) return;
             var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == fileId);
 
+            if (trackInfo == null)
+            {
+                _logger.Error("No track info for file {0} and segment {1}", fileId, targetSegment);
+                return;
+            }
+
             CreateUpdateTrackInfo(trackInfo, targetSegment);
         }
 
@@ -116,6 +122,30 @@ namespace Sdl.Community.Productivity.Services
 
         private SegmentTrackInfo GetOrCreateSegmentTrackInfo(TrackInfo trackInfo, ISegment targetSegment)
         {
+            if (trackInfo.SegmentTrackInfos == null)
+            {
+                var exceptionMessage =
+                    string.Format("SegmentTrackInfos is null for project {0}  and segment {1}!",
+                        trackInfo.ProjectName, targetSegment);
+                throw new ArgumentNullException(exceptionMessage);
+            }
+
+            if (targetSegment == null)
+            {
+                var exceptionMessage =
+                    string.Format("Segment is null for {0}!",
+                        trackInfo.ProjectName);
+                throw new ArgumentNullException(exceptionMessage);
+            }
+
+            if (targetSegment.Properties == null)
+            {
+                var exceptionMessage =
+                    string.Format("Segment properties are null for {0}!",
+                        trackInfo.ProjectName);
+                throw new ArgumentNullException(exceptionMessage);
+            }
+
             var segment = trackInfo.SegmentTrackInfos.Find(x => x.SegmentId == targetSegment.Properties.Id.Id);
 
             if (segment == null)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.Productivity</PlugInName>
-  <Version>0.4.1.0</Version>
+  <Version>0.4.2.0</Version>
   <Description>Sdl.Community.Productivity</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="11.2" />
