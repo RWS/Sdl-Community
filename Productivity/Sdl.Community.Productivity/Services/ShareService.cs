@@ -41,10 +41,15 @@ namespace Sdl.Community.Productivity.Services
 
             var isSharedOnTheLeaderboard = _leaderboardShareService.ShareOnLeaderboard(leaderboardInfo);
 
-            if (isSharedOnTheLeaderboard &&
-                bool.FalseString.Equals(PluginResources.IsStaging, StringComparison.InvariantCultureIgnoreCase))
+            if (isSharedOnTheLeaderboard)
             {
-                _twitterShareService.ShareOnTwitter(leaderboardInfo);
+
+            #if !DEBUG
+                {
+                    _twitterShareService.ShareOnTwitter(leaderboardInfo);
+                }
+            #endif
+
             }
         }
 

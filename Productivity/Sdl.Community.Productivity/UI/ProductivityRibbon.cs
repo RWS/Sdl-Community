@@ -1,11 +1,6 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Windows.Forms;
 using NLog;
-using Sdl.Community.Productivity.API;
-using Sdl.Community.Productivity.Model;
-using Sdl.Community.Productivity.Services;
-using Sdl.Community.Productivity.Services.Persistence;
 using Sdl.Community.Productivity.Util;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -20,7 +15,7 @@ namespace Sdl.Community.Productivity.UI
     {
     }
 
-    [Action("Sdl.Community.Productivity", Icon = "icon",Name = "Productivity score", Description = "Community Productivity")]
+    [Action("Sdl.Community.Productivity", Icon = "score",Name = "Productivity score", Description = "Community Productivity")]
     [ActionLayout(typeof(ProductivityRibbon), 20, DisplayType.Normal)]
     class ProductivityViewPartAction : AbstractAction
     {
@@ -59,7 +54,7 @@ namespace Sdl.Community.Productivity.UI
 
     }
 
-    [Action("Sdl.Community.ProductivityLeaderboard", Icon = "icon", Name = "Leaderboard", Description = "Community Productivity")]
+    [Action("Sdl.Community.ProductivityLeaderboard", Icon = "leaderboard", Name = "Leaderboard", Description = "Community Productivity")]
     [ActionLayout(typeof(ProductivityRibbon), 20, DisplayType.Normal)]
     class ProductivityLeaderboardViewPartAction : AbstractAction
     {

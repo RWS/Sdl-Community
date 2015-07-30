@@ -17,12 +17,14 @@ namespace Sdl.Community.Productivity.Services
         private readonly List<TrackInfo> _trackingInfos; 
         private readonly TrackInfoPersistanceService _persistance;
         private readonly Logger _logger;
+        private readonly EmailService _emailService;
 
         public Document ActiveDocument { get; set; }
 
-        public KeyboardTrackingService(Logger logger)
+        public KeyboardTrackingService(Logger logger, EmailService emailService)
         {
             _logger = logger;
+            _emailService = emailService;
             _persistance = new TrackInfoPersistanceService(_logger);
             _trackingInfos = _persistance.Load();
         }
@@ -35,61 +37,93 @@ namespace Sdl.Community.Productivity.Services
                 document.SegmentsConfirmationLevelChanged += document_SegmentsConfirmationLevelChanged;
                 var projectInfo = document.Project.GetProjectInfo();
 
-                var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == document.ActiveFile.Id);
-                if (trackInfo == null)
+                foreach (var file in document.Files)
                 {
-                    trackInfo = new TrackInfo
+                    _logger.Info(string.Format("Registered file: {0}", file.Name));
+
+                    var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == file.Id);
+                    if (trackInfo == null)
                     {
-                        FileId = document.ActiveFile.Id,
-                        FileName = document.ActiveFile.Name,
-                        ProjectId = projectInfo.Id,
-                        ProjectName = projectInfo.Name,
-                        Language = document.ActiveFile.Language.CultureInfo.Name,
-                        FileType = document.ActiveFile.FileTypeId
-                    };
-                    _trackingInfos.Add(trackInfo);
+                        trackInfo = new TrackInfo
+                        {
+                            FileId = document.ActiveFile.Id,
+                            FileName = document.ActiveFile.Name,
+                            ProjectId = projectInfo.Id,
+                            ProjectName = projectInfo.Name,
+                            Language = document.ActiveFile.Language.CultureInfo.Name,
+                            FileType = document.ActiveFile.FileTypeId
+                        };
+                        _trackingInfos.Add(trackInfo);
+                    }
                 }
+               
                 ActiveDocument = document;
           
                 _persistance.Save(_trackingInfos);
             }
             catch (Exception exception)
             {
-                _logger.Debug(exception, @"Error appeared when UnregisterDocument");
+                _logger.Debug(exception, @"Error appeared when RegisterDocument");
+                _emailService.SendLogFile();
             }
 
         }
 
+        /// <summary>
+        /// Make sure keys are registered against the segment since last change and saves the information
+        /// on the disk
+        /// </summary>
+        /// <param name="document"></param>
         public void UnregisterDocument(Document document)
         {
             try
             {
                 SetTrackingElement(document.ActiveFile.Id, document.ActiveSegmentPair.Target);
                 _persistance.Save(_trackingInfos);
-                
+
             }
             catch (Exception exception)
             {
                 _logger.Debug(exception, @"Error appeared when UnregisterDocument");
-                throw;
+                _emailService.SendLogFile();
+
             }
         }
 
         void document_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
         {
+            try
+            {
+
+            
             var segmentContainer = sender as ISegmentContainerNode;
             if (segmentContainer == null) return;
 
             var targetSegment = segmentContainer.Segment;
             SetTrackingElement(ActiveDocument.ActiveFile.Id, targetSegment);
             _persistance.Save(_trackingInfos);
+            }
+            catch (Exception exception)
+            {
+                _logger.Debug(exception);
+                _emailService.SendLogFile();
+            }
         }
 
-        void document_ContentChanged(object sender, DocumentContentEventArgs e)
+        private void document_ContentChanged(object sender, DocumentContentEventArgs e)
         {
-            SetTrackingElement(e.Document.ActiveFile.Id, e.Document.ActiveSegmentPair.Target);
-            _persistance.Save(_trackingInfos);
-            KeyboardTracking.Instance.ClearShortcuts();
+            try
+            {
+                SetTrackingElement(e.Document.ActiveFile.Id, e.Document.ActiveSegmentPair.Target);
+                _persistance.Save(_trackingInfos);
+                KeyboardTracking.Instance.ClearShortcuts();
+            }
+            catch (Exception ex)
+            {
+                _logger.Debug(ex);
+                _emailService.SendLogFile();
+
+            }
         }
 
         private void SetTrackingElement(Guid fileId, ISegment targetSegment)

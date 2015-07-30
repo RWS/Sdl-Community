@@ -91,11 +91,22 @@ namespace Sdl.Community.Productivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to true.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static string IsStaging {
+        public static System.Drawing.Bitmap info {
             get {
-                return ResourceManager.GetString("IsStaging", resourceCulture);
+                object obj = ResourceManager.GetObject("info", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon leaderboard {
+            get {
+                object obj = ResourceManager.GetObject("leaderboard", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -155,6 +166,16 @@ namespace Sdl.Community.Productivity {
             get {
                 return ResourceManager.GetString("ProductivityViewPartAction_Execute_You_need_to_configure_the_twitter_account_to_s" +
                         "ee_your_score", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon score {
+            get {
+                object obj = ResourceManager.GetObject("score", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

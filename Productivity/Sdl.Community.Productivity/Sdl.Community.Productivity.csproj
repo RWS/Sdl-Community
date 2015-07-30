@@ -141,9 +141,11 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\EmailService.cs" />
     <Compile Include="Services\KeyboardTracking.cs" />
     <Compile Include="Services\KeyboardTrackingService.cs" />
     <Compile Include="Services\LeaderboardShareService.cs" />
+    <Compile Include="Services\LoggingService.cs" />
     <Compile Include="Services\Persistence\AbstractPersistenceService.cs" />
     <Compile Include="Services\Persistence\TrackInfoPersistanceService.cs" />
     <Compile Include="Services\Persistence\TwitterPersistenceService.cs" />
@@ -195,6 +197,9 @@
     <Content Include="3rd Party\Tweetinvi.Streams.dll" />
     <Content Include="3rd Party\Tweetinvi.WebLogic.dll" />
     <Content Include="icon.ico" />
+    <Content Include="Resources\info.png" />
+    <Content Include="Resources\leaderboard.ico" />
+    <Content Include="Resources\score.ico" />
     <None Include="Resources\twitter-24.png" />
     <None Include="Resources\twitter.ico" />
     <None Include="Resources\twitter-48.png" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -27,7 +28,35 @@ namespace Sdl.Community.Productivity.UI
         public ProductivityControl()
         {
             InitializeComponent();
+
+            btnTweet.MouseEnter += btnTweet_MouseEnter;
+            btnTweet.MouseLeave += btnTweet_MouseLeave;
+            btnLeaderboard.MouseEnter += btnLeaderboard_MouseEnter;
+            btnLeaderboard.MouseLeave += btnLeaderboard_MouseLeave;
             _initialized = false;
+        }
+
+        void btnLeaderboard_MouseLeave(object sender, EventArgs e)
+        {
+            btnLeaderboard.BackColor = Color.FromArgb(72, 121, 197);
+
+        }
+
+        void btnLeaderboard_MouseEnter(object sender, EventArgs e)
+        {
+            btnLeaderboard.BackColor = Color.FromArgb(112, 151, 212);
+
+        }
+
+        void btnTweet_MouseLeave(object sender, EventArgs e)
+        {
+            btnTweet.BackColor = Color.FromArgb(72, 121, 197);
+        }
+
+        void btnTweet_MouseEnter(object sender, EventArgs e)
+        {
+            btnTweet.BackColor = Color.FromArgb(112, 151, 212);
+
         }
 
         public void Initialize(ProductivityService productivityService, TwitterShareService twitterShareService)

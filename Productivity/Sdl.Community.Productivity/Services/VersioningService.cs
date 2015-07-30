@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using Sdl.Community.Productivity.API;
@@ -36,7 +33,7 @@ namespace Sdl.Community.Productivity.Services
             return dVersion.version;
         }
 
-        private string GetPluginVersion()
+        public static string GetPluginVersion()
         {
             var assembly = typeof(ShareService).Assembly;
             var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
