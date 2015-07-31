@@ -46,12 +46,12 @@ namespace Sdl.Community.Productivity.Services
                     {
                         trackInfo = new TrackInfo
                         {
-                            FileId = document.ActiveFile.Id,
-                            FileName = document.ActiveFile.Name,
+                            FileId = file.Id,
+                            FileName = file.Name,
                             ProjectId = projectInfo.Id,
                             ProjectName = projectInfo.Name,
-                            Language = document.ActiveFile.Language.CultureInfo.Name,
-                            FileType = document.ActiveFile.FileTypeId
+                            Language = file.Language.CultureInfo.Name,
+                            FileType = file.FileTypeId
                         };
                         _trackingInfos.Add(trackInfo);
                     }
@@ -90,18 +90,31 @@ namespace Sdl.Community.Productivity.Services
             }
         }
 
-        void document_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
+        private void document_SegmentsConfirmationLevelChanged(object sender, EventArgs e)
         {
             try
             {
+                var segmentContainer = sender as ISegmentContainerNode;
+                if (segmentContainer == null) return;
 
-            
-            var segmentContainer = sender as ISegmentContainerNode;
-            if (segmentContainer == null) return;
+                if (ActiveDocument == null)
+                {
+                    _logger.Error("Segments confirmation level active document is null");
+                    _emailService.SendLogFile();
 
-            var targetSegment = segmentContainer.Segment;
-            SetTrackingElement(ActiveDocument.ActiveFile.Id, targetSegment);
-            _persistance.Save(_trackingInfos);
+                    return;
+                }
+
+                if (ActiveDocument.ActiveFile == null)
+                {
+                    _logger.Error(string.Format("Segments confirmation level active document has no active file but has {0} files part of it.",ActiveDocument.Files.Count()));
+                    _emailService.SendLogFile();
+                    return;
+                }
+
+                var targetSegment = segmentContainer.Segment;
+                SetTrackingElement(ActiveDocument.ActiveFile.Id, targetSegment);
+                _persistance.Save(_trackingInfos);
             }
             catch (Exception exception)
             {
@@ -114,6 +127,21 @@ namespace Sdl.Community.Productivity.Services
         {
             try
             {
+                if (ActiveDocument == null)
+                {
+                    _logger.Error("ContentChanged level active document is null");
+                    _emailService.SendLogFile();
+
+                    return;
+                }
+
+                if (ActiveDocument.ActiveFile == null)
+                {
+                    _logger.Error(string.Format("ContentChanged level active document has no active file but has {0} files part of it.", ActiveDocument.Files.Count()));
+                    _emailService.SendLogFile();
+                    return;
+                }
+
                 SetTrackingElement(e.Document.ActiveFile.Id, e.Document.ActiveSegmentPair.Target);
                 _persistance.Save(_trackingInfos);
                 KeyboardTracking.Instance.ClearShortcuts();

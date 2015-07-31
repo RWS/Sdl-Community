@@ -56,7 +56,7 @@ namespace Sdl.Community.Productivity.Services
         {
             if (!_authenticated) return false;
             var twitterAccount = _twitterService.GetAccountSettings();
-            return twitterAccount == null;
+            return twitterAccount != null;
         }
 
         public void ShareOnTwitter(LeaderboardInfo leaderboardInfo)
