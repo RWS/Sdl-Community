@@ -90,6 +90,7 @@ namespace Sdl.Community.Productivity
         {
             try
             {
+                if (e.Document.Mode != EditingMode.Translation) return;
                 _service.UnregisterDocument(e.Document);
 
                 foreach (var file in e.Document.Files)
@@ -114,6 +115,8 @@ namespace Sdl.Community.Productivity
         {
             try
             {
+                if (e.Document.Mode != EditingMode.Translation) return;
+
                 _service.RegisterDocument(e.Document);
             }
             catch (Exception ex)

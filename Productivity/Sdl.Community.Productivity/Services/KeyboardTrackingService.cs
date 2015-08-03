@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using NLog;
 using Sdl.Community.Productivity.Model;
 using Sdl.Community.Productivity.Services.Persistence;
+using Sdl.Community.Productivity.Util;
 using Sdl.Core.Globalization;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -18,8 +20,23 @@ namespace Sdl.Community.Productivity.Services
         private readonly TrackInfoPersistanceService _persistance;
         private readonly Logger _logger;
         private readonly EmailService _emailService;
-
-        public Document ActiveDocument { get; set; }
+        private Document _activeDocument;
+        public Document ActiveDocument
+        {
+            get { return _activeDocument; }
+            set
+            {
+                if (value.Mode == EditingMode.Translation)
+                {
+                    KeyboardTracking.Instance.Activate();
+                }
+                else
+                {
+                    KeyboardTracking.Instance.Deactivate();
+                }
+                _activeDocument = value;
+            }
+        }
 
         public KeyboardTrackingService(Logger logger, EmailService emailService)
         {
@@ -105,15 +122,16 @@ namespace Sdl.Community.Productivity.Services
                     return;
                 }
 
-                if (ActiveDocument.ActiveFile == null)
+                var file = ActiveDocument.TryGetActiveFile();
+                
+                if (file == null)
                 {
                     _logger.Error(string.Format("Segments confirmation level active document has no active file but has {0} files part of it.",ActiveDocument.Files.Count()));
                     _emailService.SendLogFile();
                     return;
                 }
-
                 var targetSegment = segmentContainer.Segment;
-                SetTrackingElement(ActiveDocument.ActiveFile.Id, targetSegment);
+                SetTrackingElement(file.Id, targetSegment);
                 _persistance.Save(_trackingInfos);
             }
             catch (Exception exception)
@@ -134,15 +152,14 @@ namespace Sdl.Community.Productivity.Services
 
                     return;
                 }
-
-                if (ActiveDocument.ActiveFile == null)
+                var file = ActiveDocument.TryGetActiveFile();
+                if (file == null)
                 {
                     _logger.Error(string.Format("ContentChanged level active document has no active file but has {0} files part of it.", ActiveDocument.Files.Count()));
                     _emailService.SendLogFile();
                     return;
                 }
-
-                SetTrackingElement(e.Document.ActiveFile.Id, e.Document.ActiveSegmentPair.Target);
+                SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target);
                 _persistance.Save(_trackingInfos);
                 KeyboardTracking.Instance.ClearShortcuts();
             }

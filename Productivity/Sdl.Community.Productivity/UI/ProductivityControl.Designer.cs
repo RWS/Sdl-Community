@@ -38,8 +38,11 @@
             this.pnlMain = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pnlbottom = new System.Windows.Forms.Panel();
+            this.btnTweet = new Sdl.Community.Productivity.UI.RoundedButton();
+            this.btnLeaderboard = new Sdl.Community.Productivity.UI.RoundedButton();
             this.panel1 = new System.Windows.Forms.Panel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.btnScore = new Sdl.Community.Productivity.UI.RoundedButton();
             this.pbInfo1 = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.tblScore = new System.Windows.Forms.TableLayoutPanel();
@@ -48,9 +51,6 @@
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolTip2 = new System.Windows.Forms.ToolTip(this.components);
-            this.btnTweet = new Sdl.Community.Productivity.UI.RoundedButton();
-            this.btnLeaderboard = new Sdl.Community.Productivity.UI.RoundedButton();
-            this.btnScore = new Sdl.Community.Productivity.UI.RoundedButton();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.pnlMain.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -83,7 +83,7 @@
             this.listView.Name = "listView";
             this.listView.SelectColumnsOnRightClick = false;
             this.listView.SelectColumnsOnRightClickBehaviour = BrightIdeasSoftware.ObjectListView.ColumnSelectBehaviour.None;
-            this.listView.Size = new System.Drawing.Size(992, 368);
+            this.listView.Size = new System.Drawing.Size(992, 358);
             this.listView.SortGroupItemsByPrimaryColumn = false;
             this.listView.SpaceBetweenGroups = 10;
             this.listView.TabIndex = 0;
@@ -145,9 +145,9 @@
             this.panel2.Controls.Add(this.pnlbottom);
             this.panel2.Controls.Add(this.listView);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 80);
+            this.panel2.Location = new System.Drawing.Point(0, 90);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(992, 368);
+            this.panel2.Size = new System.Drawing.Size(992, 358);
             this.panel2.TabIndex = 2;
             // 
             // pnlbottom
@@ -155,137 +155,10 @@
             this.pnlbottom.Controls.Add(this.btnTweet);
             this.pnlbottom.Controls.Add(this.btnLeaderboard);
             this.pnlbottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlbottom.Location = new System.Drawing.Point(0, 324);
+            this.pnlbottom.Location = new System.Drawing.Point(0, 314);
             this.pnlbottom.Name = "pnlbottom";
             this.pnlbottom.Size = new System.Drawing.Size(992, 44);
             this.pnlbottom.TabIndex = 2;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.tableLayoutPanel1);
-            this.panel1.Controls.Add(this.tblScore);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(992, 80);
-            this.panel1.TabIndex = 1;
-            // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 81.15942F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.84058F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 34F));
-            this.tableLayoutPanel1.Controls.Add(this.btnScore, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.pbInfo1, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(546, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(446, 80);
-            this.tableLayoutPanel1.TabIndex = 11;
-            // 
-            // pbInfo1
-            // 
-            this.pbInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbInfo1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pbInfo1.Image = global::Sdl.Community.Productivity.PluginResources.info;
-            this.pbInfo1.Location = new System.Drawing.Point(419, 53);
-            this.pbInfo1.Name = "pbInfo1";
-            this.pbInfo1.Size = new System.Drawing.Size(24, 24);
-            this.pbInfo1.TabIndex = 8;
-            this.pbInfo1.TabStop = false;
-            this.toolTip1.SetToolTip(this.pbInfo1, resources.GetString("pbInfo1.ToolTip"));
-            // 
-            // label1
-            // 
-            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.label1.Location = new System.Drawing.Point(29, 20);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(302, 40);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "total translation efficiency ";
-            // 
-            // tblScore
-            // 
-            this.tblScore.ColumnCount = 3;
-            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.51313F));
-            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 84.48687F));
-            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-            this.tblScore.Controls.Add(this.pbTweetAccountImage, 0, 0);
-            this.tblScore.Controls.Add(this.lblScore, 1, 0);
-            this.tblScore.Controls.Add(this.pictureBox1, 2, 0);
-            this.tblScore.Dock = System.Windows.Forms.DockStyle.Left;
-            this.tblScore.Location = new System.Drawing.Point(0, 0);
-            this.tblScore.Name = "tblScore";
-            this.tblScore.RowCount = 1;
-            this.tblScore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tblScore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.tblScore.Size = new System.Drawing.Size(450, 80);
-            this.tblScore.TabIndex = 10;
-            // 
-            // pbTweetAccountImage
-            // 
-            this.pbTweetAccountImage.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pbTweetAccountImage.Image = global::Sdl.Community.Productivity.PluginResources.cup_48;
-            this.pbTweetAccountImage.Location = new System.Drawing.Point(3, 3);
-            this.pbTweetAccountImage.Name = "pbTweetAccountImage";
-            this.pbTweetAccountImage.Size = new System.Drawing.Size(48, 48);
-            this.pbTweetAccountImage.TabIndex = 2;
-            this.pbTweetAccountImage.TabStop = false;
-            // 
-            // lblScore
-            // 
-            this.lblScore.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.lblScore.AutoSize = true;
-            this.lblScore.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblScore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.lblScore.Location = new System.Drawing.Point(68, 11);
-            this.lblScore.Name = "lblScore";
-            this.lblScore.Size = new System.Drawing.Size(337, 58);
-            this.lblScore.TabIndex = 1;
-            this.lblScore.Text = "Romulus Crisan, your score is:\r\n222,222,222 points!";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Image = global::Sdl.Community.Productivity.PluginResources.info;
-            this.pictureBox1.Location = new System.Drawing.Point(422, 53);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(23, 24);
-            this.pictureBox1.TabIndex = 9;
-            this.pictureBox1.TabStop = false;
-            this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\nCompete against translators from around the world for prizes " +
-        "and prestige!  Earn points for keeping a high efficiency percentage in all of yo" +
-        "ur completed projects.");
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 32767;
-            this.toolTip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(220)))), ((int)(((byte)(222)))));
-            this.toolTip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.toolTip1.InitialDelay = 500;
-            this.toolTip1.IsBalloon = true;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            // 
-            // toolTip2
-            // 
-            this.toolTip2.AutoPopDelay = 32767;
-            this.toolTip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(220)))), ((int)(((byte)(222)))));
-            this.toolTip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
-            this.toolTip2.InitialDelay = 500;
-            this.toolTip2.IsBalloon = true;
-            this.toolTip2.ReshowDelay = 100;
-            this.toolTip2.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
             // btnTweet
             // 
@@ -319,19 +192,146 @@
             this.btnLeaderboard.UseVisualStyleBackColor = false;
             this.btnLeaderboard.Click += new System.EventHandler(this.btnLeaderboard_Click);
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.tableLayoutPanel1);
+            this.panel1.Controls.Add(this.tblScore);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(992, 90);
+            this.panel1.TabIndex = 1;
+            // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 81.15942F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 18.84058F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 39F));
+            this.tableLayoutPanel1.Controls.Add(this.btnScore, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.pbInfo1, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Right;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(546, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 1;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(446, 90);
+            this.tableLayoutPanel1.TabIndex = 11;
+            // 
             // btnScore
             // 
             this.btnScore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnScore.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(121)))), ((int)(((byte)(197)))));
             this.btnScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnScore.ForeColor = System.Drawing.Color.White;
-            this.btnScore.Location = new System.Drawing.Point(338, 3);
+            this.btnScore.Location = new System.Drawing.Point(333, 3);
             this.btnScore.Name = "btnScore";
             this.btnScore.Radius = 70;
             this.btnScore.Size = new System.Drawing.Size(70, 70);
             this.btnScore.TabIndex = 7;
             this.btnScore.Text = "100%";
             this.btnScore.UseVisualStyleBackColor = false;
+            // 
+            // pbInfo1
+            // 
+            this.pbInfo1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pbInfo1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pbInfo1.Image = global::Sdl.Community.Productivity.PluginResources.info;
+            this.pbInfo1.Location = new System.Drawing.Point(419, 63);
+            this.pbInfo1.Name = "pbInfo1";
+            this.pbInfo1.Size = new System.Drawing.Size(24, 24);
+            this.pbInfo1.TabIndex = 8;
+            this.pbInfo1.TabStop = false;
+            this.toolTip1.SetToolTip(this.pbInfo1, resources.GetString("pbInfo1.ToolTip"));
+            // 
+            // label1
+            // 
+            this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
+            this.label1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
+            this.label1.Location = new System.Drawing.Point(25, 25);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(302, 40);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "total translation efficiency ";
+            // 
+            // tblScore
+            // 
+            this.tblScore.ColumnCount = 3;
+            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 12.69147F));
+            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 87.30853F));
+            this.tblScore.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 35F));
+            this.tblScore.Controls.Add(this.pbTweetAccountImage, 0, 0);
+            this.tblScore.Controls.Add(this.lblScore, 1, 0);
+            this.tblScore.Controls.Add(this.pictureBox1, 2, 0);
+            this.tblScore.Dock = System.Windows.Forms.DockStyle.Left;
+            this.tblScore.Location = new System.Drawing.Point(0, 0);
+            this.tblScore.Name = "tblScore";
+            this.tblScore.RowCount = 1;
+            this.tblScore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tblScore.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.tblScore.Size = new System.Drawing.Size(493, 90);
+            this.tblScore.TabIndex = 10;
+            // 
+            // pbTweetAccountImage
+            // 
+            this.pbTweetAccountImage.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pbTweetAccountImage.Image = global::Sdl.Community.Productivity.PluginResources.cup_48;
+            this.pbTweetAccountImage.Location = new System.Drawing.Point(3, 3);
+            this.pbTweetAccountImage.Name = "pbTweetAccountImage";
+            this.pbTweetAccountImage.Size = new System.Drawing.Size(48, 48);
+            this.pbTweetAccountImage.TabIndex = 2;
+            this.pbTweetAccountImage.TabStop = false;
+            // 
+            // lblScore
+            // 
+            this.lblScore.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.lblScore.AutoSize = true;
+            this.lblScore.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblScore.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblScore.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
+            this.lblScore.Location = new System.Drawing.Point(61, 16);
+            this.lblScore.Name = "lblScore";
+            this.lblScore.Size = new System.Drawing.Size(389, 58);
+            this.lblScore.TabIndex = 1;
+            this.lblScore.Text = "Louis Perdo Ferreira, your score is:\r\n222,222,222 points!";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.pictureBox1.Image = global::Sdl.Community.Productivity.PluginResources.info;
+            this.pictureBox1.Location = new System.Drawing.Point(460, 63);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(23, 24);
+            this.pictureBox1.TabIndex = 9;
+            this.pictureBox1.TabStop = false;
+            this.toolTip2.SetToolTip(this.pictureBox1, "Leaderboard score:\r\nCompete against translators from around the world for prizes " +
+        "and prestige!  Earn points for keeping a high efficiency percentage in all of yo" +
+        "ur completed projects.");
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 32767;
+            this.toolTip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(220)))), ((int)(((byte)(222)))));
+            this.toolTip1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
+            this.toolTip1.InitialDelay = 500;
+            this.toolTip1.IsBalloon = true;
+            this.toolTip1.ReshowDelay = 100;
+            this.toolTip1.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            // 
+            // toolTip2
+            // 
+            this.toolTip2.AutoPopDelay = 32767;
+            this.toolTip2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(219)))), ((int)(((byte)(220)))), ((int)(((byte)(222)))));
+            this.toolTip2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(139)))), ((int)(((byte)(141)))));
+            this.toolTip2.InitialDelay = 500;
+            this.toolTip2.IsBalloon = true;
+            this.toolTip2.ReshowDelay = 100;
+            this.toolTip2.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             // 
             // ProductivityControl
             // 
