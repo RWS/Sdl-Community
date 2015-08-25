@@ -6,6 +6,9 @@ This repository will contain the source code for applications and plugins develo
 ## Jobs
 * [Documentation](Jobs)
 
+## YourProductivity
+* [Documentation](YourProductivity)
+
 ## Apply Studio Project Template
 * [Documentation](ApplyStudioProjectTemplate)
 
