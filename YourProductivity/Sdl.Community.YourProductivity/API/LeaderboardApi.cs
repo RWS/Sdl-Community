@@ -10,7 +10,7 @@ namespace Sdl.Community.YourProductivity.API
 {
     public class LeaderboardApi
     {
-        private readonly string _baseUrl = PluginResources.Leaderboard_Link;
+        private readonly string _baseUrl = PluginResources.Leaderboard_API_Link;
         private readonly TwitterAccountInfo _twitterAccountInfo;
         private int _numberOfRetries;
         private Logger _logger;

@@ -113,6 +113,15 @@ namespace Sdl.Community.YourProductivity {
         /// <summary>
         ///   Looks up a localized string similar to https://leaderboard.translationzone.com/.
         /// </summary>
+        public static string Leaderboard_API_Link {
+            get {
+                return ResourceManager.GetString("Leaderboard_API_Link", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to http://www.translationzone.com/community/app/community-productivity/.
+        /// </summary>
         public static string Leaderboard_Link {
             get {
                 return ResourceManager.GetString("Leaderboard_Link", resourceCulture);

@@ -152,7 +152,7 @@
     <value>To be able to share your score to the SDL Leaderboard, and be eligible for our monthly prizes, you will need at least {0} characters translated and confirmed in your active projects.</value>
   </data>
   <data name="Leaderboard_Link" xml:space="preserve">
-    <value>https://leaderboard.translationzone.com/</value>
+    <value>http://www.translationzone.com/community/app/community-productivity/</value>
   </data>
   <data name="TweetFactory_CreateTweet_SDL_Leaderboard_could_not_be_reached__Please_check_your_internet_connectivity_and_try_again" xml:space="preserve">
     <value>SDL Leaderboard could not be reached. Please check your internet connectivity and try again.</value>
@@ -171,5 +171,8 @@
   </data>
   <data name="info" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\info.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Leaderboard_API_Link" xml:space="preserve">
+    <value>https://leaderboard.translationzone.com/</value>
   </data>
 </root>
