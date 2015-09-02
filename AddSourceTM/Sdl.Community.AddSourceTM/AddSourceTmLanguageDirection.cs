@@ -1,4 +1,5 @@
-﻿using System.Runtime.Remoting;
+﻿using System.IO;
+using System.Runtime.Remoting;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -20,8 +21,7 @@ namespace Sdl.Community.AddSourceTM
         {
             var results = _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnits(translationUnits,
                 previousTranslationHashes, settings);
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
             for (int i = 0; i < results.Length; i++)
             {
@@ -44,8 +44,8 @@ namespace Sdl.Community.AddSourceTM
                 _fileBasedTranslationProviderLanguageDirection.AddOrUpdateTranslationUnitsMasked(translationUnits,
                     previousTranslationHashes, settings, mask);
 
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
             for (int i = 0; i < results.Length; i++)
             {
@@ -68,8 +68,7 @@ namespace Sdl.Community.AddSourceTM
                 _fileBasedTranslationProviderLanguageDirection.AddTranslationUnit(translationUnit,
                     settings);
             if (result == null) return null;
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
 
 
@@ -87,8 +86,7 @@ namespace Sdl.Community.AddSourceTM
               _fileBasedTranslationProviderLanguageDirection.AddTranslationUnits(translationUnits,
                    settings);
 
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
             for (int i = 0; i < results.Length; i++)
             {
@@ -111,8 +109,7 @@ namespace Sdl.Community.AddSourceTM
                 _fileBasedTranslationProviderLanguageDirection.AddTranslationUnitsMasked(translationUnits,
                     settings, mask);
 
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
             for (int i = 0; i < results.Length; i++)
             {
@@ -193,8 +190,7 @@ namespace Sdl.Community.AddSourceTM
             var result =
                 _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnit(translationUnit);
             if (result == null) return null;
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
 
 
@@ -210,8 +206,7 @@ namespace Sdl.Community.AddSourceTM
             var results =
               _fileBasedTranslationProviderLanguageDirection.UpdateTranslationUnits(translationUnits);
 
-            var tmPath = this.TranslationProvider.Uri.AbsolutePath;
-            var tmDataAccess = TmDataAccess.OpenConnection(tmPath);
+            var tmDataAccess = TmDataAccess.OpenConnection(TranslationProvider.Uri);
 
             for (int i = 0; i < results.Length; i++)
             {

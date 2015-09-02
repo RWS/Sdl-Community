@@ -1,28 +1,51 @@
 ﻿using System;
+using System.Data.SqlClient;
+using System.Data.SQLite;
+using System.IO;
+using System.Linq;
+using Sdl.Community.AddSourceTM.Source_Configurtion;
 using Simple.Data;
 
 namespace Sdl.Community.AddSourceTM
 {
     public class TmDataAccess
     {
-        private const string AtttrName = "Source File";
         private readonly string _tmDatabasePath;
         private dynamic _db;
+        private AddSourceTmConfiguration _addSourceTmConfiguration;
+
         private TmDataAccess(string tmDatabasePath)
         {
             _tmDatabasePath = tmDatabasePath;
         }
 
-        public static TmDataAccess OpenConnection(string tmDatabasePath)
+        public static TmDataAccess OpenConnection(Uri providerUri)
         {
-            var tmDataAccess = new TmDataAccess(tmDatabasePath);
-            tmDataAccess.Init();
+            var tmDataAccess = new TmDataAccess(providerUri.LocalPath);
+            tmDataAccess.Init(providerUri);
             return tmDataAccess;
         }
 
-        public void Init()
+        public void Init(Uri providerUri)
         {
-            _db = Database.OpenConnection(string.Format(@"Data Source={0};Version=3;", _tmDatabasePath));
+
+            var builder
+                = new SQLiteConnectionStringBuilder
+                {
+                    SyncMode = SynchronizationModes.Off,
+                    DataSource = _tmDatabasePath,
+                    Enlist = false,
+                    Pooling = false
+                };
+
+            _db = Database.OpenConnection(builder.ToString());
+
+            var persistance = new Persistance();
+            var addSourceTmConfigurations = persistance.Load();
+
+            _addSourceTmConfiguration = addSourceTmConfigurations.Configurations.FirstOrDefault(x => x.ProviderUri == providerUri) ??
+                                           addSourceTmConfigurations.Default;
+
         }
 
         public void AddOrUpdateSourceFile(int tuId,string sourceFile)
@@ -30,9 +53,11 @@ namespace Sdl.Community.AddSourceTM
             var translationUnit = _db.translation_units.Find(_db.translation_units.id == tuId);
 
             if (translationUnit == null) return;
-           
 
-            var sourceAttribute = _db.attributes.Find(_db.attributes.name == AtttrName) ??
+            if (!_addSourceTmConfiguration.StoreFullPath)
+                sourceFile = Path.GetFileName(sourceFile);
+
+            var sourceAttribute = _db.attributes.Find(_db.attributes.name == _addSourceTmConfiguration.TmSourceFieldName) ??
                                   AddSourceAttribute(translationUnit.translation_memory_id);
             var stringAttribute = _db.string_attributes.Find(_db.string_attributes.translation_unit_id == tuId &&
                                      _db.string_attributes.attribute_id == sourceAttribute.id);
@@ -53,7 +78,7 @@ namespace Sdl.Community.AddSourceTM
         {
             var translationMemory =
                _db.translation_memories.Find(_db.translation_memories.id == tmId);
-            var attribute = _db.attributes.Insert(guid: Guid.NewGuid(), name: AtttrName, type: 2, tm_id: translationMemory.id);
+            var attribute = _db.attributes.Insert(guid: Guid.NewGuid(), name: _addSourceTmConfiguration.TmSourceFieldName, type: 2, tm_id: translationMemory.id);
 
             return attribute;
         }

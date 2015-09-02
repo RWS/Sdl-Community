@@ -12,5 +12,6 @@
     <File>Microsoft.CSharp.dll</File>
     <File>System.Data.SQLite.dll</File>
     <File>SQLite.Interop.dll</File>
+    <File>Newtonsoft.Json.dll</File>
   </Include>
 </PluginPackage>

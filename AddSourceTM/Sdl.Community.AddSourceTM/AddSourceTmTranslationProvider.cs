@@ -6,7 +6,7 @@ namespace Sdl.Community.AddSourceTM
 {
     public class AddSourceTmTranslationProvider : ITranslationProvider
     {
-        internal const string ProviderUriScheme = "sdlcommunityastp";
+        internal const string ProviderUriScheme = "sdltm.file";
         internal const string ProviderUri = ProviderUriScheme + "://";
 
         
@@ -41,7 +41,7 @@ namespace Sdl.Community.AddSourceTM
 
         public string Name
         {
-            get { return _fileBasedTranslationProvider.Name; }
+            get { return "AddSourceTM: " + _fileBasedTranslationProvider.Name; }
         }
 
         public void RefreshStatusInfo()
