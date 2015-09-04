@@ -6,13 +6,16 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AddSourceTM
 {
-    public class AddSourceTmLanguageDirection : ITranslationProviderLanguageDirection
+    public class AddSourceTmLanguageDirection : ITranslationProviderLanguageDirection, ITranslationMemoryLanguageDirection
     {
         private readonly ITranslationProviderLanguageDirection _fileBasedTranslationProviderLanguageDirection;
+        private readonly ITranslationMemoryLanguageDirection _tmlanguageDirection;
 
-        public AddSourceTmLanguageDirection(ITranslationProviderLanguageDirection languageDirection)
+
+        public AddSourceTmLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
         {
             _fileBasedTranslationProviderLanguageDirection = languageDirection;
+            _tmlanguageDirection = tmlanguageDirection;
         }
 
         #region ITranslationProviderLanguageDirection Members
@@ -31,7 +34,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
                 }
             }
 
@@ -55,7 +58,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
                 }
             }
 
@@ -74,7 +77,7 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
             }
 
             return result;
@@ -96,7 +99,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
                 }
             }
 
@@ -119,7 +122,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
                 }
             }
             return results;
@@ -196,7 +199,7 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
             }
             return result;
         }
@@ -216,12 +219,92 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.DocumentProperties.LastOpenedAsPath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
                 }
             }
             return results;
         }
 
         #endregion
+
+        public bool ApplyFieldsToTranslationUnit(FieldValues values, bool overwrite, PersistentObjectToken translationUnitId)
+        {
+            return _tmlanguageDirection.ApplyFieldsToTranslationUnit(values, overwrite, translationUnitId);
+        }
+
+        public int ApplyFieldsToTranslationUnits(FieldValues values, bool overwrite, PersistentObjectToken[] translationUnitIds)
+        {
+            return _tmlanguageDirection.ApplyFieldsToTranslationUnits(values, overwrite, translationUnitIds);
+        }
+
+        public int DeleteAllTranslationUnits()
+        {
+           return _tmlanguageDirection.DeleteAllTranslationUnits();
+        }
+
+        public bool DeleteTranslationUnit(PersistentObjectToken translationUnitId)
+        {
+           return _tmlanguageDirection.DeleteTranslationUnit(translationUnitId);
+        }
+
+        public int DeleteTranslationUnits(PersistentObjectToken[] translationUnitIds)
+        {
+           return _tmlanguageDirection.DeleteTranslationUnits(translationUnitIds);
+        }
+
+        public int DeleteTranslationUnitsWithIterator(ref RegularIterator iterator)
+        {
+         return   _tmlanguageDirection.DeleteTranslationUnitsWithIterator(ref iterator);
+        }
+
+        public int EditTranslationUnits(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, LanguagePlatform.TranslationMemory.EditScripts.EditUpdateMode updateMode, PersistentObjectToken[] translationUnitIds)
+        {
+          return  _tmlanguageDirection.EditTranslationUnits(editScript, updateMode, translationUnitIds);
+        }
+
+        public int EditTranslationUnitsWithIterator(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, LanguagePlatform.TranslationMemory.EditScripts.EditUpdateMode updateMode, ref RegularIterator iterator)
+        {
+           return _tmlanguageDirection.EditTranslationUnitsWithIterator(editScript, updateMode, ref iterator);
+        }
+
+        public TranslationUnit[] GetDuplicateTranslationUnits(ref DuplicateIterator iterator)
+        {
+          return  _tmlanguageDirection.GetDuplicateTranslationUnits(ref iterator);
+        }
+
+        public TranslationUnit GetTranslationUnit(PersistentObjectToken translationUnitId)
+        {
+           return _tmlanguageDirection.GetTranslationUnit(translationUnitId);
+        }
+
+        public int GetTranslationUnitCount()
+        {
+         return   _tmlanguageDirection.GetTranslationUnitCount();
+        }
+
+        public TranslationUnit[] GetTranslationUnits(ref RegularIterator iterator)
+        {
+            return _tmlanguageDirection.GetTranslationUnits(ref iterator);
+        }
+
+        public TranslationUnit[] PreviewEditTranslationUnitsWithIterator(LanguagePlatform.TranslationMemory.EditScripts.EditScript editScript, ref RegularIterator iterator)
+        {
+            return _tmlanguageDirection.PreviewEditTranslationUnitsWithIterator(editScript, ref iterator);
+        }
+
+        public bool ReindexTranslationUnits(ref RegularIterator iterator)
+        {
+            return _tmlanguageDirection.ReindexTranslationUnits(ref iterator);
+        }
+
+        ITranslationMemory ITranslationMemoryLanguageDirection.TranslationProvider
+        {
+            get { return _tmlanguageDirection.TranslationProvider; }
+        }
+
+        public ImportResult[] UpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, bool[] mask)
+        {
+            return _tmlanguageDirection.UpdateTranslationUnitsMasked(translationUnits, mask);
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace Sdl.Community.AddSourceTM.Source_Configurtion
         {
             InitializeComponent();
 
-            _providerUri = providerUri;
+            _providerUri = providerUri.GetInnerProviderUri();
             _isUsed = false;
         }
 

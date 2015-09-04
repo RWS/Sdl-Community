@@ -120,6 +120,7 @@
     <Compile Include="AddSourceTmProviderFactory.cs" />
     <Compile Include="AddSourceTmTranslationProviderWinFormsUI.cs" />
     <Compile Include="AddSourceTmLanguageDirection.cs" />
+    <Compile Include="Extension.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

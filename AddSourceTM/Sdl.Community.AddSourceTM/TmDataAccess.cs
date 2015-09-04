@@ -53,6 +53,7 @@ namespace Sdl.Community.AddSourceTM
             var translationUnit = _db.translation_units.Find(_db.translation_units.id == tuId);
 
             if (translationUnit == null) return;
+            if (string.IsNullOrEmpty(sourceFile)) return;
 
             if (!_addSourceTmConfiguration.StoreFullPath)
                 sourceFile = Path.GetFileName(sourceFile);
@@ -63,8 +64,9 @@ namespace Sdl.Community.AddSourceTM
                                      _db.string_attributes.attribute_id == sourceAttribute.id);
             if (stringAttribute != null)
             {
-                stringAttribute.value = sourceFile;
-                _db.string_attributes.UpdateById(stringAttribute);
+                if (IsSourceFileValueAlreadyInTu(sourceFile, stringAttribute)) return;
+                stringAttribute.value = string.Format("{0}, {1}", stringAttribute.value, sourceFile);
+                _db.string_attributes.UpdateByTranslation_Unit_id(stringAttribute);
             }
             else
             {
@@ -72,6 +74,14 @@ namespace Sdl.Community.AddSourceTM
                     value: sourceFile);
             }
 
+        }
+
+        private bool IsSourceFileValueAlreadyInTu(string sourceFile, dynamic stringAttribute)
+        {
+            string oldSourceAttributeValue = stringAttribute.value.ToString();
+            var oldValues = oldSourceAttributeValue.Split(',');
+
+            return oldValues.Any(oldValue => oldValue.Trim().Equals(sourceFile.Trim()));
         }
 
         private dynamic AddSourceAttribute(int tmId)

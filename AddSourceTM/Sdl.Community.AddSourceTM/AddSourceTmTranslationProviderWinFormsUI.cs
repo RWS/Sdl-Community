@@ -61,7 +61,8 @@ namespace Sdl.Community.AddSourceTM
 
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
-            var displayInfo = FileBasedTranslationProviderUi.GetDisplayInfo(new Uri("sdltm.file://"+translationProviderUri.AbsolutePath), 
+            
+            var displayInfo = FileBasedTranslationProviderUi.GetDisplayInfo(translationProviderUri.GetInnerProviderUri(), 
                 translationProviderState);
             displayInfo.Name = "AddSourceTm: " + displayInfo.Name;
             displayInfo.TooltipText = "AddSourceTm: " + displayInfo.TooltipText;
@@ -70,12 +71,15 @@ namespace Sdl.Community.AddSourceTM
 
         public bool SupportsEditing
         {
-            get { return true; }
+            get { return FileBasedTranslationProviderUi.SupportsEditing; }
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return translationProviderUri.Scheme.Equals(AddSourceTmTranslationProvider.ProviderUriScheme, StringComparison.InvariantCultureIgnoreCase);
+            return translationProviderUri.Scheme.StartsWith(AddSourceTmTranslationProvider.ProviderUriScheme,
+                StringComparison.InvariantCultureIgnoreCase)
+                   &&
+                   FileBasedTranslationProviderUi.SupportsTranslationProviderUri(translationProviderUri.GetInnerProviderUri());
         }
 
         public string TypeDescription

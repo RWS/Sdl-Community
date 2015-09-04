@@ -4,15 +4,20 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AddSourceTM
 {
-    public class AddSourceTmTranslationProvider : ITranslationProvider
+    public class AddSourceTmTranslationProvider : ITranslationMemory
     {
-        internal const string ProviderUriScheme = "sdltm.file";
-        internal const string ProviderUri = ProviderUriScheme + "://";
+        internal const string ProviderUriScheme = "addSourceTm.";
+        
 
         
         public ITranslationProvider FileBasedTranslationProvider
         {
             get { return _fileBasedTranslationProvider; }
+        }
+
+        public FileBasedTranslationMemory FileBasedTranslationMemory
+        {
+            get { return (FileBasedTranslationMemory)FileBasedTranslationProvider; }
         }
 
         private readonly ITranslationProvider _fileBasedTranslationProvider;
@@ -26,7 +31,7 @@ namespace Sdl.Community.AddSourceTM
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languagePair)
         {
             var languageDirection = _fileBasedTranslationProvider.GetLanguageDirection(languagePair);
-            return new AddSourceTmLanguageDirection(languageDirection);
+            return new AddSourceTmLanguageDirection(languageDirection, FileBasedTranslationMemory.LanguageDirection);
         }
 
         public bool IsReadOnly
@@ -153,8 +158,118 @@ namespace Sdl.Community.AddSourceTM
         {
             get
             {
-                return new Uri(ProviderUri + FileBasedTranslationProvider.Uri.AbsolutePath);
+                return new Uri(ProviderUriScheme + FileBasedTranslationProvider.Uri.AbsoluteUri);
             }
+        }
+
+        #endregion
+
+        #region ITranslationMemory
+
+        public string Copyright
+        {
+            get { return FileBasedTranslationMemory.Copyright; }
+            set { FileBasedTranslationMemory.Copyright = value; }
+        }
+
+        public DateTime CreationDate
+        {
+            get { return FileBasedTranslationMemory.CreationDate; }
+        }
+
+        public string CreationUserName
+        {
+            get { return FileBasedTranslationMemory.CreationUserName; }
+        }
+
+        public void Delete()
+        {
+            FileBasedTranslationMemory.Delete();
+        }
+
+        public string Description
+        {
+            get { return FileBasedTranslationMemory.Description; }
+            set { FileBasedTranslationMemory.Description = value; }
+        }
+
+        public DateTime? ExpirationDate
+        {
+            get { return FileBasedTranslationMemory.ExpirationDate; }
+            set { FileBasedTranslationMemory.ExpirationDate = value; }
+        }
+
+        public FieldDefinitionCollection FieldDefinitions
+        {
+            get { return FileBasedTranslationMemory.FieldDefinitions; }
+        }
+
+        public DateTime? FuzzyIndexStatisticsRecomputedAt
+        {
+            get { return FileBasedTranslationMemory.FuzzyIndexStatisticsRecomputedAt; }
+        }
+
+        public int? FuzzyIndexStatisticsSize
+        {
+            get { return FileBasedTranslationMemory.FuzzyIndexStatisticsSize; }
+        }
+
+        public LanguagePlatform.TranslationMemory.FuzzyIndexTuningSettings FuzzyIndexTuningSettings
+        {
+            get { return FileBasedTranslationMemory.FuzzyIndexTuningSettings; }
+            set { FileBasedTranslationMemory.FuzzyIndexTuningSettings = value; }
+        }
+
+        public LanguagePlatform.TranslationMemory.FuzzyIndexes FuzzyIndexes
+        {
+            get { return FileBasedTranslationMemory.FuzzyIndexes; }
+            set { FileBasedTranslationMemory.FuzzyIndexes = value; }
+        }
+
+        ITranslationMemoryLanguageDirection ITranslationMemory.GetLanguageDirection(LanguagePair languageDirection)
+        {
+            return FileBasedTranslationMemory.GetLanguageDirection(languageDirection);
+        }
+
+        public int GetTranslationUnitCount()
+        {
+            return FileBasedTranslationMemory.GetTranslationUnitCount();
+        }
+
+        public bool HasPermission(string permission)
+        {
+            return FileBasedTranslationMemory.HasPermission(permission);
+        }
+
+        public LanguageResourceBundleCollection LanguageResourceBundles
+        {
+            get {  return FileBasedTranslationMemory.LanguageResourceBundles; }
+        }
+
+        public LanguagePlatform.Core.Tokenization.BuiltinRecognizers Recognizers
+        {
+            get { return FileBasedTranslationMemory.Recognizers; }
+            set { FileBasedTranslationMemory.Recognizers = value; }
+        }
+
+        public void RecomputeFuzzyIndexStatistics()
+        {
+            FileBasedTranslationMemory.RecomputeFuzzyIndexStatistics();
+        }
+
+        public void Save()
+        {
+             FileBasedTranslationMemory.Save();
+        }
+
+        public bool ShouldRecomputeFuzzyIndexStatistics()
+        {
+            return FileBasedTranslationMemory.ShouldRecomputeFuzzyIndexStatistics();
+        }
+
+        public System.Collections.ObjectModel.ReadOnlyCollection<LanguagePair> SupportedLanguageDirections
+        {
+            get { return FileBasedTranslationMemory.SupportedLanguageDirections; }
         }
 
         #endregion

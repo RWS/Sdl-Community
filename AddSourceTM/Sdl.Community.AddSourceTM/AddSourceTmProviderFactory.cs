@@ -13,7 +13,7 @@ namespace Sdl.Community.AddSourceTM
 
         public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
-            var fileBasedUri = new Uri("sdltm.file://"+translationProviderUri.AbsolutePath);
+            var fileBasedUri = translationProviderUri.GetInnerProviderUri();
             var tProviderFactory = TranslationProviderManager.GetTranslationProviderFactory(fileBasedUri);
             var tProvider = tProviderFactory.CreateTranslationProvider(fileBasedUri, translationProviderState, credentialStore);
             return new AddSourceTmTranslationProvider(tProvider);
@@ -21,16 +21,20 @@ namespace Sdl.Community.AddSourceTM
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
+            var innerFactory =
+                TranslationProviderManager.GetTranslationProviderFactory(translationProviderUri.GetInnerProviderUri());
+            var info = innerFactory.GetTranslationProviderInfo(translationProviderUri.GetInnerProviderUri(),
+                translationProviderState);
             return new TranslationProviderInfo()
             {
-                Name = "AddSourceTM",
+                Name = "Add Source TM",
                 TranslationMethod = TranslationMethod.TranslationMemory
             };
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return String.Equals(translationProviderUri.Scheme,
+            return translationProviderUri.Scheme.StartsWith(
                 AddSourceTmTranslationProvider.ProviderUriScheme, StringComparison.OrdinalIgnoreCase);
         }
 
