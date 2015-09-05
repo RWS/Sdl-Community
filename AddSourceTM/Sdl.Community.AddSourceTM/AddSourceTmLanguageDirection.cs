@@ -34,7 +34,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
                 }
             }
 
@@ -58,7 +58,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
                 }
             }
 
@@ -77,7 +77,7 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
             }
 
             return result;
@@ -99,7 +99,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
                 }
             }
 
@@ -122,7 +122,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
                 }
             }
             return results;
@@ -199,7 +199,7 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
             }
             return result;
         }
@@ -219,7 +219,7 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
                 }
             }
             return results;

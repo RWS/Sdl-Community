@@ -66,7 +66,7 @@ namespace Sdl.Community.AddSourceTM
             {
                 if (IsSourceFileValueAlreadyInTu(sourceFile, stringAttribute)) return;
                 stringAttribute.value = string.Format("{0}, {1}", stringAttribute.value, sourceFile);
-                _db.string_attributes.UpdateByTranslation_Unit_id(stringAttribute);
+                _db.string_attributes.UpdateByTranslation_Unit_idAndAttribute_id(stringAttribute);
             }
             else
             {
