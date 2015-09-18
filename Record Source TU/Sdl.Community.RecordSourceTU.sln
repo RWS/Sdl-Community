@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AddSourceTM", "Sdl.Community.AddSourceTM\Sdl.Community.AddSourceTM.csproj", "{AE9FF782-821F-4D95-817E-85FC96A4AD23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.RecordSourceTU", "Sdl.Community.RecordSourceTU\Sdl.Community.RecordSourceTU.csproj", "{AE9FF782-821F-4D95-817E-85FC96A4AD23}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{49706B99-8771-45F2-9A6D-78F947809D8B}"
 	ProjectSection(SolutionItems) = preProject

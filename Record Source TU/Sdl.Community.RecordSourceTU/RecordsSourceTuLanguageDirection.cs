@@ -1,18 +1,16 @@
-﻿using System.IO;
-using System.Runtime.Remoting;
-using Sdl.LanguagePlatform.Core;
+﻿using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
-    public class AddSourceTmLanguageDirection : ITranslationProviderLanguageDirection, ITranslationMemoryLanguageDirection
+    public class RecordsSourceTuLanguageDirection : ITranslationMemoryLanguageDirection
     {
         private readonly ITranslationProviderLanguageDirection _fileBasedTranslationProviderLanguageDirection;
         private readonly ITranslationMemoryLanguageDirection _tmlanguageDirection;
 
 
-        public AddSourceTmLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
+        public RecordsSourceTuLanguageDirection(ITranslationProviderLanguageDirection languageDirection, ITranslationMemoryLanguageDirection tmlanguageDirection)
         {
             _fileBasedTranslationProviderLanguageDirection = languageDirection;
             _tmlanguageDirection = tmlanguageDirection;
@@ -34,7 +32,12 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                    var customFieldsValue = new CustomFieldValues
+                    {
+                        FileNameFullPath = translationUnit.GetFilePath(),
+                        ProjectName = translationUnit.GetProjectName()
+                    };
+                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
                 }
             }
 
@@ -58,7 +61,12 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                    var customFieldsValue = new CustomFieldValues
+                    {
+                        FileNameFullPath = translationUnit.GetFilePath(),
+                        ProjectName = translationUnit.GetProjectName()
+                    };
+                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
                 }
             }
 
@@ -77,7 +85,12 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                var customFieldsValue = new CustomFieldValues
+                {
+                    FileNameFullPath = translationUnit.GetFilePath(),
+                    ProjectName = translationUnit.GetProjectName()
+                };
+                tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
             }
 
             return result;
@@ -99,7 +112,12 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                    var customFieldsValue = new CustomFieldValues
+                    {
+                        FileNameFullPath = translationUnit.GetFilePath(),
+                        ProjectName = translationUnit.GetProjectName()
+                    };
+                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
                 }
             }
 
@@ -122,7 +140,12 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                    var customFieldsValue = new CustomFieldValues
+                    {
+                        FileNameFullPath = translationUnit.GetFilePath(),
+                        ProjectName = translationUnit.GetProjectName()
+                    };
+                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
                 }
             }
             return results;
@@ -199,7 +222,12 @@ namespace Sdl.Community.AddSourceTM
 
             if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
             {
-                tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                var customFieldsValue = new CustomFieldValues
+                {
+                    FileNameFullPath = translationUnit.GetFilePath(),
+                    ProjectName = translationUnit.GetProjectName()
+                };
+                tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
             }
             return result;
         }
@@ -219,7 +247,12 @@ namespace Sdl.Community.AddSourceTM
 
                 if (result.Action == Action.Add || result.Action == Action.Merge || result.Action == Action.Overwrite)
                 {
-                    tmDataAccess.AddOrUpdateSourceFile(result.TuId.Id, translationUnit.GetFilePath());
+                    var customFieldsValue = new CustomFieldValues
+                    {
+                        FileNameFullPath = translationUnit.GetFilePath(),
+                        ProjectName = translationUnit.GetProjectName()
+                    };
+                    tmDataAccess.AddOrUpdateCustomFields(result.TuId.Id, customFieldsValue);
                 }
             }
             return results;

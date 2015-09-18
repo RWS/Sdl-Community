@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Data.SqlClient;
+using System.Collections.Generic;
 using System.Data.SQLite;
-using System.IO;
 using System.Linq;
-using Sdl.Community.AddSourceTM.Source_Configurtion;
 using Simple.Data;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
     public class TmDataAccess
     {
@@ -26,7 +24,7 @@ namespace Sdl.Community.AddSourceTM
             return tmDataAccess;
         }
 
-        public void Init(Uri providerUri)
+        private void Init(Uri providerUri)
         {
 
             var builder
@@ -48,32 +46,61 @@ namespace Sdl.Community.AddSourceTM
 
         }
 
-        public void AddOrUpdateSourceFile(int tuId,string sourceFile)
+        public void AddOrUpdateCustomFields(int tuId, CustomFieldValues fieldValues)
         {
             var translationUnit = _db.translation_units.Find(_db.translation_units.id == tuId);
 
             if (translationUnit == null) return;
-            if (string.IsNullOrEmpty(sourceFile)) return;
+            if (fieldValues == null) return;
 
-            if (!_addSourceTmConfiguration.StoreFullPath)
-                sourceFile = Path.GetFileName(sourceFile);
+            if (_addSourceTmConfiguration.StoreFilename)
+            {
+                AddOrUpdateCustomField(translationUnit.translation_memory_id, tuId,
+                    _addSourceTmConfiguration.FileNameField, fieldValues.FileName);
+            }
+            if (_addSourceTmConfiguration.StoreFullPath)
+            {
+                AddOrUpdateCustomField(translationUnit.translation_memory_id, tuId,
+                    _addSourceTmConfiguration.FullPathField, fieldValues.FileNameFullPath);
+            }
+            if (_addSourceTmConfiguration.StoreProjectName)
+            {
+                AddOrUpdateCustomField(translationUnit.translation_memory_id, tuId,
+                    _addSourceTmConfiguration.ProjectNameField, fieldValues.ProjectName);
+            }
 
-            var sourceAttribute = _db.attributes.Find(_db.attributes.name == _addSourceTmConfiguration.TmSourceFieldName) ??
-                                  AddSourceAttribute(translationUnit.translation_memory_id);
+        }
+
+        private void AddOrUpdateCustomField(int tmId,int tuId, string fieldName, string fieldValue)
+        {
+            var sourceAttribute = _db.attributes.Find(_db.attributes.name == fieldName) ??
+                                  AddSourceAttribute(tmId, fieldName);
             var stringAttribute = _db.string_attributes.Find(_db.string_attributes.translation_unit_id == tuId &&
                                      _db.string_attributes.attribute_id == sourceAttribute.id);
             if (stringAttribute != null)
             {
-                if (IsSourceFileValueAlreadyInTu(sourceFile, stringAttribute)) return;
-                stringAttribute.value = string.Format("{0}, {1}", stringAttribute.value, sourceFile);
+                if (IsSourceFileValueAlreadyInTu(fieldValue, stringAttribute)) return;
+                stringAttribute.value = string.Format("{0}, {1}", stringAttribute.value, fieldValue);
                 _db.string_attributes.UpdateByTranslation_Unit_idAndAttribute_id(stringAttribute);
             }
             else
             {
-                _db.string_attributes.Insert(translation_unit_id: translationUnit.id, attribute_id: sourceAttribute.id,
-                    value: sourceFile);
+                _db.string_attributes.Insert(translation_unit_id: tuId, attribute_id: sourceAttribute.id,
+                    value: fieldValue);
+            }
+        }
+
+        public List<string> GetCustomFields()
+        {
+            var customFields = new List<string>();
+            var attributes = _db.attributes.All();
+
+            foreach (var attribute in attributes)
+            {
+                customFields.Add(attribute.name);
             }
 
+            return customFields;
         }
 
         private bool IsSourceFileValueAlreadyInTu(string sourceFile, dynamic stringAttribute)
@@ -84,11 +111,11 @@ namespace Sdl.Community.AddSourceTM
             return oldValues.Any(oldValue => oldValue.Trim().Equals(sourceFile.Trim()));
         }
 
-        private dynamic AddSourceAttribute(int tmId)
+        private dynamic AddSourceAttribute(int tmId,string fieldName)
         {
             var translationMemory =
                _db.translation_memories.Find(_db.translation_memories.id == tmId);
-            var attribute = _db.attributes.Insert(guid: Guid.NewGuid(), name: _addSourceTmConfiguration.TmSourceFieldName, type: 2, tm_id: translationMemory.id);
+            var attribute = _db.attributes.Insert(guid: Guid.NewGuid(), name: fieldName, type: 2, tm_id: translationMemory.id);
 
             return attribute;
         }

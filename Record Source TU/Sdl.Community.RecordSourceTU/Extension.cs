@@ -2,26 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using MoreLinq;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
     public static class Extension
     {
         public static Uri GetInnerProviderUri(this Uri addSourceTmProviderUri)
         {
-            if (addSourceTmProviderUri.AbsoluteUri.StartsWith(AddSourceTmTranslationProvider.ProviderUriScheme, StringComparison.InvariantCultureIgnoreCase))
+            if (addSourceTmProviderUri.AbsoluteUri.StartsWith(RecordSourceTuTmTranslationProvider.ProviderUriScheme,
+                StringComparison.InvariantCultureIgnoreCase))
             {
                 return
                     new Uri(
                         addSourceTmProviderUri.AbsoluteUri.Substring(
-                            AddSourceTmTranslationProvider.ProviderUriScheme.Length));
+                            RecordSourceTuTmTranslationProvider.ProviderUriScheme.Length));
             }
 
             return addSourceTmProviderUri;
@@ -43,7 +42,18 @@ namespace Sdl.Community.AddSourceTM
             return filePath;
         }
 
-        public static ProjectFile TryGetActiveFile(this Document document)
+        public static string GetProjectName(this TranslationUnit translationUnit)
+        {
+            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            if (editorController == null) return "N/A";
+            if (editorController.ActiveDocument == null) return "N/A";
+
+            var projectInfo = editorController.ActiveDocument.Project.GetProjectInfo();
+
+            return projectInfo.Name;
+        }
+
+    public static ProjectFile TryGetActiveFile(this Document document)
         {
 
             if (document.ActiveFile != null) return document.ActiveFile;

@@ -1,24 +1,22 @@
 ﻿using System;
-using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.AddSourceTM.Source_Configurtion;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
     [TranslationProviderWinFormsUi(
-        Id = "Sdl.Community.AddSourceTMWinFormsUI",
-        Name = "Sdl.Community.AddSourceTMWinFormsUI",
-        Description = "Sdl.Community.AddSourceTMWinFormsUI")]
+        Id = "Sdl.Community.RecordSourceTUWinFormsUI",
+        Name = "Sdl.Community.RecordSourceTUWinFormsUI",
+        Description = "Sdl.Community.RecordSourceTUWinFormsUI")]
     public class AddSourceTmTranslationProviderWinFormsUi : ITranslationProviderWinFormsUI
     {
         private ITranslationProviderWinFormsUI FileBasedTranslationProviderUi
         {
             get
             {
-                return TranslationProviderManager.GetTranslationProviderWinFormsUIs().First(x => x.TypeName.Equals("File-based translation memory"));
+                return TranslationProviderManager.GetTranslationProviderWinFormsUI(new Uri("sdltm.file://test.sdltm"));
             }
         }
 
@@ -34,12 +32,12 @@ namespace Sdl.Community.AddSourceTM
             }
             
 
-            return new ITranslationProvider[] {new AddSourceTmTranslationProvider(translationProvider)};
+            return new ITranslationProvider[] {new RecordSourceTuTmTranslationProvider(translationProvider)};
         }
 
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            var tProvider = translationProvider as AddSourceTmTranslationProvider;
+            var tProvider = translationProvider as RecordSourceTuTmTranslationProvider;
             bool result = false;
             if (tProvider != null)
             {
@@ -64,8 +62,8 @@ namespace Sdl.Community.AddSourceTM
             
             var displayInfo = FileBasedTranslationProviderUi.GetDisplayInfo(translationProviderUri.GetInnerProviderUri(), 
                 translationProviderState);
-            displayInfo.Name = "AddSourceTm: " + displayInfo.Name;
-            displayInfo.TooltipText = "AddSourceTm: " + displayInfo.TooltipText;
+            displayInfo.Name = "Record Source TU: " + displayInfo.Name;
+            displayInfo.TooltipText = "Record Source TU: " + displayInfo.TooltipText;
             return displayInfo;
         }
 
@@ -76,7 +74,7 @@ namespace Sdl.Community.AddSourceTM
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return translationProviderUri.Scheme.StartsWith(AddSourceTmTranslationProvider.ProviderUriScheme,
+            return translationProviderUri.Scheme.StartsWith(RecordSourceTuTmTranslationProvider.ProviderUriScheme,
                 StringComparison.InvariantCultureIgnoreCase)
                    &&
                    FileBasedTranslationProviderUi.SupportsTranslationProviderUri(translationProviderUri.GetInnerProviderUri());
@@ -89,7 +87,7 @@ namespace Sdl.Community.AddSourceTM
 
         public string TypeName
         {
-            get { return "AddSourceTM ..."; }
+            get { return "Record Source TU ..."; }
         }
 
         #endregion

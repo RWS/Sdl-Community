@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Sdl.Community.AddSourceTM.Source_Configurtion
+namespace Sdl.Community.RecordSourceTU
 {
     public class Persistance
     {
@@ -14,7 +10,7 @@ namespace Sdl.Community.AddSourceTM.Source_Configurtion
 
         public Persistance()
         {
-            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\AddSourceTM\addSourceTM.json");
+            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\RecordSourceTU\recordSourceTU.json");
         }
 
         public void Save(AddSourceTmConfigurations toSave)
@@ -30,14 +26,7 @@ namespace Sdl.Community.AddSourceTM.Source_Configurtion
 
             string json = JsonConvert.SerializeObject(toSave);
             File.WriteAllText(_persistancePath, json);
-            //using (var stream = new FileStream(_persistancePath, FileMode.OpenOrCreate))
-            //{
-            //    using (var writer = new StreamWriter(stream))
-            //    {
-                    
-            //        writer.Write(json);
-            //    }
-            //}
+            toSave.SaveChanges();
         }
 
         public AddSourceTmConfigurations Load()
@@ -46,6 +35,7 @@ namespace Sdl.Community.AddSourceTM.Source_Configurtion
             var json = File.ReadAllText(_persistancePath);
 
             var result = JsonConvert.DeserializeObject<AddSourceTmConfigurations>(json);
+            result.SaveChanges();
 
             return result;
         }

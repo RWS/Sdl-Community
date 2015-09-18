@@ -2,9 +2,9 @@
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
-    public class AddSourceTmTranslationProvider : ITranslationMemory
+    public class RecordSourceTuTmTranslationProvider : ITranslationMemory
     {
         internal const string ProviderUriScheme = "addSourceTm.";
         
@@ -21,7 +21,7 @@ namespace Sdl.Community.AddSourceTM
         }
 
         private readonly ITranslationProvider _fileBasedTranslationProvider;
-        public AddSourceTmTranslationProvider(ITranslationProvider provider)
+        public RecordSourceTuTmTranslationProvider(ITranslationProvider provider)
         {
             _fileBasedTranslationProvider = provider;
         }
@@ -31,7 +31,7 @@ namespace Sdl.Community.AddSourceTM
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languagePair)
         {
             var languageDirection = _fileBasedTranslationProvider.GetLanguageDirection(languagePair);
-            return new AddSourceTmLanguageDirection(languageDirection, FileBasedTranslationMemory.LanguageDirection);
+            return new RecordsSourceTuLanguageDirection(languageDirection, FileBasedTranslationMemory.LanguageDirection);
         }
 
         public bool IsReadOnly
@@ -46,7 +46,7 @@ namespace Sdl.Community.AddSourceTM
 
         public string Name
         {
-            get { return "AddSourceTM: " + _fileBasedTranslationProvider.Name; }
+            get { return "Record Source TU: " + _fileBasedTranslationProvider.Name; }
         }
 
         public void RefreshStatusInfo()

@@ -1,13 +1,13 @@
 ﻿using System;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.AddSourceTM
+namespace Sdl.Community.RecordSourceTU
 {
     [TranslationProviderFactory(
-        Id = "Sdl.Community.AddSourceTMFactory",
-        Name = "Sdl.Community.AddSourceTMFactory",
-        Description = "Sdl.Community.AddSourceTMFactory")]
-    public class AddSourceTmProviderFactory : ITranslationProviderFactory
+        Id = "Sdl.Community.RecordSourceTuFactory",
+        Name = "Sdl.Community.RecordSourceTuFactory",
+        Description = "Sdl.Community.RecordSourceTuFactory")]
+    public class RecordSourceTuProviderFactory : ITranslationProviderFactory
     {
         #region ITranslationProviderFactory Members
 
@@ -16,7 +16,7 @@ namespace Sdl.Community.AddSourceTM
             var fileBasedUri = translationProviderUri.GetInnerProviderUri();
             var tProviderFactory = TranslationProviderManager.GetTranslationProviderFactory(fileBasedUri);
             var tProvider = tProviderFactory.CreateTranslationProvider(fileBasedUri, translationProviderState, credentialStore);
-            return new AddSourceTmTranslationProvider(tProvider);
+            return new RecordSourceTuTmTranslationProvider(tProvider);
         }
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
@@ -35,7 +35,7 @@ namespace Sdl.Community.AddSourceTM
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
             return translationProviderUri.Scheme.StartsWith(
-                AddSourceTmTranslationProvider.ProviderUriScheme, StringComparison.OrdinalIgnoreCase);
+                RecordSourceTuTmTranslationProvider.ProviderUriScheme, StringComparison.OrdinalIgnoreCase);
         }
 
         #endregion
