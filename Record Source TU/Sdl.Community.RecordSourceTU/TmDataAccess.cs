@@ -93,7 +93,7 @@ namespace Sdl.Community.RecordSourceTU
         public List<string> GetCustomFields()
         {
             var customFields = new List<string>();
-            var attributes = _db.attributes.All();
+            var attributes = _db.attributes.All().Where(_db.attributes.type == 2);
 
             foreach (var attribute in attributes)
             {

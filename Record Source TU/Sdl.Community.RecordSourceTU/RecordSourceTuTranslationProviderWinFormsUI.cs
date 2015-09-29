@@ -64,6 +64,7 @@ namespace Sdl.Community.RecordSourceTU
                 translationProviderState);
             displayInfo.Name = "Record Source TU: " + displayInfo.Name;
             displayInfo.TooltipText = "Record Source TU: " + displayInfo.TooltipText;
+            displayInfo.TranslationProviderIcon = PluginResources.Approved;
             return displayInfo;
         }
 

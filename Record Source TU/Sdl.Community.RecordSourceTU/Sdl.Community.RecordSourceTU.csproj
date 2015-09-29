@@ -135,6 +135,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RecordSourceTuTmTranslationProvider.cs" />
     <Compile Include="RecordSourceTuProviderFactory.cs" />
     <Compile Include="RecordSourceTuTranslationProviderWinFormsUI.cs" />
@@ -156,10 +161,13 @@
     <Compile Include="TmDataAccess.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PluginResources.resx">
+    <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
-    </Content>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
+    <None Include="Resources\Approved.ico" />
     <Content Include="SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -185,6 +193,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\Approved.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\SDL\SDLTradosStudio\12\Sdl.Core.PluginFramework.Build.targets" />
