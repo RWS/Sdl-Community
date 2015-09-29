@@ -10,7 +10,7 @@ namespace Sdl.Community.RecordSourceTU
         Id = "Sdl.Community.RecordSourceTUWinFormsUI",
         Name = "Sdl.Community.RecordSourceTUWinFormsUI",
         Description = "Sdl.Community.RecordSourceTUWinFormsUI")]
-    public class AddSourceTmTranslationProviderWinFormsUi : ITranslationProviderWinFormsUI
+    public class RecordSourceTuTranslationProviderWinFormsUi : ITranslationProviderWinFormsUI
     {
         private ITranslationProviderWinFormsUI FileBasedTranslationProviderUi
         {
@@ -25,6 +25,7 @@ namespace Sdl.Community.RecordSourceTU
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             var translationProviders = FileBasedTranslationProviderUi.Browse(owner, languagePairs, credentialStore);
+            if (translationProviders.Length == 0) return null;
             var translationProvider = translationProviders[0];
             using (var sourceConfigurationForm = new SourceTmConfiguration(translationProvider.Uri))
             {
