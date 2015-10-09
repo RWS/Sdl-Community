@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDL.Community.BetaAPIs", "SDL.Community.BetaAPIs\SDL.Community.BetaAPIs.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.BetaAPIs.UI", "Sdl.Community.BetaAPIs.UI\Sdl.Community.BetaAPIs.UI.csproj", "{DA5809D0-1B8B-4F93-915D-AB87446E9460}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{597B3519-F2FA-443F-BDC2-95A2409FB624}"
+	ProjectSection(SolutionItems) = preProject
+		3rd Party\Markdown.Xaml.dll = 3rd Party\Markdown.Xaml.dll
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.ActiveCfg = Debug|x86
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.Build.0 = Debug|x86
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.ActiveCfg = Release|x86
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.Build.0 = Release|x86
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Debug|x86.ActiveCfg = Debug|x86
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Debug|x86.Build.0 = Debug|x86
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Release|x86.ActiveCfg = Release|x86
+		{DA5809D0-1B8B-4F93-915D-AB87446E9460}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
