@@ -1,0 +1,12 @@
+﻿[
+  {
+    "Name": "Alignment API",
+    "Description": "#Alignment API\r\n\r\nThe Alignment API allows other components or products to use the Alignment functionality and access specific classes and file formats.\r\n## Alignment\r\n\r\nThe **alignment problem** concerns aligning two native documents (e.g. two Microsoft Word documents) where one native document is a translation of another native document to produce an aligned resource like an aligned TMX file or an aligned sdlxliff file.\r\n##How to use\r\n\r\nIn order to start use the SpellChecking API you will have to reference in your project the following assemblies:\r\n\r\nSdl.Core.Processing.Alignment.Api.dll\r\n\r\nSdl.Core.Processing.Alignment.dll",
+    "Assemblies": [ "Sdl.Core.Processing.Alignment.Api.dll", "Sdl.Core.Processing.Alignment.dll" ]
+  },
+  {
+    "Name": "SpellChecking API",
+    "Description": "#SpellChecking API\r\n\r\nThe SpellChecking API allows other components or products to implement there custom spell checking mechanism.\r\n##How to use\r\n\r\nIn order to start use the SpellChecking API you will have to reference in your project the following assembly:\r\n\r\nSdl.SpellChecking.Api.dll",
+    "Assemblies": [ "Sdl.SpellChecking.Api.dll" ]
+  }
+]
