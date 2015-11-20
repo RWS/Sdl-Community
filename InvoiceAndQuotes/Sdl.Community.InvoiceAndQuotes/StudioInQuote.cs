@@ -368,7 +368,7 @@ namespace Sdl.Community.InvoiceAndQuotes
         private bool _saveCultrue = true;
         private void StudioInQuote_Load(object sender, EventArgs e)
         {
-            txtProjectsXML.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Studio 2014\Projects");
+            txtProjectsXML.Text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), @"Studio 2015\Projects");
             projectsList.SelectedIndexChanged += projectsList_SelectedIndexChanged;
             BindDDL(ddlWord, (new WordTemplates()).GetAllTemplates());
             BindDDL(ddlExcel, (new ExcelTemplates()).GetAllTemplates());
