@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -19,9 +21,15 @@ namespace Sdl.Community.FileTypeSupport.TXML
         private int _totalTagCount;
         private int _tmpTotalTagCount;
         private int _srcSegmentTagCount;
+        private int _maxKeyValue;
 
+        private readonly Dictionary<int, IPlaceholderTagProperties> _dictionaryTags;
 
- 
+        public TxmlParser()
+        {
+            _maxKeyValue = 0;
+            _dictionaryTags = new Dictionary<int, IPlaceholderTagProperties>();
+        }
 
         public void SetFileProperties(IFileProperties properties)
         {
@@ -99,7 +107,6 @@ namespace Sdl.Community.FileTypeSupport.TXML
 
             Output.FileComplete();
             Output.Complete();
-
             return false;
         }
 
@@ -147,6 +154,7 @@ namespace Sdl.Community.FileTypeSupport.TXML
                         if (singleNode != null) singleNode.InnerText = "";
                         ISegment trgSegment = CreateSegment(item.SelectSingleNode("source"), segmentPairProperties, false);
                         paragraphUnit.Target.Add(trgSegment);
+                        
                     }
 
                     if(tuOrg.MatchPercent >0)
@@ -160,6 +168,7 @@ namespace Sdl.Community.FileTypeSupport.TXML
                     {
                         paragraphUnit.Properties.Comments = CreateComment(item.SelectSingleNode("comments"));
                     }
+                      
                 }
 
             return paragraphUnit;
@@ -208,6 +217,7 @@ namespace Sdl.Community.FileTypeSupport.TXML
 
             ISegment segment = ItemFactory.CreateSegment(pair);
 
+           
             if (source)
             {
                 _srcSegmentTagCount = 0;
@@ -252,7 +262,6 @@ namespace Sdl.Community.FileTypeSupport.TXML
             IPlaceholderTagProperties phTagProperties = PropertiesFactory.CreatePlaceholderTagProperties(tagContent);
             IPlaceholderTag phTag = ItemFactory.CreatePlaceholderTag(phTagProperties);
 
-            
             phTagProperties.TagContent = item.OuterXml;
             phTagProperties.DisplayText = string.Format("{{{0}}}", tagNo);
             phTagProperties.CanHide = false;
@@ -260,6 +269,7 @@ namespace Sdl.Community.FileTypeSupport.TXML
             //determine tag id
             if (source)
             {
+
                 var thisId =
                     new TagId(_totalTagCount.ToString(CultureInfo.InvariantCulture));
 
@@ -267,6 +277,18 @@ namespace Sdl.Community.FileTypeSupport.TXML
                 _totalTagCount += 1;
                 _tmpTotalTagCount += 1;
                 _srcSegmentTagCount += 1;
+
+                //check for source with the same Id and different properties
+                if (CheckForIdAndPropertiesNotEqual(thisId, phTagProperties))
+                {
+                    _totalTagCount = CreatePlaceholderTagHelper(thisId, phTagProperties);
+                }
+
+                //check for source with the same Id and same properties
+                if (!CheckForIdAndPropertiesEqual(thisId, phTagProperties))
+                {
+                    _dictionaryTags.Add(int.Parse(thisId.Id), phTagProperties);
+                }
             }
             else
             {
@@ -274,10 +296,46 @@ namespace Sdl.Community.FileTypeSupport.TXML
                     new TagId(_totalTagCount.ToString(CultureInfo.InvariantCulture));
 
                 phTagProperties.TagId = thisId;
-                _totalTagCount += 1;
+
+                if (CheckForIdAndPropertiesNotEqual(thisId, phTagProperties))
+                {
+                    _totalTagCount= CreatePlaceholderTagHelper(thisId, phTagProperties);
+                }
             }
 
             return phTag;
+        }
+
+        //Helper method to check if source or tag have same Id but different content 
+        private bool CheckForIdAndPropertiesNotEqual(TagId placeholderId, IPlaceholderTagProperties phTagProperties)
+        {
+            if (_dictionaryTags.ContainsKey(int.Parse(placeholderId.Id)) && !_dictionaryTags.ContainsValue(phTagProperties))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Helper method to check if source or tag have same Id and same content
+        private bool CheckForIdAndPropertiesEqual(TagId placeholderId, IPlaceholderTagProperties phTagProperties)
+        {
+            if (_dictionaryTags.ContainsKey(int.Parse(placeholderId.Id)) && _dictionaryTags.ContainsValue(phTagProperties))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        //Helper function for source or tag with the same Id but different content
+        private int CreatePlaceholderTagHelper(TagId placeholderId, IPlaceholderTagProperties phTagProperties)
+        {
+            var max = _dictionaryTags.Keys.Max();
+            var id = max + 1;
+            placeholderId.Id = id.ToString();
+            phTagProperties.TagId = placeholderId;
+
+            _dictionaryTags.Add(id, phTagProperties);
+            return id;
         }
 
         private IContextProperties CreateContext(string unitId)
