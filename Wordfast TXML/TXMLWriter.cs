@@ -59,11 +59,15 @@ namespace Sdl.Community.FileTypeSupport.TXML
             foreach (ISegmentPair segmentPair in paragraphUnit.SegmentPairs)
             {
                 var xmlNodeList = xmlUnit.SelectNodes("segment");
-                if (xmlNodeList != null)
+                if (xmlNodeList != null && xmlNodeList[i] != null)
                 {
                     XmlNode source = xmlNodeList[i].SelectSingleNode("source");
 
-                    if (source != null) source.InnerXml = _textExtractor.GetPlainText(segmentPair.Source);
+                    if (source != null)
+                    {
+                        source.InnerXml = _textExtractor.GetPlainText(segmentPair.Source);
+                    }
+
                 }
 
                 Byte matchPercent;
@@ -74,7 +78,7 @@ namespace Sdl.Community.FileTypeSupport.TXML
                 
                 XmlNode target;
                 var segmentNodes = xmlUnit.SelectNodes("segment");
-                if (segmentNodes != null)
+                if (segmentNodes != null && segmentNodes[i]!=null)
                 {
                     if (segmentNodes[i].SelectSingleNode("target") == null)
                     {
@@ -94,8 +98,11 @@ namespace Sdl.Community.FileTypeSupport.TXML
                     }
                     else
                     {
-                        target = segmentNodes[i].SelectSingleNode("target");
-                        target.InnerXml = _textExtractor.GetPlainText(segmentPair.Target);
+                        if (segmentNodes[i] != null)
+                        {
+                            target = segmentNodes[i].SelectSingleNode("target");
+                            target.InnerXml = _textExtractor.GetPlainText(segmentPair.Target);
+                        }
                     }
 
 
