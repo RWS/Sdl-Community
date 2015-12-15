@@ -1,0 +1,372 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tmx version="1.4">
+  <header creationtool="SDL Language Platform" creationtoolversion="8.0" o-tmf="SDL TM8 Format" datatype="xml" segtype="sentence" adminlang="en-US" srclang="en-US" creationdate="20090504T230119Z" creationid="PEGASUS\Ziad">
+    <prop type="x-Client:MultipleString"></prop>
+    <prop type="x-Recognizers">RecognizeAll</prop>
+    <prop type="x-TMName">Software_EN-US_DE-DE</prop>
+  </header>
+  <body>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172121Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172121Z" usagecount="2">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-heading</prop>
+      <tuv xml:lang="en-US">
+        <seg>The Check Spelling Command</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Der Befehl Rechtschreibung</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20110816T200723Z" changeid="Juniper\Ziad Chama" lastusagedate="20090630T172125Z" usagecount="3">
+      <prop type="x-Context">-2663621573404830848, 2157403730513310309</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>To run the spelling checker:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>So führen Sie die Rechtschreibprüfung durch:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172126Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172126Z" usagecount="3">
+      <prop type="x-Context">2118343625505507241, -2258996831753894370</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Place your cursor at the point in your document where you would like the spelling checker to begin.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Positionieren Sie den Cursor an der Stelle im Dokument, an der die Rechtschreibprüfung beginnen soll.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172205Z" changeid="PEGASUS\Administrator" lastusagedate="20090504T230613Z">
+      <prop type="x-Context">8951049103686465987, -6099959160277236821</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>From the <bpt i="1" type="pt3" x="1" />Tools<ept i="1" /> menu, choose <bpt i="2" type="pt5" x="2" />Spelling Checker<ept i="2" /> or just click the button <bpt i="3" type="pt7" x="3" />Check Spelling<ept i="3" />.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie im Menü <bpt i="1" type="pt3" x="1" />Extras<ept i="1" /> den Befehl <bpt i="2" type="pt5" x="2" />Rechtschreibprüfung<ept i="2" />, oder klicken Sie auf die Schaltfläche <bpt i="3" type="pt7" x="3" />Rechtschreibprüfung<ept i="3" />.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172211Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172211Z" usagecount="2">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">2967776635217634551, -4742487714213701282</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>The spelling checker begins checking at the cursor position.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Das Dokument wird ab der aktuellen Cursorposition automatisch auf Rechtschreibfehler überprüft.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20110816T200914Z" changeid="Juniper\Ziad Chama" lastusagedate="20090630T172014Z" usagecount="10">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">112983789656, 108791733200524</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>To activate the spelling checker</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Die Rechtschreibprüfung aktivieren</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20090630T171927Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211728Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">5806475313729278161, -4204637475635611302</prop>
+      <prop type="x-Context">6712968900000706880, -5470011723441573923</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt23" x="1" />Ignore words in UPPERCASE<ept i="1" /> to skip words containing uppercase characters only, for example, acronyms.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt23" x="1" />Wörter in GROSSBUCHSTABEN ignorieren<ept i="1" /> um Wörter in Großbuchstaben, z. B. Akronyme, zu ignorieren.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20090630T172007Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211731Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">1248048638731870258, 1730012893059352883</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt27" x="1" />Ignore Internet and file addresses<ept i="1" /> if you do not want the application to check Internet addresses, file names or email addresses.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt27" x="1" />Internet- und Dateiadressen ignorieren<ept i="1" />, wenn Sie nicht möchten, dass die Anwendung die Rechtschreibung für Internetadressen, Dateinamen oder E-Mailadressen durchführt.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230911Z" creationid="PEGASUS\Ziad" changedate="20090504T230911Z" changeid="PEGASUS\Ziad" lastusagedate="20090504T230911Z">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-heading</prop>
+      <tuv xml:lang="en-US">
+        <seg>Language Support</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Unterstützte Sprachen</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T232457Z" creationid="PEGASUS\Ziad" changedate="20090630T172231Z" changeid="PEGASUS\Administrator" lastusagedate="20090504T232457Z">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>If spelling errors are found in your target text, they are highlighted and the <bpt i="1" type="pt11" x="1" />Check Spelling<ept i="1" /> dialog box is displayed.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wenn Rechtschreibfehler im Zieltext gefunden wurden, werden diese markiert und das Fenster <bpt i="1" type="pt11" x="1" />Rechtschreibprüfung <ept i="1" /> wird aufgerufen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T130625Z" creationid="PEGASUS\Ziad" changedate="20090630T172013Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211800Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">7796796821723411975, -775363947482655757</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Chapter:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Kapitel:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T200901Z" creationid="PEGASUS\Ziad" changedate="20090630T171642Z" changeid="PEGASUS\Administrator" lastusagedate="20130514T125423Z" usagecount="3">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">7456010134574206123, 949582391580915722</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <prop type="x-Client:MultipleString">test</prop>
+      <tuv xml:lang="en-US">
+        <seg>On the <bpt i="1" type="pt2" x="1" />Tools<ept i="1" /> menu, click <bpt i="2" type="pt4" x="2" />Options<ept i="2" /> to display the <bpt i="3" type="pt6" x="3" />Options<ept i="3" /> dialog box.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie im Menü <bpt i="1" type="pt2" x="1" />Extras<ept i="1" /> den Befehl <bpt i="2" type="pt4" x="2" />Optionen<ept i="2" /> aus, um das Dialogfenster <bpt i="3" type="pt6" x="3" />Optionen<ept i="3" /> aufzurufen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T201056Z" creationid="PEGASUS\Ziad" changedate="20090630T171908Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211724Z" usagecount="1">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">5806475313729278161, -4204637475635611302</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt23" x="1" />Suggest from main dictionary only<ept i="1" /> if you do not want the application to suggest spellings from any open <bpt i="2" type="pt25" x="2" />Custom<ept i="2" /> dictionaries.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie den Befehl <bpt i="1" type="pt23" x="1" />Vorschläge nur aus Hauptwörterbuch<ept i="1" />, wenn Sie verhindern wollen, dass die Anwendung Vorschläge aus den <bpt i="2" type="pt25" x="2" />Benutzerwörterbüchern<ept i="2" /> unterbreitet.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T201057Z" creationid="PEGASUS\Ziad" changedate="20110816T211753Z" changeid="Juniper\Ziad Chama" lastusagedate="20090509T201057Z">
+      <prop type="x-Context">6627292746614063468, -2450148235750662938</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt31" x="1" />Ignore words with numbers<ept i="1" /> to skip words with one or several numbers.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt31" x="1" />Wörter mit Zahlen ignorieren<ept i="1" /> um Wörter, die <bpt i="2" type="pt31" />Ziffern<ept i="2" /> enthalten zu ignorieren.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110810T160549Z" creationid="Juniper\Ziad Chama" changedate="20110817T031117Z" changeid="Juniper\Ziad Chama" lastusagedate="20130514T125523Z" usagecount="2">
+      <prop type="x-Context">-3490439613296175882, -4040960228858984290</prop>
+      <prop type="x-Context">2990502790149717257, 2526035627399216747</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <prop type="x-Client:MultipleString">test</prop>
+      <tuv xml:lang="en-US">
+        <seg>In the <bpt i="1" type="pt11" x="1" />Options<ept i="1" /> dialog box, click the <bpt i="2" type="pt12" x="2" />Spelling &amp; Grammar<ept i="2" /> tab.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Klicken Sie im Dialogfenster <bpt i="1" type="pt12" x="2" />Optionen<ept i="1" /> auf den Reiter <bpt i="2" type="pt11" x="1" />Rechtschreibung und Grammatik<ept i="2" />.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110810T160617Z" creationid="Juniper\Ziad Chama" changedate="20110810T160617Z" changeid="Juniper\Ziad Chama" lastusagedate="20110816T211721Z" usagecount="1">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">7969763200853921990, 1849450837104409230</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select the <bpt i="1" type="pt16" />Check Spelling as you type<ept i="1" /> check box for automatic correction of misspellings as you type.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie das Kontrollkästchen <bpt i="1" type="Bold" />Rechtschreibung während der Eingabe überprüfen<ept i="1" /> aus, um Rechtschreibfehler während der Eingabe korrigieren zu lassen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110810T160648Z" creationid="Juniper\Ziad Chama" changedate="20110810T160648Z" changeid="Juniper\Ziad Chama" lastusagedate="20110810T160648Z">
+      <prop type="x-Context">-6239516528262275236, 5749945007461992631</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt18" />Always suggest corrections<ept i="1" /> to have Microsoft Word suggest corrections to misspellings.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="Bold" />Immer Korrekturvorschläge unterbreiten<ept i="1" /> aus, damit Microsoft Word Korrekturvorschläge für Rechtschreibfehler macht.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110810T160339Z" creationid="Juniper\Ziad Chama" changedate="20110810T160712Z" changeid="Juniper\Ziad Chama" lastusagedate="20110810T160712Z">
+      <prop type="x-Context">-290193668855625024, 1336598597474467898</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>If you are using the Word Spelling Checker or the Word Spelling Checker 2.0 in TagEditor, you will need to configure the spelling checker options from within Microsoft Word.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wenn Sie die Word-Rechtschreibprüfung oder die Word-Rechtschreibprüfung 2.0 in TagEditor verwenden, müssen Sie die Optionen der Rechtschreibprüfung in Microsoft Word einstellen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132536Z" creationid="Juniper\Ziad Chama" changedate="20110818T132536Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="3">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">5364981232955484492, 7249129065656843027</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>Press <bpt i="1" type="66" />Enter<ept i="1" /> on the keyboard to begin the search.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Starten Sie Ihre Suche mit der <bpt i="1" type="Bold" />Eingabetaste<ept i="1" />.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132634Z" creationid="Juniper\Ziad Chama" changedate="20110818T132634Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="3">
+      <prop type="x-Context">-8430729777818702065, -5495001664271452346</prop>
+      <prop type="x-Context">-3334355809619528758, 7027919022079307795</prop>
+      <prop type="x-Context">-2038846179018768837, -8430442413100674371</prop>
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-heading</prop>
+      <tuv xml:lang="en-US">
+        <seg>Take the following steps:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Gehen Sie folgendermaßen vor:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132736Z" creationid="Juniper\Ziad Chama" changedate="20110818T132736Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="3">
+      <prop type="x-Context">8085483555402171284, 2585767291222290735</prop>
+      <prop type="x-Context">8085483555402171284, 5587238904869986124</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Enter the search value.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Geben Sie den Suchtext ein.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T133557Z" creationid="Juniper\Ziad Chama" changedate="20110818T133557Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="4">
+      <prop type="x-Context">-6306284829075017498, -3254469325141427641</prop>
+      <prop type="x-Context">-5095006944449107653, -5095007568832862696</prop>
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">3127834358223224662, 118142085</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>Before you search, select the termbases you want to use.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Bevor Sie suchen, wählen Sie die zu verwendenden Termbanken aus.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110819T233328Z" creationid="Juniper\Ziad Chama" changedate="20110924T103249Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="1">
+      <prop type="x-Context">3127834358223224662, 118142085</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>Search all text fields in all termbase entries in all languages.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Durchsucht  alle Textfelder in den Termbankeinträgen in allen Sprachen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110819T233359Z" creationid="Juniper\Ziad Chama" changedate="20110819T233359Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="1">
+      <prop type="x-Context">-6306284829075017498, -3254469325141427641</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>Finds terms that are similar to the search value.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Findet Termini, die dem Suchtext ähnlich sind.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132427Z" creationid="Juniper\Ziad Chama" changedate="20110924T093322Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="1">
+      <prop type="x-Context">-2352939465557163171, 2737549429325238955</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>The following search types are supported:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Es werden die folgenden Sucharten unterstützt:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132445Z" creationid="Juniper\Ziad Chama" changedate="20110923T221728Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="1">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">117904005, 108716250615827</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>By default, the maximum number of hits is 25.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Die maximale Trefferzahl beträgt standardmäßig 250.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T132726Z" creationid="Juniper\Ziad Chama" changedate="20111006T105450Z" changeid="Juniper\Ziad Chama" lastusagedate="20110820T210142Z" usagecount="9">
+      <prop type="x-Context">-8168491775224759318, 7201942433485900031</prop>
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select the source and target languages</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie die Ausgangs- und Zielsprachen aus aus</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110818T133642Z" creationid="Juniper\Ziad Chama" changedate="20110923T172109Z" changeid="Juniper\Ziad Chama" lastusagedate="20110923T172109Z">
+      <prop type="x-Context">-1147424637869104176, 2989651766597980153</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>In the <bpt i="1" type="48" x="1" />Terms View<ept i="1" />, select <bpt i="2" type="49" x="2" />Search<ept i="2" /> from the menu, then the type of search:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Klicken Sie in der <bpt i="1" type="48" x="1" />Termini<ept i="1" />-Ansicht auf das Menü <bpt i="2" type="49" x="2" />Suchen<ept i="2" /> und wählen dann die gewünschte Suchart aus:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20110923T173923Z" creationid="Juniper\Ziad Chama" changedate="20110923T173923Z" changeid="Juniper\Ziad Chama" lastusagedate="20110923T173923Z">
+      <prop type="x-Context">-4126294290161445722, 3236306634597228544</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <tuv xml:lang="en-US">
+        <seg>You can search for terms in a single termbase or multiple termbases.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Sie können Termini in einer oder in mehreren Termbanken suchen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20130514T125420Z" creationid="Juniper\Ziad Chama" changedate="20130514T125420Z" changeid="Juniper\Ziad Chama" lastusagedate="20130514T125455Z" usagecount="1">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-Client:MultipleString">test</prop>
+      <tuv xml:lang="en-US">
+        <seg>Configuring the Spelling Checker</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Konfiguration der Reschtschreibprüfung</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20130514T133631Z" creationid="Juniper\Ziad Chama" changedate="20130514T133756Z" changeid="Juniper\Ziad Chama" lastusagedate="20130514T133756Z">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-ConfirmationLevel">Translated</prop>
+      <prop type="x-Client:MultipleString">test</prop>
+      <tuv xml:lang="en-US">
+        <seg>Spaceship enters planet orbit to attack at <bpt i="1" type="10" />impulse speed<ept i="1" />.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Das Raumschiff tritt in den Orbit des Planeten ein, um mit Impulsgeschwindigkeit anzugreifen.</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

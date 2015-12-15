@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<tmx version="1.4">
+  <header creationtool="SDL Language Platform" creationtoolversion="8.0" o-tmf="SDL TM8 Format" datatype="xml" segtype="sentence" adminlang="en-US" srclang="en-US" creationdate="20090504T230119Z" creationid="PEGASUS\Ziad">
+    <prop type="x-Client:MultipleString"></prop>
+    <prop type="x-Recognizers">RecognizeAll</prop>
+    <prop type="x-TMName">Software_EN-US_DE-DE</prop>
+  </header>
+  <body>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172121Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172121Z" usagecount="2">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-heading</prop>
+      <tuv xml:lang="en-US">
+        <seg>The Check Spelling Command</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Der Befehl Rechtschreibung</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20110816T200723Z" changeid="Juniper\Ziad Chama" lastusagedate="20090630T172125Z" usagecount="3">
+      <prop type="x-Context">-2663621573404830848, 2157403730513310309</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>To run the spelling checker:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>So führen Sie die Rechtschreibprüfung durch:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172126Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172126Z" usagecount="3">
+      <prop type="x-Context">2118343625505507241, -2258996831753894370</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>Place your cursor at the point in your document where you would like the spelling checker to begin.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Positionieren Sie den Cursor an der Stelle im Dokument, an der die Rechtschreibprüfung beginnen soll.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172205Z" changeid="PEGASUS\Administrator" lastusagedate="20090504T230613Z">
+      <prop type="x-Context">8951049103686465987, -6099959160277236821</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>From the <bpt i="1" type="pt3" x="1" />Tools<ept i="1" /> menu, choose <bpt i="2" type="pt5" x="2" />Spelling Checker<ept i="2" /> or just click the button <bpt i="3" type="pt7" x="3" />Check Spelling<ept i="3" />.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie im Menü <bpt i="1" type="pt3" x="1" />Extras<ept i="1" /> den Befehl <bpt i="2" type="pt5" x="2" />Rechtschreibprüfung<ept i="2" />, oder klicken Sie auf die Schaltfläche <bpt i="3" type="pt7" x="3" />Rechtschreibprüfung<ept i="3" />.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230613Z" creationid="PEGASUS\Ziad" changedate="20090630T172211Z" changeid="PEGASUS\Administrator" lastusagedate="20090630T172211Z" usagecount="2">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">2967776635217634551, -4742487714213701282</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <tuv xml:lang="en-US">
+        <seg>The spelling checker begins checking at the cursor position.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Das Dokument wird ab der aktuellen Cursorposition automatisch auf Rechtschreibfehler überprüft.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20110816T200914Z" changeid="Juniper\Ziad Chama" lastusagedate="20090630T172014Z" usagecount="10">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">112983789656, 108791733200524</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>To activate the spelling checker</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Die Rechtschreibprüfung aktivieren</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20090630T171927Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211728Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">5806475313729278161, -4204637475635611302</prop>
+      <prop type="x-Context">6712968900000706880, -5470011723441573923</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt23" x="1" />Ignore words in UPPERCASE<ept i="1" /> to skip words containing uppercase characters only, for example, acronyms.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt23" x="1" />Wörter in GROSSBUCHSTABEN ignorieren<ept i="1" /> um Wörter in Großbuchstaben, z. B. Akronyme, zu ignorieren.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230703Z" creationid="PEGASUS\Ziad" changedate="20090630T172007Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211731Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">1248048638731870258, 1730012893059352883</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt27" x="1" />Ignore Internet and file addresses<ept i="1" /> if you do not want the application to check Internet addresses, file names or email addresses.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt27" x="1" />Internet- und Dateiadressen ignorieren<ept i="1" />, wenn Sie nicht möchten, dass die Anwendung die Rechtschreibung für Internetadressen, Dateinamen oder E-Mailadressen durchführt.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T230911Z" creationid="PEGASUS\Ziad" changedate="20090504T230911Z" changeid="PEGASUS\Ziad" lastusagedate="20090504T230911Z">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-heading</prop>
+      <tuv xml:lang="en-US">
+        <seg>Language Support</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Unterstützte Sprachen</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090504T232457Z" creationid="PEGASUS\Ziad" changedate="20090630T172231Z" changeid="PEGASUS\Administrator" lastusagedate="20090504T232457Z">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>If spelling errors are found in your target text, they are highlighted and the <bpt i="1" type="pt11" x="1" />Check Spelling<ept i="1" /> dialog box is displayed.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wenn Rechtschreibfehler im Zieltext gefunden wurden, werden diese markiert und das Fenster <bpt i="1" type="pt11" x="1" />Rechtschreibprüfung <ept i="1" /> wird aufgerufen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T130625Z" creationid="PEGASUS\Ziad" changedate="20090630T172013Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211800Z" usagecount="4">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">7796796821723411975, -775363947482655757</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Chapter:</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Kapitel:</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T200901Z" creationid="PEGASUS\Ziad" changedate="20090630T171642Z" changeid="PEGASUS\Administrator" lastusagedate="20130514T125423Z" usagecount="3">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">7456010134574206123, 949582391580915722</prop>
+      <prop type="x-Origin">TM</prop>
+      <prop type="x-StructureContext:MultipleString">x-tm-listitem</prop>
+      <prop type="x-Client:MultipleString">test</prop>
+      <tuv xml:lang="en-US">
+        <seg>On the <bpt i="1" type="pt2" x="1" />Tools<ept i="1" /> menu, click <bpt i="2" type="pt4" x="2" />Options<ept i="2" /> to display the <bpt i="3" type="pt6" x="3" />Options<ept i="3" /> dialog box.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie im Menü <bpt i="1" type="pt2" x="1" />Extras<ept i="1" /> den Befehl <bpt i="2" type="pt4" x="2" />Optionen<ept i="2" /> aus, um das Dialogfenster <bpt i="3" type="pt6" x="3" />Optionen<ept i="3" /> aufzurufen.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T201056Z" creationid="PEGASUS\Ziad" changedate="20090630T171908Z" changeid="PEGASUS\Administrator" lastusagedate="20110816T211724Z" usagecount="1">
+      <prop type="x-Context">0, 0</prop>
+      <prop type="x-Context">5806475313729278161, -4204637475635611302</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt23" x="1" />Suggest from main dictionary only<ept i="1" /> if you do not want the application to suggest spellings from any open <bpt i="2" type="pt25" x="2" />Custom<ept i="2" /> dictionaries.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie den Befehl <bpt i="1" type="pt23" x="1" />Vorschläge nur aus Hauptwörterbuch<ept i="1" />, wenn Sie verhindern wollen, dass die Anwendung Vorschläge aus den <bpt i="2" type="pt25" x="2" />Benutzerwörterbüchern<ept i="2" /> unterbreitet.</seg>
+      </tuv>
+    </tu>
+    <tu creationdate="20090509T201057Z" creationid="PEGASUS\Ziad" changedate="20110816T211753Z" changeid="Juniper\Ziad Chama" lastusagedate="20090509T201057Z">
+      <prop type="x-Context">6627292746614063468, -2450148235750662938</prop>
+      <prop type="x-Origin">TM</prop>
+      <tuv xml:lang="en-US">
+        <seg>Select <bpt i="1" type="pt31" x="1" />Ignore words with numbers<ept i="1" /> to skip words with one or several numbers.</seg>
+      </tuv>
+      <tuv xml:lang="de-DE">
+        <seg>Wählen Sie <bpt i="1" type="pt31" x="1" />Wörter mit Zahlen ignorieren<ept i="1" /> um Wörter, die <bpt i="2" type="pt31" />Ziffern<ept i="2" /> enthalten zu ignorieren.</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>
