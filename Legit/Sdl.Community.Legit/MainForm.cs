@@ -2,16 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using Sdl.Community.Legit.Properties;
 using TmAccess;
 using TMFileServices;
-using Trados.Interop.SettingsManager;
 using IManager = Trados.Interop.SettingsManager.IManager;
 using IRunStatus = TMFileServices.IRunStatus;
+using Settings = Sdl.Community.Legit.Properties.Settings;
 using tmaTmAccessMode = TMFileServices.tmaTmAccessMode;
 
 namespace Sdl.Community.Legit
@@ -20,8 +23,8 @@ namespace Sdl.Community.Legit
     {
 
         private IEnumerable<string> _filesToConvert;
-        private String _sourceLangLcid;
-        private String _targetLangLcid;
+        private string _sourceLangLcid;
+        private string _targetLangLcid;
         private IEnumerable<Control> _toggledControls;
 
         public MainForm()
@@ -34,17 +37,17 @@ namespace Sdl.Community.Legit
 
             AddTtFolderToThePathSysVariable();
 
-            _filesToConvert = new List<String>();
+            _filesToConvert = new List<string>();
 
-            this.FormClosing += new FormClosingEventHandler(MainForm_FormClosing);
+            FormClosing += MainForm_FormClosing;
         }
 
         // we are saving the last used source language in the settings for the next time
         // this a poor-man's default settings feature
-        void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.SourceLanguageLcid = (int)SourceLangCombo.SelectedValue;
-            Properties.Settings.Default.Save();
+            Settings.Default.SourceLanguageLcid = (int)SourceLangCombo.SelectedValue;
+            Settings.Default.Save();
         }
 
         private void InitLanguageCombo()
@@ -59,7 +62,7 @@ namespace Sdl.Community.Legit
             SourceLangCombo.DisplayMember = "EnglishName";
             SourceLangCombo.ValueMember = "KeyboardLayoutId";
             SourceLangCombo.DropDownHeight = 200;
-            SourceLangCombo.SelectedValueChanged += new EventHandler(SourceLangCombo_SelectedValueChanged);
+            SourceLangCombo.SelectedValueChanged += SourceLangCombo_SelectedValueChanged;
 
             // set the default source language to the one saved in user settings
 
@@ -67,12 +70,12 @@ namespace Sdl.Community.Legit
             TargetLangCombo.DisplayMember = "EnglishName";
             TargetLangCombo.ValueMember = "KeyboardLayoutId";
             TargetLangCombo.DropDownHeight = 200;
-            TargetLangCombo.SelectedValueChanged += new EventHandler(TargetLangCombo_SelectedValueChanged);
+            TargetLangCombo.SelectedValueChanged += TargetLangCombo_SelectedValueChanged;
 
             SourceLangCombo.SelectedIndex = 0;
         }
 
-        void SourceLangCombo_SelectedValueChanged(object sender, EventArgs e)
+        private void SourceLangCombo_SelectedValueChanged(object sender, EventArgs e)
         {
             _sourceLangLcid = SourceLangCombo.SelectedValue.ToString();
             LogSelectedSourceLanguage();
@@ -86,22 +89,22 @@ namespace Sdl.Community.Legit
 
         private void LogSelectedSourceLanguage()
         {
-            LogTextbox.LogMessage(string.Format(Properties.StringResources.SourceLanguageSetTo,
+            LogTextbox.LogMessage(string.Format(StringResources.SourceLanguageSetTo,
                                     SourceLangCombo.Text,
                                     SourceLangCombo.SelectedValue));
         }
 
         private void LogSelectedTargetLanguage()
         {
-            LogTextbox.LogMessage(string.Format(Properties.StringResources.TargetLanguageSetTo,
+            LogTextbox.LogMessage(string.Format(StringResources.TargetLanguageSetTo,
                                     TargetLangCombo.Text,
                                     TargetLangCombo.SelectedValue));
         }
 
         private void InitDragAndDropping()
         { 
-            this.DragEnter += new DragEventHandler(MainForm_DragEnter);
-            this.DragDrop += new DragEventHandler(MainForm_DragDrop);
+            DragEnter += MainForm_DragEnter;
+            DragDrop += MainForm_DragDrop;
         }
 
         private void MainForm_DragDrop(object sender, DragEventArgs e)
@@ -109,7 +112,7 @@ namespace Sdl.Community.Legit
             var files = (e.Data.GetData(DataFormats.FileDrop) as string[]);
             if (files != null)
             {
-                string path = files.FirstOrDefault();
+                var path = files.FirstOrDefault();
 
                 if (path != null && Directory.Exists(path))
                 { 
@@ -128,7 +131,7 @@ namespace Sdl.Community.Legit
 
         }
 
-        private IEnumerable<string> GetAllFilesFromFolderAndSubfolders(string folder)
+        private static IEnumerable<string> GetAllFilesFromFolderAndSubfolders(string folder)
         {
             // first let's get the files in the root of the folder
             var files = Directory.GetFiles(folder).AsEnumerable();
@@ -163,10 +166,10 @@ namespace Sdl.Community.Legit
 
         private void InitBackgroundConverter()
         {
-            BackgroundConverter.DoWork += new DoWorkEventHandler(BackgroundConverter_DoWork);
-            BackgroundConverter.RunWorkerCompleted += new RunWorkerCompletedEventHandler(BackgroundConverter_RunWorkerCompleted);
+            BackgroundConverter.DoWork += BackgroundConverter_DoWork;
+            BackgroundConverter.RunWorkerCompleted += BackgroundConverter_RunWorkerCompleted;
             BackgroundConverter.WorkerReportsProgress = true;
-            BackgroundConverter.ProgressChanged += new ProgressChangedEventHandler(BackgroundConverter_ProgressChanged);
+            BackgroundConverter.ProgressChanged += BackgroundConverter_ProgressChanged;
         }
 
         private void BackgroundConverter_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -175,10 +178,11 @@ namespace Sdl.Community.Legit
             // we just need to report which file is being converted right now
             // and if it's a conversion result then we report the result of the conversion of course
 
-            if (e.UserState is string)
+            var s = e.UserState as string;
+            if (s != null)
             {
                 LogTextbox.LogMessage(string.Format(StringResources.ConvertingFileX,
-                                                    e.UserState as string));
+                                                    s));
             }
             else
             { 
@@ -228,11 +232,11 @@ namespace Sdl.Community.Legit
 
         private void ShowSettingsMangerButton_Click(object sender, EventArgs e)
         {
-            var settingsManger = Helpers.CreateComObject<ManagerClass>(null) as IManager;
+            var settingsManger = Helpers.CreateComObject<IManager>(null);
             settingsManger.AllowConflictingSettings = true;
             settingsManger.LoadFromRegistry();
             settingsManger.Interactive = true;
-            settingsManger.ParentHwnd = (int)this.Handle;
+            settingsManger.ParentHwnd = (int)Handle;
             settingsManger.Show();
             settingsManger.SaveToRegistry();
 
@@ -246,8 +250,8 @@ namespace Sdl.Community.Legit
             if (!_filesToConvert.Any())
             {
                 MessageBox.Show(this,
-                                Properties.StringResources.NoSourceFilesSelectedText,
-                                Properties.StringResources.NoSourceFilesSelectedTitle,
+                                StringResources.NoSourceFilesSelectedText,
+                                StringResources.NoSourceFilesSelectedTitle,
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
                 return;
@@ -261,13 +265,13 @@ namespace Sdl.Community.Legit
             ConversionProgressBar.Value = 0;
             if (_sourceLangLcid == null) _sourceLangLcid = SourceLangCombo.SelectedValue.ToString();
             if (_targetLangLcid == null) _targetLangLcid = TargetLangCombo.SelectedValue.ToString();
-            var _params = new ArrayList() { _filesToConvert, _sourceLangLcid, ckTTX.Checked, ckBilingualDoc.Checked, lableTM.Text, _targetLangLcid };
+            var _params = new ArrayList { _filesToConvert, _sourceLangLcid, ckTTX.Checked, ckBilingualDoc.Checked, lableTM.Text, _targetLangLcid };
             BackgroundConverter.RunWorkerAsync(_params);
         }
 
-        private IEnumerable<ConversionResult> ConvertFilesInBackground(IEnumerable<string> files, String sourceLcid, BackgroundWorker worker, DoWorkEventArgs e, bool doTtx, bool doBDoc, String mpath, String targetLcid)
+        private static IEnumerable<ConversionResult> ConvertFilesInBackground(IEnumerable<string> files, String sourceLcid, BackgroundWorker worker, DoWorkEventArgs e, bool doTtx, bool doBDoc, String mpath, String targetLcid)
         {
-            IList<ConversionResult> _results = new List<ConversionResult>();
+            IList<ConversionResult> results = new List<ConversionResult>();
 
             var enumerable = files as IList<string> ?? files.ToList();
             int totalFiles = enumerable.Count();
@@ -277,21 +281,21 @@ namespace Sdl.Community.Legit
             enumerable.Each(f =>
                 {
                     counter++;
-                    if (String.IsNullOrEmpty(mpath))
+                    if (string.IsNullOrEmpty(mpath))
                         mpath = CreateTm(sourceLcid, targetLcid);
 
                     if (doTtx)
-                        _results.Add(CreateFileType(f, true, mpath));
+                        results.Add(CreateFileType(f, true, mpath));
                     if (doBDoc)
-                        _results.Add(CreateFileType(f, false, mpath));
+                        results.Add(CreateFileType(f, false, mpath));
 
                     //_converter = ConverterFactory.GetConverterForFile(f);
                     worker.ReportProgress(0, f);
 
-                    bool success = true;
+                    var success = true;
                     if (doTtx)
                     {
-                        if (!File.Exists(String.Format("{0}.ttx", f)))
+                        if (!File.Exists(f))
                         {
                             worker.ReportProgress((int) ((counter/totalFiles)*100), "file to a ttx one failed.");
                             success = false;
@@ -302,7 +306,8 @@ namespace Sdl.Community.Legit
 
                     if (doBDoc)
                     {
-                        if (!File.Exists(String.Format("{0}.BAK",Path.Combine(Path.GetDirectoryName(f),Path.GetFileNameWithoutExtension(f)))))
+                        if (!File.Exists(
+                            $"{Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f))}.BAK"))
                         {
                             worker.ReportProgress((int) ((counter/totalFiles)*100),
                                                   "file to a bilingual doc failed.");
@@ -315,19 +320,19 @@ namespace Sdl.Community.Legit
 
                     if (success)
                         worker.ReportProgress((int) ((counter/totalFiles)*100),
-                                              _results.Count == 0 ? null : _results.Last());
+                                              results.Count == 0 ? null : results.Last());
                 }
                 );
 
-            return _results;
+            return results;
         }
 
-        private static ConversionResult CreateFileType(string file, bool doTtx, String tmPath)
+        private static ConversionResult CreateFileType(string file, bool doTtx, string tmPath)
         {
-            TranslateTask t = new TranslateTaskClass();
+            var t = new TranslateTask();
             t.Documents.Clear();
             t.Documents.Add(file);
-            t.OpenTranslationMemory(String.Format("{0}.mdf", tmPath.Replace(".tmw", String.Empty)), Environment.UserName,
+            t.OpenTranslationMemory($"{tmPath.Replace(".tmw", string.Empty)}.mdf", Environment.UserName,
                                     tmaTmAccessMode.tmaTmAccessExclusive, null, 0);
             t.Settings.LogFileName = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -349,22 +354,26 @@ namespace Sdl.Community.Legit
             GenerateResponse(ref p1, ref p2, ref p3, ref p4);
             backdoor.SetParameters(p1, p2, p3, p4);
 
-            t.Execute();
+
+                t.Execute();
+
+            
+           
             t.CloseTranslationMemory();
             
             return new ConversionResult(file);
         }
 
-        private static String CreateTm(String sourceLcid, String targetLcid)
+        private static string CreateTm(string sourceLcid, string targetLcid)
         {
-            String filePath = Path.Combine(
+            var filePath = Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                 @"SDL\OpenExchange\TTXIT\TM\TM.tmw");
             if (!Directory.Exists(Path.GetDirectoryName(filePath)))
             {
                 Directory.CreateDirectory(Path.GetDirectoryName(filePath));
             }
-            CreateTmTask tTm = new CreateTmTaskClass();
+            CreateTmTask tTm = new CreateTmTask();
             tTm.Settings.TranslationMemoryType = tmaTranslationMemoryType.tmaTranslationMemoryTypeFile;
             tTm.Settings.SourceLocale = sourceLcid;
             tTm.Settings.TargetLocales = targetLcid;
@@ -384,7 +393,7 @@ namespace Sdl.Community.Legit
 
         public static void GenerateResponse(ref int p1, ref int p2, ref int p3, ref int p4)
         {
-            int tmp = p1;
+            var tmp = p1;
             p1 = (int)(p2 ^ (0xA98C3793 + 0));
             p2 = (int)(p3 ^ (0xA98C3793 + 1));
             p3 = (int)(p4 ^ (0xA98C3793 + 2));
@@ -393,7 +402,7 @@ namespace Sdl.Community.Legit
 
         private void FilterManagerButton_Click(object sender, EventArgs e)
         {
-            string installFolder = GetDesktopToolsInstallationFolder();
+            var installFolder = GetDesktopToolsInstallationFolder();
 
             if (string.IsNullOrEmpty(installFolder))
             { 
@@ -405,10 +414,15 @@ namespace Sdl.Community.Legit
             }
 
             // at the point we should have found the path to the filter settings manager so we can start it...
-            string filterManagerFilePath = string.Format("{0}\\TT\\TradosFilterSettings.exe", installFolder);
-            var manageProcess = new System.Diagnostics.Process();
-            manageProcess.StartInfo.FileName = filterManagerFilePath;
-            manageProcess.StartInfo.UseShellExecute = false;
+            var filterManagerFilePath = $"{installFolder}\\TT\\TradosFilterSettings.exe";
+            var manageProcess = new Process
+            {
+                StartInfo =
+                {
+                    FileName = filterManagerFilePath,
+                    UseShellExecute = false
+                }
+            };
 
             DisableEnabledControls();
 
@@ -421,25 +435,25 @@ namespace Sdl.Community.Legit
 
         private void AddTtFolderToThePathSysVariable()
         {
-            string installFolder = GetDesktopToolsInstallationFolder();
-            string ttPath = string.Format("{0}\\TT\\", installFolder);
+            var installFolder = GetDesktopToolsInstallationFolder();
+            var ttPath = $"{installFolder}\\TT\\";
 
-            string path = Environment.GetEnvironmentVariable("PATH");
+            var path = Environment.GetEnvironmentVariable("PATH");
             if (path != null && !path.ToLower().Contains(ttPath.ToLower()))
             { 
-                path = path.EndsWith(";") ? string.Format("{0}{1}", path, ttPath) : string.Format("{0};{1}", path, ttPath);
+                path = path.EndsWith(";") ? $"{path}{ttPath}" : $"{path};{ttPath}";
                 Environment.SetEnvironmentVariable("PATH", path, EnvironmentVariableTarget.Process);
             }
         }
 
-        private string GetDesktopToolsInstallationFolder()
-        { 
+        private static string GetDesktopToolsInstallationFolder()
+        {
             // get the 2007 stub ior actual 2007 install folder from the registry
             var ttfolder = Environment.GetFolderPath(Environment.SpecialFolder.CommonProgramFiles) + @"\SDL\T2007";
-            
-            Microsoft.Win32.RegistryKey regKey = Microsoft.Win32.Registry
-                                                                 .LocalMachine
-                                                                 .OpenSubKey("SOFTWARE\\TRADOS\\Translation Tools\\8.0");
+
+            var regKey = Registry
+                .LocalMachine
+                .OpenSubKey("SOFTWARE\\TRADOS\\Translation Tools\\8.0");
             if (regKey != null)
             {
                 ttfolder = regKey.GetValue("InstallDir") as string;
@@ -451,7 +465,7 @@ namespace Sdl.Community.Legit
 
         private void DisableEnabledControls()
         {
-            _toggledControls = this.Controls.Cast<Control>().Where(c => c.Tag != null && c.Tag.ToString().ToLower() == "toggle")
+            _toggledControls = Controls.Cast<Control>().Where(c => c.Tag != null && c.Tag.ToString().ToLower() == "toggle")
                                                             .Each(c => c.Enabled = false);
         }
 
@@ -462,7 +476,7 @@ namespace Sdl.Community.Legit
 
         private void ClearFilesListboxLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            _filesToConvert = new List<String>();
+            _filesToConvert = new List<string>();
             SourceFilesList.Clear();
             LogSourceFileListChange();
         }
@@ -479,12 +493,12 @@ namespace Sdl.Community.Legit
             SaveToFileDialog.OverwritePrompt = true;
             SaveToFileDialog.FileName = StringResources.SaveLogDialogDefaultFileName;
 
-            DialogResult result = SaveToFileDialog.ShowDialog();
+            var result = SaveToFileDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                string logFilePath = SaveToFileDialog.FileName;
+                var logFilePath = SaveToFileDialog.FileName;
                 using (var writer = new StreamWriter(new FileStream(logFilePath, FileMode.Create, FileAccess.ReadWrite),
-                                                              System.Text.Encoding.UTF8))
+                                                              Encoding.UTF8))
                 {
                     writer.Write(LogTextbox.Text);
                     MessageBox.Show(StringResources.SaveLogSuccessMessageText, 
@@ -499,7 +513,7 @@ namespace Sdl.Community.Legit
             var folderPath = _filesToConvert.Select(Path.GetDirectoryName).FirstOrDefault();
             if (!string.IsNullOrEmpty(folderPath))
             {
-                System.Diagnostics.Process.Start(folderPath);
+                Process.Start(folderPath);
             }
             else
             {
@@ -524,10 +538,10 @@ namespace Sdl.Community.Legit
             }
         }
 
-        private void AddLanguagesFromTmToCombo(String tmFilePath)
+        private void AddLanguagesFromTmToCombo(string tmFilePath)
         {
             var oTm = new TranslationMemory();
-            oTm.Open(String.Format("{0}.mdf", tmFilePath.Replace(".tmw", String.Empty)), Environment.UserName,
+            oTm.Open($"{tmFilePath.Replace(".tmw", string.Empty)}.mdf", Environment.UserName,
                                     TmAccess.tmaTmAccessMode.tmaTmAccessRead, null, 0);
             _sourceLangLcid = oTm.Setup.SourceLocale;
             _targetLangLcid = oTm.Setup.TargetLocales;
@@ -536,17 +550,17 @@ namespace Sdl.Community.Legit
                 var ci = new CultureInfo(Convert.ToInt32(_sourceLangLcid));
                 txtSourceLanguage.Text = ci.DisplayName;
                 var targetLanguages = _targetLangLcid.Split(',');
-                txtTargetLanguage.Text = String.Empty;
+                txtTargetLanguage.Text = string.Empty;
                 foreach (var targetLanguage in targetLanguages)
                 {
                     var tci = new CultureInfo(Convert.ToInt32(targetLanguage));
                     txtTargetLanguage.Text += tci.DisplayName + ",";
                 }
-                if (txtTargetLanguage.Text != String.Empty) txtTargetLanguage.Text = txtTargetLanguage.Text.Substring(0, txtTargetLanguage.Text.Length - 1);
+                if (txtTargetLanguage.Text != string.Empty) txtTargetLanguage.Text = txtTargetLanguage.Text.Substring(0, txtTargetLanguage.Text.Length - 1);
 
                 HelpTooltip.SetToolTip(txtSourceLanguage, txtSourceLanguage.Text);
                 HelpTooltip.SetToolTip(txtTargetLanguage, txtTargetLanguage.Text);
-            } catch
+            } catch(Exception e)
             {
             }
             oTm.Close();
@@ -554,7 +568,7 @@ namespace Sdl.Community.Legit
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            lableTM.Text = String.Empty;
+            lableTM.Text = string.Empty;
             SourceLangCombo.Visible = TargetLangCombo.Visible = true;
             txtSourceLanguage.Visible = txtTargetLanguage.Visible = false;
             InitLanguageCombo();

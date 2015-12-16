@@ -35,7 +35,7 @@ namespace Sdl.Community.FileType.TMX
         {
             var info = this.FileTypeManager.BuildFileTypeInformation();
 
-            info.FileTypeDefinitionId = new FileTypeDefinitionId("TMX File Type 1.0.0.0");
+            info.FileTypeDefinitionId = new FileTypeDefinitionId(GetAssemblyVersion());
             info.FileTypeName = new LocalizableString("Translation Memory eXchange");
             info.FileTypeDocumentName = new LocalizableString("TMX Document");
             info.FileTypeDocumentsName = new LocalizableString("TMX Documents");
@@ -48,6 +48,12 @@ namespace Sdl.Community.FileType.TMX
             return info;
         }
         #endregion
+
+        public string GetAssemblyVersion()
+        {
+            const string fileType = "TMX File Type ";
+            return fileType + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        }
         /// <summary>
         /// Gets the file sniffer for this component.
         /// </summary>
