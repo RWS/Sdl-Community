@@ -12,6 +12,7 @@ using Microsoft.Win32;
 using Sdl.Community.Legit.Properties;
 using TmAccess;
 using TMFileServices;
+using Trados.Interop.SettingsManager;
 using IManager = Trados.Interop.SettingsManager.IManager;
 using IRunStatus = TMFileServices.IRunStatus;
 using Settings = Sdl.Community.Legit.Properties.Settings;
@@ -232,7 +233,7 @@ namespace Sdl.Community.Legit
 
         private void ShowSettingsMangerButton_Click(object sender, EventArgs e)
         {
-            var settingsManger = Helpers.CreateComObject<IManager>(null);
+            var settingsManger = Helpers.CreateComObject<ManagerClass>(null);
             settingsManger.AllowConflictingSettings = true;
             settingsManger.LoadFromRegistry();
             settingsManger.Interactive = true;
