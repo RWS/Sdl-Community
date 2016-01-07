@@ -512,6 +512,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     }
                 }
             }
+            else
+            {
+                targetSettings.GetSettingsGroup(settingsGroupId).Reset();
+                if (targetLanguage == null)
+                {
+                    targetProject.UpdateSettings(targetSettings);
+                }
+                else
+                {
+                    targetProject.UpdateSettings(targetLanguage, targetSettings);
+                }
+            }
         }
 
         /// <summary>
