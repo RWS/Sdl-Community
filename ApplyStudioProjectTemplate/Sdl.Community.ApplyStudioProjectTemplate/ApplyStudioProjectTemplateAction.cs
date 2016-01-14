@@ -276,7 +276,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         TermbaseConfiguration sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
                         TermbaseConfiguration targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
                         targetTermbaseConfig.TermRecognitionOptions = sourceTermbaseConfig.TermRecognitionOptions;
-
+                        CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TermRecognitionSettings", targetProject, null);
+                        
                         // Updating with zero termbases throws an exception
                         if (targetTermbaseConfig.Termbases.Count > 0)
                         {
