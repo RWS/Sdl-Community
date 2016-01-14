@@ -323,6 +323,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         try
                         {
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "SettingsTagVerifier", targetProject, null);
+                            CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "Settings", targetProject, null);
                         }
                         catch (Exception e)
                         {
