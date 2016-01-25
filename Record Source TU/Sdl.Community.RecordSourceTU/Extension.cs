@@ -28,7 +28,21 @@ namespace Sdl.Community.RecordSourceTU
 
         public static string GetFilePath(this TranslationUnit translationUnit)
         {
-            var filePath = translationUnit.FileProperties.FileConversionProperties.InputFilePath;
+
+            string filePath;
+            if (translationUnit.FileProperties != null)
+            {
+                filePath = translationUnit.FileProperties.FileConversionProperties.InputFilePath;
+            }
+            else
+            {
+                filePath =
+                SdlTradosStudio.Application.GetController<EditorController>()
+                    .ActiveDocument.ActiveFileProperties.FileConversionProperties.InputFilePath;
+            }
+            
+
+            
             //inputFilePath is not working correct in certain cases so we need to try and get the current file from 
             //the editor
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
@@ -46,13 +60,23 @@ namespace Sdl.Community.RecordSourceTU
         {
             var editorController = SdlTradosStudio.Application.GetController<EditorController>();
             if (editorController == null) return "N/A";
-            if (editorController.ActiveDocument == null) return "N/A";
+            if (editorController.ActiveDocument == null)
+            {
+                var projectName =
+                    ProjectNameHelper(translationUnit.FileProperties.FileConversionProperties.InputFilePath);
+                return projectName;
+            }
 
             var projectInfo = editorController.ActiveDocument.Project.GetProjectInfo();
 
             return projectInfo.Name;
         }
 
+        private static string ProjectNameHelper(string projectPath)
+        {
+            var projectName = projectPath.Substring(projectPath.LastIndexOf(@"\", StringComparison.Ordinal)-1);
+            return projectName;
+        }
     public static ProjectFile TryGetActiveFile(this Document document)
         {
 
