@@ -30,6 +30,9 @@ This repository will contain the source code for applications and plugins develo
 ## Reindex Translation Memories
 * [Documentation](Reindex Translation Memories)
 
+##SDLTMRepair
+* [Documentation](SDLTMRepair)
+
 ## Embedded Content Processor
 * [Documentation](Embeded Content Processor)
 
@@ -44,3 +47,7 @@ This repository will contain the source code for applications and plugins develo
 
 ## Your Studio
 * [Documentation](YourStudio)
+
+
+
+

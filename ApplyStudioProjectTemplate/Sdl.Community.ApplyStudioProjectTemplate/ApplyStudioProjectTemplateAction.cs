@@ -276,7 +276,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         TermbaseConfiguration sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
                         TermbaseConfiguration targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
                         targetTermbaseConfig.TermRecognitionOptions = sourceTermbaseConfig.TermRecognitionOptions;
-
+                        CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TermRecognitionSettings", targetProject, null);
+                        
                         // Updating with zero termbases throws an exception
                         if (targetTermbaseConfig.Termbases.Count > 0)
                         {
@@ -323,6 +324,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         try
                         {
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "SettingsTagVerifier", targetProject, null);
+                            CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "Settings", targetProject, null);
                         }
                         catch (Exception e)
                         {
@@ -510,6 +512,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     {
                         targetProject.UpdateSettings(targetLanguage, targetSettings);
                     }
+                }
+            }
+            else
+            {
+                targetSettings.GetSettingsGroup(settingsGroupId).Reset();
+                if (targetLanguage == null)
+                {
+                    targetProject.UpdateSettings(targetSettings);
+                }
+                else
+                {
+                    targetProject.UpdateSettings(targetLanguage, targetSettings);
                 }
             }
         }
