@@ -88,28 +88,58 @@ namespace Sdl.Community.RecordSourceTU
             var fileNameField = GetFieldNameValue(cmbFilenameFields,txtFilenameField);
             var fullPathField = GetFieldNameValue(cmbCompletePathField, txtCompletePathField);
             var projectNameField = GetFieldNameValue(cmbProjectNameField, txtProjectNameField);
-            if (chkFileName.Checked && fileNameField.Equals(SelectCustomField, StringComparison.CurrentCultureIgnoreCase))
-            {
-                 MessageBox.Show(
-                    "Please specify a name for file name custom field",
-                    "Specify field", MessageBoxButtons.OK);
-
-              
-                    return;
-            }
-            if (chkFullPath.Checked && fullPathField.Equals(SelectCustomField, StringComparison.CurrentCultureIgnoreCase))
+            if (chkFileName.Checked &&
+                fileNameField.Equals(SelectCustomField, StringComparison.CurrentCultureIgnoreCase))
             {
                 MessageBox.Show(
-                   "Please specify a name for full path custom field",
-                   "Specify field", MessageBoxButtons.OK);
+                    @"Please specify a name for file name custom field",
+                    @"Specify field", MessageBoxButtons.OK);
+
+                e.Cancel = true;
                 return;
             }
 
+            if (chkFileName.Checked && string.IsNullOrEmpty(fileNameField))
+            {
+                MessageBox.Show(
+                    @"Please specify a name for file name custom field",
+                    @"Specify field", MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
+
+            if (chkFullPath.Checked && fullPathField.Equals(SelectCustomField, StringComparison.CurrentCultureIgnoreCase))
+            {
+                MessageBox.Show(
+                   @"Please specify a name for full path custom field",
+                   @"Specify field", MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
+
+            if (chkFullPath.Checked && string.IsNullOrEmpty(fullPathField))
+            {
+                MessageBox.Show(
+                  @"Please specify a name for full path custom field",
+                  @"Specify field", MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
+
+            if(chkProjectName.Checked && string.IsNullOrEmpty(projectNameField))
+            {
+                MessageBox.Show(
+                   @"Please specify a name for project name custom field",
+                   @"Specify field", MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
             if (chkProjectName.Checked && projectNameField.Equals(SelectCustomField, StringComparison.CurrentCultureIgnoreCase))
             {
                 MessageBox.Show(
-                   "Please specify a name for project name custom field",
-                   "Specify field", MessageBoxButtons.OK);
+                   @"Please specify a name for project name custom field",
+                   @"Specify field", MessageBoxButtons.OK);
+                e.Cancel = true;
                 return;
             }
 
@@ -119,27 +149,30 @@ namespace Sdl.Community.RecordSourceTU
             addSourceTmConfiguration.StoreFullPath = chkFullPath.Checked;
             addSourceTmConfiguration.ProjectNameField = projectNameField;
             addSourceTmConfiguration.StoreProjectName = chkProjectName.Checked;
-
+           
 
             if (_isUsed &&
                 (addSourceTmConfiguration.HasChanges()))
             {
                 var result = MessageBox.Show(
-                    "You are about to change the source file configuration for this TM. This will result in creating an additional source file field. Are you sure you want to continue?",
-                    "Confirm changes", MessageBoxButtons.OKCancel);
+                    @"You are about to change the source file configuration for this TM. This will result in creating an additional source file field. Are you sure you want to continue?",
+                    @"Confirm changes", MessageBoxButtons.OKCancel);
 
                 if (result == DialogResult.Cancel)
                 {
                     return;
                 }
             }
-
             persistance.Save(_addSourceTmConfigurations);
         }
 
         private string GetFieldNameValue(ComboBox comboBox, TextBox textBox)
         {
-            return string.IsNullOrEmpty(textBox.Text) ? comboBox.SelectedItem.ToString() : textBox.Text;
+            if (comboBox.SelectedIndex != 0)
+            {
+                return comboBox.SelectedItem.ToString();
+            }
+            return textBox.Text;
         }
     }
 }

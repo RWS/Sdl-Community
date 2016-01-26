@@ -29,30 +29,25 @@ namespace Sdl.Community.RecordSourceTU
         public static string GetFilePath(this TranslationUnit translationUnit)
         {
 
-            string filePath;
+            string filePath = string.Empty;
             if (translationUnit.FileProperties != null)
             {
                 filePath = translationUnit.FileProperties.FileConversionProperties.InputFilePath;
             }
             else
             {
-                filePath =
-                SdlTradosStudio.Application.GetController<EditorController>()
-                    .ActiveDocument.ActiveFileProperties.FileConversionProperties.InputFilePath;
+                //filePath =
+                //SdlTradosStudio.Application.GetController<EditorController>()
+                //    .ActiveDocument.ActiveFileProperties.FileConversionProperties.InputFilePath;
+                var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+                if (editorController == null) return filePath;
+                if (editorController.ActiveDocument == null) return filePath;
+
+                var activeFile = editorController.ActiveDocument.TryGetActiveFile();
+
+                filePath = activeFile.LocalFilePath;
             }
             
-
-            
-            //inputFilePath is not working correct in certain cases so we need to try and get the current file from 
-            //the editor
-            var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-            if (editorController == null) return filePath;
-            if (editorController.ActiveDocument == null) return filePath;
-
-            var activeFile = editorController.ActiveDocument.TryGetActiveFile();
-
-            filePath = activeFile.LocalFilePath;
-
             return filePath;
         }
 
