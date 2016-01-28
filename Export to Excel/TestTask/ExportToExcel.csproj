@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>11.0.3344.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ExportToExcel</RootNamespace>
+    <AssemblyName>ExportToExcel</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(APPDATA)\SDL\SDL Trados Studio\12\Plugins\Packages\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(APPDATA)\SDL\SDL Trados Studio\12\Plugins\Packages\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LCStudioIntegration.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LCStudioIntegration.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
+      <HintPath>..\..\..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudio.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudio.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.5.2</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataExtractor.cs" />
+    <Compile Include="ExcelSuperWriter.cs" />
+    <Compile Include="ExclusionsUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExclusionsUI.designer.cs">
+      <DependentUpon>ExclusionsUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExportTypeUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExportTypeUI.designer.cs">
+      <DependentUpon>ExportTypeUI.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileReader.cs" />
+    <Compile Include="GeneratorSettings.cs" />
+    <Compile Include="LayoutType.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ExportToExcelTask.cs" />
+    <Compile Include="ExportToExcelSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ExportToExcelSettingsControl.Designer.cs">
+      <DependentUpon>ExportToExcelSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExportToExcelSettingsPage.cs" />
+    <Compile Include="SegmentStatus.cs" />
+    <Compile Include="Token.cs" />
+    <Compile Include="Worker.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="pluginpackage.manifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SdlCommunity.PK.snk" />
+    <None Include="SdlCommunity.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExclusionsUI.resx">
+      <DependentUpon>ExclusionsUI.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportToExcelSettingsControl.resx">
+      <DependentUpon>ExportToExcelSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExportTypeUI.resx">
+      <DependentUpon>ExportTypeUI.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\SDL\SDLTradosStudio\12\Sdl.Core.PluginFramework.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>-->
+</Project>
