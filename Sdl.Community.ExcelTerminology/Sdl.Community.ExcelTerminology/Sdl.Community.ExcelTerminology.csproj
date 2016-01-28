@@ -99,7 +99,7 @@
     <Compile Include="Model\TerminologyEntryIndex.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadExcelFile.cs" />
+    <Compile Include="Services\ReadExcelTerminology.cs" />
     <Compile Include="TerminologyProviderExcel.cs" />
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />
