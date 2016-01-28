@@ -55,7 +55,7 @@
     </Reference>
     <Reference Include="Sdl.Terminology.TerminologyProvider.Core, Version=12.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.Terminology.TerminologyProvider.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
@@ -101,7 +101,7 @@
     <Compile Include="Model\TerminologyEntryIndex.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadExcelFile.cs" />
+    <Compile Include="Services\ReadExcelTerminology.cs" />
     <Compile Include="TerminologyProviderExcel.cs" />
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />

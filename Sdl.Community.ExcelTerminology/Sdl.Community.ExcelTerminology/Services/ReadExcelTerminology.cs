@@ -1,21 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
+using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace Sdl.Community.ExcelTerminology
+namespace Sdl.Community.ExcelTerminology.Services
 {
-    public  class ReadExcelFile
+    public  class ReadExcelTerminology
     {
         //  public static Dictionary<string, List<Term>> _textDictionary= new Dictionary<string, List<Term>>();
-        public static List<Tuple<int, string, List<Term>>> _termsList = new List<Tuple<int, string, List<Term>>>();
+        //public static List<Tuple<int, string, List<Term>>> _termsList = new List<Tuple<int, string, List<Term>>>();
+        private readonly List<Entry> _entries;
+
+        public ReadExcelTerminology()
+        {
+            _entries = new List<Entry>();
+        }
+
+
         public static void ReadExcel()
         {
+            var sourceColumn = "A";
+            var targetColumn = "B";
+            var approvedColumn = "C";
+            var hasHeaderColumn = true;
             try
             {
                 var package = new ExcelPackage(new FileInfo(@"C:\Users\aghisa\Desktop\glossary_example.xlsx"));
@@ -32,7 +42,7 @@ namespace Sdl.Community.ExcelTerminology
                         var cellValue = workSheet.Cells[row, col].Text;
                         rowEntry.Add(cellValue);
                     }
-                    _termsList.Add(new Tuple<int, string, List<Term>>(row,rowEntry[0], ParseRow(rowEntry)));;
+                 //   _termsList.Add(new Tuple<int, string, List<Term>>(row,rowEntry[0], ParseRow(rowEntry)));;
                     rowEntry.Clear();
                 }
             }catch(Exception ex) { }

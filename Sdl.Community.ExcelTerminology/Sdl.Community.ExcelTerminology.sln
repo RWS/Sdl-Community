@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ExcelTerminology", "Sdl.Community.ExcelTerminology\Sdl.Community.ExcelTerminology.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ExcelTerminology.Tests", "Sdl.Community.ExcelTerminology.Tests\Sdl.Community.ExcelTerminology.Tests.csproj", "{330EB275-FF6A-4A45-841B-C9E86B2D449B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{330EB275-FF6A-4A45-841B-C9E86B2D449B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{330EB275-FF6A-4A45-841B-C9E86B2D449B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{330EB275-FF6A-4A45-841B-C9E86B2D449B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{330EB275-FF6A-4A45-841B-C9E86B2D449B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
