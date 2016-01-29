@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Sdl.Community.ExcelTerminology.Model.ProviderSettings.datasource" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
