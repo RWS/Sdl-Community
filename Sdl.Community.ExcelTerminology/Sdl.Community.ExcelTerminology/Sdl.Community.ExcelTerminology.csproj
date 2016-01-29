@@ -41,6 +41,10 @@
       <HintPath>..\packages\EPPlus.4.0.5\lib\net20\EPPlus.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
@@ -108,6 +112,7 @@
     <Compile Include="Services\IExcelTermLoaderService.cs" />
     <Compile Include="Services\IParser.cs" />
     <Compile Include="Services\Parser.cs" />
+    <Compile Include="Services\PersistenceService.cs" />
     <Compile Include="TerminologyProviderExcel.cs" />
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />
@@ -126,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Sdl.Community.ExcelTerminology.Model.ProviderSettings.datasource" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
