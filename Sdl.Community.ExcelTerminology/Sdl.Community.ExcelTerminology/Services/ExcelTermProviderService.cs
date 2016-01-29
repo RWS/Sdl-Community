@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology.Services
