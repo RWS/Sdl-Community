@@ -25,6 +25,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceBox.Text = "A";
             targetBox.Text = "B";
             approvedBox.Text = "C";
+
+            sourceLanguageComboBox.DataSource = GetCultureNames();
+            sourceLanguageComboBox.DisplayMember = "DisplayName";
+            sourceLanguageComboBox.ValueMember = "Name";
+
+            targetLanguageComboBox.DataSource = GetCultureNames();
+            targetLanguageComboBox.DisplayMember = "DisplayName";
+            targetLanguageComboBox.ValueMember = "Name";
         }
 
         private void defaultSettingsLayoutPanel_Paint(object sender, PaintEventArgs e)
@@ -35,8 +43,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
         private void browseBtn_Click(object sender, EventArgs e)
         {
             var filePath = string.Empty;
-            var file = new OpenFileDialog();
-            
+            var file = new OpenFileDialog {Filter = "Office Files|*.xlsx" };
             if (file.ShowDialog() == DialogResult.OK)
             {
                 filePath = file.FileName;
@@ -45,34 +52,22 @@ namespace Sdl.Community.ExcelTerminology.Ui
             pathTextBox.Text = filePath;
         }
 
-        private void sourceLanguageComboBox_Click(object sender, EventArgs e)
-        {
-            
-            sourceLanguageComboBox.DataSource = GetCultureNames();
-            sourceLanguageComboBox.DisplayMember = "DisplayName";
-            sourceLanguageComboBox.ValueMember = "Name";
-        }
-
         protected virtual List<CultureInfo> GetCultureNames()
         {
             return CultureInfo
-                .GetCultures(CultureTypes.NeutralCultures)
+                .GetCultures(CultureTypes.SpecificCultures)
                 .ToList();
-
-        }
-
-        private void targetLanguageComboBox_Click(object sender, EventArgs e)
-        {
-            targetLanguageComboBox.DataSource = GetCultureNames();
+            
         }
 
         private void submitBtn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(separatorTextBox.Text))
+            if (string.IsNullOrWhiteSpace(separatorTextBox.Text)||string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
                 return;
             }
+            
             var provider = new ProviderSettings
             {
                 HasHeader = hasHeader.Checked,
@@ -80,25 +75,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 SourceColumn = sourceBox.Text,
                 TargetColumn = targetBox.Text,
                 SourceLanguage = sourceLanguageComboBox.SelectedValue.ToString(),
-                TargetLanguage = targetLanguageComboBox.Text,
+                TargetLanguage = targetLanguageComboBox.SelectedValue.ToString(),
                 Separator = separatorTextBox.Text[0],
                 TermFilePath = pathTextBox.Text
-            };
-            
-            if (string.IsNullOrWhiteSpace(provider.SourceLanguage) || string.IsNullOrWhiteSpace(provider.TargetLanguage) ||
-                string.IsNullOrWhiteSpace(provider.TermFilePath))
-            {
-                MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
-
-            }else if (!provider.TermFilePath.Contains("xlsx"))
-            {
-                MessageBox.Show(@"Please select an Excel file", "", MessageBoxButtons.OK);
-            }
-            else
-            {
+            };      
+           
                 var persistence = new PersistenceService();
                 persistence.Save(provider);
-            }
+           
             
         }
     }
