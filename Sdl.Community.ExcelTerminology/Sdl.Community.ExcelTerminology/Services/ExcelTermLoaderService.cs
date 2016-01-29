@@ -69,15 +69,13 @@ namespace Sdl.Community.ExcelTerminology.Services
             if (columnLetter == _providerSettings.SourceColumn)
             {
                 excelTerm.Source = cell.Text;
-                excelTerm.SourceCulture = CultureInfo
-                    .CreateSpecificCulture(_providerSettings.SourceLanguage);
+                excelTerm.SourceCulture = _providerSettings.SourceLanguage;
             }
 
             if (columnLetter == _providerSettings.TargetColumn)
             {
                 excelTerm.Target = cell.Text;
-                excelTerm.TargetCulture = CultureInfo
-                   .CreateSpecificCulture(_providerSettings.TargetLanguage);
+                excelTerm.TargetCulture = _providerSettings.TargetLanguage;
             }
 
             if (columnLetter == _providerSettings.ApprovedColumn)

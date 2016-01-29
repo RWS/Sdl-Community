@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology
@@ -18,7 +19,9 @@ namespace Sdl.Community.ExcelTerminology
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri,
             ITerminologyProviderCredentialStore credentials)
         {
-            return new TerminologyProviderExcel();
+            var persistenceService = new PersistenceService();
+            var providerSettings = persistenceService.Load();
+            return new TerminologyProviderExcel(providerSettings);
         }
     }
 }

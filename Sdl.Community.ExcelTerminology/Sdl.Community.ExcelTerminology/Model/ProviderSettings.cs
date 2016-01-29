@@ -14,8 +14,8 @@ namespace Sdl.Community.ExcelTerminology.Model
         public string ApprovedColumn { get; set; }
         public bool HasHeader { get; set; }
         public string TermFilePath { get; set; }
-        public string SourceLanguage { get; set; }
-        public string TargetLanguage { get; set; }
+        public CultureInfo SourceLanguage { get; set; }
+        public CultureInfo TargetLanguage { get; set; }
         public char Separator { get; set; }
         public string WorksheetName { get; set; }
 
