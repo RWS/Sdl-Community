@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,6 +40,23 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
 
             pathTextBox.Text = filePath;
+        }
+
+        private void sourceLanguageComboBox_Click(object sender, EventArgs e)
+        {
+            
+            sourceLanguageComboBox.DataSource = GetCultureNames();
+        }
+
+        protected virtual List<string> GetCultureNames()
+        {
+            var cultureName = CultureInfo.GetCultures(CultureTypes.NeutralCultures).Select(ci => ci.DisplayName).ToList();
+            return cultureName;
+        }
+
+        private void targetLanguageComboBox_Click(object sender, EventArgs e)
+        {
+            targetLanguageComboBox.DataSource = GetCultureNames();
         }
     }
 }

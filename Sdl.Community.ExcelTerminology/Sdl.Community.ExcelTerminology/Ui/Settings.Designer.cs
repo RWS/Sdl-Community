@@ -322,6 +322,7 @@
             this.sourceLanguageComboBox.Name = "sourceLanguageComboBox";
             this.sourceLanguageComboBox.Size = new System.Drawing.Size(121, 21);
             this.sourceLanguageComboBox.TabIndex = 1;
+            this.sourceLanguageComboBox.Click += new System.EventHandler(this.sourceLanguageComboBox_Click);
             // 
             // languageTargetLayoutPanel
             // 
@@ -356,6 +357,7 @@
             this.targetLanguageComboBox.Name = "targetLanguageComboBox";
             this.targetLanguageComboBox.Size = new System.Drawing.Size(121, 21);
             this.targetLanguageComboBox.TabIndex = 1;
+            this.targetLanguageComboBox.Click += new System.EventHandler(this.targetLanguageComboBox_Click);
             // 
             // hasHeader
             // 
