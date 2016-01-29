@@ -18,11 +18,26 @@ namespace Sdl.Community.ExcelTerminology.Tests
                 TargetColumn = "B",
                 ApprovedColumn = "C",
                 HasHeader = true,
-                Separator = "|",
+                Separator = '|',
                 SourceLanguage = "en-US",
                 TargetLanguage = "de-DE",
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example.xlsx")
+            };
+        }
+
+        public static ProviderSettings CreateProviderSettingsWithouHeaderAndApproved()
+        {
+            return new ProviderSettings
+            {
+                SourceColumn = "A",
+                TargetColumn = "B",
+                HasHeader = false,
+                Separator = '|',
+                SourceLanguage = "en-US",
+                TargetLanguage = "de-DE",
+                TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    @"Resources\glossary_example_without_header_and_approved.xlsx")
             };
         }
     }

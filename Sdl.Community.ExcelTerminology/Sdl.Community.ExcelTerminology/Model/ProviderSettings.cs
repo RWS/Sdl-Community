@@ -15,8 +15,14 @@ namespace Sdl.Community.ExcelTerminology.Model
         public string TermFilePath { get; set; }
         public string SourceLanguage { get; set; }
         public string TargetLanguage { get; set; }
-        public string Separator { get; set; }
+        public char Separator { get; set; }
         public string WorksheetName { get; set; }
 
+        public string GetExcelRangeAddress()
+        {
+            return string.IsNullOrEmpty(ApprovedColumn) 
+                ? $"{SourceColumn.ToUpper()}:{TargetColumn.ToUpper()}" 
+                : $"{SourceColumn.ToUpper()}:{ApprovedColumn.ToUpper()}";
+        }
     }
 }
