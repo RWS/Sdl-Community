@@ -41,62 +41,41 @@ namespace Sdl.Community.ExcelTerminology.Services
                    Terms = CreateEntryTerms(excelTerm.Source)
             };
 
-                return result;
+            result.Add(sourceEntryLanguage);
+
+            var targetEntryLanguage = new EntryLanguage
+            {
+                Locale = excelTerm.TargetCulture,
+                Name = excelTerm.TargetCulture.EnglishName,
+                Terms = CreateEntryTerms(excelTerm.Target,excelTerm.Approved)
+            };
+
+            result.Add(targetEntryLanguage);
+
+            return result;
         }
 
-        private IList<IEntryTerm> CreateEntryTerms(string terms)
+        public IList<IEntryTerm> CreateEntryTerms(string term, string approved = null)
         {
-            throw new NotImplementedException();
+            var terms = _parser.Parse(term);
+
+            return terms.Select(rawTerm => new EntryTerm
+            {
+                Fields = CreateEntryTermFields(approved), Value = rawTerm
+            }).Cast<IEntryTerm>().ToList();
         }
 
-        //public static List<Term> ParseRow(List<string> row)
-        //{
-        //    var excelEntryList = new List<Term>();
-        //    var target = ParseCell(row[1]);
-        //    var status = ParseCell(row[2]);
-        //    for (var i = 0; i < target.Count; i++)
-        //    {
-        //        excelEntryList.Add(new Term
-        //        {
-        //            Target = target[i],
-        //            Status = status[i]
-        //        });
-        //    }
-        //   // _textDictionary.Add(row[0], excelEntryList);
-        //    target.Clear();
-        //    status.Clear();
-        //    return excelEntryList;
-        //}
+        public IList<IEntryField> CreateEntryTermFields(string approved)
+        {
+            var result = new List<IEntryField>();
+            if (string.IsNullOrEmpty(approved)) return result;
+            var approvals = _parser.Parse(approved);
 
-        //private static List<string> ParseCell(string cellValue)
-        //{
-        //    var values = cellValue.Split('|').Select(value => value.Trim()).ToList();
-        //    return values;
-        //}
-
-        //var entry = new Entry
-        //{
-        //     Id = index,
-        //      Languages = new List<IEntryLanguage>() { new EntryLanguage
-        //      {
-        //         Name = "",
-        //          Terms = new List<IEntryTerm>()
-        //          {
-        //              new EntryTerm
-        //              {
-        //                   Value = "",
-        //                    Fields = new List<IEntryField>
-        //                    {
-        //                        new EntryField
-        //                        {
-
-        //                        }
-        //                    }
-        //              }
-        //          }  
-        //      } }
-        //};
-        //result.Add(GetSource(cell, index));
-        //index++;
+            result.AddRange(approvals.Select(approval => new EntryField
+            {
+                Name = "Approved", Value = approval
+            }));
+            return result;
+        }
     }
 }
