@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Services;
+using Sdl.Community.ExcelTerminology.Tests.Helper;
 using Xunit;
 
 namespace Sdl.Community.ExcelTerminology.Tests
@@ -80,10 +81,10 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var actualExcelTerm = actual[id];
             Assert.Equal(actualExcelTerm.Source, expectedSource);
             Assert.Equal(actualExcelTerm.SourceCulture.Name,
-                providerSettings.SourceLanguage);
+                providerSettings.SourceLanguage.Name);
             Assert.Equal(actualExcelTerm.Target, expectedTarget);
             Assert.Equal(actualExcelTerm.TargetCulture.Name,
-                providerSettings.TargetLanguage);
+                providerSettings.TargetLanguage.Name);
             Assert.Equal(actualExcelTerm.Approved, expectedApproved);
         }
 
@@ -116,10 +117,10 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var actualExcelTerm = actual[id];
             Assert.Equal(actualExcelTerm.Source, expectedSource);
             Assert.Equal(actualExcelTerm.SourceCulture.Name,
-                providerSettings.SourceLanguage);
+                providerSettings.SourceLanguage.Name);
             Assert.Equal(actualExcelTerm.Target, expectedTarget);
             Assert.Equal(actualExcelTerm.TargetCulture.Name,
-                providerSettings.TargetLanguage);
+                providerSettings.TargetLanguage.Name);
             Assert.Equal(actualExcelTerm.Approved, expectedApproved);
         }
 

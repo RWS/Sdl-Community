@@ -77,8 +77,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 ApprovedColumn = approvedBox.Text,
                 SourceColumn = sourceBox.Text,
                 TargetColumn = targetBox.Text,
-                SourceLanguage = sourceLanguageComboBox.SelectedValue.ToString(),
-                TargetLanguage = targetLanguageComboBox.SelectedValue.ToString(),
+                SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
+                TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],
                 TermFilePath = pathTextBox.Text
             };      

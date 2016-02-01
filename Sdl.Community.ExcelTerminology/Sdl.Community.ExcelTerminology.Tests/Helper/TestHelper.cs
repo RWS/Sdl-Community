@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
 
-namespace Sdl.Community.ExcelTerminology.Tests
+namespace Sdl.Community.ExcelTerminology.Tests.Helper
 {
     public class TestHelper
     {
@@ -19,8 +16,8 @@ namespace Sdl.Community.ExcelTerminology.Tests
                 ApprovedColumn = "C",
                 HasHeader = true,
                 Separator = '|',
-                SourceLanguage = "en-US",
-                TargetLanguage = "de-DE",
+                SourceLanguage = CultureInfo.CreateSpecificCulture("en-US"),
+                TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example.xlsx")
             };
@@ -34,8 +31,8 @@ namespace Sdl.Community.ExcelTerminology.Tests
                 TargetColumn = "B",
                 HasHeader = false,
                 Separator = '|',
-                SourceLanguage = "en-US",
-                TargetLanguage = "de-DE",
+                SourceLanguage = CultureInfo.CreateSpecificCulture("en-US"),
+                TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example_without_header_and_approved.xlsx")
             };

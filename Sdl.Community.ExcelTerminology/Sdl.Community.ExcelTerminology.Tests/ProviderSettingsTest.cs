@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.ExcelTerminology.Tests.Helper;
 using Xunit;
 
 namespace Sdl.Community.ExcelTerminology.Tests
