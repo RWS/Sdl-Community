@@ -115,6 +115,7 @@
     <Compile Include="Services\PersistenceService.cs" />
     <Compile Include="TerminologyProviderExcel.cs" />
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
+    <Compile Include="TerminologyProviderViewerWinFormsUIExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />
     <Compile Include="Ui\Settings.cs">
       <SubType>Form</SubType>

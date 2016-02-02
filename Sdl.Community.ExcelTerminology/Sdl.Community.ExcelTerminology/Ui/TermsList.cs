@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.ExcelTerminology.Ui
 {
-    public partial class TermsList : Form
+    public partial class TermsList : UserControl
     {
         public TermsList()
         {
