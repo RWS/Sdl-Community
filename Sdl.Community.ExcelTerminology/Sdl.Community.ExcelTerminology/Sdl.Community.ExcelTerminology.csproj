@@ -119,12 +119,19 @@
     <Compile Include="Services\PersistenceService.cs" />
     <Compile Include="TerminologyProviderExcel.cs" />
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
+    <Compile Include="TerminologyProviderViewerWinFormsUIExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />
     <Compile Include="Ui\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Ui\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\TermsList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\TermsList.Designer.cs">
+      <DependentUpon>TermsList.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -141,6 +148,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Ui\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\TermsList.resx">
+      <DependentUpon>TermsList.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

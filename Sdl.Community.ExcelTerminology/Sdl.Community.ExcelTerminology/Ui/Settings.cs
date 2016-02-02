@@ -25,7 +25,10 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceBox.Text = "A";
             targetBox.Text = "B";
             approvedBox.Text = "C";
-
+            separatorTextBox.Text = "|";
+            descriptionLbl.Text =
+                "From this screen you can fill your settings from your excel document.";
+                               
             sourceLanguageComboBox.DataSource = GetCultureNames();
             sourceLanguageComboBox.DisplayMember = "DisplayName";
             sourceLanguageComboBox.ValueMember = "Name";
@@ -84,6 +87,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 persistence.Save(provider);
            
             
+        }
+
+        private void footerLayoutPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
