@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,14 +16,15 @@ namespace Sdl.Community.ExcelTerminology.Tests
         public void Load_Entries()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelTermLoaderService = new TestExcelLoader();
+            var excelTermLoaderService = new ExcelTermLoaderService(providerSettings); //new TestExcelLoader();
             var parser = new Parser(providerSettings);
             var actualTerms = excelTermLoaderService.LoadTerms();
             var excelTermProviderService =
                 new ExcelTermProviderService(excelTermLoaderService, parser);
-
+            var sw = Stopwatch.StartNew();
             var expected = excelTermProviderService.LoadEntries();
-
+            sw.Stop();
+            var el = sw.Elapsed;
             Assert.Equal(expected.Count, actualTerms.Count);
 
         }

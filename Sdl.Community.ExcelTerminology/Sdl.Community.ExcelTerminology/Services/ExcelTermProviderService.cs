@@ -21,13 +21,16 @@ namespace Sdl.Community.ExcelTerminology.Services
         }
 
 
-        public List<Entry> LoadEntries()
+        public List<ExcelEntry> LoadEntries()
         {
             var excelTerms = _excelTermLoaderService.LoadTerms();
 
-            return excelTerms.Select(excelTerm => new Entry
+            return excelTerms.Select(excelTerm => new ExcelEntry
             {
-                Id = excelTerm.Key, Languages = CreateEntryLanguages(excelTerm.Value)
+                Id = excelTerm.Key,
+                Languages = CreateEntryLanguages(excelTerm.Value),
+                SearchText = excelTerm.Value.Source
+                
             }).ToList();
         }
 
@@ -35,23 +38,27 @@ namespace Sdl.Community.ExcelTerminology.Services
         {
             var result = new List<IEntryLanguage>();
 
-            var sourceEntryLanguage = new EntryLanguage
+            var sourceEntryLanguage = new ExcelEntryLanguage
             {
                  Locale = excelTerm.SourceCulture,
                   Name = excelTerm.SourceCulture.EnglishName,
-                   Terms = CreateEntryTerms(excelTerm.Source)
+                   Terms = CreateEntryTerms(excelTerm.Source),
+                   IsSource = true
             };
 
             result.Add(sourceEntryLanguage);
-
-            var targetEntryLanguage = new EntryLanguage
+            if (excelTerm.Target != null)
             {
-                Locale = excelTerm.TargetCulture,
-                Name = excelTerm.TargetCulture.EnglishName,
-                Terms = CreateEntryTerms(excelTerm.Target,excelTerm.Approved)
-            };
+                var targetEntryLanguage = new ExcelEntryLanguage
+                {
+                    Locale = excelTerm.TargetCulture,
+                    Name = excelTerm.TargetCulture.EnglishName,
+                    Terms = CreateEntryTerms(excelTerm.Target, excelTerm.Approved),
+                    IsSource = false
+                };
+                result.Add(targetEntryLanguage);
+            }
 
-            result.Add(targetEntryLanguage);
 
             return result;
         }

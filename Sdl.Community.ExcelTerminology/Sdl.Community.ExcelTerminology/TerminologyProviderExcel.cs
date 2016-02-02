@@ -13,7 +13,7 @@ namespace Sdl.Community.ExcelTerminology
     {
 
         //private ExcelTermProviderService _excelTermProviderService;
-        private List<Entry> _termEntries;
+        private List<ExcelEntry> _termEntries;
 
         private ProviderSettings _providerSettings;
         public const string FixedUri = "excel://terminologyproviderfactoryexcel/";

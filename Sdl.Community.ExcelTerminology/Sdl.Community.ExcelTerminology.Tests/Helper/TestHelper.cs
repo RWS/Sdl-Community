@@ -20,6 +20,7 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
                 TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example.xlsx")
+               // TermFilePath = @"C:\Temp\en-nl (large glossary example).xlsx"
             };
         }
 

@@ -102,7 +102,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Model\ExcelEntry.cs" />
+    <Compile Include="Model\ExcelEntryLanguage.cs" />
     <Compile Include="Model\ExcelTerm.cs" />
+    <Compile Include="Model\IExcelEntry.cs" />
+    <Compile Include="Model\IExcelEntryLanguage.cs" />
     <Compile Include="Model\ProviderSettings.cs" />
     <Compile Include="Model\TerminologyEntryIndex.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
