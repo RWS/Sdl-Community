@@ -70,6 +70,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             approved.Clear();
 
         }
+
     }
 
 
