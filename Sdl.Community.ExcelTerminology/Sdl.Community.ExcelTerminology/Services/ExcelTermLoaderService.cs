@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
+using Sdl.Community.ExcelTerminology.Services.Interfaces;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology.Services
