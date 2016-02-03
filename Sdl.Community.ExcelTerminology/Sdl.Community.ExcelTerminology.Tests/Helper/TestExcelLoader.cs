@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
+using Sdl.Community.ExcelTerminology.Services.Interfaces;
 
 namespace Sdl.Community.ExcelTerminology.Tests.Helper
 {

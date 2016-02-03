@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Sdl.Community.ExcelTerminology.Model;
 
-namespace Sdl.Community.ExcelTerminology.Services
+namespace Sdl.Community.ExcelTerminology.Services.Interfaces
 {
     public interface IExcelTermLoaderService
     {

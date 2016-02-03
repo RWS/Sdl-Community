@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Terminology.TerminologyProvider.Core;
 
-namespace Sdl.Community.ExcelTerminology.Services
+namespace Sdl.Community.ExcelTerminology.Services.Interfaces
 {
     public interface IEntryTransformerService
     {
