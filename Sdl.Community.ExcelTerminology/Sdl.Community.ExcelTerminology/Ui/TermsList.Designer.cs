@@ -110,6 +110,7 @@
             this.confirmBtn.TabIndex = 1;
             this.confirmBtn.Text = "Save";
             this.confirmBtn.UseVisualStyleBackColor = true;
+            this.confirmBtn.Click += new System.EventHandler(this.confirmBtn_Click);
             // 
             // sourceListView
             // 

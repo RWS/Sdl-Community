@@ -36,18 +36,23 @@ namespace Sdl.Community.ExcelTerminology.Services
             }).ToList();
         }
 
-        public void AddEntry(ExcelEntry excelEntry)
+        public void AddEntry(ExcelTerm excelEntry,int entryId)
         {
             //TODO: Make it do something
         }
 
-        public void UpdateEntry(ExcelEntry excelEntry)
-        {
-            //TODO: Make it do something
+        public void UpdateEntry(ExcelTerm excelTerm,int entryId)
+        {        
+            var excelEntry = new ExcelEntry
+            {
+                Id = entryId,
+                Languages = _transformerService.CreateEntryLanguages(excelTerm),
+                SearchText = excelTerm.Source
+            };
 
         }
 
-        public void DeleteEntry(ExcelEntry excelEntry)
+        public void DeleteEntry(int entryId)
         {
             //TODO: Make it do something
         }

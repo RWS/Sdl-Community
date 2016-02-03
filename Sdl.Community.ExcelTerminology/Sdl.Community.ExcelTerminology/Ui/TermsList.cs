@@ -73,6 +73,40 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         }
 
+
+        private void confirmBtn_Click(object sender, EventArgs e)
+        {
+            var entry = new ExcelTerm();
+            var entryId = new int();
+            if (sourceListView.SelectedItem != null)
+            {
+                
+                var source = (ExcelEntry)sourceListView.SelectedItem.RowObject;
+                entryId = source.Id;
+                entry.Source = source.SearchText;
+
+                foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
+                {
+                    if (cultureCast.IsSource)
+                    {
+                        entry.SourceCulture = cultureCast.Locale;
+                    }
+                    else
+                    {
+                        entry.TargetCulture = cultureCast.Locale;
+                    }
+                }
+            }
+
+           
+            if (targetGridView.CurrentCell != null)
+            {
+                var value = targetGridView.CurrentCell.Value;
+                entry.Target = value.ToString();
+            }
+
+            _excelTermProviderService.UpdateEntry(entry, entryId);
+        }
     }
 
 
