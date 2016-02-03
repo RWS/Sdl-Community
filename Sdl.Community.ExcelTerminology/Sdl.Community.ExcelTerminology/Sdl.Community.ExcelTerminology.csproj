@@ -49,6 +49,10 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ObjectListView, Version=2.7.1.31255, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.2.7.1.5\lib\ObjectListView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
@@ -93,6 +97,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
+    <Reference Include="SparkleLibrary, Version=2.7.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.2.7.1.5\lib\SparkleLibrary.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -106,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="Model\ExcelDataGrid.cs" />
     <Compile Include="Model\ExcelEntry.cs" />
     <Compile Include="Model\ExcelEntryLanguage.cs" />
     <Compile Include="Model\ExcelTerm.cs" />
@@ -141,7 +150,7 @@
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\TermsList.cs">
-      <SubType>Form</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Ui\TermsList.Designer.cs">
       <DependentUpon>TermsList.cs</DependentUpon>

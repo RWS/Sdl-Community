@@ -8,5 +8,6 @@
   <Include>
     <File>EPPlus.dll</File>
     <File>Newtonsoft.Json.dll</File>
+    <File>ObjectListView.dll</File>
   </Include>
 </PluginPackage>
