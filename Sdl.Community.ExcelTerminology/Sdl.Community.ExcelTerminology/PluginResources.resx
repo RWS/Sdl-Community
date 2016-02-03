@@ -112,11 +112,17 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ExcelTerminologyProviderDescription" xml:space="preserve">
+    <value>Terminology provider based on excel files.</value>
+  </data>
+  <data name="ExcelTerminologyProviderName" xml:space="preserve">
+    <value>Excel-based Terminology provider ...</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Sdl.Community.ExcelTerminology</value>
   </data>

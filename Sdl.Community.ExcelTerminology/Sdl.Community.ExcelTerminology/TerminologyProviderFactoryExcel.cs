@@ -20,8 +20,9 @@ namespace Sdl.Community.ExcelTerminology
             ITerminologyProviderCredentialStore credentials)
         {
             var persistenceService = new PersistenceService();
+            var termSearchService = new NormalTermSeachService();
             var providerSettings = persistenceService.Load();
-            return new TerminologyProviderExcel(providerSettings);
+            return new TerminologyProviderExcel(providerSettings, termSearchService);
         }
     }
 }

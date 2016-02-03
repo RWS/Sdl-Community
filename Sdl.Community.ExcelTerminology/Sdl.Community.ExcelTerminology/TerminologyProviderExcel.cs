@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,44 +10,37 @@ using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology
 {
-    public class TerminologyProviderExcel:ITerminologyProvider
+    public class TerminologyProviderExcel: AbstractTerminologyProvider
     {
+        public const string ExcelUriTemplate = "exceltbx://";
 
-        //private ExcelTermProviderService _excelTermProviderService;
-        private List<ExcelEntry> _termEntries;
 
-        private ProviderSettings _providerSettings;
-        public const string FixedUri = "excel://terminologyproviderfactoryexcel/";
-        public string Name { get; }
-        public string Description { get; }
-        public string Id { get { return Uri.AbsoluteUri; } }
-        public Uri Uri { get; }
-        public TerminologyProviderType Type { get { return TerminologyProviderType.Custom; } }
+        private readonly List<ExcelEntry> _termEntries;
 
-        public bool IsReadOnly => false;
+        private readonly ProviderSettings _providerSettings;
 
-        public bool SearchEnabled { get; }
-        public IDefinition Definition => new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
+        private readonly ITermSearchService _termSearchService;
 
-        public TerminologyProviderExcel(ProviderSettings providerSettings)
+        public override string Name => $"{PluginResources.ExcelTerminologyProviderName} ({Path.GetFileName(_providerSettings.TermFilePath)})";
+        public override string Description => PluginResources.ExcelTerminologyProviderDescription;
+        public override Uri Uri => new Uri(ExcelUriTemplate + _providerSettings.TermFilePath);
+
+        public override IDefinition Definition => new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
+
+        public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
             _providerSettings = providerSettings; 
             var parser = new Parser(_providerSettings);
+            var transformerService = new EntryTransformerService(parser);
             var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
-            var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, parser);
+            var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
+            _termSearchService = termSearchService;
 
             _termEntries = excelTermProviderService.LoadEntries();
 
-            Name = "TerminologyTermbaseExcel";
-            Description= "TerminologyTermbaseExcel";
-            Uri = new Uri(FixedUri);
-            SearchEnabled = true;
-        }
-        public void SetDefault(bool value)
-        {
         }
 
-        public IList<ILanguage> GetLanguages()
+        public override IList<ILanguage> GetLanguages()
         {
             return GetDefinitionLanguages().Cast<ILanguage>().ToList();
         }
@@ -77,33 +71,38 @@ namespace Sdl.Community.ExcelTerminology
             return result;
         }
 
-        public IEntry GetEntry(int id)
+        public override IEntry GetEntry(int id)
         {
             return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
         }
 
-        public IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
+        public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
         {
             return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
 
         }
 
-        public IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode,
+        public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode,
             bool targetRequired)
         {
-            var firstTerm = _termEntries.FirstOrDefault();
-            var searchResult = new SearchResult
+
+            var result = new List<ISearchResult>();
+
+            if (mode == SearchMode.Normal)
             {
-                Id = firstTerm.Id,
-                Language = firstTerm.Languages[0],
-                Text = "Getting",
-                Score = 100
-            };
-            return new List<ISearchResult> {searchResult};
+                _termSearchService.Search(text, _termEntries, maxResultsCount);
+            }
+
+            //var firstTerm = _termEntries.FirstOrDefault();
+            //var searchResult = new SearchResult
+            //{
+            //    Id = firstTerm.Id,
+            //    Language = firstTerm.Languages[0],
+            //    Text = "Getting",
+            //    Score = 100
+            //};
+            return result;
         }
 
-        public void Dispose()
-        {
-        }
     }
 }

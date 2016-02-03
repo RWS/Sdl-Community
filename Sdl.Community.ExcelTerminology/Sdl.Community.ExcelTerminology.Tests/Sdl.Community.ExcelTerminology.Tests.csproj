@@ -74,6 +74,7 @@
     <Compile Include="ExcelTerminologyLoaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\TestHelper.cs" />
+    <Compile Include="TransformerServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
