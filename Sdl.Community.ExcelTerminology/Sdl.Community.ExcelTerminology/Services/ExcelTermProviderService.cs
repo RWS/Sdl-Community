@@ -27,13 +27,16 @@ namespace Sdl.Community.ExcelTerminology.Services
         {
             var excelTerms = _excelTermLoaderService.LoadTerms();
 
-            return excelTerms.Select(excelTerm => new ExcelEntry
-            {
-                Id = excelTerm.Key,
-                Languages = _transformerService.CreateEntryLanguages(excelTerm.Value),
-                SearchText = excelTerm.Value.Source
+            return excelTerms
+                .Where(et => !string.IsNullOrEmpty(et.Value.Source))
+                .Select(excelTerm => new ExcelEntry
+                {
+                    Id = excelTerm.Key,
+                    Fields = new List<IEntryField>(),
+                    Languages = _transformerService.CreateEntryLanguages(excelTerm.Value),
+                    SearchText = excelTerm.Value.Source
 
-            }).ToList();
+                }).ToList();
         }
 
         public void AddEntry(ExcelTerm excelEntry,int entryId)
@@ -46,6 +49,7 @@ namespace Sdl.Community.ExcelTerminology.Services
             var excelEntry = new ExcelEntry
             {
                 Id = entryId,
+                Fields = new List<IEntryField>(),
                 Languages = _transformerService.CreateEntryLanguages(excelTerm),
                 SearchText = excelTerm.Source
             };

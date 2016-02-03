@@ -44,10 +44,8 @@ namespace Sdl.Community.ExcelTerminology.Tests
         }
 
         [Theory]
-        [InlineData("co", 3)]
-        [InlineData("co", 2)]
-
-        public void Search_Term_Multiple_Results(string text,
+        [InlineData("Register today   and obtain a 20% discount!",3)]
+        public void Search_Term_Phrase_Multiple_Results(string text,
             int expectedNumberResults)
         {
             //arrange
@@ -67,7 +65,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
 
             //assert
             Assert.Equal(results.Count, expectedNumberResults);
-          
+
 
         }
     }

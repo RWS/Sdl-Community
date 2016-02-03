@@ -22,11 +22,16 @@ namespace Sdl.Community.ExcelTerminology
 
         private readonly ITermSearchService _termSearchService;
 
-        public override string Name => $"{PluginResources.ExcelTerminologyProviderName} ({Path.GetFileName(_providerSettings.TermFilePath)})";
-        public override string Description => PluginResources.ExcelTerminologyProviderDescription;
-        public override Uri Uri => new Uri(ExcelUriTemplate + _providerSettings.TermFilePath);
+        public override string Name => 
+            PluginResources.ExcelTerminologyProviderName;
+        public override string Description => 
+            PluginResources.ExcelTerminologyProviderDescription;
+        public override Uri Uri => 
+            new Uri(ExcelUriTemplate + 
+                Path.GetFileName(_providerSettings.TermFilePath));
 
-        public override IDefinition Definition => new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
+        public override IDefinition Definition => 
+            new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
 
         public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
@@ -83,18 +88,18 @@ namespace Sdl.Community.ExcelTerminology
 
         }
 
-        public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination, int maxResultsCount, SearchMode mode,
+        public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
+            int maxResultsCount, SearchMode mode,
             bool targetRequired)
         {
 
-            var result = new List<ISearchResult>();
+            var results = new List<ISearchResult>();
 
-            if (mode == SearchMode.Normal)
-            {
-                _termSearchService.Search(text, _termEntries, maxResultsCount);
-            }
-          
-            return result;
+            results.AddRange(
+                _termSearchService
+                    .Search(text, _termEntries, maxResultsCount));
+
+            return results;
         }
 
     }

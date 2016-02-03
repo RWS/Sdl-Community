@@ -25,6 +25,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                 Locale = excelTerm.SourceCulture,
                 Name = excelTerm.SourceCulture.EnglishName,
                 Terms = CreateEntryTerms(excelTerm.Source),
+                Fields = new List<IEntryField>(),
                 IsSource = true
             };
 
@@ -36,6 +37,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                     Locale = excelTerm.TargetCulture,
                     Name = excelTerm.TargetCulture.EnglishName,
                     Terms = CreateEntryTerms(excelTerm.Target, excelTerm.Approved),
+                    Fields = new List<IEntryField>(),
                     IsSource = false
                 };
                 result.Add(targetEntryLanguage);
