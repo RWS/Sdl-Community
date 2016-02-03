@@ -86,7 +86,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 var persistence = new PersistenceService();
                 persistence.Save(provider);
            
-            
+            Close();
         }
 
         private void footerLayoutPanel_Paint(object sender, PaintEventArgs e)
