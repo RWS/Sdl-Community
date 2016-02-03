@@ -93,15 +93,7 @@ namespace Sdl.Community.ExcelTerminology
             {
                 _termSearchService.Search(text, _termEntries, maxResultsCount);
             }
-
-            //var firstTerm = _termEntries.FirstOrDefault();
-            //var searchResult = new SearchResult
-            //{
-            //    Id = firstTerm.Id,
-            //    Language = firstTerm.Languages[0],
-            //    Text = "Getting",
-            //    Score = 100
-            //};
+          
             return result;
         }
 

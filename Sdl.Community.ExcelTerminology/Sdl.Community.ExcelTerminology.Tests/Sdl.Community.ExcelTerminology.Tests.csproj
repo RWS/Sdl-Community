@@ -70,6 +70,7 @@
     <Compile Include="ExcelTermProviderServiceTests.cs" />
     <Compile Include="ExcelTests.cs" />
     <Compile Include="Helper\TestExcelLoader.cs" />
+    <Compile Include="NormalTermSearchServiceTest.cs" />
     <Compile Include="ProviderSettingsTest.cs" />
     <Compile Include="ExcelTerminologyLoaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

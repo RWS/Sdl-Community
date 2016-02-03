@@ -6,6 +6,6 @@ namespace Sdl.Community.ExcelTerminology.Services.Interfaces
 {
     public interface ITermSearchService
     {
-        SearchResult Search(string text, List<ExcelEntry> entries, int maxResultsCount);
+        IList<SearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount);
     }
 }

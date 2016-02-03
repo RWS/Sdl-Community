@@ -11,9 +11,18 @@ namespace Sdl.Community.ExcelTerminology.Services
 {
     public class NormalTermSeachService: ITermSearchService
     {
-        public SearchResult Search(string text, List<ExcelEntry> entries, int maxResultsCount)
+        public IList<SearchResult> Search(string text, List<ExcelEntry> entries, int maxResultsCount)
         {
-            throw new NotImplementedException();
+            return (from entry in entries
+                where entry.SearchText.Contains(text)
+                select new SearchResult
+                {
+                    Id = entry.Id,
+                    Language = entry.Languages.Cast<ExcelEntryLanguage>().First(lang => lang.IsSource),
+                    Score = 100, Text = entry.SearchText
+                })
+                .Take(maxResultsCount)
+                .ToList();
         }
     }
 }
