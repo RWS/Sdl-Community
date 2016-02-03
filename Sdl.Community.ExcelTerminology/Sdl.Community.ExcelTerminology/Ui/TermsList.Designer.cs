@@ -30,13 +30,12 @@
         {
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetGridView = new System.Windows.Forms.DataGridView();
+            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.editBtn = new System.Windows.Forms.Button();
             this.confirmBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.ObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
             this.buttonsLayoutPanel.SuspendLayout();
@@ -75,12 +74,24 @@
             this.targetGridView.Size = new System.Drawing.Size(263, 492);
             this.targetGridView.TabIndex = 0;
             // 
+            // Target
+            // 
+            this.Target.DataPropertyName = "Term";
+            this.Target.HeaderText = "Target";
+            this.Target.Name = "Target";
+            this.Target.Width = 150;
+            // 
+            // Approved
+            // 
+            this.Approved.DataPropertyName = "Approved";
+            this.Approved.HeaderText = "Approved";
+            this.Approved.Name = "Approved";
+            // 
             // buttonsLayoutPanel
             // 
             this.buttonsLayoutPanel.ColumnCount = 2;
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.buttonsLayoutPanel.Controls.Add(this.editBtn, 0, 0);
             this.buttonsLayoutPanel.Controls.Add(this.confirmBtn, 1, 0);
             this.buttonsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsLayoutPanel.Location = new System.Drawing.Point(272, 501);
@@ -91,22 +102,13 @@
             this.buttonsLayoutPanel.Size = new System.Drawing.Size(263, 44);
             this.buttonsLayoutPanel.TabIndex = 2;
             // 
-            // editBtn
-            // 
-            this.editBtn.Location = new System.Drawing.Point(3, 3);
-            this.editBtn.Name = "editBtn";
-            this.editBtn.Size = new System.Drawing.Size(75, 23);
-            this.editBtn.TabIndex = 0;
-            this.editBtn.Text = "Edit";
-            this.editBtn.UseVisualStyleBackColor = true;
-            // 
             // confirmBtn
             // 
             this.confirmBtn.Location = new System.Drawing.Point(134, 3);
             this.confirmBtn.Name = "confirmBtn";
             this.confirmBtn.Size = new System.Drawing.Size(75, 23);
             this.confirmBtn.TabIndex = 1;
-            this.confirmBtn.Text = "Confirm";
+            this.confirmBtn.Text = "Save";
             this.confirmBtn.UseVisualStyleBackColor = true;
             // 
             // sourceListView
@@ -129,19 +131,6 @@
             this.sourceColumn.CellPadding = null;
             this.sourceColumn.Width = 197;
             // 
-            // Target
-            // 
-            this.Target.DataPropertyName = "Term";
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            this.Target.Width = 150;
-            // 
-            // Approved
-            // 
-            this.Approved.DataPropertyName = "Approved";
-            this.Approved.HeaderText = "Approved";
-            this.Approved.Name = "Approved";
-            // 
             // TermsList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -162,7 +151,6 @@
         private System.Windows.Forms.DataGridView targetGridView;
         private System.Windows.Forms.TableLayoutPanel mainLayoutPanel;
         private System.Windows.Forms.TableLayoutPanel buttonsLayoutPanel;
-        private System.Windows.Forms.Button editBtn;
         private System.Windows.Forms.Button confirmBtn;
         private BrightIdeasSoftware.ObjectListView sourceListView;
         private BrightIdeasSoftware.OLVColumn sourceColumn;
