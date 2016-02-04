@@ -124,7 +124,7 @@
             this.sourceListView.TabIndex = 3;
             this.sourceListView.UseCompatibleStateImageBehavior = false;
             this.sourceListView.View = System.Windows.Forms.View.Details;
-            this.sourceListView.CellClick += new System.EventHandler<BrightIdeasSoftware.CellClickEventArgs>(this.sourceListView_CellClick);
+            this.sourceListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sourceListView_ItemSelectionChanged);
             // 
             // sourceColumn
             // 

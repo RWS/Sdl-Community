@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -14,7 +15,22 @@ namespace Sdl.Community.ExcelTerminology
     [TerminologyProviderViewerWinFormsUI]
     public class TerminologyProviderViewerWinFormsUIExcel : ITerminologyProviderViewerWinFormsUI
     {
-        public Control Control=>new TermsList() {Text = "TerminologyProviderViewerWinFormsUIExcel",BackColor = Color.White};
+
+        public Control Control
+        {
+            get
+            {
+                var control = new TermsList
+                {
+                    Text = @"TerminologyProviderViewerWinFormsUIExcel",
+                    BackColor = Color.White
+                };
+
+                JumpToTermAction += control.JumpToTerm;
+                return control;
+            }
+        }
+
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
             return true;
@@ -22,7 +38,7 @@ namespace Sdl.Community.ExcelTerminology
 
         public void JumpToTerm(IEntry entry)
         {
-           
+            JumpToTermAction?.Invoke(entry);
         }
 
         public void AddTerm(string source, string target)
@@ -42,7 +58,7 @@ namespace Sdl.Community.ExcelTerminology
 
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
-            
+
         }
 
         public void Release()
@@ -55,5 +71,6 @@ namespace Sdl.Community.ExcelTerminology
         public IEntry SelectedTerm { get; set; }
         public event EventHandler TermChanged;
         public event EventHandler<EntryEventArgs> SelectedTermChanged;
+        public event Action<IEntry> JumpToTermAction;
     }
 }
