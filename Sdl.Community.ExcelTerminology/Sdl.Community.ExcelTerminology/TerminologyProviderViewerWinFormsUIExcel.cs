@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -27,6 +28,7 @@ namespace Sdl.Community.ExcelTerminology
                 };
 
                 JumpToTermAction += control.JumpToTerm;
+                AddAndEditAction += control.AddAndEdit;
                 return control;
             }
         }
@@ -53,7 +55,12 @@ namespace Sdl.Community.ExcelTerminology
 
         public void AddAndEditTerm(IEntry term, string source, string target)
         {
-            
+            var dataGrid = new ExcelDataGrid
+            {
+                Term = target,
+                Approved = null
+            };
+            AddAndEditAction?.Invoke(term, dataGrid);
         }
 
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
@@ -72,5 +79,6 @@ namespace Sdl.Community.ExcelTerminology
         public event EventHandler TermChanged;
         public event EventHandler<EntryEventArgs> SelectedTermChanged;
         public event Action<IEntry> JumpToTermAction;
+        public event Action<IEntry, ExcelDataGrid> AddAndEditAction;
     }
 }

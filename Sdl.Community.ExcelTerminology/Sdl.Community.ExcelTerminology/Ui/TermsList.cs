@@ -14,7 +14,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
         private readonly ExcelTermProviderService _excelTermProviderService;
         private List<ExcelEntry> _terms;
 
-
         public TermsList()
         {
             InitializeComponent();
@@ -30,7 +29,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
         
         protected override void OnLoad(EventArgs e)
         {
-
             _terms = _excelTermProviderService.LoadEntries();
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
@@ -46,7 +44,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
         {
           
             var selectedItem = sourceListView.Objects.Cast<ExcelEntry>().FirstOrDefault(s => s.Id == entry.Id);
-            
            
             if (selectedItem != null)
             {
@@ -54,8 +51,42 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 sourceListView.SelectObject(selectedItem);
                 
             }
-        } 
+            
+        }
 
+        public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
+        {
+            
+            var selectedTerm = _terms.FirstOrDefault(item => item.Id == entry.Id);
+            var termToAdd = new EntryTerm
+            {
+                Value = excelDataGrid.Term
+            };
+            var exist = false;
+            if (selectedTerm != null)
+            {
+                foreach (var term in selectedTerm.Languages[1].Terms)
+                {
+                    if (term.Value == excelDataGrid.Term)
+                    {
+                        exist = true;
+                    }
+                   
+
+                }
+
+                if (exist == false)
+                {
+                    selectedTerm.Languages[1].Terms.Add(termToAdd);
+
+                    _terms[entry.Id].Languages = selectedTerm.Languages;
+                }
+                
+            }
+
+            JumpToTerm(entry);
+           
+        }
          private void confirmBtn_Click(object sender, EventArgs e)
         {
             var entry = new ExcelTerm();
@@ -92,10 +123,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
+            
             var rowIndex = e.ItemIndex;
             var item = _terms[rowIndex];
-            var result = new List<ExcelDataGrid>();
-            var approved = new List<string>();
+             var result = new List<ExcelDataGrid>();
+            //var approved = new List<string>();
             foreach (var target in item.Languages)
             {
                 var targetCast = (ExcelEntryLanguage)target;
@@ -107,20 +139,23 @@ namespace Sdl.Community.ExcelTerminology.Ui
                         Term = term.Value,
                         Approved = null
                     }));
-                    approved.AddRange(from approvedField in targetCast.Terms
-                                      from approvedTerm in approvedField.Fields
-                                      select approvedTerm.Value);
+                    //approved.AddRange(from approvedField in targetCast.Terms
+                    //                  from approvedTerm in approvedField.Fields
+                    //                  select approvedTerm.Value);
                 }
             }
 
-            for (var i = 0; i < result.Count; i++)
-            {
-                result[i].Approved = approved[i];
-            }
+          
+      
+
+            //for (var i = 0; i < result.Count; i++)
+            //{
+            //    result[i].Approved = approved[i];
+            //}
 
             targetGridView.DataSource = result;
-            approved.Clear();
-            
+           // approved.Clear();
+           
         }
     }
 
