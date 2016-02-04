@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
+using Sdl.Terminology.TerminologyProvider.Core;
 
 
 namespace Sdl.Community.ExcelTerminology.Ui
@@ -26,7 +27,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
             _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, transformerService);
         }
-
+        
         protected override void OnLoad(EventArgs e)
         {
 
@@ -34,47 +35,28 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
+            sourceListView.HideSelection = false;
 
             sourceListView.SetObjects(_terms);
-            targetGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
+           // targetGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
             targetGridView.ColumnHeadersVisible = false;
         }
 
-        private void sourceListView_CellClick(object sender, BrightIdeasSoftware.CellClickEventArgs e)
+        public void JumpToTerm(IEntry entry)
         {
-            var rowIndex = e.RowIndex;
-            var item = _terms[rowIndex];
-            var result = new List<ExcelDataGrid>();
-            var approved = new List<string>();
-            foreach (var target in item.Languages)
+          
+            var selectedItem = sourceListView.Objects.Cast<ExcelEntry>().FirstOrDefault(s => s.Id == entry.Id);
+            
+           
+            if (selectedItem != null)
             {
-                var targetCast = (ExcelEntryLanguage) target;
-
-                if (!targetCast.IsSource)
-                {
-                    result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
-                    {
-                        Term = term.Value,
-                        Approved = null
-                    }));
-                    approved.AddRange(from approvedField in targetCast.Terms
-                        from approvedTerm in approvedField.Fields
-                        select approvedTerm.Value);
-                }
+                sourceListView.DeselectAll();
+                sourceListView.SelectObject(selectedItem);
+                
             }
+        } 
 
-            for (var i = 0; i < result.Count; i++)
-            {
-                result[i].Approved = approved[i];
-            }
-
-            targetGridView.DataSource = result;
-            approved.Clear();
-
-        }
-
-
-        private void confirmBtn_Click(object sender, EventArgs e)
+         private void confirmBtn_Click(object sender, EventArgs e)
         {
             var entry = new ExcelTerm();
             var entryId = new int();
@@ -106,6 +88,39 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
 
             _excelTermProviderService.UpdateEntry(entry, entryId);
+        }
+
+        private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            var rowIndex = e.ItemIndex;
+            var item = _terms[rowIndex];
+            var result = new List<ExcelDataGrid>();
+            var approved = new List<string>();
+            foreach (var target in item.Languages)
+            {
+                var targetCast = (ExcelEntryLanguage)target;
+
+                if (!targetCast.IsSource)
+                {
+                    result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
+                    {
+                        Term = term.Value,
+                        Approved = null
+                    }));
+                    approved.AddRange(from approvedField in targetCast.Terms
+                                      from approvedTerm in approvedField.Fields
+                                      select approvedTerm.Value);
+                }
+            }
+
+            for (var i = 0; i < result.Count; i++)
+            {
+                result[i].Approved = approved[i];
+            }
+
+            targetGridView.DataSource = result;
+            approved.Clear();
+            
         }
     }
 
