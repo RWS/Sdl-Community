@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
@@ -26,9 +27,12 @@ namespace Sdl.Community.ExcelTerminology
             PluginResources.ExcelTerminologyProviderName;
         public override string Description => 
             PluginResources.ExcelTerminologyProviderDescription;
-        public override Uri Uri => 
-            new Uri(ExcelUriTemplate + 
-                Path.GetFileName(_providerSettings.TermFilePath));
+
+        public override Uri Uri =>
+            new Uri((ExcelUriTemplate +
+                     Path.GetFileName(_providerSettings.TermFilePath))
+                .RemoveUriForbiddenCharacters());
+                
 
         public override IDefinition Definition => 
             new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
@@ -41,6 +45,8 @@ namespace Sdl.Community.ExcelTerminology
             var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
             var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
             _termSearchService = termSearchService;
+
+
 
             _termEntries = excelTermProviderService.LoadEntries();
 
