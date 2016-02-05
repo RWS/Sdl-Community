@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
@@ -22,31 +17,32 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         protected override void OnLoad(EventArgs e)
         {
-            sourceBox.Text = "A";
-            targetBox.Text = "B";
-            approvedBox.Text = "C";
-            separatorTextBox.Text = "|";
+            sourceBox.Text = @"A";
+            targetBox.Text = @"B";
+            approvedBox.Text = @"C";
+            separatorTextBox.Text = @"|";
             descriptionLbl.Text =
-                "From this screen you can fill your settings from your excel document.";
-                               
-            sourceLanguageComboBox.DataSource = GetCultureNames();
+                @"From this screen you can fill your settings from your excel document.";
+
+            var source = GetCultureNames();
+            sourceLanguageComboBox.DataSource = source;
             sourceLanguageComboBox.DisplayMember = "DisplayName";
             sourceLanguageComboBox.ValueMember = "Name";
+            var selectedSourceItem = source.Where(s => s.Name == "en-GB");
+            sourceLanguageComboBox.SelectedItem = selectedSourceItem.FirstOrDefault();
 
-            targetLanguageComboBox.DataSource = GetCultureNames();
+            var target = GetCultureNames();
+            targetLanguageComboBox.DataSource = target;
             targetLanguageComboBox.DisplayMember = "DisplayName";
             targetLanguageComboBox.ValueMember = "Name";
-        }
-
-        private void defaultSettingsLayoutPanel_Paint(object sender, PaintEventArgs e)
-        {
-
+            var selectedTargetItem = target.Where(t => t.Name == "de-DE");
+            targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
         }
 
         private void browseBtn_Click(object sender, EventArgs e)
         {
             var filePath = string.Empty;
-            var file = new OpenFileDialog {Filter = "Office Files|*.xlsx" };
+            var file = new OpenFileDialog {Filter = @"Office Files|*.xlsx" };
             if (file.ShowDialog() == DialogResult.OK)
             {
                 filePath = file.FileName;
@@ -89,9 +85,5 @@ namespace Sdl.Community.ExcelTerminology.Ui
             Close();
         }
 
-        private void footerLayoutPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
     }
 }
