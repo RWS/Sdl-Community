@@ -67,6 +67,16 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 Value = excelDataGrid.Term
             };
+
+            var excelTerm = new ExcelTerm
+            {
+                SourceCulture = entry.Languages[0].Locale,
+                TargetCulture = entry.Languages[1].Locale,
+                Target = excelDataGrid.Term
+            };
+            var source = (ExcelEntry) entry;
+            excelTerm.Source = source.SearchText;
+
             var exist = false;
             if (selectedTerm != null)
             {
@@ -90,6 +100,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
 
             JumpToTerm(entry);
+            _excelTermProviderService.AddEntry(excelTerm,entry.Id);
+            
            
         }
          private void confirmBtn_Click(object sender, EventArgs e)
