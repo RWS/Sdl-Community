@@ -38,6 +38,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.SetObjects(_terms);
            // targetGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
             targetGridView.ColumnHeadersVisible = false;
+            targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
         }
 
         public void JumpToTerm(IEntry entry)
