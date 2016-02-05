@@ -36,6 +36,7 @@
             this.confirmBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.ObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.deleteBtn = new System.Windows.Forms.Button();
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
             this.buttonsLayoutPanel.SuspendLayout();
@@ -93,6 +94,7 @@
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.buttonsLayoutPanel.Controls.Add(this.confirmBtn, 1, 0);
+            this.buttonsLayoutPanel.Controls.Add(this.deleteBtn, 0, 0);
             this.buttonsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsLayoutPanel.Location = new System.Drawing.Point(272, 501);
             this.buttonsLayoutPanel.Name = "buttonsLayoutPanel";
@@ -132,6 +134,16 @@
             this.sourceColumn.CellPadding = null;
             this.sourceColumn.Width = 197;
             // 
+            // deleteBtn
+            // 
+            this.deleteBtn.Location = new System.Drawing.Point(3, 3);
+            this.deleteBtn.Name = "deleteBtn";
+            this.deleteBtn.Size = new System.Drawing.Size(75, 23);
+            this.deleteBtn.TabIndex = 2;
+            this.deleteBtn.Text = "Delete";
+            this.deleteBtn.UseVisualStyleBackColor = true;
+            this.deleteBtn.Click += new System.EventHandler(this.deleteBtn_Click);
+            // 
             // TermsList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -157,5 +169,6 @@
         private BrightIdeasSoftware.OLVColumn sourceColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
         private System.Windows.Forms.DataGridViewTextBoxColumn Target;
+        private System.Windows.Forms.Button deleteBtn;
     }
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using BrightIdeasSoftware;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -39,6 +41,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
            // targetGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
             targetGridView.ColumnHeadersVisible = false;
             targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            sourceColumn.IsEditable = true;
         }
 
         public void JumpToTerm(IEntry entry)
@@ -116,7 +120,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
             if (targetGridView.CurrentCell != null)
             {
                 var value = targetGridView.CurrentCell.Value;
-                entry.Target = value.ToString();
+                if (value != null)
+                {
+                    entry.Target = value.ToString();
+                }
+                
             }
 
             _excelTermProviderService.UpdateEntry(entry, entryId);
@@ -157,6 +165,20 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetGridView.DataSource = result;
            // approved.Clear();
            
+        }
+
+        private void deleteBtn_Click(object sender, EventArgs e)
+        {
+             var source = (ExcelEntry)sourceListView.SelectedItem.RowObject;
+            sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
+
+            _terms.Remove(source);
+            sourceListView.RemoveObject(source); //remove from listview
+            sourceListView.SetObjects(_terms);
+            var nextTerm = _terms.Where(s => s.Id == source.Id + 1); 
+            sourceListView.SelectObject(nextTerm.FirstOrDefault());// set the focus on next object
+
+            _excelTermProviderService.DeleteEntry(source.Id);
         }
     }
 
