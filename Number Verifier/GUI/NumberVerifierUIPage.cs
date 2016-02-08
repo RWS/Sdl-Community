@@ -79,6 +79,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.TargetDecimalPeriod = _ControlSettings.TargetDecimalPeriod;
             _Control.ExcludeLockedSegments = _ControlSettings.ExcludeLockedSegments;
             _Control.Exclude100Percents = _ControlSettings.Exclude100Percents;
+            _Control.ExcludeUntranslatedSegments= _ControlSettings.ExcludeUntranslatedSegments.Value ;
         }
         #endregion
 
@@ -152,6 +153,8 @@ namespace Sdl.Community.NumberVerifier
             _Control.ExcludeLockedSegments = _ControlSettings.ExcludeLockedSegments;
             _ControlSettings.Exclude100Percents.Reset();
             _Control.Exclude100Percents = _ControlSettings.Exclude100Percents;
+            _ControlSettings.ExcludeUntranslatedSegments.Reset();
+            _Control.ExcludeUntranslatedSegments = _ControlSettings.ExcludeUntranslatedSegments;
 
         }
         #endregion
@@ -201,6 +204,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.TargetNoSeparator.Value = _Control.TargetNoSeparator;
             _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
             _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
+            _ControlSettings.ExcludeUntranslatedSegments.Value = _Control.ExcludeUntranslatedSegments;
         }
         #endregion
 

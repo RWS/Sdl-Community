@@ -46,7 +46,7 @@ namespace Sdl.Community.NumberVerifier
         private const string TargetDecimalPeriod_Setting = "TargetDecimalPeriod";
         private const string ExcludeLockedSegments_Setting = "ExcludeLockedSegments";
         private const string Exclude100Percents_Setting = "Exclude100Percents";
-
+        private const string ExcludeUntranslatedSegments_Settings = "ExcludeUntranslatedSegments";
 
         // Return the value of the setting.
         public Setting<bool> ExcludeTagText
@@ -219,6 +219,8 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<bool>(Exclude100Percents_Setting); }
         }
 
+        public Setting<bool> ExcludeUntranslatedSegments => GetSetting<bool>(ExcludeUntranslatedSegments_Settings);
+
         #endregion
 
         /// <summary>
@@ -299,6 +301,8 @@ namespace Sdl.Community.NumberVerifier
                     return (bool)false;
                 case "Exclude100Percents":
                     return (bool)false;
+                case "ExcludeUntranslatedSegments":
+                    return true;
                 default:
                     return base.GetDefaultValue(settingId);
             }

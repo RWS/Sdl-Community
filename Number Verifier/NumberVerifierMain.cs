@@ -10,6 +10,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Verification.Api;
 using System.Text.RegularExpressions;
 using Sdl.Community.Extended.MessageUI;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -210,6 +211,7 @@ namespace Sdl.Community.NumberVerifier
         #endregion
 
         #region "process"
+
         public void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
         {
             if (Enabled)
@@ -218,6 +220,7 @@ namespace Sdl.Community.NumberVerifier
                 CheckParagraphUnit(paragraphUnit);
             }
         }
+
         #endregion
 
         /// <summary>
@@ -637,7 +640,8 @@ namespace Sdl.Community.NumberVerifier
                    (VerificationSettings.Exclude100Percents.Value == false ||
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
-                     segmentPair.Properties.TranslationOrigin.MatchPercent != 100));
+                     segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
+                     &&(VerificationSettings.ExcludeUntranslatedSegments == false && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
         }
                 #endregion
     }

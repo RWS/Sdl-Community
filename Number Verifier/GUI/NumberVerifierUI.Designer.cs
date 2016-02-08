@@ -37,6 +37,7 @@
             this.combo_ModifiedAlphanumericsErrorType = new System.Windows.Forms.ComboBox();
             this.cb_ReportModifiedAlphanumerics = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.untranslatedCheck = new System.Windows.Forms.CheckBox();
             this.cb_Exclude100Percents = new System.Windows.Forms.CheckBox();
             this.cb_ExcludeLockedSegments = new System.Windows.Forms.CheckBox();
             this.cb_ExcludeTagText = new System.Windows.Forms.CheckBox();
@@ -45,6 +46,7 @@
             this.rb_RequireLocalizations = new System.Windows.Forms.RadioButton();
             this.rb_AllowLocalizations = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.cb_TargetNoSeparator = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsPeriod = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsComma = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsNobreakThinSpace = new System.Windows.Forms.CheckBox();
@@ -58,6 +60,7 @@
             this.cb_SourceDecimalPeriod = new System.Windows.Forms.CheckBox();
             this.cb_SourceDecimalComma = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.cb_SourceNoSeparator = new System.Windows.Forms.CheckBox();
             this.cb_SourceThousandsPeriod = new System.Windows.Forms.CheckBox();
             this.cb_SourceThousandsComma = new System.Windows.Forms.CheckBox();
             this.cb_SourceThousandsNobreakThinSpace = new System.Windows.Forms.CheckBox();
@@ -71,8 +74,6 @@
             this.cb_ReportRemovedNumbers = new System.Windows.Forms.CheckBox();
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.cb_SourceNoSeparator = new System.Windows.Forms.CheckBox();
-            this.cb_TargetNoSeparator = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -183,15 +184,27 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 146);
+            this.groupBox7.Location = new System.Drawing.Point(16, 131);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(190, 90);
+            this.groupBox7.Size = new System.Drawing.Size(191, 115);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "&Exclude";
+            // 
+            // untranslatedCheck
+            // 
+            this.untranslatedCheck.AutoSize = true;
+            this.untranslatedCheck.Location = new System.Drawing.Point(18, 88);
+            this.untranslatedCheck.Name = "untranslatedCheck";
+            this.untranslatedCheck.Size = new System.Drawing.Size(173, 17);
+            this.untranslatedCheck.TabIndex = 15;
+            this.untranslatedCheck.Text = "Exclude untranslated segments";
+            this.toolTip1.SetToolTip(this.untranslatedCheck, "If this is selected, untranslated segments will not be verified.");
+            this.untranslatedCheck.UseVisualStyleBackColor = true;
             // 
             // cb_Exclude100Percents
             // 
@@ -231,9 +244,9 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(225, 146);
+            this.groupBox2.Location = new System.Drawing.Point(213, 131);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(190, 90);
+            this.groupBox2.Size = new System.Drawing.Size(202, 115);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "&Localizations";
@@ -291,6 +304,18 @@
             this.groupBox6.Text = "&Target thousands separators";
             this.toolTip1.SetToolTip(this.groupBox6, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
+            // 
+            // cb_TargetNoSeparator
+            // 
+            this.cb_TargetNoSeparator.AutoSize = true;
+            this.cb_TargetNoSeparator.Checked = true;
+            this.cb_TargetNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_TargetNoSeparator.Location = new System.Drawing.Point(20, 157);
+            this.cb_TargetNoSeparator.Name = "cb_TargetNoSeparator";
+            this.cb_TargetNoSeparator.Size = new System.Drawing.Size(89, 17);
+            this.cb_TargetNoSeparator.TabIndex = 27;
+            this.cb_TargetNoSeparator.Text = "No Separator";
+            this.cb_TargetNoSeparator.UseVisualStyleBackColor = true;
             // 
             // cb_TargetThousandsPeriod
             // 
@@ -456,6 +481,18 @@
             this.toolTip1.SetToolTip(this.groupBox3, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
             // 
+            // cb_SourceNoSeparator
+            // 
+            this.cb_SourceNoSeparator.AutoSize = true;
+            this.cb_SourceNoSeparator.Checked = true;
+            this.cb_SourceNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_SourceNoSeparator.Location = new System.Drawing.Point(17, 157);
+            this.cb_SourceNoSeparator.Name = "cb_SourceNoSeparator";
+            this.cb_SourceNoSeparator.Size = new System.Drawing.Size(89, 17);
+            this.cb_SourceNoSeparator.TabIndex = 26;
+            this.cb_SourceNoSeparator.Text = "No Separator";
+            this.cb_SourceNoSeparator.UseVisualStyleBackColor = true;
+            // 
             // cb_SourceThousandsPeriod
             // 
             this.cb_SourceThousandsPeriod.AutoSize = true;
@@ -610,30 +647,6 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // cb_SourceNoSeparator
-            // 
-            this.cb_SourceNoSeparator.AutoSize = true;
-            this.cb_SourceNoSeparator.Checked = true;
-            this.cb_SourceNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_SourceNoSeparator.Location = new System.Drawing.Point(17, 157);
-            this.cb_SourceNoSeparator.Name = "cb_SourceNoSeparator";
-            this.cb_SourceNoSeparator.Size = new System.Drawing.Size(89, 17);
-            this.cb_SourceNoSeparator.TabIndex = 26;
-            this.cb_SourceNoSeparator.Text = "No Separator";
-            this.cb_SourceNoSeparator.UseVisualStyleBackColor = true;
-            // 
-            // cb_TargetNoSeparator
-            // 
-            this.cb_TargetNoSeparator.AutoSize = true;
-            this.cb_TargetNoSeparator.Checked = true;
-            this.cb_TargetNoSeparator.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_TargetNoSeparator.Location = new System.Drawing.Point(20, 157);
-            this.cb_TargetNoSeparator.Name = "cb_TargetNoSeparator";
-            this.cb_TargetNoSeparator.Size = new System.Drawing.Size(89, 17);
-            this.cb_TargetNoSeparator.TabIndex = 27;
-            this.cb_TargetNoSeparator.Text = "No Separator";
-            this.cb_TargetNoSeparator.UseVisualStyleBackColor = true;
-            // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -709,6 +722,6 @@
         private System.Windows.Forms.RadioButton rb_ReportBriefMessages;
         private System.Windows.Forms.CheckBox cb_TargetNoSeparator;
         private System.Windows.Forms.CheckBox cb_SourceNoSeparator;
-
+        private System.Windows.Forms.CheckBox untranslatedCheck;
     }
 }

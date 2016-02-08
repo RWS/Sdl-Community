@@ -207,6 +207,13 @@ namespace Sdl.Community.NumberVerifier
             get { return cb_Exclude100Percents.Checked; }
             set { cb_Exclude100Percents.Checked = value; }
         }
+
+        public bool ExcludeUntranslatedSegments
+        {
+            get { return untranslatedCheck.Checked; }
+            set { untranslatedCheck.Checked = value; }
+        }
+
         public NumberVerifierUI()
         {
             InitializeComponent();
