@@ -95,6 +95,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Installer\TMRepair.iss" />
     <Content Include="Repair.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
