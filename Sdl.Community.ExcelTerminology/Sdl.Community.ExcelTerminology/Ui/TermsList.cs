@@ -25,25 +25,49 @@ namespace Sdl.Community.ExcelTerminology.Ui
             var excelTermLoaderService = new ExcelTermLoaderService(providerSettings);
             var parser = new Parser(providerSettings);
             var transformerService = new EntryTransformerService(parser);
-
+            _terms = new List<ExcelEntry>();
             _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, transformerService);
         }
-        
+
+        public TermsList(List<ExcelEntry> terms):this()
+        {
+            _terms = terms;
+        }
+
+        public void SetTerms(List<ExcelEntry> terms)
+        {
+            //_terms = terms;
+            ////sourceListView.SetObjects(_terms);
+            //// _terms = await _excelTermProviderService.LoadEntries();
+            //sourceListView.ShowGroups = false;
+            //sourceListView.FullRowSelect = true;
+            //sourceListView.HeaderStyle = ColumnHeaderStyle.None;
+            ////sourceListView.HideSelection = false;
+
+            // sourceListView.SetObjects(_terms);
+            //targetGridView.ColumnHeadersVisible = false;
+            //targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
+
+            //sourceColumn.IsEditable = true;
+        }
+
         protected override void OnLoad(EventArgs e)
         {
-            _terms = _excelTermProviderService.LoadEntries();
+            //// _terms = await _excelTermProviderService.LoadEntries();
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
             sourceListView.HideSelection = false;
 
-            sourceListView.SetObjects(_terms);
-           // targetGridView.CellBorderStyle = DataGridViewCellBorderStyle.None;
+             sourceListView.SetObjects(_terms);
             targetGridView.ColumnHeadersVisible = false;
             targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
 
+
             sourceColumn.IsEditable = true;
         }
+
+       
 
         public void JumpToTerm(IEntry entry)
         {
@@ -53,8 +77,9 @@ namespace Sdl.Community.ExcelTerminology.Ui
             if (selectedItem != null)
             {
                 sourceListView.DeselectAll();
-                sourceListView.SelectObject(selectedItem);
-                
+                sourceListView.Focus();
+                sourceListView.EnsureModelVisible(selectedItem);
+                sourceListView.SelectObject(selectedItem, true);
             }
             
         }

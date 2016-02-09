@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
 
 namespace Sdl.Community.ExcelTerminology.Tests.Helper
@@ -20,8 +21,15 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
                 TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example.xlsx")
-               // TermFilePath = @"C:\Temp\en-nl (large glossary example).xlsx"
+                // TermFilePath = @"C:\Temp\en-nl (large glossary example).xlsx"
+                // TermFilePath = @"C:\Users\rocrisan\Documents\My Received Files\IATE - (en-nl).xlsx"
+
             };
+        }
+
+        public static ExcelPackage CreateSampleExcelPackage()
+        {
+            return new ExcelPackage(new FileInfo(CreateProviderSettings().TermFilePath));
         }
 
         public static ProviderSettings CreateProviderSettingsWithouHeaderAndApproved()

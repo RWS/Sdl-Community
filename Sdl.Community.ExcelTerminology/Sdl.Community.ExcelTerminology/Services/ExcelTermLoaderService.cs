@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
@@ -19,26 +20,28 @@ namespace Sdl.Community.ExcelTerminology.Services
             _providerSettings = providerSettings;
         }
 
-        public Dictionary<int, ExcelTerm> LoadTerms()
+        public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
+            using (var excelPackage =
+                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            {
+                var workSheet = await GetTerminologyWorksheet(excelPackage);
+                return await GetTermsFromExcel(workSheet);
+            }
 
-            var workSheet = GetTerminologyWorksheet();
-            return GetTermsFromExcel(workSheet);
         }
 
-        public ExcelWorksheet GetTerminologyWorksheet()
-        {
-          var excelPackage =  
-                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath));
 
+        public async Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
+        {
             var worksheet = string.IsNullOrEmpty(_providerSettings.WorksheetName)
-                ? excelPackage.Workbook.Worksheets[1] 
+                ? excelPackage.Workbook.Worksheets[1]
                 : excelPackage.Workbook.Worksheets[_providerSettings.WorksheetName];
 
             return worksheet;
         }
 
-        public Dictionary<int, ExcelTerm> GetTermsFromExcel(ExcelWorksheet worksheet)
+        public async Task<Dictionary<int, ExcelTerm>> GetTermsFromExcel(ExcelWorksheet worksheet)
         {
             var result = new Dictionary<int, ExcelTerm>();
 

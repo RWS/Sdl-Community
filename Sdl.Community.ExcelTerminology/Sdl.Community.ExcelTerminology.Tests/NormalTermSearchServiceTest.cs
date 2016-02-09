@@ -17,7 +17,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
         [InlineData("unaccountable", 22)]
         [InlineData("jodhpurs", 11)]
 
-        public void Search_Term_One_Result(string text, int expectedId)
+        public async void Search_Term_One_Result(string text, int expectedId)
         {
             //arrange
             var providerSettings = TestHelper.CreateProviderSettings();
@@ -26,7 +26,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var entryTransformer = new EntryTransformerService(parser);
             var excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, entryTransformer);
 
-            var termEntries = excelTermProviderService.LoadEntries();
+            var termEntries = await excelTermProviderService.LoadEntries();
            
 
             var termSearchService = new NormalTermSeachService();
@@ -45,7 +45,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
 
         [Theory]
         [InlineData("Register today   and obtain a 20% discount!",3)]
-        public void Search_Term_Phrase_Multiple_Results(string text,
+        public async void Search_Term_Phrase_Multiple_Results(string text,
             int expectedNumberResults)
         {
             //arrange
@@ -55,7 +55,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var entryTransformer = new EntryTransformerService(parser);
             var excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, entryTransformer);
 
-            var termEntries = excelTermProviderService.LoadEntries();
+            var termEntries = await excelTermProviderService.LoadEntries();
 
 
             var termSearchService = new NormalTermSeachService();

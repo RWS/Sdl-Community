@@ -23,9 +23,9 @@ namespace Sdl.Community.ExcelTerminology.Services
         }
 
 
-        public List<ExcelEntry> LoadEntries()
+        public async Task<List<ExcelEntry>> LoadEntries()
         {
-            var excelTerms = _excelTermLoaderService.LoadTerms();
+            var excelTerms = await _excelTermLoaderService.LoadTerms();
 
             return excelTerms
                 .Where(et => !string.IsNullOrEmpty(et.Value.Source))
@@ -46,13 +46,13 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         public void UpdateEntry(ExcelTerm excelTerm,int entryId)
         {        
-            var excelEntry = new ExcelEntry
-            {
-                Id = entryId,
-                Fields = new List<IEntryField>(),
-                Languages = _transformerService.CreateEntryLanguages(excelTerm),
-                SearchText = excelTerm.Source
-            };
+            //var excelEntry = new ExcelEntry
+            //{
+            //    Id = entryId,
+            //    Fields = new List<IEntryField>(),
+            //    Languages = _transformerService.CreateEntryLanguages(excelTerm),
+            //    SearchText = excelTerm.Source
+            //};
 
         }
 
