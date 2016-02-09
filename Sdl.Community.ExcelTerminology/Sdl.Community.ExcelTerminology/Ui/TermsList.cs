@@ -36,35 +36,26 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         public void SetTerms(List<ExcelEntry> terms)
         {
-            //_terms = terms;
-            ////sourceListView.SetObjects(_terms);
-            //// _terms = await _excelTermProviderService.LoadEntries();
-            //sourceListView.ShowGroups = false;
-            //sourceListView.FullRowSelect = true;
-            //sourceListView.HeaderStyle = ColumnHeaderStyle.None;
-            ////sourceListView.HideSelection = false;
-
-            // sourceListView.SetObjects(_terms);
-            //targetGridView.ColumnHeadersVisible = false;
-            //targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
-
-            //sourceColumn.IsEditable = true;
+            _terms = terms;
+            sourceListView.SetObjects(_terms);
+            sourceListView.SelectedIndex = 0;
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            //// _terms = await _excelTermProviderService.LoadEntries();
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
             sourceListView.HideSelection = false;
 
-             sourceListView.SetObjects(_terms);
+            sourceListView.SetObjects(_terms);
+            sourceListView.SelectedIndex = 0;
             targetGridView.ColumnHeadersVisible = false;
             targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
 
 
             sourceColumn.IsEditable = true;
+
         }
 
        
@@ -129,6 +120,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             
            
         }
+
          private void confirmBtn_Click(object sender, EventArgs e)
         {
             var entry = new ExcelTerm();

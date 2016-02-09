@@ -30,13 +30,13 @@
         {
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetGridView = new System.Windows.Forms.DataGridView();
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.confirmBtn = new System.Windows.Forms.Button();
             this.deleteBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
             this.buttonsLayoutPanel.SuspendLayout();
@@ -76,19 +76,6 @@
             this.targetGridView.RowHeadersVisible = false;
             this.targetGridView.Size = new System.Drawing.Size(351, 604);
             this.targetGridView.TabIndex = 0;
-            // 
-            // Target
-            // 
-            this.Target.DataPropertyName = "Term";
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            this.Target.Width = 150;
-            // 
-            // Approved
-            // 
-            this.Approved.DataPropertyName = "Approved";
-            this.Approved.HeaderText = "Approved";
-            this.Approved.Name = "Approved";
             // 
             // buttonsLayoutPanel
             // 
@@ -135,6 +122,8 @@
             this.sourceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.sourceColumn});
             this.sourceListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sourceListView.EmptyListMsg = "There are not terms available. If there is a large number of terms it might take " +
+    "a few seconds to load the terms.";
             this.sourceListView.FullRowSelect = true;
             this.sourceListView.GridLines = true;
             this.sourceListView.HideSelection = false;
@@ -147,6 +136,7 @@
             this.sourceListView.TabIndex = 3;
             this.sourceListView.UseCompatibleStateImageBehavior = false;
             this.sourceListView.View = System.Windows.Forms.View.Details;
+            this.sourceListView.VirtualMode = true;
             this.sourceListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sourceListView_ItemSelectionChanged);
             // 
             // sourceColumn
@@ -155,6 +145,19 @@
             this.sourceColumn.CellPadding = null;
             this.sourceColumn.FillsFreeSpace = true;
             this.sourceColumn.Width = 197;
+            // 
+            // Target
+            // 
+            this.Target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Target.DataPropertyName = "Term";
+            this.Target.HeaderText = "Target";
+            this.Target.Name = "Target";
+            // 
+            // Approved
+            // 
+            this.Approved.DataPropertyName = "Approved";
+            this.Approved.HeaderText = "Approved";
+            this.Approved.Name = "Approved";
             // 
             // TermsList
             // 
@@ -180,8 +183,8 @@
         private System.Windows.Forms.Button confirmBtn;
         private BrightIdeasSoftware.FastObjectListView sourceListView;
         private BrightIdeasSoftware.OLVColumn sourceColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.Button deleteBtn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
     }
 }
