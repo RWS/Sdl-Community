@@ -16,15 +16,17 @@ namespace Sdl.Community.ExcelTerminology
     {
         public const string ExcelUriTemplate = "exceltbx://";
 
-
-        private readonly List<ExcelEntry> _termEntries;
+        private List<ExcelEntry> _termEntries;
 
         private readonly ProviderSettings _providerSettings;
 
         private readonly ITermSearchService _termSearchService;
 
-        public override string Name => 
-            PluginResources.ExcelTerminologyProviderName;
+        public List<ExcelEntry> Terms => _termEntries;
+
+
+        public override string Name =>
+            Path.GetFileName(_providerSettings.TermFilePath);
         public override string Description => 
             PluginResources.ExcelTerminologyProviderDescription;
 
@@ -40,15 +42,21 @@ namespace Sdl.Community.ExcelTerminology
         public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
             _providerSettings = providerSettings; 
+  
+            _termSearchService = termSearchService;
+
+            _termEntries = new List<ExcelEntry>();
+
+        }
+
+        public async Task LoadEntries()
+        {
             var parser = new Parser(_providerSettings);
             var transformerService = new EntryTransformerService(parser);
             var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
             var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
-            _termSearchService = termSearchService;
 
-
-
-            _termEntries = excelTermProviderService.LoadEntries();
+            _termEntries = await excelTermProviderService.LoadEntries();
 
         }
 

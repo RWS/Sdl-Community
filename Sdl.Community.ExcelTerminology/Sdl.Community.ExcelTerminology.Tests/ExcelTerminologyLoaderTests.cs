@@ -15,26 +15,29 @@ namespace Sdl.Community.ExcelTerminology.Tests
     {
 
         [Fact]
-        public void Select_WorkSheet_By_Name()
+        public async void Select_WorkSheet_By_Name()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
             providerSettings.WorksheetName = "Glossary";
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet();
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
 
             Assert.Equal(worksheet.Name, providerSettings.WorksheetName);
         }
 
         [Fact]
-        public void Select_WorkSheet_By_Index()
+        public async void Select_WorkSheet_By_Index()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
+
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet();
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
 
             Assert.Equal(worksheet.Name, "Glossary");
         }
@@ -43,12 +46,14 @@ namespace Sdl.Community.ExcelTerminology.Tests
         public void Select_WorkSheet_Which_Doesnt_Exists()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
+
             providerSettings.WorksheetName = "Worksheet";
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet();
+            var worksheet = excelTerminologyService.GetTerminologyWorksheet(excelPackage);
 
             Assert.Equal(worksheet, null);
         }
@@ -64,19 +69,20 @@ namespace Sdl.Community.ExcelTerminology.Tests
             "unerklärbar|unerfindlich",
             "Approved|Not approved"
             , 26)]
-        public void Get_All_Terms_With_Header(int id
+        public async void Get_All_Terms_With_Header(int id
             , string expectedSource
             , string expectedTarget
             , string expectedApproved
             , int expectedCount)
         {
             var providerSettings = TestHelper.CreateProviderSettings();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet();
-            var actual = excelTerminologyService.GetTermsFromExcel(worksheet);
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+            var actual = await excelTerminologyService.GetTermsFromExcel(worksheet);
             Assert.Equal(actual.Count, expectedCount);
             var actualExcelTerm = actual[id];
             Assert.Equal(actualExcelTerm.Source, expectedSource);
@@ -99,7 +105,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
            "unerklärbar|unerfindlich",
            null
            , 26)]
-        public void Get_All_Source_Terms_Without_Header(int id
+        public async void Get_All_Source_Terms_Without_Header(int id
            , string expectedSource
            , string expectedTarget
            , string expectedApproved
@@ -107,12 +113,13 @@ namespace Sdl.Community.ExcelTerminology.Tests
         {
             var providerSettings = TestHelper
                 .CreateProviderSettingsWithouHeaderAndApproved();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet();
-            var actual = excelTerminologyService.GetTermsFromExcel(worksheet);
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+            var actual = await excelTerminologyService.GetTermsFromExcel(worksheet);
             Assert.Equal(actual.Count, expectedCount);
             var actualExcelTerm = actual[id];
             Assert.Equal(actualExcelTerm.Source, expectedSource);
@@ -124,5 +131,21 @@ namespace Sdl.Community.ExcelTerminology.Tests
             Assert.Equal(actualExcelTerm.Approved, expectedApproved);
         }
 
+        [Theory]
+        [InlineData(21, "unaccountable",
+            "unerklärbar")]
+        public void Update_Term(int id, string expectedSource, string expectedTarget)
+        {
+            var providerSettings = TestHelper
+                .CreateProviderSettings();
+            var excelPackage = TestHelper.CreateSampleExcelPackage();
+
+
+            var excelTerminologyService =
+                new ExcelTermLoaderService(providerSettings);
+
+            var worksheet = excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+
+        }
     }
 }

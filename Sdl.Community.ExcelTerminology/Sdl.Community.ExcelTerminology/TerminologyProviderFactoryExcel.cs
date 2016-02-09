@@ -22,7 +22,9 @@ namespace Sdl.Community.ExcelTerminology
             var persistenceService = new PersistenceService();
             var termSearchService = new NormalTermSeachService();
             var providerSettings = persistenceService.Load();
-            return new TerminologyProviderExcel(providerSettings, termSearchService);
+            var terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+            Task.Run(terminologyProvider.LoadEntries);
+            return terminologyProvider;
         }
     }
 }

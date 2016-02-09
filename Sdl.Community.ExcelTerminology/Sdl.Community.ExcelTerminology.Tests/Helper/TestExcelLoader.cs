@@ -12,7 +12,7 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
 {
     public class TestExcelLoader : IExcelTermLoaderService
     {
-        public Dictionary<int, ExcelTerm> LoadTerms()
+        public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
             return new Dictionary<int, ExcelTerm>
             {

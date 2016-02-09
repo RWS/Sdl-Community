@@ -12,7 +12,7 @@ namespace Sdl.Community.ExcelTerminology
     {
         public static string RemoveUriForbiddenCharacters(this string uriString)
         {
-            var regex = new Regex(@"[$+!*'(), ]");
+            var regex = new Regex(@"[$%+!*'(), ]");
             return regex.Replace(uriString, "");
         }
     }

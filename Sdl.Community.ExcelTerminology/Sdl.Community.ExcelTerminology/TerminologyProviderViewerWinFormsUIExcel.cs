@@ -16,12 +16,13 @@ namespace Sdl.Community.ExcelTerminology
     [TerminologyProviderViewerWinFormsUI]
     public class TerminologyProviderViewerWinFormsUIExcel : ITerminologyProviderViewerWinFormsUI
     {
+        private ITerminologyProvider _terminologyProvider;
 
         public Control Control
         {
             get
             {
-                var control = new TermsList
+                var control = new TermsList(((TerminologyProviderExcel)_terminologyProvider).Terms)
                 {
                     Text = @"TerminologyProviderViewerWinFormsUIExcel",
                     BackColor = Color.White
@@ -65,12 +66,12 @@ namespace Sdl.Community.ExcelTerminology
 
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
-
+            _terminologyProvider = terminologyProvider;
         }
 
         public void Release()
         {
-            
+            _terminologyProvider = null;
         }
 
 

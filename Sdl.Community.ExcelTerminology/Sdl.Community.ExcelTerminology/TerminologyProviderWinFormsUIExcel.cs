@@ -46,8 +46,8 @@ namespace Sdl.Community.ExcelTerminology
             };
         }
 
-        public string TypeName => "Terminology provider Excel";
-        public string TypeDescription => "Terminology provider Excel";
-        public bool SupportsEditing => false;
+        public string TypeName => PluginResources.ExcelTerminologyProviderName;
+        public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
+        public bool SupportsEditing => true;
     }
 }

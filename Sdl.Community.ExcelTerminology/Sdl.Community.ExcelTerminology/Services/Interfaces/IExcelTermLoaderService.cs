@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
 
 namespace Sdl.Community.ExcelTerminology.Services.Interfaces
 {
     public interface IExcelTermLoaderService
     {
-        Dictionary<int, ExcelTerm> LoadTerms();
+       Task<Dictionary<int, ExcelTerm>> LoadTerms();
     }
 }
