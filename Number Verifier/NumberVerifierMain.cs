@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Sdl.Core.Settings;
@@ -9,6 +10,7 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Verification.Api;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Core.Globalization;
 
@@ -193,6 +195,9 @@ namespace Sdl.Community.NumberVerifier
             _sourceThousandSeparators += VerificationSettings.SourceThousandsNobreakThinSpace.Value ? "\u202F" : "";
             _sourceThousandSeparators += VerificationSettings.SourceThousandsComma.Value ? "," : "";
             _sourceThousandSeparators += VerificationSettings.SourceThousandsPeriod.Value ? "." : "";
+            _sourceThousandSeparators += VerificationSettings.SourceThousandsCustomSeparator.Value
+                ? VerificationSettings.GetSourceThousandsCustomSeparator
+                : "";
 
             _targetThousandSeparators += VerificationSettings.TargetThousandsSpace.Value ? " " : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsNobreakSpace.Value ? "\u00A0" : "";
@@ -200,14 +205,24 @@ namespace Sdl.Community.NumberVerifier
             _targetThousandSeparators += VerificationSettings.TargetThousandsNobreakThinSpace.Value ? "\u202F" : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsComma.Value ? "," : "";
             _targetThousandSeparators += VerificationSettings.TargetThousandsPeriod.Value ? "." : "";
+            _targetThousandSeparators += VerificationSettings.TargetThousandsCustomSeparator.Value
+                ? VerificationSettings.GetTargetThousandsCustomSeparator
+                : "";
 
             _sourceDecimalSeparators += VerificationSettings.SourceDecimalComma.Value ? "," : "";
             _sourceDecimalSeparators += VerificationSettings.SourceDecimalPeriod.Value ? "." : "";
+            _sourceDecimalSeparators += VerificationSettings.SourceDecimalCustomSeparator.Value
+                ? VerificationSettings.GetSourceDecimalCustomSeparator
+                : "";
 
             _targetDecimalSeparators += VerificationSettings.TargetDecimalComma.Value ? "," : "";
             _targetDecimalSeparators += VerificationSettings.TargetDecimalPeriod.Value ? "." : "";
+            _targetDecimalSeparators += VerificationSettings.TargetDecimalCustomSeparator.Value
+                ? VerificationSettings.GetTargetDecimalCustomSeparator
+                : "";
 
         }
+
         #endregion
 
         #region "process"
@@ -513,22 +528,51 @@ namespace Sdl.Community.NumberVerifier
             }
         }
 
-        private void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
+        //For more information see: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
+        public string AddCustomSeparators(string thousand, string decimalSeparator)
         {
-            foreach (Match match in Regex.Matches(text, @"-?\d+([ \u00A0\u2009\u202F.,]\d+)*"))
+            var expression = @"\u00A0\u2009\u202F";
+            var separators = string.Join(thousand, decimalSeparator);
+
+            foreach (char c in separators)
             {
-                var normalizedNumber = NormalizedNumber(match.Value,thousandSeparators, decimalSeparators, noSeparator);
+                if (c.ToString().Contains("'"))
+                {
+                    expression = expression + @"\u2019\u0027"; //workaround for ' character which is not recognized by regex
+                }
+                else
+                {
+                    expression = expression + @"\" + string.Format("u{0:x4}", (int) c);
+                }
+
+            }
+      
+            return expression;
+        }
+
+        public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
+        {
+             var expresion = string.Format(@"-?\d+([{0}]\d+)*", AddCustomSeparators(thousandSeparators,decimalSeparators));
+           
+            foreach (Match match in Regex.Matches(text, expresion))
+            {
+                var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators, noSeparator);
 
                 numeberCollection.Add(match.Value);
                 normalizedNumberCollection.Add(normalizedNumber);
             }
         }
 
-        private string NormalizedNumber( string number, string thousandSeparators, string decimalSeparators, bool noSeparator)
+        private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
+            bool noSeparator)
         {
             string normalizedNumber;
+
+            decimalSeparators = AddCustomSeparators(null, decimalSeparators);
+            thousandSeparators = AddCustomSeparators(thousandSeparators, null);
+
             if (thousandSeparators != String.Empty &&
-                Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                Regex.IsMatch(number, @" ^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                 // e.g 1,000,000
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");

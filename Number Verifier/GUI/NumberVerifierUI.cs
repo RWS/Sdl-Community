@@ -214,10 +214,58 @@ namespace Sdl.Community.NumberVerifier
             set { untranslatedCheck.Checked = value; }
         }
 
+        public bool SourceThousandsCustomSeparator
+        {
+            get { return customTSep.Checked; }
+            set { customTSep.Checked = value; }
+        }
+
+        public bool TargetThousandsCustomSeparator
+        {
+            get { return targetTbox.Checked; }
+            set { targetTbox.Checked = value; }
+        }
+
+        public bool SourceDecimalCustomSeparator
+        {
+            get { return customDSep.Checked; }
+            set { customDSep.Checked = value; }
+        }
+
+        public bool TargetDecimalCustomSeparator
+        {
+            get { return customTargetSep.Checked; }
+            set { customTargetSep.Checked = value; }
+        }
+
+        public string GetSourceThousandsCustomSeparator
+        {
+            get { return sourceTBox.Text; }
+            set { sourceTBox.Text = value; }
+        }
+
+        public string GetTargetThousandsCustomSeparator
+        {
+            get { return customTBox.Text; }
+            set { customTBox.Text = value; }
+        }
+
+        public string GetSourceDecimalCustomSeparator
+        {
+            get { return sourceDBox.Text; }
+            set { sourceDBox.Text = value; }
+        }
+
+        public string GetTargetDecimalCustomSeparator
+        {
+            get { return targetDBox.Text; }
+            set { targetDBox.Text = value; }
+        }
         public NumberVerifierUI()
         {
             InitializeComponent();
             this.VScroll = true;
         }
+
     }
 }
