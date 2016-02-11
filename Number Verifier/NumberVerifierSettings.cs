@@ -47,6 +47,15 @@ namespace Sdl.Community.NumberVerifier
         private const string ExcludeLockedSegments_Setting = "ExcludeLockedSegments";
         private const string Exclude100Percents_Setting = "Exclude100Percents";
         private const string ExcludeUntranslatedSegments_Settings = "ExcludeUntranslatedSegments";
+        private const string SourceThousandsCustomSeparator_Settings = "SourceThousandsCustomSeparator";
+        private const string TargetThousandsCustomSeparator_Settings = "TargetThousandsCustomSeparator";
+        private const string SourceDecimalCustomSeparator_Settings = "SourceDecimalCustomSeparator";
+        private const string TargetDecimalCustomSeparator_Settings = "TargetDecimalCustomSeparator";
+        private const string GetSourceThousandsCustomSeparator_Settings = "GetSourceThousandsCustomSeparator";
+        private const string GetTargetThousandsCustomSeparator_Settings = "GetTargetThousandsCustomSeparator";
+        private const string GetSourceDecimalCustomSeparator_Settings = "GetSourceDecimalCustomSeparator";
+        private const string GetTargetDecimalCustomSeparator_Settings = "GetTargetDecimalCustomSeparator";
+
 
         // Return the value of the setting.
         public Setting<bool> ExcludeTagText
@@ -220,7 +229,24 @@ namespace Sdl.Community.NumberVerifier
         }
 
         public Setting<bool> ExcludeUntranslatedSegments => GetSetting<bool>(ExcludeUntranslatedSegments_Settings);
+        public Setting<bool> SourceThousandsCustomSeparator=>GetSetting<bool>(SourceThousandsCustomSeparator_Settings);
 
+        public Setting<bool> TargetThousandsCustomSeparator => GetSetting<bool>(TargetThousandsCustomSeparator_Settings);
+
+        public Setting<bool> SourceDecimalCustomSeparator => GetSetting<bool>(SourceDecimalCustomSeparator_Settings);
+        public Setting<bool> TargetDecimalCustomSeparator => GetSetting<bool>(TargetDecimalCustomSeparator_Settings);
+
+        public Setting<string> GetSourceThousandsCustomSeparator
+            => GetSetting<string>(GetSourceThousandsCustomSeparator_Settings);
+
+        public Setting<string> GetTargetThousandsCustomSeparator
+            => GetSetting<string>(GetTargetThousandsCustomSeparator_Settings);
+
+        public Setting<string> GetSourceDecimalCustomSeparator
+            => GetSetting<string>(GetSourceDecimalCustomSeparator_Settings);
+
+        public Setting<string> GetTargetDecimalCustomSeparator
+            => GetSetting<string>(GetTargetDecimalCustomSeparator_Settings);
         #endregion
 
         /// <summary>
