@@ -28,6 +28,16 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
 
         }
 
+        public Task AddOrUpdateTerm(int entryId, ExcelTerm excelTerm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteTerm(int id)
+        {
+            throw new NotImplementedException();
+        }
+
         public static ExcelTerm SampleExcelTerm => new ExcelTerm
         {
             Source = "ill-treatment",

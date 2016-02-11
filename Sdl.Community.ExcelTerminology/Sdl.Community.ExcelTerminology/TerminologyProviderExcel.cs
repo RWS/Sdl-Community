@@ -24,7 +24,7 @@ namespace Sdl.Community.ExcelTerminology
 
         public List<ExcelEntry> Terms => _termEntries;
 
-
+        public event Action<List<ExcelEntry>> TermsLoaded;
         public override string Name =>
             Path.GetFileName(_providerSettings.TermFilePath);
         public override string Description => 
@@ -57,7 +57,7 @@ namespace Sdl.Community.ExcelTerminology
             var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
 
             _termEntries = await excelTermProviderService.LoadEntries();
-
+            TermsLoaded?.Invoke(_termEntries);
         }
 
         public override IList<ILanguage> GetLanguages()
@@ -117,4 +117,5 @@ namespace Sdl.Community.ExcelTerminology
         }
 
     }
+
 }

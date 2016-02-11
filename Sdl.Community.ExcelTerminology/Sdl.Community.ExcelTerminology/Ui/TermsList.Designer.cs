@@ -64,6 +64,7 @@
             // 
             // targetGridView
             // 
+            this.targetGridView.AllowUserToAddRows = false;
             this.targetGridView.BackgroundColor = System.Drawing.Color.White;
             this.targetGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.targetGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -79,10 +80,10 @@
             // 
             // Target
             // 
+            this.Target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.Target.DataPropertyName = "Term";
             this.Target.HeaderText = "Target";
             this.Target.Name = "Target";
-            this.Target.Width = 150;
             // 
             // Approved
             // 
@@ -135,6 +136,8 @@
             this.sourceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.sourceColumn});
             this.sourceListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.sourceListView.EmptyListMsg = "There are no terms available. If there is a large number of terms it might take a" +
+    " few seconds to load the terms.";
             this.sourceListView.FullRowSelect = true;
             this.sourceListView.GridLines = true;
             this.sourceListView.HideSelection = false;
@@ -147,6 +150,7 @@
             this.sourceListView.TabIndex = 3;
             this.sourceListView.UseCompatibleStateImageBehavior = false;
             this.sourceListView.View = System.Windows.Forms.View.Details;
+            this.sourceListView.VirtualMode = true;
             this.sourceListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sourceListView_ItemSelectionChanged);
             // 
             // sourceColumn
@@ -180,8 +184,8 @@
         private System.Windows.Forms.Button confirmBtn;
         private BrightIdeasSoftware.FastObjectListView sourceListView;
         private BrightIdeasSoftware.OLVColumn sourceColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.Button deleteBtn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Target;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
     }
 }

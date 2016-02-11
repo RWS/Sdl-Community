@@ -14,6 +14,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
     public partial class TermsList : UserControl
     {
         private readonly ExcelTermProviderService _excelTermProviderService;
+        private readonly ProviderSettings _providerSettings;
+        private readonly EntryTransformerService _transformerService;
         private List<ExcelEntry> _terms;
 
         public TermsList()
@@ -21,12 +23,13 @@ namespace Sdl.Community.ExcelTerminology.Ui
             InitializeComponent();
 
             var persistenceService = new PersistenceService();
-            var providerSettings = persistenceService.Load();
-            var excelTermLoaderService = new ExcelTermLoaderService(providerSettings);
-            var parser = new Parser(providerSettings);
-            var transformerService = new EntryTransformerService(parser);
+            _providerSettings = persistenceService.Load();
+            var excelTermLoaderService = new ExcelTermLoaderService(_providerSettings);
+            var parser = new Parser(_providerSettings);
+            _transformerService = new EntryTransformerService(parser);
             _terms = new List<ExcelEntry>();
-            _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, transformerService);
+            _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService,
+                _transformerService);
         }
 
         public TermsList(List<ExcelEntry> terms):this()
@@ -36,35 +39,26 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         public void SetTerms(List<ExcelEntry> terms)
         {
-            //_terms = terms;
-            ////sourceListView.SetObjects(_terms);
-            //// _terms = await _excelTermProviderService.LoadEntries();
-            //sourceListView.ShowGroups = false;
-            //sourceListView.FullRowSelect = true;
-            //sourceListView.HeaderStyle = ColumnHeaderStyle.None;
-            ////sourceListView.HideSelection = false;
-
-            // sourceListView.SetObjects(_terms);
-            //targetGridView.ColumnHeadersVisible = false;
-            //targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
-
-            //sourceColumn.IsEditable = true;
+            _terms = terms;
+            sourceListView.SetObjects(_terms);
+            sourceListView.SelectedIndex = 0;
         }
 
         protected override void OnLoad(EventArgs e)
         {
-            //// _terms = await _excelTermProviderService.LoadEntries();
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
             sourceListView.HideSelection = false;
 
-             sourceListView.SetObjects(_terms);
+            sourceListView.SetObjects(_terms);
+            sourceListView.SelectedIndex = 0;
             targetGridView.ColumnHeadersVisible = false;
             targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
 
 
             sourceColumn.IsEditable = true;
+
         }
 
        
@@ -82,6 +76,38 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 sourceListView.SelectObject(selectedItem, true);
             }
             
+        }
+
+        public void AddTerm(string source, string target)
+        {
+            var excelTerm = new ExcelTerm
+            {
+                SourceCulture = _providerSettings.SourceLanguage,
+                TargetCulture = _providerSettings.TargetLanguage,
+                Source = source,
+                Target = target
+            };
+
+            var entryLanguages = _transformerService.CreateEntryLanguages(excelTerm);
+
+            var maxId = 0;
+            if (_terms.Count > 0)
+            {
+                maxId = _terms.Max(term => term.Id);
+            }
+
+            var excelEntry = new ExcelEntry
+            {
+                Id = maxId+1,
+                Fields = new List<IEntryField>(),
+                Languages = entryLanguages,
+                SearchText = source
+
+            };
+
+            sourceListView.AddObject(excelEntry);
+            _terms.Add(excelEntry);
+            JumpToTerm(excelEntry);
         }
 
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
@@ -125,54 +151,53 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
 
             JumpToTerm(entry);
-            _excelTermProviderService.AddEntry(excelTerm,entry.Id);
-            
            
         }
-         private void confirmBtn_Click(object sender, EventArgs e)
+
+        private async void confirmBtn_Click(object sender, EventArgs e)
         {
+            if (sourceListView.SelectedObject == null) return;
             var entry = new ExcelTerm();
-            var entryId = new int();
-            if (sourceListView.SelectedItem != null)
-            {
-                
-                var source = (ExcelEntry)sourceListView.SelectedItem.RowObject;
-                entryId = source.Id;
-                entry.Source = source.SearchText;
 
-                foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
+
+            var source = (ExcelEntry) sourceListView.SelectedObject;
+            var entryId = source.Id;
+            entry.Source = source.SearchText;
+
+            foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
+            {
+                if (cultureCast.IsSource)
                 {
-                    if (cultureCast.IsSource)
-                    {
-                        entry.SourceCulture = cultureCast.Locale;
-                    }
-                    else
-                    {
-                        entry.TargetCulture = cultureCast.Locale;
-                    }
+                    entry.SourceCulture = cultureCast.Locale;
+                }
+                else
+                {
+                    entry.TargetCulture = cultureCast.Locale;
                 }
             }
 
-           
-            if (targetGridView.CurrentCell != null)
+            var value = targetGridView.CurrentCell?.Value;
+            if (value != null)
             {
-                var value = targetGridView.CurrentCell.Value;
-                if (value != null)
-                {
-                    entry.Target = value.ToString();
-                }
-                
+                entry.Target = value.ToString();
             }
 
-            _excelTermProviderService.UpdateEntry(entry, entryId);
+            await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
+
         }
 
         private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            
             var rowIndex = e.ItemIndex;
+            var result = new List<ExcelDataGrid>();
+
+            if (rowIndex == 0 && _terms.Count == 0)
+            {
+                targetGridView.DataSource = result;
+                targetGridView.AllowUserToAddRows = false;
+            }
+            if (rowIndex >= _terms.Count) return;
             var item = _terms[rowIndex];
-             var result = new List<ExcelDataGrid>();
             //var approved = new List<string>();
             foreach (var target in item.Languages)
             {
@@ -201,21 +226,27 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
             targetGridView.DataSource = result;
            // approved.Clear();
-           
+            targetGridView.AllowUserToAddRows = true;
+
         }
 
-        private void deleteBtn_Click(object sender, EventArgs e)
+        private async void deleteBtn_Click(object sender, EventArgs e)
         {
-             var source = (ExcelEntry)sourceListView.SelectedItem.RowObject;
+            if (sourceListView.SelectedObject == null) return;
+             var source = (ExcelEntry)sourceListView.SelectedObject;
             sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
 
             _terms.Remove(source);
             sourceListView.RemoveObject(source); //remove from listview
-            sourceListView.SetObjects(_terms);
-            var nextTerm = _terms.Where(s => s.Id == source.Id + 1); 
-            sourceListView.SelectObject(nextTerm.FirstOrDefault());// set the focus on next object
+            sourceListView.SelectedIndex = 0;
+            sourceListView.Focus();
+            sourceListView.EnsureModelVisible(sourceListView.SelectedItem);
+            //sourceListView.SetObjects(_terms);
+            //var nextTerm = _terms.Where(s => s.Id == source.Id + 1); 
+            //sourceListView.SelectObject(nextTerm.FirstOrDefault());// set the focus on next object
 
-            _excelTermProviderService.DeleteEntry(source.Id);
+            await _excelTermProviderService.DeleteEntry(source.Id);
+
         }
     }
 

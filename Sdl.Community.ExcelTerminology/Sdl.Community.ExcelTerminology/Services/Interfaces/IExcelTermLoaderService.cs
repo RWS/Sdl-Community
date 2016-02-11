@@ -6,6 +6,8 @@ namespace Sdl.Community.ExcelTerminology.Services.Interfaces
 {
     public interface IExcelTermLoaderService
     {
-       Task<Dictionary<int, ExcelTerm>> LoadTerms();
+        Task<Dictionary<int, ExcelTerm>> LoadTerms();
+        Task AddOrUpdateTerm(int entryId, ExcelTerm excelTerm);
+        Task DeleteTerm(int id);
     }
 }

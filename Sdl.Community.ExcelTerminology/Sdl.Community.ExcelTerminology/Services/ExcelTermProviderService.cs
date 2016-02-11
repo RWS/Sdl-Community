@@ -39,26 +39,14 @@ namespace Sdl.Community.ExcelTerminology.Services
                 }).ToList();
         }
 
-        public void AddEntry(ExcelTerm excelEntry,int entryId)
+        public async Task AddOrUpdateEntry(int entryId,ExcelTerm excelEntry)
         {
-            //TODO: Make it do something
+            await _excelTermLoaderService.AddOrUpdateTerm(entryId, excelEntry);
         }
 
-        public void UpdateEntry(ExcelTerm excelTerm,int entryId)
-        {        
-            //var excelEntry = new ExcelEntry
-            //{
-            //    Id = entryId,
-            //    Fields = new List<IEntryField>(),
-            //    Languages = _transformerService.CreateEntryLanguages(excelTerm),
-            //    SearchText = excelTerm.Source
-            //};
-
-        }
-
-        public void DeleteEntry(int entryId)
+        public async Task DeleteEntry(int entryId)
         {
-            //TODO: Make it do something
+            await _excelTermLoaderService.DeleteTerm(entryId);
         }
        
     }
