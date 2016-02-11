@@ -22,7 +22,7 @@ namespace Sdl.Community.ExcelTerminology
         {
             get
             {
-                var control = new TermsList()
+                var control = new TermsList(_terminologyProvider.Terms)
                 {
                     Text = @"TerminologyProviderViewerWinFormsUIExcel",
                     BackColor = Color.White
@@ -30,11 +30,14 @@ namespace Sdl.Community.ExcelTerminology
 
                 JumpToTermAction += control.JumpToTerm;
                 AddAndEditAction += control.AddAndEdit;
+                AddTermAction += control.AddTerm;
                 _terminologyProvider.TermsLoaded += control.SetTerms;
                 //control.SetTerms(_terminologyProvider.Terms);
                 return control;
             }
         }
+
+      
 
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
@@ -48,7 +51,7 @@ namespace Sdl.Community.ExcelTerminology
 
         public void AddTerm(string source, string target)
         {
-          
+            AddTermAction?.Invoke(source, target);
         }
 
         public void EditTerm(IEntry term)
@@ -84,5 +87,6 @@ namespace Sdl.Community.ExcelTerminology
         public event EventHandler<EntryEventArgs> SelectedTermChanged;
         public event Action<IEntry> JumpToTermAction;
         public event Action<IEntry, ExcelDataGrid> AddAndEditAction;
+        public event Action<string, string> AddTermAction;
     }
 }

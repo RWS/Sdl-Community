@@ -132,19 +132,50 @@ namespace Sdl.Community.ExcelTerminology.Tests
         }
 
         [Theory]
-        [InlineData(21, "unaccountable",
-            "unerklärbar")]
-        public void Update_Term(int id, string expectedSource, string expectedTarget)
+        [InlineData(21, "test",
+            "test")]
+        [InlineData(22, "test1",
+            "test1|test2")]
+        [InlineData(45, "test1",
+            "test1|test2")]
+        public async void Add_Or_Update_Term(int id, string expectedSource, string expectedTarget)
         {
             var providerSettings = TestHelper
                 .CreateProviderSettings();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+
+
+            var excelTerminologyService =
+                new ExcelTermLoaderService(providerSettings);
+            var excelTerm = TestHelper.CreateExcelTerm(expectedSource,
+                expectedTarget,
+                "Approved",
+                providerSettings);
+
+           await excelTerminologyService.AddOrUpdateTerm(id, excelTerm);
+
+            var actualTerms =await excelTerminologyService.LoadTerms();
+
+            Assert.Equal(actualTerms[id].Source, expectedSource);
+
+        }
+
+        [Theory]
+        [InlineData(45)]
+        
+        public async void Delete_Term(int id)
+        {
+            var providerSettings = TestHelper
+                .CreateProviderSettings();
 
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+            await excelTerminologyService.DeleteTerm(id);
+
+            var actualTerms = await excelTerminologyService.LoadTerms();
+
+            Assert.False(actualTerms.ContainsKey(id));
 
         }
     }

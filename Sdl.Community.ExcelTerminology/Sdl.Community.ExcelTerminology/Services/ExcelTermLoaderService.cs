@@ -31,6 +31,37 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         }
 
+        public async Task AddOrUpdateTerm(int entryId,ExcelTerm excelTerm)
+        {
+            using (var excelPackage =
+               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            {
+                var workSheet = await GetTerminologyWorksheet(excelPackage);
+                var sourceColumnAddress = $"{_providerSettings.SourceColumn}{entryId}";
+                var targetColumnAddress = $"{_providerSettings.TargetColumn}{entryId}";
+
+                workSheet.SetValue(sourceColumnAddress,excelTerm.Source);
+                workSheet.SetValue(targetColumnAddress, excelTerm.Target);
+                if (!string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+                {
+                    var approvedColumnAddress = $"{_providerSettings.ApprovedColumn}{entryId}";
+                    workSheet.Cells[approvedColumnAddress].Value = excelTerm.Approved;
+                }
+                excelPackage.Save();
+            }
+        }
+
+        public async Task DeleteTerm(int id)
+        {
+            using (var excelPackage =
+               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            {
+                var workSheet = await GetTerminologyWorksheet(excelPackage);
+
+                workSheet.DeleteRow(id);
+                excelPackage.Save();
+            }
+        }
 
         public async Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
         {
@@ -88,5 +119,6 @@ namespace Sdl.Community.ExcelTerminology.Services
             }
         }
 
+       
     }
 }

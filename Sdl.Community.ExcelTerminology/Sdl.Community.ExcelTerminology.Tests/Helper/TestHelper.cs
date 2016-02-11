@@ -20,7 +20,7 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
                 SourceLanguage = CultureInfo.CreateSpecificCulture("en-US"),
                 TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    @"Resources\glossary_example.xlsx")
+                    @"c:\Temp\glossary_example.xlsx")
                 // TermFilePath = @"C:\Temp\en-nl (large glossary example).xlsx"
                 // TermFilePath = @"C:\Users\rocrisan\Documents\My Received Files\IATE - (en-nl).xlsx"
 
@@ -44,6 +44,21 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
                 TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     @"Resources\glossary_example_without_header_and_approved.xlsx")
+            };
+        }
+
+        public static ExcelTerm CreateExcelTerm(string source,
+            string target,
+            string approved,
+            ProviderSettings providerSettings)
+        {
+            return new ExcelTerm
+            {
+                 Source = source,
+                  SourceCulture = providerSettings.SourceLanguage,
+                  Target = target,
+                  TargetCulture = providerSettings.TargetLanguage,
+                  Approved = approved
             };
         }
     }

@@ -30,13 +30,13 @@
         {
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetGridView = new System.Windows.Forms.DataGridView();
+            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.buttonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.confirmBtn = new System.Windows.Forms.Button();
             this.deleteBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Approved = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
             this.buttonsLayoutPanel.SuspendLayout();
@@ -64,6 +64,7 @@
             // 
             // targetGridView
             // 
+            this.targetGridView.AllowUserToAddRows = false;
             this.targetGridView.BackgroundColor = System.Drawing.Color.White;
             this.targetGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.targetGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -76,6 +77,19 @@
             this.targetGridView.RowHeadersVisible = false;
             this.targetGridView.Size = new System.Drawing.Size(351, 604);
             this.targetGridView.TabIndex = 0;
+            // 
+            // Target
+            // 
+            this.Target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Target.DataPropertyName = "Term";
+            this.Target.HeaderText = "Target";
+            this.Target.Name = "Target";
+            // 
+            // Approved
+            // 
+            this.Approved.DataPropertyName = "Approved";
+            this.Approved.HeaderText = "Approved";
+            this.Approved.Name = "Approved";
             // 
             // buttonsLayoutPanel
             // 
@@ -122,8 +136,8 @@
             this.sourceListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.sourceColumn});
             this.sourceListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.sourceListView.EmptyListMsg = "There are not terms available. If there is a large number of terms it might take " +
-    "a few seconds to load the terms.";
+            this.sourceListView.EmptyListMsg = "There are no terms available. If there is a large number of terms it might take a" +
+    " few seconds to load the terms.";
             this.sourceListView.FullRowSelect = true;
             this.sourceListView.GridLines = true;
             this.sourceListView.HideSelection = false;
@@ -145,19 +159,6 @@
             this.sourceColumn.CellPadding = null;
             this.sourceColumn.FillsFreeSpace = true;
             this.sourceColumn.Width = 197;
-            // 
-            // Target
-            // 
-            this.Target.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Target.DataPropertyName = "Term";
-            this.Target.HeaderText = "Target";
-            this.Target.Name = "Target";
-            // 
-            // Approved
-            // 
-            this.Approved.DataPropertyName = "Approved";
-            this.Approved.HeaderText = "Approved";
-            this.Approved.Name = "Approved";
             // 
             // TermsList
             // 

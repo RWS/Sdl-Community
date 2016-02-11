@@ -28,7 +28,6 @@ namespace Sdl.Community.ExcelTerminology
             var termSearchService = new NormalTermSeachService();
             var providerSettings = persistenceService.Load();
             var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
-
             return new ITerminologyProvider[] { excelProvider };
         }
 
