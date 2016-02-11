@@ -24,6 +24,10 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
             var persistenceService = new PersistenceService();
             _providerSettings = persistenceService.Load();
+            if (string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+            {
+                this.Approved.Visible = false;
+            }
             var excelTermLoaderService = new ExcelTermLoaderService(_providerSettings);
             var parser = new Parser(_providerSettings);
             _transformerService = new EntryTransformerService(parser);
@@ -176,10 +180,13 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 }
             }
 
-            var value = targetGridView.CurrentCell?.Value;
-            if (value != null)
+            var targetTerms = targetGridView.DataSource as List<ExcelDataGrid>;
+            if (targetTerms != null)
             {
-                entry.Target = value.ToString();
+                var termValue = string.Join("|", targetTerms.Select(x=>x.Term));
+                var approvedValue = string.Join("|", targetTerms.Select(x => x.Approved));
+                entry.Target = termValue;
+                entry.Approved = approvedValue;
             }
 
             await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
@@ -198,7 +205,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             if (rowIndex >= _terms.Count) return;
             var item = _terms[rowIndex];
-            //var approved = new List<string>();
             foreach (var target in item.Languages)
             {
                 var targetCast = (ExcelEntryLanguage)target;
@@ -208,24 +214,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
                     {
                         Term = term.Value,
-                        Approved = null
+                        Approved = string.Join(string.Empty,term.Fields.Select(x=>x.Value))
                     }));
-                    //approved.AddRange(from approvedField in targetCast.Terms
-                    //                  from approvedTerm in approvedField.Fields
-                    //                  select approvedTerm.Value);
+                   
+                    
                 }
             }
 
-          
-      
-
-            //for (var i = 0; i < result.Count; i++)
-            //{
-            //    result[i].Approved = approved[i];
-            //}
-
             targetGridView.DataSource = result;
-           // approved.Clear();
             targetGridView.AllowUserToAddRows = true;
 
         }
@@ -241,9 +237,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.SelectedIndex = 0;
             sourceListView.Focus();
             sourceListView.EnsureModelVisible(sourceListView.SelectedItem);
-            //sourceListView.SetObjects(_terms);
-            //var nextTerm = _terms.Where(s => s.Id == source.Id + 1); 
-            //sourceListView.SelectObject(nextTerm.FirstOrDefault());// set the focus on next object
+
 
             await _excelTermProviderService.DeleteEntry(source.Id);
 
