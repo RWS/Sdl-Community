@@ -55,6 +55,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
             sourceListView.HideSelection = false;
+            sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClickAlways;
+            sourceListView.CellEditUseWholeCell = true;
 
             sourceListView.SetObjects(_terms);
             sourceListView.SelectedIndex = 0;
@@ -85,6 +87,13 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         public void AddTerm(string source, string target)
         {
+            AddTermInternal(source, target);
+            Task.Run(Save);
+
+        }
+
+        private void AddTermInternal(string source, string target)
+        {
             var excelTerm = new ExcelTerm
             {
                 SourceCulture = _providerSettings.SourceLanguage,
@@ -103,7 +112,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
             var excelEntry = new ExcelEntry
             {
-                Id = maxId+1,
+                Id = maxId + 1,
                 Fields = new List<IEntryField>(),
                 Languages = entryLanguages,
                 SearchText = source
@@ -113,8 +122,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.AddObject(excelEntry);
             _terms.Add(excelEntry);
             JumpToTerm(excelEntry);
-            Task.Run(Save);
-
         }
 
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
@@ -252,10 +259,15 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void addBtn_Click(object sender, EventArgs e)
         {
-            
-            
+           
+            var newEntry = new ExcelEntry();
+      
+            sourceListView.AddObject(newEntry);
+            JumpToTerm(newEntry);
+         
 
         }
+
     }
 
 
