@@ -37,7 +37,7 @@ namespace Sdl.Community.ExcelTerminology
                 
 
         public override IDefinition Definition => 
-            new Definition(new List<IDescriptiveField>(), GetDefinitionLanguages());
+            new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
         public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
@@ -65,6 +65,23 @@ namespace Sdl.Community.ExcelTerminology
             return GetDefinitionLanguages().Cast<ILanguage>().ToList();
         }
 
+        public IList<IDescriptiveField> GetDescriptiveFields()
+        {
+            var result = new List<IDescriptiveField>();
+
+            var approvedField = new DescriptiveField
+            {
+                Label = "Approved",
+                Level = FieldLevel.TermLevel,
+                Mandatory = true,
+                Multiple = true,
+                PickListValues = new List<string> {"Approved", "Not Approved"},
+                Type = FieldType.String
+            };
+            result.Add(approvedField);
+
+            return result;
+        }
         public IList<IDefinitionLanguage> GetDefinitionLanguages()
         {
             var result = new List<IDefinitionLanguage>();
@@ -74,6 +91,7 @@ namespace Sdl.Community.ExcelTerminology
                 IsBidirectional = true,
                 Locale = _providerSettings.SourceLanguage,
                 Name = _providerSettings.SourceLanguage.EnglishName,
+                
                 TargetOnly = false
             };
 

@@ -18,7 +18,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
         public async void Select_WorkSheet_By_Name()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
             providerSettings.WorksheetName = "Glossary";
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
@@ -32,7 +32,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
         public async void Select_WorkSheet_By_Index()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
@@ -43,17 +43,17 @@ namespace Sdl.Community.ExcelTerminology.Tests
         }
 
         [Fact]
-        public void Select_WorkSheet_Which_Doesnt_Exists()
+        public async void Select_WorkSheet_Which_Doesnt_Exists()
         {
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
 
             providerSettings.WorksheetName = "Worksheet";
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
 
-            var worksheet = excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
 
             Assert.Equal(worksheet, null);
         }
@@ -63,12 +63,12 @@ namespace Sdl.Community.ExcelTerminology.Tests
             "ill-treatment",
             "schlechte Behandlung|Misshandlung",
             "Approved|Not approved"
-            ,26)]
+            ,31)]
         [InlineData(22,
             "unaccountable",
             "unerklärbar|unerfindlich",
             "Approved|Not approved"
-            , 26)]
+            , 31)]
         public async void Get_All_Terms_With_Header(int id
             , string expectedSource
             , string expectedTarget
@@ -76,7 +76,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
             , int expectedCount)
         {
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);
@@ -113,7 +113,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
         {
             var providerSettings = TestHelper
                 .CreateProviderSettingsWithouHeaderAndApproved();
-            var excelPackage = TestHelper.CreateSampleExcelPackage();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
 
             var excelTerminologyService =
                 new ExcelTermLoaderService(providerSettings);

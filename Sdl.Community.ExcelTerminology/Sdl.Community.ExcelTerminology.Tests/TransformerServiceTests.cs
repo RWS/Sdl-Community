@@ -32,22 +32,20 @@ namespace Sdl.Community.ExcelTerminology.Tests
         }
 
         [Theory]
-        [InlineData("Approved|Not approved|Approved", 3)]
-        [InlineData("Approved|Not approved", 2)]
-        [InlineData("Approved", 1)]
-        [InlineData(null, 0)]
-        public void Create_Entry_Term_Fields(string approved, int numberOfFields)
+        [InlineData("Approved|Not approved|Approved", 2, "Approved")]
+        [InlineData("Approved|Not approved", 1, "Not approved")]
+        [InlineData("Approved", 0,"Approved")]
+        public void Create_Entry_Term_Fields(string approved, int fieldNumber, string expected)
         {
             //arrange
             var providerSettings = TestHelper.CreateProviderSettings();
-            var excelTermLoaderService = new TestExcelLoader();
             var parser = new Parser(providerSettings);
             var transformerService = new EntryTransformerService(parser);
-
+            var approvals = parser.Parse(approved);
             //act
-            var fields = transformerService.CreateEntryTermFields(approved);
+            var fields = transformerService.CreateEntryTermFields(fieldNumber, approvals);
             //assert
-            Assert.Equal(fields.Count, numberOfFields);
+            Assert.Equal(fields[0].Value, expected);
         }
 
         [Theory]

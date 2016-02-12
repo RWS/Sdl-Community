@@ -50,25 +50,28 @@ namespace Sdl.Community.ExcelTerminology.Services
         public IList<IEntryTerm> CreateEntryTerms(string term, string approved = null)
         {
             var terms = _parser.Parse(term);
+            var approvals = _parser.Parse(approved);
 
-            return terms.Select(rawTerm => new EntryTerm
+
+            return terms.Select((t, i) => new EntryTerm
             {
-                Fields = CreateEntryTermFields(approved),
-                Value = rawTerm
+                Fields = CreateEntryTermFields(i, approvals), Value = t
             }).Cast<IEntryTerm>().ToList();
         }
 
-        public IList<IEntryField> CreateEntryTermFields(string approved)
+        public IList<IEntryField> CreateEntryTermFields(int index, IList<string> approvals)
         {
             var result = new List<IEntryField>();
-            if (string.IsNullOrEmpty(approved)) return result;
-            var approvals = _parser.Parse(approved);
+            if (approvals.Count == 0) return result;
+            if (index >= approvals.Count) return result;
 
-            result.AddRange(approvals.Select(approval => new EntryField
+            var entryField = new EntryField
             {
                 Name = "Approved",
-                Value = approval
-            }));
+                Value = approvals[index]
+            };
+
+            result.Add(entryField);
             return result;
         }
     }

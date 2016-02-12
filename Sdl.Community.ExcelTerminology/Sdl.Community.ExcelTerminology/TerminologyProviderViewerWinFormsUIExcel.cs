@@ -32,7 +32,6 @@ namespace Sdl.Community.ExcelTerminology
                 AddAndEditAction += control.AddAndEdit;
                 AddTermAction += control.AddTerm;
                 _terminologyProvider.TermsLoaded += control.SetTerms;
-                //control.SetTerms(_terminologyProvider.Terms);
                 return control;
             }
         }

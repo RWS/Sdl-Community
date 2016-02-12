@@ -8,6 +8,6 @@ namespace Sdl.Community.ExcelTerminology.Services.Interfaces
     {
         IList<IEntryLanguage> CreateEntryLanguages(ExcelTerm excelTerm);
         IList<IEntryTerm> CreateEntryTerms(string term, string approved = null);
-        IList<IEntryField> CreateEntryTermFields(string approved);
+        IList<IEntryField> CreateEntryTermFields(int index, IList<string> approvals);
     }
 }

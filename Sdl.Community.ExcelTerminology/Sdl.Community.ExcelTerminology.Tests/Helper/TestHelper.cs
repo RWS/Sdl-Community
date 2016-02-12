@@ -20,16 +20,16 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
                 SourceLanguage = CultureInfo.CreateSpecificCulture("en-US"),
                 TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
                 TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                    @"c:\Temp\glossary_example.xlsx")
+                    @"Resources\glossary_example.xlsx")
                 // TermFilePath = @"C:\Temp\en-nl (large glossary example).xlsx"
                 // TermFilePath = @"C:\Users\rocrisan\Documents\My Received Files\IATE - (en-nl).xlsx"
 
             };
         }
 
-        public static ExcelPackage CreateSampleExcelPackage()
+        public static ExcelPackage CreateSampleExcelPackage(ProviderSettings providerSettings)
         {
-            return new ExcelPackage(new FileInfo(CreateProviderSettings().TermFilePath));
+            return new ExcelPackage(new FileInfo(providerSettings.TermFilePath));
         }
 
         public static ProviderSettings CreateProviderSettingsWithouHeaderAndApproved()
