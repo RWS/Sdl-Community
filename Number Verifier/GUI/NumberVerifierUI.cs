@@ -267,5 +267,115 @@ namespace Sdl.Community.NumberVerifier
             this.VScroll = true;
         }
 
+        private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
+        {
+           
+
+            #region soutce separators
+
+            if (TargetThousandsSpace)
+            {
+                cb_TargetThousandsSpace.Checked = false;
+            }
+            cb_TargetThousandsSpace.Enabled = false;
+
+            if (TargetThousandsNobreakSpace)
+            {
+                cb_TargetThousandsNobreakSpace.Checked = false;
+            }
+            cb_TargetThousandsNobreakSpace.Enabled = false;
+
+            if (TargetThousandsThinSpace)
+            {
+                cb_TargetThousandsThinSpace.Checked = false;
+            }
+            cb_TargetThousandsThinSpace.Enabled = false;
+
+            if (TargetThousandsNobreakThinSpace)
+            {
+                cb_TargetThousandsNobreakThinSpace.Checked = false;
+            }
+            cb_TargetThousandsNobreakThinSpace.Enabled = false;
+
+            if (TargetThousandsComma)
+            {
+                cb_TargetThousandsComma.Checked = false;
+            }
+            cb_TargetThousandsComma.Enabled = false;
+
+            if (TargetThousandsPeriod)
+            {
+                cb_TargetThousandsPeriod.Checked = false;
+            }
+            cb_TargetThousandsPeriod.Enabled = false;
+
+            if (TargetNoSeparator)
+            {
+                cb_TargetNoSeparator.Checked = false;
+            }
+            cb_TargetNoSeparator.Enabled = false;
+
+            if (TargetDecimalComma)
+            {
+                cb_TargetDecimalComma.Checked = false;
+            }
+            cb_TargetDecimalComma.Enabled = false;
+
+            if (TargetDecimalPeriod)
+            {
+                cb_TargetDecimalPeriod.Checked = false;
+            }
+            cb_TargetDecimalPeriod.Enabled = false;
+
+            if (TargetThousandsCustomSeparator)
+            {
+                targetTbox.Checked = false;
+            }
+            targetTbox.Enabled = false;
+            customTBox.Clear();
+            customTBox.Enabled = false;
+
+            if (TargetDecimalCustomSeparator)
+            {
+                customTargetSep.Checked = false;
+            }
+            customTargetSep.Enabled = false;
+            targetDBox.Clear();
+            targetDBox.Enabled = false;
+
+            #endregion
+        }
+
+        private void EnableCheckBoxes()
+        {
+
+            #region target separators
+
+            cb_TargetThousandsSpace.Enabled = true;
+            cb_TargetThousandsNobreakSpace.Enabled = true;
+            cb_TargetThousandsThinSpace.Enabled = true;
+            cb_TargetThousandsNobreakThinSpace.Enabled = true;
+            cb_TargetThousandsComma.Enabled = true;
+            cb_TargetThousandsPeriod.Enabled = true;
+            cb_TargetNoSeparator.Enabled = true;
+            cb_TargetDecimalComma.Enabled = true;
+            cb_TargetDecimalPeriod.Enabled = true;
+            targetTbox.Enabled = true;
+            customTBox.Enabled = true;
+            customTargetSep.Enabled = true;
+            targetDBox.Enabled = true;
+
+            #endregion
+        }
+
+        private void rb_RequireLocalizations_CheckedChanged(object sender, System.EventArgs e)
+        {
+            EnableCheckBoxes();
+        }
+
+        private void rb_AllowLocalizations_CheckedChanged(object sender, System.EventArgs e)
+        {
+            EnableCheckBoxes();
+        }
     }
 }

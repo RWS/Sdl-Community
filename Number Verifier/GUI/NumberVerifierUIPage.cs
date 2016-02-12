@@ -46,50 +46,51 @@ namespace Sdl.Community.NumberVerifier
 
         public override void OnActivate()
         {
-            _ControlSettings.AddedNumbersErrorType.Value = _Control.AddedNumbersErrorType;
-            _ControlSettings.RemovedNumbersErrorType.Value = _Control.RemovedNumbersErrorType;
-            _ControlSettings.ModifiedNumbersErrorType.Value = _Control.ModifiedNumbersErrorType;
-            _ControlSettings.ModifiedAlphanumericsErrorType.Value = _Control.ModifiedAlphanumericsErrorType;
-            _ControlSettings.ReportAddedNumbers.Value = _Control.ReportAddedNumbers;
-            _ControlSettings.ReportRemovedNumbers.Value = _Control.ReportRemovedNumbers;
-            _ControlSettings.ReportModifiedNumbers.Value = _Control.ReportModifiedNumbers;
-            _ControlSettings.ReportModifiedAlphanumerics.Value = _Control.ReportModifiedAlphanumerics;
-            _ControlSettings.ReportBriefMessages.Value = _Control.ReportBriefMessages;
-            _ControlSettings.ReportExtendedMessages.Value = _Control.ReportExtendedMessages;
-            _ControlSettings.ExcludeTagText.Value = _Control.ExcludeTagText;
-            _ControlSettings.AllowLocalizations.Value = _Control.AllowLocalizations;
-            _ControlSettings.PreventLocalizations.Value = _Control.PreventLocalizations;
-            _ControlSettings.RequireLocalizations.Value = _Control.RequireLocalizations;
-            _ControlSettings.SourceThousandsSpace.Value = _Control.SourceThousandsSpace;
-            _ControlSettings.SourceThousandsNobreakSpace.Value = _Control.SourceThousandsNobreakSpace;
-            _ControlSettings.SourceThousandsThinSpace.Value = _Control.SourceThousandsThinSpace;
-            _ControlSettings.SourceThousandsNobreakThinSpace.Value = _Control.SourceThousandsNobreakThinSpace;
-            _ControlSettings.SourceThousandsComma.Value = _Control.SourceThousandsComma;
-            _ControlSettings.SourceThousandsPeriod.Value = _Control.SourceThousandsPeriod;
-            _ControlSettings.SourceNoSeparator.Value = _Control.SourceNoSeparator;
-            _ControlSettings.TargetThousandsSpace.Value = _Control.TargetThousandsSpace;
-            _ControlSettings.TargetThousandsNobreakSpace.Value = _Control.TargetThousandsNobreakSpace;
-            _ControlSettings.TargetThousandsThinSpace.Value = _Control.TargetThousandsThinSpace;
-            _ControlSettings.TargetThousandsNobreakThinSpace.Value = _Control.TargetThousandsNobreakThinSpace;
-            _ControlSettings.TargetThousandsComma.Value = _Control.TargetThousandsComma;
-            _ControlSettings.TargetThousandsPeriod.Value = _Control.TargetThousandsPeriod;
-            _ControlSettings.TargetNoSeparator.Value = _Control.TargetNoSeparator;
-            _ControlSettings.SourceDecimalComma.Value = _Control.SourceDecimalComma;
-            _ControlSettings.SourceDecimalPeriod.Value = _Control.SourceDecimalPeriod;
-            _ControlSettings.TargetDecimalComma.Value = _Control.TargetDecimalComma;
-            _ControlSettings.TargetDecimalPeriod.Value = _Control.TargetDecimalPeriod;
-            _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
-            _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
-            _ControlSettings.ExcludeUntranslatedSegments.Value = _Control.ExcludeUntranslatedSegments;
-            _ControlSettings.SourceThousandsCustomSeparator.Value = _Control.SourceThousandsCustomSeparator;
-            _ControlSettings.TargetThousandsCustomSeparator.Value = _Control.TargetThousandsCustomSeparator;
-            _ControlSettings.SourceDecimalCustomSeparator.Value = _Control.SourceDecimalCustomSeparator;
-            _ControlSettings.TargetDecimalCustomSeparator.Value = _Control.TargetDecimalCustomSeparator;
-            _ControlSettings.GetSourceThousandsCustomSeparator.Value = _Control.GetSourceThousandsCustomSeparator;
-            _ControlSettings.GetTargetThousandsCustomSeparator.Value = _Control.GetTargetThousandsCustomSeparator;
-            _ControlSettings.GetSourceDecimalCustomSeparator.Value = _Control.GetSourceDecimalCustomSeparator;
-            _ControlSettings.GetTargetDecimalCustomSeparator.Value = _Control.GetTargetDecimalCustomSeparator;
+            _Control.AddedNumbersErrorType = _ControlSettings.AddedNumbersErrorType;
+            _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
+            _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
+            _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
+            _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
+            _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
+            _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
+            _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
+            _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
+            _Control.ReportExtendedMessages = _ControlSettings.ReportExtendedMessages;
+            _Control.ExcludeTagText = _ControlSettings.ExcludeTagText;
 
+            _Control.AllowLocalizations = _ControlSettings.AllowLocalizations;
+            _Control.PreventLocalizations = _ControlSettings.PreventLocalizations;
+            _Control.RequireLocalizations = _ControlSettings.RequireLocalizations;
+
+            _Control.SourceThousandsSpace = _ControlSettings.SourceThousandsSpace;
+            _Control.SourceThousandsNobreakSpace = _ControlSettings.SourceThousandsNobreakSpace;
+            _Control.SourceThousandsThinSpace = _ControlSettings.SourceThousandsThinSpace;
+            _Control.SourceThousandsNobreakThinSpace = _ControlSettings.SourceThousandsNobreakThinSpace;
+            _Control.SourceThousandsComma = _ControlSettings.SourceThousandsComma;
+            _Control.SourceThousandsPeriod = _ControlSettings.SourceThousandsPeriod;
+            _Control.SourceNoSeparator = _ControlSettings.SourceNoSeparator;
+            _Control.TargetThousandsSpace = _ControlSettings.TargetThousandsSpace;
+            _Control.TargetThousandsNobreakSpace = _ControlSettings.TargetThousandsNobreakSpace;
+            _Control.TargetThousandsThinSpace = _ControlSettings.TargetThousandsThinSpace;
+            _Control.TargetThousandsNobreakThinSpace = _ControlSettings.TargetThousandsNobreakThinSpace;
+            _Control.TargetThousandsComma = _ControlSettings.TargetThousandsComma;
+            _Control.TargetThousandsPeriod = _ControlSettings.TargetThousandsPeriod;
+            _Control.TargetNoSeparator = _ControlSettings.TargetNoSeparator;
+            _Control.SourceDecimalComma = _ControlSettings.SourceDecimalComma;
+            _Control.SourceDecimalPeriod = _ControlSettings.SourceDecimalPeriod;
+            _Control.TargetDecimalComma = _ControlSettings.TargetDecimalComma;
+            _Control.TargetDecimalPeriod = _ControlSettings.TargetDecimalPeriod;
+            _Control.ExcludeLockedSegments = _ControlSettings.ExcludeLockedSegments;
+            _Control.Exclude100Percents = _ControlSettings.Exclude100Percents;
+            _Control.ExcludeUntranslatedSegments = _ControlSettings.ExcludeUntranslatedSegments.Value;
+            _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator.Value;
+            _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator.Value;
+            _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator.Value;
+            _Control.TargetDecimalCustomSeparator= _ControlSettings.TargetDecimalCustomSeparator.Value;
+            _Control.GetSourceThousandsCustomSeparator= _ControlSettings.GetSourceThousandsCustomSeparator.Value;
+            _Control.GetTargetThousandsCustomSeparator= _ControlSettings.GetTargetThousandsCustomSeparator.Value;
+            _Control.GetSourceDecimalCustomSeparator= _ControlSettings.GetSourceDecimalCustomSeparator.Value;
+            _Control.GetTargetDecimalCustomSeparator= _ControlSettings.GetTargetDecimalCustomSeparator.Value;
         }
 
         #endregion
@@ -212,14 +213,16 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ReportBriefMessages.Value = _Control.ReportBriefMessages;
             _ControlSettings.ReportExtendedMessages.Value = _Control.ReportExtendedMessages;
             _ControlSettings.ExcludeTagText.Value = _Control.ExcludeTagText;
+
             _ControlSettings.AllowLocalizations.Value = _Control.AllowLocalizations;
             _ControlSettings.PreventLocalizations.Value = _Control.PreventLocalizations;
             _ControlSettings.RequireLocalizations.Value = _Control.RequireLocalizations;
+
             _ControlSettings.SourceThousandsSpace.Value = _Control.SourceThousandsSpace;
             _ControlSettings.SourceThousandsNobreakSpace.Value = _Control.SourceThousandsNobreakSpace;
             _ControlSettings.SourceThousandsThinSpace.Value = _Control.SourceThousandsThinSpace;
             _ControlSettings.SourceThousandsNobreakThinSpace.Value = _Control.SourceThousandsNobreakThinSpace;
-            _ControlSettings.SourceThousandsComma.Value = _Control.SourceThousandsComma;
+         _ControlSettings.SourceThousandsComma.Value = _Control.SourceThousandsComma;
             _ControlSettings.SourceThousandsPeriod.Value = _Control.SourceThousandsPeriod;
             _ControlSettings.SourceNoSeparator.Value = _Control.SourceNoSeparator;
             _ControlSettings.TargetThousandsSpace.Value = _Control.TargetThousandsSpace;
@@ -249,6 +252,52 @@ namespace Sdl.Community.NumberVerifier
 
         #endregion
 
+        public override void OnDeactivate()
+        {
+            _ControlSettings.AddedNumbersErrorType.Value = _Control.AddedNumbersErrorType;
+            _ControlSettings.RemovedNumbersErrorType.Value = _Control.RemovedNumbersErrorType;
+            _ControlSettings.ModifiedNumbersErrorType.Value = _Control.ModifiedNumbersErrorType;
+            _ControlSettings.ModifiedAlphanumericsErrorType.Value = _Control.ModifiedAlphanumericsErrorType;
+            _ControlSettings.ReportAddedNumbers.Value = _Control.ReportAddedNumbers;
+            _ControlSettings.ReportRemovedNumbers.Value = _Control.ReportRemovedNumbers;
+            _ControlSettings.ReportModifiedNumbers.Value = _Control.ReportModifiedNumbers;
+            _ControlSettings.ReportModifiedAlphanumerics.Value = _Control.ReportModifiedAlphanumerics;
+            _ControlSettings.ReportBriefMessages.Value = _Control.ReportBriefMessages;
+            _ControlSettings.ReportExtendedMessages.Value = _Control.ReportExtendedMessages;
+            _ControlSettings.ExcludeTagText.Value = _Control.ExcludeTagText;
+            _ControlSettings.AllowLocalizations.Value = _Control.AllowLocalizations;
+            _ControlSettings.PreventLocalizations.Value = _Control.PreventLocalizations;
+            _ControlSettings.RequireLocalizations.Value = _Control.RequireLocalizations;
+            _ControlSettings.SourceThousandsSpace.Value = _Control.SourceThousandsSpace;
+            _ControlSettings.SourceThousandsNobreakSpace.Value = _Control.SourceThousandsNobreakSpace;
+            _ControlSettings.SourceThousandsThinSpace.Value = _Control.SourceThousandsThinSpace;
+            _ControlSettings.SourceThousandsNobreakThinSpace.Value = _Control.SourceThousandsNobreakThinSpace;
+            _ControlSettings.SourceThousandsComma.Value = _Control.SourceThousandsComma;
+            _ControlSettings.SourceThousandsPeriod.Value = _Control.SourceThousandsPeriod;
+            _ControlSettings.SourceNoSeparator.Value = _Control.SourceNoSeparator;
+            _ControlSettings.TargetThousandsSpace.Value = _Control.TargetThousandsSpace;
+            _ControlSettings.TargetThousandsNobreakSpace.Value = _Control.TargetThousandsNobreakSpace;
+            _ControlSettings.TargetThousandsThinSpace.Value = _Control.TargetThousandsThinSpace;
+            _ControlSettings.TargetThousandsNobreakThinSpace.Value = _Control.TargetThousandsNobreakThinSpace;
+            _ControlSettings.TargetThousandsComma.Value = _Control.TargetThousandsComma;
+            _ControlSettings.TargetThousandsPeriod.Value = _Control.TargetThousandsPeriod;
+            _ControlSettings.TargetNoSeparator.Value = _Control.TargetNoSeparator;
+            _ControlSettings.SourceDecimalComma.Value = _Control.SourceDecimalComma;
+            _ControlSettings.SourceDecimalPeriod.Value = _Control.SourceDecimalPeriod;
+            _ControlSettings.TargetDecimalComma.Value = _Control.TargetDecimalComma;
+            _ControlSettings.TargetDecimalPeriod.Value = _Control.TargetDecimalPeriod;
+            _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
+            _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
+            _ControlSettings.ExcludeUntranslatedSegments.Value = _Control.ExcludeUntranslatedSegments;
+            _ControlSettings.SourceThousandsCustomSeparator.Value = _Control.SourceThousandsCustomSeparator;
+            _ControlSettings.TargetThousandsCustomSeparator.Value = _Control.TargetThousandsCustomSeparator;
+            _ControlSettings.SourceDecimalCustomSeparator.Value = _Control.SourceDecimalCustomSeparator;
+            _ControlSettings.TargetDecimalCustomSeparator.Value = _Control.TargetDecimalCustomSeparator;
+            _ControlSettings.GetSourceThousandsCustomSeparator.Value = _Control.GetSourceThousandsCustomSeparator;
+            _ControlSettings.GetTargetThousandsCustomSeparator.Value = _Control.GetTargetThousandsCustomSeparator;
+            _ControlSettings.GetSourceDecimalCustomSeparator.Value = _Control.GetSourceDecimalCustomSeparator;
+            _ControlSettings.GetTargetDecimalCustomSeparator.Value = _Control.GetTargetDecimalCustomSeparator;
+        }
 
         // Call EndEdit after all changes have been saved in the Save() call.
         #region "AfterSave"
