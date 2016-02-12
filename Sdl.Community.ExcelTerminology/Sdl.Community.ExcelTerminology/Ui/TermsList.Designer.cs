@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetGridView = new System.Windows.Forms.DataGridView();
             this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,6 +38,7 @@
             this.addBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.bsTarget = new System.Windows.Forms.BindingSource(this.components);
             this.deleteLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.deleteBtn = new System.Windows.Forms.Button();
             this.mainLayoutPanel.SuspendLayout();
@@ -67,12 +69,13 @@
             // 
             // targetGridView
             // 
-            this.targetGridView.AllowUserToAddRows = false;
+            this.targetGridView.AutoGenerateColumns = false;
             this.targetGridView.BackgroundColor = System.Drawing.Color.White;
             this.targetGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.targetGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Target,
             this.Approved});
+            this.targetGridView.DataSource = this.bsTarget;
             this.targetGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetGridView.Location = new System.Drawing.Point(272, 3);
             this.targetGridView.Name = "targetGridView";
@@ -195,6 +198,7 @@
             this.buttonsLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sourceListView)).EndInit();
             this.deleteLayoutPanel.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.bsTarget)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -210,6 +214,7 @@
         private System.Windows.Forms.Button addBtn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
+        private System.Windows.Forms.BindingSource bsTarget;
         private System.Windows.Forms.TableLayoutPanel deleteLayoutPanel;
         private System.Windows.Forms.Button deleteBtn;
     }
