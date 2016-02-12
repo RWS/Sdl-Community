@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.ExcelTerminology.Model;
@@ -59,7 +60,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.SelectedIndex = 0;
             targetGridView.ColumnHeadersVisible = false;
             targetGridView.EditMode = DataGridViewEditMode.EditOnEnter;
-
+            targetGridView.AllowUserToAddRows = true;
 
             sourceColumn.IsEditable = true;
 
@@ -112,6 +113,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             sourceListView.AddObject(excelEntry);
             _terms.Add(excelEntry);
             JumpToTerm(excelEntry);
+            Task.Run(Save);
+
         }
 
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
@@ -155,10 +158,15 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
 
             JumpToTerm(entry);
-           
+            Task.Run(Save);
         }
 
-        private async void confirmBtn_Click(object sender, EventArgs e)
+        private void confirmBtn_Click(object sender, EventArgs e)
+        {
+            Task.Run(Save);
+        }
+
+        private async Task Save()
         {
             if (sourceListView.SelectedObject == null) return;
             var entry = new ExcelTerm();
@@ -180,28 +188,28 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 }
             }
 
-            var targetTerms = targetGridView.DataSource as List<ExcelDataGrid>;
+            var targetTerms = bsTarget.DataSource as List<ExcelDataGrid>;
             if (targetTerms != null)
             {
-                var termValue = string.Join("|", targetTerms.Select(x=>x.Term));
+                var termValue = string.Join("|", targetTerms.Select(x => x.Term));
                 var approvedValue = string.Join("|", targetTerms.Select(x => x.Approved));
                 entry.Target = termValue;
                 entry.Approved = approvedValue;
             }
 
             await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
-
         }
 
         private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             var rowIndex = e.ItemIndex;
-            var result = new List<ExcelDataGrid>();
 
+          
+            var result = new List<ExcelDataGrid>();
             if (rowIndex == 0 && _terms.Count == 0)
             {
-                targetGridView.DataSource = result;
-                targetGridView.AllowUserToAddRows = false;
+                bsTarget.DataSource = result;
+                bsTarget.AllowNew = false;
             }
             if (rowIndex >= _terms.Count) return;
             var item = _terms[rowIndex];
@@ -220,9 +228,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     
                 }
             }
-
-            targetGridView.DataSource = result;
-            targetGridView.AllowUserToAddRows = true;
+            bsTarget.DataSource = result;
+            bsTarget.AllowNew = true;
 
         }
 

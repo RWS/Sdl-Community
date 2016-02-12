@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.mainLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetGridView = new System.Windows.Forms.DataGridView();
             this.Target = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,10 +38,12 @@
             this.deleteBtn = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.bsTarget = new System.Windows.Forms.BindingSource(this.components);
             this.mainLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).BeginInit();
             this.buttonsLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sourceListView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsTarget)).BeginInit();
             this.SuspendLayout();
             // 
             // mainLayoutPanel
@@ -64,12 +67,13 @@
             // 
             // targetGridView
             // 
-            this.targetGridView.AllowUserToAddRows = false;
+            this.targetGridView.AutoGenerateColumns = false;
             this.targetGridView.BackgroundColor = System.Drawing.Color.White;
             this.targetGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.targetGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Target,
             this.Approved});
+            this.targetGridView.DataSource = this.bsTarget;
             this.targetGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetGridView.Location = new System.Drawing.Point(362, 4);
             this.targetGridView.Margin = new System.Windows.Forms.Padding(4);
@@ -172,6 +176,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.targetGridView)).EndInit();
             this.buttonsLayoutPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.sourceListView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bsTarget)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -187,5 +192,6 @@
         private System.Windows.Forms.Button deleteBtn;
         private System.Windows.Forms.DataGridViewTextBoxColumn Target;
         private System.Windows.Forms.DataGridViewTextBoxColumn Approved;
+        private System.Windows.Forms.BindingSource bsTarget;
     }
 }
