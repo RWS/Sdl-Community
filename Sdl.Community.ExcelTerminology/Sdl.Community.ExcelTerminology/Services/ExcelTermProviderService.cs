@@ -41,7 +41,11 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         public async Task AddOrUpdateEntry(int entryId,ExcelTerm excelEntry)
         {
-            await _excelTermLoaderService.AddOrUpdateTerm(entryId, excelEntry);
+            if (!string.IsNullOrWhiteSpace(excelEntry.Source) && !string.IsNullOrWhiteSpace(excelEntry.Target))
+            {
+                await _excelTermLoaderService.AddOrUpdateTerm(entryId, excelEntry);
+            }
+            
         }
 
         public async Task DeleteEntry(int entryId)

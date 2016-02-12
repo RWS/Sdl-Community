@@ -89,7 +89,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
         {
             AddTermInternal(source, target);
             Task.Run(Save);
-
         }
 
         private void AddTermInternal(string source, string target)
@@ -259,13 +258,10 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void addBtn_Click(object sender, EventArgs e)
         {
-           
-            var newEntry = new ExcelEntry();
-      
-            sourceListView.AddObject(newEntry);
-            JumpToTerm(newEntry);
-         
+            AddTermInternal(string.Empty, string.Empty);
+            var item = sourceListView.GetLastItemInDisplayOrder();
 
+            sourceListView.StartCellEdit(item, 0);
         }
 
     }
