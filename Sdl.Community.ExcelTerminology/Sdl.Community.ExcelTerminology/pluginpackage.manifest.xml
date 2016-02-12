@@ -4,7 +4,7 @@
   <Version>0.9</Version>
   <Description>Excel based terminology provider. It allows to specify the columns from worksheet as source and target terms including synonims separated by a delimitator.</Description>
   <Author>Microsoft</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.1" />
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>EPPlus.dll</File>
     <File>Newtonsoft.Json.dll</File>
