@@ -532,7 +532,22 @@ namespace Sdl.Community.NumberVerifier
         public string AddCustomSeparators(string thousand, string decimalSeparator)
         {
             var expression = @"\u00A0\u2009\u202F";
-            var separators = string.Join(thousand, decimalSeparator);
+            var sourceDecimalSeparators = string.Empty;
+
+            if (_verificationSettings.AllowLocalizations)
+            {
+                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceThousandSeparators();
+                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceDecimalSeparators();
+            }
+
+            if (_verificationSettings.PreventLocalizations)
+            {
+                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceThousandSeparators();
+                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceDecimalSeparators();
+
+            }
+            
+            var separators = string.Join(thousand, decimalSeparator, sourceDecimalSeparators);
 
             foreach (char c in separators)
             {
@@ -550,6 +565,60 @@ namespace Sdl.Community.NumberVerifier
             return expression;
         }
 
+        private string AddSourceDecimalSeparators()
+        {
+            var sourceDecimalSeparators = string.Empty;
+
+            if (_verificationSettings.SourceDecimalComma)
+            {
+                sourceDecimalSeparators = sourceDecimalSeparators + ",";
+            }
+            if (_verificationSettings.SourceDecimalPeriod)
+            {
+                sourceDecimalSeparators = sourceDecimalSeparators + ".";
+            }
+            if (_verificationSettings.SourceDecimalCustomSeparator)
+            {
+                sourceDecimalSeparators = sourceDecimalSeparators + _verificationSettings.GetSourceDecimalCustomSeparator;
+            }
+            return sourceDecimalSeparators;
+        }
+
+        private string AddSourceThousandSeparators()
+        {
+            var sourceThousandSeparators = string.Empty;
+
+            if (_verificationSettings.TargetThousandsSpace)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + " ";
+            }
+            if (_verificationSettings.TargetThousandsNobreakSpace)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + @"\u00a0";
+            }
+            if (_verificationSettings.SourceThousandsThinSpace)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + @"\u2009";
+            }
+            if (_verificationSettings.SourceThousandsNobreakThinSpace)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + @"\u202F";
+            }
+            if (_verificationSettings.SourceThousandsComma)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + ",";
+            }
+            if (_verificationSettings.SourceThousandsPeriod)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + ".";
+            }
+            if (_verificationSettings.SourceThousandsCustomSeparator)
+            {
+                sourceThousandSeparators = sourceThousandSeparators + _verificationSettings.GetSourceThousandsCustomSeparator;
+            }
+
+            return sourceThousandSeparators;
+        }
         public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
         {
              var expresion = string.Format(@"-?\d+([{0}]\d+)*", AddCustomSeparators(thousandSeparators,decimalSeparators));
@@ -568,7 +637,7 @@ namespace Sdl.Community.NumberVerifier
         {
             string normalizedNumber;
 
-            decimalSeparators = AddCustomSeparators(null, decimalSeparators);
+            decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
             if (thousandSeparators != String.Empty &&

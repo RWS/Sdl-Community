@@ -46,6 +46,8 @@
             this.rb_RequireLocalizations = new System.Windows.Forms.RadioButton();
             this.rb_AllowLocalizations = new System.Windows.Forms.RadioButton();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.customTBox = new System.Windows.Forms.TextBox();
+            this.targetTbox = new System.Windows.Forms.CheckBox();
             this.cb_TargetNoSeparator = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsPeriod = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsComma = new System.Windows.Forms.CheckBox();
@@ -54,12 +56,18 @@
             this.cb_TargetThousandsNobreakSpace = new System.Windows.Forms.CheckBox();
             this.cb_TargetThousandsSpace = new System.Windows.Forms.CheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.targetDBox = new System.Windows.Forms.TextBox();
+            this.customTargetSep = new System.Windows.Forms.CheckBox();
             this.cb_TargetDecimalPeriod = new System.Windows.Forms.CheckBox();
             this.cb_TargetDecimalComma = new System.Windows.Forms.CheckBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.sourceDBox = new System.Windows.Forms.TextBox();
+            this.customDSep = new System.Windows.Forms.CheckBox();
             this.cb_SourceDecimalPeriod = new System.Windows.Forms.CheckBox();
             this.cb_SourceDecimalComma = new System.Windows.Forms.CheckBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.sourceTBox = new System.Windows.Forms.TextBox();
+            this.customTSep = new System.Windows.Forms.CheckBox();
             this.cb_SourceNoSeparator = new System.Windows.Forms.CheckBox();
             this.cb_SourceThousandsPeriod = new System.Windows.Forms.CheckBox();
             this.cb_SourceThousandsComma = new System.Windows.Forms.CheckBox();
@@ -74,14 +82,6 @@
             this.cb_ReportRemovedNumbers = new System.Windows.Forms.CheckBox();
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.customTSep = new System.Windows.Forms.CheckBox();
-            this.sourceTBox = new System.Windows.Forms.TextBox();
-            this.targetTbox = new System.Windows.Forms.CheckBox();
-            this.customTBox = new System.Windows.Forms.TextBox();
-            this.customDSep = new System.Windows.Forms.CheckBox();
-            this.customTargetSep = new System.Windows.Forms.CheckBox();
-            this.sourceDBox = new System.Windows.Forms.TextBox();
-            this.targetDBox = new System.Windows.Forms.TextBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -270,6 +270,7 @@
             this.toolTip1.SetToolTip(this.rb_PreventLocalizations, "If this is selected, numbers where separators \r\nhave been changed will be reporte" +
         "d.");
             this.rb_PreventLocalizations.UseVisualStyleBackColor = true;
+            this.rb_PreventLocalizations.CheckedChanged += new System.EventHandler(this.rb_PreventLocalizations_CheckedChanged);
             // 
             // rb_RequireLocalizations
             // 
@@ -282,6 +283,7 @@
             this.toolTip1.SetToolTip(this.rb_RequireLocalizations, "If this is selected, numbers where separators \r\nhave not been changed will be rep" +
         "orted.");
             this.rb_RequireLocalizations.UseVisualStyleBackColor = true;
+            this.rb_RequireLocalizations.CheckedChanged += new System.EventHandler(this.rb_RequireLocalizations_CheckedChanged);
             // 
             // rb_AllowLocalizations
             // 
@@ -294,6 +296,7 @@
             this.rb_AllowLocalizations.TabStop = true;
             this.rb_AllowLocalizations.Text = "Allow localizations";
             this.rb_AllowLocalizations.UseVisualStyleBackColor = true;
+            this.rb_AllowLocalizations.CheckedChanged += new System.EventHandler(this.rb_AllowLocalizations_CheckedChanged);
             // 
             // groupBox6
             // 
@@ -314,6 +317,23 @@
             this.groupBox6.Text = "&Target thousands separators";
             this.toolTip1.SetToolTip(this.groupBox6, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
+            // 
+            // customTBox
+            // 
+            this.customTBox.Location = new System.Drawing.Point(20, 204);
+            this.customTBox.Name = "customTBox";
+            this.customTBox.Size = new System.Drawing.Size(100, 20);
+            this.customTBox.TabIndex = 34;
+            // 
+            // targetTbox
+            // 
+            this.targetTbox.AutoSize = true;
+            this.targetTbox.Location = new System.Drawing.Point(20, 181);
+            this.targetTbox.Name = "targetTbox";
+            this.targetTbox.Size = new System.Drawing.Size(108, 17);
+            this.targetTbox.TabIndex = 33;
+            this.targetTbox.Text = "Custom separator";
+            this.targetTbox.UseVisualStyleBackColor = true;
             // 
             // cb_TargetNoSeparator
             // 
@@ -414,6 +434,23 @@
             this.toolTip1.SetToolTip(this.groupBox5, "Select all separators that should be considered decimal separators\r\nwhen they app" +
         "ear in a place which is appropriate for a decimal separator.");
             // 
+            // targetDBox
+            // 
+            this.targetDBox.Location = new System.Drawing.Point(19, 85);
+            this.targetDBox.Name = "targetDBox";
+            this.targetDBox.Size = new System.Drawing.Size(100, 20);
+            this.targetDBox.TabIndex = 40;
+            // 
+            // customTargetSep
+            // 
+            this.customTargetSep.AutoSize = true;
+            this.customTargetSep.Location = new System.Drawing.Point(19, 61);
+            this.customTargetSep.Name = "customTargetSep";
+            this.customTargetSep.Size = new System.Drawing.Size(108, 17);
+            this.customTargetSep.TabIndex = 39;
+            this.customTargetSep.Text = "Custom separator";
+            this.customTargetSep.UseVisualStyleBackColor = true;
+            // 
             // cb_TargetDecimalPeriod
             // 
             this.cb_TargetDecimalPeriod.AutoSize = true;
@@ -452,6 +489,23 @@
             this.groupBox4.Text = "S&ource decimal separators";
             this.toolTip1.SetToolTip(this.groupBox4, "Select all separators that should be considered decimal separators\r\nwhen they app" +
         "ear in a place which is appropriate for a decimal separator.");
+            // 
+            // sourceDBox
+            // 
+            this.sourceDBox.Location = new System.Drawing.Point(17, 85);
+            this.sourceDBox.Name = "sourceDBox";
+            this.sourceDBox.Size = new System.Drawing.Size(100, 20);
+            this.sourceDBox.TabIndex = 37;
+            // 
+            // customDSep
+            // 
+            this.customDSep.AutoSize = true;
+            this.customDSep.Location = new System.Drawing.Point(17, 61);
+            this.customDSep.Name = "customDSep";
+            this.customDSep.Size = new System.Drawing.Size(108, 17);
+            this.customDSep.TabIndex = 36;
+            this.customDSep.Text = "Custom separator";
+            this.customDSep.UseVisualStyleBackColor = true;
             // 
             // cb_SourceDecimalPeriod
             // 
@@ -496,6 +550,23 @@
             this.groupBox3.Text = "&Source thousands separators";
             this.toolTip1.SetToolTip(this.groupBox3, "Select all separators that should be considered thousands separators\r\nwhen they a" +
         "ppear in a place which is appropriate for a thousands separator.");
+            // 
+            // sourceTBox
+            // 
+            this.sourceTBox.Location = new System.Drawing.Point(17, 205);
+            this.sourceTBox.Name = "sourceTBox";
+            this.sourceTBox.Size = new System.Drawing.Size(100, 20);
+            this.sourceTBox.TabIndex = 28;
+            // 
+            // customTSep
+            // 
+            this.customTSep.AutoSize = true;
+            this.customTSep.Location = new System.Drawing.Point(17, 181);
+            this.customTSep.Name = "customTSep";
+            this.customTSep.Size = new System.Drawing.Size(108, 17);
+            this.customTSep.TabIndex = 27;
+            this.customTSep.Text = "Custom separator";
+            this.customTSep.UseVisualStyleBackColor = true;
             // 
             // cb_SourceNoSeparator
             // 
@@ -662,74 +733,6 @@
             this.toolTip1.InitialDelay = 500;
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
-            // 
-            // customTSep
-            // 
-            this.customTSep.AutoSize = true;
-            this.customTSep.Location = new System.Drawing.Point(17, 181);
-            this.customTSep.Name = "customTSep";
-            this.customTSep.Size = new System.Drawing.Size(108, 17);
-            this.customTSep.TabIndex = 27;
-            this.customTSep.Text = "Custom separator";
-            this.customTSep.UseVisualStyleBackColor = true;
-            // 
-            // sourceTBox
-            // 
-            this.sourceTBox.Location = new System.Drawing.Point(17, 205);
-            this.sourceTBox.Name = "sourceTBox";
-            this.sourceTBox.Size = new System.Drawing.Size(100, 20);
-            this.sourceTBox.TabIndex = 28;
-            // 
-            // targetTbox
-            // 
-            this.targetTbox.AutoSize = true;
-            this.targetTbox.Location = new System.Drawing.Point(20, 181);
-            this.targetTbox.Name = "targetTbox";
-            this.targetTbox.Size = new System.Drawing.Size(108, 17);
-            this.targetTbox.TabIndex = 33;
-            this.targetTbox.Text = "Custom separator";
-            this.targetTbox.UseVisualStyleBackColor = true;
-            // 
-            // customTBox
-            // 
-            this.customTBox.Location = new System.Drawing.Point(20, 204);
-            this.customTBox.Name = "customTBox";
-            this.customTBox.Size = new System.Drawing.Size(100, 20);
-            this.customTBox.TabIndex = 34;
-            // 
-            // customDSep
-            // 
-            this.customDSep.AutoSize = true;
-            this.customDSep.Location = new System.Drawing.Point(17, 61);
-            this.customDSep.Name = "customDSep";
-            this.customDSep.Size = new System.Drawing.Size(108, 17);
-            this.customDSep.TabIndex = 36;
-            this.customDSep.Text = "Custom separator";
-            this.customDSep.UseVisualStyleBackColor = true;
-            // 
-            // customTargetSep
-            // 
-            this.customTargetSep.AutoSize = true;
-            this.customTargetSep.Location = new System.Drawing.Point(19, 61);
-            this.customTargetSep.Name = "customTargetSep";
-            this.customTargetSep.Size = new System.Drawing.Size(108, 17);
-            this.customTargetSep.TabIndex = 39;
-            this.customTargetSep.Text = "Custom separator";
-            this.customTargetSep.UseVisualStyleBackColor = true;
-            // 
-            // sourceDBox
-            // 
-            this.sourceDBox.Location = new System.Drawing.Point(17, 85);
-            this.sourceDBox.Name = "sourceDBox";
-            this.sourceDBox.Size = new System.Drawing.Size(100, 20);
-            this.sourceDBox.TabIndex = 37;
-            // 
-            // targetDBox
-            // 
-            this.targetDBox.Location = new System.Drawing.Point(19, 85);
-            this.targetDBox.Name = "targetDBox";
-            this.targetDBox.Size = new System.Drawing.Size(100, 20);
-            this.targetDBox.TabIndex = 40;
             // 
             // NumberVerifierUI
             // 
