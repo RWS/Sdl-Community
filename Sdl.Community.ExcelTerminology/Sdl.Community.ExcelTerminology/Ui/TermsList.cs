@@ -127,7 +127,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     SearchText = source
 
                 };
-
+                
                 sourceListView.AddObject(excelEntry);
                 _terms.Add(excelEntry);
                 JumpToTerm(excelEntry);
@@ -139,6 +139,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
         }
 
+     
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
         {
             try
@@ -202,7 +203,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 if (sourceListView.SelectedObject == null) return;
                 var entry = new ExcelTerm();
 
-
                 var source = (ExcelEntry) sourceListView.SelectedObject;
                 var entryId = source.Id;
                 entry.Source = source.SearchText;
@@ -228,6 +228,17 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     entry.Approved = approvedValue;
                 }
 
+
+
+                var entryLanguage = _transformerService.CreateEntryLanguages(entry);
+                var entryToUpdate = _terms.Find(item => item.Id == entryId);
+                
+                if (entryToUpdate != null)
+                {
+
+                    entryToUpdate.Languages = entryLanguage;
+
+                }
                 await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
             }
             catch (Exception ex)
