@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.ApplicationInsights.DataContracts;
+using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
@@ -46,18 +49,26 @@ namespace Sdl.Community.ExcelTerminology
             _termSearchService = termSearchService;
 
             _termEntries = new List<ExcelEntry>();
-
         }
 
         public async Task LoadEntries()
         {
-            var parser = new Parser(_providerSettings);
-            var transformerService = new EntryTransformerService(parser);
-            var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
-            var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
+            try
+            {
+                var parser = new Parser(_providerSettings);
+                var transformerService = new EntryTransformerService(parser);
+                var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
+                var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
 
-            _termEntries = await excelTermProviderService.LoadEntries();
-            TermsLoaded?.Invoke(_termEntries);
+                _termEntries = await excelTermProviderService.LoadEntries();
+                TelemetryService.Instance.AddMetric("Loaded Terms", _termEntries.Count);
+                TermsLoaded?.Invoke(_termEntries);
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
         }
 
         public override IList<ILanguage> GetLanguages()
@@ -126,11 +137,17 @@ namespace Sdl.Community.ExcelTerminology
         {
 
             var results = new List<ISearchResult>();
-
-            results.AddRange(
-                _termSearchService
-                    .Search(text, _termEntries, maxResultsCount));
-
+            try
+            {
+                results.AddRange(
+                    _termSearchService
+                        .Search(text, _termEntries, maxResultsCount));
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
             return results;
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -39,19 +40,21 @@ namespace Sdl.Community.ExcelTerminology.Services
                 }).ToList();
         }
 
-        public async Task AddOrUpdateEntry(int entryId,ExcelTerm excelEntry)
+        public async Task AddOrUpdateEntry(int entryId, ExcelTerm excelEntry)
         {
+
             if (!string.IsNullOrWhiteSpace(excelEntry.Source) && !string.IsNullOrWhiteSpace(excelEntry.Target))
             {
                 await _excelTermLoaderService.AddOrUpdateTerm(entryId, excelEntry);
             }
-            
         }
 
         public async Task DeleteEntry(int entryId)
         {
+
             await _excelTermLoaderService.DeleteTerm(entryId);
+
         }
-       
+
     }
 }

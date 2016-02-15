@@ -9,5 +9,11 @@
     <File>EPPlus.dll</File>
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
+    <File>Microsoft.AI.Agent.Intercept.dll</File>
+    <File>Microsoft.AI.DependencyCollector.dll</File>
+    <File>Microsoft.AI.PerfCounterCollector.dll</File>
+    <File>Microsoft.AI.ServerTelemetryChannel.dll</File>
+    <File>Microsoft.AI.WindowsServer.dll</File>
+    <File>Microsoft.ApplicationInsights.dll</File>
   </Include>
 </PluginPackage>

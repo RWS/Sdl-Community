@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -72,17 +73,24 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         public void JumpToTerm(IEntry entry)
         {
-          
-            var selectedItem = sourceListView.Objects.Cast<ExcelEntry>().FirstOrDefault(s => s.Id == entry.Id);
-           
-            if (selectedItem != null)
+            try
             {
-                sourceListView.DeselectAll();
-                sourceListView.Focus();
-                sourceListView.EnsureModelVisible(selectedItem);
-                sourceListView.SelectObject(selectedItem, true);
+                var selectedItem = sourceListView.Objects.Cast<ExcelEntry>().FirstOrDefault(s => s.Id == entry.Id);
+
+                if (selectedItem != null)
+                {
+                    sourceListView.DeselectAll();
+                    sourceListView.Focus();
+                    sourceListView.EnsureModelVisible(selectedItem);
+                    sourceListView.SelectObject(selectedItem, true);
+                }
             }
-            
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
+
         }
 
         public void AddTerm(string source, string target)
@@ -93,78 +101,93 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void AddTermInternal(string source, string target)
         {
-            var excelTerm = new ExcelTerm
+            try
             {
-                SourceCulture = _providerSettings.SourceLanguage,
-                TargetCulture = _providerSettings.TargetLanguage,
-                Source = source,
-                Target = target
-            };
+                var excelTerm = new ExcelTerm
+                {
+                    SourceCulture = _providerSettings.SourceLanguage,
+                    TargetCulture = _providerSettings.TargetLanguage,
+                    Source = source,
+                    Target = target
+                };
 
-            var entryLanguages = _transformerService.CreateEntryLanguages(excelTerm);
+                var entryLanguages = _transformerService.CreateEntryLanguages(excelTerm);
 
-            var maxId = 0;
-            if (_terms.Count > 0)
-            {
-                maxId = _terms.Max(term => term.Id);
+                var maxId = 0;
+                if (_terms.Count > 0)
+                {
+                    maxId = _terms.Max(term => term.Id);
+                }
+
+                var excelEntry = new ExcelEntry
+                {
+                    Id = maxId + 1,
+                    Fields = new List<IEntryField>(),
+                    Languages = entryLanguages,
+                    SearchText = source
+
+                };
+
+                sourceListView.AddObject(excelEntry);
+                _terms.Add(excelEntry);
+                JumpToTerm(excelEntry);
             }
-
-            var excelEntry = new ExcelEntry
+            catch (Exception ex)
             {
-                Id = maxId + 1,
-                Fields = new List<IEntryField>(),
-                Languages = entryLanguages,
-                SearchText = source
-
-            };
-
-            sourceListView.AddObject(excelEntry);
-            _terms.Add(excelEntry);
-            JumpToTerm(excelEntry);
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
         }
 
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
         {
-            
-            var selectedTerm = _terms.FirstOrDefault(item => item.Id == entry.Id);
-            var termToAdd = new EntryTerm
+            try
             {
-                Value = excelDataGrid.Term
-            };
-
-            var excelTerm = new ExcelTerm
-            {
-                SourceCulture = entry.Languages[0].Locale,
-                TargetCulture = entry.Languages[1].Locale,
-                Target = excelDataGrid.Term
-            };
-            var source = (ExcelEntry) entry;
-            excelTerm.Source = source.SearchText;
-
-            var exist = false;
-            if (selectedTerm != null)
-            {
-                foreach (var term in selectedTerm.Languages[1].Terms)
+                var selectedTerm = _terms.FirstOrDefault(item => item.Id == entry.Id);
+                var termToAdd = new EntryTerm
                 {
-                    if (term.Value == excelDataGrid.Term)
+                    Value = excelDataGrid.Term
+                };
+
+                var excelTerm = new ExcelTerm
+                {
+                    SourceCulture = entry.Languages[0].Locale,
+                    TargetCulture = entry.Languages[1].Locale,
+                    Target = excelDataGrid.Term
+                };
+                var source = (ExcelEntry) entry;
+                excelTerm.Source = source.SearchText;
+
+                var exist = false;
+                if (selectedTerm != null)
+                {
+                    foreach (var term in selectedTerm.Languages[1].Terms)
                     {
-                        exist = true;
+                        if (term.Value == excelDataGrid.Term)
+                        {
+                            exist = true;
+                        }
+
+
                     }
-                   
+
+                    if (exist == false)
+                    {
+                        selectedTerm.Languages[1].Terms.Add(termToAdd);
+
+                        _terms[entry.Id].Languages = selectedTerm.Languages;
+                    }
 
                 }
 
-                if (exist == false)
-                {
-                    selectedTerm.Languages[1].Terms.Add(termToAdd);
-
-                    _terms[entry.Id].Languages = selectedTerm.Languages;
-                }
-                
+                JumpToTerm(entry);
+                Task.Run(Save);
             }
-
-            JumpToTerm(entry);
-            Task.Run(Save);
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
         }
 
         private void confirmBtn_Click(object sender, EventArgs e)
@@ -174,94 +197,125 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private async Task Save()
         {
-            if (sourceListView.SelectedObject == null) return;
-            var entry = new ExcelTerm();
-
-
-            var source = (ExcelEntry) sourceListView.SelectedObject;
-            var entryId = source.Id;
-            entry.Source = source.SearchText;
-
-            foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
+            try
             {
-                if (cultureCast.IsSource)
-                {
-                    entry.SourceCulture = cultureCast.Locale;
-                }
-                else
-                {
-                    entry.TargetCulture = cultureCast.Locale;
-                }
-            }
+                if (sourceListView.SelectedObject == null) return;
+                var entry = new ExcelTerm();
 
-            var targetTerms = bsTarget.DataSource as List<ExcelDataGrid>;
-            if (targetTerms != null)
+
+                var source = (ExcelEntry) sourceListView.SelectedObject;
+                var entryId = source.Id;
+                entry.Source = source.SearchText;
+
+                foreach (var cultureCast in source.Languages.Cast<ExcelEntryLanguage>())
+                {
+                    if (cultureCast.IsSource)
+                    {
+                        entry.SourceCulture = cultureCast.Locale;
+                    }
+                    else
+                    {
+                        entry.TargetCulture = cultureCast.Locale;
+                    }
+                }
+
+                var targetTerms = bsTarget.DataSource as List<ExcelDataGrid>;
+                if (targetTerms != null)
+                {
+                    var termValue = string.Join("|", targetTerms.Select(x => x.Term));
+                    var approvedValue = string.Join("|", targetTerms.Select(x => x.Approved));
+                    entry.Target = termValue;
+                    entry.Approved = approvedValue;
+                }
+
+                await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
+            }
+            catch (Exception ex)
             {
-                var termValue = string.Join("|", targetTerms.Select(x => x.Term));
-                var approvedValue = string.Join("|", targetTerms.Select(x => x.Approved));
-                entry.Target = termValue;
-                entry.Approved = approvedValue;
+                TelemetryService.Instance.AddException(ex);
+                throw;
             }
-
-            await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
         }
 
         private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            var rowIndex = e.ItemIndex;
-
-          
-            var result = new List<ExcelDataGrid>();
-            if (rowIndex == 0 && _terms.Count == 0)
+            try
             {
-                bsTarget.DataSource = result;
-                bsTarget.AllowNew = false;
-            }
-            if (rowIndex >= _terms.Count) return;
-            var item = _terms[rowIndex];
-            foreach (var target in item.Languages)
-            {
-                var targetCast = (ExcelEntryLanguage)target;
+                var rowIndex = e.ItemIndex;
 
-                if (!targetCast.IsSource)
+
+                var result = new List<ExcelDataGrid>();
+                if (rowIndex == 0 && _terms.Count == 0)
                 {
-                    result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
-                    {
-                        Term = term.Value,
-                        Approved = string.Join(string.Empty,term.Fields.Select(x=>x.Value))
-                    }));
-                   
-                    
+                    bsTarget.DataSource = result;
+                    bsTarget.AllowNew = false;
                 }
-            }
-            bsTarget.DataSource = result;
-            bsTarget.AllowNew = true;
+                if (rowIndex >= _terms.Count) return;
+                var item = _terms[rowIndex];
+                foreach (var target in item.Languages)
+                {
+                    var targetCast = (ExcelEntryLanguage) target;
 
+                    if (!targetCast.IsSource)
+                    {
+                        result.AddRange(targetCast.Terms.Select(term => new ExcelDataGrid
+                        {
+                            Term = term.Value,
+                            Approved = string.Join(string.Empty, term.Fields.Select(x => x.Value))
+                        }));
+
+
+                    }
+                }
+                bsTarget.DataSource = result;
+                bsTarget.AllowNew = true;
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
         }
 
         private async void deleteBtn_Click(object sender, EventArgs e)
         {
-            if (sourceListView.SelectedObject == null) return;
-             var source = (ExcelEntry)sourceListView.SelectedObject;
-            sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
+            try
+            {
+                if (sourceListView.SelectedObject == null) return;
+                var source = (ExcelEntry) sourceListView.SelectedObject;
+                sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
 
-            _terms.Remove(source);
-            sourceListView.RemoveObject(source); //remove from listview
-            sourceListView.SelectedIndex = 0;
-            sourceListView.Focus();
-            sourceListView.EnsureModelVisible(sourceListView.SelectedItem);
+                _terms.Remove(source);
+                sourceListView.RemoveObject(source); //remove from listview
+                sourceListView.SelectedIndex = 0;
+                sourceListView.Focus();
+                sourceListView.EnsureModelVisible(sourceListView.SelectedItem);
 
 
-            await _excelTermProviderService.DeleteEntry(source.Id);
+                await _excelTermProviderService.DeleteEntry(source.Id);
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
 
         }
 
         private void addBtn_Click(object sender, EventArgs e)
         {
-            AddTermInternal(string.Empty, string.Empty);
-            var item = sourceListView.GetLastItemInDisplayOrder();
+            try
+            {
+                AddTermInternal(string.Empty, string.Empty);
+                var item = sourceListView.GetLastItemInDisplayOrder();
 
-            sourceListView.StartCellEdit(item, 0);
+                sourceListView.StartCellEdit(item, 0);
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
         }
 
     }
