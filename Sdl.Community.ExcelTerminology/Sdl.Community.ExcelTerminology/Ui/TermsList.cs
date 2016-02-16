@@ -18,14 +18,23 @@ namespace Sdl.Community.ExcelTerminology.Ui
         private readonly ExcelTermProviderService _excelTermProviderService;
         private readonly ProviderSettings _providerSettings;
         private readonly EntryTransformerService _transformerService;
-        private List<ExcelEntry> _terms;
+        private List<ExcelEntry> _terms = new List<ExcelEntry>();
+        private Uri _uri;
 
         public TermsList()
         {
             InitializeComponent();
 
+            
+        }
+
+        public TermsList(List<ExcelEntry> terms,Uri uri):this()
+        {
+            _terms = terms;
+            _uri = uri;
+
             var persistenceService = new PersistenceService();
-            _providerSettings = persistenceService.Load();
+            _providerSettings = persistenceService.Load(_uri);
             if (string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
             {
                 this.Approved.Visible = false;
@@ -33,16 +42,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
             var excelTermLoaderService = new ExcelTermLoaderService(_providerSettings);
             var parser = new Parser(_providerSettings);
             _transformerService = new EntryTransformerService(parser);
-            _terms = new List<ExcelEntry>();
+
             _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService,
                 _transformerService);
         }
-
-        public TermsList(List<ExcelEntry> terms):this()
-        {
-            _terms = terms;
-        }
-
+        
         public void SetTerms(List<ExcelEntry> terms)
         {
             _terms = terms;
@@ -139,6 +143,10 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
         }
 
+        public void SetUri(Uri uri)
+        {
+             _uri = uri;
+        }
      
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
         {

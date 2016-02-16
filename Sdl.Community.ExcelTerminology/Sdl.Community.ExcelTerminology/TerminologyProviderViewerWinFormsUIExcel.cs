@@ -22,7 +22,7 @@ namespace Sdl.Community.ExcelTerminology
         {
             get
             {
-                var control = new TermsList(_terminologyProvider.Terms)
+                var control = new TermsList(_terminologyProvider.Terms,_terminologyProvider.Uri)
                 {
                     Text = @"TerminologyProviderViewerWinFormsUIExcel",
                     BackColor = Color.White
@@ -32,13 +32,13 @@ namespace Sdl.Community.ExcelTerminology
                 AddAndEditAction += control.AddAndEdit;
                 AddTermAction += control.AddTerm;
                 _terminologyProvider.TermsLoaded += control.SetTerms;
-                return control;
+
+               return control;
             }
         }
 
-      
 
-        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+     public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
             return true;
         }
@@ -71,7 +71,6 @@ namespace Sdl.Community.ExcelTerminology
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
             _terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
-
         }
 
         public void Release()

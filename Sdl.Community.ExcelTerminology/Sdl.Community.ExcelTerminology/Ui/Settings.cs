@@ -10,6 +10,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
 {
     public partial class Settings : Form
     {
+        private Uri _providerUri;
         public Settings()
         {
             InitializeComponent();
@@ -61,7 +62,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void submitBtn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(separatorTextBox.Text)||string.IsNullOrWhiteSpace(pathTextBox.Text))
+            if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
                 return;
@@ -73,17 +74,28 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 ApprovedColumn = approvedBox.Text,
                 SourceColumn = sourceBox.Text,
                 TargetColumn = targetBox.Text,
-                SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
-                TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
+                SourceLanguage = (CultureInfo) sourceLanguageComboBox.SelectedItem,
+                TargetLanguage = (CultureInfo) targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],
-                TermFilePath = pathTextBox.Text
-            };      
-           
-                var persistence = new PersistenceService();
-                persistence.Save(provider);
-           
+                TermFilePath = pathTextBox.Text,
+            };
+
+            var termSearchService = new NormalTermSeachService();
+            var persistence = new PersistenceService();
+            var excelProvider = new TerminologyProviderExcel(provider, termSearchService);
+
+            provider.Uri = excelProvider.Uri;
+            _providerUri = provider.Uri;
+            persistence.AddSettings(provider);
+            persistence.Save();
+
+
             Close();
         }
 
+        public Uri GetProviderUri()
+        {
+            return _providerUri;
+        }
     }
 }

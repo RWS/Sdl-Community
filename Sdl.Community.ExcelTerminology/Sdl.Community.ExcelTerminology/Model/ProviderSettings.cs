@@ -18,6 +18,7 @@ namespace Sdl.Community.ExcelTerminology.Model
         public CultureInfo TargetLanguage { get; set; }
         public char Separator { get; set; }
         public string WorksheetName { get; set; }
+        public Uri Uri { get; set; }
 
         public string GetExcelRangeAddress()
         {

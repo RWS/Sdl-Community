@@ -22,8 +22,9 @@ namespace Sdl.Community.ExcelTerminology
         {
             TelemetryService.Instance.Init();
             var persistenceService = new PersistenceService();
+            
             var termSearchService = new NormalTermSeachService();
-            var providerSettings = persistenceService.Load();
+            var providerSettings = persistenceService.Load(terminologyProviderUri);
             var terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
             Task.Run(terminologyProvider.LoadEntries);
             return terminologyProvider;

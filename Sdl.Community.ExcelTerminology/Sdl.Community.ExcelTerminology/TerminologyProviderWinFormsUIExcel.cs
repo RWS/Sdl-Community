@@ -25,12 +25,15 @@ namespace Sdl.Community.ExcelTerminology
             TelemetryService.Instance.Init();
             var settingsDialog = new Settings();
             settingsDialog.ShowDialog();
+
+            var providerUri=settingsDialog.GetProviderUri();
             var persistenceService = new PersistenceService();
             var termSearchService = new NormalTermSeachService();
-            var providerSettings = persistenceService.Load();
+            var providerSettings = persistenceService.Load(providerUri);
+
             var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
 
-            return new ITerminologyProvider[] { excelProvider };
+            return new ITerminologyProvider[] {excelProvider};
         }
 
         public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)

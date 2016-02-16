@@ -12,13 +12,16 @@ namespace Sdl.Community.ExcelTerminology.Services
     public class PersistenceService
     {
         private readonly string _persistancePath;
-
+        private  List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
+      
+     
         public PersistenceService()
         {
-            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL Community\ExcelTerminology\excelTerminology.json");
+            _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                @"SDL Community\ExcelTerminology\excelTerminology.json");
         }
 
-        public void Save(ProviderSettings toSave)
+        public void Save()
         {
 
             if (!File.Exists(_persistancePath))
@@ -30,18 +33,60 @@ namespace Sdl.Community.ExcelTerminology.Services
                 }
             }
 
-            var json = JsonConvert.SerializeObject(toSave);
+            var json = JsonConvert.SerializeObject(_providerSettingList);
             File.WriteAllText(_persistancePath, json);  
         }
 
-        public ProviderSettings Load()
+        public void AddSettings(ProviderSettings providerSettings)
+        {
+            GetProviderSettingsList();
+            _providerSettinngsUri = providerSettings.Uri;
+
+            var result = _providerSettingList.FirstOrDefault(s => s.Uri == providerSettings.Uri);
+
+            if (result != null)
+            {
+                var index = _providerSettingList.FindIndex(s=>s.Uri == providerSettings.Uri);
+
+                result.WorksheetName = providerSettings.WorksheetName;
+                result.Uri = providerSettings.Uri;
+                result.ApprovedColumn = providerSettings.ApprovedColumn;
+                result.HasHeader = providerSettings.HasHeader;
+                result.Separator = providerSettings.Separator;
+                result.SourceColumn = providerSettings.SourceColumn;
+                result.SourceLanguage = providerSettings.SourceLanguage;
+                result.TargetColumn = providerSettings.TargetColumn;
+                result.TermFilePath = providerSettings.TermFilePath;
+                result.TargetLanguage = providerSettings.TargetLanguage;
+
+                _providerSettingList[index] = result;
+            }
+            else
+            {
+                if (providerSettings.Uri != null)
+                {
+                    _providerSettingList.Add(providerSettings);
+                }
+            }
+        }
+
+        public void GetProviderSettingsList()
+        {
+            var json = File.ReadAllText(_persistancePath);
+
+            _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
+        }
+        
+        public ProviderSettings Load(Uri providerUri)
         {
             if (!File.Exists(_persistancePath)) return null;
             var json = File.ReadAllText(_persistancePath);
 
-            var result = JsonConvert.DeserializeObject<ProviderSettings>(json);
+            var result = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
 
-            return result;
+            var settings = result.FirstOrDefault(r => r.Uri == providerUri);
+
+            return settings;
         }
     }
 }
