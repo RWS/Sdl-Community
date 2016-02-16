@@ -12,9 +12,9 @@ namespace Sdl.Community.ExcelTerminology.Services
     public class PersistenceService
     {
         private readonly string _persistancePath;
-        private  List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
-      
-     
+        private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
+        private Uri _providerSettinngsUri;
+
         public PersistenceService()
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -34,7 +34,7 @@ namespace Sdl.Community.ExcelTerminology.Services
             }
 
             var json = JsonConvert.SerializeObject(_providerSettingList);
-            File.WriteAllText(_persistancePath, json);  
+            File.WriteAllText(_persistancePath, json);
         }
 
         public void AddSettings(ProviderSettings providerSettings)
@@ -46,7 +46,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 
             if (result != null)
             {
-                var index = _providerSettingList.FindIndex(s=>s.Uri == providerSettings.Uri);
+                var index = _providerSettingList.FindIndex(s => s.Uri == providerSettings.Uri);
 
                 result.WorksheetName = providerSettings.WorksheetName;
                 result.Uri = providerSettings.Uri;
@@ -76,7 +76,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 
             _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
         }
-        
+
         public ProviderSettings Load(Uri providerUri)
         {
             if (!File.Exists(_persistancePath)) return null;
