@@ -4,7 +4,7 @@
   <Version>1.1</Version>
   <Description>View project content at a glance using a word cloud.</Description>
   <Author>Sdl Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>Sdl.Community.WordCloud.Controls.dll</File>
   </Include>
