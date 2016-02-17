@@ -22,22 +22,37 @@ namespace Sdl.Community.ExcelTerminology
 
         public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
         {
-            TelemetryService.Instance.Init();
-            var settingsDialog = new Settings();
-            settingsDialog.ShowDialog();
-            var settings = settingsDialog.GetSettings();
+            var result = new List<ITerminologyProvider>();
+            try
+            {
+                TelemetryService.Instance.Init();
+                var settingsDialog = new Settings();
+                var dialogResult = settingsDialog.ShowDialog();
 
-            var persistenceService = new PersistenceService();
-            var termSearchService = new NormalTermSeachService();
+                if (dialogResult == DialogResult.OK ||
+                    dialogResult == DialogResult.Yes)
+                {
+                    var settings = settingsDialog.GetSettings();
 
-            var provider = new TerminologyProviderExcel(settings);
-            settings.Uri = provider.Uri;
-            persistenceService.AddSettings(settings);
-            var providerSettings = persistenceService.Load(provider.Uri);
+                    var persistenceService = new PersistenceService();
+                    var termSearchService = new NormalTermSeachService();
 
-            var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+                    var provider = new TerminologyProviderExcel(settings);
+                    settings.Uri = provider.Uri;
+                    persistenceService.AddSettings(settings);
+                    var providerSettings = persistenceService.Load(provider.Uri);
 
-            return new ITerminologyProvider[] {excelProvider};
+                    var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+
+                    result.Add(excelProvider);
+                }
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+            }
+
+            return result.ToArray();
         }
 
         public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)

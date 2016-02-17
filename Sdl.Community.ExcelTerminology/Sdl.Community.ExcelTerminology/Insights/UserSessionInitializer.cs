@@ -14,9 +14,17 @@ namespace Sdl.Community.ExcelTerminology.Insights
         public void Initialize(TelemetryContext context)
         {
             context.User.Id = Environment.UserName;
+            context.User.UserAgent = "Studio plugin";
             context.Session.Id = Guid.NewGuid().ToString();
             context.Device.OperatingSystem = Environment.OSVersion.ToString();
             context.Device.Language = CultureInfo.CurrentCulture.DisplayName;
+            context.Component.Version =  typeof (UserSessionInitializer)
+                .Assembly
+                .GetName()
+                .Version
+                .ToString();
+            
+
         }
     }
 }

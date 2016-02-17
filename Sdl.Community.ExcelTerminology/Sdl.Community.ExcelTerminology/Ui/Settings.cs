@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 
@@ -39,6 +40,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetLanguageComboBox.ValueMember = "Name";
             var selectedTargetItem = target.Where(t => t.Name == "de-DE");
             targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
+            TelemetryService.Instance.TrackPage("Settings screen");
         }
 
         private void browseBtn_Click(object sender, EventArgs e)
