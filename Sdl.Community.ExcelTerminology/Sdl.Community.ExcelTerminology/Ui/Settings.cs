@@ -10,7 +10,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
 {
     public partial class Settings : Form
     {
-        private Uri _providerUri;
+        private ProviderSettings _providerSettings;
+
         public Settings()
         {
             InitializeComponent();
@@ -55,7 +56,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
         protected virtual List<CultureInfo> GetCultureNames()
         {
             return CultureInfo
-                .GetCultures(CultureTypes.SpecificCultures)
+                .GetCultures(CultureTypes.SpecificCultures).OrderBy(culture => culture.DisplayName)
                 .ToList();
             
         }
@@ -80,22 +81,15 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 TermFilePath = pathTextBox.Text,
             };
 
-            var termSearchService = new NormalTermSeachService();
-            var persistence = new PersistenceService();
-            var excelProvider = new TerminologyProviderExcel(provider, termSearchService);
-
-            provider.Uri = excelProvider.Uri;
-            _providerUri = provider.Uri;
-            persistence.AddSettings(provider);
-            persistence.Save();
-
+            _providerSettings = provider;
 
             Close();
         }
 
-        public Uri GetProviderUri()
+       public ProviderSettings GetSettings()
         {
-            return _providerUri;
+            return _providerSettings;
         }
+
     }
 }

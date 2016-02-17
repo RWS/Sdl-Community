@@ -93,7 +93,7 @@
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.mainTableLayout.Size = new System.Drawing.Size(599, 354);
+            this.mainTableLayout.Size = new System.Drawing.Size(637, 359);
             this.mainTableLayout.TabIndex = 0;
             // 
             // headerLayoutPanel
@@ -109,7 +109,7 @@
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
-            this.headerLayoutPanel.Size = new System.Drawing.Size(595, 64);
+            this.headerLayoutPanel.Size = new System.Drawing.Size(631, 64);
             this.headerLayoutPanel.TabIndex = 0;
             // 
             // descriptionLbl
@@ -119,7 +119,7 @@
             this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.descriptionLbl.Location = new System.Drawing.Point(3, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(589, 64);
+            this.descriptionLbl.Size = new System.Drawing.Size(625, 64);
             this.descriptionLbl.TabIndex = 0;
             this.descriptionLbl.Text = "label1";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -136,7 +136,7 @@
             this.settingsLayoutPanel.Name = "settingsLayoutPanel";
             this.settingsLayoutPanel.RowCount = 1;
             this.settingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.settingsLayoutPanel.Size = new System.Drawing.Size(595, 278);
+            this.settingsLayoutPanel.Size = new System.Drawing.Size(631, 283);
             this.settingsLayoutPanel.TabIndex = 1;
             // 
             // customSettingsGroupBox
@@ -147,7 +147,7 @@
             this.customSettingsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customSettingsGroupBox.Location = new System.Drawing.Point(3, 3);
             this.customSettingsGroupBox.Name = "customSettingsGroupBox";
-            this.customSettingsGroupBox.Size = new System.Drawing.Size(589, 272);
+            this.customSettingsGroupBox.Size = new System.Drawing.Size(625, 277);
             this.customSettingsGroupBox.TabIndex = 1;
             this.customSettingsGroupBox.TabStop = false;
             this.customSettingsGroupBox.Text = "Settings";
@@ -156,7 +156,7 @@
             // 
             this.customSettingsLayoutPanel.ColumnCount = 2;
             this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 509F));
+            this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 523F));
             this.customSettingsLayoutPanel.Controls.Add(this.targetLanguageComboBox, 1, 6);
             this.customSettingsLayoutPanel.Controls.Add(this.sourceLanguageComboBox, 1, 5);
             this.customSettingsLayoutPanel.Controls.Add(this.approvedBox, 1, 4);
@@ -185,7 +185,7 @@
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.customSettingsLayoutPanel.Size = new System.Drawing.Size(583, 253);
+            this.customSettingsLayoutPanel.Size = new System.Drawing.Size(619, 258);
             this.customSettingsLayoutPanel.TabIndex = 0;
             // 
             // targetLanguageComboBox
@@ -195,7 +195,7 @@
             this.targetLanguageComboBox.FormattingEnabled = true;
             this.targetLanguageComboBox.Location = new System.Drawing.Point(99, 131);
             this.targetLanguageComboBox.Name = "targetLanguageComboBox";
-            this.targetLanguageComboBox.Size = new System.Drawing.Size(503, 21);
+            this.targetLanguageComboBox.Size = new System.Drawing.Size(517, 21);
             this.targetLanguageComboBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource6
@@ -209,7 +209,7 @@
             this.sourceLanguageComboBox.FormattingEnabled = true;
             this.sourceLanguageComboBox.Location = new System.Drawing.Point(99, 104);
             this.sourceLanguageComboBox.Name = "sourceLanguageComboBox";
-            this.sourceLanguageComboBox.Size = new System.Drawing.Size(503, 21);
+            this.sourceLanguageComboBox.Size = new System.Drawing.Size(517, 21);
             this.sourceLanguageComboBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource2
@@ -222,7 +222,7 @@
             this.approvedBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.approvedBox.Location = new System.Drawing.Point(99, 78);
             this.approvedBox.Name = "approvedBox";
-            this.approvedBox.Size = new System.Drawing.Size(503, 20);
+            this.approvedBox.Size = new System.Drawing.Size(517, 20);
             this.approvedBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource5
@@ -235,7 +235,7 @@
             this.targetBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetBox.Location = new System.Drawing.Point(99, 52);
             this.targetBox.Name = "targetBox";
-            this.targetBox.Size = new System.Drawing.Size(503, 20);
+            this.targetBox.Size = new System.Drawing.Size(517, 20);
             this.targetBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource1
@@ -248,7 +248,7 @@
             this.sourceBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceBox.Location = new System.Drawing.Point(99, 26);
             this.sourceBox.Name = "sourceBox";
-            this.sourceBox.Size = new System.Drawing.Size(503, 20);
+            this.sourceBox.Size = new System.Drawing.Size(517, 20);
             this.sourceBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource
@@ -330,7 +330,7 @@
             this.separatorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.separatorTextBox.Location = new System.Drawing.Point(99, 158);
             this.separatorTextBox.Name = "separatorTextBox";
-            this.separatorTextBox.Size = new System.Drawing.Size(503, 20);
+            this.separatorTextBox.Size = new System.Drawing.Size(517, 20);
             this.separatorTextBox.TabIndex = 1;
             // 
             // providerSettingsBindingSource7
@@ -362,12 +362,12 @@
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(503, 92);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(517, 92);
             this.tableLayoutPanel1.TabIndex = 15;
             // 
             // browseBtn
             // 
-            this.browseBtn.Location = new System.Drawing.Point(355, 3);
+            this.browseBtn.Location = new System.Drawing.Point(364, 3);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(66, 23);
             this.browseBtn.TabIndex = 1;
@@ -381,7 +381,7 @@
             this.pathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pathTextBox.Location = new System.Drawing.Point(3, 3);
             this.pathTextBox.Name = "pathTextBox";
-            this.pathTextBox.Size = new System.Drawing.Size(346, 20);
+            this.pathTextBox.Size = new System.Drawing.Size(355, 20);
             this.pathTextBox.TabIndex = 0;
             // 
             // providerSettingsBindingSource8
@@ -391,7 +391,7 @@
             // submitBtn
             // 
             this.submitBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.submitBtn.Location = new System.Drawing.Point(433, 3);
+            this.submitBtn.Location = new System.Drawing.Point(447, 3);
             this.submitBtn.Name = "submitBtn";
             this.submitBtn.Size = new System.Drawing.Size(67, 23);
             this.submitBtn.TabIndex = 1;
@@ -407,9 +407,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(599, 354);
+            this.ClientSize = new System.Drawing.Size(637, 359);
             this.Controls.Add(this.mainTableLayout);
-            this.MinimumSize = new System.Drawing.Size(614, 391);
+            this.MinimumSize = new System.Drawing.Size(653, 397);
             this.Name = "Settings";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

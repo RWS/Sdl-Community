@@ -13,7 +13,6 @@ namespace Sdl.Community.ExcelTerminology.Services
     {
         private readonly string _persistancePath;
         private List<ProviderSettings> _providerSettingList = new List<ProviderSettings>();
-        private Uri _providerSettinngsUri;
 
         public PersistenceService()
         {
@@ -21,7 +20,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                 @"SDL Community\ExcelTerminology\excelTerminology.json");
         }
 
-        public void Save()
+        internal void WriteToFile()
         {
 
             if (!File.Exists(_persistancePath))
@@ -30,63 +29,98 @@ namespace Sdl.Community.ExcelTerminology.Services
                 if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
-                }
-            }
 
-            var json = JsonConvert.SerializeObject(_providerSettingList);
-            File.WriteAllText(_persistancePath, json);
+                }
+
+            }
+            if (!File.Exists(_persistancePath))
+            {
+                var json = JsonConvert.SerializeObject(_providerSettingList);
+                File.WriteAllText(_persistancePath, json);
+            }
+            else
+            {
+                var json = JsonConvert.SerializeObject(_providerSettingList);
+                File.WriteAllText(_persistancePath, json);
+            }
+            
         }
 
         public void AddSettings(ProviderSettings providerSettings)
         {
-            GetProviderSettingsList();
-            _providerSettinngsUri = providerSettings.Uri;
-
-            var result = _providerSettingList.FirstOrDefault(s => s.Uri == providerSettings.Uri);
-
-            if (result != null)
+            if (providerSettings == null)
             {
-                var index = _providerSettingList.FindIndex(s => s.Uri == providerSettings.Uri);
-
-                result.WorksheetName = providerSettings.WorksheetName;
-                result.Uri = providerSettings.Uri;
-                result.ApprovedColumn = providerSettings.ApprovedColumn;
-                result.HasHeader = providerSettings.HasHeader;
-                result.Separator = providerSettings.Separator;
-                result.SourceColumn = providerSettings.SourceColumn;
-                result.SourceLanguage = providerSettings.SourceLanguage;
-                result.TargetColumn = providerSettings.TargetColumn;
-                result.TermFilePath = providerSettings.TermFilePath;
-                result.TargetLanguage = providerSettings.TargetLanguage;
-
-                _providerSettingList[index] = result;
+                throw new NullReferenceException("Provider settings cannot be null");
             }
-            else
+
+            if (providerSettings.Uri == null)
             {
-                if (providerSettings.Uri != null)
+                throw new NullReferenceException("Uri cannot be null");
+            }
+
+            GetProviderSettingsList();
+
+            if (providerSettings.Uri != null)
+            {
+
+                var result = _providerSettingList.FirstOrDefault(s => s.Uri == providerSettings.Uri);
+
+                if (result != null)
+                {
+                  
+                    result.WorksheetName = providerSettings.WorksheetName;
+                    result.Uri = providerSettings.Uri;
+                    result.ApprovedColumn = providerSettings.ApprovedColumn;
+                    result.HasHeader = providerSettings.HasHeader;
+                    result.Separator = providerSettings.Separator;
+                    result.SourceColumn = providerSettings.SourceColumn;
+                    result.SourceLanguage = providerSettings.SourceLanguage;
+                    result.TargetColumn = providerSettings.TargetColumn;
+                    result.TermFilePath = providerSettings.TermFilePath;
+                    result.TargetLanguage = providerSettings.TargetLanguage;
+
+                }
+
+                else
                 {
                     _providerSettingList.Add(providerSettings);
                 }
+                
             }
+
+            WriteToFile();
+          
         }
 
         public void GetProviderSettingsList()
         {
-            var json = File.ReadAllText(_persistancePath);
 
-            _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
+            if (!File.Exists(_persistancePath))
+            {
+                var json = JsonConvert.SerializeObject(_providerSettingList);
+                File.WriteAllText(_persistancePath, json);
+            }
+            else
+            {
+                var json = File.ReadAllText(_persistancePath);
+
+                _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
+            }
+            
         }
 
         public ProviderSettings Load(Uri providerUri)
         {
-            if (!File.Exists(_persistancePath)) return null;
-            var json = File.ReadAllText(_persistancePath);
 
-            var result = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
+            if (providerUri == null)
+            {
+                throw new NullReferenceException("Uri cannot be null");
+            }
 
-            var settings = result.FirstOrDefault(r => r.Uri == providerUri);
+            GetProviderSettingsList();
+            var providerSettings = _providerSettingList.FirstOrDefault(p => p.Uri == providerUri);
 
-            return settings;
+            return providerSettings;
         }
     }
 }

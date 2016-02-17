@@ -142,11 +142,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 throw;
             }
         }
-
-        public void SetUri(Uri uri)
-        {
-             _uri = uri;
-        }
      
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
         {

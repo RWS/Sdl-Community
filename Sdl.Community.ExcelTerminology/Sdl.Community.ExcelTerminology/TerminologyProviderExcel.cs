@@ -51,6 +51,10 @@ namespace Sdl.Community.ExcelTerminology
             _termEntries = new List<ExcelEntry>();
         }
 
+        public TerminologyProviderExcel(ProviderSettings providerSettings)
+        {
+            _providerSettings = providerSettings;
+        }
         public async Task LoadEntries()
         {
             try
