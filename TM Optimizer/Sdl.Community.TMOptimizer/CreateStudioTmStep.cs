@@ -60,7 +60,9 @@ namespace Sdl.Community.TMOptimizer
                     sourceCulture,
                     targetCulture,
                     fuzzyIndexes,
-                    recognizers);
+                    recognizers,
+                    TokenizerFlags.DefaultFlags,
+                    WordCountFlags.DefaultFlags );
 
             ReportProgress(25);
             tm.Save();

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Studio.AssemblyResolver;
 
 namespace Sdl.Community.TMOptimizer
 {
@@ -15,6 +16,7 @@ namespace Sdl.Community.TMOptimizer
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            AssemblyResolver.Resolve();
             // First assign the MainWindow to the main form
             TMCleanerViewModel viewModel = new TMCleanerViewModel();
             MainWindow window = new MainWindow();
