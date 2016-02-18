@@ -107,13 +107,13 @@ namespace Sdl.Community.ExcelTerminology.Services
                 excelTerm.SourceCulture = _providerSettings.SourceLanguage;
             }
 
-            if (columnLetter == _providerSettings.TargetColumn)
+            if (columnLetter == _providerSettings.TargetColumn.ToUpper())
             {
                 excelTerm.Target = cell.Text;
                 excelTerm.TargetCulture = _providerSettings.TargetLanguage;
             }
 
-            if (columnLetter == _providerSettings.ApprovedColumn)
+            if (columnLetter == _providerSettings.ApprovedColumn.ToUpper())
             {
                 excelTerm.Approved = cell.Text;
             }

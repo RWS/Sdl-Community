@@ -66,6 +66,9 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            if (DialogResult == DialogResult.Cancel ||
+                DialogResult == DialogResult.No ||
+                DialogResult == DialogResult.Abort) return;
             if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
@@ -75,9 +78,9 @@ namespace Sdl.Community.ExcelTerminology.Ui
             var provider = new ProviderSettings
             {
                 HasHeader = hasHeader.Checked,
-                ApprovedColumn = approvedBox.Text,
-                SourceColumn = sourceBox.Text,
-                TargetColumn = targetBox.Text,
+                ApprovedColumn = approvedBox.Text.ToUpper(),
+                SourceColumn = sourceBox.Text.ToUpper(),
+                TargetColumn = targetBox.Text.ToUpper(),
                 SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
                 TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],

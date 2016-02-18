@@ -17,7 +17,7 @@ namespace Sdl.Community.ExcelTerminology
 {
     public class TerminologyProviderExcel: AbstractTerminologyProvider
     {
-        public const string ExcelUriTemplate = "exceltbx://";
+        public const string ExcelUriTemplate = "excelglossary://";
 
         private List<ExcelEntry> _termEntries;
 

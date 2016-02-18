@@ -332,7 +332,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 throw;
             }
         }
-
     }
 
 
