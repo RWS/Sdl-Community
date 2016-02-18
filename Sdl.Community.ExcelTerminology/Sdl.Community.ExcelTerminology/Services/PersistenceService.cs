@@ -29,21 +29,11 @@ namespace Sdl.Community.ExcelTerminology.Services
                 if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
-
                 }
+            }
 
-            }
-            if (!File.Exists(_persistancePath))
-            {
-                var json = JsonConvert.SerializeObject(_providerSettingList);
-                File.WriteAllText(_persistancePath, json);
-            }
-            else
-            {
-                var json = JsonConvert.SerializeObject(_providerSettingList);
-                File.WriteAllText(_persistancePath, json);
-            }
-            
+            var json = JsonConvert.SerializeObject(_providerSettingList);
+            File.WriteAllText(_persistancePath, json);
         }
 
         public void AddSettings(ProviderSettings providerSettings)
@@ -94,19 +84,13 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         public void GetProviderSettingsList()
         {
-
-            if (!File.Exists(_persistancePath))
+            if (!File.Exists(_persistancePath)) return;
+            var json = File.ReadAllText(_persistancePath);
+            if (!string.IsNullOrEmpty(json))
             {
-                var json = JsonConvert.SerializeObject(_providerSettingList);
-                File.WriteAllText(_persistancePath, json);
-            }
-            else
-            {
-                var json = File.ReadAllText(_persistancePath);
-
                 _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
             }
-            
+
         }
 
         public ProviderSettings Load(Uri providerUri)

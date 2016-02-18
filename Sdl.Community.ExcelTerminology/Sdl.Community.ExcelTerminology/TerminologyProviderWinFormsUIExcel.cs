@@ -50,6 +50,7 @@ namespace Sdl.Community.ExcelTerminology
             catch (Exception ex)
             {
                 TelemetryService.Instance.AddException(ex);
+                throw;
             }
 
             return result.ToArray();

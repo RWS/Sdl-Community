@@ -36,17 +36,11 @@
             this.customSettingsGroupBox = new System.Windows.Forms.GroupBox();
             this.customSettingsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.targetLanguageComboBox = new System.Windows.Forms.ComboBox();
-            this.providerSettingsBindingSource6 = new System.Windows.Forms.BindingSource(this.components);
             this.sourceLanguageComboBox = new System.Windows.Forms.ComboBox();
-            this.providerSettingsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
             this.approvedBox = new System.Windows.Forms.TextBox();
-            this.providerSettingsBindingSource5 = new System.Windows.Forms.BindingSource(this.components);
             this.targetBox = new System.Windows.Forms.TextBox();
-            this.providerSettingsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.sourceBox = new System.Windows.Forms.TextBox();
-            this.providerSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.hasHeader = new System.Windows.Forms.CheckBox();
-            this.providerSettingsBindingSource4 = new System.Windows.Forms.BindingSource(this.components);
             this.customSourceLbl = new System.Windows.Forms.Label();
             this.customTargetLbl = new System.Windows.Forms.Label();
             this.customApprovedLbl = new System.Windows.Forms.Label();
@@ -54,19 +48,26 @@
             this.targetLanguageLbl = new System.Windows.Forms.Label();
             this.textSeparatorLbl = new System.Windows.Forms.Label();
             this.separatorTextBox = new System.Windows.Forms.TextBox();
-            this.providerSettingsBindingSource7 = new System.Windows.Forms.BindingSource(this.components);
             this.pathLbl = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.browseBtn = new System.Windows.Forms.Button();
             this.pathTextBox = new System.Windows.Forms.TextBox();
-            this.providerSettingsBindingSource8 = new System.Windows.Forms.BindingSource(this.components);
             this.submitBtn = new System.Windows.Forms.Button();
+            this.providerSettingsBindingSource6 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource2 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource5 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource4 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource7 = new System.Windows.Forms.BindingSource(this.components);
+            this.providerSettingsBindingSource8 = new System.Windows.Forms.BindingSource(this.components);
             this.providerSettingsBindingSource3 = new System.Windows.Forms.BindingSource(this.components);
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.settingsLayoutPanel.SuspendLayout();
             this.customSettingsGroupBox.SuspendLayout();
             this.customSettingsLayoutPanel.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource5)).BeginInit();
@@ -74,7 +75,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource7)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource3)).BeginInit();
             this.SuspendLayout();
@@ -88,7 +88,7 @@
             this.mainTableLayout.Controls.Add(this.settingsLayoutPanel, 0, 1);
             this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
-            this.mainTableLayout.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mainTableLayout.Margin = new System.Windows.Forms.Padding(4);
             this.mainTableLayout.Name = "mainTableLayout";
             this.mainTableLayout.RowCount = 2;
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 86F));
@@ -106,11 +106,11 @@
             this.headerLayoutPanel.Controls.Add(this.descriptionLbl, 0, 0);
             this.headerLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.headerLayoutPanel.Location = new System.Drawing.Point(4, 4);
-            this.headerLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.headerLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.headerLayoutPanel.Name = "headerLayoutPanel";
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 79F));
+            this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 78F));
             this.headerLayoutPanel.Size = new System.Drawing.Size(841, 78);
             this.headerLayoutPanel.TabIndex = 0;
             // 
@@ -136,7 +136,7 @@
             this.settingsLayoutPanel.Controls.Add(this.customSettingsGroupBox, 0, 0);
             this.settingsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.settingsLayoutPanel.Location = new System.Drawing.Point(4, 90);
-            this.settingsLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.settingsLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.settingsLayoutPanel.Name = "settingsLayoutPanel";
             this.settingsLayoutPanel.RowCount = 1;
             this.settingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -150,9 +150,9 @@
             this.customSettingsGroupBox.Controls.Add(this.customSettingsLayoutPanel);
             this.customSettingsGroupBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customSettingsGroupBox.Location = new System.Drawing.Point(4, 4);
-            this.customSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.customSettingsGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.customSettingsGroupBox.Name = "customSettingsGroupBox";
-            this.customSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.customSettingsGroupBox.Padding = new System.Windows.Forms.Padding(4);
             this.customSettingsGroupBox.Size = new System.Drawing.Size(833, 340);
             this.customSettingsGroupBox.TabIndex = 1;
             this.customSettingsGroupBox.TabStop = false;
@@ -162,7 +162,7 @@
             // 
             this.customSettingsLayoutPanel.ColumnCount = 2;
             this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 697F));
+            this.customSettingsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 699F));
             this.customSettingsLayoutPanel.Controls.Add(this.targetLanguageComboBox, 1, 6);
             this.customSettingsLayoutPanel.Controls.Add(this.sourceLanguageComboBox, 1, 5);
             this.customSettingsLayoutPanel.Controls.Add(this.approvedBox, 1, 4);
@@ -180,7 +180,7 @@
             this.customSettingsLayoutPanel.Controls.Add(this.tableLayoutPanel1, 1, 8);
             this.customSettingsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customSettingsLayoutPanel.Location = new System.Drawing.Point(4, 19);
-            this.customSettingsLayoutPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.customSettingsLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.customSettingsLayoutPanel.Name = "customSettingsLayoutPanel";
             this.customSettingsLayoutPanel.RowCount = 9;
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -201,14 +201,10 @@
             this.targetLanguageComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetLanguageComboBox.FormattingEnabled = true;
             this.targetLanguageComboBox.Location = new System.Drawing.Point(130, 155);
-            this.targetLanguageComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.targetLanguageComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.targetLanguageComboBox.Name = "targetLanguageComboBox";
             this.targetLanguageComboBox.Size = new System.Drawing.Size(691, 24);
             this.targetLanguageComboBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource6
-            // 
-            this.providerSettingsBindingSource6.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // sourceLanguageComboBox
             // 
@@ -216,72 +212,52 @@
             this.sourceLanguageComboBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceLanguageComboBox.FormattingEnabled = true;
             this.sourceLanguageComboBox.Location = new System.Drawing.Point(130, 123);
-            this.sourceLanguageComboBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sourceLanguageComboBox.Margin = new System.Windows.Forms.Padding(4);
             this.sourceLanguageComboBox.Name = "sourceLanguageComboBox";
             this.sourceLanguageComboBox.Size = new System.Drawing.Size(691, 24);
             this.sourceLanguageComboBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource2
-            // 
-            this.providerSettingsBindingSource2.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // approvedBox
             // 
             this.approvedBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource5, "ApprovedColumn", true));
             this.approvedBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.approvedBox.Location = new System.Drawing.Point(130, 93);
-            this.approvedBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.approvedBox.Margin = new System.Windows.Forms.Padding(4);
             this.approvedBox.Name = "approvedBox";
             this.approvedBox.Size = new System.Drawing.Size(691, 22);
             this.approvedBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource5
-            // 
-            this.providerSettingsBindingSource5.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // targetBox
             // 
             this.targetBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource1, "TargetColumn", true));
             this.targetBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.targetBox.Location = new System.Drawing.Point(130, 63);
-            this.targetBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.targetBox.Margin = new System.Windows.Forms.Padding(4);
             this.targetBox.Name = "targetBox";
             this.targetBox.Size = new System.Drawing.Size(691, 22);
             this.targetBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource1
-            // 
-            this.providerSettingsBindingSource1.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // sourceBox
             // 
             this.sourceBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource, "SourceColumn", true));
             this.sourceBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sourceBox.Location = new System.Drawing.Point(130, 33);
-            this.sourceBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sourceBox.Margin = new System.Windows.Forms.Padding(4);
             this.sourceBox.Name = "sourceBox";
             this.sourceBox.Size = new System.Drawing.Size(691, 22);
             this.sourceBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource
-            // 
-            this.providerSettingsBindingSource.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // hasHeader
             // 
             this.hasHeader.AutoSize = true;
             this.hasHeader.DataBindings.Add(new System.Windows.Forms.Binding("Checked", this.providerSettingsBindingSource4, "HasHeader", true));
             this.hasHeader.Location = new System.Drawing.Point(4, 4);
-            this.hasHeader.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.hasHeader.Margin = new System.Windows.Forms.Padding(4);
             this.hasHeader.Name = "hasHeader";
             this.hasHeader.Size = new System.Drawing.Size(104, 21);
             this.hasHeader.TabIndex = 6;
             this.hasHeader.Text = "Has header";
             this.hasHeader.UseVisualStyleBackColor = true;
-            // 
-            // providerSettingsBindingSource4
-            // 
-            this.providerSettingsBindingSource4.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // customSourceLbl
             // 
@@ -348,14 +324,10 @@
             this.separatorTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource7, "Separator", true));
             this.separatorTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.separatorTextBox.Location = new System.Drawing.Point(130, 187);
-            this.separatorTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.separatorTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.separatorTextBox.Name = "separatorTextBox";
             this.separatorTextBox.Size = new System.Drawing.Size(691, 22);
             this.separatorTextBox.TabIndex = 1;
-            // 
-            // providerSettingsBindingSource7
-            // 
-            this.providerSettingsBindingSource7.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // pathLbl
             // 
@@ -379,7 +351,7 @@
             this.tableLayoutPanel1.Controls.Add(this.submitBtn, 2, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(130, 217);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.MinimumSize = new System.Drawing.Size(0, 113);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 1;
@@ -390,7 +362,7 @@
             // browseBtn
             // 
             this.browseBtn.Location = new System.Drawing.Point(487, 4);
-            this.browseBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.browseBtn.Margin = new System.Windows.Forms.Padding(4);
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(88, 28);
             this.browseBtn.TabIndex = 1;
@@ -403,26 +375,54 @@
             this.pathTextBox.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.providerSettingsBindingSource8, "TermFilePath", true));
             this.pathTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pathTextBox.Location = new System.Drawing.Point(4, 4);
-            this.pathTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pathTextBox.Margin = new System.Windows.Forms.Padding(4);
             this.pathTextBox.Name = "pathTextBox";
             this.pathTextBox.Size = new System.Drawing.Size(475, 22);
             this.pathTextBox.TabIndex = 0;
             // 
-            // providerSettingsBindingSource8
-            // 
-            this.providerSettingsBindingSource8.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
-            // 
             // submitBtn
             // 
             this.submitBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.submitBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.submitBtn.Location = new System.Drawing.Point(598, 4);
-            this.submitBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.submitBtn.Margin = new System.Windows.Forms.Padding(4);
             this.submitBtn.Name = "submitBtn";
             this.submitBtn.Size = new System.Drawing.Size(89, 28);
             this.submitBtn.TabIndex = 1;
             this.submitBtn.Text = "Submit";
             this.submitBtn.UseVisualStyleBackColor = true;
-            this.submitBtn.Click += new System.EventHandler(this.submitBtn_Click);
+            // 
+            // providerSettingsBindingSource6
+            // 
+            this.providerSettingsBindingSource6.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource2
+            // 
+            this.providerSettingsBindingSource2.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource5
+            // 
+            this.providerSettingsBindingSource5.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource1
+            // 
+            this.providerSettingsBindingSource1.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource
+            // 
+            this.providerSettingsBindingSource.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource4
+            // 
+            this.providerSettingsBindingSource4.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource7
+            // 
+            this.providerSettingsBindingSource7.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
+            // 
+            // providerSettingsBindingSource8
+            // 
+            this.providerSettingsBindingSource8.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
             // 
             // providerSettingsBindingSource3
             // 
@@ -430,11 +430,12 @@
             // 
             // Settings
             // 
+            this.AcceptButton = this.submitBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(849, 442);
             this.Controls.Add(this.mainTableLayout);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(865, 478);
             this.Name = "Settings";
             this.ShowIcon = false;
@@ -448,6 +449,8 @@
             this.customSettingsGroupBox.ResumeLayout(false);
             this.customSettingsLayoutPanel.ResumeLayout(false);
             this.customSettingsLayoutPanel.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource5)).EndInit();
@@ -455,8 +458,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource7)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.providerSettingsBindingSource3)).EndInit();
             this.ResumeLayout(false);

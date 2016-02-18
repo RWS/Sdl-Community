@@ -21,13 +21,22 @@ namespace Sdl.Community.ExcelTerminology
             ITerminologyProviderCredentialStore credentials)
         {
             TelemetryService.Instance.Init();
-            var persistenceService = new PersistenceService();
-            
-            var termSearchService = new NormalTermSeachService();
-            var providerSettings = persistenceService.Load(terminologyProviderUri);
-            var terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
-            Task.Run(terminologyProvider.LoadEntries);
+            TerminologyProviderExcel terminologyProvider = null;
+            try
+            {
+                var persistenceService = new PersistenceService();
+
+                var termSearchService = new NormalTermSeachService();
+                var providerSettings = persistenceService.Load(terminologyProviderUri);
+                terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+                Task.Run(terminologyProvider.LoadEntries);
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+            }
             return terminologyProvider;
+
         }
     }
 }

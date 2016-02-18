@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
@@ -63,32 +64,30 @@ namespace Sdl.Community.ExcelTerminology.Ui
             
         }
 
-        private void submitBtn_Click(object sender, EventArgs e)
+        protected override void OnClosing(CancelEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
-                return;
+                e.Cancel = true;
             }
-            
+
             var provider = new ProviderSettings
             {
                 HasHeader = hasHeader.Checked,
                 ApprovedColumn = approvedBox.Text,
                 SourceColumn = sourceBox.Text,
                 TargetColumn = targetBox.Text,
-                SourceLanguage = (CultureInfo) sourceLanguageComboBox.SelectedItem,
-                TargetLanguage = (CultureInfo) targetLanguageComboBox.SelectedItem,
+                SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
+                TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],
                 TermFilePath = pathTextBox.Text,
             };
 
             _providerSettings = provider;
-
-            Close();
         }
 
-       public ProviderSettings GetSettings()
+        public ProviderSettings GetSettings()
         {
             return _providerSettings;
         }
