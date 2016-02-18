@@ -44,6 +44,10 @@ namespace Sdl.Community.ExcelTerminology
 
         public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
+            if (providerSettings == null) throw new ArgumentNullException(nameof(providerSettings));
+            if (termSearchService == null) throw new ArgumentNullException(nameof(termSearchService));
+
+
             _providerSettings = providerSettings; 
   
             _termSearchService = termSearchService;

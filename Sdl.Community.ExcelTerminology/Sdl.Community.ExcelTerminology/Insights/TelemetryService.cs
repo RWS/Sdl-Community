@@ -18,7 +18,7 @@ namespace Sdl.Community.ExcelTerminology.Insights
 
         private TelemetryService()
         {
-            _telemetryClient = new TelemetryClient {InstrumentationKey = ""};
+            _telemetryClient = new TelemetryClient ();
             TelemetryConfiguration.Active.ContextInitializers.Add(new UserSessionInitializer());
 
             HandleExcetion();
@@ -34,14 +34,19 @@ namespace Sdl.Community.ExcelTerminology.Insights
         public void AddMetric(string name, double value, IDictionary<string,string> properties= null)
         {
             _telemetryClient.TrackMetric(name, value, properties);
-            _telemetryClient.Flush();
+          //  _telemetryClient.Flush();
         }
 
         public void AddException(Exception ex)
         {
             _telemetryClient.TrackException(ex);
-            _telemetryClient.Flush();
+          //  _telemetryClient.Flush();
 
+        }
+
+        public void TrackPage(string page)
+        {
+            _telemetryClient.TrackPageView(page);
         }
         public static TelemetryService Instance => _lazy.Value;
 

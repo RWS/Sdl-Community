@@ -70,10 +70,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetGridView.AllowUserToAddRows = true;
 
             sourceColumn.IsEditable = true;
+            TelemetryService.Instance.TrackPage("Terms viewer");
 
         }
 
-       
+
 
         public void JumpToTerm(IEntry entry)
         {
