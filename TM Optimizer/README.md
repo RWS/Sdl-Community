@@ -49,7 +49,7 @@ You want to add a new functionality or you spot a bug please fill free to create
 
 ##Development Prerequisites
 
-* [Studio 2014](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
+* [Studio 2015](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
 * [Studio 2014 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
 * [Visual Studio 2013](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express edition can be used
 
