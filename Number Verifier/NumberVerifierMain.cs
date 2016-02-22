@@ -641,7 +641,7 @@ namespace Sdl.Community.NumberVerifier
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
             if (thousandSeparators != String.Empty &&
-                Regex.IsMatch(number, @" ^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                 // e.g 1,000,000
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
@@ -658,7 +658,7 @@ namespace Sdl.Community.NumberVerifier
                     Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
                 normalizedNumber = usedDecimalSeparator != String.Empty
                     ? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
-                    : number;
+                    : normalizedNumber;
             }
             else if (thousandSeparators != String.Empty &&
                      Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
@@ -754,7 +754,7 @@ namespace Sdl.Community.NumberVerifier
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-                     &&(VerificationSettings.ExcludeUntranslatedSegments == false && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+                     &&(VerificationSettings.ExcludeUntranslatedSegments.Value == false || segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Translated);
         }
                 #endregion
     }
