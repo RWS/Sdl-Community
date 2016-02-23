@@ -19,12 +19,5 @@ namespace Sdl.Community.ExcelTerminology.Model
         public char Separator { get; set; }
         public string WorksheetName { get; set; }
         public Uri Uri { get; set; }
-
-        public string GetExcelRangeAddress()
-        {
-            return string.IsNullOrEmpty(ApprovedColumn) 
-                ? $"{SourceColumn.ToUpper()}:{TargetColumn.ToUpper()}" 
-                : $"{SourceColumn.ToUpper()}:{ApprovedColumn.ToUpper()}";
-        }
     }
 }

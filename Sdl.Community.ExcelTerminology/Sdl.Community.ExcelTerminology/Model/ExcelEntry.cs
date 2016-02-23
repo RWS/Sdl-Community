@@ -14,5 +14,6 @@ namespace Sdl.Community.ExcelTerminology.Model
         public IList<IEntryTransaction> Transactions { get; set; }
         public IList<IEntryLanguage> Languages { get; set; }
         public string SearchText { get; set; }
+        public bool IsDirty { get; set; } 
     }
 }

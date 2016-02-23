@@ -19,19 +19,22 @@ namespace Sdl.Community.ExcelTerminology.Ui
         private readonly ProviderSettings _providerSettings;
         private readonly EntryTransformerService _transformerService;
         private List<ExcelEntry> _terms = new List<ExcelEntry>();
+        private readonly List<int> _newTerms = new List<int>();
+        private readonly TerminologyProviderExcel _terminologyProviderExcel;
         private Uri _uri;
 
         public TermsList()
         {
             InitializeComponent();
 
-            
+
         }
 
-        public TermsList(List<ExcelEntry> terms,Uri uri):this()
+        public TermsList(TerminologyProviderExcel terminologyProviderExcel) : this()
         {
-            _terms = terms;
-            _uri = uri;
+            _terminologyProviderExcel = terminologyProviderExcel;
+            _terms = _terminologyProviderExcel.Terms;
+            _uri = _terminologyProviderExcel.Uri;
 
             var persistenceService = new PersistenceService();
             _providerSettings = persistenceService.Load(_uri);
@@ -46,11 +49,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
             _excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService,
                 _transformerService);
         }
-        
+
         public void SetTerms(List<ExcelEntry> terms)
         {
             _terms = terms;
-            sourceListView.SetObjects(_terms);
+            sourceListView.SetObjects(terms);
             sourceListView.SelectedIndex = 0;
         }
 
@@ -70,7 +73,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetGridView.AllowUserToAddRows = true;
 
             sourceColumn.IsEditable = true;
-            TelemetryService.Instance.TrackPage("Terms viewer");
 
         }
 
@@ -106,35 +108,33 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void AddTermInternal(string source, string target)
         {
+            var excelTerm = new ExcelTerm
+            {
+                SourceCulture = _providerSettings.SourceLanguage,
+                TargetCulture = _providerSettings.TargetLanguage,
+                Source = source,
+                Target = target
+            };
+            AddTermInternal(excelTerm);
+        }
+        private void AddTermInternal(ExcelTerm excelTerm)
+        {
             try
             {
-                var excelTerm = new ExcelTerm
-                {
-                    SourceCulture = _providerSettings.SourceLanguage,
-                    TargetCulture = _providerSettings.TargetLanguage,
-                    Source = source,
-                    Target = target
-                };
-
+                
                 var entryLanguages = _transformerService.CreateEntryLanguages(excelTerm);
-
-                var maxId = 0;
-                if (_terms.Count > 0)
-                {
-                    maxId = _terms.Max(term => term.Id);
-                }
 
                 var excelEntry = new ExcelEntry
                 {
-                    Id = maxId + 1,
+                    Id = 0,
                     Fields = new List<IEntryField>(),
                     Languages = entryLanguages,
-                    SearchText = source
+                    SearchText = excelTerm.Source,
+                    IsDirty = true
 
                 };
-                
+        
                 sourceListView.AddObject(excelEntry);
-                _terms.Add(excelEntry);
                 JumpToTerm(excelEntry);
             }
             catch (Exception ex)
@@ -143,12 +143,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 throw;
             }
         }
-     
+
         public void AddAndEdit(IEntry entry, ExcelDataGrid excelDataGrid)
         {
             try
             {
-                var selectedTerm = _terms.FirstOrDefault(item => item.Id == entry.Id);
+                var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+
+                var selectedTerm = terms.FirstOrDefault(item => item.Id == entry.Id);
                 var termToAdd = new EntryTerm
                 {
                     Value = excelDataGrid.Term
@@ -161,6 +163,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     Target = excelDataGrid.Term
                 };
                 var source = (ExcelEntry) entry;
+                source.IsDirty = true;
                 excelTerm.Source = source.SearchText;
 
                 var exist = false;
@@ -180,7 +183,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
                     {
                         selectedTerm.Languages[1].Terms.Add(termToAdd);
 
-                        _terms[entry.Id].Languages = selectedTerm.Languages;
+                        terms[entry.Id].Languages = selectedTerm.Languages;
                     }
 
                 }
@@ -206,8 +209,14 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 if (sourceListView.SelectedObject == null) return;
                 var entry = new ExcelTerm();
+                var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
 
                 var source = (ExcelEntry) sourceListView.SelectedObject;
+                if (source.Id == 0)
+                {
+                    var maxId = terms.Max(x => x.Id);
+                    source.Id = maxId + 1;
+                }
                 var entryId = source.Id;
                 entry.Source = source.SearchText;
 
@@ -226,8 +235,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 var targetTerms = bsTarget.DataSource as List<ExcelDataGrid>;
                 if (targetTerms != null)
                 {
-                    var termValue = string.Join("|", targetTerms.Select(x => x.Term));
-                    var approvedValue = string.Join("|", targetTerms.Select(x => x.Approved));
+                    var termValue = string.Join(_providerSettings.Separator.ToString(), targetTerms.Select(x => x.Term));
+                    var approvedValue = string.Join(_providerSettings.Separator.ToString(), targetTerms.Select(x => x.Approved));
                     entry.Target = termValue;
                     entry.Approved = approvedValue;
                 }
@@ -235,8 +244,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
 
                 var entryLanguage = _transformerService.CreateEntryLanguages(entry);
-                var entryToUpdate = _terms.Find(item => item.Id == entryId);
-                
+                var entryToUpdate = terms.Find(item => item.Id == entryId);
+
                 if (entryToUpdate != null)
                 {
 
@@ -244,6 +253,11 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
                 }
                 await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
+                source.IsDirty = false;
+                if (_newTerms.Contains(entryId))
+                {
+                    _newTerms.Remove(entryId);
+                }
             }
             catch (Exception ex)
             {
@@ -258,15 +272,17 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 var rowIndex = e.ItemIndex;
 
+                var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+
 
                 var result = new List<ExcelDataGrid>();
-                if (rowIndex == 0 && _terms.Count == 0)
+                if (rowIndex == 0 && terms.Count == 0)
                 {
                     bsTarget.DataSource = result;
                     bsTarget.AllowNew = false;
                 }
-                if (rowIndex >= _terms.Count) return;
-                var item = _terms[rowIndex];
+                if (rowIndex >= terms.Count) return;
+                var item = terms[rowIndex];
                 foreach (var target in item.Languages)
                 {
                     var targetCast = (ExcelEntryLanguage) target;
@@ -300,7 +316,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 var source = (ExcelEntry) sourceListView.SelectedObject;
                 sourceListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
 
-                _terms.Remove(source);
                 sourceListView.RemoveObject(source); //remove from listview
                 sourceListView.SelectedIndex = 0;
                 sourceListView.Focus();
@@ -332,7 +347,163 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 throw;
             }
         }
+
+        private async void btnSync_Click(object sender, EventArgs e)
+        {
+            try
+            {
+              
+                var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+                //get all terms that are new or have any changes
+                var uiAddedTerms = terms.Where(x => x.IsDirty).ToList();
+                //load excel entries from file
+                await _terminologyProviderExcel.LoadEntries();
+                //load in memory the newly loaded tersm
+                terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+                var maxId = terms.Max(x => x.Id);
+                var termsToBeSaved = new Dictionary<int, ExcelTerm>();
+                foreach (var newTerm in uiAddedTerms)
+                {
+                    var ignoreTerm = false;
+                    if (newTerm.Id == 0)
+                    {
+                        //if we have newly added term then the id is 0 so we need to 
+                        //assing a new id which is the max row numbers
+                        maxId++;
+                        newTerm.Id = maxId;
+                        newTerm.IsDirty = false;
+                        terms.Add(newTerm);
+                    }
+                    else
+                    {
+                        //if we have an existing term that has some changes then we 
+                        //need to look into the newly loaded from excel terms
+                        // and see if we have the same terms
+                        var existingTerms = terms.Where(
+                            x => x.SearchText.Equals(newTerm.SearchText, StringComparison.InvariantCultureIgnoreCase))
+                            .ToList();
+
+                        foreach (var existingTerm in existingTerms)
+                        {
+                            if (existingTerm.Id != newTerm.Id)
+                            {
+                                //if we found terms that have the same text and they are comming 
+                                //from excel we ignore the changes made in the viewer (lose them)
+                                ignoreTerm = true;
+                                continue;
+                            }
+                            //we merge the terms from excel with the ones from memory
+                            newTerm.IsDirty = false;
+
+                            var existingTargetLanguage =
+                                existingTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
+                            var newTargetLanguage =
+                                newTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
+                            foreach (var newTargetTerm in newTargetLanguage.Terms.Where(newTargetTerm => !existingTargetLanguage.Terms.Any(
+                                x =>
+                                    x.Value.Equals(newTargetTerm.Value,
+                                        StringComparison.InvariantCultureIgnoreCase))))
+                            {
+                                existingTargetLanguage.Terms.Add(newTargetTerm);
+                            }
+                            //we want to save in the excel the merge result so we need to override the value to be saved
+                            newTargetLanguage.Terms = existingTargetLanguage.Terms;
+
+                        }
+                      
+                    }
+                    if (!ignoreTerm)
+                    {
+                        termsToBeSaved.Add(newTerm.Id, newTerm.ToExcelTerm());
+                    }
+                }
+                //save all the entries to excel
+                await _excelTermProviderService.AddOrUpdateEntries(termsToBeSaved);
+                SetTerms(terms);
+                JumpToTerm(terms.FirstOrDefault());
+            }
+            catch (Exception ex)
+            {
+                TelemetryService.Instance.AddException(ex);
+                throw;
+            }
+        }
+
+        private void sourceListView_CellEditFinished(object sender, CellEditEventArgs e)
+        {
+           var termName =  e.NewValue as string;
+            var entryTerm = e.RowObject as ExcelEntry;
+            if (entryTerm == null) return;
+
+            var sourceEntryTerms = _transformerService.CreateEntryTerms(termName);
+            var sourceEntryLanguage = entryTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => x.IsSource);
+            if (sourceEntryLanguage == null)
+            {
+                var newSourceEntryLanguage = new ExcelEntryLanguage
+                {
+                    Locale =_providerSettings.SourceLanguage,
+                    Name = _providerSettings.SourceLanguage.EnglishName,
+                    Terms = sourceEntryTerms,
+                    Fields = new List<IEntryField>(),
+                    IsSource = true
+                };
+                entryTerm.Languages.Add(newSourceEntryLanguage);
+
+            }
+            else
+            {
+                sourceEntryLanguage.Terms = sourceEntryTerms;
+            }
+        }
+
+        private void bsTarget_CurrentItemChanged(object sender, EventArgs e)
+        {
+            if (bsTarget.Count == 0) return;
+            var currentSynonimEntry = bsTarget.Current as ExcelDataGrid;
+            if (currentSynonimEntry == null) return;
+            var excelEntry = sourceListView.SelectedObject as ExcelEntry;
+
+            var targetEntryLanguage = excelEntry?.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
+            if (targetEntryLanguage == null) return;
+
+            var targetTerm = targetEntryLanguage.Terms.FirstOrDefault(
+                x => x.Value.Equals(currentSynonimEntry.Term, StringComparison.InvariantCultureIgnoreCase));
+
+
+
+            if (targetTerm == null)
+            {
+                targetEntryLanguage.Terms.Clear();
+                var targetSynonims = bsTarget.DataSource as List<ExcelDataGrid>;
+                foreach (var targetSynonim in targetSynonims)
+                {
+                    var targetEntryTerms = _transformerService.CreateEntryTerms(targetSynonim.Term, targetSynonim.Approved);
+                    foreach (var targetEntryTerm in targetEntryTerms)
+                    {
+                    targetEntryLanguage.Terms.Add(targetEntryTerm);
+
+                    }
+                }
+                excelEntry.IsDirty = true;
+            }
+            else
+            {
+                var approvedField = targetTerm.Fields.FirstOrDefault(x => x.Name.Equals(EntryTransformerService.ApprovedFieldName));
+                if (approvedField == null ||
+                    approvedField.Value.Equals(currentSynonimEntry.Approved, StringComparison.InvariantCultureIgnoreCase))
+                    return;
+                targetTerm.Fields.Clear();
+                targetTerm.Fields.Add(new EntryField
+                {
+                    Name = EntryTransformerService.ApprovedFieldName,
+                    Value = currentSynonimEntry.Approved
+                });
+                excelEntry.IsDirty = true;
+            }
+
+         
+
+
+        }
     }
-
-
 }

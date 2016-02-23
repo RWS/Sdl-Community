@@ -37,6 +37,7 @@
             this.buttonsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.confirmBtn = new System.Windows.Forms.Button();
             this.addBtn = new System.Windows.Forms.Button();
+            this.btnSync = new System.Windows.Forms.Button();
             this.sourceListView = new BrightIdeasSoftware.FastObjectListView();
             this.sourceColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.deleteLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -52,8 +53,8 @@
             // mainLayoutPanel
             // 
             this.mainLayoutPanel.ColumnCount = 2;
-            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 35F));
+            this.mainLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.mainLayoutPanel.Controls.Add(this.targetGridView, 1, 0);
             this.mainLayoutPanel.Controls.Add(this.buttonsLayoutPanel, 1, 1);
             this.mainLayoutPanel.Controls.Add(this.sourceListView, 0, 0);
@@ -65,7 +66,6 @@
             this.mainLayoutPanel.RowCount = 2;
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
-            this.mainLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.mainLayoutPanel.Size = new System.Drawing.Size(717, 674);
             this.mainLayoutPanel.TabIndex = 0;
             // 
@@ -79,11 +79,11 @@
             this.Approved});
             this.targetGridView.DataSource = this.bsTarget;
             this.targetGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.targetGridView.Location = new System.Drawing.Point(362, 4);
+            this.targetGridView.Location = new System.Drawing.Point(254, 4);
             this.targetGridView.Margin = new System.Windows.Forms.Padding(4);
             this.targetGridView.Name = "targetGridView";
             this.targetGridView.RowHeadersVisible = false;
-            this.targetGridView.Size = new System.Drawing.Size(351, 604);
+            this.targetGridView.Size = new System.Drawing.Size(459, 604);
             this.targetGridView.TabIndex = 0;
             // 
             // Target
@@ -99,37 +99,44 @@
             this.Approved.HeaderText = "Approved";
             this.Approved.Name = "Approved";
             // 
+            // bsTarget
+            // 
+            this.bsTarget.CurrentItemChanged += new System.EventHandler(this.bsTarget_CurrentItemChanged);
+            // 
             // buttonsLayoutPanel
             // 
-            this.buttonsLayoutPanel.ColumnCount = 2;
-            this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.buttonsLayoutPanel.ColumnCount = 3;
+            this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33F));
+            this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34F));
             this.buttonsLayoutPanel.Controls.Add(this.confirmBtn, 1, 0);
             this.buttonsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
+            this.buttonsLayoutPanel.Controls.Add(this.btnSync, 2, 0);
             this.buttonsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonsLayoutPanel.Location = new System.Drawing.Point(362, 616);
+            this.buttonsLayoutPanel.Location = new System.Drawing.Point(254, 616);
             this.buttonsLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
             this.buttonsLayoutPanel.Name = "buttonsLayoutPanel";
             this.buttonsLayoutPanel.RowCount = 1;
             this.buttonsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.buttonsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.buttonsLayoutPanel.Size = new System.Drawing.Size(351, 54);
+            this.buttonsLayoutPanel.Size = new System.Drawing.Size(459, 54);
             this.buttonsLayoutPanel.TabIndex = 2;
             // 
             // confirmBtn
             // 
-            this.confirmBtn.Location = new System.Drawing.Point(179, 4);
+            this.confirmBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.confirmBtn.Location = new System.Drawing.Point(198, 4);
             this.confirmBtn.Margin = new System.Windows.Forms.Padding(4);
             this.confirmBtn.Name = "confirmBtn";
             this.confirmBtn.Size = new System.Drawing.Size(100, 28);
             this.confirmBtn.TabIndex = 1;
-            this.confirmBtn.Text = "Save";
+            this.confirmBtn.Text = "Save Entry";
             this.confirmBtn.UseVisualStyleBackColor = true;
             this.confirmBtn.Click += new System.EventHandler(this.confirmBtn_Click);
             // 
             // addBtn
             // 
-            this.addBtn.Location = new System.Drawing.Point(4, 4);
+            this.addBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addBtn.Location = new System.Drawing.Point(47, 4);
             this.addBtn.Margin = new System.Windows.Forms.Padding(4);
             this.addBtn.Name = "addBtn";
             this.addBtn.Size = new System.Drawing.Size(100, 28);
@@ -137,6 +144,17 @@
             this.addBtn.Text = "Add";
             this.addBtn.UseVisualStyleBackColor = true;
             this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
+            // 
+            // btnSync
+            // 
+            this.btnSync.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSync.Location = new System.Drawing.Point(356, 3);
+            this.btnSync.Name = "btnSync";
+            this.btnSync.Size = new System.Drawing.Size(100, 28);
+            this.btnSync.TabIndex = 3;
+            this.btnSync.Text = "Sync";
+            this.btnSync.UseVisualStyleBackColor = true;
+            this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
             // 
             // sourceListView
             // 
@@ -157,11 +175,13 @@
             this.sourceListView.MultiSelect = false;
             this.sourceListView.Name = "sourceListView";
             this.sourceListView.ShowGroups = false;
-            this.sourceListView.Size = new System.Drawing.Size(350, 604);
+            this.sourceListView.ShowItemToolTips = true;
+            this.sourceListView.Size = new System.Drawing.Size(242, 604);
             this.sourceListView.TabIndex = 3;
             this.sourceListView.UseCompatibleStateImageBehavior = false;
             this.sourceListView.View = System.Windows.Forms.View.Details;
             this.sourceListView.VirtualMode = true;
+            this.sourceListView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.sourceListView_CellEditFinished);
             this.sourceListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sourceListView_ItemSelectionChanged);
             // 
             // sourceColumn
@@ -183,7 +203,7 @@
             this.deleteLayoutPanel.RowCount = 1;
             this.deleteLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.deleteLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            this.deleteLayoutPanel.Size = new System.Drawing.Size(350, 54);
+            this.deleteLayoutPanel.Size = new System.Drawing.Size(242, 54);
             this.deleteLayoutPanel.TabIndex = 4;
             // 
             // deleteBtn
@@ -229,5 +249,6 @@
         private System.Windows.Forms.BindingSource bsTarget;
         private System.Windows.Forms.TableLayoutPanel deleteLayoutPanel;
         private System.Windows.Forms.Button deleteBtn;
+        private System.Windows.Forms.Button btnSync;
     }
 }

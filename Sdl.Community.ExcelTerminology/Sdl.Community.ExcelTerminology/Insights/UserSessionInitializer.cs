@@ -23,6 +23,7 @@ namespace Sdl.Community.ExcelTerminology.Insights
                 .GetName()
                 .Version
                 .ToString();
+
         }
     }
 }

@@ -34,13 +34,11 @@ namespace Sdl.Community.ExcelTerminology.Insights
         public void AddMetric(string name, double value, IDictionary<string,string> properties= null)
         {
             _telemetryClient.TrackMetric(name, value, properties);
-          //  _telemetryClient.Flush();
         }
 
-        public void AddException(Exception ex)
+        public void AddException(Exception ex, IDictionary<string,string> properties=null)
         {
-            _telemetryClient.TrackException(ex);
-          //  _telemetryClient.Flush();
+            _telemetryClient.TrackException(ex, properties);
 
         }
 

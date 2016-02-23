@@ -37,16 +37,37 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
-                var sourceColumnAddress = $"{_providerSettings.SourceColumn}{entryId}";
-                var targetColumnAddress = $"{_providerSettings.TargetColumn}{entryId}";
+                AddTermToWorksheet(entryId, excelTerm, workSheet);
+                excelPackage.Save();
+            }
+        }
 
-                workSheet.SetValue(sourceColumnAddress,excelTerm.Source);
-                workSheet.SetValue(targetColumnAddress, excelTerm.Target);
-                if (!string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+        private void AddTermToWorksheet(int entryId, ExcelTerm excelTerm, ExcelWorksheet workSheet)
+        {
+            var sourceColumnAddress = $"{_providerSettings.SourceColumn}{entryId}";
+            var targetColumnAddress = $"{_providerSettings.TargetColumn}{entryId}";
+
+            workSheet.SetValue(sourceColumnAddress, excelTerm.Source);
+            workSheet.SetValue(targetColumnAddress, excelTerm.Target);
+            if (!string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+            {
+                var approvedColumnAddress = $"{_providerSettings.ApprovedColumn}{entryId}";
+                workSheet.Cells[approvedColumnAddress].Value = excelTerm.Approved;
+            }
+        }
+
+        public async Task AddOrUpdateTerms( Dictionary<int,ExcelTerm> excelTerms)
+        {
+            using (var excelPackage =
+               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            {
+                var workSheet = await GetTerminologyWorksheet(excelPackage);
+                foreach (var excelTerm in excelTerms)
                 {
-                    var approvedColumnAddress = $"{_providerSettings.ApprovedColumn}{entryId}";
-                    workSheet.Cells[approvedColumnAddress].Value = excelTerm.Approved;
+                    AddTermToWorksheet(excelTerm.Key, excelTerm.Value, workSheet);
                 }
+
+
                 excelPackage.Save();
             }
         }
@@ -76,9 +97,7 @@ namespace Sdl.Community.ExcelTerminology.Services
         {
             var result = new Dictionary<int, ExcelTerm>();
 
-            var excelRangeAddress = _providerSettings.GetExcelRangeAddress();
-
-            foreach (var cell in worksheet.Cells[excelRangeAddress])
+            foreach (var cell in worksheet.Cells[worksheet.Dimension.Address])
             {
                 var excellCellAddress = new ExcelCellAddress(cell.Address);
 
@@ -113,7 +132,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                 excelTerm.TargetCulture = _providerSettings.TargetLanguage;
             }
 
-            if (columnLetter == _providerSettings.ApprovedColumn.ToUpper())
+            if (columnLetter == _providerSettings.ApprovedColumn?.ToUpper())
             {
                 excelTerm.Approved = cell.Text;
             }

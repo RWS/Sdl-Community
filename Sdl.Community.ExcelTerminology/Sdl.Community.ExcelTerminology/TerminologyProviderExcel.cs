@@ -92,7 +92,7 @@ namespace Sdl.Community.ExcelTerminology
             {
                 Label = "Approved",
                 Level = FieldLevel.TermLevel,
-                Mandatory = true,
+                Mandatory = false,
                 Multiple = true,
                 PickListValues = new List<string> {"Approved", "Not Approved"},
                 Type = FieldType.String

@@ -41,7 +41,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetLanguageComboBox.ValueMember = "Name";
             var selectedTargetItem = target.Where(t => t.Name == "de-DE");
             targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
-            TelemetryService.Instance.TrackPage("Settings screen");
         }
 
         private void browseBtn_Click(object sender, EventArgs e)

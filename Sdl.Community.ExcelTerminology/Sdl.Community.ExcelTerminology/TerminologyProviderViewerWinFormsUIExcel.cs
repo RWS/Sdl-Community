@@ -22,7 +22,7 @@ namespace Sdl.Community.ExcelTerminology
         {
             get
             {
-                var control = new TermsList(_terminologyProvider.Terms,_terminologyProvider.Uri)
+                var control = new TermsList(_terminologyProvider)
                 {
                     Text = @"TerminologyProviderViewerWinFormsUIExcel",
                     BackColor = Color.White
