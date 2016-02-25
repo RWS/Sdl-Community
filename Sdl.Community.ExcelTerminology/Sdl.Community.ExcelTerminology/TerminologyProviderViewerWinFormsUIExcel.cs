@@ -18,22 +18,29 @@ namespace Sdl.Community.ExcelTerminology
     {
         private TerminologyProviderExcel _terminologyProvider;
 
+        public TerminologyProviderViewerWinFormsUIExcel()
+        {
+            
+        }
+
+        private TermsList _control;
+
         public Control Control
         {
             get
             {
-                var control = new TermsList(_terminologyProvider)
+                 _control = new TermsList(_terminologyProvider)
                 {
                     Text = @"TerminologyProviderViewerWinFormsUIExcel",
                     BackColor = Color.White
                 };
 
-                JumpToTermAction += control.JumpToTerm;
-                AddAndEditAction += control.AddAndEdit;
-                AddTermAction += control.AddTerm;
-                _terminologyProvider.TermsLoaded += control.SetTerms;
+                JumpToTermAction += _control.JumpToTerm;
+                AddAndEditAction += _control.AddAndEdit;
+                AddTermAction += _control.AddTerm;
+                _terminologyProvider.TermsLoaded += _control.SetTerms;
 
-               return control;
+               return _control;
             }
         }
 
@@ -71,6 +78,10 @@ namespace Sdl.Community.ExcelTerminology
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
             _terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
+            //if (_control != null)
+            //{
+            //    _control.TerminologyProvider = _terminologyProvider;
+            //}
         }
 
         public void Release()

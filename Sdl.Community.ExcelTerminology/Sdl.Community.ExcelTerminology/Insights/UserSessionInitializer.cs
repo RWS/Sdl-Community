@@ -24,6 +24,9 @@ namespace Sdl.Community.ExcelTerminology.Insights
                 .Version
                 .ToString();
 
+            context.InstrumentationKey = "e57cc02b-cb9e-4d81-b456-ebaea04091dd";
+
+
         }
     }
 }

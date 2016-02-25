@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,25 @@ namespace Sdl.Community.ExcelTerminology.Model
         public CultureInfo TargetLanguage { get; set; }
         public char Separator { get; set; }
         public string WorksheetName { get; set; }
+        public bool IsReadOnly { get; set; }
         public Uri Uri { get; set; }
+
+
+        public bool IsFileReady()
+        {
+
+            var result = true;
+            try
+            {
+                using (new FileStream(TermFilePath, FileMode.OpenOrCreate))
+                {
+                }
+            }
+            catch (IOException)
+            {
+                result = false;
+            }
+            return result;
+        }
     }
 }

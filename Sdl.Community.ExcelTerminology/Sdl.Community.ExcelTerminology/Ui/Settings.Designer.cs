@@ -61,6 +61,7 @@
             this.pathTextBox = new System.Windows.Forms.TextBox();
             this.providerSettingsBindingSource8 = new System.Windows.Forms.BindingSource(this.components);
             this.submitBtn = new System.Windows.Forms.Button();
+            this.chkIsReadOnly = new System.Windows.Forms.CheckBox();
             this.providerSettingsBindingSource3 = new System.Windows.Forms.BindingSource(this.components);
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
@@ -178,6 +179,7 @@
             this.customSettingsLayoutPanel.Controls.Add(this.separatorTextBox, 1, 7);
             this.customSettingsLayoutPanel.Controls.Add(this.pathLbl, 0, 8);
             this.customSettingsLayoutPanel.Controls.Add(this.tableLayoutPanel1, 1, 8);
+            this.customSettingsLayoutPanel.Controls.Add(this.chkIsReadOnly, 1, 0);
             this.customSettingsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.customSettingsLayoutPanel.Location = new System.Drawing.Point(4, 19);
             this.customSettingsLayoutPanel.Margin = new System.Windows.Forms.Padding(4);
@@ -192,6 +194,7 @@
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.customSettingsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.customSettingsLayoutPanel.Size = new System.Drawing.Size(825, 317);
             this.customSettingsLayoutPanel.TabIndex = 0;
             // 
@@ -424,6 +427,16 @@
             this.submitBtn.Text = "Submit";
             this.submitBtn.UseVisualStyleBackColor = true;
             // 
+            // chkIsReadOnly
+            // 
+            this.chkIsReadOnly.AutoSize = true;
+            this.chkIsReadOnly.Location = new System.Drawing.Point(129, 3);
+            this.chkIsReadOnly.Name = "chkIsReadOnly";
+            this.chkIsReadOnly.Size = new System.Drawing.Size(111, 21);
+            this.chkIsReadOnly.TabIndex = 16;
+            this.chkIsReadOnly.Text = "Is Read Only";
+            this.chkIsReadOnly.UseVisualStyleBackColor = true;
+            // 
             // providerSettingsBindingSource3
             // 
             this.providerSettingsBindingSource3.DataSource = typeof(Sdl.Community.ExcelTerminology.Model.ProviderSettings);
@@ -499,5 +512,6 @@
         private System.Windows.Forms.Label pathLbl;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label descriptionLbl;
+        private System.Windows.Forms.CheckBox chkIsReadOnly;
     }
 }

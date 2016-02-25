@@ -23,6 +23,8 @@ namespace Sdl.Community.ExcelTerminology
 
         private readonly ProviderSettings _providerSettings;
 
+        public ProviderSettings ProviderSettings => _providerSettings;
+
         private readonly ITermSearchService _termSearchService;
 
         public List<ExcelEntry> Terms => _termEntries;

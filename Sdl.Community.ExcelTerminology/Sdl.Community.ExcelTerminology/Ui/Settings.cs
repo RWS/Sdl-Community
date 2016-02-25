@@ -27,6 +27,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             separatorTextBox.Text = @"|";
             descriptionLbl.Text =
                 @"From this screen you can fill your settings from your excel document.";
+            
 
             var source = GetCultureNames();
             sourceLanguageComboBox.DataSource = source;
@@ -72,6 +73,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
                 e.Cancel = true;
+                return;
             }
 
             var provider = new ProviderSettings
@@ -83,8 +85,19 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
                 TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],
+                IsReadOnly = chkIsReadOnly.Checked,
                 TermFilePath = pathTextBox.Text,
             };
+
+            if (!provider.IsFileReady())
+            {
+                MessageBox.Show(
+                        @"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
+                        @"Excel file is used by another process",
+                        MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
 
             _providerSettings = provider;
         }

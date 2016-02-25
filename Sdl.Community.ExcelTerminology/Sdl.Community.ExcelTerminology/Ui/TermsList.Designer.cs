@@ -85,6 +85,7 @@
             this.targetGridView.RowHeadersVisible = false;
             this.targetGridView.Size = new System.Drawing.Size(459, 604);
             this.targetGridView.TabIndex = 0;
+            this.targetGridView.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.targetGridView_CellFormatting);
             // 
             // Target
             // 
@@ -182,6 +183,7 @@
             this.sourceListView.View = System.Windows.Forms.View.Details;
             this.sourceListView.VirtualMode = true;
             this.sourceListView.CellEditFinished += new BrightIdeasSoftware.CellEditEventHandler(this.sourceListView_CellEditFinished);
+            this.sourceListView.CellEditStarting += new BrightIdeasSoftware.CellEditEventHandler(this.sourceListView_CellEditStarting);
             this.sourceListView.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.sourceListView_ItemSelectionChanged);
             // 
             // sourceColumn
