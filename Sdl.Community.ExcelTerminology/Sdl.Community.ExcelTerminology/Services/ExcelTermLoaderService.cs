@@ -26,6 +26,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                 new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
+
                 return await GetTermsFromExcel(workSheet);
             }
 
@@ -37,6 +38,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
+                if (workSheet == null) return;
                 AddTermToWorksheet(entryId, excelTerm, workSheet);
                 excelPackage.Save();
             }
@@ -62,6 +64,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
+                if (workSheet == null) return;
                 foreach (var excelTerm in excelTerms)
                 {
                     AddTermToWorksheet(excelTerm.Key, excelTerm.Value, workSheet);
@@ -78,42 +81,53 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
+                if (workSheet == null) return;
 
                 workSheet.DeleteRow(id);
                 excelPackage.Save();
             }
         }
 
-        public async Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
+        public Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
         {
-            var worksheet = string.IsNullOrEmpty(_providerSettings.WorksheetName)
-                ? excelPackage.Workbook.Worksheets[1]
-                : excelPackage.Workbook.Worksheets[_providerSettings.WorksheetName];
+            if (excelPackage.Workbook.Worksheets == null) return null;
+            if (excelPackage.Workbook.Worksheets.Count == 0) return null;
+            
 
-            return worksheet;
+            if (string.IsNullOrEmpty(_providerSettings.WorksheetName))
+            {
+                return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault());
+            }
+
+            return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault(
+                x => x.Name.Equals(_providerSettings.WorksheetName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public async Task<Dictionary<int, ExcelTerm>> GetTermsFromExcel(ExcelWorksheet worksheet)
         {
             var result = new Dictionary<int, ExcelTerm>();
 
-            foreach (var cell in worksheet.Cells[worksheet.Dimension.Address])
+            if (worksheet == null) return result;
+            await Task.Run(() =>
             {
-                var excellCellAddress = new ExcelCellAddress(cell.Address);
-
-                if (_providerSettings.HasHeader && excellCellAddress.Row == 1)
+                foreach (var cell in worksheet.Cells[worksheet.Dimension.Address])
                 {
-                    continue;
-                }
-                var id = excellCellAddress.Row;
-                if (!result.ContainsKey(id))
-                {
-                    result[id] = new ExcelTerm();
-                }
+                    var excellCellAddress = new ExcelCellAddress(cell.Address);
 
-                SetCellValue(result[id], cell, excellCellAddress.Column);
-               
-            }
+                    if (_providerSettings.HasHeader && excellCellAddress.Row == 1)
+                    {
+                        continue;
+                    }
+                    var id = excellCellAddress.Row;
+                    if (!result.ContainsKey(id))
+                    {
+                        result[id] = new ExcelTerm();
+                    }
+
+                    SetCellValue(result[id], cell, excellCellAddress.Column);
+
+                }
+            });
             return result;
         }
 

@@ -29,7 +29,7 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var termEntries = await excelTermProviderService.LoadEntries();
            
 
-            var termSearchService = new NormalTermSeachService();
+            var termSearchService = new NormalTermSeachService(providerSettings);
 
             //act
             var results = termSearchService.Search(text, termEntries, 1);
@@ -58,7 +58,33 @@ namespace Sdl.Community.ExcelTerminology.Tests
             var termEntries = await excelTermProviderService.LoadEntries();
 
 
-            var termSearchService = new NormalTermSeachService();
+            var termSearchService = new NormalTermSeachService(providerSettings);
+
+            //act
+            var results = termSearchService.Search(text, termEntries, expectedNumberResults);
+
+            //assert
+            Assert.Equal(results.Count, expectedNumberResults);
+
+
+        }
+
+        [Theory]
+        [InlineData("I have no idea what hobby-horse is", 1)]
+        public async void Search_Term_Phrase_With_Separator(string text,
+            int expectedNumberResults)
+        {
+            //arrange
+            var providerSettings = TestHelper.CreateProviderSettings();
+            var parser = new Parser(providerSettings);
+            var excelTermLoaderService = new ExcelTermLoaderService(providerSettings);
+            var entryTransformer = new EntryTransformerService(parser);
+            var excelTermProviderService = new ExcelTermProviderService(excelTermLoaderService, entryTransformer);
+
+            var termEntries = await excelTermProviderService.LoadEntries();
+
+
+            var termSearchService = new NormalTermSeachService(providerSettings);
 
             //act
             var results = termSearchService.Search(text, termEntries, expectedNumberResults);

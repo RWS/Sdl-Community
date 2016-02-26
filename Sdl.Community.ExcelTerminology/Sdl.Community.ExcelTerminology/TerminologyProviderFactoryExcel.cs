@@ -26,8 +26,9 @@ namespace Sdl.Community.ExcelTerminology
             {
                 var persistenceService = new PersistenceService();
 
-                var termSearchService = new NormalTermSeachService();
                 var providerSettings = persistenceService.Load(terminologyProviderUri);
+                var termSearchService = new NormalTermSeachService(providerSettings);
+
                 terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
                 Task.Run(terminologyProvider.LoadEntries);
             }
