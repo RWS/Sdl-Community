@@ -121,19 +121,23 @@ namespace StudioIntegrationApiSample
             ProjectCreator creator = null;
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
-            worker.DoWork += (sender, e) =>
+
+            if (SelectedProjectTemplate != null)
+            {
+                worker.DoWork += (sender, e) =>
                 {
                     creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
                     creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
                     creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
                     creator.Execute();
                 };
-            worker.ProgressChanged += (sender, e) =>
+                worker.ProgressChanged += (sender, e) =>
                 {
                     PercentComplete = e.ProgressPercentage;
                 };
-            worker.RunWorkerCompleted += (sender, e) =>
+                worker.RunWorkerCompleted += (sender, e) =>
                 {
+
                     if (e.Error != null)
                     {
                         MessageBox.Show(e.Error.ToString());
@@ -152,7 +156,12 @@ namespace StudioIntegrationApiSample
                         }
                     }
                 };
-            worker.RunWorkerAsync();
+                worker.RunWorkerAsync();
+            }
+            else
+            {
+                MessageBox.Show(@"Please choose a custom template");
+            }
         }
 
         private void ReportMessage(FileBasedProject fileBasedProject, string message)
