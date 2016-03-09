@@ -550,30 +550,30 @@ namespace Sdl.Community.NumberVerifier
                 sourceSeparators = sourceSeparators + AddSourceDecimalSeparators();
 
             }
-
+            
             //put separators in a list, in order to eliminate the duplicates
             if (decimalSeparator !=string.Empty && thousand != string.Empty)
             {
                 var allSeparators = string.Concat(decimalSeparator, thousand); //string.Join(decimalSeparator, thousand);
 
                 foreach (char c in allSeparators)
+            {
+                if (c.ToString().Contains("'"))
                 {
-                    if (c.ToString().Contains("'"))
-                    {
                           expression = @"\u2019\u0027";
-                    }
-                   else
-                    {
+                }
+                else
+                {
                         expression = @"\" + string.Format("u{0:x4}", (int)c);
-                    }
+                }
 
                     if (!separatorsList.Contains(expression.ToLower()) && !string.IsNullOrEmpty(expression))
                     {
                         separatorsList.Add(expression.ToLower());
-                    }
+            }
                 }
             }
-         
+      
 
             //get a list of source separators if we are in case of allow localisation, or prevent localisation
             if (sourceSeparators != string.Empty)
@@ -586,7 +586,7 @@ namespace Sdl.Community.NumberVerifier
                     if (!separatorsList.Contains(@"\" + separator.ToLower()) && !string.IsNullOrEmpty(separator))
                     {
                         separatorsList.Add(@"\" + separator.ToLower());
-                    }
+        }
                 }
             }
 
@@ -671,16 +671,16 @@ namespace Sdl.Community.NumberVerifier
 
             //if only "No separator" is selected "separators" variable will be a empty string
             if (separators != string.Empty)
-            {
+        {
                 var expresion = string.Format(@"-?\d+([{0}]\d+)*", separators);
-
-                foreach (Match match in Regex.Matches(text, expresion))
-                {
+           
+            foreach (Match match in Regex.Matches(text, expresion))
+            {
                     var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
                         noSeparator);
 
-                    numeberCollection.Add(match.Value);
-                    normalizedNumberCollection.Add(normalizedNumber);
+                numeberCollection.Add(match.Value);
+                normalizedNumberCollection.Add(normalizedNumber);
 
                 }
             }
@@ -703,7 +703,7 @@ namespace Sdl.Community.NumberVerifier
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
             if (thousandSeparators != String.Empty &&
-                Regex.IsMatch(number, @" ^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                 // e.g 1,000,000
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
@@ -724,7 +724,7 @@ namespace Sdl.Community.NumberVerifier
                     Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
                 normalizedNumber = usedDecimalSeparator != String.Empty
                     ? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
-                    : number;
+                    : normalizedNumber;
             }
             else if (thousandSeparators != String.Empty &&
                      Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
