@@ -8,6 +8,7 @@ using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
 using Sdl.Terminology.TerminologyProvider.Core;
+using Sdl.Community.ExcelTerminology.Insights;
 
 namespace Sdl.Community.ExcelTerminology.Services
 {
@@ -17,18 +18,26 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         public ExcelTermLoaderService(ProviderSettings providerSettings)
         {
+            if (providerSettings == null) throw new ArgumentNullException(nameof(providerSettings));
+
             _providerSettings = providerSettings;
         }
 
         public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
         {
-            using (var excelPackage =
-                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            var result = new Dictionary<int, ExcelTerm>();
+            try {
+                using (var excelPackage =
+                    new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+                {
+                    var workSheet = await GetTerminologyWorksheet(excelPackage);
+                    result = await GetTermsFromExcel(workSheet);
+                }
+            }catch(Exception ex)
             {
-                var workSheet = await GetTerminologyWorksheet(excelPackage);
-                return await GetTermsFromExcel(workSheet);
+                TelemetryService.Instance.AddException(ex);
             }
-
+            return result;
         }
 
         public async Task AddOrUpdateTerm(int entryId,ExcelTerm excelTerm)
@@ -37,16 +46,39 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
-                var sourceColumnAddress = $"{_providerSettings.SourceColumn}{entryId}";
-                var targetColumnAddress = $"{_providerSettings.TargetColumn}{entryId}";
+                if (workSheet == null) return;
+                AddTermToWorksheet(entryId, excelTerm, workSheet);
+                excelPackage.Save();
+            }
+        }
 
-                workSheet.SetValue(sourceColumnAddress,excelTerm.Source);
-                workSheet.SetValue(targetColumnAddress, excelTerm.Target);
-                if (!string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+        private void AddTermToWorksheet(int entryId, ExcelTerm excelTerm, ExcelWorksheet workSheet)
+        {
+            var sourceColumnAddress = $"{_providerSettings.SourceColumn}{entryId}";
+            var targetColumnAddress = $"{_providerSettings.TargetColumn}{entryId}";
+
+            workSheet.SetValue(sourceColumnAddress, excelTerm.Source);
+            workSheet.SetValue(targetColumnAddress, excelTerm.Target);
+            if (!string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
+            {
+                var approvedColumnAddress = $"{_providerSettings.ApprovedColumn}{entryId}";
+                workSheet.Cells[approvedColumnAddress].Value = excelTerm.Approved;
+            }
+        }
+
+        public async Task AddOrUpdateTerms( Dictionary<int,ExcelTerm> excelTerms)
+        {
+            using (var excelPackage =
+               new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
+            {
+                var workSheet = await GetTerminologyWorksheet(excelPackage);
+                if (workSheet == null) return;
+                foreach (var excelTerm in excelTerms)
                 {
-                    var approvedColumnAddress = $"{_providerSettings.ApprovedColumn}{entryId}";
-                    workSheet.Cells[approvedColumnAddress].Value = excelTerm.Approved;
+                    AddTermToWorksheet(excelTerm.Key, excelTerm.Value, workSheet);
                 }
+
+
                 excelPackage.Save();
             }
         }
@@ -57,43 +89,56 @@ namespace Sdl.Community.ExcelTerminology.Services
                new ExcelPackage(new FileInfo(_providerSettings.TermFilePath)))
             {
                 var workSheet = await GetTerminologyWorksheet(excelPackage);
+                if (workSheet == null) return;
 
                 workSheet.DeleteRow(id);
                 excelPackage.Save();
             }
         }
 
-        public async Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
+        public Task<ExcelWorksheet> GetTerminologyWorksheet(ExcelPackage excelPackage)
         {
-            var worksheet = string.IsNullOrEmpty(_providerSettings.WorksheetName)
-                ? excelPackage.Workbook.Worksheets[1]
-                : excelPackage.Workbook.Worksheets[_providerSettings.WorksheetName];
+            if (excelPackage.Workbook.Worksheets == null) return null;
+            if (excelPackage.Workbook.Worksheets.Count == 0) return null;
+            
 
-            return worksheet;
+            if (string.IsNullOrEmpty(_providerSettings.WorksheetName))
+            {
+                return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault());
+            }
+
+            return Task.FromResult(excelPackage.Workbook.Worksheets.FirstOrDefault(
+                x => x.Name.Equals(_providerSettings.WorksheetName, StringComparison.InvariantCultureIgnoreCase)));
         }
 
         public async Task<Dictionary<int, ExcelTerm>> GetTermsFromExcel(ExcelWorksheet worksheet)
         {
             var result = new Dictionary<int, ExcelTerm>();
+            try {
+                if (worksheet == null) return result;
+                await Task.Run(() =>
+                {
+                    foreach (var cell in worksheet.Cells[worksheet.Dimension.Address])
+                    {
+                        var excellCellAddress = new ExcelCellAddress(cell.Address);
 
-            var excelRangeAddress = _providerSettings.GetExcelRangeAddress();
+                        if (_providerSettings.HasHeader && excellCellAddress.Row == 1)
+                        {
+                            continue;
+                        }
+                        var id = excellCellAddress.Row;
+                        if (!result.ContainsKey(id))
+                        {
+                            result[id] = new ExcelTerm();
+                        }
 
-            foreach (var cell in worksheet.Cells[excelRangeAddress])
+                        SetCellValue(result[id], cell, excellCellAddress.Column);
+
+                    }
+                });
+            }catch(Exception ex)
             {
-                var excellCellAddress = new ExcelCellAddress(cell.Address);
-
-                if (_providerSettings.HasHeader && excellCellAddress.Row == 1)
-                {
-                    continue;
-                }
-                var id = excellCellAddress.Row;
-                if (!result.ContainsKey(id))
-                {
-                    result[id] = new ExcelTerm();
-                }
-
-                SetCellValue(result[id], cell, excellCellAddress.Column);
-               
+                TelemetryService.Instance.AddException(ex);
             }
             return result;
         }
@@ -107,13 +152,13 @@ namespace Sdl.Community.ExcelTerminology.Services
                 excelTerm.SourceCulture = _providerSettings.SourceLanguage;
             }
 
-            if (columnLetter == _providerSettings.TargetColumn)
+            if (columnLetter == _providerSettings.TargetColumn.ToUpper())
             {
                 excelTerm.Target = cell.Text;
                 excelTerm.TargetCulture = _providerSettings.TargetLanguage;
             }
 
-            if (columnLetter == _providerSettings.ApprovedColumn)
+            if (columnLetter == _providerSettings.ApprovedColumn?.ToUpper())
             {
                 excelTerm.Approved = cell.Text;
             }

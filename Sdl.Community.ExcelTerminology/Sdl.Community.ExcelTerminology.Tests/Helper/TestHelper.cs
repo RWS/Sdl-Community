@@ -27,6 +27,22 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
             };
         }
 
+        public static ProviderSettings CreateProviderSettingsWithIntermediateColumn()
+        {
+            return new ProviderSettings
+            {
+                SourceColumn = "A",
+                TargetColumn = "c",
+                ApprovedColumn = "d",
+                HasHeader = true,
+                Separator = '|',
+                SourceLanguage = CultureInfo.CreateSpecificCulture("en-US"),
+                TargetLanguage = CultureInfo.CreateSpecificCulture("de-DE"),
+                TermFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    @"Resources\glossary_example_intermediate_column.xlsx")
+            };
+        }
+
         public static ExcelPackage CreateSampleExcelPackage(ProviderSettings providerSettings)
         {
             return new ExcelPackage(new FileInfo(providerSettings.TermFilePath));

@@ -166,6 +166,9 @@
     <Compile Include="TerminologyProviderFactoryExcel.cs" />
     <Compile Include="TerminologyProviderViewerWinFormsUIExcel.cs" />
     <Compile Include="TerminologyProviderWinFormsUIExcel.cs" />
+    <Compile Include="Ui\CustomTabTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Ui\Settings.cs">
       <SubType>Form</SubType>
     </Compile>

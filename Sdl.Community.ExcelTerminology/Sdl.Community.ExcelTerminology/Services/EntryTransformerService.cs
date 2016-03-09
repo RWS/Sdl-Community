@@ -11,6 +11,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 {
     public class EntryTransformerService: IEntryTransformerService
     {
+        public const string ApprovedFieldName = "Approved";
         private readonly IParser _parser;
         public EntryTransformerService(IParser parser)
         {
@@ -67,7 +68,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 
             var entryField = new EntryField
             {
-                Name = "Approved",
+                Name = ApprovedFieldName,
                 Value = approvals[index]
             };
 

@@ -27,6 +27,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             separatorTextBox.Text = @"|";
             descriptionLbl.Text =
                 @"From this screen you can fill your settings from your excel document.";
+            
 
             var source = GetCultureNames();
             sourceLanguageComboBox.DataSource = source;
@@ -41,7 +42,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             targetLanguageComboBox.ValueMember = "Name";
             var selectedTargetItem = target.Where(t => t.Name == "de-DE");
             targetLanguageComboBox.SelectedItem = selectedTargetItem.FirstOrDefault();
-            TelemetryService.Instance.TrackPage("Settings screen");
         }
 
         private void browseBtn_Click(object sender, EventArgs e)
@@ -66,23 +66,38 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         protected override void OnClosing(CancelEventArgs e)
         {
+            if (DialogResult == DialogResult.Cancel ||
+                DialogResult == DialogResult.No ||
+                DialogResult == DialogResult.Abort) return;
             if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
                 MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
                 e.Cancel = true;
+                return;
             }
 
             var provider = new ProviderSettings
             {
                 HasHeader = hasHeader.Checked,
-                ApprovedColumn = approvedBox.Text,
-                SourceColumn = sourceBox.Text,
-                TargetColumn = targetBox.Text,
+                ApprovedColumn = approvedBox.Text.ToUpper(),
+                SourceColumn = sourceBox.Text.ToUpper(),
+                TargetColumn = targetBox.Text.ToUpper(),
                 SourceLanguage = (CultureInfo)sourceLanguageComboBox.SelectedItem,
                 TargetLanguage = (CultureInfo)targetLanguageComboBox.SelectedItem,
                 Separator = separatorTextBox.Text[0],
+                IsReadOnly = chkIsReadOnly.Checked,
                 TermFilePath = pathTextBox.Text,
             };
+
+            if (!provider.IsFileReady())
+            {
+                MessageBox.Show(
+                        @"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
+                        @"Excel file is used by another process",
+                        MessageBoxButtons.OK);
+                e.Cancel = true;
+                return;
+            }
 
             _providerSettings = provider;
         }
