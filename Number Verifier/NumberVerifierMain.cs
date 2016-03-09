@@ -531,51 +531,89 @@ namespace Sdl.Community.NumberVerifier
         //For more information see: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
         public string AddCustomSeparators(string thousand, string decimalSeparator)
         {
-            var expression = @"\u00A0\u2009\u202F";
-            var sourceDecimalSeparators = string.Empty;
+            var expression = string.Empty; 
+            var separatorsList = new List<string>();
+            var sourceSeparators = string.Empty;
+            var separators = string.Empty;
 
+            // you can use in target as separators source separators or selected target separators
             if (_verificationSettings.AllowLocalizations)
             {
-                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceThousandSeparators();
-                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceDecimalSeparators();
+                sourceSeparators = sourceSeparators + AddSourceThousandSeparators();
+                sourceSeparators = sourceSeparators + AddSourceDecimalSeparators();
             }
 
+            //you can use only source separators selected
             if (_verificationSettings.PreventLocalizations)
             {
-                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceThousandSeparators();
-                sourceDecimalSeparators = sourceDecimalSeparators + AddSourceDecimalSeparators();
+                sourceSeparators = sourceSeparators + AddSourceThousandSeparators();
+                sourceSeparators = sourceSeparators + AddSourceDecimalSeparators();
 
             }
-            
-            var separators = string.Join(thousand, decimalSeparator, sourceDecimalSeparators);
 
-            foreach (char c in separators)
+            //put separators in a list, in order to eliminate the duplicates
+            if (decimalSeparator !=string.Empty && thousand != string.Empty)
             {
-                if (c.ToString().Contains("'"))
-                {
-                    expression = expression + @"\u2019\u0027"; //workaround for ' character which is not recognized by regex
-                }
-                else
-                {
-                    expression = expression + @"\" + string.Format("u{0:x4}", (int) c);
-                }
+                var allSeparators = string.Concat(decimalSeparator, thousand); //string.Join(decimalSeparator, thousand);
 
+                foreach (char c in allSeparators)
+                {
+                    if (c.ToString().Contains("'"))
+                    {
+                          expression = @"\u2019\u0027";
+                    }
+                   else
+                    {
+                        expression = @"\" + string.Format("u{0:x4}", (int)c);
+                    }
+
+                    if (!separatorsList.Contains(expression.ToLower()) && !string.IsNullOrEmpty(expression))
+                    {
+                        separatorsList.Add(expression.ToLower());
+                    }
+                }
             }
-      
-            return expression;
+         
+
+            //get a list of source separators if we are in case of allow localisation, or prevent localisation
+            if (sourceSeparators != string.Empty)
+            {
+                var sepSource = sourceSeparators.Split('\\').ToList();
+
+                //add the separator to list only if that separator does not exists
+                foreach (var separator in sepSource)
+                {
+                    if (!separatorsList.Contains(@"\" + separator.ToLower()) && !string.IsNullOrEmpty(separator))
+                    {
+                        separatorsList.Add(@"\" + separator.ToLower());
+                    }
+                }
+            }
+
+            //returns final string of separators used
+            foreach (var sep in separatorsList)
+            {
+                separators = separators + sep;
+            }
+            return separators;
         }
 
+        /// <summary>
+        /// Returns a string containing source decimal selectors selected
+        /// Used in case allow localization or prevent localization are selected
+        /// </summary>
+        /// <returns></returns>
         private string AddSourceDecimalSeparators()
         {
             var sourceDecimalSeparators = string.Empty;
 
             if (_verificationSettings.SourceDecimalComma)
             {
-                sourceDecimalSeparators = sourceDecimalSeparators + ",";
+                sourceDecimalSeparators = sourceDecimalSeparators + @"\u002C"; 
             }
             if (_verificationSettings.SourceDecimalPeriod)
             {
-                sourceDecimalSeparators = sourceDecimalSeparators + ".";
+                sourceDecimalSeparators = sourceDecimalSeparators + @"\u002E";
             }
             if (_verificationSettings.SourceDecimalCustomSeparator)
             {
@@ -584,15 +622,20 @@ namespace Sdl.Community.NumberVerifier
             return sourceDecimalSeparators;
         }
 
+        /// <summary>
+        /// Returns a string containing source thousand selectors selected
+        /// Used in case allow localization or prevent localization are selected
+        /// </summary>
+        /// <returns></returns>
         private string AddSourceThousandSeparators()
         {
             var sourceThousandSeparators = string.Empty;
 
-            if (_verificationSettings.TargetThousandsSpace)
+            if (_verificationSettings.SourceThousandsSpace)
             {
-                sourceThousandSeparators = sourceThousandSeparators + " ";
+                sourceThousandSeparators = sourceThousandSeparators + @"\u0020";
             }
-            if (_verificationSettings.TargetThousandsNobreakSpace)
+            if (_verificationSettings.SourceThousandsNobreakSpace)
             {
                 sourceThousandSeparators = sourceThousandSeparators + @"\u00a0";
             }
@@ -606,11 +649,11 @@ namespace Sdl.Community.NumberVerifier
             }
             if (_verificationSettings.SourceThousandsComma)
             {
-                sourceThousandSeparators = sourceThousandSeparators + ",";
+                sourceThousandSeparators = sourceThousandSeparators + @"\u002C\"; 
             }
             if (_verificationSettings.SourceThousandsPeriod)
             {
-                sourceThousandSeparators = sourceThousandSeparators + ".";
+                sourceThousandSeparators = sourceThousandSeparators + @"\u002E";
             }
             if (_verificationSettings.SourceThousandsCustomSeparator)
             {
@@ -619,17 +662,36 @@ namespace Sdl.Community.NumberVerifier
 
             return sourceThousandSeparators;
         }
-        public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection, ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators, bool noSeparator)
-        {
-             var expresion = string.Format(@"-?\d+([{0}]\d+)*", AddCustomSeparators(thousandSeparators,decimalSeparators));
-           
-            foreach (Match match in Regex.Matches(text, expresion))
-            {
-                var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators, noSeparator);
 
-                numeberCollection.Add(match.Value);
+        public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection,
+            ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
+            bool noSeparator)
+        {
+            var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
+
+            //if only "No separator" is selected "separators" variable will be a empty string
+            if (separators != string.Empty)
+            {
+                var expresion = string.Format(@"-?\d+([{0}]\d+)*", separators);
+
+                foreach (Match match in Regex.Matches(text, expresion))
+                {
+                    var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
+                        noSeparator);
+
+                    numeberCollection.Add(match.Value);
+                    normalizedNumberCollection.Add(normalizedNumber);
+
+                }
+            }
+            else
+            {
+                var normalizedNumber = NormalizedNumber(text, thousandSeparators, decimalSeparators,
+                    noSeparator);
+                numeberCollection.Add(text);
                 normalizedNumberCollection.Add(normalizedNumber);
             }
+
         }
 
         private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
@@ -653,7 +715,11 @@ namespace Sdl.Community.NumberVerifier
             {
                 var usedThousandSeparator =
                     Regex.Match(number, @"[" + thousandSeparators + @"]").Value;
-                normalizedNumber = Regex.Replace(number, @"[" + usedThousandSeparator + @"]", "t");
+
+                //for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
+                var reg = new Regex(Regex.Escape(usedThousandSeparator));
+                normalizedNumber = reg.Replace(number, "t", 1);
+
                 var usedDecimalSeparator =
                     Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
                 normalizedNumber = usedDecimalSeparator != String.Empty
@@ -737,7 +803,7 @@ namespace Sdl.Community.NumberVerifier
         private List<string> GetAlphanumericList(string text)
         {
             var alphaList = new List<string>();
-            alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)+[A-Z]*") select match.Value);
+            alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)|([A-Z])+[A-Z]*") select match.Value);
             return alphaList;
         }
 
@@ -754,7 +820,7 @@ namespace Sdl.Community.NumberVerifier
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-                     &&(VerificationSettings.ExcludeUntranslatedSegments == false && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+             &&!(VerificationSettings.ExcludeUntranslatedSegments.Value == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified);
         }
                 #endregion
     }

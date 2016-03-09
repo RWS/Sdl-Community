@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Studio Integration API Reference Plug-in</PlugInName>
+  <Version>1.0</Version>
+  <Description>Sample plug-in that illustrates the capabilities of the Studio Integration API.</Description>
+  <Author>SDL</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <Include>
+    <File>Newtonsoft.Json.dll</File>
+  </Include>
+</PluginPackage>
