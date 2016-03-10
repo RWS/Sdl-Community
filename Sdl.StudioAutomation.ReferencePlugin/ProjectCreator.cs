@@ -7,6 +7,8 @@ using Sdl.ProjectAutomation.FileBased;
 using System.ComponentModel;
 using Sdl.ProjectAutomation.Core;
 using System.IO;
+using System.Linq.Expressions;
+using System.Windows.Forms;
 
 namespace StudioIntegrationApiSample
 {
@@ -61,38 +63,49 @@ namespace StudioIntegrationApiSample
                 LocalProjectFolder = GetProjectFolderPath(request.Name)
             };
             FileBasedProject project = new FileBasedProject(projectInfo, new ProjectTemplateReference(ProjectTemplate.Uri));
-            
+
             OnMessageReported(project, String.Format("Creating project {0}", request.Name));
-            
+
             ProjectFile[] projectFiles = project.AddFiles(request.Files);
-            project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan); 
-            TaskSequence taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
-                (sender, e)
-                    =>
+            project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+
+            //when a template is created from a Single file project, task sequencies is null.
+            try
+            {
+                TaskSequence taskSequence = project.RunDefaultTaskSequence(projectFiles.GetIds(),
+                    (sender, e)
+                        =>
+                    {
+                        OnProgressChanged(_currentProgress + (double) e.PercentComplete/Requests.Count);
+                    }
+                    , (sender, e)
+                        =>
+                    {
+                        OnMessageReported(project, e.Message);
+                    });
+
+                project.Save();
+
+                if (taskSequence.Status == TaskStatus.Completed)
                 {
-                    OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
+                    SuccessfulRequests.Add(Tuple.Create(request, project));
+                    OnMessageReported(project, String.Format("Project {0} created successfully.", request.Name));
+                    return project;
                 }
-                , (sender, e)
-                =>
-                { 
-                   OnMessageReported(project, e.Message);
-                });
+                else
+                {
+                    OnMessageReported(project, String.Format("Project {0} creation failed.", request.Name));
+                    return null;
+                }
 
-            project.Save();
-
-            if (taskSequence.Status == TaskStatus.Completed)
-            {
-                SuccessfulRequests.Add(Tuple.Create(request, project));
-                OnMessageReported(project, String.Format("Project {0} created successfully.", request.Name));
-                return project;
             }
-            else
+            catch (Exception ex)
             {
-                OnMessageReported(project, String.Format("Project {0} creation failed.", request.Name));
-                return null;
+                MessageBox.Show(@"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
             }
+            return project;
         }
-        
+
         private string GetProjectFolderPath(string name)
         {
             string rootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Studio 2015\\Projects");

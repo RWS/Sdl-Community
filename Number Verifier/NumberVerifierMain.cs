@@ -820,7 +820,7 @@ namespace Sdl.Community.NumberVerifier
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-             &&!(VerificationSettings.ExcludeUntranslatedSegments.Value == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified);
+                     &&(VerificationSettings.ExcludeUntranslatedSegments == false && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
         }
                 #endregion
     }

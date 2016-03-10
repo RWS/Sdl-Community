@@ -267,9 +267,9 @@
             this.folderLocationLbl.AutoSize = true;
             this.folderLocationLbl.Location = new System.Drawing.Point(243, 163);
             this.folderLocationLbl.Name = "folderLocationLbl";
-            this.folderLocationLbl.Size = new System.Drawing.Size(95, 13);
+            this.folderLocationLbl.Size = new System.Drawing.Size(130, 13);
             this.folderLocationLbl.TabIndex = 10;
-            this.folderLocationLbl.Text = "Set folder location:";
+            this.folderLocationLbl.Text = "Set default folder location:";
             // 
             // ContentConnectorViewControl
             // 
