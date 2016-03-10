@@ -33,6 +33,11 @@ namespace Sdl.Community.ExcelTerminology.Tests.Helper
             throw new NotImplementedException();
         }
 
+        public Task AddOrUpdateTerms(Dictionary<int, ExcelTerm> excelTerms)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task DeleteTerm(int id)
         {
             throw new NotImplementedException();

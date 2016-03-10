@@ -26,8 +26,16 @@ namespace Sdl.Community.ExcelTerminology
             {
                 var persistenceService = new PersistenceService();
 
-                var termSearchService = new NormalTermSeachService();
                 var providerSettings = persistenceService.Load(terminologyProviderUri);
+                //in case we didn't any settings stored there is no need to load the provider
+                if (providerSettings == null)
+                {
+                    TelemetryService.Instance.AddEvent("No settings stored for the provider",
+                        new Dictionary<string, string> { { "Uri", terminologyProviderUri.ToString() } });
+                    return terminologyProvider;
+                }
+                var termSearchService = new NormalTermSeachService(providerSettings);
+
                 terminologyProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
                 Task.Run(terminologyProvider.LoadEntries);
             }

@@ -35,12 +35,12 @@ namespace Sdl.Community.ExcelTerminology
                     var settings = settingsDialog.GetSettings();
 
                     var persistenceService = new PersistenceService();
-                    var termSearchService = new NormalTermSeachService();
 
                     var provider = new TerminologyProviderExcel(settings);
                     settings.Uri = provider.Uri;
                     persistenceService.AddSettings(settings);
                     var providerSettings = persistenceService.Load(provider.Uri);
+                    var termSearchService = new NormalTermSeachService(providerSettings);
 
                     var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
 

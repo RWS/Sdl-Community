@@ -71,7 +71,6 @@
     <Compile Include="ExcelTests.cs" />
     <Compile Include="Helper\TestExcelLoader.cs" />
     <Compile Include="NormalTermSearchServiceTest.cs" />
-    <Compile Include="ProviderSettingsTest.cs" />
     <Compile Include="ExcelTerminologyLoaderTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helper\TestHelper.cs" />
@@ -79,6 +78,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Resources\glossary_example_intermediate_column.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\glossary_example_switched_columns.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Resources\glossary_example_without_header_and_approved.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

@@ -68,6 +68,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                     result.TargetColumn = providerSettings.TargetColumn;
                     result.TermFilePath = providerSettings.TermFilePath;
                     result.TargetLanguage = providerSettings.TargetLanguage;
+                    result.IsReadOnly = providerSettings.IsReadOnly;
 
                 }
 

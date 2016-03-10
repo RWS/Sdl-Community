@@ -49,9 +49,15 @@ namespace Sdl.Community.ExcelTerminology.Services
             }
         }
 
-        public async Task DeleteEntry(int entryId)
+        public async Task AddOrUpdateEntries(Dictionary<int, ExcelTerm> excelEntries)
         {
 
+            await _excelTermLoaderService.AddOrUpdateTerms(excelEntries);
+        }
+
+        public async Task DeleteEntry(int entryId)
+        {
+            if (entryId == 0) return;
             await _excelTermLoaderService.DeleteTerm(entryId);
 
         }

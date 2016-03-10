@@ -95,6 +95,42 @@ namespace Sdl.Community.ExcelTerminology.Tests
         }
 
         [Theory]
+        [InlineData(10,
+            "ill-treatment",
+            "schlechte Behandlung|Misshandlung",
+            "Approved|Not approved"
+            , 31)]
+        [InlineData(22,
+            "unaccountable",
+            "unerklärbar|unerfindlich",
+            "Approved|Not approved"
+            , 31)]
+        public async void Get_All_Terms_With_Header_And_Intermediate_Column(int id
+            , string expectedSource
+            , string expectedTarget
+            , string expectedApproved
+            , int expectedCount)
+        {
+            var providerSettings = TestHelper.CreateProviderSettingsWithIntermediateColumn();
+            var excelPackage = TestHelper.CreateSampleExcelPackage(providerSettings);
+
+            var excelTerminologyService =
+                new ExcelTermLoaderService(providerSettings);
+
+            var worksheet = await excelTerminologyService.GetTerminologyWorksheet(excelPackage);
+            var actual = await excelTerminologyService.GetTermsFromExcel(worksheet);
+            Assert.Equal(actual.Count, expectedCount);
+            var actualExcelTerm = actual[id];
+            Assert.Equal(actualExcelTerm.Source, expectedSource);
+            Assert.Equal(actualExcelTerm.SourceCulture.Name,
+                providerSettings.SourceLanguage.Name);
+            Assert.Equal(actualExcelTerm.Target, expectedTarget);
+            Assert.Equal(actualExcelTerm.TargetCulture.Name,
+                providerSettings.TargetLanguage.Name);
+            Assert.Equal(actualExcelTerm.Approved, expectedApproved);
+        }
+
+        [Theory]
         [InlineData(9,
            "ill-treatment",
            "schlechte Behandlung|Misshandlung",

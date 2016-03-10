@@ -17,11 +17,13 @@ namespace Sdl.Community.ExcelTerminology
 {
     public class TerminologyProviderExcel: AbstractTerminologyProvider
     {
-        public const string ExcelUriTemplate = "exceltbx://";
+        public const string ExcelUriTemplate = "excelglossary://";
 
         private List<ExcelEntry> _termEntries;
 
         private readonly ProviderSettings _providerSettings;
+
+        public ProviderSettings ProviderSettings => _providerSettings;
 
         private readonly ITermSearchService _termSearchService;
 
@@ -92,7 +94,7 @@ namespace Sdl.Community.ExcelTerminology
             {
                 Label = "Approved",
                 Level = FieldLevel.TermLevel,
-                Mandatory = true,
+                Mandatory = false,
                 Multiple = true,
                 PickListValues = new List<string> {"Approved", "Not Approved"},
                 Type = FieldType.String

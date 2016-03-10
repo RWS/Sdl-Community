@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.ExcelTerminology</PlugInName>
-  <Version>0.9.4</Version>
-  <Description>Excel based terminology provider. It allows to specify the columns from worksheet as source and target terms including synonims separated by a delimitator.</Description>
+  <PlugInName>TermExcelerator</PlugInName>
+  <Version>1.0.2.0</Version>
+  <Description>Excel based terminology provider. It allows to specify the columns from worksheet as source and target terms including synonyms separated by a delimitation.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
