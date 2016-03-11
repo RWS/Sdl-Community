@@ -1,4 +1,4 @@
-﻿namespace StudioIntegrationApiSample
+﻿namespace Sdl.Community.ContentConnector
 {
     partial class ContentConnectorViewControl
     {

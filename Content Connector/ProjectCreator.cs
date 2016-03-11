@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.ProjectAutomation.FileBased;
 using System.ComponentModel;
-using Sdl.ProjectAutomation.Core;
 using System.IO;
-using System.Linq.Expressions;
 using System.Windows.Forms;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 
-namespace StudioIntegrationApiSample
+namespace Sdl.Community.ContentConnector
 {
     class ProjectCreator
     {
@@ -62,11 +58,17 @@ namespace StudioIntegrationApiSample
                 Name = request.Name,
                 LocalProjectFolder = GetProjectFolderPath(request.Name)
             };
-            FileBasedProject project = new FileBasedProject(projectInfo, new ProjectTemplateReference(ProjectTemplate.Uri));
+            FileBasedProject project = new FileBasedProject(projectInfo,
+                new ProjectTemplateReference(ProjectTemplate.Uri));
 
             OnMessageReported(project, String.Format("Creating project {0}", request.Name));
 
-            ProjectFile[] projectFiles = project.AddFiles(request.Files);
+            //path to subdirectory
+            var subdirectoryPath =
+                request.Files[0].Substring(0, request.Files[0].IndexOf(request.Name, StringComparison.Ordinal)) +
+                request.Name;
+
+            ProjectFile[] projectFiles = project.AddFolderWithFiles(subdirectoryPath, true);
             project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
 
             //when a template is created from a Single file project, task sequencies is null.
@@ -101,8 +103,10 @@ namespace StudioIntegrationApiSample
             }
             catch (Exception ex)
             {
-                MessageBox.Show(@"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
+                MessageBox.Show(
+                    @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
             }
+
             return project;
         }
 

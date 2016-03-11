@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation;
-using Sdl.Desktop.IntegrationApi;
 using System.ComponentModel;
+using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using System.Windows.Forms;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace StudioIntegrationApiSample
+namespace Sdl.Community.ContentConnector
 {
     [View(
         Id = "ContentConnectorView",
@@ -164,6 +161,10 @@ namespace StudioIntegrationApiSample
             }
         }
 
+        public void Contribute()
+        {
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.StudioAutomation.ReferencePlugin");
+        }
         private void ReportMessage(FileBasedProject fileBasedProject, string message)
         {
             _control.Value.BeginInvoke(new Action(() => _control.Value.ReportMessage(fileBasedProject, message)));

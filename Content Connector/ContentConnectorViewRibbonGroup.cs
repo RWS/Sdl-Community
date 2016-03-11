@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace StudioIntegrationApiSample
+namespace Sdl.Community.ContentConnector
 {
     [RibbonGroup("ConnectorViewRibbonGroup", "ConnectorViewRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]    
@@ -41,6 +38,16 @@ namespace StudioIntegrationApiSample
         protected override void Execute()
         {
             Controller.CreateProjects();
+        }
+    }
+
+    [Action("ContributeToProjectAction", typeof(ContentConnectorViewController), Name = "ContributeToProject_Name", Description = "ContributeToProject_Description", Icon = "opensourceimage")]
+    [ActionLayout(typeof(ContentConnectorViewRibbonGroup), 0, DisplayType.Large)]
+    public class ContributeToProjectAction : AbstractViewControllerAction<ContentConnectorViewController>
+    {
+        protected override void Execute()
+        {
+            Controller.Contribute();
         }
     }
 

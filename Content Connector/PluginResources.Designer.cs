@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StudioIntegrationApiSample {
+namespace Sdl.Community.ContentConnector {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace StudioIntegrationApiSample {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("StudioIntegrationApiSample.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.ContentConnector.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -98,6 +98,24 @@ namespace StudioIntegrationApiSample {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Contribute to project.
+        /// </summary>
+        internal static string ContributeToProject_Description {
+            get {
+                return ResourceManager.GetString("ContributeToProject_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Contribute to project.
+        /// </summary>
+        internal static string ContributeToProject_Name {
+            get {
+                return ResourceManager.GetString("ContributeToProject_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create projects for all the new project requests.
         /// </summary>
         internal static string CreateProjects_Description {
@@ -122,6 +140,16 @@ namespace StudioIntegrationApiSample {
         internal static string CreateProjects_Name {
             get {
                 return ResourceManager.GetString("CreateProjects_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon opensourceimage {
+            get {
+                object obj = ResourceManager.GetObject("opensourceimage", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
