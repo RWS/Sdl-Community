@@ -47,6 +47,10 @@
       <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="ObjectListView, Version=2.9.0.25611, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>packages\ObjectListView.Official.2.9.0\lib\net20\ObjectListView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
@@ -119,6 +123,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddFoldersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AddFoldersForm.Designer.cs">
+      <DependentUpon>AddFoldersForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ContentConnectorViewRibbonGroup.cs" />
     <Compile Include="ContentConnector.cs" />
     <Compile Include="ContentConnectorViewControl.cs">
@@ -128,6 +138,7 @@
       <DependentUpon>ContentConnectorViewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="ContentConnectorViewController.cs" />
+    <Compile Include="Folder.cs" />
     <Compile Include="Persistence.cs" />
     <Compile Include="ProjectCreator.cs" />
     <Compile Include="ProjectQuoteItem.cs" />
@@ -140,12 +151,20 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
     <DeployPluginPackage>true</DeployPluginPackage>
   </PropertyGroup>
   <ItemGroup>
+    <EmbeddedResource Include="AddFoldersForm.resx">
+      <DependentUpon>AddFoldersForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ContentConnectorViewControl.resx">
       <DependentUpon>ContentConnectorViewControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -159,9 +178,15 @@
     <EmbeddedResource Include="PluginResources.es.resx" />
     <EmbeddedResource Include="PluginResources.fr.resx" />
     <EmbeddedResource Include="PluginResources.de.resx" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <None Include="Resources\delete.ico" />
+    <Content Include="Resources\remove.ico" />
     <Content Include="Resources\CheckForProjects.ico" />
     <Content Include="Resources\CreateProjects.ico" />
     <Content Include="Resources\money_bill.ico" />

@@ -15,9 +15,17 @@ namespace Sdl.Community.ContentConnector
             InitializeComponent();
 
             _persistence = new Persistence();
-            pathLbl.Text = _persistence.Load();
             _projectsListBox.SelectedIndexChanged += new EventHandler(_projectsListBox_SelectedIndexChanged);
         }
+
+        //protected override void OnLoad(EventArgs e)
+        //{
+        //    ContentConnector.Refresh();
+
+        //    _controller.ProjectRequests = ContentConnector.ProjectRequests;
+
+        //    LoadProjectRequests();
+        //}
 
         internal ContentConnectorViewController Controller
         {
@@ -131,20 +139,16 @@ namespace Sdl.Community.ContentConnector
 
         private void browseBtn_Click(object sender, EventArgs e)
         {
-            var folderDialog = new FolderBrowserDialog();
-            var result = folderDialog.ShowDialog();
 
-            if (result == DialogResult.OK)
-            {
-                pathLbl.Text = folderDialog.SelectedPath;
+            var addFolderForm = new AddFoldersForm();
+            addFolderForm.ShowDialog();
 
-                _persistence.Save(folderDialog.SelectedPath);
+            ContentConnector.Refresh();
 
-                ContentConnector.Refresh();
-                _controller.ProjectRequests = ContentConnector.ProjectRequests;
-                LoadProjectRequests();
-            }
-             
+            _controller.ProjectRequests = ContentConnector.ProjectRequests;
+
+            //    LoadProjectRequests();
+            LoadProjectRequests();
         }
     }
 }

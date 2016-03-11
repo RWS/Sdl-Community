@@ -42,7 +42,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.buttonsDialogPanel = new System.Windows.Forms.TableLayoutPanel();
             this.browseBtn = new System.Windows.Forms.Button();
-            this.pathLbl = new System.Windows.Forms.Label();
             this.folderLocationLbl = new System.Windows.Forms.Label();
             this._tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -230,7 +229,6 @@
             this.buttonsDialogPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.buttonsDialogPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.buttonsDialogPanel.Controls.Add(this.browseBtn, 0, 0);
-            this.buttonsDialogPanel.Controls.Add(this.pathLbl, 1, 0);
             this.buttonsDialogPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsDialogPanel.Location = new System.Drawing.Point(240, 176);
             this.buttonsDialogPanel.Margin = new System.Windows.Forms.Padding(0);
@@ -246,30 +244,19 @@
             this.browseBtn.Name = "browseBtn";
             this.browseBtn.Size = new System.Drawing.Size(102, 21);
             this.browseBtn.TabIndex = 0;
-            this.browseBtn.Text = "Browse";
+            this.browseBtn.Text = "Select folders";
             this.browseBtn.UseMnemonic = false;
             this.browseBtn.UseVisualStyleBackColor = true;
             this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
-            // 
-            // pathLbl
-            // 
-            this.pathLbl.AutoSize = true;
-            this.pathLbl.Location = new System.Drawing.Point(111, 3);
-            this.pathLbl.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
-            this.pathLbl.Name = "pathLbl";
-            this.pathLbl.Size = new System.Drawing.Size(35, 13);
-            this.pathLbl.TabIndex = 1;
-            this.pathLbl.Text = "label3";
-            this.pathLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // folderLocationLbl
             // 
             this.folderLocationLbl.AutoSize = true;
             this.folderLocationLbl.Location = new System.Drawing.Point(243, 163);
             this.folderLocationLbl.Name = "folderLocationLbl";
-            this.folderLocationLbl.Size = new System.Drawing.Size(130, 13);
+            this.folderLocationLbl.Size = new System.Drawing.Size(101, 13);
             this.folderLocationLbl.TabIndex = 10;
-            this.folderLocationLbl.Text = "Set default folder location:";
+            this.folderLocationLbl.Text = "Set folders to watch";
             // 
             // ContentConnectorViewControl
             // 
@@ -290,7 +277,6 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.buttonsDialogPanel.ResumeLayout(false);
-            this.buttonsDialogPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -311,7 +297,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TableLayoutPanel buttonsDialogPanel;
         private System.Windows.Forms.Button browseBtn;
-        private System.Windows.Forms.Label pathLbl;
         private System.Windows.Forms.Label folderLocationLbl;
     }
 }

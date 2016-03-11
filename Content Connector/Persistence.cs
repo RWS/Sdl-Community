@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -7,6 +8,7 @@ namespace Sdl.Community.ContentConnector
     public class Persistence
     {
         private readonly string _persistancePath;
+       // private List<Folder> _persistenceListFolders = new List<Folder>(); 
         public Persistence()
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -14,7 +16,7 @@ namespace Sdl.Community.ContentConnector
 
         }
 
-        public void Save(string path)
+        public void Save(List<Folder> persistenceListFolders)
         {
             if (!File.Exists(_persistancePath))
             {
@@ -25,17 +27,17 @@ namespace Sdl.Community.ContentConnector
                 }
             }
 
-            var json = JsonConvert.SerializeObject(path);
+            var json = JsonConvert.SerializeObject(persistenceListFolders);
             File.WriteAllText(_persistancePath,json);
             
         }
 
-        public string Load()
+        public List<Folder> Load()
         {
             if (!File.Exists(_persistancePath)) return null;
             var json = File.ReadAllText(_persistancePath);
 
-            var result = JsonConvert.DeserializeObject<string>(json);
+            var result = JsonConvert.DeserializeObject<List<Folder>>(json);
 
             return result;
         }

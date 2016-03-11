@@ -117,53 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="CheckForProjects_Description" xml:space="preserve">
-    <value>Check for new project requests</value>
-  </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CheckForProjects_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\CheckForProjects.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CheckForProjects_Name" xml:space="preserve">
-    <value>Check Project Requests</value>
-  </data>
-  <data name="ConnectorViewRibbonGroup_Name" xml:space="preserve">
-    <value>Content Connector</value>
-  </data>
-  <data name="CreateProjects_Description" xml:space="preserve">
-    <value>Create projects for all the new project requests</value>
-  </data>
-  <data name="CreateProjects_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\CreateProjects.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CreateProjects_Name" xml:space="preserve">
-    <value>Create Projects</value>
-  </data>
-  <data name="Plugin_Name" xml:space="preserve">
-    <value>Studio Integration API Sample</value>
-  </data>
-  <data name="WikipediaSearchAction_Description" xml:space="preserve">
-    <value>Search Wikipedia with current selection</value>
-  </data>
-  <data name="WikipediaSearchAction_Name" xml:space="preserve">
-    <value>Search Wikipedia</value>
-  </data>
-  <data name="Wikipedia_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Wikipedia.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ProjectQuote_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\money_bill.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ContributeToProject_Description" xml:space="preserve">
-    <value>Contribute to project</value>
-  </data>
-  <data name="ContributeToProject_Name" xml:space="preserve">
-    <value>Contribute to project</value>
-  </data>
-  <data name="opensourceimage" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\opensourceimage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <!--<data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>-->
 </root>

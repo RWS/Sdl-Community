@@ -21,21 +21,25 @@ namespace Sdl.Community.ContentConnector
         {
             ProjectRequests = new List<ProjectRequest>();
 
-            string dropFolder = GetIncomingRequestsFolder();
+            List<Folder> dropFolderList = GetIncomingRequestsFolder();
 
-            foreach (string directory in Directory.GetDirectories(dropFolder))
+            foreach (var floder in dropFolderList)
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                ProjectRequests.Add(new ProjectRequest
+                foreach (string directory in Directory.GetDirectories(floder.Path))
                 {
-                    Name = dirInfo.Name,
-                    Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
-                });
+                    DirectoryInfo dirInfo = new DirectoryInfo(directory);
+                    ProjectRequests.Add(new ProjectRequest
+                    {
+                        Name = dirInfo.Name,
+                        Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                    });
+                }
             }
+            
            
         }
 
-        public static string GetIncomingRequestsFolder()
+        public static List<Folder>  GetIncomingRequestsFolder()
         {
             var folderPath = Persistence.Load();
             return folderPath;
@@ -58,7 +62,12 @@ namespace Sdl.Community.ContentConnector
         internal void RequestAccepted(ProjectRequest request)
         {
             Directory.CreateDirectory(GetAcceptedRequestsFolder());
-            Directory.Move(Path.Combine(GetIncomingRequestsFolder(), request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+            var folderList = GetIncomingRequestsFolder();
+            foreach (var folder in folderList)
+            {
+                Directory.Move(Path.Combine(folder.Path, request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+            }
+            //  Directory.Move(Path.Combine(GetIncomingRequestsFolder(), request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
         }
     }
 }
