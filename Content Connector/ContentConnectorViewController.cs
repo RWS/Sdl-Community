@@ -23,6 +23,8 @@ namespace Sdl.Community.ContentConnector
         private readonly Lazy<ContentConnectorViewControl> _control = new Lazy<ContentConnectorViewControl>(() => new ContentConnectorViewControl());
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
+        private List<ProjectRequest> _selectedProjects;
+        private readonly List<bool> _hasTemplateList;
         private int _percentComplete;
         #endregion private fields
 
@@ -31,6 +33,7 @@ namespace Sdl.Community.ContentConnector
         public ContentConnectorViewController()
         {
             _projectRequests = new List<ProjectRequest>();
+            _hasTemplateList = new List<bool>();
         }
 
         protected override void Initialize(IViewContext context)
@@ -38,12 +41,10 @@ namespace Sdl.Community.ContentConnector
             ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
             _control.Value.Controller = this;
         }
-
         protected override System.Windows.Forms.Control GetContentControl()
         {
             return _control.Value;
         }
-
         private ProjectsController ProjectsController
         {
             get;
@@ -85,6 +86,19 @@ namespace Sdl.Community.ContentConnector
                 OnProjectRequestsChanged();
             }
         }
+        public List<ProjectRequest> SelectedProjects
+        {
+            get
+            {
+                return _selectedProjects;
+            }
+            set
+            {
+                _selectedProjects = value;
+                OnPropertyChanged("SelectedProjects");
+            
+            }
+        }
 
         public int PercentComplete 
         {
@@ -119,51 +133,80 @@ namespace Sdl.Community.ContentConnector
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
 
-            if (SelectedProjectTemplate != null)
+            if (SelectedProjects.Count != 0 && SelectedProjects != null)
             {
-                worker.DoWork += (sender, e) =>
+                foreach (var selectedProject in SelectedProjects)
                 {
-                    creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
-                    creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
-                    creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
-                    creator.Execute();
-                };
-                worker.ProgressChanged += (sender, e) =>
-                {
-                    PercentComplete = e.ProgressPercentage;
-                };
-                worker.RunWorkerCompleted += (sender, e) =>
-                {
-
-                    if (e.Error != null)
+                    if (selectedProject.ProjectTemplate != null)
                     {
-                        MessageBox.Show(e.Error.ToString());
+                        _hasTemplateList.Add(true);
                     }
                     else
                     {
-                        foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
-                        {
-                            // accept the request
-                            ContentConnector.Instance.RequestAccepted(request.Item1);
-
-                            // remove the request from the list of requests
-                            ProjectRequests.Remove(request.Item1);
-
-                            OnProjectRequestsChanged();
-                        }
+                        _hasTemplateList.Add(false);
                     }
-                };
-                worker.RunWorkerAsync();
+                }
+            }
+
+            if (!_hasTemplateList.Contains(false))
+            {
+                if (SelectedProjects.Count != 0 && SelectedProjects != null)
+                {
+
+                    worker.DoWork += (sender, e) =>
+                    {
+                        if (SelectedProjects.Count != 0 && SelectedProjects != null)
+                        {
+                            creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
+                        }
+                        else
+                        {
+                            creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
+                        }
+
+                        creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+                        creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
+                        creator.Execute();
+                    };
+                    worker.ProgressChanged += (sender, e) =>
+                    {
+                        PercentComplete = e.ProgressPercentage;
+                    };
+                    worker.RunWorkerCompleted += (sender, e) =>
+                    {
+
+                        if (e.Error != null)
+                        {
+                            MessageBox.Show(e.Error.ToString());
+                        }
+                        else
+                        {
+                            foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
+                            {
+                                // accept the request
+                                ContentConnector.Instance.RequestAccepted(request.Item1);
+
+                                // remove the request from the list of requests
+                                ProjectRequests.Remove(request.Item1);
+
+                                OnProjectRequestsChanged();
+                            }
+                        }
+                    };
+                    worker.RunWorkerAsync();
+
+                }
             }
             else
             {
                 MessageBox.Show(@"Please choose a custom template");
+                _hasTemplateList.Clear();
             }
         }
 
         public void Contribute()
         {
-            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.StudioAutomation.ReferencePlugin");
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Content%20Connector");
         }
         private void ReportMessage(FileBasedProject fileBasedProject, string message)
         {

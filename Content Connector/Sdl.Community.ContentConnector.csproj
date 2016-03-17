@@ -123,12 +123,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddFoldersForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AddFoldersForm.Designer.cs">
-      <DependentUpon>AddFoldersForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="ContentConnectorViewRibbonGroup.cs" />
     <Compile Include="ContentConnector.cs" />
     <Compile Include="ContentConnectorViewControl.cs">
@@ -139,6 +133,9 @@
     </Compile>
     <Compile Include="ContentConnectorViewController.cs" />
     <Compile Include="Folder.cs" />
+    <Compile Include="FolderBrowseDialogExtended.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Persistence.cs" />
     <Compile Include="ProjectCreator.cs" />
     <Compile Include="ProjectQuoteItem.cs" />
@@ -162,9 +159,6 @@
     <DeployPluginPackage>true</DeployPluginPackage>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AddFoldersForm.resx">
-      <DependentUpon>AddFoldersForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ContentConnectorViewControl.resx">
       <DependentUpon>ContentConnectorViewControl.cs</DependentUpon>
     </EmbeddedResource>

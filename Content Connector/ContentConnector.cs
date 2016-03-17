@@ -21,17 +21,19 @@ namespace Sdl.Community.ContentConnector
         {
             ProjectRequests = new List<ProjectRequest>();
 
-            List<Folder> dropFolderList = GetIncomingRequestsFolder();
+            List<ProjectRequest> dropFolderList = GetIncomingRequestsFolder();
 
-            foreach (var floder in dropFolderList)
+            foreach (var folder in dropFolderList)
             {
-                foreach (string directory in Directory.GetDirectories(floder.Path))
+                foreach (string directory in Directory.GetDirectories(folder.Path))
                 {
                     DirectoryInfo dirInfo = new DirectoryInfo(directory);
                     ProjectRequests.Add(new ProjectRequest
                     {
                         Name = dirInfo.Name,
-                        Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                        Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
+                        Path = folder.Path,
+                        ProjectTemplate = folder.ProjectTemplate
                     });
                 }
             }
@@ -39,7 +41,7 @@ namespace Sdl.Community.ContentConnector
            
         }
 
-        public static List<Folder>  GetIncomingRequestsFolder()
+        public static List<ProjectRequest>  GetIncomingRequestsFolder()
         {
             var folderPath = Persistence.Load();
             return folderPath;
@@ -65,9 +67,17 @@ namespace Sdl.Community.ContentConnector
             var folderList = GetIncomingRequestsFolder();
             foreach (var folder in folderList)
             {
-                Directory.Move(Path.Combine(folder.Path, request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+                try
+                {
+                    Directory.Move(Path.Combine(folder.Path, request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+                    folder.Path = folder.Path.Remove(folder.Path.IndexOf(request.Name, StringComparison.Ordinal));
+
+                }
+                catch(Exception e) { }
+
+                Persistence.Save(folderList);
             }
-            //  Directory.Move(Path.Combine(GetIncomingRequestsFolder(), request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+            
         }
     }
 }

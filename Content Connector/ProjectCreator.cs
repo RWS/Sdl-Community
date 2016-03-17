@@ -56,10 +56,11 @@ namespace Sdl.Community.ContentConnector
             ProjectInfo projectInfo = new ProjectInfo
             {
                 Name = request.Name,
-                LocalProjectFolder = GetProjectFolderPath(request.Name)
-            };
+                LocalProjectFolder = GetProjectFolderPath(request.Name),
+               };
             FileBasedProject project = new FileBasedProject(projectInfo,
-                new ProjectTemplateReference(ProjectTemplate.Uri));
+                new ProjectTemplateReference(request.ProjectTemplate.Uri));
+            // new ProjectTemplateReference(ProjectTemplate.Uri));
 
             OnMessageReported(project, String.Format("Creating project {0}", request.Name));
 

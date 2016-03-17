@@ -30,9 +30,6 @@
         {
             this._tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this._progressBar = new System.Windows.Forms.ProgressBar();
-            this._proejctTemplateLabel = new System.Windows.Forms.Label();
-            this._projectTemplatesComboBox = new System.Windows.Forms.ComboBox();
-            this._resultsTextBox = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,8 +38,16 @@
             this._filesListView = new System.Windows.Forms.ListView();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonsDialogPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.browseBtn = new System.Windows.Forms.Button();
-            this.folderLocationLbl = new System.Windows.Forms.Label();
+            this.folderMainPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.foldersListView = new BrightIdeasSoftware.ObjectListView();
+            this.pathColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.deleteColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.templateColumn = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.btnsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.addBtn = new System.Windows.Forms.Button();
+            this.saveBtn = new System.Windows.Forms.Button();
+            this._resultsTextBox = new System.Windows.Forms.TextBox();
             this._tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -50,7 +55,9 @@
             this.splitContainer1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            this.buttonsDialogPanel.SuspendLayout();
+            this.folderMainPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.foldersListView)).BeginInit();
+            this.btnsLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // _tableLayoutPanel
@@ -59,24 +66,21 @@
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this._tableLayoutPanel.Controls.Add(this._progressBar, 0, 4);
-            this._tableLayoutPanel.Controls.Add(this._proejctTemplateLabel, 0, 2);
-            this._tableLayoutPanel.Controls.Add(this._projectTemplatesComboBox, 0, 3);
-            this._tableLayoutPanel.Controls.Add(this._resultsTextBox, 0, 5);
             this._tableLayoutPanel.Controls.Add(this.splitContainer1, 0, 1);
             this._tableLayoutPanel.Controls.Add(this.buttonsDialogPanel, 1, 3);
-            this._tableLayoutPanel.Controls.Add(this.folderLocationLbl, 1, 2);
+            this._tableLayoutPanel.Controls.Add(this.folderMainPanel, 1, 5);
+            this._tableLayoutPanel.Controls.Add(this._resultsTextBox, 0, 5);
             this._tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this._tableLayoutPanel.Name = "_tableLayoutPanel";
             this._tableLayoutPanel.RowCount = 6;
             this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 52.54902F));
+            this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 53.20513F));
             this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 47.45098F));
-            this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this._tableLayoutPanel.Size = new System.Drawing.Size(710, 378);
+            this._tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 46.79487F));
+            this._tableLayoutPanel.Size = new System.Drawing.Size(736, 413);
             this._tableLayoutPanel.TabIndex = 0;
             // 
             // _progressBar
@@ -84,47 +88,10 @@
             this._progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this._tableLayoutPanel.SetColumnSpan(this._progressBar, 2);
-            this._progressBar.Location = new System.Drawing.Point(3, 206);
+            this._progressBar.Location = new System.Drawing.Point(3, 208);
             this._progressBar.Name = "_progressBar";
-            this._progressBar.Size = new System.Drawing.Size(704, 20);
+            this._progressBar.Size = new System.Drawing.Size(730, 20);
             this._progressBar.TabIndex = 2;
-            // 
-            // _proejctTemplateLabel
-            // 
-            this._proejctTemplateLabel.AutoSize = true;
-            this._proejctTemplateLabel.Location = new System.Drawing.Point(0, 163);
-            this._proejctTemplateLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this._proejctTemplateLabel.Name = "_proejctTemplateLabel";
-            this._proejctTemplateLabel.Size = new System.Drawing.Size(86, 13);
-            this._proejctTemplateLabel.TabIndex = 3;
-            this._proejctTemplateLabel.Text = "Project template:";
-            // 
-            // _projectTemplatesComboBox
-            // 
-            this._projectTemplatesComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._projectTemplatesComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this._projectTemplatesComboBox.FormattingEnabled = true;
-            this._projectTemplatesComboBox.Location = new System.Drawing.Point(3, 179);
-            this._projectTemplatesComboBox.Name = "_projectTemplatesComboBox";
-            this._projectTemplatesComboBox.Size = new System.Drawing.Size(234, 21);
-            this._projectTemplatesComboBox.TabIndex = 4;
-            this._projectTemplatesComboBox.SelectedIndexChanged += new System.EventHandler(this._projectTemplatesComboBox_SelectedIndexChanged);
-            // 
-            // _resultsTextBox
-            // 
-            this._resultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this._resultsTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tableLayoutPanel.SetColumnSpan(this._resultsTextBox, 2);
-            this._resultsTextBox.Location = new System.Drawing.Point(3, 232);
-            this._resultsTextBox.Multiline = true;
-            this._resultsTextBox.Name = "_resultsTextBox";
-            this._resultsTextBox.ReadOnly = true;
-            this._resultsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this._resultsTextBox.Size = new System.Drawing.Size(704, 143);
-            this._resultsTextBox.TabIndex = 5;
             // 
             // splitContainer1
             // 
@@ -142,8 +109,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tableLayoutPanel2);
-            this.splitContainer1.Size = new System.Drawing.Size(704, 157);
-            this.splitContainer1.SplitterDistance = 234;
+            this.splitContainer1.Size = new System.Drawing.Size(730, 199);
+            this.splitContainer1.SplitterDistance = 242;
             this.splitContainer1.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -158,7 +125,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(234, 157);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(242, 199);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -181,8 +148,9 @@
             this._projectsListBox.Location = new System.Drawing.Point(0, 13);
             this._projectsListBox.Margin = new System.Windows.Forms.Padding(0);
             this._projectsListBox.Name = "_projectsListBox";
-            this._projectsListBox.Size = new System.Drawing.Size(234, 144);
+            this._projectsListBox.Size = new System.Drawing.Size(242, 186);
             this._projectsListBox.TabIndex = 0;
+            this._projectsListBox.Click += new System.EventHandler(this._projectsListBox_Click);
             // 
             // tableLayoutPanel2
             // 
@@ -196,7 +164,7 @@
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(466, 157);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(484, 199);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // _filesListView
@@ -207,7 +175,7 @@
             this._filesListView.Location = new System.Drawing.Point(0, 13);
             this._filesListView.Margin = new System.Windows.Forms.Padding(0);
             this._filesListView.Name = "_filesListView";
-            this._filesListView.Size = new System.Drawing.Size(466, 144);
+            this._filesListView.Size = new System.Drawing.Size(484, 186);
             this._filesListView.TabIndex = 0;
             this._filesListView.UseCompatibleStateImageBehavior = false;
             this._filesListView.View = System.Windows.Forms.View.List;
@@ -228,35 +196,124 @@
             this.buttonsDialogPanel.ColumnCount = 2;
             this.buttonsDialogPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.buttonsDialogPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.buttonsDialogPanel.Controls.Add(this.browseBtn, 0, 0);
             this.buttonsDialogPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonsDialogPanel.Location = new System.Drawing.Point(240, 176);
+            this.buttonsDialogPanel.Location = new System.Drawing.Point(435, 205);
             this.buttonsDialogPanel.Margin = new System.Windows.Forms.Padding(0);
             this.buttonsDialogPanel.Name = "buttonsDialogPanel";
             this.buttonsDialogPanel.RowCount = 1;
             this.buttonsDialogPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.buttonsDialogPanel.Size = new System.Drawing.Size(470, 27);
+            this.buttonsDialogPanel.Size = new System.Drawing.Size(301, 1);
             this.buttonsDialogPanel.TabIndex = 9;
             // 
-            // browseBtn
+            // folderMainPanel
             // 
-            this.browseBtn.Location = new System.Drawing.Point(3, 3);
-            this.browseBtn.Name = "browseBtn";
-            this.browseBtn.Size = new System.Drawing.Size(102, 21);
-            this.browseBtn.TabIndex = 0;
-            this.browseBtn.Text = "Select folders";
-            this.browseBtn.UseMnemonic = false;
-            this.browseBtn.UseVisualStyleBackColor = true;
-            this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
+            this.folderMainPanel.ColumnCount = 2;
+            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.folderMainPanel.Controls.Add(this.label3, 0, 0);
+            this.folderMainPanel.Controls.Add(this.foldersListView, 0, 1);
+            this.folderMainPanel.Controls.Add(this.btnsLayoutPanel, 0, 2);
+            this.folderMainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.folderMainPanel.Location = new System.Drawing.Point(438, 234);
+            this.folderMainPanel.Name = "folderMainPanel";
+            this.folderMainPanel.RowCount = 3;
+            this.folderMainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.folderMainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.folderMainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            this.folderMainPanel.Size = new System.Drawing.Size(295, 176);
+            this.folderMainPanel.TabIndex = 11;
             // 
-            // folderLocationLbl
+            // label3
             // 
-            this.folderLocationLbl.AutoSize = true;
-            this.folderLocationLbl.Location = new System.Drawing.Point(243, 163);
-            this.folderLocationLbl.Name = "folderLocationLbl";
-            this.folderLocationLbl.Size = new System.Drawing.Size(101, 13);
-            this.folderLocationLbl.TabIndex = 10;
-            this.folderLocationLbl.Text = "Set folders to watch";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(3, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(73, 13);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "Watch folders";
+            // 
+            // foldersListView
+            // 
+            this.foldersListView.AllColumns.Add(this.pathColumn);
+            this.foldersListView.AllColumns.Add(this.deleteColumn);
+            this.foldersListView.AllColumns.Add(this.templateColumn);
+            this.foldersListView.CellEditUseWholeCell = false;
+            this.foldersListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.pathColumn,
+            this.deleteColumn,
+            this.templateColumn});
+            this.foldersListView.Cursor = System.Windows.Forms.Cursors.Default;
+            this.foldersListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.foldersListView.HighlightBackgroundColor = System.Drawing.Color.Empty;
+            this.foldersListView.HighlightForegroundColor = System.Drawing.Color.Empty;
+            this.foldersListView.Location = new System.Drawing.Point(3, 16);
+            this.foldersListView.Name = "foldersListView";
+            this.foldersListView.Size = new System.Drawing.Size(141, 117);
+            this.foldersListView.TabIndex = 2;
+            this.foldersListView.UseCompatibleStateImageBehavior = false;
+            this.foldersListView.View = System.Windows.Forms.View.Details;
+            // 
+            // pathColumn
+            // 
+            this.pathColumn.FillsFreeSpace = true;
+            this.pathColumn.Text = "Path";
+            this.pathColumn.Width = 43;
+            // 
+            // deleteColumn
+            // 
+            this.deleteColumn.Text = "Delete";
+            // 
+            // templateColumn
+            // 
+            this.templateColumn.Text = "Template";
+            this.templateColumn.Width = 150;
+            // 
+            // btnsLayoutPanel
+            // 
+            this.btnsLayoutPanel.ColumnCount = 2;
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.btnsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
+            this.btnsLayoutPanel.Controls.Add(this.saveBtn, 1, 0);
+            this.btnsLayoutPanel.Location = new System.Drawing.Point(3, 139);
+            this.btnsLayoutPanel.Name = "btnsLayoutPanel";
+            this.btnsLayoutPanel.RowCount = 1;
+            this.btnsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.btnsLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 34F));
+            this.btnsLayoutPanel.Size = new System.Drawing.Size(141, 34);
+            this.btnsLayoutPanel.TabIndex = 3;
+            // 
+            // addBtn
+            // 
+            this.addBtn.Location = new System.Drawing.Point(3, 3);
+            this.addBtn.Name = "addBtn";
+            this.addBtn.Size = new System.Drawing.Size(64, 23);
+            this.addBtn.TabIndex = 0;
+            this.addBtn.Text = "Add folder";
+            this.addBtn.UseVisualStyleBackColor = true;
+            this.addBtn.Click += new System.EventHandler(this.addBtn_Click);
+            // 
+            // saveBtn
+            // 
+            this.saveBtn.Location = new System.Drawing.Point(73, 3);
+            this.saveBtn.Name = "saveBtn";
+            this.saveBtn.Size = new System.Drawing.Size(65, 23);
+            this.saveBtn.TabIndex = 1;
+            this.saveBtn.Text = "Save";
+            this.saveBtn.UseVisualStyleBackColor = true;
+            this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
+            // 
+            // _resultsTextBox
+            // 
+            this._resultsTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._resultsTextBox.Location = new System.Drawing.Point(3, 234);
+            this._resultsTextBox.Multiline = true;
+            this._resultsTextBox.Name = "_resultsTextBox";
+            this._resultsTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this._resultsTextBox.Size = new System.Drawing.Size(429, 176);
+            this._resultsTextBox.TabIndex = 5;
             // 
             // ContentConnectorViewControl
             // 
@@ -265,7 +322,7 @@
             this.AutoSize = true;
             this.Controls.Add(this._tableLayoutPanel);
             this.Name = "ContentConnectorViewControl";
-            this.Size = new System.Drawing.Size(710, 378);
+            this.Size = new System.Drawing.Size(736, 413);
             this._tableLayoutPanel.ResumeLayout(false);
             this._tableLayoutPanel.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -276,7 +333,10 @@
             this.tableLayoutPanel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.buttonsDialogPanel.ResumeLayout(false);
+            this.folderMainPanel.ResumeLayout(false);
+            this.folderMainPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.foldersListView)).EndInit();
+            this.btnsLayoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -285,9 +345,6 @@
 
         private System.Windows.Forms.TableLayoutPanel _tableLayoutPanel;
         private System.Windows.Forms.ProgressBar _progressBar;
-        private System.Windows.Forms.Label _proejctTemplateLabel;
-        private System.Windows.Forms.ComboBox _projectTemplatesComboBox;
-        private System.Windows.Forms.TextBox _resultsTextBox;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListView _filesListView;
         private System.Windows.Forms.ListBox _projectsListBox;
@@ -296,7 +353,15 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TableLayoutPanel buttonsDialogPanel;
-        private System.Windows.Forms.Button browseBtn;
-        private System.Windows.Forms.Label folderLocationLbl;
+        private System.Windows.Forms.TextBox _resultsTextBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TableLayoutPanel folderMainPanel;
+        private BrightIdeasSoftware.ObjectListView foldersListView;
+        private BrightIdeasSoftware.OLVColumn pathColumn;
+        private BrightIdeasSoftware.OLVColumn deleteColumn;
+        private BrightIdeasSoftware.OLVColumn templateColumn;
+        private System.Windows.Forms.TableLayoutPanel btnsLayoutPanel;
+        private System.Windows.Forms.Button saveBtn;
+        private System.Windows.Forms.Button addBtn;
     }
 }

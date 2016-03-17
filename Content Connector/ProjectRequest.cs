@@ -1,4 +1,6 @@
-﻿namespace Sdl.Community.ContentConnector
+﻿using Sdl.ProjectAutomation.Core;
+
+namespace Sdl.Community.ContentConnector
 {
     public class ProjectRequest
     {
@@ -17,5 +19,9 @@
         {
             return Name;
         }
+
+        public string Path { get; set; }
+
+        public ProjectTemplateInfo ProjectTemplate { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Sdl.Community.ContentConnector
     public class Persistence
     {
         private readonly string _persistancePath;
-       // private List<Folder> _persistenceListFolders = new List<Folder>(); 
+       
         public Persistence()
         {
             _persistancePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -16,7 +16,7 @@ namespace Sdl.Community.ContentConnector
 
         }
 
-        public void Save(List<Folder> persistenceListFolders)
+        public void Save(List<ProjectRequest> persistenceListFolders)
         {
             if (!File.Exists(_persistancePath))
             {
@@ -26,18 +26,18 @@ namespace Sdl.Community.ContentConnector
                     Directory.CreateDirectory(directory);
                 }
             }
-
+   
             var json = JsonConvert.SerializeObject(persistenceListFolders);
             File.WriteAllText(_persistancePath,json);
             
         }
 
-        public List<Folder> Load()
+        public List<ProjectRequest> Load()
         {
             if (!File.Exists(_persistancePath)) return null;
             var json = File.ReadAllText(_persistancePath);
 
-            var result = JsonConvert.DeserializeObject<List<Folder>>(json);
+            var result = JsonConvert.DeserializeObject<List<ProjectRequest>>(json);
 
             return result;
         }
