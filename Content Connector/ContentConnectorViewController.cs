@@ -25,6 +25,7 @@ namespace Sdl.Community.ContentConnector
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
         private readonly List<bool> _hasTemplateList;
+        public static Persistence Persistence = new Persistence();
         private int _percentComplete;
         #endregion private fields
 
@@ -121,8 +122,8 @@ namespace Sdl.Community.ContentConnector
 
         public void CheckForProjects()
         {
-            ContentConnector.Refresh();
-            ProjectRequests = ContentConnector.ProjectRequests;
+            var projectRequest = Persistence.Load();
+            ProjectRequests = projectRequest;
         }
 
         public void CreateProjects()
@@ -133,74 +134,84 @@ namespace Sdl.Community.ContentConnector
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
 
-            if (SelectedProjects.Count != 0 && SelectedProjects != null)
+            if (SelectedProjects == null || SelectedProjects.Count == 0)
             {
-                foreach (var selectedProject in SelectedProjects)
-                {
-                    if (selectedProject.ProjectTemplate != null)
-                    {
-                        _hasTemplateList.Add(true);
-                    }
-                    else
-                    {
-                        _hasTemplateList.Add(false);
-                    }
-                }
-            }
-
-            if (!_hasTemplateList.Contains(false))
-            {
-                if (SelectedProjects.Count != 0 && SelectedProjects != null)
-                {
-
-                    worker.DoWork += (sender, e) =>
-                    {
-                        if (SelectedProjects.Count != 0 && SelectedProjects != null)
-                        {
-                            creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
-                        }
-                        else
-                        {
-                            creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
-                        }
-
-                        creator.ProgressChanged += (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
-                        creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
-                        creator.Execute();
-                    };
-                    worker.ProgressChanged += (sender, e) =>
-                    {
-                        PercentComplete = e.ProgressPercentage;
-                    };
-                    worker.RunWorkerCompleted += (sender, e) =>
-                    {
-
-                        if (e.Error != null)
-                        {
-                            MessageBox.Show(e.Error.ToString());
-                        }
-                        else
-                        {
-                            foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
-                            {
-                                // accept the request
-                                ContentConnector.Instance.RequestAccepted(request.Item1);
-
-                                // remove the request from the list of requests
-                                ProjectRequests.Remove(request.Item1);
-
-                                OnProjectRequestsChanged();
-                            }
-                        }
-                    };
-                    worker.RunWorkerAsync();
-
-                }
+                MessageBox.Show(@"Please select a project");
             }
             else
             {
-                MessageBox.Show(@"Please choose a custom template");
-                _hasTemplateList.Clear();
+                if (SelectedProjects != null && SelectedProjects.Count != 0)
+                {
+                    foreach (var selectedProject in SelectedProjects)
+                    {
+                        if (selectedProject.ProjectTemplate != null)
+                        {
+                            _hasTemplateList.Add(true);
+                        }
+                        else
+                        {
+                            _hasTemplateList.Add(false);
+                        }
+                    }
+                }
+
+                if (!_hasTemplateList.Contains(false))
+                {
+                    if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
+                    {
+
+                        worker.DoWork += (sender, e) =>
+                        {
+                            if (SelectedProjects.Count != 0 && SelectedProjects != null)
+                            {
+                                creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
+                            }
+                            else
+                            {
+                                creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
+                            }
+
+                            creator.ProgressChanged +=
+                                (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+                            creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
+                            creator.Execute();
+                        };
+                        worker.ProgressChanged += (sender, e) =>
+                        {
+                            PercentComplete = e.ProgressPercentage;
+                        };
+                        worker.RunWorkerCompleted += (sender, e) =>
+                        {
+
+                            if (e.Error != null)
+                            {
+                                MessageBox.Show(e.Error.ToString());
+                            }
+                            else
+                            {
+                                foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
+                                {
+                                    // accept the request
+                                    ContentConnector.Instance.RequestAccepted(request.Item1);
+
+                                    // remove the request from the list of requests
+                                    ProjectRequests.Remove(request.Item1);
+
+                                    OnProjectRequestsChanged();
+                                }
+                            }
+                        };
+                        worker.RunWorkerAsync();
+
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(@"Please choose a custom template");
+                    _hasTemplateList.Clear();
+                }
+
+
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Sdl.Community.ContentConnector
@@ -30,6 +31,16 @@ namespace Sdl.Community.ContentConnector
             var json = JsonConvert.SerializeObject(persistenceListFolders);
             File.WriteAllText(_persistancePath,json);
             
+        }
+
+        public void Update(ProjectRequest projectRequest)
+        {
+            var projectRequestList = Load();
+            var projectToUpdate = projectRequestList.FirstOrDefault(p => p.Name == projectRequest.Name);
+            if (projectToUpdate != null) projectToUpdate.Files = new string[] {};
+
+            Save(projectRequestList);
+
         }
 
         public List<ProjectRequest> Load()

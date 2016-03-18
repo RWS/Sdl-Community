@@ -207,9 +207,9 @@
             // 
             // folderMainPanel
             // 
-            this.folderMainPanel.ColumnCount = 2;
-            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.folderMainPanel.ColumnCount = 1;
+            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.folderMainPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.folderMainPanel.Controls.Add(this.label3, 0, 0);
             this.folderMainPanel.Controls.Add(this.foldersListView, 0, 1);
             this.folderMainPanel.Controls.Add(this.btnsLayoutPanel, 0, 2);
@@ -248,7 +248,7 @@
             this.foldersListView.HighlightForegroundColor = System.Drawing.Color.Empty;
             this.foldersListView.Location = new System.Drawing.Point(3, 16);
             this.foldersListView.Name = "foldersListView";
-            this.foldersListView.Size = new System.Drawing.Size(141, 117);
+            this.foldersListView.Size = new System.Drawing.Size(289, 117);
             this.foldersListView.TabIndex = 2;
             this.foldersListView.UseCompatibleStateImageBehavior = false;
             this.foldersListView.View = System.Windows.Forms.View.Details;
@@ -262,6 +262,7 @@
             // deleteColumn
             // 
             this.deleteColumn.Text = "Delete";
+            this.deleteColumn.Width = 200;
             // 
             // templateColumn
             // 

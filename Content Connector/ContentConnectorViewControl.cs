@@ -34,7 +34,7 @@ namespace Sdl.Community.ContentConnector
             {
                 var folderObject = (ProjectRequest) rowObject;
 
-                return folderObject.Path;
+                return folderObject.Path + @"\"+folderObject.Name;
             };
 
             deleteColumn.AspectGetter = delegate {
@@ -52,6 +52,7 @@ namespace Sdl.Community.ContentConnector
             foldersListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
             foldersListView.CellEditStarting += FoldersListView_CellEditStarting;
             foldersListView.CellEditFinishing += FoldersListView_CellEditFinishing;
+            foldersListView.CellToolTipShowing += FoldersListView_CellToolTipShowing;
 
             templateColumn.AspectGetter = delegate(object rowObject)
             {
@@ -64,6 +65,20 @@ namespace Sdl.Community.ContentConnector
 
             //allows user to select multiple projects in listbox
             _projectsListBox.SelectionMode = SelectionMode.MultiSimple;
+
+        }
+
+        private void FoldersListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
+        {
+           
+            if (((ObjectListView) sender).HotColumnIndex == 1)
+            {
+                e.Text = "Deletes a watch folder from list. Please save the changes.";
+            }
+            if (((ObjectListView) sender).HotColumnIndex == 2)
+            {
+                e.Text = " Click to select a custom template, and save the changes.";
+            }
 
         }
 
@@ -90,7 +105,7 @@ namespace Sdl.Community.ContentConnector
                     _folderPathList = _persistence.Load();
                 }
 
-                var item = _folderPathList.FirstOrDefault(p => p.Path == ((ProjectRequest)e.RowObject).Path);
+                var item = _folderPathList.FirstOrDefault(p => p.Name == ((ProjectRequest)e.RowObject).Name);
 
                 if (item != null) item.ProjectTemplate = (ProjectTemplateInfo) value;
                 _persistence.Save(_folderPathList);
@@ -256,17 +271,23 @@ namespace Sdl.Community.ContentConnector
 
                     foreach (var directory in Directory.GetDirectories(folderPath))
                     {
+                    
                         var directoryInfo = new DirectoryInfo(directory);
 
                         if (_folderPathList != null)
                         {
-                        _folderPathList.Add(new ProjectRequest
-                        {
-                            Name = directoryInfo.Name,
-                            Path = folderPath,
-                            Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
-                        });
-                    }
+
+                            var selectedFolder = new ProjectRequest
+                            {
+                                Name = directoryInfo.Name,
+                                Path = folderPath,
+                                Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                            };
+                            if (!_folderPathList.Contains(selectedFolder))
+                            {
+                                _folderPathList.Add(selectedFolder);
+                            }
+                        }
                        
                     }
 

@@ -64,20 +64,16 @@ namespace Sdl.Community.ContentConnector
         internal void RequestAccepted(ProjectRequest request)
         {
             Directory.CreateDirectory(GetAcceptedRequestsFolder());
-            var folderList = GetIncomingRequestsFolder();
-            foreach (var folder in folderList)
+            try
             {
-                try
-                {
-                    Directory.Move(Path.Combine(folder.Path, request.Name), Path.Combine(GetAcceptedRequestsFolder(), request.Name));
-                    folder.Path = folder.Path.Remove(folder.Path.IndexOf(request.Name, StringComparison.Ordinal));
-
-                }
-                catch(Exception e) { }
-
-                Persistence.Save(folderList);
+                Directory.Move(Path.Combine(request.Path, request.Name),
+                    Path.Combine(GetAcceptedRequestsFolder(), request.Name));
+               Persistence.Update(request);
             }
-            
+            catch (Exception e)
+            {
+
+            }
         }
     }
 }
