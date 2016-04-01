@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.ProjectAutomation.Core;
@@ -14,7 +15,8 @@ namespace Sdl.Community.ContentConnector
         ContentConnectorViewController _controller;
         private readonly Persistence _persistence;
         private  List<ProjectRequest> _folderPathList;
-        private readonly List<ProjectRequest> _selectedFolders; 
+        private readonly List<ProjectRequest> _selectedFolders;
+        private readonly List<ProjectRequest> _watchFolders;
 
         public ContentConnectorViewControl()
         {
@@ -24,6 +26,7 @@ namespace Sdl.Community.ContentConnector
             _projectsListBox.SelectedIndexChanged += new EventHandler(_projectsListBox_SelectedIndexChanged);
             _folderPathList = new List<ProjectRequest>();
             _selectedFolders = new List<ProjectRequest>();
+            _watchFolders = new List<ProjectRequest>();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -34,7 +37,7 @@ namespace Sdl.Community.ContentConnector
             {
                 var folderObject = (ProjectRequest) rowObject;
 
-                return folderObject.Path + @"\"+folderObject.Name;
+                return folderObject.Path;
             };
 
             deleteColumn.AspectGetter = delegate {
@@ -60,7 +63,7 @@ namespace Sdl.Community.ContentConnector
 
                 return folderObject.ProjectTemplate;
             };
-            InitializeListView(_folderPathList);
+            InitializeListView(_watchFolders);
 
 
             //allows user to select multiple projects in listbox
@@ -105,11 +108,17 @@ namespace Sdl.Community.ContentConnector
                     _folderPathList = _persistence.Load();
                 }
 
-                var item = _folderPathList.FirstOrDefault(p => p.Name == ((ProjectRequest)e.RowObject).Name);
+   
+                var items = _folderPathList.FindAll(p => p.Path == ((ProjectRequest)e.RowObject).Path);
 
-                if (item != null) item.ProjectTemplate = (ProjectTemplateInfo) value;
-                _persistence.Save(_folderPathList);
-                InitializeListView(_folderPathList);
+                foreach (var item in items)
+                {
+                     item.ProjectTemplate = (ProjectTemplateInfo)value;
+                }
+                
+
+                Save();
+                InitializeListView(_watchFolders);
 
             }
         }
@@ -125,17 +134,38 @@ namespace Sdl.Community.ContentConnector
             if (e.Column == deleteColumn)
             {
                 e.Cancel = true;
-                foldersListView.RemoveObject(e.RowObject);
+                var confirmDelete = MessageBox.Show(@"Are you sure you want to remove this watch folder path?",
+                    @"Confirm",
+                    MessageBoxButtons.OKCancel,
+                    MessageBoxIcon.Question);
 
-                var folderObject = e.RowObject as ProjectRequest;
-                try
+                if (confirmDelete == DialogResult.OK)
                 {
-                    var pathToRemove = _folderPathList.First(p => p.Path == folderObject.Path);
+                    foldersListView.RemoveObject(e.RowObject);
 
-                    _folderPathList.Remove(pathToRemove);
+                    var folderObject = e.RowObject as ProjectRequest;
+                    try
+                    {
+
+                        var requestToRemove = _folderPathList.FindAll(p => p.Path == folderObject.Path);
+                        foreach (var request in requestToRemove)
+                        {
+                            _folderPathList.Remove(request);
+                        }
+
+                        var watchFolderToRemove = _watchFolders.First(w => w.Path == folderObject.Path);
+                        _watchFolders.Remove(watchFolderToRemove);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                    _persistence.Save(_folderPathList);
+                    LoadProjectRequests();
+
                 }
-                catch(Exception ex) { }
-               
+
             }
 
             if (e.Column != templateColumn) return;
@@ -162,11 +192,16 @@ namespace Sdl.Community.ContentConnector
         }
 
 
-        private void InitializeListView(List<ProjectRequest> filePathList)
+        private void InitializeListView(List<ProjectRequest> watchFolders)
         {
-            filePathList = _persistence.Load();
-
-            foldersListView.SetObjects(filePathList);
+            watchFolders = _persistence.Load();
+            if (watchFolders != null)
+            {
+               // var distinct = watchFolders.Select(x => x.Path).Distinct();
+                var distinct = watchFolders.GroupBy(x => x.Path).Select(y => y.First());
+                foldersListView.SetObjects(distinct);
+            }
+            
         }
 
         internal ContentConnectorViewController Controller
@@ -227,11 +262,15 @@ namespace Sdl.Community.ContentConnector
             ProjectRequest selectedProject = _projectsListBox.SelectedItem as ProjectRequest;
             if (selectedProject != null)
             {
-                foreach (string file in selectedProject.Files)
+                if (selectedProject.Files != null)
                 {
-                    string fileName = Path.GetFileName(file);
-                    _filesListView.Items.Add(fileName);
+                    foreach (string file in selectedProject.Files)
+                    {
+                        string fileName = Path.GetFileName(file);
+                        _filesListView.Items.Add(fileName);
+                    }
                 }
+                
             }
         }
 
@@ -248,7 +287,7 @@ namespace Sdl.Community.ContentConnector
        
         private void addBtn_Click(object sender, EventArgs e)
         {
-
+           
             if (_persistence.Load() != null)
             {
                 _folderPathList = _persistence.Load();
@@ -263,20 +302,26 @@ namespace Sdl.Community.ContentConnector
             };
            
             var result = folderDialog.ShowDialog();
-                
-                if (result == DialogResult.OK)
+
+            if (result == DialogResult.OK)
+            {
+
+                var folderPath = folderDialog.SelectedPath;
+                var watchFolder = new ProjectRequest
+                {
+                    Path = folderPath
+                };
+                _watchFolders.Add(watchFolder);
+
+                foreach (var directory in Directory.GetDirectories(folderPath))
                 {
 
-                    var folderPath = folderDialog.SelectedPath;
+                    var directoryInfo = new DirectoryInfo(directory);
 
-                    foreach (var directory in Directory.GetDirectories(folderPath))
+                    if (_folderPathList != null)
                     {
-                    
-                        var directoryInfo = new DirectoryInfo(directory);
-
-                        if (_folderPathList != null)
+                        if (directoryInfo.Name != "AcceptedRequests")
                         {
-
                             var selectedFolder = new ProjectRequest
                             {
                                 Name = directoryInfo.Name,
@@ -288,19 +333,32 @@ namespace Sdl.Community.ContentConnector
                                 _folderPathList.Add(selectedFolder);
                             }
                         }
-                       
+
                     }
 
-                    foldersListView.SetObjects(_folderPathList);
                 }
-            
+
+                foldersListView.SetObjects(_watchFolders);
+                Save();
+            }
+
 
         }
 
+        private void Save()
+        {
+            _persistence.Save(_folderPathList);
+            InitializeListView(_watchFolders);
+
+            ContentConnector.Refresh();
+            _controller.ProjectRequests = _folderPathList;
+
+            LoadProjectRequests();
+        }
         private void saveBtn_Click(object sender, EventArgs e)
         {
             _persistence.Save(_folderPathList);
-            InitializeListView(_folderPathList);
+            InitializeListView(_watchFolders);
 
             ContentConnector.Refresh();
             _controller.ProjectRequests = _folderPathList;

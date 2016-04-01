@@ -43,6 +43,15 @@ namespace Sdl.Community.ContentConnector
 
         }
 
+        public void Watch(ProjectRequest projectRequest)
+        {
+            var projectRequestList = Load();
+            var projectToUpdate = projectRequestList.FirstOrDefault(p => p.Name == projectRequest.Name);
+            if (projectToUpdate != null) projectToUpdate.Files = projectRequest.Files;
+
+            Save(projectRequestList);
+        }
+
         public List<ProjectRequest> Load()
         {
             if (!File.Exists(_persistancePath)) return null;
@@ -51,6 +60,17 @@ namespace Sdl.Community.ContentConnector
             var result = JsonConvert.DeserializeObject<List<ProjectRequest>>(json);
 
             return result;
+        }
+
+        public void AddProjectRequests(List<ProjectRequest> projectRequests)
+        {
+            var projectRequestList = Load();
+            foreach (var project in projectRequests)
+            {
+                projectRequestList.Add(project);
+            }
+
+            Save(projectRequestList);
         }
     }
 }

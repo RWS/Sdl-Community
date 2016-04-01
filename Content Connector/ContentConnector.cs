@@ -28,13 +28,17 @@ namespace Sdl.Community.ContentConnector
                 foreach (string directory in Directory.GetDirectories(folder.Path))
                 {
                     DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                    ProjectRequests.Add(new ProjectRequest
+                    if (dirInfo.Name != "AcceptedRequests")
                     {
-                        Name = dirInfo.Name,
-                        Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
-                        Path = folder.Path,
-                        ProjectTemplate = folder.ProjectTemplate
-                    });
+                        ProjectRequests.Add(new ProjectRequest
+                        {
+                            Name = dirInfo.Name,
+                            Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
+                            Path = folder.Path,
+                            ProjectTemplate = folder.ProjectTemplate
+                        });
+                    }
+         
                 }
             }
             
@@ -48,32 +52,68 @@ namespace Sdl.Community.ContentConnector
         }
 
 
-        private static string GetAcceptedRequestsFolder()
+        private string GetAcceptedRequestsFolder(string path)
         {
-             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                "Studio 2015\\AcceptedRequests");
-
-            if (!Directory.Exists(path))
+            var acceptedPath = Path.Combine(path, "AcceptedRequests");
+            if (!Directory.Exists(acceptedPath))
             {
                 Directory.CreateDirectory(path);
             }
-
-            return path;
+            return acceptedPath;
         }
 
         internal void RequestAccepted(ProjectRequest request)
         {
-            Directory.CreateDirectory(GetAcceptedRequestsFolder());
-            try
-            {
-                Directory.Move(Path.Combine(request.Path, request.Name),
-                    Path.Combine(GetAcceptedRequestsFolder(), request.Name));
-               Persistence.Update(request);
-            }
-            catch (Exception e)
-            {
+            var requestPath = Path.Combine(request.Path, request.Name);
+          
+            var acceptedRequestFolder = GetAcceptedRequestsFolder(request.Path);
 
+            var directoryToMovePath = Path.Combine(acceptedRequestFolder, request.Name);
+            //creez directorul "Accepted request"
+            if (!Directory.Exists(directoryToMovePath))
+            {
+                Directory.CreateDirectory(directoryToMovePath);
+            }
+
+            
+            var files = Directory.GetFiles(requestPath);
+            if (files.Length != 0)
+            {
+                MoveFilesToAcceptedFolder(files, directoryToMovePath);
+                Directory.Delete(requestPath);
+            }//inseamna ca avem subfolder si nu fisiere in director
+            else
+            {
+                
+                var subdirectories = Directory.GetDirectories(requestPath);
+                foreach (var subdirectory in subdirectories)
+                {
+                    var currentDirInfo = new DirectoryInfo(subdirectory);
+                    var subdirectoryFiles = Directory.GetFiles(currentDirInfo.FullName);
+                    MoveFilesToAcceptedFolder(subdirectoryFiles, directoryToMovePath);
+                    Directory.Delete(requestPath);
+                }
+            }
+            
+            Persistence.Update(request);
+        }
+
+        private void MoveFilesToAcceptedFolder(string[] files,string acceptedFolderPath)
+        {
+            foreach (var subFile in files)
+            {
+                var fileName = subFile.Substring(subFile.LastIndexOf(@"\", StringComparison.Ordinal));
+                try
+                {
+                    File.Copy(subFile, acceptedFolderPath + fileName, true);
+                    File.Delete(subFile);
+                }
+                catch (Exception e)
+                {
+
+                }
             }
         }
+
     }
 }

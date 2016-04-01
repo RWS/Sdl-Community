@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -122,9 +125,105 @@ namespace Sdl.Community.ContentConnector
 
         public void CheckForProjects()
         {
-            var projectRequest = Persistence.Load();
-            ProjectRequests = projectRequest;
+             var projectRequest = Persistence.Load();
+            var newProjectRequestList = new List<ProjectRequest>(); 
+            if (projectRequest != null)
+            {
+
+                var watchFoldersList=GetWatchFolders(projectRequest);
+                foreach (var warchFolder in watchFoldersList)
+                {
+                    newProjectRequestList.AddRange( GetNewDirectories(warchFolder, projectRequest));
+
+                  
+                    
+                }
+
+                Persistence.Save(newProjectRequestList);
+                ProjectRequests = newProjectRequestList;
+            }
+            
+
+
         }
+
+        private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
+        {
+            var watchFoldersPath = projectRequest.GroupBy(x => x.Path).Select(y => y.First());;
+            var foldersPath = new List<string>();
+            foreach (var watch in watchFoldersPath)
+            {
+                foldersPath.Add(watch.Path);
+            }
+
+            return foldersPath;
+        }
+
+        private List<ProjectRequest> GetNewDirectories(string watchFolderPath,List<ProjectRequest> projectRequests )
+        {
+            //get the template for watch folder
+            var templateForWatchFolder =
+                projectRequests.Where(s => s.Path == watchFolderPath).Select(t => t.ProjectTemplate).FirstOrDefault();
+           
+            var projectRequestList = new List<ProjectRequest>();
+            var subdirectories = Directory.GetDirectories(watchFolderPath);
+            foreach (var subdirectory in subdirectories)
+            {
+                var dirInfo= new DirectoryInfo(subdirectory);
+                if (dirInfo.Name != "AcceptedRequests")
+                {
+                    var projectRequest = new ProjectRequest();
+                    projectRequest.Name = dirInfo.Name;
+                    projectRequest.Path = watchFolderPath;
+                    projectRequest.ProjectTemplate = templateForWatchFolder;
+                    projectRequest.Files = Directory.GetFiles(dirInfo.FullName, "*", SearchOption.AllDirectories);
+                    if (projectRequest.Files.Length >0)
+                    {
+                        projectRequestList.Add(projectRequest);
+                    }
+                   
+                }
+
+            }
+
+            return projectRequestList;
+            
+        }
+
+        private string[] GetFilesFromFolders(string path)
+        {
+            var dirInfo = new DirectoryInfo(path);
+            var subdirectories = dirInfo.GetDirectories();
+            foreach (var subdirectory in subdirectories)
+            {
+                //if (subdirectory.Name != "AcceptedRequests")
+                //{
+                //    var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+                //    return files;
+
+                //}
+                var files = GetSubdirectories(subdirectory.FullName);
+                return files;
+            }
+            return null;
+        }
+
+        private string[] GetSubdirectories(string path)
+        {
+            var dirInfo = new DirectoryInfo(path);
+            var dir = dirInfo.GetDirectories();
+            foreach (var directories in dir)
+            {
+                if (directories.Name != "AcceptedRequests")
+                {
+                    var files = Directory.GetFiles(directories.FullName, "*", SearchOption.AllDirectories);
+                    return files;
+                }
+            }
+            var file = Directory.GetFiles(path, "*");
+            return file;
+        }
+
 
         public void CreateProjects()
         {
