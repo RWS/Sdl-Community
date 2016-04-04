@@ -1,0 +1,109 @@
+﻿<UserControl x:Class="Sdl.Community.StarTransit.UI.Controls.PackageDetails"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+<!--<UserControl.Resources>
+    <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                --><!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  --><!--
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                --><!--  Accent and AppTheme setting  --><!--
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+</UserControl.Resources>-->
+    <Grid Margin="10">
+        <Grid.Resources>
+            <Style TargetType="{x:Type TextBox}">
+                <Setter Property="Margin" Value="0,0,0,5"/>
+                <Setter Property="Padding" Value="0,0,0,10"/>
+            </Style>
+           
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="37*"/>
+            <ColumnDefinition Width="68*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="name" TextWrapping="Wrap" Text="Name:"/>
+        <TextBlock x:Name="description" TextWrapping="Wrap" Text="Description:" Grid.Row="1"/>
+        <TextBlock x:Name="location" TextWrapping="Wrap" Text="Location:" Grid.Row="2"/>
+        <TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4"/>
+        <TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5"/>
+        <TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date" Grid.Row="6"/>
+        <TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="7"/>
+        <TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="8"/>
+        <TextBox Style="{StaticResource MetroTextBox}"
+                Controls:TextBoxHelper.ClearTextButton="True"
+                Controls:TextBoxHelper.Watermark =" Package name"
+                Controls:TextBoxHelper.IsWaitingForData="True"
+                Controls:TextBoxHelper.UseFloatingWatermark="True" 
+                ToolTip="Package name"
+                 Margin="0,0,0,10"
+                 Padding="0,0,0,10"
+                 x:Name="txtName" Grid.Column="1" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
+
+        <TextBox Style="{StaticResource MetroTextBox}"
+                Controls:TextBoxHelper.ClearTextButton="True"
+                Controls:TextBoxHelper.Watermark =" Description"
+                Controls:TextBoxHelper.IsWaitingForData="True"
+                Controls:TextBoxHelper.UseFloatingWatermark="True" 
+                ToolTip="Description"
+                 Margin="0,0,0,10"
+                 x:Name="txtDescription" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1" MinLines="3" AcceptsReturn="True" Grid.ColumnSpan="2"/>
+        <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="5,0,0,10"  Click="button_Click" />
+            <TextBox Style="{StaticResource MetroTextBox}"
+                Controls:TextBoxHelper.ClearTextButton="True"
+                Controls:TextBoxHelper.Watermark =" Location"
+                Controls:TextBoxHelper.IsWaitingForData="True"
+                Controls:TextBoxHelper.UseFloatingWatermark="True" 
+                ToolTip="Location"
+                     Margin="0,0,0,10"
+                     Padding="0,0,0,15"
+                x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
+        </Grid>
+        <TextBox Style="{StaticResource MetroTextBox}"
+                Controls:TextBoxHelper.ClearTextButton="True"
+                Controls:TextBoxHelper.Watermark ="Customer"
+                Controls:TextBoxHelper.IsWaitingForData="True"
+                Controls:TextBoxHelper.UseFloatingWatermark="True" 
+                ToolTip="Customer"
+            Margin="0,0,0,10"
+           x:Name="txtName_Copy" Grid.Column="1" TextWrapping="Wrap" Grid.Row="4" Grid.ColumnSpan="2" />
+        <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+        <DatePicker Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
+        <ComboBox x:Name="sourceLanguageComboBox" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <ComboBox x:Name="targetLanguageComboBox" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+       
+    </Grid>
+</UserControl>
