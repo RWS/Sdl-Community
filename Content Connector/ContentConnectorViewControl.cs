@@ -103,11 +103,8 @@ namespace Sdl.Community.ContentConnector
                     foldersListView.RefreshObject((ProjectRequest) e.RowObject);
 
                 }
-                if (_folderPathList.Count == 0)
-                {
-                    _folderPathList = _persistence.Load();
-                }
-
+               
+                _folderPathList = _persistence.Load();
    
                 var items = _folderPathList.FindAll(p => p.Path == ((ProjectRequest)e.RowObject).Path);
 
