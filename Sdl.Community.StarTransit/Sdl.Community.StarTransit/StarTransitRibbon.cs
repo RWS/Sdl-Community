@@ -47,6 +47,8 @@ namespace Sdl.Community.StarTransit
                     Name = package.Name,
                     Description =package.Description,
                     ProjectTemplate = templateList,
+                    SourceLanguage = package.SourceLanguage,
+                    TargetLanguage = package.TargetLanguage
                 };
 
                 //creaza un proiect studio

@@ -27,21 +27,24 @@ namespace Sdl.Community.StarTransit.UI.Controls
       //  private PackageService _packageService;
         public PackageDetails(PackageModel package)
         {
-            
+
             InitializeComponent();
             txtName.Text = package.Name;
             txtDescription.Text = package.Description;
             comboBox.ItemsSource = package.ProjectTemplate;
+            sourceLanguageComboBox.SelectedItem = package.SourceLanguage;
+            targetLanguageComboBox.SelectedItem = package.TargetLanguage;
+
             GetCultureList();
         }
 
         private void GetCultureList()
         {
-            
-            //var languageList = CultureInfo
-            //    .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
-            //    .ToList();
-            var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
+
+            var languageList = CultureInfo
+                .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
+                .ToList();
+            //   var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
             sourceLanguageComboBox.ItemsSource = languageList;
             
             targetLanguageComboBox.ItemsSource = languageList;

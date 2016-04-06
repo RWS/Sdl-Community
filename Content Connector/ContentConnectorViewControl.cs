@@ -129,13 +129,13 @@ namespace Sdl.Community.ContentConnector
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void FoldersListView_CellEditStarting(object sender, BrightIdeasSoftware.CellEditEventArgs e)
+        private void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
         {
             if (e.Column == deleteColumn)
             {
                 e.Cancel = true;
                 var confirmDelete = MessageBox.Show(@"Are you sure you want to remove this watch folder path?",
-                    @"Confirm",
+                    @"Confirm", 
                     MessageBoxButtons.OKCancel,
                     MessageBoxIcon.Question);
 

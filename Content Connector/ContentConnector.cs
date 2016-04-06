@@ -8,6 +8,7 @@ namespace Sdl.Community.ContentConnector
     {
         public static readonly ContentConnector Instance = new ContentConnector();
         public static Persistence Persistence = new Persistence();
+        private string _requestPath = string.Empty;
         private ContentConnector()
         {
         }
@@ -64,40 +65,88 @@ namespace Sdl.Community.ContentConnector
 
         internal void RequestAccepted(ProjectRequest request)
         {
-            var requestPath = Path.Combine(request.Path, request.Name);
+            _requestPath = Path.Combine(request.Path, request.Name);
           
             var acceptedRequestFolder = GetAcceptedRequestsFolder(request.Path);
 
             var directoryToMovePath = Path.Combine(acceptedRequestFolder, request.Name);
-            //creez directorul "Accepted request"
+            //create the directory "Accepted request"
             if (!Directory.Exists(directoryToMovePath))
             {
                 Directory.CreateDirectory(directoryToMovePath);
             }
 
             
-            var files = Directory.GetFiles(requestPath);
+            var files = Directory.GetFiles(_requestPath);
             if (files.Length != 0)
             {
                 MoveFilesToAcceptedFolder(files, directoryToMovePath);
-                Directory.Delete(requestPath);
-            }//inseamna ca avem subfolder si nu fisiere in director
+                Directory.Delete(_requestPath);
+            }//that means we habe a subfolder in watch folder
             else
             {
                 
-                var subdirectories = Directory.GetDirectories(requestPath);
+                var subdirectories = Directory.GetDirectories(_requestPath);
                 foreach (var subdirectory in subdirectories)
                 {
                     var currentDirInfo = new DirectoryInfo(subdirectory);
-                    var subdirectoryFiles = Directory.GetFiles(currentDirInfo.FullName);
-                    MoveFilesToAcceptedFolder(subdirectoryFiles, directoryToMovePath);
-                    Directory.Delete(requestPath);
+                    // HasSubfolders(currentDirInfo.FullName);
+                    CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
+                
                 }
+
+                var currentDirectory = Directory.GetDirectories(_requestPath);
+                try
+                {
+                    if (currentDirectory.Length == 0)
+                    {
+                        Directory.Delete(_requestPath);
+                    }
+                }catch(Exception exception) { }
+               
+                
             }
             
             Persistence.Update(request);
         }
 
+  
+        private void CheckForSubfolders(DirectoryInfo directory,string root)
+        {
+            var subdirectories = directory.GetDirectories();
+            var path = root + @"\" + directory.Parent;
+            var subdirectoryFiles = Directory.GetFiles(directory.FullName);
+            if (subdirectoryFiles.Length != 0)
+            {
+                var subdirectoryToMovePath = Path.Combine(path, directory.Name);
+                if (!Directory.Exists(subdirectoryToMovePath))
+                {
+                    Directory.CreateDirectory(subdirectoryToMovePath);
+                }
+
+                MoveFilesToAcceptedFolder(subdirectoryFiles, subdirectoryToMovePath);
+                try
+                {
+                    Directory.Delete(directory.FullName);
+                    var pathToDelete = Path.Combine(_requestPath, directory.Parent.Name);
+                    var directoryToDelete = Directory.GetDirectories(pathToDelete);
+                    if (directoryToDelete.Length == 0)
+                    {
+                        Directory.Delete(pathToDelete);
+                    }
+                   
+                }catch(Exception e) { }
+                
+            }
+            if (subdirectories.Length != 0)
+            {
+                foreach (var subdirectory in subdirectories)
+                {
+                    CheckForSubfolders(subdirectory, path);
+                }
+            }
+            
+        }
         private void MoveFilesToAcceptedFolder(string[] files,string acceptedFolderPath)
         {
             foreach (var subFile in files)
