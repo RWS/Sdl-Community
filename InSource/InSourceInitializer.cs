@@ -7,11 +7,11 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 namespace Sdl.Community.InSource
 {
     [ApplicationInitializer]
-    class ContentConnectorInitializer : IApplicationInitializer
+    class InSourceInitializer : IApplicationInitializer
     {
         public void Execute()
         {
-            ContentConnectorViewController contentConnector = SdlTradosStudio.Application.GetController<ContentConnectorViewController>();
+            InSourceViewController contentConnector = SdlTradosStudio.Application.GetController<InSourceViewController>();
             contentConnector.CheckForProjects();
             TelemetryService.Instance.Init();
             if (contentConnector.ProjectRequests.Count > 0)

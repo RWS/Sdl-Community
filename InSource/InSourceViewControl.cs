@@ -10,15 +10,15 @@ using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.InSource
 {
-    public partial class ContentConnectorViewControl : UserControl
+    public partial class InSourceViewControl : UserControl
     {
-        ContentConnectorViewController _controller;
+        InSourceViewController _controller;
         private readonly Persistence _persistence;
         private  List<ProjectRequest> _folderPathList;
         private readonly List<ProjectRequest> _selectedFolders;
         private readonly List<ProjectRequest> _watchFolders;
 
-        public ContentConnectorViewControl()
+        public InSourceViewControl()
         {
             InitializeComponent();
 
@@ -202,7 +202,7 @@ namespace Sdl.Community.InSource
             
         }
 
-        internal ContentConnectorViewController Controller
+        internal InSourceViewController Controller
         {
             get { return _controller; }
             set
@@ -370,7 +370,7 @@ namespace Sdl.Community.InSource
             _persistence.Save(_folderPathList);
             InitializeListView(_watchFolders);
 
-            ContentConnector.Refresh();
+            InSource.Refresh();
             _controller.ProjectRequests = _folderPathList;
 
             LoadProjectRequests();
@@ -380,7 +380,7 @@ namespace Sdl.Community.InSource
             _persistence.Save(_folderPathList);
             InitializeListView(_watchFolders);
 
-            ContentConnector.Refresh();
+            InSource.Refresh();
             _controller.ProjectRequests = _folderPathList;
             
             LoadProjectRequests();

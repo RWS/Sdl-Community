@@ -147,15 +147,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContentConnectorViewRibbonGroup.cs" />
-    <Compile Include="ContentConnector.cs" />
-    <Compile Include="ContentConnectorViewControl.cs">
+    <Compile Include="InSourceViewRibbonGroup.cs" />
+    <Compile Include="InSource.cs" />
+    <Compile Include="InSourceViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ContentConnectorViewControl.Designer.cs">
-      <DependentUpon>ContentConnectorViewControl.cs</DependentUpon>
+    <Compile Include="InSourceViewControl.Designer.cs">
+      <DependentUpon>InSourceViewControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ContentConnectorViewController.cs" />
+    <Compile Include="InSourceViewController.cs" />
     <Compile Include="Folder.cs" />
     <Compile Include="FolderBrowseDialogExtended.cs">
       <SubType>Component</SubType>
@@ -166,7 +166,7 @@
     <Compile Include="ProjectCreator.cs" />
     <Compile Include="ProjectQuoteItem.cs" />
     <Compile Include="ProjectRequest.cs" />
-    <Compile Include="ContentConnectorInitializer.cs" />
+    <Compile Include="InSourceInitializer.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -185,8 +185,8 @@
     <DeployPluginPackage>true</DeployPluginPackage>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ContentConnectorViewControl.resx">
-      <DependentUpon>ContentConnectorViewControl.cs</DependentUpon>
+    <EmbeddedResource Include="InSourceViewControl.resx">
+      <DependentUpon>InSourceViewControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

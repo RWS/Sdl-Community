@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.InSource
 {
-    partial class ContentConnectorViewControl
+    partial class InSourceViewControl
     {
         /// <summary> 
         /// Required designer variable.

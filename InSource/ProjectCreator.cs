@@ -48,7 +48,7 @@ namespace Sdl.Community.InSource
                 _currentProgress += 100.0 / Requests.Count;
                 OnProgressChanged(_currentProgress);
             }
-
+            TelemetryService.Instance.AddMetric("Created projects",Requests.Count);
             OnProgressChanged(100);
         }
 

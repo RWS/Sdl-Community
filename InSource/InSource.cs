@@ -5,12 +5,12 @@ using Sdl.Community.InSource.Insights;
 
 namespace Sdl.Community.InSource
 {
-    class ContentConnector
+    class InSource
     {
-        public static readonly ContentConnector Instance = new ContentConnector();
+        public static readonly InSource Instance = new InSource();
         public static Persistence Persistence = new Persistence();
         private string _requestPath = string.Empty;
-        private ContentConnector()
+        private InSource()
         {
         }
 
@@ -77,38 +77,38 @@ namespace Sdl.Community.InSource
                 Directory.CreateDirectory(directoryToMovePath);
             }
 
-            
-            var files = Directory.GetFiles(_requestPath);
-            if (files.Length != 0)
+            try
             {
-                MoveFilesToAcceptedFolder(files, directoryToMovePath);
-                Directory.Delete(_requestPath);
-            }//that means we have a subfolder in watch folder
-            else
-            {
-                
-                var subdirectories = Directory.GetDirectories(_requestPath);
-                foreach (var subdirectory in subdirectories)
+                var files = Directory.GetFiles(_requestPath);
+                if (files.Length != 0)
                 {
-                    var currentDirInfo = new DirectoryInfo(subdirectory);
-                    CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
-                
-                }
+                    MoveFilesToAcceptedFolder(files, directoryToMovePath);
+                    Directory.Delete(_requestPath);
+                } //that means we have a subfolder in watch folder
+                else
+                {
 
-                var currentDirectory = Directory.GetDirectories(_requestPath);
-                try
-                {
+                    var subdirectories = Directory.GetDirectories(_requestPath);
+                    foreach (var subdirectory in subdirectories)
+                    {
+                        var currentDirInfo = new DirectoryInfo(subdirectory);
+                        CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
+
+                    }
+
+                    var currentDirectory = Directory.GetDirectories(_requestPath);
+
                     if (currentDirectory.Length == 0)
                     {
                         Directory.Delete(_requestPath);
                     }
+
+
                 }
-                catch (Exception exception)
-                {
-                    TelemetryService.Instance.AddException(exception);
-                }
-               
-                
+            }
+            catch (Exception exception)
+            {
+                TelemetryService.Instance.AddException(exception);
             }
             
             Persistence.Update(request);

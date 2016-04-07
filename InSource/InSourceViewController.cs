@@ -14,15 +14,15 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.InSource
 {
     [View(
-        Id = "ContentConnectorView",
-        Name = "Content Connector",
+        Id = "InSourceView",
+        Name = "InSource",
         Description = "Create projects from project request content",
         Icon = "CheckForProjects_Icon",
         LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
-    public class ContentConnectorViewController : AbstractViewController, INotifyPropertyChanged
+    public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
     {
         #region private fields
-        private readonly Lazy<ContentConnectorViewControl> _control = new Lazy<ContentConnectorViewControl>(() => new ContentConnectorViewControl());
+        private readonly Lazy<InSourceViewControl> _control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
@@ -33,7 +33,7 @@ namespace Sdl.Community.InSource
 
         public event EventHandler ProjectRequestsChanged;
 
-        public ContentConnectorViewController()
+        public InSourceViewController()
         {
             _projectRequests = new List<ProjectRequest>();
             _hasTemplateList = new List<bool>();
@@ -290,7 +290,7 @@ namespace Sdl.Community.InSource
                                 foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
                                 {
                                     // accept the request
-                                    ContentConnector.Instance.RequestAccepted(request.Item1);
+                                    InSource.Instance.RequestAccepted(request.Item1);
 
                                     // remove the request from the list of requests
                                     ProjectRequests.Remove(request.Item1);
