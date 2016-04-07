@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using System.ComponentModel;
-using System.Security.Permissions;
+using System.Runtime.InteropServices;
 using System.Security;
+using System.Security.Permissions;
 using System.Threading;
+using System.Windows.Forms;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
    public class FolderBrowseDialogExtended : System.Windows.Forms.CommonDialog
     {

@@ -1,6 +1,6 @@
 ﻿using Sdl.ProjectAutomation.Core;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     public class ProjectRequest
     {

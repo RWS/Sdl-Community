@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     public class Persistence
     {

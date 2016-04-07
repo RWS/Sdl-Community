@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.ContentConnector
+﻿namespace Sdl.Community.InSource
 {
     class ProjectQuoteItem
     {

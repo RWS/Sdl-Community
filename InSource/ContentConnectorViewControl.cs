@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using Sdl.Community.InSource.Insights;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     public partial class ContentConnectorViewControl : UserControl
     {
@@ -157,6 +157,7 @@ namespace Sdl.Community.ContentConnector
                     }
                     catch (Exception ex)
                     {
+                        TelemetryService.Instance.AddException(ex);
                     }
                     _persistence.Save(_folderPathList);
                     LoadProjectRequests();
@@ -242,11 +243,6 @@ namespace Sdl.Community.ContentConnector
 
                     _projectsListBox.Items.Add(projectRequest);
                 }
-
-                //if (_projectsListBox.Items.Count > 0)
-                //{
-                //    _projectsListBox.SelectedIndex = 0;
-                //}
             }
 
             LoadFileList();
@@ -281,10 +277,10 @@ namespace Sdl.Community.ContentConnector
             LoadFileList();
         }
 
-       
+
         private void addBtn_Click(object sender, EventArgs e)
         {
-           
+
             if (_persistence.Load() != null)
             {
                 _folderPathList = _persistence.Load();
@@ -293,11 +289,11 @@ namespace Sdl.Community.ContentConnector
             //extended folder browse dialog for adding a text box where you can paste the path
             var folderDialog = new FolderBrowseDialogExtended
             {
-               Description = "Select folders",
-               ShowEditBox = true,
-               ShowFullPathInEditBox = true
+                Description = "Select folders",
+                ShowEditBox = true,
+                ShowFullPathInEditBox = true
             };
-           
+
             var result = folderDialog.ShowDialog();
 
             if (result == DialogResult.OK)
@@ -309,37 +305,64 @@ namespace Sdl.Community.ContentConnector
                     Path = folderPath
                 };
                 _watchFolders.Add(watchFolder);
+                var folders = Directory.GetDirectories(folderPath);
 
-                foreach (var directory in Directory.GetDirectories(folderPath))
+                if (folders.Length != 0)
                 {
-
-                    var directoryInfo = new DirectoryInfo(directory);
-
-                    if (_folderPathList != null)
+                    foreach (var directory in folders)
                     {
-                        if (directoryInfo.Name != "AcceptedRequests")
+
+                        var directoryInfo = new DirectoryInfo(directory);
+
+                        if (_folderPathList != null)
                         {
-                            var selectedFolder = new ProjectRequest
+                            if (directoryInfo.Name != "AcceptedRequests")
                             {
-                                Name = directoryInfo.Name,
-                                Path = folderPath,
-                                Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
-                            };
-                            if (!_folderPathList.Contains(selectedFolder))
-                            {
-                                _folderPathList.Add(selectedFolder);
+                                var selectedFolder = new ProjectRequest
+                                {
+                                    Name = directoryInfo.Name,
+                                    Path = folderPath,
+                                    Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                                };
+                                if (!_folderPathList.Contains(selectedFolder))
+                                {
+                                    _folderPathList.Add(selectedFolder);
+                                }
                             }
+
                         }
-
                     }
-
                 }
-
+                else
+                {
+                    SetWatchFolder(folderPath);
+                }
                 foldersListView.SetObjects(_watchFolders);
                 Save();
             }
 
+        }
 
+        private void SetWatchFolder(string path)
+        {
+            var directoryInfo = new DirectoryInfo(path);
+
+            if (_folderPathList != null)
+            {
+                if (directoryInfo.Name != "AcceptedRequests")
+                {
+                    var selectedFolder = new ProjectRequest
+                    {
+                        Name = directoryInfo.Name,
+                        Path = path,
+                        Files = Directory.GetFiles(path, "*", SearchOption.AllDirectories)
+                    };
+                    if (!_folderPathList.Contains(selectedFolder))
+                    {
+                        _folderPathList.Add(selectedFolder);
+                    }
+                }
+            }
         }
 
         private void Save()

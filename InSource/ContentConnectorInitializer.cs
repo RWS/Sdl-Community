@@ -1,9 +1,10 @@
 ﻿using System.Windows.Forms;
+using Sdl.Community.InSource.Insights;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     [ApplicationInitializer]
     class ContentConnectorInitializer : IApplicationInitializer
@@ -12,7 +13,7 @@ namespace Sdl.Community.ContentConnector
         {
             ContentConnectorViewController contentConnector = SdlTradosStudio.Application.GetController<ContentConnectorViewController>();
             contentConnector.CheckForProjects();
-
+            TelemetryService.Instance.Init();
             if (contentConnector.ProjectRequests.Count > 0)
             {
                 if (MessageBox.Show(

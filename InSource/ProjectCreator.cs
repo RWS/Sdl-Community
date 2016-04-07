@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
+using Sdl.Community.InSource.Insights;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     class ProjectCreator
     {
@@ -106,6 +107,7 @@ namespace Sdl.Community.ContentConnector
             {
                 MessageBox.Show(
                     @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
+                TelemetryService.Instance.AddException(ex);
             }
 
             return project;

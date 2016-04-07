@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Sdl.Community.InSource.Insights;
 
-namespace Sdl.Community.ContentConnector
+namespace Sdl.Community.InSource
 {
     class ContentConnector
     {
@@ -82,7 +83,7 @@ namespace Sdl.Community.ContentConnector
             {
                 MoveFilesToAcceptedFolder(files, directoryToMovePath);
                 Directory.Delete(_requestPath);
-            }//that means we habe a subfolder in watch folder
+            }//that means we have a subfolder in watch folder
             else
             {
                 
@@ -90,7 +91,6 @@ namespace Sdl.Community.ContentConnector
                 foreach (var subdirectory in subdirectories)
                 {
                     var currentDirInfo = new DirectoryInfo(subdirectory);
-                    // HasSubfolders(currentDirInfo.FullName);
                     CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
                 
                 }
@@ -102,7 +102,11 @@ namespace Sdl.Community.ContentConnector
                     {
                         Directory.Delete(_requestPath);
                     }
-                }catch(Exception exception) { }
+                }
+                catch (Exception exception)
+                {
+                    TelemetryService.Instance.AddException(exception);
+                }
                
                 
             }
@@ -134,8 +138,12 @@ namespace Sdl.Community.ContentConnector
                     {
                         Directory.Delete(pathToDelete);
                     }
-                   
-                }catch(Exception e) { }
+
+                }
+                catch (Exception e)
+                {
+                    TelemetryService.Instance.AddException(e);
+                }
                 
             }
             if (subdirectories.Length != 0)
@@ -159,7 +167,7 @@ namespace Sdl.Community.ContentConnector
                 }
                 catch (Exception e)
                 {
-
+                    TelemetryService.Instance.AddException(e);
                 }
             }
         }
