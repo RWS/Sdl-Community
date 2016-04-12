@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Sdl.Community.NumberVerifier.Properties;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -14,7 +15,12 @@ namespace Sdl.Community.NumberVerifier
 
         private void NumberVerifierHelp_Load(object sender, System.EventArgs e)
         {
-            richTextBox1.Rtf = PluginResources.Help_Text;
+            var assembly = typeof (NumberVerifierHelp).Assembly;
+            var resourceName = "Sdl.Community.NumberVerifier.Resources.HelpText.rtf";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            {
+                richTextBox1.LoadFile(stream, RichTextBoxStreamType.RichText);
+            }
         }
     }
 }

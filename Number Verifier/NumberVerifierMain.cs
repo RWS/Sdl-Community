@@ -11,6 +11,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Verification.Api;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Core.Globalization;
 
@@ -259,174 +260,219 @@ namespace Sdl.Community.NumberVerifier
             {
                 var sourceText = GetSegmentText(segmentPair.Source);
                 var targetText = GetSegmentText(segmentPair.Target);
-               
+
 
                 // find all alphanumeric names in source and add to list
-                var sourceAlphanumericsList = GetAlphanumericList(sourceText);
+                var sourceAlphanumericsList = GetAlphanumericList(sourceText, _sourceDecimalSeparators,
+                    _sourceDecimalSeparators);
 
                 // find all alphanumeric names in target and add to list
-                var targetAlphanumericsList = GetAlphanumericList(targetText);
+                var targetAlphanumericsList = GetAlphanumericList(targetText, _targetDecimalSeparators,
+                    _targetThousandSeparators);
 
-                // remove alphanumeric names found both in source and target from respective list
-                RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
-
-                // find all numbers in source and add to list
-                sourceNumberList.Clear();
-                sourceNormalizedNumberList.Clear();
-                NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,_sourceThousandSeparators,_sourceDecimalSeparators, VerificationSettings.SourceNoSeparator);
-
-                // find all numbers in target and add to list
-                targetNumberList.Clear();
-                targetNormalizedNumberList.Clear();
-                NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,_targetThousandSeparators,_targetDecimalSeparators, VerificationSettings.TargetNoSeparator);
-
-                // remove identical numbers found both in source and target from respective list
-                RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList, sourceNormalizedNumberList);
-
-                // remove numbers found both in source and target from respective list disregarding difference in thousands and decimal separators
-                RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList, sourceNormalizedNumberList, targetNumberList);
-
-                // remove numbers found both in source and target from respective list disregarding difference when thousands and decimal separators are undefined due to ambiguity 
-                RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList, sourceNormalizedNumberList, targetNormalizedNumberList);
-
-
-
-                var errorLevel = ErrorLevel.Unspecified;
-                var errorMessage = String.Empty;
-                var extendedErrorMessage = String.Empty;
-
-                // check if numbers have been modified and should be reported
-                if (sourceNumberList.Count > 0 && targetNumberList.Count > 0 && VerificationSettings.ReportModifiedNumbers.Value)
+                if (sourceAlphanumericsList.Count != 0 && targetAlphanumericsList.Count != 0)
                 {
-                    switch (VerificationSettings.ModifiedNumbersErrorType.Value)
+
+
+                    // remove alphanumeric names found both in source and target from respective list
+                    RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
+
+                    // find all numbers in source and add to list
+                    sourceNumberList.Clear();
+                    sourceNormalizedNumberList.Clear();
+                    NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
+                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator);
+
+                    // find all numbers in target and add to list
+                    targetNumberList.Clear();
+                    targetNormalizedNumberList.Clear();
+                    NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,
+                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator);
+
+                    // remove identical numbers found both in source and target from respective list
+                    RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
+                        sourceNormalizedNumberList);
+
+                    // remove numbers found both in source and target from respective list disregarding difference in thousands and decimal separators
+                    RemoveNumbersIgnoreThousandsAndDecimalSeparators(sourceNumberList, targetNormalizedNumberList,
+                        sourceNormalizedNumberList, targetNumberList);
+
+                    // remove numbers found both in source and target from respective list disregarding difference when thousands and decimal separators are undefined due to ambiguity 
+                    RemoveNumbersUndefinedThousandsAndDecimalSeparator(targetNumberList, sourceNumberList,
+                        sourceNormalizedNumberList, targetNormalizedNumberList);
+
+
+
+                    var errorLevel = ErrorLevel.Unspecified;
+                    var errorMessage = String.Empty;
+                    var extendedErrorMessage = String.Empty;
+
+                    // check if numbers have been modified and should be reported
+                    if (sourceNumberList.Count > 0 && targetNumberList.Count > 0 &&
+                        VerificationSettings.ReportModifiedNumbers.Value)
                     {
-                        case "Error":
+                        switch (VerificationSettings.ModifiedNumbersErrorType.Value)
+                        {
+                            case "Error":
+                                errorLevel = ErrorLevel.Error;
+                                break;
+                            case "Warning":
+                                errorLevel = ErrorLevel.Warning;
+                                break;
+                            default:
+                                errorLevel = ErrorLevel.Note;
+                                break;
+                        }
+                        errorMessage = errorMessage + PluginResources.Error_NumbersNotIdentical;
+                    }
+
+                    // check if numbers have been added and should be reported
+                    if (sourceNumberList.Count < targetNumberList.Count && VerificationSettings.ReportAddedNumbers.Value)
+                    {
+                        if (VerificationSettings.AddedNumbersErrorType.Value == "Error")
+                        {
                             errorLevel = ErrorLevel.Error;
-                            break;
-                        case "Warning":
+                        }
+                        else if (VerificationSettings.AddedNumbersErrorType.Value == "Warning" &&
+                                 errorLevel != ErrorLevel.Error)
+                        {
                             errorLevel = ErrorLevel.Warning;
-                            break;
-                        default:
+                        }
+                        else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+                        {
                             errorLevel = ErrorLevel.Note;
-                            break;
+                        }
+                        errorMessage = errorMessage + PluginResources.Error_NumbersAdded;
                     }
-                    errorMessage = errorMessage + PluginResources.Error_NumbersNotIdentical;
-                }
 
-                // check if numbers have been added and should be reported
-                if (sourceNumberList.Count < targetNumberList.Count && VerificationSettings.ReportAddedNumbers.Value)
-                {
-                    if (VerificationSettings.AddedNumbersErrorType.Value == "Error")
+                    // check if numbers have been removed and should be reported
+                    if (sourceNumberList.Count > targetNumberList.Count &&
+                        VerificationSettings.ReportRemovedNumbers.Value)
                     {
-                        errorLevel = ErrorLevel.Error;
+                        if (VerificationSettings.RemovedNumbersErrorType.Value == "Error")
+                        {
+                            errorLevel = ErrorLevel.Error;
+                        }
+                        else if (VerificationSettings.RemovedNumbersErrorType.Value == "Warning" &&
+                                 errorLevel != ErrorLevel.Error)
+                        {
+                            errorLevel = ErrorLevel.Warning;
+                        }
+                        else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+                        {
+                            errorLevel = ErrorLevel.Note;
+                        }
+                        errorMessage = errorMessage + PluginResources.Error_NumbersRemoved;
                     }
-                    else if (VerificationSettings.AddedNumbersErrorType.Value == "Warning" && errorLevel != ErrorLevel.Error)
+
+                    // check if alphanumeric names are mismatched and should be reported
+                    if ((targetAlphanumericsList.Count > 0 || sourceAlphanumericsList.Count > 0) &&
+                        VerificationSettings.ReportModifiedAlphanumerics.Value)
                     {
-                        errorLevel = ErrorLevel.Warning;
+                        if (VerificationSettings.ModifiedAlphanumericsErrorType.Value == "Error")
+                        {
+                            errorLevel = ErrorLevel.Error;
+                        }
+                        else if (VerificationSettings.ModifiedAlphanumericsErrorType.Value == "Warning" &&
+                                 errorLevel != ErrorLevel.Error)
+                        {
+                            errorLevel = ErrorLevel.Warning;
+                        }
+                        else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+                        {
+                            errorLevel = ErrorLevel.Note;
+                        }
+                        errorMessage = errorMessage + PluginResources.Error_AlphanumericsModified;
                     }
-                    else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+
+
+                    // if there are any mismatched numbers or alphanumerics to report, output a warning message
+                    if (errorMessage == String.Empty) continue;
+
+                    // collate remaining numbers and put into string variables for reporting of details
+                    var sourceNumberIssues = String.Empty;
+                    if (sourceNumberList.Count > 0 &&
+                        (VerificationSettings.ReportAddedNumbers.Value ||
+                         VerificationSettings.ReportRemovedNumbers.Value ||
+                         VerificationSettings.ReportModifiedNumbers.Value))
                     {
-                        errorLevel = ErrorLevel.Note;
+                        sourceNumberIssues = sourceNumberList.Aggregate(sourceNumberIssues,
+                            (current, t) => current + (t + " \r\n"));
                     }
-                    errorMessage = errorMessage + PluginResources.Error_NumbersAdded;
-                }
 
-                // check if numbers have been removed and should be reported
-                if (sourceNumberList.Count > targetNumberList.Count && VerificationSettings.ReportRemovedNumbers.Value)
-                {
-                    if (VerificationSettings.RemovedNumbersErrorType.Value == "Error")
+                    if (sourceAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
                     {
-                        errorLevel = ErrorLevel.Error;
+                        sourceNumberIssues = sourceAlphanumericsList.Aggregate(sourceNumberIssues,
+                            (current, t) => current + (t + " \r\n"));
                     }
-                    else if (VerificationSettings.RemovedNumbersErrorType.Value == "Warning" && errorLevel != ErrorLevel.Error)
+
+                    var targetNumberIssues = String.Empty;
+                    if (targetNumberList.Count > 0 &&
+                        (VerificationSettings.ReportAddedNumbers.Value ||
+                         VerificationSettings.ReportRemovedNumbers.Value ||
+                         VerificationSettings.ReportModifiedNumbers.Value))
                     {
-                        errorLevel = ErrorLevel.Warning;
+                        targetNumberIssues = targetNumberList.Aggregate(targetNumberIssues,
+                            (current, t) => current + (t + " \r\n"));
                     }
-                    else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+
+                    if (targetAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
                     {
-                        errorLevel = ErrorLevel.Note;
+                        targetNumberIssues = targetAlphanumericsList.Aggregate(targetNumberIssues,
+                            (current, t) => current + (t + " \r\n"));
                     }
-                    errorMessage = errorMessage + PluginResources.Error_NumbersRemoved;
-                }
 
-                // check if alphanumeric names are mismatched and should be reported
-                if ((targetAlphanumericsList.Count > 0 || sourceAlphanumericsList.Count > 0) && VerificationSettings.ReportModifiedAlphanumerics.Value)
-                {
-                    if (VerificationSettings.ModifiedAlphanumericsErrorType.Value == "Error")
+
+                    if (VerificationSettings.ReportExtendedMessages == true)
                     {
-                        errorLevel = ErrorLevel.Error;
+                        extendedErrorMessage = "\r\n SOURCE: " +
+                                               TextGeneratorProcessor.GetPlainText(segmentPair.Source,
+                                                   !VerificationSettings.ExcludeTagText.Value) + " \r\n TARGET: " +
+                                               TextGeneratorProcessor.GetPlainText(segmentPair.Target,
+                                                   !VerificationSettings.ExcludeTagText.Value);
                     }
-                    else if (VerificationSettings.ModifiedAlphanumericsErrorType.Value == "Warning" && errorLevel != ErrorLevel.Error)
+
+
+                    #region ReportingMessage
+
+                    var extendedMessageReporter = MessageReporter as IBilingualContentMessageReporterWithExtendedData;
+                    if (extendedMessageReporter != null)
                     {
-                        errorLevel = ErrorLevel.Warning;
+                        #region CreateExtendedData
+
+                        var extendedData = new NumberVerifierMessageData(sourceNumberIssues, targetNumberIssues,
+                            segmentPair.Target);
+
+                        #endregion
+
+                        #region ReportingMessageWithExtendedData
+
+                        extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+                            errorLevel, errorMessage + extendedErrorMessage,
+                            new TextLocation(new Location(segmentPair.Target, true), 0),
+                            new TextLocation(new Location(segmentPair.Target, false),
+                                segmentPair.Target.ToString().Length - 1),
+                            extendedData);
+
+                        #endregion
+
                     }
-                    else if (errorLevel != ErrorLevel.Error && errorLevel != ErrorLevel.Warning)
+                    else
                     {
-                        errorLevel = ErrorLevel.Note;
+                        #region ReportingMessageWithoutExtendedData
+
+                        MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+                            errorLevel, errorMessage + extendedErrorMessage,
+                            new TextLocation(new Location(segmentPair.Target, true), 0),
+                            new TextLocation(new Location(segmentPair.Target, false),
+                                segmentPair.Target.ToString().Length - 1));
+
+                        #endregion
                     }
-                    errorMessage = errorMessage + PluginResources.Error_AlphanumericsModified;
-                }
-
-
-                // if there are any mismatched numbers or alphanumerics to report, output a warning message
-                if (errorMessage == String.Empty) continue;
-
-                // collate remaining numbers and put into string variables for reporting of details
-                var sourceNumberIssues = String.Empty;
-                if (sourceNumberList.Count > 0 && (VerificationSettings.ReportAddedNumbers.Value || VerificationSettings.ReportRemovedNumbers.Value || VerificationSettings.ReportModifiedNumbers.Value))
-                {
-                    sourceNumberIssues = sourceNumberList.Aggregate(sourceNumberIssues, (current, t) => current + (t + " \r\n"));
-                }
-
-                if (sourceAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
-                {
-                    sourceNumberIssues = sourceAlphanumericsList.Aggregate(sourceNumberIssues, (current, t) => current + (t + " \r\n"));
-                }
-
-                var targetNumberIssues = String.Empty;
-                if (targetNumberList.Count > 0 && (VerificationSettings.ReportAddedNumbers.Value || VerificationSettings.ReportRemovedNumbers.Value || VerificationSettings.ReportModifiedNumbers.Value))
-                {
-                    targetNumberIssues = targetNumberList.Aggregate(targetNumberIssues, (current, t) => current + (t + " \r\n"));
-                }
-
-                if (targetAlphanumericsList.Count > 0 && VerificationSettings.ReportModifiedAlphanumerics.Value)
-                {
-                    targetNumberIssues = targetAlphanumericsList.Aggregate(targetNumberIssues, (current, t) => current + (t + " \r\n"));
-                }
-
-
-                if (VerificationSettings.ReportExtendedMessages == true)
-                {
-                    extendedErrorMessage = "\r\n SOURCE: " + TextGeneratorProcessor.GetPlainText(segmentPair.Source, !VerificationSettings.ExcludeTagText.Value) + " \r\n TARGET: " + TextGeneratorProcessor.GetPlainText(segmentPair.Target, !VerificationSettings.ExcludeTagText.Value);
-                }
-
-
-                #region ReportingMessage
-
-                var extendedMessageReporter = MessageReporter as IBilingualContentMessageReporterWithExtendedData;
-                if (extendedMessageReporter != null)
-                {
-                    #region CreateExtendedData
-                    var extendedData = new NumberVerifierMessageData(sourceNumberIssues, targetNumberIssues, segmentPair.Target);
-                    #endregion
-
-                    #region ReportingMessageWithExtendedData
-                    extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-                        errorLevel, errorMessage + extendedErrorMessage,
-                        new TextLocation(new Location(segmentPair.Target, true), 0),
-                        new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1),
-                        extendedData);
-                    #endregion
-
                 }
                 else
                 {
-                    #region ReportingMessageWithoutExtendedData
-                    MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-                        errorLevel, errorMessage + extendedErrorMessage,
-                        new TextLocation(new Location(segmentPair.Target, true), 0),
-                        new TextLocation(new Location(segmentPair.Target, false), segmentPair.Target.ToString().Length - 1));
-                    #endregion
+                    MessageBox.Show(@"Please select at least one  decimal and thousand separator foreach source and target.");
                 }
             }
         }
@@ -552,28 +598,29 @@ namespace Sdl.Community.NumberVerifier
             }
             
             //put separators in a list, in order to eliminate the duplicates
-            if (decimalSeparator !=string.Empty && thousand != string.Empty)
+            if (decimalSeparator != string.Empty && thousand != string.Empty)
             {
-                var allSeparators = string.Concat(decimalSeparator, thousand); //string.Join(decimalSeparator, thousand);
+                var allSeparators = string.Concat(decimalSeparator, thousand);
+                    //string.Join(decimalSeparator, thousand);
 
                 foreach (char c in allSeparators)
-            {
-                if (c.ToString().Contains("'"))
                 {
-                          expression = @"\u2019\u0027";
-                }
-                else
-                {
-                        expression = @"\" + string.Format("u{0:x4}", (int)c);
-                }
+                    if (c.ToString().Contains("'"))
+                    {
+                        expression = @"\u2019\u0027";
+                    }
+                    else
+                    {
+                        expression = @"\" + string.Format("u{0:x4}", (int) c);
+                    }
 
                     if (!separatorsList.Contains(expression.ToLower()) && !string.IsNullOrEmpty(expression))
                     {
                         separatorsList.Add(expression.ToLower());
-            }
+                    }
                 }
             }
-      
+
 
             //get a list of source separators if we are in case of allow localisation, or prevent localisation
             if (sourceSeparators != string.Empty)
@@ -586,7 +633,7 @@ namespace Sdl.Community.NumberVerifier
                     if (!separatorsList.Contains(@"\" + separator.ToLower()) && !string.IsNullOrEmpty(separator))
                     {
                         separatorsList.Add(@"\" + separator.ToLower());
-        }
+                    }
                 }
             }
 
@@ -800,10 +847,27 @@ namespace Sdl.Community.NumberVerifier
             }
         }
 
-        private List<string> GetAlphanumericList(string text)
+        private List<string> GetAlphanumericList(string text,string decimalSeparators,string thousandSeparators)
         {
             var alphaList = new List<string>();
-            alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)|([A-Z])+[A-Z]*") select match.Value);
+         
+           var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
+            try
+            {
+                var expresion = string.Format(@"\d*([A-Z]|\d)*([{0}]\d+)*", separators);
+                alphaList.AddRange(from Match match in Regex.Matches(text, expresion) select match.Value);
+            }
+            catch (Exception e)
+            {
+                
+                
+               // MessageBox.Show(@"Please select at least one  decimal and thousand separator foreach source and target.");
+                
+            }
+            
+            // alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)|([A-Z])+[A-Z]*") select match.Value);
+            //  alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]|\d)*([.,]\d+)*") select match.Value);
+           
             return alphaList;
         }
 
