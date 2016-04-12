@@ -18,8 +18,8 @@ namespace Sdl.Community.InSource
             {
                 if (MessageBox.Show(
                         Form.ActiveForm,
-                        "You have new project requests. Would you like to create projects now?",
-                        "New Project Requests",
+                        @"You have new project requests. Would you like to check the project requests now?",
+                        @"New Project Requests",
                         MessageBoxButtons.YesNo,
                         MessageBoxIcon.Question) == DialogResult.Yes)
                 {

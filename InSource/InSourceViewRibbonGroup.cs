@@ -11,7 +11,7 @@ namespace Sdl.Community.InSource
     {
     }
 
-    [Action("CheckForProjectsAction", typeof(InSourceViewController), Name = "CheckForProjects_Name", Description = "CheckForProjects_Description", Icon = "CheckForProjects_Icon")]
+    [Action("CheckForProjectsAction", typeof(InSourceViewController), Name = "CheckForProjects_Name", Description = "CheckForProjects_Description", Icon = "CheckForProjects")]
     [ActionLayout(typeof(InSourceViewRibbonGroup), 2, DisplayType.Large)]
     public class CheckForProjectsAction : AbstractViewControllerAction<InSourceViewController>
     {

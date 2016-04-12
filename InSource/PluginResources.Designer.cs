@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace Sdl.Community.InSource {
+    using System;
+    
+    
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -58,21 +61,21 @@ namespace Sdl.Community.InSource {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon CheckForProjects {
+            get {
+                object obj = ResourceManager.GetObject("CheckForProjects", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for new project requests.
         /// </summary>
         internal static string CheckForProjects_Description {
             get {
                 return ResourceManager.GetString("CheckForProjects_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon CheckForProjects_Icon {
-            get {
-                object obj = ResourceManager.GetObject("CheckForProjects_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         
@@ -137,6 +140,16 @@ namespace Sdl.Community.InSource {
         internal static string CreateProjects_Name {
             get {
                 return ResourceManager.GetString("CreateProjects_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon InSource_large {
+            get {
+                object obj = ResourceManager.GetObject("InSource_large", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

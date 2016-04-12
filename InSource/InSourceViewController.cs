@@ -15,9 +15,9 @@ namespace Sdl.Community.InSource
 {
     [View(
         Id = "InSourceView",
-        Name = "InSource",
+        Name = "InSource!",
         Description = "Create projects from project request content",
-        Icon = "CheckForProjects_Icon",
+        Icon = "InSource_large",
         LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
     public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
     {
@@ -166,27 +166,68 @@ namespace Sdl.Community.InSource
            
             var projectRequestList = new List<ProjectRequest>();
             var subdirectories = Directory.GetDirectories(watchFolderPath);
-            foreach (var subdirectory in subdirectories)
+            if (subdirectories.Length != 0)
             {
-                var dirInfo= new DirectoryInfo(subdirectory);
-                if (dirInfo.Name != "AcceptedRequests")
+                foreach (var subdirectory in subdirectories)
                 {
-                    var projectRequest = new ProjectRequest();
-                    projectRequest.Name = dirInfo.Name;
-                    projectRequest.Path = watchFolderPath;
-                    projectRequest.ProjectTemplate = templateForWatchFolder;
-                    projectRequest.Files = Directory.GetFiles(dirInfo.FullName, "*", SearchOption.AllDirectories);
-                    if (projectRequest.Files.Length >0)
+                    var dirInfo = new DirectoryInfo(subdirectory);
+                 
+                    var projectRequest=CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
+                    //that means we don't have anoter folder besides "Accepted request", and we need to set the curent directory as project request
+                    if (projectRequest.Name != null)
                     {
                         projectRequestList.Add(projectRequest);
                     }
-                   
-                }
+                    else
+                    {
+                        var infoDir = new DirectoryInfo(watchFolderPath);
+                        var request = CreateRequestFromCurrentDirectory(templateForWatchFolder, infoDir, watchFolderPath);
+                        projectRequestList.Add(request);
+                    }
 
+                }
             }
+            else
+            {
+                var dirInfo = new DirectoryInfo(watchFolderPath);
+           
+               var projectRequest= CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
+                projectRequestList.Add(projectRequest);
+            }
+           
 
             return projectRequestList;
             
+        }
+
+        private ProjectRequest CreateRequestFromCurrentDirectory(ProjectTemplateInfo templateInfo,
+            DirectoryInfo directory, string path)
+        {
+            var projectRequest = new ProjectRequest();
+            if (directory.Name != "AcceptedRequests")
+            {
+
+                projectRequest.Name = directory.Name;
+                projectRequest.Path = path;
+                projectRequest.ProjectTemplate = templateInfo;
+                projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.TopDirectoryOnly);
+            }
+            return projectRequest;
+        }
+
+        private ProjectRequest CreateProjectRequest(ProjectTemplateInfo templateInfo, DirectoryInfo directory,
+            string path)
+        {
+            var projectRequest = new ProjectRequest();
+            if (directory.Name != "AcceptedRequests")
+            {
+
+                projectRequest.Name = directory.Name;
+                projectRequest.Path = path;
+                projectRequest.ProjectTemplate = templateInfo;
+                projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.AllDirectories);
+            }
+            return projectRequest;
         }
 
         private string[] GetFilesFromFolders(string path)
@@ -195,12 +236,7 @@ namespace Sdl.Community.InSource
             var subdirectories = dirInfo.GetDirectories();
             foreach (var subdirectory in subdirectories)
             {
-                //if (subdirectory.Name != "AcceptedRequests")
-                //{
-                //    var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
-                //    return files;
-
-                //}
+            
                 var files = GetSubdirectories(subdirectory.FullName);
                 return files;
             }
@@ -315,7 +351,7 @@ namespace Sdl.Community.InSource
 
         public void Contribute()
         {
-            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Content%20Connector");
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/InSource");
         }
         private void ReportMessage(FileBasedProject fileBasedProject, string message)
         {

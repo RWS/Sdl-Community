@@ -120,10 +120,6 @@
   <data name="CheckForProjects_Description" xml:space="preserve">
     <value>Check for new project requests</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CheckForProjects_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\CheckForProjects.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="CheckForProjects_Name" xml:space="preserve">
     <value>Check Project Requests</value>
   </data>
@@ -133,6 +129,7 @@
   <data name="CreateProjects_Description" xml:space="preserve">
     <value>Create projects for all the new project requests</value>
   </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="CreateProjects_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\CreateProjects.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -163,7 +160,10 @@
   <data name="opensourceimage" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\opensourceimage.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <!--<data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>resources\delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>-->
+  <data name="InSource_large" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\insource_large.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CheckForProjects" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\checkforprojects.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
