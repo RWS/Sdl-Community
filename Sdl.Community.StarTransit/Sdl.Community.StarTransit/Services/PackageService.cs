@@ -17,13 +17,15 @@ namespace Sdl.Community.StarTransit.Services
     {
         private readonly Dictionary<string, string> _dictionaryPropetries = new Dictionary<string, string>(); 
         private  Dictionary<string,Dictionary<string,string>> _pluginDictionary = new Dictionary<string, Dictionary<string, string>>();
+        private PackageModel _package = new PackageModel();
+        private List<string> _fileNameList = new List<string>(); 
 
         public PackageModel OpenPackage(string packagePath)
         {
             
             var entryName = string.Empty;
-            var pathToExtract = packagePath.Substring(0,packagePath.LastIndexOf(@"\", StringComparison.Ordinal)+1);
-            using (ZipArchive archive = ZipFile.OpenRead(packagePath))
+            var pathToTempFolder= Path.GetTempPath();
+            using (var archive = ZipFile.OpenRead(packagePath))
             {
                 foreach (ZipArchiveEntry entry in archive.Entries)
                 {
@@ -32,7 +34,7 @@ namespace Sdl.Community.StarTransit.Services
 
                         try
                         {
-                            entry.ExtractToFile(Path.Combine(pathToExtract, entry.FullName));
+                            entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
                         }
                         catch (Exception e)
                         {
@@ -45,12 +47,12 @@ namespace Sdl.Community.StarTransit.Services
 
             }
 
-            return ReadPackage(pathToExtract, entryName);
+            return ReadPackage(pathToTempFolder, entryName, packagePath);
         }
 
-        private PackageModel ReadPackage(string path, string fileName)
+        private PackageModel ReadPackage(string path, string fileName,string packagePath)
         {
-            var filePath = path + @"\" + fileName;
+            var filePath = Path.Combine(path, fileName);
             //  var pluginDictionary =  new Dictionary<string, Dictionary<string, string>>();
             var keyProperty = string.Empty;
 
@@ -96,9 +98,10 @@ namespace Sdl.Community.StarTransit.Services
                 }
             }
 
-            var packageModel = CreateModel();
+            var packageModel = CreateModel(packagePath);
 
 
+            //ar trebui sa sterg fisierul in mom in care s-a creat proiectul
             try
             {
                 File.Delete(filePath);
@@ -107,10 +110,11 @@ namespace Sdl.Community.StarTransit.Services
             {
             }
 
+            _package = packageModel;
             return packageModel;
         }
 
-        private PackageModel CreateModel()
+        private PackageModel CreateModel(string packagePath)
         {
             var model = new PackageModel();
             if (_pluginDictionary.ContainsKey("Admin"))
@@ -132,7 +136,7 @@ namespace Sdl.Community.StarTransit.Services
                 {
                     if (key == "SourceLanguage")
                     {
-                        var languageCode =int.Parse(propertiesDictionary["SourceLanguage"]);
+                        var languageCode = int.Parse(propertiesDictionary["SourceLanguage"]);
                         model.SourceLanguage = Language(languageCode);
                     }
                     if (key == "TargetLanguage")
@@ -142,8 +146,62 @@ namespace Sdl.Community.StarTransit.Services
                     }
                 }
             }
-            return model;
+            var filesName = GetFilesName();
 
+            var names=ExtractFilesFromArchive(filesName, packagePath);
+            var package = AddFilesToPackage(model, names);
+
+            return package;
+
+        }
+
+        private PackageModel AddFilesToPackage(PackageModel model,List<string> filesName )
+        {
+            var pathList = new List<string>();
+            
+            foreach (var fileName in filesName)
+            {
+                var pathToFiles = Directory.GetFiles(Path.GetTempPath(),fileName);
+                foreach (var path in pathToFiles)
+                {
+                    pathList.Add(path);
+                }
+            }
+
+            var files = new string[pathList.Count];
+            for (var i = 0; i < pathList.Count; i++)
+            {
+                files[i] = pathList[i];
+            }
+
+            model.Files = files;
+
+            return model;
+        }
+
+        private List<string> ExtractFilesFromArchive(List<string> filesName,string packagePath)
+        {
+            var filesNameList = new List<string>();
+            using (var archive = ZipFile.OpenRead(packagePath))
+            {
+                foreach (var entry in archive.Entries)
+                {
+                    foreach (var name in filesName)
+                    {
+                        if (entry.Name.Contains(name))
+                        {
+                            try
+                            {
+                                entry.ExtractToFile(Path.Combine(Path.GetTempPath(), entry.Name));
+                            }
+                            catch(Exception e) { }
+                           
+                            filesNameList.Add(entry.Name);
+                        }
+                    }
+                }
+            }
+            return filesNameList;
         }
 
         private CultureInfo Language(int languageCode)
@@ -151,6 +209,36 @@ namespace Sdl.Community.StarTransit.Services
             return new CultureInfo(languageCode);
         }
 
+        /// <summary>
+        /// Return a list of file names
+        /// </summary>
+        /// <returns></returns>
+        private List<string> GetFilesName()
+        {
+            //takes values from dictionary
+            var filesDictionary = _pluginDictionary["Files"];
+            var fileNameList = new List<string>();
 
+            //loop through the keys in order to take the name  
+            foreach (var key in filesDictionary.Keys)
+            {
+                var file = filesDictionary[key];
+                var fileName=FileName(file);
+                fileNameList.Add(fileName);
+            }
+            return fileNameList;
+        }
+
+        /// <summary>
+        /// Splits the text after "|" and take the file name 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns>file name</returns>
+        private string FileName(string file)
+        {
+            var words = file.Split('|');
+            var fileName = words[6];
+            return fileName;
+        }
     }
 }

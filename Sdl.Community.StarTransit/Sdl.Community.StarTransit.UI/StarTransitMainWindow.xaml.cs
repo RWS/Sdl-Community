@@ -32,8 +32,9 @@ namespace Sdl.Community.StarTransit.UI
             InitializeComponent();
 
             _packageDetails = new PackageDetails(package);
+            var finalPackage = _packageDetails.AddLocationToPackage();
             _translationMemories = new TranslationMemories();
-            _finish = new Finish(package);
+            _finish = new Finish(finalPackage);
             
         }
 

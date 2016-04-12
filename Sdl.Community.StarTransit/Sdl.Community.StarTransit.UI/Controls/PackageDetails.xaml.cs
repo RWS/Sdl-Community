@@ -24,6 +24,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
     /// </summary>
     public partial class PackageDetails : UserControl
     {
+        private PackageModel _package;//= new PackageModel();
       //  private PackageService _packageService;
         public PackageDetails(PackageModel package)
         {
@@ -36,6 +37,15 @@ namespace Sdl.Community.StarTransit.UI.Controls
             targetLanguageComboBox.SelectedItem = package.TargetLanguage;
 
             GetCultureList();
+            _package = new PackageModel
+            {
+                Name = package.Name,
+                SourceLanguage = package.SourceLanguage,
+                TargetLanguage = package.TargetLanguage,
+                ProjectTemplate = package.ProjectTemplate,
+                Description = package.Description,
+                Files=package.Files
+            };
         }
 
         private void GetCultureList()
@@ -60,9 +70,15 @@ namespace Sdl.Community.StarTransit.UI.Controls
             if(result == Forms.DialogResult.OK)
             {
                 txtLocation.Text = folderDialog.SelectedPath;
-               
+                AddLocation(folderDialog.SelectedPath);
             }
 
+        }
+
+        private void AddLocation(string selectedPath)
+        {
+            _package.Location = selectedPath;
+            AddLocationToPackage();
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -74,6 +90,12 @@ namespace Sdl.Community.StarTransit.UI.Controls
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             dueDatePicker.IsEnabled = true;
+        }
+
+        public PackageModel AddLocationToPackage()
+        {
+            return _package;
+
         }
     }
 }

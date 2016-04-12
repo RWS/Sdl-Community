@@ -27,7 +27,7 @@ namespace Sdl.Community.StarTransit
         protected override void Execute()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "Transit Project Package Files (*.ppf)|*.ppf";
+            fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
             var dialogResult = fileDialog.ShowDialog();
             if(dialogResult == DialogResult.OK)
             {
@@ -48,15 +48,14 @@ namespace Sdl.Community.StarTransit
                     Description =package.Description,
                     ProjectTemplate = templateList,
                     SourceLanguage = package.SourceLanguage,
-                    TargetLanguage = package.TargetLanguage
+                    TargetLanguage = package.TargetLanguage,
+                    Files = package.Files
                 };
 
-                //creaza un proiect studio
-                //var projectService = new ProjectService();
-                //projectService.CreateProject(packageModel);
-                StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
+              StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
                 window.ShowDialog();
             }
+           
         }
     }
     

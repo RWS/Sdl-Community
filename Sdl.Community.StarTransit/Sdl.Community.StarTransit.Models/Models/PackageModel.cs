@@ -15,5 +15,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public List<ProjectTemplateInfo> ProjectTemplate { get; set; }
         public CultureInfo SourceLanguage { get; set; }
         public CultureInfo TargetLanguage { get; set; }
+        public string Location { get; set; }
+        public string[] Files { get; set; }
     }
 }
