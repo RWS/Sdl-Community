@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.ProjectAutomation.Core;
 using Forms = System.Windows.Forms;
 
 namespace Sdl.Community.StarTransit.UI.Controls
@@ -32,7 +33,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
             InitializeComponent();
             txtName.Text = package.Name;
             txtDescription.Text = package.Description;
-            comboBox.ItemsSource = package.ProjectTemplate;
+            comboBox.ItemsSource = package.StudioTemplates;
             sourceLanguageComboBox.SelectedItem = package.SourceLanguage;
             targetLanguageComboBox.SelectedItem = package.TargetLanguage;
 
@@ -42,10 +43,11 @@ namespace Sdl.Community.StarTransit.UI.Controls
                 Name = package.Name,
                 SourceLanguage = package.SourceLanguage,
                 TargetLanguage = package.TargetLanguage,
-                ProjectTemplate = package.ProjectTemplate,
                 Description = package.Description,
-                Files=package.Files
+                SourceFiles = package.SourceFiles,
+                TargetFiles = package.TargetFiles
             };
+
         }
 
         private void GetCultureList()
@@ -96,6 +98,14 @@ namespace Sdl.Community.StarTransit.UI.Controls
         {
             return _package;
 
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var templateBox = sender as ComboBox;
+
+            var template = templateBox.SelectedItem as ProjectTemplateInfo;
+            _package.ProjectTemplate = template;
         }
     }
 }

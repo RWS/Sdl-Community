@@ -16,7 +16,7 @@
     WindowStartupLocation="CenterScreen"
     Loaded="MetroWindow_Loaded"
     ResizeMode="CanResizeWithGrip"
-    Icon="C:\Users\aghisa\Desktop\Sdl.Community.StarTransit\Sdl.Community.StarTransit\Sdl.Community.StarTransit\Resources\icon.ico"
+ 
     mc:Ignorable="d">
 
     <controls:MetroWindow.Resources>

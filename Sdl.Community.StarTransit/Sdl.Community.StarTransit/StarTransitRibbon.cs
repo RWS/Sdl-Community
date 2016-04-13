@@ -46,10 +46,11 @@ namespace Sdl.Community.StarTransit
                 {
                     Name = package.Name,
                     Description =package.Description,
-                    ProjectTemplate = templateList,
+                    StudioTemplates = templateList,
                     SourceLanguage = package.SourceLanguage,
                     TargetLanguage = package.TargetLanguage,
-                    Files = package.Files
+                    SourceFiles = package.SourceFiles,
+                    TargetFiles = package.TargetFiles
                 };
 
               StarTransitMainWindow window = new StarTransitMainWindow(packageModel);

@@ -18,8 +18,8 @@ namespace Sdl.Community.StarTransit.Services
         private readonly Dictionary<string, string> _dictionaryPropetries = new Dictionary<string, string>(); 
         private  Dictionary<string,Dictionary<string,string>> _pluginDictionary = new Dictionary<string, Dictionary<string, string>>();
         private PackageModel _package = new PackageModel();
-        private List<string> _fileNameList = new List<string>(); 
-
+        private List<string> _fileNameList = new List<string>();
+        private const char LanguageTargetSeparator = '|';
         public PackageModel OpenPackage(string packagePath)
         {
             
@@ -139,45 +139,157 @@ namespace Sdl.Community.StarTransit.Services
                         var languageCode = int.Parse(propertiesDictionary["SourceLanguage"]);
                         model.SourceLanguage = Language(languageCode);
                     }
-                    if (key == "TargetLanguage")
+                    if (key == "TargetLanguages")
                     {
-                        var languageCode = int.Parse(propertiesDictionary["TargetLanguage"]);
-                        model.TargetLanguage = Language(languageCode);
+                        //var languageCode = int.Parse(propertiesDictionary["TargetLanguages"]);
+                        //model.TargetLanguage = Language(languageCode);
+
+                        //we assume languages code are separated by "|"
+                       var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
+                        //}
+                        //try
+                        //{
+                        //    languages= propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
+                        //}
+                        //catch (Exception e) { }
+                        var targetLanguagesList = new List<CultureInfo>();
+                        foreach (var language in languages)
+                        {
+                            var languageCode = int.Parse(language);
+                            var cultureInfo = Language(languageCode);
+                            targetLanguagesList.Add(cultureInfo);
+                        }
+                        model.TargetLanguage = targetLanguagesList;
                     }
                 }
             }
             var filesName = GetFilesName();
 
             var names=ExtractFilesFromArchive(filesName, packagePath);
-            var package = AddFilesToPackage(model, names);
-
-            return package;
-
-        }
-
-        private PackageModel AddFilesToPackage(PackageModel model,List<string> filesName )
-        {
-            var pathList = new List<string>();
-            
-            foreach (var fileName in filesName)
-            {
-                var pathToFiles = Directory.GetFiles(Path.GetTempPath(),fileName);
-                foreach (var path in pathToFiles)
-                {
-                    pathList.Add(path);
-                }
-            }
-
-            var files = new string[pathList.Count];
-            for (var i = 0; i < pathList.Count; i++)
-            {
-                files[i] = pathList[i];
-            }
-
-            model.Files = files;
-
+           // var package = AddFilesToPackage(model, names);
+            var targetFiles = AddTargetFiles(model, names);
+            model.TargetFiles = targetFiles;
+            var sourceFiles = AddSourceFiles(model, names);
+            model.SourceFiles = sourceFiles;
             return model;
+
         }
+
+        private string[] AddSourceFiles(PackageModel model, List<string> names)
+        {
+            var tempFiles = Directory.GetFiles(Path.GetTempPath());
+            var extension = model.SourceLanguage.ThreeLetterWindowsLanguageName;
+            var sourcePathList = new List<string>();
+            //selects from temp folder files which ends with source language code
+            var filesFromTemp = (from file in tempFiles where file.Contains(extension) select file).ToList();
+
+            //selects from files name only the names which contains the source language code
+            var sourceName = (from name in names where name.Contains(extension) select name).ToList();
+
+            foreach (var name in sourceName)
+            {
+                var path = (from file in filesFromTemp where file.Contains(name) select file).ToList();
+                sourcePathList.AddRange(path);
+            }
+
+            var files = new string[sourcePathList.Count];
+            for (var i = 0; i < sourcePathList.Count; i++)
+            {
+                files[i] = sourcePathList[i];
+            }
+
+            return files;
+        }
+
+
+        private string[] AddTargetFiles(PackageModel model, List<string> filesName)
+        {
+
+            var pathList = new List<string>();
+            var tempFiles = Directory.GetFiles(Path.GetTempPath());
+            var pathTotargetFiles = new List<string>();
+            var targetFilesName = new List<string>();
+
+
+
+            foreach (var language in model.TargetLanguage)
+            {
+                var extension = language.ThreeLetterWindowsLanguageName;
+                //selects from temp folder files which ends with target language code language
+                var targetFiles = (from file in tempFiles
+                                   where file.Contains(extension)
+                                   select file).ToList();
+
+                //selects from files name only the names which contains the target language code
+                var names = (from name in filesName where name.Contains(extension) select name).ToList();
+                pathList.AddRange(targetFiles);
+                targetFilesName.AddRange(names);
+
+            }
+
+            foreach (var fileName in targetFilesName)
+            {
+
+                var targetPath = (from path in pathList where path.Contains(fileName) select path).ToList();
+                pathTotargetFiles.AddRange(targetPath);
+            }
+
+
+            var files = new string[pathTotargetFiles.Count];
+            for (var i = 0; i < pathTotargetFiles.Count; i++)
+            {
+                files[i] = pathTotargetFiles[i];
+            }
+
+            return files;
+        }
+
+
+        //private PackageModel AddFilesToPackage(PackageModel model,List<string> filesName )
+        //{
+            //var pathList = new List<string>();
+            //var tempFiles = Directory.GetFiles(Path.GetTempPath());
+            //var pathTotargetFiles = new List<string>();
+            //var targetFilesName = new List<string>();
+
+
+
+            //foreach (var language in model.TargetLanguage)
+            //{
+            //    var extension = language.ThreeLetterWindowsLanguageName;
+            //    //selects from temp folder files which ends with target source code language
+            //    var targetFiles = (from file in tempFiles
+            //                       where file.Contains(extension)
+            //                       select file).ToList();
+
+            //    //selects from files name only the names which contains the target language code
+            //    var names = (from name in filesName where name.Contains(extension) select name).ToList();
+            //    pathList.AddRange(targetFiles);
+            //    targetFilesName.AddRange(names);
+
+            //}
+
+            //foreach (var fileName in targetFilesName)
+            //{
+
+            //    var targetPath = (from path in pathList where path.Contains(fileName) select path).ToList();
+            //    pathTotargetFiles.AddRange(targetPath);
+            //}
+
+
+            //var files = new string[pathTotargetFiles.Count];
+            //for (var i = 0; i < pathTotargetFiles.Count; i++)
+            //{
+            //    files[i] = pathTotargetFiles[i];
+            //}
+
+            //model.Files = files;
+
+            //return model;
+
+
+   
+        //}
 
         private List<string> ExtractFilesFromArchive(List<string> filesName,string packagePath)
         {

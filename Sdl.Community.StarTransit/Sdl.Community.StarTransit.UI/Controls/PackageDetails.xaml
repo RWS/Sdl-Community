@@ -99,7 +99,7 @@
                 ToolTip="Customer"
             Margin="0,0,0,10"
            x:Name="txtName_Copy" Grid.Column="1" TextWrapping="Wrap" Grid.Row="4" Grid.ColumnSpan="2" />
-        <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" SelectionChanged="ComboBox_SelectionChanged" />
         <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
         <DatePicker Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
         <ComboBox x:Name="sourceLanguageComboBox" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
