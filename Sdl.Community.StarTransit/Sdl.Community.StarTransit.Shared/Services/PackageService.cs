@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.Shared.Services
@@ -16,7 +17,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private List<string> _fileNameList = new List<string>();
         private const char LanguageTargetSeparator = '|';
 
-        public PackageModel OpenPackage(string packagePath)
+        public async Task<PackageModel> OpenPackage(string packagePath)
         {
             
             var entryName = string.Empty;
@@ -43,10 +44,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             }
 
-            return ReadPackage(pathToTempFolder, entryName, packagePath);
+            return await ReadPackage(pathToTempFolder, entryName, packagePath);
         }
 
-        private PackageModel ReadPackage(string path, string fileName,string packagePath)
+        private async Task<PackageModel>  ReadPackage(string path, string fileName,string packagePath)
         {
             var filePath = Path.Combine(path, fileName);
             var keyProperty = string.Empty;
@@ -93,7 +94,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
             }
 
-            var packageModel = CreateModel(packagePath);
+            var packageModel = await CreateModel(packagePath);
 
 
             //ar trebui sa sterg fisierul in mom in care s-a creat proiectul
@@ -109,7 +110,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             return packageModel;
         }
 
-        private PackageModel CreateModel(string packagePath)
+        private async Task<PackageModel> CreateModel(string packagePath)
         {
             var model = new PackageModel();
             if (_pluginDictionary.ContainsKey("Admin"))
@@ -149,14 +150,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     }
                 }
             }
-            var filesName = GetFilesName();
+            var filesName = await Task.FromResult( GetFilesName());
 
-            var names=ExtractFilesFromArchive(filesName, packagePath);
+            var names=await Task.FromResult(ExtractFilesFromArchive(filesName, packagePath));
 
-            var targetFiles = AddTargetFiles(model, names);
+            var targetFiles = await Task.FromResult(AddTargetFiles(model, names));
             model.TargetFiles = targetFiles;
 
-            var sourceFiles = AddSourceFiles(model, names);
+            var sourceFiles = await Task.FromResult(AddSourceFiles(model, names));
             model.SourceFiles = sourceFiles;
 
             return model;
@@ -268,7 +269,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// Return a list of file names
         /// </summary>
         /// <returns></returns>
-        private List<string> GetFilesName()
+        private  List<string> GetFilesName()
         {
             //takes values from dictionary
             var filesDictionary = _pluginDictionary["Files"];

@@ -24,7 +24,7 @@ namespace Sdl.Community.StarTransit
     [ActionLayout(typeof(StarTransitRibbon),20,DisplayType.Large)]
     public class StarTransitOpenPackageAction: AbstractAction
     {
-        protected override void Execute()
+        protected async override void Execute()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
@@ -35,7 +35,7 @@ namespace Sdl.Community.StarTransit
 
                 //deschide arhiva si citeste fisierul .prj
                 var packageService = new PackageService();
-                var package = packageService.OpenPackage(path);
+                var package = await packageService.OpenPackage(path);
 
                 //lista de template din studio
                 var templateService = new TemplateService();
@@ -45,7 +45,7 @@ namespace Sdl.Community.StarTransit
                 var packageModel = new PackageModel
                 {
                     Name = package.Name,
-                    Description =package.Description,
+                    Description = package.Description,
                     StudioTemplates = templateList,
                     SourceLanguage = package.SourceLanguage,
                     TargetLanguage = package.TargetLanguage,

@@ -69,6 +69,7 @@
                 ToolTip="Package name"
                  Margin="0,0,0,10"
                  Padding="0,0,0,10"
+                 Text="{Binding Name}"
                  x:Name="txtName" Grid.Column="1" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
 
         <TextBox Style="{StaticResource MetroTextBox}"
@@ -77,6 +78,7 @@
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
                 ToolTip="Description"
+                 Text="{Binding Description}"
                  Margin="0,0,0,10"
                  x:Name="txtDescription" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1" MinLines="3" AcceptsReturn="True" Grid.ColumnSpan="2"/>
         <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
