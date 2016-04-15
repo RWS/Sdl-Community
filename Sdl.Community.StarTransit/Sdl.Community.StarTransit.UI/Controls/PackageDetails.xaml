@@ -8,9 +8,9 @@
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.UI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-<UserControl.DataContext>
+<!--<UserControl.DataContext>
         <viewModels:PackageDetailsViewModel/>
-</UserControl.DataContext>    
+</UserControl.DataContext>-->    
 <!--<UserControl.Resources>
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -87,7 +87,7 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="5,0,0,10"  Click="button_Click" />
+            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="5,0,0,10"  Command="{Binding BrowseCommand}" />
             <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
                 Controls:TextBoxHelper.Watermark =" Location"
@@ -109,11 +109,11 @@
                 ToolTip="Customer"
             Margin="0,0,0,10"
            x:Name="txtName_Copy" Grid.Column="1" TextWrapping="Wrap" Grid.Row="4" Grid.ColumnSpan="2" />
-        <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" SelectionChanged="ComboBox_SelectionChanged" />
+        <ComboBox x:Name="comboBox" ItemsSource="{Binding StudioTemplates}" SelectedItem="{Binding Template}" SelectedValue="{Binding Template ,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsSynchronizedWithCurrentItem="True" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"  />
         <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
-        <DatePicker Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
-        <TextBlock x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
-        <TextBlock x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <DatePicker SelectedDate="{Binding DueDate}"  Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
+        <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
        
     </Grid>
 </UserControl>

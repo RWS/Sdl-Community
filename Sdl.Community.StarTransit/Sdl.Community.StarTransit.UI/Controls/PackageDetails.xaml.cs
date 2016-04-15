@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.UI.ViewModels;
 using Sdl.ProjectAutomation.Core;
 using Forms = System.Windows.Forms;
 
@@ -31,18 +32,19 @@ namespace Sdl.Community.StarTransit.UI.Controls
         {
 
             InitializeComponent();
-            txtName.Text = package.Name;
-            txtDescription.Text = package.Description;
-            comboBox.ItemsSource = package.StudioTemplates;
-            sourceLanguageBlock.Text = package.SourceLanguage.DisplayName;
-            var targetLanguage = string.Empty;
-            foreach (var language in package.TargetLanguage)
-            {
-                targetLanguage = targetLanguage + language.DisplayName ;
-            }
+            this.DataContext = new PackageDetailsViewModel(package);
+            //txtName.Text = package.Name;
+            //txtDescription.Text = package.Description;
+            //comboBox.ItemsSource = package.StudioTemplates;
+            //sourceLanguageBlock.Text = package.SourceLanguage.DisplayName;
+            //var targetLanguage = string.Empty;
+            //foreach (var language in package.TargetLanguage)
+            //{
+            //    targetLanguage = targetLanguage + language.DisplayName ;
+            //}
 
-            targetLanguageBlock.Text = targetLanguage;
-            GetCultureList();
+            //targetLanguageBlock.Text = targetLanguage;
+            //GetCultureList();
             _package = new PackageModel
             {
                 Name = package.Name,
