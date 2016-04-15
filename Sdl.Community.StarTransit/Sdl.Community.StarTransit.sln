@@ -9,9 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit.U
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{B449B56B-998B-47BC-9ABD-036C761EB9F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit.Shared", "Sdl.Community.StarTransit.Models\Sdl.Community.StarTransit.Shared.csproj", "{80113C78-7889-4D14-A233-48DE24DE11A2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.FileType.Transit", "Sdl.Community.FileTypeSupport.Transit\Sdl.Community.FileType.Transit.csproj", "{5617D5CC-88D8-44D0-9431-CF963A39DCEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.StarTransit.Shared", "Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj", "{80113C78-7889-4D14-A233-48DE24DE11A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80113C78-7889-4D14-A233-48DE24DE11A2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5617D5CC-88D8-44D0-9431-CF963A39DCEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -148,7 +148,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.StarTransit.Models\Sdl.Community.StarTransit.Shared.csproj">
+    <ProjectReference Include="..\Sdl.Community.StarTransit.Shared\Sdl.Community.StarTransit.Shared.csproj">
       <Project>{80113c78-7889-4d14-a233-48de24de11a2}</Project>
       <Name>Sdl.Community.StarTransit.Shared</Name>
     </ProjectReference>
