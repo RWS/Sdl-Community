@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-namespace Sdl.Community.StarTransit.Services
+namespace Sdl.Community.StarTransit.Shared.Services
 {
    public class TemplateService: AbstractViewControllerAction<ProjectsController>
    {

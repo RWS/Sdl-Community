@@ -4,14 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media.Media3D;
 using Sdl.Community.StarTransit.Shared.Models;
 
-
-namespace Sdl.Community.StarTransit.Services
+namespace Sdl.Community.StarTransit.Shared.Services
 {
     public class PackageService
     {
