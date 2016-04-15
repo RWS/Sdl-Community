@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.StarTransit.Services;
+using Sdl.Community.StarTransit.Shared.Models;
 
 namespace TestApp
 {
@@ -12,8 +14,23 @@ namespace TestApp
         [STAThread]
         static void Main(string[] args)
         {
-            //StarTransitMainWindow mainWindow = new StarTransitMainWindow();
-            //mainWindow.ShowDialog();
+            var packageService = new PackageService();
+            var package = packageService.OpenPackage(@"C:\Users\aghisa\Desktop\Transit packages\PACK_00000228_TRA_HUN_00_HUN.PPF");
+            var templateService = new TemplateService();
+            var templateList = templateService.LoadProjectTemplates();
+            var packageModel = new PackageModel
+            {
+                Name = package.Name,
+                Description = package.Description,
+                StudioTemplates = templateList,
+                SourceLanguage = package.SourceLanguage,
+                TargetLanguage = package.TargetLanguage,
+                SourceFiles = package.SourceFiles,
+                TargetFiles = package.TargetFiles
+            };
+
+            StarTransitMainWindow mainWindow = new StarTransitMainWindow(packageModel);
+            mainWindow.ShowDialog();
         }
     }
 }

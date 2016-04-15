@@ -91,13 +91,23 @@ namespace Sdl.Community.StarTransit.UI
             switch (li.Tag.ToString())
             {
                 case "packageDetails":
+
                     tcc.Content = _packageDetails;
+
                     break;
+
                 case "tm":
-                    tcc.Content = _translationMemories;
+                    if (_packageDetails.FieldsAreCompleted())
+                    {
+                        tcc.Content = _translationMemories;
+                    }
                     break;
                 case "finish":
-                    tcc.Content = _finish;
+                    if (_packageDetails.FieldsAreCompleted())
+                    {
+                        tcc.Content = _finish;
+                    }
+
                     break;
                 default:
                     tcc.Content = _packageDetails;

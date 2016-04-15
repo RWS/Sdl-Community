@@ -2,11 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.UI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+<UserControl.DataContext>
+        <viewModels:PackageDetailsViewModel/>
+</UserControl.DataContext>    
 <!--<UserControl.Resources>
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -26,7 +30,8 @@
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="0,0,0,5"/>
                 <Setter Property="Padding" Value="0,0,0,10"/>
-            </Style>
+                <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+             </Style>
            
         </Grid.Resources>
         <Grid.RowDefinitions>
@@ -89,7 +94,10 @@
                 ToolTip="Location"
                      Margin="0,0,0,10"
                      Padding="0,0,0,15"
+                     
+                     Text="{Binding TextLocation,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                 x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
+            
         </Grid>
         <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
@@ -102,8 +110,8 @@
         <ComboBox x:Name="comboBox" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" SelectionChanged="ComboBox_SelectionChanged" />
         <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
         <DatePicker Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
-        <ComboBox x:Name="sourceLanguageComboBox" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
-        <ComboBox x:Name="targetLanguageComboBox" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <TextBlock x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
        
     </Grid>
 </UserControl>

@@ -20,6 +20,7 @@ namespace Sdl.Community.StarTransit.Services
         private PackageModel _package = new PackageModel();
         private List<string> _fileNameList = new List<string>();
         private const char LanguageTargetSeparator = '|';
+
         public PackageModel OpenPackage(string packagePath)
         {
             
@@ -53,7 +54,6 @@ namespace Sdl.Community.StarTransit.Services
         private PackageModel ReadPackage(string path, string fileName,string packagePath)
         {
             var filePath = Path.Combine(path, fileName);
-            //  var pluginDictionary =  new Dictionary<string, Dictionary<string, string>>();
             var keyProperty = string.Empty;
 
 
@@ -141,17 +141,8 @@ namespace Sdl.Community.StarTransit.Services
                     }
                     if (key == "TargetLanguages")
                     {
-                        //var languageCode = int.Parse(propertiesDictionary["TargetLanguages"]);
-                        //model.TargetLanguage = Language(languageCode);
-
                         //we assume languages code are separated by "|"
-                       var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
-                        //}
-                        //try
-                        //{
-                        //    languages= propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
-                        //}
-                        //catch (Exception e) { }
+                        var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
                         var targetLanguagesList = new List<CultureInfo>();
                         foreach (var language in languages)
                         {
@@ -166,11 +157,13 @@ namespace Sdl.Community.StarTransit.Services
             var filesName = GetFilesName();
 
             var names=ExtractFilesFromArchive(filesName, packagePath);
-           // var package = AddFilesToPackage(model, names);
+
             var targetFiles = AddTargetFiles(model, names);
             model.TargetFiles = targetFiles;
+
             var sourceFiles = AddSourceFiles(model, names);
             model.SourceFiles = sourceFiles;
+
             return model;
 
         }
@@ -245,51 +238,6 @@ namespace Sdl.Community.StarTransit.Services
         }
 
 
-        //private PackageModel AddFilesToPackage(PackageModel model,List<string> filesName )
-        //{
-            //var pathList = new List<string>();
-            //var tempFiles = Directory.GetFiles(Path.GetTempPath());
-            //var pathTotargetFiles = new List<string>();
-            //var targetFilesName = new List<string>();
-
-
-
-            //foreach (var language in model.TargetLanguage)
-            //{
-            //    var extension = language.ThreeLetterWindowsLanguageName;
-            //    //selects from temp folder files which ends with target source code language
-            //    var targetFiles = (from file in tempFiles
-            //                       where file.Contains(extension)
-            //                       select file).ToList();
-
-            //    //selects from files name only the names which contains the target language code
-            //    var names = (from name in filesName where name.Contains(extension) select name).ToList();
-            //    pathList.AddRange(targetFiles);
-            //    targetFilesName.AddRange(names);
-
-            //}
-
-            //foreach (var fileName in targetFilesName)
-            //{
-
-            //    var targetPath = (from path in pathList where path.Contains(fileName) select path).ToList();
-            //    pathTotargetFiles.AddRange(targetPath);
-            //}
-
-
-            //var files = new string[pathTotargetFiles.Count];
-            //for (var i = 0; i < pathTotargetFiles.Count; i++)
-            //{
-            //    files[i] = pathTotargetFiles[i];
-            //}
-
-            //model.Files = files;
-
-            //return model;
-
-
-   
-        //}
 
         private List<string> ExtractFilesFromArchive(List<string> filesName,string packagePath)
         {

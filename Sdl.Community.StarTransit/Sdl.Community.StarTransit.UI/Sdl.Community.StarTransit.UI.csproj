@@ -80,6 +80,8 @@
     <Compile Include="Controls\TranslationMemories.xaml.cs">
       <DependentUpon>TranslationMemories.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\PackageDetailsViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

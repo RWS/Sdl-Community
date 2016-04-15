@@ -34,9 +34,14 @@ namespace Sdl.Community.StarTransit.UI.Controls
             txtName.Text = package.Name;
             txtDescription.Text = package.Description;
             comboBox.ItemsSource = package.StudioTemplates;
-            sourceLanguageComboBox.SelectedItem = package.SourceLanguage;
-            targetLanguageComboBox.SelectedItem = package.TargetLanguage;
+            sourceLanguageBlock.Text = package.SourceLanguage.DisplayName;
+            var targetLanguage = string.Empty;
+            foreach (var language in package.TargetLanguage)
+            {
+                targetLanguage = targetLanguage + language.DisplayName ;
+            }
 
+            targetLanguageBlock.Text = targetLanguage;
             GetCultureList();
             _package = new PackageModel
             {
@@ -57,12 +62,24 @@ namespace Sdl.Community.StarTransit.UI.Controls
                 .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
                 .ToList();
             //   var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
-            sourceLanguageComboBox.ItemsSource = languageList;
-            
-            targetLanguageComboBox.ItemsSource = languageList;
+         
         }
 
-       
+        public  bool FieldsAreCompleted()
+        {
+            var completed = true;
+
+            if (txtLocation.Text == string.Empty)
+            {
+                completed= false;
+                
+            }
+            if (comboBox.SelectedItem == null)
+            {
+                completed = false;
+            }
+            return completed;
+        }
 
         private void button_Click(object sender, RoutedEventArgs e)
         {
