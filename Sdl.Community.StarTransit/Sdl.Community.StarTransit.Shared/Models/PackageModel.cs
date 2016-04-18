@@ -17,7 +17,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public CultureInfo SourceLanguage { get; set; }
         public List<CultureInfo> TargetLanguage { get; set; }
         public string Location { get; set; }
-        //public string[] Files { get; set; }
+        public DateTime? DueDate { get; set; }
+        public bool HasDueDate { get; set; }
         public string[] SourceFiles { get; set; }
         public string[] TargetFiles { get; set; }
     }

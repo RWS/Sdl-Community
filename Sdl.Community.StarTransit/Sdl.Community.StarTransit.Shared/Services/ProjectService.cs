@@ -15,7 +15,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
     public class ProjectService
     {
-        public void CreateProject(PackageModel package)
+        public  void CreateProject(PackageModel package)
         {
             var target = GetTargetLanguages(package.TargetLanguage);
 

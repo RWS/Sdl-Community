@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -14,18 +15,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
     public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged
     {
-        private string _textLocation;
-        private string _txtName;
-        private string _txtDescription;
-        private List<ProjectTemplateInfo> _studioTemplates;
-        private bool _hasDueDate;
-        private DateTime _dueDate;
-        private string _sourceLanguage;
-        private string _targetLanguage;
-        private PackageModel _packageModel;
+        private static string _textLocation;
+        private static string _txtName;
+        private static string _txtDescription;
+        private static List<ProjectTemplateInfo> _studioTemplates;
+        private static bool _hasDueDate;
+        private static DateTime? _dueDate;
+        private static string _sourceLanguage;
+        private static string _targetLanguage;
+        private static PackageModel _packageModel;
         private ICommand _browseCommand;
-        private bool _canExecute;
-        private ProjectTemplateInfo _template;
+        private static bool _canExecute;
+        private static ProjectTemplateInfo _template;
+
+        public ObservableCollection<ProjectTemplateInfo> _templates;
 
         public PackageDetailsViewModel(PackageModel package)
         {
@@ -35,8 +38,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _studioTemplates = package.StudioTemplates;
             _textLocation = package.Location;
             _sourceLanguage = package.SourceLanguage.DisplayName;
-
-            var targetLanguage = string.Empty;
+            _templates =new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
+            _hasDueDate = false;
+           var targetLanguage = string.Empty;
             foreach (var language in package.TargetLanguage)
             {
                 targetLanguage = targetLanguage + language.DisplayName;
@@ -61,12 +65,27 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
             if (result == DialogResult.OK)
             {
-               _textLocation = folderDialog.SelectedPath;
-               OnPropertyChanged(nameof(TextLocation));
+               TextLocation = folderDialog.SelectedPath;
+              
             }
         }
 
-  
+        public ObservableCollection<ProjectTemplateInfo> Templates
+        {
+            get
+            {
+                return _templates;
+            }
+            set
+            {
+                if (Equals(value, _templates))
+                {
+                    return;
+                }
+                OnPropertyChanged();
+            }
+        }
+
         public string TextLocation
         {
             get { return _textLocation; }
@@ -76,6 +95,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _textLocation = value;
                 OnPropertyChanged();
             }
         }
@@ -89,6 +109,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _txtName = value;
                 OnPropertyChanged();
             }
         }
@@ -102,6 +123,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _txtDescription = value;
                 OnPropertyChanged();
             }
         }
@@ -131,6 +153,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _template = value;
                 OnPropertyChanged();
             }
         }
@@ -144,11 +167,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _hasDueDate = value;
                 OnPropertyChanged();
             }
         }
 
-        public DateTime DueDate
+        public DateTime? DueDate
         {
             get { return _dueDate; }
             set
@@ -157,6 +181,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 {
                     return;
                 }
+                _dueDate = value;
                 OnPropertyChanged();
             }
         }
@@ -210,13 +235,19 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string Error { get; }
 
-        public PackageModel GetPackageModel()
+        public static PackageModel GetPackageModel()
         {
             _packageModel.Name = _txtName;
             _packageModel.Description = _txtDescription;
             _packageModel.Location = _textLocation;
-           // _packageModel.DueDate = _dueDate;
-           // _packageModel.te
+            if (_hasDueDate)
+            {
+                _packageModel.DueDate = _dueDate;
+            }
+           
+            _packageModel.ProjectTemplate = _template;
+            _packageModel.HasDueDate = _hasDueDate;
+            
            return _packageModel;
         }
 

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.UI.ViewModels;
 
 namespace Sdl.Community.StarTransit.UI
 {
@@ -32,9 +33,10 @@ namespace Sdl.Community.StarTransit.UI
             InitializeComponent();
 
             _packageDetails = new PackageDetails(package);
-            var finalPackage = _packageDetails.AddLocationToPackage();
+            var packageModel = PackageDetailsViewModel.GetPackageModel();
+
             _translationMemories = new TranslationMemories();
-            _finish = new Finish(finalPackage);
+           _finish = new Finish(packageModel);
             
         }
 

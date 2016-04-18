@@ -26,46 +26,25 @@ namespace Sdl.Community.StarTransit.UI.Controls
     /// </summary>
     public partial class PackageDetails : UserControl
     {
-        private PackageModel _package;//= new PackageModel();
-      //  private PackageService _packageService;
+     
         public PackageDetails(PackageModel package)
         {
 
             InitializeComponent();
-            this.DataContext = new PackageDetailsViewModel(package);
-            //txtName.Text = package.Name;
-            //txtDescription.Text = package.Description;
-            //comboBox.ItemsSource = package.StudioTemplates;
-            //sourceLanguageBlock.Text = package.SourceLanguage.DisplayName;
-            //var targetLanguage = string.Empty;
-            //foreach (var language in package.TargetLanguage)
-            //{
-            //    targetLanguage = targetLanguage + language.DisplayName ;
-            //}
-
-            //targetLanguageBlock.Text = targetLanguage;
-            //GetCultureList();
-            _package = new PackageModel
-            {
-                Name = package.Name,
-                SourceLanguage = package.SourceLanguage,
-                TargetLanguage = package.TargetLanguage,
-                Description = package.Description,
-                SourceFiles = package.SourceFiles,
-                TargetFiles = package.TargetFiles
-            };
-
+            DataContext = new PackageDetailsViewModel(package);
+        
+            
         }
 
-        private void GetCultureList()
-        {
+        //private void GetCultureList()
+        //{
 
-            var languageList = CultureInfo
-                .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
-                .ToList();
-            //   var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
+        //    var languageList = CultureInfo
+        //        .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
+        //        .ToList();
+        //    //   var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
          
-        }
+        //}
 
         public  bool FieldsAreCompleted()
         {
@@ -82,49 +61,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
             }
             return completed;
         }
+        
 
-        private void button_Click(object sender, RoutedEventArgs e)
-        {
-            Forms.FolderBrowserDialog folderDialog = new Forms.FolderBrowserDialog();
-            Forms.DialogResult result = folderDialog.ShowDialog();
-            
-            if(result == Forms.DialogResult.OK)
-            {
-                txtLocation.Text = folderDialog.SelectedPath;
-                AddLocation(folderDialog.SelectedPath);
-            }
-
-        }
-
-        private void AddLocation(string selectedPath)
-        {
-            _package.Location = selectedPath;
-            AddLocationToPackage();
-        }
-
-        private void CheckBox_Checked(object sender, RoutedEventArgs e)
-        {
-            dueDatePicker.IsEnabled = false;
-
-        }
-
-        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            dueDatePicker.IsEnabled = true;
-        }
-
-        public PackageModel AddLocationToPackage()
-        {
-            return _package;
-
-        }
-
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            var templateBox = sender as ComboBox;
-
-            var template = templateBox.SelectedItem as ProjectTemplateInfo;
-            _package.ProjectTemplate = template;
-        }
     }
 }

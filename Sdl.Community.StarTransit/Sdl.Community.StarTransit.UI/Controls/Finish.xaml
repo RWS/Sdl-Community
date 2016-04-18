@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBlock x:Name="textBlock" Height="36.561" Margin="47.078,45.952,105.676,0" TextWrapping="Wrap" Text="finish" VerticalAlignment="Top"/>
-        <Button x:Name="createProjectBtn" Click="CreateProjectBtn_OnClick" Content="Create project" Width="120" Height="50"/>
+        <!--<TextBlock x:Name="textBlock" Height="36.561" Margin="47.078,45.952,105.676,0" TextWrapping="Wrap" Text="finish" VerticalAlignment="Top"/>-->
+        <Button x:Name="createProjectBtn" Command="{Binding FinishCommand}" Content="Create project" Width="120" Height="50"/>
 
     </Grid>
 </UserControl>

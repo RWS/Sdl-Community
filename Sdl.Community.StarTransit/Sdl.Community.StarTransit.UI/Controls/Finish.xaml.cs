@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.UI.ViewModels;
 
 namespace Sdl.Community.StarTransit.UI.Controls
 {
@@ -22,21 +23,14 @@ namespace Sdl.Community.StarTransit.UI.Controls
     /// </summary>
     public partial class Finish : UserControl
     {
-        private readonly PackageModel _package;
-        private readonly ProjectService _projectService;
+        
         public Finish(PackageModel package)
         {
-           
-            _projectService = new ProjectService();
-            _package = package;
+           DataContext = new FinishViewModel(package);
+
+          
             InitializeComponent();
         }
 
-        private void CreateProjectBtn_OnClick(object sender, RoutedEventArgs e)
-        {
-            //primesc eroare la InitializeComponent() daca referentiez sdl.filebased(ca sa pot returna un proiect creat in serviciu)
-            _projectService.CreateProject(_package);
-            var messageBox = MessageBox.Show("Project created");
-        }
     }
 }
