@@ -62,5 +62,16 @@ namespace Sdl.Community.StarTransit
 
        
     }
-    
+
+    [Action("Sdl.Community.StarTransit.Contribute", Name = "Contribute to project", Icon = "opensourceimage", Description = "Contribute to project")]
+    [ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
+    public class ContributeToProjectAction : AbstractAction
+    {
+        protected override void Execute()
+        {
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit");
+        }
+    }
+
+
 }

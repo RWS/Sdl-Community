@@ -81,6 +81,16 @@ namespace Sdl.Community.StarTransit {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon opensourceimage {
+            get {
+                object obj = ResourceManager.GetObject("opensourceimage", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sdl.Community.StarTransit.
         /// </summary>
         public static string Plugin_Name {

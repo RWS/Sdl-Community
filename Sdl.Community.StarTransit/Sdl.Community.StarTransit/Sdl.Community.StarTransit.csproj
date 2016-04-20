@@ -129,6 +129,7 @@
     <Compile Include="StarTransitRibbon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\opensourceimage.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
