@@ -31,20 +31,24 @@ namespace Sdl.Community.StarTransit.UI
         {
             EnsureApplicationResources();
             InitializeComponent();
-
+           
             _packageDetails = new PackageDetails(package);
             var packageModel = PackageDetailsViewModel.GetPackageModel();
 
             _translationMemories = new TranslationMemories();
            _finish = new Finish(packageModel);
-            
+
+             DataContext = new StarTransitMainWindowViewModel(_packageDetails, _translationMemories, _finish);
+           // DataContext = new StarTransitMainWindowViewModel(packageModel);
+
         }
 
         private void EnsureApplicationResources()
         {
+
             if (Application.Current == null)
             {
-                new Application();
+                new Application {ShutdownMode = ShutdownMode.OnExplicitShutdown};
 
                 var controlsResources = new ResourceDictionary
                 {
@@ -99,16 +103,14 @@ namespace Sdl.Community.StarTransit.UI
                     break;
 
                 case "tm":
-                    if (_packageDetails.FieldsAreCompleted())
-                    {
-                        tcc.Content = _translationMemories;
-                    }
+
+                    tcc.Content = _translationMemories;
+
                     break;
                 case "finish":
-                    if (_packageDetails.FieldsAreCompleted())
-                    {
-                        tcc.Content = _finish;
-                    }
+
+                    tcc.Content = _finish;
+
 
                     break;
                 default:
@@ -121,6 +123,22 @@ namespace Sdl.Community.StarTransit.UI
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
         {
             packageDetailsItem.IsSelected = true;
+        }
+
+        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void listView_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void Next_OnClick(object sender, RoutedEventArgs e)
+        {
+
+            listView.SelectedItem = TMItem;
         }
     }
 }

@@ -260,7 +260,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         }
 
     }
-    public class CommandHandler : ICommand
+    public class CommandHandler : ICommand,INotifyPropertyChanged
     {
         private Action _action;
         private bool _canExecute;
@@ -275,11 +275,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             return _canExecute;
         }
 
-        public event EventHandler CanExecuteChanged;
+       public event EventHandler CanExecuteChanged;
 
         public void Execute(object parameter)
         {
             _action();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        //protected virtual void OnCanExecuteChanged()
+        //{
+        //    CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        //}
+
     }
 }

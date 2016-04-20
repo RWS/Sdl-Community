@@ -75,21 +75,29 @@
                 Background="#FFE8E9EB"
                 BorderBrush="{x:Null}"
                 BorderThickness="0"
-                ItemContainerStyle="{DynamicResource NavigationButtonStyle}">
+                IsEnabled="False"
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle}" SelectedItem="{Binding SelectedItem}" SelectionChanged="listView_SelectionChanged" MouseDown="listView_MouseDown">
                 <ListViewItem x:Name="packageDetailsItem"
-                    
-                    Selected="ListViewItem_Selected"
+                    IsSelected="{Binding DetailsSelected}"
+                   Selected="ListViewItem_Selected"
                     Tag="packageDetails">
                     <TextBlock x:Name="tbPackageDetails" Text="Package Details" />
                 </ListViewItem>
-                <ListViewItem Tag="tm" Selected="ListViewItem_Selected">
-                    <TextBlock x:Name="tbTM" Text="Translation Memories" />
+                <ListViewItem x:Name="TMItem" Tag="tm"  IsSelected="{Binding TmSelected}" Selected="ListViewItem_Selected" >
+                    <TextBlock x:Name="tbTM" Text="Translation Memories"  />
                 </ListViewItem>
-                <ListViewItem Tag="finish" Selected="ListViewItem_Selected">
+                <ListViewItem Tag="finish" IsSelected="{Binding FinishSelected}" Selected="ListViewItem_Selected" >
                     <TextBlock x:Name="tbFinish" Text="Finish" />
                 </ListViewItem>
             </ListView>
-            <controls:TransitioningContentControl x:Name="tcc" Grid.Column="1" Transition="Up" />
+            <StackPanel  Grid.Column="1"  Orientation="Vertical"  >
+            <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button x:Name="Back"  HorizontalAlignment="Left" MaxWidth="50" Command="{Binding BackCommand}" IsEnabled="{Binding CanExecuteBack}" HorizontalContentAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="30" >Back</Button>
+                <Button x:Name="Next"  HorizontalAlignment="Right" MaxWidth="50" Command="{Binding NextCommand}" IsEnabled="{Binding CanExecuteNext}" HorizontalContentAlignment="Right" Margin="350,0,0,10" VerticalAlignment="Bottom" Height="30">Next</Button>
+                </StackPanel>
+                <!--<Button x:Name="Create"   MaxWidth="150" HorizontalAlignment="Right" Command="{Binding CreateCommand}" IsEnabled="{Binding CanExecuteCreate}">Create Project</Button>-->
+            </StackPanel>
         </Grid>
 
     </Grid>

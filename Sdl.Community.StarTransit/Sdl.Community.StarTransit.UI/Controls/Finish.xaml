@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <!--<TextBlock x:Name="textBlock" Height="36.561" Margin="47.078,45.952,105.676,0" TextWrapping="Wrap" Text="finish" VerticalAlignment="Top"/>-->
-        <Button x:Name="createProjectBtn" Command="{Binding FinishCommand}" Content="Create project" Width="120" Height="50"/>
-
+        <Button x:Name="createProjectBtn" Command="{Binding FinishCommand}" Content="Create project" Width="120" Height="50" Margin="17,17,163,233" />
+        <controls:ProgressRing IsActive="{Binding Active}" HorizontalContentAlignment="Center"/>
     </Grid>
 </UserControl>

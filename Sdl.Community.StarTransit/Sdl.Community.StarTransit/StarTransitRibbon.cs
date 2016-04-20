@@ -8,9 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Application = System.Windows.Forms.Application;
 
 namespace Sdl.Community.StarTransit
 {
@@ -24,7 +26,7 @@ namespace Sdl.Community.StarTransit
     [ActionLayout(typeof(StarTransitRibbon),20,DisplayType.Large)]
     public class StarTransitOpenPackageAction: AbstractAction
     {
-        protected async override void Execute()
+        protected override async void Execute()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
@@ -52,12 +54,13 @@ namespace Sdl.Community.StarTransit
                     SourceFiles = package.SourceFiles,
                     TargetFiles = package.TargetFiles
                 };
-
               StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
                 window.ShowDialog();
             }
            
         }
+
+       
     }
     
 }

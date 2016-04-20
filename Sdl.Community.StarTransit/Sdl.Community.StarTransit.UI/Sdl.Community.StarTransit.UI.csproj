@@ -111,6 +111,7 @@
     <Compile Include="StarTransitMainWindow.xaml.cs">
       <DependentUpon>StarTransitMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\StarTransitMainWindowViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

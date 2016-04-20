@@ -18,23 +18,49 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ICommand _finishCommand;
         private bool _canExecute;
         private readonly ProjectService _projectService;
+        private bool _active;
+        private bool _completed;
 
         public FinishViewModel(PackageModel package)
         {
             _projectService = new ProjectService();
              _canExecute = true;
+            _completed = false;
+            // _isCreated = true;
         }
+
+        public bool Active
+        {
+            get { return _active; }
+            set
+            {
+                if (Equals(value, _active))
+                {
+                    return;
+                }
+                _active = value;
+                OnPropertyChanged();
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public ICommand FinishCommand
         {
             get { return _finishCommand ?? (_finishCommand = new CommandHandler(Finish, _canExecute)); }
-
+           
         }
 
-        public void Finish()
+        public async void Finish()
         {
+            Active = true;
             var package = PackageDetailsViewModel.GetPackageModel();
-            _projectService.CreateProject(package);
+       
+
+            await Task.Run(()=>_projectService.CreateProject(package));
+          
+
+             Active = false;
+
         }
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

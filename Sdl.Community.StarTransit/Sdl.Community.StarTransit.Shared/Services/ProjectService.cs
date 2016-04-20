@@ -9,22 +9,27 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.ProjectAutomation.Core;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
-using TaskStatus = System.Threading.Tasks.TaskStatus;
+using System.Threading.Tasks;
+//using TaskStatus = System.Threading.Tasks.TaskStatus;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
     public class ProjectService
     {
-        public  void CreateProject(PackageModel package)
+       
+
+       
+        public void CreateProject(PackageModel package)
         {
             var target = GetTargetLanguages(package.TargetLanguage);
-
+            var task = System.Threading.Tasks.Task.FromResult<object>(null);
             var projectInfo = new ProjectInfo
             {
                 Name = package.Name,
                 LocalProjectFolder = package.Location,
                 SourceLanguage = new Language(package.SourceLanguage),
-                TargetLanguages = target
+                TargetLanguages = target,
+                DueDate = package.DueDate
             };
 
             var newProject = new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
@@ -44,21 +49,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
             }, StatusHandler, MessageHandler);
             
             newProject.Save();
-
             DeleteFilesFromTemp(package.SourceFiles);
             DeleteFilesFromTemp(package.TargetFiles);
+
+            
+          //  return task;
         }
 
+      
         private void MessageHandler(object sender, TaskMessageEventArgs e)
         {
             var x = e.Message;
+           
         }
 
         private void StatusHandler(object sender, TaskStatusEventArgs e)
         {
-            var x = e.Status;
+            var status = e.Status;
+           
         }
 
+      
        
         private Language[] GetTargetLanguages(List<CultureInfo> languages)
         {
