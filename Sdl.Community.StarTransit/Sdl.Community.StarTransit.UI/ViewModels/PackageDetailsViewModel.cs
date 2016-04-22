@@ -2,14 +2,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Xml.Linq;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
+
+
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -27,9 +34,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ICommand _browseCommand;
         private static bool _canExecute;
         private static ProjectTemplateInfo _template;
-
+        private IProject _project;
+        private static Customer _selectedCustomer; 
         public ObservableCollection<ProjectTemplateInfo> _templates;
-
+        
         public PackageDetailsViewModel(PackageModel package)
         {
             _packageModel = package;
@@ -48,6 +56,53 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _targetLanguage = targetLanguage;
 
             _canExecute = true;
+
+            AssemblyVersion();
+        }
+
+        private void AssemblyVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
+            var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var projectsPath = string.Empty;
+            if (assembly.Contains("12"))
+            {
+                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2015\Projects\projects.xml");
+            }
+            else if(assembly.Contains("11"))
+            {
+                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2014\Projects\projects.xml");
+            }
+
+            ReadCustomers(projectsPath);
+        }
+
+        private void ReadCustomers(string projectsPath)
+        {
+            var sourceProjectsXml = XElement.Load(projectsPath);
+            if (!sourceProjectsXml.Element("Customers").HasElements) return;
+            
+            var customers = (from customer in sourceProjectsXml.Descendants("Customer")
+                            select new Customer
+                            {
+                                Guid = new Guid(customer.Attribute("Guid").Value),
+                                Name = customer.Attribute("Name").Value,
+                                Email = customer.Attribute("Email").Value
+                            }).ToList();
+
+            Customers = customers;
+
+        }
+
+        public Customer SelectedCustomer
+        {
+            get { return _selectedCustomer; }
+            set
+            {
+                if (Equals(_selectedCustomer, value)) return;
+                _selectedCustomer = value;
+                OnPropertyChanged();
+            }
         }
 
         public ICommand BrowseCommand
@@ -56,18 +111,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
            
         }
 
-     
+
+        public List<Customer> Customers { get; set; }
 
         public void Browse()
         {
-            var folderDialog = new FolderBrowserDialog();
-            var result = folderDialog.ShowDialog();
+            //var folderDialog = new FolderBrowserDialog();
+            //var result = folderDialog.ShowDialog();
 
-            if (result == DialogResult.OK)
+            //if (result == DialogResult.OK)
+            //{
+            //   TextLocation = folderDialog.SelectedPath;
+
+            //}
+            var folderDialog = new FolderSelectDialog();
+            if (folderDialog.ShowDialog())
             {
-               TextLocation = folderDialog.SelectedPath;
-              
+                TextLocation = folderDialog.FileName;
             }
+
         }
 
         public ObservableCollection<ProjectTemplateInfo> Templates
@@ -247,7 +309,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
            
             _packageModel.ProjectTemplate = _template;
             _packageModel.HasDueDate = _hasDueDate;
-            
+            _packageModel.Customer = _selectedCustomer;
            return _packageModel;
         }
 
@@ -259,6 +321,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+     
     }
     public class CommandHandler : ICommand,INotifyPropertyChanged
     {

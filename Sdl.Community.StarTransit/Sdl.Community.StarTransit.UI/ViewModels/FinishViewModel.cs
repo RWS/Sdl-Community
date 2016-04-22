@@ -58,7 +58,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
             await Task.Run(()=>_projectService.CreateProject(package));
           
-
+            
              Active = false;
 
         }

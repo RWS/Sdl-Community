@@ -58,6 +58,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi, Version=4.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -92,6 +96,8 @@
     <Compile Include="Controls\TranslationMemories.xaml.cs">
       <DependentUpon>TranslationMemories.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="ViewModels\FinishViewModel.cs" />
     <Compile Include="ViewModels\PackageDetailsViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

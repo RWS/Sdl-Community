@@ -10,14 +10,15 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using System.Threading.Tasks;
+using Sdl.Desktop.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+
 //using TaskStatus = System.Threading.Tasks.TaskStatus;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-    public class ProjectService
+    public class ProjectService : AbstractViewControllerAction<ProjectsController>
     {
-       
-
        
         public void CreateProject(PackageModel package)
         {
@@ -29,7 +30,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 LocalProjectFolder = package.Location,
                 SourceLanguage = new Language(package.SourceLanguage),
                 TargetLanguages = target,
-                DueDate = package.DueDate
+                DueDate = package.DueDate,
+                
             };
 
             var newProject = new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
@@ -49,11 +51,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
             }, StatusHandler, MessageHandler);
             
             newProject.Save();
+            var controller = Controller;
+            controller.RefreshProjects();
+            
             DeleteFilesFromTemp(package.SourceFiles);
             DeleteFilesFromTemp(package.TargetFiles);
 
-            
-          //  return task;
         }
 
       
@@ -99,6 +102,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
                 
             }catch(Exception e) { }
+        }
+
+        protected override void Execute()
+        {
+            
         }
     }
 }

@@ -21,5 +21,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public bool HasDueDate { get; set; }
         public string[] SourceFiles { get; set; }
         public string[] TargetFiles { get; set; }
+        public Customer Customer { get; set; }
     }
 }

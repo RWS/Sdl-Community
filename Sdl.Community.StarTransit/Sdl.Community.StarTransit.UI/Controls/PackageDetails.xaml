@@ -82,7 +82,7 @@
                  Margin="0,0,0,10"
                  x:Name="txtDescription" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1" MinLines="3" AcceptsReturn="True" Grid.ColumnSpan="2"/>
         <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
-            
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition/>
@@ -98,19 +98,13 @@
                      Padding="0,0,0,15"          
                     Text="{Binding TextLocation,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                 x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
-            
+
         </Grid>
-        <TextBox Style="{StaticResource MetroTextBox}"
-                Controls:TextBoxHelper.ClearTextButton="True"
-                Controls:TextBoxHelper.Watermark ="Customer"
-                Controls:TextBoxHelper.IsWaitingForData="True"
-                Controls:TextBoxHelper.UseFloatingWatermark="True" 
-                ToolTip="Customer"
-            Margin="0,0,0,10"
-           x:Name="txtName_Copy" Grid.Column="1" TextWrapping="Wrap" Grid.Row="4" Grid.ColumnSpan="2" />
+        <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}" SelectedValue="{Binding SelectedCustomer }" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
         <ComboBox x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" SelectedValue="{Binding Path=Template,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"  />
         <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" IsChecked="{Binding HasDueDate}" />
         <DatePicker SelectedDate="{Binding DueDate}"  IsEnabled="{Binding HasDueDate}" Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
+      
         <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
         <TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
        
