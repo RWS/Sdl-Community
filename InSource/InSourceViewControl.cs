@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
+using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Insights;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -128,65 +129,78 @@ namespace Sdl.Community.InSource
         /// <param name="e"></param>
         private void FoldersListView_CellEditStarting(object sender, CellEditEventArgs e)
         {
-            if (e.Column == deleteColumn)
+            try
             {
-                e.Cancel = true;
-                var confirmDelete = MessageBox.Show(@"Are you sure you want to remove this watch folder path?",
-                    @"Confirm", 
-                    MessageBoxButtons.OKCancel,
-                    MessageBoxIcon.Question);
-
-                if (confirmDelete == DialogResult.OK)
+                if (e.Column == deleteColumn)
                 {
-                    foldersListView.RemoveObject(e.RowObject);
+                    e.Cancel = true;
+                    var confirmDelete = MessageBox.Show(@"Are you sure you want to remove this watch folder path?",
+                        @"Confirm",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Question);
 
-                    var folderObject = e.RowObject as ProjectRequest;
-                    try
+                    if (confirmDelete == DialogResult.OK)
                     {
+                        foldersListView.RemoveObject(e.RowObject);
 
-                        var requestToRemove = _folderPathList.FindAll(p => p.Path == folderObject.Path);
-                        foreach (var request in requestToRemove)
+                        var folderObject = e.RowObject as ProjectRequest;
+                        
+
+                            var requestToRemove = _folderPathList.FindAll(p => p.Path == folderObject.Path);
+                            foreach (var request in requestToRemove)
+                            {
+                                _folderPathList.Remove(request);
+                            }
+
+                            var watchFolderToRemove = _watchFolders.FirstOrDefault(w => w.Path == folderObject.Path);
+                            if (watchFolderToRemove != null)
+                            {
+                                _watchFolders.Remove(watchFolderToRemove);
+                            }
+                   
+                    
+                        _persistence.Save(_folderPathList);
+                        LoadProjectRequests();
+
+                    }
+
+                }
+
+                if (e.Column != templateColumn) return;
+                var cb = new ComboBox
+                {
+                    Bounds = e.CellBounds,
+                    Font = ((ObjectListView) sender).Font,
+                    DropDownStyle = ComboBoxStyle.DropDownList
+                };
+
+                //displays only cumstom templates
+                if (_controller.ProjectTemplates.Count() != 0)
+                {
+                    foreach (ProjectTemplateInfo projectTemplate in _controller.ProjectTemplates)
+                    {
+                        if (projectTemplate.Name != "Default" && projectTemplate.Name != "SDL Trados")
                         {
-                            _folderPathList.Remove(request);
+                            cb.Items.Add(projectTemplate);
                         }
 
-                        var watchFolderToRemove = _watchFolders.First(w => w.Path == folderObject.Path);
-                        _watchFolders.Remove(watchFolderToRemove);
-
-
                     }
-                    catch (Exception ex)
-                    {
-                        TelemetryService.Instance.AddException(ex);
-                    }
-                    _persistence.Save(_folderPathList);
-                    LoadProjectRequests();
+                    cb.SelectedIndex = 0;
+                    e.Control = cb;
 
                 }
-
-            }
-
-            if (e.Column != templateColumn) return;
-            var cb = new ComboBox
-            {
-                Bounds = e.CellBounds,
-                Font = ((ObjectListView) sender).Font,
-                DropDownStyle = ComboBoxStyle.DropDownList
-            };
-
-            //displays only cumstom templates
-            foreach (ProjectTemplateInfo projectTemplate in _controller.ProjectTemplates)
-            {
-                if (projectTemplate.Name != "Default" && projectTemplate.Name != "SDL Trados")
+                else
                 {
-                    cb.Items.Add(projectTemplate);
+                    MessageBox.Show(@"Please create a custom project template!", @"Warning", MessageBoxButtons.OK);
+                    e.Cancel = true;
+
                 }
 
             }
-
-            cb.SelectedIndex = 0; 
-            e.Control = cb;
-
+            catch (Exception exception)
+            {
+                TelemetryService.Instance.AddException(exception);
+            }
         }
 
 
@@ -287,19 +301,19 @@ namespace Sdl.Community.InSource
             }
 
             //extended folder browse dialog for adding a text box where you can paste the path
-            var folderDialog = new FolderBrowseDialogExtended
+            //var folderDialog = new FolderBrowseDialogExtended
+            //{
+            //    Description = "Select folders",
+            //    ShowEditBox = true,
+            //    ShowFullPathInEditBox = true
+            //};
+            var folderDialog = new FolderSelectDialog();
+            
+
+            if (folderDialog.ShowDialog())
             {
-                Description = "Select folders",
-                ShowEditBox = true,
-                ShowFullPathInEditBox = true
-            };
 
-            var result = folderDialog.ShowDialog();
-
-            if (result == DialogResult.OK)
-            {
-
-                var folderPath = folderDialog.SelectedPath;
+                var folderPath = folderDialog.FileName;
                 var watchFolder = new ProjectRequest
                 {
                     Path = folderPath

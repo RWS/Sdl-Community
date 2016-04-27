@@ -27,6 +27,7 @@ namespace Sdl.Community.InSource
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
         private readonly List<bool> _hasTemplateList;
+        private readonly List<bool> _hasFiles; 
         public static Persistence Persistence = new Persistence();
         private int _percentComplete;
         #endregion private fields
@@ -37,6 +38,7 @@ namespace Sdl.Community.InSource
         {
             _projectRequests = new List<ProjectRequest>();
             _hasTemplateList = new List<bool>();
+            _hasFiles = new List<bool>();
         }
 
         protected override void Initialize(IViewContext context)
@@ -286,67 +288,90 @@ namespace Sdl.Community.InSource
                         {
                             _hasTemplateList.Add(false);
                         }
+
+                        if (HasFiles(selectedProject.Path))
+                        {
+                            _hasFiles.Add(true);
+                        }
+                        else
+                        {
+                            _hasFiles.Add(false);
+                        }
                     }
                 }
-
-                if (!_hasTemplateList.Contains(false))
+                if (!_hasFiles.Contains(true))
                 {
-                    if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
+                    if (!_hasTemplateList.Contains(false))
                     {
-
-                        worker.DoWork += (sender, e) =>
-                        {
-                            if (SelectedProjects.Count != 0 && SelectedProjects != null)
-                            {
-                                creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
-                            }
-                            else
-                            {
-                                creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
-                            }
-
-                            creator.ProgressChanged +=
-                                (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
-                            creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
-                            creator.Execute();
-                        };
-                        worker.ProgressChanged += (sender, e) =>
-                        {
-                            PercentComplete = e.ProgressPercentage;
-                        };
-                        worker.RunWorkerCompleted += (sender, e) =>
+                        if (SelectedProjects != null && (SelectedProjects.Count != 0 && SelectedProjects != null))
                         {
 
-                            if (e.Error != null)
+                            worker.DoWork += (sender, e) =>
                             {
-                                MessageBox.Show(e.Error.ToString());
-                            }
-                            else
-                            {
-                                foreach (Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
+                                if (SelectedProjects.Count != 0 && SelectedProjects != null)
                                 {
-                                    // accept the request
-                                    InSource.Instance.RequestAccepted(request.Item1);
-
-                                    // remove the request from the list of requests
-                                    ProjectRequests.Remove(request.Item1);
-
-                                    OnProjectRequestsChanged();
+                                    creator = new ProjectCreator(SelectedProjects, SelectedProjectTemplate);
                                 }
-                            }
-                        };
-                        worker.RunWorkerAsync();
+                                else
+                                {
+                                    creator = new ProjectCreator(ProjectRequests, SelectedProjectTemplate);
+                                }
 
+                                creator.ProgressChanged +=
+                                    (sender2, e2) => { worker.ReportProgress(e2.ProgressPercentage); };
+                                creator.MessageReported += (sender2, e2) => { ReportMessage(e2.Project, e2.Message); };
+                                creator.Execute();
+                            };
+                            worker.ProgressChanged += (sender, e) =>
+                            {
+                                PercentComplete = e.ProgressPercentage;
+                            };
+                            worker.RunWorkerCompleted += (sender, e) =>
+                            {
+
+                                if (e.Error != null)
+                                {
+                                    MessageBox.Show(e.Error.ToString());
+                                }
+                                else
+                                {
+                                    foreach (
+                                        Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
+                                    {
+                                        // accept the request
+                                        InSource.Instance.RequestAccepted(request.Item1);
+
+                                        // remove the request from the list of requests
+                                        ProjectRequests.Remove(request.Item1);
+
+                                        OnProjectRequestsChanged();
+                                    }
+                                }
+                            };
+                            worker.RunWorkerAsync();
+
+                        }
                     }
+                    else
+                    {
+                        MessageBox.Show(@"Please choose a custom template");
+                        _hasTemplateList.Clear();
+                    }
+
                 }
                 else
                 {
-                    MessageBox.Show(@"Please choose a custom template");
-                    _hasTemplateList.Clear();
+                    MessageBox.Show(
+                        @"Watch folders should contain only folders, please put the files in a directory, and after that click CHECK PROJECT REQUESTS BUTTON ");
+                    _hasFiles.Clear();
                 }
-
-
             }
+        }
+
+        private bool HasFiles(string path)
+        {
+            var hasFiles = Directory.EnumerateFiles(path).Any();
+            return hasFiles;
         }
 
         public void Contribute()

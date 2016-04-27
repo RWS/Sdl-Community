@@ -147,6 +147,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="InSourceViewRibbonGroup.cs" />
     <Compile Include="InSource.cs" />
     <Compile Include="InSourceViewControl.cs">
