@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="ViewModels\FinishViewModel.cs" />
     <Compile Include="ViewModels\PackageDetailsViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />

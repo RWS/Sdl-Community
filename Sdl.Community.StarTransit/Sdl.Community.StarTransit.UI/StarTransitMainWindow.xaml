@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Open StarTransit package"
-    Width="700"
+    Width="850"
     Height="600"
     BorderThickness="0"
     GlowBrush="Black"
@@ -22,12 +22,16 @@
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
             <!--<ResourceDictionary.MergedDictionaries>
-                --><!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  --><!--
+                -->
+            <!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  -->
+            <!--
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                --><!--  Accent and AppTheme setting  --><!--
+                -->
+            <!--  Accent and AppTheme setting  -->
+            <!--
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>-->
@@ -90,14 +94,20 @@
                     <TextBlock x:Name="tbFinish" Text="Finish" />
                 </ListViewItem>
             </ListView>
-            <StackPanel  Grid.Column="1"  Orientation="Vertical"  >
-            <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                <Button x:Name="Back"  HorizontalAlignment="Left" MaxWidth="50" Command="{Binding BackCommand}" IsEnabled="{Binding CanExecuteBack}" HorizontalContentAlignment="Left" Margin="10,0,0,10" VerticalAlignment="Bottom" Height="30" >Back</Button>
-                <Button x:Name="Next"  HorizontalAlignment="Right" MaxWidth="50" Command="{Binding NextCommand}" IsEnabled="{Binding CanExecuteNext}" HorizontalContentAlignment="Right" Margin="350,0,0,10" VerticalAlignment="Bottom" Height="30">Next</Button>
+            <Grid  Grid.Column="1"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="5">
+                    <Button x:Name="Back"  MaxWidth="50" Command="{Binding BackCommand}" IsEnabled="{Binding CanExecuteBack}" Margin="0,0,5,0" >Back</Button>
+                    <Button x:Name="Next"   MaxWidth="50" Command="{Binding NextCommand}" IsEnabled="{Binding CanExecuteNext}" Margin="0,0,5,0">Next</Button>
+                    <Button x:Name="Create"   MaxWidth="150" Command="{Binding CreateCommand}"  IsEnabled="{Binding CanExecuteCreate}">Create Project</Button>
                 </StackPanel>
-                <!--<Button x:Name="Create"   MaxWidth="150" HorizontalAlignment="Right" Command="{Binding CreateCommand}" IsEnabled="{Binding CanExecuteCreate}">Create Project</Button>-->
-            </StackPanel>
+
+            </Grid>
+            <controls:ProgressRing IsActive="{Binding Active}" HorizontalContentAlignment="Center"/>
         </Grid>
 
     </Grid>

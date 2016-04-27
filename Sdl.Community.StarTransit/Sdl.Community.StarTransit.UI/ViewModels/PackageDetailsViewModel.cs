@@ -22,22 +22,29 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
     public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged
     {
-        private static string _textLocation;
-        private static string _txtName;
-        private static string _txtDescription;
-        private static List<ProjectTemplateInfo> _studioTemplates;
-        private static bool _hasDueDate;
-        private static DateTime? _dueDate;
-        private static string _sourceLanguage;
-        private static string _targetLanguage;
-        private static PackageModel _packageModel;
+        private string _textLocation;
+        private  string _txtName;
+        private  string _txtDescription;
+        private  List<ProjectTemplateInfo> _studioTemplates;
+        private  bool _hasDueDate;
+        private  DateTime? _dueDate;
+        private  string _sourceLanguage;
+        private  string _targetLanguage;
+        private  PackageModel _packageModel;
         private ICommand _browseCommand;
-        private static bool _canExecute;
-        private static ProjectTemplateInfo _template;
+        private  bool _canExecute;
+        private  ProjectTemplateInfo _template;
         private IProject _project;
-        private static Customer _selectedCustomer; 
+        private  Customer _selectedCustomer; 
         public ObservableCollection<ProjectTemplateInfo> _templates;
-        
+        private  int _selectedHour;
+        private  int _selectedMinute;
+        private  string _selectedMoment;
+
+        public List<int> HourList { get; set; }
+        public List<int> MinutesList { get; set; }
+        public List<string> MomentsList { get; set; }
+
         public PackageDetailsViewModel(PackageModel package)
         {
             _packageModel = package;
@@ -46,9 +53,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _studioTemplates = package.StudioTemplates;
             _textLocation = package.Location;
             _sourceLanguage = package.SourceLanguage.DisplayName;
-            _templates =new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
+            _templates = new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
             _hasDueDate = false;
-           var targetLanguage = string.Empty;
+            var targetLanguage = string.Empty;
             foreach (var language in package.TargetLanguage)
             {
                 targetLanguage = targetLanguage + language.DisplayName;
@@ -57,43 +64,62 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
             _canExecute = true;
 
+            _selectedHour = -1;
+            _selectedMinute = -1;
+            _selectedMoment = string.Empty;
             AssemblyVersion();
-        }
-
-        private void AssemblyVersion()
-        {
-            var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
-            var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var projectsPath = string.Empty;
-            if (assembly.Contains("12"))
+            SetHours();
+            SetMinutes();
+            MomentsList = new List<string>
             {
-                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2015\Projects\projects.xml");
-            }
-            else if(assembly.Contains("11"))
-            {
-                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2014\Projects\projects.xml");
-            }
-
-            ReadCustomers(projectsPath);
+                "AM","PM"
+            };
         }
 
-        private void ReadCustomers(string projectsPath)
+      
+        public int SelectedHour
         {
-            var sourceProjectsXml = XElement.Load(projectsPath);
-            if (!sourceProjectsXml.Element("Customers").HasElements) return;
-            
-            var customers = (from customer in sourceProjectsXml.Descendants("Customer")
-                            select new Customer
-                            {
-                                Guid = new Guid(customer.Attribute("Guid").Value),
-                                Name = customer.Attribute("Name").Value,
-                                Email = customer.Attribute("Email").Value
-                            }).ToList();
-
-            Customers = customers;
-
+            get { return _selectedHour; }
+            set
+            {
+                if (Equals(value, _selectedHour))
+                {
+                    return;
+                }
+                _selectedHour = value;
+                OnPropertyChanged();
+            }
         }
 
+        public int SelectedMinute
+        {
+            get { return _selectedMinute; }
+            set
+            {
+                if (Equals(value, _selectedMinute))
+                {
+                    return;
+                }
+                _selectedMinute = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SelectedMoment
+        {
+            get { return _selectedMoment; }
+            set
+            {
+                if (Equals(value, _selectedMoment))
+                {
+                    return;
+                }
+                _selectedMoment = value;
+                OnPropertyChanged();
+            }
+        }
+
+       
         public Customer SelectedCustomer
         {
             get { return _selectedCustomer; }
@@ -114,23 +140,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public List<Customer> Customers { get; set; }
 
-        public void Browse()
-        {
-            //var folderDialog = new FolderBrowserDialog();
-            //var result = folderDialog.ShowDialog();
-
-            //if (result == DialogResult.OK)
-            //{
-            //   TextLocation = folderDialog.SelectedPath;
-
-            //}
-            var folderDialog = new FolderSelectDialog();
-            if (folderDialog.ShowDialog())
-            {
-                TextLocation = folderDialog.FileName;
-            }
-
-        }
+       
 
         public ObservableCollection<ProjectTemplateInfo> Templates
         {
@@ -234,7 +244,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public DateTime? DueDate
+        public  DateTime? DueDate
         {
             get { return _dueDate; }
             set
@@ -297,22 +307,91 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string Error { get; }
 
-        public static PackageModel GetPackageModel()
+        public  PackageModel GetPackageModel()
         {
             _packageModel.Name = _txtName;
             _packageModel.Description = _txtDescription;
             _packageModel.Location = _textLocation;
             if (_hasDueDate)
             {
-                _packageModel.DueDate = _dueDate;
+                _packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
             }
-           
+
             _packageModel.ProjectTemplate = _template;
             _packageModel.HasDueDate = _hasDueDate;
             _packageModel.Customer = _selectedCustomer;
            return _packageModel;
         }
 
+        public void Browse()
+        {
+           
+            var folderDialog = new FolderSelectDialog();
+            if (folderDialog.ShowDialog())
+            {
+                TextLocation = folderDialog.FileName;
+            }
+
+        }
+
+       
+
+
+        private void SetMinutes()
+        {
+            var minutesList = new List<int>();
+           
+            for (var i = 0; i <= 59; i++)
+            {
+                minutesList.Add(i);
+            }
+            MinutesList = minutesList;
+        }
+
+        private void AssemblyVersion()
+        {
+            var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
+            var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var projectsPath = string.Empty;
+            if (assembly.Contains("12"))
+            {
+                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2015\Projects\projects.xml");
+            }
+            else if (assembly.Contains("11"))
+            {
+                projectsPath = Path.Combine(myDocumentsPath, @"Studio 2014\Projects\projects.xml");
+            }
+
+            ReadCustomers(projectsPath);
+        }
+
+        private void ReadCustomers(string projectsPath)
+        {
+            var sourceProjectsXml = XElement.Load(projectsPath);
+            if (!sourceProjectsXml.Element("Customers").HasElements) return;
+
+            var customers = (from customer in sourceProjectsXml.Descendants("Customer")
+                             select new Customer
+                             {
+                                 Guid = new Guid(customer.Attribute("Guid").Value),
+                                 Name = customer.Attribute("Name").Value,
+                                 Email = customer.Attribute("Email").Value
+                             }).ToList();
+
+            Customers = customers;
+
+        }
+
+        private void SetHours()
+        {
+            var hoursList = new List<int>();
+            for (var i = 1; i <= 12; i++)
+            {
+                hoursList.Add(i);
+            }
+
+            HourList = hoursList;
+        }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
@@ -352,11 +431,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        //protected virtual void OnCanExecuteChanged()
-        //{
-        //    CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        //}
 
     }
 }

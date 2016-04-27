@@ -27,25 +27,13 @@ namespace Sdl.Community.StarTransit.UI.Controls
     public partial class PackageDetails : UserControl
     {
      
-        public PackageDetails(PackageModel package)
+        public PackageDetails(PackageDetailsViewModel packageDetailsViewModel)
         {
-
+            DataContext = packageDetailsViewModel;
             InitializeComponent();
-            DataContext = new PackageDetailsViewModel(package);
-        
             
         }
-
-        //private void GetCultureList()
-        //{
-
-        //    var languageList = CultureInfo
-        //        .GetCultures(CultureTypes.AllCultures).OrderBy(culture => culture.Name)
-        //        .ToList();
-        //    //   var languageList = CultureInfo.GetCultures(CultureTypes.AllCultures).Select(c => c.DisplayName);
-         
-        //}
-
+      
         public  bool FieldsAreCompleted()
         {
             var completed = true;

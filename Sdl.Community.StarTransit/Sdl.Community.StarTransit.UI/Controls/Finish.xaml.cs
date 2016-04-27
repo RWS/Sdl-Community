@@ -23,14 +23,12 @@ namespace Sdl.Community.StarTransit.UI.Controls
     /// </summary>
     public partial class Finish : UserControl
     {
-        
-        public Finish(PackageModel package)
+       public Finish(FinishViewModel finishViewModel)
         {
-           DataContext = new FinishViewModel(package);
-
-          
-            InitializeComponent();
+            DataContext = finishViewModel;
+           InitializeComponent();
         }
-
-    }
+      
+    
+}
 }

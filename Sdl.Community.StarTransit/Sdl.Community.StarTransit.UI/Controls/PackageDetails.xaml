@@ -8,31 +8,35 @@
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.UI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-<!--<UserControl.DataContext>
+    <!--<UserControl.DataContext>
         <viewModels:PackageDetailsViewModel/>
-</UserControl.DataContext>-->    
-<!--<UserControl.Resources>
+</UserControl.DataContext>-->
+    <!--<UserControl.Resources>
     <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                --><!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  --><!--
+                -->
+    <!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  -->
+    <!--
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                --><!--  Accent and AppTheme setting  --><!--
+                -->
+    <!--  Accent and AppTheme setting  -->
+    <!--
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 </UserControl.Resources>-->
-    <Grid Margin="10">
+    <Grid Margin="5,5,5,0">
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="0,0,0,5"/>
                 <Setter Property="Padding" Value="0,0,0,10"/>
                 <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
-             </Style>
-           
+            </Style>
+
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -49,21 +53,21 @@
 
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="35*"/>
-            <ColumnDefinition Width="37*"/>
-            <ColumnDefinition Width="68*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="3*"/>
+          
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="name" TextWrapping="Wrap" Text="Name:"/>
-        <TextBlock x:Name="description" TextWrapping="Wrap" Text="Description:" Grid.Row="1"/>
-        <TextBlock x:Name="location" TextWrapping="Wrap" Text="Location:" Grid.Row="2"/>
-        <TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4"/>
-        <TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5"/>
-        <TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date" Grid.Row="6"/>
-        <TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="7"/>
-        <TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="8"/>
+        <TextBlock x:Name="name" TextWrapping="Wrap" Text="Name" Foreground="#41B1E1"/>
+        <TextBlock x:Name="description" TextWrapping="Wrap" Text="Description" Grid.Row="1" Foreground="#41B1E1"/>
+        <TextBlock x:Name="location" TextWrapping="Wrap" Text="Location" Grid.Row="2" Foreground="#41B1E1" />
+        <TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4" Foreground="#41B1E1"/>
+        <TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5" Foreground="#41B1E1"/>
+        <TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6" Foreground="#41B1E1"/>
+        <TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8" Foreground="#41B1E1"/>
+        <TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Foreground="#41B1E1" Grid.RowSpan="2"/>
         <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
-                Controls:TextBoxHelper.Watermark =" Package name"
+                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
                 ToolTip="Package name"
@@ -74,39 +78,56 @@
 
         <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
-                Controls:TextBoxHelper.Watermark =" Description"
+               
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
                 ToolTip="Description"
                  Text="{Binding Description}"
                  Margin="0,0,0,10"
                  x:Name="txtDescription" Grid.Column="1" TextWrapping="Wrap" Grid.Row="1" MinLines="3" AcceptsReturn="True" Grid.ColumnSpan="2"/>
-        <Grid Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="2">
+        <Grid Grid.Column="1" Grid.Row="2" >
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+               
             </Grid.ColumnDefinitions>
-            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="5,0,0,10"  Command="{Binding BrowseCommand}" />
+            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
             <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
-                Controls:TextBoxHelper.Watermark =" Location"
+                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
                 ToolTip="Location"
-                     Margin="0,0,0,10"
+                     Margin="0,0,5,10"
                      Padding="0,0,0,15"          
                     Text="{Binding TextLocation,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                 x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
 
         </Grid>
-        <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}" SelectedValue="{Binding SelectedCustomer }" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
+        <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}" SelectedValue="{Binding SelectedCustomer }" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10" />
         <ComboBox x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" SelectedValue="{Binding Path=Template,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"  />
-        <CheckBox x:Name="hasDueDate" Grid.Column="1" Grid.Row="6" Margin="0,0,0,10" IsChecked="{Binding HasDueDate}" />
-        <DatePicker SelectedDate="{Binding DueDate}"  IsEnabled="{Binding HasDueDate}" Grid.Column="2" Grid.Row="6"  Height="25"  x:Name="dueDatePicker" Margin="0,0,0,10"/>
       
-        <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="7" Margin="0,0,0,10" Grid.ColumnSpan="2" />
-        <TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <Grid Grid.Column="1" Grid.Row="6">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
        
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <CheckBox x:Name="hasDueDate"  Margin="0,6,0,10" IsChecked="{Binding HasDueDate}" />
+                <DatePicker SelectedDate="{Binding DueDate}"  IsEnabled="{Binding HasDueDate}"  x:Name="dueDatePicker" Margin="5,0,0,10" Width="170"/>
+            </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+            <ComboBox x:Name="hourCombo" Text="H" Margin ="0,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding HourList ,Mode=TwoWay}" SelectedValue="{Binding SelectedHour}"  IsEditable="True" IsReadOnly="True" />
+            <ComboBox x:Name="minutesCombo" Text="M" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding MinutesList,Mode=TwoWay}" SelectedValue="{Binding SelectedMinute}" IsEditable="True" IsReadOnly="True" />
+            <ComboBox x:Name="amCombo" Text="PM/AM" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}" ItemsSource="{Binding MomentsList,Mode=TwoWay}" SelectedValue="{Binding SelectedMoment}" IsEditable="True" IsReadOnly="True"/>
+        </StackPanel>
+
+        </Grid>
+        <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="9" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+
     </Grid>
 </UserControl>

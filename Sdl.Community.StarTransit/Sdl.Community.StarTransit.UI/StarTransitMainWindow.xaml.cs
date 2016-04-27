@@ -26,20 +26,25 @@ namespace Sdl.Community.StarTransit.UI
     {
         private readonly PackageDetails _packageDetails;
         private readonly TranslationMemories _translationMemories;
+        private readonly FinishViewModel finishViewModel;
         private readonly Finish _finish;
         public StarTransitMainWindow(PackageModel package)
         {
             EnsureApplicationResources();
             InitializeComponent();
            
-            _packageDetails = new PackageDetails(package);
-            var packageModel = PackageDetailsViewModel.GetPackageModel();
+          
+            var packageDetailsViewModel = new PackageDetailsViewModel(package);
+            _packageDetails = new PackageDetails(packageDetailsViewModel);
 
             _translationMemories = new TranslationMemories();
-           _finish = new Finish(packageModel);
 
-             DataContext = new StarTransitMainWindowViewModel(_packageDetails, _translationMemories, _finish);
-           // DataContext = new StarTransitMainWindowViewModel(packageModel);
+            finishViewModel = new FinishViewModel(packageDetailsViewModel);
+            _finish = new Finish(finishViewModel);
+            
+
+             DataContext = new StarTransitMainWindowViewModel(packageDetailsViewModel, _packageDetails,_translationMemories, finishViewModel);
+          
 
         }
 
@@ -134,11 +139,6 @@ namespace Sdl.Community.StarTransit.UI
         {
 
         }
-
-        private void Next_OnClick(object sender, RoutedEventArgs e)
-        {
-
-            listView.SelectedItem = TMItem;
-        }
+        
     }
 }
