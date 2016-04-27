@@ -12,8 +12,7 @@ using Sdl.ProjectAutomation.FileBased;
 using System.Threading.Tasks;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-
-//using TaskStatus = System.Threading.Tasks.TaskStatus;
+using Sdl.Community.StarTransit.Shared.Utils;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -35,7 +34,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
             };
 
             var newProject = new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
-
+            if (package.Customer != null)
+            {
+                newProject.SetCustomer(package.Customer);
+            }
           
             ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.SourceFiles);
             var targetProjectFiles = newProject.AddFiles(package.TargetFiles);
@@ -48,8 +50,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 AutomaticTaskTemplateIds.PerfectMatch,
                 AutomaticTaskTemplateIds.PreTranslateFiles,
                 AutomaticTaskTemplateIds.AnalyzeFiles
-            }, StatusHandler, MessageHandler);
-            
+            });
+
             newProject.Save();
             var controller = Controller;
             controller.RefreshProjects();
@@ -58,22 +60,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             DeleteFilesFromTemp(package.TargetFiles);
 
         }
-
-      
-        private void MessageHandler(object sender, TaskMessageEventArgs e)
-        {
-            var x = e.Message;
-           
-        }
-
-        private void StatusHandler(object sender, TaskStatusEventArgs e)
-        {
-            var status = e.Status;
-           
-        }
-
-      
-       
+     
         private Language[] GetTargetLanguages(List<CultureInfo> languages)
         {
             var targetLanguageList = new List<Language>();

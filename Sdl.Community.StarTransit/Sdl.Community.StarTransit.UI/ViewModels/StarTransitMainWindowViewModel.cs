@@ -122,6 +122,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             
         }
 
+        public Action CloseAction { get; set; }
+
         public ICommand NextCommand
         {
             get { return _nextCommand ?? (_nextCommand = new CommandHandler(Next, true)); }
@@ -164,36 +166,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public void Next()
         {
            
-            //this is for navigation which include tm 
-            //if (_packageDetails.FieldsAreCompleted() && DetailsSelected)
-            //{
-               
-            //    TmSelected = true;
-            //    DetailsSelected = false;
-            //    CanExecuteBack = true;
-            //    CanExecuteNext = true;
-
-
-
-            //}
-            //else if(TmSelected && !DetailsSelected)
-            //{
-                
-                
-            //    CanExecuteBack = true;
-            //    CanExecuteNext = false;
-            //    FinishSelected = true;
-            //    TmSelected = false;
-            //    CanExecuteCreate = true;
-              
-            //    _finishViewModel.Refresh();
-               
-            //}
-
             if (_packageDetails.FieldsAreCompleted() && DetailsSelected)
             {
 
-                //TmSelected = true;
                 DetailsSelected = false;
                 TmSelected = false;
                 FinishSelected = true;
@@ -208,29 +183,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public void Back()
         {
-            //if (DetailsSelected)
-            //{
-            //    CanExecuteBack = false;
-            //}else if (TmSelected)
-            //{
-            //    CanExecuteBack = false;
-            //    TmSelected = false;
-            //    DetailsSelected = true;
-            //    CanExecuteNext = true;
-            //    CanExecuteCreate = false;
-            //}else if (FinishSelected)
-            //{
-            //    CanExecuteBack = true;
-            //    TmSelected = true;
-            //    CanExecuteNext = true;
-            //    FinishSelected = false;
-            //    CanExecuteCreate = false;
-            //}
-
             if (DetailsSelected)
             {
                 CanExecuteBack = false;
-            }  else if (FinishSelected)
+            }
+            else if (FinishSelected)
             {
                 CanExecuteBack = false;
                 DetailsSelected = true;
@@ -246,6 +203,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             Active = true;
             await Task.Run(() => _projectService.CreateProject(_packageDetailsViewModel.GetPackageModel()));
             Active = false;
+            CloseAction();
         }
 
 

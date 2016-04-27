@@ -42,8 +42,15 @@ namespace Sdl.Community.StarTransit.UI
             finishViewModel = new FinishViewModel(packageDetailsViewModel);
             _finish = new Finish(finishViewModel);
             
-
-             DataContext = new StarTransitMainWindowViewModel(packageDetailsViewModel, _packageDetails,_translationMemories, finishViewModel);
+            var starTransitViewModel = new StarTransitMainWindowViewModel(packageDetailsViewModel
+                , _packageDetails
+                , _translationMemories
+                , finishViewModel);
+            DataContext = starTransitViewModel;
+            if (starTransitViewModel.CloseAction == null)
+            {
+                starTransitViewModel.CloseAction = new Action(() => this.Close());
+            }
           
 
         }
