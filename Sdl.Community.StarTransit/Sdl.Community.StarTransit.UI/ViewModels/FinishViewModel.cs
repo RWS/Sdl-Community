@@ -200,21 +200,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        public ICommand FinishCommand
-        {
-            get { return _finishCommand ?? (_finishCommand = new CommandHandler(Finish, _canExecute)); }
-           
-        }
-
-        public async void Finish()
-        {
-            Active = true;
-           await Task.Run(()=>_projectService.CreateProject(_packageDetailsViewModel.GetPackageModel()));
-          
-            
-             Active = false;
-
-        }
+      
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {

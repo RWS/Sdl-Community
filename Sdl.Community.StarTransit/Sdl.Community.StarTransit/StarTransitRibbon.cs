@@ -35,11 +35,9 @@ namespace Sdl.Community.StarTransit
             {
                 var path = fileDialog.FileName;
 
-                //deschide arhiva si citeste fisierul .prj
                 var packageService = new PackageService();
                 var package = await packageService.OpenPackage(path);
 
-                //lista de template din studio
                 var templateService = new TemplateService();
                 var templateList = templateService.LoadProjectTemplates();
 
