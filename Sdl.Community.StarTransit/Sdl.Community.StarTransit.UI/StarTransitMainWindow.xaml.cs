@@ -34,7 +34,7 @@ namespace Sdl.Community.StarTransit.UI
             InitializeComponent();
            
           
-            var packageDetailsViewModel = new PackageDetailsViewModel(package);
+            var packageDetailsViewModel = new PackageDetailsViewModel(package,this);
             _packageDetails = new PackageDetails(packageDetailsViewModel);
 
             _translationMemories = new TranslationMemories();

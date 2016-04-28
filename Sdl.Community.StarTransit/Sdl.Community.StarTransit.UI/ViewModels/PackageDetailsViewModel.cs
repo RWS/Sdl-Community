@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Linq;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
@@ -44,9 +45,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public List<int> HourList { get; set; }
         public List<int> MinutesList { get; set; }
         public List<string> MomentsList { get; set; }
-
-        public PackageDetailsViewModel(PackageModel package)
+        private StarTransitMainWindow _window;
+        public PackageDetailsViewModel(PackageModel package, StarTransitMainWindow window)
         {
+            _window = window;
             _packageModel = package;
             _txtName = package.Name;
             _txtDescription = package.Description;
@@ -300,6 +302,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                         return "Template is rquired";
                    
                 }
+                if (columnName == "SelectedHour" && SelectedHour == -1)
+                {
+                    return "Please select an hour.";
+                }
+                if (columnName == "SelectedMinute" && SelectedMinute == -1)
+                {
+                    return "Please select minutes.";
+                }
                 return null;
             }
            
@@ -323,13 +333,24 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
            return _packageModel;
         }
 
-        public void Browse()
+        public async void Browse()
         {
            
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
             {
                 TextLocation = folderDialog.FileName;
+                bool isEmpty = !Directory.EnumerateFiles(TextLocation).Any();
+                if (isEmpty.Count() != 0)
+                {
+                    var dialog = new MetroDialogSettings
+                    {
+                        AffirmativeButtonText = "OK"
+
+                    };
+                    MessageDialogResult result = await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
+               MessageDialogStyle.Affirmative, dialog);
+                }
             }
 
         }

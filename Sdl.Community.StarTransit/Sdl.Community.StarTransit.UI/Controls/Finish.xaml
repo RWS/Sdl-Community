@@ -53,7 +53,7 @@
         <TextBlock x:Name="PackageDescription"  Text="{Binding Description}" Grid.Row="2" Grid.Column="1"   FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageLocation"  Text="{Binding Location}" Grid.Row="3" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageCustomer"  Text="{Binding Customer}" Grid.Row="4" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
-        <TextBlock x:Name="PackageDueDate"  Text="{Binding DueDate}" Grid.Row="5" Grid.Column="1" FontWeight="DemiBold"/>
+        <TextBlock x:Name="PackageDueDate"  Text="{Binding DueDate}" Grid.Row="5" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageSource"  Text="{Binding SourceLanguage}" Grid.Row="6" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageTarget"  Text="{Binding TargetLanguage}" Grid.Row="7" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageTemplate"  Text="{Binding TemplateName}" Grid.Row="8" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
