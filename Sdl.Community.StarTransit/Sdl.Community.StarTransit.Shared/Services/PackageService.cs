@@ -12,8 +12,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 {
     public class PackageService
     {
-        private readonly Dictionary<string, string> _dictionaryPropetries = new Dictionary<string, string>(); 
-        private  Dictionary<string,Dictionary<string,string>> _pluginDictionary = new Dictionary<string, Dictionary<string, string>>();
+        private readonly List<KeyValuePair<string,string>> _dictionaryPropetries = new List<KeyValuePair<string, string>>(); 
+        private  Dictionary<string,List<KeyValuePair<string,string>>> _pluginDictionary = new Dictionary<string, List<KeyValuePair<string,string>>>();
         private PackageModel _package = new PackageModel();
         private List<string> _fileNameList = new List<string>();
         private const char LanguageTargetSeparator = '|';
@@ -59,15 +59,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 {
 
                     
-                        if (line.Contains("["))
+                        if (line.StartsWith("[") && line.EndsWith("]"))
                         {
-                            var valuesDictionaries = new Dictionary<string, string>();
+                            var valuesDictionaries = new List<KeyValuePair<string, string>>();
                             if (keyProperty != string.Empty && _dictionaryPropetries.Count != 0)
                             {
-                                foreach (var property in _dictionaryPropetries)
-                                {
-                                    valuesDictionaries.Add(property.Key, property.Value);
-                                }
+                                valuesDictionaries.AddRange(_dictionaryPropetries.Select(property => new KeyValuePair<string, string>(property.Key, property.Value)));
                                 _pluginDictionary.Add(keyProperty, valuesDictionaries);
                                 _dictionaryPropetries.Clear();
                             }
@@ -80,7 +77,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                         else
                         {
                             var properties = line.Split('=');
-                            _dictionaryPropetries.Add(properties[0], properties[1]);
+                            _dictionaryPropetries.Add(new KeyValuePair<string, string>(properties[0], properties[1]));
 
 
                         }
@@ -107,11 +104,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 if (_pluginDictionary.ContainsKey("Admin"))
                 {
                     var propertiesDictionary = _pluginDictionary["Admin"];
-                    foreach (var key in propertiesDictionary.Keys)
+                    foreach (var item in propertiesDictionary)
                     {
-                        if (key == "ProjectName")
+                        if (item.Key == "ProjectName")
                         {
-                            model.Name = propertiesDictionary["ProjectName"];
+                            model.Name = item.Value;
                         }
                     }
                 }
@@ -119,17 +116,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 if (_pluginDictionary.ContainsKey("Languages"))
                 {
                     var propertiesDictionary = _pluginDictionary["Languages"];
-                    foreach (var key in propertiesDictionary.Keys)
+                    foreach (var item in propertiesDictionary)
                     {
-                        if (key == "SourceLanguage")
+                        if (item.Key == "SourceLanguage")
                         {
-                            var languageCode = int.Parse(propertiesDictionary["SourceLanguage"]);
+                            var languageCode = int.Parse(item.Value);
                             model.SourceLanguage = Language(languageCode);
                         }
-                        if (key == "TargetLanguages")
+                        if (item.Key == "TargetLanguages")
                         {
                             //we assume languages code are separated by "|"
-                            var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
+                            var languages = item.Value.Split(LanguageTargetSeparator);
                             var targetLanguagesList = new List<CultureInfo>();
                             foreach (var language in languages)
                             {
@@ -255,16 +252,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             //takes values from dictionary
             var filesDictionary = _pluginDictionary["Files"];
-            var fileNameList = new List<string>();
 
             //loop through the keys in order to take the name  
-            foreach (var key in filesDictionary.Keys)
-            {
-                var file = filesDictionary[key];
-                var fileName=FileName(file);
-                fileNameList.Add(fileName);
-            }
-            return fileNameList;
+            return filesDictionary.Select(item => FileName(item.Value)).ToList();
         }
 
         /// <summary>
