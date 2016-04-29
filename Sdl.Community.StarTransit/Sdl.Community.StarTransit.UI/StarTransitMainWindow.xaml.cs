@@ -99,24 +99,10 @@ namespace Sdl.Community.StarTransit.UI
             packageDetailsItem.IsSelected = true;
         }
 
-        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
-        private void listView_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
+      
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Shared.Utils.Helper.DeleteFilesFromTemp(_package.SourceFiles);
-
-            Shared.Utils.Helper.DeleteFilesFromTemp(_package.TargetFiles);
-
-            Shared.Utils.Helper.DeleteAnyFiles(_package.SourceFiles);
-
+           
              TelemetryService.Instance.SendCrashes(false);
         }
 

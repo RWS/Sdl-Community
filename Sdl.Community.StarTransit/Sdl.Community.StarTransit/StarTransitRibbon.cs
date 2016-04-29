@@ -5,6 +5,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace Sdl.Community.StarTransit
             //check for new version 
             await TelemetryService.Instance.CheckForUpdates(true);
             TelemetryService.Instance.SendCrashes(false);
-
+            var pathToTempFolder = CreateTempPackageFolder();
             try
             {
                 OpenFileDialog fileDialog = new OpenFileDialog();
@@ -47,7 +48,7 @@ namespace Sdl.Community.StarTransit
                     var path = fileDialog.FileName;
 
                     var packageService = new PackageService();
-                    var package = await packageService.OpenPackage(path);
+                    var package = await packageService.OpenPackage(path, pathToTempFolder);
 
                     var templateService = new TemplateService();
                     var templateList = templateService.LoadProjectTemplates();
@@ -71,6 +72,26 @@ namespace Sdl.Community.StarTransit
             {
                 TelemetryService.Instance.HandleException(e);
             }
+            finally
+            {
+                if (Directory.Exists(pathToTempFolder))
+                {
+                    Directory.Delete(pathToTempFolder,true);
+                }
+            }
+          
+        }
+
+        private string CreateTempPackageFolder()
+        {
+            var pathToTempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+
+            if (Directory.Exists(pathToTempFolder))
+            {
+                Directory.Delete(pathToTempFolder);
+            }
+            Directory.CreateDirectory(pathToTempFolder);
+            return pathToTempFolder;
         }
 
         private void EnsureApplicationResources()
@@ -123,7 +144,7 @@ namespace Sdl.Community.StarTransit
     {
         protected override void Execute()
         {
-            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit");
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/issues?q=is%3Aopen+is%3Aissue+label%3AStarTransit");
         }
     }
 

@@ -58,13 +58,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 var controller = Controller;
                 controller.RefreshProjects();
 
-                Helper.DeleteFilesFromTemp(package.SourceFiles);
-                Helper.DeleteFilesFromTemp(package.TargetFiles);
-
-                //deletes any file asociated with soutce file name
-                Helper.DeleteAnyFiles(package.SourceFiles);
-            
-           
+              
         }
      
         private Language[] GetTargetLanguages(List<CultureInfo> languages)

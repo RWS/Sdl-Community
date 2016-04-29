@@ -80,7 +80,7 @@
                 BorderBrush="{x:Null}"
                 BorderThickness="0"
                 IsEnabled="False"
-                ItemContainerStyle="{DynamicResource NavigationButtonStyle}" SelectedItem="{Binding SelectedItem}" SelectionChanged="listView_SelectionChanged" MouseDown="listView_MouseDown">
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle}" SelectedItem="{Binding SelectedItem}">
                 <ListViewItem x:Name="packageDetailsItem"
                     IsSelected="{Binding DetailsSelected}"
                    Selected="ListViewItem_Selected"

@@ -18,36 +18,37 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private List<string> _fileNameList = new List<string>();
         private const char LanguageTargetSeparator = '|';
 
-        public async Task<PackageModel> OpenPackage(string packagePath)
+        public async Task<PackageModel> OpenPackage(string packagePath,string pathToTempFolder)
         {
-            
+
             var entryName = string.Empty;
-            var pathToTempFolder= Path.GetTempPath();
-            
-                using (var archive = ZipFile.OpenRead(packagePath))
+          
+
+            using (var archive = ZipFile.OpenRead(packagePath))
+            {
+                foreach (ZipArchiveEntry entry in archive.Entries)
                 {
-                    foreach (ZipArchiveEntry entry in archive.Entries)
+                    var subdirectoryPath = Path.GetDirectoryName(entry.FullName);
+                    if (!Directory.Exists(Path.Combine(pathToTempFolder, subdirectoryPath)))
                     {
-                        if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
-                        {
+                        Directory.CreateDirectory(Path.Combine(pathToTempFolder, subdirectoryPath));
+                    }
+                    entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
 
-                            entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
-
-
-                            entryName = entry.FullName;
-                        }
-
+                    if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        entryName = entry.FullName;
                     }
 
-
                 }
-          
-            return await ReadPackage(pathToTempFolder, entryName, packagePath);
-        }
+            }
 
-        private async Task<PackageModel>  ReadPackage(string path, string fileName,string packagePath)
+            return await ReadProjectMetadata(pathToTempFolder, entryName, packagePath);
+        }
+        
+        private async Task<PackageModel> ReadProjectMetadata(string pathToTempFolder, string fileName,string packagePath)
         {
-            var filePath = Path.Combine(path, fileName);
+            var filePath = Path.Combine(pathToTempFolder, fileName);
             var keyProperty = string.Empty;
 
 
@@ -88,18 +89,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
             }
 
-            var packageModel = await CreateModel(packagePath);
+            var packageModel = await CreateModel(pathToTempFolder);
 
 
 
-                File.Delete(filePath);
+               // File.Delete(filePath);
           
 
             _package = packageModel;
             return packageModel;
         }
 
-        private async Task<PackageModel> CreateModel(string packagePath)
+        private async Task<PackageModel> CreateModel(string pathToTempFolder)
         {
             var model = new PackageModel();
             
@@ -144,21 +145,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
           
             var filesName = await Task.FromResult( GetFilesName());
 
-            var names=await Task.FromResult(ExtractFilesFromArchive(filesName, packagePath));
+            var names=await Task.FromResult(ExtractFilesFromArchive(filesName, pathToTempFolder));
 
-            var targetFiles = await Task.FromResult(AddTargetFiles(model, names));
+            var targetFiles = await Task.FromResult(AddTargetFiles(model, names,pathToTempFolder));
             model.TargetFiles = targetFiles;
 
-            var sourceFiles = await Task.FromResult(AddSourceFiles(model, names));
+            var sourceFiles = await Task.FromResult(AddSourceFiles(model, names,pathToTempFolder));
             model.SourceFiles = sourceFiles;
 
             return model;
 
         }
 
-        private string[] AddSourceFiles(PackageModel model, List<string> names)
+        private string[] AddSourceFiles(PackageModel model, List<string> names,string pathToTempFolder)
         {
-            var tempFiles = Directory.GetFiles(Path.GetTempPath());
+            var tempFiles = Directory.GetFiles(pathToTempFolder);
             var extension = model.SourceLanguage.ThreeLetterWindowsLanguageName;
             var sourcePathList = new List<string>();
             //selects from temp folder files which ends with source language code
@@ -183,11 +184,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
         }
 
 
-        private string[] AddTargetFiles(PackageModel model, List<string> filesName)
+        private string[] AddTargetFiles(PackageModel model, List<string> filesName,string pathToTempFolder)
         {
 
             var pathList = new List<string>();
-            var tempFiles = Directory.GetFiles(Path.GetTempPath());
+            var tempFiles = Directory.GetFiles(pathToTempFolder);
             var pathTotargetFiles = new List<string>();
             var targetFilesName = new List<string>();
 
@@ -227,23 +228,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 
 
-        private List<string> ExtractFilesFromArchive(List<string> filesName, string packagePath)
+        private List<string> ExtractFilesFromArchive(List<string> filesName, string pathToTempFolder)
         {
             var filesNameList = new List<string>();
-             using (var archive = ZipFile.OpenRead(packagePath))
-                {
-                    foreach (var entry in archive.Entries)
+            var tempFiles = Directory.GetFiles(pathToTempFolder,"*.*",SearchOption.AllDirectories);
+           
+                    foreach (var entry in tempFiles)
                     {
-                        foreach (var name in filesName)
-                        {
-                            if (entry.Name.Contains(name))
-                            {
-                                entry.ExtractToFile(Path.Combine(Path.GetTempPath(), entry.Name));
-                                filesNameList.Add(entry.Name);
-                            }
-                        }
+                        filesNameList.AddRange(from name in filesName where entry.Contains(name) select entry);
                     }
-                }
+                
          
             return filesNameList;
         }
