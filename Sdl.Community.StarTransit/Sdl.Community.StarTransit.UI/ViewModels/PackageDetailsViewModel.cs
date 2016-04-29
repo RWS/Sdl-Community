@@ -13,6 +13,7 @@ using System.Xml.Linq;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
@@ -26,18 +27,17 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _textLocation;
         private  string _txtName;
         private  string _txtDescription;
-        private  List<ProjectTemplateInfo> _studioTemplates;
+        private readonly List<ProjectTemplateInfo> _studioTemplates;
         private  bool _hasDueDate;
         private  DateTime? _dueDate;
-        private  string _sourceLanguage;
-        private  string _targetLanguage;
-        private  PackageModel _packageModel;
+        private  readonly string  _sourceLanguage;
+        private  readonly string _targetLanguage;
+        private readonly PackageModel _packageModel;
         private ICommand _browseCommand;
-        private  bool _canExecute;
+        private readonly bool _canExecute;
         private  ProjectTemplateInfo _template;
-        private IProject _project;
         private  Customer _selectedCustomer; 
-        public ObservableCollection<ProjectTemplateInfo> _templates;
+        private readonly ObservableCollection<ProjectTemplateInfo> _templates;
         private  int _selectedHour;
         private  int _selectedMinute;
         private  string _selectedMoment;
@@ -319,18 +319,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public  PackageModel GetPackageModel()
         {
-            _packageModel.Name = _txtName;
-            _packageModel.Description = _txtDescription;
-            _packageModel.Location = _textLocation;
-            if (_hasDueDate)
-            {
-                _packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
-            }
+           
+                _packageModel.Name = _txtName;
+                _packageModel.Description = _txtDescription;
+                _packageModel.Location = _textLocation;
+                if (_hasDueDate)
+                {
+                    _packageModel.DueDate = TimeHelper.SetDateTime(DueDate, SelectedHour, SelectedMinute, SelectedMoment);
+                }
 
-            _packageModel.ProjectTemplate = _template;
-            _packageModel.HasDueDate = _hasDueDate;
-            _packageModel.Customer = _selectedCustomer;
-           return _packageModel;
+                _packageModel.ProjectTemplate = _template;
+                _packageModel.HasDueDate = _hasDueDate;
+                _packageModel.Customer = _selectedCustomer;
+          
+            return _packageModel;
         }
 
         public async void Browse()
@@ -339,17 +341,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
             {
-                TextLocation = folderDialog.FileName;
-                bool isEmpty = !Directory.EnumerateFiles(TextLocation).Any();
-                if (isEmpty.Count() != 0)
+                
+                bool isEmpty = !Directory.EnumerateFiles(folderDialog.FileName).Any();
+                var hasSubdirectories = Directory.GetDirectories(folderDialog.FileName);
+                if (hasSubdirectories.Count() != 0 || !isEmpty)
                 {
                     var dialog = new MetroDialogSettings
                     {
                         AffirmativeButtonText = "OK"
 
                     };
-                    MessageDialogResult result = await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
-               MessageDialogStyle.Affirmative, dialog);
+                    MessageDialogResult result =
+                        await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
+                            MessageDialogStyle.Affirmative, dialog);
+                }
+                else
+                {
+                    TextLocation = folderDialog.FileName;
                 }
             }
 

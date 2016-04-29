@@ -120,8 +120,8 @@
             </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
-                <ComboBox x:Name="hourCombo" Text="H" Margin ="0,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding HourList ,Mode=TwoWay}" SelectedValue="{Binding SelectedHour ,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"  IsEditable="True" IsReadOnly="True" />
-                <ComboBox x:Name="minutesCombo" Text="M" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding MinutesList,Mode=TwoWay}" SelectedValue="{Binding SelectedMinute, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsEditable="True" IsReadOnly="True" />
+                <ComboBox x:Name="hourCombo" Text="H" Margin ="0,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding HourList ,Mode=TwoWay}" SelectedValue="{Binding SelectedHour }"  IsEditable="True" IsReadOnly="True" />
+                <ComboBox x:Name="minutesCombo" Text="M" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}"  ItemsSource="{Binding MinutesList,Mode=TwoWay}" SelectedValue="{Binding SelectedMinute}" IsEditable="True" IsReadOnly="True" />
             <ComboBox x:Name="amCombo" Text="PM/AM" Margin ="5,0,0,10" IsEnabled="{Binding HasDueDate}" ItemsSource="{Binding MomentsList,Mode=TwoWay}" SelectedValue="{Binding SelectedMoment}" IsEditable="True" IsReadOnly="True"/>
         </StackPanel>
 

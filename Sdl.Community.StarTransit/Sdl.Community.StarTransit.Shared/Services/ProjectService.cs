@@ -21,44 +21,50 @@ namespace Sdl.Community.StarTransit.Shared.Services
        
         public void CreateProject(PackageModel package)
         {
-            var target = GetTargetLanguages(package.TargetLanguage);
-            var task = System.Threading.Tasks.Task.FromResult<object>(null);
-            var projectInfo = new ProjectInfo
-            {
-                Name = package.Name,
-                LocalProjectFolder = package.Location,
-                SourceLanguage = new Language(package.SourceLanguage),
-                TargetLanguages = target,
-                DueDate = package.DueDate,
-                
-            };
-
-            var newProject = new FileBasedProject(projectInfo, new ProjectTemplateReference(package.ProjectTemplate.Uri));
-            if (package.Customer != null)
-            {
-                newProject.SetCustomer(package.Customer);
-            }
-          
-            ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.SourceFiles);
-            var targetProjectFiles = newProject.AddFiles(package.TargetFiles);
             
-            newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-            var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
-            {
-                AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-                AutomaticTaskTemplateIds.CopyToTargetLanguages,
-                AutomaticTaskTemplateIds.PerfectMatch,
-                AutomaticTaskTemplateIds.PreTranslateFiles,
-                AutomaticTaskTemplateIds.AnalyzeFiles
-            });
+                var target = GetTargetLanguages(package.TargetLanguage);
+                var task = System.Threading.Tasks.Task.FromResult<object>(null);
+                var projectInfo = new ProjectInfo
+                {
+                    Name = package.Name,
+                    LocalProjectFolder = package.Location,
+                    SourceLanguage = new Language(package.SourceLanguage),
+                    TargetLanguages = target,
+                    DueDate = package.DueDate,
 
-            newProject.Save();
-            var controller = Controller;
-            controller.RefreshProjects();
+                };
+
+                var newProject = new FileBasedProject(projectInfo,
+                    new ProjectTemplateReference(package.ProjectTemplate.Uri));
+                if (package.Customer != null)
+                {
+                    newProject.SetCustomer(package.Customer);
+                }
+
+                ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.SourceFiles);
+                var targetProjectFiles = newProject.AddFiles(package.TargetFiles);
+
+                newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+                var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
+                {
+                    AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
+                    AutomaticTaskTemplateIds.CopyToTargetLanguages,
+                    AutomaticTaskTemplateIds.PerfectMatch,
+                    AutomaticTaskTemplateIds.PreTranslateFiles,
+                    AutomaticTaskTemplateIds.AnalyzeFiles
+                });
+
+                newProject.Save();
+                var controller = Controller;
+                controller.RefreshProjects();
+
+                Helper.DeleteFilesFromTemp(package.SourceFiles);
+                Helper.DeleteFilesFromTemp(package.TargetFiles);
+
+                //deletes any file asociated with soutce file name
+                Helper.DeleteAnyFiles(package.SourceFiles);
             
-            DeleteFilesFromTemp(package.SourceFiles);
-            DeleteFilesFromTemp(package.TargetFiles);
-
+           
         }
      
         private Language[] GetTargetLanguages(List<CultureInfo> languages)
@@ -79,17 +85,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             return targetLanguages;
         }
 
-        private static void DeleteFilesFromTemp(IEnumerable<string> files)
-        {
-            try
-            {
-                foreach (var file in files)
-                {
-                    File.Delete(file);
-                }
-                
-            }catch(Exception e) { }
-        }
+    
 
         protected override void Execute()
         {

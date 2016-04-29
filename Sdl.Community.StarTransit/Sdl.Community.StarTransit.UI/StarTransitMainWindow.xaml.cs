@@ -2,6 +2,7 @@
 using Sdl.Community.StarTransit.UI.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using HockeyApp;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.ViewModels;
 
 namespace Sdl.Community.StarTransit.UI
@@ -28,12 +30,13 @@ namespace Sdl.Community.StarTransit.UI
         private readonly TranslationMemories _translationMemories;
         private readonly FinishViewModel finishViewModel;
         private readonly Finish _finish;
+        private PackageModel _package;
         public StarTransitMainWindow(PackageModel package)
         {
-            EnsureApplicationResources();
+            
             InitializeComponent();
-           
-          
+
+            _package = package;
             var packageDetailsViewModel = new PackageDetailsViewModel(package,this);
             _packageDetails = new PackageDetails(packageDetailsViewModel);
 
@@ -49,51 +52,10 @@ namespace Sdl.Community.StarTransit.UI
             DataContext = starTransitViewModel;
             if (starTransitViewModel.CloseAction == null)
             {
-                starTransitViewModel.CloseAction = new Action(() => this.Close());
+                starTransitViewModel.CloseAction = Close;
             }
           
 
-        }
-
-        private void EnsureApplicationResources()
-        {
-
-            if (Application.Current == null)
-            {
-                new Application {ShutdownMode = ShutdownMode.OnExplicitShutdown};
-
-                var controlsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
-                };
-                var fontsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
-                };
-                var colorsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
-                };
-                var blueResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
-                };
-                var baseLightResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
-                };
-                var flatButtonsResources = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml")
-                };
-
-                Application.Current.Resources.MergedDictionaries.Add(controlsResources);
-                Application.Current.Resources.MergedDictionaries.Add(fontsResources);
-                Application.Current.Resources.MergedDictionaries.Add(colorsResources);
-                Application.Current.Resources.MergedDictionaries.Add(blueResources);
-                Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
-                Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
-            }
         }
 
 
@@ -146,6 +108,18 @@ namespace Sdl.Community.StarTransit.UI
         {
 
         }
-        
+
+        private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Shared.Utils.Helper.DeleteFilesFromTemp(_package.SourceFiles);
+
+            Shared.Utils.Helper.DeleteFilesFromTemp(_package.TargetFiles);
+
+            Shared.Utils.Helper.DeleteAnyFiles(_package.SourceFiles);
+
+             TelemetryService.Instance.SendCrashes(false);
+        }
+
+
     }
 }

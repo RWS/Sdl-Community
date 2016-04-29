@@ -12,7 +12,9 @@ using System.Windows;
 using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
-using Application = System.Windows.Forms.Application;
+using Sdl.Community.StarTransit.Shared.Utils;
+using Application = System.Windows.Application;
+
 
 namespace Sdl.Community.StarTransit
 {
@@ -28,37 +30,91 @@ namespace Sdl.Community.StarTransit
     {
         protected override async void Execute()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
-            var dialogResult = fileDialog.ShowDialog();
-            if(dialogResult == DialogResult.OK)
+            EnsureApplicationResources();
+            TelemetryService.Instance.Init();
+
+            //check for new version 
+            await TelemetryService.Instance.CheckForUpdates(true);
+            TelemetryService.Instance.SendCrashes(false);
+
+            try
             {
-                var path = fileDialog.FileName;
-
-                var packageService = new PackageService();
-                var package = await packageService.OpenPackage(path);
-
-                var templateService = new TemplateService();
-                var templateList = templateService.LoadProjectTemplates();
-
-                
-                var packageModel = new PackageModel
+                OpenFileDialog fileDialog = new OpenFileDialog();
+                fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
+                var dialogResult = fileDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
                 {
-                    Name = package.Name,
-                    Description = package.Description,
-                    StudioTemplates = templateList,
-                    SourceLanguage = package.SourceLanguage,
-                    TargetLanguage = package.TargetLanguage,
-                    SourceFiles = package.SourceFiles,
-                    TargetFiles = package.TargetFiles
-                };
-              StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
-                window.ShowDialog();
+                    var path = fileDialog.FileName;
+
+                    var packageService = new PackageService();
+                    var package = await packageService.OpenPackage(path);
+
+                    var templateService = new TemplateService();
+                    var templateList = templateService.LoadProjectTemplates();
+
+
+                    var packageModel = new PackageModel
+                    {
+                        Name = package.Name,
+                        Description = package.Description,
+                        StudioTemplates = templateList,
+                        SourceLanguage = package.SourceLanguage,
+                        TargetLanguage = package.TargetLanguage,
+                        SourceFiles = package.SourceFiles,
+                        TargetFiles = package.TargetFiles
+                    };
+                    StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
+                    window.ShowDialog();
+                }
             }
-           
+            catch (Exception e)
+            {
+                TelemetryService.Instance.HandleException(e);
+            }
         }
 
-       
+        private void EnsureApplicationResources()
+        {
+
+            if (Application.Current == null)
+            {
+                new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+
+                var controlsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
+                };
+                var fontsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
+                };
+                var colorsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
+                };
+                var blueResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
+                };
+                var baseLightResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
+                };
+                var flatButtonsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml")
+                };
+
+                Application.Current.Resources.MergedDictionaries.Add(controlsResources);
+                Application.Current.Resources.MergedDictionaries.Add(fontsResources);
+                Application.Current.Resources.MergedDictionaries.Add(colorsResources);
+                Application.Current.Resources.MergedDictionaries.Add(blueResources);
+                Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
+                Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
+
+
+            }
+        }
     }
 
     [Action("Sdl.Community.StarTransit.Contribute", Name = "Contribute to project", Icon = "opensourceimage", Description = "Contribute to project")]

@@ -9,17 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
+using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
     public class FinishViewModel: INotifyPropertyChanged
     {
-        private ICommand _finishCommand;
-        private bool _canExecute;
-        private readonly ProjectService _projectService;
         private bool _active;
-        private bool _completed;
         private  string _location;
         private   string _txtName;
         private  string _txtDescription;
@@ -28,15 +25,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private  string _templateName;
         private  string _customer;
         private  string _dueDate;
-        private PackageDetailsViewModel _packageDetailsViewModel;
+        private readonly PackageDetailsViewModel _packageDetailsViewModel;
 
         public FinishViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
             _packageDetailsViewModel = packageDetailsViewModel;
-
-            _projectService = new ProjectService();
-             _canExecute = true;
-            _completed = false;
+            
             Refresh();
             
           
@@ -44,29 +38,31 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public void Refresh()
         {
-            Name = _packageDetailsViewModel.Name;
-            Location = _packageDetailsViewModel.TextLocation;
-            if (_packageDetailsViewModel.HasDueDate)
-            {
-                DueDate =
-                    Helpers.TimeHelper.SetDateTime(_packageDetailsViewModel.DueDate,
-                        _packageDetailsViewModel.SelectedHour, _packageDetailsViewModel.SelectedMinute,
-                        _packageDetailsViewModel.SelectedMoment).ToString();
-            }
-           
-            if (_packageDetailsViewModel.Template != null)
-            {
-                TemplateName = _packageDetailsViewModel.Template.Name;
-            }
-            if (_packageDetailsViewModel.SelectedCustomer != null)
-            {
-                Customer = _packageDetailsViewModel.SelectedCustomer.Name;
-            }
-           
-            Description = _packageDetailsViewModel.Description;
-            SourceLanguage = _packageDetailsViewModel.SourceLanguage;
-            TargetLanguage = _packageDetailsViewModel.TargetLanguage;
-        
+            
+                Name = _packageDetailsViewModel.Name;
+                Location = _packageDetailsViewModel.TextLocation;
+                if (_packageDetailsViewModel.HasDueDate)
+                {
+                    DueDate =
+                        Helpers.TimeHelper.SetDateTime(_packageDetailsViewModel.DueDate,
+                            _packageDetailsViewModel.SelectedHour, _packageDetailsViewModel.SelectedMinute,
+                            _packageDetailsViewModel.SelectedMoment).ToString();
+                }
+
+                if (_packageDetailsViewModel.Template != null)
+                {
+                    TemplateName = _packageDetailsViewModel.Template.Name;
+                }
+                if (_packageDetailsViewModel.SelectedCustomer != null)
+                {
+                    Customer = _packageDetailsViewModel.SelectedCustomer.Name;
+                }
+
+                Description = _packageDetailsViewModel.Description;
+                SourceLanguage = _packageDetailsViewModel.SourceLanguage;
+                TargetLanguage = _packageDetailsViewModel.TargetLanguage;
+            
+          
         }
    
         public string Name
@@ -85,7 +81,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string Description
         {
-            get { return _packageDetailsViewModel.Description; }
+            get { return _txtDescription; }
             set
             {
                 if (Equals(value, _txtDescription))
@@ -156,7 +152,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string TemplateName
         {
-            get { return _packageDetailsViewModel.Template.Name; }
+            get { return _templateName; }
             set
             {
                 if (Equals(value,_templateName))
@@ -171,7 +167,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string Customer
         {
-            get { return _packageDetailsViewModel.SelectedCustomer.Name; }
+            get { return _customer; }
             set
             {
                 if (Equals(value, _customer))

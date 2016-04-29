@@ -6,6 +6,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Utils;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -22,28 +23,25 @@ namespace Sdl.Community.StarTransit.Shared.Services
             
             var entryName = string.Empty;
             var pathToTempFolder= Path.GetTempPath();
-            using (var archive = ZipFile.OpenRead(packagePath))
-            {
-                foreach (ZipArchiveEntry entry in archive.Entries)
+            
+                using (var archive = ZipFile.OpenRead(packagePath))
                 {
-                    if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
+                    foreach (ZipArchiveEntry entry in archive.Entries)
                     {
+                        if (entry.FullName.EndsWith(".PRJ", StringComparison.OrdinalIgnoreCase))
+                        {
 
-                        try
-                        {
                             entry.ExtractToFile(Path.Combine(pathToTempFolder, entry.FullName));
+
+
+                            entryName = entry.FullName;
                         }
-                        catch (Exception e)
-                        {
-                        }
-                        entryName = entry.FullName;
+
                     }
 
-                 }
-              
 
-            }
-
+                }
+          
             return await ReadPackage(pathToTempFolder, entryName, packagePath);
         }
 
@@ -59,8 +57,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 while ((line = reader.ReadLine()) != null)
                 {
 
-                    try
-                    {
+                    
                         if (line.Contains("["))
                         {
                             var valuesDictionaries = new Dictionary<string, string>();
@@ -87,24 +84,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
                         }
 
-                    }
-                    catch (Exception ex)
-                    {
-                    }
+                 
                 }
             }
 
             var packageModel = await CreateModel(packagePath);
 
 
-            //ar trebui sa sterg fisierul in mom in care s-a creat proiectul
-            try
-            {
+
                 File.Delete(filePath);
-            }
-            catch (Exception exception)
-            {
-            }
+          
 
             _package = packageModel;
             return packageModel;
@@ -113,43 +102,46 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private async Task<PackageModel> CreateModel(string packagePath)
         {
             var model = new PackageModel();
-            if (_pluginDictionary.ContainsKey("Admin"))
-            {
-                var propertiesDictionary = _pluginDictionary["Admin"];
-                foreach (var key in propertiesDictionary.Keys)
+            
+                if (_pluginDictionary.ContainsKey("Admin"))
                 {
-                    if (key == "ProjectName")
+                    var propertiesDictionary = _pluginDictionary["Admin"];
+                    foreach (var key in propertiesDictionary.Keys)
                     {
-                        model.Name = propertiesDictionary["ProjectName"];
-                    }
-                }
-            }
-
-            if (_pluginDictionary.ContainsKey("Languages"))
-            {
-                var propertiesDictionary = _pluginDictionary["Languages"];
-                foreach (var key in propertiesDictionary.Keys)
-                {
-                    if (key == "SourceLanguage")
-                    {
-                        var languageCode = int.Parse(propertiesDictionary["SourceLanguage"]);
-                        model.SourceLanguage = Language(languageCode);
-                    }
-                    if (key == "TargetLanguages")
-                    {
-                        //we assume languages code are separated by "|"
-                        var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
-                        var targetLanguagesList = new List<CultureInfo>();
-                        foreach (var language in languages)
+                        if (key == "ProjectName")
                         {
-                            var languageCode = int.Parse(language);
-                            var cultureInfo = Language(languageCode);
-                            targetLanguagesList.Add(cultureInfo);
+                            model.Name = propertiesDictionary["ProjectName"];
                         }
-                        model.TargetLanguage = targetLanguagesList;
                     }
                 }
-            }
+
+                if (_pluginDictionary.ContainsKey("Languages"))
+                {
+                    var propertiesDictionary = _pluginDictionary["Languages"];
+                    foreach (var key in propertiesDictionary.Keys)
+                    {
+                        if (key == "SourceLanguage")
+                        {
+                            var languageCode = int.Parse(propertiesDictionary["SourceLanguage"]);
+                            model.SourceLanguage = Language(languageCode);
+                        }
+                        if (key == "TargetLanguages")
+                        {
+                            //we assume languages code are separated by "|"
+                            var languages = propertiesDictionary["TargetLanguages"].Split(LanguageTargetSeparator);
+                            var targetLanguagesList = new List<CultureInfo>();
+                            foreach (var language in languages)
+                            {
+                                var languageCode = int.Parse(language);
+                                var cultureInfo = Language(languageCode);
+                                targetLanguagesList.Add(cultureInfo);
+                            }
+                            model.TargetLanguage = targetLanguagesList;
+                        }
+                    }
+                }
+            
+          
             var filesName = await Task.FromResult( GetFilesName());
 
             var names=await Task.FromResult(ExtractFilesFromArchive(filesName, packagePath));
@@ -235,28 +227,24 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 
 
-        private List<string> ExtractFilesFromArchive(List<string> filesName,string packagePath)
+        private List<string> ExtractFilesFromArchive(List<string> filesName, string packagePath)
         {
             var filesNameList = new List<string>();
-            using (var archive = ZipFile.OpenRead(packagePath))
-            {
-                foreach (var entry in archive.Entries)
+             using (var archive = ZipFile.OpenRead(packagePath))
                 {
-                    foreach (var name in filesName)
+                    foreach (var entry in archive.Entries)
                     {
-                        if (entry.Name.Contains(name))
+                        foreach (var name in filesName)
                         {
-                            try
+                            if (entry.Name.Contains(name))
                             {
                                 entry.ExtractToFile(Path.Combine(Path.GetTempPath(), entry.Name));
+                                filesNameList.Add(entry.Name);
                             }
-                            catch(Exception e) { }
-                           
-                            filesNameList.Add(entry.Name);
                         }
                     }
                 }
-            }
+         
             return filesNameList;
         }
 

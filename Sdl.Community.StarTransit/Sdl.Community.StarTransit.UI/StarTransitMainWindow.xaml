@@ -17,7 +17,7 @@
     Loaded="MetroWindow_Loaded"
     ResizeMode="CanResizeWithGrip"
  
-    mc:Ignorable="d">
+    mc:Ignorable="d" Closing="MetroWindow_Closing">
 
     <controls:MetroWindow.Resources>
         <ResourceDictionary>

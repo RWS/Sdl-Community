@@ -22,14 +22,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _canExecuteNext;
         private bool _canExecuteBack;
         private bool _canExecuteCreate;
-        private PackageDetailsViewModel _packageDetailsViewModel;
-        private PackageDetails _packageDetails;
+        private  readonly PackageDetailsViewModel _packageDetailsViewModel;
+        private readonly PackageDetails _packageDetails;
        private bool _isDetailsSelected;
         private bool _isTmSelected;
         private bool _isFinishSelected;
-        private FinishViewModel _finishViewModel;
+        private readonly FinishViewModel _finishViewModel;
         private PackageModel _package;
-        private ProjectService _projectService;
+        private readonly ProjectService _projectService;
         private bool _active;
 
         public bool DetailsSelected
