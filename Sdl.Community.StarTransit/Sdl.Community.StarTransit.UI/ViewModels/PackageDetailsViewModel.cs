@@ -54,15 +54,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _txtDescription = package.Description;
             _studioTemplates = package.StudioTemplates;
             _textLocation = package.Location;
-            _sourceLanguage = package.SourceLanguage.DisplayName;
+            _sourceLanguage = package.LanguagePairs[0].SourceLanguage.DisplayName;
             _templates = new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
             _hasDueDate = false;
             var targetLanguage = string.Empty;
-            foreach (var language in package.TargetLanguage)
-            {
-                targetLanguage = targetLanguage + language.DisplayName;
-            }
-            _targetLanguage = targetLanguage;
+            //foreach (var language in package.TargetLanguage)
+            //{
+            //    targetLanguage = targetLanguage + language.DisplayName;
+            //}
+            _targetLanguage = package.LanguagePairs[0].TargetLanguage.DisplayName;
 
             _canExecute = true;
 
@@ -405,7 +405,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                                  Guid = new Guid(customer.Attribute("Guid").Value),
                                  Name = customer.Attribute("Name").Value,
                                  Email = customer.Attribute("Email").Value
-                             }).ToList();
+                             }).OrderBy(c=>c.Name).ToList();
 
             Customers = customers;
 

@@ -4,9 +4,13 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System.Xml.XPath;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -89,10 +93,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var packageModel = await CreateModel(pathToTempFolder);
 
 
-
-               // File.Delete(filePath);
-          
-
             _package = packageModel;
             return packageModel;
         }
@@ -100,7 +100,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private async Task<PackageModel> CreateModel(string pathToTempFolder)
         {
             var model = new PackageModel();
+            var languagePair = new LanguagePair();
+            var sourceLanguageCode = 0;
+            var targetLanguageCode = 0;
             
+            var languagePairList = new List<LanguagePair>();
                 if (_pluginDictionary.ContainsKey("Admin"))
                 {
                     var propertiesDictionary = _pluginDictionary["Admin"];
@@ -120,45 +124,69 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     {
                         if (item.Key == "SourceLanguage")
                         {
-                            var languageCode = int.Parse(item.Value);
-                            model.SourceLanguage = Language(languageCode);
+                            sourceLanguageCode = int.Parse(item.Value);
+                            languagePair.SourceLanguage = Language(sourceLanguageCode);
+
                         }
                         if (item.Key == "TargetLanguages")
                         {
                             //we assume languages code are separated by "|"
                             var languages = item.Value.Split(LanguageTargetSeparator);
-                            var targetLanguagesList = new List<CultureInfo>();
+                            
                             foreach (var language in languages)
                             {
-                                var languageCode = int.Parse(language);
-                                var cultureInfo = Language(languageCode);
-                                targetLanguagesList.Add(cultureInfo);
+                            targetLanguageCode = int.Parse(language);
+                                var cultureInfo = Language(targetLanguageCode);
+                                var pair = new LanguagePair
+                                {
+                                    SourceLanguage = languagePair.SourceLanguage,
+                                    TargetLanguage = cultureInfo
+                                };
+                            languagePairList.Add(pair);
                             }
-                            model.TargetLanguage = targetLanguagesList;
                         }
                     }
                 }
+            model.LanguagePairs = languagePairList;
             
-          
             var filesName = await Task.FromResult( GetFilesName());
 
             var names=await Task.FromResult(ExtractFilesFromArchive(filesName, pathToTempFolder));
 
-            var targetFiles = await Task.FromResult(AddTargetFiles(model, names,pathToTempFolder));
-            model.TargetFiles = targetFiles;
+            var modelWithSourceTm = await Task.FromResult(AddSourceFilesAndTm(model, names, pathToTempFolder, sourceLanguageCode));
 
-            var sourceFiles = await Task.FromResult(AddSourceFiles(model, names,pathToTempFolder));
-            model.SourceFiles = sourceFiles;
-
-            return model;
+            var finalPackage = await Task.FromResult(AddTargetFilesAndTm(modelWithSourceTm, names,pathToTempFolder,targetLanguageCode));
+      
+            return finalPackage;
 
         }
 
-        private string[] AddSourceFiles(PackageModel model, List<string> names,string pathToTempFolder)
+  
+
+        private Guid IsTmFile(string file)
+        {
+            var tmFile = XElement.Load(file);
+            if (tmFile.Attribute("ExtFileType") != null)
+            {
+              
+                var ffdNode =
+                    (from ffd in tmFile.Descendants("FFD") select new Guid(ffd.Attribute("GUID").Value)).FirstOrDefault();
+                return ffdNode;
+            }
+
+          return Guid.Empty;
+        }
+
+        private PackageModel AddSourceFilesAndTm(PackageModel model, List<string> names,string pathToTempFolder,int languageCode)
         {
             var tempFiles = Directory.GetFiles(pathToTempFolder);
-            var extension = model.SourceLanguage.ThreeLetterWindowsLanguageName;
+          
             var sourcePathList = new List<string>();
+            var languagePairList = new List<LanguagePair>();
+            var tmMetadataList =new List<StarTranslationMemoryMetadata>();
+
+            var sourceLanguage = Language(languageCode);
+            var extension = sourceLanguage.ThreeLetterWindowsLanguageName;
             //selects from temp folder files which ends with source language code
             var filesFromTemp = (from file in tempFiles where file.Contains(extension) select file).ToList();
 
@@ -171,17 +199,36 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 sourcePathList.AddRange(path);
             }
 
-            var files = new string[sourcePathList.Count];
-            for (var i = 0; i < sourcePathList.Count; i++)
+            foreach (var file in filesFromTemp)
             {
-                files[i] = sourcePathList[i];
-            }
+                var guid = IsTmFile(file);
+                if (guid != Guid.Empty)
+                {
+                    var tmMetadata = new StarTranslationMemoryMetadata
+                    {
+                        Id = guid,
+                        SourceFile = file
+                    };
+                    tmMetadataList.Add(tmMetadata);
+                 
+                }
 
-            return files;
+            }
+            var languagePair = new LanguagePair
+            {
+                HasTm = true,
+                SourceFile = sourcePathList,
+                StarTranslationMemoryMetadatas = tmMetadataList,
+                SourceLanguage = sourceLanguage
+            };
+            languagePairList.Add(languagePair);
+            model.LanguagePairs = languagePairList;
+            return model;
         }
 
 
-        private string[] AddTargetFiles(PackageModel model, List<string> filesName,string pathToTempFolder)
+        private PackageModel AddTargetFilesAndTm(PackageModel model, List<string> filesName, string pathToTempFolder,
+            int targetLanguageCode)
         {
 
             var pathList = new List<string>();
@@ -189,22 +236,20 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var pathTotargetFiles = new List<string>();
             var targetFilesName = new List<string>();
 
+            var targetLanguage = Language(targetLanguageCode);
+            var extension = targetLanguage.ThreeLetterWindowsLanguageName;
+
+            //selects from temp folder files which ends with target language code language
+            var targetFiles = (from file in tempFiles
+                where file.EndsWith(extension)
+                select file).ToList();
+
+            //selects from files name only the names which contains the target language code
+            var names = (from name in filesName where name.Contains(extension) select name).ToList();
+            pathList.AddRange(targetFiles);
+            targetFilesName.AddRange(names);
 
 
-            foreach (var language in model.TargetLanguage)
-            {
-                var extension = language.ThreeLetterWindowsLanguageName;
-                //selects from temp folder files which ends with target language code language
-                var targetFiles = (from file in tempFiles
-                                   where file.Contains(extension)
-                                   select file).ToList();
-
-                //selects from files name only the names which contains the target language code
-                var names = (from name in filesName where name.Contains(extension) select name).ToList();
-                pathList.AddRange(targetFiles);
-                targetFilesName.AddRange(names);
-
-            }
 
             foreach (var fileName in targetFilesName)
             {
@@ -213,14 +258,31 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 pathTotargetFiles.AddRange(targetPath);
             }
 
-
-            var files = new string[pathTotargetFiles.Count];
-            for (var i = 0; i < pathTotargetFiles.Count; i++)
+            foreach (var file in targetFiles)
             {
-                files[i] = pathTotargetFiles[i];
+                var guid = IsTmFile(file);
+                foreach (var language in model.LanguagePairs)
+                {
+                    if (guid != Guid.Empty)
+                    {
+                        //selects the source tm which has the same id with the target tm id
+                        var metaData =
+                            (from pair in language.StarTranslationMemoryMetadatas where guid == pair.Id select pair)
+                                .FirstOrDefault();
+                        if (metaData != null)
+                        {
+                            metaData.TargetFile = file;
+                        }
+
+                    }
+                    language.TargetFile = pathTotargetFiles;
+                    language.TargetLanguage = targetLanguage;
+                }
+
             }
 
-            return files;
+            return model;
+            
         }
 
 

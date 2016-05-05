@@ -16,7 +16,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
        public List<ProjectTemplateInfo> LoadProjectTemplates()
        {
            var controller = Controller;
-           var templateList = controller.GetProjectTemplates().ToList();
+           var templateList = controller.GetProjectTemplates().OrderBy(t => t.Name).ToList();
 
            return templateList;
        }

@@ -31,6 +31,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private PackageModel _package;
         private readonly ProjectService _projectService;
         private bool _active;
+        private bool _isEnabled;
+        private string _color;
+        private bool _hasTm;
 
         public bool DetailsSelected
         {
@@ -106,6 +109,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
+        public string Color
+        {
+            get { return _color; }
+            set
+            {
+                if (Equals(value, _color))
+                {
+                    return;
+                }
+                _color = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool CanExecuteCreate
         {
             get { return _canExecuteCreate; }
@@ -120,6 +137,21 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 
             }
             
+        }
+
+        public bool IsEnabled
+        {
+            get { return _isEnabled; }
+            set
+            {
+                if (Equals(value, _isEnabled))
+                {
+                    return;
+                    
+                }
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         public Action CloseAction { get; set; }
@@ -165,8 +197,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public void Next()
         {
-           
-            if (_packageDetails.FieldsAreCompleted() && DetailsSelected)
+            var model = _packageDetailsViewModel.GetPackageModel();
+             _hasTm = false;
+            foreach (var pair in model.LanguagePairs)
+            {
+                if (pair.StarTranslationMemoryMetadatas.Count!=0)
+                {
+                    _hasTm = true;
+                }
+            }//tm page is disabled
+            if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
             {
 
                 DetailsSelected = false;
@@ -176,7 +216,31 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 CanExecuteNext = false;
                 _finishViewModel.Refresh();
                 CanExecuteCreate = true;
-
+                IsEnabled = false;
+                Color = "Gray";
+            }//tm page
+            else if(_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+            {
+                DetailsSelected = false;
+                TmSelected = true;
+                FinishSelected = false;
+                CanExecuteBack = true;
+                CanExecuteNext = true;
+                CanExecuteCreate = false;
+                IsEnabled = true;
+                Color = "#FF66290B";
+            }//finish page
+            else if (_packageDetails.FieldsAreCompleted() && TmSelected)
+            {
+                DetailsSelected = false;
+                CanExecuteNext = false;
+                CanExecuteCreate = true;
+                CanExecuteBack = true;
+                TmSelected = false;
+                IsEnabled = true;
+                FinishSelected = true;
+                _finishViewModel.Refresh();
+                Color = "#FFB69476";
             }
 
         }
@@ -187,7 +251,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             {
                 CanExecuteBack = false;
             }
-            else if (FinishSelected)
+            else if (FinishSelected && _hasTm==false)
             {
                 CanExecuteBack = false;
                 DetailsSelected = true;
@@ -195,6 +259,25 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 CanExecuteNext = true;
                 FinishSelected = false;
                 CanExecuteCreate = false;
+            }else if (FinishSelected && _hasTm)
+            {
+                DetailsSelected = false;
+                TmSelected = true;
+                FinishSelected = false;
+                CanExecuteBack = true;
+                CanExecuteCreate = false;
+                CanExecuteNext = true;
+                Color = "#FF66290B";
+            }
+            else if (TmSelected)
+            {
+                DetailsSelected = true;
+                TmSelected = false;
+                FinishSelected = false;
+                CanExecuteBack = false;
+                CanExecuteCreate = false;
+                CanExecuteNext = true;
+                Color = "#FFB69476";
             }
         }
 
@@ -220,6 +303,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _isFinishSelected = false;
             _finishViewModel = finishViewModel;
             _projectService = new ProjectService();
+            Color = "#FFB69476";
         }
 
 

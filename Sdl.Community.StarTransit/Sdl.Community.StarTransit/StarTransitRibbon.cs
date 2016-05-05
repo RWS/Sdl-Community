@@ -32,14 +32,14 @@ namespace Sdl.Community.StarTransit
         protected override async void Execute()
         {
             EnsureApplicationResources();
-            TelemetryService.Instance.Init();
+          //  TelemetryService.Instance.Init();
 
             //check for new version 
-            await TelemetryService.Instance.CheckForUpdates(true);
-            TelemetryService.Instance.SendCrashes(false);
+            //await TelemetryService.Instance.CheckForUpdates(true);
+            //TelemetryService.Instance.SendCrashes(false);
             var pathToTempFolder = CreateTempPackageFolder();
-            try
-            {
+           // try
+            //{
                 OpenFileDialog fileDialog = new OpenFileDialog();
                 fileDialog.Filter = @"Transit Project Package Files (*.ppf)|*.ppf";
                 var dialogResult = fileDialog.ShowDialog();
@@ -59,26 +59,23 @@ namespace Sdl.Community.StarTransit
                         Name = package.Name,
                         Description = package.Description,
                         StudioTemplates = templateList,
-                        SourceLanguage = package.SourceLanguage,
-                        TargetLanguage = package.TargetLanguage,
-                        SourceFiles = package.SourceFiles,
-                        TargetFiles = package.TargetFiles
+                       LanguagePairs = package.LanguagePairs
                     };
                     StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
                     window.ShowDialog();
                 }
-            }
-            catch (Exception e)
-            {
-                TelemetryService.Instance.HandleException(e);
-            }
-            finally
-            {
-                if (Directory.Exists(pathToTempFolder))
-                {
-                    Directory.Delete(pathToTempFolder,true);
-                }
-            }
+           // }
+            //catch (Exception e)
+            //{
+            //    TelemetryService.Instance.HandleException(e);
+            //}
+            //finally
+            //{
+            //    if (Directory.Exists(pathToTempFolder))
+            //    {
+            //        Directory.Delete(pathToTempFolder,true);
+            //    }
+            //}
           
         }
 

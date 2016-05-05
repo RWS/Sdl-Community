@@ -88,7 +88,7 @@
                     <TextBlock x:Name="tbPackageDetails" Text="Package Details" />
                 </ListViewItem>
                 <ListViewItem x:Name="TMItem" Tag="tm"  IsSelected="{Binding TmSelected}" Selected="ListViewItem_Selected" >
-                    <TextBlock x:Name="tbTM" Text="Translation Memories"  />
+                    <TextBlock x:Name="tbTM" Text="Translation Memories" IsEnabled="{Binding IsEnabled}" Foreground="{Binding Color}"/>
                 </ListViewItem>
                 <ListViewItem Tag="finish" IsSelected="{Binding FinishSelected}" Selected="ListViewItem_Selected" >
                     <TextBlock x:Name="tbFinish" Text="Finish" />

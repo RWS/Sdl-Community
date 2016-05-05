@@ -14,13 +14,11 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public string Description { get; set; }
         public ProjectTemplateInfo ProjectTemplate { get; set; }
         public List<ProjectTemplateInfo> StudioTemplates { get; set; }
-        public CultureInfo SourceLanguage { get; set; }
-        public List<CultureInfo> TargetLanguage { get; set; }
         public string Location { get; set; }
         public DateTime? DueDate { get; set; }
         public bool HasDueDate { get; set; }
-        public string[] SourceFiles { get; set; }
-        public string[] TargetFiles { get; set; }
         public Customer Customer { get; set; }
+        public List<LanguagePair> LanguagePairs { get; set; }
+
     }
 }
