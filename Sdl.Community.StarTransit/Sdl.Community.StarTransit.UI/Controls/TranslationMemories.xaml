@@ -28,7 +28,7 @@
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="true">
                         <Setter Property="Foreground" Value="#41B1E1" />
-                        <Setter Property="FontWeight" Value="Bold" />
+                       
                     </Trigger>
                 </Style.Triggers>
             </Style>
@@ -60,28 +60,38 @@
 
             <ListView.ItemTemplate>
                 <ItemContainerTemplate>
-                    <TextBlock Text="{Binding PairName }" FontSize="15" FontWeight="Bold" />
+                    <TextBlock Text="{Binding PairName }" FontSize="14" Margin="10,10,10,10" />
                 </ItemContainerTemplate>
 
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Column="1" >
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="50"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                    <RowDefinition Height="60"></RowDefinition>
-                </Grid.RowDefinitions>
+        <Border BorderThickness="1 0 0 0" BorderBrush="Gainsboro" Grid.Column="1" >
+            <StackPanel  >
+           
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" Margin="20,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
-                <Button x:Name ="browseTmButton" Command="{Binding BrowseCommand}" Grid.Row="1" Content="Browse Tm" Width="auto" Height="30" Margin="20,15,22,15"></Button>
-                <Button x:Name="createTmButton" Command="{Binding CreateNewCommand}"  Grid.Row="1" Grid.Column="1" Content="Create Tm" Width="auto" Height="30" Margin="0,15,26,15"></Button>
-            </Grid>
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="60"></RowDefinition>
+                    </Grid.RowDefinitions>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                        <ColumnDefinition Width="1*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
+                    <RadioButton  Grid.Row="1" Content="None" GroupName="1" Margin="20,0,10,0" IsChecked="{Binding IsNoneChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                    <RadioButton  Grid.Row="1" Content="Create Tm" GroupName="1" Margin="20,60,10,10" IsChecked="{Binding IsCreateChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                    <RadioButton  Grid.Row="1" Content="Browse Tm" GroupName="1" Margin="20,110,10,10" IsChecked="{Binding IsBrowseChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                   <Button x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}"  Grid.Row="1" Grid.Column="1" Width="auto" Height="30" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Tm name:" Margin="20,15,22,15"/>
+                    <TextBox x:Name="TmName"  Grid.Row="2" Grid.Column="1" Width="auto" Height="20" Text="{Binding TmName}" Margin="0,0,30,0" IsEnabled="{Binding IsEnabled}"/>
+                </Grid>
+           
+           
         </StackPanel>
+        </Border>
     </Grid>
 
 </UserControl>

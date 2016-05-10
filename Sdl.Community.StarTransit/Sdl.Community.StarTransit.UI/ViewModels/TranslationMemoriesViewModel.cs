@@ -23,27 +23,47 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
     {
         private List<LanguagePair> _languagePairs;
         private string _pair;
-        private LanguagePair _selectedItem;
-        private ICommand _browseCommand;
-        private ICommand _createNewCommand;
+        private ICommand _command;
         private string _title;
         private int _selectedIndex;
-
+        private string _tmName;
+        private bool _isEnabled;
+        private PackageModel _package;
+        private bool _browseChecked;
+        private bool _createChecked;
+        private string _buttonName;
+        private ICommand _setBtnNameCommand;
+        private string _visibility;
+        private bool _isNoneChecked;
+        private LanguagePair _selectedItem;
         public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
-            var package = packageDetailsViewModel.GetPackageModel();
-            var pairs = package.LanguagePairs;
+             _package = packageDetailsViewModel.GetPackageModel();
+            var pairs = _package.LanguagePairs;
             foreach (var pair in pairs)
             {
                 pair.PairNameIso = pair.SourceLanguage.TwoLetterISOLanguageName + "-" +
                                 pair.TargetLanguage.TwoLetterISOLanguageName;
-                pair.PairName = pair.SourceLanguage.DisplayName + "-" + pair.TargetLanguage.DisplayName;
+                pair.PairName = FormatPairName(pair.SourceLanguage.DisplayName, pair.TargetLanguage.DisplayName);
             }
 
             _selectedIndex = 0;
             LanguagePairs = pairs;
+            _buttonName = "Browse";
+            _visibility = "Hidden";
+            _isNoneChecked = true;
+            _title = "Please select Translation memory  for pair " + pairs[0].PairName;
+        }
 
-            _title = "Please select TM  for pair " +Environment.NewLine+ pairs[0].PairName;
+        public bool IsNoneChecked
+        {
+            get { return _isNoneChecked; }
+            set
+            {
+                if (Equals(value, _isNoneChecked)) { return;}
+                _isNoneChecked = value;
+                OnPropertyChanged();
+            }
         }
 
         public int SelectedIndex
@@ -74,39 +94,165 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public ICommand BrowseCommand
+        public bool IsEnabled
         {
-            get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true)); }
+            get { return _isEnabled; }
+            set
+            {
+                if (Equals(value, _isEnabled))
+                {
+                    return;
+                }
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand CreateNewCommand {
-            get { return _createNewCommand ?? (_createNewCommand = new CommandHandler(Create, true)); }
-        } 
-
-        private void Create()
+        public string TmName
         {
+            get { return _tmName; }
+            set
+            {
+                if (Equals(value, _tmName))
+                {
+                    return;
+                }
+                _tmName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsCreateChecked
+        {
+            get { return _createChecked; }
+            set
+            {
+                if (Equals(value, _createChecked))
+                {
+                    return;
+                }
+                _createChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsBrowseChecked
+        {
+            get { return _browseChecked; }
+            set
+            {
+                if (Equals(value, _browseChecked))
+                {
+                    return;
+                }
+                _browseChecked = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string Visibility
+        {
+            get { return _visibility; }
+            set
+            {
+                if (Equals(value, _visibility))
+                {
+                    return;
+                }
+                _visibility = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string ButtonName
+        {
+            get
+            {
+                return _buttonName;
+                
+            }
+            set
+            {
+                if (Equals(value, _buttonName)) { return;}
+                _buttonName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand SetBtnNameCommand {
+            get { return _setBtnNameCommand ?? (_setBtnNameCommand = new CommandHandler(SetBtnName, true)); }
+        }
+
+        private void SetBtnName()
+        {
+            if (IsCreateChecked)
+            {
+                ButtonName = "Create Tm";
+                TmName = string.Empty;
+                Visibility = "Visible";
+            }
+            if (IsBrowseChecked)
+            {
+                ButtonName = "Browse";
+                TmName = string.Empty;
+                Visibility = "Visible";
+            }
+            if (IsNoneChecked)
+            {
+                Visibility = "Hidden";
+                TmName = string.Empty;
+            }
            
         }
 
-        private void Browse()
+
+        public ICommand Command
         {
-            var folderDialog = new OpenFileDialog();
-            folderDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                @"Studio 2015\Translation Memories");
-            folderDialog.Filter = @"Text Files (.sdltm)|*.sdltm";
-            var result = folderDialog.ShowDialog();
-            
-
-            if (result == DialogResult.OK)
-            {
-                var selectedTm = folderDialog.FileName;
-                SelectedItem.ChoseExistingTm = true;
-                SelectedItem.TmPath = selectedTm;
-
-            }
-         
+            get { return _command ?? (_command = new CommandHandler(CommandBtn, true)); }
         }
 
+        private void CommandBtn()
+        {
+            if (IsBrowseChecked)
+            {
+                var folderDialog = new OpenFileDialog();
+                folderDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    @"Studio 2015\Translation Memories");
+                folderDialog.Filter = @"Text Files (.sdltm)|*.sdltm";
+                var result = folderDialog.ShowDialog();
+
+
+                if (result == DialogResult.OK)
+                {
+                    var selectedTm = folderDialog.FileName;
+                    SelectedItem.ChoseExistingTm = true;
+                    SelectedItem.TmPath = selectedTm;
+                    TmName = GetTmName(selectedTm);
+                    IsEnabled = false;
+                }
+            }
+            if (IsCreateChecked)
+            {
+                var tmName = _package.Name + SelectedItem.PairNameIso;
+                TmName = tmName;
+                IsEnabled = true;
+            }
+        }
+
+
+        private string FormatPairName(string sourceLanguage, string targetLanguage)
+        {
+            var source = sourceLanguage.Substring(0, sourceLanguage.IndexOf("(", StringComparison.Ordinal));
+            var target = targetLanguage.Substring(0, targetLanguage.IndexOf("(", StringComparison.Ordinal));
+
+            return source + "to " + target;
+        }
+
+        private string GetTmName(string path)
+        {
+            var name = path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+            return name;
+        }
         public List<LanguagePair> LanguagePairs
         {
             get { return _languagePairs; }
