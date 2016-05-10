@@ -4,10 +4,84 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+           
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <TextBlock x:Name="textBlock" Height="57.596" Margin="62.604,51.461,91.152,0" TextWrapping="Wrap" Text="Translation Memories" VerticalAlignment="Top"/>
+             d:DesignHeight="300" d:DesignWidth="400">
 
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
+                <Setter Property="Foreground" Value="#FFB69476" />
+                <Setter Property="FontSize" Value="18.667" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Margin" Value="10,10,0,0" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="true">
+                        <Setter Property="Foreground" Value="#41B1E1" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="4*" />
+        </Grid.ColumnDefinitions>
+        <ListView x:Name="listView"
+                Margin="0"
+                Background="White"
+                BorderBrush="{x:Null}"
+                BorderThickness="0"
+                SelectedItem="{Binding SelectedItem}"
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle}"  
+                SelectionMode="Single"
+                 
+                ItemsSource ="{Binding LanguagePairs}" 
+                   SelectedIndex="{Binding SelectedIndex}">
+
+            <ListView.ItemTemplate>
+                <ItemContainerTemplate>
+                    <TextBlock Text="{Binding PairName }" FontSize="15" FontWeight="Bold" />
+                </ItemContainerTemplate>
+
+            </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Column="1" >
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                    <RowDefinition Height="60"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" Margin="20,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
+                <Button x:Name ="browseTmButton" Command="{Binding BrowseCommand}" Grid.Row="1" Content="Browse Tm" Width="auto" Height="30" Margin="20,15,22,15"></Button>
+                <Button x:Name="createTmButton" Command="{Binding CreateNewCommand}"  Grid.Row="1" Grid.Column="1" Content="Create Tm" Width="auto" Height="30" Margin="0,15,26,15"></Button>
+            </Grid>
+        </StackPanel>
     </Grid>
+
 </UserControl>

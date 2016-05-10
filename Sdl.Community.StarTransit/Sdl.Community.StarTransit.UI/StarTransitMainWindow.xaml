@@ -8,7 +8,7 @@
     xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Open StarTransit package"
-    Width="850"
+    Width="900"
     Height="600"
     BorderThickness="0"
     GlowBrush="Black"

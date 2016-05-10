@@ -29,7 +29,9 @@ namespace Sdl.Community.StarTransit.UI
         private readonly PackageDetails _packageDetails;
         private readonly TranslationMemories _translationMemories;
         private readonly FinishViewModel finishViewModel;
+    
         private readonly Finish _finish;
+       
         private PackageModel _package;
         public StarTransitMainWindow(PackageModel package)
         {
@@ -40,8 +42,9 @@ namespace Sdl.Community.StarTransit.UI
             var packageDetailsViewModel = new PackageDetailsViewModel(package,this);
             _packageDetails = new PackageDetails(packageDetailsViewModel);
 
-            _translationMemories = new TranslationMemories();
-
+            var tmViewModel = new TranslationMemoriesViewModel(packageDetailsViewModel);
+            _translationMemories = new TranslationMemories(tmViewModel);
+        
             finishViewModel = new FinishViewModel(packageDetailsViewModel);
             _finish = new Finish(finishViewModel);
             
