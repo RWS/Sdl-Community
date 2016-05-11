@@ -203,6 +203,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             {
                 Visibility = "Hidden";
                 TmName = string.Empty;
+                if (SelectedItem != null)
+                {
+                    SelectedItem.TmName = null;
+                }
             }
            
         }
@@ -230,6 +234,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     SelectedItem.ChoseExistingTm = true;
                     SelectedItem.TmPath = selectedTm;
                     TmName = GetTmName(selectedTm);
+                    SelectedItem.TmName = TmName;
                     IsEnabled = false;
                 }
             }
@@ -237,10 +242,27 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             {
                 var tmName = _package.Name + SelectedItem.PairNameIso;
                 TmName = tmName;
+                SelectedItem.TmName = TmName;
+                SelectedItem.CreateNewTm = true;
                 IsEnabled = true;
             }
         }
 
+        public PackageModel GetPackageModel()
+        {
+            _package.LanguagePairs = LanguagePairs;
+
+            foreach (var pair in _package.LanguagePairs)
+            {
+                if (SelectedItem != null)
+                {
+                    pair.TmName = SelectedItem.TmName;
+                    pair.TmPath = SelectedItem.TmPath;
+                }
+
+            }
+            return _package;
+        }
 
         private string FormatPairName(string sourceLanguage, string targetLanguage)
         {

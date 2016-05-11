@@ -45,12 +45,13 @@ namespace Sdl.Community.StarTransit.UI
             var tmViewModel = new TranslationMemoriesViewModel(packageDetailsViewModel);
             _translationMemories = new TranslationMemories(tmViewModel);
         
-            finishViewModel = new FinishViewModel(packageDetailsViewModel);
+            finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
             _finish = new Finish(finishViewModel);
             
             var starTransitViewModel = new StarTransitMainWindowViewModel(packageDetailsViewModel
                 , _packageDetails
                 , _translationMemories
+                ,tmViewModel
                 , finishViewModel);
             DataContext = starTransitViewModel;
             if (starTransitViewModel.CloseAction == null)

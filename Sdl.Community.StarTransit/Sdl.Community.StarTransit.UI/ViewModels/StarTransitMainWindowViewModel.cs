@@ -35,6 +35,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _color;
         private bool _hasTm;
         private TranslationMemories _translationMemories;
+        private TranslationMemoriesViewModel _translationMemoriesViewModel;
 
         public bool DetailsSelected
         {
@@ -240,7 +241,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 TmSelected = false;
                 IsEnabled = true;
                 FinishSelected = true;
-                _finishViewModel.Refresh();
+               _finishViewModel.Refresh();
                 Color = "#FFB69476";
             }
 
@@ -285,18 +286,19 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public async void Create()
         {
             Active = true;
-            await Task.Run(() => _projectService.CreateProject(_packageDetailsViewModel.GetPackageModel()));
+            await Task.Run(() => _projectService.CreateProject(_translationMemoriesViewModel.GetPackageModel()));
             Active = false;
             CloseAction();
         }
 
 
-        public StarTransitMainWindowViewModel(PackageDetailsViewModel packageDetailsViewModel,PackageDetails packageDetails,TranslationMemories translationMemories,
+        public StarTransitMainWindowViewModel(PackageDetailsViewModel packageDetailsViewModel,PackageDetails packageDetails,TranslationMemories translationMemories,TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
             FinishViewModel finishViewModel)
         {
             _packageDetailsViewModel = packageDetailsViewModel;
             _packageDetails = packageDetails;
             _translationMemories = translationMemories;
+            _translationMemoriesViewModel = translationMeloriesMemoriesViewModel;
             CanExecuteBack = false;
             CanExecuteCreate = false;
             CanExecuteNext = true;

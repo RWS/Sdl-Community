@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -21,48 +22,69 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private   string _txtName;
         private  string _txtDescription;
         private   string _sourceLanguage;
-        private  string _targetLanguage;
+        private  ObservableCollection<string> _targetLanguage = new ObservableCollection<string>();
         private  string _templateName;
         private  string _customer;
         private  string _dueDate;
+        private string _tmName;
+        private string _tmPath;
         private readonly PackageDetailsViewModel _packageDetailsViewModel;
+        private readonly TranslationMemoriesViewModel _translationMemoriesViewModel;
+        private PackageModel _package; 
 
-        public FinishViewModel(PackageDetailsViewModel packageDetailsViewModel)
+
+        public FinishViewModel(TranslationMemoriesViewModel translationMemoriesViewModel, PackageDetailsViewModel packageDetailsViewModel)
         {
+            _translationMemoriesViewModel = translationMemoriesViewModel;
             _packageDetailsViewModel = packageDetailsViewModel;
-            
+            _package = _translationMemoriesViewModel.GetPackageModel();
             Refresh();
-            
-          
         }
 
         public void Refresh()
         {
-            
-                Name = _packageDetailsViewModel.Name;
-                Location = _packageDetailsViewModel.TextLocation;
-                if (_packageDetailsViewModel.HasDueDate)
+            _package = _translationMemoriesViewModel.GetPackageModel();
+            _targetLanguage.Clear();
+            Name = _package.Name;
+                Location = _package.Location;
+                if (_package.HasDueDate)
                 {
                     DueDate =
-                        Helpers.TimeHelper.SetDateTime(_packageDetailsViewModel.DueDate,
+                        Helpers.TimeHelper.SetDateTime(_package.DueDate,
                             _packageDetailsViewModel.SelectedHour, _packageDetailsViewModel.SelectedMinute,
                             _packageDetailsViewModel.SelectedMoment).ToString();
                 }
 
-                if (_packageDetailsViewModel.Template != null)
+                if (_package.ProjectTemplate != null)
                 {
-                    TemplateName = _packageDetailsViewModel.Template.Name;
+                    TemplateName = _package.ProjectTemplate.Name; 
                 }
-                if (_packageDetailsViewModel.SelectedCustomer != null)
+                if (_package.Customer != null)
                 {
-                    Customer = _packageDetailsViewModel.SelectedCustomer.Name;
+                    Customer = _package.Customer.Name;
+                    
                 }
 
                 Description = _packageDetailsViewModel.Description;
                 SourceLanguage = _packageDetailsViewModel.SourceLanguage;
-                TargetLanguage = _packageDetailsViewModel.TargetLanguage;
+           
+
+            foreach (var pair in _package.LanguagePairs)
+            {
+                var tmPair = string.Empty;
+                if (pair.TmName == null)
+                {
+                    tmPair = "No TM selected for this pair.";
+                }
+                else
+                {
+                    tmPair = pair.TargetLanguage.DisplayName +@",translation units will be imported "+Environment.NewLine+"into Translation Memory named: " +pair.TmName ;
+                }
+                
+                _targetLanguage.Add(tmPair);
+            }
             
-          
+
         }
    
         public string Name
@@ -108,7 +130,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public string TargetLanguage
+        public ObservableCollection<string>TargetLanguage
         {
             get { return _targetLanguage; }
             set
@@ -119,6 +141,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 }
                 _targetLanguage = value;
                 OnPropertyChanged();
+               
             }
         }
 
@@ -192,6 +215,28 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 _dueDate = value;
                 OnPropertyChanged();
 
+            }
+        }
+
+        public string TmName
+        {
+            get { return _tmName; }
+            set
+            {
+                if (Equals(value, _tmName)) { return;}
+                _tmName = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string TmPath
+        {
+            get { return _tmPath; }
+            set
+            {
+                if (Equals(_tmPath, value)) { return;}
+                _tmPath = value;
+                OnPropertyChanged();
             }
         }
 

@@ -18,6 +18,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public bool CreateNewTm { get; set; }
         public bool ChoseExistingTm { get; set; }
         public string TmPath { get; set; }
+        public string TmName { get; set; }
         public string PairNameIso { get; set; }
         public string PairName { get; set; }
     }

@@ -46,8 +46,9 @@
         <TextBlock x:Name="Customer"  Text="Customer" Grid.Row="4" />
         <TextBlock x:Name="DueDate"  Text="Due date" Grid.Row="5" />
         <TextBlock x:Name="Source"  Text="Source language" Grid.Row="6" />
-        <TextBlock x:Name="Target"  Text="Target language" Grid.Row="7" />
+        <TextBlock x:Name="Target"  Text="Target language/TM name" Grid.Row="7" />
         <TextBlock x:Name="Template"  Text="Project template" Grid.Row="8" />
+      
 
         <TextBlock x:Name="PackageName"  Text="{Binding Name}" Grid.Row="1" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageDescription"  Text="{Binding Description}" Grid.Row="2" Grid.Column="1"   FontWeight="DemiBold" Foreground="Black"/>
@@ -55,9 +56,17 @@
         <TextBlock x:Name="PackageCustomer"  Text="{Binding Customer}" Grid.Row="4" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageDueDate"  Text="{Binding DueDate}" Grid.Row="5" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageSource"  Text="{Binding SourceLanguage}" Grid.Row="6" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
-        <TextBlock x:Name="PackageTarget"  Text="{Binding TargetLanguage}" Grid.Row="7" Grid.Column="1"  FontWeight="DemiBold" Foreground="Black"/>
+        <ListView ItemsSource="{Binding TargetLanguage}" Grid.Row="7" Grid.Column="1" Margin="0"
+                Background="White"
+                BorderBrush="{x:Null}"
+                  IsEnabled="False"
+                  FontWeight="DemiBold"
+                  Foreground="Black"
+                BorderThickness="0">
+           
+        </ListView>
         <TextBlock x:Name="PackageTemplate"  Text="{Binding TemplateName}" Grid.Row="8" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
-        
-        
+
+
     </Grid>
 </UserControl>
