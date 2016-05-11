@@ -81,12 +81,13 @@
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
-                    <RadioButton  Grid.Row="1" Content="None" GroupName="1" Margin="20,0,10,0" IsChecked="{Binding IsNoneChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
-                    <RadioButton  Grid.Row="1" Content="Create Tm" GroupName="1" Margin="20,60,10,10" IsChecked="{Binding IsCreateChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
-                    <RadioButton  Grid.Row="1" Content="Browse Tm" GroupName="1" Margin="20,110,10,10" IsChecked="{Binding IsBrowseChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                    <RadioButton x:Name="None" Grid.Row="1" Content="None" GroupName="1" Margin="20,0,10,0" IsChecked="{Binding IsNoneChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                    <RadioButton x:Name="Create" Grid.Row="1" Content="Create Tm" GroupName="1" Margin="20,60,10,10" IsChecked="{Binding IsCreateChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
+                    <RadioButton  x:Name="Browse" Grid.Row="1" Content="Browse Tm" GroupName="1" Margin="20,110,10,10" IsChecked="{Binding IsBrowseChecked}" Command="{Binding SetBtnNameCommand}"></RadioButton>
                    <Button x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}"  Grid.Row="1" Grid.Column="1" Width="auto" Height="30" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Tm name:" Margin="20,15,22,15"/>
-                    <TextBox x:Name="TmName"  Grid.Row="2" Grid.Column="1" Width="auto" Height="20" Text="{Binding TmName}" Margin="0,0,30,0" IsEnabled="{Binding IsEnabled}"/>
+                    <TextBox x:Name="TmName"  Grid.Row="2" Grid.Column="1" Width="auto" Height="20" Text="{Binding TmName ,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Margin="0,0,30,0" IsEnabled="{Binding IsEnabled}"/>
+
                 </Grid>
            
            

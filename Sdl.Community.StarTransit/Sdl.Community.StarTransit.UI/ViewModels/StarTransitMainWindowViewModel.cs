@@ -34,6 +34,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _isEnabled;
         private string _color;
         private bool _hasTm;
+        private TranslationMemories _translationMemories;
 
         public bool DetailsSelected
         {
@@ -230,7 +231,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 IsEnabled = true;
                 Color = "#FF66290B";
             }//finish page
-            else if (_packageDetails.FieldsAreCompleted() && TmSelected)
+            else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
             {
                 DetailsSelected = false;
                 CanExecuteNext = false;
@@ -295,6 +296,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             _packageDetailsViewModel = packageDetailsViewModel;
             _packageDetails = packageDetails;
+            _translationMemories = translationMemories;
             CanExecuteBack = false;
             CanExecuteCreate = false;
             CanExecuteNext = true;

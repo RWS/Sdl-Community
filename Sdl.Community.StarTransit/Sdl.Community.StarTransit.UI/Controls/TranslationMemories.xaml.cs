@@ -21,20 +21,24 @@ namespace Sdl.Community.StarTransit.UI.Controls
     /// </summary>
     public partial class TranslationMemories : UserControl
     {
-       
+
         public TranslationMemories(TranslationMemoriesViewModel tmViewModel)
         {
-            
+
             InitializeComponent();
-           // listView.SelectedIndex = 0;
             DataContext = tmViewModel;
-            
+
         }
 
-     
-        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public bool TmFieldIsCompleted()
         {
-            var test = "ttt";
+            bool isCompleted = !(Create.IsChecked == true && string.IsNullOrEmpty(TmName.Text));
+            if (Browse.IsChecked == true && string.IsNullOrEmpty(TmName.Text))
+            {
+                isCompleted= false;
+            }
+            return isCompleted;
         }
+     
     }
 }

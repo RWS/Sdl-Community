@@ -19,7 +19,7 @@ using Sdl.Community.StarTransit.UI.Helpers;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class TranslationMemoriesViewModel: INotifyPropertyChanged
+    public class TranslationMemoriesViewModel: INotifyPropertyChanged,IDataErrorInfo
     {
         private List<LanguagePair> _languagePairs;
         private string _pair;
@@ -36,6 +36,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _visibility;
         private bool _isNoneChecked;
         private LanguagePair _selectedItem;
+
+
         public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
              _package = packageDetailsViewModel.GetPackageModel();
@@ -253,6 +255,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var name = path.Substring(path.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
             return name;
         }
+
         public List<LanguagePair> LanguagePairs
         {
             get { return _languagePairs; }
@@ -290,5 +293,22 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public string this[string columnName]
+        {
+            get {
+                if (columnName == "TmName")
+                {
+                    if (IsCreateChecked && string.IsNullOrEmpty(TmName) ||
+                        IsBrowseChecked && string.IsNullOrEmpty(TmName))
+                    {
+                        return "Translation memory is required.";
+                    }
+                }
+                return null;
+            }
+        }
+
+        public string Error { get; }
     }
 }
