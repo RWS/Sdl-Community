@@ -37,6 +37,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _isNoneChecked;
         private LanguagePair _selectedItem;
 
+        private string _initialFolderPath =
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                @"Studio 2015\Translation Memories");
 
         public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
@@ -189,20 +192,29 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             if (IsCreateChecked)
             {
-                ButtonName = "Create Tm";
-                TmName = string.Empty;
-                Visibility = "Visible";
+                Visibility = "Hidden";
+                var tmName = string.Format("{0}.{1}.{2}",
+                    _package.Name,
+                    SelectedItem.PairNameIso,
+                    "sdltm");
+                TmName = tmName;
+                SelectedItem.TmName = TmName;
+                SelectedItem.TmPath = Path.Combine(_initialFolderPath, tmName);
+                SelectedItem.CreateNewTm = true;
+                IsEnabled = true;
             }
             if (IsBrowseChecked)
             {
                 ButtonName = "Browse";
                 TmName = string.Empty;
                 Visibility = "Visible";
+                IsEnabled = false;
             }
             if (IsNoneChecked)
             {
                 Visibility = "Hidden";
                 TmName = string.Empty;
+                IsEnabled = false;
                 if (SelectedItem != null)
                 {
                     SelectedItem.TmName = null;
@@ -219,17 +231,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private void CommandBtn()
         {
-            var initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    @"Studio 2015\Translation Memories");
             if (IsBrowseChecked)
             {
                 var folderDialog = new OpenFileDialog();
 
-                folderDialog.InitialDirectory = initialFolderPath;
+                folderDialog.InitialDirectory = _initialFolderPath;
                 folderDialog.Filter = @"Text Files (.sdltm)|*.sdltm";
                 var result = folderDialog.ShowDialog();
-
-
+                
                 if (result == DialogResult.OK)
                 {
                     var selectedTm = folderDialog.FileName;
@@ -240,18 +249,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     IsEnabled = false;
                 }
             }
-            if (IsCreateChecked)
-            {
-                var tmName = string.Format("{0}.{1}.{2}",
-                    _package.Name,
-                    SelectedItem.PairNameIso,
-                    "sdltm"); 
-                TmName = tmName;
-                SelectedItem.TmName = TmName;
-                SelectedItem.TmPath = Path.Combine(initialFolderPath, tmName);
-                SelectedItem.CreateNewTm = true;
-                IsEnabled = true;
-            }
+      
         }
 
         public PackageModel GetPackageModel()

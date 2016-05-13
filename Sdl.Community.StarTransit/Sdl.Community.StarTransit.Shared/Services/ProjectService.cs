@@ -51,24 +51,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
             List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
-            foreach (var pair in package.LanguagePairs)
+          foreach (var pair in package.LanguagePairs)
             {
                 //import language pair TM if any
                 if (pair.HasTm)
                 {
+                    var importer = new TransitTmImporter(pair.SourceLanguage,
+                           pair.TargetLanguage,
+                           pair.CreateNewTm,
+                           fileTypeManager,
+                           pair.TmPath);
                     foreach (var tm in pair.StarTranslationMemoryMetadatas)
                     {
-                        var importer = new TransitTmImporter(pair.SourceLanguage,
-                            pair.TargetLanguage,
-                            pair.CreateNewTm,
-                            fileTypeManager);
-                        var tmReference = importer.ImportStarTransitTM(tm.TargetFile, pair.TmPath);
+                       
+                         importer.ImportStarTransitTm(tm.TargetFile);
 
-                        tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tmReference,
-                            true,
-                            true,
-                            true));
+                       
                     }
+                    tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GeTranslationProviderReference(),
+                           true,
+                           true,
+                           true));
                 }
                targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
             }

@@ -16,37 +16,24 @@ namespace Sdl.Community.StarTransit.Shared.Import
         private readonly CultureInfo _sourceCulture;
         private readonly CultureInfo _targetCulture;
         private readonly bool _createTm;
+        private FileBasedTranslationMemory _fileBasedTM;
 
         public TransitTmImporter(CultureInfo sourceCulture,
             CultureInfo targetCulture,
             bool createTm,
-            IFileTypeManager fileTypeManager)
+            IFileTypeManager fileTypeManager,
+            string studioTranslationMemory)
         {
             _sourceCulture = sourceCulture;
             _targetCulture = targetCulture;
             _createTm = createTm;
             _fileTypeManager = fileTypeManager;
-        }
 
-        public TranslationProviderReference ImportStarTransitTM(string starTransitTM,string studioTranslationMemory)
-        {
-            //starTransitTMs.Substring(0, starTransitTMs.LastIndexOf(@"\", StringComparison.Ordinal))
-            //GetTmName(starTransitTM)
-
-            string sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTM);
-
-            ImportSdlXliffIntoTM(studioTranslationMemory, sdlXliffFullPath);
-            return new TranslationProviderReference(studioTranslationMemory, true);
-        }
-
-        private void ImportSdlXliffIntoTM(string studioTranslationMemory, string sdlXliffFullPath)
-        {
-            FileBasedTranslationMemory fileBasedTM;
             if (_createTm)
             {
 
 
-                fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory,
+                _fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory,
                     string.Empty,
                     _sourceCulture,
                     _targetCulture,
@@ -57,10 +44,22 @@ namespace Sdl.Community.StarTransit.Shared.Import
             }
             else
             {
-                fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory);
+                _fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory);
             }
+        }
 
-            var tmImporter = new TranslationMemoryImporter(fileBasedTM.LanguageDirection);
+        public void ImportStarTransitTm(string starTransitTm)
+        {
+            string sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
+
+            ImportSdlXliffIntoTm( sdlXliffFullPath);
+            
+        }
+
+        private void ImportSdlXliffIntoTm( string sdlXliffFullPath)
+        {
+
+            var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
             var importSettings = new ImportSettings()
             {
                 IsDocumentImport = false,
@@ -75,6 +74,10 @@ namespace Sdl.Community.StarTransit.Shared.Import
             tmImporter.Import(sdlXliffFullPath);
         }
 
+        public TranslationProviderReference GeTranslationProviderReference()
+        {
+            return new TranslationProviderReference(_fileBasedTM.FilePath,true);
+        }
         /// <summary>
         /// Create temporary bilingual file (sdlxliff) used to import the information
         /// in Studio translation memories

@@ -214,9 +214,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
 
             }
+            bool hasTm;
+            if (tmMetadataList.Count != 0)
+            {
+                hasTm = true;
+            }
+            else
+            {
+                hasTm = false;
+            }
             var languagePair = new LanguagePair
             {
-                HasTm = true,
+                HasTm = hasTm,
                 SourceFile = sourcePathList,
                 StarTranslationMemoryMetadatas = tmMetadataList,
                 SourceLanguage = sourceLanguage
