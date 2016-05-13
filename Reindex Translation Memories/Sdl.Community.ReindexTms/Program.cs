@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Studio.AssemblyResolver;
+using System;
 using System.Windows.Forms;
 
 namespace Sdl.Community.ReindexTms
@@ -11,6 +12,7 @@ namespace Sdl.Community.ReindexTms
         [STAThread]
         static void Main()
         {
+            AssemblyResolver.Resolve();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new ReindexForm());
