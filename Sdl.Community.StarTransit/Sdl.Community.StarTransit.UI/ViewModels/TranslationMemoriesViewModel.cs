@@ -219,11 +219,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private void CommandBtn()
         {
+            var initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    @"Studio 2015\Translation Memories");
             if (IsBrowseChecked)
             {
                 var folderDialog = new OpenFileDialog();
-                folderDialog.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                    @"Studio 2015\Translation Memories");
+
+                folderDialog.InitialDirectory = initialFolderPath;
                 folderDialog.Filter = @"Text Files (.sdltm)|*.sdltm";
                 var result = folderDialog.ShowDialog();
 
@@ -240,9 +242,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
             if (IsCreateChecked)
             {
-                var tmName = _package.Name + SelectedItem.PairNameIso;
+                var tmName = string.Format("{0}.{1}.{2}",
+                    _package.Name,
+                    SelectedItem.PairNameIso,
+                    "sdltm"); 
                 TmName = tmName;
                 SelectedItem.TmName = TmName;
+                SelectedItem.TmPath = Path.Combine(initialFolderPath, tmName);
                 SelectedItem.CreateNewTm = true;
                 IsEnabled = true;
             }

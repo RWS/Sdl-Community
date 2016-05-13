@@ -14,6 +14,7 @@ using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -22,16 +23,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         public void CreateProject(PackageModel package)
         {
-            var importer = new TransitTmImporter();
-            foreach (var pair in package.LanguagePairs)
-            {
-                var selectedTm = pair.TmPath;
-                foreach (var tm in pair.StarTranslationMemoryMetadatas)
-                {
-                    importer.CreateSdlXliffFile(tm.TargetFile, selectedTm);
-                }
 
-            }
             
             var target = GetTargetLanguages(package.LanguagePairs);
            
@@ -52,9 +44,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 newProject.SetCustomer(package.Customer);
             }
 
-           
+           //Add StarTransit package source files. The same on all language pairs
             ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
-            var targetProjectFiles = newProject.AddFiles(package.LanguagePairs[0].TargetFile.ToArray());
+
+            var tmConfig = newProject.GetTranslationProviderConfiguration();
+            var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+
+            List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
+            foreach (var pair in package.LanguagePairs)
+            {
+                //import language pair TM if any
+                if (pair.HasTm)
+                {
+                    foreach (var tm in pair.StarTranslationMemoryMetadatas)
+                    {
+                        var importer = new TransitTmImporter(pair.SourceLanguage,
+                            pair.TargetLanguage,
+                            pair.CreateNewTm,
+                            fileTypeManager);
+                        var tmReference = importer.ImportStarTransitTM(tm.TargetFile, pair.TmPath);
+
+                        tmConfig.Entries.Add(new TranslationProviderCascadeEntry(tmReference,
+                            true,
+                            true,
+                            true));
+                    }
+                }
+               targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
+            }
 
             newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
             var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
@@ -65,10 +82,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     AutomaticTaskTemplateIds.PreTranslateFiles,
                     AutomaticTaskTemplateIds.AnalyzeFiles
             });
-
+            newProject.UpdateTranslationProviderConfiguration(tmConfig);
             newProject.Save();
-            var controller = Controller;
-            controller.RefreshProjects();
+           // var controller = Controller;
+            Controller.RefreshProjects();
 
 
         }

@@ -56,7 +56,7 @@
     </Reference>
     <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.dll</HintPath>
@@ -65,25 +65,23 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>..\..\..\..\..\Code\Studio\Bin\Mixed Platforms\Debug\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
