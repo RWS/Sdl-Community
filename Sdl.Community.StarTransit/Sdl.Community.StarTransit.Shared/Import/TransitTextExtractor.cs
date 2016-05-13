@@ -2,9 +2,9 @@
 using System.Text;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.StarTransit.FileType
+namespace Sdl.Community.StarTransit.Shared.Import
 {
-    class TransitTextExtractor : IMarkupDataVisitor
+   public class TransitTextExtractor : IMarkupDataVisitor
     {
 
         private List<string> _Comments = new List<string>();

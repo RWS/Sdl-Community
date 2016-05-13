@@ -10,6 +10,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.Core.Globalization;
 using Sdl.ProjectAutomation.FileBased;
 using System.Threading.Tasks;
+using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.StarTransit.Shared.Utils;
@@ -21,8 +22,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         public void CreateProject(PackageModel package)
         {
+            var importer = new TransitTmImporter();
+            foreach (var pair in package.LanguagePairs)
+            {
+                var selectedTm = pair.TmPath;
+                foreach (var tm in pair.StarTranslationMemoryMetadatas)
+                {
+                    importer.CreateSdlXliffFile(tm.TargetFile, selectedTm);
+                }
 
-             var target = GetTargetLanguages(package.LanguagePairs);
+            }
+            
+            var target = GetTargetLanguages(package.LanguagePairs);
            
             var projectInfo = new ProjectInfo
             {
@@ -41,6 +52,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 newProject.SetCustomer(package.Customer);
             }
 
+           
             ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
             var targetProjectFiles = newProject.AddFiles(package.LanguagePairs[0].TargetFile.ToArray());
 

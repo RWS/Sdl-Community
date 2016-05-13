@@ -4,9 +4,9 @@ using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.StarTransit.FileType
+namespace Sdl.Community.StarTransit.Shared.Import
 {
-    class TransitSniffer : INativeFileSniffer
+    public class TransitSniffer : INativeFileSniffer
     {
 
         static string _BilingualDocument = "Transit";

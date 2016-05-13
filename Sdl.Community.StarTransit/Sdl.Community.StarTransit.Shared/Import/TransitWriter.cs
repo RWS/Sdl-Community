@@ -5,9 +5,9 @@ using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.StarTransit.FileType
+namespace Sdl.Community.StarTransit.Shared.Import
 {
-    class TransitWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
+    public class TransitWriter : AbstractBilingualFileTypeComponent, IBilingualWriter, INativeOutputSettingsAware
     {
 
         private IPersistentFileConversionProperties _originalFileProperties;

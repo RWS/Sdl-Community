@@ -115,10 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileType\TransitFilterComponentBuilder.cs" />
-    <Compile Include="FileType\TransitParser.cs" />
-    <Compile Include="FileType\TransitSniffer.cs" />
-    <Compile Include="FileType\TransitTextExtractor.cs" />
-    <Compile Include="FileType\TransitWriter.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

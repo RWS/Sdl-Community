@@ -8,9 +8,10 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.NativeApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.StarTransit.FileType
+
+namespace Sdl.Community.StarTransit.Shared.Import
 {
-    class TransitParser : AbstractBilingualFileTypeComponent, IBilingualParser, INativeContentCycleAware, ISettingsAware
+    public class TransitParser : AbstractBilingualFileTypeComponent, IBilingualParser, INativeContentCycleAware, ISettingsAware
     {
         private IFileProperties _fileProperties;
         private IDocumentProperties _documentProperties;
