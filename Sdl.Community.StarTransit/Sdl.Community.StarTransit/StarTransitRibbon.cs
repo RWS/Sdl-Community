@@ -34,7 +34,7 @@ namespace Sdl.Community.StarTransit
             EnsureApplicationResources();
             TelemetryService.Instance.Init();
 
-           // check for new version
+            // check for new version
             await TelemetryService.Instance.CheckForUpdates(true);
             TelemetryService.Instance.SendCrashes(false);
             var pathToTempFolder = CreateTempPackageFolder();
