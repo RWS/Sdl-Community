@@ -104,6 +104,12 @@
     <Compile Include="Controls\PackageDetails.xaml.cs">
       <DependentUpon>PackageDetails.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ReturnFiles.xaml.cs">
+      <DependentUpon>ReturnFiles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ReturnPackageMainWindow.xaml.cs">
+      <DependentUpon>ReturnPackageMainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\TranslationMemories.xaml.cs">
       <DependentUpon>TranslationMemories.xaml</DependentUpon>
     </Compile>
@@ -129,6 +135,8 @@
     <Compile Include="StarTransitMainWindow.xaml.cs">
       <DependentUpon>StarTransitMainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ReturnFilesViewModel.cs" />
+    <Compile Include="ViewModels\ReturnPackageMainVindowViewModel.cs" />
     <Compile Include="ViewModels\StarTransitMainWindowViewModel.cs" />
     <Compile Include="ViewModels\TranslationMemoriesViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -153,6 +161,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PackageDetails.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReturnFiles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ReturnPackageMainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

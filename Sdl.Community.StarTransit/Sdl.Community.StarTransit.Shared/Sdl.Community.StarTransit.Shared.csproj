@@ -83,11 +83,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectApi, Version=12.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectApi.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudio.Api, Version=12.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudio.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -119,10 +127,12 @@
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\LanguagePair.cs" />
     <Compile Include="Models\PackageModel.cs" />
+    <Compile Include="Models\ReturnPackage.cs" />
     <Compile Include="Models\StarTranslationMemoryMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PackageService.cs" />
     <Compile Include="Services\ProjectService.cs" />
+    <Compile Include="Services\ReturnPackageService.cs" />
     <Compile Include="Services\TemplateService.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Utils\TelemetryService.cs" />

@@ -1,0 +1,89 @@
+﻿<controls:MetroWindow
+    x:Class="Sdl.Community.StarTransit.UI.Controls.ReturnPackageMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Controls="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Title="Return StarTransit package" Height="600" Width="900" BorderThickness="0"
+    WindowStartupLocation="CenterScreen"
+    Loaded="MetroWindow_Loaded"
+    ResizeMode="CanResizeWithGrip"
+    GlowBrush="Black">
+
+    <controls:MetroWindow.Resources>
+        <ResourceDictionary>
+
+
+            <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
+                <Setter Property="Foreground" Value="#FFB69476" />
+                <Setter Property="FontSize" Value="18.667" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Cursor" Value="Hand" />
+                <Setter Property="Margin" Value="10,15,0,15" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListViewItem}">
+                            <ContentPresenter />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsSelected" Value="true">
+                        <Setter Property="Foreground" Value="#FF66290B" />
+                        <Setter Property="FontWeight" Value="Bold" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
+        </ResourceDictionary>
+    </controls:MetroWindow.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="20" />
+        </Grid.RowDefinitions>
+
+        <Controls:Footer Grid.Row="1" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+            <ListView
+                x:Name="listView"
+                Margin="0"
+                Padding="0,20,0,0"
+                Background="#FFE8E9EB"
+                BorderBrush="{x:Null}"
+                BorderThickness="0"
+                ItemContainerStyle="{DynamicResource NavigationButtonStyle}" 
+                IsEnabled="False">
+
+                <ListViewItem x:Name="ReturnPackageFiles"
+                              Tag="packageFiles"                          
+                              Selected="ListViewItem_Selected" >
+                    <TextBlock x:Name="TbPackageFiles" Text="Return package files" />
+                </ListViewItem>
+
+            </ListView>
+            <Grid  Grid.Column="1"  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="5">
+                    <Button x:Name="Back"  MaxWidth="50" Command="{Binding BackCommand}" IsEnabled="{Binding CanExecuteBack}" Margin="0,0,5,0" >Back</Button>
+                    <Button x:Name="Next"   MaxWidth="50" Command="{Binding NextCommand}" IsEnabled="{Binding CanExecuteNext}" Margin="0,0,5,0">Next</Button>
+
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+    </Grid>
+</controls:MetroWindow>

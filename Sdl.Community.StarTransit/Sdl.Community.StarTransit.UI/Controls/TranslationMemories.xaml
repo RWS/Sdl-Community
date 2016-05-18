@@ -59,7 +59,7 @@
                 SelectedItem="{Binding SelectedItem}"
                 ItemContainerStyle="{DynamicResource NavigationButtonStyle}"  
                 SelectionMode="Single"
-                 
+                
                 ItemsSource ="{Binding LanguagePairs}" 
                    SelectedIndex="{Binding SelectedIndex}">
 

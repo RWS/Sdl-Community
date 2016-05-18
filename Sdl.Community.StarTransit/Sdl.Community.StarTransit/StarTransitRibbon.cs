@@ -14,6 +14,7 @@ using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.UI.Controls;
 using Application = System.Windows.Application;
 
 
@@ -32,11 +33,11 @@ namespace Sdl.Community.StarTransit
         protected override async void Execute()
         {
             EnsureApplicationResources();
-            TelemetryService.Instance.Init();
+           // TelemetryService.Instance.Init();
 
-            // check for new version
-            await TelemetryService.Instance.CheckForUpdates(true);
-            TelemetryService.Instance.SendCrashes(false);
+            //// check for new version
+            //await TelemetryService.Instance.CheckForUpdates(true);
+            //TelemetryService.Instance.SendCrashes(false);
             var pathToTempFolder = CreateTempPackageFolder();
             try
             {
@@ -65,10 +66,10 @@ namespace Sdl.Community.StarTransit
                     window.ShowDialog();
                 }
             }
-            catch (Exception e)
-            {
-                TelemetryService.Instance.HandleException(e);
-            }
+            //catch (Exception e)
+            //{
+            //    TelemetryService.Instance.HandleException(e);
+            //}
             finally
             {
                 if (Directory.Exists(pathToTempFolder))
@@ -135,6 +136,73 @@ namespace Sdl.Community.StarTransit
         }
     }
 
+    [Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "_return", Description = "StarTransit return package")]
+    [ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
+
+    public class ReturnPackageAction : AbstractAction
+    {
+        protected override void Execute()
+        {
+            EnsureApplicationResources();
+            var returnService = new ReturnPackageService();
+            var returnPackage =returnService.GetReturnPackage();
+
+            if (returnPackage.Item2 == false)
+            {
+                System.Windows.Forms.MessageBox.Show(@"Please select only StarTransit projects", @"Warning",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }else
+            {
+                ReturnPackageMainWindow window = new ReturnPackageMainWindow(returnPackage.Item1);
+                window.ShowDialog();
+            }
+          
+        }
+
+        private void EnsureApplicationResources()
+        {
+
+            if (Application.Current == null)
+            {
+                new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
+
+                var controlsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml")
+                };
+                var fontsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml")
+                };
+                var colorsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
+                };
+                var blueResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
+                };
+                var baseLightResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml")
+                };
+                var flatButtonsResources = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml")
+                };
+
+                Application.Current.Resources.MergedDictionaries.Add(controlsResources);
+                Application.Current.Resources.MergedDictionaries.Add(fontsResources);
+                Application.Current.Resources.MergedDictionaries.Add(colorsResources);
+                Application.Current.Resources.MergedDictionaries.Add(blueResources);
+                Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
+                Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
+
+
+            }
+        }
+    }
+
     [Action("Sdl.Community.StarTransit.Contribute", Name = "Contribute to project", Icon = "opensourceimage", Description = "Contribute to project")]
     [ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
     public class ContributeToProjectAction : AbstractAction
@@ -144,6 +212,8 @@ namespace Sdl.Community.StarTransit
             System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/issues?q=is%3Aopen+is%3Aissue+label%3AStarTransit");
         }
     }
+
+   
 
 
 }

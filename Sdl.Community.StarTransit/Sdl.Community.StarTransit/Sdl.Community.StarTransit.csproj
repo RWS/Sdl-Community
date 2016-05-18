@@ -126,6 +126,7 @@
     <Compile Include="VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\return.ico" />
     <None Include="Resources\opensourceimage.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
