@@ -10,14 +10,16 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            
+            <ColumnDefinition Width="1*"/>
+
         </Grid.ColumnDefinitions>
-        <TextBlock  Text="{Binding Title}" FontSize="20" Foreground="#41B1E1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-        <ListView  Grid.Row="1"  x:Name="ListView"
+        <TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#41B1E1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+        <ListView  Grid.Row="1" Grid.ColumnSpan="2"  x:Name="ListView"
                   Margin="0"
                   Background="white"
                   BorderBrush="{x:Null}"
@@ -31,5 +33,7 @@
 
             </ListView.ItemTemplate>
         </ListView>
+        <TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="0,15,0,0" Text="{Binding ReturnPackageLocation}"/>
+        <Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
     </Grid>
 </UserControl>

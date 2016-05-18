@@ -10,6 +10,8 @@ namespace Sdl.Community.StarTransit.Shared.Models
     public class ReturnPackage
     {
         public List<ProjectFile> TargetFiles { get; set; }
+        public List<string> ProjectLocation { get; set; }
+        public List<string> Location { get; set; }
 
     }
 }

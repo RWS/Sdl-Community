@@ -28,32 +28,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var projects = Controller.SelectedProjects;
             var returnPackage = new ReturnPackage();
             var targetFiles = new List<ProjectFile>();
-            bool isTransit;
+            var projectLocationList = new List<string>();
+            List<bool> isTransitProject = new List<bool>();
 
             foreach (var project in projects)
             {
               
                 var target = project.GetTargetLanguageFiles().ToList();
-                isTransit=IsTransitProject(target);
+                var isTransit=IsTransitProject(target);
                 if (isTransit)
                 {
                     targetFiles.AddRange(target);
+                    projectLocationList.Add(project.FilePath);
+                    isTransitProject.Add(true);
+                }
+                else
+                {
+                    isTransitProject.Add(false);
                 }
 
             }
             returnPackage.TargetFiles = targetFiles;
+            returnPackage.ProjectLocation = projectLocationList;
 
-            if (targetFiles.Count != 0)
+            if (isTransitProject.Contains(false))
             {
-                isTransit = true;
+                return new Tuple<ReturnPackage, bool>(returnPackage, false);
             }
-            else
-            {
-                isTransit = false;
-            }
-            var package = new Tuple<ReturnPackage, bool>(returnPackage,isTransit);
-
-            return package;
+            return new Tuple<ReturnPackage, bool>(returnPackage, true);
         }
 
         /// <summary>
@@ -79,6 +81,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             return true;
         }
+
+        
         protected override void Execute()
         {
             

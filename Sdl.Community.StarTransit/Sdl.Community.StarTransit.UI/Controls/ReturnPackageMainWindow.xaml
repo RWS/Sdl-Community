@@ -78,8 +78,8 @@
                 </Grid.RowDefinitions>
                 <controls:TransitioningContentControl x:Name="tcc"  Transition="Up" />
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="5">
-                    <Button x:Name="Back"  MaxWidth="50" Command="{Binding BackCommand}" IsEnabled="{Binding CanExecuteBack}" Margin="0,0,5,0" >Back</Button>
-                    <Button x:Name="Next"   MaxWidth="50" Command="{Binding NextCommand}" IsEnabled="{Binding CanExecuteNext}" Margin="0,0,5,0">Next</Button>
+                    <Button x:Name="Create"  MaxWidth="150" Command="{Binding CreatePackageCommand}"  Margin="0,0,5,0" >Create package</Button>
+                    
 
                 </StackPanel>
 
