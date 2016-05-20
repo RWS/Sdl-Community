@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.ProjectApi.Settings;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
@@ -20,26 +24,29 @@ namespace Sdl.Community.StarTransit.Shared.Services
         }
 
         /// <summary>
-        /// Returns StarTransit return package and  true if the project selected is a StarTransit project 
+        /// Returns a list of StarTransit return package and  true if the projects selected are a StarTransit projects 
         /// </summary>
         /// <returns></returns>
-        public Tuple<ReturnPackage, bool> GetReturnPackage()
+        public Tuple<List<ReturnPackage>, bool> GetReturnPackage()
         {
-            var projects = Controller.SelectedProjects;
-            var returnPackage = new ReturnPackage();
-            var targetFiles = new List<ProjectFile>();
-            var projectLocationList = new List<string>();
+            var projects = Controller.SelectedProjects.ToList();
+            var returnPackageList= new List<ReturnPackage>();
             List<bool> isTransitProject = new List<bool>();
 
             foreach (var project in projects)
             {
               
-                var target = project.GetTargetLanguageFiles().ToList();
-                var isTransit=IsTransitProject(target);
+                var targetFiles = project.GetTargetLanguageFiles().ToList();
+                var isTransit=IsTransitProject(targetFiles);
                 if (isTransit)
                 {
-                    targetFiles.AddRange(target);
-                    projectLocationList.Add(project.FilePath);
+                    var returnPackage = new ReturnPackage
+                    {
+                        FileBasedProject = project,
+                        ProjectLocation = project.FilePath,
+                        TargetFiles = targetFiles
+                    };
+                   returnPackageList.Add(returnPackage);      
                     isTransitProject.Add(true);
                 }
                 else
@@ -48,14 +55,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
 
             }
-            returnPackage.TargetFiles = targetFiles;
-            returnPackage.ProjectLocation = projectLocationList;
-
+            
             if (isTransitProject.Contains(false))
             {
-                return new Tuple<ReturnPackage, bool>(returnPackage, false);
+                return new Tuple<List<ReturnPackage>, bool>(returnPackageList, false);
             }
-            return new Tuple<ReturnPackage, bool>(returnPackage, true);
+            return new Tuple<List<ReturnPackage>, bool>(returnPackageList, true);
         }
 
         /// <summary>
@@ -86,6 +91,54 @@ namespace Sdl.Community.StarTransit.Shared.Services
         protected override void Execute()
         {
             
+        }
+
+        /// <summary>
+        /// TO DO :The files are exported in studio project, they should be imported in a custom location
+        /// </summary>
+        /// <param name="package"></param>
+        public void ExportFiles(ReturnPackage package)
+        {
+            var outputFilesPathList = new List<TaskFileInfo>();
+            
+
+                package.FileBasedProject.RunAutomaticTask(package.TargetFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+             
+                var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
+                {
+                    AutomaticTaskTemplateIds.ExportFiles
+
+
+                });
+
+                var outputFiles = taskSequence.OutputFiles.ToList();
+                outputFilesPathList.AddRange(outputFiles);
+
+          //  CreateArchive(package.Location, outputFilesPathList);
+          
+        }
+
+
+        /// <summary>
+        /// Creates an archive in the Return Package folder and add project files to it
+        /// For the moment we add the files without runing any task on them
+        /// </summary>
+        /// <param name="packagePath"></param>
+        /// <param name="projectFiles"></param>
+        private void CreateArchive(string packagePath, List<TaskFileInfo> projectFiles)
+        {
+            var archivePath = Path.Combine(packagePath, "returnPackage.tpf");
+            using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
+            {
+                foreach (var file in projectFiles)
+                {
+                    //parameters :file path, file name
+                    //we can use CreateFromFolder method once we manage to save the target files in a custom folder after we run the task
+                   
+                    //archive.CreateEntryFromFile(file., file.Name, CompressionLevel.Optimal);
+                }
+
+            }
         }
     }
 }

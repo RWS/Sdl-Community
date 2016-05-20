@@ -83,8 +83,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     AutomaticTaskTemplateIds.CopyToTargetLanguages,
                     AutomaticTaskTemplateIds.PerfectMatch,
                     AutomaticTaskTemplateIds.PreTranslateFiles,
-                    AutomaticTaskTemplateIds.AnalyzeFiles
+                    AutomaticTaskTemplateIds.AnalyzeFiles,
+                   
             });
+
+            
             newProject.UpdateTranslationProviderConfiguration(tmConfig);
             newProject.Save();
            // var controller = Controller;

@@ -23,13 +23,13 @@ namespace Sdl.Community.StarTransit.UI.Controls
     public partial class ReturnPackageMainWindow : MetroWindow
     {
         private readonly ReturnFiles _returnPackageFiles;
-        private ReturnPackage _returnPackage;
+        private ReturnPackage _returnPackageList;
 
-        public ReturnPackageMainWindow(ReturnPackage returnPackage)
+        public ReturnPackageMainWindow(List<ReturnPackage> returnPackageList)
         {
             InitializeComponent();
 
-            var returnFilesViewModel = new ReturnFilesViewModel(returnPackage,this);
+            var returnFilesViewModel = new ReturnFilesViewModel(returnPackageList, this);
             _returnPackageFiles = new ReturnFiles(returnFilesViewModel);
             
             var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel);
