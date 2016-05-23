@@ -19,7 +19,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
     {
         private ICommand _createPackageCommand;
         private readonly ReturnFilesViewModel _returnFilesViewModel;
-        private List<ReturnPackage> _returnPackageList;
+        private ReturnPackage _returnPackage;
         private readonly ReturnPackageService _returnService;
 
         public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel)
@@ -36,18 +36,17 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private void CreatePackage()
         {
-            _returnPackageList = _returnFilesViewModel.GetReturnPackage();
-            foreach (var project in _returnPackageList)
-            {
-                var path = project.ProjectLocation.Substring(0,
-                    project.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
-                var returnPackageFolderPath = CreateReturnPackageFolder(path);
-                project.FolderLocation = returnPackageFolderPath;
+            _returnPackage = _returnFilesViewModel.GetReturnPackage();
 
-                _returnService.ExportFiles(project);
-            }
+            var path = _returnPackage.ProjectLocation.Substring(0,
+                _returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+            var returnPackageFolderPath = CreateReturnPackageFolder(path);
+            _returnPackage.FolderLocation = returnPackageFolderPath;
+
+            _returnService.ExportFiles(_returnPackage);
+
         }
-            
+
         /// <summary>
         /// Create return  package folder in the studio project folder
         /// </summary>

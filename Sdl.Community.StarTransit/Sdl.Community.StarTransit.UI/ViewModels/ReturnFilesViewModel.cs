@@ -18,25 +18,20 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 {
     public class ReturnFilesViewModel :INotifyPropertyChanged
     {
-        private List<ReturnPackage> _returnPackageList;
+        private ReturnPackage _returnPackage;
         private string _title;
         private List<ProjectFile> _projectFiles;
         private ICommand _browseCommand;
         private string _returnPackageLocation;
         private ReturnPackageMainWindow _window;
 
-        public ReturnFilesViewModel(List<ReturnPackage> returnPackageList, ReturnPackageMainWindow window)
+        public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
         {
-            _returnPackageList = returnPackageList;
+            _returnPackage = returnPackage;
             _window = window;
             _title = "Please select files for the return package";
             Title = _title;
-            var projectFilesList = new List<ProjectFile>();
-            foreach (var package in returnPackageList)
-            {
-                projectFilesList.AddRange(package.TargetFiles);
-            }
-            ProjectFiles = projectFilesList;
+            ProjectFiles = returnPackage.TargetFiles;
         }
 
         public string Title { get; set; }
@@ -104,9 +99,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public List<ReturnPackage> GetReturnPackage()
+        public ReturnPackage GetReturnPackage()
         {
-            return _returnPackageList;
+            return _returnPackage;
         }
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -147,9 +147,9 @@ namespace Sdl.Community.StarTransit
             var returnService = new ReturnPackageService();
             var returnPackage =returnService.GetReturnPackage();
 
-            if (returnPackage.Item2 == false)
+            if (returnPackage.Item2 != string.Empty)
             {
-                System.Windows.Forms.MessageBox.Show(@"Please select only StarTransit projects", @"Warning",
+                System.Windows.Forms.MessageBox.Show(returnPackage.Item2, @"Warning",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }else
             {

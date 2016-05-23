@@ -6,7 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.ProjectApi.Settings;
 using Sdl.ProjectAutomation.Core;
@@ -27,26 +29,30 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// Returns a list of StarTransit return package and  true if the projects selected are a StarTransit projects 
         /// </summary>
         /// <returns></returns>
-        public Tuple<List<ReturnPackage>, bool> GetReturnPackage()
+        public Tuple<ReturnPackage,string> GetReturnPackage()
         {
             var projects = Controller.SelectedProjects.ToList();
-            var returnPackageList= new List<ReturnPackage>();
-            List<bool> isTransitProject = new List<bool>();
+            var message = string.Empty;
+            if (projects.Count > 1)
+            {
+                message = @"Please select only one project.";           
+                return new Tuple<ReturnPackage, string>(null,message);
+            }
 
+            List<bool> isTransitProject = new List<bool>();
+            var returnPackage = new ReturnPackage();
             foreach (var project in projects)
             {
               
                 var targetFiles = project.GetTargetLanguageFiles().ToList();
                 var isTransit=IsTransitProject(targetFiles);
+
                 if (isTransit)
                 {
-                    var returnPackage = new ReturnPackage
-                    {
-                        FileBasedProject = project,
-                        ProjectLocation = project.FilePath,
-                        TargetFiles = targetFiles
-                    };
-                   returnPackageList.Add(returnPackage);      
+                    returnPackage.FileBasedProject = project;
+                    returnPackage.ProjectLocation = project.FilePath;
+                    returnPackage.TargetFiles = targetFiles;
+
                     isTransitProject.Add(true);
                 }
                 else
@@ -58,9 +64,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
             
             if (isTransitProject.Contains(false))
             {
-                return new Tuple<List<ReturnPackage>, bool>(returnPackageList, false);
+                message = @"Please select a StarTransit project!";
+                return new Tuple<ReturnPackage,string>(returnPackage, message);
             }
-            return new Tuple<List<ReturnPackage>, bool>(returnPackageList, true);
+            return new Tuple<ReturnPackage,string>(returnPackage,message);
         }
 
         /// <summary>
@@ -102,20 +109,20 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var outputFilesPathList = new List<TaskFileInfo>();
             
 
-                package.FileBasedProject.RunAutomaticTask(package.TargetFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-             
-                var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
-                {
-                    AutomaticTaskTemplateIds.ExportFiles
+            package.FileBasedProject.RunAutomaticTask(package.TargetFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+
+            var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
+            {
+                AutomaticTaskTemplateIds.GenerateTargetTranslations
 
 
-                });
+            });
 
-                var outputFiles = taskSequence.OutputFiles.ToList();
-                outputFilesPathList.AddRange(outputFiles);
+            var outputFiles = taskSequence.OutputFiles.ToList();
+            outputFilesPathList.AddRange(outputFiles);
 
-          //  CreateArchive(package.Location, outputFilesPathList);
-          
+            //  CreateArchive(package.Location, outputFilesPathList);
+
         }
 
 
@@ -140,5 +147,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             }
         }
+
+     
     }
 }
