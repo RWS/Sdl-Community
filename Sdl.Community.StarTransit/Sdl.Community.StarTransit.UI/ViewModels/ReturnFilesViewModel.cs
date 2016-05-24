@@ -32,24 +32,31 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             _returnPackage = returnPackage;
             _window = window;
-            _title = "Please select files for the return package";         
+            _title = "Please select files for the return package";
 
-            foreach (var project in returnPackage.TargetFiles)
+            var xliffFiles = returnPackage.TargetFiles.Where(file => file.Name.EndsWith(".sdlxliff")).ToList();
+            if (xliffFiles.Count() != 0)
             {
-                var item = new CellViewModel
+                foreach (var project in xliffFiles)
                 {
-                    Id = project.Id,
-                    Name = project.Name,
-                    Checked = false
-                };
-  
-                _listView.Add(item);
+                    var item = new CellViewModel
+                    {
+                        Id = project.Id,
+                        Name = project.Name,
+                        Checked = false
+                    };
+
+                    _listView.Add(item);
+                }
+                ProjectFiles = xliffFiles;
             }
+            else
+            {
+                ProjectFiles = new List<ProjectFile>();
+            }
+            
             Title = _title;
-           
-           
-            ProjectFiles = returnPackage.TargetFiles;
-         
+
         }
 
 
@@ -138,7 +145,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
             foreach (var id in selectedProjectsIds)
             {
-                var selectedFile = _returnPackage.TargetFiles.FirstOrDefault(file => file.Id == id);
+                var selectedFile = ProjectFiles.FirstOrDefault(file => file.Id == id);
                 selectedFiles.Add(selectedFile);
             }
             _returnPackage.TargetFiles = selectedFiles;

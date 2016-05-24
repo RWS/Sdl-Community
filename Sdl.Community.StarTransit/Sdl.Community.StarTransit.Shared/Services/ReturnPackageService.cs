@@ -80,7 +80,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var areTranstFiles = new List<bool>();
            foreach (var file in filesPath)
             {
-                if (file.FileTypeId.Equals("Transit File Type 1.0.0.0"))
+
+                if (file.FileTypeId!=null &&file.FileTypeId.Equals("Transit File Type 1.0.0.0"))
                 {
                     areTranstFiles.Add(true);
                 }
