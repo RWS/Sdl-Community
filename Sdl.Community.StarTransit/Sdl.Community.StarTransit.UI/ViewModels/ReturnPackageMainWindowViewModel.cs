@@ -57,7 +57,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
            await System.Threading.Tasks.Task.Run(()=> _returnService.ExportFiles(_returnPackage)) ;
             Active = false;
-
+            CloseAction();
         }
 
         /// <summary>
@@ -77,6 +77,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         }
 
+        public Action CloseAction { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

@@ -34,6 +34,10 @@ namespace Sdl.Community.StarTransit.UI.Controls
             
             var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel);
             DataContext = returnPackageMainWindowViewModel;
+            if (returnPackageMainWindowViewModel.CloseAction == null)
+            {
+                returnPackageMainWindowViewModel.CloseAction = Close;
+            }
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
