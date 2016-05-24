@@ -84,6 +84,7 @@
                 </StackPanel>
 
             </Grid>
+            <controls:ProgressRing IsActive="{Binding Active}" HorizontalContentAlignment="Center"/>
         </Grid>
     </Grid>
 </controls:MetroWindow>

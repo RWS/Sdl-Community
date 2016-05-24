@@ -106,22 +106,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// <param name="package"></param>
         public void ExportFiles(ReturnPackage package)
         {
-            var outputFilesPathList = new List<TaskFileInfo>();
             
-
-            package.FileBasedProject.RunAutomaticTask(package.TargetFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-
             var taskSequence = package.FileBasedProject.RunAutomaticTasks(package.TargetFiles.GetIds(), new string[]
             {
-                AutomaticTaskTemplateIds.GenerateTargetTranslations
-
-
+               AutomaticTaskTemplateIds.GenerateTargetTranslations
+             
             });
 
             var outputFiles = taskSequence.OutputFiles.ToList();
-            outputFilesPathList.AddRange(outputFiles);
+           
 
-            //  CreateArchive(package.Location, outputFilesPathList);
+            //  CreateArchive(package.FolderLocation, outputFiles);
 
         }
 
@@ -142,7 +137,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     //parameters :file path, file name
                     //we can use CreateFromFolder method once we manage to save the target files in a custom folder after we run the task
                    
-                    //archive.CreateEntryFromFile(file., file.Name, CompressionLevel.Optimal);
+                    //archive.CreateEntryFromFile(file., file., CompressionLevel.Optimal);
+                  
                 }
 
             }

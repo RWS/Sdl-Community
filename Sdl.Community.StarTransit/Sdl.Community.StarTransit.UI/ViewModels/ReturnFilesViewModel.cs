@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -24,17 +25,49 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ICommand _browseCommand;
         private string _returnPackageLocation;
         private ReturnPackageMainWindow _window;
+        private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
+        
 
         public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
         {
             _returnPackage = returnPackage;
             _window = window;
-            _title = "Please select files for the return package";
+            _title = "Please select files for the return package";         
+
+            foreach (var project in returnPackage.TargetFiles)
+            {
+                var item = new CellViewModel
+                {
+                    Id = project.Id,
+                    Name = project.Name,
+                    Checked = false
+                };
+  
+                _listView.Add(item);
+            }
             Title = _title;
+           
+           
             ProjectFiles = returnPackage.TargetFiles;
+         
         }
 
+
+
         public string Title { get; set; }
+
+        public ObservableCollection<CellViewModel> ProjectListCells
+        {
+            get { return _listView; }
+            set
+            {
+                if (Equals(value, _listView)){ return;}
+                _listView = value;
+                OnPropertyChanged();
+
+            }
+        }
+
 
         public List<ProjectFile> ProjectFiles
         {
@@ -55,6 +88,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true)); }
         }
 
+  
+
         public string ReturnPackageLocation
         {
             get { return _returnPackageLocation; }
@@ -68,10 +103,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        /// <summary>
-        /// TO DO: Do we need this button?Or set the return folder path in the studio project folder?
-        /// 
-        /// </summary>
         private async void Browse()
         {
             var folderDialog = new FolderSelectDialog();
@@ -101,6 +132,18 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public ReturnPackage GetReturnPackage()
         {
+          
+            var selectedProjectsIds = CellViewModel.ReturnSelectedProjectIds();
+            var selectedFiles = new List<ProjectFile>();
+
+            foreach (var id in selectedProjectsIds)
+            {
+                var selectedFile = _returnPackage.TargetFiles.FirstOrDefault(file => file.Id == id);
+                selectedFiles.Add(selectedFile);
+            }
+            _returnPackage.TargetFiles = selectedFiles;
+           
+
             return _returnPackage;
         }
         public event PropertyChangedEventHandler PropertyChanged;

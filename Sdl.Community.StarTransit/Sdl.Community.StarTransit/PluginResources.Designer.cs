@@ -93,6 +93,16 @@ namespace Sdl.Community.StarTransit {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon open_package {
+            get {
+                object obj = ResourceManager.GetObject("open_package", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon opensourceimage {
             get {
                 object obj = ResourceManager.GetObject("opensourceimage", resourceCulture);
@@ -106,6 +116,16 @@ namespace Sdl.Community.StarTransit {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon return_package {
+            get {
+                object obj = ResourceManager.GetObject("return_package", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
     }

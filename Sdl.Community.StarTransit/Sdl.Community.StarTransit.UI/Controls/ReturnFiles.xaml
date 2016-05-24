@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
@@ -19,21 +20,22 @@
 
         </Grid.ColumnDefinitions>
         <TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#41B1E1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-        <ListView  Grid.Row="1" Grid.ColumnSpan="2"  x:Name="ListView"
+
+        <ListBox Grid.Row="1" Grid.ColumnSpan="2"
                   Margin="0"
                   Background="white"
                   BorderBrush="{x:Null}"
                    BorderThickness="0"
-                   SelectionMode="Multiple"
-                   ItemsSource="{Binding ProjectFiles}">
-            <ListView.ItemTemplate>
+                 
+                   ItemsSource="{Binding ProjectListCells}">
+            <ListBox.ItemTemplate >
                 <ItemContainerTemplate>
-                    <TextBlock Text="{Binding Name }" FontSize="14" Margin="10,10,10,10" />
+                    <CheckBox IsChecked="{Binding Checked,Mode=TwoWay}" Content="{Binding Name}" Command="{Binding SelectCommand}"/>
                 </ItemContainerTemplate>
-
-            </ListView.ItemTemplate>
-        </ListView>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="0,15,0,0" Text="{Binding ReturnPackageLocation}"/>
+
         <Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
     </Grid>
 </UserControl>

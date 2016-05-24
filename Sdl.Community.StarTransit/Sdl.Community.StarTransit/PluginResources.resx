@@ -133,4 +133,10 @@
   <data name="_return" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>resources\return.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="open_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\open_package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="return_package" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\return_package.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

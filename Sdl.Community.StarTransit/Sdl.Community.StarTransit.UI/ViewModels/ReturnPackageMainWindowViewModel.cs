@@ -21,6 +21,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private readonly ReturnFilesViewModel _returnFilesViewModel;
         private ReturnPackage _returnPackage;
         private readonly ReturnPackageService _returnService;
+        private bool _active;
 
         public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel)
         {
@@ -34,8 +35,19 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             get { return _createPackageCommand ?? (_createPackageCommand = new CommandHandler(CreatePackage, true)); }
         }
 
-        private void CreatePackage()
+        public bool Active
         {
+            get { return _active; }
+            set
+            {
+                if (Equals(value, _active)) { return;}
+                _active = value;
+            }
+        }
+
+        private async void CreatePackage()
+        {
+            Active = true;
             _returnPackage = _returnFilesViewModel.GetReturnPackage();
 
             var path = _returnPackage.ProjectLocation.Substring(0,
@@ -43,7 +55,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var returnPackageFolderPath = CreateReturnPackageFolder(path);
             _returnPackage.FolderLocation = returnPackageFolderPath;
 
-            _returnService.ExportFiles(_returnPackage);
+           await System.Threading.Tasks.Task.Run(()=> _returnService.ExportFiles(_returnPackage)) ;
+            Active = false;
 
         }
 

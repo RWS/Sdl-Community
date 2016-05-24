@@ -26,7 +26,7 @@ namespace Sdl.Community.StarTransit
     {
     }
 
-    [Action("Sdl.Community.StarTransit", Name ="Open StarTransit Package", Icon ="icon",Description ="Open a StarTransit package")]
+    [Action("Sdl.Community.StarTransit", Name ="Open StarTransit Package", Icon ="open_package",Description ="Open a StarTransit package")]
     [ActionLayout(typeof(StarTransitRibbon),20,DisplayType.Large)]
     public class StarTransitOpenPackageAction: AbstractAction
     {
@@ -136,7 +136,7 @@ namespace Sdl.Community.StarTransit
         }
     }
 
-    [Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "_return", Description = "StarTransit return package")]
+    [Action("Sdl.Community.StarTransit.Return", Name = "StarTransit return package", Icon = "return_package", Description = "StarTransit return package")]
     [ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
 
     public class ReturnPackageAction : AbstractAction

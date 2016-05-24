@@ -129,6 +129,7 @@
     <Compile Include="Models\PackageModel.cs" />
     <Compile Include="Models\ReturnPackage.cs" />
     <Compile Include="Models\StarTranslationMemoryMetadata.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\PackageService.cs" />
     <Compile Include="Services\ProjectService.cs" />
