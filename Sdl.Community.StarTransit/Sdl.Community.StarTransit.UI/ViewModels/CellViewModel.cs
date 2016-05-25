@@ -18,6 +18,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ICommand _selectCommand;
         public event PropertyChangedEventHandler PropertyChanged;
         private  static List<Guid> _selectedProjectIds = new List<Guid>();
+
         public CellViewModel()
         {
             _name = string.Empty;
@@ -71,7 +72,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private void Select()
         {
-            //var selectedFile = _returnPackage.TargetFiles.FirstOrDefault(file => file.Id == Id);
             if (Checked)
             {
                 if (!_selectedProjectIds.Contains(Id))

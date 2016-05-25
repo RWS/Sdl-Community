@@ -52,7 +52,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     returnPackage.FileBasedProject = project;
                     returnPackage.ProjectLocation = project.FilePath;
                     returnPackage.TargetFiles = targetFiles;
-
+                    //we take only the first file location, because the other files are in the same location
+                    returnPackage.LocalFilePath = targetFiles[0].LocalFilePath;
                     isTransitProject.Add(true);
                 }
                 else
@@ -117,7 +118,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var outputFiles = taskSequence.OutputFiles.ToList();
            
 
-            //  CreateArchive(package.FolderLocation, outputFiles);
+              CreateArchive(package);
 
         }
 
@@ -126,20 +127,21 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// Creates an archive in the Return Package folder and add project files to it
         /// For the moment we add the files without runing any task on them
         /// </summary>
-        /// <param name="packagePath"></param>
-        /// <param name="projectFiles"></param>
-        private void CreateArchive(string packagePath, List<TaskFileInfo> projectFiles)
+        /// <param name="package"></param>
+        private void CreateArchive(ReturnPackage package)
         {
-            var archivePath = Path.Combine(packagePath, "returnPackage.tpf");
+            var archivePath = Path.Combine(package.FolderLocation, "returnPackage.tpf");
+            var pathToTargetFileFolder = package.LocalFilePath.Substring(0, package.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+
+            //create the archive, and add files to it
             using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
             {
-                foreach (var file in projectFiles)
+                foreach (var file in package.TargetFiles)
                 {
-                    //parameters :file path, file name
-                    //we can use CreateFromFolder method once we manage to save the target files in a custom folder after we run the task
-                   
-                    //archive.CreateEntryFromFile(file., file., CompressionLevel.Optimal);
-                  
+                    var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+
+                    archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName),fileName, CompressionLevel.Optimal);
+
                 }
 
             }
