@@ -24,7 +24,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             new Dictionary<string, List<KeyValuePair<string, string>>>();
 
         private PackageModel _package = new PackageModel();
-        private const char LanguageTargetSeparator = '|';
+        private const char LanguageTargetSeparator = ' ';
 
         /// <summary>
         /// Opens a ppf package and saves to files to temp folder
@@ -109,7 +109,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             }
 
             var packageModel = await CreateModel(pathToTempFolder);
-
+            packageModel.PathToPrjFile = filePath;
 
             _package = packageModel;
             return packageModel;

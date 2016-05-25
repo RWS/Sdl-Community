@@ -19,6 +19,7 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public bool HasDueDate { get; set; }
         public Customer Customer { get; set; }
         public List<LanguagePair> LanguagePairs { get; set; }
+        public string PathToPrjFile { get; set; }
 
     }
 }

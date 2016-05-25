@@ -60,7 +60,8 @@ namespace Sdl.Community.StarTransit
                         Name = package.Name,
                         Description = package.Description,
                         StudioTemplates = templateList,
-                       LanguagePairs = package.LanguagePairs
+                       LanguagePairs = package.LanguagePairs,
+                       PathToPrjFile = package.PathToPrjFile
                     };
                     StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
                     window.ShowDialog();

@@ -23,8 +23,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         public void CreateProject(PackageModel package)
         {
-
-            
             var target = GetTargetLanguages(package.LanguagePairs);
            
             var projectInfo = new ProjectInfo
@@ -92,7 +90,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             newProject.Save();
            // var controller = Controller;
             Controller.RefreshProjects();
-
+            CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
         }
 
@@ -116,7 +114,27 @@ namespace Sdl.Community.StarTransit.Shared.Services
             return targetArray;
         }
 
+        /// <summary>
+        /// Creates a folder named "StarTransitMetadata"and save the PRJ file in it.
+        /// </summary>
+        /// <param name="studioProjectPath"></param>
+        /// <param name="prjFilePath"></param>
+        private void CreateMetadataFolder(string studioProjectPath, string prjFilePath)
+        {
+            var starTransitMetadataFolderPath = Path.Combine(studioProjectPath, "StarTransitMetadata");
 
+            if (!Directory.Exists(starTransitMetadataFolderPath))
+            {
+                Directory.CreateDirectory(starTransitMetadataFolderPath);
+            }
+
+            var prjFileName = Path.GetFileName(prjFilePath);
+            if (prjFileName != null)
+            {
+                File.Copy(prjFilePath, Path.Combine(starTransitMetadataFolderPath, prjFileName), true);
+            }
+            
+        }
 
         protected override void Execute()
         {
