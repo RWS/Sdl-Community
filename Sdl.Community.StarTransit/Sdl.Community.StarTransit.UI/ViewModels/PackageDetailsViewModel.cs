@@ -62,7 +62,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             //{
             //    targetLanguage = targetLanguage + language.DisplayName;
             //}
-            _targetLanguage = package.LanguagePairs[0].TargetLanguage.DisplayName;
+            if (package.LanguagePairs[0].TargetLanguage != null)
+            {
+                _targetLanguage = package.LanguagePairs[0].TargetLanguage.DisplayName;
+            }
+            
 
             _canExecute = true;
 

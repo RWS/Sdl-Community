@@ -271,6 +271,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             var language = Language(languageCode);
             var extension = language.ThreeLetterWindowsLanguageName;
+            //see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
+            //StarTransit for the language code 1106 uses "Wel" as three letter code
+            if (string.Equals(extension, "CYM"))
+            {
+                extension = "WEL";
+            }
             var filesAndTms =
                 Directory.GetFiles(pathToTempFolder, "*." + extension, SearchOption.AllDirectories).ToList();
 

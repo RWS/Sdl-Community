@@ -21,11 +21,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private readonly ReturnFilesViewModel _returnFilesViewModel;
         private ReturnPackage _returnPackage;
         private readonly ReturnPackageService _returnService;
+        private readonly CellViewModel _cellViewModel;
         private bool _active;
 
-        public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel)
+        public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel,CellViewModel cellViewModel)
         {
             _returnFilesViewModel = returnFilesViewModel;
+            _cellViewModel = cellViewModel;
             _returnService = new ReturnPackageService();
         }
        
@@ -59,6 +61,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
            await System.Threading.Tasks.Task.Run(()=> _returnService.ExportFiles(_returnPackage)) ;
             Active = false;
+            _cellViewModel.ClearSelectedProjectsList();
             CloseAction();
         }
 

@@ -26,8 +26,7 @@
                   Background="white"
                   BorderBrush="{x:Null}"
                    BorderThickness="0"
-                 
-                   ItemsSource="{Binding ProjectListCells}">
+               ItemsSource="{Binding ProjectListCells}">
             <ListBox.ItemTemplate >
                 <ItemContainerTemplate>
                     <CheckBox IsChecked="{Binding Checked,Mode=TwoWay}" Content="{Binding Name}" Command="{Binding SelectCommand}"/>

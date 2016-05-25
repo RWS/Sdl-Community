@@ -11,6 +11,7 @@
     WindowStartupLocation="CenterScreen"
     Loaded="MetroWindow_Loaded"
     ResizeMode="CanResizeWithGrip"
+    Closing="ReturnPackageMainWindow_OnClosing"
     GlowBrush="Black">
 
     <controls:MetroWindow.Resources>

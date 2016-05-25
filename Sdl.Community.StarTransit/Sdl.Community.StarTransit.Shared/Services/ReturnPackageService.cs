@@ -132,19 +132,39 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             var archivePath = Path.Combine(package.FolderLocation, "returnPackage.tpf");
             var pathToTargetFileFolder = package.LocalFilePath.Substring(0, package.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-
-            //create the archive, and add files to it
-            using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
+         
+            if (!File.Exists(archivePath))
             {
-                foreach (var file in package.TargetFiles)
+                //create the archive, and add files to it
+                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
                 {
-                    var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+                    foreach (var file in package.TargetFiles)
+                    {
+                        var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
-                    archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName),fileName, CompressionLevel.Optimal);
+                        archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
+                            CompressionLevel.Optimal);
+
+                    }
 
                 }
-
             }
+            else
+            {
+                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+                {
+                    foreach (var file in package.TargetFiles)
+                    {
+                        var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+
+                        archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
+                            CompressionLevel.Optimal);
+
+                    }
+
+                }
+            }
+          
         }
 
      

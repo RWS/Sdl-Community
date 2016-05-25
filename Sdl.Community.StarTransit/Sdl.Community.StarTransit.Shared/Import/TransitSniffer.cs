@@ -358,6 +358,8 @@ namespace Sdl.Community.StarTransit.Shared.Import
                     return "zu-ZA";
                 case "ROU":
                     return "ro-RO";
+                case "WEL":
+                    return "cy-GB";
 
                 default:
                     return "";

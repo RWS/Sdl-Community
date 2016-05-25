@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
     {
         private readonly ReturnFiles _returnPackageFiles;
         private ReturnPackage _returnPackage;
-
+        private CellViewModel _cellViewModel;
         public ReturnPackageMainWindow(ReturnPackage returnPackage)
         {
             InitializeComponent();
@@ -32,7 +33,9 @@ namespace Sdl.Community.StarTransit.UI.Controls
             var returnFilesViewModel = new ReturnFilesViewModel(returnPackage, this);
             _returnPackageFiles = new ReturnFiles(returnFilesViewModel);
             
-            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel);
+             _cellViewModel = new CellViewModel();
+
+            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel);
             DataContext = returnPackageMainWindowViewModel;
             if (returnPackageMainWindowViewModel.CloseAction == null)
             {
@@ -63,6 +66,11 @@ namespace Sdl.Community.StarTransit.UI.Controls
                     break;
             }
 
+        }
+
+        private void ReturnPackageMainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            _cellViewModel.ClearSelectedProjectsList();
         }
     }
 }

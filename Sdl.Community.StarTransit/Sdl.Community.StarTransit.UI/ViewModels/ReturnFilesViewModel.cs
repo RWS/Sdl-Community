@@ -26,7 +26,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _returnPackageLocation;
         private ReturnPackageMainWindow _window;
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
-        
+        private CellViewModel _selectedItem;
 
         public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
         {
@@ -58,8 +58,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             Title = _title;
 
         }
-
-
 
         public string Title { get; set; }
 

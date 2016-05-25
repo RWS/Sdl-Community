@@ -90,6 +90,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             return _selectedProjectIds;
         }
+
+        public void ClearSelectedProjectsList()
+        {
+            _selectedProjectIds.Clear();
+        }
         [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
