@@ -51,11 +51,22 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             Active = true;
             _returnPackage = _returnFilesViewModel.GetReturnPackage();
-
-            var projectPath = _returnPackage.ProjectLocation.Substring(0,
+            var returnPackageFolderPath = string.Empty;
+                
+            if (_returnPackage.FolderLocation == null)
+            {
+                var projectPath= _returnPackage.ProjectLocation.Substring(0,
                 _returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
 
-            var returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+                 returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+            }
+            else
+            {
+                returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+            }
+             
+
+            
             //location of return package folder
             _returnPackage.FolderLocation = returnPackageFolderPath;
 

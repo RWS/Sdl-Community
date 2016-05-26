@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -134,7 +135,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var archivePath = Path.Combine(package.FolderLocation, prjFileName+".tpf");
 
             var pathToTargetFileFolder = package.LocalFilePath.Substring(0, package.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-         
+
             if (!File.Exists(archivePath))
             {
                 //create the archive, and add files to it
@@ -143,7 +144,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
                     foreach (var file in package.TargetFiles)
                     {
-                       
+
                         var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
                         archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
@@ -155,23 +156,53 @@ namespace Sdl.Community.StarTransit.Shared.Services
             }
             else
             {
-                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
-                {
-                    archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
-                    foreach (var file in package.TargetFiles)
-                    {
-                        var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-
-                        archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
-                            CompressionLevel.Optimal);
-
-                    }
-
-                }
+                UpdateArchive(archivePath, prjFileName, package, pathToTargetFileFolder);
             }
-          
+
         }
 
+        private void UpdateArchive(string archivePath, string prjFileName,ReturnPackage returnPackagePackage,string pathToTargetFileFolder)
+        {
+            //open the archive and delete old files
+            // archvie in update mode not overrides existing files 
+            using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+            {
+                var entriesColection = new ObservableCollection<ZipArchiveEntry>(archive.Entries);
+                foreach (var entry in entriesColection)
+                {
+                    
+                    if (entry.Name.Equals(prjFileName))
+                    {
+                        entry.Delete();
+                    }
+
+                    foreach (var project in returnPackagePackage.TargetFiles)
+                    {
+                        var projectFromArchiveToBeDeleted =
+                            archive.Entries.FirstOrDefault(n => n.Name.Equals(Path.GetFileNameWithoutExtension(project.Name)));
+                        if (projectFromArchiveToBeDeleted != null)
+                        {
+                            projectFromArchiveToBeDeleted.Delete();
+                        }
+                    }
+                }
+            }
+
+            //add files to archive
+            using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
+            {
+                archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
+                foreach (var file in returnPackagePackage.TargetFiles)
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+
+                    archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
+                        CompressionLevel.Optimal);
+
+                }
+
+            }
+        }
      
     }
 }

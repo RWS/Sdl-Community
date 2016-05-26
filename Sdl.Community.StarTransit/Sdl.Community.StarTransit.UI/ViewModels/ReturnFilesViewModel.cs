@@ -114,24 +114,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             if (folderDialog.ShowDialog())
             {
 
-                bool isEmpty = !Directory.EnumerateFiles(folderDialog.FileName).Any();
-                var hasSubdirectories = Directory.GetDirectories(folderDialog.FileName);
-                if (hasSubdirectories.Count() != 0 || !isEmpty)
-                {
-                    var dialog = new MetroDialogSettings
-                    {
-                        AffirmativeButtonText = "OK"
-
-                    };
-                    MessageDialogResult result =
-                        await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
-                            MessageDialogStyle.Affirmative, dialog);
-                }
-                else
-                {
-                    ReturnPackageLocation = folderDialog.FileName;
-                    //_returnPackage.Location = ReturnPackageLocation;
-                }
+                ReturnPackageLocation = folderDialog.FileName;
+                _returnPackage.FolderLocation = folderDialog.FileName;
             }
         }
 
