@@ -130,7 +130,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// <param name="package"></param>
         private void CreateArchive(ReturnPackage package)
         {
-            var archivePath = Path.Combine(package.FolderLocation, "returnPackage.tpf");
+            var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
+            var archivePath = Path.Combine(package.FolderLocation, prjFileName+".tpf");
+
             var pathToTargetFileFolder = package.LocalFilePath.Substring(0, package.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
          
             if (!File.Exists(archivePath))
@@ -138,8 +140,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 //create the archive, and add files to it
                 using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
                 {
+                    archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
                     foreach (var file in package.TargetFiles)
                     {
+                       
                         var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
                         archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
@@ -153,6 +157,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             {
                 using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
                 {
+                    archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
                     foreach (var file in package.TargetFiles)
                     {
                         var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);

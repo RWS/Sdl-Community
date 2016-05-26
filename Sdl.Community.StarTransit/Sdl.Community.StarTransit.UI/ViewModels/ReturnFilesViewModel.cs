@@ -141,6 +141,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var selectedProjectsIds = CellViewModel.ReturnSelectedProjectIds();
             var selectedFiles = new List<ProjectFile>();
 
+            var pathToProjFile = PathToPrjFile(_returnPackage.ProjectLocation);
+            _returnPackage.PathToPrjFile = pathToProjFile;
             foreach (var id in selectedProjectsIds)
             {
                 var selectedFile = ProjectFiles.FirstOrDefault(file => file.Id == id);
@@ -150,6 +152,24 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
            
 
             return _returnPackage;
+        }
+
+        /// <summary>
+        /// Gets the path to prj file in order to add to return package archive later
+        /// Prj fille is kept in StarTransitMetadata folder
+        /// </summary>
+        /// <param name="pathToProject"></param>
+        /// <returns></returns>
+        private string PathToPrjFile(string pathToProject)
+        {
+            var prjPath = Path.Combine(pathToProject.Substring(0,pathToProject.LastIndexOf(@"\", StringComparison.Ordinal)), "StarTransitMetadata");
+            if (Directory.Exists(prjPath))
+            {
+                var filesPath = Directory.GetFiles(prjPath).ToList();
+                var prj= filesPath.FirstOrDefault(p => p.EndsWith("PRJ"));
+                return prj;
+            }
+            return string.Empty;
         }
         public event PropertyChangedEventHandler PropertyChanged;
 

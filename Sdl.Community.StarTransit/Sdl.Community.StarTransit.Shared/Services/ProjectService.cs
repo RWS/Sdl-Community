@@ -88,8 +88,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
             
             newProject.UpdateTranslationProviderConfiguration(tmConfig);
             newProject.Save();
-           // var controller = Controller;
+
             Controller.RefreshProjects();
+
             CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
         }

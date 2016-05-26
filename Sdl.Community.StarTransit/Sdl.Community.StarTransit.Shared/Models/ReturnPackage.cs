@@ -19,5 +19,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
         public FileBasedProject FileBasedProject { get; set; }
         public string LocalFilePath { get; set; }
         public string FileName { get; set; }
+        public string PathToPrjFile { get; set; }
     }
 }
