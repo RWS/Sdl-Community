@@ -52,8 +52,9 @@ namespace Sdl.Community.StarTransit.UI
                 , _packageDetails
                 , _translationMemories
                 ,tmViewModel
-                , finishViewModel);
+                , finishViewModel,this);
             DataContext = starTransitViewModel;
+
             if (starTransitViewModel.CloseAction == null)
             {
                 starTransitViewModel.CloseAction = Close;

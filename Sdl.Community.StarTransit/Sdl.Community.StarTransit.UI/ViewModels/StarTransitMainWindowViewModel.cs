@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
@@ -36,7 +39,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _hasTm;
         private TranslationMemories _translationMemories;
         private TranslationMemoriesViewModel _translationMemoriesViewModel;
-
+        private MetroWindow _window;
         public bool DetailsSelected
         {
             get { return _isDetailsSelected; }
@@ -197,53 +200,78 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        public void Next()
+        private async Task<bool> IsEmptyFolder(string folderPath)
+        {
+            bool isEmpty = !Directory.EnumerateFiles(folderPath).Any();
+            var hasSubdirectories = Directory.GetDirectories(folderPath);
+           
+            if (hasSubdirectories.Count() != 0 || !isEmpty)
+            {
+                var dialog = new MetroDialogSettings
+                {
+                    AffirmativeButtonText = "OK"
+
+                };
+                MessageDialogResult result =
+                    await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
+                        MessageDialogStyle.Affirmative, dialog);
+                return false;
+            }
+            return true;
+        }
+        public async void Next()
         {
             var model = _packageDetailsViewModel.GetPackageModel();
              _hasTm = false;
-            foreach (var pair in model.LanguagePairs)
-            {
-                if (pair.StarTranslationMemoryMetadatas.Count!=0)
-                {
-                    _hasTm = true;
-                }
-            }//tm page is disabled
-            if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
-            {
+            var isEmpty = await IsEmptyFolder(_packageDetailsViewModel.TextLocation);
 
-                DetailsSelected = false;
-                TmSelected = false;
-                FinishSelected = true;
-                CanExecuteBack = true;
-                CanExecuteNext = false;
-                _finishViewModel.Refresh();
-                CanExecuteCreate = true;
-                IsEnabled = false;
-                Color = "Gray";
-            }//tm page
-            else if(_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+            if (isEmpty)
             {
-                DetailsSelected = false;
-                TmSelected = true;
-                FinishSelected = false;
-                CanExecuteBack = true;
-                CanExecuteNext = true;
-                CanExecuteCreate = false;
-                IsEnabled = true;
-                Color = "#FF66290B";
-            }//finish page
-            else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
-            {
-                DetailsSelected = false;
-                CanExecuteNext = false;
-                CanExecuteCreate = true;
-                CanExecuteBack = true;
-                TmSelected = false;
-                IsEnabled = true;
-                FinishSelected = true;
-               _finishViewModel.Refresh();
-                Color = "#FFB69476";
+                foreach (var pair in model.LanguagePairs)
+                {
+                    if (pair.StarTranslationMemoryMetadatas.Count != 0)
+                    {
+                        _hasTm = true;
+                    }
+                }//tm page is disabled
+                if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
+                {
+
+                    DetailsSelected = false;
+                    TmSelected = false;
+                    FinishSelected = true;
+                    CanExecuteBack = true;
+                    CanExecuteNext = false;
+                    _finishViewModel.Refresh();
+                    CanExecuteCreate = true;
+                    IsEnabled = false;
+                    Color = "Gray";
+                }//tm page
+                else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+                {
+                    DetailsSelected = false;
+                    TmSelected = true;
+                    FinishSelected = false;
+                    CanExecuteBack = true;
+                    CanExecuteNext = true;
+                    CanExecuteCreate = false;
+                    IsEnabled = true;
+                    Color = "#FF66290B";
+                }//finish page
+                else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
+                {
+                    DetailsSelected = false;
+                    CanExecuteNext = false;
+                    CanExecuteCreate = true;
+                    CanExecuteBack = true;
+                    TmSelected = false;
+                    IsEnabled = true;
+                    FinishSelected = true;
+                    _finishViewModel.Refresh();
+                    Color = "#FFB69476";
+                }
             }
+            
 
         }
 
@@ -293,7 +321,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 
         public StarTransitMainWindowViewModel(PackageDetailsViewModel packageDetailsViewModel,PackageDetails packageDetails,TranslationMemories translationMemories,TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
-            FinishViewModel finishViewModel)
+            FinishViewModel finishViewModel,MetroWindow window)
         {
             _packageDetailsViewModel = packageDetailsViewModel;
             _packageDetails = packageDetails;
@@ -308,6 +336,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _finishViewModel = finishViewModel;
             _projectService = new ProjectService();
             Color = "#FFB69476";
+            _window = window;
         }
 
 
