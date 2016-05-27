@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.ProjectApi.Settings;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -103,10 +102,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             
         }
 
-        /// <summary>
-        /// TO DO :The files are exported in studio project, they should be imported in a custom location
-        /// </summary>
-        /// <param name="package"></param>
+
         public void ExportFiles(ReturnPackage package)
         {
             
@@ -131,6 +127,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// <param name="package"></param>
         private void CreateArchive(ReturnPackage package)
         {
+           // ChangeMetadataFile(package.PathToPrjFile);
             var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
             var archivePath = Path.Combine(package.FolderLocation, prjFileName+".tpf");
 
@@ -203,6 +200,59 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             }
         }
-     
+
+        private void ChangeMetadataFile(string pathToPrjFile)
+        {
+            var metadata = new Metadata
+            {
+                ExchangedDate = Utils.CustomDateTime.CustomExchangeDate(DateTime.Now),
+                ExchangedTime = Utils.CustomDateTime.CustomExchangeTime(DateTime.Now),
+                LastChangedDate = Utils.CustomDateTime.CreateCustomDate(DateTime.Now)
+            };
+
+            var newFile = new StringBuilder();
+            var lines = File.ReadAllLines(pathToPrjFile).ToList();
+            foreach (var line in lines)
+            {
+                if (line.StartsWith("LastChangedDate"))
+                {
+                    var newLine = line.Replace(line, string.Concat("LastChangedDate=", metadata.LastChangedDate));
+                    newFile.Append(newLine + Environment.NewLine);
+                    continue;
+
+                }
+                //if (line.Equals("[Exchange]"))
+                //{
+                //    newFile.Append(Environment.NewLine);
+                //    const string exchange = "PromptForNewWorkingDir=0";
+                //    newFile.Append(exchange + Environment.NewLine);
+                //    continue;
+                //}
+                if (line.StartsWith("IsExchange"))
+                {
+                    var newLine = line.Replace(line, "IsExchange=1");
+                    newFile.Append(newLine + Environment.NewLine);
+                    continue;
+                }
+                //if (line.StartsWith("ExchangeDate"))
+                //{
+                //    var newLine = line.Replace(line, string.Concat("ExchangeDate=", metadata.ExchangedDate));
+                // //   newFile.Append(newLine + Environment.NewLine);
+                //    //continue;
+                //}
+                //if (line.StartsWith("ExchangeTime"))
+                //{
+                //    var newLine = line.Replace(line, string.Concat("ExchangeTime=", metadata.ExchangedTime));
+                // //   newFile.Append(newLine + Environment.NewLine);
+                //    //continue;
+                //}
+                newFile.Append(line + Environment.NewLine);
+            }
+            File.WriteAllText(pathToPrjFile, newFile.ToString());
+
+        }
+
+
+
     }
 }

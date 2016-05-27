@@ -39,5 +39,6 @@ namespace Sdl.Community.StarTransit.UI.Helpers
             }
             return null;
         }
+
     }
 }

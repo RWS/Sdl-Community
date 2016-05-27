@@ -200,6 +200,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Check to see if the folder is empty, in case the user just paste the path in text box
+        /// </summary>
+        /// <param name="folderPath"></param>
+        /// <returns></returns>
         private async Task<bool> IsEmptyFolder(string folderPath)
         {
             bool isEmpty = !Directory.EnumerateFiles(folderPath).Any();
@@ -219,6 +224,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
             return true;
         }
+
         public async void Next()
         {
             var model = _packageDetailsViewModel.GetPackageModel();
