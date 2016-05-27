@@ -8,7 +8,6 @@ namespace Sdl.Community.StarTransit.Shared.Models
 {
     public class StarTranslationMemoryMetadata
     {
-        public Guid Id { get; set; }
         public string SourceFile { get; set; }
         public string TargetFile { get; set; }
     }

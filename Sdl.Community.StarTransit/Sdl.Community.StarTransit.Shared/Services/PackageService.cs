@@ -123,9 +123,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private async Task<PackageModel> CreateModel(string pathToTempFolder)
         {
             var model = new PackageModel();
-            var languagePair = new LanguagePair();
-            var sourceLanguageCode = 0;
-            var targetLanguageCode = 0;
+            
+            CultureInfo sourceLanguage = null;
 
             var languagePairList = new List<LanguagePair>();
             if (_pluginDictionary.ContainsKey("Admin"))
@@ -147,22 +146,22 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 {
                     if (item.Key == "SourceLanguage")
                     {
-                        sourceLanguageCode = int.Parse(item.Value);
-                        languagePair.SourceLanguage = Language(sourceLanguageCode);
+                        var sourceLanguageCode = int.Parse(item.Value);
+                        sourceLanguage = Language(sourceLanguageCode);
 
                     }
                     if (item.Key == "TargetLanguages")
                     {
-                        //we assume languages code are separated by "|"
+                        //we assume languages code are separated by " "
                         var languages = item.Value.Split(LanguageTargetSeparator);
 
                         foreach (var language in languages)
                         {
-                            targetLanguageCode = int.Parse(language);
+                            var targetLanguageCode = int.Parse(language);
                             var cultureInfo = Language(targetLanguageCode);
                             var pair = new LanguagePair
                             {
-                                SourceLanguage = languagePair.SourceLanguage,
+                                SourceLanguage = sourceLanguage,
                                 TargetLanguage = cultureInfo
                             };
                             languagePairList.Add(pair);
@@ -171,105 +170,86 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 }
             }
             model.LanguagePairs = languagePairList;
+            if (model.LanguagePairs.Count > 0)
+            {
+                //for source
+                var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguage);
+                var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
 
-            //for source
-            var sourceFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, sourceLanguageCode);
-            var filesAndMetadata = ReturnSourceFilesNameAndMetadata(sourceFilesAndTmsPath);
-            AddSourceFilesAndTmsToModel(model, filesAndMetadata, sourceLanguageCode);
-
-           
-            //for target
-            var targetFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, targetLanguageCode);
-            AddTargetFilesAndTmsToModel(model, targetFilesAndTmsPath, targetLanguageCode);
+                //for target
+                foreach (var languagePair in model.LanguagePairs)
+                {
+                    var targetFilesAndTmsPath = GetFilesAndTmsFromTempFolder(pathToTempFolder, languagePair.TargetLanguage);
+                    AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
+                }
+            }
 
             return model;
 
         }
 
-        private void AddTargetFilesAndTmsToModel(PackageModel model, List<string> targetFilesAndTmsPath, int targetLanguageCode)
+        private void AddFilesAndTmsToModel(LanguagePair languagePair,
+            Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath,
+            List<string> targetFilesAndTmsPath)
         {
-            var targetLanguage = Language(targetLanguageCode);
             var pathToTargetFiles = new List<string>();
+            var tmMetaDatas = new List<StarTranslationMemoryMetadata>();
+            var sourcefileList = sourceFilesAndTmsPath.Item1;
+            var tmMetadataList = sourceFilesAndTmsPath.Item2;
+
+            languagePair.HasTm = tmMetadataList.Count > 0;
+            languagePair.SourceFile = sourcefileList;
 
             foreach (var file in targetFilesAndTmsPath)
             {
-                var guid = IsTmFile(file);
-                foreach (var language in model.LanguagePairs)
-                {
-                    if (guid != Guid.Empty)
+                var isTm = IsTmFile(file);
+                    if (isTm)
                     {
+                        var targetFileNameWithoutExtension = Path.GetFileNameWithoutExtension(file);
                         //selects the source tm which has the same id with the target tm id
-                        var metaData =
-                            (from pair in language.StarTranslationMemoryMetadatas where guid == pair.Id select pair)
-                                .FirstOrDefault();
+                        var metaData = tmMetadataList
+                            .Where(x => Path.GetFileNameWithoutExtension(x.SourceFile)
+                                            .Equals(targetFileNameWithoutExtension))
+                            .FirstOrDefault();
+                       
                         if (metaData != null)
                         {
                             metaData.TargetFile = file;
                         }
+                    tmMetaDatas.Add(metaData);
 
                     }
                     else
                     {
                         pathToTargetFiles.Add(file);
                     }
-                    language.TargetFile = pathToTargetFiles;
-                    language.TargetLanguage = targetLanguage;
-                }
-
             }
+            languagePair.StarTranslationMemoryMetadatas = tmMetaDatas;
+            languagePair.TargetFile = pathToTargetFiles;
         }
-
-        private void AddSourceFilesAndTmsToModel(PackageModel model, Tuple<List<string>, List<StarTranslationMemoryMetadata>> sourceFilesAndTmsPath, int languageCode)
-        {
-            var sourceLanguage = Language(languageCode);
-            var fileList = sourceFilesAndTmsPath.Item1;
-            var tmMetadataList = sourceFilesAndTmsPath.Item2;
-            bool hasTm;
-            var languagePairList = new List<LanguagePair>();
-
-            if (tmMetadataList.Count != 0)
-            {
-                hasTm = true;
-            }
-            else
-            {
-                hasTm = false;
-            }
-
-            var languagePair = new LanguagePair
-            {
-                HasTm = hasTm,
-                SourceFile = fileList,
-                StarTranslationMemoryMetadatas = tmMetadataList,
-                SourceLanguage = sourceLanguage
-            };
-            languagePairList.Add(languagePair);
-            model.LanguagePairs = languagePairList;
-        }
-
 
         /// <summary>
         /// Check if is a tm
         /// </summary>
         /// <param name="file"></param>
-        /// <returns>Tm id</returns>
-        private Guid IsTmFile(string file)
+        /// <returns>true if this is a tm file</returns>
+        private bool IsTmFile(string file)
         {
+            var result = false;
             var tmFile = XElement.Load(file);
             if (tmFile.Attribute("ExtFileType") != null)
             {
 
                 var ffdNode =
                     (from ffd in tmFile.Descendants("FFD") select new Guid(ffd.Attribute("GUID").Value)).FirstOrDefault();
-                return ffdNode;
+                result = true;
             }
 
-            return Guid.Empty;
+            return result;
         }
 
-        private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, int languageCode)
+        private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
         {
-            var language = Language(languageCode);
             var extension = language.ThreeLetterWindowsLanguageName;
             //see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
             //StarTransit for the language code 1106 uses "Wel" as three letter code
@@ -291,12 +271,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             foreach (var file in filesAndTmsList)
             {
-                var guid = IsTmFile(file);
-                if (guid != Guid.Empty)
+                var isTm = IsTmFile(file);
+                if (isTm)
                 {
                     var metadata = new StarTranslationMemoryMetadata
                     {
-                        Id = guid,
                         SourceFile = file
                     };
                     translationMemoryMetadataList.Add(metadata);
