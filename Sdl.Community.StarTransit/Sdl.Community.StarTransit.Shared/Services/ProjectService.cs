@@ -51,6 +51,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
           foreach (var pair in package.LanguagePairs)
             {
+                targetProjectFiles.Clear();
                 //import language pair TM if any
                 if (pair.HasTm)
                 {
@@ -72,22 +73,23 @@ namespace Sdl.Community.StarTransit.Shared.Services
                            true));
                 }
                targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-            }
-
-            newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-            var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
-            {
+                newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+                var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
+                {
                     AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
                     AutomaticTaskTemplateIds.CopyToTargetLanguages,
                     AutomaticTaskTemplateIds.PerfectMatch,
                     AutomaticTaskTemplateIds.PreTranslateFiles,
                     AutomaticTaskTemplateIds.AnalyzeFiles,
-                   
-            });
 
-            
-            newProject.UpdateTranslationProviderConfiguration(tmConfig);
-            newProject.Save();
+                });
+
+
+                newProject.UpdateTranslationProviderConfiguration(tmConfig);
+                newProject.Save();
+            }
+
+       
 
             Controller.RefreshProjects();
 

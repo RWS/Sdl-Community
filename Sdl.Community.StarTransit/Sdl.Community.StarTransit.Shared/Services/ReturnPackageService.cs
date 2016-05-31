@@ -132,30 +132,34 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
             var archivePath = Path.Combine(package.FolderLocation, prjFileName+".tpf");
 
-            var pathToTargetFileFolder = package.LocalFilePath.Substring(0, package.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
-
-            if (!File.Exists(archivePath))
+            foreach (var targetFile in package.TargetFiles)
             {
-                //create the archive, and add files to it
-                using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
+                var pathToTargetFileFolder = targetFile.LocalFilePath.Substring(0, targetFile.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+
+                if (!File.Exists(archivePath))
                 {
-                    archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
-                    foreach (var file in package.TargetFiles)
+                    //create the archive, and add files to it
+                    using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
                     {
+                        archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
+                        foreach (var file in package.TargetFiles)
+                        {
 
-                        var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+                            var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
-                        archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
-                            CompressionLevel.Optimal);
+                            archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
+                                CompressionLevel.Optimal);
+
+                        }
 
                     }
-
+                }
+                else
+                {
+                    UpdateArchive(archivePath, prjFileName, package, pathToTargetFileFolder);
                 }
             }
-            else
-            {
-                UpdateArchive(archivePath, prjFileName, package, pathToTargetFileFolder);
-            }
+           
 
         }
 

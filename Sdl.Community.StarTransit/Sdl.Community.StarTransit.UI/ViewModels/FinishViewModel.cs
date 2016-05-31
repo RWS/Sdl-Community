@@ -74,7 +74,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 var tmPair = string.Empty;
                 if (pair.TmName == null)
                 {
-                    tmPair = "No TM selected for this pair.";
+                    tmPair = "No TM selected for "+pair.PairName +" pair.";
                 }
                 else
                 {

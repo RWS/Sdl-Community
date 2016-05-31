@@ -57,16 +57,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _sourceLanguage = package.LanguagePairs[0].SourceLanguage.DisplayName;
             _templates = new ObservableCollection<ProjectTemplateInfo>(package.StudioTemplates);
             _hasDueDate = false;
-            var targetLanguage = string.Empty;
-            //foreach (var language in package.TargetLanguage)
-            //{
-            //    targetLanguage = targetLanguage + language.DisplayName;
-            //}
-            if (package.LanguagePairs[0].TargetLanguage != null)
+            _targetLanguage = string.Empty;
+
+            foreach (var pair in package.LanguagePairs)
             {
-                _targetLanguage = package.LanguagePairs[0].TargetLanguage.DisplayName;
+                var targetLanguage = string.Concat(" ", pair.TargetLanguage.DisplayName);
+                _targetLanguage =string.Concat(_targetLanguage,targetLanguage);
             }
-            
+
 
             _canExecute = true;
 

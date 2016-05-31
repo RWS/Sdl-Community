@@ -50,6 +50,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 pair.PairNameIso = pair.SourceLanguage.TwoLetterISOLanguageName + "-" +
                                 pair.TargetLanguage.TwoLetterISOLanguageName;
                 pair.PairName = FormatPairName(pair.SourceLanguage.DisplayName, pair.TargetLanguage.DisplayName);
+                pair.HasTm = false;
+                IsNoneChecked = true;
             }
 
             _selectedIndex = 0;
@@ -190,6 +192,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private void SetBtnName()
         {
+           
             if (IsCreateChecked)
             {
                 Visibility = "Hidden";
@@ -201,6 +204,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 SelectedItem.TmName = TmName;
                 SelectedItem.TmPath = Path.Combine(_initialFolderPath, tmName);
                 SelectedItem.CreateNewTm = true;
+                SelectedItem.HasTm = true;
                 IsEnabled = true;
             }
             if (IsBrowseChecked)
@@ -218,6 +222,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 if (SelectedItem != null)
                 {
                     SelectedItem.TmName = null;
+                    SelectedItem.HasTm = false;
                 }
             }
            
@@ -256,15 +261,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             _package.LanguagePairs = LanguagePairs;
 
-            foreach (var pair in _package.LanguagePairs)
-            {
-                if (SelectedItem != null)
-                {
-                    pair.TmName = SelectedItem.TmName;
-                    pair.TmPath = SelectedItem.TmPath;
-                }
+            //foreach (var pair in _package.LanguagePairs)
+            //{
+            //    if (SelectedItem != null)
+            //    {
+            //        pair.TmName = SelectedItem.TmName;
+            //        pair.TmPath = SelectedItem.TmPath;
+            //        pair.HasTm = SelectedItem.HasTm;
+            //    }
 
-            }
+            //}
             return _package;
         }
 
@@ -305,8 +311,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             {
                 if (Equals(value, _selectedItem)) { return;}
                 _selectedItem = value;
+                
                 OnPropertyChanged();
-
+                Title = SelectedItem.PairName;
+                IsNoneChecked = true;
+                SetBtnName();
             }
         }
 
