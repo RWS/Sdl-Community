@@ -35,7 +35,7 @@ namespace Sdl.Community.StarTransit.UI.Controls
             
              _cellViewModel = new CellViewModel();
 
-            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel);
+            var returnPackageMainWindowViewModel = new ReturnPackageMainWindowViewModel(returnFilesViewModel, _cellViewModel,this);
             DataContext = returnPackageMainWindowViewModel;
             if (returnPackageMainWindowViewModel.CloseAction == null)
             {

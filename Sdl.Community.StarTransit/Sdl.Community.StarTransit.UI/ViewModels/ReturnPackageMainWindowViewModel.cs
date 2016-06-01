@@ -8,9 +8,11 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
+using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
@@ -23,12 +25,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private readonly ReturnPackageService _returnService;
         private readonly CellViewModel _cellViewModel;
         private bool _active;
+        private ReturnPackageMainWindow _window;
 
-        public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel,CellViewModel cellViewModel)
+        public ReturnPackageMainWindowViewModel(ReturnFilesViewModel returnFilesViewModel,CellViewModel cellViewModel,ReturnPackageMainWindow window)
         {
             _returnFilesViewModel = returnFilesViewModel;
             _cellViewModel = cellViewModel;
             _returnService = new ReturnPackageService();
+            _window = window;
         }
        
 
@@ -49,31 +53,47 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         private async void CreatePackage()
         {
-            Active = true;
+            
             _returnPackage = _returnFilesViewModel.GetReturnPackage();
-            var returnPackageFolderPath = string.Empty;
-                
-            if (_returnPackage.FolderLocation == null)
+            if (_returnPackage.TargetFiles.Count == 0)
             {
-                var projectPath= _returnPackage.ProjectLocation.Substring(0,
-                _returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+                var dialog = new MetroDialogSettings
+                {
+                    AffirmativeButtonText = "OK"
 
-                 returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+                };
+                MessageDialogResult result =
+                    await _window.ShowMessageAsync("No files selected!", "Please select at least one file.",
+                        MessageDialogStyle.Affirmative, dialog);
             }
             else
             {
-                returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+                Active = true;
+                string returnPackageFolderPath;
+
+                if (_returnPackage.FolderLocation == null)
+                {
+                    var projectPath = _returnPackage.ProjectLocation.Substring(0,
+                    _returnPackage.ProjectLocation.LastIndexOf(@"\", StringComparison.Ordinal));
+
+                    returnPackageFolderPath = CreateReturnPackageFolder(projectPath);
+                }
+                else
+                {
+                    returnPackageFolderPath = CreateReturnPackageFolder(_returnPackage.FolderLocation);
+                }
+
+
+
+                //location of return package folder
+                _returnPackage.FolderLocation = returnPackageFolderPath;
+
+                await System.Threading.Tasks.Task.Run(() => _returnService.ExportFiles(_returnPackage));
+                Active = false;
+                _cellViewModel.ClearSelectedProjectsList();
+                CloseAction();
             }
-             
-
-            
-            //location of return package folder
-            _returnPackage.FolderLocation = returnPackageFolderPath;
-
-           await System.Threading.Tasks.Task.Run(()=> _returnService.ExportFiles(_returnPackage)) ;
-            Active = false;
-            _cellViewModel.ClearSelectedProjectsList();
-            CloseAction();
+          
         }
 
         /// <summary>
