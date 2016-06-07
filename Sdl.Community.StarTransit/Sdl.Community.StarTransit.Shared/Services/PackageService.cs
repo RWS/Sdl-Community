@@ -23,7 +23,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
             new Dictionary<string, List<KeyValuePair<string, string>>>();
 
-        private PackageModel _package = new PackageModel();
+        private static PackageModel _package = new PackageModel();
         private const char LanguageTargetSeparator = ' ';
 
         /// <summary>
@@ -113,6 +113,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             _package = packageModel;
             return packageModel;
+        }
+
+        public  PackageModel GetPackageModel()
+        {
+            return _package;
         }
 
         /// <summary>

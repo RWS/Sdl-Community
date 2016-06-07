@@ -1,5 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Xml;
+using Sdl.Community.StarTransit.Shared.Models;
+using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -12,17 +16,25 @@ namespace Sdl.Community.StarTransit.Shared.Import
         static string _BilingualDocument = "Transit";
         private string srcFileExtension;
         private string trgFileExtension;
+        private PackageModel _packageModel; 
+        private PackageService _packageService = new PackageService();
 
         public SniffInfo Sniff(string nativeFilePath, Language suggestedSourceLanguage, 
             Codepage suggestedCodepage, INativeTextLocationMessageReporter messageReporter, 
             ISettingsGroup settingsGroup)
         {
             SniffInfo info = new SniffInfo();
-
+            _packageModel = _packageService.GetPackageModel();
+            var sourceLanguageExtension = string.Empty;
+            if (_packageModel != null)
+            {
+                 sourceLanguageExtension = _packageModel.LanguagePairs[0].SourceLanguage.ThreeLetterWindowsLanguageName;
+            }
+            
             if (System.IO.File.Exists(nativeFilePath))
             {
                 // call method to check if file is supported
-                info.IsSupported = IsFileSupported(nativeFilePath);
+                info.IsSupported = IsFileSupported(nativeFilePath, sourceLanguageExtension);
                 // call method to determine the file language pair
                 GetFileLanguages(ref info, nativeFilePath);
             }
@@ -38,7 +50,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
         // determine whether a given file is supported based on the
         // root element
-        private bool IsFileSupported(string nativeFilePath)
+        private bool IsFileSupported(string nativeFilePath, string sourceLanguageExtension)
         {
             bool result = false;
             bool rootElementMatches = false;
@@ -58,14 +70,18 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
             // check whether source file with the same name exists
             // if it does not exist, the file cannot be opened in Studio
-            foreach (string fileName in Directory.GetFiles(path))
+            var files = Directory.GetFiles(path).ToList();
+            if (files.Count != 0)
             {
-                if (fileName.Substring(0, fileName.Length - 4) == nativeFilePath.Substring(0, nativeFilePath.Length - 4) &&
-                    fileName.Substring(fileName.Length - 4, 4) != nativeFilePath.Substring(nativeFilePath.Length - 4, 4))
+                var sourceFileName = Path.GetFileNameWithoutExtension(nativeFilePath) + "." + sourceLanguageExtension;
+                var sourceFilesFromFolder = files.Where(s => s.EndsWith(sourceLanguageExtension)).ToList();
+
+                var sourceFile = sourceFilesFromFolder.FirstOrDefault(f => f.Contains(sourceFileName));
+                if (sourceFile != null)
                 {
                     sourceFileFound = true;
-                    this.srcFileExtension = fileName.Substring(fileName.Length - 3, 3);
-                    this.trgFileExtension = nativeFilePath.Substring(nativeFilePath.Length - 3, 3);
+                    srcFileExtension = sourceLanguageExtension;
+                    trgFileExtension = Path.GetExtension(nativeFilePath).Replace(".", "");
                 }
             }
 
