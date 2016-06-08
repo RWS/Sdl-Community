@@ -40,11 +40,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
             if (package.Customer != null)
             {
                 newProject.SetCustomer(package.Customer);
+                
             }
-
+           
+          
            //Add StarTransit package source files. The same on all language pairs
             ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
-
+          
+            //set the file role(user to display project details in Studio view)
+            var sourceFilesIds = newProject.GetSourceLanguageFiles().GetIds();
+            newProject.SetFileRole(sourceFilesIds, FileRole.Translatable);
+            
             var tmConfig = newProject.GetTranslationProviderConfiguration();
             var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
