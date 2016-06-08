@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-
+<ScrollViewer>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
@@ -37,4 +37,5 @@
 
         <Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
     </Grid>
+    </ScrollViewer>
 </UserControl>

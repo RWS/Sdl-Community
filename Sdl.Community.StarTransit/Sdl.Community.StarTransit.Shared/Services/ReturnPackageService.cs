@@ -131,7 +131,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             var prjFileName = Path.GetFileNameWithoutExtension(package.PathToPrjFile);
             var archivePath = Path.Combine(package.FolderLocation, prjFileName+".tpf");
-
+            
             foreach (var targetFile in package.TargetFiles)
             {
                 var pathToTargetFileFolder = targetFile.LocalFilePath.Substring(0, targetFile.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
@@ -141,11 +141,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     //create the archive, and add files to it
                     using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
                     {
+                       
                         archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
                         foreach (var file in package.TargetFiles)
                         {
-
-                            var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
+                            pathToTargetFileFolder = file.LocalFilePath.Substring(0,
+                                file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
+                           var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
 
                             archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
                                 CompressionLevel.Optimal);
@@ -197,7 +199,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 foreach (var file in returnPackagePackage.TargetFiles)
                 {
                     var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
-
+                    pathToTargetFileFolder = file.LocalFilePath.Substring(0,
+                                file.LocalFilePath.LastIndexOf(@"\", StringComparison.Ordinal));
                     archive.CreateEntryFromFile(Path.Combine(pathToTargetFileFolder, fileName), fileName,
                         CompressionLevel.Optimal);
 
