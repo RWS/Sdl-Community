@@ -878,13 +878,14 @@ namespace Sdl.Community.NumberVerifier
 
         private bool FilterSegmentPairs(ISegmentPair segmentPair)
         {
+
             return (VerificationSettings.ExcludeLockedSegments.Value == false ||
                     segmentPair.Properties.IsLocked == false) &&
                    (VerificationSettings.Exclude100Percents.Value == false ||
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-                     &&(VerificationSettings.ExcludeUntranslatedSegments == false && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+                     &&!(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified);
         }
                 #endregion
     }
