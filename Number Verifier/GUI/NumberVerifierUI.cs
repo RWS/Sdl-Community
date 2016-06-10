@@ -214,6 +214,11 @@ namespace Sdl.Community.NumberVerifier
             set { untranslatedCheck.Checked = value; }
         }
 
+        public bool ExcludeDraftSegments
+        {
+            get { return draftCheck.Checked; }
+            set { draftCheck.Checked = value; }
+        }
         public bool SourceThousandsCustomSeparator
         {
             get { return customTSep.Checked; }
@@ -267,6 +272,7 @@ namespace Sdl.Community.NumberVerifier
             this.VScroll = true;
         }
 
+       
         private void rb_PreventLocalizations_CheckedChanged(object sender, System.EventArgs e)
         {
            

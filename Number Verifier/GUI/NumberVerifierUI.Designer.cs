@@ -82,6 +82,8 @@
             this.cb_ReportRemovedNumbers = new System.Windows.Forms.CheckBox();
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.draftCheck = new System.Windows.Forms.CheckBox();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -192,13 +194,14 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.draftCheck);
             this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
             this.groupBox7.Location = new System.Drawing.Point(16, 131);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(191, 115);
+            this.groupBox7.Size = new System.Drawing.Size(191, 134);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "&Exclude";
@@ -254,7 +257,7 @@
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
             this.groupBox2.Location = new System.Drawing.Point(213, 131);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(202, 115);
+            this.groupBox2.Size = new System.Drawing.Size(202, 134);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "&Localizations";
@@ -309,9 +312,9 @@
             this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-            this.groupBox6.Location = new System.Drawing.Point(225, 252);
+            this.groupBox6.Location = new System.Drawing.Point(225, 273);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(190, 242);
+            this.groupBox6.Size = new System.Drawing.Size(190, 233);
             this.groupBox6.TabIndex = 26;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "&Target thousands separators";
@@ -425,9 +428,9 @@
             this.groupBox5.Controls.Add(this.customTargetSep);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(225, 502);
+            this.groupBox5.Location = new System.Drawing.Point(225, 512);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(190, 122);
+            this.groupBox5.Size = new System.Drawing.Size(190, 114);
             this.groupBox5.TabIndex = 36;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Target &decimal separators";
@@ -481,9 +484,9 @@
             this.groupBox4.Controls.Add(this.customDSep);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(16, 502);
+            this.groupBox4.Location = new System.Drawing.Point(17, 512);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(190, 122);
+            this.groupBox4.Size = new System.Drawing.Size(190, 114);
             this.groupBox4.TabIndex = 33;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "S&ource decimal separators";
@@ -542,9 +545,9 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsThinSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
-            this.groupBox3.Location = new System.Drawing.Point(16, 252);
+            this.groupBox3.Location = new System.Drawing.Point(17, 271);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(190, 242);
+            this.groupBox3.Size = new System.Drawing.Size(190, 235);
             this.groupBox3.TabIndex = 19;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "&Source thousands separators";
@@ -734,6 +737,16 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // draftCheck
+            // 
+            this.draftCheck.AutoSize = true;
+            this.draftCheck.Location = new System.Drawing.Point(17, 111);
+            this.draftCheck.Name = "draftCheck";
+            this.draftCheck.Size = new System.Drawing.Size(136, 17);
+            this.draftCheck.TabIndex = 16;
+            this.draftCheck.Text = "Exclude draft segments";
+            this.draftCheck.UseVisualStyleBackColor = true;
+            // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -818,5 +831,7 @@
         private System.Windows.Forms.CheckBox customTargetSep;
         private System.Windows.Forms.TextBox targetDBox;
         private System.Windows.Forms.TextBox sourceDBox;
+        private System.Windows.Forms.CheckBox draftCheck;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }

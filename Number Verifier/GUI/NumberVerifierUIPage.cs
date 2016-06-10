@@ -83,6 +83,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.ExcludeLockedSegments = _ControlSettings.ExcludeLockedSegments;
             _Control.Exclude100Percents = _ControlSettings.Exclude100Percents;
             _Control.ExcludeUntranslatedSegments = _ControlSettings.ExcludeUntranslatedSegments.Value;
+            _Control.ExcludeDraftSegments = _ControlSettings.ExcludeDraftSegments.Value;
             _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator.Value;
             _Control.TargetThousandsCustomSeparator= _ControlSettings.TargetThousandsCustomSeparator.Value;
             _Control.SourceDecimalCustomSeparator= _ControlSettings.SourceDecimalCustomSeparator.Value;
@@ -168,6 +169,8 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ExcludeUntranslatedSegments.Reset();
             _Control.ExcludeUntranslatedSegments = _ControlSettings.ExcludeUntranslatedSegments;
             _ControlSettings.ExcludeUntranslatedSegments.Reset();
+            _Control.ExcludeDraftSegments = _ControlSettings.ExcludeDraftSegments;
+            _ControlSettings.ExcludeDraftSegments.Reset();
             _Control.SourceThousandsCustomSeparator = _ControlSettings.SourceThousandsCustomSeparator;
             _ControlSettings.SourceThousandsCustomSeparator.Reset();
             _Control.TargetThousandsCustomSeparator = _ControlSettings.TargetThousandsCustomSeparator;
@@ -239,6 +242,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
             _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
             _ControlSettings.ExcludeUntranslatedSegments.Value = _Control.ExcludeUntranslatedSegments;
+            _ControlSettings.ExcludeDraftSegments.Value = _Control.ExcludeDraftSegments;
             _ControlSettings.SourceThousandsCustomSeparator.Value = _Control.SourceThousandsCustomSeparator;
             _ControlSettings.TargetThousandsCustomSeparator.Value = _Control.TargetThousandsCustomSeparator;
             _ControlSettings.SourceDecimalCustomSeparator.Value = _Control.SourceDecimalCustomSeparator;
@@ -289,6 +293,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ExcludeLockedSegments.Value = _Control.ExcludeLockedSegments;
             _ControlSettings.Exclude100Percents.Value = _Control.Exclude100Percents;
             _ControlSettings.ExcludeUntranslatedSegments.Value = _Control.ExcludeUntranslatedSegments;
+            _ControlSettings.ExcludeDraftSegments.Value = _Control.ExcludeDraftSegments;
             _ControlSettings.SourceThousandsCustomSeparator.Value = _Control.SourceThousandsCustomSeparator;
             _ControlSettings.TargetThousandsCustomSeparator.Value = _Control.TargetThousandsCustomSeparator;
             _ControlSettings.SourceDecimalCustomSeparator.Value = _Control.SourceDecimalCustomSeparator;
