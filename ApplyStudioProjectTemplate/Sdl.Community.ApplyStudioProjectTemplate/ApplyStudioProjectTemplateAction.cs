@@ -44,10 +44,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     grammarCheckerSettingsId = settingsGroupId;
                 }
 
-                if (settingsGroupId.Contains("Number"))
-                {
-                    numberVerifierSettingsId = settingsGroupId;
-                }
             }
 
             // Show the dialog

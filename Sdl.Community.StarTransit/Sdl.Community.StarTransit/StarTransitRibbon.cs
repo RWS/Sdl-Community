@@ -33,7 +33,7 @@ namespace Sdl.Community.StarTransit
         protected override async void Execute()
         {
             EnsureApplicationResources();
-           // TelemetryService.Instance.Init();
+            //TelemetryService.Instance.Init();
 
             //// check for new version
             //await TelemetryService.Instance.CheckForUpdates(true);
@@ -210,7 +210,7 @@ namespace Sdl.Community.StarTransit
     {
         protected override void Execute()
         {
-            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/issues?q=is%3Aopen+is%3Aissue+label%3AStarTransit");
+            System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit");
         }
     }
 
