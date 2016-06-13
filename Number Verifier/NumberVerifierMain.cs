@@ -850,23 +850,36 @@ namespace Sdl.Community.NumberVerifier
         private List<string> GetAlphanumericList(string text,string decimalSeparators,string thousandSeparators)
         {
             var alphaList = new List<string>();
-         
+            var wordsList = text.Split(' ').ToList();
+            var alpha = new List<string>();
+
+            //get the words which contains numbers
+            foreach (var word in wordsList)
+            {
+                if (word.Any(char.IsDigit))
+                {
+                    alpha.Add(word);
+                }
+            }
+
+            //check the alphanumerics 
            var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
             try
             {
                 var expresion = string.Format(@"\d*([A-Z]|\d)*([{0}]\d+)*", separators);
-                alphaList.AddRange(from Match match in Regex.Matches(text, expresion) select match.Value);
+                if (alpha.Count != 0)
+                {
+                    foreach (var alphaNumeric in alpha)
+                    {
+                        alphaList.AddRange(from Match match in Regex.Matches(alphaNumeric, expresion) select match.Value);
+                    }
+                }
+              
             }
             catch (Exception e)
             {
                 
-                
-               // MessageBox.Show(@"Please select at least one  decimal and thousand separator foreach source and target.");
-                
             }
-            
-            // alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]+\d+)|([A-Z])+[A-Z]*") select match.Value);
-            //  alphaList.AddRange(from Match match in Regex.Matches(text, @"\d*([A-Z]|\d)*([.,]\d+)*") select match.Value);
            
             return alphaList;
         }
