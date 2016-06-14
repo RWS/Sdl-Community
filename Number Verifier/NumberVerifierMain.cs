@@ -270,10 +270,6 @@ namespace Sdl.Community.NumberVerifier
                 var targetAlphanumericsList = GetAlphanumericList(targetText, _targetDecimalSeparators,
                     _targetThousandSeparators);
 
-                if (sourceAlphanumericsList.Count != 0 && targetAlphanumericsList.Count != 0)
-                {
-
-
                     // remove alphanumeric names found both in source and target from respective list
                     RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
 
@@ -469,11 +465,6 @@ namespace Sdl.Community.NumberVerifier
 
                         #endregion
                     }
-                }
-                else
-                {
-                    MessageBox.Show(@"Please select at least one  decimal and thousand separator foreach source and target.");
-                }
             }
         }
 
@@ -719,7 +710,7 @@ namespace Sdl.Community.NumberVerifier
             //if only "No separator" is selected "separators" variable will be a empty string
             if (separators != string.Empty)
         {
-                var expresion = string.Format(@"-?\d+([{0}]\d+)*", separators);
+                var expresion = string.Format(@"-?\u2212?\d+([{0}]\d+)*", separators);
            
             foreach (Match match in Regex.Matches(text, expresion))
             {
@@ -745,19 +736,31 @@ namespace Sdl.Community.NumberVerifier
             bool noSeparator)
         {
             string normalizedNumber;
-
+            var positionOfNormalMinus = number.IndexOf('-');
+            var positionOfSpecialMinus = number.IndexOf('\u2212');
+            if (positionOfNormalMinus == 0)
+            {
+                number = number.Replace("-", "m");
+            }
+            if (positionOfSpecialMinus ==0)
+            {
+                number = number.Replace("\u2212", "m");
+            }
             decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
+            // see http://www.fileformat.info/info/unicode/char/2212/index.htm
+            //request to support special minus sign
+
             if (thousandSeparators != String.Empty &&
-                Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                 // e.g 1,000,000
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
             }
             else if (thousandSeparators != String.Empty && decimalSeparators != String.Empty &&
                      Regex.IsMatch(number,
-                         @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
+                         @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
                          @"]\d+$")) // e.g. 1,000.5
             {
                 var usedThousandSeparator =
@@ -774,11 +777,11 @@ namespace Sdl.Community.NumberVerifier
                     : normalizedNumber;
             }
             else if (thousandSeparators != String.Empty &&
-                     Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
+                     Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
                 // e.g. 1,000
             {
                 if (_sourceDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
+                    Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
                 {
                     normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
                 }
@@ -790,7 +793,7 @@ namespace Sdl.Community.NumberVerifier
             else
             {
                 if (_sourceDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+                    Regex.IsMatch(number, @"^m?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
                 {
                     normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
                 }
@@ -850,13 +853,25 @@ namespace Sdl.Community.NumberVerifier
         private List<string> GetAlphanumericList(string text,string decimalSeparators,string thousandSeparators)
         {
             var alphaList = new List<string>();
-            var wordsList = text.Split(' ').ToList();
+            //added no break space, thin space and no break thin space, as separators.
+            var positionOfNormalMinus = text.IndexOf('-');
+            var positionOfSpecialMinus = text.IndexOf('\u2212');
+            if (positionOfNormalMinus == 0)
+            {
+                text = text.Replace("-", "m");
+            }
+            if (positionOfSpecialMinus == 0)
+            {
+                text = text.Replace("\u2212", "m");
+            }
+            char[] delimiterChars = {' ', '\u00a0', '\u2009', '\u202F'};
+            var wordsList = text.Split(delimiterChars).ToList();
             var alpha = new List<string>();
 
             //get the words which contains numbers
             foreach (var word in wordsList)
             {
-                if (word.Any(char.IsDigit))
+                if (word.Any(char.IsDigit) && word.Any(char.IsLetter))
                 {
                     alpha.Add(word);
                 }
@@ -866,7 +881,7 @@ namespace Sdl.Community.NumberVerifier
            var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
             try
             {
-                var expresion = string.Format(@"\d*([A-Z]|\d)*([{0}]\d+)*", separators);
+                var expresion = string.Format(@"^-?\u2212?\d*([A-Z]|\d)*([{0}]\d+)*", separators);
                 if (alpha.Count != 0)
                 {
                     foreach (var alphaNumeric in alpha)
