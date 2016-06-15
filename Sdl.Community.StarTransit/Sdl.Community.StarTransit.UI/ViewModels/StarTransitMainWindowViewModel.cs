@@ -207,6 +207,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         /// <returns></returns>
         private async Task<bool> IsEmptyFolder(string folderPath)
         {
+            if (string.IsNullOrEmpty(folderPath)) return false;
             bool isEmpty = !Directory.EnumerateFiles(folderPath).Any();
             var hasSubdirectories = Directory.GetDirectories(folderPath);
            
