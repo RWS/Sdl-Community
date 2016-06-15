@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Linq;
 using Sdl.Community.InSource.Insights;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -57,7 +59,7 @@ namespace Sdl.Community.InSource
             ProjectInfo projectInfo = new ProjectInfo
             {
                 Name = request.Name,
-                LocalProjectFolder = GetProjectFolderPath(request.Name),
+                LocalProjectFolder = GetProjectFolderPath(request.Name,request.ProjectTemplate.Uri.LocalPath),
                };
             FileBasedProject project = new FileBasedProject(projectInfo,
                 new ProjectTemplateReference(request.ProjectTemplate.Uri));
@@ -113,9 +115,24 @@ namespace Sdl.Community.InSource
             return project;
         }
 
-        private string GetProjectFolderPath(string name)
+        
+        /// <summary>
+        /// Reads the project folder location from selected template
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="pathToTemplate"></param>
+        /// <returns></returns>
+        private string GetProjectFolderPath(string name,string pathToTemplate)
         {
-            string rootFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Studio 2015\\Projects");
+            var templateXml = XElement.Load(pathToTemplate);
+            var settingsGroup =
+                templateXml.Descendants("SettingsGroup")
+                    .Where(s => s.Attribute("Id").Value.Equals("ProjectTemplateSettings"));
+            var location =
+                settingsGroup.Descendants("Setting")
+                    .Where(id => id.Attribute("Id").Value.Equals("ProjectLocation"))
+                    .Select(l => l.Value).FirstOrDefault();
+            var rootFolder = location; 
             string folder;
             int num = 1;
             do 
