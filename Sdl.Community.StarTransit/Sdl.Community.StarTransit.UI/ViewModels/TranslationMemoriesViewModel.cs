@@ -260,17 +260,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public PackageModel GetPackageModel()
         {
             _package.LanguagePairs = LanguagePairs;
-
-            //foreach (var pair in _package.LanguagePairs)
-            //{
-            //    if (SelectedItem != null)
-            //    {
-            //        pair.TmName = SelectedItem.TmName;
-            //        pair.TmPath = SelectedItem.TmPath;
-            //        pair.HasTm = SelectedItem.HasTm;
-            //    }
-
-            //}
+            
             return _package;
         }
 

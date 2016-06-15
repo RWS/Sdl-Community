@@ -67,6 +67,10 @@ namespace Sdl.Community.StarTransit
                     window.ShowDialog();
                 }
             }
+            catch(PathTooLongException ptle)
+            {
+                System.Windows.Forms.MessageBox.Show(ptle.Message);
+            }
             //catch (Exception e)
             //{
             //    TelemetryService.Instance.HandleException(e);

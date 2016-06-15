@@ -207,7 +207,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         /// <returns></returns>
         private async Task<bool> IsEmptyFolder(string folderPath)
         {
-            bool isEmpty = !Directory.EnumerateFiles(folderPath).Any();
+            if (string.IsNullOrEmpty(folderPath)) return false;
+            
+            bool isEmpty = !Directory
+                .GetFiles(folderPath, "*.*", SearchOption.AllDirectories)
+                .Any();
             var hasSubdirectories = Directory.GetDirectories(folderPath);
            
             if (hasSubdirectories.Count() != 0 || !isEmpty)
@@ -320,7 +324,14 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public async void Create()
         {
             Active = true;
-            await Task.Run(() => _projectService.CreateProject(_translationMemoriesViewModel.GetPackageModel()));
+            var packageModel = _translationMemoriesViewModel.GetPackageModel();
+
+            var isEmpty = await IsEmptyFolder(packageModel.Location);
+
+            if (isEmpty)
+            {
+                await Task.Run(() => _projectService.CreateProject(packageModel));
+            }
             Active = false;
             CloseAction();
         }
