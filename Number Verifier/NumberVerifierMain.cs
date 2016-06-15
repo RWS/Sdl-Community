@@ -708,10 +708,15 @@ namespace Sdl.Community.NumberVerifier
             var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
 
             //if only "No separator" is selected "separators" variable will be a empty string
+            string expresion;
             if (separators != string.Empty)
-        {
-                var expresion = string.Format(@"-?\u2212?\d+([{0}]\d+)*", separators);
-           
+            {
+                expresion = string.Format(@"-?\u2212?\d+([{0}]\d+)*", separators);
+            }
+            else
+            {
+                expresion = @"-?\u2212?\d+(\d+)*";
+            }
             foreach (Match match in Regex.Matches(text, expresion))
             {
                     var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
@@ -721,14 +726,14 @@ namespace Sdl.Community.NumberVerifier
                 normalizedNumberCollection.Add(normalizedNumber);
 
                 }
-            }
-            else
-            {
-                var normalizedNumber = NormalizedNumber(text, thousandSeparators, decimalSeparators,
-                    noSeparator);
-                numeberCollection.Add(text);
-                normalizedNumberCollection.Add(normalizedNumber);
-            }
+           
+            //else
+            //{
+            //    var normalizedNumber = NormalizedNumber(text, thousandSeparators, decimalSeparators,
+            //        noSeparator);
+            //    numeberCollection.Add(text);
+            //    normalizedNumberCollection.Add(normalizedNumber);
+            //}
 
         }
 
@@ -871,7 +876,7 @@ namespace Sdl.Community.NumberVerifier
             //get the words which contains numbers
             foreach (var word in wordsList)
             {
-                if (word.Any(char.IsDigit) && word.Any(char.IsLetter))
+                if (word.Any(char.IsDigit) && word.Any(char.IsUpper))
                 {
                     alpha.Add(word);
                 }
@@ -881,7 +886,16 @@ namespace Sdl.Community.NumberVerifier
            var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
             try
             {
-                var expresion = string.Format(@"^-?\u2212?\d*([A-Z]|\d)*([{0}]\d+)*", separators);
+                string expresion;
+                if (separators != string.Empty)
+                {
+                    expresion = string.Format(@"^-?\u2212?\d*([A-Z]|\d)*([{0}]\d+)*", separators);
+                }
+                else
+                {
+                    expresion= @"^-?\u2212?\d*([A-Z]|\d)*(\d+)*";
+                }
+                
                 if (alpha.Count != 0)
                 {
                     foreach (var alphaNumeric in alpha)
