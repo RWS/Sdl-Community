@@ -51,7 +51,7 @@ namespace Sdl.Community.StarTransit.Shared.Utils
 
                 if (result == DialogResult.Yes)
                 {
-                    Process.Start(@"https://rink.hockeyapp.net/apps/455696958de74739b2922d67c796e0a3");
+                    Process.Start(@"http://appstore.sdl.com/app/transitpackage-handler/573/");
                 }
             });
 

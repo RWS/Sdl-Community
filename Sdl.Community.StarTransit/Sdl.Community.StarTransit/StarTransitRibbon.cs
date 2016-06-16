@@ -33,11 +33,14 @@ namespace Sdl.Community.StarTransit
         protected override async void Execute()
         {
             EnsureApplicationResources();
-            //TelemetryService.Instance.Init();
+            #if !DEBUG
+            TelemetryService.Instance.Init();
 
-            //// check for new version
-            //await TelemetryService.Instance.CheckForUpdates(true);
-            //TelemetryService.Instance.SendCrashes(false);
+            // check for new version
+            await TelemetryService.Instance.CheckForUpdates(true);
+            TelemetryService.Instance.SendCrashes(false);
+            #endif
+
             var pathToTempFolder = CreateTempPackageFolder();
             try
             {
@@ -60,21 +63,23 @@ namespace Sdl.Community.StarTransit
                         Name = package.Name,
                         Description = package.Description,
                         StudioTemplates = templateList,
-                       LanguagePairs = package.LanguagePairs,
-                       PathToPrjFile = package.PathToPrjFile
+                        LanguagePairs = package.LanguagePairs,
+                        PathToPrjFile = package.PathToPrjFile
                     };
                     StarTransitMainWindow window = new StarTransitMainWindow(packageModel);
                     window.ShowDialog();
                 }
             }
-            catch(PathTooLongException ptle)
+            catch (PathTooLongException ptle)
             {
                 System.Windows.Forms.MessageBox.Show(ptle.Message);
             }
-            //catch (Exception e)
-            //{
-            //    TelemetryService.Instance.HandleException(e);
-            //}
+            catch (Exception e)
+            {
+#if !DEBUG
+                TelemetryService.Instance.HandleException(e);
+#endif
+            }
             finally
             {
                 if (Directory.Exists(pathToTempFolder))
