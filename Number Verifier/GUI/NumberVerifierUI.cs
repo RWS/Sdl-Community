@@ -219,6 +219,13 @@ namespace Sdl.Community.NumberVerifier
             get { return draftCheck.Checked; }
             set { draftCheck.Checked = value; }
         }
+
+        public bool OmitLeadingZero
+        {
+            get { return omitZeroCheck.Checked; }
+            set { omitZeroCheck.Checked = value; }
+        }
+
         public bool SourceThousandsCustomSeparator
         {
             get { return customTSep.Checked; }

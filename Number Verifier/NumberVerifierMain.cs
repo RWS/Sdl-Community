@@ -30,6 +30,7 @@ namespace Sdl.Community.NumberVerifier
         private NumberVerifierSettings _verificationSettings;
         private bool? _enabled;
         private static string _sourceValue=string.Empty;
+        private static string _targetValue = string.Empty;
         #endregion
 
         public bool Enabled
@@ -278,13 +279,13 @@ namespace Sdl.Community.NumberVerifier
                     sourceNumberList.Clear();
                     sourceNormalizedNumberList.Clear();
                     NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
-                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator);
+                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.OmitLeadingZero);
 
                     // find all numbers in target and add to list
                     targetNumberList.Clear();
                     targetNormalizedNumberList.Clear();
                     NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,
-                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator);
+                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator,VerificationSettings.OmitLeadingZero);
 
                     // remove identical numbers found both in source and target from respective list
                     RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
@@ -704,7 +705,7 @@ namespace Sdl.Community.NumberVerifier
 
         public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection,
             ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
-            bool noSeparator)
+            bool noSeparator,bool omitLeadingZero)
         {
             var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
 
@@ -721,7 +722,7 @@ namespace Sdl.Community.NumberVerifier
             foreach (Match match in Regex.Matches(text, expresion))
             {
                     var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
-                        noSeparator);
+                        noSeparator, omitLeadingZero);
 
                 numeberCollection.Add(match.Value);
                 normalizedNumberCollection.Add(normalizedNumber);
@@ -731,7 +732,7 @@ namespace Sdl.Community.NumberVerifier
         }
 
         private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
-            bool noSeparator)
+            bool noSeparator,bool omitLeadingZero)
         {
             string normalizedNumber;
             // see http://www.fileformat.info/info/unicode/char/2212/index.htm
@@ -749,18 +750,20 @@ namespace Sdl.Community.NumberVerifier
             decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
-            //normalize numbers as 0.5 for source to be recognize as .5 in target
-            if (_sourceValue == string.Empty)
+            if (omitLeadingZero)
             {
-                _sourceValue = number;
+                //numbers like .23 will be normalized as s.23
+                if (number.IndexOf('.') == 0)
+                {
+                    number = string.Concat("s", number); 
+                }//0.34 -> s.34
+                else if (number.StartsWith("0"))
+                {
+                    var aux = number.Substring(1);
+                    number = string.Concat("s", aux);
+                }
             }
-            if (number.IndexOf('.') == 0)
-            {
-                var auxTarget = _sourceValue.Substring(0, 1);
-                number = string.Concat(auxTarget, number);
-                _sourceValue = string.Empty;
-            }
-           
+        
 
             if (thousandSeparators != String.Empty &&
                 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
@@ -791,7 +794,7 @@ namespace Sdl.Community.NumberVerifier
                 // e.g. 1,000
             {
                 if (_sourceDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
+                    Regex.IsMatch(number, @"^m?s?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
                 {
                     normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
                 }
@@ -803,7 +806,7 @@ namespace Sdl.Community.NumberVerifier
             else
             {
                 if (_sourceDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^m?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+                    Regex.IsMatch(number, @"^m?s?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
                 {
                     normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
                 }
@@ -814,13 +817,13 @@ namespace Sdl.Community.NumberVerifier
 
                 if (noSeparator)
                 {
-                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber);
+                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber,omitLeadingZero);
                 }
             }
             return normalizedNumber;
         }
 
-        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber)
+        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber,bool omitLeadingZero)
         {
             //if there is no separator add comma as separator and run normalize process again
             if (normalizedNumber.Length > 3 && !(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
@@ -843,7 +846,7 @@ namespace Sdl.Community.NumberVerifier
                 {
                     tempNormalized.Append(numberElements[1]);
                 }
-                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false);
+                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false, omitLeadingZero);
             }
             return normalizedNumber;
         }

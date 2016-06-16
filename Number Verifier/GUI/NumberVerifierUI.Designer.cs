@@ -37,6 +37,7 @@
             this.combo_ModifiedAlphanumericsErrorType = new System.Windows.Forms.ComboBox();
             this.cb_ReportModifiedAlphanumerics = new System.Windows.Forms.CheckBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.draftCheck = new System.Windows.Forms.CheckBox();
             this.untranslatedCheck = new System.Windows.Forms.CheckBox();
             this.cb_Exclude100Percents = new System.Windows.Forms.CheckBox();
             this.cb_ExcludeLockedSegments = new System.Windows.Forms.CheckBox();
@@ -82,8 +83,8 @@
             this.cb_ReportRemovedNumbers = new System.Windows.Forms.CheckBox();
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.draftCheck = new System.Windows.Forms.CheckBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.omitZeroCheck = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -135,7 +136,7 @@
             // 
             this.groupBox8.Controls.Add(this.rb_ReportExtendedMessages);
             this.groupBox8.Controls.Add(this.rb_ReportBriefMessages);
-            this.groupBox8.Location = new System.Drawing.Point(322, 25);
+            this.groupBox8.Location = new System.Drawing.Point(322, 15);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(93, 98);
             this.groupBox8.TabIndex = 37;
@@ -173,7 +174,7 @@
             "Error",
             "Warning",
             "Note"});
-            this.combo_ModifiedAlphanumericsErrorType.Location = new System.Drawing.Point(190, 104);
+            this.combo_ModifiedAlphanumericsErrorType.Location = new System.Drawing.Point(190, 84);
             this.combo_ModifiedAlphanumericsErrorType.Name = "combo_ModifiedAlphanumericsErrorType";
             this.combo_ModifiedAlphanumericsErrorType.Size = new System.Drawing.Size(81, 21);
             this.combo_ModifiedAlphanumericsErrorType.TabIndex = 10;
@@ -183,7 +184,7 @@
             this.cb_ReportModifiedAlphanumerics.AutoSize = true;
             this.cb_ReportModifiedAlphanumerics.Checked = true;
             this.cb_ReportModifiedAlphanumerics.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportModifiedAlphanumerics.Location = new System.Drawing.Point(16, 106);
+            this.cb_ReportModifiedAlphanumerics.Location = new System.Drawing.Point(16, 88);
             this.cb_ReportModifiedAlphanumerics.Name = "cb_ReportModifiedAlphanumerics";
             this.cb_ReportModifiedAlphanumerics.Size = new System.Drawing.Size(171, 17);
             this.cb_ReportModifiedAlphanumerics.TabIndex = 9;
@@ -194,17 +195,28 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.omitZeroCheck);
             this.groupBox7.Controls.Add(this.draftCheck);
             this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 131);
+            this.groupBox7.Location = new System.Drawing.Point(16, 111);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(191, 134);
+            this.groupBox7.Size = new System.Drawing.Size(191, 154);
             this.groupBox7.TabIndex = 11;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "&Exclude";
+            // 
+            // draftCheck
+            // 
+            this.draftCheck.AutoSize = true;
+            this.draftCheck.Location = new System.Drawing.Point(17, 111);
+            this.draftCheck.Name = "draftCheck";
+            this.draftCheck.Size = new System.Drawing.Size(136, 17);
+            this.draftCheck.TabIndex = 16;
+            this.draftCheck.Text = "Exclude draft segments";
+            this.draftCheck.UseVisualStyleBackColor = true;
             // 
             // untranslatedCheck
             // 
@@ -255,9 +267,9 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(213, 131);
+            this.groupBox2.Location = new System.Drawing.Point(213, 119);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(202, 134);
+            this.groupBox2.Size = new System.Drawing.Size(202, 148);
             this.groupBox2.TabIndex = 15;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "&Localizations";
@@ -663,7 +675,7 @@
             "Error",
             "Warning",
             "Note"});
-            this.combo_ModifiedNumbersErrorType.Location = new System.Drawing.Point(190, 77);
+            this.combo_ModifiedNumbersErrorType.Location = new System.Drawing.Point(190, 61);
             this.combo_ModifiedNumbersErrorType.Name = "combo_ModifiedNumbersErrorType";
             this.combo_ModifiedNumbersErrorType.Size = new System.Drawing.Size(81, 21);
             this.combo_ModifiedNumbersErrorType.TabIndex = 8;
@@ -676,7 +688,7 @@
             "Error",
             "Warning",
             "Note"});
-            this.combo_RemovedNumbersErrorType.Location = new System.Drawing.Point(190, 50);
+            this.combo_RemovedNumbersErrorType.Location = new System.Drawing.Point(190, 38);
             this.combo_RemovedNumbersErrorType.Name = "combo_RemovedNumbersErrorType";
             this.combo_RemovedNumbersErrorType.Size = new System.Drawing.Size(81, 21);
             this.combo_RemovedNumbersErrorType.TabIndex = 6;
@@ -689,7 +701,7 @@
             "Error",
             "Warning",
             "Note"});
-            this.combo_AddedNumbersErrorType.Location = new System.Drawing.Point(190, 23);
+            this.combo_AddedNumbersErrorType.Location = new System.Drawing.Point(190, 15);
             this.combo_AddedNumbersErrorType.Name = "combo_AddedNumbersErrorType";
             this.combo_AddedNumbersErrorType.Size = new System.Drawing.Size(81, 21);
             this.combo_AddedNumbersErrorType.TabIndex = 4;
@@ -699,7 +711,7 @@
             this.cb_ReportModifiedNumbers.AutoSize = true;
             this.cb_ReportModifiedNumbers.Checked = true;
             this.cb_ReportModifiedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportModifiedNumbers.Location = new System.Drawing.Point(16, 79);
+            this.cb_ReportModifiedNumbers.Location = new System.Drawing.Point(16, 65);
             this.cb_ReportModifiedNumbers.Name = "cb_ReportModifiedNumbers";
             this.cb_ReportModifiedNumbers.Size = new System.Drawing.Size(143, 17);
             this.cb_ReportModifiedNumbers.TabIndex = 7;
@@ -711,7 +723,7 @@
             this.cb_ReportRemovedNumbers.AutoSize = true;
             this.cb_ReportRemovedNumbers.Checked = true;
             this.cb_ReportRemovedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportRemovedNumbers.Location = new System.Drawing.Point(16, 52);
+            this.cb_ReportRemovedNumbers.Location = new System.Drawing.Point(16, 42);
             this.cb_ReportRemovedNumbers.Name = "cb_ReportRemovedNumbers";
             this.cb_ReportRemovedNumbers.Size = new System.Drawing.Size(145, 17);
             this.cb_ReportRemovedNumbers.TabIndex = 5;
@@ -723,7 +735,7 @@
             this.cb_ReportAddedNumbers.AutoSize = true;
             this.cb_ReportAddedNumbers.Checked = true;
             this.cb_ReportAddedNumbers.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_ReportAddedNumbers.Location = new System.Drawing.Point(16, 25);
+            this.cb_ReportAddedNumbers.Location = new System.Drawing.Point(16, 19);
             this.cb_ReportAddedNumbers.Name = "cb_ReportAddedNumbers";
             this.cb_ReportAddedNumbers.Size = new System.Drawing.Size(134, 17);
             this.cb_ReportAddedNumbers.TabIndex = 3;
@@ -737,15 +749,15 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // draftCheck
+            // omitZeroCheck
             // 
-            this.draftCheck.AutoSize = true;
-            this.draftCheck.Location = new System.Drawing.Point(17, 111);
-            this.draftCheck.Name = "draftCheck";
-            this.draftCheck.Size = new System.Drawing.Size(136, 17);
-            this.draftCheck.TabIndex = 16;
-            this.draftCheck.Text = "Exclude draft segments";
-            this.draftCheck.UseVisualStyleBackColor = true;
+            this.omitZeroCheck.AutoSize = true;
+            this.omitZeroCheck.Location = new System.Drawing.Point(17, 131);
+            this.omitZeroCheck.Name = "omitZeroCheck";
+            this.omitZeroCheck.Size = new System.Drawing.Size(107, 17);
+            this.omitZeroCheck.TabIndex = 17;
+            this.omitZeroCheck.Text = "Omit leading zero";
+            this.omitZeroCheck.UseVisualStyleBackColor = true;
             // 
             // NumberVerifierUI
             // 
@@ -833,5 +845,6 @@
         private System.Windows.Forms.TextBox sourceDBox;
         private System.Windows.Forms.CheckBox draftCheck;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.CheckBox omitZeroCheck;
     }
 }
