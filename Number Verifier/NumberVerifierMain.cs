@@ -28,7 +28,8 @@ namespace Sdl.Community.NumberVerifier
         #region "PrivateMembers"
         private ISharedObjects _sharedObjects;
         private NumberVerifierSettings _verificationSettings;
-        private bool? _enabled; 
+        private bool? _enabled;
+        private static string _sourceValue=string.Empty;
         #endregion
 
         public bool Enabled
@@ -711,7 +712,7 @@ namespace Sdl.Community.NumberVerifier
             string expresion;
             if (separators != string.Empty)
             {
-                expresion = string.Format(@"-?\u2212?\d+([{0}]\d+)*", separators);
+                expresion = string.Format(@"-?\u2212?.?\d+([{0}]\d+)*", separators);
             }
             else
             {
@@ -726,14 +727,6 @@ namespace Sdl.Community.NumberVerifier
                 normalizedNumberCollection.Add(normalizedNumber);
 
                 }
-           
-            //else
-            //{
-            //    var normalizedNumber = NormalizedNumber(text, thousandSeparators, decimalSeparators,
-            //        noSeparator);
-            //    numeberCollection.Add(text);
-            //    normalizedNumberCollection.Add(normalizedNumber);
-            //}
 
         }
 
@@ -741,6 +734,8 @@ namespace Sdl.Community.NumberVerifier
             bool noSeparator)
         {
             string normalizedNumber;
+            // see http://www.fileformat.info/info/unicode/char/2212/index.htm
+            //request to support special minus sign
             var positionOfNormalMinus = number.IndexOf('-');
             var positionOfSpecialMinus = number.IndexOf('\u2212');
             if (positionOfNormalMinus == 0)
@@ -754,8 +749,18 @@ namespace Sdl.Community.NumberVerifier
             decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
 
-            // see http://www.fileformat.info/info/unicode/char/2212/index.htm
-            //request to support special minus sign
+            //normalize numbers as 0.5 for source to be recognize as .5 in target
+            if (_sourceValue == string.Empty)
+            {
+                _sourceValue = number;
+            }
+            if (number.IndexOf('.') == 0)
+            {
+                var auxTarget = _sourceValue.Substring(0, 1);
+                number = string.Concat(auxTarget, number);
+                _sourceValue = string.Empty;
+            }
+           
 
             if (thousandSeparators != String.Empty &&
                 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
