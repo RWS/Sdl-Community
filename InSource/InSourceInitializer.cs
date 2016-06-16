@@ -13,7 +13,7 @@ namespace Sdl.Community.InSource
         {
             InSourceViewController contentConnector = SdlTradosStudio.Application.GetController<InSourceViewController>();
             contentConnector.CheckForProjects();
-            TelemetryService.Instance.Init();
+           // TelemetryService.Instance.Init();
 
             contentConnector.Activate();
 
