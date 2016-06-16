@@ -48,6 +48,7 @@ namespace Sdl.Community.NumberVerifier
         private const string Exclude100Percents_Setting = "Exclude100Percents";
         private const string ExcludeUntranslatedSegments_Settings = "ExcludeUntranslatedSegments";
         private const string ExcludeDraftSegments_Settings = "ExcludeDraftSegments";
+        private const string OmitLeadingZero_Settings = "OmitLeadingZero";
         private const string SourceThousandsCustomSeparator_Settings = "SourceThousandsCustomSeparator";
         private const string TargetThousandsCustomSeparator_Settings = "TargetThousandsCustomSeparator";
         private const string SourceDecimalCustomSeparator_Settings = "SourceDecimalCustomSeparator";
@@ -231,6 +232,7 @@ namespace Sdl.Community.NumberVerifier
 
         public Setting<bool> ExcludeUntranslatedSegments => GetSetting<bool>(ExcludeUntranslatedSegments_Settings);
         public Setting<bool> ExcludeDraftSegments => GetSetting<bool>(ExcludeDraftSegments_Settings);
+        public Setting<bool> OmitLeadingZero => GetSetting<bool>(OmitLeadingZero_Settings);
         public Setting<bool> SourceThousandsCustomSeparator=>GetSetting<bool>(SourceThousandsCustomSeparator_Settings);
 
         public Setting<bool> TargetThousandsCustomSeparator => GetSetting<bool>(TargetThousandsCustomSeparator_Settings);
@@ -333,6 +335,8 @@ namespace Sdl.Community.NumberVerifier
                     return true;
                 case "ExcludeDraftSegments":
                     return true;
+                case "OmitLeadingZero":
+                    return false;
                 default:
                     return base.GetDefaultValue(settingId);
             }
