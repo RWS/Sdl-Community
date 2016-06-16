@@ -108,7 +108,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
-        private async void Browse()
+        private void Browse()
         {
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
