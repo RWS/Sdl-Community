@@ -220,10 +220,16 @@ namespace Sdl.Community.NumberVerifier
             set { draftCheck.Checked = value; }
         }
 
-        public bool OmitLeadingZero
+        public bool SourceOmitLeadingZero
         {
-            get { return omitZeroCheck.Checked; }
-            set { omitZeroCheck.Checked = value; }
+            get { return sourceOmitZero.Checked; }
+            set { sourceOmitZero.Checked = value; }
+        }
+
+        public bool TargetOmitLeadingZero
+        {
+            get { return targetOmitZero.Checked; }
+            set { targetOmitZero.Checked = value; }
         }
 
         public bool SourceThousandsCustomSeparator

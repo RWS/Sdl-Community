@@ -84,7 +84,11 @@
             this.cb_ReportAddedNumbers = new System.Windows.Forms.CheckBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.omitZeroCheck = new System.Windows.Forms.CheckBox();
+            this.sourceMisBox = new System.Windows.Forms.GroupBox();
+            this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.targetMisBox = new System.Windows.Forms.GroupBox();
+            this.sourceOmitZero = new System.Windows.Forms.CheckBox();
+            this.targetOmitZero = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -94,6 +98,8 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.sourceMisBox.SuspendLayout();
+            this.targetMisBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelNumberVerifierUI
@@ -104,7 +110,7 @@
             this.panelNumberVerifierUI.Controls.Add(this.groupBox1);
             this.panelNumberVerifierUI.Location = new System.Drawing.Point(0, 0);
             this.panelNumberVerifierUI.Name = "panelNumberVerifierUI";
-            this.panelNumberVerifierUI.Size = new System.Drawing.Size(496, 642);
+            this.panelNumberVerifierUI.Size = new System.Drawing.Size(565, 642);
             this.panelNumberVerifierUI.TabIndex = 1;
             // 
             // groupBox1
@@ -126,8 +132,9 @@
             this.groupBox1.Controls.Add(this.cb_ReportAddedNumbers);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
+            this.groupBox1.MinimumSize = new System.Drawing.Size(0, 750);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(496, 642);
+            this.groupBox1.Size = new System.Drawing.Size(565, 750);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
@@ -195,7 +202,6 @@
             // 
             // groupBox7
             // 
-            this.groupBox7.Controls.Add(this.omitZeroCheck);
             this.groupBox7.Controls.Add(this.draftCheck);
             this.groupBox7.Controls.Add(this.untranslatedCheck);
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
@@ -749,24 +755,56 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
-            // omitZeroCheck
+            // sourceMisBox
             // 
-            this.omitZeroCheck.AutoSize = true;
-            this.omitZeroCheck.Location = new System.Drawing.Point(17, 131);
-            this.omitZeroCheck.Name = "omitZeroCheck";
-            this.omitZeroCheck.Size = new System.Drawing.Size(107, 17);
-            this.omitZeroCheck.TabIndex = 17;
-            this.omitZeroCheck.Text = "Omit leading zero";
-            this.omitZeroCheck.UseVisualStyleBackColor = true;
+            this.sourceMisBox.Controls.Add(this.sourceOmitZero);
+            this.sourceMisBox.Location = new System.Drawing.Point(17, 648);
+            this.sourceMisBox.Name = "sourceMisBox";
+            this.sourceMisBox.Size = new System.Drawing.Size(190, 94);
+            this.sourceMisBox.TabIndex = 2;
+            this.sourceMisBox.TabStop = false;
+            this.sourceMisBox.Text = "Source miscellaneous";
+            // 
+            // targetMisBox
+            // 
+            this.targetMisBox.Controls.Add(this.targetOmitZero);
+            this.targetMisBox.Location = new System.Drawing.Point(225, 648);
+            this.targetMisBox.Name = "targetMisBox";
+            this.targetMisBox.Size = new System.Drawing.Size(200, 94);
+            this.targetMisBox.TabIndex = 3;
+            this.targetMisBox.TabStop = false;
+            this.targetMisBox.Text = "Target miscellaneous";
+            // 
+            // sourceOmitZero
+            // 
+            this.sourceOmitZero.AutoSize = true;
+            this.sourceOmitZero.Location = new System.Drawing.Point(7, 20);
+            this.sourceOmitZero.Name = "sourceOmitZero";
+            this.sourceOmitZero.Size = new System.Drawing.Size(107, 17);
+            this.sourceOmitZero.TabIndex = 0;
+            this.sourceOmitZero.Text = "Omit leading zero";
+            this.sourceOmitZero.UseVisualStyleBackColor = true;
+            // 
+            // targetOmitZero
+            // 
+            this.targetOmitZero.AutoSize = true;
+            this.targetOmitZero.Location = new System.Drawing.Point(7, 20);
+            this.targetOmitZero.Name = "targetOmitZero";
+            this.targetOmitZero.Size = new System.Drawing.Size(107, 17);
+            this.targetOmitZero.TabIndex = 0;
+            this.targetOmitZero.Text = "Omit leading zero";
+            this.targetOmitZero.UseVisualStyleBackColor = true;
             // 
             // NumberVerifierUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
+            this.Controls.Add(this.targetMisBox);
+            this.Controls.Add(this.sourceMisBox);
             this.Controls.Add(this.panelNumberVerifierUI);
             this.Name = "NumberVerifierUI";
-            this.Size = new System.Drawing.Size(499, 666);
+            this.Size = new System.Drawing.Size(568, 755);
             this.panelNumberVerifierUI.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -784,6 +822,10 @@
             this.groupBox4.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.sourceMisBox.ResumeLayout(false);
+            this.sourceMisBox.PerformLayout();
+            this.targetMisBox.ResumeLayout(false);
+            this.targetMisBox.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -845,6 +887,10 @@
         private System.Windows.Forms.TextBox sourceDBox;
         private System.Windows.Forms.CheckBox draftCheck;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.CheckBox omitZeroCheck;
+        private System.Windows.Forms.GroupBox sourceMisBox;
+        private System.ComponentModel.BackgroundWorker backgroundWorker2;
+        private System.Windows.Forms.GroupBox targetMisBox;
+        private System.Windows.Forms.CheckBox targetOmitZero;
+        private System.Windows.Forms.CheckBox sourceOmitZero;
     }
 }
