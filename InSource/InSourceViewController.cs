@@ -23,6 +23,7 @@ namespace Sdl.Community.InSource
     {
         #region private fields
         private readonly Lazy<InSourceViewControl> _control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
+        private readonly Lazy<TimerControl> _timerControl = new Lazy<TimerControl>();
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
@@ -46,10 +47,7 @@ namespace Sdl.Community.InSource
             ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
             _control.Value.Controller = this;
         }
-        protected override System.Windows.Forms.Control GetContentControl()
-        {
-            return _control.Value;
-        }
+
         private ProjectsController ProjectsController
         {
             get;
@@ -103,6 +101,16 @@ namespace Sdl.Community.InSource
                 OnPropertyChanged("SelectedProjects");
             
             }
+        }
+
+        protected override Control GetExplorerBarControl()
+        {
+            return _timerControl.Value;
+        }
+
+        protected override Control GetContentControl()
+        {
+            return _control.Value;
         }
 
         public int PercentComplete 

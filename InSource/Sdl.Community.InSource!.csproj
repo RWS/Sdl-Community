@@ -181,6 +181,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TimerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TimerControl.Designer.cs">
+      <DependentUpon>TimerControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
@@ -203,6 +209,9 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TimerControl.resx">
+      <DependentUpon>TimerControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
