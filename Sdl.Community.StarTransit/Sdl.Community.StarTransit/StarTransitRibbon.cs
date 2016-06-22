@@ -96,7 +96,7 @@ namespace Sdl.Community.StarTransit
 
             if (Directory.Exists(pathToTempFolder))
             {
-                Directory.Delete(pathToTempFolder);
+                Directory.Delete(pathToTempFolder, true);
             }
             Directory.CreateDirectory(pathToTempFolder);
             return pathToTempFolder;

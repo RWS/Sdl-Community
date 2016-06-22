@@ -95,11 +95,9 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 newProject.Save();
             }
 
-
+            CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
             Controller.RefreshProjects();
-
-            CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
         }
 

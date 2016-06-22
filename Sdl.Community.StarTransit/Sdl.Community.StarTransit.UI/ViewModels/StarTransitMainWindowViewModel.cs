@@ -14,10 +14,12 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Controls;
+using Sdl.Community.StarTransit.UI.Helpers;
+using Sdl.Community.StarTransit.UI.Interfaces;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class StarTransitMainWindowViewModel:INotifyPropertyChanged
+    public class StarTransitMainWindowViewModel:INotifyPropertyChanged, IWindowActions
     {
         private ICommand _nextCommand;
         private ICommand _backCommand;
@@ -161,6 +163,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public Action CloseAction { get; set; }
 
+        public Action<string,string> ShowWindowsMessage { get; set; }
+
         public ICommand NextCommand
         {
             get { return _nextCommand ?? (_nextCommand = new CommandHandler(Next, true)); }
@@ -200,30 +204,18 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
         }
 
+       
+
         /// <summary>
         /// Check to see if the folder is empty, in case the user just paste the path in text box
         /// </summary>
         /// <param name="folderPath"></param>
         /// <returns></returns>
-        private async Task<bool> IsEmptyFolder(string folderPath)
+        private bool IsFolderEmpty(string folderPath)
         {
-            if (string.IsNullOrEmpty(folderPath)) return false;
-            
-            bool isEmpty = !Directory
-                .GetFiles(folderPath, "*.*", SearchOption.AllDirectories)
-                .Any();
-            var hasSubdirectories = Directory.GetDirectories(folderPath);
-           
-            if (hasSubdirectories.Count() != 0 || !isEmpty)
+            if (!Utils.IsFolderEmpty(folderPath))
             {
-                var dialog = new MetroDialogSettings
-                {
-                    AffirmativeButtonText = "OK"
-
-                };
-                MessageDialogResult result =
-                    await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
-                        MessageDialogStyle.Affirmative, dialog);
+                ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
                 return false;
             }
             return true;
@@ -233,7 +225,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             var model = _packageDetailsViewModel.GetPackageModel();
              _hasTm = false;
-            var isEmpty = await IsEmptyFolder(_packageDetailsViewModel.TextLocation);
+            var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
 
             if (isEmpty)
             {
@@ -324,14 +316,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         public async void Create()
         {
             Active = true;
+            CanExecuteBack= CanExecuteCreate = false;
             var packageModel = _translationMemoriesViewModel.GetPackageModel();
 
-            var isEmpty = await IsEmptyFolder(packageModel.Location);
+            var isEmpty = IsFolderEmpty(packageModel.Location);
 
             if (isEmpty)
             {
-                await Task.Run(() => _projectService.CreateProject(packageModel));
+               await Task.Run(() => _projectService.CreateProject(packageModel));
             }
+            CanExecuteBack = CanExecuteCreate = false;
             Active = false;
             CloseAction();
         }

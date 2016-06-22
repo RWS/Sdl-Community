@@ -17,12 +17,11 @@ using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.ProjectAutomation.Core;
-
-
+using Sdl.Community.StarTransit.UI.Interfaces;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged
+    public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged, IWindowActions
     {
         private string _textLocation;
         private  string _txtName;
@@ -319,6 +318,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
         public string Error { get; }
 
+        public Action CloseAction { get; set; }
+
+        public Action<string, string> ShowWindowsMessage { get; set; }
+       
+
         public  PackageModel GetPackageModel()
         {
            
@@ -337,25 +341,15 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             return _packageModel;
         }
 
-        public async void Browse()
+        public void Browse()
         {
            
             var folderDialog = new FolderSelectDialog();
             if (folderDialog.ShowDialog())
             {
-                
-                bool isEmpty = !Directory.EnumerateFiles(folderDialog.FileName).Any();
-                var hasSubdirectories = Directory.GetDirectories(folderDialog.FileName);
-                if (hasSubdirectories.Count() != 0 || !isEmpty)
+                 if (!Utils.IsFolderEmpty(folderDialog.FileName))
                 {
-                    var dialog = new MetroDialogSettings
-                    {
-                        AffirmativeButtonText = "OK"
-
-                    };
-                    MessageDialogResult result =
-                        await _window.ShowMessageAsync("Folder not empty!", "Please select an empty folder",
-                            MessageDialogStyle.Affirmative, dialog);
+                    ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
                 }
                 else
                 {
@@ -364,10 +358,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             }
 
         }
-
-       
-
-
         private void SetMinutes()
         {
             var minutesList = new List<int>();
