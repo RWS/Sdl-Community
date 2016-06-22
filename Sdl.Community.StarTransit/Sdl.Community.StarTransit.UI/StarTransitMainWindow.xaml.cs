@@ -18,6 +18,7 @@ using HockeyApp;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace Sdl.Community.StarTransit.UI
 {
@@ -104,11 +105,24 @@ namespace Sdl.Community.StarTransit.UI
             packageDetailsItem.IsSelected = true;
         }
 
-      
+        private async void ShowWindowsMessage(string title,string message)
+        {
+            var dialog = new MetroDialogSettings
+            {
+                AffirmativeButtonText = "OK"
+
+            };
+            await this.ShowMessageAsync(title, message,
+                        MessageDialogStyle.Affirmative, dialog);
+        }
+
+
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-           
-             TelemetryService.Instance.SendCrashes(false);
+            var starTransitViewModel = DataContext as StarTransitMainWindowViewModel;
+
+            e.Cancel = starTransitViewModel.Active;
+            TelemetryService.Instance.SendCrashes(false);
         }
 
 

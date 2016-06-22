@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.StarTransit</PlugInName>
-  <Version>0.7.4</Version>
+  <Version>0.7.5</Version>
   <Description>Star Transit Package for Studio 2015</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
