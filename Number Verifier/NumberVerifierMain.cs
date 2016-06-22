@@ -717,12 +717,12 @@ namespace Sdl.Community.NumberVerifier
         {
             var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
 
-            var positionOfNormalMinus = text.IndexOf('-');
-            var positionOfSpecialMinus = text.IndexOf('\u2212');
+            //skip the "-" in case of: - 23 (dash, space, number)
+            char[] dashSign = {'-', '\u2013', '\u2212'};
             char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
             var spacePosition = text.IndexOfAny(space);
-
-            if ((positionOfNormalMinus == 0 || positionOfSpecialMinus == 0) && spacePosition == 1)
+            var dashPosition = text.IndexOfAny(dashSign);
+            if (dashPosition==0 && spacePosition == 1)
             {
                 text = text.Substring(2);
             }
