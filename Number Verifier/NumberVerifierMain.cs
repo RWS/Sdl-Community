@@ -282,21 +282,6 @@ namespace Sdl.Community.NumberVerifier
                     sourceText = OmitZero(sourceText);
                 }
 
-                //in case we have for eg .55 in source and .55 in target 
-                if (VerificationSettings.SourceOmitLeadingZero == false &&
-                    VerificationSettings.TargetOmitLeadingZero == false)
-                {
-                    if (sourceText.StartsWith(".") || sourceText.StartsWith(","))
-                    {
-                        sourceText = string.Concat("z", sourceText);
-                    }
-                    else if (sourceText.StartsWith("-") || sourceText.StartsWith("\u2212"))
-                    {
-                        var aux = string.Concat(sourceText.First(),"z");
-                        sourceText = string.Concat(aux, sourceText.Substring(1));
-                    }
-
-                }
                     NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
                         _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.SourceOmitLeadingZero,false);
 
@@ -732,8 +717,19 @@ namespace Sdl.Community.NumberVerifier
         {
             var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
 
+            var positionOfNormalMinus = text.IndexOf('-');
+            var positionOfSpecialMinus = text.IndexOf('\u2212');
+            char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
+            var spacePosition = text.IndexOfAny(space);
+
+            if ((positionOfNormalMinus == 0 || positionOfSpecialMinus == 0) && spacePosition == 1)
+            {
+                text = text.Substring(2);
+            }
+
             //if only "No separator" is selected "separators" variable will be a empty string
             string expresion;
+
             if (separators != string.Empty)
             {
                 expresion = string.Format(@"-?z?\u2212?.?\d+([{0}]\d+)*", separators);
@@ -783,11 +779,16 @@ namespace Sdl.Community.NumberVerifier
         {
             var positionOfNormalMinus = number.IndexOf('-');
             var positionOfSpecialMinus = number.IndexOf('\u2212');
-            if (positionOfNormalMinus == 0)
+            char[] space = { ' ','\u00a0','\u2009','\u202F'};
+            var spacePosition = number.IndexOfAny(space);
+            
+
+            //if it has space is not a negative number
+            if (positionOfNormalMinus == 0 && spacePosition!=1)
             {
                 number = number.Replace("-", "m");
             }
-            if (positionOfSpecialMinus == 0)
+            if (positionOfSpecialMinus == 0 && spacePosition!=1)
             {
                 number = number.Replace("\u2212", "m");
             }
