@@ -732,11 +732,11 @@ namespace Sdl.Community.NumberVerifier
 
             if (separators != string.Empty)
             {
-                expresion = string.Format(@"-?z?\u2212?.?\d+([{0}]\d+)*", separators);
+                expresion = string.Format(@"-?m?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
             }
             else
             {
-                expresion = @"-?z?\u2212?\d+(\d+)*";
+                expresion = @"-?m?\u2212?\u002E?\u2013?\d+(\d+)*";
             }
             foreach (Match match in Regex.Matches(text, expresion))
             {
@@ -779,6 +779,7 @@ namespace Sdl.Community.NumberVerifier
         {
             var positionOfNormalMinus = number.IndexOf('-');
             var positionOfSpecialMinus = number.IndexOf('\u2212');
+            var positionOfDash = number.IndexOf('\u2013');
             char[] space = { ' ','\u00a0','\u2009','\u202F'};
             var spacePosition = number.IndexOfAny(space);
             
@@ -792,16 +793,26 @@ namespace Sdl.Community.NumberVerifier
             {
                 number = number.Replace("\u2212", "m");
             }
+            if (positionOfDash == 0 && spacePosition != 1)
+            {
+                number = number.Replace("\u2013", "m");
+            }
             return number;
         }
+
         private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
-            bool noSeparator,bool sourceOmitLeadingZero, bool targetOmitLeadingZero)
+            bool noSeparator, bool sourceOmitLeadingZero, bool targetOmitLeadingZero)
         {
             string normalizedNumber;
             // see http://www.fileformat.info/info/unicode/char/2212/index.htm
             //request to support special minus sign
 
-            number = NormalizeNumberWithMinusSign(number);
+            if (number.IndexOf('.') == 0)
+            {
+                number = OmitZero(number);
+            }
+
+        number = NormalizeNumberWithMinusSign(number);
 
             decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
             thousandSeparators = AddCustomSeparators(thousandSeparators, null);
@@ -925,7 +936,7 @@ namespace Sdl.Community.NumberVerifier
             //get the words which contains numbers
             foreach (var word in wordsList)
             {
-                if (word.Any(char.IsDigit) && word.Any(char.IsUpper))
+                if (word.Any(char.IsDigit) && word.All(char.IsUpper))
                 {
                     alpha.Add(word);
                 }
