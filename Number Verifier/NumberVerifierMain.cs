@@ -277,23 +277,16 @@ namespace Sdl.Community.NumberVerifier
                     // find all numbers in source and add to list
                     sourceNumberList.Clear();
                     sourceNormalizedNumberList.Clear();
-                if (VerificationSettings.SourceOmitLeadingZero)
-                {
-                    sourceText = OmitZero(sourceText);
-                }
 
                     NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
-                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.SourceOmitLeadingZero,false);
+                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.SourceOmitLeadingZero);
 
                     // find all numbers in target and add to list
                     targetNumberList.Clear();
                     targetNormalizedNumberList.Clear();
-                if (VerificationSettings.TargetOmitLeadingZero)
-                {
-                    targetText = OmitZero(targetText);
-                }
+             
                     NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,
-                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator,false,VerificationSettings.TargetOmitLeadingZero);
+                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator,VerificationSettings.TargetOmitLeadingZero);
 
                     // remove identical numbers found both in source and target from respective list
                     RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
@@ -713,9 +706,13 @@ namespace Sdl.Community.NumberVerifier
 
         public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection,
             ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
-            bool noSeparator,bool sourceOmitLeadingZero, bool targetOmitLeadingZero)
+            bool noSeparator,bool omitLeadingZero)
         {
             var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
+            if (omitLeadingZero)
+            {
+                text = OmitZero(text);
+            }
 
             //skip the "-" in case of: - 23 (dash, space, number)
             char[] dashSign = {'-', '\u2013', '\u2212'};
@@ -728,20 +725,36 @@ namespace Sdl.Community.NumberVerifier
             }
 
             //if only "No separator" is selected "separators" variable will be a empty string
-            string expresion;
+            string expresion=string.Empty;
 
-            if (separators != string.Empty)
+            if (omitLeadingZero)
             {
-                expresion = string.Format(@"-?m?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
+                if (separators != string.Empty)
+                {
+                   expresion = string.Format(@"-?m?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
+                }
+                else
+                {
+                    expresion =string.Format(@"-?m?\u2212?\u002E?\u2013?\d+(\d+)*");
+                }
             }
             else
             {
-                expresion = @"-?m?\u2212?\u002E?\u2013?\d+(\d+)*";
+                if (separators != string.Empty)
+                {
+                    expresion = string.Format(@"-?m?\u2212?\u2013?\d+([{0}]\d+)*", separators);
+                   
+                }
+                else
+                {
+                    expresion = @"-?m?\u2212?\u2013?\d+(\d+)*";
+                }
             }
+
             foreach (Match match in Regex.Matches(text, expresion))
             {
                     var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
-                        noSeparator, sourceOmitLeadingZero,targetOmitLeadingZero);
+                        noSeparator);
 
                 numeberCollection.Add(match.Value);
                 normalizedNumberCollection.Add(normalizedNumber);
@@ -801,7 +814,7 @@ namespace Sdl.Community.NumberVerifier
         }
 
         private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
-            bool noSeparator, bool sourceOmitLeadingZero, bool targetOmitLeadingZero)
+            bool noSeparator)
         {
             string normalizedNumber;
             // see http://www.fileformat.info/info/unicode/char/2212/index.htm
@@ -869,13 +882,13 @@ namespace Sdl.Community.NumberVerifier
 
                 if (noSeparator)
                 {
-                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber,sourceOmitLeadingZero, targetOmitLeadingZero);
+                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber);
                 }
             }
             return normalizedNumber;
         }
 
-        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber,bool sourceOmitLeadingZero,bool targetOmitLeadingZero)
+        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber)
         {
             //if there is no separator add comma as separator and run normalize process again
             if (normalizedNumber.Length > 3 && !(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
@@ -898,7 +911,7 @@ namespace Sdl.Community.NumberVerifier
                 {
                     tempNormalized.Append(numberElements[1]);
                 }
-                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false, sourceOmitLeadingZero, targetOmitLeadingZero);
+                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false);
             }
             return normalizedNumber;
         }
