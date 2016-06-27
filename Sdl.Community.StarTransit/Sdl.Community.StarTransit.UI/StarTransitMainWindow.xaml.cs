@@ -60,7 +60,15 @@ namespace Sdl.Community.StarTransit.UI
             {
                 starTransitViewModel.CloseAction = Close;
             }
-          
+            if(starTransitViewModel.ShowWindowsMessage == null)
+            {
+                starTransitViewModel.ShowWindowsMessage = ShowWindowsMessage;
+            }
+            if (packageDetailsViewModel.ShowWindowsMessage == null)
+            {
+                packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
+            }
+
 
         }
 

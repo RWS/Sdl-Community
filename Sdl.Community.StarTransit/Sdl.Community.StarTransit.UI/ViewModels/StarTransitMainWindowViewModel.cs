@@ -221,7 +221,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             return true;
         }
 
-        public async void Next()
+        public void Next()
         {
             var model = _packageDetailsViewModel.GetPackageModel();
              _hasTm = false;
