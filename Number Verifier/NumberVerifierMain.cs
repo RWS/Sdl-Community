@@ -14,6 +14,7 @@ using System.Threading;
 using System.Windows.Forms;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Core.Globalization;
+using Sdl.Core.PluginFramework;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -29,6 +30,7 @@ namespace Sdl.Community.NumberVerifier
         private ISharedObjects _sharedObjects;
         private NumberVerifierSettings _verificationSettings;
         private bool? _enabled;
+        private bool _omitLeadingZero;
 
         #endregion
 
@@ -709,10 +711,10 @@ namespace Sdl.Community.NumberVerifier
             bool noSeparator,bool omitLeadingZero)
         {
             var separators = string.Concat(thousandSeparators, decimalSeparators);
-            if (omitLeadingZero)
-            {
-                text = OmitZero(text);
-            }
+            //if (omitLeadingZero)
+            //{
+            //    text = OmitZero(text);
+            //}
 
             //skip the "-" in case of: - 23 (dash, space, number)
             char[] dashSign = {'-', '\u2013', '\u2212'};
@@ -730,25 +732,27 @@ namespace Sdl.Community.NumberVerifier
 
             if (omitLeadingZero)
             {
+                _omitLeadingZero = true;
                 if (separators != string.Empty)
                 {
-                   expresion = string.Format(@"-?m?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
+                   expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
                 }
                 else
                 {
-                    expresion =string.Format(@"-?m?\u2212?\u002E?\u2013?\d+(\d+)*");
+                    expresion =string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+(\d+)*");
                 }
             }
             else
             {
+                _omitLeadingZero = false;
                 if (separators != string.Empty)
                 {
-                    expresion = string.Format(@"-?m?\u2212?\u2013?\d+([{0}]\d+)*", separators);
+                    expresion = string.Format(@"-?\u2013?\u2212?\u2013?\d+([{0}]\d+)*", separators);
                    
                 }
                 else
                 {
-                    expresion = @"-?m?\u2212?\u2013?\d+(\d+)*";
+                    expresion = @"-?\u2013?\u2212?\u2013?\d+(\d+)*";
                 }
             }
 #endregion
@@ -821,12 +825,17 @@ namespace Sdl.Community.NumberVerifier
             // see http://www.fileformat.info/info/unicode/char/2212/index.htm
             //request to support special minus sign
 
-            if (number.IndexOf('.') == 0)
+            //if (number.IndexOf('.') == 0)
+            //{
+            //    number = OmitZero(number);
+            //}
+
+            if (_omitLeadingZero)
             {
                 number = OmitZero(number);
             }
 
-        number = NormalizeNumberWithMinusSign(number);
+            number = NormalizeNumberWithMinusSign(number);
 
             if (thousandSeparators != String.Empty &&
                 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
@@ -891,8 +900,9 @@ namespace Sdl.Community.NumberVerifier
 
         private string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
         {
-            string thousandSeparator=string.Empty;
-            string decimalSeparator=string.Empty;
+            var thousandSeparator=string.Empty;
+            var decimalSeparator=string.Empty;
+            var hasMinusSign = false;
 
             if (thousandSeparators != string.Empty)
             {
@@ -903,48 +913,79 @@ namespace Sdl.Community.NumberVerifier
             {
                 decimalSeparator = decimalSeparators.Substring(0,1);
             }
-            //if there is no separator add comma as separator and run normalize process again
-            if (normalizedNumber.Length > 3 && !(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
+
+            if(!(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
             {
                 var numberElements = Regex.Split(normalizedNumber, "d");
-                var thousands = numberElements[0];
-                var tempNormalized = new StringBuilder();
-                var counter = 0;
-                for (var i = thousands.Length - 1; i >= 0; i--)
+                decimal thousandNumber;
+               
+                if (numberElements[0].IndexOf('m') == 0)
                 {
-                    if (tempNormalized.Length > 0 && counter%3 == 0)
+                     var numberWithoutMinus = numberElements[0].Substring(1);
+                    thousandNumber = decimal.Parse(numberWithoutMinus);
+                    hasMinusSign = true;
+                }
+                else
+                {
+                    thousandNumber = decimal.Parse(numberElements[0]);
+                }
+
+                //number must be >= 1000 to run no separator option
+                if (thousandNumber >= 1000)
+                {
+
+                    var thousands = thousandNumber.ToString(CultureInfo.InvariantCulture);
+                    var tempNormalized = new StringBuilder();
+                    var counter = 0;
+                    for (var i = thousands.Length - 1; i >= 0; i--)
                     {
-                        if (thousandSeparators != string.Empty)
+                        if (tempNormalized.Length > 0 && counter%3 == 0)
                         {
-                            tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], thousandSeparator));
+                            if (thousandSeparators != string.Empty)
+                            {
+                                tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], thousandSeparator));
+                            }
+                            else
+                            {
+                                tempNormalized.Insert(0, string.Format("{0}", thousands[i]));
+                            }
+
+                            counter=1;
                         }
                         else
                         {
-                            tempNormalized.Insert(0, string.Format("{0}", thousands[i]));
+                            tempNormalized.Insert(0, thousands[i]);
+                            counter++;
                         }
-                        
-                        counter = 1;
                     }
-                    else
+
+                    if (numberElements.Length > 1)
                     {
-                        tempNormalized.Insert(0, thousands[i]);
-                        counter++;
+                        if (decimalSeparator != string.Empty)
+                        {
+
+                               tempNormalized.Append(string.Format(@"{0}{1}", decimalSeparator, numberElements[1]));
+                            if (hasMinusSign)
+                            {
+                                tempNormalized.Insert(0, "m");
+                            }
+                            
+                        }
+                        else
+                        {
+                            tempNormalized.Append(string.Format("{0}", numberElements[1]));
+                            if (hasMinusSign)
+                            {
+                                tempNormalized.Insert(0, "m");
+                            }
+                        }
+
                     }
+                    normalizedNumber = NormalizedNumber(tempNormalized.ToString(), thousandSeparators, decimalSeparators,
+                        false);
                 }
-                if (numberElements.Length > 1)
-                {
-                    if (decimalSeparator != string.Empty)
-                    {
-                        tempNormalized.Append(string.Format(@"{0}{1}", decimalSeparator, numberElements[1]));
-                    }
-                    else
-                    {
-                        tempNormalized.Append(numberElements[1]);
-                    }
-                    
-                }
-                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), thousandSeparators, decimalSeparators, false);
             }
+
             return normalizedNumber;
         }
 
