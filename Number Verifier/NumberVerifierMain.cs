@@ -277,16 +277,19 @@ namespace Sdl.Community.NumberVerifier
                     // find all numbers in source and add to list
                     sourceNumberList.Clear();
                     sourceNormalizedNumberList.Clear();
-
-                    NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
-                        _sourceThousandSeparators, _sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.SourceOmitLeadingZero);
+                    var sourceDecimalSeparators = AddCustomSeparators( _sourceDecimalSeparators);
+                    var sourceThousandSeparators = AddCustomSeparators(_sourceThousandSeparators);
+                NormalizeAlphanumerics(sourceText, sourceNumberList, sourceNormalizedNumberList,
+                        sourceThousandSeparators, sourceDecimalSeparators, VerificationSettings.SourceNoSeparator,VerificationSettings.SourceOmitLeadingZero);
 
                     // find all numbers in target and add to list
                     targetNumberList.Clear();
                     targetNormalizedNumberList.Clear();
-             
-                    NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,
-                        _targetThousandSeparators, _targetDecimalSeparators, VerificationSettings.TargetNoSeparator,VerificationSettings.TargetOmitLeadingZero);
+
+                var targetDecimalSeparators = AddCustomSeparators( _targetDecimalSeparators);
+                var targetThousandSeparators = AddCustomSeparators(_targetThousandSeparators);
+                NormalizeAlphanumerics(targetText, targetNumberList, targetNormalizedNumberList,
+                        targetThousandSeparators, targetDecimalSeparators, VerificationSettings.TargetNoSeparator,VerificationSettings.TargetOmitLeadingZero);
 
                     // remove identical numbers found both in source and target from respective list
                     RemoveIdenticalNumbers(sourceNumberList, targetNumberList, targetNormalizedNumberList,
@@ -569,7 +572,7 @@ namespace Sdl.Community.NumberVerifier
         }
 
         //For more information see: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
-        public string AddCustomSeparators(string thousand, string decimalSeparator)
+        public string AddCustomSeparators(string selectedSeparators)
         {
             var expression = string.Empty; 
             var separatorsList = new List<string>();
@@ -592,12 +595,9 @@ namespace Sdl.Community.NumberVerifier
             }
             
             //put separators in a list, in order to eliminate the duplicates
-            if (decimalSeparator != string.Empty && thousand != string.Empty)
+            if (selectedSeparators != string.Empty)
             {
-                var allSeparators = string.Concat(decimalSeparator, thousand);
-                    //string.Join(decimalSeparator, thousand);
-
-                foreach (char c in allSeparators)
+                foreach (char c in selectedSeparators)
                 {
                     if (c.ToString().Contains("'"))
                     {
@@ -708,7 +708,7 @@ namespace Sdl.Community.NumberVerifier
             ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
             bool noSeparator,bool omitLeadingZero)
         {
-            var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
+            var separators = string.Concat(thousandSeparators, decimalSeparators);
             if (omitLeadingZero)
             {
                 text = OmitZero(text);
@@ -724,6 +724,7 @@ namespace Sdl.Community.NumberVerifier
                 text = text.Substring(2);
             }
 
+#region Omit zero
             //if only "No separator" is selected "separators" variable will be a empty string
             string expresion=string.Empty;
 
@@ -750,7 +751,7 @@ namespace Sdl.Community.NumberVerifier
                     expresion = @"-?m?\u2212?\u2013?\d+(\d+)*";
                 }
             }
-
+#endregion
             foreach (Match match in Regex.Matches(text, expresion))
             {
                     var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
@@ -827,9 +828,6 @@ namespace Sdl.Community.NumberVerifier
 
         number = NormalizeNumberWithMinusSign(number);
 
-            decimalSeparators = AddCustomSeparators(null, decimalSeparators); 
-            thousandSeparators = AddCustomSeparators(thousandSeparators, null);
-
             if (thousandSeparators != String.Empty &&
                 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
                 // e.g 1,000,000
@@ -882,36 +880,70 @@ namespace Sdl.Community.NumberVerifier
 
                 if (noSeparator)
                 {
-                    normalizedNumber = NormalizeNumberNoSeparator(decimalSeparators, normalizedNumber);
+                   
+                    normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,_targetDecimalSeparators, normalizedNumber);
                 }
             }
             return normalizedNumber;
         }
 
-        private string NormalizeNumberNoSeparator(string decimalSeparators, string normalizedNumber)
+
+
+        private string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
         {
+            string thousandSeparator=string.Empty;
+            string decimalSeparator=string.Empty;
+
+            if (thousandSeparators != string.Empty)
+            {
+                 thousandSeparator = thousandSeparators.Substring(0,1);
+            }
+
+            if (decimalSeparators != string.Empty)
+            {
+                decimalSeparator = decimalSeparators.Substring(0,1);
+            }
             //if there is no separator add comma as separator and run normalize process again
             if (normalizedNumber.Length > 3 && !(normalizedNumber.Contains("u") || normalizedNumber.Contains("t")))
             {
                 var numberElements = Regex.Split(normalizedNumber, "d");
                 var thousands = numberElements[0];
                 var tempNormalized = new StringBuilder();
+                var counter = 0;
                 for (var i = thousands.Length - 1; i >= 0; i--)
                 {
-                    if (tempNormalized.Length > 0 && tempNormalized.Length%3 == 0)
+                    if (tempNormalized.Length > 0 && counter%3 == 0)
                     {
-                        tempNormalized.Insert(0, string.Format("{0},", thousands[i]));
+                        if (thousandSeparators != string.Empty)
+                        {
+                            tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], thousandSeparator));
+                        }
+                        else
+                        {
+                            tempNormalized.Insert(0, string.Format("{0}", thousands[i]));
+                        }
+                        
+                        counter = 1;
                     }
                     else
                     {
                         tempNormalized.Insert(0, thousands[i]);
+                        counter++;
                     }
                 }
                 if (numberElements.Length > 1)
                 {
-                    tempNormalized.Append(numberElements[1]);
+                    if (decimalSeparator != string.Empty)
+                    {
+                        tempNormalized.Append(string.Format(@"{0}{1}", decimalSeparator, numberElements[1]));
+                    }
+                    else
+                    {
+                        tempNormalized.Append(numberElements[1]);
+                    }
+                    
                 }
-                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), ",", decimalSeparators, false);
+                normalizedNumber = NormalizedNumber(tempNormalized.ToString(), thousandSeparators, decimalSeparators, false);
             }
             return normalizedNumber;
         }
@@ -956,7 +988,9 @@ namespace Sdl.Community.NumberVerifier
             }
 
             //check the alphanumerics 
-           var separators = AddCustomSeparators(thousandSeparators, decimalSeparators);
+            var customDecimalSeparators = AddCustomSeparators(decimalSeparators);
+            var customThousandSeparators = AddCustomSeparators(thousandSeparators);
+            var separators = string.Concat(customDecimalSeparators, customThousandSeparators);
             try
             {
                 string expresion;
