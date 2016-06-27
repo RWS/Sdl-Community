@@ -87,7 +87,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
                             valuesDictionaries.AddRange(
                                 _dictionaryPropetries.Select(
                                     property => new KeyValuePair<string, string>(property.Key, property.Value)));
-                            _pluginDictionary.Add(keyProperty, valuesDictionaries);
+                            if (_pluginDictionary.ContainsKey(keyProperty))
+                            {
+                                _pluginDictionary[keyProperty].AddRange(valuesDictionaries);
+                            }
+                            else
+                            {
+                                _pluginDictionary.Add(keyProperty, valuesDictionaries);
+                            }
                             _dictionaryPropetries.Clear();
                         }
 
