@@ -1,4 +1,6 @@
-﻿using Sdl.Core.Settings;
+﻿using System;
+using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Core.Settings;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -8,252 +10,296 @@ namespace Sdl.Community.NumberVerifier
     /// is generated for each project that is created in SDL Trados Studio or for 
     /// each file that is opened and translated.
     /// </summary>
-    public class NumberVerifierSettings : SettingsGroup
+    public class NumberVerifierSettings : SettingsGroup, INumberVerifierSettings
     {
         #region "setting"
-        // Define the setting constant.
-        private const string ExcludeTagText_Setting = "ExcludeTagText";
-        private const string ReportAddedNumbers_Setting = "ReportAddedNumbers";
-        private const string ReportRemovedNumbers_Setting = "ReportRemovedNumbers";
-        private const string ReportModifiedNumbers_Setting = "ReportModifiedNumbers";
-        private const string ReportModifiedAlphanumerics_Setting = "ReportModifiedAlphanumerics";
-        private const string AddedNumbersErrorType_Setting = "AddedNumbersErrorType";
-        private const string RemovedNumbersErrorType_Setting = "RemovedNumbersErrorType";
-        private const string ModifiedNumbersErrorType_Setting = "ModifiedNumbersErrorType";
-        private const string ModifiedAlphanumericsErrorType_Setting = "ModifiedAlphanumericsErrorType";
-        private const string ReportBriefMessages_Setting = "ReportBriefMessages";
-        private const string ReportExtendedMessages_Setting = "ReportExtendedMessages";
-        private const string AllowLocalizations_Setting = "AllowLocalizations";
-        private const string RequireLocalizations_Setting = "RequireLocalizations";
-        private const string PreventLocalizations_Setting = "PreventLocalizations";
-        private const string SourceThousandsSpace_Setting = "SourceThousandsSpace";
-        private const string SourceThousandsNobreakSpace_Setting = "SourceThousandsNobreakSpace";
-        private const string SourceThousandsThinSpace_Setting = "SourceThousandsThinSpace";
-        private const string SourceThousandsNobreakThinSpace_Setting = "SourceThousandsNobreakThinSpace";
-        private const string SourceThousandsComma_Setting = "SourceThousandsComma";
-        private const string SourceThousandsPeriod_Setting = "SourceThousandsPeriod";
-        private const string SourceNoSeparator_Setting = "SourceNoSeparator";
-        private const string TargetThousandsSpace_Setting = "TargetThousandsSpace";
-        private const string TargetThousandsNobreakSpace_Setting = "TargetThousandsNobreakSpace";
-        private const string TargetThousandsThinSpace_Setting = "TargetThousandsThinSpace";
-        private const string TargetThousandsNobreakThinSpace_Setting = "TargetThousandsNobreakThinSpace";
-        private const string TargetThousandsComma_Setting = "TargetThousandsComma";
-        private const string TargetThousandsPeriod_Setting = "TargetThousandsPeriod";
-        private const string TargetNoSeparator_Setting = "TargetNoSeparator";
-        private const string SourceDecimalComma_Setting = "SourceDecimalComma";
-        private const string SourceDecimalPeriod_Setting = "SourceDecimalPeriod";
-        private const string TargetDecimalComma_Setting = "TargetDecimalComma";
-        private const string TargetDecimalPeriod_Setting = "TargetDecimalPeriod";
-        private const string ExcludeLockedSegments_Setting = "ExcludeLockedSegments";
-        private const string Exclude100Percents_Setting = "Exclude100Percents";
-        private const string ExcludeUntranslatedSegments_Settings = "ExcludeUntranslatedSegments";
-        private const string ExcludeDraftSegments_Settings = "ExcludeDraftSegments";
-        private const string SourceOmitLeadingZero_Settings = "SourceOmitLeadingZero";
-        private const string TargetOmitLeadingZero_Settings = "TargetOmitLeadingZero";
-        private const string SourceThousandsCustomSeparator_Settings = "SourceThousandsCustomSeparator";
-        private const string TargetThousandsCustomSeparator_Settings = "TargetThousandsCustomSeparator";
-        private const string SourceDecimalCustomSeparator_Settings = "SourceDecimalCustomSeparator";
-        private const string TargetDecimalCustomSeparator_Settings = "TargetDecimalCustomSeparator";
-        private const string GetSourceThousandsCustomSeparator_Settings = "GetSourceThousandsCustomSeparator";
-        private const string GetTargetThousandsCustomSeparator_Settings = "GetTargetThousandsCustomSeparator";
-        private const string GetSourceDecimalCustomSeparator_Settings = "GetSourceDecimalCustomSeparator";
-        private const string GetTargetDecimalCustomSeparator_Settings = "GetTargetDecimalCustomSeparator";
-
 
         // Return the value of the setting.
-        public Setting<bool> ExcludeTagText
+        public bool ExcludeTagText
         {
-            get { return GetSetting<bool>(ExcludeTagText_Setting); }
+            set { GetSetting<bool>(nameof(ExcludeTagText)).Value = value; }
+            get { return GetSetting<bool>(nameof(ExcludeTagText)).Value; }
         }
 
-        public Setting<bool> ReportAddedNumbers
+        public bool ReportAddedNumbers
         {
-            get { return GetSetting<bool>(ReportAddedNumbers_Setting); }
+            set { GetSetting<bool>(nameof(ReportAddedNumbers)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportAddedNumbers)).Value; }
         }
 
-        public Setting<bool> ReportRemovedNumbers
+        public bool ReportRemovedNumbers
         {
-            get { return GetSetting<bool>(ReportRemovedNumbers_Setting); }
+            set { GetSetting<bool>(nameof(ReportRemovedNumbers)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportRemovedNumbers)).Value; }
         }
 
-        public Setting<bool> ReportModifiedNumbers
+        public bool ReportModifiedNumbers
         {
-            get { return GetSetting<bool>(ReportModifiedNumbers_Setting); }
+            set { GetSetting<bool>(nameof(ReportModifiedNumbers)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportModifiedNumbers)).Value; }
         }
 
-        public Setting<bool> ReportModifiedAlphanumerics
+        public bool ReportModifiedAlphanumerics
         {
-            get { return GetSetting<bool>(ReportModifiedAlphanumerics_Setting); }
+            set { GetSetting<bool>(nameof(ReportModifiedAlphanumerics)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportModifiedAlphanumerics)).Value; }
         }
 
-        public Setting<string> AddedNumbersErrorType
+        public string AddedNumbersErrorType
         {
-            get { return GetSetting<string>(AddedNumbersErrorType_Setting); }
+            set { GetSetting<string>(nameof(AddedNumbersErrorType)).Value = value; }
+            get { return GetSetting<string>(nameof(AddedNumbersErrorType)).Value; }
         }
 
-        public Setting<string> RemovedNumbersErrorType
+        public string RemovedNumbersErrorType
         {
-            get { return GetSetting<string>(RemovedNumbersErrorType_Setting); }
+            set { GetSetting<string>(nameof(RemovedNumbersErrorType)).Value = value; }
+            get { return GetSetting<string>(nameof(RemovedNumbersErrorType)).Value; }
         }
 
-        public Setting<string> ModifiedNumbersErrorType
+        public string ModifiedNumbersErrorType
         {
-            get { return GetSetting<string>(ModifiedNumbersErrorType_Setting); }
+            set { GetSetting<string>(nameof(ModifiedNumbersErrorType)).Value = value; }
+            get { return GetSetting<string>(nameof(ModifiedNumbersErrorType)).Value; }
         }
 
-        public Setting<string> ModifiedAlphanumericsErrorType
+        public string ModifiedAlphanumericsErrorType
         {
-            get { return GetSetting<string>(ModifiedAlphanumericsErrorType_Setting); }
+            set { GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value = value; }
+            get { return GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value; }
         }
 
-        public Setting<bool> ReportBriefMessages
+        public bool ReportBriefMessages
         {
-            get { return GetSetting<bool>(ReportBriefMessages_Setting); }
+            set { GetSetting<bool>(nameof(ReportBriefMessages)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportBriefMessages)).Value; }
         }
 
-        public Setting<bool> ReportExtendedMessages
+        public bool ReportExtendedMessages
         {
-            get { return GetSetting<bool>(ReportExtendedMessages_Setting); }
+            set { GetSetting<bool>(nameof(ReportExtendedMessages)).Value = value; }
+            get { return GetSetting<bool>(nameof(ReportExtendedMessages)).Value; }
         }
 
-        public Setting<bool> AllowLocalizations
+        public bool AllowLocalizations
         {
-            get { return GetSetting<bool>(AllowLocalizations_Setting); }
+            set { GetSetting<bool>(nameof(AllowLocalizations)).Value = value; }
+            get { return GetSetting<bool>(nameof(AllowLocalizations)).Value; }
         }
 
-        public Setting<bool> PreventLocalizations
+        public bool PreventLocalizations
         {
-            get { return GetSetting<bool>(PreventLocalizations_Setting); }
+            set { GetSetting<bool>(nameof(PreventLocalizations)).Value = value; }
+            get { return GetSetting<bool>(nameof(PreventLocalizations)).Value; }
         }
 
-        public Setting<bool> RequireLocalizations
+        public bool RequireLocalizations
         {
-            get { return GetSetting<bool>(RequireLocalizations_Setting); }
+            set { GetSetting<bool>(nameof(RequireLocalizations)).Value = value; }
+            get { return GetSetting<bool>(nameof(RequireLocalizations)).Value; }
         }
 
-        public Setting<bool> SourceThousandsSpace
+        public bool SourceThousandsSpace
         {
-            get { return GetSetting<bool>(SourceThousandsSpace_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsSpace)).Value; }
         }
 
-        public Setting<bool> SourceThousandsNobreakSpace
+        public bool SourceThousandsNobreakSpace
         {
-            get { return GetSetting<bool>(SourceThousandsNobreakSpace_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsNobreakSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsNobreakSpace)).Value; }
         }
 
-        public Setting<bool> SourceThousandsThinSpace
+        public bool SourceThousandsThinSpace
         {
-            get { return GetSetting<bool>(SourceThousandsThinSpace_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsThinSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsThinSpace)).Value; }
         }
 
-        public Setting<bool> SourceThousandsNobreakThinSpace
+        public bool SourceThousandsNobreakThinSpace
         {
-            get { return GetSetting<bool>(SourceThousandsNobreakThinSpace_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsNobreakThinSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsNobreakThinSpace)).Value; }
         }
 
-        public Setting<bool> SourceThousandsComma
+        public bool SourceThousandsComma
         {
-            get { return GetSetting<bool>(SourceThousandsComma_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsComma)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsComma)).Value; }
         }
 
-        public Setting<bool> SourceThousandsPeriod
+        public bool SourceThousandsPeriod
         {
-            get { return GetSetting<bool>(SourceThousandsPeriod_Setting); }
+            set { GetSetting<bool>(nameof(SourceThousandsPeriod)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsPeriod)).Value; }
         }
 
-        public Setting<bool> SourceNoSeparator
+        public bool SourceNoSeparator
         {
-            get { return GetSetting<bool>(SourceNoSeparator_Setting); }
+            set { GetSetting<bool>(nameof(SourceNoSeparator)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceNoSeparator)).Value; }
         }
 
-        public Setting<bool> TargetThousandsSpace
+        public bool TargetThousandsSpace
         {
-            get { return GetSetting<bool>(TargetThousandsSpace_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsSpace)).Value; }
         }
 
-        public Setting<bool> TargetThousandsNobreakSpace
+        public bool TargetThousandsNobreakSpace
         {
-            get { return GetSetting<bool>(TargetThousandsNobreakSpace_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsNobreakSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsNobreakSpace)).Value; }
         }
 
-        public Setting<bool> TargetThousandsThinSpace
+        public bool TargetThousandsThinSpace
         {
-            get { return GetSetting<bool>(TargetThousandsThinSpace_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsThinSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsThinSpace)).Value; }
         }
 
-        public Setting<bool> TargetThousandsNobreakThinSpace
+        public bool TargetThousandsNobreakThinSpace
         {
-            get { return GetSetting<bool>(TargetThousandsNobreakThinSpace_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsNobreakThinSpace)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsNobreakThinSpace)).Value; }
         }
 
-        public Setting<bool> TargetThousandsComma
+        public bool TargetThousandsComma
         {
-            get { return GetSetting<bool>(TargetThousandsComma_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsComma)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsComma)).Value; }
         }
 
-        public Setting<bool> TargetThousandsPeriod
+        public bool TargetThousandsPeriod
         {
-            get { return GetSetting<bool>(TargetThousandsPeriod_Setting); }
+            set { GetSetting<bool>(nameof(TargetThousandsPeriod)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsPeriod)).Value; }
         }
 
-        public Setting<bool> TargetNoSeparator
+        public bool TargetNoSeparator
         {
-            get { return GetSetting<bool>(TargetNoSeparator_Setting); }
-        }
-        
-        public Setting<bool> SourceDecimalComma
-        {
-            get { return GetSetting<bool>(SourceDecimalComma_Setting); }
+            set { GetSetting<bool>(nameof(TargetNoSeparator)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetNoSeparator)).Value; }
         }
 
-        public Setting<bool> SourceDecimalPeriod
+        public bool SourceDecimalComma
         {
-            get { return GetSetting<bool>(SourceDecimalPeriod_Setting); }
+            set { GetSetting<bool>(nameof(SourceDecimalComma)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceDecimalComma)).Value; }
         }
 
-        public Setting<bool> TargetDecimalComma
+        public bool SourceDecimalPeriod
         {
-            get { return GetSetting<bool>(TargetDecimalComma_Setting); }
+            set { GetSetting<bool>(nameof(SourceDecimalPeriod)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceDecimalPeriod)).Value; }
         }
 
-        public Setting<bool> TargetDecimalPeriod
+        public bool TargetDecimalComma
         {
-            get { return GetSetting<bool>(TargetDecimalPeriod_Setting); }
+            set { GetSetting<bool>(nameof(TargetDecimalComma)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetDecimalComma)).Value; }
         }
 
-        public Setting<bool> ExcludeLockedSegments
+        public bool TargetDecimalPeriod
         {
-            get { return GetSetting<bool>(ExcludeLockedSegments_Setting); }
+            set { GetSetting<bool>(nameof(TargetDecimalPeriod)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetDecimalPeriod)).Value; }
         }
 
-        public Setting<bool> Exclude100Percents
+        public bool ExcludeLockedSegments
         {
-            get { return GetSetting<bool>(Exclude100Percents_Setting); }
+            set { GetSetting<bool>(nameof(ExcludeLockedSegments)).Value = value; }
+            get { return GetSetting<bool>(nameof(ExcludeLockedSegments)).Value; }
         }
 
-        public Setting<bool> ExcludeUntranslatedSegments => GetSetting<bool>(ExcludeUntranslatedSegments_Settings);
-        public Setting<bool> ExcludeDraftSegments => GetSetting<bool>(ExcludeDraftSegments_Settings);
-        public Setting<bool> SourceOmitLeadingZero => GetSetting<bool>(SourceOmitLeadingZero_Settings);
-        public Setting<bool> TargetOmitLeadingZero => GetSetting<bool>(TargetOmitLeadingZero_Settings);
-        public Setting<bool> SourceThousandsCustomSeparator=>GetSetting<bool>(SourceThousandsCustomSeparator_Settings);
+        public bool Exclude100Percents
+        {
+            set { GetSetting<bool>(nameof(Exclude100Percents)).Value = value; }
+            get { return GetSetting<bool>(nameof(Exclude100Percents)).Value; }
+        }
 
-        public Setting<bool> TargetThousandsCustomSeparator => GetSetting<bool>(TargetThousandsCustomSeparator_Settings);
+        public bool ExcludeUntranslatedSegments
+        {
+            set { GetSetting<bool>(nameof(ExcludeUntranslatedSegments)).Value = value; }
+            get { return GetSetting<bool>(nameof(ExcludeUntranslatedSegments)).Value; }
+        }
 
-        public Setting<bool> SourceDecimalCustomSeparator => GetSetting<bool>(SourceDecimalCustomSeparator_Settings);
-        public Setting<bool> TargetDecimalCustomSeparator => GetSetting<bool>(TargetDecimalCustomSeparator_Settings);
 
-        public Setting<string> GetSourceThousandsCustomSeparator
-            => GetSetting<string>(GetSourceThousandsCustomSeparator_Settings);
+        public bool ExcludeDraftSegments
+        {
+            set { GetSetting<bool>(nameof(ExcludeDraftSegments)).Value = value; }
+            get { return GetSetting<bool>(nameof(ExcludeDraftSegments)).Value; }
+        }
 
-        public Setting<string> GetTargetThousandsCustomSeparator
-            => GetSetting<string>(GetTargetThousandsCustomSeparator_Settings);
 
-        public Setting<string> GetSourceDecimalCustomSeparator
-            => GetSetting<string>(GetSourceDecimalCustomSeparator_Settings);
+        public bool SourceOmitLeadingZero
+        {
+            set { GetSetting<bool>(nameof(SourceOmitLeadingZero)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceOmitLeadingZero)).Value; }
+        }
 
-        public Setting<string> GetTargetDecimalCustomSeparator
-            => GetSetting<string>(GetTargetDecimalCustomSeparator_Settings);
+        public bool TargetOmitLeadingZero
+        {
+            set { GetSetting<bool>(nameof(TargetOmitLeadingZero)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetOmitLeadingZero)).Value; }
+        }
+
+        public bool SourceThousandsCustomSeparator
+        {
+            set { GetSetting<bool>(nameof(SourceThousandsCustomSeparator)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceThousandsCustomSeparator)).Value; }
+        }
+
+        public bool TargetThousandsCustomSeparator
+        {
+            set { GetSetting<bool>(nameof(TargetThousandsCustomSeparator)).Value=value; }
+            get { return GetSetting<bool>(nameof(TargetThousandsCustomSeparator)).Value; }
+        }
+
+        public bool SourceDecimalCustomSeparator
+        {
+            set { GetSetting<bool>(nameof(SourceDecimalCustomSeparator)).Value = value; }
+            get { return GetSetting<bool>(nameof(SourceDecimalCustomSeparator)).Value; }
+        }
+
+        public bool TargetDecimalCustomSeparator
+        {
+            set { GetSetting<bool>(nameof(TargetDecimalCustomSeparator)).Value = value; }
+            get { return GetSetting<bool>(nameof(TargetDecimalCustomSeparator)).Value; }
+        }
+
+        public string GetSourceThousandsCustomSeparator
+        {
+            set { GetSetting<string>(nameof(GetSourceThousandsCustomSeparator)).Value = value; }
+            get { return GetSetting<string>(nameof(GetSourceThousandsCustomSeparator)).Value; }
+        }
+
+        public string GetTargetThousandsCustomSeparator
+        {
+            set { GetSetting<string>(nameof(GetTargetThousandsCustomSeparator)).Value=value; }
+            get { return GetSetting<string>(nameof(GetTargetThousandsCustomSeparator)).Value; }
+        }
+
+        public string GetSourceDecimalCustomSeparator
+        {
+            set { GetSetting<string>(nameof(GetSourceDecimalCustomSeparator)).Value=value; }
+            get { return GetSetting<string>(nameof(GetSourceDecimalCustomSeparator)).Value; }
+        }
+
+        public string GetTargetDecimalCustomSeparator
+        {
+            set { GetSetting<string>(nameof(GetTargetDecimalCustomSeparator)).Value=value; }
+            get { return GetSetting<string>(nameof(GetTargetDecimalCustomSeparator)).Value; }
+        }
+
+     
         #endregion
+
+        public void Reset(string propertyName)
+        {
+            GetDefaultValue(propertyName);
+        }
 
         /// <summary>
         /// Return the default value of the setting properties
@@ -265,81 +311,81 @@ namespace Sdl.Community.NumberVerifier
         {
             switch (settingId)
             {
-                case "ExcludeTagText":
-                    return (bool)false;
-                case "ReportAddedNumbers":
-                    return (bool)true;
-                case "ReportRemovedNumbers":
-                    return (bool)true;
-                case "ReportModifiedNumbers":
-                    return (bool)true;
-                case "ReportModifiedAlphanumerics":
-                    return (bool)true;
-                case "AddedNumbersErrorType":
-                    return (string)"Warning";
-                case "RemovedNumbersErrorType":
-                    return (string)"Warning";
-                case "ModifiedNumbersErrorType":
-                    return (string)"Error";
-                case "ModifiedAlphanumericsErrorType":
-                    return (string)"Error";
-                case "ReportBriefMessages":
-                    return (bool)true;
-                case "ReportExtendedMessages":
-                    return (bool)false;
-                case "AllowLocalizations":
-                    return (bool)true;
-                case "PreventLocalizations":
-                    return (bool)false;
-                case "RequireLocalizations":
-                    return (bool)false;
-                case "SourceThousandsSpace":
-                    return (bool)true;
-                case "SourceThousandsNobreakSpace":
-                    return (bool)true;
-                case "SourceThousandsThinSpace":
-                    return (bool)true;
-                case "SourceThousandsNobreakThinSpace":
-                    return (bool)true;
-                case "SourceThousandsComma":
-                    return (bool)true;
-                case "SourceThousandsPeriod":
-                    return (bool)true;
-                case SourceNoSeparator_Setting:
-                    return (bool)true;
-                case "TargetThousandsSpace":
-                    return (bool)true;
-                case "TargetThousandsNobreakSpace":
-                    return (bool)true;
-                case "TargetThousandsThinSpace":
-                    return (bool)true;
-                case "TargetThousandsNobreakThinSpace":
-                    return (bool)true;
-                case "TargetThousandsComma":
-                    return (bool)true;
-                case "TargetThousandsPeriod":
-                    return (bool)true;
-                case TargetNoSeparator_Setting:
-                    return (bool)true;
-                case "SourceDecimalComma":
-                    return (bool)true;
-                case "SourceDecimalPeriod":
-                    return (bool)true;
-                case "TargetDecimalComma":
-                    return (bool)true;
-                case "TargetDecimalPeriod":
-                    return (bool)true;
-                case "ExcludeLockedSegments":
-                    return (bool)false;
-                case "Exclude100Percents":
-                    return (bool)false;
-                case "ExcludeUntranslatedSegments":
-                    return true;
-                case "ExcludeDraftSegments":
-                    return true;
-                case "SourceOmitLeadingZero":
+                case nameof(ExcludeTagText):
                     return false;
-                case "TargetOmitLeadingZero":
+                case nameof(ReportAddedNumbers):
+                    return true;
+                case nameof(ReportRemovedNumbers):
+                    return true;
+                case nameof(ReportModifiedNumbers) :
+                    return true;
+                case nameof(ReportModifiedAlphanumerics) :
+                    return true;
+                case nameof(AddedNumbersErrorType):
+                    return "Warning";
+                case nameof(RemovedNumbersErrorType):
+                    return "Warning";
+                case nameof(ModifiedNumbersErrorType):
+                    return "Error";
+                case nameof(ModifiedAlphanumericsErrorType):
+                    return "Error";
+                case nameof(ReportBriefMessages):
+                    return true;
+                case nameof(ReportExtendedMessages):
+                    return false;
+                case nameof(AllowLocalizations):
+                    return true;
+                case nameof(PreventLocalizations):
+                    return false;
+                case nameof(RequireLocalizations):
+                    return false;
+                case nameof(SourceThousandsSpace):
+                    return true;
+                case nameof(SourceThousandsNobreakSpace):
+                    return true;
+                case nameof(SourceThousandsThinSpace):
+                    return true;
+                case nameof(SourceThousandsNobreakThinSpace):
+                    return true;
+                case nameof(SourceThousandsComma):
+                    return true;
+                case nameof(SourceThousandsPeriod):
+                    return true;
+                case nameof(SourceNoSeparator):
+                    return true;
+                case nameof(TargetThousandsSpace):
+                    return true;
+                case nameof(TargetThousandsNobreakSpace):
+                    return true;
+                case nameof(TargetThousandsThinSpace):
+                    return true;
+                case nameof(TargetThousandsNobreakThinSpace):
+                    return true;
+                case nameof(TargetThousandsComma):
+                    return true;
+                case nameof(TargetThousandsPeriod):
+                    return true;
+                case nameof(TargetNoSeparator):
+                    return true;
+                case nameof(SourceDecimalComma):
+                    return true;
+                case nameof(SourceDecimalPeriod):
+                    return true;
+                case nameof(TargetDecimalComma):
+                    return true;
+                case nameof(TargetDecimalPeriod):
+                    return true;
+                case nameof(ExcludeLockedSegments):
+                    return false;
+                case nameof(Exclude100Percents):
+                    return false;
+                case nameof(ExcludeUntranslatedSegments):
+                    return true;
+                case nameof(ExcludeDraftSegments):
+                    return true;
+                case nameof(SourceOmitLeadingZero):
+                    return false;
+                case nameof(TargetOmitLeadingZero):
                     return false;
                 default:
                     return base.GetDefaultValue(settingId);
