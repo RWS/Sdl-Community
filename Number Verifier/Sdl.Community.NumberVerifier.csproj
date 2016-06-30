@@ -111,6 +111,7 @@
       <DependentUpon>NumberVerifierHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
+    <Compile Include="Interfaces\INumberVerifierMethods.cs" />
     <Compile Include="Interfaces\INumberVerifierSettings.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
     <Compile Include="MessageUI\NumberVerifierMessagePlugIn.cs" />

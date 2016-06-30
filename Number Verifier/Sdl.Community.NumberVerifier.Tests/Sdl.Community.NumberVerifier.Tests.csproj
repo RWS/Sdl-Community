@@ -81,6 +81,8 @@
     <Compile Include="Alphanumeric\AlphanumericWithThinSpace.cs" />
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
     <Compile Include="NumberVerifierMainTests.cs" />
+    <Compile Include="OmitZero\OmitLeadingZero.cs" />
+    <Compile Include="OmitZero\OmitZeroSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\NumberVerifierLocalizationsSettings.cs" />
   </ItemGroup>

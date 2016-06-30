@@ -26,7 +26,7 @@ namespace Sdl.Community.NumberVerifier
     #region "Declaration"
     [GlobalVerifier("Number Verifier", "Plugin_Name", "Plugin_Description")]
     #endregion
-    public class NumberVerifierMain : IGlobalVerifier, IBilingualVerifier, ISharedObjectsAware
+    public class NumberVerifierMain : IGlobalVerifier, IBilingualVerifier, ISharedObjectsAware, INumberVerifierMethods
     {
         #region "PrivateMembers"
         private ISharedObjects _sharedObjects;
@@ -782,7 +782,7 @@ namespace Sdl.Community.NumberVerifier
 
         }
 
-        private string OmitZero(string number)
+        public string OmitZero(string number)
         {
             number = NormalizeNumberWithMinusSign(number);
             if (number.IndexOf('m') == 0 && number.IndexOf('.') == 1 || number.IndexOf(',') == 1)
@@ -832,7 +832,7 @@ namespace Sdl.Community.NumberVerifier
             return number;
         }
 
-        private string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
+        public string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
             bool noSeparator)
         {
             string normalizedNumber;
