@@ -912,7 +912,7 @@ namespace Sdl.Community.NumberVerifier
 
 
 
-        private string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
+        public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
         {
             var thousandSeparator=string.Empty;
             var decimalSeparator=string.Empty;
