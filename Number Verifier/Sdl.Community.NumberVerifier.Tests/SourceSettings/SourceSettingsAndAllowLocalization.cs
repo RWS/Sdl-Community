@@ -47,6 +47,16 @@ namespace Sdl.Community.NumberVerifier.Tests.SourceSettings
             
         }
 
+        public static Mock<INumberVerifierSettings> CommaPeriod()
+        {
+            var numberVerifierSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+            numberVerifierSettings.Setup(t => t.SourceThousandsComma).Returns(true);
+            numberVerifierSettings.Setup(t => t.SourceThousandsPeriod).Returns(true);
+
+            return numberVerifierSettings;
+
+        }
+
         public static Mock<INumberVerifierSettings> DecimalComma()
         {
             var numberVerifierSettings = new Mock<INumberVerifierSettings>(MockBehavior.Loose);

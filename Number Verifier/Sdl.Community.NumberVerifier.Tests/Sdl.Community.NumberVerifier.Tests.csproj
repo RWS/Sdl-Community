@@ -80,8 +80,10 @@
     <Compile Include="Alphanumeric\AlphanumericWithNoBreakSpace.cs" />
     <Compile Include="Alphanumeric\AlphanumericWithThinSpace.cs" />
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
+    <Compile Include="NormalizeNumbers\CheckNumbersAgainstRegularExpression.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersAllowLocalization.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersNoSeparator.cs" />
+    <Compile Include="NormalizeNumbers\SourceAndTargetNormalization.cs" />
     <Compile Include="NumberVerifierMainTests.cs" />
     <Compile Include="OmitZero\OmitLeadingZero.cs" />
     <Compile Include="OmitZero\OmitZeroSettings.cs" />

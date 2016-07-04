@@ -264,7 +264,7 @@ namespace Sdl.Community.NumberVerifier
         /// and in the Messages window of SDL Trados Studio.
         /// </summary>
         /// <param name="paragraphUnit"></param>
-        private void CheckParagraphUnit(IParagraphUnit paragraphUnit)
+        public void CheckParagraphUnit(IParagraphUnit paragraphUnit)
         {
 
             var sourceNumberList = new List<string>();
