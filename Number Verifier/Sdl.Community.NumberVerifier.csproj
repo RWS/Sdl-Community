@@ -121,6 +121,7 @@
     <Compile Include="MessageUI\NumberVerifierMessageUI.designer.cs">
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">
       <SubType>UserControl</SubType>
