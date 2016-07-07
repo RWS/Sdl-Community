@@ -12,8 +12,6 @@ namespace Sdl.Community.NumberVerifier.Model
         public ErrorLevel ErrorLevel { get; set; }
         public string ErrorMessage { get; set; }
 
-        public string ExtendedErrorMessage { get; set; }
-
         public string TargetNumberIssues { get; set; }
         public string SourceNumberIssues { get; set; }
 

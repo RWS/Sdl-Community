@@ -4,35 +4,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
-using Sdl.Community.NumberVerifier.Tests.SourceSettings;
+using Sdl.Community.NumberVerifier.Model;
 using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 {
-    /// <summary>
-    /// Source separators
-    /// </summary>
-    public class SourceAndTargetNormalizationPrevent
+    public  class MultipleErrors
     {
-        
-        /// <summary>
-        /// Decimal separators : comma, period
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
+
         [Theory]
-        [InlineData("1,55", "1.55")]
-        public void DecimalSeparatorsComma(string source, string target)
+        [InlineData("1,554,5 alphanumeric AB23", " wrong separator 1 554.5 wrong alphanumeric BC12")]
+        public void ThousandsNumbersAndAlphanumerics(string source, string target)
         {
             //target settings
-            var numberVerifierSettings = SourceSettingsAndPreventLocalization.SpaceCommaPeriod();
- 
+            var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.CommaPeriod();
+            numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+
             //source settings
             numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
-            numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -40,10 +32,9 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
+           
 
-            Assert.True(errorMessage.Count == 0);
-
-
+            Assert.True(errorMessage.Count==3);
         }
     }
 }

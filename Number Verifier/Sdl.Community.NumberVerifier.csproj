@@ -143,6 +143,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TextGenerator.cs" />
+    <Compile Include="Utils\ErrorReportingUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GUI\NumberVerifierHelp.resx">

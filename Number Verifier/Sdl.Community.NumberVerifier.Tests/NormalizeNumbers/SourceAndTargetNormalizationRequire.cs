@@ -36,8 +36,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -67,8 +66,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -97,7 +95,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
         }
 
         /// <summary>
@@ -129,8 +127,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
         #endregion
 
@@ -162,8 +159,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
 
 
         }
@@ -195,8 +191,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
 
 
         }
@@ -229,7 +224,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
 
         }
 
@@ -260,7 +255,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ErrorMessage, "Number removed. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number removed. ");
         }
 
         /// <summary>
@@ -291,7 +286,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage.ErrorMessage, "Number added. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number added. ");
         }
 
         #endregion

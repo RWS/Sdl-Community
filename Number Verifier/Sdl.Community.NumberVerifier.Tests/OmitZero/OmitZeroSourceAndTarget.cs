@@ -20,7 +20,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
       /// <param name="source"></param>
       /// <param name="target"></param>
       /// <returns></returns>
-       public ErrorReporting SourceOmitCheckedTargetUnchecked(string source, string target)
+       public List<ErrorReporting> SourceOmitCheckedTargetUnchecked(string source, string target)
        {
             //source settings
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
@@ -41,7 +41,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             
        }
 
-       public ErrorReporting SourceOmitUncheckedTargetChecked(string source, string target)
+       public List<ErrorReporting> SourceOmitUncheckedTargetChecked(string source, string target)
        {
             //source settings
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
@@ -60,7 +60,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             return errorMessage;
         }
 
-        public ErrorReporting SourceOmitUncheckedTargetUnchecked(string source, string target)
+        public List<ErrorReporting> SourceOmitUncheckedTargetUnchecked(string source, string target)
         {
             //source settings
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
@@ -79,7 +79,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             return errorMessage;
         }
 
-        public ErrorReporting SourceOmitCheckedTargetChecked(string source, string target)
+        public List<ErrorReporting> SourceOmitCheckedTargetChecked(string source, string target)
         {
             //source settings
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
@@ -98,23 +98,22 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             return errorMessage;
         }
 
-        /// <summary>
-        /// Source: omit zero true
-        /// Target: omit zero false
-        /// No error
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        [Theory]
-        [InlineData(".55 another number 0.55 negative -.58 another -0.58", "0.55 number 0.55 negative -0.58 nr -0.58")]
-        public void SourceOmitCheckedTargetUncheckedNoError(string source, string target)
-        {
-            var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
-        }
+       /// <summary>
+       /// Source: omit zero true
+       /// Target: omit zero false
+       /// No error
+       /// </summary>
+       /// <param name="source"></param>
+       /// <param name="target"></param>
+       [Theory]
+       [InlineData(".55 another number 0.55 negative -.58 another -0.58", "0.55 number 0.55 negative -0.58 nr -0.58")]
+       public void SourceOmitCheckedTargetUncheckedNoError(string source, string target)
+       {
+           var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
+           Assert.True(errorMessage.Count == 0);
+       }
 
-        /// <summary>
+       /// <summary>
         /// Source: omit zero true
         /// Target: omit zero false
         /// Number modified/unlocalised
@@ -126,7 +125,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetUncheckedError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
 
         }
 
@@ -135,7 +134,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetUncheckedNegativeNumbers(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
 
         }
 
@@ -151,8 +150,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitUncheckedTargetCheckedNoError(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -167,7 +165,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitUncheckedTargetCheckedError(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
 
         }
 
@@ -183,8 +181,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitUncheckedTargetUncheckedNoError(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -199,8 +196,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetCheckedNoError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, string.Empty);
-            Assert.Equal(errorMessage.ErrorMessage, string.Empty);
+            Assert.True(errorMessage.Count == 0);
         }
 
         /// <summary>
@@ -213,7 +209,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void CheckError(string source, string target)
        {
             var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage.ExtendedErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
         }
     }
 }

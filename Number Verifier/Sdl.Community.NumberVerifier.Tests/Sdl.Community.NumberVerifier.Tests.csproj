@@ -81,6 +81,7 @@
     <Compile Include="Alphanumeric\AlphanumericWithThinSpace.cs" />
     <Compile Include="NegativeNumbers\NegativeNumbers.cs" />
     <Compile Include="NormalizeNumbers\CheckNumbersAgainstRegularExpression.cs" />
+    <Compile Include="NormalizeNumbers\MultipleErrors.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersAllowLocalization.cs" />
     <Compile Include="NormalizeNumbers\NormalizeNumbersNoSeparator.cs" />
     <Compile Include="NormalizeNumbers\SourceAndTargetNormalizationAllow.cs" />
