@@ -16,9 +16,10 @@ using System.Windows.Forms;
 using Sdl.Community.Extended.MessageUI;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
-using Sdl.Community.NumberVerifier.Utils;
 using Sdl.Core.Globalization;
 using Sdl.Core.PluginFramework;
+using Sdl.Community.NumberVerifier.Processors;
+using Sdl.Community.NumberVerifier.Specifications;
 
 namespace Sdl.Community.NumberVerifier
 {
@@ -32,17 +33,17 @@ namespace Sdl.Community.NumberVerifier
     {
         #region "PrivateMembers"
         private ISharedObjects _sharedObjects;
-        
+
         private bool? _enabled;
         private bool _omitLeadingZero;
         private INumberVerifierSettings _verificationSettings;
 
         #endregion
 
-        public NumberVerifierMain():this(null)
+        public NumberVerifierMain() : this(null)
         {
 
-          
+
         }
 
         public NumberVerifierMain(INumberVerifierSettings numberVerifierSettings)
@@ -85,7 +86,7 @@ namespace Sdl.Community.NumberVerifier
                 if (bundle == null) return _verificationSettings;
                 _verificationSettings = bundle.GetSettingsGroup<NumberVerifierSettings>();
                 return _verificationSettings;
-                
+
             }
         }
         #endregion
@@ -268,7 +269,7 @@ namespace Sdl.Community.NumberVerifier
         /// <param name="paragraphUnit"></param>
         public void CheckParagraphUnit(IParagraphUnit paragraphUnit)
         {
-           
+
             // loop through the whole paragraph unit
             foreach (var segmentPair in paragraphUnit.SegmentPairs.Where(FilterSegmentPairs))
             {
@@ -281,31 +282,31 @@ namespace Sdl.Community.NumberVerifier
 
                 foreach (var errorMessage in errorMessageList)
                 {
-                    
-                        var extendedMessageReporter = MessageReporter as IBilingualContentMessageReporterWithExtendedData;
-                        if (extendedMessageReporter != null)
-                        {
-                            #region CreateExtendedData
 
-                            var extendedData = new NumberVerifierMessageData(errorMessage.SourceNumberIssues, errorMessage.TargetNumberIssues,
-                                segmentPair.Target);
+                    var extendedMessageReporter = MessageReporter as IBilingualContentMessageReporterWithExtendedData;
+                    if (extendedMessageReporter != null)
+                    {
+                        #region CreateExtendedData
 
-                            #endregion
+                        var extendedData = new NumberVerifierMessageData(errorMessage.SourceNumberIssues, errorMessage.TargetNumberIssues,
+                            segmentPair.Target);
 
-                            #region ReportingMessageWithExtendedData
+                        #endregion
 
-                            extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
-                                errorMessage.ErrorLevel, errorMessage.ErrorMessage,
-                                new TextLocation(new Location(segmentPair.Target, true), 0),
-                                new TextLocation(new Location(segmentPair.Target, false),
-                                    segmentPair.Target.ToString().Length - 1),
-                                extendedData);
+                        #region ReportingMessageWithExtendedData
 
-                            #endregion
+                        extendedMessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
+                            errorMessage.ErrorLevel, errorMessage.ErrorMessage,
+                            new TextLocation(new Location(segmentPair.Target, true), 0),
+                            new TextLocation(new Location(segmentPair.Target, false),
+                                segmentPair.Target.ToString().Length - 1),
+                            extendedData);
 
-                      }
+                        #endregion
 
-                }          
+                    }
+
+                }
 
             }
         }
@@ -317,7 +318,7 @@ namespace Sdl.Community.NumberVerifier
         /// <param name="sourceText"></param>
         /// <param name="targetText"></param>
         /// <returns></returns>
-        public List<ErrorReporting> CheckAlphanumerics(string sourceText,string targetText)
+        public IEnumerable<ErrorReporting> CheckAlphanumerics(string sourceText, string targetText)
         {
             var errorReportingList = new List<ErrorReporting>();
             var sourceAlphanumericsList = GetAlphanumericList(sourceText, _sourceDecimalSeparators,
@@ -330,20 +331,43 @@ namespace Sdl.Community.NumberVerifier
             // remove alphanumeric names found both in source and target from respective list
             RemoveMatchingAlphanumerics(sourceAlphanumericsList, targetAlphanumericsList);
 
-            var errorReporting = new ErrorReporting
+            var numberResults = new NumberResults(VerificationSettings,
+                sourceAlphanumericsList,
+                targetAlphanumericsList);
+
+            var verifyProcessor = new ConditionalVerifyProcessor
             {
-                ErrorLevel = ErrorReportingUtils.GetAlphanumericsErrorLevel(sourceAlphanumericsList,targetAlphanumericsList,VerificationSettings),
-                ErrorMessage = PluginResources.Error_AlphanumericsModified,
-                SourceNumberIssues = ErrorReportingUtils.GetAlphanumericsIssues(sourceAlphanumericsList,VerificationSettings),
-                TargetNumberIssues = ErrorReportingUtils.GetAlphanumericsIssues(targetAlphanumericsList, VerificationSettings)
+                Specification = new AndVerifySpecification
+                {
+                    Specifications = new IVerifySpecification[]
+                   {
+                       new OrVerifySpecification
+                       {
+                           Specifications = new IVerifySpecification[]
+                           {
+                               new NumberExistsInSourceSpecification(),
+                               new NumberExistsInTargetSpecification()
+                           }
+                       },
+                       new ReportModifiedAlphanumericsSpecification()
+                   }
+                },
+                TruthProcessor = new ModifiedAlphanumericsVerifyProcessor
+                {
+                    SourceMessageProcessor = new ConditionalErrorMessageProcessor
+                    {
+                        Specification = new NumberExistsInSourceSpecification(),
+                        TruthProcessor = new AggregateSourceIssuesOnNewLineErrorMessageProcessor()
+                    },
+                    TargetMessageProcessor = new ConditionalErrorMessageProcessor
+                    {
+                        Specification = new NumberExistsInTargetSpecification(),
+                        TruthProcessor = new AggregateTargetIssuesOnNewLineErrorMessageProcessor()
+                    }
+                }
             };
 
-            if (errorReporting.SourceNumberIssues != string.Empty || errorReporting.TargetNumberIssues != string.Empty)
-            {
-                errorReportingList.Add(errorReporting);
-            }
-            
-            return errorReportingList;
+            return verifyProcessor.Verify(numberResults);
         }
 
         /// <summary>
@@ -509,7 +533,7 @@ namespace Sdl.Community.NumberVerifier
             }
 
             return errorList;
-        } 
+        }
 
         /// <summary>
         /// Returns a list of errors which contains combined errors from alphanumerics check and numbers check
@@ -539,7 +563,7 @@ namespace Sdl.Community.NumberVerifier
         /// <param name="targetNumberList"></param>
         /// <param name="sourceText"></param>
         /// <param name="targetText"></param>
-        public void SetReportDetails(ErrorReporting errorReporting,List<string> sourceNumberList,List<string > targetNumberList,string sourceText,string targetText)
+        public void SetReportDetails(ErrorReporting errorReporting, List<string> sourceNumberList, List<string> targetNumberList, string sourceText, string targetText)
         {
             // collate remaining numbers and put into string variables for reporting of details       
             if (sourceNumberList.Count > 0 &&
@@ -670,9 +694,9 @@ namespace Sdl.Community.NumberVerifier
         }
 
         //For more information see: https://www.cl.cam.ac.uk/~mgk25/ucs/quotes.html
-        public string AddCustomSeparators(string selectedSeparators,bool isDecimalSeparator)
+        public string AddCustomSeparators(string selectedSeparators, bool isDecimalSeparator)
         {
-            var expression = string.Empty; 
+            var expression = string.Empty;
             var separatorsList = new List<string>();
             var selectedSep = string.Empty;
             var separators = string.Empty;
@@ -688,7 +712,7 @@ namespace Sdl.Community.NumberVerifier
                 }
                 else
                 {
-                    selectedSep = selectedSep+ AddSourceThousandSeparators();
+                    selectedSep = selectedSep + AddSourceThousandSeparators();
                 }
             }
 
@@ -705,7 +729,7 @@ namespace Sdl.Community.NumberVerifier
                 }
 
             }
-            
+
             //put separators in a list, in order to eliminate the duplicates
             if (selectedSeparators != string.Empty)
             {
@@ -717,7 +741,7 @@ namespace Sdl.Community.NumberVerifier
                     }
                     else
                     {
-                        expression = @"\" + string.Format("u{0:x4}", (int) c);
+                        expression = @"\" + string.Format("u{0:x4}", (int)c);
                     }
 
                     if (!separatorsList.Contains(expression.ToLower()) && !string.IsNullOrEmpty(expression))
@@ -762,7 +786,7 @@ namespace Sdl.Community.NumberVerifier
 
             if (_verificationSettings.SourceDecimalComma)
             {
-                sourceDecimalSeparators = sourceDecimalSeparators + @"\u002C"; 
+                sourceDecimalSeparators = sourceDecimalSeparators + @"\u002C";
             }
             if (_verificationSettings.SourceDecimalPeriod)
             {
@@ -821,7 +845,7 @@ namespace Sdl.Community.NumberVerifier
             }
             if (_verificationSettings.SourceThousandsComma)
             {
-                sourceThousandSeparators = sourceThousandSeparators + @"\u002C"; 
+                sourceThousandSeparators = sourceThousandSeparators + @"\u002C";
             }
             if (_verificationSettings.SourceThousandsPeriod)
             {
@@ -837,34 +861,34 @@ namespace Sdl.Community.NumberVerifier
 
         public void NormalizeAlphanumerics(string text, ICollection<string> numeberCollection,
             ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
-            bool noSeparator,bool omitLeadingZero)
+            bool noSeparator, bool omitLeadingZero)
         {
             var separators = string.Concat(thousandSeparators, decimalSeparators);
 
             //skip the "-" in case of: - 23 (dash, space, number)
-            char[] dashSign = {'-', '\u2013', '\u2212'};
+            char[] dashSign = { '-', '\u2013', '\u2212' };
             char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
             var spacePosition = text.IndexOfAny(space);
             var dashPosition = text.IndexOfAny(dashSign);
-            if (dashPosition==0 && spacePosition == 1)
+            if (dashPosition == 0 && spacePosition == 1)
             {
                 text = text.Substring(2);
             }
 
-#region Omit zero
+            #region Omit zero
             //if only "No separator" is selected "separators" variable will be a empty string
-            string expresion=string.Empty;
+            string expresion = string.Empty;
 
             if (omitLeadingZero)
             {
                 _omitLeadingZero = true;
                 if (separators != string.Empty)
                 {
-                   expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
+                    expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+([{0}]\d+)*", separators);
                 }
                 else
                 {
-                    expresion =string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+(\d+)*");
+                    expresion = string.Format(@"-?\u2013?\u2212?\u002E?\u2013?\d+(\d+)*");
                 }
             }
             else
@@ -873,23 +897,23 @@ namespace Sdl.Community.NumberVerifier
                 if (separators != string.Empty)
                 {
                     expresion = string.Format(@"-?\u2013?\u2212?\u2013?\d+([{0}]\d+)*", separators);
-                   
+
                 }
                 else
                 {
                     expresion = @"-?\u2013?\u2212?\u2013?\d+(\d+)*";
                 }
             }
-#endregion
+            #endregion
             foreach (Match match in Regex.Matches(text, expresion))
             {
-                    var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
-                        noSeparator);
+                var normalizedNumber = NormalizedNumber(match.Value, thousandSeparators, decimalSeparators,
+                    noSeparator);
 
                 numeberCollection.Add(match.Value);
                 normalizedNumberCollection.Add(normalizedNumber);
 
-                }
+            }
 
         }
 
@@ -923,16 +947,16 @@ namespace Sdl.Community.NumberVerifier
             var positionOfNormalMinus = number.IndexOf('-');
             var positionOfSpecialMinus = number.IndexOf('\u2212');
             var positionOfDash = number.IndexOf('\u2013');
-            char[] space = { ' ','\u00a0','\u2009','\u202F'};
+            char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
             var spacePosition = number.IndexOfAny(space);
-            
+
 
             //if it has space is not a negative number
-            if (positionOfNormalMinus == 0 && spacePosition!=1)
+            if (positionOfNormalMinus == 0 && spacePosition != 1)
             {
                 number = number.Replace("-", "m");
             }
-            if (positionOfSpecialMinus == 0 && spacePosition!=1)
+            if (positionOfSpecialMinus == 0 && spacePosition != 1)
             {
                 number = number.Replace("\u2212", "m");
             }
@@ -959,7 +983,7 @@ namespace Sdl.Community.NumberVerifier
 
             if (thousandSeparators != String.Empty &&
                 Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
-                // e.g 1,000,000
+            // e.g 1,000,000
             {
                 normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
             }
@@ -983,7 +1007,7 @@ namespace Sdl.Community.NumberVerifier
             }
             else if (thousandSeparators != String.Empty &&
                      Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
-                // e.g. 1,000
+            // e.g. 1,000
             {
                 if (_sourceDecimalSeparators != String.Empty &&
                     Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
@@ -1009,8 +1033,8 @@ namespace Sdl.Community.NumberVerifier
 
                 if (noSeparator)
                 {
-                   
-                    normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,_targetDecimalSeparators, normalizedNumber);
+
+                    normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators, _targetDecimalSeparators, normalizedNumber);
                 }
             }
             return normalizedNumber;
@@ -1020,18 +1044,18 @@ namespace Sdl.Community.NumberVerifier
 
         public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
         {
-            var thousandSeparator=string.Empty;
-            var decimalSeparator=string.Empty;
+            var thousandSeparator = string.Empty;
+            var decimalSeparator = string.Empty;
             var hasMinusSign = false;
 
             if (thousandSeparators != string.Empty)
             {
-                 thousandSeparator = thousandSeparators.Substring(0,1);
+                thousandSeparator = thousandSeparators.Substring(0, 1);
             }
 
             if (decimalSeparators != string.Empty)
             {
-                decimalSeparator = decimalSeparators.Substring(0,1);
+                decimalSeparator = decimalSeparators.Substring(0, 1);
             }
 
             try
@@ -1061,7 +1085,7 @@ namespace Sdl.Community.NumberVerifier
                         var counter = 0;
                         for (var i = thousands.Length - 1; i >= 0; i--)
                         {
-                            if (tempNormalized.Length > 0 && counter%3 == 0)
+                            if (tempNormalized.Length > 0 && counter % 3 == 0)
                             {
                                 if (thousandSeparators != string.Empty)
                                 {
@@ -1111,7 +1135,7 @@ namespace Sdl.Community.NumberVerifier
             }
             catch (Exception e)
             {
-                
+
             }
             return normalizedNumber;
         }
@@ -1128,7 +1152,7 @@ namespace Sdl.Community.NumberVerifier
             }
         }
 
-        public List<string> GetAlphanumericList(string text,string decimalSeparators,string thousandSeparators)
+        public List<string> GetAlphanumericList(string text, string decimalSeparators, string thousandSeparators)
         {
             var alphaList = new List<string>();
             //added no break space, thin space and no break thin space, as separators.
@@ -1142,7 +1166,7 @@ namespace Sdl.Community.NumberVerifier
             {
                 text = text.Replace("\u2212", "m");
             }
-            char[] delimiterChars = {' ', '\u00a0', '\u2009', '\u202F'};
+            char[] delimiterChars = { ' ', '\u00a0', '\u2009', '\u202F' };
             var wordsList = text.Split(delimiterChars).ToList();
             var alpha = new List<string>();
 
@@ -1151,8 +1175,8 @@ namespace Sdl.Community.NumberVerifier
             {
                 if (word.Any(char.IsDigit))
                 {
-                    var upperCaseLetters = word.Where(d=>!char.IsDigit(d)).ToList();
-                    if (upperCaseLetters.Count!=0 && upperCaseLetters.All(char.IsUpper))
+                    var upperCaseLetters = word.Where(d => !char.IsDigit(d)).ToList();
+                    if (upperCaseLetters.Count != 0 && upperCaseLetters.All(char.IsUpper))
                     {
                         alpha.Add(word);
                     }
@@ -1174,9 +1198,9 @@ namespace Sdl.Community.NumberVerifier
                 }
                 else
                 {
-                    expresion= @"^-?\u2212?\d*([A-Z]|\d)*(\d+)*";
+                    expresion = @"^-?\u2212?\d*([A-Z]|\d)*(\d+)*";
                 }
-                
+
                 if (alpha.Count != 0)
                 {
                     foreach (var alphaNumeric in alpha)
@@ -1184,13 +1208,13 @@ namespace Sdl.Community.NumberVerifier
                         alphaList.AddRange(from Match match in Regex.Matches(alphaNumeric, expresion) select match.Value);
                     }
                 }
-              
+
             }
             catch (Exception e)
             {
-                
+
             }
-           
+
             return alphaList;
         }
 
@@ -1208,9 +1232,9 @@ namespace Sdl.Community.NumberVerifier
                     ((segmentPair.Properties.TranslationOrigin.OriginType != "auto-propagated" &&
                       segmentPair.Properties.TranslationOrigin.OriginType != "tm") ||
                      segmentPair.Properties.TranslationOrigin.MatchPercent != 100))
-                     &&!(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified)
-                     &&!(VerificationSettings.ExcludeDraftSegments==true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
+                     && !(VerificationSettings.ExcludeUntranslatedSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Unspecified)
+                     && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
         }
-                #endregion
+        #endregion
     }
 }
