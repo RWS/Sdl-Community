@@ -95,7 +95,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
         }
 
         /// <summary>
@@ -224,7 +224,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
 
         }
 
@@ -255,7 +255,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number removed. ");
+            Assert.Equal(errorMessage[0].ErrorMessage,PluginResources.Error_NumbersRemoved);
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number added. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersAdded);
         }
 
         #endregion

@@ -12,5 +12,8 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         List<string> SourceNumbers { get; set; }
         List<string> TargetNumbers { get; set; }
 
+        string SourceText { get; set; }
+        string  TargetText { get; set; }
+
     }
 }

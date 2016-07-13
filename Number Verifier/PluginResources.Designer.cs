@@ -22,7 +22,7 @@ namespace Sdl.Community.NumberVerifier {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class PluginResources {
+    public class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Sdl.Community.NumberVerifier {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.NumberVerifier.PluginResources", typeof(PluginResources).Assembly);
@@ -51,7 +51,7 @@ namespace Sdl.Community.NumberVerifier {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Alphanumeric name modified..
         /// </summary>
-        internal static string Error_AlphanumericsModified {
+        public static string Error_AlphanumericsModified {
             get {
                 return ResourceManager.GetString("Error_AlphanumericsModified", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number added. .
         /// </summary>
-        internal static string Error_NumbersAdded {
+        public static string Error_NumbersAdded {
             get {
                 return ResourceManager.GetString("Error_NumbersAdded", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number modified/unlocalised. .
         /// </summary>
-        internal static string Error_NumbersNotIdentical {
+        public static string Error_NumbersNotIdentical {
             get {
                 return ResourceManager.GetString("Error_NumbersNotIdentical", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number removed. .
         /// </summary>
-        internal static string Error_NumbersRemoved {
+        public static string Error_NumbersRemoved {
             get {
                 return ResourceManager.GetString("Error_NumbersRemoved", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number Verifier Help.rtf.
         /// </summary>
-        internal static string Help {
+        public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
             }
@@ -110,7 +110,7 @@ namespace Sdl.Community.NumberVerifier {
         ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\qc\lang29\b\f0\fs28 Number Verifier Help\par
         ///\pard\sa200\sl276\slmult1\b0\fs22 While the standard number verification in SDL Trados Studio may often be sufficient there are some occasions when a bit more control would be preferable, for example when translating documents that contain lots of numbers. This Number Verifier plug-in allows you to fine-tu [rest of string was truncated]&quot;;.
         /// </summary>
-        internal static string Help_Text {
+        public static string Help_Text {
             get {
                 return ResourceManager.GetString("Help_Text", resourceCulture);
             }
@@ -119,7 +119,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon icon {
+        public static System.Drawing.Icon icon {
             get {
                 object obj = ResourceManager.GetObject("icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
@@ -129,7 +129,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Checks whether numbers in the target segment are identical to those in the source segment..
         /// </summary>
-        internal static string Plugin_Description {
+        public static string Plugin_Description {
             get {
                 return ResourceManager.GetString("Plugin_Description", resourceCulture);
             }
@@ -138,7 +138,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number Verifier.
         /// </summary>
-        internal static string Plugin_Name {
+        public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
@@ -147,7 +147,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Verification settings for numbers.
         /// </summary>
-        internal static string Setting_Description {
+        public static string Setting_Description {
             get {
                 return ResourceManager.GetString("Setting_Description", resourceCulture);
             }
@@ -156,7 +156,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Number verification settings.
         /// </summary>
-        internal static string Setting_Name {
+        public static string Setting_Name {
             get {
                 return ResourceManager.GetString("Setting_Name", resourceCulture);
             }
@@ -165,7 +165,7 @@ namespace Sdl.Community.NumberVerifier {
         /// <summary>
         ///   Looks up a localized string similar to Plug-in to compare source and target numbers..
         /// </summary>
-        internal static string Verifier_Description {
+        public static string Verifier_Description {
             get {
                 return ResourceManager.GetString("Verifier_Description", resourceCulture);
             }

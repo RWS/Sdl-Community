@@ -104,6 +104,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Composers\AlphanumericErrorComposer.cs" />
+    <Compile Include="Composers\ExtendedErrorMessageComposer.cs" />
+    <Compile Include="Composers\NumberErrorComposer.cs" />
+    <Compile Include="Composers\SourceErrorMessageComposer.cs" />
+    <Compile Include="Composers\TargetErrorMessageComposer.cs" />
     <Compile Include="GUI\NumberVerifierHelp.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -136,12 +141,13 @@
     </Compile>
     <Compile Include="NumberVerifierSettings.cs" />
     <Compile Include="GUI\NumberVerifierUIPage.cs" />
+    <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\CompositeVerifyProcessor.cs" />
     <Compile Include="Processors\ConditionalErrorMessageProcessor.cs" />
     <Compile Include="Processors\ConditionalVerifyProcessor.cs" />
-    <Compile Include="Processors\ModifiedAlphanumericsVerifyProcessor.cs" />
+    <Compile Include="Processors\VerifyProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -154,11 +160,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Specifications\AndVerifySpecification.cs" />
+    <Compile Include="Specifications\NumberAddedSpecification.cs" />
     <Compile Include="Specifications\NumberExistsInSourceSpecification.cs" />
     <Compile Include="Specifications\NumberExistsInTargetSpecification.cs" />
+    <Compile Include="Specifications\NumberRemovedSpecification.cs" />
     <Compile Include="Specifications\OrVerifySpecification.cs" />
+    <Compile Include="Specifications\ReportAddedNumbersSpecification.cs" />
+    <Compile Include="Specifications\ReportExtendedMessageSpecification.cs" />
     <Compile Include="Specifications\ReportModifiedAlphanumericsSpecification.cs" />
     <Compile Include="Specifications\ReportModifiedNumbersSpecification.cs" />
+    <Compile Include="Specifications\ReportRemovedNumbersSpecification.cs" />
     <Compile Include="TextGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -172,7 +183,7 @@
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
