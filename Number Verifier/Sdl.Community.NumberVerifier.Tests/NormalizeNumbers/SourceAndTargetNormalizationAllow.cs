@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
@@ -78,7 +80,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
         }
         /// <summary>
         /// Thousands sep: space, thin space, no-break space
@@ -119,6 +121,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(s => s.TargetNoSeparator).Returns(true);
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+            numberVerifierSettings.Setup(d => d.TargetThousandsPeriod).Returns(true);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -154,7 +157,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersNotIdentical);
         }
 
 
@@ -209,7 +212,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
 
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number removed. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, PluginResources.Error_NumbersRemoved);
         }
 
         /// <summary>
@@ -233,8 +236,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierMain.Initialize(docPropMock.Object);
 
             var errorMessage = numberVerifierMain.CheckSourceAndTarget(source, target);
-
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number added. ");
+            Assert.Equal(errorMessage[0].ErrorMessage,PluginResources.Error_NumbersAdded);
         }
 
         #endregion

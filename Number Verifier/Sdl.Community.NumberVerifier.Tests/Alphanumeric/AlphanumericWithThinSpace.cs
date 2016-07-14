@@ -16,8 +16,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
             var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text, decimalSeparators,
-                thousandSeparators);
+            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
             Assert.True(textAlphanumericsList.Count != 0);
             return textAlphanumericsList;
@@ -42,8 +41,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.RequireLocalization();
             var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
-            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text, decimalSeparators,
-                thousandSeparators);
+            var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
 
             Assert.True(textAlphanumericsList.Count == 0);
         }

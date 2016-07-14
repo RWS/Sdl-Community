@@ -12,6 +12,8 @@ namespace Sdl.Community.NumberVerifier.Model
         private INumberVerifierSettings _settings;
         private List<string> _sourceNumbers;
         private List<string> _targetNumbers;
+        private string _targetText;
+
         public NumberResults(INumberVerifierSettings settings, 
             List<string> sourceNumbers,
             List<string> targetNumbers)
@@ -19,6 +21,13 @@ namespace Sdl.Community.NumberVerifier.Model
             _settings = settings;
             _sourceNumbers = sourceNumbers;
             _targetNumbers = targetNumbers;
+        }
+
+        public NumberResults(INumberVerifierSettings settings, List<string> sourceNumbers, List<string> targetNumbers,string sourceText,string targetText) 
+            :this(settings, sourceNumbers,targetNumbers)
+        {
+            SourceText = sourceText;
+            _targetText = targetText;
         }
 
         public INumberVerifierSettings Settings
@@ -59,5 +68,9 @@ namespace Sdl.Community.NumberVerifier.Model
                 _targetNumbers = value;
             }
         }
+
+        public string SourceText { get; set; }
+
+        public string TargetText { get; set; }
     }
 }
