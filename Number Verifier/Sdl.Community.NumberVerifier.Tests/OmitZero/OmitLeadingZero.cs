@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.OmitZero
@@ -19,6 +20,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             var numberVerifierSettings = OmitZeroSettings.OmitZeroCheckedAndPreventLocalization();
             var methodsMock = new Mock<INumberVerifierMethods>();
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
             numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
             var normalizedNumber=numberVerifierMain.NormalizedNumber(number, ".", ".", false);
@@ -46,6 +48,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         {
             var imockSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
 
+            NumberVerifierLocalizationsSettings.InitSeparators(imockSettings);
             var numberVerifierMain = new NumberVerifierMain(imockSettings.Object);
 
             var normalizedNumber = numberVerifierMain.OmitZero(text);
@@ -72,6 +75,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         {
             var imockSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
 
+            NumberVerifierLocalizationsSettings.InitSeparators(imockSettings);
             var numberVerifierMain = new NumberVerifierMain(imockSettings.Object);
 
             var normalizedNumber = numberVerifierMain.OmitZero(text);
@@ -95,6 +99,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         {
             var imockSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
 
+            NumberVerifierLocalizationsSettings.InitSeparators(imockSettings);
             var numberVerifierMain = new NumberVerifierMain(imockSettings.Object);
 
             var normalizedNumberWithPeriod = numberVerifierMain.OmitZero(numberWithPeriod);
@@ -126,6 +131,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             var numberVerifierSettings = OmitZeroSettings.OmitZeroUncheckedAndAllowLocalization();
             var methodsMock = new Mock<INumberVerifierMethods>(MockBehavior.Strict);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
             numberVerifierMain.NormalizeAlphanumerics(number, new List<string>(), new List<string>(), ".", ".", false, numberVerifierSettings.Object.SourceOmitLeadingZero);
            var normalizedNumber= numberVerifierMain.NormalizedNumber(number, ".", ".", false);

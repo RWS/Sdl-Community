@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Model;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
@@ -29,6 +30,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
 
             //target settings 
            numberVerifierSettings.Setup(t => t.TargetOmitLeadingZero).Returns(false);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -49,6 +52,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             numberVerifierSettings.Setup(d => d.SourceDecimalPeriod).Returns(true);
 
             numberVerifierSettings.Setup(t => t.TargetOmitLeadingZero).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -68,6 +73,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             numberVerifierSettings.Setup(d => d.SourceDecimalPeriod).Returns(true);
 
             numberVerifierSettings.Setup(t => t.TargetOmitLeadingZero).Returns(false);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -87,6 +94,8 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
             numberVerifierSettings.Setup(d => d.SourceDecimalPeriod).Returns(true);
 
             numberVerifierSettings.Setup(t => t.TargetOmitLeadingZero).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators

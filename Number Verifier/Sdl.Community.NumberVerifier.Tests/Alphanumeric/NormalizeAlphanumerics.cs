@@ -32,6 +32,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target,numberVerifierMain);
@@ -44,6 +46,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -72,6 +76,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             numberVerifierSettings.Setup(s => s.SourceThousandsSpace).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -96,6 +101,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             numberVerifierSettings.Setup(s => s.SourceThousandsSpace).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -115,6 +121,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -128,6 +136,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -147,6 +157,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
@@ -159,6 +171,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             var errorMessage = ReportModifiedAlphanumerics(source, target, numberVerifierMain);

@@ -58,5 +58,11 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetSourceDecimalCustomSeparator { get; set; }
         string GetTargetDecimalCustomSeparator { get; set; }
 
+        IEnumerable<string> GetSourceDecimalSeparators();
+        IEnumerable<string> GetSourceThousandSeparators();
+
+        IEnumerable<string> GetTargetDecimalSeparators();
+        IEnumerable<string> GetTargetThousandSeparators();
+
     }
 }

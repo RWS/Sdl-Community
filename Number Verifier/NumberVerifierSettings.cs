@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Core.Settings;
 
@@ -392,5 +393,50 @@ namespace Sdl.Community.NumberVerifier
             }
         }
         #endregion
+
+        public IEnumerable<string> GetSourceDecimalSeparators()
+        {
+            yield return SourceDecimalComma ? @"\u002C" : string.Empty;
+            yield return SourceDecimalPeriod ? @"\u002E" : string.Empty;
+            yield return SourceDecimalCustomSeparator ? GetSourceDecimalCustomSeparator
+                : string.Empty;
+        }
+
+        public IEnumerable<string> GetTargetDecimalSeparators()
+        {
+            yield return TargetDecimalComma ? @"\u002C" : string.Empty;
+            yield return TargetDecimalPeriod ? @"\u002E" : string.Empty;
+            yield return TargetDecimalCustomSeparator ? GetTargetDecimalCustomSeparator
+                : string.Empty;
+        }
+
+        public IEnumerable<string> GetSourceThousandSeparators()
+        {
+            yield return SourceThousandsSpace ? @"\u0020" : string.Empty;
+            yield return SourceThousandsNobreakSpace ? @"\u00A0" : string.Empty;
+            yield return SourceThousandsThinSpace ? @"\u2009" : string.Empty;
+            yield return SourceThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
+            yield return SourceThousandsComma ? @"\u002C" : string.Empty;
+            yield return SourceThousandsPeriod ? @"\u002E" : string.Empty;
+            yield return SourceThousandsCustomSeparator
+                ? GetSourceThousandsCustomSeparator
+                : string.Empty;
+
+        }
+
+      
+
+        public IEnumerable<string> GetTargetThousandSeparators()
+        {
+            yield return TargetThousandsSpace ? @"\u0020" : string.Empty;
+            yield return TargetThousandsNobreakSpace ? @"\u00A0" : string.Empty;
+            yield return TargetThousandsThinSpace ? @"\u2009" : string.Empty;
+            yield return TargetThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
+            yield return TargetThousandsComma ? @"\u002C" : string.Empty;
+            yield return TargetThousandsPeriod ? @"\u002E" : string.Empty;
+            yield return TargetThousandsCustomSeparator
+                ? GetTargetThousandsCustomSeparator
+                : string.Empty;
+        }
     }
 }

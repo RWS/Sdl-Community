@@ -214,32 +214,10 @@ namespace Sdl.Community.NumberVerifier
 
         public void Initialize(IDocumentProperties documentInfo)
         {
-
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsSpace ? @"\u0020" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsNobreakSpace ? @"\u00A0" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsThinSpace ? @"\u2009" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsComma ? @"\u002C" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsPeriod ? @"\u002E" : string.Empty;
-            _sourceMatchingThousandSeparators += VerificationSettings.SourceThousandsCustomSeparator
-                ? VerificationSettings.GetSourceThousandsCustomSeparator
-                : string.Empty;
-
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsSpace ? @"\u0020" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsNobreakSpace ? @"\u00A0" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsThinSpace ? @"\u2009" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsNobreakThinSpace ? @"\u202F" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsComma ? @"\u002C" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsPeriod ? @"\u002E" : string.Empty;
-            _targetMatchingThousandSeparators += VerificationSettings.TargetThousandsCustomSeparator
-                ? VerificationSettings.GetTargetThousandsCustomSeparator
-                : string.Empty;
-
-            _sourceMatchingDecimalSeparators += VerificationSettings.SourceDecimalComma ? @"\u002C" : string.Empty;
-            _sourceMatchingDecimalSeparators += VerificationSettings.SourceDecimalPeriod ? @"\u002E" : string.Empty;
-            _sourceMatchingDecimalSeparators += VerificationSettings.SourceDecimalCustomSeparator
-                ? VerificationSettings.GetSourceDecimalCustomSeparator
-                : string.Empty;
+            _sourceMatchingThousandSeparators = string.Concat(VerificationSettings.GetSourceThousandSeparators());
+            _targetMatchingThousandSeparators = string.Concat(VerificationSettings.GetTargetThousandSeparators());
+            _sourceMatchingDecimalSeparators = string.Concat(VerificationSettings.GetSourceDecimalSeparators());
+            _targetMatchingDecimalSeparators = string.Concat(VerificationSettings.GetTargetDecimalSeparators());
 
             _targetMatchingDecimalSeparators += VerificationSettings.TargetDecimalComma ? @"\u002C" : string.Empty;
             _targetMatchingDecimalSeparators += VerificationSettings.TargetDecimalPeriod ? @"\u002E" : string.Empty;
@@ -404,20 +382,14 @@ namespace Sdl.Community.NumberVerifier
         /// <returns></returns>
         public Tuple<List<string>, List<string>> GetNumbersTuple(string text, string decimalSeparators,
             string thousandSeparators,
-            bool noSeparator, bool omitZero,bool isSource)
+            bool noSeparator, bool omitZero)
         {
             var numberList = new List<string>();
             var normalizedNumberList = new List<string>();
-            _isSource = isSource;
-            // find all numbers in source and add to list
-            numberList.Clear();
-            normalizedNumberList.Clear();
-            var customDecimalSeparators = AddCustomSeparators(decimalSeparators, true);
-            var customThousandSeparators = AddCustomSeparators(thousandSeparators, false);
 
             //call normalize method with source settings
             NormalizeAlphanumerics(text, numberList, normalizedNumberList,
-                customThousandSeparators, customDecimalSeparators, noSeparator, omitZero);
+                thousandSeparators, decimalSeparators, noSeparator, omitZero);
 
             var tulpleList = Tuple.Create(numberList, normalizedNumberList);
 
@@ -432,15 +404,25 @@ namespace Sdl.Community.NumberVerifier
         /// <returns></returns>
         public IEnumerable<ErrorReporting> CheckNumbers(string sourceText, string targetText)
         {
-            var errorList = new List<ErrorReporting>();
+            var sourceDecimalExtractComposer = new SourceDecimalSeparatorsExtractComposer().Compose();
+            var sourceThousandsExtractComposer = new SourceThousandSeparatorsExtractComposer().Compose();
 
-            var sourceList = GetNumbersTuple(sourceText, _sourceMatchingDecimalSeparators,
-                _sourceMatchingThousandSeparators, VerificationSettings.SourceNoSeparator,
-                VerificationSettings.SourceOmitLeadingZero, true);
+            var sourceDecimalSeparators = sourceDecimalExtractComposer.Extract(new ExtractData(VerificationSettings,new []{sourceText}));
+            var sourceThousandSeparators = sourceThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { sourceText }));
 
-            var targetList = GetNumbersTuple(targetText, _targetMatchingDecimalSeparators,
-                _targetMatchingThousandSeparators, VerificationSettings.TargetNoSeparator,
-                VerificationSettings.TargetOmitLeadingZero, false);
+            var sourceList = GetNumbersTuple(sourceText, string.Concat(sourceDecimalSeparators),
+                string.Concat(sourceThousandSeparators), VerificationSettings.SourceNoSeparator,
+                VerificationSettings.SourceOmitLeadingZero);
+
+            var targetDecimalExtractComposer = new TargetDecimalSeparatorsExtractComposer().Compose();
+            var targetThousandsExtractComposer = new TargetThousandSeparatorsExtractComposer().Compose();
+
+            var targetDecimalSeparators = targetDecimalExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { targetText }));
+            var targetThousandSeparators = targetThousandsExtractComposer.Extract(new ExtractData(VerificationSettings, new[] { targetText }));
+
+            var targetList = GetNumbersTuple(targetText, string.Concat(targetDecimalSeparators),
+                string.Concat(targetThousandSeparators), VerificationSettings.TargetNoSeparator,
+                VerificationSettings.TargetOmitLeadingZero);
 
             var sourceNumberList = sourceList.Item1;
             var sourceNormalizedNumberList = sourceList.Item2;
@@ -597,53 +579,62 @@ namespace Sdl.Community.NumberVerifier
             var separators = string.Empty;
 
             // you can use in target as separators source separators or selected target separators
+            //1 specificicat-done
             if (_verificationSettings.AllowLocalizations)
             {
 
                 if (isDecimalSeparator)
                 {
-                    selectedSep =  _sourceMatchingDecimalSeparators;
+                    selectedSep =  _sourceMatchingDecimalSeparators;//decimalAllowlocalizationProcessor
                     selectedSep = selectedSep + _targetMatchingDecimalSeparators;
                 }
                 else
                 {
-                    selectedSep = _sourceMatchingThousandSeparators;
+                    selectedSep = _sourceMatchingThousandSeparators;//thousandAlloProc
                     selectedSep = selectedSep + _targetMatchingThousandSeparators;
                 }
             }
 
+            //1 specificicat
             //you can use only source separators selected
             if (_verificationSettings.PreventLocalizations)
             {
                 if (isDecimalSeparator)
                 {
-                    selectedSep =  _sourceMatchingDecimalSeparators;
+                    selectedSep =  _sourceMatchingDecimalSeparators; //DecimalPrevProc
                 }
                 else
                 {
-                    selectedSep = selectedSep + _sourceMatchingThousandSeparators;
+                    selectedSep =  _sourceMatchingThousandSeparators;//ThouPrevProc
                 }
 
             }
 
+            //1 specificicat
             if (_verificationSettings.RequireLocalizations)
             {
                 if (isDecimalSeparator)
                 {
-                    selectedSep = selectedSeparators;
+                    selectedSep = selectedSeparators;//DecimalReqProc
+                    //sourceDecimalProc
+                    //tarDecimalProc
                 }
                 else
                 {
-                    selectedSep = selectedSeparators;
+                    selectedSep = selectedSeparators;//sourceThProcess, targetThProc
                 }
             }
 
+            //Compozitie (ApostrophCompositionProcessor)
             if (selectedSeparators.Contains("'"))
             {
                 selectedSep = string.Concat(selectedSeparators, @"\u2019\u0027");
             }
 
             //get a list of source separators if we are in case of allow localization, or prevent localization
+            //Composition UniqueSeparatorComposition (are noduri)
+            //primeste IEnumerable(aplic logica de unique)
+            //trebuie com
             if (selectedSep != string.Empty)
             {
                 var sepSource = selectedSep.Split('\\').ToList();
@@ -670,8 +661,8 @@ namespace Sdl.Community.NumberVerifier
             ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
             bool noSeparator, bool omitLeadingZero)
         {
-            var separators = string.Concat(thousandSeparators, decimalSeparators);
 
+                var separators = string.Concat(thousandSeparators, decimalSeparators);
             //skip the "-" in case of: - 23 (dash, space, number)
             char[] dashSign = { '-', '\u2013', '\u2212' };
             char[] space = { ' ', '\u00a0', '\u2009', '\u202F' };
@@ -777,82 +768,89 @@ namespace Sdl.Community.NumberVerifier
         public string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
             bool noSeparator)
         {
-            string normalizedNumber;
-            // see http://www.fileformat.info/info/unicode/char/2212/index.htm
-            //request to support special minus sign
-
-            if (_omitLeadingZero)
+            var normalizedNumber=string.Empty;
+            try
             {
-                number = OmitZero(number);
-            }
+                
+                // see http://www.fileformat.info/info/unicode/char/2212/index.htm
+                //request to support special minus sign
 
-            number = NormalizeNumberWithMinusSign(number);
-
-            if (thousandSeparators != String.Empty &&
-                Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
-            // e.g 1,000,000
-            {
-                normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
-            }
-            else if (thousandSeparators != String.Empty && decimalSeparators != String.Empty &&
-                     Regex.IsMatch(number,
-                         @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
-                         @"]\d+$")) // e.g. 1,000.5
-            {
-                var usedThousandSeparator =
-                    Regex.Match(number, @"[" + thousandSeparators + @"]").Value;
-
-                //for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
-                var reg = new Regex(Regex.Escape(usedThousandSeparator));
-                normalizedNumber = reg.Replace(number, "t", 1);
-
-                var usedDecimalSeparator =
-                    Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
-                normalizedNumber = usedDecimalSeparator != String.Empty
-                    ? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
-                    : normalizedNumber;
-            }
-            else if (thousandSeparators != String.Empty &&
-                     Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
-            // e.g. 1,000
-            {
-                if (_sourceMatchingDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
+                if (_omitLeadingZero)
                 {
-                    normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
+                    number = OmitZero(number);
                 }
-                else
+
+                number = NormalizeNumberWithMinusSign(number);
+
+                if (thousandSeparators != String.Empty &&
+                    Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)+$"))
+                    // e.g 1,000,000
                 {
                     normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
                 }
-            }
-            else
-            {
-                if (_sourceMatchingDecimalSeparators != String.Empty &&
-                    Regex.IsMatch(number, @"^m?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+                else if (thousandSeparators != String.Empty && decimalSeparators != String.Empty &&
+                         Regex.IsMatch(number,
+                             @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d(\1\d\d\d)*[" + decimalSeparators +
+                             @"]\d+$")) // e.g. 1,000.5
                 {
-                    normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
-                }
-                else
-                {
-                    normalizedNumber = number;
-                }
+                    var usedThousandSeparator =
+                        Regex.Match(number, @"[" + thousandSeparators + @"]").Value;
 
-                if (noSeparator)
+                    //for ex if we have 1.45.67, we need to replace only first aparition of the thousand separator
+                    var reg = new Regex(Regex.Escape(usedThousandSeparator));
+                    normalizedNumber = reg.Replace(number, "t", 1);
+
+                    var usedDecimalSeparator =
+                        Regex.Match(normalizedNumber, @"[" + decimalSeparators + @"]").Value;
+                    normalizedNumber = usedDecimalSeparator != String.Empty
+                        ? Regex.Replace(normalizedNumber, @"[" + usedDecimalSeparator + @"]", "d")
+                        : normalizedNumber;
+                }
+                else if (thousandSeparators != String.Empty &&
+                         Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + thousandSeparators + @"])\d\d\d$"))
+                    // e.g. 1,000
                 {
-                    if (_isSource)
+                    if (_sourceMatchingDecimalSeparators != String.Empty &&
+                        Regex.IsMatch(number, @"^m?[1-9]\d{0,2}([" + decimalSeparators + @"])\d\d\d$"))
                     {
-                        normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,
-                            _sourceThousandSeparators, normalizedNumber);
+                        normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "u");
                     }
                     else
                     {
-                        normalizedNumber = NormalizeNumberNoSeparator(_targetDecimalSeparators,
-                            _targetThousandSeparators, normalizedNumber);
+                        normalizedNumber = Regex.Replace(number, @"[" + thousandSeparators + @"]", "t");
                     }
-                    
+                }
+                else
+                {
+                    if (_sourceMatchingDecimalSeparators != String.Empty &&
+                        Regex.IsMatch(number, @"^m?\d+[" + decimalSeparators + @"]\d+$")) // e.g. 0,100
+                    {
+                        normalizedNumber = Regex.Replace(number, @"[" + decimalSeparators + @"]", "d");
+                    }
+                    else
+                    {
+                        normalizedNumber = number;
+                    }
+
+                    if (noSeparator)
+                    {
+                        if (_isSource)
+                        {
+                            normalizedNumber = NormalizeNumberNoSeparator(_sourceDecimalSeparators,
+                                _sourceThousandSeparators, normalizedNumber);
+                        }
+                        else
+                        {
+                            normalizedNumber = NormalizeNumberNoSeparator(_targetDecimalSeparators,
+                                _targetThousandSeparators, normalizedNumber);
+                        }
+
+                    }
+                    return normalizedNumber;
                 }
             }
+            catch(Exception e) { }
+
             return normalizedNumber;
         }
 
@@ -977,7 +975,7 @@ namespace Sdl.Community.NumberVerifier
                     alphaList.AddRange(
                         from word in words 
                         from Match match in Regex.Matches(word, @"^-?\u2212?(([A-Z]{1,}[0-9]{1,})|([0-9]{1,}[A-Z]{1,}))")
-                        select Regex.Replace(match.Value, "\u2212?-?","m"));
+                        select Regex.Replace(match.Value, "\u2212|-","m"));
 
             return alphaList;
         }

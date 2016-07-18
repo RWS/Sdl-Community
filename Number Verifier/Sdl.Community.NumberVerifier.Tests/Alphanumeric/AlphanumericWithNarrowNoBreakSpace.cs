@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
@@ -14,6 +15,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         public List<string> FindAlphanumericsNarrowNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
         {
             var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+            NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
             var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
 
             var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);

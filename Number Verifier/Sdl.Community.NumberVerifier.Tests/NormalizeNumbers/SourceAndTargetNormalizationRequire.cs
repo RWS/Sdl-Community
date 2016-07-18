@@ -207,7 +207,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         /// <param name="target"></param>
         [Theory]
         [InlineData("1,55", "1,55")]
-        public void DecimalSeparatorsCommaErrorMessage(string source, string target)
+        public void DecimalSeparatorsCommaInsteadOfPeriodErrorMessage(string source, string target)
         {
             //target settings
             var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.SpaceCommaPeriod();
@@ -216,6 +216,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             //source settings
             numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
+
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -247,6 +249,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -278,6 +281,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
