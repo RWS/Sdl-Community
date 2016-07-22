@@ -274,10 +274,10 @@
             // btnsLayoutPanel
             // 
             this.btnsLayoutPanel.ColumnCount = 4;
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.9481F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.22491F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.14053F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.btnsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
             this.btnsLayoutPanel.Controls.Add(this.saveBtn, 1, 0);
             this.btnsLayoutPanel.Controls.Add(this.timerLbl, 2, 0);
@@ -323,7 +323,7 @@
             // remainingTimeLbl
             // 
             this.remainingTimeLbl.AutoSize = true;
-            this.remainingTimeLbl.Location = new System.Drawing.Point(247, 5);
+            this.remainingTimeLbl.Location = new System.Drawing.Point(249, 5);
             this.remainingTimeLbl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.remainingTimeLbl.Name = "remainingTimeLbl";
             this.remainingTimeLbl.Size = new System.Drawing.Size(35, 13);

@@ -22,8 +22,10 @@ namespace Sdl.Community.InSource
     public class InSourceViewController : AbstractViewController, INotifyPropertyChanged
     {
         #region private fields
-        private readonly Lazy<InSourceViewControl> _control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
-        private readonly Lazy<TimerControl> _timerControl = new Lazy<TimerControl>();
+       
+        private static readonly Lazy<InSourceViewControl> _control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
+        private static readonly Lazy<TimerControl> _timerControl = new Lazy<TimerControl>(()=>new TimerControl(_control));
+
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
         private List<ProjectRequest> _selectedProjects;
@@ -40,6 +42,7 @@ namespace Sdl.Community.InSource
             _projectRequests = new List<ProjectRequest>();
             _hasTemplateList = new List<bool>();
             _hasFiles = new List<bool>();
+            
         }
 
         protected override void Initialize(IViewContext context)
@@ -148,7 +151,7 @@ namespace Sdl.Community.InSource
                     
                 }
 
-                Persistence.Save(newProjectRequestList);
+                Persistence.SaveProjectRequestList(newProjectRequestList);
                 ProjectRequests = newProjectRequestList;
             }
             
