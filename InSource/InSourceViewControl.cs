@@ -37,12 +37,6 @@ namespace Sdl.Community.InSource
             _watchFolders = new List<ProjectRequest>();
             _timerModel = _persistence.LoadTimerSettings();
 
-            _timer = new Timer
-            {
-                Interval = 6000,
-                AutoReset = true,
-            };
-            _timer.Start();
         }
 
 
@@ -85,49 +79,10 @@ namespace Sdl.Community.InSource
 
 
             //allows user to select multiple projects in listbox
-            _projectsListBox.SelectionMode = SelectionMode.MultiSimple;
-
-           
-
-            Value_TimeChanged();
-
+  
 
         }
 
-        public void Value_TimeChanged()
-        {
-            var timerSettings = _persistence.LoadTimerSettings();
-
-            if (timerSettings.HasTimer)
-            {
-
-                _timeLeft = timerSettings.Minutes;
-                _timer.Enabled = true;
-                _timer.Elapsed += _timer_Elapsed;
-             
-
-            }
-            else
-            {
-                _timer.Stop();
-              
-                remainingTimeLbl.Text = @"Timer is disabled";
-            }
-        }
-
-        private void _timer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            if (_timeLeft > 0)
-            {
-                _timeLeft--;
-                remainingTimeLbl.Text = _timeLeft + @" min";
-            }
-            else
-            {
-                Controller.CheckForProjects();
-                _timeLeft = _timerModel.Minutes;
-            }
-        }
 
         private void FoldersListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
         {
