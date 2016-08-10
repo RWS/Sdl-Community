@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using NLog;
 using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
+using Sdl.Community.YourProductivity.Persistance.Model;
 
 namespace Sdl.Community.YourProductivity.Services
 {
     public class ProductivityService
     {
-        private readonly TrackInfoPersistanceService _persistance;
-        private List<TrackInfo> _trackingInfos;
+        private readonly TrackInfoDb _db;
+        private IList<TrackInfo> _trackingInfos;
         private readonly Logger _logger;
         
         public double ProductivityScore { get; set; }
@@ -21,18 +22,14 @@ namespace Sdl.Community.YourProductivity.Services
         public DateTime LastTranslationDate { get; set; }
         public List<TrackInfoView> TrackInfoViews { get; set; }
 
-        public ProductivityService(Logger logger)
+        public ProductivityService(Logger logger, TrackInfoDb db)
         {
             _logger = logger;
-            _persistance = new TrackInfoPersistanceService(_logger);
+            _db = db;
             TrackInfoViews = new List<TrackInfoView>();
             Initialize();
         }
 
-        public ProductivityService():this(LogManager.GetLogger("log"))
-        {
-            
-        }
 
         public void Refresh()
         {
@@ -43,7 +40,7 @@ namespace Sdl.Community.YourProductivity.Services
         {
             try
             {
-                _trackingInfos = _persistance.Load();
+                _trackingInfos = _db.GetTrackInfosAsync().Result;
 
                 if (_trackingInfos.Count == 0)
                 {
@@ -99,10 +96,33 @@ namespace Sdl.Community.YourProductivity.Services
             return Math.Round(trackingInfos.DefaultIfEmpty(new TrackInfo()).Average(x => Math.Round(x.ProductivityScore, 0)), 0);
         }
 
-        private List<TrackInfoView> GetTrackInfoView(List<TrackInfo> trackingInfos)
+        private List<TrackInfoView> GetTrackInfoView(IList<TrackInfo> trackingInfos)
         {
-            return TrackInfoView.CreateFromTrackInfos(trackingInfos);
+            return CreateFromTrackInfos(trackingInfos);
         }
+        public List<TrackInfoView> CreateFromTrackInfos(IList<TrackInfo> trackInfos)
+        {
+            var trackInfoViews = new List<TrackInfoView>();
 
+
+            trackInfos.ToList().ForEach(trackInfo =>
+            {
+                var trackInfoView = new TrackInfoView()
+                {
+                    FileId = trackInfo.FileId,
+                    FileName = trackInfo.FileName,
+                    ProjectName = trackInfo.ProjectName,
+                    ProjectId = trackInfo.ProjectId,
+                    FileType = trackInfo.FileType,
+                    Language = trackInfo.Language,
+                    Efficiency = trackInfo.ProductivityScore,
+                    KeystrokesSaved = trackInfo.SegmentTrackInfos.Sum(x => x.InsertedCharacters - x.NumberOfKeys < 0 ? 0 : x.InsertedCharacters - x.NumberOfKeys),
+                    InsertedCharacters = trackInfo.SegmentTrackInfos.Sum(x => x.InsertedCharacters),
+                };
+                trackInfoViews.Add(trackInfoView);
+            });
+
+            return trackInfoViews;
+        }
     }
 }

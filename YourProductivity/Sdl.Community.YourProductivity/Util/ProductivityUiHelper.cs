@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 using NLog;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.UI;
 
 namespace Sdl.Community.YourProductivity.Util

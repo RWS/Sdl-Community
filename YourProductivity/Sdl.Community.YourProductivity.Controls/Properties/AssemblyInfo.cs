@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Sdl.Community.YourProductivity")]
+[assembly: AssemblyTitle("Sdl.Community.YourProductivity.Controls")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Sdl.Community.YourProductivity")]
+[assembly: AssemblyProduct("Sdl.Community.YourProductivity.Controls")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,4 +20,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("48b5ddfb-6bf4-4b77-b7a2-3074be5463c6")]
+[assembly: Guid("cf61c1e5-3b3c-4546-8070-4bab41b49f4a")]

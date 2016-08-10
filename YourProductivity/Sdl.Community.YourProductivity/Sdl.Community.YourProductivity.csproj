@@ -18,6 +18,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,20 +47,36 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\TweetMoaSharp.3.0.0.5\lib\4.5\Hammock.ClientProfile.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="MoreLinq">
-      <HintPath>..\packages\morelinq.1.1.1\lib\net35\MoreLinq.dll</HintPath>
+    <Reference Include="Microsoft.CSharp">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
+      <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\TweetMoaSharp.3.0.0.5\lib\4.5\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ObjectListView">
-      <HintPath>..\packages\ObjectListView.Official.2.8.1\lib\net20\ObjectListView.dll</HintPath>
+    <Reference Include="ObjectListView, Version=2.9.1.1072, Culture=neutral, PublicKeyToken=b1c5bf581481bcd4, processorArchitecture=MSIL">
+      <HintPath>..\packages\ObjectListView.Official.2.9.1\lib\net20\ObjectListView.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Database.3.0.30143\lib\net45\Raven.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Client.Lightweight, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Client.3.0.30143\lib\net45\Raven.Client.Lightweight.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Raven.Database, Version=3.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+      <HintPath>..\packages\RavenDB.Database.3.0.30143\lib\net45\Raven.Database.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="RestSharp, Version=105.1.0.0, Culture=neutral, PublicKeyToken=a6f9048fb51b33ed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,15 +122,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi, Version=4.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(ProgramFiles)\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -128,17 +146,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\TweetMoaSharp.3.0.0.5\lib\4.5\TweetSharp.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\LeaderboardApi.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Initializer.cs" />
-    <Compile Include="Model\LeaderboardInfo.cs" />
-    <Compile Include="Model\SegmentTrackInfo.cs" />
-    <Compile Include="Model\TrackInfo.cs" />
-    <Compile Include="Model\TrackInfoView.cs" />
-    <Compile Include="Model\TwitterAccountInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -151,9 +165,6 @@
     <Compile Include="Services\KeyboardTrackingService.cs" />
     <Compile Include="Services\LeaderboardShareService.cs" />
     <Compile Include="Services\LoggingService.cs" />
-    <Compile Include="Services\Persistence\AbstractPersistenceService.cs" />
-    <Compile Include="Services\Persistence\TrackInfoPersistanceService.cs" />
-    <Compile Include="Services\Persistence\TwitterPersistenceService.cs" />
     <Compile Include="Services\ProductivityService.cs" />
     <Compile Include="Services\ShareService.cs" />
     <Compile Include="Services\TweetMessageService.cs" />
@@ -172,11 +183,11 @@
       <DependentUpon>ProductivityControl.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ProductivityRibbon.cs" />
-    <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Util\ProductivityUiHelper.cs" />
     <Compile Include="UI\RoundedButton.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Util\Extensions.cs" />
+    <Compile Include="Util\ProductivityUiHelper.cs" />
     <Compile Include="UI\TweetForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,18 +201,9 @@
       <DependentUpon>TwitterAccountSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Util\FormFactory.cs" />
+    <Compile Include="VersionInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="3rd Party\RestSharp.dll" />
-    <Content Include="3rd Party\Tweetinvi.Controllers.dll" />
-    <Content Include="3rd Party\Tweetinvi.Core.dll" />
-    <Content Include="3rd Party\Tweetinvi.Credentials.dll" />
-    <Content Include="3rd Party\Tweetinvi.dll" />
-    <Content Include="3rd Party\Tweetinvi.Factories.dll" />
-    <Content Include="3rd Party\Tweetinvi.Logic.dll" />
-    <Content Include="3rd Party\Tweetinvi.Security.dll" />
-    <Content Include="3rd Party\Tweetinvi.Streams.dll" />
-    <Content Include="3rd Party\Tweetinvi.WebLogic.dll" />
     <Content Include="icon.ico" />
     <Content Include="Resources\info.png" />
     <Content Include="Resources\leaderboard.ico" />
@@ -242,7 +244,16 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.YourProductivity.Controls\Sdl.Community.YourProductivity.Persistance.csproj">
+      <Project>{cf61c1e5-3b3c-4546-8070-4bab41b49f4a}</Project>
+      <Name>Sdl.Community.YourProductivity.Persistance</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.YourProductivity.Model\Sdl.Community.YourProductivity.Model.csproj">
+      <Project>{bdb19e0b-99e4-463c-bbe3-2a4b9809013c}</Project>
+      <Name>Sdl.Community.YourProductivity.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

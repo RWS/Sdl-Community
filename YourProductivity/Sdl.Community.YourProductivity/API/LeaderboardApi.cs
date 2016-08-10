@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using NLog;
 using RestSharp;
 using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 
 namespace Sdl.Community.YourProductivity.API
 {

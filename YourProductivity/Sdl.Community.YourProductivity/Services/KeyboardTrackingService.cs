@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using NLog;
-using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.Util;
 using Sdl.Core.Globalization;
 using Sdl.DesktopEditor.EditorApi;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.YourProductivity.Persistance.Model;
+using System.Threading.Tasks;
+using Sdl.Community.YourProductivity.Persistance;
+using System.Diagnostics;
+using Raven.Client;
 
 namespace Sdl.Community.YourProductivity.Services
 {
@@ -16,7 +20,7 @@ namespace Sdl.Community.YourProductivity.Services
     {
 
         private readonly List<TrackInfo> _trackingInfos; 
-        private readonly TrackInfoPersistanceService _persistance;
+        private readonly TrackInfoDb db;
         private readonly Logger _logger;
         private readonly EmailService _emailService;
         private Document _activeDocument;
@@ -37,27 +41,29 @@ namespace Sdl.Community.YourProductivity.Services
             }
         }
 
-        public KeyboardTrackingService(Logger logger, EmailService emailService)
+        public KeyboardTrackingService(Logger logger,
+            EmailService emailService)
         {
             _logger = logger;
             _emailService = emailService;
-            _persistance = new TrackInfoPersistanceService(_logger);
-            _trackingInfos = _persistance.Load();
+            db = new TrackInfoDb();
+            _trackingInfos = new List<TrackInfo>();
         }
 
-        public void RegisterDocument(Document document)
+        public async void RegisterDocument(Document document)
         {
             try
             {
                 document.ContentChanged += document_ContentChanged;
                 document.SegmentsConfirmationLevelChanged += document_SegmentsConfirmationLevelChanged;
-                var projectInfo = document.Project.GetProjectInfo();
 
+                var newTrackInfo = new List<TrackInfo>();
+                var projectInfo = document.Project.GetProjectInfo();
                 foreach (var file in document.Files)
                 {
                     _logger.Info(string.Format("Registered file: {0}", file.Name));
-
-                    var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == file.Id);
+                    var trackInfo =await db.GetTrackInfoByFileIdAsync(file.Id, RavenContext.Current.CurrentSession);
+                        
                     if (trackInfo == null)
                     {
                         trackInfo = new TrackInfo
@@ -69,13 +75,14 @@ namespace Sdl.Community.YourProductivity.Services
                             Language = file.Language.CultureInfo.Name,
                             FileType = file.FileTypeId
                         };
-                        _trackingInfos.Add(trackInfo);
+                        newTrackInfo.Add(trackInfo);
                     }
+                    _trackingInfos.Add(trackInfo);
+
                 }
-               
+
                 ActiveDocument = document;
-          
-                _persistance.Save(_trackingInfos);
+                await db.AddTrackInfosAsync(newTrackInfo, RavenContext.Current.CurrentSession);
             }
             catch (Exception exception)
             {
@@ -85,17 +92,40 @@ namespace Sdl.Community.YourProductivity.Services
 
         }
 
+        private async void EnsureSessionIsNotOld(IDocumentSession currentSession)
+        {
+            if (currentSession.Advanced.NumberOfRequests >= 25)
+            {
+                await db.SaveChangesAsync(RavenContext.Current.CurrentSession);
+                RavenContext.Current.CloseCurrentSession();
+                _trackingInfos.Clear();
+                foreach (var file in ActiveDocument.Files)
+                {
+                    var trackInfo = await db.GetTrackInfoByFileIdAsync(file.Id, RavenContext.Current.CurrentSession);
+                    _trackingInfos.Add(trackInfo);
+                }
+            }
+        }
+
         /// <summary>
         /// Make sure keys are registered against the segment since last change and saves the information
         /// on the disk
         /// </summary>
         /// <param name="document"></param>
-        public void UnregisterDocument(Document document)
+        public async void UnregisterDocument(Document document)
         {
             try
             {
-                SetTrackingElement(document.ActiveFile.Id, document.ActiveSegmentPair.Target);
-                _persistance.Save(_trackingInfos);
+                var keyStrokes = KeyboardTracking.Instance.GetCount();
+                if (document.ActiveSegmentPair != null)
+                {
+                    SetTrackingElement(document.ActiveFile.Id, document.ActiveSegmentPair.Target, keyStrokes);
+                }
+                EnsureSessionIsNotOld(RavenContext.Current.CurrentSession);
+                await db.SaveChangesAsync(RavenContext.Current.CurrentSession);
+                RavenContext.Current.CloseCurrentSession();
+                _trackingInfos.Clear();
+              
 
             }
             catch (Exception exception)
@@ -130,8 +160,9 @@ namespace Sdl.Community.YourProductivity.Services
                     return;
                 }
                 var targetSegment = segmentContainer.Segment;
-                SetTrackingElement(file.Id, targetSegment);
-                _persistance.Save(_trackingInfos);
+                var keyStrokes = KeyboardTracking.Instance.GetCount();
+
+                SetTrackingElement(file.Id, targetSegment, keyStrokes, false);
             }
             catch (Exception exception)
             {
@@ -144,6 +175,7 @@ namespace Sdl.Community.YourProductivity.Services
         {
             try
             {
+                var keyStrokes = KeyboardTracking.Instance.GetCount();
                 if (ActiveDocument == null)
                 {
                     _logger.Error("ContentChanged level active document is null");
@@ -158,8 +190,7 @@ namespace Sdl.Community.YourProductivity.Services
                     _emailService.SendLogFile();
                     return;
                 }
-                SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target);
-                _persistance.Save(_trackingInfos);
+                SetTrackingElement(file.Id, e.Document.ActiveSegmentPair.Target, keyStrokes);
                 KeyboardTracking.Instance.ClearShortcuts();
             }
             catch (Exception ex)
@@ -170,10 +201,15 @@ namespace Sdl.Community.YourProductivity.Services
             }
         }
 
-        private void SetTrackingElement(Guid fileId, ISegment targetSegment)
+      
+
+        private void SetTrackingElement(Guid fileId,
+            ISegment targetSegment,
+            int keyStrokes,
+            bool shouldCreateSegmentTrackInfo = true)
         {
             if (targetSegment == null) return;
-            var trackInfo = _trackingInfos.FirstOrDefault(x => x.FileId == fileId);
+            var trackInfo = _trackingInfos.Find(x => x.FileId == fileId);
 
             if (trackInfo == null)
             {
@@ -181,24 +217,29 @@ namespace Sdl.Community.YourProductivity.Services
                 return;
             }
 
-            CreateUpdateTrackInfo(trackInfo, targetSegment);
+            CreateUpdateTrackInfo(trackInfo, targetSegment,keyStrokes,shouldCreateSegmentTrackInfo);
         }
 
-        private void CreateUpdateTrackInfo(TrackInfo trackInfo, ISegment targetSegment)
+        private void CreateUpdateTrackInfo(TrackInfo trackInfo,
+            ISegment targetSegment,
+            int keyStrokes,
+            bool shouldCreateSegmentTrackInfo)
         {
             if (targetSegment == null) return;
-            var keyStrokes = KeyboardTracking.Instance.GetCount();
             var segmentText = targetSegment.ToString();
 
             if (keyStrokes == 0 && segmentText.Length == 0) return;
 
-            var segment = GetOrCreateSegmentTrackInfo(trackInfo, targetSegment);
+            var segment = GetOrCreateSegmentTrackInfo(trackInfo, targetSegment, shouldCreateSegmentTrackInfo);
+            if (segment == null) return;
             var translated = targetSegment.Properties.ConfirmationLevel ==
                                                   ConfirmationLevel.Translated;
             segment.SetTrackInfo(keyStrokes, targetSegment.ToString(), translated);
         }
 
-        private SegmentTrackInfo GetOrCreateSegmentTrackInfo(TrackInfo trackInfo, ISegment targetSegment)
+        private SegmentTrackInfo GetOrCreateSegmentTrackInfo(TrackInfo trackInfo,
+            ISegment targetSegment,
+            bool shouldCreate)
         {
             if (trackInfo.SegmentTrackInfos == null)
             {
@@ -224,9 +265,9 @@ namespace Sdl.Community.YourProductivity.Services
                 throw new ArgumentNullException(exceptionMessage);
             }
 
-            var segment = trackInfo.SegmentTrackInfos.Find(x => x.SegmentId == targetSegment.Properties.Id.Id);
+            SegmentTrackInfo segment = trackInfo.SegmentTrackInfos.Find(x => x.SegmentId == targetSegment.Properties.Id.Id);
 
-            if (segment == null)
+            if (segment == null && shouldCreate)
             {
                 var segmentId = targetSegment.Properties.Id.Id;
 

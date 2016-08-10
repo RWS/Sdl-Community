@@ -3,7 +3,7 @@ using System.IO;
 using NLog;
 using Sdl.Community.YourProductivity.Model;
 
-namespace Sdl.Community.YourProductivity.Services.Persistence
+namespace Sdl.Community.YourProductivity.Persistence
 {
     public class TwitterPersistenceService : AbstractPersistenceService<TwitterAccountInfo>
     {
