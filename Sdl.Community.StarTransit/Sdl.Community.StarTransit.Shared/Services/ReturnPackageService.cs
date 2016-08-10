@@ -142,7 +142,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Create))
                     {
                        
-                        archive.CreateEntryFromFile(package.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
+                        archive.CreateEntryFromFile(package.PathToPrjFile, string.Concat(prjFileName,".PRJ"), CompressionLevel.Optimal);
                         foreach (var file in package.TargetFiles)
                         {
                             pathToTargetFileFolder = file.LocalFilePath.Substring(0,
@@ -175,7 +175,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 foreach (var entry in entriesColection)
                 {
                     
-                    if (entry.Name.Equals(prjFileName))
+                    if (entry.Name.Equals(string.Concat(prjFileName, ".PRJ")))
                     {
                         entry.Delete();
                     }
@@ -195,7 +195,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             //add files to archive
             using (var archive = ZipFile.Open(archivePath, ZipArchiveMode.Update))
             {
-                archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, prjFileName, CompressionLevel.Optimal);
+                archive.CreateEntryFromFile(returnPackagePackage.PathToPrjFile, string.Concat(prjFileName, ".PRJ"), CompressionLevel.Optimal);
                 foreach (var file in returnPackagePackage.TargetFiles)
                 {
                     var fileName = Path.GetFileNameWithoutExtension(file.LocalFilePath);
