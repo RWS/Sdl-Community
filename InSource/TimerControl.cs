@@ -4,95 +4,95 @@ using System.Text.RegularExpressions;
 using System.Timers;
 using System.Windows.Forms;
 using Sdl.Community.InSource.Models;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Timer = System.Timers.Timer;
 
 namespace Sdl.Community.InSource
 {
     public partial class TimerControl : UserControl
     {
-        private readonly TimerModel _timerSettings;
+        private  TimerModel _timerSettings;
         private readonly Persistence _persistence = new Persistence();
-        private Timer _timer;
-        private int _timeLeft=0;
-        private readonly Lazy<InSourceViewControl> _control;
+        private readonly Timer _timer;
+        private int _timeLeft;
+        public event EventHandler CheckForProjectsRequestEvent;
 
-        public TimerControl(Lazy<InSourceViewControl>  control)
+        public TimerControl()
         {
             InitializeComponent();
 
-            _timerSettings = _persistence.LoadTimerSettings();
             _timer = new Timer();
-            _timer.Elapsed += _timer_Elapsed;
             _timer.Interval = 60000;
-               
+            _timer.Elapsed += _timer_Elapsed;
             _timer.AutoReset = true;
-            
-            _timer.Start();
 
-             _control = control;
+            intervalTextBox.TextChanged += TimeTextBox_TextChanged;
+
+        }
+
+        protected override void OnLoad(EventArgs e)
+        {
+            _timerSettings = _persistence.LoadTimerSettings();
 
             if (_timerSettings.HasTimer)
             {
                 timerCheckBox.Checked = true;
-                timeTextBox.Enabled = true;
-                timeLbl.ForeColor = Color.Black;
-                timeTextBox.Text = _timerSettings.Minutes.ToString();
+                intervalTextBox.Enabled = true;
+                refreshIntervalLbl.ForeColor = Color.Black;
+                intervalTextBox.Text = _timerSettings.Minutes.ToString();
 
                 _timeLeft = _timerSettings.Minutes;
                 _timer.Enabled = true;
-                _timer.Elapsed += _timer_Elapsed;
-                remainingTimeLbl.Text = _timerSettings.Minutes.ToString();
+                remainingTime.Text = _timerSettings.Minutes +@" minutes until project request is checked. ";
             }
             else
             {
                 timerCheckBox.Checked = false;
-                timeTextBox.Enabled = false;
-                timeLbl.ForeColor = Color.Gray;
-                timeTextBox.Text = @"0";             
-                remainingTimeLbl.Text = @"Timer is disabled";
-                remainingTimeLbl.ForeColor = Color.Gray;
-                timerLbl.ForeColor = Color.Gray;
+                intervalTextBox.Enabled = false;
+                refreshIntervalLbl.ForeColor = Color.Gray;
+                intervalTextBox.Text = @"0";
+                remainingTime.Text = @"Timer is disabled";
+                remainingTime.ForeColor = Color.Gray;
+                remainingTime.ForeColor = Color.Gray;
 
-                _timer.Stop();
-             
+                _timer.Enabled = false;
+
             }
-
-            timeTextBox.TextChanged += TimeTextBox_TextChanged;
-
         }
 
-     
+        
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_timeLeft > 0)
             {
                 _timeLeft--;
-                remainingTimeLbl.Text = _timeLeft + @" min";
-                
-                
+                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
+
+
             }
-            else
+            if (_timeLeft == 0)
             {
-                _control.Value.Controller.CheckForProjects();
+                OnCheckForProjectsRequestEvent();
                 _timeLeft = _timerSettings.Minutes;
+                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
             }
+               
+            
         }
 
 
         private void TimeTextBox_TextChanged(object sender, EventArgs e)
         {
-            if (Regex.IsMatch(timeTextBox.Text, "^[0-9]*$"))
+            if (Regex.IsMatch(intervalTextBox.Text, "^[0-9]*$"))
             {
-                _timerSettings.Minutes = int.Parse(timeTextBox.Text);
+                _timerSettings.Minutes = int.Parse(intervalTextBox.Text);
 
                 _persistence.SaveTimerSettings(_timerSettings);
 
                 _timeLeft = _timerSettings.Minutes;
-                _timer.Enabled = true;
-                _timer.Elapsed += _timer_Elapsed;
 
-             }
+                remainingTime.Text = _timeLeft + @" minutes until project request is checked. ";
+                _timer.Enabled = true;
+            }
             else
             {
                  MessageBox.Show(@"Please set a number for timer ",@"Warning" , MessageBoxButtons.OK,
@@ -105,29 +105,37 @@ namespace Sdl.Community.InSource
         {
             if (timerCheckBox.Checked)
             {
-                timeTextBox.Enabled = true;
-                timeLbl.ForeColor = Color.Black;
-                remainingTimeLbl.ForeColor = Color.Black;
-                timerLbl.ForeColor = Color.Black;
+                intervalTextBox.Enabled = true;
+                refreshIntervalLbl.ForeColor = Color.Black;
+                remainingTime.ForeColor = Color.Black;
+                remainingTime.ForeColor = Color.Black;
                 _timerSettings.HasTimer = true;
+               
 
             }
             else
             {
-                timeTextBox.Enabled = false;
-                timeLbl.ForeColor = Color.Gray;
+                intervalTextBox.Enabled = false;
+                refreshIntervalLbl.ForeColor = Color.Gray;
                 _timerSettings.HasTimer = false;
                 _timerSettings.Minutes = 0;
-                timeTextBox.Text = @"0";
+                intervalTextBox.Text = @"0";
 
-                _timer.Stop();
-               // _timer.Dispose();
-                remainingTimeLbl.Text = @"Timer is disabled";
-                remainingTimeLbl.ForeColor = Color.Gray;
-                timerLbl.ForeColor = Color.Gray;
+                _timer.Enabled = false;
+               remainingTime.Text = @"Timer is disabled";
+                remainingTime.ForeColor = Color.Gray;
+                remainingTime.ForeColor = Color.Gray;
             }
 
         }
 
+       private void OnCheckForProjectsRequestEvent()
+        {
+            
+            if (CheckForProjectsRequestEvent != null)
+            {
+                CheckForProjectsRequestEvent(this, EventArgs.Empty);
+            }
+        }
     }
 }

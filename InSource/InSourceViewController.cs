@@ -24,7 +24,7 @@ namespace Sdl.Community.InSource
         #region private fields
        
         private static readonly Lazy<InSourceViewControl> _control = new Lazy<InSourceViewControl>(() => new InSourceViewControl());
-        private static readonly Lazy<TimerControl> _timerControl = new Lazy<TimerControl>(()=>new TimerControl(_control));
+        private static readonly Lazy<TimerControl> _timerControl = new Lazy<TimerControl>();
 
         private ProjectTemplateInfo _selectedProjectTemplate;
         private List<ProjectRequest> _projectRequests;
@@ -49,6 +49,12 @@ namespace Sdl.Community.InSource
         {
             ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
             _control.Value.Controller = this;
+            _timerControl.Value.CheckForProjectsRequestEvent += CheckForProjectsEvent;
+        }
+
+        private void CheckForProjectsEvent(object sender, EventArgs e)
+        {
+            CheckForProjects();
         }
 
         private ProjectsController ProjectsController

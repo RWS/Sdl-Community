@@ -85,16 +85,18 @@ namespace Sdl.Community.InSource
         {
             if (!File.Exists(_persistancePath))
             {
+                
                 var directory = Path.GetDirectoryName(_persistancePath);
                 if (directory != null && !Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);
                 }
-            };
+                File.Create(_persistancePath);
+            }
             var jsonText = File.ReadAllText(_persistancePath);
 
             //this means the structure of json file has changed
-            if (!jsonText.Contains("HasTimer"))
+            if (!jsonText.Contains("HasTimer")&&!string.IsNullOrEmpty(jsonText))
             {
                 RecoverDataFromOldJson();
             }
@@ -127,17 +129,26 @@ namespace Sdl.Community.InSource
             var json = File.ReadAllText(_persistancePath);
             
             var result = JsonConvert.DeserializeObject<Request>(json);
-
-            return result.ProjectRequest;
+            if (result != null) { return result.ProjectRequest; }
+            return new List<ProjectRequest>();
         }
 
         public TimerModel LoadTimerSettings()
         {
-            if (!File.Exists(_persistancePath)) return null;
+            if (!File.Exists(_persistancePath))
+            {
+                CreateNewJsonFile(new List<ProjectRequest>());
+            }
             var json = File.ReadAllText(_persistancePath);
 
             var savedData = JsonConvert.DeserializeObject<Request>(json);
-            return savedData.Timer;
+            if (savedData != null)
+            {
+                return savedData.Timer;
+            }
+            
+                return  new TimerModel();
+         
         }
 
         public void AddProjectRequests(List<ProjectRequest> projectRequests)
