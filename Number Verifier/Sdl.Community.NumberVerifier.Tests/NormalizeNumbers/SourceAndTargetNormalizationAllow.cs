@@ -6,6 +6,7 @@ using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
 using Moq;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Xunit;
 
@@ -32,6 +33,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -55,6 +57,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -72,6 +75,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.SpaceCommaPeriod();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -95,6 +99,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.AllTypesOfSpacesChecked();
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -122,6 +127,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetThousandsPeriod).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -149,6 +156,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
         {
             var numberVerifierSettings = SourceSettings.SourceSettingsAndAllowLocalization.CommaPeriod();
             numberVerifierSettings.Setup(d => d.TargetDecimalComma).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -175,6 +184,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -204,6 +214,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators
@@ -229,6 +240,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(d => d.TargetDecimalPeriod).Returns(true);
 
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators

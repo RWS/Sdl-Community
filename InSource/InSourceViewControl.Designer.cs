@@ -47,8 +47,6 @@
             this.btnsLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.addBtn = new System.Windows.Forms.Button();
             this.saveBtn = new System.Windows.Forms.Button();
-            this.timerLbl = new System.Windows.Forms.Label();
-            this.remainingTimeLbl = new System.Windows.Forms.Label();
             this._resultsTextBox = new System.Windows.Forms.TextBox();
             this._tableLayoutPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -274,14 +272,12 @@
             // btnsLayoutPanel
             // 
             this.btnsLayoutPanel.ColumnCount = 4;
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 34.9481F));
-            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15.22491F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29.42973F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.14053F));
+            this.btnsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.btnsLayoutPanel.Controls.Add(this.addBtn, 0, 0);
             this.btnsLayoutPanel.Controls.Add(this.saveBtn, 1, 0);
-            this.btnsLayoutPanel.Controls.Add(this.timerLbl, 2, 0);
-            this.btnsLayoutPanel.Controls.Add(this.remainingTimeLbl, 3, 0);
             this.btnsLayoutPanel.Location = new System.Drawing.Point(3, 139);
             this.btnsLayoutPanel.Name = "btnsLayoutPanel";
             this.btnsLayoutPanel.RowCount = 1;
@@ -301,35 +297,13 @@
             // 
             // saveBtn
             // 
-            this.saveBtn.Location = new System.Drawing.Point(75, 3);
+            this.saveBtn.Location = new System.Drawing.Point(88, 3);
             this.saveBtn.Name = "saveBtn";
             this.saveBtn.Size = new System.Drawing.Size(65, 23);
             this.saveBtn.TabIndex = 1;
             this.saveBtn.Text = "Save";
             this.saveBtn.UseVisualStyleBackColor = true;
             this.saveBtn.Click += new System.EventHandler(this.saveBtn_Click);
-            // 
-            // timerLbl
-            // 
-            this.timerLbl.AutoSize = true;
-            this.timerLbl.Location = new System.Drawing.Point(147, 5);
-            this.timerLbl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-            this.timerLbl.Name = "timerLbl";
-            this.timerLbl.Size = new System.Drawing.Size(79, 13);
-            this.timerLbl.TabIndex = 2;
-            this.timerLbl.Text = "Remaining time";
-            this.timerLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // remainingTimeLbl
-            // 
-            this.remainingTimeLbl.AutoSize = true;
-            this.remainingTimeLbl.Location = new System.Drawing.Point(247, 5);
-            this.remainingTimeLbl.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
-            this.remainingTimeLbl.Name = "remainingTimeLbl";
-            this.remainingTimeLbl.Size = new System.Drawing.Size(35, 13);
-            this.remainingTimeLbl.TabIndex = 3;
-            this.remainingTimeLbl.Text = "label4";
-            this.remainingTimeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // _resultsTextBox
             // 
@@ -365,7 +339,6 @@
             this.folderMainPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.foldersListView)).EndInit();
             this.btnsLayoutPanel.ResumeLayout(false);
-            this.btnsLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -392,7 +365,5 @@
         private System.Windows.Forms.TableLayoutPanel btnsLayoutPanel;
         private System.Windows.Forms.Button saveBtn;
         private System.Windows.Forms.Button addBtn;
-        private System.Windows.Forms.Label timerLbl;
-        private System.Windows.Forms.Label remainingTimeLbl;
     }
 }

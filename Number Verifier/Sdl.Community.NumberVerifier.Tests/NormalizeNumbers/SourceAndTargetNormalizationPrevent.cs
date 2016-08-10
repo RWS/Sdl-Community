@@ -33,6 +33,8 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
             numberVerifierSettings.Setup(s => s.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalComma).Returns(true);
             numberVerifierSettings.Setup(s => s.SourceDecimalPeriod).Returns(true);
+
+            NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
             var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
 
             //run initialize method in order to set chosen separators

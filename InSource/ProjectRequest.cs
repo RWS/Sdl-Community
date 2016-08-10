@@ -23,5 +23,6 @@ namespace Sdl.Community.InSource
         public string Path { get; set; }
 
         public ProjectTemplateInfo ProjectTemplate { get; set; }
+
     }
 }

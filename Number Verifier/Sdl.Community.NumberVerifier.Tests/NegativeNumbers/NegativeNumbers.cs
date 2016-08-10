@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.NumberVerifier.Tests.Utilities;
 using Xunit;
 
 namespace Sdl.Community.NumberVerifier.Tests.NegativeNumbers
@@ -15,7 +16,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NegativeNumbers
             string thousandSeparators)
         {
             var iMockSettings = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
-
+            NumberVerifierLocalizationsSettings.InitSeparators(iMockSettings);
             var numberVerifierMain = new NumberVerifierMain(iMockSettings.Object);
 
             var negativeNumberNormalized = numberVerifierMain.NormalizeNumberWithMinusSign(text);

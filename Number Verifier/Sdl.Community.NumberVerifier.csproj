@@ -105,6 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Composers\AlphanumericErrorComposer.cs" />
+    <Compile Include="Composers\TargetThousandSeparatorsExtractComposer.cs" />
+    <Compile Include="Composers\SourceThousandSeparatorsExtractComposer.cs" />
+    <Compile Include="Composers\TargetDecimalSeparatorsExtractComposer.cs" />
+    <Compile Include="Composers\SourceDecimalSeparatorsExtractComposer.cs" />
     <Compile Include="Composers\ExtendedErrorMessageComposer.cs" />
     <Compile Include="Composers\NumberErrorComposer.cs" />
     <Compile Include="Composers\SourceErrorMessageComposer.cs" />
@@ -117,9 +121,14 @@
     </Compile>
     <Compile Include="GUI\NumberVerifierHelpPage.cs" />
     <Compile Include="Interfaces\IErrorMessageProcessor.cs" />
+    <Compile Include="Interfaces\IExtractProcessor.cs" />
+    <Compile Include="Interfaces\IExtractSpecification.cs" />
+    <Compile Include="Interfaces\IExtractData.cs" />
     <Compile Include="Interfaces\INumberResults.cs" />
     <Compile Include="Interfaces\INumberVerifierMethods.cs" />
+    <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
     <Compile Include="Interfaces\INumberVerifierSettings.cs" />
+    <Compile Include="Interfaces\ISkipTheDashProcessor.cs" />
     <Compile Include="Interfaces\IVerifyProcessor.cs" />
     <Compile Include="Interfaces\IVerifySpecification.cs" />
     <Compile Include="MessageUI\NumberVerifierMessageData.cs" />
@@ -131,6 +140,7 @@
       <DependentUpon>NumberVerifierMessageUI.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
+    <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\NumberResults.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">
@@ -144,9 +154,23 @@
     <Compile Include="Processors\AggregateExtendedMessageOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateSourceIssuesOnNewLineErrorMessageProcessor.cs" />
     <Compile Include="Processors\AggregateTargetIssuesOnNewLineErrorMessageProcessor.cs" />
-    <Compile Include="Processors\CompositeVerifyProcessor.cs" />
+    <Compile Include="Processors\CompositionProcessors\CompositeExtractProcessor.cs" />
+    <Compile Include="Processors\CompositionProcessors\CompositeVerifyProcessor.cs" />
+    <Compile Include="Processors\CompositionProcessors\ApostrophSeparatorsCompositeExtractProcessor.cs" />
+    <Compile Include="Processors\CompositionProcessors\UniqueSeparatorsCompositeExtractProcessor.cs" />
     <Compile Include="Processors\ConditionalErrorMessageProcessor.cs" />
     <Compile Include="Processors\ConditionalVerifyProcessor.cs" />
+    <Compile Include="Processors\ConditionalSeparatorsExtractProcessor.cs" />
+    <Compile Include="Processors\ExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\DecimalAllowLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\SourceDecimalRequireLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\SourceThousandRequireLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\TargetDecimalRequireLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\TargetThousandRequireLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\ThousandAllowLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\SkipTheDashProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\DecimalPreventLocalizationExtractProcessor.cs" />
+    <Compile Include="Processors\LocalizationProcessors\ThousandPreventLocalizationExtractProcessor.cs" />
     <Compile Include="Processors\VerifyProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -159,17 +183,24 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Specifications\LocalizationSpecification\AllowLocalizationSpecification.cs" />
     <Compile Include="Specifications\AndVerifySpecification.cs" />
     <Compile Include="Specifications\NumberAddedSpecification.cs" />
     <Compile Include="Specifications\NumberExistsInSourceSpecification.cs" />
     <Compile Include="Specifications\NumberExistsInTargetSpecification.cs" />
     <Compile Include="Specifications\NumberRemovedSpecification.cs" />
+    <Compile Include="Specifications\OmitLeadingZeroInSourceSpecification.cs" />
+    <Compile Include="Specifications\OmitLeadingZeroInTargetSpecification.cs" />
+    <Compile Include="Specifications\OrVerifySettingsSpecification.cs" />
     <Compile Include="Specifications\OrVerifySpecification.cs" />
+    <Compile Include="Specifications\LocalizationSpecification\PreventLocalizationSpecification.cs" />
     <Compile Include="Specifications\ReportAddedNumbersSpecification.cs" />
     <Compile Include="Specifications\ReportExtendedMessageSpecification.cs" />
     <Compile Include="Specifications\ReportModifiedAlphanumericsSpecification.cs" />
     <Compile Include="Specifications\ReportModifiedNumbersSpecification.cs" />
     <Compile Include="Specifications\ReportRemovedNumbersSpecification.cs" />
+    <Compile Include="Specifications\LocalizationSpecification\RequireLocalizationSpecification.cs" />
+    <Compile Include="Specifications\SkipTheDashSpecification.cs" />
     <Compile Include="TextGenerator.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -6,8 +6,10 @@ using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
 using Sdl.Community.InSource.Insights;
+using Sdl.Community.InSource.Models;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Timer = System.Timers.Timer;
 
 namespace Sdl.Community.InSource
 {
@@ -18,6 +20,11 @@ namespace Sdl.Community.InSource
         private  List<ProjectRequest> _folderPathList;
         private readonly List<ProjectRequest> _selectedFolders;
         private readonly List<ProjectRequest> _watchFolders;
+     
+        private readonly Timer _timer;
+        private int _timeLeft;
+        private readonly TimerModel _timerModel;
+
 
         public InSourceViewControl()
         {
@@ -28,7 +35,11 @@ namespace Sdl.Community.InSource
             _folderPathList = new List<ProjectRequest>();
             _selectedFolders = new List<ProjectRequest>();
             _watchFolders = new List<ProjectRequest>();
+            _timerModel = _persistence.LoadTimerSettings();
+
         }
+
+
 
         protected override void OnLoad(EventArgs e)
         {
@@ -68,9 +79,10 @@ namespace Sdl.Community.InSource
 
 
             //allows user to select multiple projects in listbox
-            _projectsListBox.SelectionMode = SelectionMode.MultiSimple;
+  
 
         }
+
 
         private void FoldersListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
         {
@@ -159,7 +171,7 @@ namespace Sdl.Community.InSource
                             }
                    
                     
-                        _persistence.Save(_folderPathList);
+                        _persistence.SaveProjectRequestList(_folderPathList);
                         LoadProjectRequests();
 
                     }
@@ -336,7 +348,7 @@ namespace Sdl.Community.InSource
                                 {
                                     Name = directoryInfo.Name,
                                     Path = folderPath,
-                                    Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories)
+                                    Files = Directory.GetFiles(directory, "*", SearchOption.AllDirectories),
                                 };
                                 if (!_folderPathList.Contains(selectedFolder))
                                 {
@@ -381,7 +393,7 @@ namespace Sdl.Community.InSource
 
         private void Save()
         {
-            _persistence.Save(_folderPathList);
+            _persistence.SaveProjectRequestList(_folderPathList);
             InitializeListView(_watchFolders);
 
             InSource.Refresh();
@@ -391,7 +403,7 @@ namespace Sdl.Community.InSource
         }
         private void saveBtn_Click(object sender, EventArgs e)
         {
-            _persistence.Save(_folderPathList);
+            _persistence.SaveProjectRequestList(_folderPathList);
             InitializeListView(_watchFolders);
 
             InSource.Refresh();

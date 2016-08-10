@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.NumberVerifier.Interfaces;
 using Sdl.Community.NumberVerifier.Processors;
+using Sdl.Community.NumberVerifier.Processors.CompositionProcessors;
 using Sdl.Community.NumberVerifier.Specifications;
 
 namespace Sdl.Community.NumberVerifier.Composers
