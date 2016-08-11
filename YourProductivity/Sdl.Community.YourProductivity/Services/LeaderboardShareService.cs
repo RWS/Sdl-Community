@@ -2,7 +2,7 @@
 using RestSharp;
 using Sdl.Community.YourProductivity.API;
 using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 
 namespace Sdl.Community.YourProductivity.Services
 {

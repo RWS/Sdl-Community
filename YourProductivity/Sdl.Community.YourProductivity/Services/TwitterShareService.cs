@@ -1,6 +1,6 @@
 ﻿using NLog;
 using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.Util;
 using TweetSharp;
 

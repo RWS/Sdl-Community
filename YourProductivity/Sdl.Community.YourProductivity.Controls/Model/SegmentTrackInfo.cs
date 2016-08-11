@@ -1,9 +1,10 @@
 ﻿using System;
 
-namespace Sdl.Community.YourProductivity.Model
+namespace Sdl.Community.YourProductivity.Persistance.Model
 {
     public class SegmentTrackInfo
     {
+        public int SegmentTrackInfoId { get; set; }
         public string SegmentId { get; set; }
 
         public int NumberOfKeys { get; set; }

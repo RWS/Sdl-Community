@@ -17,6 +17,7 @@ namespace Sdl.Community.YourProductivity.Util
             //at the time of implementation using ActiveFile property is not working always for the virtual merged files - for some reasons in the editor
             //there more file nodes for one file. This is a workaround to try and resolve it.
             var segmentPair = document.ActiveSegmentPair;
+            if (segmentPair == null) return null;
             var type = document.GetType();
             var method = type.GetMethod("GetTargetSegmentContainerNodeById",
                 BindingFlags.NonPublic | BindingFlags.Instance);

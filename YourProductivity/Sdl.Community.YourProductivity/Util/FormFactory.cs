@@ -3,8 +3,9 @@ using System.Windows.Forms;
 using NLog;
 using Sdl.Community.YourProductivity.API;
 using Sdl.Community.YourProductivity.Services;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.UI;
+using Sdl.Community.YourProductivity.Persistance;
 
 namespace Sdl.Community.YourProductivity.Util
 {
@@ -23,7 +24,8 @@ namespace Sdl.Community.YourProductivity.Util
                             .ProductivityShareViewPartAction_Execute_In_order_to_share_the_result_you_need_to_configure_your_twitter_account);
                     return;
                 }
-                var productivityService = new ProductivityService(logger);
+                var trackInfoDb = new TrackInfoDb();
+                var productivityService = new ProductivityService(logger, trackInfoDb);
 
                 if (productivityService.TotalNumberOfCharacters < Constants.MinimumNumberOfCharacters)
                 {
@@ -80,8 +82,8 @@ namespace Sdl.Community.YourProductivity.Util
         {
             try
             {
-
-                var productivityService = new ProductivityService(logger);
+                var trackInfoDb = new TrackInfoDb();
+                var productivityService = new ProductivityService(logger, trackInfoDb);
                 var twitterPersistanceService = new TwitterPersistenceService(logger);
                 var leaderboardApi = new LeaderboardApi(twitterPersistanceService);
                 var versioningService = new VersioningService(leaderboardApi);

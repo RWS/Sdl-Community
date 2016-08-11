@@ -30,11 +30,11 @@ namespace Sdl.Community.YourProductivity.UI
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
-            var rect = new RectangleF(0, 0, this.Width, this.Height);
+            var rect = new System.Drawing.RectangleF(0, 0, Width, this.Height);
             var graphPath = GetRoundPath(rect, Radius);
 
-            this.Region = new Region(graphPath);
-            using (var pen = new Pen(Color.FromArgb(72, 121, 197), 4.75f))
+            this.Region = new System.Drawing.Region(graphPath);
+            using (var pen = new System.Drawing.Pen(System.Drawing.Color.FromArgb(72, 121, 197), 4.75f))
             {
                 pen.Alignment = PenAlignment.Inset;
                 e.Graphics.DrawPath(pen, graphPath);
@@ -43,5 +43,16 @@ namespace Sdl.Community.YourProductivity.UI
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
             
         }
+
+        public void MouseLeaveColor()
+        {
+            this.BackColor = Color.FromArgb(72, 121, 197);
+        }
+
+        public void MouseEnterColor()
+        {
+            this.BackColor = Color.FromArgb(112, 151, 212);
+        }
+
     }
 }

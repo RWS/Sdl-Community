@@ -5,7 +5,7 @@ using System.Text;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Sdl.Community.YourProductivity.Services.Persistence
+namespace Sdl.Community.YourProductivity.Persistence
 {
     public abstract class AbstractPersistenceService<T> where T : new()
     {

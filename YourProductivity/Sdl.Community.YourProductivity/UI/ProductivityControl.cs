@@ -12,6 +12,7 @@ using Sdl.Community.YourProductivity.Services;
 using Sdl.Community.YourProductivity.Util;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.YourProductivity.Persistance;
 
 namespace Sdl.Community.YourProductivity.UI
 {
@@ -38,24 +39,24 @@ namespace Sdl.Community.YourProductivity.UI
 
         void btnLeaderboard_MouseLeave(object sender, EventArgs e)
         {
-            btnLeaderboard.BackColor = Color.FromArgb(72, 121, 197);
+            btnLeaderboard.MouseLeaveColor();
 
         }
 
         void btnLeaderboard_MouseEnter(object sender, EventArgs e)
         {
-            btnLeaderboard.BackColor = Color.FromArgb(112, 151, 212);
+            btnLeaderboard.MouseEnterColor();
 
         }
 
         void btnTweet_MouseLeave(object sender, EventArgs e)
         {
-            btnTweet.BackColor = Color.FromArgb(72, 121, 197);
+            btnTweet.MouseLeaveColor();
         }
 
         void btnTweet_MouseEnter(object sender, EventArgs e)
         {
-            btnTweet.BackColor = Color.FromArgb(112, 151, 212);
+            btnTweet.MouseEnterColor();
 
         }
 

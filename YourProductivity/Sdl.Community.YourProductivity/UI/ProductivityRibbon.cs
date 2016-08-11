@@ -6,6 +6,8 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Sdl.Community.YourProductivity.Persistance;
+using Sdl.Community.YourProductivity.Persistence;
 
 namespace Sdl.Community.YourProductivity.UI
 {
@@ -29,6 +31,7 @@ namespace Sdl.Community.YourProductivity.UI
             }
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
+            RavenContext.Current.CurrentSession.SaveChanges();
             FormFactory.CreateProductivityForm(logger);
         }
     }
@@ -48,6 +51,7 @@ namespace Sdl.Community.YourProductivity.UI
             }
             Application.EnableVisualStyles();
             var logger = LogManager.GetLogger("log");
+            RavenContext.Current.CurrentSession.SaveChanges();
             FormFactory.CreateTweetForm(logger);
         }
 

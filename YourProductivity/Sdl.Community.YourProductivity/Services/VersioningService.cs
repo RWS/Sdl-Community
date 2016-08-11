@@ -52,7 +52,11 @@ namespace Sdl.Community.YourProductivity.Services
         public string GetStudioVersionFriendly()
         {
             var version = GetStudioVersion();
-            return version.Major == 11 ? "studio2014" : "studio2015";
+            var result = "studio2017";
+            if (version.Major == 11) result = "studio2014";
+            if (version.Major == 12) result = "studio2015";
+
+            return result;
         }
 
         public bool IsPluginVersionCompatibleWithLeaderboardVersion()

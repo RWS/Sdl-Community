@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sdl.Community.YourProductivity.Model
+namespace Sdl.Community.YourProductivity.Persistance.Model
 {
     public class TrackInfo 
     {
@@ -10,7 +10,7 @@ namespace Sdl.Community.YourProductivity.Model
         {
             SegmentTrackInfos = new List<SegmentTrackInfo>();
         }
-
+        public string Id { get; set; }
         public Guid FileId { get; set; }
 
         public string FileName { get; set; }
@@ -24,11 +24,9 @@ namespace Sdl.Community.YourProductivity.Model
         public List<SegmentTrackInfo> SegmentTrackInfos { get; set; }
 
         public string FileType { get; set; }
+        //return SegmentTrackInfos.All(x => x.Translated);
+        public bool HasBonus { get; set; }
 
-        public bool HasBonus
-        {
-            get { return SegmentTrackInfos.All(x => x.Translated); }
-        }
 
         public double ProductivityScore
         {

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Forms;
 using Sdl.Community.YourProductivity.Model;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using TweetSharp;
 
 namespace Sdl.Community.YourProductivity.UI
@@ -26,7 +26,6 @@ namespace Sdl.Community.YourProductivity.UI
             _twitterService = new TwitterService(Constants.ConsumerKey,
                 Constants.ConsumerSecret);
             _requestToken = _twitterService.GetRequestToken();
-            //_applicationCredentials = CredentialsCreator.GenerateApplicationCredentials);
             _url = _twitterService.GetAuthorizationUri(_requestToken).ToString();
         }
 

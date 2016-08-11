@@ -5,11 +5,12 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using Sdl.Community.YourProductivity.Services;
-using Sdl.Community.YourProductivity.Services.Persistence;
+using Sdl.Community.YourProductivity.Persistence;
 using Sdl.Community.YourProductivity.UI;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.YourProductivity.Persistance;
 
 namespace Sdl.Community.YourProductivity
 {
@@ -37,13 +38,14 @@ namespace Sdl.Community.YourProductivity
 
             try
             {
-
+                RavenContext.Current.Initialize();
                 InitializeLoggingConfiguration();
 
                 Application.AddMessageFilter(KeyboardTracking.Instance);
                 SdlTradosStudio.Application.Closing += Application_Closing;
 
-                _service = new KeyboardTrackingService(_logger,_emailService);
+                _service = new KeyboardTrackingService(_logger,
+                    _emailService);
                 _editorController = SdlTradosStudio.Application.GetController<EditorController>();
                 _editorController.Opened += _editorController_Opened;
                 _editorController.ActiveDocumentChanged += _editorController_ActiveDocumentChanged;
@@ -67,6 +69,7 @@ namespace Sdl.Community.YourProductivity
         void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.RemoveMessageFilter(KeyboardTracking.Instance);
+            RavenContext.Current.Dispose();
         }
 
         private void InitializeLoggingConfiguration()
