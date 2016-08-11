@@ -4,7 +4,7 @@
   <Version>0.2.2.0</Version>
   <Description>Retrieve job postings from ProZ.</Description>
   <Author>Sdl Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0"/>
+  <RequiredProduct name="SDLTradosStudio" minversion="11.0"/>
   <Include>
     <File>Newtonsoft.Json.dll</File>
     <File>RestSharp.dll</File>
