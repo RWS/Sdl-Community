@@ -29,11 +29,16 @@ namespace Sdl.Community.Jobs.Model
             if (langStrings.Length != 2) 
                 throw new ArgumentException("language pair string format is invalid");
 
-            return new LanguagePair
+            var pair = new LanguagePair
             {
                 Source = languages.FirstOrDefault(x => x.LanguageCode == langStrings[0]),
                 Target = languages.FirstOrDefault(x => x.LanguageCode == langStrings[1])
             };
+            if (pair.Source == null || pair.Target == null)
+            {
+                return null;
+            }
+            return pair;
         }
 
         public string Serialize()
