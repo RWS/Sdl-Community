@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Sdl.Community.YourProductivity.Persistance;
 using System.Diagnostics;
 using Raven.Client;
+using System.Threading;
 
 namespace Sdl.Community.YourProductivity.Services
 {
@@ -24,6 +25,9 @@ namespace Sdl.Community.YourProductivity.Services
         private readonly Logger _logger;
         private readonly EmailService _emailService;
         private Document _activeDocument;
+        private object lockObject = new object();
+        private Timer _timer;
+
         public Document ActiveDocument
         {
             get { return _activeDocument; }
@@ -48,6 +52,7 @@ namespace Sdl.Community.YourProductivity.Services
             _emailService = emailService;
             db = new TrackInfoDb();
             _trackingInfos = new List<TrackInfo>();
+            _timer = new Timer(AutoSave);
         }
 
         public async void RegisterDocument(Document document)
@@ -83,6 +88,8 @@ namespace Sdl.Community.YourProductivity.Services
 
                 ActiveDocument = document;
                 await db.AddTrackInfosAsync(newTrackInfo, RavenContext.Current.CurrentSession);
+                _timer.Change(120000, 60000);
+
             }
             catch (Exception exception)
             {
@@ -92,18 +99,31 @@ namespace Sdl.Community.YourProductivity.Services
 
         }
 
-        private async void EnsureSessionIsNotOld(IDocumentSession currentSession)
+        private async void EnsureSessionIsNotOld()
         {
-            if (currentSession.Advanced.NumberOfRequests >= 25)
+            if (RavenContext.Current.CurrentSession.Advanced.NumberOfRequests >= 25)
             {
-                await db.SaveChangesAsync(RavenContext.Current.CurrentSession);
-                RavenContext.Current.CloseCurrentSession();
-                _trackingInfos.Clear();
-                foreach (var file in ActiveDocument.Files)
+                var fileIds = _trackingInfos.Select(x => x.FileId).ToList();
+                lock (lockObject)
                 {
-                    var trackInfo = await db.GetTrackInfoByFileIdAsync(file.Id, RavenContext.Current.CurrentSession);
+                    db.SaveChangesAsync(RavenContext.Current.CurrentSession);
+                    RavenContext.Current.CloseCurrentSession();
+                    _trackingInfos.Clear();
+                }
+                foreach (var file in fileIds)
+                {
+                    var trackInfo = await db.GetTrackInfoByFileIdAsync(file, RavenContext.Current.CurrentSession);
                     _trackingInfos.Add(trackInfo);
                 }
+
+            }
+        }
+        private void AutoSave(object state)
+        {
+            EnsureSessionIsNotOld();
+            lock (lockObject)
+            {
+                db.SaveChangesAsync(RavenContext.Current.CurrentSession);
             }
         }
 
@@ -121,12 +141,16 @@ namespace Sdl.Community.YourProductivity.Services
                 {
                     SetTrackingElement(document.ActiveFile.Id, document.ActiveSegmentPair.Target, keyStrokes);
                 }
-                EnsureSessionIsNotOld(RavenContext.Current.CurrentSession);
-                await db.SaveChangesAsync(RavenContext.Current.CurrentSession);
-                RavenContext.Current.CloseCurrentSession();
-                _trackingInfos.Clear();
-              
+                EnsureSessionIsNotOld();
+                lock (lockObject)
+                {
+                    db.SaveChangesAsync(RavenContext.Current.CurrentSession);
+                }
+                foreach (var file in document.Files)
+                {
+                    _trackingInfos.RemoveAll(x => x.FileId == file.Id);
 
+                }
             }
             catch (Exception exception)
             {

@@ -5,14 +5,14 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.YourProductivity", "Sdl.Community.YourProductivity\Sdl.Community.YourProductivity.csproj", "{AE9FF782-821F-4D95-817E-85FC96A4AD23}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{750145B9-170F-4B59-AF1D-71305D0A5EDA}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\packages.config = .nuget\packages.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.YourProductivity.Persistance", "Sdl.Community.YourProductivity.Controls\Sdl.Community.YourProductivity.Persistance.csproj", "{CF61C1E5-3B3C-4546-8070-4BAB41B49F4A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.YourProductivity.Model", "Sdl.Community.YourProductivity.Model\Sdl.Community.YourProductivity.Model.csproj", "{BDB19E0B-99E4-463C-BBE3-2A4B9809013C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rd Party", "3rd Party", "{5811E948-2E8A-423E-813D-73CF48A1EDBC}"
+	ProjectSection(SolutionItems) = preProject
+		3rd Party\RestSharp.dll = 3rd Party\RestSharp.dll
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

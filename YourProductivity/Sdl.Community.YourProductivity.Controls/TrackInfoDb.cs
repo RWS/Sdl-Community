@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 using Sdl.Community.YourProductivity.Persistance;
 using Raven.Client.Linq;
 using Raven.Client;
+using System.Threading;
 
 namespace Sdl.Community.YourProductivity.Persistence
 {
     public class TrackInfoDb : IDisposable
     {
         private bool disposed;
-
+        private bool _autoSave;
+        
         public TrackInfoDb()
         {
+
         }
+
 
         public Task<List<TrackInfo>> GetTrackInfosAsync()
         {
@@ -93,9 +97,9 @@ namespace Sdl.Community.YourProductivity.Persistence
         public Task SaveChangesAsync(IDocumentSession session)
         {
             this.ThrowIfDisposed();
-
+           
             session.SaveChanges();
-
+            
             return Task.FromResult(true);
         }
 

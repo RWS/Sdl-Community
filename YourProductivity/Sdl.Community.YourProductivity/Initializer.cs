@@ -69,6 +69,7 @@ namespace Sdl.Community.YourProductivity
         void Application_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Application.RemoveMessageFilter(KeyboardTracking.Instance);
+            RavenContext.Current.CurrentSession.SaveChanges();
             RavenContext.Current.Dispose();
         }
 
