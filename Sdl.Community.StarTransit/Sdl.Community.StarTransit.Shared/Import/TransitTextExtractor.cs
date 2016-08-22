@@ -103,7 +103,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
 
         public void VisitPlaceholderTag(IPlaceholderTag tag)
         {
-            //PlainText.Append(tag.TagProperties.TagContent);
+            PlainText.Append(tag.TagProperties.TagContent);
         }
 
         public void VisitRevisionMarker(IRevisionMarker revisionMarker)
