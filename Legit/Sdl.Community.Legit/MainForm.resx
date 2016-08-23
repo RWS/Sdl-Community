@@ -112,26 +112,26 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="BrowseForFolderButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 3</value>
   </data>
   <data name="BrowseForFolderButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>142, 23</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="BrowseForFolderButton.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="BrowseForFolderButton.Text" xml:space="preserve">
     <value>&amp;Browse for file(s)...</value>
   </data>
-  <metadata name="HelpTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="HelpTooltip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>182, 17</value>
   </metadata>
   <data name="BrowseForFolderButton.ToolTip" xml:space="preserve">
@@ -143,7 +143,7 @@ file over the form to add them to the conversion list.</value>
     <value>BrowseForFolderButton</value>
   </data>
   <data name="&gt;&gt;BrowseForFolderButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BrowseForFolderButton.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -151,7 +151,7 @@ file over the form to add them to the conversion list.</value>
   <data name="&gt;&gt;BrowseForFolderButton.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ShowSettingsMangerButton.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
     <value>Top, Right</value>
   </data>
@@ -175,7 +175,7 @@ settings (INI) files dialog (just like in TagEditor).</value>
     <value>ShowSettingsMangerButton</value>
   </data>
   <data name="&gt;&gt;ShowSettingsMangerButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ShowSettingsMangerButton.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -205,7 +205,7 @@ settings (INI) files dialog (just like in TagEditor).</value>
     <value>ConvertButton</value>
   </data>
   <data name="&gt;&gt;ConvertButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ConvertButton.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -236,7 +236,7 @@ dialog where you can configure filter settings.</value>
     <value>FilterManagerButton</value>
   </data>
   <data name="&gt;&gt;FilterManagerButton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;FilterManagerButton.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -263,7 +263,7 @@ dialog where you can configure filter settings.</value>
     <value>SourceLangCombo</value>
   </data>
   <data name="&gt;&gt;SourceLangCombo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SourceLangCombo.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -297,7 +297,7 @@ as well as the contents of the textbox below.</value>
     <value>ClearFilesListboxLink</value>
   </data>
   <data name="&gt;&gt;ClearFilesListboxLink.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ClearFilesListboxLink.Parent" xml:space="preserve">
     <value>$this</value>
@@ -330,7 +330,7 @@ as well as the contents of the textbox below.</value>
     <value>ClearLogLink</value>
   </data>
   <data name="&gt;&gt;ClearLogLink.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ClearLogLink.Parent" xml:space="preserve">
     <value>$this</value>
@@ -364,7 +364,7 @@ the contents of the log textbox to a text file.</value>
     <value>SaveLogToTextFile</value>
   </data>
   <data name="&gt;&gt;SaveLogToTextFile.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SaveLogToTextFile.Parent" xml:space="preserve">
     <value>$this</value>
@@ -396,7 +396,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>btnTM</value>
   </data>
   <data name="&gt;&gt;btnTM.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;btnTM.Parent" xml:space="preserve">
     <value>$this</value>
@@ -423,7 +423,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>TargetLangCombo</value>
   </data>
   <data name="&gt;&gt;TargetLangCombo.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;TargetLangCombo.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -459,7 +459,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>linkLabel1</value>
   </data>
   <data name="&gt;&gt;linkLabel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;linkLabel1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -467,7 +467,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
   <data name="&gt;&gt;linkLabel1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <metadata name="BackgroundConverter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="BackgroundConverter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>363, 17</value>
   </metadata>
   <data name="ConversionProgressBar.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -486,7 +486,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>ConversionProgressBar</value>
   </data>
   <data name="&gt;&gt;ConversionProgressBar.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ProgressBar, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ConversionProgressBar.Parent" xml:space="preserve">
     <value>$this</value>
@@ -494,7 +494,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
   <data name="&gt;&gt;ConversionProgressBar.ZOrder" xml:space="preserve">
     <value>10</value>
   </data>
-  <metadata name="BrowseForFilesDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="BrowseForFilesDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>533, 17</value>
   </metadata>
   <data name="BrowseForFilesDialog.Title" xml:space="preserve">
@@ -525,7 +525,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>txtTargetLanguage</value>
   </data>
   <data name="&gt;&gt;txtTargetLanguage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtTargetLanguage.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -549,7 +549,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>txtSourceLanguage</value>
   </data>
   <data name="&gt;&gt;txtSourceLanguage.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;txtSourceLanguage.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -582,7 +582,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>label1</value>
   </data>
   <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;label1.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -612,7 +612,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>SourceFilesList</value>
   </data>
   <data name="&gt;&gt;SourceFilesList.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SourceFilesList.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -642,7 +642,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>SourceLangLabel</value>
   </data>
   <data name="&gt;&gt;SourceLangLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SourceLangLabel.Parent" xml:space="preserve">
     <value>splitContainer1.Panel1</value>
@@ -654,7 +654,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>splitContainer1.Panel1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel1.Parent" xml:space="preserve">
     <value>splitContainer1</value>
@@ -684,7 +684,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>LogTextbox</value>
   </data>
   <data name="&gt;&gt;LogTextbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;LogTextbox.Parent" xml:space="preserve">
     <value>splitContainer1.Panel2</value>
@@ -696,7 +696,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>splitContainer1.Panel2</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitterPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Panel2.Parent" xml:space="preserve">
     <value>splitContainer1</value>
@@ -717,7 +717,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>splitContainer1</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SplitContainer, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;splitContainer1.Parent" xml:space="preserve">
     <value>$this</value>
@@ -725,7 +725,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
   <data name="&gt;&gt;splitContainer1.ZOrder" xml:space="preserve">
     <value>9</value>
   </data>
-  <metadata name="SaveToFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="SaveToFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>701, 17</value>
   </metadata>
   <data name="OpenResultingFolderLink.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
@@ -750,7 +750,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>OpenResultingFolderLink</value>
   </data>
   <data name="&gt;&gt;OpenResultingFolderLink.Type" xml:space="preserve">
-    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.LinkLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;OpenResultingFolderLink.Parent" xml:space="preserve">
     <value>$this</value>
@@ -777,7 +777,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>ckTTX</value>
   </data>
   <data name="&gt;&gt;ckTTX.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ckTTX.Parent" xml:space="preserve">
     <value>$this</value>
@@ -807,7 +807,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>ckBilingualDoc</value>
   </data>
   <data name="&gt;&gt;ckBilingualDoc.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;ckBilingualDoc.Parent" xml:space="preserve">
     <value>$this</value>
@@ -831,7 +831,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>lableTM</value>
   </data>
   <data name="&gt;&gt;lableTM.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;lableTM.Parent" xml:space="preserve">
     <value>$this</value>
@@ -839,7 +839,7 @@ a default will be used.  It is not possible to use a Studio Translation memory w
   <data name="&gt;&gt;lableTM.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
@@ -4138,6 +4138,9 @@ a default will be used.  It is not possible to use a Studio Translation memory w
         //8AAAD//////A////8AAAD///////////8AAAD///////////8AAAA=
 </value>
   </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
     <value>SDL legIt! - Batch convert source files to TTX or Bilingual Doc</value>
   </data>
@@ -4145,30 +4148,30 @@ a default will be used.  It is not possible to use a Studio Translation memory w
     <value>HelpTooltip</value>
   </data>
   <data name="&gt;&gt;HelpTooltip.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.ToolTip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BackgroundConverter.Name" xml:space="preserve">
     <value>BackgroundConverter</value>
   </data>
   <data name="&gt;&gt;BackgroundConverter.Type" xml:space="preserve">
-    <value>System.ComponentModel.BackgroundWorker, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;BrowseForFilesDialog.Name" xml:space="preserve">
     <value>BrowseForFilesDialog</value>
   </data>
   <data name="&gt;&gt;BrowseForFilesDialog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.OpenFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;SaveToFileDialog.Name" xml:space="preserve">
     <value>SaveToFileDialog</value>
   </data>
   <data name="&gt;&gt;SaveToFileDialog.Type" xml:space="preserve">
-    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.SaveFileDialog, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>MainForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
 </root>
