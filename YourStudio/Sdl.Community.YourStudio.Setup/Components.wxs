@@ -2,17 +2,8 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
-            <Component Id="cmpA2FA9A01E764596745B4FF21D94003B0" Guid="*">
-                <File Id="fil0AEE7AF543061F8578ACCB8B10C7F169" KeyPath="yes" Source="$(var.SourceDir)\Sdl.Community.YourSDLStudio.exe" />
-            </Component>
             <Component Id="cmpA79076BD9EDFE8A33FA4792D15218281" Guid="*">
                 <File Id="fil176C26E03403F9A1E2CF2DD5C014E7BD" KeyPath="yes" Source="$(var.SourceDir)\Sdl.Community.YourSDLStudio.exe.config" />
-            </Component>
-            <Component Id="cmp6F199EB6DD1B3E7EF46028F055419667" Guid="*">
-                <File Id="fil8212A5159F6B8DF0E5B71E9AACD61C90" KeyPath="yes" Source="$(var.SourceDir)\Sdl.Community.YourSDLStudio.pdb" />
-            </Component>
-            <Component Id="cmp750429DA80B339794B34EB73C36FCAAE" Guid="*">
-                <File Id="filD1E63089EA9620D78405B401D3244A3A" KeyPath="yes" Source="$(var.SourceDir)\Sdl.Community.YourSDLStudio.vshost.exe" />
             </Component>
             <Component Id="cmp6B4D771E4072E6A866569DDC9FFF566A" Guid="*">
                 <File Id="filB10C2A3BC639CCD5AFC5584E3A6C27B4" KeyPath="yes" Source="$(var.SourceDir)\Sdl.Community.YourSDLStudio.vshost.exe.config" />
@@ -24,10 +15,7 @@
     </Fragment>
     <Fragment>
         <ComponentGroup Id="C_CommonAssemblies">
-            <ComponentRef Id="cmpA2FA9A01E764596745B4FF21D94003B0" />
             <ComponentRef Id="cmpA79076BD9EDFE8A33FA4792D15218281" />
-            <ComponentRef Id="cmp6F199EB6DD1B3E7EF46028F055419667" />
-            <ComponentRef Id="cmp750429DA80B339794B34EB73C36FCAAE" />
             <ComponentRef Id="cmp6B4D771E4072E6A866569DDC9FFF566A" />
             <ComponentRef Id="cmp785DD1D1032FE9AFFCED5B890964C775" />
         </ComponentGroup>
