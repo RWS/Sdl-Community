@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Sdl.Community.StudioMigrationUtility.Integration</PlugInName>
+  <Version>1.0</Version>
+  <Description>Sdl.Community.StudioMigrationUtility.Integration</Description>
+  <Author>Microsoft</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <Include>
+    <File>Sdl.Community.StudioMigrationUtility.dll</File>
+    <File>Sdl.Community.Controls.dll</File>
+    <File>ObjectListView.dll</File>
+  </Include>
+</PluginPackage>
