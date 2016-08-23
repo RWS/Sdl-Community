@@ -13,14 +13,10 @@ namespace Sdl.Community.InSource
         {
             InSourceViewController contentConnector = SdlTradosStudio.Application.GetController<InSourceViewController>();
 
-            var persistence = new Persistence();
-            persistence.IsStructureChanged();
-
             contentConnector.CheckForProjects();
+
            // TelemetryService.Instance.Init();
 
-            contentConnector.Activate();
-            
 
         }
     }

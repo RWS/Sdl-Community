@@ -35,7 +35,7 @@ namespace Sdl.Community.InSource
             _folderPathList = new List<ProjectRequest>();
             _selectedFolders = new List<ProjectRequest>();
             _watchFolders = new List<ProjectRequest>();
-            _timerModel = _persistence.LoadTimerSettings();
+            _timerModel = _persistence.LoadRequest().Timer;
 
         }
 
@@ -266,8 +266,11 @@ namespace Sdl.Community.InSource
             {
                 foreach (ProjectRequest projectRequest in _controller.ProjectRequests)
                 {
-
-                    _projectsListBox.Items.Add(projectRequest);
+                    if (!projectRequest.Path.Contains(projectRequest.Name))
+                    {
+                        _projectsListBox.Items.Add(projectRequest);
+                    }
+                    
                 }
             }
 
@@ -312,13 +315,6 @@ namespace Sdl.Community.InSource
                 _folderPathList = _persistence.Load();
             }
 
-            //extended folder browse dialog for adding a text box where you can paste the path
-            //var folderDialog = new FolderBrowseDialogExtended
-            //{
-            //    Description = "Select folders",
-            //    ShowEditBox = true,
-            //    ShowFullPathInEditBox = true
-            //};
             var folderDialog = new FolderSelectDialog();
             
 
@@ -363,6 +359,7 @@ namespace Sdl.Community.InSource
                 {
                     SetWatchFolder(folderPath);
                 }
+               
                 foldersListView.SetObjects(_watchFolders);
                 Save();
             }

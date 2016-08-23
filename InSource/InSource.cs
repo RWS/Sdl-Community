@@ -66,51 +66,69 @@ namespace Sdl.Community.InSource
 
         internal void RequestAccepted(ProjectRequest request)
         {
+            
             _requestPath = Path.Combine(request.Path, request.Name);
-          
-            var acceptedRequestFolder = GetAcceptedRequestsFolder(request.Path);
 
-            var directoryToMovePath = Path.Combine(acceptedRequestFolder, request.Name);
-            //create the directory "Accepted request"
-            if (!Directory.Exists(directoryToMovePath))
+            var delete = Persistence.LoadRequest().DeleteFolders;
+
+            if (!delete)
             {
-                Directory.CreateDirectory(directoryToMovePath);
-            }
+                var acceptedRequestFolder = GetAcceptedRequestsFolder(request.Path);
 
-            try
-            {
-                var files = Directory.GetFiles(_requestPath);
-                if (files.Length != 0)
+                var directoryToMovePath = Path.Combine(acceptedRequestFolder, request.Name);
+                //create the directory "Accepted request"
+                if (!Directory.Exists(directoryToMovePath))
                 {
-                    MoveFilesToAcceptedFolder(files, directoryToMovePath);
-                    Directory.Delete(_requestPath);
-                } //that means we have a subfolder in watch folder
-                else
+                    Directory.CreateDirectory(directoryToMovePath);
+                }
+
+                try
                 {
-
-                    var subdirectories = Directory.GetDirectories(_requestPath);
-                    foreach (var subdirectory in subdirectories)
+                    var files = Directory.GetFiles(_requestPath);
+                    if (files.Length != 0)
                     {
-                        var currentDirInfo = new DirectoryInfo(subdirectory);
-                        CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
-
-                    }
-
-                    var currentDirectory = Directory.GetDirectories(_requestPath);
-
-                    if (currentDirectory.Length == 0)
-                    {
+                        MoveFilesToAcceptedFolder(files, directoryToMovePath);
                         Directory.Delete(_requestPath);
+                    } //that means we have a subfolder in watch folder
+                    else
+                    {
+
+                        var subdirectories = Directory.GetDirectories(_requestPath);
+                        foreach (var subdirectory in subdirectories)
+                        {
+                            var currentDirInfo = new DirectoryInfo(subdirectory);
+                            CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
+
+                        }
+
+                        var currentDirectory = Directory.GetDirectories(_requestPath);
+
+                        if (currentDirectory.Length == 0)
+                        {
+                            Directory.Delete(_requestPath);
+                        }
+
+
                     }
-
-
+                }
+                catch (Exception exception)
+                {
+                    TelemetryService.Instance.AddException(exception);
                 }
             }
-            catch (Exception exception)
+            else
             {
-                TelemetryService.Instance.AddException(exception);
+                try
+                {
+                    Directory.Delete(_requestPath,true);
+                }
+                catch (Exception ex)
+                {
+
+                    TelemetryService.Instance.AddException(ex);
+                }
             }
-            
+
             Persistence.Update(request);
         }
 

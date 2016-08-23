@@ -45,16 +45,8 @@ namespace Sdl.Community.InSource
             File.WriteAllText(_persistancePath, json);
 
         }
-        private void RecoverDataFromOldJson()
-        {
-            var jsonText = File.ReadAllText(_persistancePath);
-            var watchFoldersPath = JsonConvert.DeserializeObject<List<ProjectRequest>>(jsonText);
 
-            DeleteOldJson();
-            CreateNewJsonFile(watchFoldersPath);
-        }
-
-        private void CreateNewJsonFile(List<ProjectRequest> watchFolderList)
+        private void CreateNewJsonFile(Request recoveredJson)
         {
             if (!File.Exists(_persistancePath))
             {
@@ -65,43 +57,12 @@ namespace Sdl.Community.InSource
                 }
             }
 
-            var request = new Request
-            {
-                ProjectRequest = watchFolderList,
-                Timer = new TimerModel()
+            recoveredJson.DeleteFolders = false;
 
-            };
-
-            var json = JsonConvert.SerializeObject(request);
+            var json = JsonConvert.SerializeObject(recoveredJson);
 
             File.WriteAllText(_persistancePath, json);
         }
-        private void DeleteOldJson()
-        {
-            File.Delete(_persistancePath);
-        }
-
-        public void IsStructureChanged()
-        {
-            if (!File.Exists(_persistancePath))
-            {
-                
-                var directory = Path.GetDirectoryName(_persistancePath);
-                if (directory != null && !Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-                File.Create(_persistancePath);
-            }
-            var jsonText = File.ReadAllText(_persistancePath);
-
-            //this means the structure of json file has changed
-            if (!jsonText.Contains("HasTimer")&&!string.IsNullOrEmpty(jsonText))
-            {
-                RecoverDataFromOldJson();
-            }
-        }
-
      
         public void Update(ProjectRequest projectRequest)
         {
@@ -113,15 +74,16 @@ namespace Sdl.Community.InSource
 
         }
 
-        public void Watch(ProjectRequest projectRequest)
+        public void UpdateDelete(bool delete)
         {
-            var projectRequestList = Load();
-            var projectToUpdate = projectRequestList.FirstOrDefault(p => p.Name == projectRequest.Name);
-            if (projectToUpdate != null) projectToUpdate.Files = projectRequest.Files;
-            
-            SaveProjectRequestList(projectRequestList);
-        }
+            var savedRequest = LoadRequest();
 
+            savedRequest.DeleteFolders = delete;
+
+            var json = JsonConvert.SerializeObject(savedRequest);
+
+            File.WriteAllText(_persistancePath, json);
+        }
 
         public List<ProjectRequest> Load()
         {
@@ -133,33 +95,27 @@ namespace Sdl.Community.InSource
             return new List<ProjectRequest>();
         }
 
-        public TimerModel LoadTimerSettings()
+
+        public Request LoadRequest()
         {
             if (!File.Exists(_persistancePath))
             {
-                CreateNewJsonFile(new List<ProjectRequest>());
+                CreateNewJsonFile(new Request
+                {
+                    ProjectRequest = new List<ProjectRequest>(),
+                    Timer = new TimerModel
+                    {
+                        HasTimer = false
+                    },
+                    DeleteFolders = false
+                });
             }
+
             var json = File.ReadAllText(_persistancePath);
 
             var savedData = JsonConvert.DeserializeObject<Request>(json);
-            if (savedData != null)
-            {
-                return savedData.Timer;
-            }
-            
-                return  new TimerModel();
-         
+            return savedData;
         }
 
-        public void AddProjectRequests(List<ProjectRequest> projectRequests)
-        {
-            var projectRequestList = Load();
-            foreach (var project in projectRequests)
-            {
-                projectRequestList.Add(project);
-            }
-
-            SaveProjectRequestList(projectRequestList);
-        }
     }
 }

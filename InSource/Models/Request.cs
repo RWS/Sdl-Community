@@ -10,5 +10,7 @@ namespace Sdl.Community.InSource.Models
     {
        public List<ProjectRequest> ProjectRequest { get; set; }
        public TimerModel Timer { get; set; }
+       public bool DeleteFolders { get; set; }
+    
     }
 }

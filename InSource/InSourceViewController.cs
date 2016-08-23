@@ -249,36 +249,6 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
-        private string[] GetFilesFromFolders(string path)
-        {
-            var dirInfo = new DirectoryInfo(path);
-            var subdirectories = dirInfo.GetDirectories();
-            foreach (var subdirectory in subdirectories)
-            {
-            
-                var files = GetSubdirectories(subdirectory.FullName);
-                return files;
-            }
-            return null;
-        }
-
-        private string[] GetSubdirectories(string path)
-        {
-            var dirInfo = new DirectoryInfo(path);
-            var dir = dirInfo.GetDirectories();
-            foreach (var directories in dir)
-            {
-                if (directories.Name != "AcceptedRequests")
-                {
-                    var files = Directory.GetFiles(directories.FullName, "*", SearchOption.AllDirectories);
-                    return files;
-                }
-            }
-            var file = Directory.GetFiles(path, "*");
-            return file;
-        }
-
-
         public void CreateProjects()
         {
             _control.Value.ClearMessages();

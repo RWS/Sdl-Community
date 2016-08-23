@@ -31,7 +31,7 @@ namespace Sdl.Community.InSource
 
         protected override void OnLoad(EventArgs e)
         {
-            _timerSettings = _persistence.LoadTimerSettings();
+            _timerSettings = _persistence.LoadRequest().Timer;
 
             if (_timerSettings.HasTimer)
             {
@@ -57,9 +57,33 @@ namespace Sdl.Community.InSource
                 _timer.Enabled = false;
 
             }
+            if (_persistence.LoadRequest().DeleteFolders)
+            {
+                deleteBtn.Checked = true;
+            }
+            else
+            {
+                archiveBtn.Checked = true;
+            }
+            archiveBtn.CheckedChanged += ArchiveBtn_CheckedChanged;
+
         }
 
-        
+        private void ArchiveBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            bool deleteFolders;
+            if (!archiveBtn.Checked && deleteBtn.Checked)
+            {
+                deleteFolders = true;
+            }
+            else
+            {
+                deleteFolders = false;
+            }
+          
+            _persistence.UpdateDelete(deleteFolders);
+        }
+
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             if (_timeLeft > 0)
