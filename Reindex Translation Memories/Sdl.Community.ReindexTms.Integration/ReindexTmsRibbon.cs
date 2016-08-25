@@ -22,7 +22,7 @@ namespace Sdl.Community.ReindexTms.Integration
         protected override void Execute()
         {
             var reindex = new ReindexForm();
-            reindex.ShowDialog();
+            reindex.ShowDialog(); 
         }
     }
 }
