@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Antidote Verifier</PlugInName>
-  <Version>0.1.0</Version>
+  <Version>0.6.0</Version>
   <Description>Sdl Studio verifier that will verify the text in Antidote</Description>
-  <Author></Author>
+  <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>Interop.antido32Lib.dll</File>

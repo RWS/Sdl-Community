@@ -12,18 +12,18 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
     public interface IAntidoteClient
     {
         void ActiveApplication();
-        void ActiveDocument(long idDoc);
-        long DonneDebutSelection(long idDoc, long idZone);
-        long DonneFinSelection(long idDoc, long idZone);
-        long DonneIdDocumentCourant();
-        long DonneIdZoneDeTexte(long id, long indice);
-        long DonneIdZoneDeTexteCourante(long id);
-        string DonneIntervalle(long idDoc, long idZone, long leDebut, long laFin);
-        long DonneLongueurZoneDeTexte(long idDoc, long idZone);
-        long DonneNbZonesDeTexte(long id);
-        string DonnePolice(long idDoc, long idZone);
+        void ActiveDocument(int idDoc);
+        int DonneDebutSelection(int idDoc, int idZone);
+        int DonneFinSelection(int idDoc, int idZone);
+        int DonneIdDocumentCourant();
+        int DonneIdZoneDeTexte(int id, int indice);
+        int DonneIdZoneDeTexteCourante(int id);
+        string DonneIntervalle(int idDoc, int idZone, int leDebut, int laFin);
+        int DonneLongueurZoneDeTexte(int idDoc, int idZone);
+        int DonneNbZonesDeTexte(int id);
+        string DonnePolice(int idDoc, int idZone);
         string DonneTitreDocCourant();
-        void RemplaceIntervalle(long idDoc, long idZone, long leDebut, long laFin, ref string laChaine);
-        void SelectionneIntervalle(long idDoc, long idZone, long leDebut, long laFin);
+        void RemplaceIntervalle(int idDoc, int idZone, int leDebut, int laFin, ref string laChaine);
+        void SelectionneIntervalle(int idDoc, int idZone, int leDebut, int laFin);
     }
 }

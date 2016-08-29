@@ -13,35 +13,35 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
     public class AntidoteClient : IAntidoteClient
     {
         private IEditorService _editorService;
+
         public AntidoteClient(IEditorService editorService)
         {
             _editorService = editorService;
         }
         public void ActiveApplication()
         {
-            //Do something
         }
 
-        public void ActiveDocument(long idDoc)
+        public void ActiveDocument(int idDoc)
         {
-            
+            _editorService.ActivateDocument();
         }
 
-        public long DonneDebutSelection(long idDoc, long idZone)
-        {
-            return 0; 
-        }
-
-        public long DonneFinSelection(long idDoc, long idZone)
+        public int DonneDebutSelection(int idDoc, int idZone)
         {
             return 0;
+        }
+
+        public int DonneFinSelection(int idDoc, int idZone)
+        {
+            return _editorService.GetSegmentText(idZone).Length;
         }
 
         /// <summary>
         /// This method informs Antidote about the unique document id
         /// </summary>
         /// <returns></returns>
-        public long DonneIdDocumentCourant()
+        public int DonneIdDocumentCourant()
         {
             return _editorService.GetDocumentId();
         }
@@ -54,7 +54,7 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <param name="id">The document id</param>
         /// <param name="index">Identifier for current area</param>
         /// <returns>Returns the identifier of the text field</returns>
-        public long DonneIdZoneDeTexte(long id, long index)
+        public int DonneIdZoneDeTexte(int id, int index)
         {
             return _editorService.GetCurrentSegmentId(index);
         }
@@ -65,14 +65,14 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <param name="id">The document Id</param>
         /// <returns>Returns the identifier for the current area</returns>
 
-        public long DonneIdZoneDeTexteCourante(long id)
+        public int DonneIdZoneDeTexteCourante(int index)
         {
-            return 1;
+            return 0;
         }
 
-        public string DonneIntervalle(long idDoc, long idZone, long leDebut, long laFin)
+        public string DonneIntervalle(int idDoc, int idZone, int leDebut, int laFin)
         {
-            return _editorService.GetSegmentText(idZone);
+            return _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
         }
 
         /// <summary>
@@ -81,9 +81,9 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <param name="idDoc">The document id</param>
         /// <param name="idZone">The identifier of the text field</param>
         /// <returns>Returns the text length</returns>
-        public long DonneLongueurZoneDeTexte(long idDoc, long idZone)
+        public int DonneLongueurZoneDeTexte(int idDoc, int idZone)
         {
-            return 14;
+            return _editorService.GetSegmentText(idZone).Length;
         }
         /// <summary>
         /// Informs Antidote about the number of segments from the document
@@ -91,31 +91,32 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// </summary>
         /// <param name="id">The document Id</param>
         /// <returns>Returns the number of zones of text in the specified document</returns>
-        public long DonneNbZonesDeTexte(long id)
+        public int DonneNbZonesDeTexte(int id)
         {
             return _editorService.GetDocumentNoOfSegments();
 
         }
 
-        public string DonnePolice(long idDoc, long idZone)
+        public string DonnePolice(int idDoc, int idZone)
         {
-            return "dernier choisi";
+            return string.Empty;
         }
 
         public string DonneTitreDocCourant()
         {
-            return "dernier choisi";
+            return _editorService.GetDocumentName();
 
         }
 
-        public void RemplaceIntervalle(long idDoc, long idZone, long leDebut, long laFin, ref string laChaine)
+        public void RemplaceIntervalle(int idDoc, int idZone, int leDebut, int laFin, ref string laChaine)
         {
-            
+            _editorService.ReplaceTextInSegment(idZone,leDebut, laFin,laChaine);
+    
         }
 
-        public void SelectionneIntervalle(long idDoc, long idZone, long leDebut, long laFin)
+        public void SelectionneIntervalle(int idDoc, int idZone, int leDebut, int laFin)
         {
-            
+            _editorService.SelectText(idZone, leDebut, laFin);
         }
     }
 }
