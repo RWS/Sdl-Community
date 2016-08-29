@@ -41,7 +41,7 @@ namespace Sdl.Community.YourProductivity.Services
             try
             {
                 _trackingInfos = _db.GetTrackInfosAsync().Result;
-
+                _trackingInfos = _trackingInfos.Where(x => x.SegmentTrackInfos.Count > 0).ToList();
                 if (_trackingInfos.Count == 0)
                 {
                     ProductivityScore = 0;
