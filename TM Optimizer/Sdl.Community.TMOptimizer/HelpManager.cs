@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Sdl.Community.TMOptimizer
 {
-    static class HelpManager
+     public static class HelpManager
     {
         public static void ShowHelp()
         {

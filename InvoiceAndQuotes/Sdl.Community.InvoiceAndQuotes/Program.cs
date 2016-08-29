@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sdl.Community.InvoiceAndQuotes.Properties;
+using Sdl.Community.InvoiceAndQuotes.Templates;
 
 namespace Sdl.Community.InvoiceAndQuotes
 {

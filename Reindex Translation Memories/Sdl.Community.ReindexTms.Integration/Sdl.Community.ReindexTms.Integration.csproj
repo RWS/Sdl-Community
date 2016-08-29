@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.ReindexTms.Integration</RootNamespace>
-    <AssemblyName>Plug-in Project</AssemblyName>
+    <AssemblyName>Sdl.Community.ReindexTms.Integration</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

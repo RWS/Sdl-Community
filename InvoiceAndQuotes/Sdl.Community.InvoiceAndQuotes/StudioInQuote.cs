@@ -5,6 +5,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Windows.Forms;
 using System.Xml.XPath;
 using Sdl.Community.InvoiceAndQuotes.Customers;
@@ -44,7 +45,9 @@ namespace Sdl.Community.InvoiceAndQuotes
         {
             InitializeComponent();
             InitializeCustomControls();
-
+            //var test = new ResXResourceReader("InvoiceAndQuotes.de-DE.resx");
+            //var test1 = new ResXResourceReader("InvoiceAndQuotes.en-US.resx");
+            var res = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceNames();
             _rates = new Rates {Name = "rates", Dock = DockStyle.Fill, Visible = true};
             groupStudioAnalysisBands.Controls.Add(_rates);
         }

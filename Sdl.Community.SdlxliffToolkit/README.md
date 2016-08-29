@@ -1,0 +1,1 @@
+Slice, change or clear SDLXLIFF files individually, within a project or a whole folder.

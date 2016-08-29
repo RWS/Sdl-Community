@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AA2AF093-976A-431F-A54B-C86F63C00F5F}"
 	ProjectSection(SolutionItems) = preProject
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer", "Sdl.Community.TMOptimizer\Sdl.Community.TMOptimizer.csproj", "{DF84726D-B356-459B-AEA7-2C0731063E96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizerLib", "Sdl.Community.TMOptimizerLib\Sdl.Community.TMOptimizerLib.csproj", "{256DB2E3-306A-4AEF-B343-4514ACF6299E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer.Integration", "Sdl.Community.TMOptimizer.Integration\Sdl.Community.TMOptimizer.Integration.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMOptimizer.Control", "Sdl.Community.TMOptimizer.Control\Sdl.Community.TMOptimizer.Control.csproj", "{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +51,30 @@ Global
 		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{256DB2E3-306A-4AEF-B343-4514ACF6299E}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.Build.0 = Debug|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.ActiveCfg = Release|Any CPU
+		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.Build.0 = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Debug|x86.Build.0 = Debug|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|x86.ActiveCfg = Release|Any CPU
+		{A82ED8EE-C8FF-4AD2-B09F-EC379AA17B0E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
