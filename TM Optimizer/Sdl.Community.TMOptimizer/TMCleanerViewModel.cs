@@ -191,7 +191,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        internal void SelectExistingTranslationMemory()
+        public void SelectExistingTranslationMemory()
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TM to optimize";
@@ -209,7 +209,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        internal void AddTmxInputFile()
+        public void AddTmxInputFile()
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select TMX files to clean up";
@@ -248,7 +248,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        private void SafeAddInputTmxFile(InputTmxFile tmxFile)
+        public void SafeAddInputTmxFile(InputTmxFile tmxFile)
         {
             Application.Current.Dispatcher.Invoke(new Action(() => 
             {
@@ -256,7 +256,7 @@ namespace Sdl.Community.TMOptimizer
             }));
         }
 
-        private void SafeRemoveInputTmxFile(InputTmxFile tmxFile)
+        public void SafeRemoveInputTmxFile(InputTmxFile tmxFile)
         {
             Application.Current.Dispatcher.Invoke(new Action(() =>
             {
@@ -264,7 +264,7 @@ namespace Sdl.Community.TMOptimizer
             }));
         }
 
-        internal void SelectNewOutputTranslationMemory()
+        public void SelectNewOutputTranslationMemory()
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             dlg.Title = "Specify output TM file name";
@@ -282,7 +282,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        internal void SelectExistingOutputTranslationMemory()
+        public void SelectExistingOutputTranslationMemory()
         {
             Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
             dlg.Title = "Select output TM";
@@ -407,7 +407,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        private bool ValidateOutput()
+        public bool ValidateOutput()
         {
             if (OutputMethod == OutputMethod.UpdateExistingTranslationMemory)
             {
@@ -451,7 +451,7 @@ namespace Sdl.Community.TMOptimizer
             return true;
         }
 
-        private void CreateProcessingSteps()
+        public void CreateProcessingSteps()
         {
             ProcessingSteps.Clear();
             ProcessingContext context = new ProcessingContext();
@@ -508,7 +508,7 @@ namespace Sdl.Community.TMOptimizer
             }
         }
 
-        private void ExecuteProcessingStepsAsync()
+        public void ExecuteProcessingStepsAsync()
         {
             _worker = new BackgroundWorker();
             _worker.WorkerSupportsCancellation = true;
@@ -562,7 +562,7 @@ namespace Sdl.Community.TMOptimizer
             private set;
         }
 
-        internal void OpenContainerFolder()
+        public void OpenContainerFolder()
         {
             string dirName = null;
             if (OutputMethod == OutputMethod.CreateNewTranslationMemory)
@@ -577,7 +577,7 @@ namespace Sdl.Community.TMOptimizer
             Process.Start(dirName);
         }
 
-        internal void OpenOutputTMInStudio()
+        public void OpenOutputTMInStudio()
         {
             string filePath = null;
             if (OutputMethod == OutputMethod.CreateNewTranslationMemory)

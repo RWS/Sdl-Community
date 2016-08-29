@@ -15,9 +15,9 @@ namespace Sdl.Community.InvoiceAndQuotes.Templates
         }
         public List<KeyValuePair<String, String>> GetAllTemplates()
         {
-            String path = String.Format(@"{0}\Office Templates",
-                                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-            String[] files = Directory.GetFiles(path, String.Format("*.{0}*", _extention)).Where(file => !Path.GetFileName(file).StartsWith("~")).ToArray();
+            
+            var path = @"C:\Users\aghisa\AppData\Roaming\SDL Community\Invoice\Office Templates";
+            var files = Directory.GetFiles(path, String.Format("*.{0}*", _extention)).Where(file => !Path.GetFileName(file).StartsWith("~")).ToArray();
 
             List<KeyValuePair<String, String>> fileList = files.Select(
                 file =>

@@ -9,6 +9,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Sdl.Community.InvoiceAndQuotes.Customers;
 using Sdl.Community.InvoiceAndQuotes.Projects;
+
 using Color = DocumentFormat.OpenXml.Spreadsheet.Color;
 using DifferentialFormats = DocumentFormat.OpenXml.Spreadsheet.DifferentialFormats;
 
