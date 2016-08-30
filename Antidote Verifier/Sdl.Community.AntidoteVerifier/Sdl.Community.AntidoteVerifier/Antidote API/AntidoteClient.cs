@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -43,7 +44,10 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <returns></returns>
         public int DonneIdDocumentCourant()
         {
-            return _editorService.GetDocumentId();
+            var documentId = _editorService.GetDocumentId();
+            Log.Verbose("Sending document with id {@documentId} to Antidote.",
+                documentId);
+            return documentId;
         }
 
         /// <summary>
@@ -72,6 +76,8 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         public string DonneIntervalle(int idDoc, int idZone, int leDebut, int laFin)
         {
+            var text = _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
+            Log.Verbose("Sending {@text} corresponding to segment {@idZone} from document with id {@id} to Antidote", text,idZone, idDoc);
             return _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
         }
 
@@ -93,7 +99,10 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <returns>Returns the number of zones of text in the specified document</returns>
         public int DonneNbZonesDeTexte(int id)
         {
-            return _editorService.GetDocumentNoOfSegments();
+           var numberOfSegments = _editorService.GetDocumentNoOfSegments();
+            Log.Verbose("Sending document with id {@id} to Antidote having {@numberOfSegments} number of segments.",
+    id, numberOfSegments);
+            return numberOfSegments;
 
         }
 

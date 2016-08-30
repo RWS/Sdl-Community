@@ -1,5 +1,6 @@
 ﻿using antido32Lib;
 using Microsoft.Win32;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,10 +35,16 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         private void CallAntidoteInternal(object parameter)
         {
-            ApiOle api = GetAntidoteInstance();
-            if(api != null)
+            try
             {
-                api.LanceOutilDispatch(_antidoteClient, (string)parameter);
+                ApiOle api = GetAntidoteInstance();
+                if (api != null)
+                {
+                    api.LanceOutilDispatch(_antidoteClient, (string)parameter);
+                }
+            }catch(Exception ex)
+            {
+                Log.Error(ex, "An error appeared while starting antidote!");
             }
         }
 
@@ -65,35 +72,42 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         private bool LaunchAntidote()
         {
-            RegistryKey pRegKey = Registry.LocalMachine;
-            pRegKey = pRegKey.OpenSubKey(Constants.RegistryInstallLocation);
-            object obj = pRegKey.GetValue(Constants.RegistryInstallLocationValue, "Invalide");
-            if (obj.ToString() == "Invalide")
+            try
             {
-                //TODO message if the registry values could not be find - this should be displayed
-                //to the user
-                return false;
-            }
-            string antidotePath = obj.ToString();
-            if (!antidotePath.EndsWith("\\")) antidotePath += "\\";
-            antidotePath += Constants.AntidoteExecutable;
-            System.Diagnostics.Process.Start(antidotePath, Constants.ApiAntidote);
-
-            // get a hold of the newly launched Antidote instance
-            long i = 0;
-            IntPtr hwndAntidote;
-            
-            while (!IsAntidoteRuning(out hwndAntidote))
-            {
-                System.Threading.Thread.Sleep(250);
-                i++;
-                // limit the number of attempts
-                if (i > 48)
+                RegistryKey pRegKey = Registry.LocalMachine;
+                pRegKey = pRegKey.OpenSubKey(Constants.RegistryInstallLocation);
+                object obj = pRegKey.GetValue(Constants.RegistryInstallLocationValue, "Invalide");
+                if (obj.ToString() == "Invalide")
                 {
-                    //TODO display a message to the user if this didn't work and we could find the window
-                    //probably didn't launched
+                    //TODO message if the registry values could not be find - this should be displayed
+                    //to the user
                     return false;
                 }
+                string antidotePath = obj.ToString();
+                if (!antidotePath.EndsWith("\\")) antidotePath += "\\";
+                antidotePath += Constants.AntidoteExecutable;
+                System.Diagnostics.Process.Start(antidotePath, Constants.ApiAntidote);
+
+                // get a hold of the newly launched Antidote instance
+                long i = 0;
+                IntPtr hwndAntidote;
+
+                while (!IsAntidoteRuning(out hwndAntidote))
+                {
+                    System.Threading.Thread.Sleep(250);
+                    i++;
+                    // limit the number of attempts
+                    if (i > 48)
+                    {
+                        //TODO display a message to the user if this didn't work and we could find the window
+                        //probably didn't launched
+                        return false;
+                    }
+                }
+            }catch(Exception _ex)
+            {
+                Log.Error(_ex, "An error appeared while starting antidote!");
+                return false;
             }
 
             return true;
