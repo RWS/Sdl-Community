@@ -60,7 +60,10 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <returns>Returns the identifier of the text field</returns>
         public int DonneIdZoneDeTexte(int id, int index)
         {
-            return _editorService.GetCurrentSegmentId(index);
+            var segmentId = _editorService.GetCurrentSegmentId(index);
+            Log.Verbose("Prepare to send segment {@segmentId} from document with id {@id} to Antidote", segmentId, id);
+
+            return segmentId;
         }
         
         /// <summary>
@@ -89,7 +92,10 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <returns>Returns the text length</returns>
         public int DonneLongueurZoneDeTexte(int idDoc, int idZone)
         {
-            return _editorService.GetSegmentText(idZone).Length;
+            var length = _editorService.GetSegmentText(idZone).Length;
+            Log.Verbose("Prepare to send segment {@idZone} with length {@length} from document with id {@id} to Antidote", idZone,length, idDoc);
+
+            return length;
         }
         /// <summary>
         /// Informs Antidote about the number of segments from the document
@@ -113,7 +119,9 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         public string DonneTitreDocCourant()
         {
-            return _editorService.GetDocumentName();
+            var documentName = _editorService.GetDocumentName();
+            Log.Verbose("Prepare to send document {@documentName} to Antidote", documentName);
+            return documentName;
 
         }
 
