@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="label4.Text" xml:space="preserve">
-    <value>Selecting this option will result in all Translation Memories and Language Resource Templates listed in the Translation Memories View being recreated in the application you are migrating to.  The actual Translation Memories and Language resource Templates will not be moved, they will remain in the same location they are now.</value>
-  </data>
   <data name="label3.Text" xml:space="preserve">
     <value>All selected projects will be migrated to the version of Studio selected in the previous steps.  Projects already selected are those that have been created in the default Studio location.  You can add/remove as you wish.</value>
+  </data>
+  <data name="label4.Text" xml:space="preserve">
+    <value>Selecting this option will result in all Translation Memories and Language Resource Templates listed in the Translation Memories View being recreated in the application you are migrating to.  The actual Translation Memories and Language resource Templates will not be moved, they will remain in the same location they are now.</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
