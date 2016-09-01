@@ -28,14 +28,14 @@ namespace Sdl.Community.AntidoteVerifier
             Logger.IntializeLogger();
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
-            AntidoteClient antidotedClient = new AntidoteClient(editorService);
+            AntidoteClient antidotedClient = new AntidoteClient(editorService,true);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for correction!");
             antidoteApiOle.CallAntidote(ConstantsUtils.Corrector);
         }
     }
 
-    [Action("Sdl.Community.AntidoteVerifier.DictionaryAction", Name = "Dictionary", Icon = "dictionary", Description = "Run Antidote dictionary")]
+    [Action("Sdl.Community.AntidoteVerifier.DictionaryAction", Name = "Dictionaries", Icon = "dictionary", Description = "Run Antidote dictionary")]
     [ActionLayout(typeof(AntidoteVerifierRibbon), 10, DisplayType.Normal)]
     public class AntidoteDictionaryAction : AbstractAction
     {
@@ -45,7 +45,7 @@ namespace Sdl.Community.AntidoteVerifier
 
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
-            AntidoteClient antidotedClient = new AntidoteClient(editorService);
+            AntidoteClient antidotedClient = new AntidoteClient(editorService,false);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for dictionary!");
 
@@ -53,7 +53,7 @@ namespace Sdl.Community.AntidoteVerifier
         }
     }
 
-    [Action("Sdl.Community.AntidoteVerifier.GuideAction", Name = "Guide", Icon = "guide", Description = "Run Antidote guide")]
+    [Action("Sdl.Community.AntidoteVerifier.GuideAction", Name = "Guides", Icon = "guide", Description = "Run Antidote guide")]
     [ActionLayout(typeof(AntidoteVerifierRibbon), 10, DisplayType.Normal)]
     public class AntidoteGuideAction : AbstractAction
     {
@@ -64,7 +64,7 @@ namespace Sdl.Community.AntidoteVerifier
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
 
-            AntidoteClient antidotedClient = new AntidoteClient(editorService);
+            AntidoteClient antidotedClient = new AntidoteClient(editorService,false);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
             Log.Information("Starting Antidote for guide!");
 

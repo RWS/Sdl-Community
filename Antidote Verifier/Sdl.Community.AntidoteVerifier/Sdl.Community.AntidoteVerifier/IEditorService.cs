@@ -10,6 +10,7 @@
         int GetActiveSegmentId();
 
         string GetSegmentText(int segmentId);
+        string GetSelection();
 
         string GetDocumentName();
         void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string segmentText);

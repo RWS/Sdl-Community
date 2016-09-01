@@ -67,6 +67,11 @@ namespace Sdl.Community.AntidoteVerifier
             return segmentPair.Target.GetString();
         }
 
+        public string GetSelection()
+        {
+            return _document.Selection.Target.ToString();
+        }
+
         public string GetDocumentName()
         {
             return _document.ActiveFile.Name;
