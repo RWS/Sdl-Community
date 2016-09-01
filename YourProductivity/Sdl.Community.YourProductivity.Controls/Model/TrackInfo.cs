@@ -24,7 +24,6 @@ namespace Sdl.Community.YourProductivity.Persistance.Model
         public List<SegmentTrackInfo> SegmentTrackInfos { get; set; }
 
         public string FileType { get; set; }
-        //return SegmentTrackInfos.All(x => x.Translated);
         public bool HasBonus { get; set; }
 
 

@@ -4,54 +4,100 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.AntidoteVerifier.Utils;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+using System.Reflection;
+using Sdl.DesktopEditor.EditorApi;
 
 namespace Sdl.Community.AntidoteVerifier
 {
     public class EditorService : IEditorService
     {
         private Document _document;
-        private Dictionary<long, string> _segmentMetadata;
+        private Dictionary<int, int> _segmentMetadata;
+        
         public EditorService(Document document)
         {
             _document = document;
-            _segmentMetadata = new Dictionary<long, string>();
-            Initialize();
+            _segmentMetadata = new Dictionary<int, int>();
         }
 
-        private void Initialize()
+        private ISegmentPair GetSegmentPair(int segmentId)
         {
+            return _document.SegmentPairs
+                .FirstOrDefault(x => x.Properties.Id.Id.Equals(segmentId.ToString()));
+        }
+        public int GetDocumentId()
+        {
+           return DocumentIdGenerator.Instance.GetDocumentId(_document.ActiveFile.Id);
+        }
+       
+        public int GetDocumentNoOfSegments()
+        {
+            _segmentMetadata.Clear();
+            var activeSegmentId = GetActiveSegmentId();
+            int index = 1;
             foreach (var segmentPair in _document.SegmentPairs)
             {
-                var id = long.Parse(segmentPair.Properties.Id.Id);
-                var targetString = segmentPair.Target.ToString();
-                _segmentMetadata.Add(id, targetString);
+                if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
+                var currentId = int.Parse(segmentPair.Properties.Id.Id);
+                if (currentId < activeSegmentId) continue;
+                _segmentMetadata.Add(index, currentId);
+                index++;
             }
+            return _segmentMetadata.Count();
         }
 
-        public long GetDocumentId()
+        public int GetCurrentSegmentId(int segmentNumber)
         {
-            //we will only one active document at a time so this will always be 1
-            return 1;
+            return _segmentMetadata[segmentNumber];
         }
 
-        public long GetDocumentNoOfSegments()
+        public int GetActiveSegmentId()
         {
-            return _document.SegmentPairs.Count();
+            return int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
         }
 
-        public long GetCurrentSegmentId(long segmentId)
+        public string GetSegmentText(int segmentId)
         {
-            return segmentId;
+            var segmentPair = GetSegmentPair(segmentId);
+
+
+            return segmentPair.Target.GetString();
         }
 
-        public long GetActiveSegmentId()
+        public string GetDocumentName()
         {
-            return long.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+            return _document.ActiveFile.Name;
         }
 
-        public string GetSegmentText(long segmentId)
+        public void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string replacementText)
         {
-            return _segmentMetadata[segmentId];
+            var segmentPair = GetSegmentPair(segmentId);
+
+            segmentPair.Target.Replace(startPosition, endPosition, replacementText);
+           
+            _document.UpdateSegmentPair(segmentPair);
+
+        }
+
+        public void SelectText(int segmentId, int startPosition, int endPosition)
+        {
+            var segmentPair = GetSegmentPair(segmentId);
+
+            var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+
+            _document.SetActiveSegmentPair(paragraphUnitId, segmentId.ToString());
+            
+        }
+
+        public void ActivateDocument()
+        {
+            
+            //Commented because Activate is not thread-safe and it will crash.
+            //EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
+            //editorController.Activate(_document);
         }
     }
 

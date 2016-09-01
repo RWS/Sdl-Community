@@ -2,13 +2,18 @@
 {
     public interface IEditorService
     {
-        long GetDocumentId();
+        int GetDocumentId();
 
-        long GetDocumentNoOfSegments();
+        int GetDocumentNoOfSegments();
 
-        long GetCurrentSegmentId(long segmentId);
-        long GetActiveSegmentId();
+        int GetCurrentSegmentId(int segmentId);
+        int GetActiveSegmentId();
 
-        string GetSegmentText(long segmentId);
+        string GetSegmentText(int segmentId);
+
+        string GetDocumentName();
+        void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string segmentText);
+        void SelectText(int segmentId, int startPosition, int endPosition);
+        void ActivateDocument();
     }
 }

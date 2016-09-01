@@ -1,8 +1,10 @@
 ﻿using Sdl.Community.AntidoteVerifier.Antidote_API;
+using Sdl.Community.AntidoteVerifier.Utils;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +25,12 @@ namespace Sdl.Community.AntidoteVerifier
     {
         protected override void Execute()
         {
+            Logger.IntializeLogger();
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
             AntidoteClient antidotedClient = new AntidoteClient(editorService);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+            Log.Information("Starting Antidote for correction!");
             antidoteApiOle.CallAntidote(ConstantsUtils.Corrector);
         }
     }
@@ -37,10 +41,14 @@ namespace Sdl.Community.AntidoteVerifier
     {
         protected override void Execute()
         {
+            Logger.IntializeLogger();
+
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
             AntidoteClient antidotedClient = new AntidoteClient(editorService);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+            Log.Information("Starting Antidote for dictionary!");
+
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedDictionary);
         }
     }
@@ -51,11 +59,15 @@ namespace Sdl.Community.AntidoteVerifier
     {
         protected override void Execute()
         {
+            Logger.IntializeLogger();
+
             EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             EditorService editorService = new EditorService(editorController.ActiveDocument);
 
             AntidoteClient antidotedClient = new AntidoteClient(editorService);
             AntidoteApiOle antidoteApiOle = new AntidoteApiOle(antidotedClient);
+            Log.Information("Starting Antidote for guide!");
+
             antidoteApiOle.CallAntidote(ConstantsUtils.LastSelectedGuide);
         }
     }
