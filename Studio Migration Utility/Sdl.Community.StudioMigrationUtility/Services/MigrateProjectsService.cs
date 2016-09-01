@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Xml.Linq;
 using Sdl.Community.StudioMigrationUtility.Model;
 
 namespace Sdl.Community.StudioMigrationUtility.Services
 {
-    public class MigrateProjectsService
+    public class MigrateProjectsService 
     {
         private readonly StudioVersion _sourceStudioVersion;
         private readonly StudioVersion _destinationStudioVersion;
+         
         public MigrateProjectsService(StudioVersion sourceVersion,StudioVersion destinationVersion)
         {
             _sourceStudioVersion = sourceVersion;
             _destinationStudioVersion = destinationVersion;
+            
         }
 
 
@@ -115,7 +115,8 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             return Path.Combine(appDataPath, string.Format("SDL\\SDL Trados Studio\\{0}\\TranslationMemoryRepository.xml", folderName));
         }
 
-        public void MigrateProjects(List<Project> projects, List<Project> projectToBeMoved, bool migrateCustomers, Action<int> reportProgress)
+        
+        public void MigrateProjects(List<Project> projects, List<Project> projectsToBeMoved, bool migrateCustomers, Action<int> reportProgress)
         {
             var destinationProjectPath = GetProjectsPath(_destinationStudioVersion);
             var projectsXml = XElement.Load(destinationProjectPath);
@@ -127,7 +128,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 MigrateCustomers(projectsXml);
 
             }
-            MoveProjects(projectToBeMoved,reportProgress);
+            MoveProjects(projectsToBeMoved,reportProgress);
 
             var projectsElement = projectsXml.Element("Projects");
             if (projectsElement == null)
@@ -139,10 +140,10 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             }
 
 
-            foreach (var project in projects)
+            foreach (var project in projectsToBeMoved)
             {
                 var workingProject = project;
-                var projectMoved = projectToBeMoved.Find(x => x.Guid.Equals(project.Guid));
+                var projectMoved = projectsToBeMoved.Find(x => x.Guid.Equals(project.Guid));
                 if (projectMoved != null)
                 {
                     workingProject = projectMoved;
@@ -186,13 +187,15 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                     new XAttribute("ProjectFilePath", workingProject.ProjectFilePath), projectInfoItem
                     );
                 projectsElement.Add(projectItem);
+             
             }
 
             projectsXml.Save(destinationProjectPath);
-
+     
             reportProgress(95);
         }
 
+        
         private void MigrateCustomers(XElement destinationProjectsXml)
         {
             var sourceProjectsPath = GetProjectsPath(_sourceStudioVersion);
@@ -298,5 +301,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
             return defaultValue;
         }
+
+       
     }
 }

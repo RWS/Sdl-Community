@@ -16,7 +16,8 @@ namespace Sdl.Community.StudioMigrationUtility.Services
         {
             {"Studio2", "Studio 2011"},
             {"Studio3", "Studio 2014"},
-            {"Studio4", "Studio 2015"}
+            {"Studio4", "Studio 2015"},
+            {"Studio5", "Studio 2017"}
         };
         private readonly List<StudioVersion> _installedStudioVersions;
 
