@@ -21,7 +21,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(APPDATA)\SDL\SDL Trados Studio\12\Plugins\Packages\</OutputPath>
+    <OutputPath>..\..\..\..\..\..\Users\rocrisan\AppData\Roaming\SDL\SDL Trados Studio\14\Plugins\Packages\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -118,11 +118,13 @@
     <Compile Include="AntidoteRibbon.cs" />
     <Compile Include="EditorService.cs" />
     <Compile Include="Utils\DocumentIdGenerator.cs" />
+    <Compile Include="Utils\EndOfItemCharacterCounterNoTagsVisitor.cs" />
     <Compile Include="Utils\Logger.cs" />
     <Compile Include="Utils\SegmentExtenstions.cs" />
     <Compile Include="IEditorService.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\StartOfItemCharacterCounterNoTagsVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">

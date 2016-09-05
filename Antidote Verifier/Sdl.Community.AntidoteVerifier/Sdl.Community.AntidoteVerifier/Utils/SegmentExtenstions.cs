@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.CharacterCountingIterator;
 
 namespace Sdl.Community.AntidoteVerifier.Utils
 {
@@ -70,12 +71,11 @@ namespace Sdl.Community.AntidoteVerifier.Utils
                 if (text != null)
                 {
                     var startLocationInsideTextItem = new TextLocation(counter.CurrentLocation, startIndex - counter.CharacterCount);
-                    var sb = new StringBuilder(text.Properties.Text);
-                    sb.Remove(startIndex, endPosition - startIndex);
-                    sb.Insert(startIndex, replacementText);
-                    //var textToReplace = segmentText.Substring(startLocationInsideTextItem.TextOffset,
-                    //    endPosition - startLocationInsideTextItem.TextOffset);
-                    text.Properties.Text = sb.ToString();// segmentText.Replace(textToReplace, replacementText);
+                    
+                    var sb = new StringBuilder(text.ToString());
+                    sb.Remove(startLocationInsideTextItem.TextOffset, endPosition - startIndex);
+                    sb.Insert(startLocationInsideTextItem.TextOffset, replacementText);
+                    text.Properties.Text = sb.ToString();
 
                 }
             }
@@ -87,7 +87,9 @@ namespace Sdl.Community.AntidoteVerifier.Utils
             Location startLocation = new Location(segment, true);
 
 
-            CharacterCountingIterator counter = new CharacterCountingIterator(startLocation);
+            CharacterCountingIterator counter = new CharacterCountingIterator(startLocation,
+                GetStartCountingVisitor,
+                GetEndCountingVisitor);
             while (counter.CharacterCount <= startIndex)
             {
                 if (!counter.MoveNext())
@@ -97,6 +99,16 @@ namespace Sdl.Community.AntidoteVerifier.Utils
             }
             counter.MovePrevious();
             return counter;
+        }
+
+        private static ICharacterCountingVisitor GetStartCountingVisitor()
+        {
+            return new StartOfItemCharacterCounterNoTagsVisitor();
+        }
+
+        private static ICharacterCountingVisitor GetEndCountingVisitor()
+        {
+            return new EndOfItemCharacterCounterNoTagsVisitor();
         }
     }
 }

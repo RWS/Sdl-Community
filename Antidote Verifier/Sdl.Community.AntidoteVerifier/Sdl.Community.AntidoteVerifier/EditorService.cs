@@ -15,18 +15,43 @@ namespace Sdl.Community.AntidoteVerifier
     public class EditorService : IEditorService
     {
         private Document _document;
-        private Dictionary<int, int> _segmentMetadata;
+        private Dictionary<int, KeyValuePair<int,string>> _segmentMetadata;
         
         public EditorService(Document document)
         {
             _document = document;
-            _segmentMetadata = new Dictionary<int, int>();
+            _segmentMetadata = new Dictionary<int, KeyValuePair<int,string>>();
+            Initialize();
         }
 
-        private ISegmentPair GetSegmentPair(int segmentId)
+        private void Initialize()
         {
+            _segmentMetadata.Clear();
+            var activeSegmentId = int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+            int index = 1;
+            foreach (var segmentPair in _document.SegmentPairs)
+            {
+                var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+                if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
+                var currentId = int.Parse(segmentPair.Properties.Id.Id);
+                if (currentId < activeSegmentId) continue;
+                _segmentMetadata.Add(index, new KeyValuePair<int, string>(currentId, paragraphUnitId));
+                index++;
+            }
+        }
+
+        private ISegmentPair GetSegmentPair(int index)
+        {
+            var segmentUniqueIdentifier = _segmentMetadata[index];
+
             return _document.SegmentPairs
-                .FirstOrDefault(x => x.Properties.Id.Id.Equals(segmentId.ToString()));
+                .FirstOrDefault(
+                        segmentPair =>
+                        {
+                            var segmentIdFound = segmentPair.Properties.Id.Id.Equals(segmentUniqueIdentifier.Key.ToString());
+                            var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+                            return segmentIdFound && paragraphUnitId.Equals(segmentUniqueIdentifier.Value);
+                        });
         }
         public int GetDocumentId()
         {
@@ -35,33 +60,33 @@ namespace Sdl.Community.AntidoteVerifier
        
         public int GetDocumentNoOfSegments()
         {
-            _segmentMetadata.Clear();
-            var activeSegmentId = GetActiveSegmentId();
-            int index = 1;
-            foreach (var segmentPair in _document.SegmentPairs)
-            {
-                if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
-                var currentId = int.Parse(segmentPair.Properties.Id.Id);
-                if (currentId < activeSegmentId) continue;
-                _segmentMetadata.Add(index, currentId);
-                index++;
-            }
+           
             return _segmentMetadata.Count();
         }
 
         public int GetCurrentSegmentId(int segmentNumber)
         {
-            return _segmentMetadata[segmentNumber];
+            return segmentNumber;
         }
 
         public int GetActiveSegmentId()
         {
-            return int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+            var segmentId = int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+            var paragraphUnitId = _document.ActiveSegmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+            foreach (var kvp in _segmentMetadata)
+            {
+                if(kvp.Value.Key.Equals(segmentId) && kvp.Value.Value.Equals(paragraphUnitId))
+                {
+                    return kvp.Key;
+                }
+            }
+
+            return 1;
         }
 
-        public string GetSegmentText(int segmentId)
+        public string GetSegmentText(int index)
         {
-            var segmentPair = GetSegmentPair(segmentId);
+            var segmentPair = GetSegmentPair(index);
 
 
             return segmentPair.Target.GetString();
@@ -87,14 +112,13 @@ namespace Sdl.Community.AntidoteVerifier
 
         }
 
-        public void SelectText(int segmentId, int startPosition, int endPosition)
+        public void SelectText(int index, int startPosition, int endPosition)
         {
-            var segmentPair = GetSegmentPair(segmentId);
+            var segmentPair = GetSegmentPair(index);
 
             var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
 
-            _document.SetActiveSegmentPair(paragraphUnitId, segmentId.ToString());
-            
+            _document.SetActiveSegmentPair(paragraphUnitId, segmentPair.Properties.Id.Id);
         }
 
         public void ActivateDocument()
