@@ -38,7 +38,7 @@ namespace Sdl.Community.YourStudio
                 tabConfigurationFilesList.Items.Add(tabFile.Value);
             }
             btnUp.Enabled = btnDown.Enabled = false;
-
+            CancelButton = btnClose;
         }
 
         private Dictionary<String, String> GetAllTabFiles()
@@ -227,7 +227,6 @@ namespace Sdl.Community.YourStudio
         private void btnClose_Click(object sender, EventArgs e)
         {
             Save();
-            Application.Exit();
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
