@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -23,7 +24,7 @@ namespace Sdl.Community.TMRepair
                 Location = new Point(this.Location.X + 10, this.Location.Y + 32),
                 Opacity = 0.7
             };
-            waitForm.Show();
+           // waitForm.Show();
 
         }
 
@@ -47,8 +48,16 @@ namespace Sdl.Community.TMRepair
             var log = Guid.NewGuid();
             var logFolder = Path.GetDirectoryName(txtFile.Text);
             var logFilePath = Path.Combine(logFolder, $"log_{log}.txt");
-            var p = Process.Start(Path.Combine(path, "cmd.exe"),
-                $@"/c echo .dump | sqlite3.exe {txtFile.Text} ""pragma integrity_check;"" >{logFilePath}");
+
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+            var processStartInfo = new ProcessStartInfo("cmd.exe");
+
+            processStartInfo.WorkingDirectory = assemblyPath.Substring(0, assemblyPath.LastIndexOf(@"\"));
+            processStartInfo.Arguments = $@"/c echo .dump | sqlite3.exe ""{txtFile.Text}"" ""pragma integrity_check;"" >""{logFilePath}""";
+            processStartInfo.UseShellExecute = false;
+            
+            var p = Process.Start(processStartInfo);
+
             if (p != null)
             {
                 while (!p.HasExited)
@@ -91,8 +100,17 @@ namespace Sdl.Community.TMRepair
                 var logFilePath = Path.Combine(logFolder, $"log_{log}.txt");
                 var sqlFilePath = Path.Combine(logFolder, $"{sql}.sql");
 
-                var p = Process.Start(Path.Combine(path, "cmd.exe"),
-                    $@"/c echo .dump | sqlite3.exe {txtFile.Text} >{sqlFilePath}");
+                var assemblyPath = Assembly.GetExecutingAssembly().Location;
+                var processStartInfo = new ProcessStartInfo("cmd.exe");
+
+                processStartInfo.WorkingDirectory = assemblyPath.Substring(0, assemblyPath.LastIndexOf(@"\"));
+                processStartInfo.Arguments = $@"/c echo .dump | sqlite3.exe ""{txtFile.Text}"" >""{sqlFilePath}""";
+                processStartInfo.UseShellExecute = false;
+
+                var p = Process.Start(processStartInfo);
+
+                //var p = Process.Start(Path.Combine(path, "cmd.exe"),
+                //    $@"/c echo .dump | sqlite3.exe {txtFile.Text} >{sqlFilePath}");
                 if (p != null)
                 {
                     while (!p.HasExited)
@@ -102,8 +120,16 @@ namespace Sdl.Community.TMRepair
 
                     var newFileName = Path.Combine(Path.GetDirectoryName(txtFile.Text),
                         $"repaired_{Path.GetFileName(txtFile.Text)}");
-                    var p1 = Process.Start(Path.Combine(path, "cmd.exe"),
-                        $@"/c sqlite3.exe -init {sqlFilePath} {newFileName} "".quit"" >{logFilePath}");
+
+                    //var assemblyPath = Assembly.GetExecutingAssembly().Location;
+                    var processStartInfo1 = new ProcessStartInfo("cmd.exe");
+                    processStartInfo1.Arguments = $@"/c sqlite3.exe -init ""{sqlFilePath}"" ""{newFileName}"" "".quit"" >""{logFilePath}""";
+
+                    processStartInfo1.WorkingDirectory = assemblyPath.Substring(0, assemblyPath.LastIndexOf(@"\"));
+                    processStartInfo1.UseShellExecute = false;
+                    var p1 = Process.Start(processStartInfo1);
+                    //var p1 = Process.Start(Path.Combine(path, "cmd.exe"),
+                    //    $@"/c sqlite3.exe -init {sqlFilePath} {newFileName} "".quit"" >{logFilePath}");
                     if (p1 != null)
                     {
                         while (!p1.HasExited)
