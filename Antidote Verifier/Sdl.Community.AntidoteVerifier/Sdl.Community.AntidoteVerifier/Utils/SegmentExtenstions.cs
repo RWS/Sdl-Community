@@ -11,9 +11,9 @@ namespace Sdl.Community.AntidoteVerifier.Utils
 {
     public static class SegmentExtenstions
     {
-        public static string GetString(this ISegment segment)
+        public static string GetString(this ISegment segment, bool includeSegments=false)
         {
-            var textVisitor = new TextCollectionVisitor(false);
+            var textVisitor = new TextCollectionVisitor(includeSegments);
 
             foreach (var item in segment)
             {

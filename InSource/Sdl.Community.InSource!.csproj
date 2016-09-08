@@ -238,7 +238,7 @@
     <None Include="samples.snk" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath)\SDL\PluginFramework\v12.0\Sdl.Core.PluginFramework.Build.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\SDL\PluginFramework\v12\Sdl.Core.PluginFramework.Build.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

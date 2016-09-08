@@ -31,7 +31,7 @@ namespace Sdl.Community.AntidoteVerifier.Utils
                 @"SDL Community\Antidote Verifier\logs\antidoteVerifier-{Date}.log");
             Serilog.Log.Logger = new LoggerConfiguration()
                 .WriteTo.RollingFile(logFilePath)
-                .MinimumLevel.Verbose()
+                //.MinimumLevel.Verbose()
                 .CreateLogger();
         }
     }
