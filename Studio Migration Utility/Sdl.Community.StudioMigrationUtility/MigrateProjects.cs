@@ -127,10 +127,13 @@ namespace Sdl.Community.StudioMigrationUtility
                     e.Cancel = true;
                     return;
                 }
+
+               
             }
 
             if (oldPage == toStudioVersion && e.NewIndex > e.OldIndex)
             {
+                
                 var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
                 if (selectedDestinationStudioVersionsGeneric.Count == 0)
                 {
@@ -195,8 +198,9 @@ namespace Sdl.Community.StudioMigrationUtility
                 }
 
                 projectsToBeMoved.ItemChecked += ProjectsToBeMoved_ItemChecked;
-
+               
             }
+
 
             if (oldPage == moveProjects && e.NewIndex > e.OldIndex)
             {
@@ -208,10 +212,10 @@ namespace Sdl.Community.StudioMigrationUtility
                 var type = pluginInfoDll.GetType("Sdl.Community.PluginInfo.PluginPackageInfo");
 
                 var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
-                var sourceStudioVersion = (StudioVersion) selectedSourceStudioVersionsGeneric[0];
+                var sourceStudioVersion = (StudioVersion)selectedSourceStudioVersionsGeneric[0];
 
                 var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
-                var destinationStudioVersion = (StudioVersion) selectedDestinationStudioVersionsGeneric[0];
+                var destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
 
                 //get plugins list for source selected studio  version
                 var sourcePluginsList = GetInstallledPluginsForSpecificStudioVersion(sourceStudioVersion);
@@ -219,12 +223,9 @@ namespace Sdl.Community.StudioMigrationUtility
                 //get plugins list for destination selected studio  version
                 var destinationPluginsPathList = GetInstallledPluginsForSpecificStudioVersion(destinationStudioVersion);
 
-
                 //check if there are any plugins to be migrated for selected verions 
                 var pluginsList =
                     sourcePluginsList.Where(p => destinationPluginsPathList.All(d => d.PluginName != p.PluginName));
-
-                //var pluginsToMigrateList = new List<PluginInfo>();
 
                 //call "GetPluginName" method in order to get the plugin name
                 var method = type.GetMethod("GetPluginName");
@@ -240,12 +241,16 @@ namespace Sdl.Community.StudioMigrationUtility
                     {
                         Path = plugin.Path,
                         PluginName = name as string
-                };
+                    };
 
-                    _pluginsToBeMigrated.Add(pluginToBeMoved);
+                    if (!_pluginsToBeMigrated.Exists(p => p.PluginName == pluginToBeMoved.PluginName))
+                    {
+                        _pluginsToBeMigrated.Add(pluginToBeMoved);
+                    }
+
                 }
                 installedPluginsListView.SetObjects(_pluginsToBeMigrated);
-             
+
 
 
             }
@@ -294,10 +299,42 @@ namespace Sdl.Community.StudioMigrationUtility
         {
             // get wizard page to be displayed
             WizardPage newPage = projectMigrationWizzard.Pages[e.NewIndex];
+            var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
+            var sourceStudioVersion= new StudioVersion();
+            var destinationStudioVersion = new StudioVersion();
+            var skipPluginsPage=true;
+            if (selectedSourceStudioVersionsGeneric.Count > 0)
+            {
+                 sourceStudioVersion = (StudioVersion)selectedSourceStudioVersionsGeneric[0];
+            }
+            
+
+            var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
+            if (selectedDestinationStudioVersionsGeneric.Count > 0)
+            {
+                 destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
+            }
+
+            
+
+            if (destinationStudioVersion.Version != null && (sourceStudioVersion.Version != null && (sourceStudioVersion.Version.Equals("Studio4") && destinationStudioVersion.Version.Equals("Studio5"))))
+            {
+                skipPluginsPage = false;
+            }
 
             if (newPage == taskRunnerPage)
             {
                 StartTask();
+            }
+            if (newPage == pluginsPage && e.OldIndex==3&&skipPluginsPage)
+            {
+                projectMigrationWizzard.Next();
+               
+            }
+            if (newPage == pluginsPage && e.OldIndex == 5&&skipPluginsPage)
+            {
+                projectMigrationWizzard.Back();
+               
             }
         }
 
