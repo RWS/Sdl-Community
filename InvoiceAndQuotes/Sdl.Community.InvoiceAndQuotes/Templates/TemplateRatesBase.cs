@@ -101,7 +101,7 @@ namespace Sdl.Community.InvoiceAndQuotes.Templates
             String html = sb.ToString();
             const string htmlEnd = "<!--EndFragment-->\r\n</body>\r\n</html>\r\n";
 
-            string beginSample = String.Format(begin, 0, 0, 0, 0);
+            string beginSample =String.Format(begin, 0, 0, 0, 0);
 
             int countBegin = enc.GetByteCount(beginSample);
             int countHtmlBegin = enc.GetByteCount(htmlBegin);
@@ -109,16 +109,18 @@ namespace Sdl.Community.InvoiceAndQuotes.Templates
             int countHtmlEnd = enc.GetByteCount(htmlEnd);
 
             string htmlTotal = String.Format(
-               begin
-               , countBegin
+               begin,
+                countBegin
                , countBegin + countHtmlBegin + countHtml + countHtmlEnd
                , countBegin + countHtmlBegin
                , countBegin + countHtmlBegin + countHtml
                ) + htmlBegin + html + htmlEnd;
 
             DataObject obj = new DataObject();
+
             obj.SetData(DataFormats.Html, new System.IO.MemoryStream(
                enc.GetBytes(htmlTotal)));
+
             Clipboard.SetDataObject(obj, true);
         }
 

@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DisplayFilterControl_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="DisplayFilterControl_Draft" xml:space="preserve">
+    <value>Draft</value>
+  </data>
+  <data name="DisplayFilterControl_Show_All_Content" xml:space="preserve">
+    <value>Show All Content</value>
+  </data>
+  <data name="DisplayFilterControl_Segment_Content" xml:space="preserve">
+    <value>Segment Content</value>
+  </data>
+  <data name="DisplayFilterControl_General" xml:space="preserve">
+    <value>General</value>
+  </data>
+  <data name="DisplayFilterControl_Exact_matches" xml:space="preserve">
+    <value>100% matches</value>
+  </data>
+  <data name="DisplayFilterControl_Number_Only" xml:space="preserve">
+    <value>Number Only</value>
+  </data>
+  <data name="DisplayFilterControl_Perfect_matches" xml:space="preserve">
+    <value>Perfect matches</value>
+  </data>
+  <data name="DisplayFilterControl_Translation_Approved" xml:space="preserve">
+    <value>Translation Approved</value>
+  </data>
+  <data name="DisplayFilterControl_Exclude_number_only" xml:space="preserve">
+    <value>Exclude number only</value>
+  </data>
+  <data name="DisplayFilterControl_Signed_Off" xml:space="preserve">
+    <value>Signed Off</value>
+  </data>
+  <data name="DisplayFilterControl_Context_matches" xml:space="preserve">
+    <value>Context matches</value>
+  </data>
+  <data name="DisplayFilterControl_Unlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="DisplayFilterControl_None" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="DisplayFilterControl_With_comments" xml:space="preserve">
+    <value>With comments</value>
+  </data>
+  <data name="DisplayFilterControl_First_Occurrences" xml:space="preserve">
+    <value>First Occurrences</value>
+  </data>
+  <data name="DisplayFilterControl_Filtered_of_rows" xml:space="preserve">
+    <value>Filtered {0} of {1} segments</value>
+  </data>
+  <data name="DisplayFilterControl_Copied_from_source" xml:space="preserve">
+    <value>Copied from source</value>
+  </data>
+  <data name="DisplayFilterControl_Sign_off_Rejected" xml:space="preserve">
+    <value>Sign-off Rejected</value>
+  </data>
+  <data name="DisplayFilterControl_Automated_translations" xml:space="preserve">
+    <value>Automated translations</value>
+  </data>
+  <data name="DisplayFilterControl_Segment_Locking" xml:space="preserve">
+    <value>Segment Locking</value>
+  </data>
+  <data name="DisplayFilterControl_All" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="DisplayFilterControl_With_messages" xml:space="preserve">
+    <value>With messages</value>
+  </data>
+  <data name="DisplayFilterControl_Repetitions" xml:space="preserve">
+    <value>Repetitions</value>
+  </data>
+  <data name="DisplayFilterControl_Exclude_first_occurrences" xml:space="preserve">
+    <value>Exclude first occurrences</value>
+  </data>
+  <data name="DisplayFilterControl_Previous_Origin" xml:space="preserve">
+    <value>Previous Origin</value>
+  </data>
+  <data name="DisplayFilterControl_ShowAllContent" xml:space="preserve">
+    <value>ShowAllContent</value>
+  </data>
+  <data name="DisplayFilterControl_With_tracked_changes" xml:space="preserve">
+    <value>With tracked changes</value>
+  </data>
+  <data name="DisplayFilterControl_Translated" xml:space="preserve">
+    <value>Translated</value>
+  </data>
+  <data name="DisplayFilterControl_Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="DisplayFilterControl_Auto_propagated" xml:space="preserve">
+    <value>Auto-propagated</value>
+  </data>
+  <data name="DisplayFilterControl_Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="DisplayFilterControl_Fuzzy_matches" xml:space="preserve">
+    <value>Fuzzy matches</value>
+  </data>
+  <data name="DisplayFilterControl_Translation_Rejected" xml:space="preserve">
+    <value>Translation Rejected</value>
+  </data>
+  <data name="DisplayFilterControl_Origin" xml:space="preserve">
+    <value>Origin</value>
+  </data>
+  <data name="DisplayFilterControl_With_TQA" xml:space="preserve">
+    <value>With TQA</value>
+  </data>
+  <data name="DisplayFilterControl_Segment_Review" xml:space="preserve">
+    <value>Segment Review</value>
+  </data>
+  <data name="DisplayFilterControl_Not_Translated" xml:space="preserve">
+    <value>Not Translated</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="ok.32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Images\ok.32x32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="DisplayFilterControl_SaveFilter_Save_Filter_Settings" xml:space="preserve">
+    <value>Save Filter Settings</value>
+  </data>
+  <data name="DisplayFilterControl_Settings_XML_File_sdladfsettings" xml:space="preserve">
+    <value>Settings XML File (*.sdladfsettings)|*.sdladfsettings</value>
+  </data>
+  <data name="DisplayFilterControl_LoadFilter_Load_Filter_Settings" xml:space="preserve">
+    <value>Load Filter Settings</value>
+  </data>
+  <data name="DisplayFilterControl_Source" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="DisplayFilterControl_Target" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="DisplayFilterControl_Regular_Expression" xml:space="preserve">
+    <value>Regular Expression</value>
+  </data>
+  <data name="DisplayFilterControl_Case_Sensitive" xml:space="preserve">
+    <value>Case Sensitive</value>
+  </data>
+  <data name="DisplayFilterControl_OR" xml:space="preserve">
+    <value>OR</value>
+  </data>
+  <data name="DisplayFilterControl_Comment_text" xml:space="preserve">
+    <value>Comment Text</value>
+  </data>
+  <data name="DisplayFilterControl_Comment_author" xml:space="preserve">
+    <value>Comment Author</value>
+  </data>
+  <data name="DisplayFilterControl_Comment_severity" xml:space="preserve">
+    <value>Comment Severity</value>
+  </data>
+  <data name="DisplayFilterControl_Selected" xml:space="preserve">
+    <value>Selected: {0}</value>
+  </data>
+  <data name="DisplayFilterControl_ContextInfo" xml:space="preserve">
+    <value>ContextInfo</value>
+  </data>
+  <data name="DisplayFilterControl_Document_structure" xml:space="preserve">
+    <value>Document Structure</value>
+  </data>
+</root>

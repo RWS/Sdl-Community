@@ -14,10 +14,12 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
     public class AntidoteClient : IAntidoteClient
     {
         private IEditorService _editorService;
+        private bool _spellChecking;
 
-        public AntidoteClient(IEditorService editorService)
+        public AntidoteClient(IEditorService editorService, bool spellChecking)
         {
             _editorService = editorService;
+            _spellChecking = spellChecking;
         }
         public void ActiveApplication()
         {
@@ -74,14 +76,28 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         public int DonneIdZoneDeTexteCourante(int index)
         {
-            return 0;
+            if(_spellChecking) return 0;
+            var segmentId = _editorService.GetActiveSegmentId(); 
+            Log.Verbose("Prepare to send segment {@segmentId} for index {@index} to Antidote", segmentId, index);
+
+            return segmentId;
         }
 
         public string DonneIntervalle(int idDoc, int idZone, int leDebut, int laFin)
         {
-            var text = _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
+            var text = string.Empty;
+            //Document selection is not thread-safe hence we can't get the selected text
+            //until this is fixed in the api
+            //if (!_spellChecking)
+            //{
+            //    text = _editorService.GetSelection();
+            //}
+            //else
+            //{
+            text = _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
+           // }
             Log.Verbose("Sending {@text} corresponding to segment {@idZone} from document with id {@id} to Antidote", text,idZone, idDoc);
-            return _editorService.GetSegmentText(idZone).Substring(leDebut, laFin - leDebut);
+            return text;
         }
 
         /// <summary>
@@ -92,8 +108,18 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
         /// <returns>Returns the text length</returns>
         public int DonneLongueurZoneDeTexte(int idDoc, int idZone)
         {
-            var length = _editorService.GetSegmentText(idZone).Length;
-            Log.Verbose("Prepare to send segment {@idZone} with length {@length} from document with id {@id} to Antidote", idZone,length, idDoc);
+            var length = 0;
+            //Document selection is not thread-safe hence we can't get the selected text
+            //until this is fixed in the api
+            //if (!_spellChecking)
+            //{
+            //    length = _editorService.GetSelection().Length;
+            //}
+            //else
+            //{
+                length = _editorService.GetSegmentText(idZone).Length;
+           // }
+            Log.Verbose("Prepare to send segment {@idZone} with length {@length} from document with id {@id} to Antidote", idZone, length, idDoc);
 
             return length;
         }

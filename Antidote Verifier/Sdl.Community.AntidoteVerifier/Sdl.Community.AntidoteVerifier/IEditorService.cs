@@ -6,14 +6,15 @@
 
         int GetDocumentNoOfSegments();
 
-        int GetCurrentSegmentId(int segmentId);
+        int GetCurrentSegmentId(int index);
         int GetActiveSegmentId();
 
-        string GetSegmentText(int segmentId);
+        string GetSegmentText(int index);
+        string GetSelection();
 
         string GetDocumentName();
-        void ReplaceTextInSegment(int segmentId, int startPosition, int endPosition, string segmentText);
-        void SelectText(int segmentId, int startPosition, int endPosition);
+        void ReplaceTextInSegment(int index, int startPosition, int endPosition, string segmentText);
+        void SelectText(int index, int startPosition, int endPosition);
         void ActivateDocument();
     }
 }

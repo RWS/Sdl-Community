@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Advanced Display Filter</PlugInName>
+  <Version>1.0</Version>
+  <Description>Advanced display filter that allows more options in filtering the rows visible from the editor</Description>
+  <Author></Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+</PluginPackage>
