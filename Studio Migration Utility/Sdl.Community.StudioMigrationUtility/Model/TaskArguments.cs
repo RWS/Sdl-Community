@@ -15,5 +15,7 @@ namespace Sdl.Community.StudioMigrationUtility.Model
         public bool MigrateTranslationMemories { get; set; }
         
         public bool MigrateCustomers { get; set; }
+
+        public List<PluginInfo> PluginsToBeMoved { get; set; } 
     }
 }

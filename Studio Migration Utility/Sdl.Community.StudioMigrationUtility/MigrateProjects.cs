@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
@@ -11,6 +12,7 @@ using Sdl.Community.StudioMigrationUtility.Model;
 using Sdl.Community.StudioMigrationUtility.Properties;
 using Sdl.Community.StudioMigrationUtility.Services;
 using Sdl.Desktop.IntegrationApi;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StudioMigrationUtility
@@ -20,7 +22,7 @@ namespace Sdl.Community.StudioMigrationUtility
         private readonly StudioVersionService _studioVersionService;
         private BackgroundWorker _bw;
         private List<Project> _projects=new List<Project>();
-
+        private List<PluginInfo> _pluginsToBeMigrated = new List<PluginInfo>(); 
         public MigrateUtility(StudioVersionService studioVersionService)
         {
             InitializeComponent();
@@ -61,14 +63,26 @@ namespace Sdl.Community.StudioMigrationUtility
                 var project = (Project)rowObject;
                 return project.Name;
             };
+
+            pluginsColumn.AspectGetter = delegate(object rowObject)
+            {
+                var plugin = (PluginInfo) rowObject;
+                return plugin.PluginName;
+            };
             _bw = new BackgroundWorker { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
             _bw.ProgressChanged += _bw_ProgressChanged;
             _bw.DoWork += _bw_DoWork;
             _bw.RunWorkerCompleted += _bw_RunWorkerCompleted;
 
+            installedPluginsListView.CellToolTipShowing += InstalledPluginsListView_CellToolTipShowing;
         }
 
-     
+        private void InstalledPluginsListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
+        {
+            var index = ((ObjectListView)sender).HotRowIndex;
+            var plugin = _pluginsToBeMigrated[index];
+            e.Text = plugin.PluginName;
+        }
 
         private void MigrateUtility_Closing(object sender, CancelEventArgs e)
         {
@@ -83,7 +97,8 @@ namespace Sdl.Community.StudioMigrationUtility
            
         }
 
-        private void projectMigrationWizzard_BeforeSwitchPages(object sender, CristiPotlog.Controls.Wizard.BeforeSwitchPagesEventArgs e)
+        private void projectMigrationWizzard_BeforeSwitchPages(object sender,
+            CristiPotlog.Controls.Wizard.BeforeSwitchPagesEventArgs e)
         {
             // get wizard page already displayed
             WizardPage oldPage = projectMigrationWizzard.Pages[e.OldIndex];
@@ -95,8 +110,10 @@ namespace Sdl.Community.StudioMigrationUtility
                 if (selectedStudioVersionsGeneric.Count == 0)
                 {
                     MessageBox.Show(this,
-                        Resources.MigrateProjects_projectMigrationWizzard_BeforeSwitchPages_Please_select_a_Studio_version_,
-                        Resources.MigrateProjects_projectMigrationWizzard_BeforeSwitchPages_Select_a_studio_version, MessageBoxButtons.OK);
+                        Resources
+                            .MigrateProjects_projectMigrationWizzard_BeforeSwitchPages_Please_select_a_Studio_version_,
+                        Resources.MigrateProjects_projectMigrationWizzard_BeforeSwitchPages_Select_a_studio_version,
+                        MessageBoxButtons.OK);
                     e.Cancel = true;
                     return;
                 }
@@ -161,11 +178,14 @@ namespace Sdl.Community.StudioMigrationUtility
                 {
                     projects.Insert(0, selectAllProjects);
                 }
-              
-               
+
+
                 projectsToBeMoved.SetObjects(projects);
 
-                foreach (OLVListItem item in from OLVListItem item in projectsToBeMoved.Items let project = (Project)item.RowObject where !Path.IsPathRooted(project.ProjectFilePath) select item)
+                foreach (OLVListItem item in from OLVListItem item in projectsToBeMoved.Items
+                    let project = (Project) item.RowObject
+                    where !Path.IsPathRooted(project.ProjectFilePath)
+                    select item)
                 {
                     if (item.Text != @"Select all projects")
                     {
@@ -175,10 +195,79 @@ namespace Sdl.Community.StudioMigrationUtility
                 }
 
                 projectsToBeMoved.ItemChecked += ProjectsToBeMoved_ItemChecked;
-             
+
             }
 
+            if (oldPage == moveProjects && e.NewIndex > e.OldIndex)
+            {
+
+                //call Sdl.Community.PluginInfo.dll in order to get the plugin name
+                var currentAssembly = Assembly.GetAssembly(typeof(MigrateProjectsService));
+                var path = Path.GetDirectoryName(currentAssembly.Location);
+                var pluginInfoDll = Assembly.LoadFrom(Path.Combine(path, "Sdl.Community.PluginInfo"));
+                var type = pluginInfoDll.GetType("Sdl.Community.PluginInfo.PluginPackageInfo");
+
+                var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
+                var sourceStudioVersion = (StudioVersion) selectedSourceStudioVersionsGeneric[0];
+
+                var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
+                var destinationStudioVersion = (StudioVersion) selectedDestinationStudioVersionsGeneric[0];
+
+                //get plugins list for source selected studio  version
+                var sourcePluginsList = GetInstallledPluginsForSpecificStudioVersion(sourceStudioVersion);
+
+                //get plugins list for destination selected studio  version
+                var destinationPluginsPathList = GetInstallledPluginsForSpecificStudioVersion(destinationStudioVersion);
+
+
+                //check if there are any plugins to be migrated for selected verions 
+                var pluginsList =
+                    sourcePluginsList.Where(p => destinationPluginsPathList.All(d => d.PluginName != p.PluginName));
+
+                //var pluginsToMigrateList = new List<PluginInfo>();
+
+                //call "GetPluginName" method in order to get the plugin name
+                var method = type.GetMethod("GetPluginName");
+                var constructor = type.GetConstructor(
+                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                    null, Type.EmptyTypes, null);
+                var instance = constructor.Invoke(new object[] { });
+
+                foreach (var plugin in pluginsList)
+                {
+                    var name = method.Invoke(instance, new object[] { plugin.Path });
+                    var pluginToBeMoved = new PluginInfo
+                    {
+                        Path = plugin.Path,
+                        PluginName = name as string
+                };
+
+                    _pluginsToBeMigrated.Add(pluginToBeMoved);
+                }
+                installedPluginsListView.SetObjects(_pluginsToBeMigrated);
+             
+
+
+            }
         }
+
+        private List<PluginInfo> GetInstallledPluginsForSpecificStudioVersion(StudioVersion studioVersion)
+        {
+            var pluginService = new PluginService();
+
+            var pluginsList = new List<PluginInfo>();
+            foreach (var path in pluginService.GetInstalledPlugins(studioVersion))
+            {
+                var plugin = new PluginInfo
+                {
+                    Path = path,
+                    PluginName = Path.GetFileNameWithoutExtension(path)
+                };
+                pluginsList.Add(plugin);
+            }
+
+            return pluginsList;
+        } 
 
         private void ProjectsToBeMoved_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
@@ -222,6 +311,7 @@ namespace Sdl.Community.StudioMigrationUtility
             var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
             var selectedProjectsToBeMoved = projectsToBeMoved.CheckedObjects;
             var projects = projectsToBeMoved.Objects;
+            var selectedPluginsToBeMoved = installedPluginsListView.CheckedObjects;
 
             var taskArgument = new TaskArgument
             {
@@ -230,7 +320,8 @@ namespace Sdl.Community.StudioMigrationUtility
                 DestinationStudioVersion = (StudioVersion) selectedDestinationStudioVersionsGeneric[0],
                 SourceStudioVersion = (StudioVersion) selectedSourceStudioVersionsGeneric[0],
                 MigrateTranslationMemories = chkTranslationMemories.Checked,
-                MigrateCustomers = chkCustomers.Checked
+                MigrateCustomers = chkCustomers.Checked,
+                PluginsToBeMoved = selectedPluginsToBeMoved.Cast<PluginInfo>().ToList()
             };
 
             _bw.RunWorkerAsync(taskArgument);
@@ -280,10 +371,29 @@ namespace Sdl.Community.StudioMigrationUtility
             {
                 mpService.MigrateTranslationMemories();
             }
+
+            if (taskArgument.PluginsToBeMoved.Count > 0)
+            {
+                MovePlugins(taskArgument.PluginsToBeMoved, taskArgument.SourceStudioVersion.ExecutableVersion.Major);
+            }
+           
             _bw.ReportProgress(100);
 
         }
 
+        private void MovePlugins(List<PluginInfo> pluginsToBeMoved,int sourceStudioVersion)
+        {
+            var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
+            var destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
+
+            var majorVersion = destinationStudioVersion.ExecutableVersion.Major;
+
+            foreach (var plugin in pluginsToBeMoved)
+            {
+                var destinationPath = plugin.Path.Replace(sourceStudioVersion.ToString(), majorVersion.ToString());
+                File.Copy(plugin.Path,destinationPath,true);
+            }
+        }
         void _bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             progressLongTask.Value = e.ProgressPercentage;
