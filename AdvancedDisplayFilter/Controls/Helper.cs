@@ -1,64 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
+using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
     public class Helper
     {
-        public static DisplayFilterSettings.OriginType GetOriginType(ITranslationOrigin translationOrigin)
-        {
-            if (translationOrigin == null) return DisplayFilterSettings.OriginType.None;
-            if (string.Compare(translationOrigin.OriginType, "auto-propagated", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                return DisplayFilterSettings.OriginType.AutoPropagated;
-            }
-            else if (string.Compare(translationOrigin.OriginType, "interactive", StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                return DisplayFilterSettings.OriginType.Interactive;
-            }
-            else
-            {
-                if (translationOrigin.MatchPercent >= 100)
-                {
-                    if (string.Compare(translationOrigin.OriginType, "document-match", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return DisplayFilterSettings.OriginType.PM;
-                    }
-                    else if (translationOrigin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget)
-                    {
-                        return DisplayFilterSettings.OriginType.CM;
-                    }
-                    else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        return DisplayFilterSettings.OriginType.AT;
-                    }
-                    else
-                    {
-                        return DisplayFilterSettings.OriginType.Exact;
-                    }
-                }
-                else if (string.Compare(translationOrigin.OriginType, "mt", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    return DisplayFilterSettings.OriginType.AT;                    
-                }
-                else if (translationOrigin.MatchPercent > 0)
-                {
-                    return DisplayFilterSettings.OriginType.Fuzzy;
-                }
-                else if (string.Compare(translationOrigin.OriginType, "source", StringComparison.OrdinalIgnoreCase) == 0)
-                {
-                    return DisplayFilterSettings.OriginType.Source;
-                }
-            }
-            return DisplayFilterSettings.OriginType.None;
-        }
-
         public static string GetTypeName(DisplayFilterSettings.ConfirmationLevel type)
         {
             switch (type)
@@ -74,23 +24,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
         }
 
-        public static string GetTypeName(DisplayFilterSettings.OriginType type)
+        public static string GetTypeName(OriginType type)
         {
             switch (type)
             {
-                case DisplayFilterSettings.OriginType.Source:
+                case OriginType.Source:
                     return StringResources.DisplayFilterControl_Copied_from_source;
-                case DisplayFilterSettings.OriginType.AutoPropagated:
+                case OriginType.AutoPropagated:
                     return StringResources.DisplayFilterControl_Auto_propagated;
-                case DisplayFilterSettings.OriginType.Exact:
+                case OriginType.Exact:
                     return StringResources.DisplayFilterControl_Exact_matches;
-                case DisplayFilterSettings.OriginType.Fuzzy:
+                case OriginType.Fuzzy:
                     return StringResources.DisplayFilterControl_Fuzzy_matches;
-                case DisplayFilterSettings.OriginType.PM:
+                case OriginType.PM:
                     return StringResources.DisplayFilterControl_Perfect_matches;
-                case DisplayFilterSettings.OriginType.CM:
+                case OriginType.CM:
                     return StringResources.DisplayFilterControl_Context_matches;
-                case DisplayFilterSettings.OriginType.AT:
+                case OriginType.AT:
                     return StringResources.DisplayFilterControl_Automated_translations;
                 default:
                     return type.ToString();

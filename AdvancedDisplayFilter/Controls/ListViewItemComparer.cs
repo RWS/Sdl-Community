@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.AdvancedDisplayFilter.Models;
+using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -86,8 +87,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                 if (item.Tag.GetType() == typeof(DisplayFilterSettings.ConfirmationLevel))
                     return (int)(DisplayFilterSettings.ConfirmationLevel)item.Tag;
-                else if (item.Tag.GetType() == typeof(DisplayFilterSettings.OriginType))
-                    return (int)(DisplayFilterSettings.OriginType)item.Tag;
+                else if (item.Tag.GetType() == typeof(OriginType))
+                    return (int)(OriginType)item.Tag;
                 else if (item.Tag.GetType() == typeof(DisplayFilterSettings.RepetitionType))
                     return (int)(DisplayFilterSettings.RepetitionType)item.Tag;
                 else if (item.Tag.GetType() == typeof(DisplayFilterSettings.SegmentReviewType))

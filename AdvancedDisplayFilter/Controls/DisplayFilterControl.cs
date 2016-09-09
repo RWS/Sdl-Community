@@ -13,6 +13,8 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
+using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
@@ -20,7 +22,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
     {
         #region  |  Delegates  |
 
-        public delegate void OnApplyFilterHandler(IDisplayFilterSettings displayFilterSettings, FilteredCountsCallback result);
+        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result);
         public event OnApplyFilterHandler OnApplyDisplayFilter;
 
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
@@ -398,25 +400,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Tag = type;
                 }
 
-                foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
+                foreach (var type in Enum.GetValues(typeof(OriginType)))
                 {
                     if (type.ToString() == "None")
                         continue;
 
                     var item =
-                        listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
+                        listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
 
                     item.Group = GroupOriginAvailable;
 
                     item.Tag = type;
                 }
-                foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.OriginType)))
+                foreach (var type in Enum.GetValues(typeof(OriginType)))
                 {
                     if (type.ToString() == "None")
                         continue;
 
                     var item =
-                        listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.OriginType)type));
+                        listView_available.Items.Add(Helper.GetTypeName((OriginType)type));
 
                     item.Group = GroupPreviousOriginAvailable;
 
@@ -560,7 +562,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
-        private void ApplyDisplayFilter(IDisplayFilterSettings displayFilterSettings, FilteredCountsCallback result)
+        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result)
         {
             if (ActiveDocument == null)
                 return;
@@ -616,15 +618,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
                     + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((DisplayFilterSettings.OriginType)Enum.Parse(
-                        typeof(DisplayFilterSettings.OriginType), item, true))) + ")");
+                    + Helper.GetTypeName((OriginType)Enum.Parse(
+                        typeof(OriginType), item, true))) + ")");
 
             if (DisplayFilterSettings.PreviousOriginTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
                     + "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((DisplayFilterSettings.OriginType)Enum.Parse(
-                        typeof(DisplayFilterSettings.OriginType), item, true))) + ")");
+                    + Helper.GetTypeName((OriginType)Enum.Parse(
+                        typeof(OriginType), item, true))) + ")");
 
             if (DisplayFilterSettings.RepetitionTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
@@ -717,7 +719,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             panel_filterStatusBarImage.Visible = visible;
             panel_filterStatusBar.BackColor = visible ? SystemColors.GradientInactiveCaption : Color.Transparent;
         }
-        private bool IsFilterApplied(IDisplayFilterSettings settings)
+        private bool IsFilterApplied(DisplayFilterSettings settings)
         {
             if (!string.IsNullOrEmpty(settings.SourceText)
                 || !string.IsNullOrEmpty(settings.TargetText)
@@ -746,7 +748,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             tabPage.ImageIndex = -1;
         }
-        private void InvalidateIconsFilterApplied_contentTab(IDisplayFilterSettings settings)
+        private void InvalidateIconsFilterApplied_contentTab(DisplayFilterSettings settings)
         {
             if (!string.IsNullOrEmpty(settings.SourceText)
                 || !string.IsNullOrEmpty(settings.TargetText))
@@ -759,7 +761,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 
         }
-        private void InvalidateIconsFilterApplied_filtersTab(IDisplayFilterSettings settings)
+        private void InvalidateIconsFilterApplied_filtersTab(DisplayFilterSettings settings)
         {
 
             if (settings.SegmentReviewTypes.Any()
@@ -780,7 +782,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 
         }
-        private void InvalidateIconsFilterApplied_commentsTab(IDisplayFilterSettings settings)
+        private void InvalidateIconsFilterApplied_commentsTab(DisplayFilterSettings settings)
         {
 
             if (!string.IsNullOrEmpty(settings.CommentText)
@@ -795,7 +797,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 
         }
-        private void InvalidateIconsFilterApplied_contextInfoTab(IDisplayFilterSettings settings)
+        private void InvalidateIconsFilterApplied_contextInfoTab(DisplayFilterSettings settings)
         {
             if (settings.ContextInfoTypes.Any())
             {
