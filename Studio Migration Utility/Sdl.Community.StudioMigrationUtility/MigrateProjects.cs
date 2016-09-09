@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -198,10 +199,17 @@ namespace Sdl.Community.StudioMigrationUtility
                 }
 
                 projectsToBeMoved.ItemChecked += ProjectsToBeMoved_ItemChecked;
-               
+
+                if (projectsToBeMoved.Items[0].Text == @"Select all projects")
+                {
+                    projectsToBeMoved.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
+                    projectsToBeMoved.Items[0].Font = new Font(projectsToBeMoved.Items[0].Font, FontStyle.Bold);
+
+                }
             }
 
 
+            #region Plugins page
             if (oldPage == moveProjects && e.NewIndex > e.OldIndex)
             {
 
@@ -249,13 +257,51 @@ namespace Sdl.Community.StudioMigrationUtility
                     }
 
                 }
+
+                var selectAllPlugins = new PluginInfo
+                {
+                    PluginName = "Select all plugins"
+                };
+
+                if (_pluginsToBeMigrated.Count > 1&&!_pluginsToBeMigrated.Exists(p => p.PluginName == selectAllPlugins.PluginName))
+                {
+                    _pluginsToBeMigrated.Insert(0,selectAllPlugins);
+                }
+
                 installedPluginsListView.SetObjects(_pluginsToBeMigrated);
 
 
+                installedPluginsListView.ItemChecked += InstalledPluginsListView_ItemChecked;
 
+                if (installedPluginsListView.Items[0].Text == @"Select all plugins")
+                {
+                    installedPluginsListView.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
+                    installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font,FontStyle.Bold);
+                }
+            }
+            #endregion
+        }
+
+        private void InstalledPluginsListView_ItemChecked(object sender, ItemCheckedEventArgs e)
+        {
+            var selectedItem = e.Item;
+
+            if (selectedItem.Text.Equals("Select all plugins") && selectedItem.Checked)
+            {
+                SelectPlugins(true);
+            }else if(selectedItem.Text.Equals("Select all plugins") && !selectedItem.Checked)
+            {
+                SelectPlugins(false);
             }
         }
 
+        private void SelectPlugins(bool check)
+        {
+            foreach (var plugin in installedPluginsListView.Items)
+            {
+                ((OLVListItem)plugin).Checked = check;
+            }
+        }
         private List<PluginInfo> GetInstallledPluginsForSpecificStudioVersion(StudioVersion studioVersion)
         {
             var pluginService = new PluginService();
@@ -277,23 +323,24 @@ namespace Sdl.Community.StudioMigrationUtility
         private void ProjectsToBeMoved_ItemChecked(object sender, ItemCheckedEventArgs e)
         {
             var selectedItem = e.Item;
-
+            
             if (selectedItem.Text.Equals("Select all projects")&&selectedItem.Checked)
             {
-                foreach (var item in projectsToBeMoved.Items)
-                {
-                    ((OLVListItem) item).Checked = true;
-                }
+                SelectProjects(true);
             }else if (selectedItem.Text.Equals("Select all projects") && !selectedItem.Checked)
             {
-                foreach (var item in projectsToBeMoved.Items)
-                {
-                    ((OLVListItem)item).Checked = false;
-                }
+                SelectProjects(false);
             }
           
         }
 
+        private void SelectProjects(bool check)
+        {
+            foreach (var item in projectsToBeMoved.Items)
+            {
+                ((OLVListItem)item).Checked = check;
+            }
+        }
 
         private void projectMigrationWizzard_AfterSwitchPages(object sender, CristiPotlog.Controls.Wizard.AfterSwitchPagesEventArgs e)
         {
@@ -303,19 +350,17 @@ namespace Sdl.Community.StudioMigrationUtility
             var sourceStudioVersion= new StudioVersion();
             var destinationStudioVersion = new StudioVersion();
             var skipPluginsPage=true;
+
             if (selectedSourceStudioVersionsGeneric.Count > 0)
             {
                  sourceStudioVersion = (StudioVersion)selectedSourceStudioVersionsGeneric[0];
             }
-            
-
+ 
             var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
             if (selectedDestinationStudioVersionsGeneric.Count > 0)
             {
                  destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
             }
-
-            
 
             if (destinationStudioVersion.Version != null && (sourceStudioVersion.Version != null && (sourceStudioVersion.Version.Equals("Studio4") && destinationStudioVersion.Version.Equals("Studio5"))))
             {
@@ -326,6 +371,7 @@ namespace Sdl.Community.StudioMigrationUtility
             {
                 StartTask();
             }
+            //this will skip the plugins page if selected versions are different from 2015-2017
             if (newPage == pluginsPage && e.OldIndex==3&&skipPluginsPage)
             {
                 projectMigrationWizzard.Next();
@@ -404,6 +450,7 @@ namespace Sdl.Community.StudioMigrationUtility
 
             mpService.MigrateProjects(taskArgument.Projects, taskArgument.ProjectToBeMoved, taskArgument.MigrateCustomers, _bw.ReportProgress);
             _bw.ReportProgress(95);
+
             if (taskArgument.MigrateTranslationMemories)
             {
                 mpService.MigrateTranslationMemories();
@@ -411,6 +458,11 @@ namespace Sdl.Community.StudioMigrationUtility
 
             if (taskArgument.PluginsToBeMoved.Count > 0)
             {
+                var selectAllPlugins = taskArgument.PluginsToBeMoved.FirstOrDefault(s => s.PluginName == @"Select all plugins");
+                if (selectAllPlugins != null)
+                {
+                    taskArgument.PluginsToBeMoved.Remove(selectAllPlugins);
+                }
                 MovePlugins(taskArgument.PluginsToBeMoved, taskArgument.SourceStudioVersion.ExecutableVersion.Major);
             }
            
