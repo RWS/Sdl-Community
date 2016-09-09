@@ -9,5 +9,6 @@
     <File>Sdl.Community.StudioMigrationUtility.dll</File>
     <File>Sdl.Community.Controls.dll</File>
     <File>ObjectListView.dll</File>
+    <File>Sdl.Community.PluginInfo</File>
   </Include>
 </PluginPackage>
