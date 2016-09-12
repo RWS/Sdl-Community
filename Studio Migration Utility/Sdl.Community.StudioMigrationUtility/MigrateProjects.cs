@@ -87,15 +87,22 @@ namespace Sdl.Community.StudioMigrationUtility
 
         private void MigrateUtility_Closing(object sender, CancelEventArgs e)
         {
+            var controllerProjects = GetProjectsController().GetProjects().ToList();
+
             if (_projects.Count > 0)
             {
                 foreach (var project in _projects)
                 {
-                    GetProjectsController().Add(project.ProjectFilePath);
+                    var exist = controllerProjects.Any(p => p.FilePath.Contains(project.Name));
+                    if (!exist)
+                    {
+                        GetProjectsController().Add(project.ProjectFilePath);
+                    }
+                    
                 }
                 GetProjectsController().RefreshProjects();
             }
-           
+
         }
 
         private void projectMigrationWizzard_BeforeSwitchPages(object sender,
