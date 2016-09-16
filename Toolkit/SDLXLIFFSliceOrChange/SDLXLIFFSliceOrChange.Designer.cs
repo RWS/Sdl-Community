@@ -130,7 +130,6 @@ namespace SDLXLIFFSliceOrChange
             this.btnSliceit = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelSliceComments = new System.Windows.Forms.Label();
-            this.txtStatus = new System.Windows.Forms.TextBox();
             this.browseTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
@@ -202,7 +201,7 @@ namespace SDLXLIFFSliceOrChange
             this.tabControl1.Controls.Add(this.pageSearch);
             this.tabControl1.Controls.Add(this.pageReplace);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(5, 256);
+            this.tabControl1.Location = new System.Drawing.Point(7, 256);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(803, 279);
@@ -1019,7 +1018,7 @@ namespace SDLXLIFFSliceOrChange
             this.panelCommands.Controls.Add(this.groupClear);
             this.panelCommands.Controls.Add(this.groupChange);
             this.panelCommands.Controls.Add(this.groupSlice);
-            this.panelCommands.Location = new System.Drawing.Point(3, 541);
+            this.panelCommands.Location = new System.Drawing.Point(5, 541);
             this.panelCommands.Name = "panelCommands";
             this.panelCommands.Size = new System.Drawing.Size(807, 239);
             this.panelCommands.TabIndex = 9;
@@ -1359,18 +1358,6 @@ namespace SDLXLIFFSliceOrChange
     "u can add this file to your Project or share it with others to handle specific s" +
     "egments first.";
             // 
-            // txtStatus
-            // 
-            this.txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtStatus.Location = new System.Drawing.Point(0, 0);
-            this.txtStatus.Multiline = true;
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.ReadOnly = true;
-            this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStatus.Size = new System.Drawing.Size(794, 138);
-            this.txtStatus.TabIndex = 9;
-            // 
             // browseTableLayoutPanel
             // 
             this.browseTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -1379,7 +1366,7 @@ namespace SDLXLIFFSliceOrChange
             this.browseTableLayoutPanel.Controls.Add(this.panel1, 0, 1);
             this.browseTableLayoutPanel.Controls.Add(this.browseLabel, 0, 0);
             this.browseTableLayoutPanel.Controls.Add(this.gridXLIFFFiles, 0, 2);
-            this.browseTableLayoutPanel.Location = new System.Drawing.Point(5, 3);
+            this.browseTableLayoutPanel.Location = new System.Drawing.Point(6, 3);
             this.browseTableLayoutPanel.MaximumSize = new System.Drawing.Size(804, 274);
             this.browseTableLayoutPanel.Name = "browseTableLayoutPanel";
             this.browseTableLayoutPanel.RowCount = 3;
@@ -1533,14 +1520,13 @@ namespace SDLXLIFFSliceOrChange
             // 
             // mainTableLayoutPanel
             // 
-            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTableLayoutPanel.ColumnCount = 1;
-            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainTableLayoutPanel.Controls.Add(this.panelCommands, 0, 2);
             this.mainTableLayoutPanel.Controls.Add(this.panelStatus, 0, 3);
             this.mainTableLayoutPanel.Controls.Add(this.tabControl1, 0, 1);
             this.mainTableLayoutPanel.Controls.Add(this.browseTableLayoutPanel, 0, 0);
+            this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
             this.mainTableLayoutPanel.RowCount = 4;
@@ -1548,21 +1534,20 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainTableLayoutPanel.Size = new System.Drawing.Size(814, 972);
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(817, 1056);
             this.mainTableLayoutPanel.TabIndex = 11;
             // 
             // panelStatus
             // 
             this.panelStatus.Controls.Add(this.progressBar);
-            this.panelStatus.Controls.Add(this.txtStatus);
             this.panelStatus.Location = new System.Drawing.Point(3, 786);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(794, 138);
+            this.panelStatus.Size = new System.Drawing.Size(794, 51);
             this.panelStatus.TabIndex = 10;
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(4, 100);
+            this.progressBar.Location = new System.Drawing.Point(18, 21);
             this.progressBar.MarqueeAnimationSpeed = 10;
             this.progressBar.Name = "progressBar";
             this.progressBar.Size = new System.Drawing.Size(758, 14);
@@ -1630,7 +1615,6 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).EndInit();
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.panelStatus.ResumeLayout(false);
-            this.panelStatus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1708,7 +1692,6 @@ namespace SDLXLIFFSliceOrChange
         public System.Windows.Forms.Label lblReplaceSourceReplace;
         public System.Windows.Forms.TextBox txtReplaceSourceSearch;
         public System.Windows.Forms.Label lblReplaceSourceSearch;
-        private System.Windows.Forms.TextBox txtStatus;
         private System.Windows.Forms.Panel panelCommands;
         public System.Windows.Forms.GroupBox groupClear;
         public System.Windows.Forms.Button btnClearit;

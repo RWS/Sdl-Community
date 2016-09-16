@@ -111,7 +111,7 @@ namespace SDLXLIFFSliceOrChange
             _setFormSizeChanged = false;
             panelStatus.Visible = true;
            // groupBrowse.Enabled = tabControl1.Enabled = panelCommands.Enabled = false;
-            txtStatus.Text = String.Empty;
+           
             progressBar.Value = progressBar.Minimum = 0;
             progressBar.Maximum = 100;
             if (tabControl1.SelectedIndex == 2)
@@ -136,8 +136,7 @@ namespace SDLXLIFFSliceOrChange
                 {
                     try
                     {
-                        txtStatus.Text = "\r\n" + txtStatus.Text;
-                        txtStatus.Text = DateTime.Now.ToShortTimeString() + "  " + message + txtStatus.Text;
+                        
                         progressBar.Focus();
                         if (progressBar.Value + 1 < progressBar.Maximum)
                             progressBar.Value++;
