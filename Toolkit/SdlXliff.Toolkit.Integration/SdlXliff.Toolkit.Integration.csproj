@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{01C27390-6448-4B3F-A955-2E8915A7ACA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SdlXliff.Toolkit.Integration</RootNamespace>
+    <AssemblyName>SdlXliff.Toolkit.Integration</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(APPDATA)\SDL\SDL Trados Studio\12\Plugins\Packages\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(APPDATA)\SDL\SDL Trados Studio\12\Plugins\Packages\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ControlPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlPanel.designer.cs">
+      <DependentUpon>ControlPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ControlCell.cs" />
+    <Compile Include="Controls\ControlColumn.cs" />
+    <Compile Include="Controls\RTBControlPrinter.cs" />
+    <Compile Include="Controls\RTBManager.cs" />
+    <Compile Include="Controls\WarningCellData.cs" />
+    <Compile Include="Data\DataExtractor.cs" />
+    <Compile Include="Data\DataSearcher.cs" />
+    <Compile Include="Data\DetailCellData.cs" />
+    <Compile Include="File\FileData.cs" />
+    <Compile Include="File\FileReadProcessor.cs" />
+    <Compile Include="File\FileReplaceProcessor.cs" />
+    <Compile Include="File\FilesAnalyzer.cs" />
+    <Compile Include="File\FileStatusUpdateProcessor.cs" />
+    <Compile Include="Data\IndexData.cs" />
+    <Compile Include="Helpers\MultiFileConverterHelper.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchSettings.cs" />
+    <Compile Include="Data\SegmentData.cs" />
+    <Compile Include="Helpers\SegmentHelper.cs" />
+    <Compile Include="Helpers\StatusUpdateHelper.cs" />
+    <Compile Include="Data\TagData.cs" />
+    <Compile Include="TextCharacterCountingIterator.cs" />
+    <Compile Include="Data\WarningData.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="SdlCommunity.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ControlPanel.resx">
+      <DependentUpon>ControlPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\accept-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SDLXLIFF_s.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SDLXLIFF_t.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\warning-icon.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
