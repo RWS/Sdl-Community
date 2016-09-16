@@ -58,17 +58,17 @@ namespace SDLXLIFFSliceOrChange
             if (tabControl1.SelectedIndex == 2)
             {
                 panelCommands.Visible = false;
-                MaximumSize = new Size(MaximumSize.Width, 520);
-                //if (!_formSizeChanged || Height > 520)
-                    Height = 520;
+                //MaximumSize = new Size(MaximumSize.Width, 520);
+                ////if (!_formSizeChanged || Height > 520)
+                //    Height = 520;
                 BindReplaceResults();
             }
             else
             {
                 panelCommands.Visible = true;
-                MaximumSize = new Size(MaximumSize.Width, 760);
-                //if (!_formSizeChanged || Height > 760)
-                    Height = 760;
+                //MaximumSize = new Size(MaximumSize.Width, 760);
+                ////if (!_formSizeChanged || Height > 760)
+                //    Height = 760;
             }
             _setFormSizeChanged = true;
 
@@ -89,15 +89,15 @@ namespace SDLXLIFFSliceOrChange
             if (tabControl1.SelectedIndex == 2)
             {
                 panelCommands.Visible = false;
-                MaximumSize = new Size(MaximumSize.Width, 520);
-                if (!_formSizeChanged)
-                    Height = 520;
+                //MaximumSize = new Size(MaximumSize.Width, 520);
+                //if (!_formSizeChanged)
+                //    Height = 520;
             }
             else
             {
-                MaximumSize = new Size(MaximumSize.Width, 760);
-                if (!_formSizeChanged)
-                    Height = 760;
+                //MaximumSize = new Size(MaximumSize.Width, 760);
+                //if (!_formSizeChanged)
+                //    Height = 760;
                 panelCommands.Visible = true;
             }
            // groupBrowse.Enabled = tabControl1.Enabled = panelCommands.Enabled = true;
@@ -116,16 +116,16 @@ namespace SDLXLIFFSliceOrChange
             progressBar.Maximum = 100;
             if (tabControl1.SelectedIndex == 2)
             {
-                MaximumSize = new Size(MaximumSize.Width, 593);
+               // MaximumSize = new Size(MaximumSize.Width, 593);
                 panelCommands.Visible = false;
-                if (Height == 520)
-                    Height = 593;
+                //if (Height == 520)
+                //    Height = 593;
             }
             else 
             {
-                this.MaximumSize = new Size(MaximumSize.Width, 833);
-                if (this.Height == 760)
-                    Height = 833;
+                //this.MaximumSize = new Size(MaximumSize.Width, 833);
+                //if (this.Height == 760)
+                //    Height = 833;
             }
             _setFormSizeChanged = true;
         }

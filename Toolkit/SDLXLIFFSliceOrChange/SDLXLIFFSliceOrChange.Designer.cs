@@ -202,10 +202,10 @@ namespace SDLXLIFFSliceOrChange
             this.tabControl1.Controls.Add(this.pageSearch);
             this.tabControl1.Controls.Add(this.pageReplace);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(3, 256);
+            this.tabControl1.Location = new System.Drawing.Point(5, 256);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(807, 279);
+            this.tabControl1.Size = new System.Drawing.Size(803, 279);
             this.tabControl1.TabIndex = 8;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -222,7 +222,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageStatuses.Location = new System.Drawing.Point(4, 24);
             this.pageStatuses.Name = "pageStatuses";
             this.pageStatuses.Padding = new System.Windows.Forms.Padding(3);
-            this.pageStatuses.Size = new System.Drawing.Size(799, 251);
+            this.pageStatuses.Size = new System.Drawing.Size(795, 251);
             this.pageStatuses.TabIndex = 0;
             this.pageStatuses.Text = "Statuses";
             // 
@@ -597,7 +597,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageSearch.Location = new System.Drawing.Point(4, 24);
             this.pageSearch.Name = "pageSearch";
             this.pageSearch.Padding = new System.Windows.Forms.Padding(3);
-            this.pageSearch.Size = new System.Drawing.Size(799, 251);
+            this.pageSearch.Size = new System.Drawing.Size(795, 251);
             this.pageSearch.TabIndex = 1;
             this.pageSearch.Text = "Search";
             this.pageSearch.UseVisualStyleBackColor = true;
@@ -798,7 +798,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageReplace.Location = new System.Drawing.Point(4, 24);
             this.pageReplace.Name = "pageReplace";
             this.pageReplace.Padding = new System.Windows.Forms.Padding(3);
-            this.pageReplace.Size = new System.Drawing.Size(799, 251);
+            this.pageReplace.Size = new System.Drawing.Size(795, 251);
             this.pageReplace.TabIndex = 2;
             this.pageReplace.Text = "Replace";
             this.pageReplace.UseVisualStyleBackColor = true;
@@ -823,7 +823,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupReplace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupReplace.Location = new System.Drawing.Point(3, 3);
             this.groupReplace.Name = "groupReplace";
-            this.groupReplace.Size = new System.Drawing.Size(793, 245);
+            this.groupReplace.Size = new System.Drawing.Size(789, 245);
             this.groupReplace.TabIndex = 6;
             this.groupReplace.TabStop = false;
             this.groupReplace.Text = "Replace in source OR target";
@@ -1033,7 +1033,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupClear.ForeColor = System.Drawing.Color.Red;
             this.groupClear.Location = new System.Drawing.Point(643, 10);
             this.groupClear.Name = "groupClear";
-            this.groupClear.Size = new System.Drawing.Size(146, 226);
+            this.groupClear.Size = new System.Drawing.Size(160, 226);
             this.groupClear.TabIndex = 6;
             this.groupClear.TabStop = false;
             this.groupClear.Text = "Clear";
@@ -1043,7 +1043,7 @@ namespace SDLXLIFFSliceOrChange
             this.btnClearit.BackColor = System.Drawing.SystemColors.Control;
             this.btnClearit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClearit.ForeColor = System.Drawing.Color.Red;
-            this.btnClearit.Location = new System.Drawing.Point(6, 171);
+            this.btnClearit.Location = new System.Drawing.Point(6, 167);
             this.btnClearit.Name = "btnClearit";
             this.btnClearit.Size = new System.Drawing.Size(130, 49);
             this.btnClearit.TabIndex = 2;
@@ -1055,7 +1055,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.InitialImage = null;
-            this.pictureBox3.Location = new System.Drawing.Point(6, 124);
+            this.pictureBox3.Location = new System.Drawing.Point(6, 120);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(127, 43);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1069,7 +1069,7 @@ namespace SDLXLIFFSliceOrChange
             this.lblClearit.ForeColor = System.Drawing.Color.Blue;
             this.lblClearit.Location = new System.Drawing.Point(3, 18);
             this.lblClearit.Name = "lblClearit";
-            this.lblClearit.Size = new System.Drawing.Size(140, 205);
+            this.lblClearit.Size = new System.Drawing.Size(154, 205);
             this.lblClearit.TabIndex = 0;
             this.lblClearit.Text = "Click Clearit! to clear all the translated segments based on your selection crite" +
     "ria.";
