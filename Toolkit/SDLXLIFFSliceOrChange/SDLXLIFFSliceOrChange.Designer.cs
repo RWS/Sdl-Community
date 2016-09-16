@@ -1520,13 +1520,14 @@ namespace SDLXLIFFSliceOrChange
             // 
             // mainTableLayoutPanel
             // 
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTableLayoutPanel.ColumnCount = 1;
             this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainTableLayoutPanel.Controls.Add(this.panelCommands, 0, 2);
             this.mainTableLayoutPanel.Controls.Add(this.panelStatus, 0, 3);
             this.mainTableLayoutPanel.Controls.Add(this.tabControl1, 0, 1);
             this.mainTableLayoutPanel.Controls.Add(this.browseTableLayoutPanel, 0, 0);
-            this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
             this.mainTableLayoutPanel.RowCount = 4;
@@ -1562,7 +1563,7 @@ namespace SDLXLIFFSliceOrChange
             this.AutoSize = true;
             this.Controls.Add(this.mainTableLayoutPanel);
             this.Name = "SDLXLIFFSliceOrChange";
-            this.Size = new System.Drawing.Size(817, 1056);
+            this.Size = new System.Drawing.Size(820, 1059);
             this.Load += new System.EventHandler(this.SDLXLIFFSliceOrChange_Load);
             this.SizeChanged += new System.EventHandler(this.SDLXLIFFSliceOrChange_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.xLIFFFiles)).EndInit();
