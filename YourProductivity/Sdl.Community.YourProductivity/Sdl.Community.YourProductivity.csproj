@@ -85,49 +85,61 @@
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.EditorApi, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.DesktopEditor.EditorApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Settings.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -248,10 +260,12 @@
     <ProjectReference Include="..\Sdl.Community.YourProductivity.Controls\Sdl.Community.YourProductivity.Persistance.csproj">
       <Project>{cf61c1e5-3b3c-4546-8070-4bab41b49f4a}</Project>
       <Name>Sdl.Community.YourProductivity.Persistance</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.YourProductivity.Model\Sdl.Community.YourProductivity.Model.csproj">
       <Project>{bdb19e0b-99e4-463c-bbe3-2a4b9809013c}</Project>
       <Name>Sdl.Community.YourProductivity.Model</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

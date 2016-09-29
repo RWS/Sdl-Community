@@ -3,7 +3,7 @@
   <PlugInName>#YourProductivity</PlugInName>
   <Version>1.1.2.0</Version>
   <Description>Compete against translators from around the world for prizes and prestige! Earn points for keeping a high efficiency percentage in all of your completed projects.</Description>
-  <Author></Author>
+  <Author>Sdl Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>Newtonsoft.Json.dll</File>
