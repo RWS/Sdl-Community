@@ -130,7 +130,6 @@ namespace SDLXLIFFSliceOrChange
             this.btnSliceit = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.labelSliceComments = new System.Windows.Forms.Label();
-            this.txtStatus = new System.Windows.Forms.TextBox();
             this.browseTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.cmbLanguages = new System.Windows.Forms.ComboBox();
@@ -202,10 +201,10 @@ namespace SDLXLIFFSliceOrChange
             this.tabControl1.Controls.Add(this.pageSearch);
             this.tabControl1.Controls.Add(this.pageReplace);
             this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tabControl1.Location = new System.Drawing.Point(3, 256);
+            this.tabControl1.Location = new System.Drawing.Point(7, 256);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(807, 296);
+            this.tabControl1.Size = new System.Drawing.Size(803, 279);
             this.tabControl1.TabIndex = 8;
             this.tabControl1.SelectedIndexChanged += new System.EventHandler(this.tabControl1_SelectedIndexChanged);
             // 
@@ -222,7 +221,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageStatuses.Location = new System.Drawing.Point(4, 24);
             this.pageStatuses.Name = "pageStatuses";
             this.pageStatuses.Padding = new System.Windows.Forms.Padding(3);
-            this.pageStatuses.Size = new System.Drawing.Size(799, 268);
+            this.pageStatuses.Size = new System.Drawing.Size(795, 251);
             this.pageStatuses.TabIndex = 0;
             this.pageStatuses.Text = "Statuses";
             // 
@@ -597,7 +596,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageSearch.Location = new System.Drawing.Point(4, 24);
             this.pageSearch.Name = "pageSearch";
             this.pageSearch.Padding = new System.Windows.Forms.Padding(3);
-            this.pageSearch.Size = new System.Drawing.Size(799, 268);
+            this.pageSearch.Size = new System.Drawing.Size(795, 251);
             this.pageSearch.TabIndex = 1;
             this.pageSearch.Text = "Search";
             this.pageSearch.UseVisualStyleBackColor = true;
@@ -798,7 +797,7 @@ namespace SDLXLIFFSliceOrChange
             this.pageReplace.Location = new System.Drawing.Point(4, 24);
             this.pageReplace.Name = "pageReplace";
             this.pageReplace.Padding = new System.Windows.Forms.Padding(3);
-            this.pageReplace.Size = new System.Drawing.Size(799, 268);
+            this.pageReplace.Size = new System.Drawing.Size(795, 251);
             this.pageReplace.TabIndex = 2;
             this.pageReplace.Text = "Replace";
             this.pageReplace.UseVisualStyleBackColor = true;
@@ -823,7 +822,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupReplace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupReplace.Location = new System.Drawing.Point(3, 3);
             this.groupReplace.Name = "groupReplace";
-            this.groupReplace.Size = new System.Drawing.Size(793, 262);
+            this.groupReplace.Size = new System.Drawing.Size(789, 245);
             this.groupReplace.TabIndex = 6;
             this.groupReplace.TabStop = false;
             this.groupReplace.Text = "Replace in source OR target";
@@ -1019,9 +1018,9 @@ namespace SDLXLIFFSliceOrChange
             this.panelCommands.Controls.Add(this.groupClear);
             this.panelCommands.Controls.Add(this.groupChange);
             this.panelCommands.Controls.Add(this.groupSlice);
-            this.panelCommands.Location = new System.Drawing.Point(3, 558);
+            this.panelCommands.Location = new System.Drawing.Point(5, 541);
             this.panelCommands.Name = "panelCommands";
-            this.panelCommands.Size = new System.Drawing.Size(807, 321);
+            this.panelCommands.Size = new System.Drawing.Size(807, 239);
             this.panelCommands.TabIndex = 9;
             // 
             // groupClear
@@ -1031,9 +1030,9 @@ namespace SDLXLIFFSliceOrChange
             this.groupClear.Controls.Add(this.lblClearit);
             this.groupClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupClear.ForeColor = System.Drawing.Color.Red;
-            this.groupClear.Location = new System.Drawing.Point(640, 25);
+            this.groupClear.Location = new System.Drawing.Point(643, 10);
             this.groupClear.Name = "groupClear";
-            this.groupClear.Size = new System.Drawing.Size(146, 226);
+            this.groupClear.Size = new System.Drawing.Size(160, 226);
             this.groupClear.TabIndex = 6;
             this.groupClear.TabStop = false;
             this.groupClear.Text = "Clear";
@@ -1043,7 +1042,7 @@ namespace SDLXLIFFSliceOrChange
             this.btnClearit.BackColor = System.Drawing.SystemColors.Control;
             this.btnClearit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnClearit.ForeColor = System.Drawing.Color.Red;
-            this.btnClearit.Location = new System.Drawing.Point(6, 171);
+            this.btnClearit.Location = new System.Drawing.Point(6, 167);
             this.btnClearit.Name = "btnClearit";
             this.btnClearit.Size = new System.Drawing.Size(130, 49);
             this.btnClearit.TabIndex = 2;
@@ -1055,7 +1054,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
             this.pictureBox3.InitialImage = null;
-            this.pictureBox3.Location = new System.Drawing.Point(6, 124);
+            this.pictureBox3.Location = new System.Drawing.Point(6, 120);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(127, 43);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -1069,7 +1068,7 @@ namespace SDLXLIFFSliceOrChange
             this.lblClearit.ForeColor = System.Drawing.Color.Blue;
             this.lblClearit.Location = new System.Drawing.Point(3, 18);
             this.lblClearit.Name = "lblClearit";
-            this.lblClearit.Size = new System.Drawing.Size(140, 205);
+            this.lblClearit.Size = new System.Drawing.Size(154, 205);
             this.lblClearit.TabIndex = 0;
             this.lblClearit.Text = "Click Clearit! to clear all the translated segments based on your selection crite" +
     "ria.";
@@ -1082,7 +1081,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupChange.Controls.Add(this.labelChangeComments);
             this.groupChange.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupChange.ForeColor = System.Drawing.Color.Red;
-            this.groupChange.Location = new System.Drawing.Point(171, 21);
+            this.groupChange.Location = new System.Drawing.Point(174, 6);
             this.groupChange.Name = "groupChange";
             this.groupChange.Size = new System.Drawing.Size(463, 230);
             this.groupChange.TabIndex = 5;
@@ -1096,9 +1095,9 @@ namespace SDLXLIFFSliceOrChange
             this.groupChangeToStatusOr.Controls.Add(this.groupChangeTranslationStatus);
             this.groupChangeToStatusOr.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupChangeToStatusOr.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupChangeToStatusOr.Location = new System.Drawing.Point(6, 21);
+            this.groupChangeToStatusOr.Location = new System.Drawing.Point(6, 19);
             this.groupChangeToStatusOr.Name = "groupChangeToStatusOr";
-            this.groupChangeToStatusOr.Size = new System.Drawing.Size(303, 200);
+            this.groupChangeToStatusOr.Size = new System.Drawing.Size(303, 205);
             this.groupChangeToStatusOr.TabIndex = 0;
             this.groupChangeToStatusOr.TabStop = false;
             this.groupChangeToStatusOr.Text = "Change to Status and/or Lock value";
@@ -1107,7 +1106,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.ckCopySourceToTarget.AutoSize = true;
             this.ckCopySourceToTarget.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ckCopySourceToTarget.Location = new System.Drawing.Point(161, 103);
+            this.ckCopySourceToTarget.Location = new System.Drawing.Point(161, 89);
             this.ckCopySourceToTarget.Name = "ckCopySourceToTarget";
             this.ckCopySourceToTarget.Size = new System.Drawing.Size(127, 17);
             this.ckCopySourceToTarget.TabIndex = 2;
@@ -1164,7 +1163,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupChangeTranslationStatus.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupChangeTranslationStatus.Location = new System.Drawing.Point(6, 20);
             this.groupChangeTranslationStatus.Name = "groupChangeTranslationStatus";
-            this.groupChangeTranslationStatus.Size = new System.Drawing.Size(143, 174);
+            this.groupChangeTranslationStatus.Size = new System.Drawing.Size(143, 179);
             this.groupChangeTranslationStatus.TabIndex = 0;
             this.groupChangeTranslationStatus.TabStop = false;
             this.groupChangeTranslationStatus.Text = "Translation Status";
@@ -1303,7 +1302,7 @@ namespace SDLXLIFFSliceOrChange
             this.groupSlice.Controls.Add(this.labelSliceComments);
             this.groupSlice.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupSlice.ForeColor = System.Drawing.Color.Red;
-            this.groupSlice.Location = new System.Drawing.Point(4, 22);
+            this.groupSlice.Location = new System.Drawing.Point(4, 7);
             this.groupSlice.Name = "groupSlice";
             this.groupSlice.Size = new System.Drawing.Size(164, 229);
             this.groupSlice.TabIndex = 4;
@@ -1359,17 +1358,6 @@ namespace SDLXLIFFSliceOrChange
     "u can add this file to your Project or share it with others to handle specific s" +
     "egments first.";
             // 
-            // txtStatus
-            // 
-            this.txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtStatus.Location = new System.Drawing.Point(0, 21);
-            this.txtStatus.Multiline = true;
-            this.txtStatus.Name = "txtStatus";
-            this.txtStatus.ReadOnly = true;
-            this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStatus.Size = new System.Drawing.Size(828, 73);
-            this.txtStatus.TabIndex = 9;
-            // 
             // browseTableLayoutPanel
             // 
             this.browseTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
@@ -1378,7 +1366,7 @@ namespace SDLXLIFFSliceOrChange
             this.browseTableLayoutPanel.Controls.Add(this.panel1, 0, 1);
             this.browseTableLayoutPanel.Controls.Add(this.browseLabel, 0, 0);
             this.browseTableLayoutPanel.Controls.Add(this.gridXLIFFFiles, 0, 2);
-            this.browseTableLayoutPanel.Location = new System.Drawing.Point(4, 3);
+            this.browseTableLayoutPanel.Location = new System.Drawing.Point(6, 3);
             this.browseTableLayoutPanel.MaximumSize = new System.Drawing.Size(804, 274);
             this.browseTableLayoutPanel.Name = "browseTableLayoutPanel";
             this.browseTableLayoutPanel.RowCount = 3;
@@ -1532,13 +1520,14 @@ namespace SDLXLIFFSliceOrChange
             // 
             // mainTableLayoutPanel
             // 
+            this.mainTableLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.mainTableLayoutPanel.ColumnCount = 1;
-            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.mainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.mainTableLayoutPanel.Controls.Add(this.panelCommands, 0, 2);
             this.mainTableLayoutPanel.Controls.Add(this.panelStatus, 0, 3);
             this.mainTableLayoutPanel.Controls.Add(this.tabControl1, 0, 1);
             this.mainTableLayoutPanel.Controls.Add(this.browseTableLayoutPanel, 0, 0);
-            this.mainTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayoutPanel.Name = "mainTableLayoutPanel";
             this.mainTableLayoutPanel.RowCount = 4;
@@ -1546,24 +1535,23 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.mainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.mainTableLayoutPanel.Size = new System.Drawing.Size(813, 1056);
+            this.mainTableLayoutPanel.Size = new System.Drawing.Size(817, 1056);
             this.mainTableLayoutPanel.TabIndex = 11;
             // 
             // panelStatus
             // 
             this.panelStatus.Controls.Add(this.progressBar);
-            this.panelStatus.Controls.Add(this.txtStatus);
-            this.panelStatus.Location = new System.Drawing.Point(3, 885);
+            this.panelStatus.Location = new System.Drawing.Point(3, 786);
             this.panelStatus.Name = "panelStatus";
-            this.panelStatus.Size = new System.Drawing.Size(794, 138);
+            this.panelStatus.Size = new System.Drawing.Size(794, 51);
             this.panelStatus.TabIndex = 10;
             // 
             // progressBar
             // 
-            this.progressBar.Location = new System.Drawing.Point(4, 100);
+            this.progressBar.Location = new System.Drawing.Point(18, 21);
             this.progressBar.MarqueeAnimationSpeed = 10;
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(821, 14);
+            this.progressBar.Size = new System.Drawing.Size(758, 14);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 8;
             // 
@@ -1575,7 +1563,7 @@ namespace SDLXLIFFSliceOrChange
             this.AutoSize = true;
             this.Controls.Add(this.mainTableLayoutPanel);
             this.Name = "SDLXLIFFSliceOrChange";
-            this.Size = new System.Drawing.Size(813, 1056);
+            this.Size = new System.Drawing.Size(820, 1059);
             this.Load += new System.EventHandler(this.SDLXLIFFSliceOrChange_Load);
             this.SizeChanged += new System.EventHandler(this.SDLXLIFFSliceOrChange_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.xLIFFFiles)).EndInit();
@@ -1628,7 +1616,6 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).EndInit();
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.panelStatus.ResumeLayout(false);
-            this.panelStatus.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1706,7 +1693,6 @@ namespace SDLXLIFFSliceOrChange
         public System.Windows.Forms.Label lblReplaceSourceReplace;
         public System.Windows.Forms.TextBox txtReplaceSourceSearch;
         public System.Windows.Forms.Label lblReplaceSourceSearch;
-        private System.Windows.Forms.TextBox txtStatus;
         private System.Windows.Forms.Panel panelCommands;
         public System.Windows.Forms.GroupBox groupClear;
         public System.Windows.Forms.Button btnClearit;
