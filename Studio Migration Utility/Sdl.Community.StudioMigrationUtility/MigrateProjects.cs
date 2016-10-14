@@ -207,12 +207,16 @@ namespace Sdl.Community.StudioMigrationUtility
 
                 projectsToBeMoved.ItemChecked += ProjectsToBeMoved_ItemChecked;
 
-                if (projectsToBeMoved.Items[0].Text == @"Select all projects")
+                if (projectsToBeMoved.Items.Count > 0)
                 {
-                    projectsToBeMoved.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
-                    projectsToBeMoved.Items[0].Font = new Font(projectsToBeMoved.Items[0].Font, FontStyle.Bold);
+                    if (projectsToBeMoved.Items[0].Text == @"Select all projects")
+                    {
+                        projectsToBeMoved.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
+                        projectsToBeMoved.Items[0].Font = new Font(projectsToBeMoved.Items[0].Font, FontStyle.Bold);
 
+                    }
                 }
+              
             }
 
 
