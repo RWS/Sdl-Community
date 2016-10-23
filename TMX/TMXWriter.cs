@@ -45,7 +45,7 @@ namespace Sdl.Community.FileType.TMX
             
             string unitId = paragraphUnit.Properties.Contexts.Contexts[1].GetMetaData("UnitID");
             XmlNode xmlUnit = _targetFile.SelectSingleNode("//tu[" + unitId + "]");
-            MessageBox.Show(_targetFile.SelectSingleNode("//tu[" + unitId + "]").OuterXml);
+            //MessageBox.Show(_targetFile.SelectSingleNode("//tu[" + unitId + "]").OuterXml);
 
             CreateParagraphUnit(paragraphUnit, xmlUnit);
         }
