@@ -12,6 +12,12 @@ using Sdl.DesktopEditor.EditorApi;
 
 namespace Sdl.Community.AntidoteVerifier
 {
+    public struct RangeOfCharacterInfos
+    {
+	    public int start;
+	    public int length;
+    }
+
     public class EditorService : IEditorService
     {
         private Document _document;
@@ -106,7 +112,10 @@ namespace Sdl.Community.AntidoteVerifier
         {
             var segmentPair = GetSegmentPair(segmentId);
 
-            segmentPair.Target.Replace(startPosition, endPosition, replacementText);
+            if (segmentPair != null)
+            {
+	            segmentPair.Target.Replace(startPosition, endPosition, replacementText);
+            }
            
             _document.UpdateSegmentPair(segmentPair);
 
@@ -127,6 +136,17 @@ namespace Sdl.Community.AntidoteVerifier
             //Commented because Activate is not thread-safe and it will crash.
             //EditorController editorController = SdlTradosStudio.Application.GetController<EditorController>();
             //editorController.Activate(_document);
+        }
+
+        public bool CanReplace(int segmentId, int startPosition, int endPosition, string origString, string displayLanguage, ref string message, ref string explication)
+        {
+            bool ret = false;
+            var segmentPair = GetSegmentPair(segmentId);
+            if (segmentPair != null)
+            {
+	            ret = segmentPair.Target.CanReplace(startPosition, endPosition, origString, displayLanguage, ref message, ref explication);
+            }
+            return ret;
         }
     }
 

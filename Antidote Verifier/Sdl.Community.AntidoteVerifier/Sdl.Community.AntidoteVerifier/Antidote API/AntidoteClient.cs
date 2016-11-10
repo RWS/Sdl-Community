@@ -151,6 +151,11 @@ namespace Sdl.Community.AntidoteVerifier.Antidote_API
 
         }
 
+        public bool PeutRemplacer(int idDoc, int idZone, int leDebut, int laFin, string laChaineOrig, string laLangueAffichage, ref string leMessage, ref string lExplication)
+        {
+	        return _editorService.CanReplace(idZone, leDebut, laFin, laChaineOrig, laLangueAffichage, ref leMessage, ref lExplication);
+        }
+
         public void RemplaceIntervalle(int idDoc, int idZone, int leDebut, int laFin, ref string laChaine)
         {
             _editorService.ReplaceTextInSegment(idZone,leDebut, laFin,laChaine);
