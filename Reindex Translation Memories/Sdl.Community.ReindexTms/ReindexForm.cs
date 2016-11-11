@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Sdl.Community.ReindexTms
@@ -11,11 +13,15 @@ namespace Sdl.Community.ReindexTms
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
+        private readonly Stopwatch _stopWatch;
+        private readonly StringBuilder _elapsedTime;
 
         public ReindexForm()
         {
             InitializeComponent();
             _tmHelper = new TranslationMemoryHelper();
+            _stopWatch = new Stopwatch();
+            _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
         }
 
@@ -26,7 +32,9 @@ namespace Sdl.Community.ReindexTms
             _bw.DoWork += bw_DoWork;
             _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             _bw.ProgressChanged += bw_ProgressChanged;
-            
+            reIndexCheckBox.Checked = true;
+
+
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -37,16 +45,34 @@ namespace Sdl.Community.ReindexTms
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             btnReindex.Enabled = true;
+            _stopWatch.Stop();
+            string elapsedTime;
+            var timeSpan = _stopWatch.Elapsed;
+            if (timeSpan.Hours != 00)
+            {
+                elapsedTime = " Process time " +
+                              $"{timeSpan.Hours:00}:{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} hours.";
+            }
+            else
+            {
+                elapsedTime = " Process time " + $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds / 10:00} minutes.";
+            }
+            
+
+            _elapsedTime.Append("Process time:" + elapsedTime);
+            rtbStatus.AppendText(elapsedTime);
+           
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
+            
+            _stopWatch.Start();
             var tms = e.Argument as List<TranslationMemoryInfo>;
             
             if (tms == null) return;
 
-            _tmHelper.Reindex(tms, _bw);
-
+            _tmHelper.Reindex(tms, _bw,reIndexCheckBox.Checked,upLiftCheckBox.Checked);
         }
 
         private void btnReindex_Click(object sender, EventArgs e)

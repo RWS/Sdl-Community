@@ -284,11 +284,15 @@ namespace Sdl.Community.StudioMigrationUtility
 
                 installedPluginsListView.ItemChecked += InstalledPluginsListView_ItemChecked;
 
-                if (installedPluginsListView.Items[0].Text == @"Select all plugins")
+                if (installedPluginsListView.Items.Count > 0)
                 {
-                    installedPluginsListView.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
-                    installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font,FontStyle.Bold);
+                    if (installedPluginsListView.Items[0].Text == @"Select all plugins")
+                    {
+                        installedPluginsListView.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
+                        installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font, FontStyle.Bold);
+                    }
                 }
+             
             }
             #endregion
         }
