@@ -3,11 +3,14 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using Sdl.Community.ReindexTms.Processor;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.ReindexTms.TranslationMemory
 {
@@ -64,7 +67,75 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
             return tms;
         }
 
-        public void Reindex(List<TranslationMemoryInfo> tms, BackgroundWorker bw)
+        
+        public void Uplift(TranslationMemoryInfo tm,BackgroundWorker bw)
+        {
+            var upliftTmFilePath = ProcessorUtil.GetOutputTmFullPath(tm.Name, tm.FilePath);
+            _reindexStatus.AppendLine(string.Format("Start uplift {0} translation memory", tm.Name));
+            bw.ReportProgress(0, _reindexStatus.ToString());
+
+            File.Copy(tm.FilePath, upliftTmFilePath, true);
+            var tmOut = new FileBasedTranslationMemory(upliftTmFilePath);
+            tmOut.FGASupport = FGASupport.Automatic;
+            tmOut.Save();
+            var tmExporter = new TmExporter(tmOut);
+            var tmIn = new FileBasedTranslationMemory(tm.FilePath);
+            var tmImporter = new TmImporter(tmIn);
+
+            var modelBuilder = new ModelBuilder(tmOut);
+            var fragmentAligner = new FragmentAligner(tmOut);
+
+            if (tmIn.FGASupport != FGASupport.NonAutomatic)
+            {
+                Process(modelBuilder, fragmentAligner);
+            }
+            else
+            {
+                Process(tmExporter,
+               tmImporter,
+               modelBuilder,
+               fragmentAligner);
+            }
+            ProcessorUtil.UpdateTranslationMemory(tmOut);
+            _reindexStatus.AppendLine(string.Format("Finish uplift {0} translation memory", tm.Name));
+
+            bw.ReportProgress(0, _reindexStatus.ToString());
+        }
+
+        private async void Process(TmExporter tmExporter, TmImporter tmImporter, ModelBuilder modelBuilder, 
+           FragmentAligner fragmentAligner)
+        {
+            try
+            {
+                
+                var exportFullPath = await tmExporter.Export();
+                await tmImporter.Import(exportFullPath);
+
+                File.Delete(exportFullPath);
+
+                 modelBuilder.BuildTranslationModel();
+                 fragmentAligner.AlignTranslationUnits();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+          
+
+        }
+        private  void Process(ModelBuilder modelBuilder, FragmentAligner fragmentAligner)
+        {
+            try
+            {
+                 modelBuilder.BuildTranslationModel();
+                 fragmentAligner.AlignTranslationUnits();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        public void Reindex(List<TranslationMemoryInfo> tms, BackgroundWorker bw, bool reindex,bool upplift)
         {
             //remove possible duplicates based on the URI
             var distinctTms = tms.GroupBy(k => k.Uri)
@@ -74,28 +145,42 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
             Parallel.ForEach(distinctTms, tm =>
             {
-                _reindexStatus.AppendLine(string.Format("Start reindex {0} translation memory", tm.Name));
-                bw.ReportProgress(0, _reindexStatus.ToString());
-                var fileBasedTm = new FileBasedTranslationMemory(tm.FilePath);
-                if ((fileBasedTm.Recognizers & BuiltinRecognizers.RecognizeAlphaNumeric) == 0)
+                
+                if (reindex)
                 {
-                    fileBasedTm.Recognizers |= BuiltinRecognizers.RecognizeAlphaNumeric;
+                    ProcessReindex(bw,tm);
                 }
-
-                var languageDirection = fileBasedTm.LanguageDirection;
-
-                var iterator = new LanguagePlatform.TranslationMemory.RegularIterator(100);
-
-                while (languageDirection.ReindexTranslationUnits(ref iterator))
+                if (upplift)
                 {
-                    bw.ReportProgress(0, _reindexStatus.ToString());
+                    Uplift(tm, bw);
                 }
-
-                fileBasedTm.RecomputeFuzzyIndexStatistics();
-                fileBasedTm.Save();
-                _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
-                bw.ReportProgress(0, _reindexStatus.ToString());
             });
+        }
+
+        public void ProcessReindex(BackgroundWorker bw, TranslationMemoryInfo tm)
+        {
+            _reindexStatus.AppendLine(string.Format("Start reindex {0} translation memory", tm.Name));
+            bw.ReportProgress(0, _reindexStatus.ToString());
+            var fileBasedTm = new FileBasedTranslationMemory(tm.FilePath);
+            if ((fileBasedTm.Recognizers & BuiltinRecognizers.RecognizeAlphaNumeric) == 0)
+            {
+                fileBasedTm.Recognizers |= BuiltinRecognizers.RecognizeAlphaNumeric;
+            }
+
+            var languageDirection = fileBasedTm.LanguageDirection;
+
+            var iterator = new LanguagePlatform.TranslationMemory.RegularIterator(100);
+
+            while (languageDirection.ReindexTranslationUnits(ref iterator))
+            {
+                bw.ReportProgress(0, _reindexStatus.ToString());
+            }
+
+            fileBasedTm.RecomputeFuzzyIndexStatistics();
+            fileBasedTm.Save();
+            _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
+
+            bw.ReportProgress(0, _reindexStatus.ToString());
         }
     }
 }
