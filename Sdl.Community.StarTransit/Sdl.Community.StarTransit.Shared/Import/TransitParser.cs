@@ -300,34 +300,6 @@ namespace Sdl.Community.StarTransit.Shared.Import
                 tmpTotalTagCount += 1;
                 srcSegmentTagCount += 1; 
             }
-            else
-            {
-                /*foreach (object tag in thisSrcSegment.AllSubItems)
-                {
-                    if (tag.ToString().StartsWith("<") && tag.ToString().EndsWith(">"))
-                    {
-                        IPlaceholderTag srcPh = (IPlaceholderTag)tag;
-
-                        if (srcPh.TagProperties.TagId.ToString() == totalTagCount.ToString())
-                        {
-                            if (phTagProperties.TagContent == srcPh.TagProperties.TagContent)
-                            {
-                                Sdl.FileTypeSupport.Framework.NativeApi.TagId thisId =
-                                    new Sdl.FileTypeSupport.Framework.NativeApi.TagId(totalTagCount.ToString());
-
-                                phTagProperties.TagId = thisId;
-                                totalTagCount += 1;
-                            }
-                        }
-                    }
-                }*/
-
-                 
-            }
-
-
-
-
 
             return phTag;
         }

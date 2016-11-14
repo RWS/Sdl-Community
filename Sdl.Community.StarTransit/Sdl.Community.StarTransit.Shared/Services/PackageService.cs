@@ -249,7 +249,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             var result = false;
             var tmFile = XElement.Load(file);
-            if (tmFile.Attribute("ExtFileType") != null)
+            var fileName = Path.GetFileName(file);
+            if (tmFile.Attribute("ExtFileType") != null || fileName.StartsWith("_AEXTR", StringComparison.InvariantCultureIgnoreCase))
             {
 
                 var ffdNode =

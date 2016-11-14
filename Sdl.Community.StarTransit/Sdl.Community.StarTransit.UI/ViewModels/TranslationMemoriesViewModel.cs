@@ -15,7 +15,7 @@ using System.Windows.Media;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
-
+using Sdl.Community.Toolkit.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -37,9 +37,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _isNoneChecked;
         private LanguagePair _selectedItem;
 
-        private string _initialFolderPath =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-                @"Studio 2015\Translation Memories");
+        private  readonly string _initialFolderPath; 
 
         public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
@@ -60,6 +58,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             _visibility = "Hidden";
             _isNoneChecked = true;
             _title = "Please select Translation memory  for pair " + pairs[0].PairName;
+
+            var studioVersion = new Studio().GetStudioVersion();
+            _initialFolderPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                    studioVersion.PublicVersion.Replace("SDL","").Trim(),
+                    "Translation Memories");
         }
 
         public bool IsNoneChecked
