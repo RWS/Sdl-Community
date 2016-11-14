@@ -70,11 +70,12 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
         
         public void Uplift(TranslationMemoryInfo tm,BackgroundWorker bw)
         {
+            var originalTmFilePath = ProcessorUtil.RenameOriginalTm(tm.Name, tm.FilePath);
             var upliftTmFilePath = ProcessorUtil.GetOutputTmFullPath(tm.Name, tm.FilePath);
             _reindexStatus.AppendLine(string.Format("Start uplift {0} translation memory", tm.Name));
             bw.ReportProgress(0, _reindexStatus.ToString());
 
-            File.Copy(tm.FilePath, upliftTmFilePath, true);
+            File.Copy(originalTmFilePath, upliftTmFilePath, true);
             var tmOut = new FileBasedTranslationMemory(upliftTmFilePath);
             tmOut.FGASupport = FGASupport.Automatic;
             tmOut.Save();
