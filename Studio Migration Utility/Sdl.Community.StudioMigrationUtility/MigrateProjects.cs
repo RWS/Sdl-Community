@@ -102,6 +102,7 @@ namespace Sdl.Community.StudioMigrationUtility
                 }
                 GetProjectsController().RefreshProjects();
             }
+            GetProjectsController().RefreshProjects();
 
         }
 
@@ -227,46 +228,49 @@ namespace Sdl.Community.StudioMigrationUtility
                 //call Sdl.Community.PluginInfo.dll in order to get the plugin name
                 var currentAssembly = Assembly.GetAssembly(typeof(MigrateProjectsService));
                 var path = Path.GetDirectoryName(currentAssembly.Location);
-                var pluginInfoDll = Assembly.LoadFrom(Path.Combine(path, "Sdl.Community.PluginInfo"));
-                var type = pluginInfoDll.GetType("Sdl.Community.PluginInfo.PluginPackageInfo");
-
-                var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
-                var sourceStudioVersion = (StudioVersion)selectedSourceStudioVersionsGeneric[0];
-
-                var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
-                var destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
-
-                //get plugins list for source selected studio  version
-                var sourcePluginsList = GetInstallledPluginsForSpecificStudioVersion(sourceStudioVersion);
-
-                //get plugins list for destination selected studio  version
-                var destinationPluginsPathList = GetInstallledPluginsForSpecificStudioVersion(destinationStudioVersion);
-
-                //check if there are any plugins to be migrated for selected verions 
-                var pluginsList =
-                    sourcePluginsList.Where(p => destinationPluginsPathList.All(d => d.PluginName != p.PluginName));
-
-                //call "GetPluginName" method in order to get the plugin name
-                var method = type.GetMethod("GetPluginName");
-                var constructor = type.GetConstructor(
-                    BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                    null, Type.EmptyTypes, null);
-                var instance = constructor.Invoke(new object[] { });
-
-                foreach (var plugin in pluginsList)
+                if (path != null)
                 {
-                    var name = method.Invoke(instance, new object[] { plugin.Path });
-                    var pluginToBeMoved = new PluginInfo
-                    {
-                        Path = plugin.Path,
-                        PluginName = name as string
-                    };
+                    var pluginInfoDll = Assembly.LoadFrom(Path.Combine(path, "Sdl.Community.PluginInfo"));
+                    var type = pluginInfoDll.GetType("Sdl.Community.PluginInfo.PluginPackageInfo");
 
-                    if (!_pluginsToBeMigrated.Exists(p => p.PluginName == pluginToBeMoved.PluginName))
+                    var selectedSourceStudioVersionsGeneric = chkSourceStudioVersions.CheckedObjects;
+                    var sourceStudioVersion = (StudioVersion)selectedSourceStudioVersionsGeneric[0];
+
+                    var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
+                    var destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];
+
+                    //get plugins list for source selected studio  version
+                    var sourcePluginsList = GetInstallledPluginsForSpecificStudioVersion(sourceStudioVersion);
+
+                    //get plugins list for destination selected studio  version
+                    var destinationPluginsPathList = GetInstallledPluginsForSpecificStudioVersion(destinationStudioVersion);
+
+                    //check if there are any plugins to be migrated for selected verions 
+                    var pluginsList =
+                        sourcePluginsList.Where(p => destinationPluginsPathList.All(d => d.PluginName != p.PluginName));
+
+                    //call "GetPluginName" method in order to get the plugin name
+                    var method = type.GetMethod("GetPluginName");
+                    var constructor = type.GetConstructor(
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+                        null, Type.EmptyTypes, null);
+                    var instance = constructor.Invoke(new object[] { });
+
+                    foreach (var plugin in pluginsList)
                     {
-                        _pluginsToBeMigrated.Add(pluginToBeMoved);
+                        var name = method.Invoke(instance, new object[] { plugin.Path });
+                        var pluginToBeMoved = new PluginInfo
+                        {
+                            Path = plugin.Path,
+                            PluginName = name as string
+                        };
+
+                        if (!_pluginsToBeMigrated.Exists(p => p.PluginName == pluginToBeMoved.PluginName))
+                        {
+                            _pluginsToBeMigrated.Add(pluginToBeMoved);
+                        }
+
                     }
-
                 }
 
                 var selectAllPlugins = new PluginInfo
@@ -284,11 +288,15 @@ namespace Sdl.Community.StudioMigrationUtility
 
                 installedPluginsListView.ItemChecked += InstalledPluginsListView_ItemChecked;
 
-                if (installedPluginsListView.Items[0].Text == @"Select all plugins")
+                if (installedPluginsListView.Items.Count > 0)
                 {
-                    installedPluginsListView.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
-                    installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font,FontStyle.Bold);
+                    if (installedPluginsListView.Items[0].Text == @"Select all plugins")
+                    {
+                        installedPluginsListView.Items[0].ForeColor = ColorTranslator.FromHtml("#6887B2");
+                        installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font, FontStyle.Bold);
+                    }
                 }
+                
             }
             #endregion
         }
