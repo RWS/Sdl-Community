@@ -3,6 +3,7 @@ using System.Xml;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
+using System.Collections;
 
 namespace Sdl.Community.FileType.TMX
 {
@@ -13,6 +14,8 @@ namespace Sdl.Community.FileType.TMX
         private INativeOutputFileProperties _nativeFileProperties;
         private XmlDocument _targetFile;
         private TMXTextExtractor _textExtractor;
+        private XmlNodeList nodeList;
+        private string lastTargetFile;
 
         public void GetProposedOutputFileInfo(IPersistentFileConversionProperties fileProperties, IOutputFileInfo proposedFileInfo)
         {
@@ -44,8 +47,14 @@ namespace Sdl.Community.FileType.TMX
         {
             
             string unitId = paragraphUnit.Properties.Contexts.Contexts[1].GetMetaData("UnitID");
-            XmlNode xmlUnit = _targetFile.SelectSingleNode("//tu[" + unitId + "]");
+            //XmlNode xmlUnit = _targetFile.SelectSingleNode("//tu[" + unitId + "]");
             //MessageBox.Show(_targetFile.SelectSingleNode("//tu[" + unitId + "]").OuterXml);
+            if (nodeList == null || lastTargetFile != _targetFile.BaseURI)
+            {
+                nodeList = _targetFile.SelectNodes("tmx/body/tu");
+                lastTargetFile = _targetFile.BaseURI;
+            }
+            XmlNode xmlUnit = nodeList[int.Parse(unitId) - 1];
 
             CreateParagraphUnit(paragraphUnit, xmlUnit);
         }
