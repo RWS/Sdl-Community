@@ -25,7 +25,11 @@ namespace Sdl.Community.ReindexTms.Processor
             var extension = Path.GetExtension(filePath);
             var tmName = name.Substring(0, name.IndexOf(".", StringComparison.Ordinal));
             var renamedTm = Path.Combine(fullPath, tmName + "_original" + extension);
-            File.Move(filePath,renamedTm);
+            if (File.Exists(renamedTm))
+            {
+                File.Delete(renamedTm);
+            }
+            File.Move(filePath, renamedTm);
             return renamedTm;
 
         }

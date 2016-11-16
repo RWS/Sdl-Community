@@ -15,7 +15,7 @@ namespace Sdl.Community.ReindexTms
             AssemblyResolver.Resolve();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ReindexForm());
+         
         }
     }
 }

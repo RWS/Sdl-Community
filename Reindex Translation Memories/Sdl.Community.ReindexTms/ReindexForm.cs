@@ -6,10 +6,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Sdl.Community.ReindexTms.Helpers;
 
 namespace Sdl.Community.ReindexTms
 {
-    public partial class ReindexForm : Form
+    public partial class ReindexForm : UserControl
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
@@ -39,7 +40,9 @@ namespace Sdl.Community.ReindexTms
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            rtbStatus.Text =e.UserState.ToString();
+
+            rtbStatus.Text = e.UserState.ToString();
+
         }
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -55,24 +58,24 @@ namespace Sdl.Community.ReindexTms
             }
             else
             {
-                elapsedTime = " Process time " + $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds / 10:00} minutes.";
+                elapsedTime = " Process time " +
+                              $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} minutes.";
             }
-            
+
 
             _elapsedTime.Append("Process time:" + elapsedTime);
             rtbStatus.AppendText(elapsedTime);
-           
+
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
-            
             _stopWatch.Start();
             var tms = e.Argument as List<TranslationMemoryInfo>;
-            
+
             if (tms == null) return;
 
-            _tmHelper.Reindex(tms, _bw,reIndexCheckBox.Checked,upLiftCheckBox.Checked);
+            _tmHelper.Process(tms, _bw, reIndexCheckBox.Checked, upLiftCheckBox.Checked);
         }
 
         private void btnReindex_Click(object sender, EventArgs e)
@@ -111,11 +114,11 @@ namespace Sdl.Community.ReindexTms
 
         private void btnBrowse_Click(object sender, EventArgs e)
         {
-            using(var folderDialog = new FolderBrowserDialog())
+            var folderDialog = new FolderSelectDialog();
+
+            if (folderDialog.ShowDialog())
             {
-                var dialogResult = folderDialog.ShowDialog();
-                if (dialogResult != DialogResult.OK || string.IsNullOrEmpty(folderDialog.SelectedPath)) return;
-                List<TranslationMemoryInfo> tms= _tmHelper.LoadTmsFromPath(folderDialog.SelectedPath);
+                List<TranslationMemoryInfo> tms = _tmHelper.LoadTmsFromPath(folderDialog.FileName);
                 foreach (var tm in tms)
                 {
                     lstTms.Items.Add(tm);
@@ -170,6 +173,17 @@ namespace Sdl.Community.ReindexTms
             }
         }
 
-       
+        private void cleanBtn_Click(object sender, EventArgs e)
+        {
+            lstTms.Items.Clear();
+            rtbStatus.Text = string.Empty;
+        }
+
+        private void cancelBtn_Click(object sender, EventArgs e)
+        {
+            _bw.CancelAsync();
+            rtbStatus.Text = string.Empty;
+            btnReindex.Enabled = true;
+        }
     }
 }

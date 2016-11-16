@@ -136,8 +136,9 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 throw new Exception(e.Message);
             }
         }
-        public void Reindex(List<TranslationMemoryInfo> tms, BackgroundWorker bw, bool reindex,bool upplift)
+        public void Process(List<TranslationMemoryInfo> tms, BackgroundWorker bw, bool reindex,bool upplift)
         {
+            _reindexStatus.Remove(0, _reindexStatus.Length);
             //remove possible duplicates based on the URI
             var distinctTms = tms.GroupBy(k => k.Uri)
                  .Where(g => g.Any())
@@ -146,7 +147,6 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
             Parallel.ForEach(distinctTms, tm =>
             {
-                
                 if (reindex)
                 {
                     ProcessReindex(bw,tm);
