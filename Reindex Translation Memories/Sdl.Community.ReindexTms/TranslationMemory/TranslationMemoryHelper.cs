@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Sdl.Community.ReindexTms.Processor;
+using Sdl.Community.Toolkit.Core;
+using Sdl.Community.Toolkit.Core.Services;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.ReindexTms.TranslationMemory
@@ -22,7 +24,9 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
         public TranslationMemoryHelper()
         {
-            _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\12.0.0.0\TranslationMemoryRepository.xml");
+            var studioService = new StudioVersionService();
+            var publicVersion = studioService.GetStudioVersion().ExecutableVersion.Major;
+             _tmsConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"SDL\SDL Trados Studio\"+publicVersion+ @".0.0.0\TranslationMemoryRepository.xml");
             _reindexStatus = new StringBuilder();
         }
 
