@@ -134,6 +134,7 @@
     <Compile Include="Antidote API\IAntidoteClient.cs" />
     <Compile Include="AntidoteRibbon.cs" />
     <Compile Include="EditorService.cs" />
+		<Compile Include="Utils\CustomTextCollectionVisitor.cs" />
     <Compile Include="Utils\DocumentIdGenerator.cs" />
     <Compile Include="Utils\EndOfItemCharacterCounterNoTagsVisitor.cs" />
     <Compile Include="Utils\Logger.cs" />
