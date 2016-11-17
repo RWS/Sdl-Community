@@ -88,23 +88,34 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
             if (tmIn.FGASupport != FGASupport.NonAutomatic)
             {
-                Process(modelBuilder, fragmentAligner);
+                Process(modelBuilder, fragmentAligner,bw);
             }
             else
             {
                 Process(tmExporter,
                tmImporter,
                modelBuilder,
-               fragmentAligner);
+               fragmentAligner,bw);
             }
-            ProcessorUtil.UpdateTranslationMemory(tmOut);
-            _reindexStatus.AppendLine(string.Format("Finish uplift {0} translation memory", tm.Name));
+            if (!bw.CancellationPending)
+            {
+                ProcessorUtil.UpdateTranslationMemory(tmOut);
+                _reindexStatus.AppendLine(string.Format("Finish uplift {0} translation memory", tm.Name));
 
-            bw.ReportProgress(0, _reindexStatus.ToString());
+                bw.ReportProgress(0, _reindexStatus.ToString());
+            }
+            else
+            {
+                bw.ReportProgress(100,"");
+            }
+                
+            
+         
+            
         }
 
         private async void Process(TmExporter tmExporter, TmImporter tmImporter, ModelBuilder modelBuilder, 
-           FragmentAligner fragmentAligner)
+           FragmentAligner fragmentAligner,BackgroundWorker bw)
         {
             try
             {
@@ -115,7 +126,15 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 File.Delete(exportFullPath);
 
                  modelBuilder.BuildTranslationModel();
-                 fragmentAligner.AlignTranslationUnits();
+                if (!bw.CancellationPending)
+                {
+                    fragmentAligner.AlignTranslationUnits();
+                }
+                else
+                {
+                    bw.ReportProgress(100, "");
+                }
+               
             }
             catch (Exception e)
             {
@@ -124,12 +143,19 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
           
 
         }
-        private  void Process(ModelBuilder modelBuilder, FragmentAligner fragmentAligner)
+        private  void Process(ModelBuilder modelBuilder, FragmentAligner fragmentAligner,BackgroundWorker bw)
         {
             try
             {
                  modelBuilder.BuildTranslationModel();
-                 fragmentAligner.AlignTranslationUnits();
+                if (!bw.CancellationPending)
+                {
+                    fragmentAligner.AlignTranslationUnits();
+                }else
+                {
+                    bw.ReportProgress(100,"");
+                }
+                
             }
             catch (Exception e)
             {
@@ -170,18 +196,27 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
 
             var languageDirection = fileBasedTm.LanguageDirection;
 
-            var iterator = new LanguagePlatform.TranslationMemory.RegularIterator(100);
+            var iterator = new RegularIterator(100);
 
             while (languageDirection.ReindexTranslationUnits(ref iterator))
             {
-                bw.ReportProgress(0, _reindexStatus.ToString());
+                if (!bw.CancellationPending)
+                {
+                    bw.ReportProgress(0, _reindexStatus.ToString());
+                    fileBasedTm.RecomputeFuzzyIndexStatistics();
+                    fileBasedTm.Save();
+                    _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
+
+                    bw.ReportProgress(0, _reindexStatus.ToString());
+                }
+                else
+                {
+                    bw.ReportProgress(100,"");
+                }
+                
             }
-
-            fileBasedTm.RecomputeFuzzyIndexStatistics();
-            fileBasedTm.Save();
-            _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
-
-            bw.ReportProgress(0, _reindexStatus.ToString());
+           
+           
         }
     }
 }

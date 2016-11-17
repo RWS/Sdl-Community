@@ -47,24 +47,34 @@ namespace Sdl.Community.ReindexTms
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            btnReindex.Enabled = true;
-            _stopWatch.Stop();
-            string elapsedTime;
-            var timeSpan = _stopWatch.Elapsed;
-            if (timeSpan.Hours != 00)
+
+            if (!e.Cancelled)
             {
-                elapsedTime = " Process time " +
-                              $"{timeSpan.Hours:00}:{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} hours.";
+                btnReindex.Enabled = true;
+                _stopWatch.Stop();
+                string elapsedTime;
+                var timeSpan = _stopWatch.Elapsed;
+                if (timeSpan.Hours != 00)
+                {
+                    elapsedTime = " Process time " +
+                                  $"{timeSpan.Hours:00}:{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} hours.";
+                }
+                else
+                {
+                    elapsedTime = " Process time " +
+                                  $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} minutes.";
+                }
+
+
+                _elapsedTime.Append("Process time:" + elapsedTime);
+                rtbStatus.AppendText(elapsedTime);
             }
             else
             {
-                elapsedTime = " Process time " +
-                              $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} minutes.";
+                _stopWatch.Stop();
+                rtbStatus.AppendText("Process canceled.");
             }
-
-
-            _elapsedTime.Append("Process time:" + elapsedTime);
-            rtbStatus.AppendText(elapsedTime);
+            
 
         }
 
@@ -76,6 +86,12 @@ namespace Sdl.Community.ReindexTms
             if (tms == null) return;
 
             _tmHelper.Process(tms, _bw, reIndexCheckBox.Checked, upLiftCheckBox.Checked);
+            var bw = sender as BackgroundWorker;
+            if (bw != null && bw.CancellationPending)
+            {
+                e.Cancel = true;
+                btnReindex.Enabled = true;
+            }
         }
 
         private void btnReindex_Click(object sender, EventArgs e)
@@ -183,7 +199,8 @@ namespace Sdl.Community.ReindexTms
         {
             _bw.CancelAsync();
             rtbStatus.Text = string.Empty;
-            btnReindex.Enabled = true;
+            rtbStatus.Text = @"Process will be canceled";
+           
         }
     }
 }
