@@ -14,7 +14,7 @@ namespace Sdl.Community.ReindexTms.Processor
         public static string GetOutputTmFullPath(string name,string filePath)
         {
             var fullPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
-            var tmName = name.Substring(0, name.IndexOf(".", StringComparison.Ordinal));
+            var tmName = name.Substring(0, name.LastIndexOf(".", StringComparison.Ordinal));
             var extension = Path.GetExtension(filePath);
             return Path.Combine(fullPath, tmName + extension);
         }
@@ -23,7 +23,7 @@ namespace Sdl.Community.ReindexTms.Processor
         {
             var fullPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
             var extension = Path.GetExtension(filePath);
-            var tmName = name.Substring(0, name.IndexOf(".", StringComparison.Ordinal));
+            var tmName = name.Substring(0, name.LastIndexOf(".", StringComparison.Ordinal));
             var renamedTm = Path.Combine(fullPath, tmName + "_original" + extension);
             if (File.Exists(renamedTm))
             {

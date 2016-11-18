@@ -22,12 +22,12 @@ namespace Sdl.Community.ReindexTms.Processor
         public void AlignTranslationUnits()
         {
             var iterator = new RegularIterator();
-            while (_tm.AlignTranslationUnits(false, true, ref iterator))
-            {          
-            }
-            _tm.Save();
-            
+            do
+            {
+            } while (_tm.AlignTranslationUnits(true, false, ref iterator));
 
+
+            _tm.Save();
         }
     }
 }
