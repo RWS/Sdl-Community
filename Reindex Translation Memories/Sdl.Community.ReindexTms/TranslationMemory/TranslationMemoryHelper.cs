@@ -207,11 +207,7 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 if (!bw.CancellationPending)
                 {
                     bw.ReportProgress(0, _reindexStatus.ToString());
-                    fileBasedTm.RecomputeFuzzyIndexStatistics();
-                    fileBasedTm.Save();
-                    _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
-
-                    bw.ReportProgress(0, _reindexStatus.ToString());
+                
                 }
                 else
                 {
@@ -219,8 +215,13 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 }
                 
             }
-           
-           
+            fileBasedTm.RecomputeFuzzyIndexStatistics();
+            fileBasedTm.Save();
+            _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
+
+            bw.ReportProgress(0, _reindexStatus.ToString());
+
+
         }
     }
 }
