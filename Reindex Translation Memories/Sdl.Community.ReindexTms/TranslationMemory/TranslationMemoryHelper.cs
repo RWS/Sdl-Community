@@ -168,7 +168,7 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
         }
         public void Process(List<TranslationMemoryInfo> tms, BackgroundWorker bw, bool reindex,bool upplift)
         {
-            _reindexStatus.Remove(0, _reindexStatus.Length);
+         
             //remove possible duplicates based on the URI
             var distinctTms = tms.GroupBy(k => k.Uri)
                  .Where(g => g.Any())

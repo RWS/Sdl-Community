@@ -198,8 +198,7 @@ namespace Sdl.Community.ReindexTms
         private void cancelBtn_Click(object sender, EventArgs e)
         {
             _bw.CancelAsync();
-            rtbStatus.Text = string.Empty;
-            rtbStatus.Text = @"Process will be canceled";
+            rtbStatus.AppendText(@"Process will be canceled");
            
         }
     }
