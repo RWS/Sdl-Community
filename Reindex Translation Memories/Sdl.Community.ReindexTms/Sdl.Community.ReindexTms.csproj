@@ -47,7 +47,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
-    <OutputPath>..\..\..\..\..\Program Files %28x86%29\SDL\SDL Trados Studio\Studio4\</OutputPath>
+    <OutputPath>bin\release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
@@ -73,8 +73,8 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.5.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.5.0\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.5.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.5.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.FineGrainedAlignment, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
@@ -114,11 +114,7 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Studio.AssemblyResolver, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Studio.AssemblyResolver.0.1.2.0\lib\Studio.AssemblyResolver.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -146,7 +142,6 @@
     <Compile Include="ReindexForm.Designer.cs">
       <DependentUpon>ReindexForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReindexTmsRibbon.cs" />
     <Compile Include="TranslationMemory\TranslationMemoryHelper.cs" />
