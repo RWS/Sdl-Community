@@ -26,8 +26,8 @@ namespace Sdl.Community.YourStudio
 
         private String GetTabFolder()
         {
-            String studio2014Path = GetStudioPath();
-            return Path.Combine(studio2014Path, "Welcome");
+            var studio2015Path = GetStudioPath();
+            return Path.Combine(studio2015Path, "Welcome");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -51,8 +51,8 @@ namespace Sdl.Community.YourStudio
         private string GetStudioPath()
         {
             String defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles), @"SDL\SDL Trados Studio\Studio3\");
-            RegistryKey installKey = Registry.LocalMachine.OpenSubKey(@"Software\Wow6432Node\SDL\Studio4");
-            if (installKey == null) installKey = Registry.LocalMachine.OpenSubKey(@"Software\SDL\Studio4");
+            RegistryKey installKey = Registry.LocalMachine.OpenSubKey(@"Software\Wow6432Node\SDL\Studio5");
+            if (installKey == null) installKey = Registry.LocalMachine.OpenSubKey(@"Software\SDL\Studio5");
             if (installKey == null) return defaultPath;
 
             String installLocation = installKey.GetValue("InstallLocation", defaultPath).ToString();
