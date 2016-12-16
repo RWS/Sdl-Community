@@ -57,7 +57,8 @@ namespace SDLXLIFFSliceOrChange
                 BindSearchResults();
             if (tabControl1.SelectedIndex == 2)
             {
-                panelCommands.Visible = false;
+                 panelCommands.Visible = false;
+               // panelCommands.Visible = true;
                 //MaximumSize = new Size(MaximumSize.Width, 520);
                 ////if (!_formSizeChanged || Height > 520)
                 //    Height = 520;
@@ -241,7 +242,7 @@ namespace SDLXLIFFSliceOrChange
             ckChangeToNotTranslated.Text = resources.ChangeToNotTranslated;
             ckChangeToUnlocked.Text = resources.ChangeToUnlocked;
             ckChangeToLocked.Text = resources.ChangeToLocked;
-        //    groupBrowse.Text = resources.Browse;
+           // groupBrowse.Text = resources.Browse;
             btnSelectFolder.Text = resources.SelectFolder;
             btnSelectProjectFile.Text = resources.ProjectFile;
             groupScore.Text = resources.Score;
