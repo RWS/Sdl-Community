@@ -27,16 +27,19 @@ namespace SDLXLIFFSliceOrChange
 {
     public partial class SDLXLIFFSliceOrChange : UserControl
     {
-        
+        private ErrorProvider _errorProvider;
         public SDLXLIFFSliceOrChange()
         {
             InitializeComponent();
             _sliceManager = new SliceManager(this);
             _updateManager = new UpdateManager(this);
+            _errorProvider = new ErrorProvider();
+
         }
 
         private bool _saveCultrue = true;
         private ILog logger = LogManager.GetLogger(typeof (SDLXLIFFSliceOrChange));
+       // DataGridView grView = new DataGridView();
 
         public SliceManager SliceManager
         {
@@ -1896,8 +1899,20 @@ namespace SDLXLIFFSliceOrChange
             grView.Size = new System.Drawing.Size(676, 151);
             grView.TabIndex = 7;
             grView.VirtualMode = true;
+           // grView.DefaultCellStyle.Font = new Font("Tahoma", 7);
+            //grView.Font = new Font("Tahoma", 7);
+            //grView.Dock = DockStyle.Fill;
+            // grView.AutoSizeRowsMode=DataGridViewAutoSizeRowsMode.AllCells;
+            //grView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            // grView.RowTemplate.Resizable= DataGridViewTriState.True;
+            //.RowTemplate.Height = 150;
             grView.CellValueNeeded += gridReplaceResults_CellValueNeeded;
             grView.DataBindingComplete += gridReplaceResults_DataBindingComplete;
+            //  grView.CellMouseEnter += GrView_CellMouseEnter;
+            // grView.CellFormatting += GrView_CellFormatting;
+
+         
+
             BindReplaceResults(grView);
 
 
@@ -1912,7 +1927,7 @@ namespace SDLXLIFFSliceOrChange
                 _searchResultsForm.Close();
             }
 
-            _searchResultsForm = new SearchResults(grView);
+            _searchResultsForm = new SearchResults(grView) {Dock = DockStyle.Fill};
             if (setSizeAndLocation)
             {
                 _searchResultsForm.Location = location;
@@ -1920,6 +1935,23 @@ namespace SDLXLIFFSliceOrChange
             }
             _searchResultsForm.Show();
         }
+
+        //private void GrView_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        //{
+           
+        //        var cell = grView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+        //    cell.ToolTipText = cell.FormattedValue.ToString();
+
+        //}
+
+        //private void GrView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        //{
+        //    if (e.Value != null)
+        //    {
+        //        var cell = grView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+        //    }
+
+        //}
 
         private void btnFindAllInReplace_Click(object sender, EventArgs e)
         {
@@ -2074,7 +2106,12 @@ namespace SDLXLIFFSliceOrChange
             grView.Columns[0].HeaderText = resources.Seg;
             grView.Columns[1].HeaderText = resources.Status;
             grView.Columns[2].HeaderText = resources.SearchSource;
-            grView.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+              grView.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+           // grView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            //grView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //grView.Dock = DockStyle.Right;
+            //grView.DefaultCellStyle.Font = new Font("Tahoma", 7);
+            
             ((ControlColumn) grView.Columns[2]).FileFilter = false;
             ((ControlColumn) grView.Columns[2]).IsSearch = true;
             ((ControlColumn) grView.Columns[2]).SearchInTags = false;
@@ -2089,8 +2126,11 @@ namespace SDLXLIFFSliceOrChange
             grView.Columns[1].MinimumWidth = 60;
             grView.Columns[1].Width = 60;
             grView.Columns[2].MinimumWidth = 150;
-            grView.Columns[2].Width = 300;
+         //   grView.Columns[2].DefaultCellStyle.Font = new Font("Tahoma", 7);
+            //grView.Columns[2].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+              grView.Columns[2].Width = 300;
             grView.Columns[3].MinimumWidth = 150;
+           
             grView.Columns[3].Width = 500;
 
         }
@@ -2478,6 +2518,34 @@ namespace SDLXLIFFSliceOrChange
         {
             if (_setFormSizeChanged)
                 _formSizeChanged = true;
+        }
+
+        private void txtReplaceSourceSearch_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var pattern = txtReplaceSourceSearch.Text;
+            try
+            {
+                new Regex(pattern);
+                _errorProvider.SetError(txtReplaceSourceSearch, "");
+            }
+            catch (Exception ex)
+            {
+                _errorProvider.SetError(txtReplaceSourceSearch, "Invalid regular expression");
+            }
+        }
+
+        private void txtReplaceTargetSearch_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var pattern = txtReplaceTargetSearch.Text;
+            try
+            {
+                new Regex(pattern);
+                _errorProvider.SetError(txtReplaceTargetSearch, "");
+            }
+            catch (Exception ex)
+            {
+                _errorProvider.SetError(txtReplaceTargetSearch, "Invalid regular expression");
+            }
         }
     }
 }

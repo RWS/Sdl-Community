@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using log4net;
 //using Sdl.Utilities.BatchSearchReplace.Lib;
@@ -164,11 +165,13 @@ namespace SDLXLIFFSliceOrChange
                     if (inSource && settings.SourceSearchText != string.Empty &&
                         settings.SourceReplaceText != string.Empty)
                     {
+                        
                         matchCollection = Regex.Matches(segmentHtml, settings.SourceSearchText);
                     }
                     if(!inSource&&settings.TargetSearchText!=string.Empty&&settings.TargetReplaceText!=string.Empty)
                     {
                         matchCollection = Regex.Matches(segmentHtml, settings.TargetSearchText);
+                       
                     }
                     if (matchCollection != null)
                     {

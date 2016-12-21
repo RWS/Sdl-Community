@@ -30,7 +30,17 @@ namespace SDLXLIFFSliceOrChange
         private void SearchResults_Load(object sender, EventArgs e)
         {
             _searchResultsGrid.Dock = DockStyle.Fill;
+           
             Controls.Add(_searchResultsGrid);
+           // _searchResultsGrid.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            //_searchResultsGrid.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            foreach (DataGridViewRow row in _searchResultsGrid.Rows)
+            {
+                row.Height = 100;
+                row.Resizable= DataGridViewTriState.True;
+                
+                //   row.DefaultCellStyle.Font = new Font("Tahoma", 7);
+            }
         }
 
         private void SearchResults_FormClosing(object sender, FormClosingEventArgs e)

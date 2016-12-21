@@ -144,6 +144,7 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelStatus = new System.Windows.Forms.Panel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.xLIFFFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -179,6 +180,7 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).BeginInit();
             this.mainTableLayoutPanel.SuspendLayout();
             this.panelStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // xLIFFFiles
@@ -922,7 +924,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.lblReplaceTargetReplace.AutoSize = true;
             this.lblReplaceTargetReplace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReplaceTargetReplace.Location = new System.Drawing.Point(503, 51);
+            this.lblReplaceTargetReplace.Location = new System.Drawing.Point(503, 55);
             this.lblReplaceTargetReplace.Name = "lblReplaceTargetReplace";
             this.lblReplaceTargetReplace.Size = new System.Drawing.Size(69, 13);
             this.lblReplaceTargetReplace.TabIndex = 8;
@@ -934,8 +936,9 @@ namespace SDLXLIFFSliceOrChange
             this.txtReplaceTargetSearch.Location = new System.Drawing.Point(248, 48);
             this.txtReplaceTargetSearch.Multiline = true;
             this.txtReplaceTargetSearch.Name = "txtReplaceTargetSearch";
-            this.txtReplaceTargetSearch.Size = new System.Drawing.Size(249, 20);
+            this.txtReplaceTargetSearch.Size = new System.Drawing.Size(226, 20);
             this.txtReplaceTargetSearch.TabIndex = 7;
+            this.txtReplaceTargetSearch.Validating += new System.ComponentModel.CancelEventHandler(this.txtReplaceTargetSearch_Validating);
             // 
             // lblReplaceTargetSearch
             // 
@@ -972,8 +975,9 @@ namespace SDLXLIFFSliceOrChange
             this.txtReplaceSourceSearch.Location = new System.Drawing.Point(248, 22);
             this.txtReplaceSourceSearch.Multiline = true;
             this.txtReplaceSourceSearch.Name = "txtReplaceSourceSearch";
-            this.txtReplaceSourceSearch.Size = new System.Drawing.Size(249, 20);
+            this.txtReplaceSourceSearch.Size = new System.Drawing.Size(226, 20);
             this.txtReplaceSourceSearch.TabIndex = 1;
+            this.txtReplaceSourceSearch.Validating += new System.ComponentModel.CancelEventHandler(this.txtReplaceSourceSearch_Validating);
             // 
             // lblReplaceSourceSearch
             // 
@@ -1528,6 +1532,10 @@ namespace SDLXLIFFSliceOrChange
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 8;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // SDLXLIFFSliceOrChange
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
@@ -1589,6 +1597,7 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).EndInit();
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.panelStatus.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1710,6 +1719,7 @@ namespace SDLXLIFFSliceOrChange
         private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
         private System.Windows.Forms.Panel panelStatus;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 
