@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
+using System.ServiceModel.Activation;
 using System.Text;
 using System.Web;
 
@@ -28,6 +29,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
         private AdmAccessToken HttpPost(string DatamarketAccessUri, string requestDetails)
         {
+           
             //Prepare OAuth request 
             WebRequest webRequest = WebRequest.Create(DatamarketAccessUri);
             webRequest.ContentType = "application/x-www-form-urlencoded";

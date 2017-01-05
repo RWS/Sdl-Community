@@ -75,10 +75,10 @@
             // 
             // btn_OK
             // 
-            this.btn_OK.Location = new System.Drawing.Point(275, 378);
-            this.btn_OK.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_OK.Location = new System.Drawing.Point(309, 472);
+            this.btn_OK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_OK.Name = "btn_OK";
-            this.btn_OK.Size = new System.Drawing.Size(100, 28);
+            this.btn_OK.Size = new System.Drawing.Size(112, 35);
             this.btn_OK.TabIndex = 3;
             this.btn_OK.Text = "&OK";
             this.btn_OK.UseVisualStyleBackColor = true;
@@ -87,10 +87,10 @@
             // btn_Cancel
             // 
             this.btn_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btn_Cancel.Location = new System.Drawing.Point(381, 378);
-            this.btn_Cancel.Margin = new System.Windows.Forms.Padding(4);
+            this.btn_Cancel.Location = new System.Drawing.Point(429, 472);
+            this.btn_Cancel.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btn_Cancel.Name = "btn_Cancel";
-            this.btn_Cancel.Size = new System.Drawing.Size(100, 28);
+            this.btn_Cancel.Size = new System.Drawing.Size(112, 35);
             this.btn_Cancel.TabIndex = 4;
             this.btn_Cancel.Text = "&Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
@@ -106,11 +106,11 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.comboProvider);
-            this.groupBox3.Location = new System.Drawing.Point(3, 5);
+            this.groupBox3.Location = new System.Drawing.Point(3, 6);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBox3.Size = new System.Drawing.Size(443, 68);
+            this.groupBox3.Size = new System.Drawing.Size(498, 85);
             this.groupBox3.TabIndex = 15;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Choose MT provider";
@@ -122,9 +122,10 @@
             this.comboProvider.Items.AddRange(new object[] {
             "Google Translate",
             "Microsoft Translator"});
-            this.comboProvider.Location = new System.Drawing.Point(6, 20);
+            this.comboProvider.Location = new System.Drawing.Point(7, 25);
+            this.comboProvider.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboProvider.Name = "comboProvider";
-            this.comboProvider.Size = new System.Drawing.Size(431, 24);
+            this.comboProvider.Size = new System.Drawing.Size(484, 28);
             this.comboProvider.TabIndex = 0;
             this.comboProvider.SelectedIndexChanged += new System.EventHandler(this.comboProvider_SelectedIndexChanged);
             // 
@@ -132,10 +133,11 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(12, 12);
+            this.tabControl1.Location = new System.Drawing.Point(14, 15);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(469, 352);
+            this.tabControl1.Size = new System.Drawing.Size(528, 440);
             this.tabControl1.TabIndex = 16;
             // 
             // tabPage1
@@ -144,10 +146,11 @@
             this.tabPage1.Controls.Add(this.groupBoxMT);
             this.tabPage1.Controls.Add(this.groupBoxGT);
             this.tabPage1.Controls.Add(this.groupBox3);
-            this.tabPage1.Location = new System.Drawing.Point(4, 25);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(461, 323);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.tabPage1.Size = new System.Drawing.Size(520, 407);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Choose provider";
             // 
@@ -161,11 +164,11 @@
             this.groupBoxMT.Controls.Add(this.lblClientSecret);
             this.groupBoxMT.Controls.Add(this.chkSaveCred);
             this.groupBoxMT.Controls.Add(this.txtClientSecret);
-            this.groupBoxMT.Location = new System.Drawing.Point(4, 79);
-            this.groupBoxMT.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBoxMT.Location = new System.Drawing.Point(4, 99);
+            this.groupBoxMT.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBoxMT.Name = "groupBoxMT";
-            this.groupBoxMT.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxMT.Size = new System.Drawing.Size(439, 243);
+            this.groupBoxMT.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxMT.Size = new System.Drawing.Size(494, 304);
             this.groupBoxMT.TabIndex = 5;
             this.groupBoxMT.TabStop = false;
             this.groupBoxMT.Text = "Microsoft Translator credentials";
@@ -174,9 +177,10 @@
             // btnDeleteSavedMicrosoftCreds
             // 
             this.btnDeleteSavedMicrosoftCreds.AutoSize = true;
-            this.btnDeleteSavedMicrosoftCreds.Location = new System.Drawing.Point(7, 147);
+            this.btnDeleteSavedMicrosoftCreds.Location = new System.Drawing.Point(8, 184);
+            this.btnDeleteSavedMicrosoftCreds.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDeleteSavedMicrosoftCreds.Name = "btnDeleteSavedMicrosoftCreds";
-            this.btnDeleteSavedMicrosoftCreds.Size = new System.Drawing.Size(174, 27);
+            this.btnDeleteSavedMicrosoftCreds.Size = new System.Drawing.Size(217, 38);
             this.btnDeleteSavedMicrosoftCreds.TabIndex = 16;
             this.btnDeleteSavedMicrosoftCreds.Text = "Delete saved credentials";
             this.btnDeleteSavedMicrosoftCreds.UseVisualStyleBackColor = true;
@@ -185,9 +189,10 @@
             // chkCatId
             // 
             this.chkCatId.AutoSize = true;
-            this.chkCatId.Location = new System.Drawing.Point(7, 183);
+            this.chkCatId.Location = new System.Drawing.Point(8, 229);
+            this.chkCatId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkCatId.Name = "chkCatId";
-            this.chkCatId.Size = new System.Drawing.Size(135, 21);
+            this.chkCatId.Size = new System.Drawing.Size(147, 24);
             this.chkCatId.TabIndex = 9;
             this.chkCatId.Text = "Use category ID:";
             this.chkCatId.UseVisualStyleBackColor = true;
@@ -196,52 +201,56 @@
             // txtCatId
             // 
             this.txtCatId.Enabled = false;
-            this.txtCatId.Location = new System.Drawing.Point(7, 210);
+            this.txtCatId.Location = new System.Drawing.Point(8, 262);
+            this.txtCatId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCatId.Name = "txtCatId";
-            this.txtCatId.Size = new System.Drawing.Size(402, 22);
+            this.txtCatId.Size = new System.Drawing.Size(452, 26);
             this.txtCatId.TabIndex = 10;
             // 
             // lblClientID
             // 
             this.lblClientID.AutoSize = true;
-            this.lblClientID.Location = new System.Drawing.Point(3, 27);
+            this.lblClientID.Location = new System.Drawing.Point(3, 34);
             this.lblClientID.Name = "lblClientID";
-            this.lblClientID.Size = new System.Drawing.Size(64, 17);
+            this.lblClientID.Size = new System.Drawing.Size(122, 20);
             this.lblClientID.TabIndex = 15;
-            this.lblClientID.Text = "Client ID:";
+            this.lblClientID.Text = "Subscription ID:";
             // 
             // txtClientId
             // 
-            this.txtClientId.Location = new System.Drawing.Point(6, 47);
+            this.txtClientId.Location = new System.Drawing.Point(7, 59);
+            this.txtClientId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtClientId.Name = "txtClientId";
-            this.txtClientId.Size = new System.Drawing.Size(246, 22);
+            this.txtClientId.Size = new System.Drawing.Size(276, 26);
             this.txtClientId.TabIndex = 3;
             // 
             // lblClientSecret
             // 
             this.lblClientSecret.AutoSize = true;
-            this.lblClientSecret.Location = new System.Drawing.Point(4, 72);
+            this.lblClientSecret.Location = new System.Drawing.Point(4, 90);
             this.lblClientSecret.Name = "lblClientSecret";
-            this.lblClientSecret.Size = new System.Drawing.Size(92, 17);
+            this.lblClientSecret.Size = new System.Drawing.Size(104, 20);
             this.lblClientSecret.TabIndex = 13;
             this.lblClientSecret.Text = "Client Secret:";
             // 
             // chkSaveCred
             // 
             this.chkSaveCred.AutoSize = true;
-            this.chkSaveCred.Location = new System.Drawing.Point(7, 120);
+            this.chkSaveCred.Location = new System.Drawing.Point(8, 150);
+            this.chkSaveCred.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkSaveCred.Name = "chkSaveCred";
-            this.chkSaveCred.Size = new System.Drawing.Size(256, 21);
+            this.chkSaveCred.Size = new System.Drawing.Size(280, 24);
             this.chkSaveCred.TabIndex = 6;
             this.chkSaveCred.Text = "Save credentials for future sessions";
             this.chkSaveCred.UseVisualStyleBackColor = true;
             // 
             // txtClientSecret
             // 
-            this.txtClientSecret.Location = new System.Drawing.Point(6, 92);
+            this.txtClientSecret.Location = new System.Drawing.Point(7, 115);
+            this.txtClientSecret.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtClientSecret.Name = "txtClientSecret";
             this.txtClientSecret.PasswordChar = '*';
-            this.txtClientSecret.Size = new System.Drawing.Size(399, 22);
+            this.txtClientSecret.Size = new System.Drawing.Size(448, 26);
             this.txtClientSecret.TabIndex = 4;
             // 
             // groupBoxGT
@@ -249,11 +258,11 @@
             this.groupBoxGT.Controls.Add(this.btnDeleteSavedGoogleKey);
             this.groupBoxGT.Controls.Add(this.chkSaveKey);
             this.groupBoxGT.Controls.Add(this.textApiKey);
-            this.groupBoxGT.Location = new System.Drawing.Point(4, 330);
-            this.groupBoxGT.Margin = new System.Windows.Forms.Padding(4);
+            this.groupBoxGT.Location = new System.Drawing.Point(4, 412);
+            this.groupBoxGT.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBoxGT.Name = "groupBoxGT";
-            this.groupBoxGT.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxGT.Size = new System.Drawing.Size(439, 112);
+            this.groupBoxGT.Padding = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.groupBoxGT.Size = new System.Drawing.Size(494, 140);
             this.groupBoxGT.TabIndex = 5;
             this.groupBoxGT.TabStop = false;
             this.groupBoxGT.Text = "Google Translate API key";
@@ -262,9 +271,10 @@
             // btnDeleteSavedGoogleKey
             // 
             this.btnDeleteSavedGoogleKey.AutoSize = true;
-            this.btnDeleteSavedGoogleKey.Location = new System.Drawing.Point(7, 74);
+            this.btnDeleteSavedGoogleKey.Location = new System.Drawing.Point(8, 92);
+            this.btnDeleteSavedGoogleKey.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDeleteSavedGoogleKey.Name = "btnDeleteSavedGoogleKey";
-            this.btnDeleteSavedGoogleKey.Size = new System.Drawing.Size(127, 27);
+            this.btnDeleteSavedGoogleKey.Size = new System.Drawing.Size(158, 38);
             this.btnDeleteSavedGoogleKey.TabIndex = 13;
             this.btnDeleteSavedGoogleKey.Text = "Delete saved key";
             this.btnDeleteSavedGoogleKey.UseVisualStyleBackColor = true;
@@ -273,30 +283,31 @@
             // chkSaveKey
             // 
             this.chkSaveKey.AutoSize = true;
-            this.chkSaveKey.Location = new System.Drawing.Point(7, 48);
+            this.chkSaveKey.Location = new System.Drawing.Point(8, 60);
             this.chkSaveKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chkSaveKey.Name = "chkSaveKey";
-            this.chkSaveKey.Size = new System.Drawing.Size(209, 21);
+            this.chkSaveKey.Size = new System.Drawing.Size(227, 24);
             this.chkSaveKey.TabIndex = 12;
             this.chkSaveKey.Text = "Save key for future sessions";
             this.chkSaveKey.UseVisualStyleBackColor = true;
             // 
             // textApiKey
             // 
-            this.textApiKey.Location = new System.Drawing.Point(7, 22);
+            this.textApiKey.Location = new System.Drawing.Point(8, 28);
             this.textApiKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textApiKey.Name = "textApiKey";
             this.textApiKey.PasswordChar = '*';
-            this.textApiKey.Size = new System.Drawing.Size(407, 22);
+            this.textApiKey.Size = new System.Drawing.Size(457, 26);
             this.textApiKey.TabIndex = 10;
             // 
             // tabPage3
             // 
             this.tabPage3.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.tabPage3.Controls.Add(this.groupBox4);
-            this.tabPage3.Location = new System.Drawing.Point(4, 25);
+            this.tabPage3.Location = new System.Drawing.Point(4, 29);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(461, 323);
+            this.tabPage3.Size = new System.Drawing.Size(520, 407);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Provider options";
             // 
@@ -308,9 +319,11 @@
             this.groupBox4.Controls.Add(this.chkUsePostEdit);
             this.groupBox4.Controls.Add(this.chkUsePreEdit);
             this.groupBox4.Controls.Add(this.chkPlainTextOnly);
-            this.groupBox4.Location = new System.Drawing.Point(3, 18);
+            this.groupBox4.Location = new System.Drawing.Point(3, 22);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(444, 286);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBox4.Size = new System.Drawing.Size(500, 358);
             this.groupBox4.TabIndex = 6;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Provider Options";
@@ -319,9 +332,11 @@
             // 
             this.groupBoxPostedit.Controls.Add(this.txtPostEditFileName);
             this.groupBoxPostedit.Controls.Add(this.btnBrowsePostEditFile);
-            this.groupBoxPostedit.Location = new System.Drawing.Point(0, 204);
+            this.groupBoxPostedit.Location = new System.Drawing.Point(0, 255);
+            this.groupBoxPostedit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBoxPostedit.Name = "groupBoxPostedit";
-            this.groupBoxPostedit.Size = new System.Drawing.Size(435, 56);
+            this.groupBoxPostedit.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBoxPostedit.Size = new System.Drawing.Size(489, 70);
             this.groupBoxPostedit.TabIndex = 22;
             this.groupBoxPostedit.TabStop = false;
             this.groupBoxPostedit.Text = "Post-lookup find/replace filename:";
@@ -329,18 +344,20 @@
             // txtPostEditFileName
             // 
             this.txtPostEditFileName.Enabled = false;
-            this.txtPostEditFileName.Location = new System.Drawing.Point(3, 21);
+            this.txtPostEditFileName.Location = new System.Drawing.Point(3, 26);
+            this.txtPostEditFileName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtPostEditFileName.MaxLength = 30;
             this.txtPostEditFileName.Name = "txtPostEditFileName";
             this.txtPostEditFileName.ReadOnly = true;
-            this.txtPostEditFileName.Size = new System.Drawing.Size(350, 22);
+            this.txtPostEditFileName.Size = new System.Drawing.Size(393, 26);
             this.txtPostEditFileName.TabIndex = 8;
             // 
             // btnBrowsePostEditFile
             // 
-            this.btnBrowsePostEditFile.Location = new System.Drawing.Point(359, 18);
+            this.btnBrowsePostEditFile.Location = new System.Drawing.Point(404, 22);
+            this.btnBrowsePostEditFile.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnBrowsePostEditFile.Name = "btnBrowsePostEditFile";
-            this.btnBrowsePostEditFile.Size = new System.Drawing.Size(73, 28);
+            this.btnBrowsePostEditFile.Size = new System.Drawing.Size(82, 35);
             this.btnBrowsePostEditFile.TabIndex = 10;
             this.btnBrowsePostEditFile.Text = "Browse...";
             this.btnBrowsePostEditFile.UseVisualStyleBackColor = true;
@@ -350,9 +367,11 @@
             // 
             this.groupBoxPreedit.Controls.Add(this.txtPreEditFileName);
             this.groupBoxPreedit.Controls.Add(this.btnBrowsePreEdit);
-            this.groupBoxPreedit.Location = new System.Drawing.Point(3, 107);
+            this.groupBoxPreedit.Location = new System.Drawing.Point(3, 134);
+            this.groupBoxPreedit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.groupBoxPreedit.Name = "groupBoxPreedit";
-            this.groupBoxPreedit.Size = new System.Drawing.Size(435, 64);
+            this.groupBoxPreedit.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.groupBoxPreedit.Size = new System.Drawing.Size(489, 80);
             this.groupBoxPreedit.TabIndex = 21;
             this.groupBoxPreedit.TabStop = false;
             this.groupBoxPreedit.Text = "Pre-lookup find/replace filename:";
@@ -360,19 +379,21 @@
             // txtPreEditFileName
             // 
             this.txtPreEditFileName.Enabled = false;
-            this.txtPreEditFileName.Location = new System.Drawing.Point(6, 24);
+            this.txtPreEditFileName.Location = new System.Drawing.Point(7, 30);
+            this.txtPreEditFileName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtPreEditFileName.MaxLength = 30;
             this.txtPreEditFileName.Name = "txtPreEditFileName";
             this.txtPreEditFileName.ReadOnly = true;
-            this.txtPreEditFileName.Size = new System.Drawing.Size(344, 22);
+            this.txtPreEditFileName.Size = new System.Drawing.Size(386, 26);
             this.txtPreEditFileName.TabIndex = 20;
             this.txtPreEditFileName.TabStop = false;
             // 
             // btnBrowsePreEdit
             // 
-            this.btnBrowsePreEdit.Location = new System.Drawing.Point(356, 21);
+            this.btnBrowsePreEdit.Location = new System.Drawing.Point(400, 26);
+            this.btnBrowsePreEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnBrowsePreEdit.Name = "btnBrowsePreEdit";
-            this.btnBrowsePreEdit.Size = new System.Drawing.Size(73, 28);
+            this.btnBrowsePreEdit.Size = new System.Drawing.Size(82, 35);
             this.btnBrowsePreEdit.TabIndex = 14;
             this.btnBrowsePreEdit.Text = "Browse...";
             this.btnBrowsePreEdit.UseVisualStyleBackColor = true;
@@ -381,9 +402,10 @@
             // chkResendDrafts
             // 
             this.chkResendDrafts.AutoSize = true;
-            this.chkResendDrafts.Location = new System.Drawing.Point(6, 26);
+            this.chkResendDrafts.Location = new System.Drawing.Point(7, 32);
+            this.chkResendDrafts.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkResendDrafts.Name = "chkResendDrafts";
-            this.chkResendDrafts.Size = new System.Drawing.Size(277, 21);
+            this.chkResendDrafts.Size = new System.Drawing.Size(306, 24);
             this.chkResendDrafts.TabIndex = 11;
             this.chkResendDrafts.Text = "Re-send draft and translated segments";
             this.chkResendDrafts.UseVisualStyleBackColor = true;
@@ -391,9 +413,10 @@
             // chkUsePostEdit
             // 
             this.chkUsePostEdit.AutoSize = true;
-            this.chkUsePostEdit.Location = new System.Drawing.Point(3, 177);
+            this.chkUsePostEdit.Location = new System.Drawing.Point(3, 221);
+            this.chkUsePostEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkUsePostEdit.Name = "chkUsePostEdit";
-            this.chkUsePostEdit.Size = new System.Drawing.Size(204, 21);
+            this.chkUsePostEdit.Size = new System.Drawing.Size(222, 24);
             this.chkUsePostEdit.TabIndex = 7;
             this.chkUsePostEdit.Text = "Do post-lookup find/replace";
             this.chkUsePostEdit.UseVisualStyleBackColor = true;
@@ -402,9 +425,10 @@
             // chkUsePreEdit
             // 
             this.chkUsePreEdit.AutoSize = true;
-            this.chkUsePreEdit.Location = new System.Drawing.Point(6, 80);
+            this.chkUsePreEdit.Location = new System.Drawing.Point(7, 100);
+            this.chkUsePreEdit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkUsePreEdit.Name = "chkUsePreEdit";
-            this.chkUsePreEdit.Size = new System.Drawing.Size(198, 21);
+            this.chkUsePreEdit.Size = new System.Drawing.Size(214, 24);
             this.chkUsePreEdit.TabIndex = 13;
             this.chkUsePreEdit.Text = "Do pre-lookup find/replace";
             this.chkUsePreEdit.UseVisualStyleBackColor = true;
@@ -413,23 +437,24 @@
             // chkPlainTextOnly
             // 
             this.chkPlainTextOnly.AutoSize = true;
-            this.chkPlainTextOnly.Location = new System.Drawing.Point(6, 53);
+            this.chkPlainTextOnly.Location = new System.Drawing.Point(7, 66);
+            this.chkPlainTextOnly.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkPlainTextOnly.Name = "chkPlainTextOnly";
-            this.chkPlainTextOnly.Size = new System.Drawing.Size(214, 21);
+            this.chkPlainTextOnly.Size = new System.Drawing.Size(232, 24);
             this.chkPlainTextOnly.TabIndex = 12;
             this.chkPlainTextOnly.Text = "Send plain text only (no tags)";
             this.chkPlainTextOnly.UseVisualStyleBackColor = true;
             // 
             // MtProviderConfDialog
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(491, 420);
+            this.ClientSize = new System.Drawing.Size(552, 525);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_OK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MtProviderConfDialog";
