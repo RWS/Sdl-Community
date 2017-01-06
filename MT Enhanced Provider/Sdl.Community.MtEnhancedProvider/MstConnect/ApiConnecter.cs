@@ -4,8 +4,11 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.Threading.Tasks;
 using System.Web;
+using Sdl.Community.MtEnhancedProvider.TranslatorService;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
@@ -19,7 +22,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         private string cst;
         private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
         private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-
+ 
         /// <summary>
         /// This class allows connection to the Microsoft Translation API
         /// </summary>
@@ -31,7 +34,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             this.cst = this._options.ClientSecret;
             if (_authToken == null) _authToken = GetAuthToken(); //if the class variable has not been set
             if (_supportedLangs == null) _supportedLangs = getSupportedLangs(); //if the class variable has not been set
-
+            
         }
 
                
@@ -44,7 +47,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         internal void resetCrd(string cid, string cst)
         {
             this.cst = cst;
-            this._subscriptionKey = cid;
+            _subscriptionKey = cid;
         }
         
         
@@ -59,78 +62,28 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <returns></returns>
         internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId, string format)
         {
-            //var translatorService = new TranslatorService.LanguageServiceClient();
+            
             //convert our language codes
             string sourceLc = convertLangCode(sourceLang);
             string targetLc = convertLangCode(targetLang);
-            
+
             //url encode input
             string formattedSourceText = HttpUtility.UrlEncode(textToTranslate);
-            
-            
+
             //check to see if token is null
             if (_authToken == null) _authToken = GetAuthToken();
 
             //check to see if token expired and if so, get a new one
             if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
-            //var translatedText =translatorService.Translate(_subscriptionKey, formattedSourceText, sourceLang, targetLang, "text/plain",
-            //    "general", string.Empty);
-            string uri = "http://api.microsofttranslator.com/v2/Http.svc/Translate?text=" + formattedSourceText + "&from=" + sourceLc + "&to=" + targetLc + "&contentType=" + format;
+            var binding = new BasicHttpBinding();
+            var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
 
-            //add category ID if applicable
-            if (!categoryId.Equals(""))
-                uri += "&category=" + categoryId;
+            var translatedText = client.Translate(_authToken, formattedSourceText, sourceLc, targetLc, "text/plain",
+               "general", string.Empty);
+          
+             return translatedText;
 
-
-            //delete the follwoing line for production...only to be able to trace http calls using Fiddler
-            //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
-
-
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
-
-            httpWebRequest.Headers.Add("Authorization", _authToken);
-
-
-            WebResponse response = null;
-            try
-            {
-                response = httpWebRequest.GetResponse();
-                using (Stream stream = response.GetResponseStream())
-                {
-                    System.Runtime.Serialization.DataContractSerializer dcs = new System.Runtime.Serialization.DataContractSerializer(Type.GetType("System.String"));
-                    string translation = (string)dcs.ReadObject(stream);
-                    return translation; //return
-                }
-            }
-            catch (WebException e)
-            {
-                string errorResponse = ProcessWebException(e, PluginResources.MsApiFailedToTranslateMessage);
-                //in case our expiration check didn't work
-                bool returnedExpiredToken = errorResponse.Contains("Message: The incoming token has expired.");
-                bool returnedBadCatID = errorResponse.Contains("Message: Invalid category");
-
-                if (returnedExpiredToken)
-                {//if the reason is that the token is expired
-                    _authToken = GetAuthToken();
-                    string x = Translate(sourceLang, targetLang, textToTranslate, categoryId, format);
-                }
-                else if (returnedBadCatID)
-                    throw new Exception(PluginResources.MsApiCategoryIdErrorMessage);
-                else throw new Exception(errorResponse); //to throw other errors up to calling program
-
-            }
-            finally
-            {
-                if (response != null)
-                {
-                    response.Close();
-                    response = null;
-                }
-            }
-
-           // return translatedText;
-            return "";
         }
 
         /// <summary>
@@ -225,24 +178,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
         private string GetAuthToken()
         {
-            //AdmAccessToken admToken;
-            //string headerValue;
-            ////Get Client Id and Client Secret from https://datamarket.azure.com/developer/applications/
-            ////Refer obtaining AccessToken (http://msdn.microsoft.com/en-us/library/hh454950.aspx) 
-            //try
-            //{
-            //    AdmAuthentication admAuth = new AdmAuthentication(cid, cst);
-            //    admToken = admAuth.GetAccessToken();
-            //    TimeSpan span = new TimeSpan(0, 0, int.Parse(admToken.expires_in)); //set a timespan for the time that the token expires
-            //    tokenExpiresAt = DateTime.Now.Add(span);
-            //    headerValue = "Bearer " + admToken.access_token;
-            //}
-            //catch (WebException)
-            //{
-            //    throw new Exception(PluginResources.MsApiBadCredentialsMessage);// + prompt);
-            //}
-
-            //return headerValue;
             string accessToken = null;
             var task = Task.Run(async () =>
             {

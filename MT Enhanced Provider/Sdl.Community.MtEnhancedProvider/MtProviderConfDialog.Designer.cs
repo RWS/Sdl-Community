@@ -212,9 +212,9 @@
             this.lblClientID.AutoSize = true;
             this.lblClientID.Location = new System.Drawing.Point(3, 34);
             this.lblClientID.Name = "lblClientID";
-            this.lblClientID.Size = new System.Drawing.Size(122, 20);
+            this.lblClientID.Size = new System.Drawing.Size(40, 20);
             this.lblClientID.TabIndex = 15;
-            this.lblClientID.Text = "Subscription ID:";
+            this.lblClientID.Text = "Test";
             // 
             // txtClientId
             // 
