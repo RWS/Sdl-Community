@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml.Linq;
 using Sdl.Community.StudioMigrationUtility.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StudioMigrationUtility.Services
 {
@@ -20,6 +22,10 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             
         }
 
+        public ProjectsController GetProjectsController()
+        {
+            return SdlTradosStudio.Application.GetController<ProjectsController>();
+        }
 
         public List<Project> GetProjectsToBeMigrated()
         {
@@ -189,7 +195,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 projectsElement.Add(projectItem);
              
             }
-
+         
             projectsXml.Save(destinationProjectPath);
      
             reportProgress(95);
@@ -203,13 +209,53 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
             if (!sourceProjectsXml.Element("Customers").HasElements) return;
 
-            foreach (var sourceDescendant in from sourceDescendant in sourceProjectsXml.Descendants("Customer") 
-                                             let sourcePath = sourceDescendant.Attribute("Guid")
-                                             where destinationProjectsXml.Element("Customers").Descendants("Customer").All(x => x.Attribute("Guid").Value != sourcePath.Value) 
-                                             select sourceDescendant)
+            foreach (var sourceDescendant in from sourceDescendant in sourceProjectsXml.Descendants("Customer")
+                let sourcePath = sourceDescendant.Attribute("Guid")
+                where
+                    destinationProjectsXml.Element("Customers")
+                        .Descendants("Customer")
+                        .All(x => x.Attribute("Guid").Value != sourcePath.Value)
+                select sourceDescendant)
             {
-                destinationProjectsXml.Element("Customers").Add(sourceDescendant);
+                //destinationProjectsXml.Element("Customers").Add(sourceDescendant);
+                var xAttribute = sourceDescendant.Attribute("Name");
+                var name = string.Empty;
+                var email = string.Empty;
+                if (xAttribute != null)
+                {
+                    name = xAttribute.Value;
+                }
+                var attribute = sourceDescendant.Attribute("Email");
+                if (attribute != null)
+                {
+                    email = attribute.Value;
+                }
+                AddCustomers(name, email);
+
             }
+        }
+
+        private void AddCustomers(string name, string email)
+        {
+            var currentProject = GetProjectsController().CurrentProject;
+            var type = currentProject.GetType();
+
+            var internalProjectField = type.GetField("_project", BindingFlags.Instance | BindingFlags.NonPublic);
+            dynamic internalDynamicaProject = internalProjectField.GetValue(currentProject);
+            dynamic customersList = internalDynamicaProject.ProjectServer.Customers;
+            var existCustomer = false;
+            foreach (var customer in customersList)
+            {
+                if (customer.Name == name)
+                {
+                    existCustomer = true;
+                }
+            }
+            if (existCustomer==false)
+            {
+                internalDynamicaProject.ProjectServer.AddCustomer(name, email);
+            }
+            
         }
 
         private void MoveProjects(IEnumerable<Project> projectToBeMoved, Action<int> reportProgress)

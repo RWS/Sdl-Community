@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.MtEnhancedProvider", "Sdl.Community.MtEnhancedProvider\Sdl.Community.MtEnhancedProvider.csproj", "{B008D046-5127-4120-A5BA-41E4E27F35A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		v2011_Debug|Any CPU = v2011_Debug|Any CPU
+		v2011_Release|Any CPU = v2011_Release|Any CPU
+		v2014_Debug|Any CPU = v2014_Debug|Any CPU
+		v2014_Release|Any CPU = v2014_Release|Any CPU
+		v2015_Debug|Any CPU = v2015_Debug|Any CPU
+		v2015_Release|Any CPU = v2015_Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2011_Debug|Any CPU.ActiveCfg = v2011_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2011_Debug|Any CPU.Build.0 = v2011_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2011_Release|Any CPU.ActiveCfg = v2011_Release|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2011_Release|Any CPU.Build.0 = v2011_Release|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2014_Debug|Any CPU.ActiveCfg = v2014_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2014_Debug|Any CPU.Build.0 = v2014_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2014_Release|Any CPU.ActiveCfg = v2014_Release|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2014_Release|Any CPU.Build.0 = v2014_Release|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2015_Debug|Any CPU.ActiveCfg = v2015_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2015_Debug|Any CPU.Build.0 = v2015_Debug|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2015_Release|Any CPU.ActiveCfg = v2015_Release|Any CPU
+		{B008D046-5127-4120-A5BA-41E4E27F35A8}.v2015_Release|Any CPU.Build.0 = v2015_Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
