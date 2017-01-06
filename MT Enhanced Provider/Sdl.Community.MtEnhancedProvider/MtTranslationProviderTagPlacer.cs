@@ -41,10 +41,7 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <summary>
         /// Returns the source text with markup replacing the tags in the source segment
         /// </summary>
-        public string PreparedSourceText
-        {
-            get { return preparedSourceText; }
-        }
+        public string PreparedSourceText => preparedSourceText;
 
         private string DecodeReturnedText(string strInput)
         {
@@ -59,43 +56,43 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             dict = new Dictionary<string, MtTag>(); //try this
             //build dict
-            for (int i = 0; i < sourceSegment.Elements.Count; i++)
+            for (var i = 0; i < sourceSegment.Elements.Count; i++)
             {
-                System.Type elType = sourceSegment.Elements[i].GetType();
+                var elType = sourceSegment.Elements[i].GetType();
 
                 if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag") //if tag, add to dictionary
                 {
-                    MtTag theTag = new MtTag((Tag)sourceSegment.Elements[i].Duplicate());
-                    int tagNumber = sourceSegment.Elements.IndexOf(theTag.SdlTag);//this is a number we will assign the tag
-                    string tagText = "<tg" + tagNumber.ToString() + ">"; //create our abbreviated tag to send to google
+                    var theTag = new MtTag((Tag)sourceSegment.Elements[i].Duplicate());
+                    var tagNumber = sourceSegment.Elements.IndexOf(theTag.SdlTag);//this is a number we will assign the tag
+                    var tagText = "<tg" + tagNumber + ">"; //create our abbreviated tag to send to google
                     preparedSourceText += tagText;
 
                     //now we have to figure out whether this tag is preceded and/or followed by whitespace
                     if (i > 0 && !sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
                     {
-                        string prevText = sourceSegment.Elements[i - 1].ToString();
+                        var prevText = sourceSegment.Elements[i - 1].ToString();
                         if (!prevText.Trim().Equals(""))//and not just whitespace
                         {
                             //get number of trailing spaces for that segment
-                            int whitespace = prevText.Length - prevText.TrimEnd().Length;
+                            var whitespace = prevText.Length - prevText.TrimEnd().Length;
                             //add that trailing space to our tag as leading space
-                            theTag.padLeft = prevText.Substring(prevText.Length - whitespace);
+                            theTag.PadLeft = prevText.Substring(prevText.Length - whitespace);
                         }
                     }
                     if (i < sourceSegment.Elements.Count - 1 && !sourceSegment.Elements[i + 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
                     {
                         //here we don't care whether it is only whitespace
                         //get number of leading spaces for that segment
-                        string nextText = sourceSegment.Elements[i + 1].ToString();
-                        int whitespace = nextText.Length - nextText.TrimStart().Length;
+                        var nextText = sourceSegment.Elements[i + 1].ToString();
+                        var whitespace = nextText.Length - nextText.TrimStart().Length;
                         //add that trailing space to our tag as leading space
-                        theTag.padRight = nextText.Substring(0, whitespace);
+                        theTag.PadRight = nextText.Substring(0, whitespace);
                     }
                     dict.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
                 }
                 else
                 {//if not a tag
-                    string str = HttpUtility.HtmlEncode(sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
+                    var str = HttpUtility.HtmlEncode(sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
                     preparedSourceText += str;
                 }
             }
@@ -106,26 +103,26 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <summary>
         /// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
         /// </summary>
-        /// <param name="_returnedText"></param>
+        /// <param name="returnedText"></param>
         /// <returns></returns>
         public Segment GetTaggedSegment(string _returnedText)
         {
             //decode the returned text
             returnedText = DecodeReturnedText(_returnedText);
             //our dictionary, dict, is already built
-            Segment segment = new Segment(); //our segment to return
-            string[] _targetElements = GetTargetElements();//get our array of elements..it will be array of tagtexts and text in the order received from google
+            var segment = new Segment(); //our segment to return
+            var targetElements = GetTargetElements();//get our array of elements..it will be array of tagtexts and text in the order received from google
             //build our segment looping through elements
 
-            for (int i = 0; i < _targetElements.Length; i++)
+            for (var i = 0; i < targetElements.Length; i++)
             {
-                string text = _targetElements[i]; //the text to be compared/added
+                var text = targetElements[i]; //the text to be compared/added
                 if (dict.ContainsKey(text)) //if our text in question is in the tagtext list
                 {
                     try
                     {
-                        string padleft = dict[text].padLeft;
-                        string padright = dict[text].padRight;
+                        var padleft = dict[text].PadLeft;
+                        var padright = dict[text].PadRight;
                         if (padleft.Length > 0) segment.Add(padleft); //add leading space if applicable in the source text
                         segment.Add(dict[text].SdlTag); //add the actual tag element after casting it back to a Tag
                         if (padright.Length > 0) segment.Add(padright); //add trailing space if applicable in the source text
@@ -158,14 +155,14 @@ namespace Sdl.Community.MtEnhancedProvider
         public Segment RemoveTrailingClosingTags(Segment segment)
         {
             #region RemoveTrailingClosingTags
-            SegmentElement element = segment.Elements[segment.Elements.Count - 1]; //get last element
-            string str = element.ToString();
+            var element = segment.Elements[segment.Elements.Count - 1]; //get last element
+            var str = element.ToString();
 
-            int tagsCount = segment.GetTagCount();
-            string pattern = @"\</tg[0-9]*\>"; //we want to find "</tg" + {any number} + ">"
-            Regex rgx = new Regex(pattern);
-            System.Type elType = element.GetType();
-            MatchCollection matches = rgx.Matches(str);
+            var tagsCount = segment.GetTagCount();
+            var pattern = @"\</tg[0-9]*\>"; //we want to find "</tg" + {any number} + ">"
+            var rgx = new Regex(pattern);
+            var elType = element.GetType();
+            var matches = rgx.Matches(str);
             if (elType.ToString().Equals("Sdl.LanguagePlatform.Core.Text") && matches.Count > 0) //if a text element containing matches
             {
                 foreach (Match myMatch in matches)
@@ -188,18 +185,18 @@ namespace Sdl.Community.MtEnhancedProvider
         private string[] GetTargetElements()
         {
             //first create a regex to put our array separators around the tags
-            string str = returnedText;
-            string pattern = @"\<tg[0-9]*\>"; //do we need to be more exlusive, i.e. only \<tg.*?\>
-            Regex rgx = new Regex(pattern);
-            MatchCollection matches = rgx.Matches(returnedText);
+            var str = returnedText;
+            var pattern = @"\<tg[0-9]*\>"; //do we need to be more exlusive, i.e. only \<tg.*?\>
+            var rgx = new Regex(pattern);
+            var matches = rgx.Matches(returnedText);
 
             foreach (Match myMatch in matches)
             {
                 str = str.Replace(myMatch.Value, "***" + myMatch.Value + "***"); //puts our separator around tagtexts
             }
 
-            string[] stringSeparators = new string[] { "***" }; //split at our inserted marker....is there a better way?
-            string[] strAr = str.Split(stringSeparators, StringSplitOptions.None);
+            var stringSeparators = new string[] { "***" }; //split at our inserted marker....is there a better way?
+            var strAr = str.Split(stringSeparators, StringSplitOptions.None);
             return strAr;
         }
     }

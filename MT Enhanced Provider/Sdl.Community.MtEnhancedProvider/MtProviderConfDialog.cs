@@ -98,14 +98,14 @@ namespace Sdl.Community.MtEnhancedProvider
         private void UpdateDialog()
         {
             showcredsloc = groupBoxMT.Location; //holds our location of where to place the group box we are showing
-            textApiKey.Text = Options.apiKey;
-            txtClientId.Text = Options.ClientID;
-            chkSaveKey.Checked = Options.persistGoogleKey;
-            chkSaveCred.Checked = Options.persistMicrosoftCreds;
+            textApiKey.Text = Options.ApiKey;
+            txtClientId.Text = Options.ClientId;
+            chkSaveKey.Checked = Options.PersistGoogleKey;
+            chkSaveCred.Checked = Options.PersistMicrosoftCreds;
             chkPlainTextOnly.Checked = Options.SendPlainTextOnly;
             comboProvider.Text = MtTranslationOptions.GetProviderTypeDescription(Options.SelectedProvider);
             chkCatId.Checked = Options.UseCatID;
-            txtCatId.Text = Options.CatID;
+            txtCatId.Text = Options.CatId;
             chkResendDrafts.Checked = Options.ResendDrafts;
             chkUsePreEdit.Checked = Options.UsePreEdit;
             chkUsePostEdit.Checked = Options.UsePostEdit;
@@ -210,14 +210,14 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             if (!ValidateForm()) return;
 
-            Options.apiKey = textApiKey.Text;
-            Options.ClientID = txtClientId.Text;
-            Options.persistGoogleKey = chkSaveKey.Checked;
-            Options.persistMicrosoftCreds = chkSaveCred.Checked;
+            Options.ApiKey = textApiKey.Text;
+            Options.ClientId = txtClientId.Text;
+            Options.PersistGoogleKey = chkSaveKey.Checked;
+            Options.PersistMicrosoftCreds = chkSaveCred.Checked;
             Options.SendPlainTextOnly = chkPlainTextOnly.Checked;
             Options.SelectedProvider = MtTranslationOptions.GetProviderType(comboProvider.Text);
             Options.UseCatID = chkCatId.Checked;
-            Options.CatID = txtCatId.Text;
+            Options.CatId = txtCatId.Text;
             Options.ResendDrafts = chkResendDrafts.Checked;
             Options.UsePreEdit = chkUsePreEdit.Checked;
             Options.UsePostEdit = chkUsePostEdit.Checked;

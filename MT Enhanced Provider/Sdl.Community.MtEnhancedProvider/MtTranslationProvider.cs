@@ -52,10 +52,7 @@ namespace Sdl.Community.MtEnhancedProvider
             return new MtTranslationProviderLanguageDirection(this, languageDirection);
         }
 
-        public bool IsReadOnly
-        {
-            get { return true; } //change to true to support updates
-        }
+        public bool IsReadOnly => true;
 
         public void LoadState(string translationProviderState)
         {
@@ -85,27 +82,16 @@ namespace Sdl.Community.MtEnhancedProvider
             return null;
         }
 
-        public ProviderStatusInfo StatusInfo
-        {
-            get { return new ProviderStatusInfo(true, PluginResources.Plugin_NiceName); }
-        }
+        public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true, PluginResources.Plugin_NiceName);
 
         #region "SupportsConcordanceSearch"
-        public bool SupportsConcordanceSearch
-        {
-            get { return false; }
-        }
+        public bool SupportsConcordanceSearch { get; } = false;
+
         #endregion
 
-        public bool SupportsDocumentSearches
-        {
-            get { return false; }
-        }
+        public bool SupportsDocumentSearches { get; } = false;
 
-        public bool SupportsFilters
-        {
-            get { return false; }
-        }
+        public bool SupportsFilters { get; } = false;
 
         #region "SupportsFuzzySearch"
         public bool SupportsFuzzySearch
@@ -135,7 +121,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 }
                 else
                 {
-                    mstConnect.resetCrd(Options.ClientID, Options.ClientSecret); //reset in case changed since last time the class was constructed
+                    mstConnect.resetCrd(Options.ClientId, Options.ClientSecret); //reset in case changed since last time the class was constructed
                 }
 
                 return mstConnect.isSupportedLangPair(languageDirection.SourceCulture.Name, languageDirection.TargetCulture.Name);
@@ -144,11 +130,11 @@ namespace Sdl.Community.MtEnhancedProvider
             {
                 if (gtConnect == null) //instantiate GtApiConnecter if necessary
                 {
-                    gtConnect = new MtTranslationProviderGTApiConnecter(Options.apiKey);
+                    gtConnect = new MtTranslationProviderGTApiConnecter(Options.ApiKey);
                 }
                 else
                 {
-                    gtConnect.ApiKey = Options.apiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
+                    gtConnect.ApiKey = Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
                 }
                 return gtConnect.isSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
             }
@@ -161,88 +147,53 @@ namespace Sdl.Community.MtEnhancedProvider
         
 
         #region "SupportsMultipleResults"
-        public bool SupportsMultipleResults
-        {
-            get { return false; }
-        }
+        public bool SupportsMultipleResults => false;
+
         #endregion
 
         #region "SupportsPenalties"
-        public bool SupportsPenalties
-        {
-            get { return true; }
-        }
+        public bool SupportsPenalties => true;
+
         #endregion
 
-        public bool SupportsPlaceables
-        {
-            get { return false; }
-        }
+        public bool SupportsPlaceables => false;
 
-        public bool SupportsScoring
-        {
-            get { return false; }
-        }
+        public bool SupportsScoring => false;
 
         #region "SupportsSearchForTranslationUnits"
-        public bool SupportsSearchForTranslationUnits
-        {
-            get { return true; }
-        }
+        public bool SupportsSearchForTranslationUnits => true;
+
         #endregion
 
         #region "SupportsSourceTargetConcordanceSearch"
-        public bool SupportsSourceConcordanceSearch
-        {
-            get { return false; }
-        }
+        public bool SupportsSourceConcordanceSearch => false;
 
-        public bool SupportsTargetConcordanceSearch
-        {
-            get { return false; }
-        }
+        public bool SupportsTargetConcordanceSearch => false;
+
         #endregion
 
-        public bool SupportsStructureContext
-        {
-            get { return false; }
-        }
+        public bool SupportsStructureContext { get; } = false;
 
         #region "SupportsTaggedInput"
-        public bool SupportsTaggedInput
-        {
-            get { return true; }
-        }
+        public bool SupportsTaggedInput => true;
+
         #endregion
 
 
-        public bool SupportsTranslation
-        {
-            get { return true; }
-        }
+        public bool SupportsTranslation => true;
 
         #region "SupportsUpdate"
-        public bool SupportsUpdate
-        {
-            get { return false; } //change to true along with readonly to false to enable updating
-        }
+        public bool SupportsUpdate => false;
+
         #endregion
 
-        public bool SupportsWordCounts
-        {
-            get { return false; }
-        }
+        public bool SupportsWordCounts => false;
 
-        public TranslationMethod TranslationMethod
-        {
-            get { return MtTranslationOptions.ProviderTranslationMethod; }
-        }
+        public TranslationMethod TranslationMethod => MtTranslationOptions.ProviderTranslationMethod;
 
         #region "Uri"
-        public Uri Uri
-        {
-            get { return Options.Uri; }
-        }
+        public Uri Uri => Options.Uri;
+
         #endregion
 
 

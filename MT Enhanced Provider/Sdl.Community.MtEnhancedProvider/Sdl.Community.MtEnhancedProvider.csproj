@@ -177,8 +177,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditCollection.cs" />
-    <Compile Include="MstConnect\AdmAccessToken.cs" />
-    <Compile Include="MstConnect\AdmAuthentication.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">
       <AutoGen>True</AutoGen>

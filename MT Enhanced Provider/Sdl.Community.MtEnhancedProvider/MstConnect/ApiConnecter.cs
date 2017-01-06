@@ -19,10 +19,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         private static List<string> _supportedLangs;
         private MtTranslationOptions _options;
         private string _subscriptionKey=string.Empty; 
-        private string cst;
-        private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
+       private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
         private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
- 
+
         /// <summary>
         /// This class allows connection to the Microsoft Translation API
         /// </summary>
@@ -30,15 +29,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         internal ApiConnecter(MtTranslationOptions options)
         {
             this._options = options;
-            this._subscriptionKey = this._options.ClientID;
-            this.cst = this._options.ClientSecret;
+            this._subscriptionKey = this._options.ClientId;
             if (_authToken == null) _authToken = GetAuthToken(); //if the class variable has not been set
             if (_supportedLangs == null) _supportedLangs = getSupportedLangs(); //if the class variable has not been set
-            
+
         }
 
-               
-        
+
+
         /// <summary>
         /// Allows static credentials to be updated by the calling program
         /// </summary>
@@ -46,7 +44,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <param name="cst">the client secret obtained from Microsoft</param>
         internal void resetCrd(string cid, string cst)
         {
-            this.cst = cst;
             _subscriptionKey = cid;
         }
         

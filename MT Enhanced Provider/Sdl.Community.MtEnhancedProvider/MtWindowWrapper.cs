@@ -21,20 +21,11 @@ namespace Sdl.Community.MtEnhancedProvider
     /// </summary>
     class MtWindowWrapper : System.Windows.Forms.IWin32Window
     {
-
-        private IntPtr _hwnd;
-
-
         public MtWindowWrapper(IntPtr handle)
         {
-            _hwnd = handle;
+            Handle = handle;
         }
 
-        public IntPtr Handle
-        {
-            get { return _hwnd; }
-        }
-
-
+        public IntPtr Handle { get; }
     }
 }

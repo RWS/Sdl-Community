@@ -38,26 +38,26 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             try
             {
-                using (System.IO.StreamReader reader = new System.IO.StreamReader(filename))
+                using (var reader = new StreamReader(filename))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(EditCollection));
+                    var serializer = new XmlSerializer(typeof(EditCollection));
                     edcoll = (EditCollection)serializer.Deserialize(reader);
                 }
             }
             catch (InvalidOperationException) //invalid operation is what happens when the xml can't be parsed into the objects correctly
             {
                 //FUTURE: do we want a message box here or just throw the exception up to studio????
-                string caption = PluginResources.EditSettingsErrorCaption;
-                string message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(filename));
-                MessageBox.Show(new MtWindowWrapper(getHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                var caption = PluginResources.EditSettingsErrorCaption;
+                var message = string.Format(PluginResources.EditSettingsXmlErrorMessage, Path.GetFileName(filename));
+                MessageBox.Show(new MtWindowWrapper(GetHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception(message);
             }
             catch (Exception exp) //catch-all for any other kind of error...passes up a general message with the error description
             {
                 //FUTURE: do we want a message box here or just throw the exception up to studio????
-                string caption = PluginResources.EditSettingsErrorCaption;
-                string message = PluginResources.EditSettingsGenericErrorMessage + " " + exp.Message;
-                MessageBox.Show(new MtWindowWrapper(getHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                var caption = PluginResources.EditSettingsErrorCaption;
+                var message = PluginResources.EditSettingsGenericErrorMessage + " " + exp.Message;
+                MessageBox.Show(new MtWindowWrapper(GetHandle()), message, caption, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 throw new Exception(message); //throwing exception aborts the segment lookup
 
             }
@@ -65,9 +65,9 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public string EditText(string text)
         {
-            string result = text;
+            var result = text;
             //check last time edit file was written to and if its changed reload the collection.
-            DateTime currentversion = File.GetLastWriteTime(filename);
+            var currentversion = File.GetLastWriteTime(filename);
             if (currentversion > lastversion)
             {
                 lastversion = currentversion;
@@ -78,12 +78,12 @@ namespace Sdl.Community.MtEnhancedProvider
                 return text;
 
             
-            for (int i = 0; i< edcoll.Items.Count; i++)
+            for (var i = 0; i< edcoll.Items.Count; i++)
             {
                 if (edcoll.Items[i].Enabled) //need to skip when disabled
                 {
-                    string find = edcoll.Items[i].FindText;
-                    string replace = edcoll.Items[i].ReplaceText;
+                    var find = edcoll.Items[i].FindText;
+                    var replace = edcoll.Items[i].ReplaceText;
 
                     if (edcoll.Items[i].Type == EditItem.EditItemType.PlainText)
                     {
@@ -91,7 +91,7 @@ namespace Sdl.Community.MtEnhancedProvider
                     }
                     else if (edcoll.Items[i].Type == EditItem.EditItemType.RegularExpression)
                     {
-                        Regex reg = new Regex(find);
+                        var reg = new Regex(find);
                         result = reg.Replace(result, replace);
                     }
                 }
@@ -100,14 +100,14 @@ namespace Sdl.Community.MtEnhancedProvider
             return result;
         }
 
-        private IntPtr getHandle()
+        private IntPtr GetHandle()
         { //this allows us to get the handle of the main Studio window so we can instantiate our WindowWrapper class 
             //used for making our messagebox modal
             //Get FriendlyName from Application Domain
-            string strFriendlyName = AppDomain.CurrentDomain.FriendlyName;
+            var strFriendlyName = AppDomain.CurrentDomain.FriendlyName;
 
             //Get process collection by the application name without extension (.exe)
-            Process[] pro = Process.GetProcessesByName(strFriendlyName.Substring(0, strFriendlyName.LastIndexOf('.')));
+            var pro = Process.GetProcessesByName(strFriendlyName.Substring(0, strFriendlyName.LastIndexOf('.')));
             return pro[0].MainWindowHandle;
 
         }

@@ -21,32 +21,17 @@ namespace Sdl.Community.MtEnhancedProvider
     /// </summary>
     internal class MtTag
     {
-        Tag tag;
-        string padleft;
-        string padright;
-
         internal MtTag(Tag tag)
         {
-            this.tag = tag;
-            padleft = string.Empty;
-            padright = string.Empty;
+            this.SdlTag = tag;
+            PadLeft = string.Empty;
+            PadRight = string.Empty;
         }
 
-        internal string padLeft
-        {
-            get { return padleft; }
-            set { padleft = value; }
-        }
+        internal string PadLeft { get; set; }
 
-        internal string padRight
-        {
-            get { return padright; }
-            set { padright = value; }
-        }
+        internal string PadRight { get; set; }
 
-        internal Tag SdlTag
-        {
-            get { return tag; }
-        }
+        internal Tag SdlTag { get; }
     }
 }

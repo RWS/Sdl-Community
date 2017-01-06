@@ -60,13 +60,13 @@ namespace Sdl.Community.MtEnhancedProvider
             set { SetStringParameter("sendplaintextonly", value); }
         }
 
-        private string useCatID
+        private string UseCatId
         {
             get { return GetStringParameter("usecatid"); }
             set { SetStringParameter("usecatid", value); }
         }
 
-        private string resendDrafts
+        public string resendDrafts
         {
             get { return GetStringParameter("resenddrafts"); }
             set { SetStringParameter("resenddrafts", value); }
@@ -161,13 +161,13 @@ namespace Sdl.Community.MtEnhancedProvider
 
 
 
-        public string apiKey
+        public string ApiKey
         {
             get { return _apiKey; } //the apiKey is going to be held in a static variable so we don't have to get it from credential store all the time
             set { _apiKey = value; }
         }
 
-        public string ClientID
+        public string ClientId
         {
             get { return _clientid; } //the creds are going to be held in a static variable so we don't have to get it from credential store all the time
             set { _clientid = value; }
@@ -179,13 +179,13 @@ namespace Sdl.Community.MtEnhancedProvider
             set { _clientsecret = value; }
         }
 
-        public bool persistGoogleKey
+        public bool PersistGoogleKey
         {
             get;
             set;
         }
 
-        public bool persistMicrosoftCreds
+        public bool PersistMicrosoftCreds
         {
             get;
             set;
@@ -205,11 +205,11 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public bool UseCatID //we'll access this from other classes..converting to and from string for purposes of our uri setter/getter above
         {
-            get { return Convert.ToBoolean(useCatID); }
-            set { useCatID = value.ToString(); }
+            get { return Convert.ToBoolean(UseCatId); }
+            set { UseCatId = value.ToString(); }
         }
 
-        public string CatID
+        public string CatId
         {
             get { return GetStringParameter("catid"); }
             set { SetStringParameter("catid", value); }

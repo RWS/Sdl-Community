@@ -41,7 +41,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private TranslationProviderCredential GetMyCredentials(ITranslationProviderCredentialStore credentialStore, string uri)
         {
-            Uri myUri = new Uri(uri);
+            var myUri = new Uri(uri);
             TranslationProviderCredential cred = null;
 
             if (credentialStore.GetCredential(myUri) != null)
@@ -58,9 +58,9 @@ namespace Sdl.Community.MtEnhancedProvider
         private void SetMstCredentials(ITranslationProviderCredentialStore credentialStore, GenericCredentials creds, bool persistCred)
         { //used to set credentials
             // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-            Uri myUri = new Uri("mtenhancedprovidermst:///");
+            var myUri = new Uri("mtenhancedprovidermst:///");
 
-            TranslationProviderCredential cred = new TranslationProviderCredential(creds.ToCredentialString(), persistCred);
+            var cred = new TranslationProviderCredential(creds.ToCredentialString(), persistCred);
             credentialStore.RemoveCredential(myUri);
             credentialStore.AddCredential(myUri, cred);
         }
@@ -68,8 +68,8 @@ namespace Sdl.Community.MtEnhancedProvider
         private void SetGoogleCredentials(ITranslationProviderCredentialStore credentialStore, string apiKey, bool persistKey)
         { //used to set credentials
             // we are only setting and getting credentials for the uri with no parameters...kind of like a master credential
-            Uri myUri = new Uri("mtenhancedprovidergt:///");
-            TranslationProviderCredential cred = new TranslationProviderCredential(apiKey, persistKey);
+            var myUri = new Uri("mtenhancedprovidergt:///");
+            var cred = new TranslationProviderCredential(apiKey, persistKey);
             credentialStore.RemoveCredential(myUri);
             credentialStore.AddCredential(myUri, cred);
         }
@@ -78,49 +78,49 @@ namespace Sdl.Community.MtEnhancedProvider
         public ITranslationProvider[] Browse(IWin32Window owner, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             //construct options to send to form
-            MtTranslationOptions loadOptions = new MtTranslationOptions();
+            var loadOptions = new MtTranslationOptions();
             //get saved key if there is one and put it into options
             //get google credentials
-            TranslationProviderCredential getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
+            var getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
             if (getCredGt != null)
             {
-                loadOptions.apiKey = getCredGt.Credential;
-                loadOptions.persistGoogleKey = getCredGt.Persist;
+                loadOptions.ApiKey = getCredGt.Credential;
+                loadOptions.PersistGoogleKey = getCredGt.Persist;
             }
             
             //get microsoft credentials
-            TranslationProviderCredential getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
+            var getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
             if (getCredMt != null)
             {
                 try
                 {
-                    GenericCredentials creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
-                    loadOptions.ClientID = creds.UserName;
+                    var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
+                    loadOptions.ClientId = creds.UserName;
                     loadOptions.ClientSecret = creds.Password;
-                    loadOptions.persistMicrosoftCreds = getCredMt.Persist;
+                    loadOptions.PersistMicrosoftCreds = getCredMt.Persist;
                 }
                 catch { } //swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
 
             //construct form
-            MtProviderConfDialog dialog = new MtProviderConfDialog(loadOptions, credentialStore);
+            var dialog = new MtProviderConfDialog(loadOptions, credentialStore);
             //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
-                MtTranslationProvider testProvider = new MtTranslationProvider(dialog.Options);
-                string apiKey = dialog.Options.apiKey;
+                var testProvider = new MtTranslationProvider(dialog.Options);
+                var apiKey = dialog.Options.ApiKey;
                 
                 //we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
                 if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
                 {
                     //set google credential
-                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.persistGoogleKey);
+                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
                 }
                 else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    GenericCredentials creds2 = new GenericCredentials(dialog.Options.ClientID, dialog.Options.ClientSecret);
-                    SetMstCredentials(credentialStore, creds2, dialog.Options.persistMicrosoftCreds);
+                    var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
                 }
 
                 return new ITranslationProvider[] { testProvider };
@@ -155,7 +155,7 @@ namespace Sdl.Community.MtEnhancedProvider
         #region "Edit"
         public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
-            MtTranslationProvider editProvider = translationProvider as MtTranslationProvider;
+            var editProvider = translationProvider as MtTranslationProvider;
             if (editProvider == null)
             {
                 return false;
@@ -163,46 +163,46 @@ namespace Sdl.Community.MtEnhancedProvider
 
             //get saved key if there is one and put it into options
             //get google credentials
-            TranslationProviderCredential getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
+            var getCredGt = GetMyCredentials(credentialStore, "mtenhancedprovidergt:///");
             if (getCredGt != null)
             {
-                editProvider.Options.apiKey = getCredGt.Credential;
-                editProvider.Options.persistGoogleKey = getCredGt.Persist;
+                editProvider.Options.ApiKey = getCredGt.Credential;
+                editProvider.Options.PersistGoogleKey = getCredGt.Persist;
             }
 
             //get microsoft credentials
-            TranslationProviderCredential getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
+            var getCredMt = GetMyCredentials(credentialStore, "mtenhancedprovidermst:///");
             if (getCredMt != null)
             {
                 try
                 {
-                    GenericCredentials creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
-                    editProvider.Options.ClientID = creds.UserName;
+                    var creds = new GenericCredentials(getCredMt.Credential); //parse credential into username and password
+                    editProvider.Options.ClientId = creds.UserName;
                     editProvider.Options.ClientSecret = creds.Password;
-                    editProvider.Options.persistMicrosoftCreds = getCredMt.Persist;
+                    editProvider.Options.PersistMicrosoftCreds = getCredMt.Persist;
                 }
                 catch { }//swallow b/c it will just fail to fill in instead of crashing the whole program 
             }
 
-            MtProviderConfDialog dialog = new MtProviderConfDialog(editProvider.Options, credentialStore);
+            var dialog = new MtProviderConfDialog(editProvider.Options, credentialStore);
             //we are letting user delete creds but after testing it seems that it's ok if the individual credentials are null, b/c our method will re-add them to the credstore based on the uri
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
                 editProvider.Options = dialog.Options;
 
-                string apiKey = editProvider.Options.apiKey;
+                var apiKey = editProvider.Options.ApiKey;
                 
                 //we are setting credentials selectively based on the chosen provider to avoid saving the other if it is blank
                 if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
                 {
                     //set google credential
-                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.persistGoogleKey);
+                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
                 }
                 else if (dialog.Options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    GenericCredentials creds2 = new GenericCredentials(dialog.Options.ClientID, dialog.Options.ClientSecret);
-                    SetMstCredentials(credentialStore, creds2, dialog.Options.persistMicrosoftCreds);
+                    var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
                 }
                 return true;
             }
@@ -227,30 +227,30 @@ namespace Sdl.Community.MtEnhancedProvider
         public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
             
-            MtTranslationOptions options = new MtTranslationOptions(translationProviderUri);
-            string caption = "Credentials"; //default in case any problem retrieving localized resource below
+            var options = new MtTranslationOptions(translationProviderUri);
+            var caption = "Credentials"; //default in case any problem retrieving localized resource below
             if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
                 caption = PluginResources.PromptForCredentialsCaption_Google;
             else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 caption = PluginResources.PromptForCredentialsCaption_Microsoft;
             
-            MtProviderConfDialog dialog = new MtProviderConfDialog(options, caption, credentialStore);
+            var dialog = new MtProviderConfDialog(options, caption, credentialStore);
             dialog.DisableForCredentialsOnly(); //only show controls for setting credentials, as that is the only thing that will end up getting saved
 
             if (dialog.ShowDialog(owner) == DialogResult.OK)
             {
-                string apiKey = dialog.Options.apiKey;
+                var apiKey = dialog.Options.ApiKey;
 
                 if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
                 {
                     //set google credential
-                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.persistGoogleKey);
+                    SetGoogleCredentials(credentialStore, apiKey, dialog.Options.PersistGoogleKey);
                 }
                 else if (options.SelectedProvider == MtTranslationOptions.ProviderType.MicrosoftTranslator)
                 {
                     //set mst cred
-                    GenericCredentials creds2 = new GenericCredentials(dialog.Options.ClientID, dialog.Options.ClientSecret);
-                    SetMstCredentials(credentialStore, creds2, dialog.Options.persistMicrosoftCreds);
+                    var creds2 = new GenericCredentials(dialog.Options.ClientId, dialog.Options.ClientSecret);
+                    SetMstCredentials(credentialStore, creds2, dialog.Options.PersistMicrosoftCreds);
                 }
                 return true;
             }
@@ -269,8 +269,8 @@ namespace Sdl.Community.MtEnhancedProvider
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
 
-            TranslationProviderDisplayInfo info = new TranslationProviderDisplayInfo();
-            MtTranslationOptions options = new MtTranslationOptions(translationProviderUri);
+            var info = new TranslationProviderDisplayInfo();
+            var options = new MtTranslationOptions(translationProviderUri);
             info.TranslationProviderIcon = PluginResources.my_icon;
             
             if (options.SelectedProvider == MtTranslationOptions.ProviderType.GoogleTranslate)
@@ -303,15 +303,9 @@ namespace Sdl.Community.MtEnhancedProvider
             return String.Equals(translationProviderUri.Scheme, MtTranslationProvider.ListTranslationProviderScheme, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        public string TypeDescription
-        {
-            get { return PluginResources.Plugin_Description; }
-        }
+        public string TypeDescription => PluginResources.Plugin_Description;
 
-        public string TypeName
-        {
-            get { return PluginResources.Plugin_NiceName; }
-        }
+        public string TypeName => PluginResources.Plugin_NiceName;
 
         #endregion
     }
