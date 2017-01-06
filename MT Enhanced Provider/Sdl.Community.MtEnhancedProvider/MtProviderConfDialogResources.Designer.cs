@@ -341,7 +341,7 @@ namespace Sdl.Community.MtEnhancedProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Client ID:.
+        ///   Looks up a localized string similar to Microsoft Translator Key:.
         /// </summary>
         public static string lblClientID_Text {
             get {

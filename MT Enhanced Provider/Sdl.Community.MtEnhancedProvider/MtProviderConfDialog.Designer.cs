@@ -43,9 +43,7 @@
             this.txtCatId = new System.Windows.Forms.TextBox();
             this.lblClientID = new System.Windows.Forms.Label();
             this.txtClientId = new System.Windows.Forms.TextBox();
-            this.lblClientSecret = new System.Windows.Forms.Label();
             this.chkSaveCred = new System.Windows.Forms.CheckBox();
-            this.txtClientSecret = new System.Windows.Forms.TextBox();
             this.groupBoxGT = new System.Windows.Forms.GroupBox();
             this.btnDeleteSavedGoogleKey = new System.Windows.Forms.Button();
             this.chkSaveKey = new System.Windows.Forms.CheckBox();
@@ -161,9 +159,7 @@
             this.groupBoxMT.Controls.Add(this.txtCatId);
             this.groupBoxMT.Controls.Add(this.lblClientID);
             this.groupBoxMT.Controls.Add(this.txtClientId);
-            this.groupBoxMT.Controls.Add(this.lblClientSecret);
             this.groupBoxMT.Controls.Add(this.chkSaveCred);
-            this.groupBoxMT.Controls.Add(this.txtClientSecret);
             this.groupBoxMT.Location = new System.Drawing.Point(4, 99);
             this.groupBoxMT.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.groupBoxMT.Name = "groupBoxMT";
@@ -177,7 +173,7 @@
             // btnDeleteSavedMicrosoftCreds
             // 
             this.btnDeleteSavedMicrosoftCreds.AutoSize = true;
-            this.btnDeleteSavedMicrosoftCreds.Location = new System.Drawing.Point(8, 184);
+            this.btnDeleteSavedMicrosoftCreds.Location = new System.Drawing.Point(6, 143);
             this.btnDeleteSavedMicrosoftCreds.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDeleteSavedMicrosoftCreds.Name = "btnDeleteSavedMicrosoftCreds";
             this.btnDeleteSavedMicrosoftCreds.Size = new System.Drawing.Size(217, 38);
@@ -189,7 +185,7 @@
             // chkCatId
             // 
             this.chkCatId.AutoSize = true;
-            this.chkCatId.Location = new System.Drawing.Point(8, 229);
+            this.chkCatId.Location = new System.Drawing.Point(8, 199);
             this.chkCatId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkCatId.Name = "chkCatId";
             this.chkCatId.Size = new System.Drawing.Size(147, 24);
@@ -201,10 +197,10 @@
             // txtCatId
             // 
             this.txtCatId.Enabled = false;
-            this.txtCatId.Location = new System.Drawing.Point(8, 262);
+            this.txtCatId.Location = new System.Drawing.Point(6, 244);
             this.txtCatId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtCatId.Name = "txtCatId";
-            this.txtCatId.Size = new System.Drawing.Size(452, 26);
+            this.txtCatId.Size = new System.Drawing.Size(479, 26);
             this.txtCatId.TabIndex = 10;
             // 
             // lblClientID
@@ -212,46 +208,28 @@
             this.lblClientID.AutoSize = true;
             this.lblClientID.Location = new System.Drawing.Point(3, 34);
             this.lblClientID.Name = "lblClientID";
-            this.lblClientID.Size = new System.Drawing.Size(40, 20);
+            this.lblClientID.Size = new System.Drawing.Size(179, 20);
             this.lblClientID.TabIndex = 15;
-            this.lblClientID.Text = "Test";
+            this.lblClientID.Text = "Microsoft Translator Key";
             // 
             // txtClientId
             // 
             this.txtClientId.Location = new System.Drawing.Point(7, 59);
             this.txtClientId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtClientId.Name = "txtClientId";
-            this.txtClientId.Size = new System.Drawing.Size(276, 26);
+            this.txtClientId.Size = new System.Drawing.Size(480, 26);
             this.txtClientId.TabIndex = 3;
-            // 
-            // lblClientSecret
-            // 
-            this.lblClientSecret.AutoSize = true;
-            this.lblClientSecret.Location = new System.Drawing.Point(4, 90);
-            this.lblClientSecret.Name = "lblClientSecret";
-            this.lblClientSecret.Size = new System.Drawing.Size(104, 20);
-            this.lblClientSecret.TabIndex = 13;
-            this.lblClientSecret.Text = "Client Secret:";
             // 
             // chkSaveCred
             // 
             this.chkSaveCred.AutoSize = true;
-            this.chkSaveCred.Location = new System.Drawing.Point(8, 150);
+            this.chkSaveCred.Location = new System.Drawing.Point(8, 102);
             this.chkSaveCred.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.chkSaveCred.Name = "chkSaveCred";
             this.chkSaveCred.Size = new System.Drawing.Size(280, 24);
             this.chkSaveCred.TabIndex = 6;
             this.chkSaveCred.Text = "Save credentials for future sessions";
             this.chkSaveCred.UseVisualStyleBackColor = true;
-            // 
-            // txtClientSecret
-            // 
-            this.txtClientSecret.Location = new System.Drawing.Point(7, 115);
-            this.txtClientSecret.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.txtClientSecret.Name = "txtClientSecret";
-            this.txtClientSecret.PasswordChar = '*';
-            this.txtClientSecret.Size = new System.Drawing.Size(448, 26);
-            this.txtClientSecret.TabIndex = 4;
             // 
             // groupBoxGT
             // 
@@ -493,9 +471,7 @@
         private System.Windows.Forms.GroupBox groupBoxMT;
         private System.Windows.Forms.Label lblClientID;
         private System.Windows.Forms.TextBox txtClientId;
-        private System.Windows.Forms.Label lblClientSecret;
         private System.Windows.Forms.CheckBox chkSaveCred;
-        private System.Windows.Forms.TextBox txtClientSecret;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox txtPreEditFileName;

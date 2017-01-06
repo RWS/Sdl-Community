@@ -100,7 +100,6 @@ namespace Sdl.Community.MtEnhancedProvider
             showcredsloc = groupBoxMT.Location; //holds our location of where to place the group box we are showing
             textApiKey.Text = Options.apiKey;
             txtClientId.Text = Options.ClientID;
-            txtClientSecret.Text = Options.ClientSecret;
             chkSaveKey.Checked = Options.persistGoogleKey;
             chkSaveCred.Checked = Options.persistMicrosoftCreds;
             chkPlainTextOnly.Checked = Options.SendPlainTextOnly;
@@ -169,7 +168,6 @@ namespace Sdl.Community.MtEnhancedProvider
             this.groupBoxPostedit.Text = MtProviderConfDialogResources.groupBoxPostedit_Text;
             this.groupBoxPreedit.Text = MtProviderConfDialogResources.groupBoxPreedit_Text;
             this.lblClientID.Text = MtProviderConfDialogResources.lblClientID_Text;
-            this.lblClientSecret.Text = MtProviderConfDialogResources.lblClientSecret_Text;
             this.tabPage1.Text = MtProviderConfDialogResources.tabPage1_Text;
             this.tabPage3.Text = MtProviderConfDialogResources.tabPage3_Text;
             
@@ -207,13 +205,13 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
         #region "OK"
+
         private void btn_OK_Click(object sender, EventArgs e)
         {
             if (!ValidateForm()) return;
 
             Options.apiKey = textApiKey.Text;
             Options.ClientID = txtClientId.Text;
-            Options.ClientSecret = txtClientSecret.Text;
             Options.persistGoogleKey = chkSaveKey.Checked;
             Options.persistMicrosoftCreds = chkSaveCred.Checked;
             Options.SendPlainTextOnly = chkPlainTextOnly.Checked;
@@ -229,6 +227,7 @@ namespace Sdl.Community.MtEnhancedProvider
             this.DialogResult = DialogResult.OK;
             this.Close(); //dispose????
         }
+
         #endregion
 
         private void btn_Cancel_Click(object sender, EventArgs e)
@@ -291,12 +290,6 @@ namespace Sdl.Community.MtEnhancedProvider
                 && txtClientId.Text == string.Empty)
             {
                 prompt += newLine + MtProviderConfDialogResources.validationMessageNoClientId;
-                result = false;
-            }
-            if (comboProvider.Text.Equals(msTranslatorString) //these strings should not be localized and are therefore hard-coded
-                && txtClientSecret.Text == string.Empty)
-            {
-                prompt += newLine + MtProviderConfDialogResources.validationMessageNoClientSecret;
                 result = false;
             }
             if (comboProvider.Text.Equals(gTranslateString) //these strings should not be localized and are therefore hard-coded
