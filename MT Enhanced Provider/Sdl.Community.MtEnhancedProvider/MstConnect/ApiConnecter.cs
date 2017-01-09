@@ -76,7 +76,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             var binding = new BasicHttpBinding();
             var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
 
-            var translatedText = client.Translate(_authToken, formattedSourceText, sourceLc, targetLc, "text/plain",
+            var translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
                "general", string.Empty);
           
              return translatedText;
