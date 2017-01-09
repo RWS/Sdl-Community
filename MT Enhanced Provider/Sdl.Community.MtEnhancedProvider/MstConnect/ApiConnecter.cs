@@ -69,14 +69,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
             //check to see if token is null
             if (_authToken == null) _authToken = GetAuthToken();
-
+            
             //check to see if token expired and if so, get a new one
             if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
             var binding = new BasicHttpBinding();
             var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
 
-            var translatedText = client.Translate(_authToken, formattedSourceText, sourceLc, targetLc, "text/plain",
+            var translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
                "general", string.Empty);
           
              return translatedText;

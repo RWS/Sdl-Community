@@ -217,6 +217,7 @@
             this.txtClientId.Location = new System.Drawing.Point(7, 59);
             this.txtClientId.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtClientId.Name = "txtClientId";
+            this.txtClientId.PasswordChar = '*';
             this.txtClientId.Size = new System.Drawing.Size(480, 26);
             this.txtClientId.TabIndex = 3;
             // 
