@@ -137,18 +137,44 @@ namespace SDLXLIFFSliceOrChange
 
         private static void ReplaceAllChildsValue(XmlElement target, ReplaceSettings settings, bool inSource = true)
         {
-           // ReplaceTheVaue(settings, inSource, target);
             foreach (XmlElement child in target.ChildNodes.OfType<XmlElement>())
             {
-                //if ((child.Name == "mrk" && child.HasAttribute("mtype") && child.Attributes["mtype"].Value != "seg") || child.Name == "g")
-                //{
-                //    ReplaceTheVaue(settings, inSource, child);
-                //}
-                //ReplaceAllChildsValue(child, settings, inSource);
-                ReplaceTheVaue(settings, inSource, child);
+                if (!child.IsEmpty)
+                {
+                    if (child.Name == "mrk" && child.HasAttribute("mtype"))
+                    {
+                        ReplaceTheVaue(settings, inSource, child);
+                    }
+                    else
+                    {
+                        GetLastNode(settings, inSource, child);
+                    }
+                    
+                    
+                }
+              
             }
-          //  ReplaceTheVaue(settings, inSource, target);
         }
+
+        private static void GetLastNode(ReplaceSettings settings,bool inSource,XmlElement currentNode)
+        {
+            var childNodes = currentNode.ChildNodes.OfType<XmlElement>().ToList();
+
+            foreach (var innerChild in childNodes)
+            {
+                if (innerChild.Name == "mrk" && innerChild.HasAttribute("mtype"))
+                {
+                    ReplaceTheVaue(settings, inSource, innerChild);
+
+                }
+                 GetLastNode(settings,inSource,innerChild);
+            }
+
+        }
+
+
+
+
 
         private static void ReplaceTheVaue(ReplaceSettings settings, bool inSource, XmlElement child)
         {
@@ -200,32 +226,7 @@ namespace SDLXLIFFSliceOrChange
                 }
      
             }
-            //else { }
-            //foreach (XmlText childNode in child.ChildNodes.OfType<XmlText>())
-            //{
-            //    String text = childNode.Value;
-            //    if (settings.UseRegEx)
-            //    {
-            //        var options = RegexOptions.None;
-            //        if (!settings.MatchCase)
-            //            options = RegexOptions.IgnoreCase;
-            //        childNode.Value = Regex.Replace(text,
-            //                                        inSource ? settings.SourceSearchText : settings.TargetSearchText,
-            //                                        inSource ? settings.SourceReplaceText : settings.TargetReplaceText,
-            //                                        options);
-            //    }
-            //    else
-            //    {
-            //        string remove = Regex.Escape(inSource ? settings.SourceSearchText : settings.TargetSearchText);
-            //        string pattern = settings.MatchWholeWord
-            //                             ? String.Format(@"(\b(?<!\w){0}\b|(?<=^|\s){0}(?=\s|$))", remove)
-            //                             : remove;
-            //        string replace = inSource ? settings.SourceReplaceText : settings.TargetReplaceText;
 
-            //        childNode.Value = Regex.Replace(text, pattern, replace,
-            //                                        !settings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None);
-            //    }
-            // }
         }
     }
 }
