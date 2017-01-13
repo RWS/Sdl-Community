@@ -182,34 +182,27 @@ namespace SDLXLIFFSliceOrChange
             
             if (settings.UseRegEx)
             {
-                var options = RegexOptions.None;
+                var options = RegexOptions.None&RegexOptions.Multiline;
+                
                 if (!settings.MatchCase)
-                    options = RegexOptions.IgnoreCase;
-                MatchCollection matchCollection=null;
+                    options = RegexOptions.IgnoreCase&RegexOptions.Multiline;
+                
                 if (segmentHtml != string.Empty)
                 {
                     if (inSource && settings.SourceSearchText != string.Empty &&
                         settings.SourceReplaceText != string.Empty)
                     {
-                        
-                        matchCollection = Regex.Matches(segmentHtml, settings.SourceSearchText);
+                        var sourceRg = new Regex(settings.SourceSearchText,options);
+                        var replacedText = sourceRg.Replace(segmentHtml, settings.SourceReplaceText);
+                        child.InnerXml = replacedText;               
                     }
-                    if(!inSource&&settings.TargetSearchText!=string.Empty&&settings.TargetReplaceText!=string.Empty)
+                    if (!inSource && settings.TargetSearchText != string.Empty && settings.TargetReplaceText != string.Empty)
                     {
-                        matchCollection = Regex.Matches(segmentHtml, settings.TargetSearchText);
-                       
+                        var targetRg = new Regex(settings.TargetSearchText, options);
+                        var replacedText = targetRg.Replace(segmentHtml, settings.TargetReplaceText);
+                        child.InnerXml = replacedText;
                     }
-                    if (matchCollection != null)
-                    {
-                        foreach (Match match in matchCollection)
-                        {
-                            var value = Regex.Replace(match.Value,
-                                inSource ? settings.SourceSearchText : settings.TargetSearchText,
-                                inSource ? settings.SourceReplaceText : settings.TargetReplaceText, options);
-                            child.InnerXml = value;
-                        }
-                    }
-                 
+
                 }
             }
             else
