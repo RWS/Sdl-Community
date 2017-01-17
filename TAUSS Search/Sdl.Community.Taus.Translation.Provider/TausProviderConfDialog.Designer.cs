@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(TausProviderConfDialog));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TausProviderConfDialog));
             this.bnt_OK = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -81,7 +81,6 @@
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox_titleBar_image = new System.Windows.Forms.PictureBox();
-            this.button_Help = new System.Windows.Forms.Button();
             this.button_about = new System.Windows.Forms.Button();
             this.button_saveGlobalSettings = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
@@ -689,19 +688,9 @@
             this.pictureBox_titleBar_image.TabIndex = 1;
             this.pictureBox_titleBar_image.TabStop = false;
             // 
-            // button_Help
-            // 
-            this.button_Help.Location = new System.Drawing.Point(12, 471);
-            this.button_Help.Name = "button_Help";
-            this.button_Help.Size = new System.Drawing.Size(75, 23);
-            this.button_Help.TabIndex = 5;
-            this.button_Help.Text = "&Help";
-            this.button_Help.UseVisualStyleBackColor = true;
-            this.button_Help.Click += new System.EventHandler(this.button_Help_Click);
-            // 
             // button_about
             // 
-            this.button_about.Location = new System.Drawing.Point(93, 471);
+            this.button_about.Location = new System.Drawing.Point(12, 471);
             this.button_about.Name = "button_about";
             this.button_about.Size = new System.Drawing.Size(75, 23);
             this.button_about.TabIndex = 5;
@@ -711,7 +700,7 @@
             // 
             // button_saveGlobalSettings
             // 
-            this.button_saveGlobalSettings.Location = new System.Drawing.Point(174, 471);
+            this.button_saveGlobalSettings.Location = new System.Drawing.Point(100, 471);
             this.button_saveGlobalSettings.Name = "button_saveGlobalSettings";
             this.button_saveGlobalSettings.Size = new System.Drawing.Size(128, 23);
             this.button_saveGlobalSettings.TabIndex = 4;
@@ -731,7 +720,6 @@
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.button_about);
-            this.Controls.Add(this.button_Help);
             this.Controls.Add(this.button_saveGlobalSettings);
             this.Controls.Add(this.bnt_OK);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
@@ -805,7 +793,6 @@
         private System.Windows.Forms.PictureBox pictureBox_titleBar_image;
         private System.Windows.Forms.LinkLabel linkLabel_createNewLoginCredentials;
         private System.Windows.Forms.LinkLabel linkLabel_createNewAuthorizationKey;
-        private System.Windows.Forms.Button button_Help;
         private System.Windows.Forms.LinkLabel linkLabel_clearConnectionSettings;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button button_about;
