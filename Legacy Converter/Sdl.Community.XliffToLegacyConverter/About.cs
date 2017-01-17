@@ -31,8 +31,8 @@ namespace Sdl.Community.XliffToLegacyConverter
         public About()
         {
             InitializeComponent();
-            Text = String.Format("About {0}", AssemblyProduct + " for SDL Trados Studio 2015");
-            labelProductName.Text = AssemblyProduct + @" for SDL Trados Studio 2015";
+            Text = String.Format("About {0}", AssemblyProduct + " for SDL Trados Studio 2017");
+            labelProductName.Text = AssemblyProduct + @" for SDL Trados Studio 2017";
             labelVersion.Text = String.Format("Version {0}", AssemblyVersion );
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;

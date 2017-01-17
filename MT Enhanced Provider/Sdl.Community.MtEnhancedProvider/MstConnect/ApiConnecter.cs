@@ -76,9 +76,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             var binding = new BasicHttpBinding();
             var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
 
-<<<<<<< HEAD
-            var translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
-=======
             string translatedText = string.Empty;
             if (categoryId != string.Empty)
             {
@@ -88,12 +85,10 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             else
             {
                 translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
->>>>>>> studio_2015
                "general", string.Empty);
             } 
           
              return translatedText;
-
         }
 
         /// <summary>
