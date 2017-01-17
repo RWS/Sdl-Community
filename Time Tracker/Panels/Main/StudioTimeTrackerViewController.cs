@@ -2494,10 +2494,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Panels.Main
         }
 
 
-        public void ViewOnlineHelp()
-        {
-            Process.Start("http://studiotimetracker.wiki-site.com/index.php/Main_Page");
-        }
+      
         public void ViewAboutInfo()
         {
             var f = new Dialogs.About();
