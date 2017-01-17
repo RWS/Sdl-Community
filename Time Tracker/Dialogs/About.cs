@@ -12,7 +12,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
         {
             InitializeComponent();
 
-            Text = string.Format("About {0}", AssemblyProduct) + @" for SDL Trados Studio 2015";
+            Text = string.Format("About {0}", AssemblyProduct) + @" for SDL Trados Studio 2017";
             labelProductNameAndVersion.Text = AssemblyProduct + " - " + String.Format("Version {0}", AssemblyVersion);
             //this.linkLabelpostEditCompareNameAndVersion.Text = "Post-Edit Compare " + " - " + String.Format("Version {0}", getPostEditCompareProductVersion());
             labelCopyright.Text = AssemblyCopyright;

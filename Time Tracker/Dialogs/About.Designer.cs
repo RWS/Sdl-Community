@@ -134,7 +134,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
             this.Name = "About";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About Post-Edit Versions for SDL Trados Studio 2014";
+            this.Text = "About Post-Edit Versions for SDL Trados Studio 2017";
             this.Load += new System.EventHandler(this.About_Load);
             ((System.ComponentModel.ISupportInitialize)(this.logoPictureBox)).EndInit();
             this.ResumeLayout(false);

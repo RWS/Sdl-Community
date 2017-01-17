@@ -32,12 +32,12 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            var treeNode1 = new System.Windows.Forms.TreeNode("General", 0, 0);
-            var treeNode2 = new System.Windows.Forms.TreeNode("Activity Types", 3, 3);
-            var treeNode3 = new System.Windows.Forms.TreeNode("Client Rates", 1, 1);
-            var treeNode4 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
-            var treeNode5 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("General", 0, 0);
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Activity Types", 3, 3);
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Client Rates", 1, 1);
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
             this.button_Close = new System.Windows.Forms.Button();
@@ -1006,7 +1006,7 @@ namespace Sdl.Community.Studio.Time.Tracker.Dialogs
             this.toolStripButton_addActivity.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton_addActivity.Image")));
             this.toolStripButton_addActivity.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton_addActivity.Name = "toolStripButton_addActivity";
-            this.toolStripButton_addActivity.Size = new System.Drawing.Size(129, 28);
+            this.toolStripButton_addActivity.Size = new System.Drawing.Size(128, 28);
             this.toolStripButton_addActivity.Text = "Add Activity Type";
             this.toolStripButton_addActivity.Click += new System.EventHandler(this.toolStripButton_addActivity_Click);
             // 
