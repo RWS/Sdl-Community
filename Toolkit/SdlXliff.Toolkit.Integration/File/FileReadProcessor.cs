@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -79,21 +80,27 @@ namespace SdlXliff.Toolkit.Integration.File
                     // extract text and tags from Segment
                     sourceSegment = item.Source;
                     _dataExtractor.Process(sourceSegment);
-                    sourceText = _dataExtractor.PlainText.ToString();
                     sourceTags = _dataExtractor.Tags;
+                    sourceText = _dataExtractor.PlainText.ToString();                 
                     sourceLContent = _dataExtractor.LockedContent;
 
                     targetSegment = item.Target;
                     _dataExtractor.Process(targetSegment);
                     targetText = _dataExtractor.PlainText.ToString();
                     targetTags = _dataExtractor.Tags;
-                    targetLContent = _dataExtractor.LockedContent;
+                 targetLContent = _dataExtractor.LockedContent;
 
                     // perform search
                     if (_searcher.checkSegment(item.Properties.IsLocked, item.Properties.ConfirmationLevel))
                     {
                         if (_searchSettings.SearchInSource && (sourceText.Length > 0 || sourceTags.Count > 0))
                         {
+                            
+                            if (sourceTags.Count > 0)
+                            {
+                                var regex = new Regex(@"\s\s+", RegexOptions.None);
+                                sourceText = regex.Replace(_dataExtractor.PlainText.ToString(), " ");
+                            }
                             _searcher.SearchInSegment(sourceText, sourceTags, sourceLContent);
                             sourceResult = _searcher.resultsInText;
                             sourceTags = _searcher.resultsInTags;
@@ -101,6 +108,11 @@ namespace SdlXliff.Toolkit.Integration.File
 
                         if (_searchSettings.SearchInTarget && (targetText.Length > 0 || targetTags.Count > 0))
                         {
+                            if (targetTags.Count > 0)
+                            {
+                                var regex = new Regex(@"\s\s+", RegexOptions.None);
+                                targetText = regex.Replace(_dataExtractor.PlainText.ToString(), " ");
+                            }
                             _searcher.SearchInSegment(targetText, targetTags, targetLContent);
                             targetResult = _searcher.resultsInText;
                             targetTags = _searcher.resultsInTags;
