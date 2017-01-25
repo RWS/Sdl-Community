@@ -1033,7 +1033,7 @@ namespace Sdl.Community.XliffCompare.Core.Reports
                 var assembly = Assembly.GetExecutingAssembly();
 
                 
-                 var   templateXsltName = "SdlXliffCompare.Core.Reports.SdlXliffCompare.StyleSheet.01.xslt";
+                 var   templateXsltName = "Sdl.Community.XliffCompare.Core.Reports.SdlXliffCompare.StyleSheet.01.xslt";
              
                 using (var inputStream = assembly.GetManifestResourceStream(templateXsltName))
                 {
