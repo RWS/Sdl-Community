@@ -99,7 +99,7 @@ namespace SdlXliff.Toolkit.Integration.File
                             if (sourceTags.Count > 0)
                             {
                                 var regex = new Regex(@"\s\s+", RegexOptions.None);
-                                sourceText = regex.Replace(_dataExtractor.PlainText.ToString(), " ");
+                                sourceText = regex.Replace(sourceText, " ");
                             }
                             _searcher.SearchInSegment(sourceText, sourceTags, sourceLContent);
                             sourceResult = _searcher.resultsInText;
@@ -111,7 +111,7 @@ namespace SdlXliff.Toolkit.Integration.File
                             if (targetTags.Count > 0)
                             {
                                 var regex = new Regex(@"\s\s+", RegexOptions.None);
-                                targetText = regex.Replace(_dataExtractor.PlainText.ToString(), " ");
+                                targetText = regex.Replace(targetText, " ");
                             }
                             _searcher.SearchInSegment(targetText, targetTags, targetLContent);
                             targetResult = _searcher.resultsInText;
