@@ -46,9 +46,9 @@ namespace Sdl.Community.ExcelTerminology
 
 
      public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-        {
-            return true;
-        }
+     {
+         return terminologyProviderUri.Scheme == "excelglossary";
+     }
 
         public void JumpToTerm(IEntry entry)
         {

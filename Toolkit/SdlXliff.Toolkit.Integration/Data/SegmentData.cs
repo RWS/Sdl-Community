@@ -69,12 +69,13 @@ namespace SdlXliff.Toolkit.Integration.Data
             set;
         }
 
-        public SegmentData(int sid, int SegmentId, string segmentText, ConfirmationLevel segmentStatus, ISegment segmentContent)
+        public SegmentData(int sid, int segmentId, string segmentText, ConfirmationLevel segmentStatus, ISegment segmentContent)
         {
             Sid = sid;
             SegmentText = segmentText;
             SegmentStatus = segmentStatus;
             SegmentContent = segmentContent;
+            SegmentId = segmentId;
         }
 
 

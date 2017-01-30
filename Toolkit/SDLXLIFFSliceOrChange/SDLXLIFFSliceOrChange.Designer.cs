@@ -29,9 +29,6 @@ namespace SDLXLIFFSliceOrChange
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SDLXLIFFSliceOrChange));
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.xLIFFFiles = new XLIFFFiles();
             this.selectFolder = new System.Windows.Forms.FolderBrowserDialog();
             this.selectProjectFile = new System.Windows.Forms.OpenFileDialog();
@@ -147,6 +144,7 @@ namespace SDLXLIFFSliceOrChange
             this.mainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.panelStatus = new System.Windows.Forms.Panel();
             this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.xLIFFFiles)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.filesBindingSource)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -182,6 +180,7 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).BeginInit();
             this.mainTableLayoutPanel.SuspendLayout();
             this.panelStatus.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // xLIFFFiles
@@ -604,9 +603,9 @@ namespace SDLXLIFFSliceOrChange
             // btnExpandSearchResults
             // 
             this.btnExpandSearchResults.Image = ((System.Drawing.Image)(resources.GetObject("btnExpandSearchResults.Image")));
-            this.btnExpandSearchResults.Location = new System.Drawing.Point(784, 93);
+            this.btnExpandSearchResults.Location = new System.Drawing.Point(745, 96);
             this.btnExpandSearchResults.Name = "btnExpandSearchResults";
-            this.btnExpandSearchResults.Size = new System.Drawing.Size(27, 29);
+            this.btnExpandSearchResults.Size = new System.Drawing.Size(30, 27);
             this.btnExpandSearchResults.TabIndex = 9;
             this.btnExpandSearchResults.UseVisualStyleBackColor = true;
             this.btnExpandSearchResults.Click += new System.EventHandler(this.btnExpandSearchResults_Click);
@@ -629,34 +628,10 @@ namespace SDLXLIFFSliceOrChange
             this.gridSearchResults.AllowUserToDeleteRows = false;
             this.gridSearchResults.AllowUserToResizeRows = false;
             this.gridSearchResults.BackgroundColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridSearchResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.gridSearchResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gridSearchResults.DefaultCellStyle = dataGridViewCellStyle2;
             this.gridSearchResults.GridColor = System.Drawing.SystemColors.Control;
             this.gridSearchResults.Location = new System.Drawing.Point(163, 96);
             this.gridSearchResults.Name = "gridSearchResults";
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gridSearchResults.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.gridSearchResults.RowHeadersVisible = false;
             this.gridSearchResults.Size = new System.Drawing.Size(612, 151);
             this.gridSearchResults.TabIndex = 7;
@@ -830,7 +805,7 @@ namespace SDLXLIFFSliceOrChange
             // btnExpandReplaceResults
             // 
             this.btnExpandReplaceResults.Image = ((System.Drawing.Image)(resources.GetObject("btnExpandReplaceResults.Image")));
-            this.btnExpandReplaceResults.Location = new System.Drawing.Point(798, 81);
+            this.btnExpandReplaceResults.Location = new System.Drawing.Point(756, 75);
             this.btnExpandReplaceResults.Name = "btnExpandReplaceResults";
             this.btnExpandReplaceResults.Size = new System.Drawing.Size(27, 29);
             this.btnExpandReplaceResults.TabIndex = 13;
@@ -845,10 +820,10 @@ namespace SDLXLIFFSliceOrChange
             this.gridReplaceResults.BackgroundColor = System.Drawing.SystemColors.Window;
             this.gridReplaceResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridReplaceResults.GridColor = System.Drawing.SystemColors.Control;
-            this.gridReplaceResults.Location = new System.Drawing.Point(169, 81);
+            this.gridReplaceResults.Location = new System.Drawing.Point(169, 74);
             this.gridReplaceResults.Name = "gridReplaceResults";
             this.gridReplaceResults.RowHeadersVisible = false;
-            this.gridReplaceResults.Size = new System.Drawing.Size(630, 151);
+            this.gridReplaceResults.Size = new System.Drawing.Size(615, 168);
             this.gridReplaceResults.TabIndex = 12;
             this.gridReplaceResults.VirtualMode = true;
             this.gridReplaceResults.CellValueNeeded += new System.Windows.Forms.DataGridViewCellValueEventHandler(this.gridReplaceResults_CellValueNeeded);
@@ -949,7 +924,7 @@ namespace SDLXLIFFSliceOrChange
             // 
             this.lblReplaceTargetReplace.AutoSize = true;
             this.lblReplaceTargetReplace.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblReplaceTargetReplace.Location = new System.Drawing.Point(503, 51);
+            this.lblReplaceTargetReplace.Location = new System.Drawing.Point(503, 55);
             this.lblReplaceTargetReplace.Name = "lblReplaceTargetReplace";
             this.lblReplaceTargetReplace.Size = new System.Drawing.Size(69, 13);
             this.lblReplaceTargetReplace.TabIndex = 8;
@@ -961,8 +936,9 @@ namespace SDLXLIFFSliceOrChange
             this.txtReplaceTargetSearch.Location = new System.Drawing.Point(248, 48);
             this.txtReplaceTargetSearch.Multiline = true;
             this.txtReplaceTargetSearch.Name = "txtReplaceTargetSearch";
-            this.txtReplaceTargetSearch.Size = new System.Drawing.Size(249, 20);
+            this.txtReplaceTargetSearch.Size = new System.Drawing.Size(226, 20);
             this.txtReplaceTargetSearch.TabIndex = 7;
+            this.txtReplaceTargetSearch.Validating += new System.ComponentModel.CancelEventHandler(this.txtReplaceTargetSearch_Validating);
             // 
             // lblReplaceTargetSearch
             // 
@@ -999,8 +975,9 @@ namespace SDLXLIFFSliceOrChange
             this.txtReplaceSourceSearch.Location = new System.Drawing.Point(248, 22);
             this.txtReplaceSourceSearch.Multiline = true;
             this.txtReplaceSourceSearch.Name = "txtReplaceSourceSearch";
-            this.txtReplaceSourceSearch.Size = new System.Drawing.Size(249, 20);
+            this.txtReplaceSourceSearch.Size = new System.Drawing.Size(226, 20);
             this.txtReplaceSourceSearch.TabIndex = 1;
+            this.txtReplaceSourceSearch.Validating += new System.ComponentModel.CancelEventHandler(this.txtReplaceSourceSearch_Validating);
             // 
             // lblReplaceSourceSearch
             // 
@@ -1505,8 +1482,8 @@ namespace SDLXLIFFSliceOrChange
             // colSize
             // 
             this.colSize.DataPropertyName = "Size";
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            this.colSize.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.colSize.DefaultCellStyle = dataGridViewCellStyle1;
             this.colSize.HeaderText = "Size";
             this.colSize.Name = "colSize";
             this.colSize.ReadOnly = true;
@@ -1554,6 +1531,10 @@ namespace SDLXLIFFSliceOrChange
             this.progressBar.Size = new System.Drawing.Size(758, 14);
             this.progressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar.TabIndex = 8;
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // SDLXLIFFSliceOrChange
             // 
@@ -1616,6 +1597,7 @@ namespace SDLXLIFFSliceOrChange
             ((System.ComponentModel.ISupportInitialize)(this.gridXLIFFFiles)).EndInit();
             this.mainTableLayoutPanel.ResumeLayout(false);
             this.panelStatus.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1737,6 +1719,7 @@ namespace SDLXLIFFSliceOrChange
         private System.Windows.Forms.TableLayoutPanel mainTableLayoutPanel;
         private System.Windows.Forms.Panel panelStatus;
         private System.Windows.Forms.ProgressBar progressBar;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }
 

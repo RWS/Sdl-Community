@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Windows.Forms;
 using System.Xml;
 using log4net;
 //using Sdl.Utilities.BatchSearchReplace.Lib;
@@ -136,44 +137,89 @@ namespace SDLXLIFFSliceOrChange
 
         private static void ReplaceAllChildsValue(XmlElement target, ReplaceSettings settings, bool inSource = true)
         {
-            ReplaceTheVaue(settings, inSource, target);
             foreach (XmlElement child in target.ChildNodes.OfType<XmlElement>())
             {
-                if ((child.Name == "mrk" && child.HasAttribute("mtype") && child.Attributes["mtype"].Value != "seg") || child.Name == "g")
+                if (!child.IsEmpty)
                 {
-                    ReplaceTheVaue(settings, inSource, child);
+                    if (child.Name == "mrk" && child.HasAttribute("mtype"))
+                    {
+                        ReplaceTheVaue(settings, inSource, child);
+                    }
+                    else
+                    {
+                        GetLastNode(settings, inSource, child);
+                    }
+                    
+                    
                 }
-                ReplaceAllChildsValue(child, settings, inSource);
+              
             }
         }
 
+        private static void GetLastNode(ReplaceSettings settings,bool inSource,XmlElement currentNode)
+        {
+            var childNodes = currentNode.ChildNodes.OfType<XmlElement>().ToList();
+
+            foreach (var innerChild in childNodes)
+            {
+                if (innerChild.Name == "mrk" && innerChild.HasAttribute("mtype"))
+                {
+                    ReplaceTheVaue(settings, inSource, innerChild);
+
+                }
+                 GetLastNode(settings,inSource,innerChild);
+            }
+
+        }
+
+
+
+
+
         private static void ReplaceTheVaue(ReplaceSettings settings, bool inSource, XmlElement child)
         {
-            foreach (XmlText childNode in child.ChildNodes.OfType<XmlText>())
+            var segmentHtml = child.InnerXml;
+            
+            if (settings.UseRegEx)
             {
-                String text = childNode.Value;
-                if (settings.UseRegEx)
+                var options = RegexOptions.None&RegexOptions.Multiline;
+                
+                if (!settings.MatchCase)
+                    options = RegexOptions.IgnoreCase&RegexOptions.Multiline;
+                
+                if (segmentHtml != string.Empty)
                 {
-                    var options = RegexOptions.None;
-                    if (!settings.MatchCase)
-                        options = RegexOptions.IgnoreCase;
-                    childNode.Value = Regex.Replace(text,
-                                                    inSource ? settings.SourceSearchText : settings.TargetSearchText,
-                                                    inSource ? settings.SourceReplaceText : settings.TargetReplaceText,
-                                                    options);
-                }
-                else
-                {
-                    string remove = Regex.Escape(inSource ? settings.SourceSearchText : settings.TargetSearchText);
-                    string pattern = settings.MatchWholeWord
-                                         ? String.Format(@"(\b(?<!\w){0}\b|(?<=^|\s){0}(?=\s|$))", remove)
-                                         : remove;
-                    string replace = inSource ? settings.SourceReplaceText : settings.TargetReplaceText;
+                    if (inSource && settings.SourceSearchText != string.Empty &&
+                        settings.SourceReplaceText != string.Empty)
+                    {
+                        var sourceRg = new Regex(settings.SourceSearchText,options);
+                        var replacedText = sourceRg.Replace(segmentHtml, settings.SourceReplaceText);
+                        child.InnerXml = replacedText;               
+                    }
+                    if (!inSource && settings.TargetSearchText != string.Empty && settings.TargetReplaceText != string.Empty)
+                    {
+                        var targetRg = new Regex(settings.TargetSearchText, options);
+                        var replacedText = targetRg.Replace(segmentHtml, settings.TargetReplaceText);
+                        child.InnerXml = replacedText;
+                    }
 
-                    childNode.Value = Regex.Replace(text, pattern, replace,
-                                                    !settings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None);
                 }
             }
+            else
+            {
+                if (segmentHtml != string.Empty)
+                {
+                    var remove = Regex.Escape(inSource ? settings.SourceSearchText : settings.TargetSearchText);
+                    var pattern = settings.MatchWholeWord
+                                             ? string.Format(@"(\b(?<!\w){0}\b|(?<=^|\s){0}(?=\s|$))", remove)
+                                             : remove;
+                    var replace = inSource ? settings.SourceReplaceText : settings.TargetReplaceText;
+                    child.InnerXml = Regex.Replace(segmentHtml, pattern, replace,
+                                                        !settings.MatchCase ? RegexOptions.IgnoreCase : RegexOptions.None);
+                }
+     
+            }
+
         }
     }
 }

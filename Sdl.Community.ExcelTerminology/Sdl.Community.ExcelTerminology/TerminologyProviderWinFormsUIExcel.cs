@@ -17,7 +17,7 @@ namespace Sdl.Community.ExcelTerminology
         
         public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
-            return true;
+            return terminologyProviderUri.Scheme == "excelglossary";
         }
 
         public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)

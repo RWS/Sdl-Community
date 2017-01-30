@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Studio Time Tracker</PlugInName>
+  <Version>1.0</Version>
+  <Description>Studio Time Tracker</Description>
+  <Author></Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <Include>
+    <File>Studio.Time.Tracker.DocumentFormat.OpenXml.dll</File>
+    <File>Studio.Time.Tracker.ObjectListView.dll</File>
+  </Include>
+</PluginPackage>
