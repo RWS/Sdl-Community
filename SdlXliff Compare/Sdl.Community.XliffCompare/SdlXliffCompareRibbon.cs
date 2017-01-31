@@ -1,22 +1,79 @@
-﻿using Sdl.Desktop.IntegrationApi;
+﻿using System;
+using System.Reflection;
+using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
+
 
 namespace Sdl.Community.XliffCompare
 {
-    [RibbonGroup("Sdl.Community.SdlXliffCompare", Name = "SdlXliffCompare")]
-    [RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
-    class SdlXliffCompareRibbon : AbstractRibbonGroup
+    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
+    class SdlXliffCompareRibbon : AbstractViewPartController
     {
+        private static  readonly Lazy<FormMain> _control= new Lazy<FormMain>(()=>new FormMain());
+        protected override void Initialize()
+        {
+           
+        }
+
+        protected override Control GetContentControl()
+        {
+            return _control.Value; 
+        }
     }
-    [Action("Sdl.Community.SdlXliffCompare", Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
+
+    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPartLayout(typeof(ProjectsController), Dock = DockType.Bottom)]
+    class SdlXliffCompareProjectsViewPart : AbstractViewPartController
+    {
+        private static readonly Lazy<FormMain> _control = new Lazy<FormMain>(() => new FormMain());
+        protected override void Initialize()
+        {
+           
+        }
+
+        protected override Control GetContentControl()
+        {
+            return _control.Value;
+        }
+    }
+
+    [Action("SdlXliffCompare", typeof(ProjectsController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
     [ActionLayout(typeof(SdlXliffCompareRibbon), 20, DisplayType.Large)]
-    class YourStudioViewPartAction : AbstractAction
+    class SdlXliffCompareViewPartAction : AbstractAction
     {
         protected override void Execute()
         {
-            var compare = new FormMain();
-            compare.ShowDialog();
+            ApplicationHost<SdlTradosStudioApplication>.Application.GetController<SdlXliffCompareProjectsViewPart>().Show();
+        }
+    }
+
+    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPartLayout(typeof(FilesController), Dock = DockType.Bottom)]
+    class SdlXliffCompareFilesViewPart : AbstractViewPartController
+    {
+        private static readonly Lazy<FormMain> _control = new Lazy<FormMain>(() => new FormMain());
+        protected override void Initialize()
+        {
+            
+        }
+
+        protected override Control GetContentControl()
+        {
+            return _control.Value;
+        }
+    }
+
+    [Action("Sdl.Community.SdlToolkit.Files", typeof(FilesController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
+    [ActionLayout(typeof(SdlXliffCompareRibbon), 20, DisplayType.Large)]
+    class SdlXliffCompareFilesViewPartAction : AbstractAction {
+        protected override void Execute()
+        {
+           ApplicationHost<SdlTradosStudioApplication>.Application.GetController<SdlXliffCompareFilesViewPart>().Show();
         }
     }
 }

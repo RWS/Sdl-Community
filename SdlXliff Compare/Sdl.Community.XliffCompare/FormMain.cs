@@ -8,7 +8,7 @@ using Sdl.Community.XliffCompare.Core.Comparer;
 
 namespace Sdl.Community.XliffCompare
 {
-    public partial class FormMain : Form
+    public partial class FormMain : UserControl
     {
         public FormMain()
         {
@@ -519,7 +519,8 @@ namespace Sdl.Community.XliffCompare
 
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Close();
+            
+           // Close();
         }
 
        
