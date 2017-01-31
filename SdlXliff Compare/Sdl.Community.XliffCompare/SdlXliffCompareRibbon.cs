@@ -10,7 +10,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Internal;
 
 namespace Sdl.Community.XliffCompare
 {
-    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPart(Id = "SdlXliffCompare.Editor", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
     [ViewPartLayout(typeof(EditorController), Dock = DockType.Bottom)]
     class SdlXliffCompareRibbon : AbstractViewPartController
     {
@@ -26,7 +26,7 @@ namespace Sdl.Community.XliffCompare
         }
     }
 
-    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPart(Id = "SdlXliffCompare.Projects", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
     [ViewPartLayout(typeof(ProjectsController), Dock = DockType.Bottom)]
     class SdlXliffCompareProjectsViewPart : AbstractViewPartController
     {
@@ -42,7 +42,7 @@ namespace Sdl.Community.XliffCompare
         }
     }
 
-    [Action("SdlXliffCompare", typeof(ProjectsController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
+    [Action("SdlXliffCompare.Projects", typeof(ProjectsController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
     [ActionLayout(typeof(SdlXliffCompareRibbon), 20, DisplayType.Large)]
     class SdlXliffCompareViewPartAction : AbstractAction
     {
@@ -52,7 +52,7 @@ namespace Sdl.Community.XliffCompare
         }
     }
 
-    [ViewPart(Id = "SdlXliffCompare", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
+    [ViewPart(Id = "SdlXliffCompare.Files", Name = "SdlXliffCompare", Description = "SdlXliffCompare", Icon = "SDLXLIFFCompare")]
     [ViewPartLayout(typeof(FilesController), Dock = DockType.Bottom)]
     class SdlXliffCompareFilesViewPart : AbstractViewPartController
     {
@@ -68,7 +68,7 @@ namespace Sdl.Community.XliffCompare
         }
     }
 
-    [Action("Sdl.Community.SdlToolkit.Files", typeof(FilesController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
+    [Action("SdlXliffCompare.Files", typeof(FilesController), Name = "SdlXliffCompare", Icon = "SDLXLIFFCompare", Description = "SdlXliffCompare")]
     [ActionLayout(typeof(SdlXliffCompareRibbon), 20, DisplayType.Large)]
     class SdlXliffCompareFilesViewPartAction : AbstractAction {
         protected override void Execute()
