@@ -112,7 +112,6 @@ namespace Sdl.Community.PostEdit.Versions
         {
 
             IModel mModel = new Model();
-            //Controller.LoadPostEditCompare();
             var postEditCompare = new FormMain(mModel);
             postEditCompare.ShowDialog();
         }

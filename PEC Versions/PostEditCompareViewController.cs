@@ -6,6 +6,8 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using PostEdit.Compare;
+using PostEdit.Compare.Model;
 using Sdl.Community.PostEdit.Versions.Automation;
 using Sdl.Community.PostEdit.Versions.Dialogs;
 using Sdl.Community.PostEdit.Versions.Structures;
@@ -15,6 +17,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using About = Sdl.Community.PostEdit.Versions.Dialogs.About;
 using SettingsSerializer = Sdl.Community.PostEdit.Versions.Structures.SettingsSerializer;
 
 namespace Sdl.Community.PostEdit.Versions
@@ -446,19 +449,10 @@ namespace Sdl.Community.PostEdit.Versions
 
 
                 Automation.SettingsSerializer.SaveSettings(settings);
-
-                var sPath = Path.Combine(Application.StartupPath, "PostEdit.Compare.exe");
-
-                if (File.Exists(sPath))
-                {
-                    Process.Start(sPath);
-                }
-                else
-                {
-                    MessageBox.Show(PluginResources.Unable_to_locate_the_executable_file_for_PEC
-                                    + sPath + "\r\n", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
-            }
+                IModel mModel = new Model();
+                var postEditCompare = new FormMain(mModel);
+                postEditCompare.ShowDialog();
+   }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
