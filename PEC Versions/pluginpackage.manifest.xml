@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Post-Edit Versions</PlugInName>
-  <Version>2.0</Version>
+  <Version>2.1</Version>
   <Description>Post-Edit Versions by Patrick Hartnett</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
