@@ -1,0 +1,452 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9AA109E-E936-4E92-A0AF-7297902270CD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.PostEdit.Compare</RootNamespace>
+    <AssemblyName>Sdl.Community.PostEdit.Compare</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Rubiks cube.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PostEdit.Compare.WinFormsUI.Docking, Version=2.3.1.25349, Culture=neutral, PublicKeyToken=8e8d386f68ddc844, processorArchitecture=MSIL">
+      <HintPath>3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="About.designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Automation\AutomationComunicationSettings.cs" />
+    <Compile Include="Automation\SettingsSerializer.cs" />
+    <Compile Include="ComboboxItem.cs" />
+    <Compile Include="Common.cs" />
+    <Compile Include="DataGridViewRichTextBox\DataGridViewRichTextBoxColumn.cs" />
+    <Compile Include="DataGridViewRichTextBox\RichTextBoxPrinter.cs" />
+    <Compile Include="FolderSelectDialog.cs" />
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AppendMultiplePrices.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AppendMultiplePrices.Designer.cs">
+      <DependentUpon>AppendMultiplePrices.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ComparisonProject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ComparisonProject.Designer.cs">
+      <DependentUpon>ComparisonProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ComparisonProjectFileAlignment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ComparisonProjectFileAlignment.Designer.cs">
+      <DependentUpon>ComparisonProjectFileAlignment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FileViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FileViewer.Designer.cs">
+      <DependentUpon>FileViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CopyFilesToFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyFilesToFolder.Designer.cs">
+      <DependentUpon>CopyFilesToFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DeleteFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DeleteFiles.Designer.cs">
+      <DependentUpon>DeleteFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CopyFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CopyFiles.Designer.cs">
+      <DependentUpon>CopyFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FilterAppend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FilterAppend.Designer.cs">
+      <DependentUpon>FilterAppend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormSettingsFormatting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormSettingsFormatting.designer.cs">
+      <DependentUpon>FormSettingsFormatting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PriceAppend.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PriceAppend.designer.cs">
+      <DependentUpon>PriceAppend.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AppendAnlaysisBand.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AppendAnlaysisBand.designer.cs">
+      <DependentUpon>AppendAnlaysisBand.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MoveFiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MoveFiles.Designer.cs">
+      <DependentUpon>MoveFiles.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PriceGroupsGroup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\PriceGroupsGroup.Designer.cs">
+      <DependentUpon>PriceGroupsGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ReportWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportWizard.Designer.cs">
+      <DependentUpon>ReportWizard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\FormMain.PanelManager.CompareList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_FileViewerComments.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_FileViewerComments.Designer.cs">
+      <DependentUpon>Panel_FileViewerComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_FileViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_FileViewer.Designer.cs">
+      <DependentUpon>Panel_FileViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ComparisonProjects.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ComparisonProjects.Designer.cs">
+      <DependentUpon>Panel_ComparisonProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ReportViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ReportViewer.Designer.cs">
+      <DependentUpon>Panel_ReportViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ReportViewerNavigation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_ReportViewerNavigation.Designer.cs">
+      <DependentUpon>Panel_ReportViewerNavigation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_CompareProject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_CompareProject.Designer.cs">
+      <DependentUpon>Panel_CompareProject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PanelManager\Panel_CompareLog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PanelManager\Panel_CompareLog.Designer.cs">
+      <DependentUpon>Panel_CompareLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressCore.cs" />
+    <Compile Include="Forms\ReportViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ReportViewer.Designer.cs">
+      <DependentUpon>ReportViewer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WaitingDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WaitingDialog.Designer.cs">
+      <DependentUpon>WaitingDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ListViewSortManager\ListViewSortManager.cs" />
+    <Compile Include="Model\DataNode.cs" />
+    <Compile Include="Model\FileType.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\Model.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ProgressDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressDialog.Designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ProgressObject.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AppendMultiplePrices.resx">
+      <DependentUpon>AppendMultiplePrices.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ComparisonProject.resx">
+      <DependentUpon>ComparisonProject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ComparisonProjectFileAlignment.resx">
+      <DependentUpon>ComparisonProjectFileAlignment.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FileViewer.resx">
+      <DependentUpon>FileViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyFilesToFolder.resx">
+      <DependentUpon>CopyFilesToFolder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DeleteFiles.resx">
+      <DependentUpon>DeleteFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\CopyFiles.resx">
+      <DependentUpon>CopyFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FilterAppend.resx">
+      <DependentUpon>FilterAppend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormSettingsFormatting.resx">
+      <DependentUpon>FormSettingsFormatting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PriceAppend.resx">
+      <DependentUpon>PriceAppend.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AppendAnlaysisBand.resx">
+      <DependentUpon>AppendAnlaysisBand.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MoveFiles.resx">
+      <DependentUpon>MoveFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\PriceGroupsGroup.resx">
+      <DependentUpon>PriceGroupsGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReportWizard.resx">
+      <DependentUpon>ReportWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_FileViewerComments.resx">
+      <DependentUpon>Panel_FileViewerComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_FileViewer.resx">
+      <DependentUpon>Panel_FileViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_ComparisonProjects.resx">
+      <DependentUpon>Panel_ComparisonProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_ReportViewer.resx">
+      <DependentUpon>Panel_ReportViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_ReportViewerNavigation.resx">
+      <DependentUpon>Panel_ReportViewerNavigation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_CompareProject.resx">
+      <DependentUpon>Panel_CompareProject.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PanelManager\Panel_CompareLog.resx">
+      <DependentUpon>Panel_CompareLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ReportViewer.resx">
+      <DependentUpon>ReportViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WaitingDialog.resx">
+      <DependentUpon>WaitingDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Cache\Application.Cache.cs" />
+    <None Include="..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk">
+      <Link>SdlCommunity.snk</Link>
+    </None>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="cursors\Cube a.ani" />
+    <None Include="PostEdit.Compare.exe.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.PostEdit.Compare.Core\Sdl.Community.PostEdit.Compare.Core.csproj">
+      <Project>{46538E68-8AA6-4EDC-B291-CB2003E929D0}</Project>
+      <Name>Sdl.Community.PostEdit.Compare.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\new\Book-Next-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\new\Book-Previous-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\new\Gnome-Format-Justify-Right-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\new\Gnome-Format-Justify-Left-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\new\Red-X-32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="3rd party\PostEdit.Compare.WinFormsUI.Docking.dll" />
+    <Content Include="PostEdit.Compare.ico" />
+    <Content Include="WinFormsUI\PostEdit.Compare.WinFormsUI.Docking.dll" />
+    <EmbeddedResource Include="Reports\EventLog.StyleSheet.01.xslt">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <None Include="Images\link\Link-32.png" />
+    <None Include="cursors\BlueWings.cur" />
+    <None Include="cursors\Half Life LD-UR.cur" />
+    <None Include="cursors\Half Life Unavailable.cur" />
+    <None Include="cursors\Phlame_Arrow_Link_Select.cur" />
+    <None Include="cursors\YellowWings.cur" />
+    <EmbeddedResource Include="Reports\Images\Compare.png" />
+    <EmbeddedResource Include="Reports\Images\Filters.png" />
+    <EmbeddedResource Include="Reports\Images\Projects.png" />
+    <EmbeddedResource Include="Reports\Images\FolderCompare.png" />
+    <EmbeddedResource Include="Reports\Images\ProjectCompare.png" />
+    <EmbeddedResource Include="Reports\Images\ReportsAuto.png" />
+    <EmbeddedResource Include="Reports\Images\ReportsSave.png" />
+    <EmbeddedResource Include="Reports\Images\FilesCopy.png" />
+    <EmbeddedResource Include="Reports\Images\FilesDelete.png" />
+    <EmbeddedResource Include="Reports\Images\FilesMove.png" />
+    <Content Include="FolderBrowser\FolderBrowser.dll" />
+    <Content Include="Rubiks cube.ico" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
