@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FormMain_SaveComparisonProject" xml:space="preserve">
+    <value>The folder pair already exists in one of the saved comparison projects!
+
+Do you want to save a new entry for this folder pair?
+
+Click 'Yes' to save a new comparison project
+Click 'No' to cancel</value>
+  </data>
+  <data name="FormMain_SaveComparisonProject_New_comparison_project" xml:space="preserve">
+    <value>New comparison project</value>
+  </data>
+  <data name="FormMain_SaveComparisonProject_The_left_directory_path_does_not_exist" xml:space="preserve">
+    <value>The left directory path does not exist!</value>
+  </data>
+  <data name="FormMain_SaveComparisonProject_The_right_directory_path_does_not_exist" xml:space="preserve">
+    <value>The right directory path does not exist!</value>
+  </data>
+  <data name="FormMain_RemoveComparisonProject" xml:space="preserve">
+    <value>Do you want to delete the selected projects?
+
+Note: you will not be able to recover this information
+
+Click 'Yes' to delete the selected projects
+Click 'No' to cancel</value>
+  </data>
+  <data name="FormMain_DeleteSelected" xml:space="preserve">
+    <value>Do you want to delete the selected files?
+
+Note: you will not be able to recover these files once deleted
+
+Click 'Yes' to delete the selected files
+Click 'No' to cancel</value>
+  </data>
+  <data name="FormMain_CopyToFolder_Functionality_not_implemented_yet" xml:space="preserve">
+    <value>Functionality not implemented yet!</value>
+  </data>
+  <data name="FormMain_CompareDirectories_Left_Side_Directories_0_Files_1_Right_Side_Directories_2_Files_3" xml:space="preserve">
+    <value>Left Side ( Directories: {0}, Files: {1}); Right Side ( Directories: {2}, Files: {3})</value>
+  </data>
+  <data name="FormMain_CreateReport_Empty_file_comparison_list" xml:space="preserve">
+    <value>Empty file comparison list!</value>
+  </data>
+  <data name="FormMain_CreateComparisonReport_Report_Summary" xml:space="preserve">
+    <value>Report Summary</value>
+  </data>
+  <data name="FormMain_CreateComparisonReport_Report_Files" xml:space="preserve">
+    <value>Report Files</value>
+  </data>
+  <data name="FormMain_CreateComparisonReport_Report_Header" xml:space="preserve">
+    <value>Report Header</value>
+  </data>
+  <data name="FormMain_GetPairedFiles_Unable_to_locate_left_file" xml:space="preserve">
+    <value>Unable to locate left file</value>
+  </data>
+  <data name="FormMain_GetPairedFiles_Unable_to_locate_right_file" xml:space="preserve">
+    <value>Unable to locate right file</value>
+  </data>
+  <data name="FormMain_ComparerProgressReport_Creating_Report" xml:space="preserve">
+    <value>Creating Report...</value>
+  </data>
+  <data name="FormMain_ComparerProgressReport_Processing_file_0_of_1_files" xml:space="preserve">
+    <value>Processing file {0} of {1} files</value>
+  </data>
+  <data name="FormMain_CreateEntriesLogReport_Saved_Report__Auto" xml:space="preserve">
+    <value>Saved Report (Auto)</value>
+  </data>
+  <data name="FormMain_ComparerProgress_Comparing_segments" xml:space="preserve">
+    <value>Comparing segments</value>
+  </data>
+  <data name="FormMain_ComparerProgress_Processing_Files" xml:space="preserve">
+    <value>Processing Files...</value>
+  </data>
+  <data name="FormMain_ParserProgress_Parsing_segments" xml:space="preserve">
+    <value>Parsing segments</value>
+  </data>
+  <data name="FormMain_FilesProgress_Parsing_comparing_segments" xml:space="preserve">
+    <value>Parsing/comparing segments</value>
+  </data>
+  <data name="FormMain_FilesProgress_Processing_0_of_1_files" xml:space="preserve">
+    <value>Processing... {0} of {1} files </value>
+  </data>
+  <data name="FormMain_BrowseFolder_Select_base_folder_0_side" xml:space="preserve">
+    <value>Select base folder ( {0} side )</value>
+  </data>
+  <data name="FormMain_BrowseFolder_left" xml:space="preserve">
+    <value>left</value>
+  </data>
+  <data name="FormMain_BrowseFolder_right" xml:space="preserve">
+    <value>right</value>
+  </data>
+  <data name="FormMain_CopySelectedTo_Copied_0_files" xml:space="preserve">
+    <value>Copied {0} files</value>
+  </data>
+  <data name="FormMain_CopySelectedTo_Copied_0_file" xml:space="preserve">
+    <value>Copied {0} file</value>
+  </data>
+  <data name="FormMain_DeleteSelected_Deleted_0_files" xml:space="preserve">
+    <value>Deleted {0} files</value>
+  </data>
+  <data name="FormMain_DeleteSelected_Deleted_1_file" xml:space="preserve">
+    <value>Deleted 1 file</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Set_base_folder__left" xml:space="preserve">
+    <value>Set base folder (left)</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Set_base_folders_left_right" xml:space="preserve">
+    <value>Set base folders (left &amp;&amp; right)</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Set_base_folder_right" xml:space="preserve">
+    <value>Set base folder (right)</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Copy_to_the_right" xml:space="preserve">
+    <value>Copy to the right...</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Copy_to_folder" xml:space="preserve">
+    <value>Copy to folder...</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Copy_to_the_left" xml:space="preserve">
+    <value>Copy to the left...</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Move_to_the_right" xml:space="preserve">
+    <value>Move to the right...</value>
+  </data>
+  <data name="FormMain_contextMenuStrip1_Opening_Move_to_the_left" xml:space="preserve">
+    <value>Move to the left...</value>
+  </data>
+  <data name="PriceAppend_FormAPGPriceAppend_Load_Edit" xml:space="preserve">
+    <value> (Edit)</value>
+  </data>
+  <data name="PriceAppend_FormAPGPriceAppend_Load_New" xml:space="preserve">
+    <value> (New)</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceContext_ValueChanged_The_rate_Context_Match_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Context Match' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceRepetitions_ValueChanged_The_rate_Repetitions_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Repetitions' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceFuzzy99_ValueChanged_The_rate_Fuzzy_99_94_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Fuzzy 99%-94%' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceFuzzy94_ValueChanged_The_rate_Fuzzy_94_85_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Fuzzy 94%-85%' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceFuzzy84_ValueChanged_The_rate__Fuzzy_84_75_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Fuzzy 84%-75%' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceFuzzy74_ValueChanged_The_rate_Fuzzy_74__50_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'Fuzzy 74%-50%' cannot be greater than the base rate</value>
+  </data>
+  <data name="PriceAppend_numericUpDown_priceFuzzyNew_ValueChanged_The_rate_New_cannot_be_greater_than_the_base_rate" xml:space="preserve">
+    <value>The rate 'New' cannot be greater than the base rate</value>
+  </data>
+  <data name="FilterAppend_FilterAppend_Load_Filter_Settings_Edit" xml:space="preserve">
+    <value>Filter Settings (Edit)</value>
+  </data>
+  <data name="FilterAppend_FilterAppend_Load_Filter_Settings_New" xml:space="preserve">
+    <value>Filter Settings (New)</value>
+  </data>
+  <data name="FormSettingsFormatting_updateVisualTextFormatting_This_is_some_sample_text" xml:space="preserve">
+    <value>This is some sample text</value>
+  </data>
+  <data name="DeleteFiles_UpdatedObjects_Delete_selected_files_from_both_the_left_and_right_sides" xml:space="preserve">
+    <value>Delete selected files from both the left and right sides</value>
+  </data>
+  <data name="DeleteFiles_UpdatedObjects_Delete_selected_files_from_the_left_side" xml:space="preserve">
+    <value>Delete selected files from the left side </value>
+  </data>
+  <data name="DeleteFiles_UpdatedObjects_Delete_selected_files_from_the_right_side" xml:space="preserve">
+    <value>Delete selected files from the right side</value>
+  </data>
+  <data name="ComparisonProjectFileAlignment_LoadFileLists_Loading_files" xml:space="preserve">
+    <value>Loading files...</value>
+  </data>
+</root>

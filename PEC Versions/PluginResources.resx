@@ -1,0 +1,473 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="PostEditCompare_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PostEdit.Compare.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditVersions_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\PostEdit.Versions.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditProjectVersionDetails_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Details.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditCompareContactLicense_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\License.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditCompareContactHelp_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditCompareContactAbout_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Info.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="PostEditCompareActionsConfiguration_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CompareProjects_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Compare.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CreateProjectVersion_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EditProjectVersion_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RemoveProjectVersion_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Remove.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RestoreProjectVersion_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Restore.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CompareProjectVersions_Description" xml:space="preserve">
+    <value>Compare the selected versions of the project with Post-Edit Compare</value>
+  </data>
+  <data name="CompareProjectVersions_Name" xml:space="preserve">
+    <value>Compare with Post-Edit Compare</value>
+  </data>
+  <data name="EditProjectVersion_Description" xml:space="preserve">
+    <value>Edit the selected version information</value>
+  </data>
+  <data name="EditProjectVersion_Name" xml:space="preserve">
+    <value>Edit Project Version</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Post-Edit Versions</value>
+  </data>
+  <data name="PostEditCompareViewRibbonGroup_Name" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="RemoveProjectVersion_Description" xml:space="preserve">
+    <value>Remove the selected versions of the project</value>
+  </data>
+  <data name="RemoveProjectVersion_Name" xml:space="preserve">
+    <value>Remove Project Version</value>
+  </data>
+  <data name="CreateProjectVersion_Description" xml:space="preserve">
+    <value>Create a new version of the current project</value>
+  </data>
+  <data name="CreateProjectVersion_Name" xml:space="preserve">
+    <value>New Project Version</value>
+  </data>
+  <data name="PostEditCompareActionsConfiguration_Description" xml:space="preserve">
+    <value>Default Settings</value>
+  </data>
+  <data name="PostEditCompareActionsConfiguration_Name" xml:space="preserve">
+    <value>Default Settings</value>
+  </data>
+  <data name="PostEditCompareViewConfigurationRibbonGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="PostEditCompareContactAbout_Description" xml:space="preserve">
+    <value>About Post-Edit Versions</value>
+  </data>
+  <data name="PostEditCompareContactAbout_Name" xml:space="preserve">
+    <value>About Post-Edit Versions</value>
+  </data>
+  <data name="PostEditCompareContactHelp_Description" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="PostEditCompareContactHelp_Name" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="PostEditCompareContactLicense_Description" xml:space="preserve">
+    <value>License Manager</value>
+  </data>
+  <data name="PostEditCompareContactLicense_Name" xml:space="preserve">
+    <value>License Manager</value>
+  </data>
+  <data name="PostEditCompareViewContactRibbonGroup_Name" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="PostEditCompareMainProjectOpenCompare_Description" xml:space="preserve">
+    <value>Post-Edit Compare</value>
+  </data>
+  <data name="PostEditCompareMainProjectOpenCompare_Name" xml:space="preserve">
+    <value>Open Post-Edit Compare</value>
+  </data>
+  <data name="PostEditCompareMainProjectRibbonGroup_Name" xml:space="preserve">
+    <value>Versions</value>
+  </data>
+  <data name="PostEditCompareMainProjectViewVersions_Description" xml:space="preserve">
+    <value>View Project Versions</value>
+  </data>
+  <data name="PostEditCompareMainProjectViewVersions_Name" xml:space="preserve">
+    <value>View Project Versions</value>
+  </data>
+  <data name="PostEditCompareOpenCompare_Description" xml:space="preserve">
+    <value>Open Post-Edit Compare</value>
+  </data>
+  <data name="PostEditCompareOpenCompare_Name" xml:space="preserve">
+    <value>Open Post-Edit Compare</value>
+  </data>
+  <data name="PostEditCompareRibbonGroup_Name" xml:space="preserve">
+    <value>Post-Edit Compare</value>
+  </data>
+  <data name="RestoreProjectVersion_Description" xml:space="preserve">
+    <value>Restore Project Version</value>
+  </data>
+  <data name="RestoreProjectVersion_Name" xml:space="preserve">
+    <value>Restore Project Version</value>
+  </data>
+  <data name="About_SDL_Trados_Studio_2015" xml:space="preserve">
+    <value>About {0} for SDL Trados Studio 2015</value>
+  </data>
+  <data name="Post_Edit_Compare_Version_0" xml:space="preserve">
+    <value>Post-Edit Compare - Version {0}</value>
+  </data>
+  <data name="About_CopyRight_01" xml:space="preserve">
+    <value>DISCLAIMER OF WARRANTIES: YOU AGREE THAT THE DEVELOPER OF THE SOFTWARE HAS MADE NO EXPRESS WARRANTIES TO YOU REGARDING THE SOFTWARE AND THAT THE SOFTWARE IS BEING PROVIDED TO YOU "AS IS" WITHOUT WARRANTY OF ANY KIND.  THE DEVELOPER DISCLAIMS ALL WARRANTIES WITH REGARD TO THE SOFTWARE, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, MERCHANTABLE QUALITY, OR NONINFRINGEMENT OF THIRD-PARTY RIGHTS.
+</value>
+  </data>
+  <data name="About_CopyRight_02" xml:space="preserve">
+    <value>LIMIT OF LIABILITY: IN NO EVENT WILL THE DEVELOPER BE LIABLE TO YOU FOR ANY LOSS OF USE, INTERRUPTION OF BUSINESS, OR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF ANY KIND (INCLUDING LOST PROFITS) REGARDLESS OF THE FORM OF ACTION WHETHER IN CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT PRODUCT LIABILITY OR OTHERWISE, EVEN IF THE DEVELOPER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+</value>
+  </data>
+  <data name="About_CopyRight_03" xml:space="preserve">
+    <value>Restrictions:
+</value>
+  </data>
+  <data name="About_CopyRight_00" xml:space="preserve">
+    <value>License agreement
+</value>
+  </data>
+  <data name="About_CopyRight_04" xml:space="preserve">
+    <value>1. You may redistribute this software, but the distribution package must not be modified in ANY WAY. All redistributions of this package must retain all occurrences of the above copyright notice and web links that are currently in place (for example, in the about boxes or documentation).
+</value>
+  </data>
+  <data name="About_CopyRight_05" xml:space="preserve">
+    <value>2. You must not emulate, clone, rent, lease, sell, modify, decompile, disassemble, otherwise reverse engineer, or transfer any version of the software, or any subset of it. Any such unauthorized use shall result in immediate and automatic termination of this license and may result in criminal and/or civil prosecution.
+</value>
+  </data>
+  <data name="Version_0" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="Invalid_directory" xml:space="preserve">
+    <value>Invalid directory!</value>
+  </data>
+  <data name="Project_Versions_0" xml:space="preserve">
+    <value>Project Versions - {0}</value>
+  </data>
+  <data name="Projects_0" xml:space="preserve">
+    <value>Projects: {0}</value>
+  </data>
+  <data name="Unable_to_locate_the_executable_file_for_PEC" xml:space="preserve">
+    <value>Unable to locate the executable file for Post-Edit Compare!</value>
+  </data>
+  <data name="RemoveProjectVersions" xml:space="preserve">
+    <value>Are you sure you want to remove the selected project versions?
+
+Note: you will not be able to recover this information if you continue!
+
+Select 'Yes' to continue
+Select 'No' to cancel this action
+</value>
+  </data>
+  <data name="RemoveAllProjectVersions" xml:space="preserve">
+    <value>Are you sure you want to remove the selected project?
+
+Note: you will not be able to recover this information if you continue!
+
+Select 'Yes' to continue
+Select 'No' to cancel this action
+</value>
+  </data>
+  <data name="_0_translatable_1_reference" xml:space="preserve">
+    <value>{0} translatable, {1} reference</value>
+  </data>
+  <data name="Project_Version_Step_1_of_2" xml:space="preserve">
+    <value>Project Version - Step 1 of 2</value>
+  </data>
+  <data name="Select_the_SDL_Trados_Studio_Project_and_then_" xml:space="preserve">
+    <value>Select the SDL Trados Studio Project and then specificy the name, location &amp;&amp; description of the project version.</value>
+  </data>
+  <data name="Note_Click_on_the_button_Continue_to_proceed_with_the_project_version_creation" xml:space="preserve">
+    <value>Note: Click on the button 'Continue' to proceed with the project version creation</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>&amp;Continue</value>
+  </data>
+  <data name="Project_Version_Step_2_of_2" xml:space="preserve">
+    <value>Project Version - Step 2 of 2</value>
+  </data>
+  <data name="Progress_Creating_new_project_version" xml:space="preserve">
+    <value>Progress - Creating new project version...</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>&amp;Close</value>
+  </data>
+  <data name="No_help_file_found" xml:space="preserve">
+    <value>No help file found!</value>
+  </data>
+  <data name="Select_Project_Versions_Folder" xml:space="preserve">
+    <value>Select Project Versions Folder</value>
+  </data>
+  <data name="NewProjectVersion_CreateProjectVersion_" xml:space="preserve">
+    <value>Creating new project version...
+</value>
+  </data>
+  <data name="Start_Processing_0" xml:space="preserve">
+    <value>Start Processing {0}</value>
+  </data>
+  <data name="CreateProjectVersion_" xml:space="preserve">
+    <value>Creating new project version...
+</value>
+  </data>
+  <data name="Project_Name_0" xml:space="preserve">
+    <value>Project - {0}</value>
+  </data>
+  <data name="Project_Location_0" xml:space="preserve">
+    <value>Project Location - {0}</value>
+  </data>
+  <data name="Project_Source_Language_0" xml:space="preserve">
+    <value>Project Source Language - {0}</value>
+  </data>
+  <data name="Project_Target_Languages_0" xml:space="preserve">
+    <value>Project Target Languages - {0}</value>
+  </data>
+  <data name="Project_Source_Files_Translatable_Reference_Localizable_Unknown" xml:space="preserve">
+    <value>Project Source Files - Translatable {0}, Reference {1}, Localizable {2}, Unknown {3}</value>
+  </data>
+  <data name="Project_Version_Name" xml:space="preserve">
+    <value>Project Version Name - {0}</value>
+  </data>
+  <data name="Project_Version_Location_0" xml:space="preserve">
+    <value>Project Version Location - {0}</value>
+  </data>
+  <data name="Initializing_" xml:space="preserve">
+    <value>Initializing...</value>
+  </data>
+  <data name="Total_Files_0" xml:space="preserve">
+    <value>Total Files - {0}</value>
+  </data>
+  <data name="Warning_no_local_files_where_copied_during_the_project_version_creation_process" xml:space="preserve">
+    <value>Warning: no local files where copied during the project version creation process!</value>
+  </data>
+  <data name="Copied_files_0_of_1" xml:space="preserve">
+    <value>Copied files {0} of {1}</value>
+  </data>
+  <data name="Finished_Processing_without_errors" xml:space="preserve">
+    <value>Finished Processing without errors</value>
+  </data>
+  <data name="Finished_Processing_with_errors" xml:space="preserve">
+    <value>Finished Processing with errors</value>
+  </data>
+  <data name="Exception_Message__" xml:space="preserve">
+    <value>Exception Message: </value>
+  </data>
+  <data name="End_Processing_0_" xml:space="preserve">
+    <value>End Processing {0}
+</value>
+  </data>
+  <data name="Finished_Processing" xml:space="preserve">
+    <value>Finished Processing</value>
+  </data>
+  <data name="Progress_Finished_Processing" xml:space="preserve">
+    <value>Progress - Finished Processing</value>
+  </data>
+  <data name="Restore_Project_Version_Step_1_of_2" xml:space="preserve">
+    <value>Restore Project Version - Step 1 of 2</value>
+  </data>
+  <data name="Review_the_information_and_select_the_appropriate_options_" xml:space="preserve">
+    <value>Review the information and select the appropriate options to restore the project from the project version</value>
+  </data>
+  <data name="Note_Click_on_the_button_Continue_to_proceed_with_the_restoring_the_project_" xml:space="preserve">
+    <value>Note: Click on the button 'Continue' to proceed with the restoring the project files; a restore point of the project will be created before starting the process.</value>
+  </data>
+  <data name="Restore_Project_Version_Step_2_of_2" xml:space="preserve">
+    <value>Restore Project Version - Step 2 of 2</value>
+  </data>
+  <data name="Progress_Restoring_the_project_from_project_version_" xml:space="preserve">
+    <value>Progress - Restoring the project from project version...</value>
+  </data>
+  <data name="Error_during_restore_point_creation" xml:space="preserve">
+    <value>Error during RESTORE POINT creation of the project; no project restore took place!
+</value>
+  </data>
+  <data name="RestoreProjectFromProjectVersion_" xml:space="preserve">
+    <value>Restoring Project from Project Version...</value>
+  </data>
+  <data name="Project_Location_0_" xml:space="preserve">
+    <value>Project Location - {0}</value>
+  </data>
+  <data name="Project_Source_Language_0_" xml:space="preserve">
+    <value>Project Source Language - {0}</value>
+  </data>
+  <data name="Restoring_Project_from_Project_Version_" xml:space="preserve">
+    <value>Restoring Project from Project Version...</value>
+  </data>
+  <data name="Project_Version_Soruce_Language_0" xml:space="preserve">
+    <value>Project Version Source Language - {0}</value>
+  </data>
+  <data name="Project_Version_Target_Languages_0" xml:space="preserve">
+    <value>Project Version Target Languages - {0}</value>
+  </data>
+  <data name="Project_Version_Soruce_Files_Translatable_Reference_Localizable_Unknown" xml:space="preserve">
+    <value>Project Version Source Files - Translatable {0}, Reference {1}, Localizable {2}, Unknown {3}</value>
+  </data>
+  <data name="Initializing_restore_project_from_project_version_procedure_" xml:space="preserve">
+    <value>Initializing restore project from project version procedure...</value>
+  </data>
+  <data name="Total_Files_Retored_from_Project_Version_0" xml:space="preserve">
+    <value>Total Files Retored from Project Version - {0}</value>
+  </data>
+  <data name="Warning_no_local_files_where_copied_during_the_project_project_restore_process" xml:space="preserve">
+    <value>Warning: no local files where copied during the project project restore process!</value>
+  </data>
+  <data name="RESTORE_POINT_before_restoring_the_Project_from_the_Project_Version" xml:space="preserve">
+    <value>RESTORE POINT before restoring the Project from the Project Version {0}ID: {1} {2}Name: {3}</value>
+  </data>
+  <data name="Total_Files_included_in_the_Project_restore_point_0" xml:space="preserve">
+    <value>Total Files included in the Project restore point - {0}</value>
+  </data>
+  <data name="Finished_creating_project_restore_point_without_errors" xml:space="preserve">
+    <value>Finished creating project restore point without errors</value>
+  </data>
+  <data name="Finished_creating_project_restore_point_with_errors" xml:space="preserve">
+    <value>Finished creating project restore point with errors</value>
+  </data>
+  <data name="Creating_new_restore_point_from_the_project__" xml:space="preserve">
+    <value>Creating new restore point from the project...</value>
+  </data>
+  <data name="Project_Version_Description_0" xml:space="preserve">
+    <value>Project Version Description - {0}</value>
+  </data>
+  <data name="Initializing_restore_point_from_project_procedure__" xml:space="preserve">
+    <value>Initializing restore point from project procedure...</value>
+  </data>
+</root>
