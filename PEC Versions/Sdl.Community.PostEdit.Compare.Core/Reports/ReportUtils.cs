@@ -953,7 +953,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 var asb = Assembly.GetExecutingAssembly();
 
 
-                const string templateXsltName = "PostEdit.Compare.Core.Reports.PostEdit.Compare.Report.01.xslt";
+                const string templateXsltName = "Sdl.Community.PostEdit.Compare.Core.Reports.PostEdit.Compare.Report.01.xslt";
 
                 using (var inputStream = asb.GetManifestResourceStream(templateXsltName))
                 {
@@ -986,7 +986,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
         }
 
-        internal const string DefaultXsltName = "PostEdit.Compare.Report.xslt";
+        internal const string DefaultXsltName = "Sdl.Community.PostEdit.Compare.Report.xslt";
 
         internal static string GetCompiledSegmentText(List<SegmentSection> tcrss, bool includeTags)
         {

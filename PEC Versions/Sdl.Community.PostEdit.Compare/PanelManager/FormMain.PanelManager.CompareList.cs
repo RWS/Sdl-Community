@@ -6290,6 +6290,8 @@ namespace PostEdit.Compare
         private void CreateEntriesLogReport()
         {
             if (_panelEventsLog == null || _panelEventsLog.DockPanel == null) return;
+            var assmebly = Assembly.GetExecutingAssembly();
+            var files = assmebly.GetManifestResourceNames();
             var xmlFileFullPath = Path.Combine(Application.Settings.ApplicationSettingsPath, "PostEdit.Compare.EventLog.xml");
 
 

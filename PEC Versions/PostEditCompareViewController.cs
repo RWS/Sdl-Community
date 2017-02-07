@@ -396,18 +396,10 @@ namespace Sdl.Community.PostEdit.Versions
                 SelectedProjectChanged();
             }
 
+            IModel mModel = new Model();
+            var postEditCompare = new FormMain(mModel);
+            postEditCompare.ShowDialog();
 
-            var sPath = @"C:\Users\aghisa\AppData\Roaming\SDL\SDL Trados Studio\12\Plugins\Packages\PostEdit.Compare.exe";//Path.Combine(Application.StartupPath, "PostEdit.Compare.exe");
-
-            if (File.Exists(sPath))
-            {
-                Process.Start(sPath);
-            }
-            else
-            {
-                MessageBox.Show(PluginResources.Unable_to_locate_the_executable_file_for_PEC
-                    + sPath + "\r\n", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
 
 
         }

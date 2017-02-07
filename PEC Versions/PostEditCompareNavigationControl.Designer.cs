@@ -29,7 +29,7 @@ namespace Sdl.Community.PostEdit.Versions
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            var resources = new System.ComponentModel.ComponentResourceManager(typeof(PostEditCompareNavigationControl));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PostEditCompareNavigationControl));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel_top = new System.Windows.Forms.Panel();
             this.textBox_view = new System.Windows.Forms.TextBox();
