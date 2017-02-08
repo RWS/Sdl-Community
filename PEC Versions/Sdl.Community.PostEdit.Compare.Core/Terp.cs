@@ -41,7 +41,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
         private static string WriteObjFile(string workingDir)
         {
 
-            const string terpJar = "PostEdit.Compare.Core.Files.objout.jar";
+            const string terpJar = "Sdl.Community.PostEdit.Compare.Core.Files.objout.jar";
             var terpJarOut = Path.Combine(workingDir, terpJar);
 
             var asb = Assembly.GetExecutingAssembly();

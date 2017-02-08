@@ -5310,7 +5310,7 @@ namespace PostEdit.Compare
                 f.checkBox_viewSegmentsWithComments.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
                 f.checkBox_viewLockedSegments.Checked = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
 
-                f.checkBox_includeAllSubfolders.Checked = false;
+                f.checkBox_includeAllSubfolders.Checked = true;
 
                 f.checkBox_showOriginalSourceSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
                 f.checkBox_showOriginalTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
