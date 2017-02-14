@@ -3098,7 +3098,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
         public void ViewOnlineHelp()
         {
-            MessageBox.Show("No help file found!");
+            
         }
         public void ViewAboutInfo()
         {
