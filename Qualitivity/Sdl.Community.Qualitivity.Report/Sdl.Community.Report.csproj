@@ -1,0 +1,634 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2B1D6C21-CB8B-4C24-8128-54E911C03E08}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.Report</RootNamespace>
+    <AssemblyName>Sdl.Community.Qualitivity.Report</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Helper.cs" />
+    <Compile Include="MergedDocuments.cs" />
+    <Compile Include="Processor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report.StyleSheet.01.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report.StyleSheet.02.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\af-ZA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-AE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-BH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-DZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-EG.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-IQ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-JO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-KW.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-LB.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-LY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-MA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-OM.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-QA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-SA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-SY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-TN.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar-YE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ar.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\be-BY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\be.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bg-BG.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bg.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bp.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bs-Cyrl-BA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bs-Latn-BA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\bs.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ca-ES.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ca.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\cf.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ch.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\cs-CZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\cs.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\da-DK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\da.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de-AT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de-CH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de-DE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de-LI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de-LU.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\de.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\el-GR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\el.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\empty.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-AU.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-BZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-CA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-GB.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-IE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-JM.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-NZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-PH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-TT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-US.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en-ZW.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\en.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-AR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-BO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-CL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-CO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-CR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-DO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-EC.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-ES.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-GT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-HN.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-MX.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-NI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-PA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-PE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-PR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-PY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-SV.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-UY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es-VE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\es.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\et-EE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\et.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\eu-ES.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\eu.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fa-IR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fa.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fi-FI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fi.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fl.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr-BE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr-CA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr-CH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr-FR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr-LU.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\fr.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ga.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\gb.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\he-IL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\he.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hi-IN.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hi.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hr-HR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hr.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hu-HU.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\hu.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\id-ID.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\in.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\is-IS.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\is.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\it-CH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\it-IT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\it.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ja-JP.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ja.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\kk-KZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\kk.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ko-KR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ko.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ls.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\lt-LT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\lt.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\lv-LV.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\lv.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\lx.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\mk-MK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\mk.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ms-MY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ms.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\nb-NO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\nl-BE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\nl-NL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\nl.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\nn-NO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\no.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\pl-PL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\pl.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\pt-BR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\pt-PT.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\pt.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ro-RO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ro.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ru-RU.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ru.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sd.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sf.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\si.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sk-SK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sk.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sl-SI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sl.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sp.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sq-AL.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sq.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sr-Cyrl-CS.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sr-Latn-CS.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sr.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sv-FI.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sv-SE.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\sv.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\syr-SY.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\SdlCommunity.snk">
+      <Link>SdlCommunity.snk</Link>
+    </None>
+    <None Include="Flags\temp\BE.psd" />
+    <None Include="Flags\temp\CH.psd" />
+    <None Include="Flags\temp\flags.zip" />
+    <None Include="Flags\temp\World_Flags.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\th-TH.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\th.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\tr-TR.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\tr.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\uk-UA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\uk.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\ur-PK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\uz-Cyrl-UZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\uz-Latn-UZ.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\vi-VN.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\vi.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\xh-ZA.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh-CN.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh-HK.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh-MO.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh-SG.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh-TW.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zh.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Flags\zt.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Studio.Time.Tracker.DQF.Default.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Studio.Time.Tracker.DQF.Empty.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\Report.StyleSheet.03.xslt">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\leaf.gif" />
+    <EmbeddedResource Include="Images\minus.gif" />
+    <EmbeddedResource Include="Images\plus.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj">
+      <Project>{455ea006-c9e9-46f9-87ba-4482ecbec69f}</Project>
+      <Name>Sdl.Community.Comparison</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Models\Sdl.Community.Models.csproj">
+      <Project>{7ad662af-2d85-4874-8b69-42cb5ace2ec3}</Project>
+      <Name>Sdl.Community.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

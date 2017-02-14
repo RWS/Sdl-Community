@@ -1,0 +1,868 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="QualitivityApp_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Time-Machine.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityHelp_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Help.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityAbout_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Info.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupLicense_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\License.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivitySettings_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Settings.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityCreateProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Calendar-Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityEditProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Calendar-Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityRemoveProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Calendar-Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityCreateProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Book-Add.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityEditProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Book-Edit.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityRemoveProjectAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Book-Delete.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityConfigurationPEMRates_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Coins.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityConfigurationClients_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Users-simple.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityConfigurationMyInfo_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\MyDetails.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityTimerController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Timer.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityPropertiesController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Information.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityTrackChangesController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Edit-Diff.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityTrackChangesEditorController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Android-Calender.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityReportsController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\bar_chart.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityStartTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Button-End-green.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityStopTimer_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Button-Stop-blue.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupCreateActivitiesReport_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Chart-Bar-Document.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Export.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityMergeProjectTaskAction_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Arrow-join-left.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityRevisionController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Tasks.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityDQFController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\tausdata_1tE_icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityDQFImportProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Document-Import.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityDQFNewProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Gnome-Bookmark-New.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityDQFSaveProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Save-download.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityViewActivityRecordsController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Bar-Chart.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="QualitivityContactRibbonViewCompanyLicenses_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\Ldap-Browser-Pgp.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Plugin_Name" xml:space="preserve">
+    <value>Qualitivity</value>
+  </data>
+  <data name="QualitivityConfigurationRibbonGroup_Name" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="QualitivityConfiguration_Description" xml:space="preserve">
+    <value>Application Settings</value>
+  </data>
+  <data name="QualitivityConfiguration_Name" xml:space="preserve">
+    <value>Application Settings</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupAbout_Description" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupAbout_Name" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupHelp_Description" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupHelp_Name" xml:space="preserve">
+    <value>Online Help</value>
+  </data>
+  <data name="QualitivityContactRibbonGroup_Name" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="QualitivityCreateProjectTaskAction_Description" xml:space="preserve">
+    <value>Create a new Project Activity</value>
+  </data>
+  <data name="QualitivityCreateProjectTaskAction_Name" xml:space="preserve">
+    <value>New Project Activity</value>
+  </data>
+  <data name="QualitivityEditProjectTaskAction_Description" xml:space="preserve">
+    <value>Edit Project Activity</value>
+  </data>
+  <data name="QualitivityEditProjectTaskAction_Name" xml:space="preserve">
+    <value>Edit Activity</value>
+  </data>
+  <data name="QualitivityRemoveProjectTaskAction_Name" xml:space="preserve">
+    <value>Remove Activity</value>
+  </data>
+  <data name="QualitivityRemoveProjectTaskAction_Description" xml:space="preserve">
+    <value>Remove Project Activity</value>
+  </data>
+  <data name="QualitivityCreateProjectAction_Description" xml:space="preserve">
+    <value>Create a new Qualitivity Project</value>
+  </data>
+  <data name="QualitivityCreateProjectAction_Name" xml:space="preserve">
+    <value>New Qualitivity Project</value>
+  </data>
+  <data name="QualitivityEditProjectAction_Description" xml:space="preserve">
+    <value>Edit Qualitivity Project</value>
+  </data>
+  <data name="QualitivityEditProjectAction_Name" xml:space="preserve">
+    <value>Edit Project</value>
+  </data>
+  <data name="QualitivityRemoveProjectAction_Description" xml:space="preserve">
+    <value>Remove Qualitivity Project</value>
+  </data>
+  <data name="QualitivityRemoveProjectAction_Name" xml:space="preserve">
+    <value>Remove Project</value>
+  </data>
+  <data name="QualitivityProjectsRibbonGroup_Name" xml:space="preserve">
+    <value>Qualitivity Projects</value>
+  </data>
+  <data name="QualitivityProjectTasksRibbonGroup_Name" xml:space="preserve">
+    <value>Project Activities</value>
+  </data>
+  <data name="QualitivityConfigurationPEMRates_Name" xml:space="preserve">
+    <value>Language Rates</value>
+  </data>
+  <data name="QualitivityConfigurationPEMRates_Description" xml:space="preserve">
+    <value>Language Rates</value>
+  </data>
+  <data name="QualitivityConfigurationClients_Description" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="QualitivityConfigurationClients_Name" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="QualitivityConfigurationMyInfo_Description" xml:space="preserve">
+    <value>My Details</value>
+  </data>
+  <data name="QualitivityConfigurationMyInfo_Name" xml:space="preserve">
+    <value>My Details</value>
+  </data>
+  <data name="QualitivityStartTimer_Description" xml:space="preserve">
+    <value>Start Activity Tracking</value>
+  </data>
+  <data name="QualitivityStartTimer_Name" xml:space="preserve">
+    <value>Start Activity Tracking</value>
+  </data>
+  <data name="QualitivityStopTimer_Description" xml:space="preserve">
+    <value>Stop Activity Tracking</value>
+  </data>
+  <data name="QualitivityStopTimer_Name" xml:space="preserve">
+    <value>Stop Activity Tracking</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupCreateActivitiesReport_Description" xml:space="preserve">
+    <value>Create Activities Report</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupCreateActivitiesReport_Name" xml:space="preserve">
+    <value>Create Activities Report</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Description" xml:space="preserve">
+    <value>Export Activities</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroupExoprtActivitiesToExcel_Name" xml:space="preserve">
+    <value>Export Activities</value>
+  </data>
+  <data name="QualitivityToolsRibbonGroup_Name" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="QualitivityMergeProjectTaskAction_Description" xml:space="preserve">
+    <value>Merge Project Activities</value>
+  </data>
+  <data name="QualitivityMergeProjectTaskAction_Name" xml:space="preserve">
+    <value>Merge Activities</value>
+  </data>
+  <data name="QualitivityTimeTrackingRibbonGroup_Name" xml:space="preserve">
+    <value>Activity Tracking</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupLicense_Description" xml:space="preserve">
+    <value>License Manager</value>
+  </data>
+  <data name="QualitivityContactRibbonGroupLicense_Name" xml:space="preserve">
+    <value>License Manager</value>
+  </data>
+  <data name="QualitivityProfessionalMainProjectRibbonGroup_Name" xml:space="preserve">
+    <value>Qualitivity</value>
+  </data>
+  <data name="Title_Qualitivity" xml:space="preserve">
+    <value>Qualitivity</value>
+  </data>
+  <data name="Unable_To_Initialize_Timer" xml:space="preserve">
+    <value>Unable to initialize the timer; the active file in the document = null!</value>
+  </data>
+  <data name="ErrorMessage_Get_tracker_project_from_document_0" xml:space="preserve">
+    <value>Get_tracker_project_from_document </value>
+  </data>
+  <data name="Updating_0_of_1_documents" xml:space="preserve">
+    <value>Updating {0} of {1} documents...</value>
+  </data>
+  <data name="Create_New_Document_Activity_Message" xml:space="preserve">
+    <value>Creating a new project activity; the activity records are being saved to the database.
+Please wait until processing has completed.</value>
+  </data>
+  <data name="Update_Document_Activity_Message" xml:space="preserve">
+    <value>Updating project activities; the activity records are being saved to the database.
+Please wait until processing has completed.</value>
+  </data>
+  <data name="Record_Progress" xml:space="preserve">
+    <value>Record Progress</value>
+  </data>
+  <data name="Total_Progress" xml:space="preserve">
+    <value>Total Progress</value>
+  </data>
+  <data name="The_activity_tracker_is_not_running_" xml:space="preserve">
+    <value>The activity tracker is not running, do you want to start the activity tracker now?</value>
+  </data>
+  <data name="Note_The_current_change_will_be_ignored" xml:space="preserve">
+    <value>Note: The current change will be ignored.</value>
+  </data>
+  <data name="DQF_Project_Task_Wizard_Title" xml:space="preserve">
+    <value>DQF Project Task Wizard</value>
+  </data>
+  <data name="no_help_found" xml:space="preserve">
+    <value>no help found!</value>
+  </data>
+  <data name="Project_ID" xml:space="preserve">
+    <value>Project ID:	</value>
+  </data>
+  <data name="Project_Key" xml:space="preserve">
+    <value>Project Key:	</value>
+  </data>
+  <data name="Project_Name" xml:space="preserve">
+    <value>Project Name:	</value>
+  </data>
+  <data name="Created" xml:space="preserve">
+    <value>Created:		</value>
+  </data>
+  <data name="Source_Language" xml:space="preserve">
+    <value>Source Language:	</value>
+  </data>
+  <data name="Content_Type" xml:space="preserve">
+    <value>Content Type:	</value>
+  </data>
+  <data name="Industry" xml:space="preserve">
+    <value>Industry:		</value>
+  </data>
+  <data name="Process" xml:space="preserve">
+    <value>Process:		</value>
+  </data>
+  <data name="Quality_Level" xml:space="preserve">
+    <value>Quality Level:	</value>
+  </data>
+  <data name="Total_Tasks" xml:space="preserve">
+    <value>Total Tasks:	</value>
+  </data>
+  <data name="DQF_Project_Task_Step_1_of_3" xml:space="preserve">
+    <value>DQF Project Task - Step 1 of 3</value>
+  </data>
+  <data name="DQF_Project_Task_Step_2_of_3" xml:space="preserve">
+    <value>DQF Project Task - Step 2 of 3</value>
+  </data>
+  <data name="DQF_Project_Task_Step_3_of_3" xml:space="preserve">
+    <value>DQF Project Task - Step 3 of 3</value>
+  </data>
+  <data name="_0_entries_processed" xml:space="preserve">
+    <value>{0} entries processed</value>
+  </data>
+  <data name="The_last_backup_for_Qualitivity_was_performed_0_days_ago_on_the_1_" xml:space="preserve">
+    <value>The last backup for Qualitivity was performed {0} days ago, on the {1}</value>
+  </data>
+  <data name="Do_you_want_to_backup_your_settings_now" xml:space="preserve">
+    <value>Do you want to backup your settings now?</value>
+  </data>
+  <data name="Select_Yes_to_backup_your_setting_now" xml:space="preserve">
+    <value>Select 'Yes' to backup your setting now.</value>
+  </data>
+  <data name="Select_No_to_ignore_this_message" xml:space="preserve">
+    <value>Select 'No' to ignore this message.</value>
+  </data>
+  <data name="Paused_the_activity_timer_at_0" xml:space="preserve">
+    <value>Paused the activity timer at: {0}</value>
+  </data>
+  <data name="Are_you_sure_that_you_want_to_remove_this_project_and_all_its_data" xml:space="preserve">
+    <value>Are you sure that you want to remove this project and all its data?</value>
+  </data>
+  <data name="Note__you_will_not_be_able_to_recover_this_data_if_you_continue" xml:space="preserve">
+    <value>Note: you will not be able to recover this data if you continue!</value>
+  </data>
+  <data name="Click_Yes_to_continue_and_remove_the_project" xml:space="preserve">
+    <value>Click 'Yes' to continue and remove the project</value>
+  </data>
+  <data name="Click_No_to_cancel" xml:space="preserve">
+    <value>Click 'No' to cancel</value>
+  </data>
+  <data name="The_DQF_API_key_cannot_be_null" xml:space="preserve">
+    <value>The DQF API key cannot be null!</value>
+  </data>
+  <data name="To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key" xml:space="preserve">
+    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
+  </data>
+  <data name="Are_you_sure_that_you_want_to_remove_the_selected_project_activities" xml:space="preserve">
+    <value>Are you sure that you want to remove the selected project activities?</value>
+  </data>
+  <data name="Note_you_will_not_be_able_to_recover_this_data_if_you_continue" xml:space="preserve">
+    <value>Note: you will not be able to recover this data if you continue!</value>
+  </data>
+  <data name="Click_Yes_to_continue_and_remove_the_project_activities" xml:space="preserve">
+    <value>Click 'Yes' to continue and remove the project activities</value>
+  </data>
+  <data name="Located_multiple_activity_types_from_the_selected_records" xml:space="preserve">
+    <value>Located multiple activity types from the selected records</value>
+  </data>
+  <data name="Are_you_sure_that_you_want_to_continue_merging_these_records" xml:space="preserve">
+    <value>Are you sure that you want to continue merging these records?</value>
+  </data>
+  <data name="Click_Yes_to_continue" xml:space="preserve">
+    <value>Click 'Yes' to continue</value>
+  </data>
+  <data name="Warning_You_are_merging_activities_with_tracking_information_where_the_same_segments_exist_in_multiple_documents_" xml:space="preserve">
+    <value>Warning: You are merging activities with tracking information where the same segments exist in multiple documents!</value>
+  </data>
+  <data name="Note_This_might_cuase_a_discrepancy_with_the_word_count_total_if_you_are_accumulating_word_counts_from_" xml:space="preserve">
+    <value>Note: This might cuase a discrepancy with the word count total if you are accumulating word counts from segments that exist in multiple documents</value>
+  </data>
+  <data name="Do_you_want_to_accumulate_the_word_count_from_the_duplicated_segments" xml:space="preserve">
+    <value>Do you want to accumulate the word count from the duplicated segments?</value>
+  </data>
+  <data name="Click_Yes_to_accumulate_the_word_counts" xml:space="preserve">
+    <value>Click 'Yes' to accumulate the word counts</value>
+  </data>
+  <data name="Click_No_to_exclude_the_duplicated_word_counts" xml:space="preserve">
+    <value>Click 'No' to exclude the duplicated word counts</value>
+  </data>
+  <data name="Unable_to_merge_activities_that_belong_to_different_projects" xml:space="preserve">
+    <value>Unable to merge activities that belong to different projects!</value>
+  </data>
+  <data name="Unable_to_merge_activities_with_different_language_combinations" xml:space="preserve">
+    <value>Unable to merge activities with different language combinations!</value>
+  </data>
+  <data name="Project_0" xml:space="preserve">
+    <value>Project: {0}</value>
+  </data>
+  <data name="Client_0" xml:space="preserve">
+    <value>Client: {0}</value>
+  </data>
+  <data name="Year_0" xml:space="preserve">
+    <value>Year: {0}</value>
+  </data>
+  <data name="Year_0_" xml:space="preserve">
+    <value>Year: {0}, </value>
+  </data>
+  <data name="Month_0" xml:space="preserve">
+    <value>Month: {0}</value>
+  </data>
+  <data name="To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key_in_the_plugin_setting_area" xml:space="preserve">
+    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
+  </data>
+  <data name="The_Translator_DQF_API_key_cannot_be_null" xml:space="preserve">
+    <value>The Translator DQF API key cannot be null!</value>
+  </data>
+  <data name="To_create_TAUS_DQF_Project_Task_you_must_first_save_your_Translator_DQF_API_key_" xml:space="preserve">
+    <value>To create TAUS DQF Project Task, you must first save your Translator DQF API key in the plugin setting area</value>
+  </data>
+  <data name="Expand_all_companyProfiles" xml:space="preserve">
+    <value>Expand all companyProfiles</value>
+  </data>
+  <data name="Search_project_name" xml:space="preserve">
+    <value>Search project name</value>
+  </data>
+  <data name="To_create_a_TAUS_DQF_Project__you_must_first_save_your_DQF_API_key_" xml:space="preserve">
+    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
+  </data>
+  <data name="The_DQF_project_name_already_exists" xml:space="preserve">
+    <value>The DQF project name already exists!</value>
+  </data>
+  <data name="Open_TAUS_DQF_Project_Import_File" xml:space="preserve">
+    <value>Open TAUS DQF Project Import File</value>
+  </data>
+  <data name="DQF_Project_Import_File" xml:space="preserve">
+    <value>DQF Project Import File</value>
+  </data>
+  <data name="The_DQF_Project_0_already_exists_in_the_list" xml:space="preserve">
+    <value>The DQF Project '{0}' already exists in the list</value>
+  </data>
+  <data name="Save_TAUS_DQF_Project_Import_File" xml:space="preserve">
+    <value>Save TAUS DQF Project Import File</value>
+  </data>
+  <data name="Are_you_sure_that_you_want_to_remove_the_selected_DQF_Project" xml:space="preserve">
+    <value>Are you sure that you want to remove the selected DQF Project?</value>
+  </data>
+  <data name="Click_Click_Yes_to_continue" xml:space="preserve">
+    <value>Click 'Yes' to continue</value>
+  </data>
+  <data name="Click_Click_No_to_cancel" xml:space="preserve">
+    <value>Click 'No' to cancel</value>
+  </data>
+  <data name="Project_ID_" xml:space="preserve">
+    <value>Project ID:	</value>
+  </data>
+  <data name="Project_Key_" xml:space="preserve">
+    <value>Project Key:	</value>
+  </data>
+  <data name="Project_Name_" xml:space="preserve">
+    <value>Project Name:	</value>
+  </data>
+  <data name="Created__" xml:space="preserve">
+    <value>Created:		</value>
+  </data>
+  <data name="Source_Language_" xml:space="preserve">
+    <value>Source Language:	</value>
+  </data>
+  <data name="Content_Type_" xml:space="preserve">
+    <value>Content Type:	</value>
+  </data>
+  <data name="Industry__" xml:space="preserve">
+    <value>Industry:		</value>
+  </data>
+  <data name="Process__" xml:space="preserve">
+    <value>Process:		</value>
+  </data>
+  <data name="Quality_Level_" xml:space="preserve">
+    <value>Quality Level:	</value>
+  </data>
+  <data name="Total_Tasks_" xml:space="preserve">
+    <value>Total Tasks:	</value>
+  </data>
+  <data name="Project_Created_" xml:space="preserve">
+    <value>Project Created:	</value>
+  </data>
+  <data name="Translator_Key_" xml:space="preserve">
+    <value>Translator Key:	</value>
+  </data>
+  <data name="Task_ID__" xml:space="preserve">
+    <value>Task ID:		</value>
+  </data>
+  <data name="Task_Uploaded_" xml:space="preserve">
+    <value>Task Uploaded:	</value>
+  </data>
+  <data name="Document_Name_" xml:space="preserve">
+    <value>Document Name:	</value>
+  </data>
+  <data name="Target_Language_" xml:space="preserve">
+    <value>Target Language:	</value>
+  </data>
+  <data name="CAT_Tool_" xml:space="preserve">
+    <value>CAT Tool:	</value>
+  </data>
+  <data name="Save_an_Excel_report_file" xml:space="preserve">
+    <value>Save an Excel report file</value>
+  </data>
+  <data name="Click_Save_an_XML_report_file" xml:space="preserve">
+    <value>Save an XML report file</value>
+  </data>
+  <data name="Created_" xml:space="preserve">
+    <value>Created: </value>
+  </data>
+  <data name="_Severity_" xml:space="preserve">
+    <value>, Severity: </value>
+  </data>
+  <data name="_Author_" xml:space="preserve">
+    <value>, Author: </value>
+  </data>
+  <data name="_Comment_" xml:space="preserve">
+    <value>, Comment: </value>
+  </data>
+  <data name="The_price__Perfect_Match__cannot_be_greater_than_the_base_price" xml:space="preserve">
+    <value>The price 'Perfect Match' cannot be greater than the base price</value>
+  </data>
+  <data name="The_price__Context_Match__cannot_be_greater_than_the_base_price" xml:space="preserve">
+    <value>The price 'Context Match' cannot be greater than the base price</value>
+  </data>
+  <data name="The_price__Repetitions__cannot_be_greater_than_the_base_price" xml:space="preserve">
+    <value>The price 'Repetitions' cannot be greater than the base price</value>
+  </data>
+  <data name="The_price__Exact_Match__cannot_be_greater_than_the_base_price" xml:space="preserve">
+    <value>The price 'Exact Match' cannot be greater than the base price</value>
+  </data>
+  <data name="Modified_" xml:space="preserve">
+    <value>Modified: </value>
+  </data>
+  <data name="By_" xml:space="preserve">
+    <value>By: </value>
+  </data>
+  <data name="Items_" xml:space="preserve">
+    <value>Items: </value>
+  </data>
+  <data name="Severity_Weight___Add" xml:space="preserve">
+    <value>Severity Weight - Add</value>
+  </data>
+  <data name="Item_name_already_exists_in_the_list_" xml:space="preserve">
+    <value>Item name already exists in the list!</value>
+  </data>
+  <data name="Severity_Weight___Edit" xml:space="preserve">
+    <value>Severity Weight - Edit</value>
+  </data>
+  <data name="About_Qualitivity_for_SDL_Trados_Studio_2015" xml:space="preserve">
+    <value>About Qualitivity for SDL Trados Studio 2015</value>
+  </data>
+  <data name="Qualitivity___Version__0_" xml:space="preserve">
+    <value>Qualitivity - Version {0}</value>
+  </data>
+  <data name="Qualitivity" xml:space="preserve">
+    <value>Qualitivity</value>
+  </data>
+  <data name="no_help_found_" xml:space="preserve">
+    <value>no help found!</value>
+  </data>
+  <data name="Select_Reports_Folder" xml:space="preserve">
+    <value>Select Reports Folder</value>
+  </data>
+  <data name="Qualitivity___Activity_Report_Wizard" xml:space="preserve">
+    <value>Qualitivity - Activity Report Wizard</value>
+  </data>
+  <data name="Qualitivity___Activity_Report_Task___Step_1_of_3" xml:space="preserve">
+    <value>Qualitivity - Activity Report Task - Step 1 of 3</value>
+  </data>
+  <data name="Qualitivity___Activity_Report_Task___Step_2_of_3" xml:space="preserve">
+    <value>Qualitivity - Activity Report Task - Step 2 of 3</value>
+  </data>
+  <data name="Qualitivity___Activity_Report_Task___Step_3_of_3" xml:space="preserve">
+    <value>Qualitivity - Activity Report Task - Step 3 of 3</value>
+  </data>
+  <data name="__0__entries_processed" xml:space="preserve">
+    <value>{0} entries processed</value>
+  </data>
+  <data name="___Severity__" xml:space="preserve">
+    <value>, Severity: </value>
+  </data>
+  <data name="___Author__" xml:space="preserve">
+    <value>, Author: </value>
+  </data>
+  <data name="l___Comment__" xml:space="preserve">
+    <value>, Comment: </value>
+  </data>
+  <data name="___Comment__" xml:space="preserve">
+    <value>, Comment: </value>
+  </data>
+  <data name="Invalid_directory_" xml:space="preserve">
+    <value>Invalid directory!</value>
+  </data>
+  <data name="Total_Activities__0___Selected__1_" xml:space="preserve">
+    <value>Total Activities {0}; Selected {1}</value>
+  </data>
+  <data name="This_is_some_sample_text" xml:space="preserve">
+    <value>This is some sample text</value>
+  </data>
+  <data name="Unable_to_save_settings__unable_to_locate_the_backup_folder_specified_" xml:space="preserve">
+    <value>Unable to save settings; unable to locate the backup folder specified!</value>
+  </data>
+  <data name="Unable_to_save_the_company_profile___0____" xml:space="preserve">
+    <value>Unable to save the company profile '{0}'; the company name already exists!</value>
+  </data>
+  <data name="Unable_to_save_the_company_profile__the_company_name_cannot_be_null_" xml:space="preserve">
+    <value>Unable to save the company profile; the company name cannot be null!</value>
+  </data>
+  <data name="The_company_name_cannot_be_null_" xml:space="preserve">
+    <value>The company name cannot be null!</value>
+  </data>
+  <data name="The_company_name_already_exists_" xml:space="preserve">
+    <value>The company name already exists!</value>
+  </data>
+  <data name="New_Company" xml:space="preserve">
+    <value>New Company</value>
+  </data>
+  <data name="Are_you_sure_that_you_want_to_remove_the_selected_client_profile_" xml:space="preserve">
+    <value>Are you sure that you want to remove the selected client profile?</value>
+  </data>
+  <data name="Note__you_will_not_be_able_to_recover_this_data_if_you_continue_" xml:space="preserve">
+    <value>Note: you will not be able to recover this data if you continue!</value>
+  </data>
+  <data name="Click__Yes__to_continue_and_remove_the_client_profile" xml:space="preserve">
+    <value>Click 'Yes' to continue and remove the client profile</value>
+  </data>
+  <data name="Click__No__to_cancel" xml:space="preserve">
+    <value>Click 'No' to cancel</value>
+  </data>
+  <data name="Unable_to_delete_the_client___0__" xml:space="preserve">
+    <value>Unable to delete the client '{0}'</value>
+  </data>
+  <data name="Note__it_is_made_reference_to_from_the_project___0__" xml:space="preserve">
+    <value>Note: it is made reference to from the project '{0}'</value>
+  </data>
+  <data name="This_is_an_example_of_inserted_text_formatting_" xml:space="preserve">
+    <value>This is an example of inserted text formatting.</value>
+  </data>
+  <data name="This_is_an_example_of_deleted_text_formatting_" xml:space="preserve">
+    <value>This is an example of deleted text formatting.</value>
+  </data>
+  <data name="This_is_an_example_of_inserted__tag___formatting_" xml:space="preserve">
+    <value>This is an example of inserted &lt;tag/&gt; formatting.</value>
+  </data>
+  <data name="This_is_an_example_of_deleted__tag___formatting_" xml:space="preserve">
+    <value>This is an example of deleted &lt;tag/&gt; formatting.</value>
+  </data>
+  <data name="Items___0__" xml:space="preserve">
+    <value>Items: {0} </value>
+  </data>
+  <data name="Do_you_want_to_delete_the_selected_Quality_Metric_Group_" xml:space="preserve">
+    <value>Do you want to delete the selected Quality Metric Group?</value>
+  </data>
+  <data name="Note__you_will_not_be_able_to_recover_this_information" xml:space="preserve">
+    <value>Note: you will not be able to recover this information</value>
+  </data>
+  <data name="Click__Yes__to_delete_the_selected_item" xml:space="preserve">
+    <value>Click 'Yes' to delete the selected item</value>
+  </data>
+  <data name="Unable_to_remove_the_selected_Quality_Metric_Group" xml:space="preserve">
+    <value>Unable to remove the selected Quality Metric Group while is 
+still associated with the client profile '{0}'</value>
+  </data>
+  <data name="Open_the_Qualitity_Metrics_Group_file" xml:space="preserve">
+    <value>Open the Qualitity Metrics Group file</value>
+  </data>
+  <data name="Import_Failed_" xml:space="preserve">
+    <value>Import Failed!</value>
+  </data>
+  <data name="The_Quality_Metric_Group_name_already_exists_in_the_list_" xml:space="preserve">
+    <value>The Quality Metric Group name already exists in the list!</value>
+  </data>
+  <data name="Error_while_reading_the_xml_file_" xml:space="preserve">
+    <value>Error while reading the xml file!</value>
+  </data>
+  <data name="Save_the_Qualitity_Metrics_Group_to_file" xml:space="preserve">
+    <value>Save the Qualitity Metrics Group to file</value>
+  </data>
+  <data name="Error_while_writing_the_xml_file_" xml:space="preserve">
+    <value>Error while writing the xml file!</value>
+  </data>
+  <data name="no_help_file_found_" xml:space="preserve">
+    <value>no help file found!</value>
+  </data>
+  <data name="Select_Backup_Folder" xml:space="preserve">
+    <value>Select Backup Folder</value>
+  </data>
+  <data name="Settings_linkLabel_create_a_backup_now_LinkClicked_Backup_was_successful_" xml:space="preserve">
+    <value>Backup was successful!</value>
+  </data>
+  <data name="Backup_was_successful_" xml:space="preserve">
+    <value>Backup was successful!</value>
+  </data>
+  <data name="New_Language_Rate_Group" xml:space="preserve">
+    <value>New Language Rate Group</value>
+  </data>
+  <data name="Do_you_want_to_delete_the_selected_PRM_Rate_" xml:space="preserve">
+    <value>Do you want to delete the selected PRM Rate?</value>
+  </data>
+  <data name="Unable_to_save_group_settings__the_updated_name_is_already_used_" xml:space="preserve">
+    <value>Unable to save group settings; the updated name is already used!</value>
+  </data>
+  <data name="___default_percentages_" xml:space="preserve">
+    <value> (default percentages)</value>
+  </data>
+  <data name="___Edit_" xml:space="preserve">
+    <value> (Edit)</value>
+  </data>
+  <data name="___New_" xml:space="preserve">
+    <value> (New)</value>
+  </data>
+  <data name="No_new_SDL_Studio_Project_available_" xml:space="preserve">
+    <value>No new SDL Studio Project available!</value>
+  </data>
+  <data name="Note__All_Studio_Projects_are_currently_listed_in_the_navigation_area" xml:space="preserve">
+    <value>Note: All Studio Projects are currently listed in the navigation area</value>
+  </data>
+  <data name="The_project_name_already_exists_" xml:space="preserve">
+    <value>The project name already exists!</value>
+  </data>
+  <data name="The_project_name_cannot_be_empty_" xml:space="preserve">
+    <value>The project name cannot be empty!</value>
+  </data>
+  <data name="The_project_due_date_cannot_precede_the_project_creation_date_" xml:space="preserve">
+    <value>The project due date cannot precede the project creation date!</value>
+  </data>
+  <data name="The_project_completed_date_cannot_precede_the_project_creation_date_" xml:space="preserve">
+    <value>The project completed date cannot precede the project creation date!</value>
+  </data>
+  <data name="___Merge_" xml:space="preserve">
+    <value> (Merge)</value>
+  </data>
+  <data name="Document_Activities___0_" xml:space="preserve">
+    <value>Document Activities: {0}</value>
+  </data>
+  <data name="Select_a_language_rate" xml:space="preserve">
+    <value>Select a language rate</value>
+  </data>
+  <data name="Specify_an_hourly_rate" xml:space="preserve">
+    <value>Specify an hourly rate</value>
+  </data>
+  <data name="Specify_a_custom_rate" xml:space="preserve">
+    <value>Specify a custom rate</value>
+  </data>
+  <data name="The_activity_name_cannot_be_empty_" xml:space="preserve">
+    <value>The activity name cannot be empty!</value>
+  </data>
+  <data name="The_activity_end_date_cannot_precede_the_started_date_" xml:space="preserve">
+    <value>The activity end date cannot precede the started date!</value>
+  </data>
+  <data name="The_activity_end_date_cannot_supersede_the_project_due_date_" xml:space="preserve">
+    <value>The activity end date cannot supersede the project due date!</value>
+  </data>
+  <data name="The_activity_started_date_cannot_supersede_the_project_due_date_" xml:space="preserve">
+    <value>The activity started date cannot supersede the project due date!</value>
+  </data>
+  <data name="The_maximum_penalty_value_applied_cannot_be_less_than_the_number_" xml:space="preserve">
+    <value>The maximum penalty value applied cannot be less than the number of words in the quality metrics settings!</value>
+  </data>
+  <data name="The_maximum_penalty_value_applied_cannot_be_greater_than_the_number_of_words_" xml:space="preserve">
+    <value>The maximum penalty value applied cannot be greater than the number of words in the quality metrics settings!</value>
+  </data>
+</root>
