@@ -1,0 +1,517 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"             
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:records="clr-namespace:Sdl.Community.Structures.Documents.Records;assembly=Sdl.Community.Qualitivity.Models"             
+             xmlns:iProperties="clr-namespace:Sdl.Community.Structures.iProperties;assembly=Sdl.Community.Qualitivity.Models"
+             xmlns:wpfListView="clr-namespace:Sdl.Community.WPFListView"
+             xmlns:records1="clr-namespace:Sdl.Community.Structures.Documents.Records;assembly=Sdl.Community.Qualitivity.Models"
+             x:Name="ListViewControl1" x:Class="Sdl.Community.WPFListView.ListViewControl" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600" Loaded="ListViewControl1_Loaded">
+    <UserControl.Resources>
+
+        <CollectionViewSource x:Key="ListingDataViewKeyStroke" CollectionViewType="{x:Type ListCollectionView}" />
+        <CollectionViewSource x:Key="ListingDataViewColumns" CollectionViewType="{x:Type ListCollectionView}" />
+        <CollectionViewSource x:Key="ListingDataView" CollectionViewType="{x:Type ListCollectionView}" />
+
+
+        <Style x:Key="ItemContStyle" TargetType="{x:Type ListViewItem}">
+         
+            
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+      
+            
+            <Setter Property="Margin" Value="0,1,0,1" />
+            <Setter Property="Visibility" Value="{Binding ItemVisibility, Mode=OneTime}"/>
+
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">                    
+                    <Setter Property="BorderBrush" Value="DarkBlue" />
+                </Trigger>        
+            </Style.Triggers>
+        </Style>
+
+
+
+        <DataTemplate x:Key="ColumnSegmentId" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="segment_id_content" GotFocus="segment_id_GotFocus" Text="{Binding SegmentId , Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ColumnParagraphId" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="paragraph_id_content" GotFocus="paragraph_id_content_GotFocus"  Text="{Binding ParagraphId, Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnStarted" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="started_content" TextWrapping="WrapWithOverflow"  GotFocus="started_GotFocus" Text="{Binding Started, Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnStopped" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="stopped_content" TextWrapping="WrapWithOverflow" GotFocus="stopped_GotFocus"  Text="{Binding Stopped, Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnElapsed" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="elapsed_content" TextWrapping="WrapWithOverflow" GotFocus="elapsed_content_GotFocus"  Text="{Binding ElapsedTime , Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnStatus" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="status_content" GotFocus="status_GotFocus" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False"  FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}" >
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding StatusLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True"/>
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnMatch" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="match_content" GotFocus="match_GotFocus" Background="{Binding MatchColor, Mode=OneTime}" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False"  FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}" >
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding MatchLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True"/>
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnSourceWordCount" DataType="records:Record" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="source_word_count" TextWrapping="WrapWithOverflow" GotFocus="source_word_count_GotFocus"  Text="{Binding WordCount , Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+
+
+        <DataTemplate x:Key="ColumnSourceContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="source_content" GotFocus="source_content_GotFocus" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False"  FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}" >
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding ContentSections.SourceSectionLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True"/>
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnTargetOriginalContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="target_original_content" GotFocus="target_original_content_GotFocus" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding ContentSections.TargetOriginalSectionLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnTargetUpdatedContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="target_updated_content" GotFocus="target_updated_content_GotFocus" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding ContentSections.TargetUpdatedSectionLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnTargetTrackChangesContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="target_track_changes_content" GotFocus="target_track_changes_content_GotFocus"  IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding ContentSections.TargetTrackChangesLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnTargetComparisonContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="target_comparison_content" GotFocus="target_comparison_content_GotFocus" IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding ContentSections.TargetCompareSectionLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnModificationsDistanceContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="modificationsDistance_content" TextWrapping="WrapWithOverflow" GotFocus="modificationsDistance_content_GotFocus"  Text="{Binding EditDistance , Mode=OneTime}" HorizontalAlignment="Center"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnPemPercentageContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="pemPercentage_content" GotFocus="pemPercentage_content_GotFocus"  IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding PemPercentageLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnQualityMetricsContent" DataType="records1:Record" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="quality_metrics_content" GotFocus="quality_metrics_content_GotFocus"  IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding QualityMetricsLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ColumnTargetCommentsContent" DataType="records:Record">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <RichTextBox x:Name="target_comments_content" GotFocus="target_comments_content_GotFocus"  IsReadOnly="True" BorderThickness="0" AllowDrop="False" IsUndoEnabled="False" UndoLimit="0"  AcceptsReturn="False" FontFamily="{Binding FontName, Mode=OneTime}" FontSize="{Binding FontSize, Mode=OneTime}">
+                    <FlowDocument>
+                        <wpfListView:BindableParagraphBlock  ForceCursor="True" BoundInline="{Binding CommentLines , Mode=OneTime}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type FrameworkElement}}}" Focusable="True" />
+                    </FlowDocument>
+                </RichTextBox>
+            </Border>
+        </DataTemplate>
+
+
+
+        <DataTemplate x:Key="ColumnKeyStrokeCreated" DataType="records:KeyStroke">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_created"  TextWrapping="Wrap"  Text="{Binding Created , Mode=OneTime, StringFormat='dd/MM/yyyy hh:mm:ss.fff tt'}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeOrigin" DataType="records:KeyStroke">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_origin"  TextWrapping="Wrap" Text="{Binding OriginType , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeMatch"  DataType="records1:KeyStroke">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_match"  TextWrapping="Wrap" Text="{Binding Match , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeSystem" DataType="records:KeyStroke" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_system"  TextWrapping="Wrap" Text="{Binding OriginSystem , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeCtrl" DataType="records:KeyStroke" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_ctrl"   Text="{Binding Ctrl , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeAlt"  DataType="records:KeyStroke">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_alt"   Text="{Binding Alt , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeShift" DataType="records:KeyStroke" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_shift"   Text="{Binding Shift , Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeKey"  DataType="records:KeyStroke">
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_key"  TextWrapping="Wrap" Text="{Binding Key, Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeText" DataType="records:KeyStroke" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_text"  TextWrapping="Wrap" Text="{Binding Text, Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ColumnKeyStrokeSelection" DataType="records:KeyStroke" >
+            <Border BorderBrush="DarkGray" BorderThickness="0,0,1,1" Margin="-6,0,-6,0">
+                <TextBlock x:Name="keyStroke_selection"  TextWrapping="Wrap" Text="{Binding Selection, Mode=OneTime}" HorizontalAlignment="Left"   VerticalAlignment="Center"  />
+            </Border>
+        </DataTemplate>
+
+    </UserControl.Resources>
+
+
+
+
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="Grid" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid MouseLeave="showHideColumnPropertiesGrid_MouseLeave" MouseEnter="showHideColumnPropertiesGrid_MouseEnter"  Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid x:Name="ShowHideColumnPropertiesGrid" Visibility="Collapsed"  Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView  Padding="0,2,0,2"
+						ItemsSource="{Binding Source={StaticResource ListingDataViewColumns}}"
+						IsSynchronizedWithCurrentItem="True" Margin="2,0,0,0" UseLayoutRounding="True">
+
+                        <ListView.View>
+
+                            <GridView AllowsColumnReorder="true"
+								ColumnHeaderToolTip="Information">
+
+                                <GridViewColumn Header="Show/Hide Columns" Width="170">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate DataType="iProperties:ViewProperty">
+                                            <CheckBox VerticalAlignment="Center" x:Name="column_names" Content="{Binding Text}" IsChecked="{Binding Value, Mode=TwoWay}" Checked="column_names_Checked" Unchecked="column_names_Unchecked" HorizontalAlignment="Left" Padding="0,2,0,0"  />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+                <Grid Grid.Column="0">
+                    <Button x:Name="ShowHideColumnPropertiesButton" Grid.Column="0" Background="#D8DAE3" >
+                        <TextBlock x:Name="ShowHideColumnPropertiesTextProperty" Width="auto" Height="20" Foreground="Black"  Text="Column Properties" 
+                                   RenderTransformOrigin="0.5,0.5" FontSize="14"  >
+                            <TextBlock.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform ScaleY="1" ScaleX="1"/>
+                                    <SkewTransform AngleY="0" AngleX="0"/>
+                                    <RotateTransform Angle="0"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </TextBlock.RenderTransform>
+                            <TextBlock.LayoutTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </TextBlock.LayoutTransform>
+                        </TextBlock>
+                    </Button>
+                </Grid>
+            </Grid>
+
+            <Grid x:Name="GridMainListArea" Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" x:Name="RowDefinitionListview"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="100" x:Name="RowDefinitionKeystroke" MinHeight="100"/>
+                </Grid.RowDefinitions>
+                <ListView x:Name="ListViewGrid"  Grid.Row="0" 
+					FocusManager.IsFocusScope="True"
+					IsSynchronizedWithCurrentItem="True" 
+					SelectionChanged="ListView_Grid_SelectionChanged"					                                   
+					ItemContainerStyle="{StaticResource ItemContStyle}"
+					VirtualizingPanel.IsVirtualizing="True"
+					VirtualizingPanel.VirtualizationMode="Recycling"
+					ScrollViewer.IsDeferredScrollingEnabled="True"
+					ItemsSource="{Binding Source={StaticResource ListingDataView}}" 
+					SnapsToDevicePixels="True" 
+					ForceCursor="True"                   					
+					IsTextSearchEnabled="False">
+
+                    <ListView.View  >
+                        <GridView x:Name="GridViewList" >
+                            <GridViewColumn CellTemplate="{StaticResource ColumnParagraphId}" x:Name="ColumnParagraphId"  Width="32" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ParagraphId" 
+									Content="PID" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnSegmentId}" x:Name="ColumnSegmentId"  Width="32">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="SegmentIdIndex" 
+									Content="SID" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnStarted}" x:Name="ColumnStarted"  Width="65">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="Started" 
+									Content="Started" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnStopped}" x:Name="ColumnStopped"  Width="65">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="Stopped" 
+									Content="Stopped" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnElapsed}" x:Name="ColumnElapsed"  Width="80">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="Elapsed" 
+									Content="Elapsed" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnStatus}" x:Name="ColumnStatus"  Width="75">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="TranslationOrigins.Original.ConfirmationLevel" 
+									Content="Status" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnMatch}" x:Name="ColumnMatch"  Width="60">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="TranslationOrigins.Original.TranslationStatus" 
+									Content="Match" />
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnSourceWordCount}" x:Name="ColumnSourceWordCount"  Width="70">
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="words" 
+									Content="Word Count" />
+                            </GridViewColumn>
+
+                            <GridViewColumn CellTemplate="{StaticResource ColumnSourceContent}" x:Name="ColumnSourceContent" Width="230"  >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ContentSections.SourceIndex">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image x:Name="HeaderImageSource"  />
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextSource" Text=" Source"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn  CellTemplate="{StaticResource ColumnTargetOriginalContent}" x:Name="ColumnTargetOriginalContent" Width="230" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ContentSections.TargetOriginalIndex">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image x:Name="HeaderImageTargetOriginal"  />
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextTargetOriginal" Text=" Target (Original)"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+
+                            <GridViewColumn CellTemplate="{StaticResource ColumnTargetUpdatedContent}" x:Name="ColumnTargetUpdatedContent" Width="230" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ContentSections.TargetUpdatedIndex">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image x:Name="HeaderImageTargetUpdated" />
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextTargetUpdated" Text=" Target (Updated)"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnTargetTrackChangesContent}" x:Name="ColumnTargetTrackChangesContent" Width="200" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ContentSections.TargetCompareIndex">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextTargetTrackChanges" Text=" Target (Track Changes)"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnTargetComparisonContent}" x:Name="ColumnTargetComparisonContent" Width="250" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image x:Name="HeaderImageTargetComparison" />
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextTargetComparison" Text=" Target (Comparison)"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnModificationsDistanceContent}" x:Name="ColumnModificationsDistanceContent" Width="75" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="ModificationsDistance">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextModificationsDistance" Text=" Modifications"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnPemPercentageContent}" x:Name="ColumnPemPercentageContent" Width="70" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="PemPercentage">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextPemPercentage" Text=" PEM %"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+                            <GridViewColumn CellTemplate="{StaticResource ColumnQualityMetricsContent}" x:Name="ColumnQualityMetricsContent" Width="230" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextQualityMetrics" Text=" Quality Metrics"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>                            
+                            <GridViewColumn CellTemplate="{StaticResource ColumnTargetCommentsContent}" x:Name="ColumnTargetCommentsContent" Width="230" >
+                                <GridViewColumnHeader Click="SortClick" 
+									Tag="">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" x:Name="HeaderTextTargetComments" Text=" Target Comments"/>
+                                    </StackPanel>
+                                </GridViewColumnHeader>
+                            </GridViewColumn>
+
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <GridSplitter Grid.Row="1"  ResizeDirection="Rows" Width="Auto" Height="4" HorizontalAlignment="Stretch" Margin="0" x:Name="GridSplitterKeyStroke" ResizeBehavior="PreviousAndNext"  />
+                <Grid x:Name="GridKeyStroke" Visibility="Visible" Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Background="#4C6EAD" Text="Keystroke data" Foreground="White" FontWeight="Medium"  FontSize="14" Height="20" TextAlignment="Center" VerticalAlignment="Center"/>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0"  BorderBrush="DarkGray" BorderThickness="1" >                          
+                            <Canvas Width="150" Margin="5,5,5,5" Background="White">
+                                <TextBlock x:Name="TextBoxWordSpeedData"  Canvas.Top="10" Text="{Binding}"/>                                
+                            </Canvas>
+                        </Border>
+                        <ListView  x:Name="ListViewGridKeyStroke" Grid.Column="1"
+						VerticalAlignment="Stretch"
+						VerticalContentAlignment="Stretch"
+						FocusManager.IsFocusScope="True"
+						IsSynchronizedWithCurrentItem="True"              
+                        ItemsSource="{Binding Source={StaticResource ListingDataViewKeyStroke}}"                 
+						ItemContainerStyle="{StaticResource ItemContStyle}"
+						VirtualizingPanel.IsVirtualizing="True"
+						VirtualizingPanel.VirtualizationMode="Recycling"
+						ScrollViewer.IsDeferredScrollingEnabled="True" 
+						SnapsToDevicePixels="True" 
+						ForceCursor="True"                                    
+						IsTextSearchEnabled="False"  >
+
+
+                            <ListView.View>
+                                <GridView x:Name="GridViewListKeyStroke" >
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeCreated}" x:Name="ColumnKeyStrokeCreated"  Width="180">
+                                        <GridViewColumnHeader Content="Created" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeCtrl}" x:Name="Ctrl"  Width="40">
+                                        <GridViewColumnHeader Content="CTRL" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeAlt}" x:Name="Alt"  Width="40">
+                                        <GridViewColumnHeader Content="ALT" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeShift}" x:Name="Shift"  Width="40">
+                                        <GridViewColumnHeader Content="Shift" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeKey}" x:Name="ColumnKeyStrokeKey"  Width="60">
+                                        <GridViewColumnHeader Content="Key" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeText}" x:Name="ColumnKeyStrokeText"  Width="250">
+                                        <GridViewColumnHeader Content="Text" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeSelection}" x:Name="ColumnKeyStrokeSelection"  Width="200">
+                                        <GridViewColumnHeader Content="Selection" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeSystem}" x:Name="ColumnKeyStrokeSystem"  Width="150">
+                                        <GridViewColumnHeader Content="Origin System" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeOrigin}" x:Name="ColumnKeyStrokeOrigin"  Width="100">
+                                        <GridViewColumnHeader Content="Origin Type" />
+                                    </GridViewColumn>
+                                    <GridViewColumn CellTemplate="{StaticResource ColumnKeyStrokeMatch}" x:Name="ColumnKeyStrokeMatch"  Width="60">
+                                        <GridViewColumnHeader Content="Match" />
+                                    </GridViewColumn>
+
+
+
+                                </GridView>
+                            </ListView.View>
+
+                        </ListView>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Grid>
+
+    </Grid>
+</UserControl>
