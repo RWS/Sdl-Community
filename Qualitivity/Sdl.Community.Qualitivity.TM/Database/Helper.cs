@@ -15,9 +15,9 @@ namespace Sdl.Community.TM.Database
         {
 
             var databaseSettingsOut = Path.Combine(databasePath, "Settings.sqlite");
-            const string databaseSettings = "TM.Database.New.Settings.sqlite";
+            const string databaseSettings = "Sdl.Community.TM.Database.New.Settings.sqlite";
             var databaseProjectsOut = Path.Combine(databasePath, "Projects.sqlite");
-            const string databaseProjects = "TM.Database.New.Projects.sqlite";
+            const string databaseProjects = "Sdl.Community.TM.Database.New.Projects.sqlite";
 
             if (!File.Exists(databaseSettingsOut))
                 InitializeDatabasesFirst(databaseSettings, databaseSettingsOut);
@@ -29,6 +29,7 @@ namespace Sdl.Community.TM.Database
         internal static void InitializeDatabasesFirst(string database_from, string database_to)
         {
             var _asb = Assembly.GetExecutingAssembly();
+            var resources = _asb.GetManifestResourceNames();
 
             using (var _inputStream = _asb.GetManifestResourceStream(database_from))
             {

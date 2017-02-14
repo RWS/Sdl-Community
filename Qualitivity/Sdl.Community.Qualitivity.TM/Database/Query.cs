@@ -9636,7 +9636,7 @@ namespace Sdl.Community.TM.Database
         {
             List<DocumentActivity> values;
             if (!File.Exists(databasePath))
-                Helper.InitializeDatabasesFirst("TM.Database.New.Project.sqlite", databasePath);
+                Helper.InitializeDatabasesFirst("Sdl.Community.TM.Database.New.Project.sqlite", databasePath);
 
 
             using (var connection = new SQLiteConnection(GetConnectionString(databasePath)))
@@ -9764,7 +9764,7 @@ namespace Sdl.Community.TM.Database
         {
             var value = -1;
             if (!File.Exists(databasePath))
-                Helper.InitializeDatabasesFirst("TM.Database.New.Project.sqlite", databasePath);
+                Helper.InitializeDatabasesFirst("Sdl.Community.TM.Database.New.Project.sqlite", databasePath);
 
 
             using (var connection = new SQLiteConnection(GetConnectionString(databasePath)))
@@ -9859,7 +9859,7 @@ namespace Sdl.Community.TM.Database
         {
             bool value;
             if (!File.Exists(databasePath))
-                Helper.InitializeDatabasesFirst("TM.Database.New.Project.sqlite", databasePath);
+                Helper.InitializeDatabasesFirst("Sdl.Community.TM.Database.New.Project.sqlite", databasePath);
 
             using (var connection = new SQLiteConnection(GetConnectionString(databasePath)))
             {
@@ -9942,7 +9942,7 @@ namespace Sdl.Community.TM.Database
 
             bool value;
             if (!File.Exists(databasePath))
-                Helper.InitializeDatabasesFirst("TM.Database.New.Project.sqlite", databasePath);
+                Helper.InitializeDatabasesFirst("Sdl.Community.TM.Database.New.Project.sqlite", databasePath);
 
             using (var connection = new SQLiteConnection(GetConnectionString(databasePath)))
             {
@@ -10533,7 +10533,7 @@ namespace Sdl.Community.TM.Database
         {
             List<Sdl.Community.Structures.Documents.Records.QualityMetric> values;
             if (!File.Exists(databasePath))
-                Helper.InitializeDatabasesFirst("TM.Database.New.Project.sqlite", databasePath);
+                Helper.InitializeDatabasesFirst("Sdl.Community.TM.Database.New.Project.sqlite", databasePath);
 
             using (var connection = new SQLiteConnection(GetConnectionString(databasePath)))
             {
