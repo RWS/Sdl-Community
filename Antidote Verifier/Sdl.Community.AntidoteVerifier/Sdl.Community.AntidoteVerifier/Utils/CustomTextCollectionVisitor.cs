@@ -205,6 +205,10 @@ namespace Sdl.Community.AntidoteVerifier
         //visit functions
         public void VisitCommentMarker(ICommentMarker commentMarker)
         {
+            foreach (IAbstractMarkupData item in commentMarker.AllSubItems)
+            {
+                item.AcceptVisitor(this);
+            }
         }
 
         public void VisitLocationMarker(ILocationMarker location)
@@ -232,6 +236,10 @@ namespace Sdl.Community.AntidoteVerifier
 
         public void VisitOtherMarker(IOtherMarker marker)
         {
+            foreach (IAbstractMarkupData item in marker.AllSubItems)
+            {
+                item.AcceptVisitor(this);
+            }
         }
 
         public void VisitPlaceholderTag(IPlaceholderTag tag)
