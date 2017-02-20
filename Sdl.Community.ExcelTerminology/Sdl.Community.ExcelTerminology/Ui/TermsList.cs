@@ -118,8 +118,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+               
+                throw ex;
             }
 
         }
@@ -189,8 +189,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+               
+                throw ex;
             }
         }
 
@@ -257,8 +257,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+               
+                throw ex;
             }
         }
 
@@ -337,8 +337,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+                
+                throw ex;
             }
         }
 
@@ -379,8 +379,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+             
+                throw ex;
             }
         }
 
@@ -415,8 +415,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+              
+                throw ex;
             }
 
         }
@@ -446,8 +446,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+             
+                throw ex;
             }
         }
 
@@ -540,8 +540,8 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+           
+                throw ex;
             }
         }
 

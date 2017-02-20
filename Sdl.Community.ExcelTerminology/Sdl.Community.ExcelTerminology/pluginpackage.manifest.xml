@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TermExcelerator</PlugInName>
-  <Version>1.0.2.0</Version>
+  <Version>1.0.3.0</Version>
   <Description>Excel based terminology provider. It allows to specify the columns from worksheet as source and target terms including synonyms separated by a delimitation.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
@@ -14,6 +14,5 @@
     <File>Microsoft.AI.PerfCounterCollector.dll</File>
     <File>Microsoft.AI.ServerTelemetryChannel.dll</File>
     <File>Microsoft.AI.WindowsServer.dll</File>
-    <File>Microsoft.ApplicationInsights.dll</File>
   </Include>
 </PluginPackage>

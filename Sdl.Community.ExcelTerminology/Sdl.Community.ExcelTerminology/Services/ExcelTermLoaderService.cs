@@ -35,7 +35,8 @@ namespace Sdl.Community.ExcelTerminology.Services
                 }
             }catch(Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
+                //TelemetryService.Instance.AddException(ex);
+                throw ex;
             }
             return result;
         }
@@ -138,7 +139,7 @@ namespace Sdl.Community.ExcelTerminology.Services
                 });
             }catch(Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
+                throw ex;
             }
             return result;
         }

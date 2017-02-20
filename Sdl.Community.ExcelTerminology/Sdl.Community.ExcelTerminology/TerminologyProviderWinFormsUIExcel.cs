@@ -25,7 +25,7 @@ namespace Sdl.Community.ExcelTerminology
             var result = new List<ITerminologyProvider>();
             try
             {
-                TelemetryService.Instance.Init();
+               
                 var settingsDialog = new Settings();
                 var dialogResult = settingsDialog.ShowDialog();
 
@@ -49,8 +49,8 @@ namespace Sdl.Community.ExcelTerminology
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+                
+                throw ex;
             }
 
             return result.ToArray();

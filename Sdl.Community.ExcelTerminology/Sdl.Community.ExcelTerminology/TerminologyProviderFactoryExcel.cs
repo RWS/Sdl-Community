@@ -20,7 +20,7 @@ namespace Sdl.Community.ExcelTerminology
         public ITerminologyProvider CreateTerminologyProvider(Uri terminologyProviderUri,
             ITerminologyProviderCredentialStore credentials)
         {
-            TelemetryService.Instance.Init();
+           
             TerminologyProviderExcel terminologyProvider = null;
             try
             {
@@ -30,8 +30,8 @@ namespace Sdl.Community.ExcelTerminology
                 //in case we didn't any settings stored there is no need to load the provider
                 if (providerSettings == null)
                 {
-                    TelemetryService.Instance.AddEvent("No settings stored for the provider",
-                        new Dictionary<string, string> { { "Uri", terminologyProviderUri.ToString() } });
+                 
+                    //    new Dictionary<string, string> { { "Uri", terminologyProviderUri.ToString() } });
                     return terminologyProvider;
                 }
                 var termSearchService = new NormalTermSeachService(providerSettings);
@@ -41,7 +41,8 @@ namespace Sdl.Community.ExcelTerminology
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
+                throw ex;
+                
             }
             return terminologyProvider;
 

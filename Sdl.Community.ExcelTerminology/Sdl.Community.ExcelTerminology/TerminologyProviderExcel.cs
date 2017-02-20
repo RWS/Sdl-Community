@@ -71,13 +71,13 @@ namespace Sdl.Community.ExcelTerminology
                 var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
 
                 _termEntries = await excelTermProviderService.LoadEntries();
-                TelemetryService.Instance.AddMetric("Loaded Terms", _termEntries.Count);
+              
                 TermsLoaded?.Invoke(_termEntries);
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+              
+                throw ex;
             }
         }
 
@@ -155,8 +155,8 @@ namespace Sdl.Community.ExcelTerminology
             }
             catch (Exception ex)
             {
-                TelemetryService.Instance.AddException(ex);
-                throw;
+               
+                throw ex;
             }
             return results;
         }
