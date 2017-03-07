@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SdlXliffReadWrite by Patrick Hartnett")]
-[assembly: AssemblyDescription("SDLXLIFF Read/Write by Patrick Hartnett")]
+[assembly: AssemblyTitle("SdlXliffReadWrite")]
+[assembly: AssemblyDescription("SDLXLIFF Read/Write")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SdlXliffReadWrite")]
-[assembly: AssemblyCopyright("Copyright © Patrick Hartnett 2011")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
