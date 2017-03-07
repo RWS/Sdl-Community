@@ -284,7 +284,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
                 
             searchString += "&limit=" + settings.Limit.ToString();
 
-            // Patrick Hartnett 29/01/2012
+
             // tests have shown that we need at >= 30 segment limit for this server
             // I will shorten the return list to respect the limit specified by the user
             // searchString += "&limit=35";
@@ -310,7 +310,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
                 foreach (var _char in word.ToCharArray())
                 {
-                    // Patrick Hartnett 29/01/2012
+
                     // need to confirm if we separate the dbl byte chars
                     // from the documentation it suggests this, but I need to confirm
                     if (Encoding.UTF8.GetByteCount(_char.ToString()) > 2) //aisian characters
@@ -336,7 +336,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
             #region  |  get rid of the last punctuation mark at beginning & end  |
 
-            // Patrick Hartnett 29/01/2012
+
             // note we don't want to get rid of all punctuation marks
             if (searchWords.Count > 0)
             {

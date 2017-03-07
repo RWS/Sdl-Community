@@ -310,8 +310,7 @@ namespace Sdl.Community.Taus.Translation.Provider
 
             var punctuations = new string[] { "!", ":", ".", ";", "?" };
 
-            //Patrick Hartnett 29/01/2012
-            //note we don't want to get rid of all punctuation marks
+             //note we don't want to get rid of all punctuation marks
             if (tmpWords.Count > 0)
             {
                 var firstWord = tmpWords[0];
