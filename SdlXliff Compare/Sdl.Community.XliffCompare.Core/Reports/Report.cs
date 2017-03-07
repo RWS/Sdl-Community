@@ -42,7 +42,7 @@ namespace Sdl.Community.XliffCompare.Core.Reports
 
 
                 xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DefaultXsltName + "'");
-                xmlTxtWriter.WriteComment("SDLXLIFF Compare by Patrick Hartnett, 2011");
+                xmlTxtWriter.WriteComment("SDLXLIFF Compare by Sdl Community, 2011");
 
                 #region  |  files  |
 

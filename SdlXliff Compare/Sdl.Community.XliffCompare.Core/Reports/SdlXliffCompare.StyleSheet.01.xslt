@@ -14,7 +14,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" exclude-result-prefixes="xs fn">
     <html>
       <head>
         <title>SDLXLIFF Comparison Report</title>
-        <!--Developed by Patrick Hartnett 25/11/2012-->
+
 
         <style type="text/css">
           body
