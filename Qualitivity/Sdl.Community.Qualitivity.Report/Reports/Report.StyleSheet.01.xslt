@@ -10,8 +10,6 @@ xmlns="http://www.w3.org/2000/svg">
       <head>
         <meta http-equiv="X-UA-Compatible" content="IE=9"/>
         <title>Qualitivity - Activity Documents Overview Report</title>
-        <!--Developed by Patrick Hartnett 25/11/2013-->
-
         <style type="text/css">
           body
           {
