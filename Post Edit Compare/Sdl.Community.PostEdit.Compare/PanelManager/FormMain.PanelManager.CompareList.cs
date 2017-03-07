@@ -6307,7 +6307,7 @@ namespace PostEdit.Compare
 
 
             xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + "PostEdit.Compare.EventLog.xslt" + "'");
-            xmlTxtWriter.WriteComment("SDLXLIFF Compare by Patrick Hartnett, 2011");
+            xmlTxtWriter.WriteComment("SDLXLIFF Compare by Sdl Community, 2011");
 
             xmlTxtWriter.WriteStartElement("log_entries");
 

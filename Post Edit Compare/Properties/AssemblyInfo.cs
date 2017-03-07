@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PostEdit.Versions")]
 [assembly: AssemblyDescription("Post-Edit Versions")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Patrick Hartnett")]
+[assembly: AssemblyCompany("Sdl Community")]
 [assembly: AssemblyProduct("Post-Edit Versions")]
-[assembly: AssemblyCopyright("Copyright © 2014 Patrick Hartnett")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

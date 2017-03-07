@@ -13,7 +13,7 @@ xmlns="http://www.w3.org/2000/svg">
 
         <meta http-equiv="X-UA-Compatible" content="IE=9"/>
         <title>PostEdit.Compare Comparison Log</title>
-        <!--Developed by Patrick Hartnett 25/11/2013-->
+
 
 
         <style type="text/css">

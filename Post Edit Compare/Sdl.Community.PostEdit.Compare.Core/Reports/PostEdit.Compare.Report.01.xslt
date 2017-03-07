@@ -8,7 +8,7 @@
       <head>
         <meta http-equiv="X-UA-Compatible" content="IE=9"/>
         <title>PostEdit.Compare Comparison Report</title>
-        <!--Developed by Patrick Hartnett 25/11/2013-->
+
 
         <style type="text/css">
           body

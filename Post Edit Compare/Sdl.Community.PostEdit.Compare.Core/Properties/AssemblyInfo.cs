@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("PostEdit.Compare.Core by Patrick Hartnett")]
-[assembly: AssemblyDescription("PostEdit.Compare.Core by Patrick Hartnett")]
+[assembly: AssemblyTitle("PostEdit.Compare.Core")]
+[assembly: AssemblyDescription("PostEdit.Compare.Core")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Patrick Hartnett")]
+[assembly: AssemblyCompany("Sdl Community")]
 [assembly: AssemblyProduct("PostEdit.Compare.Core")]
-[assembly: AssemblyCopyright("Copyright © Patrick Hartnett 2016")]
+[assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

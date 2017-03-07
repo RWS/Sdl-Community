@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("PostEdit.Compare")]
 [assembly: AssemblyDescription("Post-Edit Compare")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Patrick Hartnett")]
+[assembly: AssemblyCompany("Sdl Community")]
 [assembly: AssemblyProduct("Post-Edit Compare")]
-[assembly: AssemblyCopyright("Copyright © 2017 Patrick Hartnett")]
+[assembly: AssemblyCopyright("Copyright © 2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

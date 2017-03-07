@@ -65,7 +65,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
 
             xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + ReportUtils.DefaultXsltName + "'");
-            xmlTxtWriter.WriteComment("Post-Edit Compare by Patrick Hartnett, 2013");
+            xmlTxtWriter.WriteComment("Post-Edit Compare by Sdl Community, 2013");
 
             #region  |  variable totals  |
 
