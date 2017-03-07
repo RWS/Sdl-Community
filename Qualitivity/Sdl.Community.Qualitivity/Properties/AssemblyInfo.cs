@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Qualitivity")]
 [assembly: AssemblyDescription("Qualitivity")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("SDL Community Developers")]
+[assembly: AssemblyCompany("SDL Community")]
 [assembly: AssemblyProduct("Qualitivity")]
-[assembly: AssemblyCopyright("Copyright © 2015 SDL")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
