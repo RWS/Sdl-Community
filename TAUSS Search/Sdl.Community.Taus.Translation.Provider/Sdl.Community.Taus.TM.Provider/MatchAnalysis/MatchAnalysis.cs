@@ -341,8 +341,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
             #region  |  get rid of the last punctuation mark at beginning & end  |
 
-            // Patrick Hartnett 29/01/2012
-            // note we don't want to get rid of all punctuation marks
+             // note we don't want to get rid of all punctuation marks
             if (wordsList.Count <= 0) return wordsList;
             var firstWord = wordsList[0];
             var lastWord = wordsList[wordsList.Count - 1];

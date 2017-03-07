@@ -33,7 +33,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
                  
 
            xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + DefaultXsltName + "'");
-           xmlTxtWriter.WriteComment("Taus TM Provider by Patrick Hartnett, 2011");
+           xmlTxtWriter.WriteComment("Taus TM Provider by Sdl Community, 2017");
 
 
            xmlTxtWriter.WriteStartElement("segments");
