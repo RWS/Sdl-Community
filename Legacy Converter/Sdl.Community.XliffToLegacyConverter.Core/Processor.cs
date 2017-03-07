@@ -212,7 +212,6 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 
         public static List<TagUnit> SeperateTags(string text)
         {
-            //Patrick Hartnett 2010
             //simple function to recover the tag information
             var tags = new List<TagUnit>();
 

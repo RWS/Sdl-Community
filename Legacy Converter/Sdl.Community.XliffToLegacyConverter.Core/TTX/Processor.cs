@@ -66,7 +66,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
             };
             xmlTxtWriter.WriteStartDocument(true);
 
-            xmlTxtWriter.WriteComment(Application.ProductName + " by Patrick Hartnett, 2009");
+            xmlTxtWriter.WriteComment(Application.ProductName + " by Sdl Community 2017");
 
             xmlTxtWriter.WriteStartElement("TRADOStag");
             xmlTxtWriter.WriteAttributeString("Version", "2.0");
