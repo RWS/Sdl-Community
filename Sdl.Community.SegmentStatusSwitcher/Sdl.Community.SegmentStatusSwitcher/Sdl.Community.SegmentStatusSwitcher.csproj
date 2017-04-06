@@ -125,7 +125,7 @@
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
     </Content>
     <Content Include="pluginpackage.manifest.xml" />
-    <None Include="..\..\..\..\..\Source\Repos\Sdl-Community\SdlCommunity.snk">
+    <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="Resources\ConfirmationLevel_Unspecified.ico" />
@@ -150,7 +150,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\..\..\Source\Repos\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />

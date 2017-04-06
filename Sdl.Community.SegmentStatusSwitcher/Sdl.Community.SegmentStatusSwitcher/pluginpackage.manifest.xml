@@ -4,5 +4,5 @@
   <Version>1.0</Version>
   <Description>Keyboard shortcuts for changing segments status</Description>
   <Author>SDL Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 </PluginPackage>
