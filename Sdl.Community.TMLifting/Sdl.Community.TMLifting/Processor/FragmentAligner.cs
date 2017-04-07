@@ -1,14 +1,7 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.LanguagePlatform.TranslationMemory;
+﻿using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.ReindexTms.Processor
+namespace Sdl.Community.TMLifting.Processor
 {
     public class FragmentAligner
     {
@@ -25,7 +18,6 @@ namespace Sdl.Community.ReindexTms.Processor
             do
             {
             } while (_tm.AlignTranslationUnits(true, false, ref iterator));
-
 
             _tm.Save();
         }

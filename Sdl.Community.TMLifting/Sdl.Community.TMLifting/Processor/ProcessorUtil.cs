@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.LanguagePlatform.TranslationMemory;
+﻿using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System;
+using System.IO;
 
-namespace Sdl.Community.ReindexTms.Processor
+namespace Sdl.Community.TMLifting.Processor
 {
     public class ProcessorUtil
     {
@@ -33,6 +29,7 @@ namespace Sdl.Community.ReindexTms.Processor
             return renamedTm;
 
         }
+
         public static void UpdateTranslationMemory(FileBasedTranslationMemory tm)
         {
             if (tm.FGASupport == FGASupport.NonAutomatic)

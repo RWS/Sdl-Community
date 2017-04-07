@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.LanguagePlatform.TranslationMemory;
+﻿using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System.Threading.Tasks;
 
-namespace Sdl.Community.ReindexTms.Processor
+namespace Sdl.Community.TMLifting.Processor
 {
     public class TmImporter
     {
@@ -36,6 +32,5 @@ namespace Sdl.Community.ReindexTms.Processor
             await t;
             return importer.Statistics;
         }
-
     }
 }

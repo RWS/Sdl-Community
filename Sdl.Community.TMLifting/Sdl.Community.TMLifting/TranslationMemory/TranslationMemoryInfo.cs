@@ -1,7 +1,7 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 
-namespace Sdl.Community.ReindexTms.TranslationMemory
+namespace Sdl.Community.TMLifting.TranslationMemory
 {
     public class TranslationMemoryInfo
     {
@@ -24,7 +24,6 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
         public override string ToString()
         {
             return Name;
-        }
-     
+        }     
     }
 }

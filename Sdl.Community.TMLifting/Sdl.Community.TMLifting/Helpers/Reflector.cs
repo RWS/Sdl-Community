@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Sdl.Community.ReindexTms.Helpers
+namespace Sdl.Community.TMLifting.Helpers
 {
     internal class Reflector
     {

@@ -1,4 +1,5 @@
-﻿using Sdl.Community.ReindexTms.TranslationMemory;
+﻿using Sdl.Community.TMLifting.Helpers;
+using Sdl.Community.TMLifting.TranslationMemory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,24 +7,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Sdl.Community.ReindexTms.Helpers;
 
-namespace Sdl.Community.ReindexTms
+namespace Sdl.Community.TMLifting
 {
-    public partial class ReindexForm : UserControl
+    public partial class TMLiftingForm : UserControl
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
 
-        public ReindexForm()
+        public TMLiftingForm()
         {
             InitializeComponent();
             _tmHelper = new TranslationMemoryHelper();
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
-            _bw = new BackgroundWorker {WorkerReportsProgress = true, WorkerSupportsCancellation = true};
+            _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
         }
 
         protected override void OnLoad(EventArgs e)
@@ -34,20 +34,15 @@ namespace Sdl.Community.ReindexTms
             _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             _bw.ProgressChanged += bw_ProgressChanged;
             reIndexCheckBox.Checked = true;
-
-
         }
 
         void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-
             rtbStatus.Text = e.UserState.ToString();
-
         }
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-
             if (!e.Cancelled)
             {
                 btnReindex.Enabled = true;
@@ -57,14 +52,13 @@ namespace Sdl.Community.ReindexTms
                 if (timeSpan.Hours != 00)
                 {
                     elapsedTime = " Process time " +
-                                  $"{timeSpan.Hours:00}:{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} hours.";
+                                  $"{timeSpan.Hours:00}:{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds / 10:00} hours.";
                 }
                 else
                 {
                     elapsedTime = " Process time " +
-                                  $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds/10:00} minutes.";
+                                  $"{timeSpan.Minutes:00}: {timeSpan.Seconds:00}.{timeSpan.Milliseconds / 10:00} minutes.";
                 }
-
 
                 _elapsedTime.Append("Process time:" + elapsedTime);
                 rtbStatus.AppendText(elapsedTime);
@@ -74,8 +68,6 @@ namespace Sdl.Community.ReindexTms
                 _stopWatch.Stop();
                 rtbStatus.AppendText("Process canceled.");
             }
-            
-
         }
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -101,12 +93,11 @@ namespace Sdl.Community.ReindexTms
             var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
 
             _bw.RunWorkerAsync(tms);
-            
         }
 
         private void chkLoadStudioTMs_CheckedChanged(object sender, EventArgs e)
         {
-            if(chkLoadStudioTMs.Checked)
+            if (chkLoadStudioTMs.Checked)
             {
                 var tms = _tmHelper.LoadLocalUserTms();
 
@@ -119,7 +110,8 @@ namespace Sdl.Community.ReindexTms
             {
                 var toRemoveItems = (from object item in lstTms.Items
                                      let tmInfo = item as TranslationMemoryInfo
-                                     where tmInfo.IsStudioTm select item).ToList();
+                                     where tmInfo.IsStudioTm
+                                     select item).ToList();
 
                 foreach (var item in toRemoveItems)
                 {
@@ -148,7 +140,6 @@ namespace Sdl.Community.ReindexTms
             //// the drop effect reflects that the drop cannot occur. 
             if (!e.Data.GetDataPresent(DataFormats.FileDrop, false))
             {
-
                 e.Effect = DragDropEffects.None;
                 return;
             }
@@ -199,7 +190,6 @@ namespace Sdl.Community.ReindexTms
         {
             _bw.CancelAsync();
             rtbStatus.AppendText(@"Process will be canceled");
-           
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.ReindexTms</PlugInName>
+  <PlugInName>Sdl.Community.TMLifting</PlugInName>
   <Version>1.0.7.0</Version>
-  <Description>Sdl.Community.ReindexTms</Description>
+  <Description>Sdl.Community.TMLifting</Description>
   <Author></Author>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
   <Include>

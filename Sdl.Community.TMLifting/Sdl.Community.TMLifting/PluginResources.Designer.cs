@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.ReindexTms {
+namespace Sdl.Community.TMLifting {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.ReindexTms {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.ReindexTms.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TMLifting.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -71,7 +71,7 @@ namespace Sdl.Community.ReindexTms {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.ReindexTms.
+        ///   Looks up a localized string similar to Sdl.Community.TMLifting.
         /// </summary>
         internal static string Plugin_Name {
             get {

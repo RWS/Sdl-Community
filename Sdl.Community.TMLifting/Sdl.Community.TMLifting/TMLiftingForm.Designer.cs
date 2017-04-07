@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Sdl.Community.ReindexTms
+namespace Sdl.Community.TMLifting
 {
-    partial class ReindexForm
+    partial class TMLiftingForm
     {
         /// <summary>
         /// Required designer variable.

@@ -1,22 +1,19 @@
-﻿using Sdl.LanguagePlatform.Core.Tokenization;
+﻿using Sdl.Community.TMLifting.Processor;
+using Sdl.Community.Toolkit.Core.Services;
+using Sdl.LanguagePlatform.Core.Tokenization;
+using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Sdl.Community.ReindexTms.Processor;
-using Sdl.Community.Toolkit.Core;
-using Sdl.Community.Toolkit.Core.Services;
-using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.ReindexTms.TranslationMemory
+namespace Sdl.Community.TMLifting.TranslationMemory
 {
-
     public class TranslationMemoryHelper
     {
         private readonly string _tmsConfigPath;
@@ -40,11 +37,11 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                     where !string.IsNullOrEmpty(path) && File.Exists(path)
                     select new TranslationMemoryInfo(path, true)).ToList();
         }
+
         public List<TranslationMemoryInfo> LoadTmsFromPath(string path)
         {
             return LoadTmsFromPath(new[] { path });
         }
-
 
         public List<TranslationMemoryInfo> LoadTmsFromPath(string[] paths)
         {
@@ -66,11 +63,8 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                     }
                 }
             }
-
-
             return tms;
         }
-
         
         public void Uplift(TranslationMemoryInfo tm,BackgroundWorker bw)
         {
@@ -111,15 +105,15 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
             else
             {
                 bw.ReportProgress(100,"");
-            }
-                
-            
-         
-            
+            }                
         }
 
-        private async void Process(TmExporter tmExporter, TmImporter tmImporter, ModelBuilder modelBuilder, 
-           FragmentAligner fragmentAligner,BackgroundWorker bw)
+        private async void Process(
+           TmExporter tmExporter,
+           TmImporter tmImporter,
+           ModelBuilder modelBuilder,             
+           FragmentAligner fragmentAligner,
+           BackgroundWorker bw)
         {
             try
             {
@@ -143,10 +137,9 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
             catch (Exception e)
             {
                 throw new Exception(e.Message);
-            }
-          
-
+            }         
         }
+
         private  void Process(ModelBuilder modelBuilder, FragmentAligner fragmentAligner,BackgroundWorker bw)
         {
             try
@@ -159,13 +152,13 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 {
                     bw.ReportProgress(100,"");
                 }
-                
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
+
         public void Process(List<TranslationMemoryInfo> tms, BackgroundWorker bw, bool reindex,bool upplift)
         {
             _reindexStatus.Remove(0, _reindexStatus.Length);
@@ -207,21 +200,19 @@ namespace Sdl.Community.ReindexTms.TranslationMemory
                 if (!bw.CancellationPending)
                 {
                     bw.ReportProgress(0, _reindexStatus.ToString());
-                
+
                 }
                 else
                 {
-                    bw.ReportProgress(100,"");
+                    bw.ReportProgress(100, "");
                 }
-                
             }
+
             fileBasedTm.RecomputeFuzzyIndexStatistics();
             fileBasedTm.Save();
             _reindexStatus.AppendLine(string.Format("Finish reindex {0} translation memory", tm.Name));
 
             bw.ReportProgress(0, _reindexStatus.ToString());
-
-
         }
     }
 }

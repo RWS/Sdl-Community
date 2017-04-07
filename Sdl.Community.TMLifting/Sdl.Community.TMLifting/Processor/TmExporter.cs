@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.ReindexTms.Processor
+namespace Sdl.Community.TMLifting.Processor
 {
     public class TmExporter
     {

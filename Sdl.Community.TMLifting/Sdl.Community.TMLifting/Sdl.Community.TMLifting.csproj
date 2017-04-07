@@ -7,8 +7,8 @@
     <ProjectGuid>{E6321FCA-484B-4D69-BDE1-DA168F37840E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.ReindexTms</RootNamespace>
-    <AssemblyName>Sdl.Community.ReindexTms</AssemblyName>
+    <RootNamespace>Sdl.Community.TMLifting</RootNamespace>
+    <AssemblyName>Sdl.Community.TMLifting</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -136,18 +136,18 @@
     <Compile Include="Processor\TmExporter.cs" />
     <Compile Include="Processor\TmImporter.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="ReindexForm.cs">
+    <Compile Include="TMLiftingForm.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ReindexForm.Designer.cs">
-      <DependentUpon>ReindexForm.cs</DependentUpon>
+    <Compile Include="TMLiftingForm.Designer.cs">
+      <DependentUpon>TMLiftingForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReindexTmsRibbon.cs" />
+    <Compile Include="TMLiftingRibbon.cs" />
     <Compile Include="TranslationMemory\TranslationMemoryHelper.cs" />
     <Compile Include="TranslationMemory\TranslationMemoryInfo.cs" />
-    <EmbeddedResource Include="ReindexForm.resx">
-      <DependentUpon>ReindexForm.cs</DependentUpon>
+    <EmbeddedResource Include="TMLiftingForm.resx">
+      <DependentUpon>TMLiftingForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

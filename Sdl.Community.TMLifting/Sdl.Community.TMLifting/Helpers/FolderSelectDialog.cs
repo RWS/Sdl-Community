@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sdl.Community.ReindexTms.Helpers
+namespace Sdl.Community.TMLifting.Helpers
 {
     public class FolderSelectDialog : IDisposable
     {
