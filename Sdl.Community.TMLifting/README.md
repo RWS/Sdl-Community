@@ -1,4 +1,4 @@
-# Reindex Translation Memories
+# TM Lifting Translation Memories
 
 ##Introduction
 
