@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: OpenOffice.sdlfiletype
+  Last change:        18 May 2009
+-->
+<!-- filter definition for using open office document files in filter framework 2.0 via a filter framework 1 adapter -->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>OpenOffice v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.TagProcessing/Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.StringResources/OpenOfficeFileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.TagProcessing/Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.StringResources/OpenOfficeFileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.TagProcessing/Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.StringResources/OpenOfficeFileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.odt;*.ods;*.odp;*.sxw;*.sxc;*.sxi</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>odt</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.TagProcessing/Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.OpenOfficeAdapterFilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.TagProcessing/Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.StringResources/OpenOfficeFileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+  </object>
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FilterFramework1FilterDefinitionFilePath" value="OpenOfficeFilter_1_0_0_0.xml" />
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<!--
+	
+	Copyright (c) 2007 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+-->
+<!--	
+	
+	This is a open office filter definition file for the SDL Trados Filter plug-in for 
+	OpenOffice/StarOffice files. It allows the adjustment of the default 
+	settings of the filter. Possible setting values are described later in 
+	the file. Any unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+-->
+<!-- 	Original file name: 		OpenOfficeFilter_1_0_0_0.xml	-->
+<!-- 	Version:							1.0.3.5				-->
+<!-- 	Last change:					07 November 2007 			-->
+
+<FilterDefinition>
+  <Guid>Open Office 1.0.0.0</Guid>
+  <FileTypeName>OpenOffice/StarOffice Documents</FileTypeName>
+  <FileFilterRegExp>*.odt;*.ods;*.odp;*.sxw;*.sxc;*.sxi</FileFilterRegExp>
+  <InteractiveParser Instantiation="Java">
+    <Components>
+      <Component Instantiation="Java" HomeLocation="Filters/OpenOfficeFilter/OpenOfficeFilter1.0.0.0.jar">
+        <Guid>com.trados.filters.openoffice.interactiveparser.OpnOffInteractiveParser</Guid>
+        <Settings></Settings>
+      </Component>
+    </Components>
+  </InteractiveParser>
+  <Parser Instantiation="Java" HomeLocation="Filters/OpenOfficeFilter/OpenOfficeFilter1.0.0.0.jar">
+    <Guid>com.trados.filters.openoffice.forwardconversion.OpnOffFileParser</Guid>
+    <Settings>
+    </Settings>
+  </Parser>
+  <Writer Instantiation="Java" HomeLocation="Filters/OpenOfficeFilter/OpenOfficeFilter1.0.0.0.jar">
+    <Guid>com.trados.filters.openoffice.backwardconversion.OpnOffFileWriter</Guid>
+    <Settings>
+    </Settings>
+  </Writer>
+</FilterDefinition>]]></value>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.OpenOfficeFileSniffer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true">
+    <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+  </object>
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Framework1FormattingProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list></list>
+    </property>
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- internal objects -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier ">
+          <property name="Enabled">
+            <value>True</value>
+          </property>
+          <property name="CheckTagOrderChange">
+            <value>True</value>
+          </property>
+          <property name="TagOrderChange">
+            <value>Warning</value>
+          </property>
+          <property name="CheckSpaceAroundTag">
+            <value>True</value>
+          </property>
+          <property name="SpaceAroundTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckGhostTag">
+            <value>True</value>
+          </property>
+          <property name="GhostTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckTagDeleted">
+            <value>True</value>
+          </property>
+          <property name="TagDeleted">
+            <value>Error</value>
+          </property>
+          <property name="CheckTagAdded">
+            <value>True</value>
+          </property>
+          <property name="TagAdded">
+            <value>Error</value>
+          </property>
+          <property name="IgnoreFormatting">
+            <value>True</value>
+          </property>
+        </object>
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+  <!-- settings user interface -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+</objects>

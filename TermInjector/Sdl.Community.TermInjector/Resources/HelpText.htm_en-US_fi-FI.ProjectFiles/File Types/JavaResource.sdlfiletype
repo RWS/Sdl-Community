@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: JavaResource.sdlfiletype
+  Last change:        15 May 2009
+-->
+<!-- Filter Definition for using RC Document files in Filter Framework 2.0 via a Filter Framework 1 Adapter -->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>Java Resource v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/Java_Resource_Documents</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.properties</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>properties</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.FilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+  </object>
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FilterFramework1FilterDefinitionFilePath" value="JavaResourceFilter_1_0_0_0.xml" />
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<!--
+	
+	Copyright © 2007 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+-->
+<!--	
+	
+	This is a properties filter definition file for Java Resource files. 
+	It allows the adjustment of the default settings of the filter. 
+	Possible setting values are described later in 	the file. A
+	ny unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+-->
+<!-- 	Original file name: 		PropertiesFilter_1_0_0_0.xml	-->
+<!-- 	Version: 					1.0.4.1	-->
+<!-- 	Last change: 				21 Sep 2007 -->
+
+<FilterDefinition>
+  <Guid>TRADOS Java Resource Filter 1.0.0.0</Guid>
+  <FileTypeName>Java Properties Files</FileTypeName>
+  <FileFilterRegExp>*.properties</FileFilterRegExp>
+
+  <QuickTags>
+    <QuickTag Command="Bold">
+      <StartTag>&lt;b&gt;</StartTag>
+      <EndTag>&lt;/b&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Italic">
+      <StartTag>&lt;i&gt;</StartTag>
+      <EndTag>&lt;/i&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Underline">
+      <StartTag>&lt;u&gt;</StartTag>
+      <EndTag>&lt;/u&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Subscript">
+      <StartTag>&lt;sub&gt;</StartTag>
+      <EndTag>&lt;/sub&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Superscript">
+      <StartTag>&lt;sub&gt;</StartTag>
+      <EndTag>&lt;/sub&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom1">
+      <StartTag>&lt;strong&gt;</StartTag>
+      <EndTag>&lt;/strong&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom2">
+      <StartTag>&lt;br/&gt;</StartTag>
+      <EndTag>
+      </EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom3">
+      <StartTag>&lt;hr/&gt;</StartTag>
+      <EndTag>
+      </EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom4">
+      <StartTag>&lt;pre&gt;</StartTag>
+      <EndTag>&lt;/pre&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom5">
+      <StartTag>&lt;var&gt;</StartTag>
+      <EndTag>&lt;/var&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom6">
+      <StartTag>&lt;q&gt;</StartTag>
+      <EndTag>&lt;/q&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom7">
+      <StartTag>&lt;samp&gt;</StartTag>
+      <EndTag>&lt;/samp&gt;</EndTag>
+    </QuickTag>
+  </QuickTags>
+  <Parser Instantiation="Java" HomeLocation="Filters/JavaResourceFilter/JavaResourceFilter1.0.0.0.jar">
+    <Guid>com.trados.filters.properties.forwardconversion.PropFileParser</Guid>
+    <Settings>
+      <Properties>
+        <!-- 
+					Comment delimiters, by default filter would identify # as comment delimiters.
+					More comment delimiters can be added with new Comment tags.
+					Moreover delimiters can be combination of one or more character(s).
+				-->
+        <Comments>
+          <Comment>#</Comment>
+          <Comment>!</Comment>
+          <Comment>;</Comment>
+          <Comment>WSS</Comment>
+          <Comment>image</Comment>
+        </Comments>
+        <!-- 
+					Properties key value seperators, by default filter would identify = as seperators.
+					More seperators can be added with new Seperator tags.
+					Note: Standard seperators (white spaces) : \n, \t, space and \r these are taken care by Java API by default. 					
+				-->
+        <Separators>
+        </Separators>
+        <SetBackslashAsLineContinue>Default</SetBackslashAsLineContinue> 
+        <!--  To set backslash as line continue, possible values: On, Off, Default (equal On)-->
+        <IsCommentVisible>Default</IsCommentVisible>
+        <!-- To show comments on the TagEditor, possible values: On, Off, Default (equal On)-->
+        <IsCommentTranslatable>Default</IsCommentTranslatable>
+        <!-- To make comments translatable, possible values: On, Off, Default (equal On)-->
+        <ProcessEmptyKeyValue>Default</ProcessEmptyKeyValue>
+        <!-- If On, Filter would show the key with empty value allowing Translator to provide new value, else ignore key with empty value.
+				Possible values: On, Off, Default (equal On). -->
+        <TagsExternal>ABBR,ADDRESS,APPLET,AREA,BASE,BASEFONT,BDO,BGSOUND,BLOCKQUOTE,BODY,BUTTON,CAPTION,CENTER,COL,COLGROUP,DD,DEL,DIR,DIV,DL,DT,FIELDSET,FOOT,FORM,FRAME,FRAMESET,H1,H2,H3,H4,H5,H6,HEAD,HR,HTML,IA,INPUT,INS,ISINDEX,LABEL,LEGEND,LI,LINK,LISTING,MAP,META,NOFRAMES,NOSCRIPT,OBJECT,OL,OPTGROUP,OPTION,P,PARAM,PRE,PROPERTY,Q,SAMP,SCRIPT,SELECT,SPACER,STYLE,TABLE,TBODY,TD,TEMPLATE,TEXTAREA,TFOOT,TH,THEAD,TITLE,TR,UL,XMP</TagsExternal>
+        <!-- TagsExternal : 
+						By default, inline HTML tags will be considered internal.
+						List here the HTML tags that should be treated as external
+						by the PropertiesFilter. Tag names are case insensitive.
+						-->
+        <Entities>amp,apos,bdquo,circ,dagger,emsp,ensp,gt,lrm,lsaquo,lsquo,lt,mdash,ndash,oelig,permil,quot,rdquorlm,rsaquo,rsquo,sbquo,scaron,thinsp,tilde,yuml,zwj,zwjn</Entities>
+        <!-- Entities : 
+						Any entity designated below will be treated as a placeholder 
+						and read-only by TagEditor when delimited by & and ; (eg: &bvsp;) 
+						Tag names are case insensitive.
+						-->
+      </Properties>
+    </Settings>
+  </Parser>
+  <Writer Instantiation="Java" HomeLocation="Filters/JavaResourceFilter/JavaResourceFilter1.0.0.0.jar">
+    <Guid>com.trados.filters.properties.backwardconversion.PropFileWriter</Guid>
+    <Settings>
+      <Properties>
+        <!-- 
+					Comment delimiters, by default filter would identify # as comment delimiters.
+					More comment delimiters can be added with new Comment tags.
+					Moreover delimiters can be combination of one or more character(s).
+				-->
+        <Comments>
+          <Comment>#</Comment>
+          <Comment>!</Comment>
+          <Comment>;</Comment>
+          <Comment>WSS</Comment>
+          <Comment>image</Comment>
+        </Comments>
+        <!-- 
+					Properties key value seperators, by default filter would identify = as seperators.
+					More seperators can be added with new Seperator tags.
+					Note: Standard seperators (white spaces) : \n, \t, space and \r these are taken care by Java API by default. 					
+				-->
+        <Separators>
+        </Separators>
+        <SetBackslashAsLineContinue>Default</SetBackslashAsLineContinue> 
+        <!--  To set backslash as line continue, possible values: On, Off, Default (equal On)-->
+        <IsCommentVisible>Default</IsCommentVisible>
+        <!-- To show comments on the TagEditor, possible values: On, Off, Default (equal On)-->
+        <IsCommentTranslatable>Default</IsCommentTranslatable>
+        <!-- To make comments translatable, possible values: On, Off, Default (equal On)-->
+        <ProcessEmptyKeyValue>Default</ProcessEmptyKeyValue>
+        <!-- If On, Filter would show the key with empty value allowing Translator to provide new value, else ignore key with empty value.
+				Possible values: On, Off, Default (equal On). -->
+        <DoStrictVerification>Default</DoStrictVerification>
+        <!-- 
+		If the setting is on, then it will verify internal standalone tags (insertion/deletion or shuffle).
+		Otherwise it will allow saving the target file without verifying the same.	
+		To do strict verification, possible values: On, Off, Default (equal Off) -->
+        <TargetSeparator>=</TargetSeparator>
+        <TagsExternal>ABBR,ADDRESS,APPLET,AREA,BASE,BASEFONT,BDO,BGSOUND,BLOCKQUOTE,BODY,BUTTON,CAPTION,CENTER,COL,COLGROUP,DD,DEL,DIR,DIV,DL,DT,FIELDSET,FOOT,FORM,FRAME,FRAMESET,H1,H2,H3,H4,H5,H6,HEAD,HR,HTML,IA,INPUT,INS,ISINDEX,LABEL,LEGEND,LI,LINK,LISTING,MAP,META,NOFRAMES,NOSCRIPT,OBJECT,OL,OPTGROUP,OPTION,P,PARAM,PRE,PROPERTY,Q,SAMP,SCRIPT,SELECT,SPACER,STYLE,TABLE,TBODY,TD,TEMPLATE,TEXTAREA,TFOOT,TH,THEAD,TITLE,TR,UL,XMP</TagsExternal>
+        <!-- TagsExternal : 
+						By default, inline HTML tags will be considered internal.
+						List here the HTML tags that should be treated as external
+						by the PropertiesFilter.
+						-->
+        <Entities>amp,apos,bdquo,circ,dagger,emsp,ensp,gt,lrm,lsaquo,lsquo,lt,mdash,ndash,oelig,permil,quot,rdquorlm,rsaquo,rsquo,sbquo,scaron,thinsp,tilde,yuml,zwj,zwjn</Entities>
+        <!-- Entities : 
+						Any entity designated below will be treated as a placeholder 
+						and read-only by TagEditor when delimited by & and ; (eg: &bvsp;) 												
+						-->
+      </Properties>
+    </Settings>
+  </Writer>
+  <InteractiveParser Instantiation="Java">
+    <Components>
+      <Component Instantiation="Java" HomeLocation="Filters/JavaResourceFilter/JavaResourceFilter1.0.0.0.jar">
+        <Guid>com.trados.filters.properties.interactiveparser.PropInteractiveParser</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+    </Components>
+  </InteractiveParser>
+</FilterDefinition>]]></value>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Framework1FileSniffer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true">
+    <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+  </object>
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.Comments, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JavaResource Comments Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/COMMENTS</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Comments Settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Java_Resource_Comments</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.Delimiters, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JavaResource Delimiters Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/DELIMITERS</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Delimiters Settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Java_Resource_Delimiters</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.Tags, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JavaResource Tags Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/TAGS</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Tags Settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Java_Resource_Tags</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.Entities, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JavaResource Entities Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/ENTITIES</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Entities Settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Java_Resource_Entities</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.OtherSettings, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JavaResource Other Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings/Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.StringResources/Other_Settings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Other Settings for JavaResource File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Java_Resource_Other_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.CommentContextGeneratingProcessor, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Framework1JavaResourceFormattingProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list></list>
+    </property>
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- internal objects(quick tags) -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings.QuickTagBuilder, Sdl.FileTypeSupport.Framework.Adapter.JavaResourceFilterSettings" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- internal objects(tag verifier) -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier ">
+          <property name="Enabled">
+            <value>True</value>
+          </property>
+          <property name="CheckTagOrderChange">
+            <value>True</value>
+          </property>
+          <property name="TagOrderChange">
+            <value>Warning</value>
+          </property>
+          <property name="CheckSpaceAroundTag">
+            <value>True</value>
+          </property>
+          <property name="SpaceAroundTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckGhostTag">
+            <value>True</value>
+          </property>
+          <property name="GhostTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckTagDeleted">
+            <value>True</value>
+          </property>
+          <property name="TagDeleted">
+            <value>Error</value>
+          </property>
+          <property name="CheckTagAdded">
+            <value>True</value>
+          </property>
+          <property name="TagAdded">
+            <value>Error</value>
+          </property>
+          <property name="IgnoreFormatting">
+            <value>True</value>
+          </property>
+        </object>
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>

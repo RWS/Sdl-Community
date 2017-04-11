@@ -1,0 +1,247 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<objects xmlns="http://www.springframework.net" xmlns:sp="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object singleton="true" type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core">
+        <constructor-arg>
+          <value>WsXliff 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/FileTypeDocumentName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/FileTypeDocumentsName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/Description</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.xlf</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>xlf</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.FilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsXliffSniffer, Sdl.FileTypeSupport.Bilingual.WsXliff" singleton="true" />
+  <!-- file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualParser">
+      <object type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsXliffReader, Sdl.FileTypeSupport.Bilingual.WsXliff" singleton="false" />
+    </property>
+    <property name="BilingualProcessors">
+      <list />
+    </property>
+  </object>
+  <!-- file writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualProcessors">
+      <list />
+    </property>
+    <property name="BilingualWriter">
+      <object type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsXliffWriter, Sdl.FileTypeSupport.Bilingual.WsXliff" singleton="false" />
+    </property>
+  </object>
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <!--
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+-->
+        <object name="WsXliffVerifier" type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsXliffVerifier, Sdl.FileTypeSupport.Bilingual.WsXliff" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+  <!-- preview sets -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- Internal navigable preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalNavigablePreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/InternalNavigablePreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.WsXliff/Sdl.FileTypeSupport.Bilingual.WsXliff.StringResources/InternalNavigablePreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SourceAndTargetPreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableSideBySideBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- default control preview -->
+    <property name="DefaultControlPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>InternalNavigablePreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- preview generators -->
+  <object id="Generator_InternalPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsInternalPreviewWriter, Sdl.FileTypeSupport.Bilingual.WsXliff" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+    <property name="FileTweakers">
+      <list>
+        <!--
+        <object type="Sdl.FileTypeSupport.Native.Xml.XmlFilePostTweaker, Sdl.FileTypeSupport.Native.Xml_1_1" singleton="false" />
+-->
+        <object type="Sdl.FileTypeSupport.Bilingual.WsXliff.WsPreviewFileTweaker, Sdl.FileTypeSupport.Bilingual.WsXliff" singleton="false"></object>
+      </list>
+    </property>
+  </object>
+  <!-- preview controls -->
+  <!-- navigable internal preview control -->
+  <object id="PreviewControl_InternalNavigableBrowser" type="Sdl.FileTypeSupport.Native.Xml.Preview.XmlNavigablePreviewController, Sdl.FileTypeSupport.Native.Xml" singleton="false" />
+  <!-- preview control (navigable side-by-side browser) -->
+  <object id="PreviewControl_InternalNavigableSideBySideBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.SideBySideNavigableWebBrowserPreviewController, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- custom UI Administration -->
+  <!--
+	<object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+		<property name="SettingsPageReferences">
+			<list>
+				<object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+					<constructor-arg>
+						<value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+					</constructor-arg>
+					<constructor-arg>
+						<value>Quick Tags Settings for Bil filter ID</value>
+					</constructor-arg>
+					<constructor-arg>
+						<object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+							<constructor-arg>
+								<value>Quick Inserts</value>
+							</constructor-arg>
+						</object>
+					</constructor-arg>
+					<constructor-arg>
+						<object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+							<constructor-arg>
+								<value>Quick Inserts for Sample Bilingual File Type</value>
+							</constructor-arg>
+						</object>
+					</constructor-arg>
+				</object>
+			</list>
+		</property>
+	</object>
+	-->
+  <!-- quick tags -->
+  <!--
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.Sdk.FilterFramework.Samples.Bil.QuickTagBuilder, Sdl.Sdk.FilterFramework.Samples.Bil" factory-method="BuildStandardQuickTags" singleton="false"/>
+    </property>
+  </object>
+  -->
+</objects>

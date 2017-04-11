@@ -1,0 +1,993 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: Word2003.sdlfiletype
+  Last change:        18 May 2009
+-->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core">
+        <constructor-arg>
+          <value>Word 2000-2003 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/Microsoft_Word_2000_2003</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.doc;*.dot</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>doc</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Word2003/Sdl.FileTypeSupport.Filters.Word2003.Word2003Doc.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>OrderOfTextBoxesSettings</value>
+        <value>NonTranslatableStylesSettings</value>
+        <value>NonTranslatableFootnotesSettings</value>
+        <value>NonTranslatableTextSettings</value>
+        <value>OtherSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FilterFramework1FilterDefinitionFilePath">
+      <value>Word_1_0_0_0.xml</value>
+    </property>
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<!--
+	
+	Copyright © 2005 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+-->
+<!--	
+	
+	This is a filter definition file for the TRADOS Filter PlugIn for 
+	Microsoft Word(tm) files. It allows the adjustment of the default 
+	settings of the filter. Possible setting values are described later in 
+	the file. Any unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+-->
+<!-- 	Original file name: 	Word_1_0_0_0.xml	-->
+<!-- 	Version: 				1.0.0.0	-->
+<!-- Internal Version: 			1.0.1.3	-->
+<!-- 	Last change: 			05 Jun 2008	-->
+
+<FilterDefinition>
+  <Guid>TRADOS Word Filter 1.0.0.0</Guid>
+  <FileTypeName>Microsoft Word 2000-2003</FileTypeName>
+  <FileFilterRegExp>*.doc;*.dot</FileFilterRegExp>
+  <QuickTags>
+    <QuickTag Command="Bold">
+      <StartTag>&lt;cf bold="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Italic">
+      <StartTag>&lt;cf italic="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Underline">
+      <StartTag>&lt;cf underlinestyle="single"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Subscript">
+      <StartTag>&lt;cf subscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Superscript">
+      <StartTag>&lt;cf superscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom1">
+      <StartTag>&lt;cf bold="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom2">
+      <StartTag>&lt;cf italic="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom3">
+      <StartTag>&lt;cf underlinestyle="none"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom4">
+      <StartTag>&lt;cf superscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom5">
+      <StartTag>&lt;cf subscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom6">
+      <StartTag>&lt;br/&gt;</StartTag>
+      <EndTag>
+      </EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom7">
+      <StartTag>„</StartTag>
+      <EndTag>“</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom8">
+      <StartTag>“</StartTag>
+      <EndTag>”</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom9">
+      <StartTag>« </StartTag>
+      <EndTag> »</EndTag>
+    </QuickTag>
+  </QuickTags>
+  <Scanner Instantiation="C++" FactoryFunction="CreateWordFileScanner">
+    <Guid>WordBinaryFile.dll</Guid>
+    <Settings>
+    </Settings>
+  </Scanner>
+  <Parser Instantiation="C++" FactoryFunction="CreateWordFileParser">
+    <Guid>WordPlugInFilter.dll</Guid>
+    <Settings>
+      <DisplayComplexScriptsAndAsianTextFontSettings>Default</DisplayComplexScriptsAndAsianTextFontSettings>
+      <!-- DisplayComplexScriptsAndAsianTextFontSettings possible values: On, Off, Default (equal Off) -->
+      <TextBoxesOrder>Default</TextBoxesOrder>
+      <!-- TextBoxesOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow) -->
+      <FootnoteEndnoteCustomMarkRepresentation>Default</FootnoteEndnoteCustomMarkRepresentation>
+      <!-- FootnoteEndnoteCustomMarkRepresentation possible values: Tag, Text, Default (equal Tag) -->
+      <NonAcceptedOrRejectedChangesHandling>Default</NonAcceptedOrRejectedChangesHandling>
+      <!-- NonAcceptedOrRejectedChangesHandling possible values: Ignore, StopConversion, Default (equal StopConversion) -->
+      <SpecialSymbolCharactersDisplay>Default</SpecialSymbolCharactersDisplay>
+			<!-- SpecialSymbolCharactersDisplay possible values: Tag, Text, Default (equal Text) -->
+			<CommentProcessing>Default</CommentProcessing>
+			<!-- CommentProcessing possible values: On, Off, Default (equal On) -->
+			<WordDocPropertyContentsDisplay>Default</WordDocPropertyContentsDisplay>
+			<!-- WordDocPropertyContentsDisplay possible values: On, Off, Default (equal Off) -->
+      <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+    </Settings>
+    <Components>
+      <Component Instantiation="C++" FactoryFunction="CreateWordNonTranslatableTextGuard">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <NonTranslatableTextGuarding>Default</NonTranslatableTextGuarding>
+          <!-- NonTranslatableTextGuarding possible values: On, Off, Default (equal On) -->
+          <NonTranslatableStyles>
+            <Inline>
+              <NonTranslatableStyle>
+                <StyleName>tw4winInternal</StyleName>
+              </NonTranslatableStyle>
+            </Inline>
+            <Structure>
+              <NonTranslatableStyle>
+                <StyleName>tw4winExternal</StyleName>
+              </NonTranslatableStyle>
+            </Structure>
+          </NonTranslatableStyles>
+          <NonTranslatableFootnotesEndnotes>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>#</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>*</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>+</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>@</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>A</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>&gt;</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+            <NonTranslatableFootnoteEndnote>
+              <FootnoteEndnoteCustomMark>!</FootnoteEndnoteCustomMark>
+            </NonTranslatableFootnoteEndnote>
+          </NonTranslatableFootnotesEndnotes>
+          <NonTranslatableTexts>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{bmp</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{bmc</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{bmct</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{bml</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{bmlt</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+            <NonTranslatableText>
+              <NonTranslatableTextStart>{Button</NonTranslatableTextStart>
+              <NonTranslatableTextEnd>}</NonTranslatableTextEnd>
+            </NonTranslatableText>
+          </NonTranslatableTexts>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordTagFormatter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <BreakTagType>Default</BreakTagType>
+          <!-- BreakTagType possible values: Internal, External, Default (equal Internal) -->
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordParagraphBreakInserter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordMessageFilter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordDisplayFormatter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <DisplayFormatting>Default</DisplayFormatting>
+          <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+          <DisplayFontMapping>Default</DisplayFontMapping>
+          <!-- DisplayFontMapping possible values: On, Off, Default (equal On) -->
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordColourAdapter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <ColourAdaptation>Default</ColourAdaptation>
+          <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+					Default (equal DarkenedLightColours) -->
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFontAdapter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <FontAdaptation>Default</FontAdaptation>
+          <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+					Default (equal ResizeToVisible) -->
+          <MinFontSize>Default</MinFontSize>
+          <ReductionTreshold>Default</ReductionTreshold>
+          <ReductionFactor>Default</ReductionFactor>
+          <SingleSize>Default</SingleSize>
+        </Settings>
+      </Component>
+    </Components>
+  </Parser>
+  <InteractiveParser>
+    <Components>
+      <Component Instantiation="C++" FactoryFunction="CreateWordTagFormatter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordMessageFilter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordDisplayFormatter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+          <DisplayFontMapping>Default</DisplayFontMapping>
+          <!-- DisplayFontMapping possible values: On, Off, Default (equal On) -->
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordColourAdapter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFontAdapter">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+    </Components>
+  </InteractiveParser>
+  <PreviewWriter Instantiation="C++" FactoryFunction="CreateWordPreviewFileWriter">
+    <Guid>WordPlugInFilter.dll</Guid>
+    <Settings>
+    <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+    </Settings>
+    <Components>
+      <Component Instantiation="C++" FactoryFunction="CreateWordParagraphBreakIdentifier">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordParagraphBreakRemover">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFormattingNormalizer">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFontMapper">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        <FontMapping>Default</FontMapping>
+        </Settings>
+      </Component>
+    </Components>
+  </PreviewWriter>
+  <Writer Instantiation="C++" FactoryFunction="CreateWordFileWriter">
+    <Guid>WordPlugInFilter.dll</Guid>
+    <Settings>
+    <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+    </Settings>
+    <Components>
+      <Component Instantiation="C++" FactoryFunction="CreateWordParagraphBreakIdentifier">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordParagraphBreakRemover">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFormattingNormalizer">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        </Settings>
+      </Component>
+      <Component Instantiation="C++" FactoryFunction="CreateWordFontMapper">
+        <Guid>WordPlugInFilter.dll</Guid>
+        <Settings>
+        <FontMapping>Default</FontMapping>
+          <FontMappingRules>
+            <FontMappingRule>
+              <LanguageAndRegion>ar-SA</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>Arial</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>zh-TW</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>PMingLiU</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>zh-CN</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>SimSun</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>th-TH</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>Tahoma</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>he-IL</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>Arial</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>vi-VN</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>Arial</ApplyFont>
+            </FontMappingRule>
+            <FontMappingRule>
+              <LanguageAndRegion>ja-JP</LanguageAndRegion>
+              <AllFonts />
+              <AllFontTypes />
+              <ApplyFont>MS Mincho</ApplyFont>
+            </FontMappingRule>
+          </FontMappingRules>
+        </Settings>
+      </Component>
+    </Components>
+  </Writer>
+</FilterDefinition>]]></value>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Framework1FileSniffer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true">
+    <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+  </object>
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <!-- quick insert page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003/Sdl.FileTypeSupport.Filters.Word2003.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003/Sdl.FileTypeSupport.Filters.Word2003.StringResources/QuickInsertPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.OrderOfTextBoxesPage, Sdl.FileTypeSupport.Filters.Word2003.WinUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_OrderOfTextBoxes_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/Order_Of_Text_Boxes</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/Order_Of_Text_Boxes_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Order_of_Text_Boxes</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.NonTranslatableStylesPage, Sdl.FileTypeSupport.Filters.Word2003.WinUI">
+              <!--              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Filters.Word2003.WinUI.NonTranslatableStyles, Sdl.FileTypeSupport.Filters.Word2003.WinUI</value>
+              </constructor-arg> -->
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_NonTranslatable_Styles_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Styles</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Styles_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Non_translatable_styles</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.NonTranslatableFootnotesPage, Sdl.FileTypeSupport.Filters.Word2003.WinUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_NonTranslatableFootnotes_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Footnotes</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Footnotes_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Non_translatable_footnotes</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.NonTranslatableTextsPage, Sdl.FileTypeSupport.Filters.Word2003.WinUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_NonTranslatableTexts_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Text</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/NonTranslatable_Text_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Non_translatable_texts</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.OtherSettingsPage, Sdl.FileTypeSupport.Filters.Word2003.WinUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_WordOtherSettings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/Other_Settings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/Other_Settings_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Word_2000_2003_Other_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.FontMappingPage, Sdl.FileTypeSupport.Framework.AdministrationUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Word2003_WordFontMapping_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.AdministrationUI/Sdl.FileTypeSupport.Framework.AdministrationUI.StringResources/Font_Mapping</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.AdministrationUI/Sdl.FileTypeSupport.Framework.AdministrationUI.StringResources/Font_Mapping_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Font_Mapping</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.SettingsAwareFF1Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <!--            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property> -->
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordPlaceholderTextEquivalentSetter, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+            <object id="FormattingProcessor" type="Sdl.FileTypeSupport.Filters.Word2003.WordInlineFormattingProcessor, Sdl.FileTypeSupport.Filters.Word2003" singleton="false">
+              <property name="DisplayFormatting">
+                <value>Default</value>
+              </property>
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordFilterContext, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordBinaryNativeExtractionContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object id="BookMarkProcessing" type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BookMarkExtractor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+              <property name="ProcessBookMarks">
+                <value>False</value>
+              </property>
+            </object>
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list></list>
+    </property>
+  </object>
+  <!-- Writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordBinaryNativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BookMarkWriter, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- navigable hosted preview (Source and Target) -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/InternalPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/InternalPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <!-- to provide navigation support we we use the real-time preview generator for this preview type. -->
+                    <value>RealTimePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <!-- to provide navigation support we we use the real-time preview generator for this preview type. -->
+                    <value>RealTimePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- real-time hosted preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalRealTimePreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/RealTimePreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/RealTimePreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>RealTimePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalRealTimePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>RealTimePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <!-- Since the source does not change during translation we can use a navigable preview rather than a real-time updating preview -->
+                    <value>InternalNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- external preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalDocPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/ExternalPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Word2003.WinUI/Sdl.FileTypeSupport.Filters.Word2003.WinUI.StringResources/ExternalPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- Default Previews -->
+    <property name="DefaultControlPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>InternalRealTimePreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>ExternalDocPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- preview generator (real-time) -->
+  <object id="Generator_RealTimePreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordBinaryNativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Filters.Word2003.InteractivePreviewWordProcessor, Sdl.FileTypeSupport.Filters.Word2003"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BookMarkWriter, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" />
+          </list>
+        </property>
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- preview generator (native) -->
+  <object id="Generator_DefaultPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.WordBinaryNativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BookMarkWriter, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- preview control (external)-->
+  <object id="PreviewApplication_ExternalPreview" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false">
+    <property name="ApplicationPath">
+      <value></value>
+    </property>
+  </object>
+  <!-- preview control (internal navigable)-->
+  <object id="PreviewControl_InternalNavigablePreview" type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.NavigablePreviewControlController, Sdl.FileTypeSupport.Filters.Word2003.WinUI" singleton="false">
+    <property name="Extension">
+      <value>.doc</value>
+    </property>
+  </object>
+  <!-- preview control (internal real time)-->
+  <object id="PreviewControl_InternalRealTimePreview" type="Sdl.FileTypeSupport.Filters.Word2003.WinUI.RealTimePreviewControlController, Sdl.FileTypeSupport.Filters.Word2003.WinUI" singleton="false">
+    <property name="Extension">
+      <value>.doc</value>
+    </property>
+  </object>
+  <!-- quick inserts -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Filters.Word2003.QuickTagBuilder, Sdl.FileTypeSupport.Filters.Word2003" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>

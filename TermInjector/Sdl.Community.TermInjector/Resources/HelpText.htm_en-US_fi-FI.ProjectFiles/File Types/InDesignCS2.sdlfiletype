@@ -1,0 +1,568 @@
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: InDesignCS2.sdlfiletype
+  Last change:        11 May 2009
+--><!-- filter definition for using InDesign document files in filter framework 2.0 via a filter framework 1 adapter --><objects xmlns="http://www.springframework.net" xmlns:sp="http://www.springframework.net">
+
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="Enabled">
+      <value>true</value>
+    </property>
+    <property name="Hidden">
+      <value>true</value>
+    </property>
+    <property name="FileTypeDefinitionId">
+      <object singleton="true" type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core">
+        <constructor-arg>
+          <value>InDesign CS2 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/Adobe_InDesign_CS2_CS4_Interchange_Documents</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.inx</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>inx</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.FilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+  </object>
+
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true" lazy-init="true">
+    <property name="FilterFramework1FilterDefinitionFilePath">
+      <value>IndesignFilter_1_0_0_0.xml</value>
+    </property>
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;!--
+	
+	Copyright (c) 2007 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+--&gt;
+&lt;!--	
+	
+	This is a filter definition file for the SDL Trados Filter plug-in for 
+	Adobe InDesign CS2/CS3 (INX) files. It allows the adjustment of the default 
+	settings of the filter. Possible setting values are described later in 
+	the file. Any unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+--&gt;
+&lt;!-- 	Original file name: 	IndesignFilter_1_0_0_0.xml	--&gt;
+&lt;!-- 	Version:				1.0.14.8			--&gt;
+&lt;!-- 	Last change:			02 Jun 2008		--&gt;
+&lt;FilterDefinition&gt;
+  &lt;Guid&gt;TRADOS Indesign Filter 1.0.0.0&lt;/Guid&gt;
+  &lt;FileTypeName&gt;InDesign CS2/CS3 Interchange&lt;/FileTypeName&gt;
+  &lt;FileFilterRegExp&gt;*.inx&lt;/FileFilterRegExp&gt;
+  &lt;QuickTags&gt;
+    &lt;QuickTag Command="Bold"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" ptfs="c_Bold"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Italic"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" ptfs="c_Italic"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Underline"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" undr="b_t"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Subscript"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" posm="e_sbsc"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Superscript"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" posm="e_spsc"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Custom1"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" ptfs="c_Bold Italic"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Custom2"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" capm="e_alcp"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Custom3"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" capm="e_smcp"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+    &lt;QuickTag Command="Custom4"&gt;
+      &lt;StartTag&gt;&amp;lt;cf cstyle="[No character style]" strk="b_t"&amp;gt;&lt;/StartTag&gt;
+      &lt;EndTag&gt;&amp;lt;/cf&amp;gt;&lt;/EndTag&gt;
+    &lt;/QuickTag&gt;
+  &lt;/QuickTags&gt;
+  &lt;Scanner Instantiation="Java" HomeLocation="Filters/IndesignFilter/TradosIndesignFilter1.0.0.0.jar"&gt;
+    &lt;Guid&gt;com.trados.filters.indesign.sniffer.IndFileScanner&lt;/Guid&gt;
+    &lt;Settings&gt;
+    &lt;/Settings&gt;
+  &lt;/Scanner&gt;
+  &lt;Parser Instantiation="Java" HomeLocation="Filters/IndesignFilter/TradosIndesignFilter1.0.0.0.jar"&gt;
+    &lt;Guid&gt;com.trados.filters.indesign.forwardconversion.IndFileParser&lt;/Guid&gt;
+    &lt;Settings&gt;
+      &lt;InDesign&gt;
+        &lt;Lock&gt;
+          &lt;ProcessMasterSpread&gt;Default&lt;/ProcessMasterSpread&gt;
+          &lt;!-- ProcessMasterSpread possible values: On, Off, Default (equal On) --&gt;
+          &lt;ProcessForcedReturn&gt;Default&lt;/ProcessForcedReturn&gt;
+          &lt;!-- ProcessForcedReturn possible values: On, Off, Default (equal Off) --&gt;
+          &lt;ProcessHiddenAndLockedLayers&gt;Default&lt;/ProcessHiddenAndLockedLayers&gt;
+          &lt;!-- ProcessHiddenAndLockedLayers possible values: On, Off, Default (equal Off) --&gt;
+          &lt;DisplayFormatting&gt;Default&lt;/DisplayFormatting&gt;
+          &lt;!-- DisplayFormatting possible values: On, Off, Default (equal On) --&gt;
+          &lt;ProcessExternalDocDestinations&gt;Default&lt;/ProcessExternalDocDestinations&gt;
+          &lt;!-- ProcessExternalDocDestinations possible values: On, Off, Default (equal Off) --&gt;
+          &lt;ProcessHyperlinkResource&gt;Default&lt;/ProcessHyperlinkResource&gt;
+          &lt;!-- ProcessHyperlinkResource possible values: On, Off, Default (equal On) --&gt;
+        &lt;/Lock&gt;
+        &lt;ProcessPageMaker&gt;Default&lt;/ProcessPageMaker&gt;
+        &lt;!-- ProcessPageMaker possible values: On, Off, Default (equal Off) --&gt;
+        &lt;FontMapping&gt;Default&lt;/FontMapping&gt;
+        &lt;!-- FontMapping possible values: On, Off, Default (equal On) --&gt;
+        &lt;Skiptrackingkerninginformation&gt;Default&lt;/Skiptrackingkerninginformation&gt;
+          &lt;!-- Skiptrackingkerninginformation possible values: On, Off, Default (equal on) --&gt;
+        &lt;TranslateFileInfo&gt;Default&lt;/TranslateFileInfo&gt;
+          &lt;!-- TranslateFileInfo possible values: On, Off, Default (equal on) --&gt;
+         &lt;ProcessHiddenConditionalText&gt;Off&lt;/ProcessHiddenConditionalText&gt;
+          &lt;!-- ProcessHiddenConditionalText possible values: On, Off, Default (equal on) --&gt;
+          &lt;DisplayCrossReferenceFormat&gt;Default&lt;/DisplayCrossReferenceFormat&gt;
+          &lt;!-- DisplayCrossReferenceFormat possible values: On, Off, Default (equal on) --&gt; 
+        &lt;FontMappingRules&gt;&lt;/FontMappingRules&gt;
+      &lt;/InDesign&gt;
+    &lt;/Settings&gt;
+  &lt;/Parser&gt;
+  &lt;Writer Instantiation="Java" HomeLocation="Filters/IndesignFilter/TradosIndesignFilter1.0.0.0.jar"&gt;
+    &lt;Guid&gt;com.trados.filters.indesign.backwardconversion.IndFileWriter&lt;/Guid&gt;
+    &lt;Settings&gt;
+      &lt;InDesign&gt;
+        &lt;Lock&gt;
+          &lt;ProcessMasterSpread&gt;Default&lt;/ProcessMasterSpread&gt;
+          &lt;!-- ProcessMasterSpread possible values: On, Off, Default (equal On) --&gt;
+          &lt;ProcessForcedReturn&gt;Default&lt;/ProcessForcedReturn&gt;
+          &lt;!-- ProcessForcedReturn possible values: On, Off, Default (equal Off) --&gt;
+          &lt;ProcessHiddenAndLockedLayers&gt;Default&lt;/ProcessHiddenAndLockedLayers&gt;
+          &lt;!-- ProcessHiddenAndLockedLayers possible values: On, Off, Default (equal Off) --&gt;
+          &lt;DisplayFormatting&gt;Default&lt;/DisplayFormatting&gt;
+          &lt;!-- DisplayFormatting possible values: On, Off, Default (equal On) --&gt;
+          &lt;ProcessExternalDocDestinations&gt;Default&lt;/ProcessExternalDocDestinations&gt;
+          &lt;!-- ProcessExternalDocDestinations possible values: On, Off, Default (equal Off) --&gt;
+          &lt;ProcessHyperlinkResource&gt;Default&lt;/ProcessHyperlinkResource&gt;
+          &lt;!-- ProcessHyperlinkResource possible values: On, Off, Default (equal On) --&gt;
+        &lt;/Lock&gt;
+        &lt;SwitchDirection&gt;Default&lt;/SwitchDirection&gt;
+        &lt;!-- SwitchDirection possible values: On, Off, Default (equal Off) --&gt;
+        &lt;ProcessPageMaker&gt;Default&lt;/ProcessPageMaker&gt;
+        &lt;!-- ProcessPageMaker possible values: On, Off, Default (equal Off) --&gt;
+        &lt;FontMapping&gt;Default&lt;/FontMapping&gt;
+        &lt;!-- FontMapping possible values: On, Off, Default (equal On) --&gt;
+        &lt;Skiptrackingkerninginformation&gt;Default&lt;/Skiptrackingkerninginformation&gt;
+          &lt;!-- Skiptrackingkerninginformation possible values: On, Off, Default (equal on) --&gt;
+        &lt;TranslateFileInfo&gt;Default&lt;/TranslateFileInfo&gt;
+          &lt;!-- TranslateFileInfo possible values: On, Off, Default (equal on) --&gt;
+         &lt;ProcessHiddenConditionalText&gt;Off&lt;/ProcessHiddenConditionalText&gt;
+          &lt;!-- ProcessHiddenConditionalText possible values: On, Off, Default (equal on) --&gt;
+          &lt;DisplayCrossReferenceFormat&gt;Default&lt;/DisplayCrossReferenceFormat&gt;
+          &lt;!-- DisplayCrossReferenceFormat possible values: On, Off, Default (equal on) --&gt; 
+        &lt;FontMappingRules&gt;
+          &lt;FontMappingRule lcid="1025"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;Arial&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="1028"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;PMingLiU&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="2052"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;SimSun&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="1054"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;Tahoma&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="1037"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;Arial&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="1066"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;Arial&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+          &lt;FontMappingRule lcid="1041"&gt;
+            &lt;AllFonts /&gt;
+            &lt;ApplyFont&gt;MS Mincho&lt;/ApplyFont&gt;
+          &lt;/FontMappingRule&gt;
+        &lt;/FontMappingRules&gt;
+      &lt;/InDesign&gt;
+    &lt;/Settings&gt;
+  &lt;/Writer&gt;
+  &lt;InteractiveParser Instantiation="Java"&gt;
+    &lt;Components&gt;
+      &lt;Component Instantiation="Java" HomeLocation="Filters/IndesignFilter/TradosIndesignFilter1.0.0.0.jar"&gt;
+        &lt;Guid&gt;com.trados.filters.indesign.interactiveparser.IndInteractiveParser&lt;/Guid&gt;
+        &lt;Settings&gt;
+          &lt;InDesign&gt;
+            &lt;Lock&gt;
+              &lt;ProcessMasterSpread&gt;Default&lt;/ProcessMasterSpread&gt;
+              &lt;!-- ProcessMasterSpread possible values: On, Off, Default (equal On) --&gt;
+              &lt;ProcessForcedReturn&gt;Default&lt;/ProcessForcedReturn&gt;
+              &lt;!-- ProcessForcedReturn possible values: On, Off, Default (equal Off) --&gt;
+              &lt;ProcessHiddenAndLockedLayers&gt;Default&lt;/ProcessHiddenAndLockedLayers&gt;
+              &lt;!-- ProcessHiddenAndLockedLayers possible values: On, Off, Default (equal Off) --&gt;
+              &lt;DisplayFormatting&gt;Default&lt;/DisplayFormatting&gt;
+              &lt;!-- DisplayFormatting possible values: On, Off, Default (equal On) --&gt;
+              &lt;ProcessExternalDocDestinations&gt;Default&lt;/ProcessExternalDocDestinations&gt;
+              &lt;!-- ProcessExternalDocDestinations possible values: On, Off, Default (equal Off) --&gt;
+              &lt;ProcessHyperlinkResource&gt;Default&lt;/ProcessHyperlinkResource&gt;
+              &lt;!-- ProcessHyperlinkResource possible values: On, Off, Default (equal On) --&gt;
+            &lt;/Lock&gt;
+            &lt;ProcessPageMaker&gt;Default&lt;/ProcessPageMaker&gt;
+            &lt;!-- ProcessPageMaker possible values: On, Off, Default (equal Off) --&gt;
+            &lt;FontMapping&gt;Default&lt;/FontMapping&gt;
+            &lt;!-- FontMapping possible values: On, Off, Default (equal On) --&gt;
+            &lt;Skiptrackingkerninginformation&gt;Default&lt;/Skiptrackingkerninginformation&gt;
+            &lt;!-- Skiptrackingkerninginformation possible values: On, Off, Default (equal on) --&gt;
+            &lt;TranslateFileInfo&gt;Default&lt;/TranslateFileInfo&gt;
+          &lt;!-- TranslateFileInfo possible values: On, Off, Default (equal on) --&gt;
+         &lt;ProcessHiddenConditionalText&gt;Off&lt;/ProcessHiddenConditionalText&gt;
+          &lt;!-- ProcessHiddenConditionalText possible values: On, Off, Default (equal on) --&gt;
+          &lt;DisplayCrossReferenceFormat&gt;Default&lt;/DisplayCrossReferenceFormat&gt;
+          &lt;!-- DisplayCrossReferenceFormat possible values: On, Off, Default (equal on) --&gt; 
+            &lt;FontMappingRules&gt;&lt;/FontMappingRules&gt;
+          &lt;/InDesign&gt;
+        &lt;/Settings&gt;
+      &lt;/Component&gt;
+    &lt;/Components&gt;
+  &lt;/InteractiveParser&gt;
+&lt;/FilterDefinition&gt;
+      </value>
+    </property>
+  </object>
+
+  <!-- java virtual machine options -->
+  <object id="CommonJavaSettings" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.JavaSettings, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true" lazy-init="true">
+    <property name="JvmOptions">
+      <list>
+        <!-- 
+        This parameter explicitly sets memory allocated to the Java Virtual Machine. 
+        Guidance:
+              Increase this value if you get an error indicating that the JVM has run out of memory.
+              The value should not be larger than half of the free RAM on the machine. 
+              E.g. with 2 GB RAM installed and 1 GB free, use a maximum value of 512m.
+              
+              NOTE: Don't set this value unless you are not experiencing problems. If the value
+                    is not set the memory assigned to the VM will be determined dynamically.
+              
+              See JVM documentation for more information.
+        -->
+        <!--<value>-Xmx256m</value>-->
+      </list>
+    </property>
+  </object>
+
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Framework1FileSniffer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true" lazy-init="true">
+    <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+    <property name="JavaSettings" ref="CommonJavaSettings" />
+  </object>
+
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for InDesign CS2 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.Settings, Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>InDesign CS2 Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/SETTINGS</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Settings for InDesign CS2 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>InDesign_CS2_CS3_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.JavaSettingsPage, Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>JVM_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/JVM</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/JVM_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.FontMapping, Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>InDesign CS2/CS2 Font mapping ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.StringResources/Font_Mapping</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Font mapping Settings for InDesign CS2/CS2 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>InDesign_CS2_CS3_Font_Mapping</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+
+  <!-- parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="JavaSettings" ref="CommonJavaSettings" />
+            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Framework1FormattingProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.InDesignCS2FilterContext, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.InDesignNativeExtractionContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.InDesignContextFormattingParser, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list>
+      </list>
+    </property>
+  </object>
+
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="JavaSettings" ref="CommonJavaSettings" />
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.InDesignNativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+
+  <!-- quick insert definitions -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true" lazy-init="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings.QuickTagBuilder, Sdl.FileTypeSupport.Framework.Adapter.InDesignCS2FilterSettings" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" singleton="false">
+          <property name="Enabled">
+            <value>True</value>
+          </property>
+          <property name="CheckTagOrderChange">
+            <value>True</value>
+          </property>
+          <property name="TagOrderChange">
+            <value>Warning</value>
+          </property>
+          <property name="CheckSpaceAroundTag">
+            <value>True</value>
+          </property>
+          <property name="SpaceAroundTag">
+            <value>Warning</value>
+          </property>
+          <property name="CheckGhostTag">
+            <value>True</value>
+          </property>
+          <property name="GhostTag">
+            <value>Warning</value>
+          </property>
+          <property name="CheckTagDeleted">
+            <value>True</value>
+          </property>
+          <property name="TagDeleted">
+            <value>Warning</value>
+          </property>
+          <property name="CheckTagAdded">
+            <value>True</value>
+          </property>
+          <property name="TagAdded">
+            <value>Warning</value>
+          </property>
+          <property name="IgnoreFormatting">
+            <value>True</value>
+          </property>
+        </object>
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list>
+      </list>
+    </property>
+  </object>
+
+</objects>

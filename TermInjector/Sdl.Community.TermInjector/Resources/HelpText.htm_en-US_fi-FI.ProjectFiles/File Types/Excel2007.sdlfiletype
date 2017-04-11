@@ -1,0 +1,906 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: Excel2007.sdlfiletype
+  Last change:        18 May 2009
+-->
+
+<!-- filter definition for using excel 2007 Document files in Filter Framework 2.0 via a Filter Framework 1 Adapter -->
+<objects xmlns="http://www.springframework.net">
+
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="Hidden">
+      <value>true</value>
+    </property>
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>Excel 2007 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/FileTypeName_Microsoft_Excel_2007</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.xlsx;*.xltx;*.xlsm</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>xlsx</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.Excel2007Doc.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0"/>
+      </object>
+    </property>
+  </object>
+
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FilterFramework1FilterDefinitionFilePath" value="Excel2007_1_0_0_0.xml" />
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<!--
+	
+	Copyright © 2005-2007 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+-->
+<!--	
+	
+	This is a filter definition file for the SDL Trados filter plug-in for 
+	Microsoft(r) Excel(tm) 2007 files. It allows the adjustment of the default 
+	settings of the filter. Possible setting values are described later in 
+	the file. Any unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+-->
+<!-- 	Original file name: Excel2007_1_0_0_0.xml	-->
+<!-- 	Version: 				1.0.11.9	-->
+<!-- 	Last change: 			05 June 2008	-->
+
+<FilterDefinition>
+  <Guid>SDL Trados Excel 2007 Filter 1.0.0.0</Guid>
+  <FileTypeName>Microsoft Excel 2007</FileTypeName>
+  <FileFilterRegExp>*.xlsx;*.xltx;*.xlsm</FileFilterRegExp>
+  <QuickTags>
+    <QuickTag Command="Bold">
+      <StartTag>&lt;cf bold="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Italic">
+      <StartTag>&lt;cf italic="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Underline">
+      <StartTag>&lt;cf underlinestyle="single"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Subscript">
+      <StartTag>&lt;cf subscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Superscript">
+      <StartTag>&lt;cf superscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom1">
+      <StartTag>&lt;cf strike="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom2">
+      <StartTag>&lt;cf underlinestyle="double"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom3">
+      <StartTag>&lt;cf bold="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom4">
+      <StartTag>&lt;cf italic="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom5">
+      <StartTag>&lt;cf underlinestyle="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom6">
+      <StartTag>&lt;cf subscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom7">
+      <StartTag>&lt;cf superscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom8">
+      <StartTag>&lt;cf strike="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom9">
+      <StartTag>&lt;br/&gt;</StartTag>
+      <EndTag>
+      </EndTag>
+    </QuickTag>
+  </QuickTags>
+  <Parser Instantiation="COM">
+    <Guid>FF2.office12excelFileParser</Guid>
+    <Settings>
+      <SheetsInWorkbookOrder>Default</SheetsInWorkbookOrder>
+      <!--  SheetsInWorkbookOrder possible values: ByIndex, WorksheetAfterChartsheet, 
+			ChartsheetAfterWorksheet, Default (equal ByIndex) -->
+
+      <CellsAndShapesOnWorksheetOrder>Default</CellsAndShapesOnWorksheetOrder>
+      <!--  CellsAndShapesOnWorksheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+      <ShapesInDiagramOrder>Default</ShapesInDiagramOrder>
+      <!--  ShapesInDiagramOrder possible values: Original, Default (equal Original) -->
+
+      <ShapesInGroupOrder>Default</ShapesInGroupOrder>
+      <!--  ShapesInGroupOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow)  -->
+
+      <ShapesInChartSheetOrder>Default</ShapesInChartSheetOrder>
+      <!--  ShapesInChartSheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow)   -->
+
+      <ShapesInChartShapeOrder>Default</ShapesInChartShapeOrder>
+      <!--  ShapesInChartShapeOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+      <SegmentationAfterBreakTags>Off</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, Default (equal On) -->
+
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal Off) -->
+
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HiddenContentProcessing>Default</HiddenContentProcessing>
+      <!-- HiddenContentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HeaderFooterProcessing>Default</HeaderFooterProcessing>
+      <!-- HeaderFooterProcessing possible values: On, Off, Default (equal On) 
+			NOTE: without printer installed on the machine header or footer may
+			not be processed correctly -->
+
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+
+      <AlternativeTextForGraphics>Default</AlternativeTextForGraphics>
+      <!-- AlternativeTextForGraphics possible values: On, Off, Default (equal On) -->
+
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules></FontMappingRules>
+    </Settings>
+  </Parser>
+  <InteractiveParser Instantiation="COM">
+    <Components>
+      <Component Instantiation="COM">
+        <Guid>FF2.office12excelFileInteractiveParser</Guid>
+        <Settings>
+          <DisplayFormatting>Default</DisplayFormatting>
+          <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+
+          <ColourAdaptation>Default</ColourAdaptation>
+          <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+
+          <AlternativeTextForGraphics>Default</AlternativeTextForGraphics>
+          <!-- AlternativeTextForGraphics possible values: On, Off, Default (equal On) -->
+
+          <FontAdaptation>Default</FontAdaptation>
+          <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+
+          <MinFontSize>Default</MinFontSize>
+          <MaxFontSize>Default</MaxFontSize>
+          <SingleSize>Default</SingleSize>
+
+          <FontMapping>Default</FontMapping>
+          <!-- FontMapping possible values: On, Off, Default (equal On) -->
+          <FontMappingRules></FontMappingRules>
+        </Settings>
+      </Component>
+    </Components>
+  </InteractiveParser>
+  <Writer Instantiation="COM">
+    <Guid>FF2.office12excelFileWriter</Guid>
+    <Settings>
+
+      <SheetsInWorkbookOrder>Default</SheetsInWorkbookOrder>
+      <!--  SheetsInWorkbookOrder possible values: ByIndex, WorksheetAfterChartsheet, 
+			ChartsheetAfterWorksheet, Default (equal ByIndex) -->
+
+      <CellsAndShapesOnWorksheetOrder>Default</CellsAndShapesOnWorksheetOrder>
+      <!--  CellsAndShapesOnWorksheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+      <ShapesInDiagramOrder>Default</ShapesInDiagramOrder>
+      <!--  ShapesInDiagramOrder possible values: Original, Default (equal Original) -->
+
+      <ShapesInGroupOrder>Default</ShapesInGroupOrder>
+      <!--  ShapesInGroupOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow)  -->
+
+      <ShapesInChartSheetOrder>Default</ShapesInChartSheetOrder>
+      <!--  ShapesInChartSheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow)   -->
+
+      <ShapesInChartShapeOrder>Default</ShapesInChartShapeOrder>
+      <!--  ShapesInChartShapeOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+
+      <SegmentationAfterBreakTags>Off</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, Default (equal On) -->
+
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal Off) -->
+
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HiddenContentProcessing>Default</HiddenContentProcessing>
+      <!-- HiddenContentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HeaderFooterProcessing>Default</HeaderFooterProcessing>
+      <!-- HeaderFooterProcessing possible values: On, Off, Default (equal On) 
+				NOTE: without printer installed on the machine header or footer may
+				not be processed correctly -->
+
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+
+      <AlternativeTextForGraphics>Default</AlternativeTextForGraphics>
+      <!-- AlternativeTextForGraphics possible values: On, Off, Default (equal On) -->
+
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules>
+        <FontMappingRule lcid="1025">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1028">
+          <AllFonts />
+          <ApplyFont>PMingLiU</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="2052">
+          <AllFonts />
+          <ApplyFont>SimSun</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1054">
+          <AllFonts />
+          <ApplyFont>Tahoma</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1037">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1066">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1041">
+          <AllFonts />
+          <ApplyFont>MS Mincho</ApplyFont>
+        </FontMappingRule>
+      </FontMappingRules>
+      <TextExceedingMSExcelLimitsBackwardConversion>Default</TextExceedingMSExcelLimitsBackwardConversion>
+      <!-- TextExceedingMSExcelLimitsBackwardConversion possible values: 
+			BreakConversion, Skip, MakeShorter, Default (equal BreakConversion) -->
+    </Settings>
+  </Writer>
+  <PreviewWriter Instantiation="COM">
+    <Guid>FF2.office12excelFilePreviewWriter</Guid>
+    <Settings>
+
+      <SheetsInWorkbookOrder>Default</SheetsInWorkbookOrder>
+      <!--  SheetsInWorkbookOrder possible values: ByIndex, WorksheetAfterChartsheet, 
+			ChartsheetAfterWorksheet, Default (equal ByIndex) -->
+
+      <CellsAndShapesOnWorksheetOrder>Default</CellsAndShapesOnWorksheetOrder>
+      <!--  CellsAndShapesOnWorksheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+      <ShapesInDiagramOrder>Default</ShapesInDiagramOrder>
+      <!--  ShapesInDiagramOrder possible values: Original, Default (equal Original) -->
+
+      <ShapesInGroupOrder>Default</ShapesInGroupOrder>
+      <!--  ShapesInGroupOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow)  -->
+
+      <ShapesInChartSheetOrder>Default</ShapesInChartSheetOrder>
+      <!--  ShapesInChartSheetOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow)   -->
+
+      <ShapesInChartShapeOrder>Default</ShapesInChartShapeOrder>
+      <!--  ShapesInChartShapeOrder possible values: TopLeftBottomRightByCol, 
+			TopLeftBottomRightByRow, TopRightBottomLeftByCol, TopRightBottomLeftByRow, 
+			Default (equal TopRightBottomLeftByRow) -->
+
+
+      <SegmentationAfterBreakTags>Off</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, Default (equal On) -->
+
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal Off) -->
+
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HiddenContentProcessing>Default</HiddenContentProcessing>
+      <!-- HiddenContentProcessing possible values: On, Off, Default (equal Off) -->
+
+      <HeaderFooterProcessing>Default</HeaderFooterProcessing>
+      <!-- HeaderFooterProcessing possible values: On, Off, Default (equal On) 
+				NOTE: without printer installed on the machine header or footer may
+				not be processed correctly -->
+
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+
+      <AlternativeTextForGraphics>Default</AlternativeTextForGraphics>
+      <!-- AlternativeTextForGraphics possible values: On, Off, Default (equal On) -->
+
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules>
+        <FontMappingRule lcid="1025">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1028">
+          <AllFonts />
+          <ApplyFont>PMingLiU</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="2052">
+          <AllFonts />
+          <ApplyFont>SimSun</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1054">
+          <AllFonts />
+          <ApplyFont>Tahoma</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1037">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1066">
+          <AllFonts />
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule lcid="1041">
+          <AllFonts />
+          <ApplyFont>MS Mincho</ApplyFont>
+        </FontMappingRule>
+      </FontMappingRules>
+      <TextExceedingMSExcelLimitsBackwardConversion>Default</TextExceedingMSExcelLimitsBackwardConversion>
+      <!-- TextExceedingMSExcelLimitsBackwardConversion possible values: 
+			BreakConversion, Skip, MakeShorter, Default (equal BreakConversion) -->
+    </Settings>
+  </PreviewWriter>
+</FilterDefinition>]]>
+      </value>
+    </property>
+  </object>
+
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.Sniffer, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings" singleton="true" />
+
+
+  <!-- custom UI Administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.ContentAndMacroProcessing, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Excel 2007 Content and macro processing ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/CONTENT_AND_MACRO_PROCESSING</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Content and macro processing Settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Excel_2007_Optional_content</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.TextExceedingLengthLimit, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Excel 2007 Text exceeding length limit ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/TEXT_EXCEEDING_LENGTH_LIMIT</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Text exceeding length limit Settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Text_exceeding_length</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.AlternativeText, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Excel 2007 AlternativeText ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/Alternative_Text</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Alternative Text Settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Alternative_Text</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.OrderOfSheetsAndShapes, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Excel 2007 Order of sheets and shapes ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/ORDER_OF_SHEETS_AND_SHAPES</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Order of sheets and shapes Settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Order_of_sheets_and_shapes</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUIHelpers.LegacyFilterDefinitionSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi">
+              <constructor-arg>
+                <value>Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.FontMapping, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Excel 2007 Font mapping ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.StringResources/FONT_MAPPING</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Font mapping Settings for Excel 2007 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Font_Mapping</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+
+            <object type="Sdl.FileTypeSupport.Framework.Native.NativeTextNormalizer, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" />
+
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+
+            <object id="FormattingProcessor" type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Framework1FormattingProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+              <property name="DisplayFormatting">
+                <value>Default</value>
+              </property>
+            </object>
+
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Excel12FilterContext, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Excel2007NativeExtractionContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.ExcelWorksheetNameLengthContext, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list>
+      </list>
+    </property>
+  </object>
+
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Excel2007NativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+            </object>
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- External Preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalXlsxPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="false">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2003FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2003FilterSettings.StringResources/ExternalPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="false">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.Adapter.Excel2003FilterSettings/Sdl.FileTypeSupport.Framework.Adapter.Excel2003FilterSettings.StringResources/ExternalPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- Default Preview -->
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>ExternalXlsxPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+
+  <!-- preview generators -->
+  <object id="Generator_DefaultPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Excel2007NativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"/>
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+
+  <!-- preview controls -->
+  <object id="PreviewApplication_ExternalPreview" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false">
+    <property name="ApplicationPath">
+      <value></value>
+    </property>
+  </object>
+
+  <!-- quick inserts -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings.QuickTagBuilder, Sdl.FileTypeSupport.Framework.Adapter.Excel2007FilterSettings" factory-method="BuildStandardQuickTags" singleton="false"/>
+    </property>
+  </object>
+
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier ">
+          <property name="Enabled">
+            <value>True</value>
+          </property>
+          <property name="CheckTagOrderChange">
+            <value>True</value>
+          </property>
+          <property name="TagOrderChange">
+            <value>Warning</value>
+          </property>
+          <property name="CheckSpaceAroundTag">
+            <value>True</value>
+          </property>
+          <property name="SpaceAroundTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckGhostTag">
+            <value>True</value>
+          </property>
+          <property name="GhostTag">
+            <value>Note</value>
+          </property>
+          <property name="CheckTagDeleted">
+            <value>True</value>
+          </property>
+          <property name="TagDeleted">
+            <value>Error</value>
+          </property>
+          <property name="CheckTagAdded">
+            <value>True</value>
+          </property>
+          <property name="TagAdded">
+            <value>Error</value>
+          </property>
+          <property name="IgnoreFormatting">
+            <value>True</value>
+          </property>
+        </object>
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list>
+      </list>
+    </property>
+  </object>
+
+</objects>
