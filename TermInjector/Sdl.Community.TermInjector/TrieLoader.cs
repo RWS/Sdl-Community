@@ -6,7 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Globalization;
-using RegexTrie;
 
 namespace Sdl.Community.TermInjector
 {

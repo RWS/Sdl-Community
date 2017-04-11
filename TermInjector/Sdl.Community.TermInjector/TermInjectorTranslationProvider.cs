@@ -15,7 +15,6 @@ using System.ComponentModel;
 using System.Threading;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-using RegexTrie;
 
 namespace Sdl.Community.TermInjector
 {
