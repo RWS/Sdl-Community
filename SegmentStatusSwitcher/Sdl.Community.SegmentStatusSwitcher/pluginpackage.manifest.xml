@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Segment Status Switcher</PlugInName>
+  <Version>1.0</Version>
+  <Description>Keyboard shortcuts for changing segments status</Description>
+  <Author>SDL Community</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+</PluginPackage>
