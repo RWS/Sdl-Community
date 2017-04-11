@@ -128,6 +128,7 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="README.md" />
     <None Include="Resources\ConfirmationLevel_Unspecified.ico" />
     <None Include="Resources\ConfirmationLevel_Translated.ico" />
     <None Include="Resources\ConfirmationLevel_RejectedTranslation.ico" />
