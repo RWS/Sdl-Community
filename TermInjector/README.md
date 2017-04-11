@@ -10,8 +10,7 @@ available as open source under the MIT license.
 This was the first project I had done on C#, so the code quality can be uneven.
 However, the plugin has been widely used, so it seems fairly robust.
 
-The plugin reportedly works in all versions of Studio up to 2015, but it's been
-developed for the Studio 2009/2011 APIs.
+The plugin reportedly works in all versions of Studio up to 2017, including 2017.
 
 The plugin documentation can be accessed here:
 http://www.tntranslations.com/TermInjectorHelp.html
