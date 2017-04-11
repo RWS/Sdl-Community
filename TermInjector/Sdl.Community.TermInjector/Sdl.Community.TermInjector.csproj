@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{04EDD58D-0BA3-4C08-ADA6-58B6A0595B70}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Community.TermInjector</RootNamespace>
+    <AssemblyName>Sdl.Community.TermInjector</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\..\..\AppData\Local\SDL\SDL Trados Studio\10\Plugins\Packages\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>3</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.Globalization.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Determiniser.cs" />
+    <Compile Include="RegexTrie.cs" />
+    <Compile Include="RegexTrieProcessing.cs" />
+    <Compile Include="TrieLoader.cs" />
+    <Compile Include="ValidationErrorForm.cs" />
+    <Compile Include="ValidationErrorForm.Designer.cs">
+      <DependentUpon>ValidationErrorForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TrieProcessing.cs" />
+    <Compile Include="Trie.cs" />
+    <Compile Include="TermInjectorTranslationProviderConfDialog.cs" />
+    <Compile Include="TermInjectorTranslationProviderConfDialog.Designer.cs">
+      <DependentUpon>TermInjectorTranslationProviderConfDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TermInjectorTranslationOptions.cs" />
+    <Compile Include="TermInjectorTranslationProvider.cs" />
+    <Compile Include="TermInjectorTranslationProviderElementVisitor.cs" />
+    <Compile Include="TermInjectorTranslationProviderFactory.cs" />
+    <Compile Include="TermInjectorTranslationProviderWinFormsUI.cs" />
+    <Compile Include="TermInjectorTranslationProviderLanguageDirection.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="band_aid.ico" />
+    <Content Include="band_aid.png" />
+    <Content Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\FilterFramework2Configuration.xml" />
+    <EmbeddedResource Include="ValidationErrorForm.resx">
+      <DependentUpon>ValidationErrorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="..\..\SdlCommunity.snk">
+      <Link>SdlCommunity.snk</Link>
+    </None>
+    <None Include="packages.config" />
+    <None Include="README.md" />
+    <None Include="Resources\%24this.Icon.ico" />
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\CSV.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\DITA.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\DocBook.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Excel2003.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Excel2003_2.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Excel2007.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Excel2007_2.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\FrameMaker.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\GenericXML.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\HTML.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Icml.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Idml.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\InDesignCS2.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\InDesignCS2_1_1.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\ITD.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\JavaResource.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\OpenOffice.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\PDF.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\PlainText.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\PowerPoint2003.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\PowerPoint2007.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\PowerPoint2007_2.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\QuarkXPress.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\RegEx_Template.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\RESX.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\RTF.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\SDLXLIFF.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\SimpleDelimited_Template.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\TabDelimitedText.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\TTX.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Word2003.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Word2007.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\Word2007_2.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\WsXliff.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\XHTML.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\XLIFF.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\XML_ITS_1_0.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\XML_Template.sdlfiletype" />
+    <None Include="Resources\HelpText.htm_en-US_fi-FI.sdlproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TermInjectorTranslationProviderConfDialog.resx">
+      <DependentUpon>TermInjectorTranslationProviderConfDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>-->
+</Project>
