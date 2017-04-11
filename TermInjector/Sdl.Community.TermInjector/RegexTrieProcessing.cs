@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-namespace RegexTrie
+namespace Sdl.Community.TermInjector
 {
     class MinMaxResult
     {

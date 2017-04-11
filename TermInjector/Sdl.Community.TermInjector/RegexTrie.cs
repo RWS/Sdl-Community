@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace RegexTrie
+namespace Sdl.Community.TermInjector
 {
     public class RegexTrie<T>
     {
