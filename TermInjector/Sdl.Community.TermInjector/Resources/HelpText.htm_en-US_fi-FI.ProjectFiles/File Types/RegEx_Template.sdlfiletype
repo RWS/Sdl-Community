@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: RegEx_Template.sdlfiletype
+  Last change:        11 May 2009
+-->
+
+<!-- filter definition for using regex filter in filter framework 2.0 -->
+<objects xmlns="http://www.springframework.net">
+
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="Enabled">
+      <value>false</value>
+    </property>
+    <property name="Hidden">
+      <value>true</value>
+    </property>
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>RegEx v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.StringResources/RegExFileTypeName_Template</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.StringResources/RegExFileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.StringResources/RegExFileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.StringResources/RegExFileTypeDescription_Template</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0"/>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.txt</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>txt</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.FilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+
+    <!-- Silverlight-based Settings UI -->
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>UserSettingsInlineRules</value>
+        <value>UserSettingsOther</value>
+        <value>UserSettingsStructureRules</value>
+      </list>
+    </property>
+  </object>
+
+
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Native.RegEx.RegExSniffer, Sdl.FileTypeSupport.Native.RegEx_1_1" singleton="true"/>
+
+
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Native.RegEx.RegExParser, Sdl.FileTypeSupport.Native.RegEx_1_1" singleton="false"/>
+        </property>
+        <property name="Processors">
+          <list>
+            <object name="TagBalancing" type="Sdl.FileTypeSupport.Filters.Processors.TagPairingContentProcessor, Sdl.FileTypeSupport.Filters.Processors" singleton="false">
+              <property name="aWarning" value="true" />
+            </object>
+          </list>
+        </property>
+      </object>
+    </property>
+
+    <property name="BilingualProcessors">
+      <list>
+      </list>
+    </property>
+
+  </object>
+
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Native.RegEx.RegExWriter, Sdl.FileTypeSupport.Native.RegEx_1_1" singleton="false"/>
+        </property>
+
+      </object>
+    </property>
+
+  </object>
+
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/QuickInsertPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.RegEx.WinUI.ExternalPatternsPage, Sdl.FileTypeSupport.Native.RegEx.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>RegEx_StructurePatterns_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Structure_Patterns</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Structure_Patterns_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>RegEx_Structure_Patterns</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.RegEx.WinUI.InlinePatternsPage, Sdl.FileTypeSupport.Native.RegEx.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Inline_Patterns_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Inline_Patterns</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Inline_Patterns_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>RegEx_Inline_Patterns</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.RegEx.WinUI.OtherSettingsPage, Sdl.FileTypeSupport.Native.RegEx.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>RegEx_OtherSettings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Other_Settings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.RegEx.WinUI/Sdl.FileTypeSupport.Native.RegEx.WinUI.StringResources/Other_Settings_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>RegEx_Other_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+
+  <!-- tag verifier -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list>
+      </list>
+    </property>
+  </object>
+
+  <!-- file type information for creating new filter definition from template -->
+  <object id="FileTypeCreator" type="Sdl.FileTypeSupport.Framework.AdministrationApi.IntegrationApi.Implementation.FileTypeCreator, Sdl.FileTypeSupport.Framework.Core.AdministrationApi" singleton="false">
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.RegEx_1_1/Sdl.FileTypeSupport.Native.RegEx.StringResources/FileTypeCreator_FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeInformation" ref="FileTypeInformation">
+    </property>
+    <property name="Configurer">
+      <object id="FileTypeConfigurer" type="Sdl.FileTypeSupport.Native.RegEx.WinUI.RegExFileTypeConfigurer, Sdl.FileTypeSupport.Native.RegEx.WinUI" singleton="false"/>
+    </property>
+  </object>
+</objects>

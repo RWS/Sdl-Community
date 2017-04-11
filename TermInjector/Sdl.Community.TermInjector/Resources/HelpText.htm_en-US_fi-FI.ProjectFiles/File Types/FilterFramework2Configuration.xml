@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<objects xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.net">
+  <!-- This is the default filter manager instance -->
+  <object id="FilterManager" type="Sdl.FileTypeSupport.Framework.Integration.SpringFilterManager, Sdl.FileTypeSupport.Framework.Implementation" singleton="true" lazy-init="true">
+    <constructor-arg>
+      <list>
+        <value>SDLXLIFF.sdlfiletype</value>
+        <value>TTX.sdlfiletype</value>
+        <value>ITD.sdlfiletype</value>
+        <value>Word2003.sdlfiletype</value>
+        <value>Word2007_2.sdlfiletype</value>
+        <value>PowerPoint2003.sdlfiletype</value>
+        <value>PowerPoint2007_2.sdlfiletype</value>
+        <value>Excel2007_2.sdlfiletype</value>
+        <value>Excel2003_2.sdlfiletype</value>
+        <value>OpenOffice.sdlfiletype</value>
+        <value>RTF.sdlfiletype</value>
+        <value>XHTML.sdlfiletype</value>
+        <value>HTML.sdlfiletype</value>
+        <value>FrameMaker.sdlfiletype</value>
+        <value>InDesignCS2_1_1.sdlfiletype</value>
+        <value>Idml.sdlfiletype</value>
+        <value>Icml.sdlfiletype</value>
+        <value>QuarkXPress.sdlfiletype</value>
+        <value>XLIFF.sdlfiletype</value>
+        <value>WsXliff.sdlfiletype</value>
+        <value>PDF.sdlfiletype</value>
+        <value>CSV.sdlfiletype</value>
+        <value>TabDelimitedText.sdlfiletype</value>
+        <value>JavaResource.sdlfiletype</value>
+        <value>RESX.sdlfiletype</value>
+        <value>DITA.sdlfiletype</value>
+        <value>DocBook.sdlfiletype</value>
+        <value>XML_ITS_1_0.sdlfiletype</value>
+        <value>GenericXML.sdlfiletype</value>
+        <value>PlainText.sdlfiletype</value>
+        <value>XML_Template.sdlfiletype</value>
+        <value>SimpleDelimited_Template.sdlfiletype</value>
+        <value>RegEx_Template.sdlfiletype</value>
+        <value>Excel2003.sdlfiletype</value>
+        <value>Excel2007.sdlfiletype</value>
+        <value>Word2007.sdlfiletype</value>
+        <value>PowerPoint2007.sdlfiletype</value>
+        <value>InDesignCS2.sdlfiletype</value>
+      </list>
+    </constructor-arg>
+  </object>
+</objects>

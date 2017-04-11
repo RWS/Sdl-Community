@@ -1,0 +1,471 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: TTX.sdlfiletype
+  Last change:        18 May 2009
+-->
+<!-- filter definition for using TTX files in filter framework 2.0 -->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>TTX 2.0 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg value="assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/FileTypeNameSingular" />
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg value="assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/FileTypeNamePlural" />
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.ttx</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>ttx</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.TTX.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>TradosTag_GeneralSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- path to framework 1 configuration file -->
+  <!--
+    NOTE: Set this path to override explicitly specified file .The TTX filter
+    should use the filter framework 1 filter manager to initialize.
+    If not set the default path on the machine as set in the registry by the
+    TRADOS tools is used:
+      HKEY_LOCAL_MACHINE\Software\Trados\Shared\Plugins\FileFilters\FilterDefinitionsFilePath
+      
+    The value can be an absolute path or a relative path. If relative the following root folders are attempted:
+    1) The OS current directory.
+    2) The folder the executing assmebly is deployed to.
+    3) The folder "SDL International" under Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData)
+  -->
+  <object id="Ff1ConfigurationFilePath" type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+    <!-- leave this value empty to use the path set in the registry -->
+    <constructor-arg value="" />
+    <!-- If using the default location for the FF 1 configuration file the following should also work: -->
+    <!--<constructor-arg value="PluginFileFilterDefinitions.xml"/>-->
+  </object>
+  <!-- quickInsert definitions -->
+  <!-- 
+    NOTE: Since the insertable QuickTags depend on the underlying file type we cannot list the
+    available QuickTags here. Instead we use a factory to construct the available set dynamically
+    for a specific file when it is requested.
+  -->
+  <object id="QuickTagsFactory" type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxQuickTagsFactory, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="true" lazy-init="true">
+    <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+  </object>
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- browser control preview for native format -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>NativeInternalBrowserControlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/InternalPreviewName</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>aassembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/InternalPreviewDescription</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <!-- same generator type used for source and target -->
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreviewSideBySide</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SourceAndTargetPreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalSideBySideBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- external preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>NativeTTXExternalPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/ExternalPreviewName</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/ExternalPreviewDescription</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <!-- TBD: we want add side-by-side application preview, since that is well supported by some plug-in file types (e.g. PPT)-->
+          <!--<property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              -->
+          <!-- same generator type used for source and target -->
+          <!--
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>NativeFileForPreviewSideBySide</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SourceAndTargetPreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalSideBySidePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>-->
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- Default Preview -->
+    <property name="DefaultControlPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>NativeInternalBrowserControlPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>NativeTTXExternalPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- hosted web browser preview control -->
+  <object id="PreviewControl_InternalBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericInternalWebBrowserPreviewControl, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- hosted side-by-side web browser preview control -->
+  <object id="PreviewControl_InternalSideBySideBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericSideBySideWebBrowserPreviewControl, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- external native preview application -->
+  <object id="PreviewApplication_ExternalPreview" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false">
+    <property name="ApplicationPath">
+      <value></value>
+    </property>
+  </object>
+  <!-- additional generators -->
+  <object id="AdditionalGeneratorsInfo" type="Sdl.FileTypeSupport.Framework.Integration.AdditionalGeneratorsInfo, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- save TTX to native format -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.GeneratorInfo, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+              <constructor-arg>
+                <value>NativeFile</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/NativeFileTypeName</value>
+              </constructor-arg>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+  </object>
+  <!-- settings user interface -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Bilingual.Ttx.WinUI.TtxSettingsCompatibilityPage, Sdl.FileTypeSupport.Bilingual.Ttx.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>TTX_Compatibility_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/CompatibilitySettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.Ttx/Sdl.FileTypeSupport.Bilingual.Ttx.StringResources/CompatibilitySettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>TRCompatibility</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Bilingual.Ttx.TtxFileSniffer, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="true"></object>
+  <!-- file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualParser">
+      <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxSaxParser, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+        <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+        <!-- 
+          Enable this to make all inline tags appear as placeholders (i.e. no attempt will be made to
+          construct inline tag pairs. This may increase compatibility with T2007 but will decrease future compatiblity and re-use in Studio and related components.
+        -->
+        <property name="TreatAllInlineTagsAsPlaceholders">
+          <value>false</value>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.SegmentTagPairReorganizer, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.TagAligner, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+        <object type="Sdl.FileTypeSupport.Filters.Processors.SegmentRenumberingTrigger, Sdl.FileTypeSupport.Filters.Processors" singleton="false"></object>
+      </list>
+    </property>
+  </object>
+  <!-- file writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.RedundantTagDetector, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+      </list>
+    </property>
+    <property name="BilingualWriter">
+      <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+        <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+      </object>
+    </property>
+  </object>
+  <!-- writer for native format -->
+  <object id="Generator_NativeFile" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.RedundantTagDetector, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+      </list>
+    </property>
+    <property name="BilingualWriter">
+      <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxWriterToNative, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+        <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+      </object>
+    </property>
+  </object>
+  <!-- writer for single native preview -->
+  <object id="Generator_NativeFileForPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.RedundantTagDetector, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+      </list>
+    </property>
+    <property name="BilingualWriter">
+      <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxPreviewNativeWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+        <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+      </object>
+    </property>
+    <property name="FileTweakers">
+      <list>
+        <!-- ensures the output file has .htm file extension and is stripped of any ASP/JSP tags -->
+        <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxPreviewNativePostTweaker, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true" />
+      </list>
+    </property>
+  </object>
+  <!-- writer for part of side-by-side native preview -->
+  <object id="Generator_NativeFileForPreviewSideBySide" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Bilingual.Ttx.RedundantTagDetector, Sdl.FileTypeSupport.Bilingual.Ttx" singleton="false"></object>
+      </list>
+    </property>
+    <property name="BilingualWriter">
+      <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxPreviewNativeWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+        <property name="IsSideBySidePreview" value="true" />
+        <property name="Framework1ConfigurationFilePath" ref="Ff1ConfigurationFilePath" />
+      </object>
+    </property>
+    <property name="FileTweakers">
+      <list>
+        <!-- ensures the output file has .htm file extension and is stripped of any ASP/JSP tags -->
+        <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.TtxPreviewNativePostTweaker, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true" />
+      </list>
+    </property>
+  </object>
+  <!--verifiers-->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>

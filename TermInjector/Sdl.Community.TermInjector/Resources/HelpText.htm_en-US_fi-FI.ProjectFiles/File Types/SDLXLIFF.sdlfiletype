@@ -1,0 +1,271 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: SDLXLIFF.sdlfiletype
+  Last change:        18 May 2009
+-->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true" lazy-init="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>SDL XLIFF 1.0 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="IsBilingualDocumentFileType">
+      <value>true</value>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.sdlxliff</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>sdlxliff</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.SDLXLIFF.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>SdlXliff_GeneralSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Bilingual.SdlXliff.SdlXliffFileSniffer, Sdl.FileTypeSupport.Bilingual.SdlXliff" singleton="true" lazy-init="true">
+    <!-- NOTE: This property controls whether older, incompatible versions of XLIFF should 
+               be reported by the file sniffer. Set this value to false if you have another
+               version of the filter installed that supports the older version. 
+               That will avoid unnecessary messages about incompatible file formats being shown to the user.
+    -->
+    <property name="ReportUnsupportedOlderVersions">
+      <value>true</value>
+    </property>
+    <!-- NOTE: The version compatibility check can be explicitly disabled altogether 
+               by setting this property to true. NOT RECOMMENDED!!! 
+    -->
+    <property name="DisableVersionCheck">
+      <value>false</value>
+    </property>
+  </object>
+  <!-- parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" init-method="ReconnectComponents">
+    <property name="BilingualParser">
+      <object type="Sdl.FileTypeSupport.Bilingual.SdlXliff.XliffFileReader, Sdl.FileTypeSupport.Bilingual.SdlXliff" singleton="false">
+        <property name="ValidateXliff">
+          <value>true</value>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- using a bilingual generator instead of a normal generator (the object is still called BilingualWriter for historical reasons) -->
+  <object id="BilingualWriter" type="Sdl.FileTypeSupport.Framework.Integration.BilingualDocumentGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="Writer">
+      <object type="Sdl.FileTypeSupport.Bilingual.SdlXliff.XliffFileWriter, Sdl.FileTypeSupport.Bilingual.SdlXliff" singleton="false">
+        <!-- This property sets the maximum size for dependency files
+             to be embedded inside the SDL XLIFF file. If a dependency file
+             is larger than this value (in bytes) it will always be linked,
+             not embedded. 
+             
+             Note that the size of the dependency file does not reflect
+             the size it will take up inside the SDL XLIFF file, as embedded dependency
+             files are zipped and embedded as Base-64 encoded content.
+             
+             Example values:
+             100 MB = 104857600 
+              10 MB =  10485760
+               1 MB =   1048576
+        -->
+        <property name="MaxEmbeddableFileSize">
+          <value>20971520</value>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- settings pages -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Bilingual.SdlXliff.WinUI.SdlXliffGeneralSettingsPage, Sdl.FileTypeSupport.Bilingual.SdlXliff.WinUI" />
+          </constructor-arg>
+          <constructor-arg>
+            <value>SdlXliff_Settings_Validation_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- The following two LocalizableString ID names should not be changed (otherwise we will break
+			  backwards compatibility-->
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/SettingsPageName_Validation</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/SettingsPageDescription_Validation</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>SDL_XLIFF_Reader</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" singleton="true" lazy-init="true">
+    <constructor-arg>
+      <list>
+        <!-- internal HTML browser preview -->
+        <!--
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core">
+              <constructor-arg>
+                <value>InternalXliffHtmlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/HtmlPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/HtmlPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>XliffHtmlPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>InternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        -->
+        <!-- "send to browser" HTML preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalXliffHtmlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/ExternalHtmlPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Bilingual.SdlXliff/Sdl.FileTypeSupport.Bilingual.SdlXliff.StringResources/ExternalHtmlPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>XliffHtmlPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+  </object>
+  <!-- "view as html" preview generator -->
+  <object id="Generator_XliffHtmlPreview" type="Sdl.FileTypeSupport.Framework.Integration.BilingualDocumentGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="Writer">
+      <object type="Sdl.FileTypeSupport.Bilingual.SdlXliff.Preview.XliffPreviewXmlWriter, Sdl.FileTypeSupport.Bilingual.SdlXliff" singleton="false" />
+    </property>
+  </object>
+  <!-- preview controls and applications -->
+  <object id="PreviewApplication_ExternalBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>
