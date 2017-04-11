@@ -8,7 +8,6 @@ using Sdl.LanguagePlatform.Core;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using RegexTrie;
 
 namespace Sdl.Community.TermInjector
 {

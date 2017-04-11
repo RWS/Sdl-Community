@@ -5,8 +5,6 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using Sdl.LanguagePlatform.Core;
-using RegexTrie;
-
 
 namespace Sdl.Community.TermInjector
 {
