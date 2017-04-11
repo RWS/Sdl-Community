@@ -7,9 +7,6 @@ I'm not able to continue development myself, and as there's been some interest
 in updating the plugin for newer Studio versions, I've decided to make the code
 available as open source under the MIT license.
 
-This was the first project I had done on C#, so the code quality can be uneven.
-However, the plugin has been widely used, so it seems fairly robust.
-
 The plugin reportedly works in all versions of Studio up to 2017, including 2017.
 
 The plugin documentation can be accessed here:
@@ -18,9 +15,7 @@ http://www.tntranslations.com/TermInjectorHelp.html
 ### How do I get set up? ###
 
 The repo contains a Visual Studio solution, which includes the Sdl.Community.TermInjector
-project (adapted from Studio SDK examples). API references point to the folder
-of an old Studio version, so they should probably be updated before building.
-
+project (adapted from Studio SDK examples).
 
 More information on setup can be found in the Trados Studio SDK documentation. 
 
