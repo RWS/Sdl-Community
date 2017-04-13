@@ -137,6 +137,32 @@
     <Content Include="band_aid.ico" />
     <Content Include="band_aid.png" />
     <Content Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\FilterFramework2Configuration.xml" />
+    <Content Include="TermInjector Help\help.css" />
+    <Content Include="TermInjector Help\images\HelpPic1.png" />
+    <Content Include="TermInjector Help\images\HelpPic10.png" />
+    <Content Include="TermInjector Help\images\HelpPic11.png" />
+    <Content Include="TermInjector Help\images\HelpPic12.png" />
+    <Content Include="TermInjector Help\images\HelpPic13.png" />
+    <Content Include="TermInjector Help\images\HelpPic14.png" />
+    <Content Include="TermInjector Help\images\HelpPic15.png" />
+    <Content Include="TermInjector Help\images\HelpPic16.png" />
+    <Content Include="TermInjector Help\images\HelpPic17.png" />
+    <Content Include="TermInjector Help\images\HelpPic18.png" />
+    <Content Include="TermInjector Help\images\HelpPic19.png" />
+    <Content Include="TermInjector Help\images\HelpPic2.png" />
+    <Content Include="TermInjector Help\images\HelpPic20.png" />
+    <Content Include="TermInjector Help\images\HelpPic21.png" />
+    <Content Include="TermInjector Help\images\HelpPic22.png" />
+    <Content Include="TermInjector Help\images\HelpPic23.png" />
+    <Content Include="TermInjector Help\images\HelpPic24.png" />
+    <Content Include="TermInjector Help\images\HelpPic3.png" />
+    <Content Include="TermInjector Help\images\HelpPic4.png" />
+    <Content Include="TermInjector Help\images\HelpPic5.png" />
+    <Content Include="TermInjector Help\images\HelpPic6.png" />
+    <Content Include="TermInjector Help\images\HelpPic7.png" />
+    <Content Include="TermInjector Help\images\HelpPic8.png" />
+    <Content Include="TermInjector Help\images\HelpPic9.png" />
+    <Content Include="TermInjector Help\TermInjectorHelp.html" />
     <EmbeddedResource Include="ValidationErrorForm.resx">
       <DependentUpon>ValidationErrorForm.cs</DependentUpon>
     </EmbeddedResource>

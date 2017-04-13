@@ -388,7 +388,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(118, 17);
             this.label4.TabIndex = 16;
-            this.label4.Text = "TermInjector v2.2";
+            this.label4.Text = "TermInjector v2.3";
             // 
             // label5
             // 
@@ -398,7 +398,6 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(227, 17);
             this.label5.TabIndex = 17;
-            this.label5.Text = "Copyright © 2014 Tommi Nieminen";
             // 
             // btn_reload
             // 

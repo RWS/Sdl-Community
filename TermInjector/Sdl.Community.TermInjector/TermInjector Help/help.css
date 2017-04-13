@@ -1,0 +1,27 @@
+#main {
+        
+        width:1000px;
+        margin-left:auto;
+        margin-right:auto;
+        padding-left:20px;
+        padding-right:20px;
+        border-left-style:groove; 
+        border-left-color:gray;
+        border-left-width:10px;
+        border-right-style:groove; 
+        border-right-color:gray;
+        border-right-width:10px;
+        border-bottom-style:groove;
+        border-bottom-color:gray;
+        border-bottom-width:5px;
+		font-size:100%;
+}
+
+td.conventions {
+		font-size:100%;
+		padding:10px;
+}
+
+td.rule{
+	padding:10px;
+}
