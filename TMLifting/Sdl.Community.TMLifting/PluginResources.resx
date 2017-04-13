@@ -118,28 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ConfirmationLevel_ApprovedSignOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_ApprovedSignOff.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_ApprovedTranslation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_ApprovedTranslation.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_Draft" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_Draft.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_RejectedSignOff" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_RejectedSignOff.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_RejectedTranslation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_RejectedTranslation.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_Translated" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_Translated.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ConfirmationLevel_Unspecified" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\ConfirmationLevel_Unspecified.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>Segment Status Switcher</value>
+    <value>Sdl.Community.TMLifting</value>
   </data>
 </root>
