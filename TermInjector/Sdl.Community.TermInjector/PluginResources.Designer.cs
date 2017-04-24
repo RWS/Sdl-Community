@@ -81,6 +81,285 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to #main {
+        ///        
+        ///        width:1000px;
+        ///        margin-left:auto;
+        ///        margin-right:auto;
+        ///        padding-left:20px;
+        ///        padding-right:20px;
+        ///        border-left-style:groove; 
+        ///        border-left-color:gray;
+        ///        border-left-width:10px;
+        ///        border-right-style:groove; 
+        ///        border-right-color:gray;
+        ///        border-right-width:10px;
+        ///        border-bottom-style:groove;
+        ///        border-bottom-color:gray;
+        ///        border-bottom-width:5px;
+        ///		font-size:100%;
+        ///}
+        ///
+        ///td.conventions {
+        ///		font-size:100%;
+        ///		pad [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string help {
+            get {
+                return ResourceManager.GetString("help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sdl.Community.TermInjector.TermInjector_Help.images.HelpPic.
+        /// </summary>
+        public static string HelpImage_Name {
+            get {
+                return ResourceManager.GetString("HelpImage_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic1 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic10 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic10", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic11 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic11", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic12 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic13 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic13", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic14 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic14", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic15 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic15", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic16 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic16", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic17 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic17", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic18 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic18", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic19 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic19", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic2 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic20 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic20", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic21 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic21", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic22 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic22", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic23 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic23", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic24 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic3 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic4 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic5 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic6 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic6", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic7 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic7", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic8 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic8", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap HelpPic9 {
+            get {
+                object obj = ResourceManager.GetObject("HelpPic9", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A translation provider plug-in for inserting terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Description {
@@ -113,6 +392,32 @@ namespace Sdl.Community.TermInjector {
         public static string Plugin_Tooltip {
             get {
                 return ResourceManager.GetString("Plugin_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///&lt;!-- saved from url=(0051)http://www.tntranslations.com/TermInjectorHelp.html --&gt;
+        ///&lt;html&gt;
+        ///	&lt;head&gt;
+        ///		&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=ISO-8859-1&quot;&gt;
+        ///		&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;help.css&quot; /&gt;
+        ///	&lt;/head&gt;
+        ///	&lt;body&gt;
+        ///		&lt;div id=&quot;main&quot;&gt;
+        ///			&lt;a href=&quot;#quickstart&quot;&gt;Quickstart&lt;/a&gt;
+        ///			&lt;br /&gt;
+        ///			&lt;a href=&quot;#rules&quot;&gt;Replacement rules&lt;/a&gt;
+        ///			&lt;br /&gt;
+        ///			&lt;a href=&quot;#regex&quot;&gt;Regular expression conventions&lt;/a&gt;
+        ///			&lt;br /&gt;
+        ///			&lt;a href=&quot;#regexexample&quot;&gt;Regular expression examples&lt;/a&gt;
+        ///			&lt;br /&gt;
+        ///			&lt;a hr [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string TermInjectorHelp {
+            get {
+                return ResourceManager.GetString("TermInjectorHelp", resourceCulture);
             }
         }
     }

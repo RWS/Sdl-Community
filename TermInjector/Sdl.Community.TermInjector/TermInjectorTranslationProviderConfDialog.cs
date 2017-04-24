@@ -8,16 +8,18 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Reflection;
+using System.Drawing.Imaging;
 
 namespace Sdl.Community.TermInjector
 {
     public partial class TermInjectorTranslationProviderConfDialog : Form
-    {        
+    {
         TermInjectorTranslationProvider provider;
 
         IWin32Window owner;
         #region "TermInjectorConfDialog"
-        public TermInjectorTranslationProviderConfDialog(TermInjectorTranslationOptions options,TermInjectorTranslationProvider provider,IWin32Window owner)
+        public TermInjectorTranslationProviderConfDialog(TermInjectorTranslationOptions options, TermInjectorTranslationProvider provider, IWin32Window owner)
         {
             this.provider = provider;
             this.Options = options;
@@ -26,7 +28,7 @@ namespace Sdl.Community.TermInjector
             UpdateDialog();
         }
 
-        public TermInjectorTranslationProviderConfDialog(TermInjectorTranslationOptions options,IWin32Window owner)
+        public TermInjectorTranslationProviderConfDialog(TermInjectorTranslationOptions options, IWin32Window owner)
         {
             this.provider = null;
             this.Options = options;
@@ -52,7 +54,7 @@ namespace Sdl.Community.TermInjector
             termAdditionSeparator.Text = Options.TermAdditionSeparator;
             tokenBoundaryCharacters.Text = Options.TokenBoundaryCharacters;
             matchCase.CheckState =
-                Options.MatchCase == "true" ?  CheckState.Checked : CheckState.Unchecked;
+                Options.MatchCase == "true" ? CheckState.Checked : CheckState.Unchecked;
             InjectIntoFullMatchesCheckBox.CheckState =
                 Options.InjectIntoFullMatches == "true" ? CheckState.Checked : CheckState.Unchecked;
             NewSegmentPercentageBox.Text = Options.NewSegmentPercentage.ToString();
@@ -71,7 +73,7 @@ namespace Sdl.Community.TermInjector
             this.dlg_OpenFile.ShowDialog();
             string fileName = dlg_OpenFile.FileName;
 
-            if (fileName != "")
+            if (!string.IsNullOrEmpty(fileName))
             {
                 glosFile.Text = fileName;
             }
@@ -104,7 +106,7 @@ namespace Sdl.Community.TermInjector
             {
                 Options.NewSegmentPercentage = Convert.ToInt32(NewSegmentPercentageBox.Text);
             }
-            
+
         }
         #endregion
 
@@ -120,7 +122,7 @@ namespace Sdl.Community.TermInjector
             this.dlg_OpenFile.ShowDialog();
             string fileName = dlg_OpenFile.FileName;
 
-            if (fileName != "")
+            if (!string.IsNullOrEmpty(fileName))
             {
                 tmFile.Text = fileName;
             }
@@ -179,28 +181,43 @@ namespace Sdl.Community.TermInjector
 
         private void btn_Help_Click(object sender, EventArgs e)
         {
-            var fileName = Path.Combine(Environment.GetFolderPath(
-                Environment.SpecialFolder.LocalApplicationData), "TermInjector Help\\TermInjectorHelp.html");
-            if (File.Exists(fileName))
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var helpFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TermInjectorHelp");
+
+            if (!Directory.Exists(helpFilePath))
             {
-                System.Diagnostics.Process.Start(fileName);
+                Directory.CreateDirectory(helpFilePath);
+            }
+
+            // Get TermInjectorHelp.html images and .css file from resources 
+            GetImageResourceForHelpFile(assembly, helpFilePath);
+            GetCssResourceForHelpFile(assembly);
+
+            // Get TermInjector.html resource
+            Stream stream = assembly.GetManifestResourceStream("Sdl.Community.TermInjector.TermInjector_Help.TermInjectorHelp.html");
+            var htmlPath = Path.Combine(helpFilePath, "TermInjectorHelp.html");
+
+            WriteFileContent(stream, htmlPath);
+
+            if (File.Exists(htmlPath))
+            {
+                System.Diagnostics.Process.Start(htmlPath);
             }
             else
             {
                 MessageBox.Show("Help file has not been installed", "TermInjector");
             }
-            
         }
 
         private void btn_browse_regex_Click(object sender, EventArgs e)
         {
-         
             this.dlg_OpenFile.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
             this.dlg_OpenFile.FilterIndex = 1;
             this.dlg_OpenFile.ShowDialog();
             string fileName = dlg_OpenFile.FileName;
 
-            if (fileName != "")
+            if (!string.IsNullOrEmpty(fileName))
             {
                 regexFile.Text = fileName;
             }
@@ -229,7 +246,7 @@ namespace Sdl.Community.TermInjector
             //Reload the tries
             if (this.provider != null)
             {
-                
+
                 this.provider.Options = this.Options;
                 //this.provider.checkExistenceOfFiles();
                 try
@@ -242,14 +259,14 @@ namespace Sdl.Community.TermInjector
                 }
                 this.provider.initializeVisitors();
             }
-            
+
         }
 
         private void EditExact_Click(object sender, EventArgs e)
         {
             try
             {
-                if (this.glosFile.Text != "")
+                if (!string.IsNullOrEmpty((this.glosFile.Text)))
                 {
                     System.Diagnostics.Process.Start(this.glosFile.Text);
                 }
@@ -263,7 +280,7 @@ namespace Sdl.Community.TermInjector
         {
             try
             {
-                if (this.regexFile.Text != "")
+                if (!string.IsNullOrEmpty((this.regexFile.Text)))
                 {
                     System.Diagnostics.Process.Start(this.regexFile.Text);
                 }
@@ -271,6 +288,53 @@ namespace Sdl.Community.TermInjector
             catch
             {
             }
-        }        
+        }
+
+        private void GetImageResourceForHelpFile(Assembly assembly, string helpFilePath)
+        {
+            var resources = assembly.GetManifestResourceNames();
+            string imagePath = Path.Combine(helpFilePath, "images");
+            int imageNumber = 1;
+
+            if (!Directory.Exists(imagePath))
+            {
+                Directory.CreateDirectory(imagePath);
+            }
+
+            for (var i = 0; i < resources.Count(); i++)
+            {
+                if (resources[i].Contains(PluginResources.HelpImage_Name))
+                {
+                    Bitmap image = new Bitmap(assembly.GetManifestResourceStream(string.Concat(PluginResources.HelpImage_Name, imageNumber.ToString(), ".png")));
+                    image.Save(Path.Combine(imagePath, string.Concat("HelpPic", imageNumber.ToString(), ".png")), ImageFormat.Png);
+                    imageNumber += 1;
+                }
+            }
+        }
+
+        private void GetCssResourceForHelpFile(Assembly assembly)
+        {
+            Stream stream = assembly.GetManifestResourceStream("Sdl.Community.TermInjector.TermInjector_Help.help.css");
+
+            var cssHelpFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "TermInjectorHelp\\help.css");
+
+            WriteFileContent(stream, cssHelpFile);
+        }
+
+        private void WriteFileContent(Stream stream, string filePath)
+        {
+            if (stream != null)
+            {
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    var fileContent = reader.ReadToEnd();
+
+                    // Create a file to write to. 
+                    StreamWriter fileWriter = new StreamWriter(filePath);
+                    fileWriter.WriteLine(fileContent);
+                    fileWriter.Close();
+                }
+            }
+        }
     }
 }

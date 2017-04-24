@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="band_aid_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -135,5 +135,86 @@
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>This provider insert terms into new segments or fuzzy matches</value>
+  </data>
+  <data name="TermInjectorHelp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\TermInjectorHelp.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="help" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\help.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="HelpPic1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic11.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic12.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic14" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic14.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic15" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic15.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic16" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic16.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic17" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic17.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic18" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic18.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic19" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic19.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic20" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic20.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic21" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic21.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic22" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic22.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic23" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic23.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic4" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic4.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic5" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic5.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic6" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic6.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic7" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic7.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic8" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic8.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpPic9" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TermInjector Help\images\HelpPic9.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HelpImage_Name" xml:space="preserve">
+    <value>Sdl.Community.TermInjector.TermInjector_Help.images.HelpPic</value>
   </data>
 </root>
