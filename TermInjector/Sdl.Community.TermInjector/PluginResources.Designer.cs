@@ -81,6 +81,15 @@ namespace Sdl.Community.TermInjector {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sdl.Community.TermInjector.TermInjector_Help.images.HelpPic.
+        /// </summary>
+        public static string HelpImage_Name {
+            get {
+                return ResourceManager.GetString("HelpImage_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A translation provider plug-in for inserting terms into new segments or fuzzy matches.
         /// </summary>
         public static string Plugin_Description {
