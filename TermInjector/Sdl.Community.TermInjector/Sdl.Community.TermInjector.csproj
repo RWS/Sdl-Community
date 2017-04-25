@@ -134,7 +134,7 @@
     <Content Include="band_aid.ico" />
     <Content Include="band_aid.png" />
     <Content Include="Resources\HelpText.htm_en-US_fi-FI.ProjectFiles\File Types\FilterFramework2Configuration.xml" />
-    <Content Include="TermInjector Help\help.css" />
+    <EmbeddedResource Include="TermInjector Help\help.css" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic1.png" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic10.png" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic11.png" />
@@ -159,7 +159,7 @@
     <EmbeddedResource Include="TermInjector Help\images\HelpPic7.png" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic8.png" />
     <EmbeddedResource Include="TermInjector Help\images\HelpPic9.png" />
-    <Content Include="TermInjector Help\TermInjectorHelp.html" />
+    <EmbeddedResource Include="TermInjector Help\TermInjectorHelp.html" />
     <EmbeddedResource Include="ValidationErrorForm.resx">
       <DependentUpon>ValidationErrorForm.cs</DependentUpon>
     </EmbeddedResource>
