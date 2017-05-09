@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<Project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Guid="150c659f-1052-421d-977e-71427d8e8990" SettingsBundleGuid="5a5d2d95-d260-4887-9eed-b450e65d1a80" Version="3.1.0.0" Owner="Anonyymi-PC\Anonyymi" ProjectTemplateGuid="30004f3b-4acf-4425-a3e3-38d3b3514276" ReferenceProjectGuid="00000000-0000-0000-0000-000000000000">
+  <LanguageDirections>
+    <LanguageDirection Guid="3f2765b0-3063-4c59-b14e-55eb20643e35" SettingsBundleGuid="f3601971-e3b1-4f08-a571-ec9ec354aa9d" TargetLanguageCode="fi-FI" SourceLanguageCode="en-US">
+      <AutoSuggestDictionaries />
+      <AnalysisStatistics WordCountStatus="None" AnalysisStatus="None">
+        <Total Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        <Repetitions Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        <Perfect Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        <InContextExact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        <Exact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        <Fuzzy>
+          <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+        </Fuzzy>
+        <New Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+      </AnalysisStatistics>
+      <CascadeItem OverrideParent="false" StopSearchingWhenResultsFound="false" />
+    </LanguageDirection>
+  </LanguageDirections>
+  <TermbaseConfiguration>
+    <Termbases>
+      <Name>usspeaking</Name>
+      <SettingsXml>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;TermbaseSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;Path&gt;C:\Users\Anonyymi\Documents\SDL\SDL MultiTerm\Termbases\usspeaking.sdltb&lt;/Path&gt;
+  &lt;IsOpen&gt;false&lt;/IsOpen&gt;
+  &lt;Filter&gt;0&lt;/Filter&gt;
+  &lt;FilterHighlight&gt;true&lt;/FilterHighlight&gt;
+  &lt;Layout&gt;0&lt;/Layout&gt;
+  &lt;Local&gt;true&lt;/Local&gt;
+&lt;/TermbaseSettings&gt;</SettingsXml>
+      <Enabled>true</Enabled>
+    </Termbases>
+    <LanguageIndexMappings>
+      <Language>en-US</Language>
+      <Index>English</Index>
+    </LanguageIndexMappings>
+    <LanguageIndexMappings>
+      <Language>de-DE</Language>
+    </LanguageIndexMappings>
+    <RecognitionOptions>
+      <ShowWithNoAvailableTranslation>false</ShowWithNoAvailableTranslation>
+      <MinimumMatchValue>70</MinimumMatchValue>
+      <SearchDepth>200</SearchDepth>
+      <SearchOrder>Parallel</SearchOrder>
+    </RecognitionOptions>
+  </TermbaseConfiguration>
+  <SettingsBundles>
+    <SettingsBundle Guid="5a5d2d95-d260-4887-9eed-b450e65d1a80">
+      <SettingsBundle>
+        <SettingsGroup Id="TranslateTaskSettings">
+          <Setting Id="MinimumMatchScore">75</Setting>
+          <Setting Id="NoTranslationMemoryMatchFoundAction">CopySourceToTarget</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="TranslationMemorySettings">
+          <Setting Id="TranslationMinimumMatchValue">30</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="QASettings">
+          <Setting Id="Enabled">True</Setting>
+        </SettingsGroup>
+        <SettingsGroup Id="TermVerifierSettings">
+          <Setting Id="Enabled">True</Setting>
+        </SettingsGroup>
+      </SettingsBundle>
+    </SettingsBundle>
+  </SettingsBundles>
+  <AnalysisBands>
+    <AnalysisBand MinimumMatchValue="50" />
+    <AnalysisBand MinimumMatchValue="75" />
+    <AnalysisBand MinimumMatchValue="85" />
+    <AnalysisBand MinimumMatchValue="95" />
+  </AnalysisBands>
+  <ManualTaskTemplates />
+  <Users>
+    <User UserId="Anonyymi-PC\Anonyymi" FullName="Anonyymi" Description="" Email="nieminentommi@hotmail.com" PhoneNumber="" EmailType="Smtp" />
+  </Users>
+  <CascadeItem OverrideParent="true" StopSearchingWhenResultsFound="false">
+    <CascadeEntryItem PerformConcordanceSearch="true" Penalty="0" PerformUpdate="true" PerformNormalSearch="true">
+      <MainTranslationProviderItem Uri="terminjector:///?tokenboundarycharacters=+.%2c!%3f%22'-%3b%3a()&amp;termadditionseparator=%c2%a4&amp;delimiter=Tab&amp;glossaryfile=C%3a%5cUsers%5cAnonyymi%5cDocuments%5cSDL+Trados+Studio%5cTranslation+Memories%5cnewtest.txt&amp;tmfile=C%3a%5cUsers%5cAnonyymi%5cDocuments%5cSDL+Trados+Studio%5cTranslation+Memories%5chtml.sdltm&amp;regexfile=C%3a%5cUsers%5cAnonyymi%5cDocuments%5cSDL+Trados+Studio%5cTranslation+Memories%5cihanuusin.txt&amp;matchcase=false&amp;injectfullmatches=false&amp;newsegmentpercentage=0&amp;injectnewtermsintofuzzies=true" Enabled="true" />
+    </CascadeEntryItem>
+  </CascadeItem>
+  <GeneralProjectInfo StartedAt="2012-07-13T12:29:42.0889091Z" IsInPlace="true" IsImported="false" Name="HelpText.htm_en-US_fi-FI" Status="Started" CreatedBy="Anonyymi-PC\Anonyymi" CreatedAt="2012-07-13T12:29:41.9061055Z" />
+  <SourceLanguageCode>en-US</SourceLanguageCode>
+  <ProjectFiles>
+    <ProjectFile Guid="75e1d2f1-1caf-485c-9b44-881d6228de35" Path="" Role="Translatable" Name="HelpText.htm" ParentProjectFileGuid="00000000-0000-0000-0000-000000000000" FilterDefinitionId="HTML v 1.0.0.0">
+      <SpecificTargetLanguages />
+      <LanguageFiles>
+        <LanguageFile Guid="cae8fe54-d0d1-46b0-9b0e-25c8eeee329a" SettingsBundleGuid="dec9dade-b957-4909-a0b6-be11af0879cc" LanguageCode="en-US">
+          <FileVersions>
+            <FileVersion Guid="807bc840-209e-4fff-8b6d-bc648670d9d8" VersionNumber="1" Size="8028" FileName="HelpText.htm" PhysicalPath="HelpText.htm" CreatedBy="Anonyymi-PC\Anonyymi" CreatedAt="2012-07-13T12:29:42.0889091Z" FileTimeStamp="2012-06-18T13:11:42.2757132Z" />
+          </FileVersions>
+          <ChildFiles />
+        </LanguageFile>
+        <LanguageFile Guid="2b567633-f5a2-442b-b239-d73aa4965447" SettingsBundleGuid="d51c9d31-5264-4d00-847d-f30f7a624c85" LanguageCode="fi-FI">
+          <FileVersions>
+            <FileVersion Guid="74ddafa6-244a-44f2-b8ac-b517c3884e3c" VersionNumber="2" Size="8028" FileName="HelpText.htm" PhysicalPath="HelpText.htm" CreatedBy="Anonyymi-PC\Anonyymi" CreatedAt="2012-07-13T12:29:42.0889091Z" FileTimeStamp="2012-06-18T13:11:42.2757132Z" />
+          </FileVersions>
+          <AnalysisStatistics WordCountStatus="None" AnalysisStatus="None">
+            <Total Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Repetitions Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Perfect Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <InContextExact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Exact Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Fuzzy>
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+              <CountData Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            </Fuzzy>
+            <New Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          </AnalysisStatistics>
+          <ConfirmationStatistics Status="None">
+            <Unspecified Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Draft Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <Translated Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <RejectedTranslation Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <ApprovedTranslation Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <RejectedSignOff Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+            <ApprovedSignOff Words="0" Characters="0" Segments="0" Placeables="0" Tags="0" />
+          </ConfirmationStatistics>
+          <ChildFiles />
+        </LanguageFile>
+      </LanguageFiles>
+      <PreviousBilingualFiles />
+    </ProjectFile>
+  </ProjectFiles>
+  <Tasks />
+  <PackageOperations>
+    <ProjectPackageCreationOperations />
+    <ProjectPackageImportOperations />
+    <ReturnPackageCreationOperations />
+    <ReturnPackageImportOperations />
+  </PackageOperations>
+</Project>

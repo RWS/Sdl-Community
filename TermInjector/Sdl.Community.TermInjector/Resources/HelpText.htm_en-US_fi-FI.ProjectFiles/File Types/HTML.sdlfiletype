@@ -1,0 +1,694 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: HTML.sdlfiletype
+  Last change:        11 May 2009
+-->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.html.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>HTML v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.htm;*.html;*.jsp;*.asp;*.aspx;*.ascx;*.inc;*.php;*.hhk;*.hhc</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>htm</value>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>HtmlEntitySettingsPageId</value>
+        <value>HtmlScriptHandlingPageId</value>
+        <value>HtmlWriterSettingsPageId</value>
+        <value>HtmlElementsSettingsPageId</value>
+      </list>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="HtmlFileSniffer, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="true" />
+  <!-- settings for parsing -->
+  <object id="ParserSettings" type="HtmlParserSettings, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false">
+    <!-- 
+      NOTE: The content of an INI file can be pasted into the CDATA section below. If set
+            it will be used as parser settings defaults. You may optionally also want to
+            set the UseFullIniSettings property on the Parser to true, see below for details.
+    -->
+    <!-- 
+    <property name="IniFileContent">
+      <value><![CDATA[
+      ]]></value>
+    </property>
+    -->
+    <property name="EntitySettings">
+      <ref object="EntitySettings" />
+    </property>
+    <property name="PreserveLinebreaks">
+      <value>false</value>
+    </property>
+    <property name="DefaultTagType">
+      <value>Inline</value>
+    </property>
+    <property name="ScriptHandling">
+      <value>TranslateAllStrings</value>
+    </property>
+  </object>
+  <!-- settings for entity conversion -->
+  <object id="EntitySettings" type="Sdl.FileTypeSupport.Native.Xml.FilterSettings.EntitySettings,  Sdl.FileTypeSupport.Native.Xml.FilterSettings" singleton="false">
+    <property name="ConvertEntities">
+      <value>true</value>
+    </property>
+    <property name="DefaultOverrides">
+      <list element-type="Sdl.FileTypeSupport.Native.Xml.FilterSettings.EntitySet,  Sdl.FileTypeSupport.Native.Xml.FilterSettings">
+        <object type="Sdl.FileTypeSupport.Native.Xml.FilterSettings.EntitySet,  Sdl.FileTypeSupport.Native.Xml.FilterSettings">
+          <property name="Name">
+            <value>ISOLAT1</value>
+          </property>
+          <property name="Active">
+            <value>true</value>
+          </property>
+          <property name="IsDefault">
+            <value>true</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Native.Xml.FilterSettings.EntitySet,  Sdl.FileTypeSupport.Native.Xml.FilterSettings">
+          <property name="Name">
+            <value>HTMLSPECIAL</value>
+          </property>
+          <property name="Active">
+            <value>true</value>
+          </property>
+          <property name="IsDefault">
+            <value>true</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" init-method="ReconnectComponents">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false" lazy-init="true">
+        <property name="Parser">
+          <object type="HtmlParser, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true">
+            <property name="Settings">
+              <ref object="ParserSettings" />
+            </property>
+            <!-- 
+              NOTE: Setting this to true allows the use of explicitly defined INI files to be
+                fully applied (after which the parser settings are applied as overrides). 
+              The INI file used is the content of the ParserSettings->IniFileContent property if set,
+                and if not set it is the default HTML4.ini file that is embeddeded as a resource
+              in the ConvertAdapter DLL.
+            -->
+            <property name="UseFullIniSettings">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Native.Html.SplitTagMerger, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Native.Html.HtmlContextProcessor, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Native.Html.HtmlLayoutPropertiesProcessor, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Native.Html.EntityTagDecorator, Sdl.FileTypeSupport.Native.Html" singleton="false" lazy-init="true">
+              <property name="EntitySettings">
+                <ref object="EntitySettings" />
+              </property>
+            </object>
+            <object type="TagBalancer, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true" />
+            <!-- NOTE: the formatting processor required balanced start/end tags, so it must always be after the tag balancer-->
+            <object type="Sdl.FileTypeSupport.Native.Html.HtmlFormattingProcessor, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- settings for writing -->
+  <object id="WriterSettings" type="Sdl.FileTypeSupport.Native.Html.WriterSettings, Sdl.FileTypeSupport.Native.Html">
+    <property name="MetaCharsetHandling">
+      <value>AddIfNotPresent</value>
+    </property>
+    <property name="Utf8BomHandling">
+      <value>Preserve</value>
+    </property>
+    <property name="EntitySettings">
+      <ref object="EntitySettings" />
+    </property>
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" init-method="ReconnectComponents">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false" lazy-init="true">
+        <property name="Writer">
+          <object type="HtmlFileWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true">
+            <property name="Settings">
+              <ref object="WriterSettings" />
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Native.Html.SplitTagSplitter, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- previews -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- source, target and side-by-side Navigable HTML Browser Control Preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalNavigableHtmlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/InternalPreviewName</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/InternalPreviewDescription</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SourceAndTargetPreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalNavigableSideBySideBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- real-time side-by-side and target HTML Web Browser Control Preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalRealTimeHtmlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/InternalRealtimePreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/InternalRealtimePreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalRealtimeNavigableBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="SideBySide">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlNavigablePreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SourceAndTargetPreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalRealtimeSideBySideBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- view in Browser HTML preview (standalone source and target only) -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalHtmlPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ExternalPreviewName</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ExternalPreviewDescription</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>HtmlPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>ExternalBrowser</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- default previews -->
+    <property name="DefaultControlPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>InternalNavigableHtmlPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>ExternalHtmlPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- preview writer (HTML) -->
+  <object id="Generator_HtmlPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" init-method="ReconnectComponents">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false" lazy-init="true">
+        <property name="Writer">
+          <object type="HtmlPreviewWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true">
+            <property name="Settings">
+              <ref object="WriterSettings" />
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Native.Html.SplitTagSplitter, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="FileTweakers">
+      <list>
+        <object type="HtmlPreviewPostTweaker, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true" />
+      </list>
+    </property>
+  </object>
+  <!-- preview writer (navigable HTML) -->
+  <object id="Generator_HtmlNavigablePreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false" init-method="ReconnectComponents">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false" lazy-init="true">
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Native.Html.Preview.HtmlNavigablePreviewProcessor,  Sdl.FileTypeSupport.Native.Html" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Native.Html.SplitTagSplitter, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+          </list>
+        </property>
+        <property name="Writer">
+          <object type="HtmlPreviewWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true">
+            <property name="Settings">
+              <ref object="WriterSettings" />
+            </property>
+          </object>
+        </property>
+      </object>
+    </property>
+    <property name="FileTweakers">
+      <list>
+        <object type="HtmlPreviewPostTweaker, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false" lazy-init="true" />
+        <object type="Sdl.FileTypeSupport.Native.Html.Preview.HtmlNavigablePreviewFileTweaker, Sdl.FileTypeSupport.Native.Html" singleton="false" />
+      </list>
+    </property>
+  </object>
+  <!-- preview control (browser) -->
+  <object id="PreviewControl_InternalBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericInternalWebBrowserPreviewControl, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- preview control (side-by-side browser) -->
+  <object id="PreviewControl_InternalSideBySideBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericSideBySideWebBrowserPreviewControl, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- preview control (navigable browser) -->
+  <object id="PreviewControl_InternalNavigableBrowser" type="Sdl.FileTypeSupport.Native.Html.Preview.HtmlNavigablePreviewController, Sdl.FileTypeSupport.Native.Html" singleton="false"></object>
+  <!-- preview control (navigable side-by-side browser) -->
+  <object id="PreviewControl_InternalNavigableSideBySideBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.SideBySideNavigableWebBrowserPreviewController, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- preview control (real-time browser) -->
+  <object id="PreviewControl_InternalRealtimeNavigableBrowser" type="Sdl.FileTypeSupport.Native.Html.Preview.HtmlRealtimePreviewController, Sdl.FileTypeSupport.Native.Html" singleton="false"></object>
+  <!-- preview control (real-time side-by-side browser) -->
+  <object id="PreviewControl_InternalRealtimeSideBySideBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.SideBySideRealtimeWebBrowserPreviewController, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- preview application (browser) -->
+  <object id="PreviewApplication_ExternalBrowser" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false"></object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+  <!-- quick inserts -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Native.Html.QuickTagBuilder, Sdl.FileTypeSupport.Native.Html" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- settings pages -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <!-- quick inserts page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlQuickTagsSettingsPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/QuickInsertSettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/QuickInsrtSettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <!-- element settings page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlElementSettingsPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>HTML Elements Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ElementSettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ElementSettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>HTML_Files_Elements_and_Attributes</value>
+          </property>
+        </object>
+        <!-- entity settings page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlEntitySettingsPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>HTML Entity Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/EntitySettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/EntitySettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>HTML_Entity_conversion</value>
+          </property>
+        </object>
+        <!-- script settings page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlScriptSettingsPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>HTML_Script_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ScriptSettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/ScriptSettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>TRScript_translation</value>
+          </property>
+        </object>
+        <!-- writer settings page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlWriterSettingsPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>HTML Writer Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/WriterSettingsPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/WriterSettingsPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>HTML_Files_Writing</value>
+          </property>
+        </object>
+        <!-- settings import page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.Html.WinUI.HtmlSettingsImportPage, Sdl.FileTypeSupport.Native.Html.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>HTML_Settings_Import_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/SettingsImportPage_Name</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.Html/Sdl.FileTypeSupport.Native.Html.StringResources/SettingsImportPage_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>HTML_Files_Settings_Import</value>
+          </property>
+        </object>
+        <!-- tag verification page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+</objects>

@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- File type definition for a simple text file type plug-in -->
+<objects xmlns="http://www.springframework.net" xmlns:sp="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object singleton="true" type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core">
+        <constructor-arg>
+          <value>ICML Filter 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.StringResources/Description</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.icml</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>icml</value>
+    </property>
+    <property name="Icon">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" factory-method="Create" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.Icml.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.StringResources/FileTypeDocumentName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.StringResources/FileTypeDocumentsName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>UserSettingsGeneral</value>
+      </list>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+  </object>
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Filters.Icml.IcmlSniffer, Sdl.FileTypeSupport.Filters.Icml" singleton="false" />
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Filters.Icml.DynamicParser.IcmlParser, Sdl.FileTypeSupport.Filters.Icml" singleton="false" />
+        </property>
+      </object>
+    </property>
+  </object>
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <description>Generates the native target file from the bilingual SDLXLIFF document.</description>
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Filters.Icml.Writer.IcmlWriter, Sdl.FileTypeSupport.Filters.Icml" singleton="false" />
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- quick tags -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Filters.Icml.UserSettings.QuickTagBuilder, Sdl.FileTypeSupport.Filters.Icml" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- custom UI Administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Icml/Sdl.FileTypeSupport.Filters.Icml.Resources.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for Icml File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Icml.WinUI.GeneralSettingsPage, Sdl.FileTypeSupport.Filters.Icml.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>General_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Icml.WinUI/Sdl.FileTypeSupport.Filters.Icml.WinUI.StringResources/GeneralSetName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Icml.WinUI/Sdl.FileTypeSupport.Filters.Icml.WinUI.StringResources/GeneralSetDesc</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>InDesign_CS4_ICML_General_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list />
+    </property>
+  </object>
+</objects>

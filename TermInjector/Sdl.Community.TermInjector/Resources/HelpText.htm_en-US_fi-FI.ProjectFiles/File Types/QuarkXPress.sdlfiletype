@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL International. All rights reserved.
+  
+  Original file name: QuarkXPress.sdlfiletype
+  Last change:        20090714
+-->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>QuarkXPress v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>QuarkXPress Export</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress/Sdl.FileTypeSupport.Filters.QuarkXPress.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress/Sdl.FileTypeSupport.Filters.QuarkXPress.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.xtg;*.tag</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress/Sdl.FileTypeSupport.Filters.QuarkXPress.QuarkXPress.app.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress/Sdl.FileTypeSupport.Filters.QuarkXPress.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>QuarkXPress_GeneralSettings</value>
+        <value>GenericVerifier_GeneralSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Filters.QuarkXPress.Sniffer, Sdl.FileTypeSupport.Filters.QuarkXPress" singleton="true" />
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.QuarkXPressParser, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+    <!--    <property name="BilingualProcessors">
+      <list>
+      </list>
+    </property> -->
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Filters.ConvertAdapter.QuarkXPressWriter, Sdl.FileTypeSupport.Filters.ConvertAdapter" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- custom UI Administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress/Sdl.FileTypeSupport.Filters.QuarkXPress.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for QuarkXPress File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>QuarkXPressSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI/Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI.Resources/Settings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI/Sdl.FileTypeSupport.Filters.QuarkXPress.WinUI.Resources/Settings_Description</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuarkXPress_filter_settings</value>
+          </property>
+        </object>
+        <!-- tag verification page -->
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+									assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+								</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- quick inserts -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Filters.QuarkXPress.QuickTagBuilder, Sdl.FileTypeSupport.Filters.QuarkXPress" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>

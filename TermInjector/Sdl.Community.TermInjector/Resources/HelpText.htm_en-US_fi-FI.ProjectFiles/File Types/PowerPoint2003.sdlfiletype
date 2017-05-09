@@ -1,0 +1,819 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: PowerPoint2003.sdlfiletype
+  Last change:        18 May 2009
+-->
+<!-- filter definition for using PowerPoint XP-2003 document files in filter framework 2.0 via a filter framework 1 adapter -->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>PowerPoint XP-2003 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/FileTypeName</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/Microsoft_PowerPoint_XP_2003_Documents</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.ppt;*.pps;*.pot</value>
+    </property>
+    <property name="DefaultFileExtension">
+      <value>ppt</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.PowerPoint2003Doc.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>HyperlinksAndCommentsSettings</value>
+        <value>NotesAndShapesSettings</value>
+        <value>SegmentationSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- filter framework 1 filter definition -->
+  <object id="FilterFramework1FilterDefinitionFile" type="Sdl.FileTypeSupport.Framework.Integration.FilterFramework1FilterDefinitionFile, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FilterFramework1FilterDefinitionFilePath" value="PowerPoint_2_0_0_0.xml" />
+    <property name="FilterFramework1FilterDefinitionFileContent">
+      <value><![CDATA[<?xml version="1.0" encoding="utf-16"?>
+<!--
+	
+	Copyright © 2007 SDL International. All rights reserved.
+	
+	"Warning: This filter definition file is protected by copyright law and 
+	international treaties. Unauthorised reproduction or distribution of this file, 
+	or any portion of it, may result in severe civil and criminal penalties, and 
+	will be prosecuted to the maximum extent possible under the law."
+	
+-->
+<!--	
+	
+	This is a filter definition file for the SDL Trados filter plug-in for 
+	Microsoft(r) PowerPoint(tm) files. It allows the adjustment of the default 
+	settings of the filter. Possible setting values are described later in 
+	the file. Any unauthorised modification of the settings might result in the 
+	filter not working correctly.
+	
+-->
+<!-- 	Original file name: 	PowerPoint_2_0_0_0.xml	-->
+<!-- 	Version: 				  2.0.15.10	-->
+<!-- 	Last change: 			05 Jun 2008	-->
+<FilterDefinition>
+  <Guid>TRADOS PowerPoint Filter 2.0.0.0</Guid>
+  <FileTypeName>Microsoft PowerPoint XP-2003</FileTypeName>
+  <FileFilterRegExp>*.ppt;*.pps;*.pot</FileFilterRegExp>
+  <QuickTags>
+    <QuickTag Command="Bold">
+      <StartTag>&lt;cf bold="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Italic">
+      <StartTag>&lt;cf italic="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Underline">
+      <StartTag>&lt;cf underline="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Subscript">
+      <StartTag>&lt;cf baselineoffset="-25" subscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Superscript">
+      <StartTag>&lt;cf baselineoffset="30" superscript="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom1">
+      <StartTag>&lt;cf emboss="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom2">
+      <StartTag>&lt;cf shadow="on"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom3">
+      <StartTag>&lt;cf bold="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom4">
+      <StartTag>&lt;cf italic="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom5">
+      <StartTag>&lt;cf underline="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom6">
+      <StartTag>&lt;cf baselineoffset="0" subscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom7">
+      <StartTag>&lt;cf baselineoffset="0" superscript="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom8">
+      <StartTag>&lt;cf emboss="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <QuickTag Command="Custom9">
+      <StartTag>&lt;cf shadow="off"&gt;</StartTag>
+      <EndTag>&lt;/cf&gt;</EndTag>
+    </QuickTag>
+    <!--<QuickTag Command="Custom0">
+	      <StartTag>&lt;br/&gt;</StartTag>
+	      <EndTag>
+        </EndTag>
+	    </QuickTag>-->
+    <QuickTag Command="Custom0">
+      <StartTag>* </StartTag>
+      <EndTag> *</EndTag>
+    </QuickTag>
+  </QuickTags>
+  <Scanner Instantiation="C++" FactoryFunction="CreatePPTFileScanner">
+    <Guid>PowerPointPlugInFilter.dll</Guid>
+    <Settings>
+    </Settings>
+  </Scanner>
+  <Parser Instantiation="C++" FactoryFunction="CreatePPTFileParser">
+    <Guid>PowerPointPlugInFilter.dll</Guid>
+    <Settings>
+      <SlidesInPresentationOrder>Default</SlidesInPresentationOrder>
+      <!-- SlidesInPresentationOrder possible values: NoNotes, NotesAfterAllSlides, 
+			NotesAfterEverySlide, Default (equal NotesAfterEverySlide) -->
+      <ShapesOnSlideOrder>Default</ShapesOnSlideOrder>
+      <!-- ShapesOnSlideOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow) -->
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing applies to comments inserted with PowerPoint 97 or 2000
+			CommentProcessing possible values: On, Off, Default (equal Off) -->
+      <XPCommentProcessing>Default</XPCommentProcessing>
+      <!-- XPCommentProcessing applies to comments inserted with PowerPoint XP, 2003 or newer
+			XPCommentProcessing possible values: On, Off, Default (equal Off) -->
+      <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+      <SegmentationAfterBreakTags>Default</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, InListsOnly, Default (equal On) -->
+      <SegmentationAfterSoftReturnTags>Default</SegmentationAfterSoftReturnTags>
+      <!-- SegmentationAfterSoftReturnTags possible values: On, Off, Default (equal Off) -->
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal On) -->
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules></FontMappingRules>
+    </Settings>
+  </Parser>
+  <PreviewWriter Instantiation="C++" FactoryFunction="CreatePPTPreviewFileWriter">
+    <Guid>PowerPointPlugInFilter.dll</Guid>
+    <Settings>
+      <SlidesInPresentationOrder>Default</SlidesInPresentationOrder>
+      <!-- SlidesInPresentationOrder possible values: NoNotes, NotesAfterAllSlides, 
+			NotesAfterEverySlide, Default (equal NotesAfterEverySlide) -->
+      <ShapesOnSlideOrder>Default</ShapesOnSlideOrder>
+      <!-- ShapesOnSlideOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow) -->
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing applies to comments inserted with PowerPoint 97 or 2000
+			CommentProcessing possible values: On, Off, Default (equal Off) -->
+      <XPCommentProcessing>Default</XPCommentProcessing>
+      <!-- XPCommentProcessing applies to comments inserted with PowerPoint XP, 2003 or newer
+			XPCommentProcessing possible values: On, Off, Default (equal Off) -->
+      <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+      <SegmentationAfterBreakTags>Default</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, InListsOnly, Default (equal On) -->
+      <SegmentationAfterSoftReturnTags>Default</SegmentationAfterSoftReturnTags>
+      <!-- SegmentationAfterSoftReturnTags possible values: On, Off, Default (equal Off) -->
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal On) -->
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules>
+        <FontMappingRule>
+          <LanguageAndRegion>ar-SA</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>zh-TW</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>PMingLiU</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>zh-CN</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>SimSun</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>th-TH</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Tahoma</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>he-IL</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>vi-VN</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>ja-JP</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>MS Mincho</ApplyFont>
+        </FontMappingRule>
+      </FontMappingRules>
+    </Settings>
+  </PreviewWriter>
+  <Writer Instantiation="C++" FactoryFunction="CreatePPTFileWriter">
+    <Guid>PowerPointPlugInFilter.dll</Guid>
+    <Settings>
+      <SlidesInPresentationOrder>Default</SlidesInPresentationOrder>
+      <!-- SlidesInPresentationOrder possible values: NoNotes, NotesAfterAllSlides, 
+			NotesAfterEverySlide, Default (equal NotesAfterEverySlide) -->
+      <ShapesOnSlideOrder>Default</ShapesOnSlideOrder>
+      <!-- ShapesOnSlideOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow) -->
+      <CommentProcessing>Default</CommentProcessing>
+      <!-- CommentProcessing applies to comments inserted with PowerPoint 97 or 2000
+			CommentProcessing possible values: On, Off, Default (equal Off) -->
+      <XPCommentProcessing>Default</XPCommentProcessing>
+      <!-- XPCommentProcessing applies to comments inserted with PowerPoint XP, 2003 or newer
+			XPCommentProcessing possible values: On, Off, Default (equal Off) -->
+      <HyperlinkProcessing>Default</HyperlinkProcessing>
+      <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+      <SegmentationAfterBreakTags>Default</SegmentationAfterBreakTags>
+      <!-- SegmentationAfterBreakTags possible values: On, Off, InListsOnly, Default (equal On) -->
+      <SegmentationAfterSoftReturnTags>Default</SegmentationAfterSoftReturnTags>
+      <!-- SegmentationAfterSoftReturnTags possible values: On, Off, Default (equal Off) -->
+      <BreakTagToExternal>Default</BreakTagToExternal>
+      <!-- BreakTagToExternal possible values: On, Off, Default (equal On) -->
+      <DisplayFormatting>Default</DisplayFormatting>
+      <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+      <ColourAdaptation>Default</ColourAdaptation>
+      <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+      <FontAdaptation>Default</FontAdaptation>
+      <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+      <MinFontSize>Default</MinFontSize>
+      <MaxFontSize>Default</MaxFontSize>
+      <SingleSize>Default</SingleSize>
+      <FontMapping>Default</FontMapping>
+      <!-- FontMapping possible values: On, Off, Default (equal On) -->
+      <FontMappingRules>
+        <FontMappingRule>
+          <LanguageAndRegion>ar-SA</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>zh-TW</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>PMingLiU</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>zh-CN</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>SimSun</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>th-TH</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Tahoma</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>he-IL</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>vi-VN</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>Arial</ApplyFont>
+        </FontMappingRule>
+        <FontMappingRule>
+          <LanguageAndRegion>ja-JP</LanguageAndRegion>
+          <AllFonts/>
+          <ApplyFont>MS Mincho</ApplyFont>
+        </FontMappingRule>
+      </FontMappingRules>
+    </Settings>
+  </Writer>
+  <InteractiveParser>
+    <Components>
+      <Component Instantiation="C++" FactoryFunction="CreatePPTInteractiveFileParser">
+        <Guid>PowerPointPlugInFilter.dll</Guid>
+        <Settings>
+          <SlidesInPresentationOrder>Default</SlidesInPresentationOrder>
+          <!-- SlidesInPresentationOrder possible values: NoNotes, NotesAfterAllSlides, 
+			NotesAfterEverySlide, Default (equal NotesAfterEverySlide) -->
+          <ShapesOnSlideOrder>Default</ShapesOnSlideOrder>
+          <!-- ShapesOnSlideOrder possible values: TopLeftBottomRightByCol, TopLeftBottomRightByRow 
+			TopRightBottomLeftByCol, TopRightBottomLeftByRow, Default (equal TopRightBottomLeftByRow for 
+			bidirectional source languages, otherwise TopLeftBottomRightByRow) -->
+          <CommentProcessing>Default</CommentProcessing>
+          <!-- CommentProcessing applies to comments inserted with PowerPoint 97 or 2000
+			CommentProcessing possible values: On, Off, Default (equal Off) -->
+          <XPCommentProcessing>Default</XPCommentProcessing>
+          <!-- XPCommentProcessing applies to comments inserted with PowerPoint XP, 2003 or newer
+			XPCommentProcessing possible values: On, Off, Default (equal Off) -->
+          <HyperlinkProcessing>Default</HyperlinkProcessing>
+          <!-- HyperlinkProcessing possible values: On, Off, Partial, Default (equal On) -->
+          <SegmentationAfterBreakTags>Default</SegmentationAfterBreakTags>
+          <!-- SegmentationAfterBreakTags possible values: On, Off, InListsOnly, Default (equal On) -->
+          <SegmentationAfterSoftReturnTags>Default</SegmentationAfterSoftReturnTags>
+          <!-- SegmentationAfterSoftReturnTags possible values: On, Off, Default (equal Off) -->
+          <BreakTagToExternal>Default</BreakTagToExternal>
+          <!-- BreakTagToExternal possible values: On, Off, Default (equal On) -->
+          <DisplayFormatting>Default</DisplayFormatting>
+          <!-- DisplayFormatting possible values: On, Off, Default (equal On) -->
+          <ColourAdaptation>Default</ColourAdaptation>
+          <!-- ColourAdaptation possible values: Off, AllToBlack, DarkenedLightColours, 
+			Default (equal DarkenedLightColours) -->
+          <FontAdaptation>Default</FontAdaptation>
+          <!-- FontAdaptation possible values: Off, AllToSingleSize, ResizeToVisible, 
+			Default (equal ResizeToVisible) -->
+          <MinFontSize>Default</MinFontSize>
+          <MaxFontSize>Default</MaxFontSize>
+          <SingleSize>Default</SingleSize>
+          <FontMapping>Default</FontMapping>
+          <!-- FontMapping possible values: On, Off, Default (equal On) -->
+          <FontMappingRules></FontMappingRules>
+        </Settings>
+      </Component>
+    </Components>
+  </InteractiveParser>
+</FilterDefinition>]]></value>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Framework1FileSniffer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="true">
+    <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+  </object>
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for PowerPoint 2003 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.HyperlinksAndCommentsPage, Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>PowerPoint 2003 Hyperlink and comment processing ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/HYPERLINK_AND_COMMENT_PROCESSING</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Hyperlink and comment processing Settings for PowerPoint 2003</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Hyperlink_and_comment_processing</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.OrderOfSlidesAndShapesPage, Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>PowerPoint 2003 Order of slides and shapes ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/ORDER_OF_SLIDES_AND_SHAPES</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Order of slides and shapes Settings for PowerPoint 2003</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Order_of_notes_and_shapes</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.SegmentationPage, Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>PowerPoint 2003 Segmentation ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/SEGMENTATION</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Segmentation Settings for PowerPoint 2003</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Document_structure_segmentation</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.FontMappingPage, Sdl.FileTypeSupport.Framework.AdministrationUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>PowerPoint 2007 Font mapping Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.AdministrationUI/Sdl.FileTypeSupport.Framework.AdministrationUI.StringResources/Font_Mapping</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Font mapping Settings for PowerPoint 2003 File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Font_Mapping</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.SettingsAwareFF1Parser, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false">
+            <property name="FilterFramework1FilterDefinition" ref="FilterFramework1FilterDefinitionFile" />
+            <property name="ConvertToPairedTags">
+              <value>false</value>
+            </property>
+          </object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.TagPairer, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <object id="FormattingProcessor" type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.Framework1FormattingProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false">
+              <property name="DisplayFormatting">
+                <value>Default</value>
+              </property>
+            </object>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BinaryPowerPointNativeExtractionContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+            <!--Two formatting processors are added - one for structure tags, one for inline tags-->
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.PowerPointFilterContext, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.PowerPointContextFormattingParser, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list></list>
+    </property>
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.BinaryPowerPointNativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false" />
+            <object type="Sdl.FileTypeSupport.Filters.PowerPoint2003.EmptySegmentProcessor, Sdl.FileTypeSupport.Filters.PowerPoint2003" singleton="false" />
+          </list>
+        </property>
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- external preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalPptPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/ExternalPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/ExternalPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+        <!-- Internal static preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>InternalStaticPowerpointPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/InternalStaticPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI/Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.StringResources/InternalStaticPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalStaticPreviewControl</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ControlPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewControlId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewControlId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+                  <constructor-arg>
+                    <value>InternalStaticPreviewControl</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- default preview -->
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>ExternalPptPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- preview generators -->
+  <object id="Generator_DefaultPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <object id="Generator_InternalPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Framework.Adapter.Framework1.Writer, Sdl.FileTypeSupport.Framework.Adapter.Framework1" singleton="false"></object>
+        </property>
+        <property name="Processors">
+          <list>
+            <object type="Sdl.FileTypeSupport.Framework.Adapter.TagProcessing.PowerPoint12NativeGenerationContentProcessor, Sdl.FileTypeSupport.Framework.Adapter.TagProcessing" singleton="false"></object>
+          </list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list>
+        <object type="Sdl.FileTypeSupport.Filters.PowerPoint2003.PowerpointPreviewProcessor, Sdl.FileTypeSupport.Filters.PowerPoint2003" singleton="false"></object>
+      </list>
+    </property>
+  </object>
+  <!-- preview controls -->
+  <object id="PreviewApplication_ExternalPreview" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false">
+    <property name="ApplicationPath">
+      <value></value>
+    </property>
+    <property name="MonitorApplicationExit">
+      <value>false</value>
+    </property>
+  </object>
+  <!-- static internal preview control -->
+  <object id="PreviewControl_InternalStaticPreviewControl" type="Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI.InternalPreviewController, Sdl.FileTypeSupport.Filters.PowerPoint2003.WinUI" singleton="false" />
+  <!-- quick inserts -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Filters.PowerPoint2003.QuickTagBuilder, Sdl.FileTypeSupport.Filters.PowerPoint2003" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- verifiers -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+</objects>

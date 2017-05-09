@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright © 2009 SDL. All rights reserved.
+  
+  Original file name: FrameMaker.sdlfiletype
+  Last change:        15 May 2009
+-->
+<objects xmlns="http://www.springframework.net">
+  <!-- file type information -->
+  <object id="FileTypeInformation" type="Sdl.FileTypeSupport.Framework.Integration.FileTypeInformation, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="FileTypeDefinitionId">
+      <object type="Sdl.FileTypeSupport.Framework.FileTypeDefinitionId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>FrameMaker 8.0 v 1.0.0.0</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/Adobe_FrameMaker_Documents</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/FileTypeNameSingular</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeDocumentsName">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/FileTypeNamePlural</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileDialogWildcardExpression">
+      <value>*.mif</value>
+    </property>
+    <property name="Icon">
+      <object factory-method="Create" type="Sdl.FileTypeSupport.Framework.IntegrationApi.IconDescriptor, Sdl.FileTypeSupport.Framework.Core" singleton="false">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.FrameMakerFilterDefinition.ico</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="Description">
+      <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+        <constructor-arg>
+          <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/FileTypeDescription</value>
+        </constructor-arg>
+      </object>
+    </property>
+    <property name="FileTypeFrameworkVersion">
+      <object type="System.Version">
+        <constructor-arg value="2.3.0.0" />
+      </object>
+    </property>
+    <property name="SilverlightSettingsPageIds">
+      <list>
+        <value>Framemaker_GeneralSettings</value>
+      </list>
+    </property>
+  </object>
+  <!-- file sniffer -->
+  <object id="FileSniffer" type="Sdl.FileTypeSupport.Native.FrameMaker.FrameMakerPlugInFilter.FileSniffer.CFrameMakerSniffer, Sdl.FileTypeSupport.Native.FrameMaker" singleton="true" />
+  <!-- custom UI administration -->
+  <object id="FilterDefinitionAdministratorUI" type="Sdl.FileTypeSupport.Framework.AdministrationUI.FilterDefinitionAdministratorUI, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+    <property name="SettingsPageReferences">
+      <list>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Framework.AdministrationUI.QuickTagsUI.QuickTagsSettingsPage, Sdl.FileTypeSupport.Framework.AdministrationUi</value>
+          </constructor-arg>
+          <constructor-arg>
+            <!-- Fixed id, because this referenced elsewhere -->
+            <value>QuickInsertSettingsPage</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/QuickInsert</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>QuickInsert settings for FrameMaker File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>QuickInsert</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Native.FrameMaker.WinUI.GeneralSettingsPage, Sdl.FileTypeSupport.Native.FrameMaker.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>Framemaker Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/Settings</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Settings for Framemaker File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>FrameMaker_Settings</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.FontMappingPage, Sdl.FileTypeSupport.Framework.AdministrationUI"></object>
+          </constructor-arg>
+          <constructor-arg>
+            <value>FrameMaker Font mapping Settings ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Framework.AdministrationUI/Sdl.FileTypeSupport.Framework.AdministrationUI.StringResources/Font_Mapping</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>Font mapping Settings for FrameMaker File Type</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>FrameMaker_Font_Mapping</value>
+          </property>
+        </object>
+        <object type="Sdl.FileTypeSupport.Framework.AdministrationUI.ConfigurableFilterDefinitionSettingsPageReference, Sdl.FileTypeSupport.Framework.AdministrationUi" singleton="false">
+          <constructor-arg>
+            <value>Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI.SettingsPage, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.WinUI</value>
+          </constructor-arg>
+          <constructor-arg>
+            <value>GenericTagVerifier_Settings_ID</value>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsName</value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <constructor-arg>
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization">
+              <constructor-arg>
+                <value>
+                  assembly://Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier/Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.StringResources/VerifierSettingsDescription
+                </value>
+              </constructor-arg>
+            </object>
+          </constructor-arg>
+          <property name="HelpTopic">
+            <value>Generic_Tag_Verifier_Settings</value>
+          </property>
+        </object>
+      </list>
+    </property>
+  </object>
+  <!-- native file parser -->
+  <object id="Extractor" type="Sdl.FileTypeSupport.Framework.Integration.FileExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeExtractor">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeExtractor, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+        <property name="Parser">
+          <object type="Sdl.FileTypeSupport.Native.FrameMaker.FrameMakerPlugInFilter.FileParser.CFrameMakerParser, Sdl.FileTypeSupport.Native.FrameMaker" singleton="false" />
+        </property>
+        <property name="Processors">
+          <list></list>
+        </property>
+      </object>
+    </property>
+    <property name="BilingualProcessors">
+      <list></list>
+    </property>
+  </object>
+  <!-- writer -->
+  <object id="Generator" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Native.FrameMaker.FrameMakerPlugInFilter.FileWriter.CFrameMakerWriter, Sdl.FileTypeSupport.Native.FrameMaker" singleton="false"></object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- internal objects -->
+  <object id="VerifierCollection" type="Sdl.FileTypeSupport.Framework.Integration.VerifierCollection, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+    <property name="BilingualVerifiers">
+      <list>
+        <object name="GenericTagVerifier" type="Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier.GenericTagVerifier, Sdl.FileTypeSupport.Filters.Verifiers.GenericTagVerifier" />
+      </list>
+    </property>
+    <property name="NativeVerifiers">
+      <list></list>
+    </property>
+  </object>
+  <!-- quick tags -->
+  <object id="QuickTags" type="Sdl.FileTypeSupport.Framework.Integration.QuickTags, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+    <property name="StandardQuickTags">
+      <object type="Sdl.FileTypeSupport.Native.FrameMaker.QuickTagBuilder, Sdl.FileTypeSupport.Native.FrameMaker" factory-method="BuildStandardQuickTags" singleton="false" />
+    </property>
+  </object>
+  <!-- preview types -->
+  <object id="PreviewSets" type="Sdl.FileTypeSupport.Framework.Integration.PreviewSets, Sdl.FileTypeSupport.Framework.Implementation" lazy-init="true" singleton="true">
+    <constructor-arg>
+      <list>
+        <!-- external preview -->
+        <object type="Sdl.FileTypeSupport.Framework.Integration.PreviewSet, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+          <property name="Id">
+            <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+              <constructor-arg>
+                <value>ExternalMIFPreview</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Name">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/ExternalPreview_Name</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Description">
+            <object type="Sdl.Core.Globalization.LocalizableString, Sdl.Core.Globalization" singleton="true">
+              <constructor-arg>
+                <value>assembly://Sdl.FileTypeSupport.Native.FrameMaker/Sdl.FileTypeSupport.Native.FrameMaker.StringResources/ExternalPreview_Description</value>
+              </constructor-arg>
+            </object>
+          </property>
+          <property name="Source">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+          <property name="Target">
+            <object type="Sdl.FileTypeSupport.Framework.Integration.ApplicationPreviewType, Sdl.FileTypeSupport.Framework.Implementation" singleton="true">
+              <property name="TargetGeneratorId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.GeneratorId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>DefaultPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+              <property name="SingleFilePreviewApplicationId">
+                <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewApplicationId, Sdl.FileTypeSupport.Framework.Core">
+                  <constructor-arg>
+                    <value>ExternalPreview</value>
+                  </constructor-arg>
+                </object>
+              </property>
+            </object>
+          </property>
+        </object>
+      </list>
+    </constructor-arg>
+    <!-- default preview -->
+    <property name="DefaultApplicationPreview">
+      <object type="Sdl.FileTypeSupport.Framework.IntegrationApi.PreviewSetId, Sdl.FileTypeSupport.Framework.Core" singleton="true">
+        <constructor-arg>
+          <value>ExternalMIFPreview</value>
+        </constructor-arg>
+      </object>
+    </property>
+  </object>
+  <!-- preview generators -->
+  <object id="Generator_DefaultPreview" type="Sdl.FileTypeSupport.Framework.Integration.FileGenerator, Sdl.FileTypeSupport.Framework.Implementation" init-method="ReconnectComponents" singleton="false">
+    <property name="NativeGenerator">
+      <object type="Sdl.FileTypeSupport.Framework.Native.NativeGenerator, Sdl.FileTypeSupport.Framework.Implementation" singleton="false">
+        <property name="Writer">
+          <object type="Sdl.FileTypeSupport.Native.FrameMaker.FrameMakerPlugInFilter.FileWriter.CFrameMakerWriter, Sdl.FileTypeSupport.Native.FrameMaker" singleton="false">
+            <property name="FontMapping">
+              <value>Off</value>
+            </property>
+            <!-- fontmapping possible values: On, Off, Default (equal On) -->
+            <property name="FontMappingRules">
+              <list />
+            </property>
+          </object>
+        </property>
+      </object>
+    </property>
+  </object>
+  <!-- preview controls -->
+  <object id="PreviewApplication_ExternalPreview" type="Sdl.FileTypeSupport.Framework.PreviewControls.GenericExteralPreviewApplication, Sdl.FileTypeSupport.Framework.PreviewControls" singleton="false">
+    <property name="ApplicationPath">
+      <value></value>
+    </property>
+  </object>
+</objects>
