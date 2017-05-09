@@ -136,7 +136,7 @@ namespace Sdl.Community.MtEnhancedProvider
                 {
                     gtConnect.ApiKey = Options.ApiKey; //reset in case it has been changed since last time GtApiConnecter was instantiated
                 }
-                return gtConnect.isSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
+                return gtConnect.IsSupportedLangPair(languageDirection.SourceCulture, languageDirection.TargetCulture);
             }
 
             //not likely to get here but...

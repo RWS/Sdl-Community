@@ -26,46 +26,39 @@ namespace Sdl.Community.MtEnhancedProvider
 {
     public class MtTranslationProviderGTApiConnecter
     {
-
-
-        private string keyIn;
         //holds supported languages so we don't have to keep pinging google once the lang has been checked
         //the structure is <targetLang, List<sourceLangs>>
         private static Dictionary<string, List<string>> dictSupportedLangs;
 
-        public string ApiKey //for when this is already instantiated but key is changed in dialog
-        {
-            get { return keyIn; }
-            set { keyIn = value; }
-        }
+        public string ApiKey { get; set; }//for when this is already instantiated but key is changed in dialog
 
-        public MtTranslationProviderGTApiConnecter(String key)
+        public MtTranslationProviderGTApiConnecter(string key)
         {
 
-            keyIn = key;
+            ApiKey = key;
         }
 
         private void UpdateSupportedLangs(string target)
         {
-            List<string> list = GetSourceLangsList(target);
+            var list = GetSourceLangsList(target);
             if (list == null) //returns null if error
             {
-                string message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;// +Environment.NewLine + PluginResources.LangPairAuthErrorMsg3;
+                var message = PluginResources.LangPairAuthErrorMsg1 + Environment.NewLine + PluginResources.LangPairAuthErrorMsg2;// +Environment.NewLine + PluginResources.LangPairAuthErrorMsg3;
                 throw new Exception(message); //b/c list will come back null if key is bad
             }
 
             dictSupportedLangs.Add(target, list);
         }
 
-        public bool isSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
+        public bool IsSupportedLangPair(CultureInfo sourceCulture, CultureInfo targetCulture)
         {
-            string sourceLang = GetLanguageCode(sourceCulture);
-            string targetLang = GetLanguageCode(targetCulture);
+            var sourceLang = GetLanguageCode(sourceCulture);
+            var targetLang = GetLanguageCode(targetCulture);
             if (dictSupportedLangs == null)
                 dictSupportedLangs = new Dictionary<string, List<string>>();
             if (!dictSupportedLangs.ContainsKey(targetLang))
                 UpdateSupportedLangs(targetLang);
-            foreach (string source in dictSupportedLangs[targetLang])
+            foreach (var source in dictSupportedLangs[targetLang])
             {
                 if (source == sourceLang)
                 {
@@ -82,11 +75,11 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <param name="langPair"></param>
         /// <param name="text"></param>
         /// <returns></returns>
-        public String Translate(LanguagePair langPair, String text) //this is called for just plain text
+        public string Translate(LanguagePair langPair, string text) //this is called for just plain text
         {
-            String format = "html";
+            var format = "html";
             text = HttpUtility.HtmlEncode(text); //we want to HtmlEncode a plain text segment
-            string result = DoTranslate(langPair, text, format);
+            var result = DoTranslate(langPair, text, format);
             return result;
         }
 
@@ -97,7 +90,7 @@ namespace Sdl.Community.MtEnhancedProvider
         /// <param name="text"></param>
         /// <param name="format"></param>
         /// <returns></returns>
-        public String Translate(LanguagePair langPair, String text, String format) //this is called for segments with tags
+        public string Translate(LanguagePair langPair, string text, string format) //this is called for segments with tags
         {
             //here we do not HtmlEncode b/c the tagplacer will do that later..selectively
             string result = DoTranslate(langPair, text, format);
@@ -105,34 +98,35 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
 
-        private String DoTranslate(LanguagePair langPair, String text, String format)
+        private string DoTranslate(LanguagePair langPair, string text, string format)
         {
-            if (ApiKey == null || ApiKey == string.Empty)
+            if (string.IsNullOrEmpty(ApiKey))
             {
                 throw new Exception(PluginResources.ApiConnectionGoogleNoKeyErrorMessage);
             }
 
-            string sourceLang = GetLanguageCode(langPair.SourceCulture); //shorten the input localized langs into 2-digit where applicable
-            string targetLang = GetLanguageCode(langPair.TargetCulture);
+            var sourceLang = GetLanguageCode(langPair.SourceCulture); //shorten the input localized langs into 2-digit where applicable
+            var targetLang = GetLanguageCode(langPair.TargetCulture);
 
             #region "Encoding"
             text = EncodeSpecialChars(text); //all strings should get this final check for characters that seem to break GT api
             #endregion
 
             //create the url for the translate request
-            string url = String.Format("https://www.googleapis.com/language/translate/v2?key={0}&q={1}&source={2}&target={3}&prettyprint=true", keyIn, text, sourceLang, targetLang);
-
+            var url = string.Format(
+                "https://translation.googleapis.com/language/translate/v2?key={0}&q={1}&target={2}", ApiKey, text,
+                targetLang);
             if (format != "") //add format if provided
             {
                 url += "&format=" + format;
             }
 
-            string result = ""; //this will take the result from the webclient
+            var result = ""; //this will take the result from the webclient
 
             //delete the follwoing line for production...only to be able to trace http calls using Fiddler
             //ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
 
-            using (WebClient webClient = new WebClient())
+            using (var webClient = new WebClient())
             {
                 webClient.Encoding = Encoding.UTF8;
                 try
@@ -149,7 +143,7 @@ namespace Sdl.Community.MtEnhancedProvider
             }
 
             //need to parse results and find key "translatedText" - there should be only one
-            String returnedResult = parseReturnedResults(result, "translatedText")[0];
+            String returnedResult = ParseReturnedResults(result, "translatedText")[0];
 
             string decodedResult = HttpUtility.HtmlDecode(returnedResult); //google seems to send back html codes at times
 
@@ -204,7 +198,7 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public List<string> GetSourceLangsList(string targetLang)
         {
-            string url = String.Format("https://www.googleapis.com/language/translate/v2/languages?key={0}&target={1}", keyIn, targetLang);
+            string url = string.Format("https://www.googleapis.com/language/translate/v2/languages?key={0}&target={1}", ApiKey, targetLang);
             string result = ""; //this will take the result from the webclient
             List<string> list = new List<string>();
 
@@ -230,7 +224,7 @@ namespace Sdl.Community.MtEnhancedProvider
             #endregion
 
 
-            foreach (string lang in parseReturnedResults(result, "language")) //the second arg is the key we'll be looking for
+            foreach (string lang in ParseReturnedResults(result, "language")) //the second arg is the key we'll be looking for
             {
                 //have to parse for zh-CN, which for some reason google returns as only 'zh' on a supported language check...although it seems to accept it on translation calls...i think? 
                 string filtered_lang = lang;
@@ -243,7 +237,7 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
 
-        private string parseReturnedError(string input)
+        private string ParseReturnedError(string input)
         {
 
             //this is different from successful response parses
@@ -253,7 +247,7 @@ namespace Sdl.Community.MtEnhancedProvider
             string message = "";
 
             dict = ser.Deserialize<Dictionary<string, Dictionary<string, object>>>(input);
-            foreach (String strKey in dict.Keys) //this structure gets it out
+            foreach (string strKey in dict.Keys) //this structure gets it out
             {
                 object o = dict[strKey];
                 dict2 = (Dictionary<string, object>)o;
@@ -265,7 +259,7 @@ namespace Sdl.Community.MtEnhancedProvider
         }
 
 
-        private List<string> parseReturnedResults(string input, string findKey)
+        private List<string> ParseReturnedResults(string input, string findKey)
         {
 
             #region "variables"
@@ -280,17 +274,17 @@ namespace Sdl.Community.MtEnhancedProvider
             #region "loopthrough"
             dict = ser.Deserialize<Dictionary<string, Dictionary<string, object>>>(input);
             //loop through output 
-            foreach (String strKey in dict.Keys) //this structure seems to be the only way to get it out
+            foreach (var strKey in dict.Keys) //this structure seems to be the only way to get it out
             {
                 object o = dict[strKey];
                 dict2 = (Dictionary<string, object>)o;
-                foreach (String strKey2 in dict2.Keys)
+                foreach (var strKey2 in dict2.Keys)
                 {
                     object o2 = dict2[strKey2];
                     myAl = (System.Collections.ArrayList)o2;
                     for (int i = 0; i < myAl.Count; i++)
                     {
-                        object o3 = myAl[i];
+                        var o3 = myAl[i];
                         dict3 = (Dictionary<string, object>)o3;
                         myList.Add(dict3[findKey].ToString()); //we change the key depending on if we are translating or checking languages
                     }
@@ -351,11 +345,11 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private string GetExceptionReason(WebException exception)
         {
-            System.IO.Stream myStream = exception.Response.GetResponseStream();
-            bool xx = myStream.CanRead;
-            System.IO.StreamReader x = new System.IO.StreamReader(myStream);
-            string contents = x.ReadToEnd();
-            string reason = parseReturnedError(contents);
+            var myStream = exception.Response.GetResponseStream();
+            var xx = myStream.CanRead;
+            var x = new System.IO.StreamReader(myStream);
+            var contents = x.ReadToEnd();
+            var reason = ParseReturnedError(contents);
 
             return reason;
 
