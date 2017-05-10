@@ -34,29 +34,13 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Invoice And Quotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-
-
-## Legacy Converter
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)
-
-## MT Enhanced Provider
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)
-
-## Post Edit Compare
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare/README.md)
-
-## Qualitivity
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)
-
-## SDLTM Repair	 
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)
-
-## StarTransit
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)
-
-## Segment Status Switcher
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)
+| [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
+| [MT Enhanced Provider](http://appstore.sdl.com/app/mt-enhanced-plugin-for-trados-studio/604/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)|
+| [Post Edit Compare](http://appstore.sdl.com/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare)|
+| [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
+| [SDLTM Repair](http://appstore.sdl.com/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
+| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
+| [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
 
 
 ## Studio Migration Utility	
