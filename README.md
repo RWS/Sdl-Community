@@ -29,22 +29,13 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | Plugin Name | Description |
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
-| [Advenced Display filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
+| [Advenced Display Filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
 | [Bring Back The Button]() | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
-| [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.Integration/) |  NuGet package that includes helper methods for [Integration API](http://producthelp.sdl.com/SDK/StudioIntegrationApi/4.1/html/135dcb1c-535b-46a9-8063-b83be4a06d82.htm) classes, like DisplayFilterRowInfo or Document. |
+| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
+| [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
+| [Invoice And Quotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
+| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 
-
-## Bring Back The Button
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton/README.md)
-
-## Export to Excel
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/README.md)
-
-## InSource
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource/README.md)
-
-## Invoice And Quotes
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes/README.md)
 
 ## Legacy Converter
 * [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)
