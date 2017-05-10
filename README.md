@@ -14,6 +14,9 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 1. Install Visual Studio 2013 or 2015. The community edition is available for free [here](https://www.visualstudio.com/).
 
+2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository.
+
+
 ## Antidode
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
 
