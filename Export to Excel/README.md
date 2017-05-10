@@ -1,6 +1,6 @@
 # Export to Excel
 
-#Introduction
+##Introduction
 
 Add a new Batch Task to Studio that can export your project files (SDLXLIFF files) to Excel. 
 There is no import facility with this task but having the content in Excel allows for various supporting jobs such as:
