@@ -30,7 +30,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
 | [Advenced Display Filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| [Bring Back The Button]() | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
+| Bring Back The Button | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
@@ -71,9 +71,9 @@ If you find an issue you report it [here](https://github.com/sdl/SDL-Community/i
 
 ## Development Prerequisites
 
-* [Studio 2014 or 2015 or 2017](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
-* [Studio 2014,2015 or 2017 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
-* [Visual Studio 2013](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express/community edition can be used
+* [Studio 2017](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
+* [Studio 2017 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
+* [Visual Studio 2013, 2015 or 2017](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express/community edition can be used
 
 
 
