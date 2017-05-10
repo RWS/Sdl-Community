@@ -50,14 +50,14 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 | [Variables Manager](http://appstore.sdl.com/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 | [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| [Controlled Machine Translation Providers]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
+| Controlled Machine Translation Providers |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
 | [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 | [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
-| [Your Studio]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
+| Your Studio |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
 
 
 ## Contribution
