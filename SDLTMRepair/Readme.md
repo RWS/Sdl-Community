@@ -1,5 +1,7 @@
 
-#SDLTM Repair
+# SDLTM Repair
+
+
 SDLTM Repair has been designed to fix specific errors within SDLTM files. If you find that you can’t open, export or do anything with an SDLTM then this app may be able to repair it.
 
 This app will export the entire contents of an SDLTM in SQL, and re-import it, re-indexing as it goes and fixing any corruption.
@@ -8,10 +10,4 @@ Success is not guaranteed every time, but if you have an SDLTM that you cannot o
 
 Once installed, you will now find SDLTM Repair on your desktop as a shortcut where it opens as a stand alone app outside of SDL Trados Studio.
 
-##Contribution
 
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-##Issues
-
-If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
