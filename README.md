@@ -42,26 +42,24 @@ This repository will contain the source code for applications and plugins develo
 ## Segment Status Switcher
 * [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)
 
-## Studio Beta APIs
-* [Documentation](Studio Beta APIs)
 
 ## Studio Migration Utility	
 * [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility/README.md)
 
 ## TAUSS Search
-* [Documentation](TAUSS Search)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUSS%20Search)
 
 ## TM Lifting
-* [Documentation](Antidote Verifier)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)
 
 ## Term Injector
-* [Documentation](Antidote Verifier)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)
 
 ## Jobs
-* [Documentation](Jobs)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)
 
 ## YourProductivity
-* [Documentation](YourProductivity)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)
 
 ## Time Tracker
 * [Documentation](Time Tracker)
