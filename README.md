@@ -16,7 +16,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository.
 
-3. In order to clone the repository using Source Tree from menu select "Clone/New", an popup will appear (https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png). In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
+3. In order to clone the repository using Source Tree from menu select "Clone/New", an popup will appear(https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png). In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
 
 ## Antidode
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
