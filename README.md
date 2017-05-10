@@ -13,7 +13,7 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton/README.md)
 
 ## Export to Excel
-* [Documentation](https://github.com/sdl/Sdl-Community/edit/master/Export%20to%20Excel/README.md)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/README.md)
 
 ## InSource
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource/README.md)
