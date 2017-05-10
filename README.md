@@ -14,7 +14,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 1. Install Visual Studio 2013 or 2015. The community edition is available for free [here](https://www.visualstudio.com/).
 
-2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository.
+2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository. Another alternative is to install git extension from Visual Studio.
 
 3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
 
@@ -29,15 +29,10 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | Plugin Name | Description |
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
-| [Sdl.Community.Toolkit.FileType](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | NuGet package that includes helper metods for [FileType Support Framework](http://producthelp.sdl.com/SDK/FileTypeSupport/4.0/html/1f5584af-9763-46ff-894b-08127a2421a7.htm) classes, like ISegment, ISegmentPairs or ITranslationOrigin. |
-| [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.ProjectAutomation/) | NuGet package that includes helper methods for [ProjectAutomation API](http://producthelp.sdl.com/SDK/ProjectAutomationApi/4.0/html/b986e77a-82d2-4049-8610-5159c55fddd3.htm) classes, like ProjectTemplateInfo. |
+| [Advenced Display filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
+| [Bring Back The Button] | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
 | [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.Integration/) |  NuGet package that includes helper methods for [Integration API](http://producthelp.sdl.com/SDK/StudioIntegrationApi/4.1/html/135dcb1c-535b-46a9-8063-b83be4a06d82.htm) classes, like DisplayFilterRowInfo or Document. |
 
-## Antidode
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
-
-## Advenced Display filter
-* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/AdvancedDisplayFilter/README.md)
 
 ## Bring Back The Button
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton/README.md)
