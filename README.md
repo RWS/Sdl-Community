@@ -19,16 +19,16 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource/README.md)
 
 ## Invoice And Quotes
-* [Documentation](Invoice And Quotes)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes/README.md)
 
 ## Legacy Converter
-* [Documentation](Legacy Converter)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)
 
 ## MT Enhanced Provider
-* [Documentation](MT Enhanced Provider)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)
 
 ## Post Edit Compare
-* [Documentation](Post Edit Compare)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare/README.md)
 
 ## Qualitivity
 * [Documentation](Qualitivity)
