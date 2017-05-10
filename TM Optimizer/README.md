@@ -43,16 +43,4 @@ Due the fact that during optimization a vast amount of tags is removed, SDL Trad
 
 More and more clients are migrating from the legacy DOC format towards the latest version of Microsoft Word which is using the new DOCX file format. The features mentioned above will allow you to switch from translating DOC files in Microsoft Word to translating DOCX files in SDL Trados Studio without the major issues with leverage you would otherwise see.
 
-##Contribution
 
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-##Development Prerequisites
-
-* [Studio 2015](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
-* [Studio 2014 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
-* [Visual Studio 2013](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express edition can be used
-
-##Issues
-
-If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
