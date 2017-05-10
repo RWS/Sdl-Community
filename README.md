@@ -6,11 +6,75 @@ This repository will contain the source code for applications and plugins develo
 ## Antidode
 * [Documentation](Antidote Verifier)
 
+##Advanced Display Filter
+* [Documentation](Advanced Display Filter)
+
+## Bring Back The Button
+* [Documentation](Bring Back The Button)
+
+## Export to Excel
+* [Documentation](Export to Excel)
+
+## InSource
+* [Documentation](InSource)
+
+## Invoice And Quotes
+* [Documentation](Invoice And Quotes)
+
+## Legacy Converter
+* [Documentation](Legacy Converter)
+
+## MT Enhanced Provider
+* [Documentation](MT Enhanced Provider)
+
+## Post Edit Compare
+* [Documentation](Post Edit Compare)
+
+## Qualitivity
+* [Documentation](Qualitivity)
+
+## SDLTM Repair	 
+* [Documentation](SDLTM Repair)
+
+## Excel Terminology
+* [Documentation](Excel Terminology)
+
+## StarTransit
+* [Documentation](StarTransit)
+
+## Segment Status Switcher
+* [Documentation](Segment Status Switcher)
+
+## Studio Beta APIs
+* [Documentation](Studio Beta APIs)
+
+## Studio Migration Utility	
+* [Documentation](Studio Migration Utility)
+
+## TAUSS Search
+* [Documentation](TAUSS Search)
+
+## TM Lifting
+* [Documentation](Antidote Verifier)
+
+## Term Injector
+* [Documentation](Antidote Verifier)
+
 ## Jobs
 * [Documentation](Jobs)
 
 ## YourProductivity
 * [Documentation](YourProductivity)
+
+## Time Tracker
+* [Documentation](Time Tracker)
+
+## Toolkit
+* [Documentation](Toolkit)
+
+## Variables Manager
+* [Documentation](VariablesManager)
+
 
 ## Apply Studio Project Template
 * [Documentation](ApplyStudioProjectTemplate)
