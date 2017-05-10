@@ -41,31 +41,16 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [SDLTM Repair](http://appstore.sdl.com/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
 | [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
 | [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
+| [Studio Migration Utility](http://appstore.sdl.com/app/studio-migration-utility/481/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility)|
+| [TAUS Search](http://appstore.sdl.com/app/taus-search/164/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUSS%20Search)|
+| [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)|
+| [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
+| [Jobs](http://appstore.sdl.com/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
+| [YourProductivity](http://appstore.sdl.com/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
+| [Time Tracker](http://appstore.sdl.com/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
+| [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 
 
-## Studio Migration Utility	
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility/README.md)
-
-## TAUSS Search
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUSS%20Search)
-
-## TM Lifting
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)
-
-## Term Injector
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)
-
-## Jobs
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)
-
-## YourProductivity
-* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)
-
-## Time Tracker
-* [Documentation](Time Tracker)
-
-## Toolkit
-* [Documentation](Toolkit)
 
 ## Variables Manager
 * [Documentation](VariablesManager)
