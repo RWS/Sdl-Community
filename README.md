@@ -10,7 +10,7 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/AdvancedDisplayFilter/README.md)
 
 ## Bring Back The Button
-* [Documentation](Bring Back The Button)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton/README.md)
 
 ## Export to Excel
 * [Documentation](Export to Excel)
