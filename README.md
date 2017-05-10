@@ -20,6 +20,14 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 ![](https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png)
 
+4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
+
+5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+
+![](https://github.com/sdl/Sdl-Community/blob/master/unsignedPlugin.png)
+
+
+
 ## Antidode
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
 
