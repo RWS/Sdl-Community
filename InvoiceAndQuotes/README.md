@@ -12,12 +12,3 @@ PLEASE NOTE: THIS APP CAN ONLY BE INSTALLED IF YOU HAVE SDL TRADOS STUDIO 2014 O
 
 Once installed, you will now find SDL Studio InQuote on your desktop as a shortcut where it opens as a stand alone app outside of SDL Trados Studio.
 
-##Contribution
-
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-
-
-##Issues
-
-If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
