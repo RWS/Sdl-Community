@@ -26,7 +26,12 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 ![](https://github.com/sdl/Sdl-Community/blob/master/unsignedPlugin.png)
 
-
+| NuGet Package Name | description |
+| --- | --- |
+| [Sdl.Community.Toolkit.Core](https://www.nuget.org/packages/Sdl.Community.Toolkit.Core/) | NuGet package includes helper methods for Studio versions. |
+| [Sdl.Community.Toolkit.FileType](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | NuGet package that includes helper metods for [FileType Support Framework](http://producthelp.sdl.com/SDK/FileTypeSupport/4.0/html/1f5584af-9763-46ff-894b-08127a2421a7.htm) classes, like ISegment, ISegmentPairs or ITranslationOrigin. |
+| [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.ProjectAutomation/) | NuGet package that includes helper methods for [ProjectAutomation API](http://producthelp.sdl.com/SDK/ProjectAutomationApi/4.0/html/b986e77a-82d2-4049-8610-5159c55fddd3.htm) classes, like ProjectTemplateInfo. |
+| [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.Integration/) |  NuGet package that includes helper methods for [Integration API](http://producthelp.sdl.com/SDK/StudioIntegrationApi/4.1/html/135dcb1c-535b-46a9-8063-b83be4a06d82.htm) classes, like DisplayFilterRowInfo or Document. |
 
 ## Antidode
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
