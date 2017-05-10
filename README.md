@@ -33,7 +33,6 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [Bring Back The Button]() | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
-| [Invoice And Quotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
 | [MT Enhanced Provider](http://appstore.sdl.com/app/mt-enhanced-plugin-for-trados-studio/604/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)|
 | [Post Edit Compare](http://appstore.sdl.com/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare)|
@@ -49,51 +48,17 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [YourProductivity](http://appstore.sdl.com/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
 | [Time Tracker](http://appstore.sdl.com/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
 | [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
+| [Variables Manager](http://appstore.sdl.com/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
+| [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
+| [Controlled Machine Translation Providers]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
+| [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
+| [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
+| [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
+| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
+| [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
+| [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
+| [Your Studio]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
 
-
-
-## Variables Manager
-* [Documentation](VariablesManager)
-
-
-## Apply Studio Project Template
-* [Documentation](ApplyStudioProjectTemplate)
-
-## Word Cloud
-* [Documentation](Word Cloud)
-
-## Controlled Machine Translation Providers
-* [Documentation](Controlled Machine Translation Providers)
-
-## Number verifier
-* [Documentation](Number Verifier)
-
-## TM Optimizer
-* [Documentation](TM Optimizer)
-
-## Record Source TU
-* [Documentation](Record Source TU)
-
-## Reindex Translation Memories
-* [Documentation](Reindex Translation Memories)
-
-##SDLTMRepair
-* [Documentation](SDLTMRepair)
-
-## Embedded Content Processor
-* [Documentation](Embeded Content Processor)
-
-## Legit
-* [Documentation](Legit)
-
-## Wordfast TXML
-* [Documentation](Wordfast TXML)
-
-## Studio InQuote
-* [Documentation](InvoiceAndQuotes)
-
-## Your Studio
-* [Documentation](YourStudio)
 
 
 
