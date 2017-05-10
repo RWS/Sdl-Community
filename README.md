@@ -7,7 +7,7 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
 
 ## Advenced Display filter
-* [Documentation](Advanced Display Filter)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/AdvancedDisplayFilter/README.md)
 
 ## Bring Back The Button
 * [Documentation](Bring Back The Button)
