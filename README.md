@@ -3,6 +3,17 @@ SDL-Community
 
 This repository will contain the source code for applications and plugins developed and published under SDL Community.
 
+## Supported platforms
+
+* .NET 4.5.2 
+* SDL Studio 2017
+
+## Getting started
+
+This libraries are build on top of SDL Studio APIs and thus using them also requires having SDL Studio installed.
+
+1. Install Visual Studio 2013 or 2015. The community edition is available for free [here](https://www.visualstudio.com/).
+
 ## Antidode
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
 
