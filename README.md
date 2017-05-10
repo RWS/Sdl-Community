@@ -30,7 +30,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
 | [Advenced Display filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| [Bring Back The Button] | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
+| [Bring Back The Button]() | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
 | [Sdl.Community.Toolkit.ProjectAutomation](https://www.nuget.org/packages/Sdl.Community.Toolkit.Integration/) |  NuGet package that includes helper methods for [Integration API](http://producthelp.sdl.com/SDK/StudioIntegrationApi/4.1/html/135dcb1c-535b-46a9-8063-b83be4a06d82.htm) classes, like DisplayFilterRowInfo or Document. |
 
 
