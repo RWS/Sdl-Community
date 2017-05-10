@@ -4,7 +4,7 @@ SDL-Community
 This repository will contain the source code for applications and plugins developed and published under SDL Community.
 
 ## Antidode
-* [Documentation](Antidote Verifier)
+* [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Antidote%20Verifier/Readme.md)
 
 ##Advanced Display Filter
 * [Documentation](Advanced Display Filter)
