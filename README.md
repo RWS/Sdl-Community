@@ -31,19 +31,16 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare/README.md)
 
 ## Qualitivity
-* [Documentation](Qualitivity)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)
 
 ## SDLTM Repair	 
-* [Documentation](SDLTM Repair)
-
-## Excel Terminology
-* [Documentation](Excel Terminology)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)
 
 ## StarTransit
-* [Documentation](StarTransit)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)
 
 ## Segment Status Switcher
-* [Documentation](Segment Status Switcher)
+* [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)
 
 ## Studio Beta APIs
 * [Documentation](Studio Beta APIs)
