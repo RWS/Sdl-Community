@@ -49,7 +49,7 @@ This repository will contain the source code for applications and plugins develo
 * [Documentation](Studio Beta APIs)
 
 ## Studio Migration Utility	
-* [Documentation](Studio Migration Utility)
+* [Documentation](README.md)
 
 ## TAUSS Search
 * [Documentation](TAUSS Search)
