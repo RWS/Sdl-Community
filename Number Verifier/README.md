@@ -1,6 +1,6 @@
 # Number Verifier
 
-##Introduction
+
 
  While the standard number verification in SDL Trados Studio may often be sufficient there are some occasions when a bit more control would be preferable, for example when translating documents that contain lots of numbers. This Number Verifier plug-in allows you to fine-tune settings to provide you with the desired balance between amount of false positives and potentially missed errors.
  
@@ -18,17 +18,4 @@ In addition to plain numbers the Number Verifier plug-in can also be used to fin
 You can select **Exclude tag text**  if you find that you get duplicate error messages since the change of a number in a tag constitutes a tag change that is reported by the tag verifier.
 Finally, you can select the **Extended** option for **Messages** if you want the source and target text to be included in the log file.
 
-##Contribution
 
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-##Development Prerequisites
-
-* [Studio 2014](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
-* [Studio 2014 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
-* [Visual Studio 2013](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express edition can be used
-* [Inno Setup](http://www.jrsoftware.org/isinfo.php) - if you want to generate the installer
-
-##Issues
-
-If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
