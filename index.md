@@ -25,7 +25,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
 
-<img src="Sdl-Community/assets/images/backgroundImg.jpg >
+![](Sdl-Community/assets/images/backgroundImg.jpg )
 
 
 | Plugin Name | Description |
