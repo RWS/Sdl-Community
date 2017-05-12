@@ -6,3 +6,4 @@ theme: jekyll-theme-cayman
 
 gems:
   - jekyll-mentions
+  - jekyll-relative-links
