@@ -18,11 +18,13 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
 
+![](https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png)
 
 4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
 
 5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
+![](https://github.com/sdl/Sdl-Community/blob/master/unsignedPlugin.png)
 
 | Plugin Name | Description |
 | --- | --- |
