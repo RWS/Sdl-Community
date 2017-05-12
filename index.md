@@ -25,7 +25,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
 
-![](https://github.com/sdl/Sdl-Community/blob/gh-pages/assets/images/backgroundImg.jpg)
+ ![](https://github.com/sdl/Sdl-Community/blob/master/unsignedPlugin.png)
 
 
 | Plugin Name | Description |
