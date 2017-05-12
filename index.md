@@ -18,7 +18,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
 
-![](https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png)
+![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
 4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
 
