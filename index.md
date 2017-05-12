@@ -24,7 +24,7 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
 5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
- ![](http://appstore.sdl.com/cassette.axd/file/Content/themes/AppStore/images/search-box-bg-8c043caf81803f50c1862b484e5b539ffa0ce7da.jpg)
+ ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
 
 | Plugin Name | Description |
