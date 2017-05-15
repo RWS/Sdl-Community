@@ -23,9 +23,7 @@ If you don't have a licence please send a email to app-signing@sdl.com and ask f
 
 2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository. Another alternative is to install git extension from Visual Studio.
 
-3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
-
-![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
+3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
 4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
 
