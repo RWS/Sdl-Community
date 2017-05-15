@@ -5,7 +5,7 @@ The main porpose of this repository is to give the ability to users to improve e
 
 If you want to add a new functionality please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
-If you have any questions don't hesitate to ask it on the [Sdl Community](https://community.sdl.com/developers/language-developers/)
+If you have any questions don't hesitate to ask it on the [Sdl Community](https://community.sdl.com/developers/language-developers/).
 
 
 ## Supported platforms
