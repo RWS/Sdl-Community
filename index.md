@@ -1,7 +1,7 @@
 SDL-Community
 =============
 
-The main porpose of this repository is to give the ability to users to improve existing plugins. Or to give a code example of how SDL Api's can be consumed.
+The main porpose of this repository is to give the ability to users to improve existing plugins. Or to give a code example of how SDL Trados Studio Api's can be consumed.
 
 If you want to add a new functionality please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
