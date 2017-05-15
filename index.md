@@ -1,7 +1,9 @@
 SDL-Community
 =============
 
-This repository will contain the source code for applications and plugins developed and published under SDL Community.
+The main porpose of this repository is to give the ability to users to improve existing plugins. Or to give a code example of how SDL Api's can be consumed.
+
+If you want to add a new functionality please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
 ## Supported platforms
 
@@ -10,7 +12,9 @@ This repository will contain the source code for applications and plugins develo
 
 ## Getting started
 
-This libraries are build on top of SDL Studio APIs and thus using them also requires having SDL Studio installed.
+These libraries are built on top of SDL Studio APIs and thus using them also requires having SDL Studio installed.
+
+If you don't have a licence please send a email to app-signing@sdl.com and ask for a developer licence. 
 
 1. Install Visual Studio 2013 or 2015. The community edition is available for free [here](https://www.visualstudio.com/).
 
@@ -26,6 +30,12 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
+## Content
+
+In the following table are shown all the plugins available in the repository. 
+
+If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
+Documentation column will redirect to the source code for the selected plugin.
 
 | Plugin Name | Description |
 | --- | --- |
@@ -61,20 +71,9 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
 
 
-## Contribution
-
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-
 ## Issues
 
 If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
-
-## Development Prerequisites
-
-* [Studio 2017](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
-* [Studio 2017 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
-* [Visual Studio 2013, 2015 or 2017](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express/community edition can be used
 
 
 
