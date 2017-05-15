@@ -27,9 +27,9 @@ If you don't have a licence please send a email to app-signing@sdl.com and ask f
 
 ![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
- After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
+4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
 
- Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
