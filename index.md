@@ -5,6 +5,9 @@ The main porpose of this repository is to give the ability to users to improve e
 
 If you want to add a new functionality please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
+If you have any questions don't hesitate to ask it on the [Sdl Community] (https://community.sdl.com/developers/language-developers/)
+
+
 ## Supported platforms
 
 * .NET 4.5.2 
@@ -24,9 +27,9 @@ If you don't have a licence please send a email to app-signing@sdl.com and ask f
 
 ![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
-4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
+ After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
 
-5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+ Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
