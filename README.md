@@ -1,31 +1,49 @@
-SDL-Community
-=============
+## Table of contents 
 
-This repository will contain the source code for applications and plugins developed and published under SDL Community.
+1. [Intro](#intro)
+2. [Getting started](#getting-started)
+3. [List of plugins](#list-of-plugins)
+4. [We want your feedback](#we-want-your-feedback)
 
-## Supported platforms
+## Intro
 
-* .NET 4.5.2 
-* SDL Studio 2017
+This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
+
+We encourage everyone who is interested to contribute, either by fixing some issues, implement new features or improve the documentation. To do this you will have to clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
+
+You can also use this repository for learning by reading and tinkering with real Trados Studio plugins. For the documentation please go [here](http://appstore.sdl.com/developers/sdk.html).
+
+If you have any questions, don't hesitate to ask on the [Sdl Language Developer Community](https://community.sdl.com/developers/language-developers/).
 
 ## Getting started
 
-This libraries are build on top of SDL Studio APIs and thus using them also requires having SDL Studio installed.
+These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having SDL Trados Studio installed.
 
-1. Install Visual Studio 2013 or 2015. The community edition is available for free [here](https://www.visualstudio.com/).
+If you don't have a licence please send a email to app-signing@sdl.com and ask for a developer licence.
 
-2. In order to clone the Community repository you need to have Git installed or for example SourceTree, this tool is available [here](https://www.sourcetreeapp.com/). This application has a user interface which facilitates the work with repository. Another alternative is to install git extension from Visual Studio.
+All the plugins require .NET 4.5.2 and SDL Trados Studio 2017.
 
-3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive.
+To get started with this repository follow the following steps:
 
-![](https://github.com/sdl/Sdl-Community/blob/master/cloneRepository.png)
+1. Make sure you have a installed Microsoft Visual Studio 2013, 2015 or 2017. If you don't have Microsoft Visual Studio you can install the community edition, available for free [here](https://www.visualstudio.com/).
 
-4. After the repository was cloned, navigate to folder path and from there you can select any solution and open it in Visual Studio.
+2. To clone this repository you need to have Git installed and configured on your machine (more details [here](https://www.atlassian.com/git/tutorials/install-git#windows) and [here](https://help.github.com/articles/cloning-a-repository/)). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
 
-5. Build the solution, after the build succeded open Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
-![](https://github.com/sdl/Sdl-Community/blob/master/unsignedPlugin.png)
+4. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder so all you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
+5. Build the solution, after the build succeded open SDL Trados Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+
+ ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
+
+## List of plugins
+
+In the following table are shown all the plugins available in the repository. 
+
+If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
+Documentation column will redirect to the source code for the selected plugin.
+  
 | Plugin Name | Description |
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
@@ -59,21 +77,6 @@ This libraries are build on top of SDL Studio APIs and thus using them also requ
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
 
+## We want your feedback
 
-## Contribution
-
-You want to add a new functionality or you spot a bug please fill free to create a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
-
-
-## Issues
-
-If you find an issue you report it [here](https://github.com/sdl/SDL-Community/issues).
-
-## Development Prerequisites
-
-* [Studio 2017](https://oos.sdl.com/asp/products/ssl/account/mydownloads.asp) - if you don't have a licence please use this [link](http://www.translationzone.com/openexchange/developer/index.html) and sign-up into SDL OpenExchange Developer Program
-* [Studio 2017 SDK](http://www.translationzone.com/openexchange/developer/sdk.html)
-* [Visual Studio 2013, 2015 or 2017](http://www.visualstudio.com/downloads/download-visual-studio-vs) - express/community edition can be used
-
-
-
+If you have any suggestions or find any issues please go [here](https://github.com/sdl/SDL-Community/issues) and let us know.
