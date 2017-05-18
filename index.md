@@ -45,7 +45,7 @@ If you click on the plugin name you'll be redirected to SDL App Store, from wher
 Documentation column will redirect to the source code for the selected plugin.
 
 <details>
-  <summary> ##Click to see the list of plugins </summary>
+  <summary> Click to see the list of plugins </summary>
   
   
 | Plugin Name | Description |
