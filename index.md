@@ -1,4 +1,4 @@
-SDL-Community
+Intro
 =============
 
 The main porpose of this repository is to give the ability to users to improve existing plugins. Or to give a code example of how SDL Trados Studio Api's can be consumed.
