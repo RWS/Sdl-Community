@@ -45,6 +45,7 @@ If you click on the plugin name you'll be redirected to SDL App Store, from wher
 Documentation column will redirect to the source code for the selected plugin.
 <details>
   <summary>Click to see the list</summary>
+  
 | Plugin Name | Description |
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
@@ -77,6 +78,7 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
+
 </details>
 
 ## We want your feedback
