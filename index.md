@@ -1,7 +1,7 @@
 Intro
 =============
 
-This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins down bellow.
+This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins down [bellow](#Content).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implement new features or improve the documentation. To do this you will have to clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
