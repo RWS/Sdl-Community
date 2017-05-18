@@ -5,6 +5,8 @@ This repository contains around 30 plugins developed for [Trados Studio](http://
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implement new features or improve the documentation. To do this you will have to clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
+You can also use this repository for learning by reading and tinkering with real Trados Studio plugins. For the documentation please go [here](http://appstore.sdl.com/developers/sdk.html).
+
 If you have any questions, don't hesitate to ask on the [Sdl Language Developer Community](https://community.sdl.com/developers/language-developers/).
 
 ## Getting started
