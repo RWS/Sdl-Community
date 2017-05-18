@@ -1,7 +1,13 @@
-Intro
-=============
+## Table of contents
 
-This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#content).
+1. [Intro](#intro)
+2. [Getting started](#getting-started)
+3. [List of plugins](#list-of-plugins)
+4. [We want your feedback](#we-want-your-feedback)
+
+## Intro
+
+This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#(#list-of-plugins).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implement new features or improve the documentation. To do this you will have to clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
@@ -31,7 +37,7 @@ To get started with this repository follow the following steps:
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
-## Content
+## List of plugins
 
 In the following table are shown all the plugins available in the repository. 
 
@@ -72,9 +78,6 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
 
 
-## Issues
+## We want your feedback
 
-If you find any issues or you would like to see new features please open issue [here](https://github.com/sdl/SDL-Community/issues).
-
-
-
+If you have any suggestions or find any issues please go [here](https://github.com/sdl/SDL-Community/issues) and let us know.
