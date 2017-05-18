@@ -43,10 +43,6 @@ In the following table are shown all the plugins available in the repository.
 
 If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
 Documentation column will redirect to the source code for the selected plugin.
-
-<details>
-  <summary> Click to see the list of plugins </summary>
-  
   
 | Plugin Name | Description |
 | --- | --- |
@@ -80,8 +76,6 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
-
-</details>
 
 ## We want your feedback
 
