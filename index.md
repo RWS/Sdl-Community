@@ -43,8 +43,9 @@ In the following table are shown all the plugins available in the repository.
 
 If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
 Documentation column will redirect to the source code for the selected plugin.
+
 <details>
-  <summary>Click to see the list</summary>
+  <summary> **Click to see the list of plugins ** </summary>
   
 | Plugin Name | Description |
 | --- | --- |
