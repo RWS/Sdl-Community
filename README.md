@@ -7,7 +7,7 @@
 
 ## Intro
 
-This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all this plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
+This repository contains around 30 plugins developed for [Trados Studio](http://www.sdl.com/solution/language/translation-productivity/trados-studio/). Most of the plugins were developed by SDL, but you might also find a few of them which were initially developed by someone else. For all these plugins we now have full source code ownership according to our [License agreement](https://github.com/sdl/Sdl-Community/blob/master/License.md). You can find the complete list of plugins [here](#list-of-plugins).
 
 We encourage everyone who is interested to contribute, either by fixing some issues, implement new features or improve the documentation. To do this you will have to clone this repository, make the changes and send us a [pull request](http://www.codenewbie.org/blogs/how-to-make-a-pull-request) with your changes.
 
@@ -19,13 +19,13 @@ If you have any questions, don't hesitate to ask on the [Sdl Language Developer 
 
 These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having SDL Trados Studio installed.
 
-If you don't have a licence please send a email to app-signing@sdl.com and ask for a developer licence.
+If you don't have a licence please send an email to app-signing@sdl.com and ask for a developer licence.
 
 All the plugins require .NET 4.5.2 and SDL Trados Studio 2017.
 
 To get started with this repository follow the following steps:
 
-1. Make sure you have a installed Microsoft Visual Studio 2013, 2015 or 2017. If you don't have Microsoft Visual Studio you can install the community edition, available for free [here](https://www.visualstudio.com/).
+1. Make sure you have installed Microsoft Visual Studio 2013, 2015 or 2017. If you don't have Microsoft Visual Studio you can install the community edition, available for free [here](https://www.visualstudio.com/).
 
 2. To clone this repository you need to have Git installed and configured on your machine (more details [here](https://www.atlassian.com/git/tutorials/install-git#windows) and [here](https://help.github.com/articles/cloning-a-repository/)). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
 
@@ -33,13 +33,13 @@ To get started with this repository follow the following steps:
 
 4. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder so all you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-5. Build the solution, after the build succeded open SDL Trados Studio 2017. A warning message will appear click "Yes", after Studio loads, builded plugin will be available in Studio.
+5. Build the solution, after the build has succeeded open SDL Trados Studio 2017. A warning message will appear click "Yes", after Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
 ## List of plugins
 
-In the following table are shown all the plugins available in the repository. 
+The following table showns all the plugins available in the repository. 
 
 If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
 Documentation column will redirect to the source code for the selected plugin.
