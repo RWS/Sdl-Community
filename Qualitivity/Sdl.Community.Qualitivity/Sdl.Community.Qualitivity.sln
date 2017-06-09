@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Qualitivity", "Sdl.Community.Qualitivity.csproj", "{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}"
 EndProject
@@ -31,12 +31,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|x64.ActiveCfg = Debug|x64
-		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|x64.Build.0 = Debug|x64
+		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Debug|x64.Build.0 = Debug|Any CPU
 		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|x64.ActiveCfg = Release|x64
-		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|x64.Build.0 = Release|x64
+		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|x64.ActiveCfg = Release|Any CPU
+		{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}.Release|x64.Build.0 = Release|Any CPU
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Debug|x64.ActiveCfg = Debug|Any CPU

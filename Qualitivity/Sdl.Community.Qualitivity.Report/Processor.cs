@@ -1493,7 +1493,7 @@ namespace Sdl.Community.Report
 
             foreach (var cultureInfoId in cultureInfoIds)
             {
-                using (var inputStream = asb.GetManifestResourceStream("Report.Flags." + cultureInfoId + ".gif"))
+                using (var inputStream = asb.GetManifestResourceStream("Sdl.Community.Report.Flags." + cultureInfoId + ".gif"))
                 {
                     if (inputStream == null) continue;
                     var outputFilePath = Path.Combine(flagsPath, cultureInfoId + ".gif");
