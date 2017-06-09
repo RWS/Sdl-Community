@@ -278,7 +278,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk">
+    <None Include="..\..\..\Sdl-Community\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="app.config" />
@@ -378,7 +378,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>$(MSBuildProjectDirectory)\..\..\..\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\debug\</OutputPath>
