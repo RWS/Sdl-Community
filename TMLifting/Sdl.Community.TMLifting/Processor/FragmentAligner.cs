@@ -1,4 +1,7 @@
-﻿using Sdl.LanguagePlatform.TranslationMemory;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMLifting.Processor
@@ -14,12 +17,20 @@ namespace Sdl.Community.TMLifting.Processor
 
         public void AlignTranslationUnits()
         {
-            var iterator = new RegularIterator();
-            do
-            {
-            } while (_tm.AlignTranslationUnits(true, false, ref iterator));
+
+			var _lastProgressNumber = 0;
+			var cts = new CancellationTokenSource();
+			var token = cts.Token;
+
+			var progress = new Progress<int>(i =>
+			{
+				_lastProgressNumber = i;
+			});
+
+			_tm.AlignTranslationUnits(true, false, token, progress);
 
             _tm.Save();
-        }
+			var unaligned = _tm.UnalignedTranslationUnitCount;
+		}
     }
 }
