@@ -106,7 +106,16 @@ namespace Sdl.Community.MtEnhancedProvider
             }
 
             var sourceLang = GetLanguageCode(langPair.SourceCulture); //shorten the input localized langs into 2-digit where applicable
-            var targetLang = GetLanguageCode(langPair.TargetCulture);
+			var targetLang = string.Empty;
+			if (langPair.TargetCulture.Name.Equals("fr-HT"))
+			{
+				targetLang = "ht";
+			}
+			else
+			{
+				targetLang = GetLanguageCode(langPair.TargetCulture);
+			}
+            
 
             #region "Encoding"
             text = EncodeSpecialChars(text); //all strings should get this final check for characters that seem to break GT api
