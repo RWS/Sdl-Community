@@ -56,5 +56,18 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
             CantFindAlphanumericsNormalSpace(text, decimalSeparators, thousandSeparators);
         }
 
-    }
+		[Theory]
+		[InlineData("BB1254AE word")]
+		public List<string> FindAlphanumericsLettersCombination(string text)
+		{
+			var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+			NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+
+			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+
+			Assert.True(textAlphanumericsList.Count != 0);
+			return textAlphanumericsList;
+		}
+	}
 }
