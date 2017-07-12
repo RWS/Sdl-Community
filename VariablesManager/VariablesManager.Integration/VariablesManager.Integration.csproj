@@ -87,25 +87,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="VariablesManagerRibbon.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="pluginpackage.manifest.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Resources\variables manager - 128.ico" />
+    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VariablesManager\VariablesManager.csproj">
       <Project>{42fe4375-be4e-4ea4-baba-bb551aac172d}</Project>
       <Name>VariablesManager</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
