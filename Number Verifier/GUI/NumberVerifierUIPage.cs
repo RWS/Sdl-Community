@@ -52,6 +52,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
 			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
 
 			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -120,7 +121,8 @@ namespace Sdl.Community.NumberVerifier
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _ControlSettings.Reset("ReportModifiedAlphanumerics");
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
-            _ControlSettings.Reset("ReportBriefMessages");
+			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
+			_ControlSettings.Reset("ReportBriefMessages");
             _Control.ReportBriefMessages = _ControlSettings.ReportBriefMessages;
             _ControlSettings.Reset("ReportExtendedMessages");
             _Control.ReportExtendedMessages = _ControlSettings.ReportExtendedMessages;
@@ -219,7 +221,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
-			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+			_Control.CustomsSeparatorsErrorType = _Control.CustomsSeparatorsErrorType;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
@@ -228,8 +230,9 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
             _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
             _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
+			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
-            _ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
+			_ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
             _ControlSettings.PreventLocalizations = _Control.PreventLocalizations;
             _ControlSettings.RequireLocalizations = _Control.RequireLocalizations;
 
@@ -276,7 +279,8 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
-			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+			_ControlSettings.CustomsSeparatorsErrorType = _Control.CustomsSeparatorsErrorType;
+			_ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
 			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;

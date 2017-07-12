@@ -974,8 +974,9 @@ namespace Sdl.Community.NumberVerifier
             
                     alphaList.AddRange(
                         from word in words 
-                        from Match match in Regex.Matches(word, @"^-?\u2212?(^[a-zA-Z0-9]*$)")
-                        select Regex.Replace(match.Value, "\u2212|-","m"));
+                        from Match match in Regex.Matches(word, @"^-?\u2212?(^[a-zA-Z0-9\..!@?#""""$% &:';()*\+,\/;\-=[\\\]\^_{|}<>~` ]+$]*$)")
+
+						select Regex.Replace(match.Value, "\u2212|-","m"));
 
             return alphaList;
         }

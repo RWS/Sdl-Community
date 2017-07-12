@@ -46,7 +46,13 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<bool>(nameof(ReportModifiedAlphanumerics)).Value; }
         }
 
-        public string AddedNumbersErrorType
+		public bool CustomsSeparatorsAlphanumerics
+		{
+			set { GetSetting<bool>(nameof(CustomsSeparatorsAlphanumerics)).Value = value; }
+			get { return GetSetting<bool>(nameof(CustomsSeparatorsAlphanumerics)).Value; }
+		}
+
+		public string AddedNumbersErrorType
         {
             set { GetSetting<string>(nameof(AddedNumbersErrorType)).Value = value; }
             get { return GetSetting<string>(nameof(AddedNumbersErrorType)).Value; }
