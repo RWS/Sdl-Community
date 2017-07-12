@@ -51,7 +51,9 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
-            _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
+			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+
+			_Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
             _Control.ReportModifiedNumbers = _ControlSettings.ReportModifiedNumbers;
             _Control.ReportModifiedAlphanumerics = _ControlSettings.ReportModifiedAlphanumerics;
@@ -109,7 +111,8 @@ namespace Sdl.Community.NumberVerifier
             _Control.RemovedNumbersErrorType = _ControlSettings.RemovedNumbersErrorType;
             _Control.ModifiedNumbersErrorType = _ControlSettings.ModifiedNumbersErrorType;
             _Control.ModifiedAlphanumericsErrorType = _ControlSettings.ModifiedAlphanumericsErrorType;
-            _ControlSettings.Reset("ReportAddedNumbers");
+			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+			_ControlSettings.Reset("ReportAddedNumbers");
             _Control.ReportAddedNumbers = _ControlSettings.ReportAddedNumbers;
             _ControlSettings.Reset("ReportRemovedNumbers");
             _Control.ReportRemovedNumbers = _ControlSettings.ReportRemovedNumbers;
@@ -187,7 +190,7 @@ namespace Sdl.Community.NumberVerifier
             _Control.TargetDecimalCustomSeparator = _ControlSettings.TargetDecimalCustomSeparator;
             _ControlSettings.Reset("TargetDecimalCustomSeparator");
             _Control.GetSourceThousandsCustomSeparator =
-               _ControlSettings.GetSourceThousandsCustomSeparator;
+            _ControlSettings.GetSourceThousandsCustomSeparator;
             _ControlSettings.Reset("GetSourceThousandsCustomSeparator");
             _Control.GetTargetThousandsCustomSeparator = _ControlSettings.GetTargetThousandsCustomSeparator;
             _ControlSettings.Reset("GetTargetThousandsCustomSeparator");
@@ -216,7 +219,9 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
-            _ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
+			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+
+			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
             _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
             _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
@@ -232,7 +237,7 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.SourceThousandsNobreakSpace = _Control.SourceThousandsNobreakSpace;
             _ControlSettings.SourceThousandsThinSpace = _Control.SourceThousandsThinSpace;
             _ControlSettings.SourceThousandsNobreakThinSpace = _Control.SourceThousandsNobreakThinSpace;
-         _ControlSettings.SourceThousandsComma = _Control.SourceThousandsComma;
+		    _ControlSettings.SourceThousandsComma = _Control.SourceThousandsComma;
             _ControlSettings.SourceThousandsPeriod = _Control.SourceThousandsPeriod;
             _ControlSettings.SourceNoSeparator = _Control.SourceNoSeparator;
             _ControlSettings.TargetThousandsSpace = _Control.TargetThousandsSpace;
@@ -271,7 +276,9 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
             _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
             _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
-            _ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
+			_Control.CustomsSeparatorsErrorType = _ControlSettings.CustomsSeparatorsErrorType;
+
+			_ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
             _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
             _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
             _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;

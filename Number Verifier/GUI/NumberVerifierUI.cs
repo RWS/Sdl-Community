@@ -53,7 +53,13 @@ namespace Sdl.Community.NumberVerifier
             set { combo_ModifiedAlphanumericsErrorType.Text = value; }
         }
 
-        public bool ReportBriefMessages
+		public string CustomsSeparatorsErrorType
+		{
+			get { return combo_customsSeparatorsErrorType.Text; }
+			set { combo_customsSeparatorsErrorType.Text = value; }
+		}
+
+		public bool ReportBriefMessages
         {
             get { return rb_ReportBriefMessages.Checked; }
             set { rb_ReportBriefMessages.Checked = value; }
@@ -379,6 +385,7 @@ namespace Sdl.Community.NumberVerifier
             cb_TargetNoSeparator.Enabled = true;
             cb_TargetDecimalComma.Enabled = true;
             cb_TargetDecimalPeriod.Enabled = true;
+			cb_customSeparators.Enabled = true;
             targetTbox.Enabled = true;
             customTBox.Enabled = true;
             customTargetSep.Enabled = true;
@@ -396,5 +403,10 @@ namespace Sdl.Community.NumberVerifier
         {
             EnableCheckBoxes();
         }
-    }
+
+		private void cb_customSeparators_CheckedChanged(object sender, System.EventArgs e)
+		{
+			EnableCheckBoxes();
+		}
+	}
 }

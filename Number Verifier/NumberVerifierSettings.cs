@@ -64,13 +64,19 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<string>(nameof(ModifiedNumbersErrorType)).Value; }
         }
 
-        public string ModifiedAlphanumericsErrorType
-        {
-            set { GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value = value; }
-            get { return GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value; }
+        public string CustomsSeparatorsErrorType
+		{
+            set { GetSetting<string>(nameof(CustomsSeparatorsErrorType)).Value = value; }
+            get { return GetSetting<string>(nameof(CustomsSeparatorsErrorType)).Value; }
         }
 
-        public bool ReportBriefMessages
+		public string ModifiedAlphanumericsErrorType
+		{
+			set { GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value = value; }
+			get { return GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value; }
+		}
+
+		public bool ReportBriefMessages
         {
             set { GetSetting<bool>(nameof(ReportBriefMessages)).Value = value; }
             get { return GetSetting<bool>(nameof(ReportBriefMessages)).Value; }
@@ -330,7 +336,9 @@ namespace Sdl.Community.NumberVerifier
                     return "Error";
                 case nameof(ModifiedAlphanumericsErrorType):
                     return "Error";
-                case nameof(ReportBriefMessages):
+				case nameof(CustomsSeparatorsErrorType):
+					return "Error";
+				case nameof(ReportBriefMessages):
                     return true;
                 case nameof(ReportExtendedMessages):
                     return false;

@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.panelNumberVerifierUI = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.combo_customsSeparatorsErrorType = new System.Windows.Forms.ComboBox();
+            this.cb_customSeparators = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.rb_ReportExtendedMessages = new System.Windows.Forms.RadioButton();
             this.rb_ReportBriefMessages = new System.Windows.Forms.RadioButton();
@@ -85,9 +87,9 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.sourceMisBox = new System.Windows.Forms.GroupBox();
+            this.sourceOmitZero = new System.Windows.Forms.CheckBox();
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.targetMisBox = new System.Windows.Forms.GroupBox();
-            this.sourceOmitZero = new System.Windows.Forms.CheckBox();
             this.targetOmitZero = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -115,6 +117,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.combo_customsSeparatorsErrorType);
+            this.groupBox1.Controls.Add(this.cb_customSeparators);
             this.groupBox1.Controls.Add(this.groupBox8);
             this.groupBox1.Controls.Add(this.combo_ModifiedAlphanumericsErrorType);
             this.groupBox1.Controls.Add(this.cb_ReportModifiedAlphanumerics);
@@ -138,6 +142,33 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
+            // 
+            // combo_customsSeparatorsErrorType
+            // 
+            this.combo_customsSeparatorsErrorType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combo_customsSeparatorsErrorType.FormattingEnabled = true;
+            this.combo_customsSeparatorsErrorType.Items.AddRange(new object[] {
+            "Error",
+            "Warning",
+            "Note"});
+            this.combo_customsSeparatorsErrorType.Location = new System.Drawing.Point(190, 108);
+            this.combo_customsSeparatorsErrorType.Name = "combo_customsSeparatorsErrorType";
+            this.combo_customsSeparatorsErrorType.Size = new System.Drawing.Size(81, 21);
+            this.combo_customsSeparatorsErrorType.TabIndex = 39;
+            // 
+            // cb_customSeparators
+            // 
+            this.cb_customSeparators.AutoSize = true;
+            this.cb_customSeparators.Checked = true;
+            this.cb_customSeparators.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cb_customSeparators.Location = new System.Drawing.Point(16, 112);
+            this.cb_customSeparators.Name = "cb_customSeparators";
+            this.cb_customSeparators.Size = new System.Drawing.Size(118, 17);
+            this.cb_customSeparators.TabIndex = 38;
+            this.cb_customSeparators.Text = "Customs separators";
+            this.toolTip1.SetToolTip(this.cb_customSeparators, "Select this to to allow customs separators in alphanumerics verification");
+            this.cb_customSeparators.UseVisualStyleBackColor = true;
+            this.cb_customSeparators.CheckedChanged += new System.EventHandler(this.cb_customSeparators_CheckedChanged);
             // 
             // groupBox8
             // 
@@ -207,7 +238,7 @@
             this.groupBox7.Controls.Add(this.cb_Exclude100Percents);
             this.groupBox7.Controls.Add(this.cb_ExcludeLockedSegments);
             this.groupBox7.Controls.Add(this.cb_ExcludeTagText);
-            this.groupBox7.Location = new System.Drawing.Point(16, 111);
+            this.groupBox7.Location = new System.Drawing.Point(16, 144);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(191, 154);
             this.groupBox7.TabIndex = 11;
@@ -273,7 +304,7 @@
             this.groupBox2.Controls.Add(this.rb_PreventLocalizations);
             this.groupBox2.Controls.Add(this.rb_RequireLocalizations);
             this.groupBox2.Controls.Add(this.rb_AllowLocalizations);
-            this.groupBox2.Location = new System.Drawing.Point(213, 119);
+            this.groupBox2.Location = new System.Drawing.Point(213, 152);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(202, 148);
             this.groupBox2.TabIndex = 15;
@@ -330,7 +361,7 @@
             this.groupBox6.Controls.Add(this.cb_TargetThousandsThinSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsNobreakSpace);
             this.groupBox6.Controls.Add(this.cb_TargetThousandsSpace);
-            this.groupBox6.Location = new System.Drawing.Point(225, 273);
+            this.groupBox6.Location = new System.Drawing.Point(224, 306);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(190, 233);
             this.groupBox6.TabIndex = 26;
@@ -446,7 +477,7 @@
             this.groupBox5.Controls.Add(this.customTargetSep);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalPeriod);
             this.groupBox5.Controls.Add(this.cb_TargetDecimalComma);
-            this.groupBox5.Location = new System.Drawing.Point(225, 512);
+            this.groupBox5.Location = new System.Drawing.Point(224, 545);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(190, 114);
             this.groupBox5.TabIndex = 36;
@@ -502,7 +533,7 @@
             this.groupBox4.Controls.Add(this.customDSep);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalPeriod);
             this.groupBox4.Controls.Add(this.cb_SourceDecimalComma);
-            this.groupBox4.Location = new System.Drawing.Point(17, 512);
+            this.groupBox4.Location = new System.Drawing.Point(16, 545);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(190, 114);
             this.groupBox4.TabIndex = 33;
@@ -563,7 +594,7 @@
             this.groupBox3.Controls.Add(this.cb_SourceThousandsThinSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsNobreakSpace);
             this.groupBox3.Controls.Add(this.cb_SourceThousandsSpace);
-            this.groupBox3.Location = new System.Drawing.Point(17, 271);
+            this.groupBox3.Location = new System.Drawing.Point(16, 304);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(190, 235);
             this.groupBox3.TabIndex = 19;
@@ -758,22 +789,12 @@
             // sourceMisBox
             // 
             this.sourceMisBox.Controls.Add(this.sourceOmitZero);
-            this.sourceMisBox.Location = new System.Drawing.Point(17, 648);
+            this.sourceMisBox.Location = new System.Drawing.Point(16, 667);
             this.sourceMisBox.Name = "sourceMisBox";
-            this.sourceMisBox.Size = new System.Drawing.Size(190, 94);
+            this.sourceMisBox.Size = new System.Drawing.Size(202, 77);
             this.sourceMisBox.TabIndex = 2;
             this.sourceMisBox.TabStop = false;
             this.sourceMisBox.Text = "Source miscellaneous";
-            // 
-            // targetMisBox
-            // 
-            this.targetMisBox.Controls.Add(this.targetOmitZero);
-            this.targetMisBox.Location = new System.Drawing.Point(225, 648);
-            this.targetMisBox.Name = "targetMisBox";
-            this.targetMisBox.Size = new System.Drawing.Size(200, 94);
-            this.targetMisBox.TabIndex = 3;
-            this.targetMisBox.TabStop = false;
-            this.targetMisBox.Text = "Target miscellaneous";
             // 
             // sourceOmitZero
             // 
@@ -784,6 +805,16 @@
             this.sourceOmitZero.TabIndex = 0;
             this.sourceOmitZero.Text = "Omit leading zero";
             this.sourceOmitZero.UseVisualStyleBackColor = true;
+            // 
+            // targetMisBox
+            // 
+            this.targetMisBox.Controls.Add(this.targetOmitZero);
+            this.targetMisBox.Location = new System.Drawing.Point(224, 667);
+            this.targetMisBox.Name = "targetMisBox";
+            this.targetMisBox.Size = new System.Drawing.Size(191, 77);
+            this.targetMisBox.TabIndex = 3;
+            this.targetMisBox.TabStop = false;
+            this.targetMisBox.Text = "Target miscellaneous";
             // 
             // targetOmitZero
             // 
@@ -804,7 +835,7 @@
             this.Controls.Add(this.sourceMisBox);
             this.Controls.Add(this.panelNumberVerifierUI);
             this.Name = "NumberVerifierUI";
-            this.Size = new System.Drawing.Size(568, 755);
+            this.Size = new System.Drawing.Size(568, 780);
             this.panelNumberVerifierUI.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -892,5 +923,7 @@
         private System.Windows.Forms.GroupBox targetMisBox;
         private System.Windows.Forms.CheckBox targetOmitZero;
         private System.Windows.Forms.CheckBox sourceOmitZero;
-    }
+		private System.Windows.Forms.CheckBox cb_customSeparators;
+		private System.Windows.Forms.ComboBox combo_customsSeparatorsErrorType;
+	}
 }
