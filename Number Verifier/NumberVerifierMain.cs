@@ -210,7 +210,9 @@ namespace Sdl.Community.NumberVerifier
         private string _sourceDecimalSeparators = string.Empty;
         private string _targetThousandSeparators = string.Empty;
         private string _targetDecimalSeparators = string.Empty;
-        private bool _isSource;
+		private string _alphanumericsCustomSeparators = string.Empty;
+
+		private bool _isSource;
 
         public void Initialize(IDocumentProperties documentInfo)
         {
@@ -257,7 +259,10 @@ namespace Sdl.Community.NumberVerifier
             _targetDecimalSeparators += VerificationSettings.TargetDecimalCustomSeparator
                 ? VerificationSettings.GetSourceDecimalCustomSeparator
                 : string.Empty;
-        }
+			_alphanumericsCustomSeparators += VerificationSettings.CustomsSeparatorsAlphanumerics
+			   ? VerificationSettings.GetAlphanumericsCustomSeparator
+			   : string.Empty;
+		}
 
         #endregion
 
@@ -969,15 +974,25 @@ namespace Sdl.Community.NumberVerifier
         public List<string> GetAlphanumericList(string text)
         {
             var alphaList = new List<string>();
+			var words = Regex.Split(text, @"\s");
 
-            var words=Regex.Split(text, @"\s");
-            
-                    alphaList.AddRange(
-                        from word in words 
-                        from Match match in Regex.Matches(word, @"^-?\u2212?(^[a-zA-Z0-9\..!@?#""""$% &:';()*\+,\/;\-=[\\\]\^_{|}<>~` ]+$]*$)")
+			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
+			{
+				var customsSeparators = _verificationSettings.GetAlphanumericsCustomSeparator.Split(',').ToList();
+				var regex = string.Format(@"^-?\u2212?(^[a-zA-Z0-9\{0}]+$]*$)", customsSeparators[0]);
 
-						select Regex.Replace(match.Value, "\u2212|-","m"));
-
+				alphaList.AddRange(
+					from word in words
+					from Match match in Regex.Matches(word, regex)
+					select Regex.Replace(match.Value, "\u2212|-", "m"));
+			}
+			else
+			{
+				alphaList.AddRange(
+					from word in words
+					from Match match in Regex.Matches(word, @"^-?\u2212?(^[a-zA-Z0-9]+$]*$)")
+					select Regex.Replace(match.Value, "\u2212|-", "m"));
+			}
             return alphaList;
         }
 

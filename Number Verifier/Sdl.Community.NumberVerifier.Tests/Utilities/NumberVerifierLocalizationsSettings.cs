@@ -17,9 +17,9 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             iNumberSettingsMock.Setup(r => r.ReportModifiedAlphanumerics).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportModifiedNumbers).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportRemovedNumbers).Returns(true);
-            
+			iNumberSettingsMock.Setup(r => r.CustomsSeparatorsAlphanumerics).Returns(true);
 
-            return iNumberSettingsMock;
+			return iNumberSettingsMock;
         }
 
         public static void InitSeparators(Mock<INumberVerifierSettings> mock)
