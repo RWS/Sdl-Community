@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.panelNumberVerifierUI = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.combo_customsSeparatorsErrorType = new System.Windows.Forms.ComboBox();
+            this.tb_customsSeparators = new System.Windows.Forms.TextBox();
             this.cb_customSeparators = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.rb_ReportExtendedMessages = new System.Windows.Forms.RadioButton();
@@ -117,7 +117,7 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.combo_customsSeparatorsErrorType);
+            this.groupBox1.Controls.Add(this.tb_customsSeparators);
             this.groupBox1.Controls.Add(this.cb_customSeparators);
             this.groupBox1.Controls.Add(this.groupBox8);
             this.groupBox1.Controls.Add(this.combo_ModifiedAlphanumericsErrorType);
@@ -143,18 +143,12 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
             // 
-            // combo_customsSeparatorsErrorType
+            // tb_customsSeparators
             // 
-            this.combo_customsSeparatorsErrorType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.combo_customsSeparatorsErrorType.FormattingEnabled = true;
-            this.combo_customsSeparatorsErrorType.Items.AddRange(new object[] {
-            "Error",
-            "Warning",
-            "Note"});
-            this.combo_customsSeparatorsErrorType.Location = new System.Drawing.Point(190, 108);
-            this.combo_customsSeparatorsErrorType.Name = "combo_customsSeparatorsErrorType";
-            this.combo_customsSeparatorsErrorType.Size = new System.Drawing.Size(81, 21);
-            this.combo_customsSeparatorsErrorType.TabIndex = 39;
+            this.tb_customsSeparators.Location = new System.Drawing.Point(190, 112);
+            this.tb_customsSeparators.Name = "tb_customsSeparators";
+            this.tb_customsSeparators.Size = new System.Drawing.Size(225, 20);
+            this.tb_customsSeparators.TabIndex = 39;
             // 
             // cb_customSeparators
             // 
@@ -924,6 +918,6 @@
         private System.Windows.Forms.CheckBox targetOmitZero;
         private System.Windows.Forms.CheckBox sourceOmitZero;
 		private System.Windows.Forms.CheckBox cb_customSeparators;
-		private System.Windows.Forms.ComboBox combo_customsSeparatorsErrorType;
+		private System.Windows.Forms.TextBox tb_customsSeparators;
 	}
 }

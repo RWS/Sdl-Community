@@ -70,12 +70,6 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<string>(nameof(ModifiedNumbersErrorType)).Value; }
         }
 
-        public string CustomsSeparatorsErrorType
-		{
-            set { GetSetting<string>(nameof(CustomsSeparatorsErrorType)).Value = value; }
-            get { return GetSetting<string>(nameof(CustomsSeparatorsErrorType)).Value; }
-        }
-
 		public string ModifiedAlphanumericsErrorType
 		{
 			set { GetSetting<string>(nameof(ModifiedAlphanumericsErrorType)).Value = value; }
@@ -306,10 +300,15 @@ namespace Sdl.Community.NumberVerifier
             get { return GetSetting<string>(nameof(GetTargetDecimalCustomSeparator)).Value; }
         }
 
-     
-        #endregion
+		public string GetAlphanumericsCustomSeparator
+		{
+			set { GetSetting<string>(nameof(GetAlphanumericsCustomSeparator)).Value = value; }
+			get { return GetSetting<string>(nameof(GetAlphanumericsCustomSeparator)).Value; }
+		}
 
-        public void Reset(string propertyName)
+		#endregion
+
+		public void Reset(string propertyName)
         {
             GetDefaultValue(propertyName);
         }
@@ -334,7 +333,9 @@ namespace Sdl.Community.NumberVerifier
                     return true;
                 case nameof(ReportModifiedAlphanumerics) :
                     return true;
-                case nameof(AddedNumbersErrorType):
+				case nameof(CustomsSeparatorsAlphanumerics):
+					return true;
+				case nameof(AddedNumbersErrorType):
                     return "Warning";
                 case nameof(RemovedNumbersErrorType):
                     return "Warning";
@@ -342,8 +343,6 @@ namespace Sdl.Community.NumberVerifier
                     return "Error";
                 case nameof(ModifiedAlphanumericsErrorType):
                     return "Error";
-				case nameof(CustomsSeparatorsErrorType):
-					return "Error";
 				case nameof(ReportBriefMessages):
                     return true;
                 case nameof(ReportExtendedMessages):
