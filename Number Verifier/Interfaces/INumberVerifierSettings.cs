@@ -16,11 +16,12 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         bool ReportRemovedNumbers { get; set; }
         bool ReportModifiedNumbers { get; set; }
         bool ReportModifiedAlphanumerics { get; set; }
-        string AddedNumbersErrorType { get; set; }
+		bool CustomsSeparatorsAlphanumerics { get; set; }
+		string AddedNumbersErrorType { get; set; }
         string RemovedNumbersErrorType { get; set; }
         string ModifiedNumbersErrorType { get; set; }
         string ModifiedAlphanumericsErrorType { get; set; }
-        bool ReportBriefMessages { get; set; }
+		bool ReportBriefMessages { get; set; }
         bool ReportExtendedMessages { get; set; }
         bool PreventLocalizations { get; set; }
         bool RequireLocalizations { get; set; }
@@ -57,8 +58,9 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetTargetThousandsCustomSeparator { get; set; }
         string GetSourceDecimalCustomSeparator { get; set; }
         string GetTargetDecimalCustomSeparator { get; set; }
+		string GetAlphanumericsCustomSeparator { get; set; }
 
-        IEnumerable<string> GetSourceDecimalSeparators();
+		IEnumerable<string> GetSourceDecimalSeparators();
         IEnumerable<string> GetSourceThousandSeparators();
 
         IEnumerable<string> GetTargetDecimalSeparators();

@@ -47,13 +47,19 @@ namespace Sdl.Community.NumberVerifier
             set { cb_ReportModifiedAlphanumerics.Checked = value; }
         }
 
-        public string ModifiedAlphanumericsErrorType
-        {
-            get { return combo_ModifiedAlphanumericsErrorType.Text; }
-            set { combo_ModifiedAlphanumericsErrorType.Text = value; }
-        }
+		public string ModifiedAlphanumericsErrorType
+		{
+			get { return combo_ModifiedAlphanumericsErrorType.Text; }
+			set { combo_ModifiedAlphanumericsErrorType.Text = value; }
+		}
 
-        public bool ReportBriefMessages
+		public bool CustomsSeparatorsAlphanumerics
+		{
+			get { return cb_customSeparators.Checked; }
+			set { cb_customSeparators.Checked = value; }
+		}
+		
+		public bool ReportBriefMessages
         {
             get { return rb_ReportBriefMessages.Checked; }
             set { rb_ReportBriefMessages.Checked = value; }
@@ -268,7 +274,13 @@ namespace Sdl.Community.NumberVerifier
             set { customTBox.Text = value; }
         }
 
-        public string GetSourceDecimalCustomSeparator
+		public string GetAlphanumericsCustomSeparator
+		{
+			get { return tb_customsSeparators.Text; }
+			set { tb_customsSeparators.Text = value; }
+		}
+
+		public string GetSourceDecimalCustomSeparator
         {
             get { return sourceDBox.Text; }
             set { sourceDBox.Text = value; }
@@ -362,8 +374,16 @@ namespace Sdl.Community.NumberVerifier
             targetDBox.Clear();
             targetDBox.Enabled = false;
 
-            #endregion
-        }
+			if(CustomsSeparatorsAlphanumerics)
+			{
+				cb_customSeparators.Checked = false;
+			}
+			cb_customSeparators.Enabled = false;
+			tb_customsSeparators.Clear();
+			tb_customsSeparators.Enabled = false;
+
+			#endregion
+		}
 
         private void EnableCheckBoxes()
         {
@@ -382,7 +402,10 @@ namespace Sdl.Community.NumberVerifier
             targetTbox.Enabled = true;
             customTBox.Enabled = true;
             customTargetSep.Enabled = true;
-            targetDBox.Enabled = true;
+			cb_customSeparators.Enabled = true;
+			tb_customsSeparators.Enabled = true;
+
+			targetDBox.Enabled = true;
 
             #endregion
         }
@@ -396,5 +419,10 @@ namespace Sdl.Community.NumberVerifier
         {
             EnableCheckBoxes();
         }
-    }
+
+		private void cb_customSeparators_CheckedChanged(object sender, System.EventArgs e)
+		{
+
+		}
+	}
 }
