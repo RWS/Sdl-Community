@@ -978,8 +978,15 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
-				var customsSeparators = _verificationSettings.GetAlphanumericsCustomSeparator.Split(',').ToList();
-				var regex = string.Format(@"^-?\u2212?(^[a-zA-Z0-9\{0}]+$]*$)", customsSeparators[0]);
+				var customsSeparators = _verificationSettings.GetAlphanumericsCustomSeparator.Split(',');
+				var res = string.Join(string.Empty, customsSeparators);
+				
+				// replace \ with \\ in order to recognize the regex expression
+				if (res.Contains(@"\"))
+				{
+					res = res.Replace(@"\", @"\\");
+				}
+				var regex = string.Format(@"^-?\u2212?(^[a-zA-Z0-9{0}]+$]*$)", res);
 
 				alphaList.AddRange(
 					from word in words
