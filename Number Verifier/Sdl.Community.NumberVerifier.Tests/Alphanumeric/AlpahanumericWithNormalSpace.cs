@@ -69,5 +69,20 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 			Assert.True(textAlphanumericsList.Count != 0);
 			return textAlphanumericsList;
 		}
+
+		// To Do: mock somehow in GetAlphanumericList() method the customs separators retrieved in _verificationSettings.GetAlphanumericsCustomSeparator
+		//[Theory]
+		//[InlineData("*BB-1254AE word")]
+		//public List<string> AlphanumericCustomsSeparators(string text)
+		//{
+		//	var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.AllowLocalization();
+		//	NumberVerifierLocalizationsSettings.InitSeparators(iNumberSettingsMock);
+		//	var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+
+		//	var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+
+		//	Assert.True(textAlphanumericsList.Count != 0);
+		//	return textAlphanumericsList;
+		//}
 	}
 }
