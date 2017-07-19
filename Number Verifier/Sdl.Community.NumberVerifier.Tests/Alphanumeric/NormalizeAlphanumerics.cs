@@ -65,7 +65,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
         /// <param name="source"></param>
         /// <param name="target"></param>
         [Theory]
-        [InlineData("mAB23", "mCD23")]
+        [InlineData("mAB23", "mAB23")]
         public void CheckIfIsAnAlphanumeric(string source, string target)
         {
             //target settings
@@ -106,7 +106,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
             var errorMessages = ReportModifiedAlphanumerics(source, target, numberVerifierMain);
 
-            Assert.Equal(errorMessages[0].ErrorMessage,PluginResources.Error_NumbersNotIdentical);
+            Assert.Equal(errorMessages[0].ErrorMessage,PluginResources.Error_AlphanumericsModified);
         }
 
         /// <summary>

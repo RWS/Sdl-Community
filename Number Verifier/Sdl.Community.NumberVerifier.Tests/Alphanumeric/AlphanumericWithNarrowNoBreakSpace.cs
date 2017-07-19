@@ -50,10 +50,15 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
         [Theory]
         [InlineData("!AB14 ab12 #Cd23 12 those aren't alphanumerics ", ",.", ",.")]
-        public void CantFindAlphanumericsWithSpecialCharactersNarrowNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
+        public void FindAlphanumericsWithSpecialCharactersNarrowNoBreakSpace(string text, string decimalSeparators, string thousandSeparators)
         {
-            CantFindAlphanumericsNarrowNoBreakSpace(text, decimalSeparators, thousandSeparators);
-        }
+			var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.RequireLocalization();
+			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+
+			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+
+			Assert.True(textAlphanumericsList.Count != 0);
+		}
 
         [Theory]
         [InlineData("AB14 ab12 #Cd2 EF12", ",.", ",.")]

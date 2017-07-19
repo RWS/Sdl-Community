@@ -51,10 +51,15 @@ namespace Sdl.Community.NumberVerifier.Tests.Alphanumeric
 
         [Theory]
         [InlineData(" !AB14 ab12 #Cd23 those aren't  alphanumerics ", ",.", ",.")]
-        public void CantFindAlphanumericsWithSpecialCharacters(string text, string decimalSeparators, string thousandSeparators)
+        public void FindAlphanumericsWithSpecialCharacters(string text, string decimalSeparators, string thousandSeparators)
         {
-            CantFindAlphanumericsNormalSpace(text, decimalSeparators, thousandSeparators);
-        }
+			var iNumberSettingsMock = Utilities.NumberVerifierLocalizationsSettings.RequireLocalization();
+			var numberVerifier = new NumberVerifierMain(iNumberSettingsMock.Object);
+
+			var textAlphanumericsList = numberVerifier.GetAlphanumericList(text);
+
+			Assert.True(textAlphanumericsList.Count != 0);
+		}
 
 		[Theory]
 		[InlineData("BB1254AE word")]

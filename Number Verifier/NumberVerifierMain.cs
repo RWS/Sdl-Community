@@ -983,7 +983,10 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
-				var customsSeparators = _verificationSettings.GetAlphanumericsCustomSeparator.Split(',');
+				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
+					? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',').ToString()
+					: string.Empty;
+
 				var res = string.Join(string.Empty, customsSeparators);
 				
 				// replace \ with \\ in order to recognize the regex expression
@@ -991,7 +994,7 @@ namespace Sdl.Community.NumberVerifier
 				{
 					res = res.Replace(@"\", @"\\");
 				}
-				var regex = string.Format(@"^-?\u2212?(^[a-zA-Z0-9{0}]+$]*$)", res);
+				var regex = string.Format(@"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)", res);
 
 				alphaList.AddRange(
 					from word in words
@@ -1002,7 +1005,7 @@ namespace Sdl.Community.NumberVerifier
 			{
 				alphaList.AddRange(
 					from word in words
-					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^[a-zA-Z0-9]+$]*$)")
+					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
             return alphaList;
