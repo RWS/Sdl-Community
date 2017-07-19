@@ -157,10 +157,10 @@
             this.cb_customSeparators.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cb_customSeparators.Location = new System.Drawing.Point(16, 112);
             this.cb_customSeparators.Name = "cb_customSeparators";
-            this.cb_customSeparators.Size = new System.Drawing.Size(184, 17);
+            this.cb_customSeparators.Size = new System.Drawing.Size(179, 17);
             this.cb_customSeparators.TabIndex = 38;
-            this.cb_customSeparators.Text = "Alphanumeric customs separators";
-            this.toolTip1.SetToolTip(this.cb_customSeparators, "Select this to to allow customs separators in alphanumerics verification");
+            this.cb_customSeparators.Text = "Alphanumeric custom separators";
+            this.toolTip1.SetToolTip(this.cb_customSeparators, "Select this to to allow custom separators in alphanumerics verification");
             this.cb_customSeparators.UseVisualStyleBackColor = true;
             this.cb_customSeparators.CheckedChanged += new System.EventHandler(this.cb_customSeparators_CheckedChanged);
             // 

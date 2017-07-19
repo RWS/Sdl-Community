@@ -767,7 +767,7 @@ namespace Sdl.Community.NumberVerifier
             {
                 number = number.Replace("\u2013", "m");
             }
-            return number;
+            return number.Normalize(NormalizationForm.FormKC);
         }
 
         public string NormalizedNumber(string number, string thousandSeparators, string decimalSeparators,
@@ -775,8 +775,7 @@ namespace Sdl.Community.NumberVerifier
         {
             var normalizedNumber=string.Empty;
             try
-            {
-                
+            {                
                 // see http://www.fileformat.info/info/unicode/char/2212/index.htm
                 //request to support special minus sign
 
@@ -851,16 +850,14 @@ namespace Sdl.Community.NumberVerifier
                         }
 
                     }
-                    return normalizedNumber;
+                    return normalizedNumber.Normalize(NormalizationForm.FormKC);
                 }
             }
             catch(Exception e) { }
 
-            return normalizedNumber;
+            return normalizedNumber.Normalize(NormalizationForm.FormKC);
         }
-
-
-
+		
         public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
         {
             var thousandSeparator = string.Empty;
@@ -887,18 +884,17 @@ namespace Sdl.Community.NumberVerifier
                     if (numberElements[0].IndexOf('m') == 0)
                     {
                         var numberWithoutMinus = numberElements[0].Substring(1);
-                        thousandNumber = decimal.Parse(numberWithoutMinus);
+                        thousandNumber = decimal.Parse(numberWithoutMinus.Normalize(NormalizationForm.FormKC));
                         hasMinusSign = true;
                     }
                     else
-                    {
-                        thousandNumber = decimal.Parse(numberElements[0]);
+                    {						
+						thousandNumber = decimal.Parse(numberElements[0].Normalize(NormalizationForm.FormKC));
                     }
 
                     //number must be >= 1000 to run no separator option
                     if (thousandNumber >= 1000)
                     {
-
                         var thousands = thousandNumber.ToString(CultureInfo.InvariantCulture);
                         var tempNormalized = new StringBuilder();
                         var counter = 0;
@@ -906,14 +902,21 @@ namespace Sdl.Community.NumberVerifier
                         {
                             if (tempNormalized.Length > 0 && counter % 3 == 0)
                             {
-                                if (thousandSeparators != string.Empty)
-                                {
-                                    tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], thousandSeparator));
-                                }
-                                else
-                                {
-                                    tempNormalized.Insert(0, string.Format("{0}", thousands[i]));
-                                }
+								if (!string.IsNullOrEmpty(thousandSeparators))
+								{
+									if (!thousandSeparator.Contains(" "))
+									{
+										tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], thousandSeparator));
+									}
+									else
+									{
+										tempNormalized.Insert(0, string.Format(@"{0}{1}", thousands[i], string.Empty));
+									}
+								}
+								else
+								{
+									tempNormalized.Insert(0, string.Format("{0}", thousands[i]));
+								}
 
                                 counter = 1;
                             }
@@ -921,8 +924,8 @@ namespace Sdl.Community.NumberVerifier
                             {
                                 tempNormalized.Insert(0, thousands[i]);
                                 counter++;
-                            }
-                        }
+                            }							
+						}
 
                         if (numberElements.Length > 1)
                         {
@@ -946,7 +949,9 @@ namespace Sdl.Community.NumberVerifier
                             }
 
                         }
-                        normalizedNumber = NormalizedNumber(tempNormalized.ToString(), thousandSeparators,
+						var temNormalizedWithoutSpaces = tempNormalized.ToString().Normalize(NormalizationForm.FormKC);
+
+						normalizedNumber = NormalizedNumber(temNormalizedWithoutSpaces, thousandSeparators,
                             decimalSeparators,
                             false);
                     }
@@ -956,7 +961,7 @@ namespace Sdl.Community.NumberVerifier
             {
 
             }
-            return normalizedNumber;
+            return normalizedNumber.Normalize(NormalizationForm.FormKC);
         }
 
         private void RemoveMatchingAlphanumerics(IList<string> sourceAlphanumericsList, ICollection<string> targetAlphanumericsList)
@@ -990,14 +995,14 @@ namespace Sdl.Community.NumberVerifier
 
 				alphaList.AddRange(
 					from word in words
-					from Match match in Regex.Matches(word, regex)
+					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
 			else
 			{
 				alphaList.AddRange(
 					from word in words
-					from Match match in Regex.Matches(word, @"^-?\u2212?(^[a-zA-Z0-9]+$]*$)")
+					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^[a-zA-Z0-9]+$]*$)")
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
             return alphaList;
