@@ -5,6 +5,8 @@
         public string Text { get; set; }
         public int Occurrences { get; set; }
 
+        public Word() { }
+
         public Word(string text, int occurences)
         {
             Text = text;

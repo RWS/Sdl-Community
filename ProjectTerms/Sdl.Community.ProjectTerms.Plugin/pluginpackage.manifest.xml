@@ -5,4 +5,7 @@
   <Description>Sdl.Community.ProjectTerms.Plugin</Description>
   <Author>SDL.Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <Include>
+    <File>Sdl.Community.ProjectTerms.Controls.dll</File>
+  </Include>
 </PluginPackage>
