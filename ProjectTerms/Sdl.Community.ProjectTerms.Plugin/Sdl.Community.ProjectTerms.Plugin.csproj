@@ -37,6 +37,9 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>True</Private>
@@ -55,10 +58,16 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
       <SpecificVersion>False</SpecificVersion>
@@ -84,6 +93,9 @@
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -94,14 +106,21 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PlainTextExtractor.cs" />
     <Compile Include="ProjectTermsBatchTask.cs" />
     <Compile Include="ProjectTermsBatchTaskSettings.cs" />
     <Compile Include="ProjectTermsBatchTaskSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ProjectTermsBatchTaskSettingsControl.Designer.cs">
+      <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProjectTermsBatchTaskSettingsPage.cs" />
+    <Compile Include="ProjectTermsViewModel.cs" />
+    <Compile Include="ProjectTermsExtractor.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TextExtractionBilingualContentHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">
@@ -143,5 +162,10 @@
       <Project>{154a450e-3d19-42d3-ae88-e059729f647d}</Project>
       <Name>Sdl.Community.ProjectTerms.Controls</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ProjectTermsBatchTaskSettingsControl.resx">
+      <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
