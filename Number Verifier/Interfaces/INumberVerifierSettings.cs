@@ -65,6 +65,6 @@ namespace Sdl.Community.NumberVerifier.Interfaces
 
         IEnumerable<string> GetTargetDecimalSeparators();
         IEnumerable<string> GetTargetThousandSeparators();
-
-    }
+		string GetAlphanumericCustomSeparator();
+	}
 }

@@ -983,9 +983,9 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
-				var customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
-					? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',').ToString()
-					: string.Empty;
+				string[] customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
+				? _verificationSettings.GetAlphanumericsCustomSeparator.Split(',')
+				: new string[0];
 
 				var res = string.Join(string.Empty, customsSeparators);
 				

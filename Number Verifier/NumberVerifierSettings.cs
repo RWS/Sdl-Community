@@ -437,8 +437,6 @@ namespace Sdl.Community.NumberVerifier
 
         }
 
-      
-
         public IEnumerable<string> GetTargetThousandSeparators()
         {
             yield return TargetThousandsSpace ? @"\u0020" : string.Empty;
@@ -451,5 +449,12 @@ namespace Sdl.Community.NumberVerifier
                 ? GetTargetThousandsCustomSeparator
                 : string.Empty;
         }
-    }
+
+		public string GetAlphanumericCustomSeparator()
+		{
+			return CustomsSeparatorsAlphanumerics
+			   ? GetAlphanumericsCustomSeparator
+			   : string.Empty;
+		}
+	}
 }

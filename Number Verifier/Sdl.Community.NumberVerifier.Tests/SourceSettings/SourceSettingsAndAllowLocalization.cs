@@ -32,8 +32,7 @@ namespace Sdl.Community.NumberVerifier.Tests.SourceSettings
             var numberVerifierSettings = ThousandsSeparatorsSpaceNoBreakThinSpace();
             numberVerifierSettings.Setup(t => t.SourceThousandsNobreakThinSpace).Returns(true);
 
-            return numberVerifierSettings;
-            
+            return numberVerifierSettings;            
         }
 
         public static Mock<INumberVerifierSettings> SpaceCommaPeriod()
@@ -43,8 +42,7 @@ namespace Sdl.Community.NumberVerifier.Tests.SourceSettings
             numberVerifierSettings.Setup(t => t.SourceThousandsComma).Returns(true);
             numberVerifierSettings.Setup(t => t.SourceThousandsPeriod).Returns(true);
 
-            return numberVerifierSettings;
-            
+            return numberVerifierSettings;            
         }
 
         public static Mock<INumberVerifierSettings> CommaPeriod()
@@ -54,7 +52,6 @@ namespace Sdl.Community.NumberVerifier.Tests.SourceSettings
             numberVerifierSettings.Setup(t => t.SourceThousandsPeriod).Returns(true);
 
             return numberVerifierSettings;
-
         }
 
         public static Mock<INumberVerifierSettings> DecimalComma()
@@ -63,10 +60,16 @@ namespace Sdl.Community.NumberVerifier.Tests.SourceSettings
 
             numberVerifierSettings.Setup(d => d.SourceDecimalComma).Returns(true);
 
-            return numberVerifierSettings;
-            
-
+            return numberVerifierSettings;       
         }
 
-    }
+		public static Mock<INumberVerifierSettings> CustomSeparators()
+		{
+			var numberVerifierSettings = new Mock<INumberVerifierSettings>(MockBehavior.Loose);
+
+			numberVerifierSettings.Setup(d => d.CustomsSeparatorsAlphanumerics).Returns(true);
+
+			return numberVerifierSettings;
+		}
+	}
 }
