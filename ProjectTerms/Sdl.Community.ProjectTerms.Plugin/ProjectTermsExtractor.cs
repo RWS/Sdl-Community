@@ -35,7 +35,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             {
                 foreach (var term in GetTerms(text))
                 {
-                    terms.Add(term);
+                    terms.Add(term.ToLower());
                 }
             }
         }

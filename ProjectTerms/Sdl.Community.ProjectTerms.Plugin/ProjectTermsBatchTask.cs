@@ -1,5 +1,4 @@
 ﻿using Sdl.ProjectAutomation.AutomaticTasks;
-using System;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
@@ -14,15 +13,17 @@ namespace Sdl.Community.ProjectTerms.Plugin
     [RequiresSettings(typeof(ProjectTermsBatchTaskSettings), typeof(ProjectTermsBatchTaskSettingsPage))]
     public class ProjectTermsBatchTask : AbstractFileContentProcessingAutomaticTask
     {
-        private ProjectTermsBatchTaskSettingsControl control;
         private HashSet<string> projectFiles;
+        private ProjectTermsBatchTaskSettingsControl control;
+        private ProjectTermsBatchTaskSettings settings;
 
         protected override void OnInitializeTask()
         {
             base.OnInitializeTask();
-            projectFiles = new HashSet<string>();
 
+            projectFiles = new HashSet<string>();
             control = new ProjectTermsBatchTaskSettingsControl();
+            settings = GetSetting<ProjectTermsBatchTaskSettings>();
         }
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -35,7 +36,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public override void TaskComplete()
         {
-            control.ExtractProjectTerms();
+            control.ExtractProjectTerms(settings);
         }
     }
 }

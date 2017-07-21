@@ -21,10 +21,16 @@ namespace Sdl.Community.ProjectTerms.Plugin
             extractor.ExtractProjectFileTerms(projectFile, multiFileConverter);
         }
 
-        public void ExtractProjectTerms()
+        public void ExtractProjectTerms(int occurrences, int length, List<string> blackList)
         {
             IEnumerable<string> terms = extractor.GetProjectTerms();
-            Terms = terms.CountOccurences();
+
+            Terms = terms
+                .FilterByBlackList(blackList)
+                .CountOccurences()
+                .FilterByOccurrences(occurrences)
+                .FilterByLength(length);
+
         }
     }
 }

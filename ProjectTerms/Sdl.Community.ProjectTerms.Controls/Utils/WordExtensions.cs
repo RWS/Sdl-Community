@@ -16,5 +16,20 @@ namespace Sdl.Community.ProjectTerms.Controls.Utils
                     StringComparer.InvariantCultureIgnoreCase)
                     .Cast<IWord>();
         }
+
+        public static IEnumerable<IWord> FilterByOccurrences(this IEnumerable<IWord> terms, int occurrences)
+        {
+            return terms.Where(term => term.Occurrences >= occurrences);
+        }
+
+        public static IEnumerable<IWord> FilterByLength(this IEnumerable<IWord> terms, int length)
+        {
+            return terms.Where(term => term.Text.Length >= length);
+        }
+
+        public static IEnumerable<string> FilterByBlackList(this IEnumerable<string> terms, List<string> blackList)
+        {
+            return terms.Where(term => !blackList.Contains(term));
+        }
     }
 }
