@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using Sdl.Community.NumberVerifier.Interfaces;
+using System.Collections.Generic;
 
 namespace Sdl.Community.NumberVerifier.Tests.Utilities
 {
-    public static class NumberVerifierLocalizationsSettings
+	public static class NumberVerifierLocalizationsSettings
     {
         private static Mock<INumberVerifierSettings> Settings()
         {
@@ -33,9 +29,18 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
                 .Returns(GetTargetThousandSeparators(mock.Object));
             mock.Setup(r => r.GetTargetDecimalSeparators())
                .Returns(GetTargetDecimalSeparators(mock.Object));
-        }
+			mock.Setup(r => r.GetAlphanumericCustomSeparator())
+			  .Returns(GetAlphanumericsCustomSeparator(mock.Object));
+		}
 
-        public static IEnumerable<string> GetSourceDecimalSeparators(INumberVerifierSettings numberVerifierSettings)
+		public static string GetAlphanumericsCustomSeparator(INumberVerifierSettings numberVerifierSettings)
+		{
+			return numberVerifierSettings.CustomsSeparatorsAlphanumerics ?
+				numberVerifierSettings.GetAlphanumericsCustomSeparator
+				: string.Empty;
+		}
+
+		public static IEnumerable<string> GetSourceDecimalSeparators(INumberVerifierSettings numberVerifierSettings)
         {
             yield return numberVerifierSettings.SourceDecimalComma ? @"\u002C" : string.Empty;
             yield return numberVerifierSettings.SourceDecimalPeriod ? @"\u002E" : string.Empty;
@@ -63,11 +68,8 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             yield return numberVerifierSettings.SourceThousandsCustomSeparator
                 ? numberVerifierSettings.GetSourceThousandsCustomSeparator
                 : string.Empty;
-
         }
-
-
-
+		
         public static IEnumerable<string> GetTargetThousandSeparators(INumberVerifierSettings numberVerifierSettings)
         {
             yield return numberVerifierSettings.TargetThousandsSpace ? @"\u0020" : string.Empty;
@@ -86,8 +88,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             var iNumberSettingsMock = Settings();
             iNumberSettingsMock.Setup(x => x.AllowLocalizations).Returns(true);
 
-            return iNumberSettingsMock;
-            
+            return iNumberSettingsMock;            
         }
 
         public static Mock<INumberVerifierSettings> RequireLocalization()
@@ -96,7 +97,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             iNumberSettingsMock.Setup(x => x.RequireLocalizations).Returns(true);
 
             return iNumberSettingsMock;
-
         }
 
         public static Mock<INumberVerifierSettings> PreventLocalization()
@@ -105,7 +105,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             iNumberSettingsMock.Setup(x => x.PreventLocalizations).Returns(true);
 
             return iNumberSettingsMock;
-
         }
     }
 }

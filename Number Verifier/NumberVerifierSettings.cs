@@ -52,6 +52,12 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<bool>(nameof(CustomsSeparatorsAlphanumerics)).Value; }
 		}
 
+		public bool HindiNumberVerification
+		{
+			set { GetSetting<bool>(nameof(HindiNumberVerification)).Value = value; }
+			get { return GetSetting<bool>(nameof(HindiNumberVerification)).Value; }
+		}
+
 		public string AddedNumbersErrorType
         {
             set { GetSetting<string>(nameof(AddedNumbersErrorType)).Value = value; }
@@ -335,6 +341,8 @@ namespace Sdl.Community.NumberVerifier
                     return true;
 				case nameof(CustomsSeparatorsAlphanumerics):
 					return true;
+				case nameof(HindiNumberVerification):
+					return true;
 				case nameof(AddedNumbersErrorType):
                     return "Warning";
                 case nameof(RemovedNumbersErrorType):
@@ -437,8 +445,6 @@ namespace Sdl.Community.NumberVerifier
 
         }
 
-      
-
         public IEnumerable<string> GetTargetThousandSeparators()
         {
             yield return TargetThousandsSpace ? @"\u0020" : string.Empty;
@@ -451,5 +457,12 @@ namespace Sdl.Community.NumberVerifier
                 ? GetTargetThousandsCustomSeparator
                 : string.Empty;
         }
-    }
+
+		public string GetAlphanumericCustomSeparator()
+		{
+			return CustomsSeparatorsAlphanumerics
+			   ? GetAlphanumericsCustomSeparator
+			   : string.Empty;
+		}
+	}
 }

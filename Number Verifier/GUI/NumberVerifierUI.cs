@@ -47,6 +47,12 @@ namespace Sdl.Community.NumberVerifier
             set { cb_ReportModifiedAlphanumerics.Checked = value; }
         }
 
+		public bool HindiNumberVerification
+		{
+			get { return cb_Hindi.Checked; }
+			set { cb_Hindi.Checked = value; }
+		}
+
 		public string ModifiedAlphanumericsErrorType
 		{
 			get { return combo_ModifiedAlphanumericsErrorType.Text; }
