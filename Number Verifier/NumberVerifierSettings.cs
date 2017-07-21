@@ -52,6 +52,12 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<bool>(nameof(CustomsSeparatorsAlphanumerics)).Value; }
 		}
 
+		public bool HindiNumberVerification
+		{
+			set { GetSetting<bool>(nameof(HindiNumberVerification)).Value = value; }
+			get { return GetSetting<bool>(nameof(HindiNumberVerification)).Value; }
+		}
+
 		public string AddedNumbersErrorType
         {
             set { GetSetting<string>(nameof(AddedNumbersErrorType)).Value = value; }
@@ -334,6 +340,8 @@ namespace Sdl.Community.NumberVerifier
                 case nameof(ReportModifiedAlphanumerics) :
                     return true;
 				case nameof(CustomsSeparatorsAlphanumerics):
+					return true;
+				case nameof(HindiNumberVerification):
 					return true;
 				case nameof(AddedNumbersErrorType):
                     return "Warning";
