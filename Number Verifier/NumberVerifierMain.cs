@@ -39,6 +39,7 @@ namespace Sdl.Community.NumberVerifier
 		private bool? _enabled;
 		private bool _omitLeadingZero;
 		private INumberVerifierSettings _verificationSettings;
+		private string _language;
 
 		#endregion
 
@@ -460,7 +461,7 @@ namespace Sdl.Community.NumberVerifier
 
 			var numberErrorComposer = new NumberErrorComposer();
 			var verifyProcessor = numberErrorComposer.Compose();
-
+						
 			return verifyProcessor.Verify(numberResults);
 		}
 
@@ -478,12 +479,12 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.HindiNumberVerification)
 			{
-				var numberVerification = GetTargetFromHindiNumbers(targetText);
-				if (numberVerification.Language == "Hindi (India)")
+				targetText = GetTargetFromHindiNumbers(targetText);
+				if (_language == "Hindi (India)")
 				{
 					sourceText = GetArabicTextFromHindi(sourceText);
 				}
-				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, numberVerification.NumberText);
+				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
 			}
 			else
 			{
@@ -872,7 +873,15 @@ namespace Sdl.Community.NumberVerifier
 			}
 			catch (Exception e) { }
 
-			return normalizedNumber.Normalize(NormalizationForm.FormKC);
+			if (_language == "Hindi (India)")
+			{
+				normalizedNumber = normalizedNumber.Replace("t", string.Empty);
+				return normalizedNumber.Normalize(NormalizationForm.FormKC); ;
+			}
+			else
+			{
+				return normalizedNumber.Normalize(NormalizationForm.FormKC);
+			}
 		}
 
 		public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)
@@ -906,7 +915,7 @@ namespace Sdl.Community.NumberVerifier
 					}
 					else
 					{
-						thousandNumber = decimal.Parse(numberElements[0].Normalize(NormalizationForm.FormKC));
+						decimal.TryParse(numberElements[0].Normalize(NormalizationForm.FormKC), out thousandNumber);	
 					}
 
 					//number must be >= 1000 to run no separator option
@@ -1046,33 +1055,32 @@ namespace Sdl.Community.NumberVerifier
 					 && !(VerificationSettings.ExcludeDraftSegments == true && segmentPair.Properties.ConfirmationLevel == ConfirmationLevel.Draft);
 		}
 
-		private NumberVerification GetTargetFromHindiNumbers(string target)
+		private string GetTargetFromHindiNumbers(string target)
 		{
 			var _projectController = GetProjectController();
-			NumberVerification result = new NumberVerification();
+			string result = string.Empty;
 
 			if (_projectController.CurrentProject != null)
 			{
 				var projectInfo = _projectController.CurrentProject.GetProjectInfo();
-				result.Language = projectInfo.SourceLanguage.DisplayName;
-				result.NumberText = string.Empty;
+				_language = projectInfo.SourceLanguage.DisplayName;
 
 				var hindiNumbers = GetHindiNumbers();
 				var formatedTarget = target.ToCharArray();
 
-				if (result.Language == "Hindi (India)")
+				if (_language == "Hindi (India)")
 				{
 					foreach (var t in target)
 					{
 						if (hindiNumbers.ContainsKey(t.ToString()))
 						{
 							//add arabic values to result 
-							result.NumberText = result.NumberText.Insert(target.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Key == t.ToString()).Key);
+							result = result.Insert(target.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Key == t.ToString()).Key);
 						}
 						else
 						{
 							// add separator like , or .
-							result.NumberText = result.NumberText.Insert(target.IndexOf(t), t.ToString());
+							result = result.Insert(target.IndexOf(t), t.ToString());
 						}
 					}
 				}
@@ -1083,13 +1091,17 @@ namespace Sdl.Community.NumberVerifier
 						if (hindiNumbers.ContainsValue(t.ToString()))
 						{
 							//add arabic values to result 
-							result.NumberText = result.NumberText.Insert(target.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
+							result = result.Insert(target.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
 						}
 						else
 						{
 							// add separator like , or .
-							result.NumberText = result.NumberText.Insert(target.IndexOf(t), t.ToString());
+							result = result.Insert(target.IndexOf(t), t.ToString());
 						}
+					}
+					if(!result.Contains("."))
+					{
+						result = result.Insert(1, ".");
 					}
 				}
 			}
