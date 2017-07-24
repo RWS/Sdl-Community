@@ -106,7 +106,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PlainTextExtractor.cs" />
+    <Compile Include="ExtractTerms\PlainTextExtractor.cs" />
     <Compile Include="ProjectTermsBatchTask.cs" />
     <Compile Include="ProjectTermsBatchTaskSettings.cs" />
     <Compile Include="ProjectTermsBatchTaskSettingsControl.cs">
@@ -117,10 +117,10 @@
     </Compile>
     <Compile Include="ProjectTermsBatchTaskSettingsPage.cs" />
     <Compile Include="ProjectTermsViewModel.cs" />
-    <Compile Include="ProjectTermsExtractor.cs" />
+    <Compile Include="ExtractTerms\ProjectTermsExtractor.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextExtractionBilingualContentHandler.cs" />
+    <Compile Include="ExtractTerms\TextExtractionBilingualContentHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">
@@ -167,5 +167,8 @@
     <EmbeddedResource Include="ProjectTermsBatchTaskSettingsControl.resx">
       <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ExportTermsToXML\" />
   </ItemGroup>
 </Project>

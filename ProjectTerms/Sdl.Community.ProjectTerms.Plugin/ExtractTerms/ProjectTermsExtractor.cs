@@ -44,6 +44,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             StringBuilder term = new StringBuilder();
             bool containsLetter = false;
+            List<string> terms = new List<string>();
 
             foreach (char ch in text)
             {
@@ -58,14 +59,18 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 }
                 else
                 {
-                    if (term.Length > 1 && containsLetter)
+                    if (!term.Equals("") && containsLetter)
                     {
-                        yield return term.ToString();
+                        terms.Add(term.ToString());
                     }
                     term.Clear();
                     containsLetter = false;
                 }
             }
+
+            if (!term.ToString().Equals("")) terms.Add(term.ToString());
+
+            return terms;
         }
 
         public List<string> GetProjectTerms()
