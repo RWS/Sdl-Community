@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using Sdl.Community.ProjectTerms.Controls.Utils;
 using Sdl.ProjectAutomation.Core;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsViewModel
     {
         private ProjectTermsExtractor extractor;
-        public IEnumerable<IWord> Terms { get; set; }
+        public IEnumerable<ITerm> Terms { get; set; }
 
         public ProjectTermsViewModel()
         {
@@ -21,7 +22,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             extractor.ExtractProjectFileTerms(projectFile, multiFileConverter);
         }
 
-        public void ExtractProjectTerms(int occurrences, int length, List<string> blackList)
+        public void ExtractProjectTerms(int occurrences, int length, List<string> blackList, string projectPath)
         {
             IEnumerable<string> terms = extractor.GetProjectTerms();
 
@@ -31,6 +32,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 .FilterByOccurrences(occurrences)
                 .FilterByLength(length);
 
+            ProjectTermsCache cache = new ProjectTermsCache();
+            cache.Save(projectPath, Terms);
         }
     }
 }

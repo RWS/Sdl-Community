@@ -104,8 +104,11 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>4.5.2</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExportTermsToXML\ProjectTermsCache.cs" />
     <Compile Include="ExtractTerms\PlainTextExtractor.cs" />
     <Compile Include="ProjectTermsBatchTask.cs" />
     <Compile Include="ProjectTermsBatchTaskSettings.cs" />
@@ -168,7 +171,5 @@
       <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ExportTermsToXML\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>

@@ -1,13 +1,13 @@
 ﻿namespace Sdl.Community.ProjectTerms.Controls.Interfaces
 {
-    public class Word : IWord
+    public class Term : ITerm
     {
         public string Text { get; set; }
         public int Occurrences { get; set; }
 
-        public Word() { }
+        public Term() { }
 
-        public Word(string text, int occurences)
+        public Term(string text, int occurences)
         {
             Text = text;
             Occurrences = occurences;

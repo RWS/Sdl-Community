@@ -46,10 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Interfaces\IWord.cs" />
-    <Compile Include="Model\Word.cs" />
+    <Compile Include="Interfaces\ITerm.cs" />
+    <Compile Include="Model\Term.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\WordExtensions.cs" />
+    <Compile Include="Utils\TermExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">

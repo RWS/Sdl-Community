@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.ProjectTerms.Controls.Interfaces
 {
-    public interface IWord
+    public interface ITerm
     {
         string Text { get; }
         int Occurrences { get; }

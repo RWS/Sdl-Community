@@ -5,24 +5,24 @@ using System.Linq;
 
 namespace Sdl.Community.ProjectTerms.Controls.Utils
 {
-    public static class WordExtensions
+    public static class TermExtensions
     {
-        public static IEnumerable<IWord> CountOccurences(this IEnumerable<string> terms)
+        public static IEnumerable<ITerm> CountOccurences(this IEnumerable<string> terms)
         {
             return
                 terms.GroupBy(
                     term => term,
-                    (term, equivalentTerms) => new Word(term, equivalentTerms.Count()),
+                    (term, equivalentTerms) => new Term(term, equivalentTerms.Count()),
                     StringComparer.InvariantCultureIgnoreCase)
-                    .Cast<IWord>();
+                    .Cast<ITerm>();
         }
 
-        public static IEnumerable<IWord> FilterByOccurrences(this IEnumerable<IWord> terms, int occurrences)
+        public static IEnumerable<ITerm> FilterByOccurrences(this IEnumerable<ITerm> terms, int occurrences)
         {
             return terms.Where(term => term.Occurrences >= occurrences);
         }
 
-        public static IEnumerable<IWord> FilterByLength(this IEnumerable<IWord> terms, int length)
+        public static IEnumerable<ITerm> FilterByLength(this IEnumerable<ITerm> terms, int length)
         {
             return terms.Where(term => term.Text.Length >= length);
         }

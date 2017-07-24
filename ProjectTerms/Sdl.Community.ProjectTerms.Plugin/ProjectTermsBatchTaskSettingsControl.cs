@@ -43,10 +43,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
             ViewModel.ExtractProjectFileTerms(projectFile, multiFileConverter);
         }
 
-        public void ExtractProjectTerms(ProjectTermsBatchTaskSettings settings)
+        public void ExtractProjectTerms(ProjectTermsBatchTaskSettings settings, string projectPath)
         {
             Settings = settings;
-            ViewModel.ExtractProjectTerms(Settings.TermsOccurrencesSettings, Settings.TermsLengthSettings, Settings.BlackListSettings);
+            ViewModel.ExtractProjectTerms(Settings.TermsOccurrencesSettings, Settings.TermsLengthSettings, Settings.BlackListSettings, projectPath);
         }
 
         private List<string> ExtractListViewItems(ListView listViewBlackList)
