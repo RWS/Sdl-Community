@@ -5,8 +5,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsBatchTaskSettings : SettingsGroup
     {
-        private int initialTermsOccurrences = 0;
-        private int initialTermsLength = 0;
+        private int initialTermsOccurrences = 3;
+        private int initialTermsLength = 3;
 
         public List<string> BlackListSettings
         {

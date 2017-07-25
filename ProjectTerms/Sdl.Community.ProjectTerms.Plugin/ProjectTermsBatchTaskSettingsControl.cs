@@ -86,8 +86,35 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            listViewBlackList.Items.Remove(listViewBlackList.SelectedItems[0]);
-            Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
+            if (listViewBlackList.Items.Count == 0)
+            {
+                MessageBox.Show("Your list is empty!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            if (listViewBlackList.SelectedItems.Count == 0)
+            {
+                MessageBox.Show("Please select at least one term!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            foreach (ListViewItem seletectedTerm in listViewBlackList.SelectedItems)
+            {
+                listViewBlackList.Items.Remove(seletectedTerm);
+                Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
+            }
+        }
+
+        // Redirect the enter key from textBox 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (msg.Msg == 256 && keyData == Keys.Enter)
+            {
+                buttonAdd.PerformClick();
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
         }
     }
 }
