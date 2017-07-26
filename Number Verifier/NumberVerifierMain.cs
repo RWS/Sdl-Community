@@ -1186,6 +1186,10 @@ namespace Sdl.Community.NumberVerifier
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
 			{
+				// remove thousand and decimal separators in order to construct the target text correctly
+				numberRes.TargetText = numberRes.TargetText.Replace(",", string.Empty);
+				numberRes.TargetText = numberRes.TargetText.Replace(".", string.Empty);
+
 				if (numberRes.SourceText.Contains("."))
 				{
 					var sourceTextIndex = numberRes.SourceText.IndexOf(".");
