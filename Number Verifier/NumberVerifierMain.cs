@@ -1147,33 +1147,6 @@ namespace Sdl.Community.NumberVerifier
 			return hindiDictionary;
 		}
 
-		public List<NumberModel> GetArabicTextFromHindi(List<NumberModel> numberModels)
-		{
-			List<NumberModel> result = new List<NumberModel>();
-			string res = string.Empty;
-			var hindiNumbers = GetHindiNumbers();
-
-			foreach (var numberModel in numberModels)
-			{
-				foreach (var t in numberModel.SourceText)
-				{
-					if (hindiNumbers.ContainsValue(t.ToString()))
-					{
-						//add arabic values to result 
-						res = res.Insert(numberModel.SourceText.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
-					}
-					else
-					{
-						// add separator like , or .
-						res = res.Insert(numberModel.SourceText.IndexOf(t), t.ToString());
-					}
-				}
-				result.Add(new NumberModel { SourceText = res, TargetText = numberModel.TargetText});
-				res = string.Empty;
-			}
-			return result;
-		}
-
 		public List<NumberModel> GetFormatedNumbers(string textGroupResult, string[] textGroups)
 		{
 			List<NumberModel> result = new List<NumberModel>();
@@ -1186,10 +1159,10 @@ namespace Sdl.Community.NumberVerifier
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
 			{
-				// remove thousand and decimal separators in order to construct the target text correctly
-				numberRes.TargetText = numberRes.TargetText.Replace(",", string.Empty);
-				numberRes.TargetText = numberRes.TargetText.Replace(".", string.Empty);
-
+				// add . separator in the translated number as it is in the source number(this change will work only for valid verification)
+				// source: the converted hindi to arabic/just arabic(depending on source langauge) and target; (arabic/converted hindi to arabic)
+				// valid ex: source: 1234,56 => target: 1.234,56/1,234.56 or source: 1.234,56 => target: 1.234,56 
+				// invalid ex: soruce: 1234,56  => target: 12.34,56
 				if (numberRes.SourceText.Contains("."))
 				{
 					var sourceTextIndex = numberRes.SourceText.IndexOf(".");
@@ -1204,6 +1177,19 @@ namespace Sdl.Community.NumberVerifier
 					if (!numberRes.TargetText.Contains(","))
 					{
 						numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
+					}
+					else
+					{
+						// Scenario of translation from Hindi to Arabic: ١٢٣٤,٨٩ => 1.234,56 or 1,234.56 should be valid.
+						// in scenario: ١٢٣٤,٨٩ => 1,234.56, the Hindi number is converted to 1234,56
+						// in the above code the . separator is added where it should be
+						// in the the bellow code, the , separator is moved at the right place
+						// so the target result it will be 1,234.56 for verification.
+						if (numberRes.TargetText.IndexOf(",.") != -1)
+						{
+							numberRes.TargetText = Regex.Replace(numberRes.TargetText, ",+\\.+", ".");
+							numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
+						}
 					}
 				}
 				result.Add(new NumberModel
