@@ -2,7 +2,6 @@
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -37,7 +36,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public override void TaskComplete()
         {
-            control.ExtractProjectTerms(settings, Path.GetFullPath(Project.GetProjectInfo().LocalProjectFolder));
+            control.ExtractProjectTerms(settings);
         }
     }
 }

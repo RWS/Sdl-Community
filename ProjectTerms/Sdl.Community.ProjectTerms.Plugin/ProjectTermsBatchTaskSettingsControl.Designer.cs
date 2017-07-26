@@ -22,6 +22,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.buttonLoad = new System.Windows.Forms.Button();
+            this.buttonSave = new System.Windows.Forms.Button();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -31,6 +33,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // groupBoxFilters
             // 
+            this.groupBoxFilters.Controls.Add(this.buttonSave);
+            this.groupBoxFilters.Controls.Add(this.buttonLoad);
             this.groupBoxFilters.Controls.Add(this.buttonDelete);
             this.groupBoxFilters.Controls.Add(this.buttonResetList);
             this.groupBoxFilters.Controls.Add(this.numericUpDownTermsLength);
@@ -46,14 +50,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.groupBoxFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBoxFilters.Location = new System.Drawing.Point(3, 3);
             this.groupBoxFilters.Name = "groupBoxFilters";
-            this.groupBoxFilters.Size = new System.Drawing.Size(581, 279);
+            this.groupBoxFilters.Size = new System.Drawing.Size(581, 346);
             this.groupBoxFilters.TabIndex = 2;
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Text = "Project terms filters";
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(201, 116);
+            this.buttonDelete.Location = new System.Drawing.Point(201, 115);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(130, 23);
             this.buttonDelete.TabIndex = 16;
@@ -67,20 +71,20 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.buttonResetList.Name = "buttonResetList";
             this.buttonResetList.Size = new System.Drawing.Size(130, 23);
             this.buttonResetList.TabIndex = 15;
-            this.buttonResetList.Text = "Reset the list";
+            this.buttonResetList.Text = "Reset";
             this.buttonResetList.UseVisualStyleBackColor = true;
             this.buttonResetList.Click += new System.EventHandler(this.buttonResetList_Click);
             // 
             // numericUpDownTermsLength
             // 
-            this.numericUpDownTermsLength.Location = new System.Drawing.Point(139, 236);
+            this.numericUpDownTermsLength.Location = new System.Drawing.Point(139, 302);
             this.numericUpDownTermsLength.Name = "numericUpDownTermsLength";
             this.numericUpDownTermsLength.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsLength.TabIndex = 11;
             // 
             // numericUpDownTermsOccurrences
             // 
-            this.numericUpDownTermsOccurrences.Location = new System.Drawing.Point(139, 207);
+            this.numericUpDownTermsOccurrences.Location = new System.Drawing.Point(139, 273);
             this.numericUpDownTermsOccurrences.Name = "numericUpDownTermsOccurrences";
             this.numericUpDownTermsOccurrences.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsOccurrences.TabIndex = 10;
@@ -88,7 +92,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // labelTermsLength
             // 
             this.labelTermsLength.AutoSize = true;
-            this.labelTermsLength.Location = new System.Drawing.Point(10, 238);
+            this.labelTermsLength.Location = new System.Drawing.Point(10, 304);
             this.labelTermsLength.Name = "labelTermsLength";
             this.labelTermsLength.Size = new System.Drawing.Size(71, 13);
             this.labelTermsLength.TabIndex = 7;
@@ -97,7 +101,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // labelOccurrences
             // 
             this.labelOccurrences.AutoSize = true;
-            this.labelOccurrences.Location = new System.Drawing.Point(10, 208);
+            this.labelOccurrences.Location = new System.Drawing.Point(10, 274);
             this.labelOccurrences.Name = "labelOccurrences";
             this.labelOccurrences.Size = new System.Drawing.Size(104, 13);
             this.labelOccurrences.TabIndex = 6;
@@ -106,7 +110,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // label1
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(6, 186);
+            this.label1.Location = new System.Drawing.Point(6, 249);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(571, 2);
             this.label1.TabIndex = 5;
@@ -123,7 +127,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(201, 82);
+            this.buttonAdd.Location = new System.Drawing.Point(201, 85);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(130, 23);
             this.buttonAdd.TabIndex = 3;
@@ -151,10 +155,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             this.listViewBlackList.FullRowSelect = true;
             this.listViewBlackList.GridLines = true;
+            this.listViewBlackList.Columns.Add("Terms", 150);
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
             this.listViewBlackList.Name = "listViewBlackList";
-            this.listViewBlackList.Size = new System.Drawing.Size(185, 131);
+            this.listViewBlackList.Size = new System.Drawing.Size(185, 190);
             this.listViewBlackList.TabIndex = 0;
             this.listViewBlackList.UseCompatibleStateImageBehavior = false;
             this.listViewBlackList.View = System.Windows.Forms.View.Details;
@@ -162,6 +167,26 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(201, 175);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(130, 23);
+            this.buttonLoad.TabIndex = 17;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(201, 204);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(130, 23);
+            this.buttonSave.TabIndex = 18;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // ProjectTermsBatchTaskSettingsControl
             // 
@@ -194,5 +219,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private ErrorProvider errorProvider1;
         private Button buttonResetList;
         private Button buttonDelete;
+        private Button buttonSave;
+        private Button buttonLoad;
     }
 }

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.ProjectTerms.Plugin</RootNamespace>
-    <AssemblyName>SDL Custom Batch Task Plug-in 2017</AssemblyName>
+    <AssemblyName>Sdl.Community.ProjectTerms</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>

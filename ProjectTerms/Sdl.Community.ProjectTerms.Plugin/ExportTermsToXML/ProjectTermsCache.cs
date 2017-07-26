@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
@@ -17,7 +16,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                 new XElement("projectTerms",
                     new XElement("terms",
                         from term in terms
-                        select new XElement("term", new XAttribute("text", term.Text), new XAttribute("count", term.Occurrences))))
+                        select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
                 );
 
             string cacheFile = CreateCacheFilePath(projectPath);

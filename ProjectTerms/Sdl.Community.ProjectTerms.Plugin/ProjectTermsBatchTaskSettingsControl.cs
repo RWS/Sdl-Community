@@ -4,25 +4,24 @@ using Sdl.ProjectAutomation.Core;
 using System.Windows.Forms;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public partial class ProjectTermsBatchTaskSettingsControl : UserControl, ISettingsAware<ProjectTermsBatchTaskSettings>
     {
-        private ProjectTermsViewModel viewModel;
-
-        public ProjectTermsViewModel ViewModel
-        {
-            get { return viewModel; }
-            set { viewModel = value; }
-        }
+        public ProjectTermsViewModel ViewModel { get; set; }
         public ProjectTermsBatchTaskSettings Settings { get; set; }
+        public string ProjectPath { get; set; }
 
         public ProjectTermsBatchTaskSettingsControl()
         {
             InitializeComponent();
-
             ViewModel = new ProjectTermsViewModel();
+            ProjectPath = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder;
+
+            if (!File.Exists(GenerateBlackListPath())) buttonLoad.Enabled = false;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -43,10 +42,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
             ViewModel.ExtractProjectFileTerms(projectFile, multiFileConverter);
         }
 
-        public void ExtractProjectTerms(ProjectTermsBatchTaskSettings settings, string projectPath)
+        public void ExtractProjectTerms(ProjectTermsBatchTaskSettings settings)
         {
             Settings = settings;
-            ViewModel.ExtractProjectTerms(Settings.TermsOccurrencesSettings, Settings.TermsLengthSettings, Settings.BlackListSettings, projectPath);
+            ViewModel.ExtractProjectTerms(Settings.TermsOccurrencesSettings, Settings.TermsLengthSettings, Settings.BlackListSettings, ProjectPath);
         }
 
         private List<string> ExtractListViewItems(ListView listViewBlackList)
@@ -76,12 +75,20 @@ namespace Sdl.Community.ProjectTerms.Plugin
             Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
 
             textBoxTerm.Text = "";
+            ButtonsEnabled(true);
         }
 
         private void buttonResetList_Click(object sender, EventArgs e)
         {
             listViewBlackList.Items.Clear();
             Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
+            ButtonsEnabled(true);
+        }
+
+        private void ButtonsEnabled(bool value)
+        {
+            buttonSave.Enabled = value;
+            buttonLoad.Enabled = value;
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -103,6 +110,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 listViewBlackList.Items.Remove(seletectedTerm);
                 Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
             }
+
+            ButtonsEnabled(true);
         }
 
         // Redirect the enter key from textBox 
@@ -115,6 +124,46 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private string GenerateBlackListPath()
+        {
+            return Path.Combine(ProjectPath, "blackListTerms.txt");
+        }
+
+        private void buttonLoad_Click(object sender, EventArgs e)
+        {
+            string blackListFilePath = GenerateBlackListPath();
+            using (StreamReader rw = new StreamReader(blackListFilePath))
+            {
+                listViewBlackList.Items.Clear();
+
+                string term = string.Empty;
+                while ((term = rw.ReadLine()) != null)
+                {
+                    listViewBlackList.Items.Add(new ListViewItem(term));
+                    Settings.BlackListSettings = ExtractListViewItems(listViewBlackList);
+                }
+            }
+
+            ButtonsEnabled(false);
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            string blackListFilePath = GenerateBlackListPath();
+
+            if (File.Exists(blackListFilePath)) File.Delete(blackListFilePath);
+
+            using (StreamWriter sw = new StreamWriter(blackListFilePath))
+            {
+                foreach (ListViewItem item in listViewBlackList.Items)
+                {
+                    sw.WriteLine(item.Text);
+                }
+            }
+
+            ButtonsEnabled(false);
         }
     }
 }
