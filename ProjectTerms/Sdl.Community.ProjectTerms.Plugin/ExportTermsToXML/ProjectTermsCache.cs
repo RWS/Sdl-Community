@@ -8,7 +8,6 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 {
     public class ProjectTermsCache
     {
-
         public void Save(string projectPath, IEnumerable<ITerm> terms)
         {
             XDocument doc = new XDocument();
@@ -19,14 +18,20 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                         select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
                 );
 
-            string cacheFile = CreateCacheFilePath(projectPath);
+            CreateCacheDirectory(projectPath);
+            string cacheFile = GetXMLFilePath(projectPath);
 
             doc.Save(cacheFile);
         }
 
-        private string CreateCacheFilePath(string projectPath)
+        public static string GetXMLFilePath(string projectPath)
         {
-            string tmpDirectoryPath = projectPath + "\\tmp";
+            return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath.ToString()) + "_ProjectTerms" + ".xml");
+        }
+
+        private void CreateCacheDirectory(string projectPath)
+        {
+            string tmpDirectoryPath = Path.GetDirectoryName(GetXMLFilePath(projectPath));
 
             if (!Directory.Exists(tmpDirectoryPath))
             {
@@ -38,8 +43,6 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                     File.Delete(file);
                 }
             }
-
-            return Path.Combine(tmpDirectoryPath, Path.GetFileNameWithoutExtension(projectPath.ToString()) + "_ProjectTerms" + ".xml");
         }
     }
 }

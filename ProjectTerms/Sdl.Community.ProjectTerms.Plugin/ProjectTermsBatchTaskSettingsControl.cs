@@ -9,6 +9,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
+    
     public partial class ProjectTermsBatchTaskSettingsControl : UserControl, ISettingsAware<ProjectTermsBatchTaskSettings>
     {
         public ProjectTermsViewModel ViewModel { get; set; }
@@ -134,6 +135,12 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private void buttonLoad_Click(object sender, EventArgs e)
         {
             string blackListFilePath = GenerateBlackListPath();
+            if (!File.Exists(blackListFilePath))
+            {
+                MessageBox.Show("Blacklist is not define!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             using (StreamReader rw = new StreamReader(blackListFilePath))
             {
                 listViewBlackList.Items.Clear();
