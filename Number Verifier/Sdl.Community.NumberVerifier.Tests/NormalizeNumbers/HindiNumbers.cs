@@ -18,6 +18,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		{
 			// settings
 			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.HindiNumbers();
+			numberVerifierSettings.Setup(s => s.HindiNumberVerification).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -42,6 +43,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		{
 			// settings
 			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.HindiNumbers();
+			numberVerifierSettings.Setup(s => s.HindiNumberVerification).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -66,6 +68,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		{
 			// settings
 			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.HindiNumbers();
+			numberVerifierSettings.Setup(s => s.HindiNumberVerification).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);
@@ -90,6 +93,7 @@ namespace Sdl.Community.NumberVerifier.Tests.NormalizeNumbers
 		{
 			// settings
 			var numberVerifierSettings = NumberVerifierRequireLocalizationSettings.HindiNumbers();
+			numberVerifierSettings.Setup(s => s.HindiNumberVerification).Returns(true);
 
 			NumberVerifierLocalizationsSettings.InitSeparators(numberVerifierSettings);
 			var numberVerifierMain = new NumberVerifierMain(numberVerifierSettings.Object);

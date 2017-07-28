@@ -14,7 +14,6 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             iNumberSettingsMock.Setup(r => r.ReportModifiedNumbers).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportRemovedNumbers).Returns(true);
 			iNumberSettingsMock.Setup(r => r.CustomsSeparatorsAlphanumerics).Returns(true);
-			iNumberSettingsMock.Setup(r => r.HindiNumberVerification).Returns(true);
 
 			return iNumberSettingsMock;
         }
