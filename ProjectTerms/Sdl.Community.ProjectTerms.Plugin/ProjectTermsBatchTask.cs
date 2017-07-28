@@ -2,6 +2,8 @@
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
+using Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML;
+using System.IO;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -37,6 +39,17 @@ namespace Sdl.Community.ProjectTerms.Plugin
         public override void TaskComplete()
         {
             control.ExtractProjectTerms(settings);
+
+            AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
+        }
+
+        private void AddXMlToProject(IProject project, string xmlFolder, bool recursion)
+        {
+            project.AddFolderWithFiles(xmlFolder, recursion);
+            ProjectFile[] projectFiles = project.GetSourceLanguageFiles();
+            AutomaticTask scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+            AutomaticTask convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+            AutomaticTask copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
         }
     }
 }
