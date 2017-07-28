@@ -14,6 +14,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             iNumberSettingsMock.Setup(r => r.ReportModifiedNumbers).Returns(true);
             iNumberSettingsMock.Setup(r => r.ReportRemovedNumbers).Returns(true);
 			iNumberSettingsMock.Setup(r => r.CustomsSeparatorsAlphanumerics).Returns(true);
+			iNumberSettingsMock.Setup(r => r.HindiNumberVerification).Returns(true);
 
 			return iNumberSettingsMock;
         }
@@ -31,12 +32,21 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
                .Returns(GetTargetDecimalSeparators(mock.Object));
 			mock.Setup(r => r.GetAlphanumericCustomSeparator())
 			  .Returns(GetAlphanumericsCustomSeparator(mock.Object));
+			mock.Setup(r => r.GetHindiNumber())
+			  .Returns(GetHindi(mock.Object));
 		}
 
 		public static string GetAlphanumericsCustomSeparator(INumberVerifierSettings numberVerifierSettings)
 		{
 			return numberVerifierSettings.CustomsSeparatorsAlphanumerics ?
 				numberVerifierSettings.GetAlphanumericsCustomSeparator
+				: string.Empty;
+		}
+
+		public static string GetHindi(INumberVerifierSettings numberVerifierSettings)
+		{
+			return numberVerifierSettings.HindiNumberVerification ?
+				numberVerifierSettings.GetHindi
 				: string.Empty;
 		}
 

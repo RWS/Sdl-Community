@@ -312,6 +312,13 @@ namespace Sdl.Community.NumberVerifier
 			get { return GetSetting<string>(nameof(GetAlphanumericsCustomSeparator)).Value; }
 		}
 
+		public string GetHindi
+		{
+			set { GetSetting<string>(nameof(GetHindi)).Value = value; }
+			get { return GetSetting<string>(nameof(GetHindi)).Value; }
+		}
+
+
 		#endregion
 
 		public void Reset(string propertyName)
@@ -462,6 +469,13 @@ namespace Sdl.Community.NumberVerifier
 		{
 			return CustomsSeparatorsAlphanumerics
 			   ? GetAlphanumericsCustomSeparator
+			   : string.Empty;
+		}
+
+		public string GetHindiNumber()
+		{
+			return HindiNumberVerification
+			   ? GetHindi
 			   : string.Empty;
 		}
 	}

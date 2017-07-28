@@ -874,16 +874,6 @@ namespace Sdl.Community.NumberVerifier
 			catch (Exception e) { }
 
 			return normalizedNumber.Normalize(NormalizationForm.FormKC);
-
-			//if (_language == "Hindi (India)")
-			//{
-			//	normalizedNumber = normalizedNumber.Replace("t", string.Empty);
-			//	return normalizedNumber.Normalize(NormalizationForm.FormKC); ;
-			//}
-			//else
-			//{
-			//	return normalizedNumber.Normalize(NormalizationForm.FormKC);
-			//}
 		}
 
 		public string NormalizeNumberNoSeparator(string decimalSeparators, string thousandSeparators, string normalizedNumber)

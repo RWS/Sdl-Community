@@ -60,6 +60,7 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetSourceDecimalCustomSeparator { get; set; }
         string GetTargetDecimalCustomSeparator { get; set; }
 		string GetAlphanumericsCustomSeparator { get; set; }
+		string GetHindi { get; set; }
 
 		IEnumerable<string> GetSourceDecimalSeparators();
         IEnumerable<string> GetSourceThousandSeparators();
@@ -67,5 +68,6 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         IEnumerable<string> GetTargetDecimalSeparators();
         IEnumerable<string> GetTargetThousandSeparators();
 		string GetAlphanumericCustomSeparator();
+		string GetHindiNumber();
 	}
 }
