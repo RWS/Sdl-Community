@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using System.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -47,6 +48,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             Settings = settings;
             ViewModel.ExtractProjectTerms(Settings.TermsOccurrencesSettings, Settings.TermsLengthSettings, Settings.BlackListSettings, ProjectPath);
+        }
+
+        public int GetNumbersOfExtractedTerms()
+        {
+            return ViewModel.Terms.Count();
         }
 
         private List<string> ExtractListViewItems(ListView listViewBlackList)
