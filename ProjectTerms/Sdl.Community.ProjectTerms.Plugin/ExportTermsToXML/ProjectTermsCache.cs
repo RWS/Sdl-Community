@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.ProjectTerms.Controls.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 
         public static string GetXMLFilePath(string projectPath)
         {
-            return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath.ToString()) + "_ProjectTerms" + ".xml");
+            return Path.Combine(projectPath + "\\tmp", "ProjectTerms_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
         }
 
         private void CreateCacheDirectory(string projectPath)

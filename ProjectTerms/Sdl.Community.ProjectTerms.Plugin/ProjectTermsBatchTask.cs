@@ -18,7 +18,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private HashSet<string> projectFiles;
         private ProjectTermsBatchTaskSettingsControl control;
         private ProjectTermsBatchTaskSettings settings;
-        string reportContent = "<report><projectTerms>";
 
         protected override void OnInitializeTask()
         {
@@ -40,28 +39,21 @@ namespace Sdl.Community.ProjectTerms.Plugin
         public override void TaskComplete()
         {
             control.ExtractProjectTerms(settings);
-            if (CheckedXmlExists(Project, ProjectTermsCache.GetXMLFilePath(control.ProjectPath)))
-            {
-                reportContent = "<report><projectTerms>";
-                reportContent += "<infoTag>The project terms file was already generated!</infoTag>";
-                GenerateReport();
-                CreateReport("Project terms", "Project terms report", reportContent);
-                return;
-            }
-            
             AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
-            GenerateReport();
-            CreateReport("Project terms", "Project terms report", reportContent);
+            CreateReport("Project terms", "Project terms report", GenerateReport());
         }
 
-        private void GenerateReport()
+        private string GenerateReport()
         {
+            string reportContent = "<report><projectTerms>";
             reportContent += "<header>The project contains:</header>";
             reportContent += "<noTerms>" + control.GetNumbersOfExtractedTerms().ToString() + "</noTerms>";
             reportContent += "<occurrences>" + settings.TermsOccurrencesSettings.ToString() + "</occurrences>";
             reportContent += "<length>" + settings.TermsLengthSettings.ToString() + "</length>";
             reportContent += "</projectTerms>";
             reportContent += "</report>";
+
+            return reportContent;
         }
 
         private void AddXMlToProject(IProject project, string xmlFolder, bool recursion)
@@ -71,17 +63,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             AutomaticTask scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
             AutomaticTask convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
             AutomaticTask copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
-        }
-
-        private bool CheckedXmlExists(IProject project, string xmlFilePath)
-        {
-            string xmlfileName = Path.GetFileName(xmlFilePath) + ".sdlxliff";
-            foreach (ProjectFile file in project.GetSourceLanguageFiles())
-            {
-                if (file.Name == xmlfileName) return true;
-            }
-
-            return false;
         }
     }
 }

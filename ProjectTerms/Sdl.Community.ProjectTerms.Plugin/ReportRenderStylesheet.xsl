@@ -7,10 +7,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <style type="text/css">
           body { font-family: arial, helvetica; font-size: 10pt }
-          .header { font-size: 14pt; font-weight: bold; color: navy}
-          .noTerms, occurrences, length { font-weight: normal }
+          span { padding-left: 30pt; }
+          .header { font-size: 14pt; font-weight: bold; color: navy; padding-left: 0pt;}
+          .noTerms, .occurrences, .length { font-weight: normal; padding-left: 5pt; }
           .label { font-weight: bold }
-          .infoTag { color: red; }
         </style>
       </head>
       <body bgcolor="white">
@@ -24,10 +24,6 @@
   <!-- ***********************************************************************-->
   <xsl:template match="projectTerms">
     <div>
-      <span class="infoTag">
-        <xsl:value-of select="infoTag"/>
-      </span>
-      <p/>
       <h2 class="header">
         <xsl:value-of select="header"/>
       </h2>
