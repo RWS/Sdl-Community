@@ -4,7 +4,6 @@ using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -14,6 +13,37 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
 {
     public class TermbaseGeneration : AbstractBilingualContentHandler
     {
+        private string termbasePath;
+        private void CleanLocalTempDirectory(string termbaseDefinitionPath)
+        {
+            string termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
+            File.Delete(termbaseDefinitionPath);
+            Directory.Delete(termbaseDefinitionDirectory);
+        }
+
+        public void SetTermbasePath()
+        {
+            ProjectInfo sdlProjectInfo = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo();
+            termbasePath =  Path.Combine(sdlProjectInfo.LocalProjectFolder + "\\Termbases" + "\\" + sdlProjectInfo.Name, "projectTerms.sdltb");
+        }
+
+        private Termbases ConnectToTermbaseLocalRepository()
+        {
+            MultiTerm.TMO.Interop.Application multiTermClientObject = new MultiTerm.TMO.Interop.Application();
+            TermbaseRepository localRepository = multiTermClientObject.LocalRepository;
+            localRepository.Connect("", "");
+            return localRepository.Termbases;
+        }
+
+        public ITermbase AddContentToExistedTermbase()
+        {
+            Termbases termbases = ConnectToTermbaseLocalRepository();
+            termbases.Add(termbasePath, "", "");
+            ITermbase termbase = termbases[0];
+            return termbase;
+        }
+
+
         /// <summary>
         /// Create a termbase and add it to Termbases file in sdl project.
         /// </summary>
@@ -21,19 +51,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         public ITermbase CreateTermbase(string termbaseDefinitionPath)
         {
-            // Prepare the thermbase local repository
-            MultiTerm.TMO.Interop.Application multiTermClientObject = new MultiTerm.TMO.Interop.Application();
-            TermbaseRepository localRepository = multiTermClientObject.LocalRepository;
-            localRepository.Connect("", "");
-            Termbases oTbs = localRepository.Termbases;
+            Termbases termbases = ConnectToTermbaseLocalRepository();
 
-            ProjectInfo sdlProjectInfo = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo();
-            string termbasePath = Path.Combine(sdlProjectInfo.LocalProjectFolder + "\\Termbases" + "\\" + sdlProjectInfo.Name, "projectTerms.sdltb");
+            SetTermbasePath();
             if (!Directory.Exists(Path.GetDirectoryName(termbasePath))) Directory.CreateDirectory(Path.GetDirectoryName(termbasePath));
-            if (File.Exists(termbasePath)) MessageBox.Show("Termbase exists.");
-            ITermbase oTb = oTbs.New("projectTermsTermbase", "Optional Description", termbaseDefinitionPath, termbasePath);
+            if (File.Exists(termbasePath)) return null;
 
-            return oTb;
+            ITermbase termbase = termbases.New("projectTermsTermbase", "Optional Description", termbaseDefinitionPath, termbasePath);
+
+            CleanLocalTempDirectory(termbaseDefinitionPath);
+            return termbase;
         }
 
         /// <summary>
@@ -70,7 +97,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// Add entries to a given termbase
         /// </summary>
         /// <param name="oTb"></param>
-        public void PopulateTermbase(ITermbase oTb)
+        public void PopulateTermbase(ITermbase termbase)
         {
             ProjectTermsExtractor extractor = new ProjectTermsExtractor();
             var selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
@@ -81,7 +108,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
             foreach (var item in bilingualContentPair.Keys)
             {
                 string entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item], selectedFile.Language);
-                Entries oEntries = oTb.Entries;
+                Entries oEntries = termbase.Entries;
                 oEntries.New(entry, true);
             }
         }

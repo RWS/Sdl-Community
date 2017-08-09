@@ -22,9 +22,13 @@ namespace Sdl.Community.ProjectTerms.Plugin
             TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbase.GetProjectLanguages());
 
             ITermbase oTb = termbase.CreateTermbase(termbaseDefinitionPath);
+            if (oTb == null)
+            {
+                termbase.SetTermbasePath();
+                termbase.AddContentToExistedTermbase();
+                return;
+            }
             termbase.PopulateTermbase(oTb);
-
-            MessageBox.Show("termbase creator!");
         }
     }
 }
