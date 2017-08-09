@@ -3,39 +3,54 @@ using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using System.Text;
+using Sdl.Community.ProjectTerms.Plugin.ExtractTerms;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsExtractor
     {
-        private List<string> terms;
+        private List<string> sourceTerms;
+        private Dictionary<string, string> bilingualContentPair;
         public IFileTypeManager FileTypeManager { get; set; }
 
         public ProjectTermsExtractor()
         {
-            terms = new List<string>();
+            sourceTerms = new List<string>();
+            bilingualContentPair = new Dictionary<string, string>();
             FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
+        }
+
+        public void ExtractBilingualContent(ProjectFile projectFile)
+        {
+            IMultiFileConverter converter = FileTypeManager.GetConverter(projectFile.LocalFilePath, (sender, e) => { });
+            TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
+            converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
+            converter.Parse();
+
+            for (int i = 0; i < extractor.SourceText.Count; i++)
+            {
+                if (extractor.SourceText[i] == "" || extractor.TargetText[i] == "") continue;
+                bilingualContentPair[extractor.SourceText[i].ToLower()] = extractor.TargetText[i].ToLower();
+            }
         }
 
         public void ExtractProjectFileTerms(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
             if (projectFile.Role != FileRole.Translatable) return;
 
-            FileTypeManager.SettingsBundle = Sdl.Core.Settings.SettingsUtil.CreateSettingsBundle(null);
-
+            FileTypeManager.SettingsBundle = Core.Settings.SettingsUtil.CreateSettingsBundle(null);
             // disable xliff validation to speed up things
             FileTypeManager.SettingsBundle.GetSettingsGroup("SDL XLIFF 1.0 v 1.0.0.0").GetSetting<bool>("ValidateXliff").Value = false;
 
-            TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
-
+            TextExtractionBilingualSourceContentHandler extractor = new TextExtractionBilingualSourceContentHandler();
             multiFileConverter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
             multiFileConverter.Parse();
 
-            foreach (var text in extractor.Text)
+            foreach (var text in extractor.SourceText)
             {
                 foreach (var term in GetTerms(text))
                 {
-                    terms.Add(term.ToLower());
+                    sourceTerms.Add(term.ToLower());
                 }
             }
         }
@@ -73,9 +88,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
             return terms;
         }
 
-        public List<string> GetProjectTerms()
+        public List<string> GetSourceTerms()
         {
-            return terms;
+            return sourceTerms;
+        }
+
+        public Dictionary<string, string> GetBilingualContentPair()
+        {
+            return bilingualContentPair;
         }
     }
 }

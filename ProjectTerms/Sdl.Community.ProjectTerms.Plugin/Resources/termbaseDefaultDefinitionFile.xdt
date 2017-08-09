@@ -1,0 +1,35 @@
+<Output>
+  <Object>
+    <Tree>
+      <Node ID="0">
+        <TextChild>Entry level</TextChild>
+        <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">0</NodeType>
+        <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+        <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+        <labels />
+        <description />
+        <Node ID="0">
+          <TextChild>Index level</TextChild>
+          <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</NodeType>
+          <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+          <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+          <labels />
+          <description />
+          <Node ID="0">
+            <TextChild>Term level</TextChild>
+            <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">3</NodeType>
+            <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+            <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+            <labels />
+            <description />
+          </Node>
+        </Node>
+      </Node>
+    </Tree>
+    <Languages>
+    </Languages>
+    <TerminologyFields>
+    </TerminologyFields>
+  </Object>
+  <Schema />
+</Output>

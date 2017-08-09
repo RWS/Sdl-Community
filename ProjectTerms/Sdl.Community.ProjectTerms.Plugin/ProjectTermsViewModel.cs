@@ -24,7 +24,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public void ExtractProjectTerms(int occurrences, int length, List<string> blackList, string projectPath)
         {
-            IEnumerable<string> terms = extractor.GetProjectTerms();
+            IEnumerable<string> terms = extractor.GetSourceTerms();
 
             Terms = terms
                 .FilterByBlackList(blackList)
