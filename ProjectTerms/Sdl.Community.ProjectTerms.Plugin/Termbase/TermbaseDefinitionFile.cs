@@ -1,5 +1,4 @@
-﻿using Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 

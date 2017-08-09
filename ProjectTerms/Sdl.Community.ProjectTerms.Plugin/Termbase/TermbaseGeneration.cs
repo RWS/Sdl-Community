@@ -4,12 +4,11 @@ using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin.Termbase
 {
@@ -22,6 +21,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         public ITermbase CreateTermbase(string termbaseDefinitionPath)
         {
+            // Prepare the thermbase local repository
             MultiTerm.TMO.Interop.Application multiTermClientObject = new MultiTerm.TMO.Interop.Application();
             TermbaseRepository localRepository = multiTermClientObject.LocalRepository;
             localRepository.Connect("", "");
@@ -54,57 +54,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
             return langs;
         }
 
-        private ConceptGrpLanguageGrp CreateLanguageGroup(string text, Language lang)
-        {
-            var termGrp = new ConceptGrpLanguageGrpTermGrp();
-            termGrp.Term = text;
-
-            var language = new ConceptGrpLanguageGrpLanguage();
-            language.Lang = lang.DisplayName.ToUpper();
-            language.Type = lang.IsoAbbreviation.ToUpper();
-
-
-            var languageGrp = new ConceptGrpLanguageGrp();
-            languageGrp.Language = language;
-            languageGrp.TermGrp = termGrp;
-
-            return languageGrp;
-        }
-
-        public static string Serialize(ConceptGrp dataToSerialize)
-        {
-            try
-            {
-                var stringwriter = new System.IO.StringWriter();
-                var serializer = new XmlSerializer(typeof(ConceptGrp));
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Encoding = new UnicodeEncoding(false, false); // no BOM in a .NET string
-                settings.Indent = true;
-                settings.OmitXmlDeclaration = true;
-
-                serializer.Serialize(stringwriter, dataToSerialize);
-                return stringwriter.ToString();
-            }
-            catch
-            {
-                throw;
-            }
-        }
-
         private string CreateEntry(string sourceText, Language sourceLang, string targetText, Language targetLang)
         {
-            var conceptGrp = new ConceptGrp();
-            conceptGrp.Concept = sbyte.Parse("-1");
-
-            ConceptGrpLanguageGrp[] languageGrp = new ConceptGrpLanguageGrp[] {
-                CreateLanguageGroup(sourceText, sourceLang),
-                CreateLanguageGroup(targetText, targetLang)
-            };
-
-            conceptGrp.LanguageGrp = languageGrp;
-            string result = Serialize(conceptGrp);
-            return result;
-            
+            return new XElement("conceptGrp",
+                    new XElement("languageGrp", 
+                        new XElement("language", new XAttribute("lang", sourceLang.IsoAbbreviation.ToUpper()), new XAttribute("type", sourceLang.DisplayName.ToUpper())),
+                        new XElement("termGrp", new XElement("term", sourceText))),
+                    new XElement("languageGrp",
+                        new XElement("language", new XAttribute("lang", targetLang.IsoAbbreviation.ToUpper()), new XAttribute("type", targetLang.DisplayName.ToUpper())),
+                        new XElement("termGrp", new XElement("term", targetText)))
+                ).ToString();
         }
 
         /// <summary>
@@ -119,13 +78,11 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
             extractor.ExtractBilingualContent(selectedFile);
 
             Dictionary<string, string> bilingualContentPair = extractor.GetBilingualContentPair();
-
-            Entries oEntries = oTb.Entries;
             foreach (var item in bilingualContentPair.Keys)
             {
                 string entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item], selectedFile.Language);
-
-                //oEntries.New(entry, true);
+                Entries oEntries = oTb.Entries;
+                oEntries.New(entry, true);
             }
         }
     }

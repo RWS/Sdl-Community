@@ -132,7 +132,6 @@
     <Compile Include="Termbase\TermbaseDefinitionFile.cs" />
     <Compile Include="Termbase\TermbaseGeneration.cs" />
     <Compile Include="Termbase\TermbaseGenerationAction.cs" />
-    <Compile Include="Termbase\XmlEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">
