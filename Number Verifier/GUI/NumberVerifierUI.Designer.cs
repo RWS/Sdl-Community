@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.panelNumberVerifierUI = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cb_Hindi = new System.Windows.Forms.CheckBox();
             this.tb_customsSeparators = new System.Windows.Forms.TextBox();
             this.cb_customSeparators = new System.Windows.Forms.CheckBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -91,7 +92,6 @@
             this.backgroundWorker2 = new System.ComponentModel.BackgroundWorker();
             this.targetMisBox = new System.Windows.Forms.GroupBox();
             this.targetOmitZero = new System.Windows.Forms.CheckBox();
-            this.cb_Hindi = new System.Windows.Forms.CheckBox();
             this.panelNumberVerifierUI.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox8.SuspendLayout();
@@ -144,6 +144,16 @@
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Number Verifier";
+            // 
+            // cb_Hindi
+            // 
+            this.cb_Hindi.AutoSize = true;
+            this.cb_Hindi.Location = new System.Drawing.Point(16, 112);
+            this.cb_Hindi.Name = "cb_Hindi";
+            this.cb_Hindi.Size = new System.Drawing.Size(142, 17);
+            this.cb_Hindi.TabIndex = 40;
+            this.cb_Hindi.Text = "Check for Hindi numbers";
+            this.cb_Hindi.UseVisualStyleBackColor = true;
             // 
             // tb_customsSeparators
             // 
@@ -821,18 +831,6 @@
             this.targetOmitZero.TabIndex = 0;
             this.targetOmitZero.Text = "Omit leading zero";
             this.targetOmitZero.UseVisualStyleBackColor = true;
-            // 
-            // cb_Hindi
-            // 
-            this.cb_Hindi.AutoSize = true;
-            this.cb_Hindi.Checked = true;
-            this.cb_Hindi.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cb_Hindi.Location = new System.Drawing.Point(16, 112);
-            this.cb_Hindi.Name = "cb_Hindi";
-            this.cb_Hindi.Size = new System.Drawing.Size(142, 17);
-            this.cb_Hindi.TabIndex = 40;
-            this.cb_Hindi.Text = "Check for Hindi numbers";
-            this.cb_Hindi.UseVisualStyleBackColor = true;
             // 
             // NumberVerifierUI
             // 
