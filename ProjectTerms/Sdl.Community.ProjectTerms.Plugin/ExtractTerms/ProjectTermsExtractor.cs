@@ -4,33 +4,59 @@ using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using System.Text;
 using Sdl.Community.ProjectTerms.Plugin.ExtractTerms;
+using System.Linq;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsExtractor
     {
         private List<string> sourceTerms;
-        private Dictionary<string, string> bilingualContentPair;
+        private Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair;
         public IFileTypeManager FileTypeManager { get; set; }
 
         public ProjectTermsExtractor()
         {
             sourceTerms = new List<string>();
-            bilingualContentPair = new Dictionary<string, string>();
+            bilingualContentPair = new Dictionary<string, List<KeyValuePair<string, string>>>();
             FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
         }
 
-        public void ExtractBilingualContent(ProjectFile projectFile)
+        private void AddItemToBilingualContentPair(string sourceText, string targetText, string targetLang)
         {
-            IMultiFileConverter converter = FileTypeManager.GetConverter(projectFile.LocalFilePath, (sender, e) => { });
-            TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
-            converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
-            converter.Parse();
-
-            for (int i = 0; i < extractor.SourceText.Count; i++)
+            if (bilingualContentPair.ContainsKey(sourceText))
             {
-                if (extractor.SourceText[i] == "" || extractor.TargetText[i] == "") continue;
-                bilingualContentPair[extractor.SourceText[i].ToLower()] = extractor.TargetText[i].ToLower();
+                List<KeyValuePair<string, string>> targetTerms = bilingualContentPair[sourceText];
+                if (targetTerms.Where(x => x.Key.Equals(targetText) && x.Value.Equals(targetLang)) == null) return;
+
+                if(targetTerms.Where(x => x.Key.Equals(targetText)) != null)
+                {
+                    targetTerms.Add(new KeyValuePair<string, string>(targetText, targetLang));
+                }
+            }
+            else
+            {
+                List<KeyValuePair<string, string>> targetTermsList = new List<KeyValuePair<string, string>>();
+                KeyValuePair<string, string> targetContent = new KeyValuePair<string, string>(targetText, targetLang);
+                targetTermsList.Add(targetContent);
+                bilingualContentPair.Add(sourceText, targetTermsList);
+            }
+        }
+
+        public void ExtractBilingualContent(ProjectFile[] targetFiles)
+        {
+            foreach (var file in targetFiles)
+            {
+                IMultiFileConverter converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
+                TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
+                converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
+                converter.Parse();
+
+                for (int i = 0; i < extractor.SourceText.Count; i++)
+                {
+                    if (extractor.SourceText[i] == "" || extractor.TargetText[i] == "") continue;
+                    AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
+                }
             }
         }
 
@@ -93,7 +119,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             return sourceTerms;
         }
 
-        public Dictionary<string, string> GetBilingualContentPair()
+        public Dictionary<string, List<KeyValuePair<string, string>>> GetBilingualContentPair()
         {
             return bilingualContentPair;
         }

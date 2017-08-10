@@ -1,15 +1,15 @@
 ﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.MultiTerm.TMO.Interop;
-using System.Windows.Forms;
 using System;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.Community.ProjectTerms.Plugin.Termbase;
+using System.Windows.Forms;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
-    [Action("TermbaseCreator", Name = "Generate Termbase", Description = "TermbaseCreator_Description")]
+    [Action("TermbaseGeneration", Name = "Generate Termbase", Description = "TermbaseGeneration_Description")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 2, DisplayType.Large)]
     public class TermbaseGenerationAction : AbstractViewControllerAction<FilesController>
     {
@@ -24,10 +24,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
             ITermbase oTb = termbase.CreateTermbase(termbaseDefinitionPath);
             if (oTb == null)
             {
-                termbase.SetTermbasePath();
-                termbase.AddContentToExistedTermbase();
+                MessageBox.Show("You already have a termbase!");
                 return;
             }
+
             termbase.PopulateTermbase(oTb);
         }
     }
