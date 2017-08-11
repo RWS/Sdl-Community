@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml;
 
-namespace Sdl.Community.ProjectTerms.Plugin.Termbase
+namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
     public class TermbaseDefinitionFile
     {

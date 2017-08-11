@@ -1,4 +1,5 @@
-﻿using Sdl.Core.Globalization;
+﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.MultiTerm.TMO.Interop;
 using Sdl.ProjectAutomation.Core;
@@ -11,7 +12,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
-namespace Sdl.Community.ProjectTerms.Plugin.Termbase
+namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
     public class TermbaseGeneration : AbstractBilingualContentHandler
     {
@@ -43,10 +44,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         private Termbases ConnectToTermbaseLocalRepository()
         {
-            var multiTermClientObject = new MultiTerm.TMO.Interop.Application();
-            var localRepository = multiTermClientObject.LocalRepository;
-            localRepository.Connect("", "");
-            return localRepository.Termbases;
+            try
+            {
+                var multiTermClientObject = new MultiTerm.TMO.Interop.Application();
+                var localRepository = multiTermClientObject.LocalRepository;
+                localRepository.Connect("", "");
+                return localRepository.Termbases;
+            } catch(Exception e)
+            {
+                throw new TermbaseGenerationException("Connection to termbase repository failed!");
+            }
         }
 
         /// <summary>
@@ -56,15 +63,21 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         public ITermbase CreateTermbase(string termbaseDefinitionPath)
         {
-            var termbases = ConnectToTermbaseLocalRepository();
+            try
+            {
+                var termbases = ConnectToTermbaseLocalRepository();
 
-            Settings();
-            if (File.Exists(termbasePath)) return null;
+                Settings();
+                if (File.Exists(termbasePath)) return null;
 
-            var termbase = termbases.New(Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, termbasePath);
+                var termbase = termbases.New(Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, termbasePath);
 
-            CleanLocalTempDirectory(termbaseDefinitionPath);
-            return termbase;
+                CleanLocalTempDirectory(termbaseDefinitionPath);
+                return termbase;
+            } catch (Exception e)
+            {
+                throw new TermbaseGenerationException("The termbase generation failed!");
+            }
         }
 
         /// <summary>
@@ -76,18 +89,24 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         private string CreateEntry(string sourceText, Language sourceLang, List<KeyValuePair<string, string>> targets)
         {
-            return new XElement("conceptGrp",
-                // Add source text
-                new XElement("languageGrp",
-                    new XElement("language", new XAttribute("lang", sourceLang.IsoAbbreviation.ToUpper()), new XAttribute("type", sourceLang.DisplayName.ToUpper())),
-                    new XElement("termGrp", new XElement("term", sourceText))),
-                // Add target texts
-                targets.Select(item => 
-                     new XElement("languageGrp",
-                        new XElement("language", new XAttribute("lang", langs[item.Value]), new XAttribute("type", item.Value)),
-                        new XElement("termGrp", new XElement("term", item.Key)))
-                )
-            ).ToString();
+            try
+            {
+                return new XElement("conceptGrp",
+                    // Add source text
+                    new XElement("languageGrp",
+                        new XElement("language", new XAttribute("lang", sourceLang.IsoAbbreviation.ToUpper()), new XAttribute("type", sourceLang.DisplayName.ToUpper())),
+                        new XElement("termGrp", new XElement("term", sourceText))),
+                    // Add target texts
+                    targets.Select(item =>
+                         new XElement("languageGrp",
+                            new XElement("language", new XAttribute("lang", langs[item.Value]), new XAttribute("type", item.Value)),
+                            new XElement("termGrp", new XElement("term", item.Key)))
+                    )
+                ).ToString();
+            } catch(Exception e)
+            {
+                throw new TermbaseGenerationException("XML entry is not correct!");
+            }
         }
 
         /// <summary>
@@ -96,19 +115,26 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <param name="oTb"></param>
         public void PopulateTermbase(ITermbase termbase)
         {
-            var extractor = new ProjectTermsExtractor();
-
-            var targetProjectFiles = project.GetTargetLanguageFiles();
-            var targetFilesReportedToSelectedFile = targetProjectFiles.Where(file => file.Name.Equals(selectedFile.Name));
-
-            extractor.ExtractBilingualContent(targetFilesReportedToSelectedFile.ToArray());
-
-            Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair = extractor.GetBilingualContentPair();
-            foreach (var item in bilingualContentPair.Keys)
+            try
             {
-                var entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item]);
-                var oEntries = termbase.Entries;
-                oEntries.New(entry, true);
+                var extractor = new ProjectTermsExtractor();
+
+                var targetProjectFiles = project.GetTargetLanguageFiles();
+                var targetFilesReportedToSelectedFile = targetProjectFiles.Where(file => file.Name.Equals(selectedFile.Name));
+
+                extractor.ExtractBilingualContent(targetFilesReportedToSelectedFile.ToArray());
+
+                Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair = extractor.GetBilingualContentPair();
+                foreach (var item in bilingualContentPair.Keys)
+                {
+                    var entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item]);
+                    var oEntries = termbase.Entries;
+                    oEntries.New(entry, true);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new TermbaseGenerationException("Population termbase was failed!");
             }
         }
 
