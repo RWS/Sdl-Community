@@ -15,16 +15,16 @@ namespace Sdl.Community.ProjectTerms.Plugin
     {
         protected override void Execute()
         {
-            TermbaseGeneration termbase = new TermbaseGeneration();
+            var termbase = new TermbaseGeneration();
 
-            string termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
-            string termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
+            var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
+            var termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
             TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbase.GetProjectLanguages());
 
-            ITermbase oTb = termbase.CreateTermbase(termbaseDefinitionPath);
+            var oTb = termbase.CreateTermbase(termbaseDefinitionPath);
             if (oTb == null)
             {
-                MessageBox.Show("You already have a termbase!");
+                MessageBox.Show("You already have a termbase for this file! Please remove it and generate it again!", "Generate termbase information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

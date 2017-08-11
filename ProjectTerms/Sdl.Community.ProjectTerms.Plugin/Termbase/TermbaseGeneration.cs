@@ -1,50 +1,50 @@
 ﻿using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.MultiTerm.TMO.Interop;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin.Termbase
 {
     public class TermbaseGeneration : AbstractBilingualContentHandler
     {
-        private string termbasePath;
         private FileBasedProject project;
+        private ProjectFile selectedFile;
+        private string termbasePath;
         private Dictionary<string, string> langs;
 
-        public TermbaseGeneration()
-        {
-            langs = new Dictionary<string, string>();
-        }
+        public TermbaseGeneration() { langs = new Dictionary<string, string>(); }
 
-        private void CleanLocalTempDirectory(string termbaseDefinitionPath)
-        {
-            string termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
-            File.Delete(termbaseDefinitionPath);
-            Directory.Delete(termbaseDefinitionDirectory);
-        }
-
-        private void SetDataMember()
+        private void Settings()
         {
             project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+            selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
 
+            #region extract studio version number
             var myDocumentsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //TO DO:
-            //var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
-            //var studioVersion = studioVersionService.GetStudioVersion().Version;
-            var selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
-            termbasePath = Path.Combine(myDocumentsPath + "\\Studio 2017" + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
+            var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
+            var studioVersion = studioVersionService.GetStudioVersion().PublicVersion;
+            var studioVersionNumber = Regex.Replace(studioVersion, "[^0-9]+", string.Empty);
+            #endregion
+
+            termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + studioVersionNumber + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
         }
 
+        /// <summary>
+        /// Connect to local termbase repository
+        /// </summary>
+        /// <returns></returns>
         private Termbases ConnectToTermbaseLocalRepository()
         {
-            MultiTerm.TMO.Interop.Application multiTermClientObject = new MultiTerm.TMO.Interop.Application();
-            TermbaseRepository localRepository = multiTermClientObject.LocalRepository;
+            var multiTermClientObject = new MultiTerm.TMO.Interop.Application();
+            var localRepository = multiTermClientObject.LocalRepository;
             localRepository.Connect("", "");
             return localRepository.Termbases;
         }
@@ -56,34 +56,24 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         public ITermbase CreateTermbase(string termbaseDefinitionPath)
         {
-            Termbases termbases = ConnectToTermbaseLocalRepository();
+            var termbases = ConnectToTermbaseLocalRepository();
 
-            SetDataMember();
+            Settings();
             if (File.Exists(termbasePath)) return null;
 
-            ITermbase termbase = termbases.New("projectTermsTermbase", "Optional Description", termbaseDefinitionPath, termbasePath);
+            var termbase = termbases.New(Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, termbasePath);
 
             CleanLocalTempDirectory(termbaseDefinitionPath);
             return termbase;
         }
 
         /// <summary>
-        /// Extract the project languages to include them in termbase
+        /// Create xml entry as string
         /// </summary>
+        /// <param name="sourceText"></param>
+        /// <param name="sourceLang"></param>
+        /// <param name="targets"></param>
         /// <returns></returns>
-        public Dictionary<string, string> GetProjectLanguages()
-        {
-            Language sourceLanguage = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().SourceLanguage;
-            langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
-            var targetLanguages = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().TargetLanguages;
-            foreach (var lang in targetLanguages)
-            {
-                langs[lang.DisplayName] = lang.IsoAbbreviation.ToUpper();
-            }
-
-            return langs;
-        }
-
         private string CreateEntry(string sourceText, Language sourceLang, List<KeyValuePair<string, string>> targets)
         {
             return new XElement("conceptGrp",
@@ -106,10 +96,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <param name="oTb"></param>
         public void PopulateTermbase(ITermbase termbase)
         {
-            ProjectTermsExtractor extractor = new ProjectTermsExtractor();
+            var extractor = new ProjectTermsExtractor();
 
             var targetProjectFiles = project.GetTargetLanguageFiles();
-            var selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
             var targetFilesReportedToSelectedFile = targetProjectFiles.Where(file => file.Name.Equals(selectedFile.Name));
 
             extractor.ExtractBilingualContent(targetFilesReportedToSelectedFile.ToArray());
@@ -117,10 +106,36 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
             Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair = extractor.GetBilingualContentPair();
             foreach (var item in bilingualContentPair.Keys)
             {
-                string entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item]);
-                Entries oEntries = termbase.Entries;
+                var entry = CreateEntry(item, selectedFile.SourceFile.Language, bilingualContentPair[item]);
+                var oEntries = termbase.Entries;
                 oEntries.New(entry, true);
             }
+        }
+
+        private void CleanLocalTempDirectory(string termbaseDefinitionPath)
+        {
+            var termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
+            File.Delete(termbaseDefinitionPath);
+            Directory.Delete(termbaseDefinitionDirectory);
+        }
+
+        /// <summary>
+        /// Extract the project languages to include them in termbase
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetProjectLanguages()
+        {
+            if (project == null) Settings();
+
+            var sourceLanguage = project.GetProjectInfo().SourceLanguage;
+            langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
+            var targetLanguages = project.GetProjectInfo().TargetLanguages;
+            foreach (var lang in targetLanguages)
+            {
+                langs[lang.DisplayName] = lang.IsoAbbreviation.ToUpper();
+            }
+
+            return langs;
         }
     }
 }

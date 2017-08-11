@@ -13,7 +13,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <returns></returns>
         public static string GetResourceTextFile(string fileName)
         {
-            string result = string.Empty;
+            var result = string.Empty;
 
             using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
             {
@@ -31,11 +31,11 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <param name="content"></param>
         public static string SaveTermbaseDefinitionToTempLocation(string content)
         {
-            string tempLocationPath = Path.GetTempPath();
-            string termbaseDefinitionPath = Path.Combine(tempLocationPath + "Termbases", "termbaseDefinition.xdt");
+            var tempLocationPath = Path.GetTempPath();
+            var termbaseDefinitionPath = Path.Combine(tempLocationPath + "Termbases", "termbaseDefinition.xdt");
             CreateDirectory(termbaseDefinitionPath);
 
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.LoadXml(content);
             doc.Save(termbaseDefinitionPath);
 
@@ -48,7 +48,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <param name="termbaseDefinitionPath"></param>
         public static void CreateDirectory(string termbaseDefinitionPath)
         {
-            string termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
+            var termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
 
             if (!Directory.Exists(termbaseDefinitionDirectory))
             {
@@ -70,10 +70,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Termbase
         /// <param name="langs"></param>
         public static void AddLanguages(string termbaseDefinitionPath, Dictionary<string, string> langs)
         {
-            XmlDocument doc = new XmlDocument();
+            var doc = new XmlDocument();
             doc.Load(termbaseDefinitionPath);
 
-            XmlNode langTag = doc.GetElementsByTagName("Languages")[0];
+            var langTag = doc.GetElementsByTagName("Languages")[0];
             foreach (var lang in langs.Keys)
             {
                 var nodeItemLocale = doc.CreateNode(XmlNodeType.Element, "ItemLocale", null);

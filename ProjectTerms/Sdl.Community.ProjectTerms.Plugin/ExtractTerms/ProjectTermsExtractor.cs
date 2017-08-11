@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Text;
 using Sdl.Community.ProjectTerms.Plugin.ExtractTerms;
 using System.Linq;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -54,7 +53,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
                 for (int i = 0; i < extractor.SourceText.Count; i++)
                 {
-                    if (extractor.SourceText[i] == "" || extractor.TargetText[i] == "") continue;
+                    if (string.IsNullOrWhiteSpace(extractor.SourceText[i]) || string.IsNullOrWhiteSpace(extractor.TargetText[i])) continue;
                     AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
                 }
             }
