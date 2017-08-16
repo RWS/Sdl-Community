@@ -474,6 +474,8 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
+			var errorListResult = new List<ErrorReporting>();
+
 			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 			var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
 
@@ -493,6 +495,23 @@ namespace Sdl.Community.NumberVerifier
 			errorList.AddRange(errorsListFromAlphanumerics);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 
+			// find duplicate error message which contains 'm' instead of '-' sign and add to errorListResult list.
+			foreach (var errorItem in errorList)
+			{
+				if(Regex.IsMatch(errorItem.SourceNumberIssues, @"(^(m)[0-9])"))
+				{
+					var erItem = errorList.Where(e => e.SourceNumberIssues == errorItem.SourceNumberIssues).FirstOrDefault();
+					errorListResult.Add(erItem);
+				}
+			}
+			// remove each errorListResult item from errorList
+			if (errorListResult.Any())
+			{
+				foreach (var item in errorListResult)
+				{
+					errorList.Remove(item);
+				}
+			}
 			return errorList;
 		}
 
