@@ -1,11 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Resources;
 using System.Xml;
 
 namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
     public class TermbaseDefinitionFile
     {
+        private static ResourceManager rm = new ResourceManager("Sdl.Community.ProjectTerms.Plugin.PluginResources", Assembly.GetExecutingAssembly());
+
         /// <summary>
         /// Extract the content from embedded resource file 
         /// </summary>
@@ -13,16 +19,24 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         /// <returns></returns>
         public static string GetResourceTextFile(string fileName)
         {
-            var result = string.Empty;
-
-            using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
+            try
             {
-                using (StreamReader sr = new StreamReader(stream))
+                var result = string.Empty;
+
+                using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
                 {
-                    result = sr.ReadToEnd();
+                    using (StreamReader sr = new StreamReader(stream))
+                    {
+                        result = sr.ReadToEnd();
+                    }
                 }
+
+                return result;
             }
-            return result;
+            catch (Exception e)
+            {
+                throw new TermbaseDefinitionException("Extraction from embedded resource file failed!\n" + e.Message);
+            }
         }
 
         /// <summary>
@@ -31,35 +45,22 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         /// <param name="content"></param>
         public static string SaveTermbaseDefinitionToTempLocation(string content)
         {
-            var tempLocationPath = Path.GetTempPath();
-            var termbaseDefinitionPath = Path.Combine(tempLocationPath + "Termbases", "termbaseDefinition.xdt");
-            CreateDirectory(termbaseDefinitionPath);
-
-            var doc = new XmlDocument();
-            doc.LoadXml(content);
-            doc.Save(termbaseDefinitionPath);
-
-            return termbaseDefinitionPath;
-        }
-
-        /// <summary>
-        /// Create a directory. If already exists will remove its content
-        /// </summary>
-        /// <param name="termbaseDefinitionPath"></param>
-        public static void CreateDirectory(string termbaseDefinitionPath)
-        {
-            var termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
-
-            if (!Directory.Exists(termbaseDefinitionDirectory))
+            try
             {
-                Directory.CreateDirectory(termbaseDefinitionDirectory);
+                var tempLocationPath = Path.GetTempPath();
+                var termbaseDefinitionPath = Path.Combine(tempLocationPath + "Termbases", "termbaseDefinition.xdt");
+                Utils.Utils.CreateDirectory(Path.GetDirectoryName(termbaseDefinitionPath));
+
+                var doc = new XmlDocument();
+                doc.LoadXml(content);
+                doc.Save(termbaseDefinitionPath);
+
+                return termbaseDefinitionPath;
             }
-            else
+            catch (Exception e)
             {
-                foreach (var file in Directory.GetFiles(termbaseDefinitionDirectory))
-                {
-                    File.Delete(file);
-                }
+
+                throw new TermbaseDefinitionException("Storing termbase definition file locally failed!\n" + e.Message);
             }
         }
 
@@ -70,22 +71,30 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         /// <param name="langs"></param>
         public static void AddLanguages(string termbaseDefinitionPath, Dictionary<string, string> langs)
         {
-            var doc = new XmlDocument();
-            doc.Load(termbaseDefinitionPath);
-
-            var langTag = doc.GetElementsByTagName("Languages")[0];
-            foreach (var lang in langs.Keys)
+            try
             {
-                var nodeItemLocale = doc.CreateNode(XmlNodeType.Element, "ItemLocale", null);
-                nodeItemLocale.InnerText = langs[lang];
-                langTag.AppendChild(nodeItemLocale);
+                var doc = new XmlDocument();
+                doc.Load(termbaseDefinitionPath);
 
-                var nodeItemText = doc.CreateNode(XmlNodeType.Element, "ItemText", null);
-                nodeItemText.InnerText = lang;
-                langTag.AppendChild(nodeItemText);
+                var langTag = doc.GetElementsByTagName("Languages")[0];
+                foreach (var lang in langs.Keys)
+                {
+                    var nodeItemLocale = doc.CreateNode(XmlNodeType.Element, "ItemLocale", null);
+                    nodeItemLocale.InnerText = langs[lang];
+                    langTag.AppendChild(nodeItemLocale);
+
+                    var nodeItemText = doc.CreateNode(XmlNodeType.Element, "ItemText", null);
+                    nodeItemText.InnerText = lang;
+                    langTag.AppendChild(nodeItemText);
+                }
+
+                doc.Save(termbaseDefinitionPath);
             }
+            catch (Exception e)
+            {
 
-            doc.Save(termbaseDefinitionPath);
+                throw new TermbaseDefinitionException("Adding languages to termbase definition file failed!\n" + e.Message);
+            }
         }
     }
 }

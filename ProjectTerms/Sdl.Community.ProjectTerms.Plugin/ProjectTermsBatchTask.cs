@@ -4,6 +4,9 @@ using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
 using Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML;
 using System.IO;
+using System;
+using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using System.Windows.Forms;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -38,9 +41,16 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public override void TaskComplete()
         {
-            control.ExtractProjectTerms(settings);
-            AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
-            CreateReport("Project terms", "Project terms report", GenerateReport());
+            try
+            {
+                control.ExtractProjectTerms(settings);
+                AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
+                CreateReport("Project terms", "Project terms report", GenerateReport());
+            }
+            catch (ProjectTermsException e)
+            {
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK);
+            }
         }
 
         private string GenerateReport()
@@ -58,11 +68,20 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         private void AddXMlToProject(IProject project, string xmlFolder, bool recursion)
         {
-            project.AddFolderWithFiles(xmlFolder, recursion);
-            ProjectFile[] projectFiles = project.GetSourceLanguageFiles();
-            AutomaticTask scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-            AutomaticTask convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
-            AutomaticTask copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
+            try
+            {
+                project.AddFolderWithFiles(xmlFolder, recursion);
+                ProjectFile[] projectFiles = project.GetSourceLanguageFiles();
+                AutomaticTask scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+                AutomaticTask convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                AutomaticTask copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
+
+                Utils.Utils.RemoveDirectory(xmlFolder);
+            }
+            catch (Exception e)
+            {
+                throw new ProjectTermsException("Add xml file in the Studio project failed!\n" + e.Message);
+            }
         }
     }
 }

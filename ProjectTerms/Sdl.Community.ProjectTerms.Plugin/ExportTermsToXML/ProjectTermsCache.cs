@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.ProjectTerms.Controls.Interfaces;
+using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,39 +12,31 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
     {
         public void Save(string projectPath, IEnumerable<ITerm> terms)
         {
-            XDocument doc = new XDocument();
-            doc.Add(
-                new XElement("projectTerms",
-                    new XElement("terms",
-                        from term in terms
-                        select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
-                );
+            try
+            {
+                XDocument doc = new XDocument();
+                doc.Add(
+                    new XElement("projectTerms",
+                        new XElement("terms",
+                            from term in terms
+                            select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
+                    );
 
-            CreateCacheDirectory(projectPath);
-            string cacheFile = GetXMLFilePath(projectPath);
+                Utils.Utils.CreateDirectory(Path.GetDirectoryName(GetXMLFilePath(projectPath)));
+                string cacheFile = GetXMLFilePath(projectPath);
 
-            doc.Save(cacheFile);
+                doc.Save(cacheFile);
+            }
+            catch (Exception e)
+            {
+
+                throw new ProjectTermsException("The xml file failed to be saved!\n" + e.Message);
+            }
         }
 
         public static string GetXMLFilePath(string projectPath)
         {
             return Path.Combine(projectPath + "\\tmp", "ProjectTerms_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
-        }
-
-        private void CreateCacheDirectory(string projectPath)
-        {
-            string tmpDirectoryPath = Path.GetDirectoryName(GetXMLFilePath(projectPath));
-
-            if (!Directory.Exists(tmpDirectoryPath))
-            {
-                Directory.CreateDirectory(tmpDirectoryPath);
-            } else
-            {
-                foreach (var file in Directory.GetFiles(tmpDirectoryPath))
-                {
-                    File.Delete(file);
-                }
-            }
         }
     }
 }

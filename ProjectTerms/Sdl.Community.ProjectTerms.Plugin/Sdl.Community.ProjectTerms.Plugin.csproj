@@ -116,6 +116,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exceptions\ProjectTermsException.cs" />
+    <Compile Include="Exceptions\TermbaseDefinitionException.cs" />
     <Compile Include="Exceptions\TermbaseGenerationException.cs" />
     <Compile Include="Exceptions\UploadTermbaseException.cs" />
     <Compile Include="ExportTermsToXML\ProjectTermsCache.cs" />
@@ -138,6 +140,7 @@
     <Compile Include="TermbaseIntegrationAction\TermbaseDefinitionFile.cs" />
     <Compile Include="TermbaseIntegrationAction\TermbaseGeneration.cs" />
     <Compile Include="TermbaseIntegrationAction\TermbaseGenerationAction.cs" />
+    <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="PluginResources.resx">

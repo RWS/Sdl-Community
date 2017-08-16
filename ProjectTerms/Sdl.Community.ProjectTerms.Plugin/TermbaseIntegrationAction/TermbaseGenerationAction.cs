@@ -30,24 +30,36 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)
                 {
-                    MessageBox.Show("You already have a termbase for this file! Please remove it and generate it again!", "Generate termbase information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    DisplayErrorMessage("You already have a termbase for this file! Please remove it and generate it again!", "Termbase information");
                     return;
                 }
 
                 termbaseCreator.PopulateTermbase(termbase);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator);
+                DisplayErrorMessage("Your termbase was successfully added to the project!", "Termbase information");
+            }
+            catch(ProjectTermsException e)
+            {
+                DisplayErrorMessage(e.Message, "Error");
+            }
+            catch(TermbaseDefinitionException e)
+            {
+                DisplayErrorMessage(e.Message, "Error");
             }
             catch (TermbaseGenerationException e)
             {
-
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DisplayErrorMessage(e.Message, "Error");
             }
             catch(UploadTermbaseException e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
+                DisplayErrorMessage(e.Message, "Error");
             }
+        }
+
+        private void DisplayErrorMessage(string message, string title)
+        {
+            MessageBox.Show(message, title, MessageBoxButtons.OK);
         }
 
         private void IncludeTermbaseInStudio(ITermbase termbase, TermbaseGeneration termbaseCreator)
@@ -69,7 +81,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 project.UpdateTermbaseConfiguration(termbaseConfig);
             } catch(Exception e)
             {
-                throw new UploadTermbaseException("Including termbase to Studio error!");
+                throw new UploadTermbaseException("Including termbase to Studio error!\n" + e.Message);
             }
         }
     }

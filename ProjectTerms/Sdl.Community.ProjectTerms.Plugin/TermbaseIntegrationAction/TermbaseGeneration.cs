@@ -25,17 +25,25 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
         private void Settings()
         {
-            project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-            selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
+            try
+            {
+                project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+                selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
 
-            #region extract studio version number
-            var myDocumentsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
-            var studioVersion = studioVersionService.GetStudioVersion().PublicVersion;
-            var studioVersionNumber = Regex.Replace(studioVersion, "[^0-9]+", string.Empty);
-            #endregion
+                #region extract studio version number
+                var myDocumentsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
+                var studioVersion = studioVersionService.GetStudioVersion().PublicVersion;
+                var studioVersionNumber = Regex.Replace(studioVersion, "[^0-9]+", string.Empty);
+                #endregion
 
-            termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + studioVersionNumber + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
+                termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + studioVersionNumber + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
+            }
+            catch (Exception e)
+            {
+
+                throw new TermbaseGenerationException("Termbase generation settings failed!\n" + e.Message);
+            }
         }
 
         /// <summary>
@@ -52,7 +60,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 return localRepository.Termbases;
             } catch(Exception e)
             {
-                throw new TermbaseGenerationException("Connection to termbase repository failed!");
+                throw new TermbaseGenerationException("Connection to termbase repository failed!\n" + e.Message);
             }
         }
 
@@ -72,11 +80,11 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
                 var termbase = termbases.New(Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath), "Optional Description", termbaseDefinitionPath, termbasePath);
 
-                CleanLocalTempDirectory(termbaseDefinitionPath);
+                Utils.Utils.RemoveDirectory(Path.GetDirectoryName(termbaseDefinitionPath));
                 return termbase;
             } catch (Exception e)
             {
-                throw new TermbaseGenerationException("The termbase generation failed!");
+                throw new TermbaseGenerationException("The termbase generation failed!\n" + e.Message);
             }
         }
 
@@ -105,7 +113,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 ).ToString();
             } catch(Exception e)
             {
-                throw new TermbaseGenerationException("XML entry is not correct!");
+                throw new TermbaseGenerationException("XML entry creation failed!\n" + e.Message);
             }
         }
 
@@ -134,15 +142,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-                throw new TermbaseGenerationException("Population termbase was failed!");
+                throw new TermbaseGenerationException("Population termbase failed!\n" + e.Message);
             }
-        }
-
-        private void CleanLocalTempDirectory(string termbaseDefinitionPath)
-        {
-            var termbaseDefinitionDirectory = Path.GetDirectoryName(termbaseDefinitionPath);
-            File.Delete(termbaseDefinitionPath);
-            Directory.Delete(termbaseDefinitionDirectory);
         }
 
         /// <summary>
@@ -151,17 +152,25 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         /// <returns></returns>
         public Dictionary<string, string> GetProjectLanguages()
         {
-            if (project == null) Settings();
-
-            var sourceLanguage = project.GetProjectInfo().SourceLanguage;
-            langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
-            var targetLanguages = project.GetProjectInfo().TargetLanguages;
-            foreach (var lang in targetLanguages)
+            try
             {
-                langs[lang.DisplayName] = lang.IsoAbbreviation.ToUpper();
-            }
+                if (project == null) Settings();
 
-            return langs;
+                var sourceLanguage = project.GetProjectInfo().SourceLanguage;
+                langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
+                var targetLanguages = project.GetProjectInfo().TargetLanguages;
+                foreach (var lang in targetLanguages)
+                {
+                    langs[lang.DisplayName] = lang.IsoAbbreviation.ToUpper();
+                }
+
+                return langs;
+            }
+            catch (Exception e)
+            {
+
+                throw new TermbaseGenerationException("Extract the project languages failed!\n" + e.Message);
+            }
         }
     }
 }

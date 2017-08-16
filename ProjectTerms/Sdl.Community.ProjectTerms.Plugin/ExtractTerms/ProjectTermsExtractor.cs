@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using Sdl.Community.ProjectTerms.Plugin.ExtractTerms;
 using System.Linq;
+using System;
+using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -44,39 +46,55 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public void ExtractBilingualContent(ProjectFile[] targetFiles)
         {
-            foreach (var file in targetFiles)
+            try
             {
-                IMultiFileConverter converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
-                TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
-                converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
-                converter.Parse();
-
-                for (int i = 0; i < extractor.SourceText.Count; i++)
+                foreach (var file in targetFiles)
                 {
-                    if (string.IsNullOrWhiteSpace(extractor.SourceText[i]) || string.IsNullOrWhiteSpace(extractor.TargetText[i])) continue;
-                    AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
+                    IMultiFileConverter converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
+                    TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
+                    converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
+                    converter.Parse();
+
+                    for (int i = 0; i < extractor.SourceText.Count; i++)
+                    {
+                        if (string.IsNullOrWhiteSpace(extractor.SourceText[i]) || string.IsNullOrWhiteSpace(extractor.TargetText[i])) continue;
+                        AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+
+                throw new ProjectTermsException("Extraction .sdlxliff content failed!\n" + e.Message);
             }
         }
 
         public void ExtractProjectFileTerms(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
-            if (projectFile.Role != FileRole.Translatable) return;
-
-            FileTypeManager.SettingsBundle = Core.Settings.SettingsUtil.CreateSettingsBundle(null);
-            // disable xliff validation to speed up things
-            FileTypeManager.SettingsBundle.GetSettingsGroup("SDL XLIFF 1.0 v 1.0.0.0").GetSetting<bool>("ValidateXliff").Value = false;
-
-            TextExtractionBilingualSourceContentHandler extractor = new TextExtractionBilingualSourceContentHandler();
-            multiFileConverter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
-            multiFileConverter.Parse();
-
-            foreach (var text in extractor.SourceText)
+            try
             {
-                foreach (var term in GetTerms(text))
+                if (projectFile.Role != FileRole.Translatable) return;
+
+                FileTypeManager.SettingsBundle = Core.Settings.SettingsUtil.CreateSettingsBundle(null);
+                // disable xliff validation to speed up things
+                FileTypeManager.SettingsBundle.GetSettingsGroup("SDL XLIFF 1.0 v 1.0.0.0").GetSetting<bool>("ValidateXliff").Value = false;
+
+                TextExtractionBilingualSourceContentHandler extractor = new TextExtractionBilingualSourceContentHandler();
+                multiFileConverter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
+                multiFileConverter.Parse();
+
+                foreach (var text in extractor.SourceText)
                 {
-                    sourceTerms.Add(term.ToLower());
+                    foreach (var term in GetTerms(text))
+                    {
+                        sourceTerms.Add(term.ToLower());
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+
+                throw new ProjectTermsException("Extraction .sdlxliff content failed!\n" + e.Message);
             }
         }
 
