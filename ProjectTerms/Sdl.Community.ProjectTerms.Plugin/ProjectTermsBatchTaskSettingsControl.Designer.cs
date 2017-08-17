@@ -8,6 +8,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
             this.buttonResetList = new System.Windows.Forms.Button();
             this.numericUpDownTermsLength = new System.Windows.Forms.NumericUpDown();
@@ -22,8 +24,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.buttonLoad = new System.Windows.Forms.Button();
-            this.buttonSave = new System.Windows.Forms.Button();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -54,6 +54,26 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.groupBoxFilters.TabIndex = 2;
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Text = "Project terms filters";
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(201, 204);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(130, 23);
+            this.buttonSave.TabIndex = 18;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // buttonLoad
+            // 
+            this.buttonLoad.Location = new System.Drawing.Point(201, 175);
+            this.buttonLoad.Name = "buttonLoad";
+            this.buttonLoad.Size = new System.Drawing.Size(130, 23);
+            this.buttonLoad.TabIndex = 17;
+            this.buttonLoad.Text = "Load";
+            this.buttonLoad.UseVisualStyleBackColor = true;
+            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
             // 
             // buttonDelete
             // 
@@ -154,12 +174,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // listViewBlackList
             // 
             this.listViewBlackList.FullRowSelect = true;
-            this.listViewBlackList.GridLines = true;
-            this.listViewBlackList.Columns.Add("Terms", 150);
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewBlackList.Columns.Add("Terms", 178);
             this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
             this.listViewBlackList.Name = "listViewBlackList";
-            this.listViewBlackList.Size = new System.Drawing.Size(185, 190);
+            this.listViewBlackList.Size = new System.Drawing.Size(182, 190);
             this.listViewBlackList.TabIndex = 0;
             this.listViewBlackList.UseCompatibleStateImageBehavior = false;
             this.listViewBlackList.View = System.Windows.Forms.View.Details;
@@ -167,26 +186,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // buttonLoad
-            // 
-            this.buttonLoad.Location = new System.Drawing.Point(201, 175);
-            this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(130, 23);
-            this.buttonLoad.TabIndex = 17;
-            this.buttonLoad.Text = "Load";
-            this.buttonLoad.UseVisualStyleBackColor = true;
-            this.buttonLoad.Click += new System.EventHandler(this.buttonLoad_Click);
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Location = new System.Drawing.Point(201, 204);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(130, 23);
-            this.buttonSave.TabIndex = 18;
-            this.buttonSave.Text = "Save";
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // ProjectTermsBatchTaskSettingsControl
             // 
