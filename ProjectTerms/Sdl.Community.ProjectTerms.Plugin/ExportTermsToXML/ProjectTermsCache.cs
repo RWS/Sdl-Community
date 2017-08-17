@@ -29,8 +29,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
             }
             catch (Exception e)
             {
-
-                throw new ProjectTermsException("The xml file failed to be saved!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_Save + e.Message);
             }
         }
 

@@ -11,7 +11,7 @@ using System.Windows.Forms;
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     [AutomaticTask("Coding.ProjectTerms.BatchTask",
-        "Project Terms",
+        "Extract Project Terms",
         "Export project terms according the following criteria...",
         GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
     [AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
@@ -33,7 +33,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
-            if (projectFiles.Contains(projectFile.Name)) return;
+            var projectTermsFileName = Path.GetFileNameWithoutExtension(ProjectTermsCache.GetXMLFilePath(control.ProjectPath));
+            var projectTermsStartFileName = projectTermsFileName.Split('_');
+            if (projectFiles.Contains(projectFile.Name) || projectFile.Name.Contains(projectTermsStartFileName[0])) return;
 
             control.ExtractProjectFileTerms(projectFile, multiFileConverter);
             projectFiles.Add(projectFile.Name);
@@ -49,7 +51,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (ProjectTermsException e)
             {
-                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK);
+                MessageBox.Show(e.Message, PluginResources.MessageType_Error, MessageBoxButtons.OK);
             }
         }
 
@@ -80,7 +82,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (Exception e)
             {
-                throw new ProjectTermsException("Add xml file in the Studio project failed!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_AddXMlToProject + e.Message);
             }
         }
     }

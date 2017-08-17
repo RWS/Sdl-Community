@@ -23,8 +23,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             }
             catch (Exception e)
             {
-
-                throw new ProjectTermsException("The folder failed to remove!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_RemoveDirectory + e.Message);
             }
         }
 
@@ -44,7 +43,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             catch (Exception e)
             {
 
-                throw new ProjectTermsException("The folder failed to create!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_CreateDirectory + e.Message);
             }
         }
     }

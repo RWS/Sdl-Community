@@ -64,8 +64,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (Exception e)
             {
-
-                throw new ProjectTermsException("Extraction .sdlxliff content failed!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message);
             }
         }
 
@@ -93,8 +92,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (Exception e)
             {
-
-                throw new ProjectTermsException("Extraction .sdlxliff content failed!\n" + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message);
             }
         }
 

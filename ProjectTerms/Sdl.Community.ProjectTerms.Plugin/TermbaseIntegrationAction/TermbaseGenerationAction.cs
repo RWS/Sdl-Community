@@ -10,6 +10,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.Core.Globalization;
 using System.Globalization;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Community.ProjectTerms.Plugin;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -30,30 +31,30 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)
                 {
-                    DisplayErrorMessage("You already have a termbase for this file! Please remove it and generate it again!", "Termbase information");
+                    DisplayErrorMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
                     return;
                 }
 
                 termbaseCreator.PopulateTermbase(termbase);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator);
-                DisplayErrorMessage("Your termbase was successfully added to the project!", "Termbase information");
+                DisplayErrorMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
             }
             catch(ProjectTermsException e)
             {
-                DisplayErrorMessage(e.Message, "Error");
+                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch(TermbaseDefinitionException e)
             {
-                DisplayErrorMessage(e.Message, "Error");
+                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch (TermbaseGenerationException e)
             {
-                DisplayErrorMessage(e.Message, "Error");
+                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch(UploadTermbaseException e)
             {
-                DisplayErrorMessage(e.Message, "Error");
+                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
             }
         }
 
@@ -81,7 +82,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 project.UpdateTermbaseConfiguration(termbaseConfig);
             } catch(Exception e)
             {
-                throw new UploadTermbaseException("Including termbase to Studio error!\n" + e.Message);
+                throw new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message);
             }
         }
     }

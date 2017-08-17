@@ -23,6 +23,14 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 
         public TermbaseGeneration() { langs = new Dictionary<string, string>(); }
 
+        private void CheckedTermbaseDirectoryExists(string termbasePath)
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(termbasePath)))
+            {
+                Utils.Utils.CreateDirectory(Path.GetDirectoryName(termbasePath));
+            }
+        }
+
         private void Settings()
         {
             try
@@ -38,11 +46,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 #endregion
 
                 termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + studioVersionNumber + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
+
+                CheckedTermbaseDirectoryExists(termbasePath);
             }
             catch (Exception e)
             {
-
-                throw new TermbaseGenerationException("Termbase generation settings failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_Settings + e.Message);
             }
         }
 
@@ -54,13 +63,13 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         {
             try
             {
-                var multiTermClientObject = new MultiTerm.TMO.Interop.Application();
+                var multiTermClientObject = new Application();
                 var localRepository = multiTermClientObject.LocalRepository;
                 localRepository.Connect("", "");
                 return localRepository.Termbases;
             } catch(Exception e)
             {
-                throw new TermbaseGenerationException("Connection to termbase repository failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_ConnectToTermbaseLocalRepository + e.Message);
             }
         }
 
@@ -84,7 +93,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 return termbase;
             } catch (Exception e)
             {
-                throw new TermbaseGenerationException("The termbase generation failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_CreateTermbase + e.Message);
             }
         }
 
@@ -113,7 +122,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 ).ToString();
             } catch(Exception e)
             {
-                throw new TermbaseGenerationException("XML entry creation failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_CreateEntry + e.Message);
             }
         }
 
@@ -142,7 +151,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-                throw new TermbaseGenerationException("Population termbase failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_PopulateTermbase + e.Message);
             }
         }
 
@@ -168,8 +177,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-
-                throw new TermbaseGenerationException("Extract the project languages failed!\n" + e.Message);
+                throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
             }
         }
     }

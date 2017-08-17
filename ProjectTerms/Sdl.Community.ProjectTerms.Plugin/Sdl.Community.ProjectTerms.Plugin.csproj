@@ -123,6 +123,11 @@
     <Compile Include="ExportTermsToXML\ProjectTermsCache.cs" />
     <Compile Include="ExtractTerms\PlainTextExtractor.cs" />
     <Compile Include="ExtractTerms\TextExtractionBilingualContentHandler.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ProjectTermsBatchTask.cs" />
     <Compile Include="ProjectTermsBatchTaskSettings.cs" />
     <Compile Include="ProjectTermsBatchTaskSettingsControl.cs">
@@ -143,9 +148,11 @@
     <Compile Include="Utils\Utils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="PluginResources.resx">
+    <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
-    </Content>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="Resources\termbaseDefaultDefinitionFile.xdt" />
     <EmbeddedResource Include="ReportRenderStylesheet.xsl" />

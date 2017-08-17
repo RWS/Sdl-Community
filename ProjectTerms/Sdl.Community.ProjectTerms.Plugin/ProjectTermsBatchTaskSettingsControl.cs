@@ -73,7 +73,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             if (listViewBlackList.FindItemWithText(term) != null)
             {
                 textBoxTerm.Text = "";
-                MessageBox.Show("Term already exists!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -102,13 +102,13 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             if (listViewBlackList.Items.Count == 0)
             {
-                MessageBox.Show("Your list is empty!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(PluginResources.MessageContent_buttonDelete_Empty, PluginResources.MessageType_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             if (listViewBlackList.SelectedItems.Count == 0)
             {
-                MessageBox.Show("Please select at least one term!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(PluginResources.MessageContent_buttonDelete_Select, PluginResources.MessageType_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -143,7 +143,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             string blackListFilePath = GenerateBlackListPath();
             if (!File.Exists(blackListFilePath))
             {
-                MessageBox.Show("Blacklist is not define!", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(PluginResources.MessageContent_buttonLoad, PluginResources.MessageType_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 

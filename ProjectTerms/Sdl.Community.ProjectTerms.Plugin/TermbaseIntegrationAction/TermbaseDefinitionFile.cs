@@ -2,16 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Resources;
 using System.Xml;
 
 namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
     public class TermbaseDefinitionFile
     {
-        private static ResourceManager rm = new ResourceManager("Sdl.Community.ProjectTerms.Plugin.PluginResources", Assembly.GetExecutingAssembly());
-
         /// <summary>
         /// Extract the content from embedded resource file 
         /// </summary>
@@ -35,7 +31,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-                throw new TermbaseDefinitionException("Extraction from embedded resource file failed!\n" + e.Message);
+                throw new TermbaseDefinitionException(PluginResources.Error_GetResourceTextFile + e.Message);
             }
         }
 
@@ -59,8 +55,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-
-                throw new TermbaseDefinitionException("Storing termbase definition file locally failed!\n" + e.Message);
+                throw new TermbaseDefinitionException(PluginResources.Error_SaveTermbaseDefinitionToTempLocation + e.Message);
             }
         }
 
@@ -92,8 +87,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
-
-                throw new TermbaseDefinitionException("Adding languages to termbase definition file failed!\n" + e.Message);
+                throw new TermbaseDefinitionException(PluginResources.Error_AddLanguages + e.Message);
             }
         }
     }
