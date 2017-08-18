@@ -20,6 +20,14 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         private ProjectFile selectedFile;
         private string termbasePath;
         private Dictionary<string, string> langs;
+        private readonly Dictionary<string, string> supportedStudioVersions = new Dictionary<string, string>
+        {
+            {"Studio2", "SDL Studio 2011"},
+            {"Studio3", "SDL Studio 2014"},
+            {"Studio4", "SDL Studio 2015"},
+            {"Studio5", "SDL Studio 2017"},
+            {"Studio6", "SDL Studio Next"} //update with correct names
+        };
 
         public TermbaseGeneration() { langs = new Dictionary<string, string>(); }
 
@@ -31,21 +39,33 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
         }
 
+        private string GetStudioVersion()
+        {
+            var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
+
+            var studioInstallPath = (studioVersionService.GetStudioVersion().InstallPath).Split('\\');
+            var version = "";
+            foreach (var item in studioInstallPath)
+            {
+                if (item.StartsWith("Studio"))
+                {
+                    version = item;
+                    break;
+                }
+            }
+
+            return Regex.Replace(supportedStudioVersions[version], "[^0-9]+", string.Empty);
+        }
+
         private void Settings()
         {
             try
             {
                 project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
-
-                #region extract studio version number
                 var myDocumentsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                var studioVersionService = new Toolkit.Core.Services.StudioVersionService();
-                var studioVersion = studioVersionService.GetStudioVersion().PublicVersion;
-                var studioVersionNumber = Regex.Replace(studioVersion, "[^0-9]+", string.Empty);
-                #endregion
 
-                termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + studioVersionNumber + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
+                termbasePath = Path.Combine(myDocumentsPath + "\\Studio " + GetStudioVersion() + "\\Termbases", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
 
                 CheckedTermbaseDirectoryExists(termbasePath);
             }
