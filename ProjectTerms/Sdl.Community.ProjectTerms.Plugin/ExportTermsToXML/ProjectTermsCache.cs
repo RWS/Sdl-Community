@@ -35,7 +35,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 
         public static string GetXMLFilePath(string projectPath)
         {
-            return Path.Combine(projectPath + "\\tmp", "ProjectTerms_" + DateTime.Now.ToString("yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
+            return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath) + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
         }
     }
 }
