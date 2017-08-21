@@ -475,6 +475,8 @@ namespace Sdl.Community.NumberVerifier
 		{
 			var errorList = new List<ErrorReporting>();
 			var errorListResult = new List<ErrorReporting>();
+			var hindiNumbers = GetHindiNumbers();
+			var hindiVerificationList = new List<string>();
 
 			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 			var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
@@ -1094,12 +1096,26 @@ namespace Sdl.Community.NumberVerifier
 							if (hindiNumbers.ContainsValue(s.ToString()))
 							{
 								//add arabic values to result 
-								sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key);
+								if (sourceResult.Contains(s))
+								{
+									sourceResult = sourceResult.Insert(sourceGroup.LastIndexOf(s), hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key);
+								}
+								else
+								{
+									sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key);
+								}
 							}
 							else
 							{
-								// add separator like , or .
-								sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), s.ToString());
+								// add separator like , or . (or just the number)
+								if (sourceResult.Contains(s))
+								{
+									sourceResult = sourceResult.Insert(sourceGroup.LastIndexOf(s), s.ToString());
+								}
+								else
+								{
+									sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), s.ToString());
+								}
 							}
 						}
 						sourceGroupResult = sourceGroupResult + " " + sourceResult;
@@ -1122,12 +1138,26 @@ namespace Sdl.Community.NumberVerifier
 							if (hindiNumbers.ContainsValue(t.ToString()))
 							{
 								//add arabic values to result 
-								targetResult = targetResult.Insert(targetGroup.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
+								if (targetResult.Contains(t))
+								{
+									targetResult = targetResult.Insert(targetGroup.LastIndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
+								}
+								else
+								{
+									targetResult = targetResult.Insert(targetGroup.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
+								}
 							}
 							else
 							{
-								// add separator like , or .
-								targetResult = targetResult.Insert(targetGroup.IndexOf(t), t.ToString());
+								// add separator like , or . (or just the number)
+								if (targetResult.Contains(t))
+								{
+									targetResult = targetResult.Insert(targetGroup.LastIndexOf(t), t.ToString());
+								}
+								else
+								{
+									targetResult = targetResult.Insert(targetGroup.IndexOf(t), t.ToString());
+								}
 							}
 						}
 						targetGroupResult = targetGroupResult + " " + targetResult;
@@ -1200,6 +1230,10 @@ namespace Sdl.Community.NumberVerifier
 							numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
 						}
 					}
+				}
+				if (numberRes.TargetText.IndexOf(".,") != -1)
+				{
+					numberRes.TargetText = Regex.Replace(numberRes.TargetText, "\\.+\\,+", ".");
 				}
 				result.Add(new NumberModel
 				{
