@@ -488,6 +488,7 @@ namespace Sdl.Community.NumberVerifier
 				foreach (var targetRes in result)
 				{
 					errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
+					errorList.AddRange(errorsListFromNormalizedNumbers);
 				}
 			}
 			else
