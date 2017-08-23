@@ -377,6 +377,15 @@ namespace Sdl.Community.NumberVerifier
 				sourceAlphanumericsList,
 				targetAlphanumericsList);
 
+			if (numberResults.SourceNumbers.Any())
+			{
+				numberResults.SourceNumbers[0] = sourceText;
+			}
+			if (numberResults.TargetNumbers.Any())
+			{
+				numberResults.TargetNumbers[0] = targetText;
+			}
+
 			var alphanumericErrorComposer = new AlphanumericErrorComposer();
 			var verifyProcessor = alphanumericErrorComposer.Compose();
 
@@ -474,7 +483,7 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var errorListResult = new List<ErrorReporting>();
+			var errorListAlphanumericsResult = new List<ErrorReporting>();
 			var hindiNumbers = GetHindiNumbers();
 			var hindiVerificationList = new List<string>();
 
@@ -495,26 +504,17 @@ namespace Sdl.Community.NumberVerifier
 			{
 				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
 			}
-			errorList.AddRange(errorsListFromAlphanumerics);
+
+			foreach (var error in errorsListFromAlphanumerics)
+			{
+				error.SourceNumberIssues = sourceText;
+				error.TargetNumberIssues = targetText;	
+				errorListAlphanumericsResult.Add(error);
+			}			
+
+			errorList.AddRange(errorListAlphanumericsResult);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 
-			// find duplicate error message which contains 'm' instead of '-' sign and add to errorListResult list.
-			foreach (var errorItem in errorList)
-			{
-				if(Regex.IsMatch(errorItem.SourceNumberIssues, @"(^(m)[0-9])"))
-				{
-					var erItem = errorList.Where(e => e.SourceNumberIssues == errorItem.SourceNumberIssues).FirstOrDefault();
-					errorListResult.Add(erItem);
-				}
-			}
-			// remove each errorListResult item from errorList
-			if (errorListResult.Any())
-			{
-				foreach (var item in errorListResult)
-				{
-					errorList.Remove(item);
-				}
-			}
 			return errorList;
 		}
 
