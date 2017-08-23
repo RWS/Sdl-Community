@@ -61,7 +61,6 @@ namespace Sdl.Community.NumberVerifier
             _Control.ExcludeTagText = _ControlSettings.ExcludeTagText;
 			_Control.CustomsSeparatorsAlphanumerics = _ControlSettings.CustomsSeparatorsAlphanumerics;
 			_Control.HindiNumberVerification = _ControlSettings.HindiNumberVerification;
-
 			_Control.AllowLocalizations = _ControlSettings.AllowLocalizations;
             _Control.PreventLocalizations = _ControlSettings.PreventLocalizations;
             _Control.RequireLocalizations = _ControlSettings.RequireLocalizations;
@@ -102,7 +101,6 @@ namespace Sdl.Community.NumberVerifier
 		}
 
         #endregion
-
 
 
         // Reset the values on the UI control.

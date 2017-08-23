@@ -377,6 +377,15 @@ namespace Sdl.Community.NumberVerifier
 				sourceAlphanumericsList,
 				targetAlphanumericsList);
 
+			if (numberResults.SourceNumbers.Any())
+			{
+				numberResults.SourceNumbers[0] = sourceText;
+			}
+			if (numberResults.TargetNumbers.Any())
+			{
+				numberResults.TargetNumbers[0] = targetText;
+			}
+
 			var alphanumericErrorComposer = new AlphanumericErrorComposer();
 			var verifyProcessor = alphanumericErrorComposer.Compose();
 
@@ -474,7 +483,9 @@ namespace Sdl.Community.NumberVerifier
 		public List<ErrorReporting> CheckSourceAndTarget(string sourceText, string targetText)
 		{
 			var errorList = new List<ErrorReporting>();
-			var errorListResult = new List<ErrorReporting>();
+			var errorListAlphanumericsResult = new List<ErrorReporting>();
+			var hindiNumbers = GetHindiNumbers();
+			var hindiVerificationList = new List<string>();
 
 			IEnumerable<ErrorReporting> errorsListFromNormalizedNumbers = Enumerable.Empty<ErrorReporting>();
 			var errorsListFromAlphanumerics = CheckAlphanumerics(sourceText, targetText);
@@ -486,32 +497,24 @@ namespace Sdl.Community.NumberVerifier
 				foreach (var targetRes in result)
 				{
 					errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
+					errorList.AddRange(errorsListFromNormalizedNumbers);
 				}
 			}
 			else
 			{
 				errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
 			}
-			errorList.AddRange(errorsListFromAlphanumerics);
+
+			foreach (var error in errorsListFromAlphanumerics)
+			{
+				error.SourceNumberIssues = sourceText;
+				error.TargetNumberIssues = targetText;	
+				errorListAlphanumericsResult.Add(error);
+			}			
+
+			errorList.AddRange(errorListAlphanumericsResult);
 			errorList.AddRange(errorsListFromNormalizedNumbers);
 
-			// find duplicate error message which contains 'm' instead of '-' sign and add to errorListResult list.
-			foreach (var errorItem in errorList)
-			{
-				if(Regex.IsMatch(errorItem.SourceNumberIssues, @"(^(m)[0-9])"))
-				{
-					var erItem = errorList.Where(e => e.SourceNumberIssues == errorItem.SourceNumberIssues).FirstOrDefault();
-					errorListResult.Add(erItem);
-				}
-			}
-			// remove each errorListResult item from errorList
-			if (errorListResult.Any())
-			{
-				foreach (var item in errorListResult)
-				{
-					errorList.Remove(item);
-				}
-			}
 			return errorList;
 		}
 
@@ -1071,6 +1074,7 @@ namespace Sdl.Community.NumberVerifier
 			var _projectController = GetProjectController();
 
 			List<NumberModel> result = new List<NumberModel>();
+			StringBuilder sb = new StringBuilder();
 
 			if (_projectController.CurrentProject != null)
 			{
@@ -1094,16 +1098,17 @@ namespace Sdl.Community.NumberVerifier
 							if (hindiNumbers.ContainsValue(s.ToString()))
 							{
 								//add arabic values to result 
-								sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key);
+								sourceResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == s.ToString()).Key).ToString();
 							}
 							else
 							{
-								// add separator like , or .
-								sourceResult = sourceResult.Insert(sourceGroup.IndexOf(s), s.ToString());
+								// add separator like , or . (or just the number)
+								sourceResult = sb.Append(s.ToString()).ToString();
 							}
 						}
 						sourceGroupResult = sourceGroupResult + " " + sourceResult;
 						sourceResult = string.Empty;
+						sb.Clear();
 					}
 					result = GetFormatedNumbers(sourceGroupResult, targetGroups);
 				}
@@ -1122,16 +1127,17 @@ namespace Sdl.Community.NumberVerifier
 							if (hindiNumbers.ContainsValue(t.ToString()))
 							{
 								//add arabic values to result 
-								targetResult = targetResult.Insert(targetGroup.IndexOf(t), hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key);
+								targetResult = sb.Append(hindiNumbers.FirstOrDefault(h => h.Value == t.ToString()).Key).ToString();
 							}
 							else
 							{
-								// add separator like , or .
-								targetResult = targetResult.Insert(targetGroup.IndexOf(t), t.ToString());
+								// add separator like , or . (or just the number)
+								targetResult = sb.Append(t.ToString()).ToString();
 							}
 						}
 						targetGroupResult = targetGroupResult + " " + targetResult;
 						targetResult = string.Empty;
+						sb.Clear();
 					}
 					result = GetFormatedNumbers(targetGroupResult, sourceGroups);
 				}
@@ -1168,37 +1174,44 @@ namespace Sdl.Community.NumberVerifier
 			// add thousand separator or decimal separtor in the target text as it is in the source text where needed
 			foreach (var numberRes in res)
 			{
-				// add . separator in the translated number as it is in the source number(this change will work only for valid verification)
-				// source: the converted hindi to arabic/just arabic(depending on source langauge) and target; (arabic/converted hindi to arabic)
-				// valid ex: source: 1234,56 => target: 1.234,56/1,234.56 or source: 1.234,56 => target: 1.234,56 
-				// invalid ex: soruce: 1234,56  => target: 12.34,56
-				if (numberRes.SourceText.Contains("."))
+				if (!string.IsNullOrEmpty(numberRes.TargetText))
 				{
-					var sourceTextIndex = numberRes.SourceText.IndexOf(".");
-					if (!numberRes.TargetText.Contains("."))
+					// add . separator in the translated number as it is in the source number(this change will work only for valid verification)
+					// source: the converted hindi to arabic/just arabic(depending on source langauge) and target; (arabic/converted hindi to arabic)
+					// valid ex: source: 1234,56 => target: 1.234,56/1,234.56 or source: 1.234,56 => target: 1.234,56 
+					// invalid ex: soruce: 1234,56  => target: 12.34,56
+					if (numberRes.SourceText.Contains("."))
 					{
-						numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ".");
-					}
-				}
-				if (numberRes.SourceText.Contains(","))
-				{
-					var sourceTextIndex = numberRes.SourceText.IndexOf(",");
-					if (!numberRes.TargetText.Contains(","))
-					{
-						numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
-					}
-					else
-					{
-						// Scenario of translation from Hindi to Arabic: ١٢٣٤,٨٩ => 1.234,56 or 1,234.56 should be valid.
-						// in scenario: ١٢٣٤,٨٩ => 1,234.56, the Hindi number is converted to 1234,56
-						// in the above code the . separator is added where it should be
-						// in the the bellow code, the , separator is moved at the right place
-						// so the target result it will be 1,234.56 for verification.
-						if (numberRes.TargetText.IndexOf(",.") != -1)
+						var sourceTextIndex = numberRes.SourceText.IndexOf(".");
+						if (!numberRes.TargetText.Contains("."))
 						{
-							numberRes.TargetText = Regex.Replace(numberRes.TargetText, ",+\\.+", ".");
+							numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ".");
+						}
+					}
+					if (numberRes.SourceText.Contains(","))
+					{
+						var sourceTextIndex = numberRes.SourceText.IndexOf(",");
+						if (!numberRes.TargetText.Contains(","))
+						{
 							numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
 						}
+						else
+						{
+							// Scenario of translation from Hindi to Arabic: ١٢٣٤,٨٩ => 1.234,56 or 1,234.56 should be valid.
+							// in scenario: ١٢٣٤,٨٩ => 1,234.56, the Hindi number is converted to 1234,56
+							// in the above code the . separator is added where it should be
+							// in the the bellow code, the , separator is moved at the right place
+							// so the target result it will be 1,234.56 for verification.
+							if (numberRes.TargetText.IndexOf(",.") != -1)
+							{
+								numberRes.TargetText = Regex.Replace(numberRes.TargetText, ",+\\.+", ".");
+								numberRes.TargetText = numberRes.TargetText.Insert(sourceTextIndex, ",");
+							}
+						}
+					}
+					if (numberRes.TargetText.IndexOf(".,") != -1)
+					{
+						numberRes.TargetText = Regex.Replace(numberRes.TargetText, "\\.+\\,+", ".");
 					}
 				}
 				result.Add(new NumberModel
