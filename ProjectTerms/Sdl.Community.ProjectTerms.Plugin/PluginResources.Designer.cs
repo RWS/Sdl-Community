@@ -61,6 +61,24 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to _project.
+        /// </summary>
+        public static string Constant_ProjectType {
+            get {
+                return ResourceManager.GetString("Constant_ProjectType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SingleFile.
+        /// </summary>
+        public static string Constant_ProjectTypeContent {
+            get {
+                return ResourceManager.GetString("Constant_ProjectTypeContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding languages to termbase definition file failed!.
         /// </summary>
         public static string Error_AddLanguages {
@@ -196,6 +214,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Project Terms cannot be used on a single file project. Please create a standard Studio project and try again..
+        /// </summary>
+        public static string Error_SingleFileProject {
+            get {
+                return ResourceManager.GetString("Error_SingleFileProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your termbase was successfully added to the project!.
         /// </summary>
         public static string Info_SuccessfullyAdded {
@@ -246,6 +273,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string MessageContent_buttonLoad {
             get {
                 return ResourceManager.GetString("MessageContent_buttonLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot skip the setting part.
+        /// </summary>
+        public static string MessageContent_SkipSettings {
+            get {
+                return ResourceManager.GetString("MessageContent_SkipSettings", resourceCulture);
             }
         }
         

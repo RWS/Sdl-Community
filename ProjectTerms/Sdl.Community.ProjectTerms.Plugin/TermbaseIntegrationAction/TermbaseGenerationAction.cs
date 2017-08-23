@@ -67,20 +67,38 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
         {
             try
             {
+                #region TbConfig
                 var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
-                var studioTermbase = new LocalTermbase(termbase._Path);
                 TermbaseConfiguration termbaseConfig = project.GetTermbaseConfiguration();
-                termbaseConfig.Termbases.Add(studioTermbase);
+                #endregion
 
+                #region AddTb
+                var studioTermbase = new LocalTermbase(termbase._Path);
+                termbaseConfig.Termbases.Add(studioTermbase);
+                #endregion
+
+                #region TermRecOptions
+                TermRecognitionOptions options = termbaseConfig.TermRecognitionOptions;
+                options.MinimumMatchValue = 50;
+                options.SearchDepth = 200;
+                options.ShowWithNoAvailableTranslation = false;
+                options.SearchOrder = TermbaseSearchOrder.Hierarchical;
+                #endregion
+
+                #region TermbaseLanguageIndex
                 var langs = termbaseCreator.GetProjectLanguages();
                 termbaseConfig.LanguageIndexes.Clear();
                 foreach (var lang in langs.Keys)
                 {
                     termbaseConfig.LanguageIndexes.Add(new TermbaseLanguageIndex(new Language(CultureInfo.GetCultureInfo(langs[lang])), lang));
                 }
+                #endregion
 
+                #region UpdateTermbaseConfiguration
                 project.UpdateTermbaseConfiguration(termbaseConfig);
-            } catch(Exception e)
+                #endregion
+            }
+            catch (Exception e)
             {
                 throw new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message);
             }

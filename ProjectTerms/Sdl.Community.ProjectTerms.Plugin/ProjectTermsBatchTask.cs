@@ -7,6 +7,9 @@ using System.IO;
 using System;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using System.Windows.Forms;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.ProjectAutomation.FileBased;
+using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -21,9 +24,12 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private HashSet<string> projectFiles;
         private ProjectTermsBatchTaskSettingsControl control;
         private ProjectTermsBatchTaskSettings settings;
+        private bool fileIncluded = false;
 
         protected override void OnInitializeTask()
         {
+            if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
+
             base.OnInitializeTask();
 
             projectFiles = new HashSet<string>();
@@ -33,9 +39,17 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
+            if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
+
             var projectTermsFileName = Path.GetFileNameWithoutExtension(ProjectTermsCache.GetXMLFilePath(control.ProjectPath));
             var projectTermsStartFileName = projectTermsFileName.Split('_');
-            if (projectFiles.Contains(projectFile.Name) || projectFile.Name.Contains(projectTermsStartFileName[0])) return;
+            if (projectFiles.Contains(projectFile.Name)) return;
+
+            if (projectFile.Name.Contains(projectTermsStartFileName[0]))
+            {
+                fileIncluded = true;
+                return;
+            }
 
             control.ExtractProjectFileTerms(projectFile, multiFileConverter);
             projectFiles.Add(projectFile.Name);
@@ -45,9 +59,28 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
-                control.ExtractProjectTerms(settings);
+                if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
+
+                if (settings.BlackListSettings == null)
+                {
+                    MessageBox.Show(PluginResources.MessageContent_SkipSettings, PluginResources.MessageType_Info);
+                    return;
+                }
+                
+                if (fileIncluded)
+                {
+                    string path = ProjectTermsCache.GetXMLFilePath(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder);
+                    Utils.Utils.CreateDirectory(Path.GetDirectoryName(path));
+                    XDocument doc = new XDocument(new XDeclaration("1.0", "utf-8", null));
+                    doc.Add(new XElement("projectTerms", string.Empty));
+                    doc.Save(path);
+                } else
+                {
+                    control.ExtractProjectTerms(settings);
+                    CreateReport("Project terms", "Project terms report", GenerateReport());
+                }
+
                 AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
-                CreateReport("Project terms", "Project terms report", GenerateReport());
             }
             catch (ProjectTermsException e)
             {

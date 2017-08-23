@@ -16,10 +16,18 @@ namespace Sdl.Community.ProjectTerms.Plugin
         public ProjectTermsViewModel ViewModel { get; set; }
         public ProjectTermsBatchTaskSettings Settings { get; set; }
         public string ProjectPath { get; set; }
+        public static bool ControlDisabled { get; set; }
 
         public ProjectTermsBatchTaskSettingsControl()
         {
+            if (ControlDisabled)
+            {
+                MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Error);
+                return;
+            }
+
             InitializeComponent();
+
             ViewModel = new ProjectTermsViewModel();
             ProjectPath = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder;
 
@@ -28,6 +36,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         protected override void OnLoad(EventArgs e)
         {
+            if (ControlDisabled) return;
+
             Settings.ResetToDefaults();
             base.OnLoad(e);
             SetSettings(Settings);

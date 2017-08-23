@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Constant_ProjectType" xml:space="preserve">
+    <value>_project</value>
+  </data>
+  <data name="Constant_ProjectTypeContent" xml:space="preserve">
+    <value>SingleFile</value>
+  </data>
   <data name="Error_AddLanguages" xml:space="preserve">
     <value>Adding languages to termbase definition file failed!</value>
   </data>
@@ -162,6 +168,9 @@
   <data name="Error_Settings" xml:space="preserve">
     <value>Termbase generation settings failed!</value>
   </data>
+  <data name="Error_SingleFileProject" xml:space="preserve">
+    <value>Project Terms cannot be used on a single file project. Please create a standard Studio project and try again.</value>
+  </data>
   <data name="Info_SuccessfullyAdded" xml:space="preserve">
     <value>Your termbase was successfully added to the project!</value>
   </data>
@@ -179,6 +188,9 @@
   </data>
   <data name="MessageContent_buttonLoad" xml:space="preserve">
     <value>Blacklist is not define!</value>
+  </data>
+  <data name="MessageContent_SkipSettings" xml:space="preserve">
+    <value>You cannot skip the setting part</value>
   </data>
   <data name="MessageTitle" xml:space="preserve">
     <value>Termbase information</value>

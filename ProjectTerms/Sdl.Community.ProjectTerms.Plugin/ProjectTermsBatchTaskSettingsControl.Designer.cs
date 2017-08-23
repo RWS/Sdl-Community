@@ -24,6 +24,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.checkBoxRegex = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.buttonWordCloud = new System.Windows.Forms.Button();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -33,6 +36,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // groupBoxFilters
             // 
+            this.groupBoxFilters.Controls.Add(this.buttonWordCloud);
+            this.groupBoxFilters.Controls.Add(this.label2);
+            this.groupBoxFilters.Controls.Add(this.checkBoxRegex);
             this.groupBoxFilters.Controls.Add(this.buttonSave);
             this.groupBoxFilters.Controls.Add(this.buttonLoad);
             this.groupBoxFilters.Controls.Add(this.buttonDelete);
@@ -50,7 +56,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.groupBoxFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.groupBoxFilters.Location = new System.Drawing.Point(3, 3);
             this.groupBoxFilters.Name = "groupBoxFilters";
-            this.groupBoxFilters.Size = new System.Drawing.Size(581, 346);
+            this.groupBoxFilters.Size = new System.Drawing.Size(581, 410);
             this.groupBoxFilters.TabIndex = 2;
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Text = "Project terms filters";
@@ -175,7 +181,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             this.listViewBlackList.FullRowSelect = true;
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listViewBlackList.Columns.Add("Terms", 178);
             this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
             this.listViewBlackList.Name = "listViewBlackList";
             this.listViewBlackList.Size = new System.Drawing.Size(182, 190);
@@ -187,11 +192,39 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // checkBoxRegex
+            // 
+            this.checkBoxRegex.AutoSize = true;
+            this.checkBoxRegex.Location = new System.Drawing.Point(358, 55);
+            this.checkBoxRegex.Name = "checkBoxRegex";
+            this.checkBoxRegex.Size = new System.Drawing.Size(132, 17);
+            this.checkBoxRegex.TabIndex = 19;
+            this.checkBoxRegex.Text = "Use regex expressions";
+            this.checkBoxRegex.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Location = new System.Drawing.Point(5, 337);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(571, 2);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "labelSeparator1";
+            // 
+            // buttonWordCloud
+            // 
+            this.buttonWordCloud.Location = new System.Drawing.Point(5, 362);
+            this.buttonWordCloud.Name = "buttonWordCloud";
+            this.buttonWordCloud.Size = new System.Drawing.Size(161, 23);
+            this.buttonWordCloud.TabIndex = 21;
+            this.buttonWordCloud.Text = "Preview the extracted terms";
+            this.buttonWordCloud.UseVisualStyleBackColor = true;
+            // 
             // ProjectTermsBatchTaskSettingsControl
             // 
             this.Controls.Add(this.groupBoxFilters);
             this.Name = "ProjectTermsBatchTaskSettingsControl";
-            this.Size = new System.Drawing.Size(587, 400);
+            this.Size = new System.Drawing.Size(587, 425);
             this.groupBoxFilters.ResumeLayout(false);
             this.groupBoxFilters.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).EndInit();
@@ -220,5 +253,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private Button buttonDelete;
         private Button buttonSave;
         private Button buttonLoad;
+        private Label label2;
+        private CheckBox checkBoxRegex;
+        private Button buttonWordCloud;
     }
 }
