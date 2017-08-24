@@ -11,6 +11,8 @@ using Sdl.Core.Globalization;
 using System.Globalization;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Plugin;
+using System.IO;
+using Sdl.Community.ProjectTerms.Plugin.Utils;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -31,39 +33,45 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)
                 {
-                    DisplayErrorMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
+                    DisplayMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
                     return;
                 }
 
                 termbaseCreator.PopulateTermbase(termbase);
 
-                IncludeTermbaseInStudio(termbase, termbaseCreator);
-                DisplayErrorMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
+                string termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.FilePath), "Tb");
+                Utils.CreateDirectory(termbaseDirectoryPath);
+                string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
+                File.Copy(termbase._Path, termbasePath);
+
+                IncludeTermbaseInStudio(termbase, termbaseCreator, termbasePath);
+
+                DisplayMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
             }
             catch(ProjectTermsException e)
             {
-                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
+                DisplayMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch(TermbaseDefinitionException e)
             {
-                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
+                DisplayMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch (TermbaseGenerationException e)
             {
-                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
+                DisplayMessage(e.Message, PluginResources.MessageType_Error);
             }
             catch(UploadTermbaseException e)
             {
-                DisplayErrorMessage(e.Message, PluginResources.MessageType_Error);
+                DisplayMessage(e.Message, PluginResources.MessageType_Error);
             }
         }
 
-        private void DisplayErrorMessage(string message, string title)
+        private void DisplayMessage(string message, string title)
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK);
         }
 
-        private void IncludeTermbaseInStudio(ITermbase termbase, TermbaseGeneration termbaseCreator)
+        private void IncludeTermbaseInStudio(ITermbase termbase, TermbaseGeneration termbaseCreator, string termbasePath)
         {
             try
             {
@@ -73,7 +81,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 #endregion
 
                 #region AddTb
-                var studioTermbase = new LocalTermbase(termbase._Path);
+                var studioTermbase = new LocalTermbase(termbasePath);
                 termbaseConfig.Termbases.Add(studioTermbase);
                 #endregion
 
@@ -81,7 +89,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 TermRecognitionOptions options = termbaseConfig.TermRecognitionOptions;
                 options.MinimumMatchValue = 50;
                 options.SearchDepth = 200;
-                options.ShowWithNoAvailableTranslation = false;
+                options.ShowWithNoAvailableTranslation = true;
                 options.SearchOrder = TermbaseSearchOrder.Hierarchical;
                 #endregion
 
