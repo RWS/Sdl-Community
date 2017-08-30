@@ -178,6 +178,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The regex expression is not valid! Please review once again!.
+        /// </summary>
+        public static string Error_Regex {
+            get {
+                return ResourceManager.GetString("Error_Regex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The folder failed to remove!.
         /// </summary>
         public static string Error_RemoveDirectory {

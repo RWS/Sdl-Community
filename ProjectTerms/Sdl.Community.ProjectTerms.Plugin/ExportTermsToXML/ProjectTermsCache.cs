@@ -20,11 +20,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                         new XElement("terms",
                             from term in terms
                             select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
-                    );
+                );
 
                 Utils.Utils.CreateDirectory(Path.GetDirectoryName(GetXMLFilePath(projectPath)));
-                string cacheFile = GetXMLFilePath(projectPath);
-
+                var cacheFile = GetXMLFilePath(projectPath);
                 doc.Save(cacheFile);
             }
             catch (Exception e)
@@ -36,6 +35,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
         public static string GetXMLFilePath(string projectPath)
         {
             return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath) + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
+        }
+
+        public static string GetExistedFileName(string directoryPath)
+        {
+            var files = Directory.GetFiles(directoryPath);
+            return files.Count() == 1 ? Path.GetFileName(files.FirstOrDefault()) : string.Empty;
         }
     }
 }

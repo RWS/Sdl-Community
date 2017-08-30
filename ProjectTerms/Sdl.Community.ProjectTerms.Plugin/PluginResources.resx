@@ -204,4 +204,7 @@
   <data name="Plugin_Name" xml:space="preserve">
     <value>Sdl.Community.ProjectTerms.Plugin</value>
   </data>
+  <data name="Error_Regex" xml:space="preserve">
+    <value>The regex expression is not valid! Please review once again!</value>
+  </data>
 </root>

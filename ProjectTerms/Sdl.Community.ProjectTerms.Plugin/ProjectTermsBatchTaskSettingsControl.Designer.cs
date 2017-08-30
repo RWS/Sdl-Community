@@ -8,6 +8,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
+            this.buttonWordCloud = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.checkBoxRegex = new System.Windows.Forms.CheckBox();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonLoad = new System.Windows.Forms.Button();
             this.buttonDelete = new System.Windows.Forms.Button();
@@ -24,9 +27,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.checkBoxRegex = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.buttonWordCloud = new System.Windows.Forms.Button();
+            this.labelErrorRegex = new System.Windows.Forms.Label();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -36,6 +37,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // groupBoxFilters
             // 
+            this.groupBoxFilters.Controls.Add(this.labelErrorRegex);
             this.groupBoxFilters.Controls.Add(this.buttonWordCloud);
             this.groupBoxFilters.Controls.Add(this.label2);
             this.groupBoxFilters.Controls.Add(this.checkBoxRegex);
@@ -61,9 +63,39 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Text = "Project terms filters";
             // 
+            // buttonWordCloud
+            // 
+            this.buttonWordCloud.Location = new System.Drawing.Point(5, 372);
+            this.buttonWordCloud.Name = "buttonWordCloud";
+            this.buttonWordCloud.Size = new System.Drawing.Size(161, 23);
+            this.buttonWordCloud.TabIndex = 21;
+            this.buttonWordCloud.Text = "Preview the extracted terms";
+            this.buttonWordCloud.UseVisualStyleBackColor = true;
+            this.buttonWordCloud.Click += new System.EventHandler(this.buttonWordCloud_Click);
+            // 
+            // label2
+            // 
+            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.Location = new System.Drawing.Point(5, 356);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(571, 2);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "labelSeparator1";
+            // 
+            // checkBoxRegex
+            // 
+            this.checkBoxRegex.AutoSize = true;
+            this.checkBoxRegex.Location = new System.Drawing.Point(358, 55);
+            this.checkBoxRegex.Name = "checkBoxRegex";
+            this.checkBoxRegex.Size = new System.Drawing.Size(138, 17);
+            this.checkBoxRegex.TabIndex = 19;
+            this.checkBoxRegex.Text = "Use regular expressions";
+            this.checkBoxRegex.UseVisualStyleBackColor = true;
+            this.checkBoxRegex.CheckedChanged += new System.EventHandler(this.checkBoxRegex_CheckedChanged);
+            // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(201, 204);
+            this.buttonSave.Location = new System.Drawing.Point(201, 219);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(130, 23);
             this.buttonSave.TabIndex = 18;
@@ -73,7 +105,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(201, 175);
+            this.buttonLoad.Location = new System.Drawing.Point(201, 190);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(130, 23);
             this.buttonLoad.TabIndex = 17;
@@ -83,7 +115,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(201, 115);
+            this.buttonDelete.Location = new System.Drawing.Point(201, 130);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(130, 23);
             this.buttonDelete.TabIndex = 16;
@@ -93,7 +125,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // buttonResetList
             // 
-            this.buttonResetList.Location = new System.Drawing.Point(201, 145);
+            this.buttonResetList.Location = new System.Drawing.Point(201, 160);
             this.buttonResetList.Name = "buttonResetList";
             this.buttonResetList.Size = new System.Drawing.Size(130, 23);
             this.buttonResetList.TabIndex = 15;
@@ -103,14 +135,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // numericUpDownTermsLength
             // 
-            this.numericUpDownTermsLength.Location = new System.Drawing.Point(139, 302);
+            this.numericUpDownTermsLength.Location = new System.Drawing.Point(139, 313);
             this.numericUpDownTermsLength.Name = "numericUpDownTermsLength";
             this.numericUpDownTermsLength.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsLength.TabIndex = 11;
             // 
             // numericUpDownTermsOccurrences
             // 
-            this.numericUpDownTermsOccurrences.Location = new System.Drawing.Point(139, 273);
+            this.numericUpDownTermsOccurrences.Location = new System.Drawing.Point(139, 284);
             this.numericUpDownTermsOccurrences.Name = "numericUpDownTermsOccurrences";
             this.numericUpDownTermsOccurrences.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsOccurrences.TabIndex = 10;
@@ -118,7 +150,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // labelTermsLength
             // 
             this.labelTermsLength.AutoSize = true;
-            this.labelTermsLength.Location = new System.Drawing.Point(10, 304);
+            this.labelTermsLength.Location = new System.Drawing.Point(10, 315);
             this.labelTermsLength.Name = "labelTermsLength";
             this.labelTermsLength.Size = new System.Drawing.Size(71, 13);
             this.labelTermsLength.TabIndex = 7;
@@ -127,7 +159,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // labelOccurrences
             // 
             this.labelOccurrences.AutoSize = true;
-            this.labelOccurrences.Location = new System.Drawing.Point(10, 274);
+            this.labelOccurrences.Location = new System.Drawing.Point(10, 285);
             this.labelOccurrences.Name = "labelOccurrences";
             this.labelOccurrences.Size = new System.Drawing.Size(104, 13);
             this.labelOccurrences.TabIndex = 6;
@@ -136,7 +168,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // label1
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label1.Location = new System.Drawing.Point(6, 249);
+            this.label1.Location = new System.Drawing.Point(6, 261);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(571, 2);
             this.label1.TabIndex = 5;
@@ -153,7 +185,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(201, 85);
+            this.buttonAdd.Location = new System.Drawing.Point(201, 100);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(130, 23);
             this.buttonAdd.TabIndex = 3;
@@ -167,6 +199,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.textBoxTerm.Name = "textBoxTerm";
             this.textBoxTerm.Size = new System.Drawing.Size(130, 20);
             this.textBoxTerm.TabIndex = 2;
+            this.textBoxTerm.TextChanged += new System.EventHandler(this.textBoxTerm_TextChanged);
             // 
             // labelBlackList
             // 
@@ -180,10 +213,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // listViewBlackList
             // 
             this.listViewBlackList.FullRowSelect = true;
+            this.listViewBlackList.Columns.Add("Terms", 178);
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
             this.listViewBlackList.Name = "listViewBlackList";
-            this.listViewBlackList.Size = new System.Drawing.Size(182, 190);
+            this.listViewBlackList.Size = new System.Drawing.Size(182, 205);
             this.listViewBlackList.TabIndex = 0;
             this.listViewBlackList.UseCompatibleStateImageBehavior = false;
             this.listViewBlackList.View = System.Windows.Forms.View.Details;
@@ -192,33 +226,13 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             this.errorProvider1.ContainerControl = this;
             // 
-            // checkBoxRegex
+            // labelErrorRegex
             // 
-            this.checkBoxRegex.AutoSize = true;
-            this.checkBoxRegex.Location = new System.Drawing.Point(358, 55);
-            this.checkBoxRegex.Name = "checkBoxRegex";
-            this.checkBoxRegex.Size = new System.Drawing.Size(132, 17);
-            this.checkBoxRegex.TabIndex = 19;
-            this.checkBoxRegex.Text = "Use regex expressions";
-            this.checkBoxRegex.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label2.Location = new System.Drawing.Point(5, 337);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(571, 2);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "labelSeparator1";
-            // 
-            // buttonWordCloud
-            // 
-            this.buttonWordCloud.Location = new System.Drawing.Point(5, 362);
-            this.buttonWordCloud.Name = "buttonWordCloud";
-            this.buttonWordCloud.Size = new System.Drawing.Size(161, 23);
-            this.buttonWordCloud.TabIndex = 21;
-            this.buttonWordCloud.Text = "Preview the extracted terms";
-            this.buttonWordCloud.UseVisualStyleBackColor = true;
+            this.labelErrorRegex.AutoSize = true;
+            this.labelErrorRegex.Location = new System.Drawing.Point(201, 81);
+            this.labelErrorRegex.Name = "labelErrorRegex";
+            this.labelErrorRegex.Size = new System.Drawing.Size(0, 13);
+            this.labelErrorRegex.TabIndex = 22;
             // 
             // ProjectTermsBatchTaskSettingsControl
             // 
@@ -256,5 +270,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private Label label2;
         private CheckBox checkBoxRegex;
         private Button buttonWordCloud;
+        private Label labelErrorRegex;
     }
 }

@@ -10,24 +10,28 @@ using System.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
-    
     public partial class ProjectTermsBatchTaskSettingsControl : UserControl, ISettingsAware<ProjectTermsBatchTaskSettings>
     {
+        private bool checkboxEnabled = false;
         public ProjectTermsViewModel ViewModel { get; set; }
         public ProjectTermsBatchTaskSettings Settings { get; set; }
         public string ProjectPath { get; set; }
-        public static bool ControlDisabled { get; set; }
+        private bool singleFileProject = false;
+        public static bool controlLoad = false;
 
         public ProjectTermsBatchTaskSettingsControl()
         {
-            if (ControlDisabled)
+            if (Utils.Utils.CheckSingleFileProject())
             {
-                MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Error);
+                singleFileProject = true;
                 return;
+            }
+            else
+            {
+                singleFileProject = false;
             }
 
             InitializeComponent();
-
             ViewModel = new ProjectTermsViewModel();
             ProjectPath = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder;
 
@@ -36,8 +40,13 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         protected override void OnLoad(EventArgs e)
         {
-            if (ControlDisabled) return;
+            if (singleFileProject)
+            {
+                MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Error);
+                return;
+            }
 
+            controlLoad = true;
             Settings.ResetToDefaults();
             base.OnLoad(e);
             SetSettings(Settings);
@@ -85,6 +94,16 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 textBoxTerm.Text = "";
                 MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
+            }
+
+            if (checkboxEnabled)
+            {
+                string exp = "@" + textBoxTerm.Text.ToString();
+                if (!Utils.Utils.IsRegexPatternValid(exp))
+                {
+                    labelErrorRegex.Text = PluginResources.Error_Regex;
+                    return;
+                }
             }
 
             listViewBlackList.Items.Add(new ListViewItem(term));
@@ -187,6 +206,28 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
 
             ButtonsEnabled(false);
+        }
+
+        private void buttonWordCloud_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxRegex.Checked == true)
+            {
+                checkboxEnabled = true;
+            }
+            else
+            {
+                checkboxEnabled = false;
+            }
+        }
+
+        private void textBoxTerm_TextChanged(object sender, EventArgs e)
+        {
+            labelErrorRegex.Text = "";
         }
     }
 }

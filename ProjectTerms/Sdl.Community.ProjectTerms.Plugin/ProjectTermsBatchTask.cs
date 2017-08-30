@@ -9,7 +9,6 @@ using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using System.Windows.Forms;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.ProjectAutomation.FileBased;
-using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -22,34 +21,42 @@ namespace Sdl.Community.ProjectTerms.Plugin
     public class ProjectTermsBatchTask : AbstractFileContentProcessingAutomaticTask
     {
         private HashSet<string> projectFiles;
-        private ProjectTermsBatchTaskSettingsControl control;
+        private FileBasedProject CurrentProject { get; set; }
+        private ProjectTermsBatchTaskSettingsControl control = new ProjectTermsBatchTaskSettingsControl();
         private ProjectTermsBatchTaskSettings settings;
-        private bool fileIncluded = false;
+        private bool singleFileProject = false;
+
+        private string GetProjectTermsName()
+        {
+            return CurrentProject.GetProjectInfo().Name;
+        }
 
         protected override void OnInitializeTask()
         {
-            if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
+            CurrentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+            
+            if (Utils.Utils.CheckSingleFileProject())
+            {
+                singleFileProject = true;
+                return;
+            }
+            else
+            {
+                singleFileProject = false;
+            }
 
             base.OnInitializeTask();
 
             projectFiles = new HashSet<string>();
-            control = new ProjectTermsBatchTaskSettingsControl();
             settings = GetSetting<ProjectTermsBatchTaskSettings>();
         }
 
         protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
         {
-            if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
+            if (singleFileProject) return;
 
-            var projectTermsFileName = Path.GetFileNameWithoutExtension(ProjectTermsCache.GetXMLFilePath(control.ProjectPath));
-            var projectTermsStartFileName = projectTermsFileName.Split('_');
-            if (projectFiles.Contains(projectFile.Name)) return;
-
-            if (projectFile.Name.Contains(projectTermsStartFileName[0]))
-            {
-                fileIncluded = true;
-                return;
-            }
+            // skip repeated and project terms files
+            if (projectFiles.Contains(projectFile.Name) || projectFile.Name.Contains(GetProjectTermsName())) return;
 
             control.ExtractProjectFileTerms(projectFile, multiFileConverter);
             projectFiles.Add(projectFile.Name);
@@ -59,28 +66,23 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
-                if (ProjectTermsBatchTaskSettingsControl.ControlDisabled) return;
-
-                if (settings.BlackListSettings == null)
+                if (singleFileProject)
                 {
-                    MessageBox.Show(PluginResources.MessageContent_SkipSettings, PluginResources.MessageType_Info);
+                    MessageBox.Show(PluginResources.Error_SingleFileProject, PluginResources.MessageType_Error);
                     return;
                 }
-                
-                if (fileIncluded)
+
+                if (!ProjectTermsBatchTaskSettingsControl.controlLoad)
                 {
-                    string path = ProjectTermsCache.GetXMLFilePath(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder);
-                    Utils.Utils.CreateDirectory(Path.GetDirectoryName(path));
-                    XDocument doc = new XDocument(new XDeclaration("1.0", "utf-8", null));
-                    doc.Add(new XElement("projectTerms", string.Empty));
-                    doc.Save(path);
-                } else
-                {
-                    control.ExtractProjectTerms(settings);
-                    CreateReport("Project terms", "Project terms report", GenerateReport());
+                    settings.ResetToDefaults();
                 }
 
+                control.ExtractProjectTerms(settings);
+
                 AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
+                CreateReport("Project terms", "Project terms report", GenerateReport());
+
+                ProjectTermsBatchTaskSettingsControl.controlLoad = false;
             }
             catch (ProjectTermsException e)
             {
@@ -110,8 +112,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 AutomaticTask scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
                 AutomaticTask convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
                 AutomaticTask copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
-
-                Utils.Utils.RemoveDirectory(xmlFolder);
+                AutomaticTask preTran = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.PreTranslateFiles);
             }
             catch (Exception e)
             {

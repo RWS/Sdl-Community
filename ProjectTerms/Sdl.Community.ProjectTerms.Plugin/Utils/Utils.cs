@@ -1,6 +1,10 @@
 ﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.IO;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Sdl.Community.ProjectTerms.Plugin.Utils
 {
@@ -45,6 +49,30 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
 
                 throw new ProjectTermsException(PluginResources.Error_CreateDirectory + e.Message);
             }
+        }
+
+        public static bool IsRegexPatternValid(String pattern)
+        {
+            try
+            {
+                new Regex(pattern);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public static bool CheckSingleFileProject()
+        {
+            var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+            FieldInfo projectVal = typeof(FileBasedProject).GetField(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
+
+            dynamic projectValDynamic = projectVal.GetValue(project);
+            dynamic projectType = projectValDynamic.ProjectType != null ? projectValDynamic.ProjectType : string.Empty;
+
+            string projectTypeContent = Convert.ToString(projectType);
+
+            return projectTypeContent.Equals(PluginResources.Constant_ProjectTypeContent);
         }
     }
 }
