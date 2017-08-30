@@ -492,13 +492,26 @@ namespace Sdl.Community.NumberVerifier
 
 			if (_verificationSettings.HindiNumberVerification)
 			{
-				var result = GetTargetFromHindiNumbers(sourceText, targetText);
-
-				foreach (var targetRes in result)
+				var _projectController = GetProjectController();
+				if(_projectController.CurrentProject != null)
 				{
-					errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
-					errorList.AddRange(errorsListFromNormalizedNumbers);
-				}
+					var projectInfo = _projectController.CurrentProject.GetProjectInfo();
+					var sourceLanguage = projectInfo.SourceLanguage.DisplayName;
+					if(sourceLanguage == "Hindi (India)" || projectInfo.TargetLanguages.Any(l=>l.DisplayName == "Hindi (India)"))
+					{
+						var result = GetTargetFromHindiNumbers(sourceText, targetText);
+
+						foreach (var targetRes in result)
+						{
+							errorsListFromNormalizedNumbers = CheckNumbers(targetRes.SourceText, targetRes.TargetText);
+							errorList.AddRange(errorsListFromNormalizedNumbers);
+						}
+					}
+					else
+					{
+						errorsListFromNormalizedNumbers = CheckNumbers(sourceText, targetText);
+					}
+				}			
 			}
 			else
 			{
