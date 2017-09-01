@@ -107,6 +107,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
@@ -147,6 +148,12 @@
     <Compile Include="TermbaseIntegrationAction\TermbaseGeneration.cs" />
     <Compile Include="TermbaseIntegrationAction\TermbaseGenerationAction.cs" />
     <Compile Include="Utils\Utils.cs" />
+    <Compile Include="WordCloudForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WordCloudForm.Designer.cs">
+      <DependentUpon>WordCloudForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx">
@@ -157,6 +164,9 @@
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="Resources\termbaseDefaultDefinitionFile.xdt" />
     <EmbeddedResource Include="ReportRenderStylesheet.xsl" />
+    <EmbeddedResource Include="WordCloudForm.resx">
+      <DependentUpon>WordCloudForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

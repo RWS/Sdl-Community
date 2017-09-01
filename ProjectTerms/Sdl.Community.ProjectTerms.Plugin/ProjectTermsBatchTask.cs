@@ -2,7 +2,6 @@
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using System.Collections.Generic;
-using Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML;
 using System.IO;
 using System;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
@@ -35,7 +34,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             CurrentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
             
-            if (Utils.Utils.CheckSingleFileProject())
+            if (Utils.Utils.VerifySingleFileProjectType())
             {
                 singleFileProject = true;
                 return;
@@ -79,10 +78,12 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
                 control.ExtractProjectTerms(settings);
 
-                AddXMlToProject(Project, Path.GetDirectoryName(ProjectTermsCache.GetXMLFilePath(control.ProjectPath)), false);
+                var tmpDirectory = Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(control.ProjectPath));
+                AddXMlToProject(Project, tmpDirectory, false);
                 CreateReport("Project terms", "Project terms report", GenerateReport());
 
                 ProjectTermsBatchTaskSettingsControl.controlLoad = false;
+                Utils.Utils.RemoveDirectory(tmpDirectory);
             }
             catch (ProjectTermsException e)
             {

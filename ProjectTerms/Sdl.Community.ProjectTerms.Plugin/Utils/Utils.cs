@@ -51,7 +51,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             }
         }
 
-        public static bool IsRegexPatternValid(String pattern)
+        public static bool VerifyRegexPattern(String pattern)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             return false;
         }
 
-        public static bool CheckSingleFileProject()
+        public static bool VerifySingleFileProjectType()
         {
             var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
             FieldInfo projectVal = typeof(FileBasedProject).GetField(PluginResources.Constant_ProjectType, BindingFlags.NonPublic | BindingFlags.Instance);
@@ -73,6 +73,14 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             string projectTypeContent = Convert.ToString(projectType);
 
             return projectTypeContent.Equals(PluginResources.Constant_ProjectTypeContent);
+        }
+
+        public static string GetXMLFilePath(string projectPath, bool wordCloudFile = false)
+        {
+            if (!wordCloudFile)
+                return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath) + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
+            else
+                return Path.Combine(projectPath, PluginResources.WordCloudFileName + ".xml");
         }
     }
 }

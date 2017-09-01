@@ -31,5 +31,17 @@ namespace Sdl.Community.ProjectTerms.Controls.Utils
         {
             return terms.Where(term => !blackList.Contains(term));
         }
+
+        public static IEnumerable<ITerm> FilterByBlackList(this IEnumerable<ITerm> terms, List<string> blackList)
+        {
+            return terms.Where(term => !blackList.Contains(term.Text));
+        }
+
+        public static IOrderedEnumerable<T> SortByOccurences<T>(this IEnumerable<T> words) where T : ITerm
+        {
+            return
+                words.OrderByDescending(
+                    word => word.Occurrences);
+        }
     }
 }

@@ -18,10 +18,12 @@ namespace Sdl.Community.ProjectTerms.Plugin
         public string ProjectPath { get; set; }
         private bool singleFileProject = false;
         public static bool controlLoad = false;
+        private bool buttonWordCloudPressedOnce;
 
         public ProjectTermsBatchTaskSettingsControl()
         {
-            if (Utils.Utils.CheckSingleFileProject())
+            buttonWordCloudPressedOnce = true;
+            if (Utils.Utils.VerifySingleFileProjectType())
             {
                 singleFileProject = true;
                 return;
@@ -99,7 +101,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             if (checkboxEnabled)
             {
                 string exp = "@" + textBoxTerm.Text.ToString();
-                if (!Utils.Utils.IsRegexPatternValid(exp))
+                if (!Utils.Utils.VerifyRegexPattern(exp))
                 {
                     labelErrorRegex.Text = PluginResources.Error_Regex;
                     return;
@@ -210,8 +212,40 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         private void buttonWordCloud_Click(object sender, EventArgs e)
         {
+            // Get the settings
+            int termsOccurrences = (int)numericUpDownTermsOccurrences.Value;
+            int termsLength = (int)numericUpDownTermsLength.Value;
+            var blacklist = ExtractListViewItems(listViewBlackList);
 
+            List<ProjectFile> sourceFilesToProcessed = new List<ProjectFile>();
+            List<ProjectFile> selectedFiles = (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles).ToList();
+            var currentProject = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+            var sourceFiles = currentProject.GetSourceLanguageFiles();
+            if (selectedFiles.Count == 0)
+            {
+                foreach (var file in sourceFiles)
+                {
+                    if (!file.Name.Contains(currentProject.GetProjectInfo().Name))
+                    {
+                        sourceFilesToProcessed.Add(file);
+                    }
+                }
+            }
+            else
+            {
+                foreach (var file in selectedFiles)
+                {
+                    sourceFilesToProcessed.Add(sourceFiles.FirstOrDefault(x => x.Name == file.Name));
+                }
+            }
+            
+            ViewModel.ExtractProjectTerms(termsOccurrences, termsLength, blacklist, ProjectPath, sourceFilesToProcessed, buttonWordCloudPressedOnce);
+            buttonWordCloudPressedOnce = false;
+            var wordcloudWin = new WordCloudForm();
+            wordcloudWin.PopulateWordCloud(ViewModel.Terms);
+            wordcloudWin.Show();
         }
+
 
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
         {

@@ -178,6 +178,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The xml file failed to be read!.
+        /// </summary>
+        public static string Error_ReadXmlFile {
+            get {
+                return ResourceManager.GetString("Error_ReadXmlFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The regex expression is not valid! Please review once again!.
         /// </summary>
         public static string Error_Regex {
@@ -327,6 +336,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to projectTerms-sourcecloud.
+        /// </summary>
+        public static string WordCloudFileName {
+            get {
+                return ResourceManager.GetString("WordCloudFileName", resourceCulture);
             }
         }
     }

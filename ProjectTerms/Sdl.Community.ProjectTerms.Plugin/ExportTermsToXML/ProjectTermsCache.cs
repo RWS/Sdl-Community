@@ -4,13 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 {
     public class ProjectTermsCache
     {
-        public void Save(string projectPath, IEnumerable<ITerm> terms)
+        public void Save(string projectPath, IEnumerable<ITerm> terms, bool wordCloudFile = false)
         {
             try
             {
@@ -22,9 +23,17 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                             select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
                 );
 
-                Utils.Utils.CreateDirectory(Path.GetDirectoryName(GetXMLFilePath(projectPath)));
-                var cacheFile = GetXMLFilePath(projectPath);
-                doc.Save(cacheFile);
+                if (!Directory.Exists(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath))))
+                    Utils.Utils.CreateDirectory(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath)));
+
+                if (!wordCloudFile)
+                {
+                    doc.Save(Utils.Utils.GetXMLFilePath(projectPath));
+                }
+                else
+                {
+                    doc.Save(Utils.Utils.GetXMLFilePath(projectPath, true));
+                }
             }
             catch (Exception e)
             {
@@ -32,15 +41,28 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
             }
         }
 
-        public static string GetXMLFilePath(string projectPath)
+        public IEnumerable<ITerm> ReadXmlFile(string filePath)
         {
-            return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath) + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
-        }
-
-        public static string GetExistedFileName(string directoryPath)
-        {
-            var files = Directory.GetFiles(directoryPath);
-            return files.Count() == 1 ? Path.GetFileName(files.FirstOrDefault()) : string.Empty;
+            try
+            {
+                var xmlTerms = new List<ITerm>();
+                XmlDocument doc = new XmlDocument();
+                doc.Load(filePath);
+                XmlNodeList terms = doc.GetElementsByTagName("term");
+                foreach (XmlNode term in terms)
+                {
+                    xmlTerms.Add(new Term()
+                    {
+                        Text = term.InnerText,
+                        Occurrences = int.Parse(term.Attributes["count"].Value)
+                    });
+                }
+                return xmlTerms;
+            }
+            catch (Exception e)
+            {
+                throw new ProjectTermsException(PluginResources.Error_ReadXmlFile + e.Message);
+            }
         }
     }
 }

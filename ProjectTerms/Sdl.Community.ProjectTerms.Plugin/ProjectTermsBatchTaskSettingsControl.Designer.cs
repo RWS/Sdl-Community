@@ -8,6 +8,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             this.components = new System.ComponentModel.Container();
             this.groupBoxFilters = new System.Windows.Forms.GroupBox();
+            this.labelErrorRegex = new System.Windows.Forms.Label();
             this.buttonWordCloud = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBoxRegex = new System.Windows.Forms.CheckBox();
@@ -27,7 +28,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.labelErrorRegex = new System.Windows.Forms.Label();
             this.groupBoxFilters.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -62,6 +62,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.groupBoxFilters.TabIndex = 2;
             this.groupBoxFilters.TabStop = false;
             this.groupBoxFilters.Text = "Project terms filters";
+            // 
+            // labelErrorRegex
+            // 
+            this.labelErrorRegex.AutoSize = true;
+            this.labelErrorRegex.Location = new System.Drawing.Point(201, 81);
+            this.labelErrorRegex.Name = "labelErrorRegex";
+            this.labelErrorRegex.Size = new System.Drawing.Size(0, 13);
+            this.labelErrorRegex.TabIndex = 22;
             // 
             // buttonWordCloud
             // 
@@ -136,6 +144,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // numericUpDownTermsLength
             // 
             this.numericUpDownTermsLength.Location = new System.Drawing.Point(139, 313);
+            this.numericUpDownTermsLength.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numericUpDownTermsLength.Name = "numericUpDownTermsLength";
             this.numericUpDownTermsLength.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsLength.TabIndex = 11;
@@ -143,6 +156,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // numericUpDownTermsOccurrences
             // 
             this.numericUpDownTermsOccurrences.Location = new System.Drawing.Point(139, 284);
+            this.numericUpDownTermsOccurrences.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
             this.numericUpDownTermsOccurrences.Name = "numericUpDownTermsOccurrences";
             this.numericUpDownTermsOccurrences.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsOccurrences.TabIndex = 10;
@@ -213,8 +231,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // listViewBlackList
             // 
             this.listViewBlackList.FullRowSelect = true;
-            this.listViewBlackList.Columns.Add("Terms", 178);
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.listViewBlackList.Columns.Add("Terms", 178);
             this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
             this.listViewBlackList.Name = "listViewBlackList";
             this.listViewBlackList.Size = new System.Drawing.Size(182, 205);
@@ -225,14 +243,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // labelErrorRegex
-            // 
-            this.labelErrorRegex.AutoSize = true;
-            this.labelErrorRegex.Location = new System.Drawing.Point(201, 81);
-            this.labelErrorRegex.Name = "labelErrorRegex";
-            this.labelErrorRegex.Size = new System.Drawing.Size(0, 13);
-            this.labelErrorRegex.TabIndex = 22;
             // 
             // ProjectTermsBatchTaskSettingsControl
             // 
