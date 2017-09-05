@@ -79,7 +79,7 @@ namespace Sdl.Community.NumberVerifier {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number modified/unlocalised. .
+        ///   Looks up a localized string similar to Number(s) modified/unlocalised. .
         /// </summary>
         public static string Error_NumbersNotIdentical {
             get {

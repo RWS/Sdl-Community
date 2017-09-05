@@ -339,6 +339,20 @@ namespace Sdl.Community.NumberVerifier
 					else if (errorMessage.ErrorMessage != string.Empty)
 					{
 						#region ReportingMessageWithoutExtendedData
+						if(!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
+						{
+							List<string> targetNumbers = new List<string>();
+							var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"-?[0-9]+\.?[0-9,]*");
+
+							foreach (var value in numbers)
+							{
+								var targetNumber = string.Format(@"""{0}""", value.ToString());
+								targetNumbers.Add(targetNumber);
+							}
+							var res = string.Join(", ", targetNumbers.ToArray());
+
+							errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", res, ")");
+						}
 
 						MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
 							errorMessage.ErrorLevel, errorMessage.ErrorMessage,
@@ -467,7 +481,7 @@ namespace Sdl.Community.NumberVerifier
 			var numberResults = new NumberResults(VerificationSettings,
 				sourceNumberList,
 				targetNumberList, sourceText, targetText);
-
+			
 			var numberErrorComposer = new NumberErrorComposer();
 			var verifyProcessor = numberErrorComposer.Compose();
 						
