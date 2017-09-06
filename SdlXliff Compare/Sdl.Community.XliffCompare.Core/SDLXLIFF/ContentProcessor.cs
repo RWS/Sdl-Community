@@ -53,7 +53,12 @@ namespace Sdl.Community.XliffCompare.Core.SDLXLIFF
 
         public void FileComplete()
         {
-            FileParagraphUnits.Add(CurrentFileProperties.FileConversionProperties.OriginalFilePath, ParagraphUnits);
+			var containsKey = FileParagraphUnits.ContainsKey(CurrentFileProperties.FileConversionProperties.OriginalFilePath);
+			if (!containsKey&&ParagraphUnits.Count>0)
+			{
+				FileParagraphUnits.Add(CurrentFileProperties.FileConversionProperties.OriginalFilePath, ParagraphUnits);
+			}
+           
         }
 
         public void Initialize(IDocumentProperties documentInfo)
