@@ -59,7 +59,7 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
@@ -112,12 +112,105 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Constant_ProjectType" xml:space="preserve">
+    <value>_project</value>
+  </data>
+  <data name="Constant_ProjectTypeContent" xml:space="preserve">
+    <value>SingleFile</value>
+  </data>
+  <data name="Error_AddLanguages" xml:space="preserve">
+    <value>Adding languages to termbase definition file failed!</value>
+  </data>
+  <data name="Error_AddXMlToProject" xml:space="preserve">
+    <value>Add xml file in the Studio project failed!</value>
+  </data>
+  <data name="Error_ConnectToTermbaseLocalRepository" xml:space="preserve">
+    <value>Connection to termbase repository failed!</value>
+  </data>
+  <data name="Error_CreateDirectory" xml:space="preserve">
+    <value>The folder failed to create!</value>
+  </data>
+  <data name="Error_CreateEntry" xml:space="preserve">
+    <value>XML entry creation failed!</value>
+  </data>
+  <data name="Error_CreateTermbase" xml:space="preserve">
+    <value>The termbase generation failed!</value>
+  </data>
+  <data name="Error_ExtractContent" xml:space="preserve">
+    <value>Extraction .sdlxliff content failed!</value>
+  </data>
+  <data name="Error_GetProjectLanguages" xml:space="preserve">
+    <value>Extract the project languages failed!</value>
+  </data>
+  <data name="Error_GetResourceTextFile" xml:space="preserve">
+    <value>Extraction from embedded resource file failed!</value>
+  </data>
+  <data name="Error_IncludeTermbaseInStudio" xml:space="preserve">
+    <value>Including termbase to Studio failed!</value>
+  </data>
+  <data name="Error_PopulateTermbase" xml:space="preserve">
+    <value>Population termbase failed!</value>
+  </data>
+  <data name="Error_RemoveDirectory" xml:space="preserve">
+    <value>The folder failed to remove!</value>
+  </data>
+  <data name="Error_Save" xml:space="preserve">
+    <value>The xml file failed to be saved!</value>
+  </data>
+  <data name="Error_SaveTermbaseDefinitionToTempLocation" xml:space="preserve">
+    <value>Storing termbase definition file locally failed!</value>
+  </data>
+  <data name="Error_Settings" xml:space="preserve">
+    <value>Termbase generation settings failed!</value>
+  </data>
+  <data name="Error_SingleFileProject" xml:space="preserve">
+    <value>Project Terms cannot be used on a single file project. Please create a standard Studio project and try again.</value>
+  </data>
+  <data name="Info_SuccessfullyAdded" xml:space="preserve">
+    <value>Your termbase was successfully added to the project!</value>
+  </data>
+  <data name="Info_TermbaseExists" xml:space="preserve">
+    <value>You already have a termbase for this file! Please remove it and generate it again!</value>
+  </data>
+  <data name="MessageContent_buttonAdd" xml:space="preserve">
+    <value>Term already exists!</value>
+  </data>
+  <data name="MessageContent_buttonDelete_Empty" xml:space="preserve">
+    <value>Your list is empty!</value>
+  </data>
+  <data name="MessageContent_buttonDelete_Select" xml:space="preserve">
+    <value>Please select at least one term!</value>
+  </data>
+  <data name="MessageContent_buttonLoad" xml:space="preserve">
+    <value>Blacklist is not define!</value>
+  </data>
+  <data name="MessageContent_SkipSettings" xml:space="preserve">
+    <value>You cannot skip the setting part</value>
+  </data>
+  <data name="MessageTitle" xml:space="preserve">
+    <value>Termbase information</value>
+  </data>
+  <data name="MessageType_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="MessageType_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
   <data name="Plugin_Name" xml:space="preserve">
     <value>Sdl.Community.ProjectTerms.Plugin</value>
+  </data>
+  <data name="Error_Regex" xml:space="preserve">
+    <value>The regex expression is not valid! Please review once again!</value>
+  </data>
+  <data name="WordCloudFileName" xml:space="preserve">
+    <value>projectTerms-sourcecloud</value>
+  </data>
+  <data name="Error_ReadXmlFile" xml:space="preserve">
+    <value>The xml file failed to be read!</value>
   </data>
 </root>

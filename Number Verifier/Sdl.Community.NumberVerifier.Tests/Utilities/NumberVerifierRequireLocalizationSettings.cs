@@ -16,7 +16,7 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             numberVerifierSettings.Setup(t => t.TargetThousandsSpace).Returns(true);
             numberVerifierSettings.Setup(t => t.TargetThousandsNobreakSpace).Returns(true);
 
-            return numberVerifierSettings;
+			return numberVerifierSettings;
         }
 
         public static Mock<INumberVerifierSettings> ThousandsSeparatorsSpaceNoBreakThinSpace()
@@ -54,7 +54,14 @@ namespace Sdl.Community.NumberVerifier.Tests.Utilities
             numberVerifierSettings.Setup(t => t.TargetThousandsPeriod).Returns(true);
 
             return numberVerifierSettings;
-
         }
+
+		public static Mock<INumberVerifierSettings> HindiNumbers()
+		{
+			var numberVerifierSettings = NumberVerifierLocalizationsSettings.RequireLocalization();
+			numberVerifierSettings.Setup(t => t.HindiNumberVerification).Returns(true);
+
+			return numberVerifierSettings;
+		}
     }
 }

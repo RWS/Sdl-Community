@@ -17,6 +17,7 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         bool ReportModifiedNumbers { get; set; }
         bool ReportModifiedAlphanumerics { get; set; }
 		bool CustomsSeparatorsAlphanumerics { get; set; }
+		bool HindiNumberVerification { get; set; }
 		string AddedNumbersErrorType { get; set; }
         string RemovedNumbersErrorType { get; set; }
         string ModifiedNumbersErrorType { get; set; }
@@ -59,12 +60,14 @@ namespace Sdl.Community.NumberVerifier.Interfaces
         string GetSourceDecimalCustomSeparator { get; set; }
         string GetTargetDecimalCustomSeparator { get; set; }
 		string GetAlphanumericsCustomSeparator { get; set; }
+		string GetHindi { get; set; }
 
 		IEnumerable<string> GetSourceDecimalSeparators();
         IEnumerable<string> GetSourceThousandSeparators();
 
         IEnumerable<string> GetTargetDecimalSeparators();
         IEnumerable<string> GetTargetThousandSeparators();
-
-    }
+		string GetAlphanumericCustomSeparator();
+		string GetHindiNumber();
+	}
 }

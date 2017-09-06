@@ -76,6 +76,14 @@
       <SpecificVersion>False</SpecificVersion>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.DesktopEditor.BasicControls">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.DesktopEditor.BasicControls.dll</HintPath>
       <Private>False</Private>
@@ -88,6 +96,22 @@
     <Reference Include="Sdl.FileTypeSupport.Framework.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
+      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Verification.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
@@ -148,6 +172,7 @@
     </Compile>
     <Compile Include="Model\ErrorReporting.cs" />
     <Compile Include="Model\ExtractData.cs" />
+    <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">

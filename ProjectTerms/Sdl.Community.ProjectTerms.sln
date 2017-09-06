@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ProjectTerms.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ProjectTerms.Controls", "Sdl.Community.ProjectTerms.Controls\Sdl.Community.ProjectTerms.Controls.csproj", "{154A450E-3D19-42D3-AE88-E059729F647D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.ProjectTerms.Tests", "Sdl.Community.ProjectTerms.Tests\Sdl.Community.ProjectTerms.Tests.csproj", "{298947FA-5AA4-4701-98EC-ECC885CED004}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{154A450E-3D19-42D3-AE88-E059729F647D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{154A450E-3D19-42D3-AE88-E059729F647D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{154A450E-3D19-42D3-AE88-E059729F647D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{298947FA-5AA4-4701-98EC-ECC885CED004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{298947FA-5AA4-4701-98EC-ECC885CED004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{298947FA-5AA4-4701-98EC-ECC885CED004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{298947FA-5AA4-4701-98EC-ECC885CED004}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
