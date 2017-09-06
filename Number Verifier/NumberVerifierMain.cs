@@ -339,19 +339,48 @@ namespace Sdl.Community.NumberVerifier
 					else if (errorMessage.ErrorMessage != string.Empty)
 					{
 						#region ReportingMessageWithoutExtendedData
-						if(!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
+						if (!string.IsNullOrEmpty(errorMessage.TargetNumberIssues))
 						{
-							List<string> targetNumbers = new List<string>();
-							var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"-?[0-9]+\.?[0-9,]*");
-
-							foreach (var value in numbers)
+							if (errorMessage.ErrorMessage == PluginResources.Error_AlphanumericsModified)
 							{
-								var targetNumber = string.Format(@"""{0}""", value.ToString());
-								targetNumbers.Add(targetNumber);
-							}
-							var res = string.Join(", ", targetNumbers.ToArray());
+								var alphaList = new List<string>();
+								List<string> alphaTargetList = new List<string>();
 
-							errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", res, ")");
+								var alphanumericsText = Regex.Matches(errorMessage.TargetNumberIssues, @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)");
+
+								foreach (Match alphanumericText in alphanumericsText)
+								{
+									var words = Regex.Split(alphanumericText.Value, @"\s");
+
+									alphaList.AddRange(
+												from word in words
+												from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)")
+												select match.Value);
+
+									foreach (var alphaElement in alphaList)
+									{
+										var alphanumericTarget = string.Format(@"""{0}""", alphaElement);
+										alphaTargetList.Add(alphanumericTarget);
+									}
+									var alphanumericRes = string.Join(", ", alphaTargetList.ToArray());
+									errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", alphanumericRes, ")");
+								}
+							}
+
+							else
+							{
+								List<string> targetNumbers = new List<string>();
+								var numbers = Regex.Matches(errorMessage.TargetNumberIssues, @"-?[0-9]+\.?[0-9,]*");
+
+								foreach (var value in numbers)
+								{
+									var targetNumber = string.Format(@"""{0}""", value.ToString());
+									targetNumbers.Add(targetNumber);
+								}
+								var res = string.Join(", ", targetNumbers.ToArray());
+
+								errorMessage.ErrorMessage = string.Concat(errorMessage.ErrorMessage, " (", res, ")");
+							}
 						}
 
 						MessageReporter.ReportMessage(this, PluginResources.Plugin_Name,
