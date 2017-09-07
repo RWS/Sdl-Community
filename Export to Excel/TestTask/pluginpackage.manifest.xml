@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Export to Excel Batch Task Plugin</PlugInName>
-  <Version>1.0.1</Version>
+  <Version>1.0.2</Version>
   <Description>Plugin adds a new batch task to the available Batch Tasks in Studio 2015 SR2 and above.  The task is called Export to Excel and it exports all the project SDLXLIFF files as Excel files.</Description>
   <Author>SDL Community Developers</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />

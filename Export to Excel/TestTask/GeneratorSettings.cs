@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Sdl.Core.Globalization;
 using Sdl.Core.Settings;
@@ -10,7 +11,7 @@ namespace ExportToExcel
     {
        
         public enum ExportType { Excel, Word, Xml }
-        public enum ExclusionType { Category, Status }
+        public enum ExclusionType { Category, Status,Locked }
         public enum UpdateSegmentMode { All, TrackedOnly }
 
         private readonly decimal _columnWidth = 75;
@@ -37,8 +38,8 @@ namespace ExportToExcel
             UpdateSegmentStatusTracked = false;
             NewSegmentStatusAll = ConfirmationLevel.Draft;
             NewSegmentStatusTrackedChanges = ConfirmationLevel.Draft;
-            ExcludeExportType = ExclusionType.Category;
-            ExcludedStatuses = new List<ConfirmationLevel>();
+			ExcludeExportType = ExclusionType.Category;
+			ExcludedStatuses = new List<ConfirmationLevel>();
             ImportUpdateSegmentMode = UpdateSegmentMode.TrackedOnly;
             WarningWhenOverwrite = true;
             BackupImport = false;
@@ -50,10 +51,10 @@ namespace ExportToExcel
             Unspecified = false;
         }
 
-        /// <summary>
-        /// Prefix which will be used for generated file names.
-        /// </summary>
-        public string FileNamePrefix
+		/// <summary>
+		/// Prefix which will be used for generated file names.
+		/// </summary>
+		public string FileNamePrefix
         {
             get { return GetSetting<string>(nameof(FileNamePrefix)); }
             set { GetSetting<string>(nameof(FileNamePrefix)).Value = value; }
@@ -91,8 +92,12 @@ namespace ExportToExcel
         {
             get { return GetSetting<bool>(nameof(ExclusionTypeCategoryStatus)); }
         }
+		public bool ExclusionTypeCategoryLocked
+		{
+			get { return GetSetting<bool>(nameof(ExclusionTypeCategoryLocked)); }
+		}
 
-        public bool DontExportContext {
+		public bool DontExportContext {
             get { return GetSetting<bool>(nameof(DontExportContext)); }
             set { GetSetting<bool>(nameof(DontExportContext)).Value = value; }
         }
@@ -141,7 +146,7 @@ namespace ExportToExcel
 
         public bool RejectedTranslation
         {
-            get { return GetSetting<bool>(nameof(RejectedSignOff)); }
+            get { return GetSetting<bool>(nameof(RejectedTranslation)); }
             set { GetSetting<bool>(nameof(RejectedTranslation)).Value = value; }
         }
 
@@ -156,12 +161,18 @@ namespace ExportToExcel
             get { return GetSetting<bool>(nameof(Unspecified)); }
             set { GetSetting<bool>(nameof(Unspecified)).Value = value; }
         }
- 
 
-        /// <summary>
-        /// Specify if the no matches will be locked
-        /// </summary>
-        public bool IsNoMatchLocked
+		public ExclusionType ExcludeExportType
+		{
+			
+			get { return GetSetting<ExclusionType>(nameof(ExcludeExportType)); }
+			set { GetSetting<ExclusionType>(nameof(ExcludeExportType)).Value = value; }
+		}
+
+		/// <summary>
+		/// Specify if the no matches will be locked
+		/// </summary>
+		public bool IsNoMatchLocked
         {
             get;
             set;
@@ -237,11 +248,7 @@ namespace ExportToExcel
             set;
         }
 
-        public ExclusionType ExcludeExportType
-        {
-            get;
-            set;
-        }
+        
 
         /// <summary>
         /// Creates a list used later for data binding
