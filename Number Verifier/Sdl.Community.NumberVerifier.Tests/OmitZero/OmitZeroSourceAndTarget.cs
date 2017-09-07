@@ -134,7 +134,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetUncheckedError(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
 
         }
 
@@ -143,7 +143,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitCheckedTargetUncheckedNegativeNumbers(string source, string target)
         {
             var errorMessage = SourceOmitCheckedTargetUnchecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
 
         }
 
@@ -174,7 +174,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void SourceOmitUncheckedTargetCheckedError(string source, string target)
         {
             var errorMessage = SourceOmitUncheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
 
         }
 
@@ -218,7 +218,7 @@ namespace Sdl.Community.NumberVerifier.Tests.OmitZero
         public void CheckError(string source, string target)
        {
             var errorMessage = SourceOmitCheckedTargetChecked(source, target);
-            Assert.Equal(errorMessage[0].ErrorMessage, "Number modified/unlocalised. ");
+            Assert.Equal(errorMessage[0].ErrorMessage, "Number(s) modified/unlocalised. ");
         }
     }
 }

@@ -539,12 +539,12 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
                                 case "RejectedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
+                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
                                     } break;
                                 case "ApprovedTranslation":
                                     {
                                         if (!doNotExportSegment)
-                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationRejected;
+                                            doNotExportSegment = Sdl.Community.XliffReadWrite.Processor.ProcessorSettings.DoNotExportTranslationApproved;
                                     } break;
                                 case "RejectedSignOff":
                                     {

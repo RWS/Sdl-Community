@@ -16,7 +16,7 @@ namespace Sdl.Community.NumberVerifier
         private void NumberVerifierHelp_Load(object sender, System.EventArgs e)
         {
             var assembly = typeof (NumberVerifierHelp).Assembly;
-            var resourceName = "Sdl.Community.NumberVerifier.Resources.HelpText.rtf";
+            var resourceName = "Sdl.Community.NumberVerifier.Resources.Number Verifier Help.rtf";
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
                 richTextBox1.LoadFile(stream, RichTextBoxStreamType.RichText);
