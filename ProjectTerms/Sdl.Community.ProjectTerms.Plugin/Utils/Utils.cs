@@ -82,5 +82,20 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             else
                 return Path.Combine(projectPath, PluginResources.WordCloudFileName + ".xml");
         }
+
+        public static string GetProjecPath()
+        {
+            return SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().LocalProjectFolder;
+        }
+
+        public static FileBasedProject GetCurrentProject()
+        {
+            return SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
+        }
+
+        public static string GenerateBlackListPath()
+        {
+            return Path.Combine(Utils.GetProjecPath(), PluginResources.BlacklistFileName);
+        }
     }
 }

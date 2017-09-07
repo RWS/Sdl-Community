@@ -40,7 +40,8 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 termbaseCreator.PopulateTermbase(termbase);
 
                 string termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.FilePath), "Tb");
-                Utils.CreateDirectory(termbaseDirectoryPath);
+
+                if (!Directory.Exists(termbaseDirectoryPath)) Directory.CreateDirectory(termbaseDirectoryPath);
                 string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
                 File.Copy(termbase._Path, termbasePath);
 

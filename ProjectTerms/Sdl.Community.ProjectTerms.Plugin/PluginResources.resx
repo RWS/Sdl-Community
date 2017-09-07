@@ -205,12 +205,22 @@
     <value>Sdl.Community.ProjectTerms.Plugin</value>
   </data>
   <data name="Error_Regex" xml:space="preserve">
-    <value>The regex expression is not valid! Please review once again!</value>
+    <value>The regular expression is not valid! Please review once again!</value>
   </data>
   <data name="WordCloudFileName" xml:space="preserve">
     <value>projectTerms-sourcecloud</value>
   </data>
   <data name="Error_ReadXmlFile" xml:space="preserve">
     <value>The xml file failed to be read!</value>
+  </data>
+  <data name="BlacklistFileName" xml:space="preserve">
+    <value>blackListTerms.txt</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="wordcloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wordcloud.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Message_ExtractedTerms" xml:space="preserve">
+    <value>Terms was extracted with success!</value>
   </data>
 </root>
