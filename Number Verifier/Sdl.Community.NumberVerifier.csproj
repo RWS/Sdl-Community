@@ -155,6 +155,7 @@
     <Compile Include="Interfaces\IExtractProcessor.cs" />
     <Compile Include="Interfaces\IExtractSpecification.cs" />
     <Compile Include="Interfaces\IExtractData.cs" />
+    <Compile Include="Interfaces\IHindiNumbersVerifier.cs" />
     <Compile Include="Interfaces\INumberResults.cs" />
     <Compile Include="Interfaces\INumberVerifierMethods.cs" />
     <Compile Include="Interfaces\INumberVerifierSeparators.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Model\ExtractData.cs" />
     <Compile Include="Model\NumberModel.cs" />
     <Compile Include="Model\NumberResults.cs" />
+    <Compile Include="Model\ProjectControllerAdapterModel.cs" />
     <Compile Include="NumberVerifierMain.cs" />
     <Compile Include="GUI\NumberVerifierUI.cs">
       <SubType>UserControl</SubType>
@@ -280,8 +282,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="key.snk" />
-    <EmbeddedResource Include="Resources\Number Verifier Help.rtf" />
     <EmbeddedResource Include="Resources\HelpText.rtf" />
+    <EmbeddedResource Include="Resources\Number Verifier Help.rtf" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
