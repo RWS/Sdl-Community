@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>SdlXliffToLegacyConverter</PlugInName>
-  <Version>1.1</Version>
+  <Version>1.2</Version>
   <Description>SdlXliff to Legacy Converter</Description>
   <Author>Sdl Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />

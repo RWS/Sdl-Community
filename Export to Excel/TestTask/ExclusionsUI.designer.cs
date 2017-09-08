@@ -33,6 +33,7 @@
             this.cb_DontExportExact = new System.Windows.Forms.CheckBox();
             this.cb_DontExportContext = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.excludeLockedBtn = new System.Windows.Forms.RadioButton();
             this.cbl_ExcludedStatuses = new System.Windows.Forms.CheckedListBox();
             this.rb_ExcludeStatus = new System.Windows.Forms.RadioButton();
             this.rb_ExcludeCategory = new System.Windows.Forms.RadioButton();
@@ -75,7 +76,7 @@
             // cb_DontExportContext
             // 
             this.cb_DontExportContext.AutoSize = true;
-            this.cb_DontExportContext.Location = new System.Drawing.Point(27, 43);
+            this.cb_DontExportContext.Location = new System.Drawing.Point(27, 42);
             this.cb_DontExportContext.Name = "cb_DontExportContext";
             this.cb_DontExportContext.Size = new System.Drawing.Size(144, 17);
             this.cb_DontExportContext.TabIndex = 2;
@@ -87,6 +88,7 @@
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Controls.Add(this.excludeLockedBtn);
             this.groupBox2.Controls.Add(this.cbl_ExcludedStatuses);
             this.groupBox2.Controls.Add(this.rb_ExcludeStatus);
             this.groupBox2.Controls.Add(this.rb_ExcludeCategory);
@@ -94,28 +96,40 @@
             this.groupBox2.Controls.Add(this.cb_DontExportContext);
             this.groupBox2.Controls.Add(this.cb_DontExportExact);
             this.groupBox2.Controls.Add(this.cb_DontExportFuzzy);
-            this.groupBox2.Location = new System.Drawing.Point(3, 2);
+            this.groupBox2.Location = new System.Drawing.Point(5, 2);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(417, 286);
+            this.groupBox2.Size = new System.Drawing.Size(443, 234);
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Segment exclusion";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter);
+            // 
+            // excludeLockedBtn
+            // 
+            this.excludeLockedBtn.AutoSize = true;
+            this.excludeLockedBtn.Location = new System.Drawing.Point(6, 175);
+            this.excludeLockedBtn.Name = "excludeLockedBtn";
+            this.excludeLockedBtn.Size = new System.Drawing.Size(146, 17);
+            this.excludeLockedBtn.TabIndex = 8;
+            this.excludeLockedBtn.TabStop = true;
+            this.excludeLockedBtn.Text = "Exclude locked segments";
+            this.excludeLockedBtn.UseVisualStyleBackColor = true;
+            this.excludeLockedBtn.CheckedChanged += new System.EventHandler(this.excludeLockedBtn_CheckedChanged);
             // 
             // cbl_ExcludedStatuses
             // 
             this.cbl_ExcludedStatuses.CheckOnClick = true;
             this.cbl_ExcludedStatuses.Enabled = false;
             this.cbl_ExcludedStatuses.FormattingEnabled = true;
-            this.cbl_ExcludedStatuses.Location = new System.Drawing.Point(26, 155);
+            this.cbl_ExcludedStatuses.Location = new System.Drawing.Point(216, 42);
             this.cbl_ExcludedStatuses.Name = "cbl_ExcludedStatuses";
-            this.cbl_ExcludedStatuses.Size = new System.Drawing.Size(251, 124);
+            this.cbl_ExcludedStatuses.Size = new System.Drawing.Size(182, 124);
             this.cbl_ExcludedStatuses.TabIndex = 7;
             // 
             // rb_ExcludeStatus
             // 
             this.rb_ExcludeStatus.AutoSize = true;
-            this.rb_ExcludeStatus.Location = new System.Drawing.Point(7, 132);
+            this.rb_ExcludeStatus.Location = new System.Drawing.Point(216, 19);
             this.rb_ExcludeStatus.Name = "rb_ExcludeStatus";
             this.rb_ExcludeStatus.Size = new System.Drawing.Size(151, 17);
             this.rb_ExcludeStatus.TabIndex = 6;
@@ -128,13 +142,14 @@
             // 
             this.rb_ExcludeCategory.AutoSize = true;
             this.rb_ExcludeCategory.Checked = true;
-            this.rb_ExcludeCategory.Location = new System.Drawing.Point(7, 20);
+            this.rb_ExcludeCategory.Location = new System.Drawing.Point(6, 19);
             this.rb_ExcludeCategory.Name = "rb_ExcludeCategory";
             this.rb_ExcludeCategory.Size = new System.Drawing.Size(161, 17);
             this.rb_ExcludeCategory.TabIndex = 0;
             this.rb_ExcludeCategory.TabStop = true;
             this.rb_ExcludeCategory.Text = "&Exclude segment categories:";
             this.rb_ExcludeCategory.UseVisualStyleBackColor = true;
+            this.rb_ExcludeCategory.CheckedChanged += new System.EventHandler(this.rb_ExcludeCategory_CheckedChanged);
             // 
             // ExclusionsUI
             // 
@@ -143,7 +158,7 @@
             this.AutoSize = true;
             this.Controls.Add(this.groupBox2);
             this.Name = "ExclusionsUI";
-            this.Size = new System.Drawing.Size(423, 291);
+            this.Size = new System.Drawing.Size(423, 242);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
@@ -160,5 +175,6 @@
         private System.Windows.Forms.CheckedListBox cbl_ExcludedStatuses;
         private System.Windows.Forms.RadioButton rb_ExcludeStatus;
         private System.Windows.Forms.RadioButton rb_ExcludeCategory;
-    }
+		private System.Windows.Forms.RadioButton excludeLockedBtn;
+	}
 }

@@ -61,6 +61,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to blackListTerms.txt.
+        /// </summary>
+        public static string BlacklistFileName {
+            get {
+                return ResourceManager.GetString("BlacklistFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _project.
         /// </summary>
         public static string Constant_ProjectType {
@@ -187,7 +196,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The regex expression is not valid! Please review once again!.
+        ///   Looks up a localized string similar to The regular expression is not valid! Please review once again!.
         /// </summary>
         public static string Error_Regex {
             get {
@@ -255,6 +264,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Info_TermbaseExists {
             get {
                 return ResourceManager.GetString("Info_TermbaseExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terms was extracted with success!.
+        /// </summary>
+        public static string Message_ExtractedTerms {
+            get {
+                return ResourceManager.GetString("Message_ExtractedTerms", resourceCulture);
             }
         }
         
@@ -336,6 +354,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon wordcloud {
+            get {
+                object obj = ResourceManager.GetObject("wordcloud", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         

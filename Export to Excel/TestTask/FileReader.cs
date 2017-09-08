@@ -57,49 +57,58 @@ namespace ExportToExcel
             ITranslationOrigin origin = segmentPair.Properties.TranslationOrigin;
             ConfirmationLevel confLevel = segmentPair.Properties.ConfirmationLevel;
 
-            if (_convertSettings.ExcludeExportType == GeneratorSettings.ExclusionType.Status)
-            {
-                if (_convertSettings.ExcludedStatuses.Contains(confLevel))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (origin == null)
-                {
-                    if (_convertSettings.DontExportNoMatch)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
+			if(_convertSettings.ExcludeExportType == GeneratorSettings.ExclusionType.Locked 
+				&& segmentPair.Properties.IsLocked)
+			{
+				return true;
+			}
+			else
+			{
+				if (_convertSettings.ExcludeExportType == GeneratorSettings.ExclusionType.Status)
+				{
+					if (_convertSettings.ExcludedStatuses.Contains(confLevel))
+					{
+						return true;
+					}
+				}
+				else
+				{
+					if (origin == null)
+					{
+						if (_convertSettings.DontExportNoMatch)
+						{
+							return true;
+						}
+						else
+						{
+							return false;
+						}
+					}
 
-                if ((origin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget) &&
-                    _convertSettings.DontExportContext)
-                {
+					if ((origin.TextContextMatchLevel == TextContextMatchLevel.SourceAndTarget) &&
+						_convertSettings.DontExportContext)
+					{
 
-                    return true;
-                }
-                else
-                {
-                    if (origin.MatchPercent == 100 && _convertSettings.DontExportExact)
-                    {
-                        return true;
-                    }
-                    if ((origin.MatchPercent > 0 && origin.MatchPercent < 100) && _convertSettings.DontExportFuzzy)
-                    {
-                        return true;
-                    }
-                    if (origin.MatchPercent == 0 && _convertSettings.DontExportNoMatch)
-                    {
-                        return true;
-                    }
-                }
-            }
+						return true;
+					}
+					else
+					{
+						if (origin.MatchPercent == 100 && _convertSettings.DontExportExact)
+						{
+							return true;
+						}
+						if ((origin.MatchPercent > 0 && origin.MatchPercent < 100) && _convertSettings.DontExportFuzzy)
+						{
+							return true;
+						}
+						if (origin.MatchPercent == 0 && _convertSettings.DontExportNoMatch)
+						{
+							return true;
+						}
+					}
+				}
+			}
+            
             return false;
         }
 

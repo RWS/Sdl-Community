@@ -60,6 +60,7 @@
     <Compile Include="Geometry\LayoutItem.cs" />
     <Compile Include="Geometry\SpiralLayout.cs" />
     <Compile Include="Geometry\TypewriterLayout.cs" />
+    <Compile Include="Interfaces\IProgressIndicator.cs" />
     <Compile Include="Interfaces\ITerm.cs" />
     <Compile Include="LayoutFactory.cs" />
     <Compile Include="LayoutType.cs" />

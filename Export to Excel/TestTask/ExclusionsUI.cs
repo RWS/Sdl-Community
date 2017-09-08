@@ -31,7 +31,10 @@ namespace ExportToExcel
             var segmentStatus = chkList?.Items[e.Index] as SegmentStatus;
 
             if (segmentStatus != null)
-                _settings.SetSegmentStatus(segmentStatus.Status, e.NewValue == CheckState.Checked);
+			{
+				_settings.SetSegmentStatus(segmentStatus.Status, e.NewValue == CheckState.Checked);
+			}
+               
         }
 
         /// <summary>
@@ -74,6 +77,9 @@ namespace ExportToExcel
                 case GeneratorSettings.ExclusionType.Status:
                     rb_ExcludeStatus.Checked = true;
                     break;
+				case GeneratorSettings.ExclusionType.Locked:
+					excludeLockedBtn.Checked = true;
+					break;
                 default:
                     break;
             }
@@ -121,10 +127,14 @@ namespace ExportToExcel
             {
                 _settings.ExcludeExportType = GeneratorSettings.ExclusionType.Status;
             }
-            else
+			if (rb_ExcludeCategory.Checked)
+			{
+				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Category;
+			}
+			if (excludeLockedBtn.Checked)
             {
-                _settings.ExcludeExportType = GeneratorSettings.ExclusionType.Category;
-            }
+				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Locked;
+			}
         }
 
         private void cb_DontExportContext_CheckedChanged(object sender, EventArgs e)
@@ -152,10 +162,13 @@ namespace ExportToExcel
             if (rb_ExcludeStatus.Checked)
             {
                 cbl_ExcludedStatuses.Enabled = true;
-            }
+				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Status;
+
+			}
             else
             {
                 cbl_ExcludedStatuses.Enabled = false;
+				excludeLockedBtn.Enabled = false;
             }
         }
 
@@ -163,5 +176,28 @@ namespace ExportToExcel
         {
 
         }
-    }
+
+		private void excludeLockedBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (excludeLockedBtn.Checked)
+			{
+				excludeLockedBtn.Enabled = true;
+				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Locked;
+			}
+			else
+			{
+				cbl_ExcludedStatuses.Enabled = false;
+				
+			}
+		}
+
+		private void rb_ExcludeCategory_CheckedChanged(object sender, EventArgs e)
+		{
+			if (rb_ExcludeCategory.Checked)
+			{
+				rb_ExcludeCategory.Enabled = true;
+				_settings.ExcludeExportType = GeneratorSettings.ExclusionType.Category;
+			}
+		}
+	}
 }

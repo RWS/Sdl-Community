@@ -16,18 +16,33 @@ namespace Sdl.Community.ProjectTerms.Plugin
         private Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair;
         public IFileTypeManager FileTypeManager { get; set; }
 
+        public event EventHandler<Utils.ProgressEventArgs> Progress;
+
         public ProjectTermsExtractor()
+        {
+            Initialize();
+        }
+
+        public void Initialize()
         {
             sourceTerms = new List<string>();
             bilingualContentPair = new Dictionary<string, List<KeyValuePair<string, string>>>();
             FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
         }
 
+        private void OnProgress(int percent)
+        {
+            if (Progress != null)
+            {
+                Progress(this, new Utils.ProgressEventArgs { Percent = percent });
+            }
+        }
+
         private void AddItemToBilingualContentPair(string sourceText, string targetText, string targetLang)
         {
             if (bilingualContentPair.ContainsKey(sourceText))
             {
-                List<KeyValuePair<string, string>> targetTerms = bilingualContentPair[sourceText];
+                var targetTerms = bilingualContentPair[sourceText];
                 if (targetTerms.Where(x => x.Key.Equals(targetText) && x.Value.Equals(targetLang)) == null) return;
 
                 if(targetTerms.Where(x => x.Key.Equals(targetText)) != null)
@@ -37,8 +52,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             else
             {
-                List<KeyValuePair<string, string>> targetTermsList = new List<KeyValuePair<string, string>>();
-                KeyValuePair<string, string> targetContent = new KeyValuePair<string, string>(targetText, targetLang);
+                var targetTermsList = new List<KeyValuePair<string, string>>();
+                var targetContent = new KeyValuePair<string, string>(targetText, targetLang);
                 targetTermsList.Add(targetContent);
                 bilingualContentPair.Add(sourceText, targetTermsList);
             }
@@ -50,8 +65,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             {
                 foreach (var file in targetFiles)
                 {
-                    IMultiFileConverter converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
-                    TextExtractionBilingualContentHandler extractor = new TextExtractionBilingualContentHandler();
+                    var converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
+                    var extractor = new TextExtractionBilingualContentHandler();
                     converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
                     converter.Parse();
 
@@ -68,26 +83,34 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
         }
 
-        public void ExtractProjectFileTerms(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
+        public void ExtractProjectFilesTerms(List<ProjectFile> projectFiles)
         {
             try
             {
-                if (projectFile.Role != FileRole.Translatable) return;
-
-                FileTypeManager.SettingsBundle = Core.Settings.SettingsUtil.CreateSettingsBundle(null);
-                // disable xliff validation to speed up things
-                FileTypeManager.SettingsBundle.GetSettingsGroup("SDL XLIFF 1.0 v 1.0.0.0").GetSetting<bool>("ValidateXliff").Value = false;
-
-                TextExtractionBilingualSourceContentHandler extractor = new TextExtractionBilingualSourceContentHandler();
-                multiFileConverter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
-                multiFileConverter.Parse();
-
-                foreach (var text in extractor.SourceText)
+                sourceTerms.Clear();
+                var count = 0;
+                foreach (ProjectFile file in projectFiles)
                 {
-                    foreach (var term in GetTerms(text))
+                    if (file.Role != FileRole.Translatable) return;
+
+                    FileTypeManager.SettingsBundle = Core.Settings.SettingsUtil.CreateSettingsBundle(null);
+                    // disable xliff validation to speed up things
+                    FileTypeManager.SettingsBundle.GetSettingsGroup("SDL XLIFF 1.0 v 1.0.0.0").GetSetting<bool>("ValidateXliff").Value = false;
+                    var converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
+                    var extractor = new TextExtractionBilingualSourceContentHandler();
+                    converter.AddBilingualProcessor(new Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi.BilingualContentHandlerAdapter(extractor));
+                    converter.Parse();
+
+                    foreach (var text in extractor.SourceText)
                     {
-                        sourceTerms.Add(term.ToLower());
+                        foreach (var term in GetTerms(text))
+                        {
+                            sourceTerms.Add(term.ToLower());
+                        }
                     }
+
+                    count++;
+                    OnProgress((int)(100.0 * count / (double)projectFiles.Count));
                 }
             }
             catch (Exception e)
@@ -98,9 +121,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         protected virtual IEnumerable<string> GetTerms(string text)
         {
-            StringBuilder term = new StringBuilder();
-            bool containsLetter = false;
-            List<string> terms = new List<string>();
+            var term = new StringBuilder();
+            var containsLetter = false;
+            var terms = new List<string>();
 
             foreach (char ch in text)
             {
