@@ -13,6 +13,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
     {
         private ProjectTermsViewModel viewModel;
         private bool checkboxEnabled = false;
+        public bool ProjectSelected { get; set; }
 
         public ProjectTermsView()
         {
@@ -22,6 +23,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
         public void Initialize()
         {
             InitializeComponent();
+            progressBarExtractTerms.Visible = false;
 
             viewModel = ProjectTermsViewModel.Instance;
             viewModel.Filters = ExtractFilters();
@@ -29,9 +31,22 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
         private void ProjectTermsView_Load(object sender, EventArgs e)
         {
+            viewModel.ProjectSelected = ProjectSelected;
+            if (ProjectSelected)
+            {
+                buttonExtractTerms.Text = PluginResources.Button_ExtractTermsProject;
+            }
+            else
+            {
+                buttonExtractTerms.Text = PluginResources.Button_ExtractTermsFiles;
+            }
+        }
+
+        private void buttonExtractTerms_Click(object sender, EventArgs e)
+        {
             progressBarExtractTerms.Value = 0;
             buttonShowWordCloud.Enabled = false;
-            buttonExtractTerms.Enabled = false;
+            buttonIncludeFile.Enabled = false;
             progressBarExtractTerms.Visible = true;
 
             viewModel.ExtractProjectTermsAsync((result)
@@ -43,10 +58,10 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 }
 
                 progressBarExtractTerms.Visible = false;
-                labelExtractTerms.Text = PluginResources.Message_ExtractedTerms;
                 buttonShowWordCloud.Enabled = true;
-                buttonExtractTerms.Enabled = true;
+                buttonIncludeFile.Enabled = true;
 
+                buttonShowWordCloud.PerformClick();
             }, (progress) => { progressBarExtractTerms.Value = progress; });
         }
 
@@ -227,36 +242,50 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
         {
             try
             {
-                var viewPartProjectWordCloud = SdlTradosStudio.Application.GetController<ProjectTermsViewPart>();
-                viewPartProjectWordCloud.Activate();
-                viewPartProjectWordCloud.GenerateWordCloud(viewModel);
+                if (ProjectSelected)
+                {
+                    var viewPartProjectWordCloudProject = SdlTradosStudio.Application.GetController<ProjectTermsViewPartProject>();
+                    viewPartProjectWordCloudProject.Activate();
+                    viewPartProjectWordCloudProject.GenerateWordCloud(viewModel);
+                }
+                else
+                {
+                    var viewPartProjectWordCloudFiles = SdlTradosStudio.Application.GetController<ProjectTermsViewPartFiles>();
+                    viewPartProjectWordCloudFiles.Activate();
+                    viewPartProjectWordCloudFiles.GenerateWordCloud(viewModel);
+                }
             }
             catch (ProjectTermsException ex)
-            {
-                MessageBox.Show(ex.Message, PluginResources.MessageType_Error, MessageBoxButtons.OK);
-            }
-        }
-        #endregion
-
-        #region Extract term into xml file
-        private void buttonExtractTerms_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                viewModel.AddXMlFileToProject();
-                this.Close();
-            } catch(ProjectTermsException ex)
             {
                 MessageBox.Show(ex.Message, PluginResources.MessageType_Error);
             }
         }
         #endregion
 
-        private void ProjectTermsView_FormClosed(object sender, FormClosedEventArgs e)
+        #region Include terms into xml file and load to the Studio
+        private void buttonIncludeFile_Click(object sender, EventArgs e)
         {
-            var viewPartProjectWordCloud = SdlTradosStudio.Application.GetController<ProjectTermsViewPart>();
-            viewPartProjectWordCloud.Activate();
-            viewPartProjectWordCloud.ResetCloud();
+            try
+            {
+                progressBarExtractTerms.Value = 0;
+                buttonIncludeFile.Enabled = false;
+                progressBarExtractTerms.Visible = true;
+
+                viewModel.AddXMlFileToProjectAsync((result) => 
+                {
+                    if (result.Exception != null)
+                    {
+                        MessageBox.Show(Form.ActiveForm, "Failed to include project terms file: " + result.Exception.Message, "Error");
+                        return;
+                    }
+                    this.Close();
+                }, (progress) => { progressBarExtractTerms.Value = progress; });
+            }
+            catch (ProjectTermsException ex)
+            {
+                MessageBox.Show(ex.Message, PluginResources.MessageType_Error);
+            }
         }
+        #endregion
     }
 }

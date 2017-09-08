@@ -152,6 +152,8 @@
     <Compile Include="ViewPart\ProjectTermsViewPartControl.Designer.cs">
       <DependentUpon>ProjectTermsViewPartControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ViewPart\ProjectTermsViewPartFiles.cs" />
+    <Compile Include="ViewPart\ProjectTermsViewPartProject.cs" />
     <Compile Include="Views\ProjectTermsView.cs">
       <SubType>Form</SubType>
     </Compile>

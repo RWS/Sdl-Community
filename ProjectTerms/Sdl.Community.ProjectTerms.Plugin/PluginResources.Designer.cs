@@ -70,6 +70,24 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extract Terms From Selected Files.
+        /// </summary>
+        public static string Button_ExtractTermsFiles {
+            get {
+                return ResourceManager.GetString("Button_ExtractTermsFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract Terms From Project.
+        /// </summary>
+        public static string Button_ExtractTermsProject {
+            get {
+                return ResourceManager.GetString("Button_ExtractTermsProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _project.
         /// </summary>
         public static string Constant_ProjectType {
@@ -187,7 +205,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The xml file failed to be read!.
+        ///   Looks up a localized string similar to The terms weren&apos;t be extracted!.
         /// </summary>
         public static string Error_ReadXmlFile {
             get {

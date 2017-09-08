@@ -211,7 +211,7 @@
     <value>projectTerms-sourcecloud</value>
   </data>
   <data name="Error_ReadXmlFile" xml:space="preserve">
-    <value>The xml file failed to be read!</value>
+    <value>The terms weren't be extracted!</value>
   </data>
   <data name="BlacklistFileName" xml:space="preserve">
     <value>blackListTerms.txt</value>
@@ -222,5 +222,11 @@
   </data>
   <data name="Message_ExtractedTerms" xml:space="preserve">
     <value>Terms was extracted with success!</value>
+  </data>
+  <data name="Button_ExtractTermsFiles" xml:space="preserve">
+    <value>Extract Terms From Selected Files</value>
+  </data>
+  <data name="Button_ExtractTermsProject" xml:space="preserve">
+    <value>Extract Terms From Project</value>
   </data>
 </root>

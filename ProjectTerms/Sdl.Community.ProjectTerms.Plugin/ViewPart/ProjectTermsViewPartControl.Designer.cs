@@ -31,7 +31,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
         private void InitializeComponent()
         {
             this._tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this._cloudControl = new Sdl.Community.ProjectTerms.Controls.CloudControl();
+            this.cloudControl = new Sdl.Community.ProjectTerms.Controls.CloudControl();
             this._tableLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -41,7 +41,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this._tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this._tableLayoutPanel.Controls.Add(this._cloudControl, 0, 1);
+            this._tableLayoutPanel.Controls.Add(this.cloudControl, 0, 1);
             this._tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this._tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this._tableLayoutPanel.Name = "_tableLayoutPanel";
@@ -51,19 +51,19 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
             this._tableLayoutPanel.Size = new System.Drawing.Size(510, 313);
             this._tableLayoutPanel.TabIndex = 0;
             // 
-            // _cloudControl
+            // cloudControl
             // 
-            this._cloudControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.cloudControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this._cloudControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this._tableLayoutPanel.SetColumnSpan(this._cloudControl, 3);
-            this._cloudControl.LayoutType = Sdl.Community.ProjectTerms.Controls.LayoutType.Spiral;
-            this._cloudControl.Location = new System.Drawing.Point(3, 3);
-            this._cloudControl.MaxFontSize = 50;
-            this._cloudControl.MinFontSize = 6;
-            this._cloudControl.Name = "_cloudControl";
-            this._cloudControl.Palette = new System.Drawing.Color[] {
+            this.cloudControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this._tableLayoutPanel.SetColumnSpan(this.cloudControl, 3);
+            this.cloudControl.LayoutType = Sdl.Community.ProjectTerms.Controls.LayoutType.Spiral;
+            this.cloudControl.Location = new System.Drawing.Point(3, 3);
+            this.cloudControl.MaxFontSize = 50;
+            this.cloudControl.MinFontSize = 6;
+            this.cloudControl.Name = "cloudControl";
+            this.cloudControl.Palette = new System.Drawing.Color[] {
         System.Drawing.Color.DarkRed,
         System.Drawing.Color.DarkBlue,
         System.Drawing.Color.DarkGreen,
@@ -75,9 +75,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
         System.Drawing.Color.Blue,
         System.Drawing.Color.Red,
         System.Drawing.Color.Green};
-            this._cloudControl.Size = new System.Drawing.Size(504, 307);
-            this._cloudControl.TabIndex = 2;
-            this._cloudControl.WeightedTerms = null;
+            this.cloudControl.Size = new System.Drawing.Size(504, 307);
+            this.cloudControl.TabIndex = 2;
+            this.cloudControl.WeightedTerms = null;
             // 
             // ProjectTermsViewPartControl
             // 
@@ -93,7 +93,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
 
         #endregion
 
-        private CloudControl _cloudControl;
+        private CloudControl cloudControl;
         private System.Windows.Forms.TableLayoutPanel _tableLayoutPanel;
     }
 }

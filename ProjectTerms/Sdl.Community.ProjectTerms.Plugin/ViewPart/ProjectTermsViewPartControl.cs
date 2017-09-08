@@ -1,11 +1,27 @@
 ﻿using System.Windows.Forms;
 using System.Collections.Generic;
 using Sdl.Community.ProjectTerms.Controls.Interfaces;
+using System;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
 {
     public partial class ProjectTermsViewPartControl : UserControl
     {
+        ProjectTermsViewModel viewModel;
+        internal ProjectTermsViewModel ViewModel
+        {
+            get
+            {
+                return viewModel;
+            }
+
+            set
+            {
+                viewModel = value;
+                viewModel.SelectedProjectChanged += viewModel_SelectedProjectChanged;
+            }
+        }
+
         public ProjectTermsViewPartControl()
         {
             Initialize();
@@ -16,7 +32,13 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
             InitializeComponent();
         }
 
-        public void GenerateWordCloud(ProjectTermsViewModel viewModel)
+        void viewModel_SelectedProjectChanged(object sender, EventArgs e)
+        {
+            cloudControl.WeightedTerms = ViewModel.Terms;
+            cloudControl.Invalidate();
+        }
+
+        public void GenerateWordCloud()
         {
             viewModel.GenerateWordCloudAsync((result)
                 =>
@@ -27,16 +49,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
                 }
                 else
                 {
-                    _cloudControl.WeightedTerms = result.WeightedTerms;
+                    cloudControl.WeightedTerms = result.WeightedTerms;
                 }
-
-
             });
-        }
-
-        public void Resetcloud()
-        {
-            _cloudControl.WeightedTerms = new List<ITerm>();
         }
     }
 }

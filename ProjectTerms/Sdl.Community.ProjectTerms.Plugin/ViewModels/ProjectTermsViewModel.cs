@@ -26,6 +26,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public FileBasedProject Project { get; set; }
         private ProjectsController ProjectsController { get; set; }
+        public bool ProjectSelected { get; set; }
+
+        public event EventHandler SelectedProjectChanged;
+        public event EventHandler<Utils.ProgressEventArgs> Progress;
 
         public ProjectTermsViewModel()
         {
@@ -36,6 +40,43 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             extractor = new ProjectTermsExtractor();
             cache = new ProjectTermsCache();
+
+            ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
+            ProjectsController.SelectedProjectsChanged += ProjectsController_SelectedProjectsChanged;
+            OnSelectedProjectsChanged();
+        }
+
+        void ProjectsController_SelectedProjectsChanged(object sender, EventArgs e)
+        {
+            OnSelectedProjectsChanged();
+        }
+
+        private void OnSelectedProjectsChanged()
+        {
+            List<FileBasedProject> projects = ProjectsController.SelectedProjects.ToList();
+
+            Project = projects.Count == 1 ? projects[0] : null;
+
+            if (Project != null)
+            {
+                if (File.Exists(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true)))
+                {
+                    Terms = cache.ReadXmlFile(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true));
+                }
+                else
+                {
+                    Terms = null;
+                }
+            }
+            else
+            {
+                Terms = null;
+            }
+
+            if (SelectedProjectChanged != null)
+            {
+                SelectedProjectChanged(this, EventArgs.Empty);
+            }
         }
 
         #region Utils
@@ -43,10 +84,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             List<ProjectFile> sourceFilesToProcessed = new List<ProjectFile>();
 
-            List<ProjectFile> selectedFiles = (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles).ToList();
             var projectSourceFiles = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetSourceLanguageFiles();
-
-            if (selectedFiles.Count == 0)
+            if (ProjectSelected)
             {
                 foreach (var file in projectSourceFiles)
                 {
@@ -58,6 +97,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             else
             {
+                List<ProjectFile> selectedFiles = (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles).ToList();
                 foreach (var file in selectedFiles)
                 {
                     sourceFilesToProcessed.Add(projectSourceFiles.FirstOrDefault(x => x.Name == file.Name));
@@ -118,14 +158,18 @@ namespace Sdl.Community.ProjectTerms.Plugin
             sourceProjectFilesToProcessed = GetFiles();
             var projectPath = Utils.Utils.GetProjecPath();
             var xmlWordCloudFilePath = Utils.Utils.GetXMLFilePath(projectPath, true);
-            if (!File.Exists(xmlWordCloudFilePath))
+
+            if (File.Exists(xmlWordCloudFilePath))
             {
-                ExtractTermsCache(projectPath, sourceProjectFilesToProcessed, xmlWordCloudFilePath);
+                File.Delete(xmlWordCloudFilePath);
             }
-            else
-            {
-                Terms = cache.ReadXmlFile(xmlWordCloudFilePath);
-            }
+
+            ExtractTermsCache(projectPath, sourceProjectFilesToProcessed, xmlWordCloudFilePath);
+        }
+
+        public void ReadProjectTermsFromFile()
+        {
+            Terms = cache.ReadXmlFile(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true));
         }
 
         private void ExtractTermsCache(string projectPath, List<ProjectFile> files, string xmlWordCloudFilePath)
@@ -142,7 +186,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
         #region Generate Cloud
         private void FilterProjectTerms()
         {
-            ExtractProjectTerms();
+            ReadProjectTermsFromFile();
             Terms = Terms
                 .FilterByBlackList(Filters.Blacklist)
                 .FilterByOccurrences(Filters.Occurrences)
@@ -187,12 +231,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
         public void AddXMlFileToProject()
         {
             GenerateXmlTermsFile();
+            OnProgress(15);
 
             var xmlFolder = Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath()));
             if (CheckXmlProjectTermsFileExists())
             {
                 // Todo: to remove the existed file with reflexion
             }
+            OnProgress(30);
 
             IncludeFileToProject(Utils.Utils.GetCurrentProject(), xmlFolder, false);
 
@@ -206,14 +252,56 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 project.AddFolderWithFiles(xmlFolder, recursion);
                 var projectFiles = project.GetSourceLanguageFiles();
                 var scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+                OnProgress(70);
                 var convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                OnProgress(90);
                 var copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
                 var preTran = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.PreTranslateFiles);
+                OnProgress(100);
             }
             catch (Exception e)
             {
                 throw new ProjectTermsException(PluginResources.Error_AddXMlToProject + e.Message);
             }
+        }
+
+        private void OnProgress(int percent)
+        {
+            if (Progress != null)
+            {
+                Progress(this, new Utils.ProgressEventArgs { Percent = percent });
+            }
+        }
+
+        public void AddXMlFileToProjectAsync(Action<ProjectTermsCloudResult> resultCallback, Action<int> progressCallback)
+        {
+            var worker = new BackgroundWorker();
+            worker.WorkerReportsProgress = true;
+
+            worker.DoWork += (sender, e) =>
+            {
+                this.Progress += (s, p) =>
+                {
+                    if (worker.IsBusy)
+                    {
+                        worker.ReportProgress(p.Percent);
+                    }
+                };
+
+                AddXMlFileToProject();
+            };
+            worker.RunWorkerCompleted += (sender, e) =>
+            {
+                var result = new ProjectTermsCloudResult();
+                if (e.Error != null)
+                {
+                    result.Exception = e.Error;
+                }
+
+                resultCallback(result);
+            };
+            worker.ProgressChanged += (sender, e) => { progressCallback(e.ProgressPercentage); };
+            worker.RunWorkerAsync();
         }
         #endregion
     }

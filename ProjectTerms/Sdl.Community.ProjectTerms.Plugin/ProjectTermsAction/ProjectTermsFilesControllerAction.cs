@@ -21,6 +21,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ProjectTermsAction
             }
 
             var projectTermsView = new ProjectTermsView();
+            projectTermsView.ProjectSelected = false;
             var parent = projectTermsView.ParentForm;
             projectTermsView.ShowDialog(parent);
         }

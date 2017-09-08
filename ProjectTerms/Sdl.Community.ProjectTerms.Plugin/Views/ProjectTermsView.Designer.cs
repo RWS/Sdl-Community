@@ -30,6 +30,7 @@
         {
             this.groupBoxSettings = new System.Windows.Forms.GroupBox();
             this.buttonExtractTerms = new System.Windows.Forms.Button();
+            this.buttonIncludeFile = new System.Windows.Forms.Button();
             this.labelErrorRegex = new System.Windows.Forms.Label();
             this.buttonShowWordCloud = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
@@ -50,7 +51,6 @@
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.Terms = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.progressBarExtractTerms = new System.Windows.Forms.ProgressBar();
-            this.labelExtractTerms = new System.Windows.Forms.Label();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -59,6 +59,7 @@
             // groupBoxSettings
             // 
             this.groupBoxSettings.Controls.Add(this.buttonExtractTerms);
+            this.groupBoxSettings.Controls.Add(this.buttonIncludeFile);
             this.groupBoxSettings.Controls.Add(this.labelErrorRegex);
             this.groupBoxSettings.Controls.Add(this.buttonShowWordCloud);
             this.groupBoxSettings.Controls.Add(this.label2);
@@ -87,13 +88,22 @@
             // 
             // buttonExtractTerms
             // 
-            this.buttonExtractTerms.Location = new System.Drawing.Point(305, 372);
+            this.buttonExtractTerms.Location = new System.Drawing.Point(3, 372);
             this.buttonExtractTerms.Name = "buttonExtractTerms";
-            this.buttonExtractTerms.Size = new System.Drawing.Size(270, 23);
-            this.buttonExtractTerms.TabIndex = 24;
-            this.buttonExtractTerms.Text = "Include terms file to the project";
+            this.buttonExtractTerms.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtractTerms.TabIndex = 25;
             this.buttonExtractTerms.UseVisualStyleBackColor = true;
             this.buttonExtractTerms.Click += new System.EventHandler(this.buttonExtractTerms_Click);
+            // 
+            // buttonIncludeFile
+            // 
+            this.buttonIncludeFile.Location = new System.Drawing.Point(400, 372);
+            this.buttonIncludeFile.Name = "buttonIncludeFile";
+            this.buttonIncludeFile.Size = new System.Drawing.Size(176, 23);
+            this.buttonIncludeFile.TabIndex = 24;
+            this.buttonIncludeFile.Text = "Include terms file to the project";
+            this.buttonIncludeFile.UseVisualStyleBackColor = true;
+            this.buttonIncludeFile.Click += new System.EventHandler(this.buttonIncludeFile_Click);
             // 
             // labelErrorRegex
             // 
@@ -105,9 +115,9 @@
             // 
             // buttonShowWordCloud
             // 
-            this.buttonShowWordCloud.Location = new System.Drawing.Point(5, 372);
+            this.buttonShowWordCloud.Location = new System.Drawing.Point(201, 372);
             this.buttonShowWordCloud.Name = "buttonShowWordCloud";
-            this.buttonShowWordCloud.Size = new System.Drawing.Size(272, 23);
+            this.buttonShowWordCloud.Size = new System.Drawing.Size(176, 23);
             this.buttonShowWordCloud.TabIndex = 21;
             this.buttonShowWordCloud.Text = "Preview the extracted terms";
             this.buttonShowWordCloud.UseVisualStyleBackColor = true;
@@ -281,26 +291,16 @@
             // 
             // progressBarExtractTerms
             // 
-            this.progressBarExtractTerms.Location = new System.Drawing.Point(111, 429);
+            this.progressBarExtractTerms.Location = new System.Drawing.Point(10, 429);
             this.progressBarExtractTerms.Name = "progressBarExtractTerms";
-            this.progressBarExtractTerms.Size = new System.Drawing.Size(476, 23);
+            this.progressBarExtractTerms.Size = new System.Drawing.Size(577, 23);
             this.progressBarExtractTerms.TabIndex = 4;
-            // 
-            // labelExtractTerms
-            // 
-            this.labelExtractTerms.AutoSize = true;
-            this.labelExtractTerms.Location = new System.Drawing.Point(10, 434);
-            this.labelExtractTerms.Name = "labelExtractTerms";
-            this.labelExtractTerms.Size = new System.Drawing.Size(91, 13);
-            this.labelExtractTerms.TabIndex = 5;
-            this.labelExtractTerms.Text = "Extracting terms...";
             // 
             // ProjectTermsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 461);
-            this.Controls.Add(this.labelExtractTerms);
             this.Controls.Add(this.progressBarExtractTerms);
             this.Controls.Add(this.groupBoxSettings);
             this.MaximizeBox = false;
@@ -308,21 +308,19 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Project Terms";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ProjectTermsView_FormClosed);
             this.Load += new System.EventHandler(this.ProjectTermsView_Load);
             this.groupBoxSettings.ResumeLayout(false);
             this.groupBoxSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.GroupBox groupBoxSettings;
-        private System.Windows.Forms.Button buttonExtractTerms;
+        private System.Windows.Forms.Button buttonIncludeFile;
         private System.Windows.Forms.Label labelErrorRegex;
         private System.Windows.Forms.Button buttonShowWordCloud;
         private System.Windows.Forms.Label label2;
@@ -342,7 +340,7 @@
         private System.Windows.Forms.Label labelBlackList;
         private System.Windows.Forms.ListView listViewBlackList;
         private System.Windows.Forms.ProgressBar progressBarExtractTerms;
-        private System.Windows.Forms.Label labelExtractTerms;
         private System.Windows.Forms.ColumnHeader Terms;
+        private System.Windows.Forms.Button buttonExtractTerms;
     }
 }
