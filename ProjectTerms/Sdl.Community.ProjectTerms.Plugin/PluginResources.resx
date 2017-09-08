@@ -124,49 +124,64 @@
     <value>SingleFile</value>
   </data>
   <data name="Error_AddLanguages" xml:space="preserve">
-    <value>Adding languages to termbase definition file failed!</value>
+    <value>Unable to add languages to the termbase definition file!</value>
+    <comment>Adding languages to termbase definition file failed!</comment>
   </data>
   <data name="Error_AddXMlToProject" xml:space="preserve">
-    <value>Add xml file in the Studio project failed!</value>
+    <value>Unable to add the XML file to the project!</value>
+    <comment>Add xml file in the Studio project failed!</comment>
   </data>
   <data name="Error_ConnectToTermbaseLocalRepository" xml:space="preserve">
-    <value>Connection to termbase repository failed!</value>
+    <value>Unable to connect to the termbase repository!</value>
+    <comment>Connection to termbase repository failed!</comment>
   </data>
   <data name="Error_CreateDirectory" xml:space="preserve">
-    <value>The folder failed to create!</value>
+    <value>Unable to create the folder!</value>
+    <comment>The folder failed to create!</comment>
   </data>
   <data name="Error_CreateEntry" xml:space="preserve">
-    <value>XML entry creation failed!</value>
+    <value>Unable to create the XML entry!</value>
+    <comment>XML entry creation failed!</comment>
   </data>
   <data name="Error_CreateTermbase" xml:space="preserve">
-    <value>The termbase generation failed!</value>
+    <value>Unable to generate the termbase!</value>
+    <comment>The termbase generation failed!</comment>
   </data>
   <data name="Error_ExtractContent" xml:space="preserve">
-    <value>Extraction .sdlxliff content failed!</value>
+    <value>Unable to extract the SDLXLIFF content!</value>
+    <comment>Extraction .sdlxliff content failed!</comment>
   </data>
   <data name="Error_GetProjectLanguages" xml:space="preserve">
-    <value>Extract the project languages failed!</value>
+    <value>Unable to read the project languages!</value>
+    <comment>Extract the project languages failed!</comment>
   </data>
   <data name="Error_GetResourceTextFile" xml:space="preserve">
-    <value>Extraction from embedded resource file failed!</value>
+    <value>Unable to extract the embedded resource file!</value>
+    <comment>Extraction from embedded resource file failed!</comment>
   </data>
   <data name="Error_IncludeTermbaseInStudio" xml:space="preserve">
-    <value>Including termbase to Studio failed!</value>
+    <value>Unable to open the termbase in Studio!</value>
+    <comment>Including termbase to Studio failed!</comment>
   </data>
   <data name="Error_PopulateTermbase" xml:space="preserve">
-    <value>Population termbase failed!</value>
+    <value>Unable to update the termbase!</value>
+    <comment>Population termbase failed!</comment>
   </data>
   <data name="Error_RemoveDirectory" xml:space="preserve">
-    <value>The folder failed to remove!</value>
+    <value>Unable to delete the folder!</value>
+    <comment>The folder failed to remove!</comment>
   </data>
   <data name="Error_Save" xml:space="preserve">
-    <value>The xml file failed to be saved!</value>
+    <value>Unable to save the XML file!</value>
+    <comment>The xml file failed to be saved!</comment>
   </data>
   <data name="Error_SaveTermbaseDefinitionToTempLocation" xml:space="preserve">
-    <value>Storing termbase definition file locally failed!</value>
+    <value>Unable to save the termbase definition!</value>
+    <comment>Storing termbase definition file locally failed!</comment>
   </data>
   <data name="Error_Settings" xml:space="preserve">
-    <value>Termbase generation settings failed!</value>
+    <value>Unable to read the termbase settings!</value>
+    <comment>Termbase generation settings failed!</comment>
   </data>
   <data name="Error_SingleFileProject" xml:space="preserve">
     <value>Project Terms cannot be used on a single file project. Please create a standard Studio project and try again.</value>
@@ -178,19 +193,23 @@
     <value>You already have a termbase for this file! Please remove it and generate it again!</value>
   </data>
   <data name="MessageContent_buttonAdd" xml:space="preserve">
-    <value>Term already exists!</value>
+    <value>The term exists in the list!</value>
+    <comment>Term already exists!</comment>
   </data>
   <data name="MessageContent_buttonDelete_Empty" xml:space="preserve">
-    <value>Your list is empty!</value>
+    <value>The list is empty!</value>
+    <comment>Your list is empty!</comment>
   </data>
   <data name="MessageContent_buttonDelete_Select" xml:space="preserve">
     <value>Please select at least one term!</value>
   </data>
   <data name="MessageContent_buttonLoad" xml:space="preserve">
-    <value>Blacklist is not define!</value>
+    <value>Unable to find the blacklist! Please save the list once!</value>
+    <comment>Blacklist is not define!</comment>
   </data>
   <data name="MessageContent_SkipSettings" xml:space="preserve">
-    <value>You cannot skip the setting part</value>
+    <value>Please open the settings window!</value>
+    <comment>You cannot skip the setting part</comment>
   </data>
   <data name="MessageTitle" xml:space="preserve">
     <value>Termbase information</value>
@@ -205,13 +224,15 @@
     <value>Sdl.Community.ProjectTerms.Plugin</value>
   </data>
   <data name="Error_Regex" xml:space="preserve">
-    <value>The regular expression is not valid! Please review once again!</value>
+    <value>Invalid regular expression, please review the rules!</value>
+    <comment>The regular expression is not valid! Please review once again!</comment>
   </data>
   <data name="WordCloudFileName" xml:space="preserve">
     <value>projectTerms-sourcecloud</value>
   </data>
   <data name="Error_ReadXmlFile" xml:space="preserve">
-    <value>The terms weren't be extracted!</value>
+    <value>Please extract the terms first!</value>
+    <comment>The terms weren't be extracted!</comment>
   </data>
   <data name="BlacklistFileName" xml:space="preserve">
     <value>blackListTerms.txt</value>
@@ -221,7 +242,8 @@
     <value>Resources\wordcloud.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Message_ExtractedTerms" xml:space="preserve">
-    <value>Terms was extracted with success!</value>
+    <value>The terms were extracted successfully.</value>
+    <comment>Terms was extracted with success!</comment>
   </data>
   <data name="Button_ExtractTermsFiles" xml:space="preserve">
     <value>Extract Terms From Selected Files</value>
