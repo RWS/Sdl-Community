@@ -79,9 +79,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             string translatedText = string.Empty;
             if (categoryId != string.Empty)
             {
-                translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
-               categoryId, string.Empty);
-            }
+
+				//send full language source code in case of custom engine
+
+				// translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
+				//categoryId, string.Empty);
+				translatedText = client.Translate(_authToken, textToTranslate, sourceLang, targetLc, "text/plain",
+				categoryId, string.Empty);
+			}
             else
             {
                 translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
