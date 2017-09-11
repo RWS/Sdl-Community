@@ -1,15 +1,38 @@
-﻿using System.Windows.Forms;
-
-namespace Sdl.Community.ProjectTerms.Plugin
+﻿namespace Sdl.Community.ProjectTerms.Plugin.Views
 {
-    public partial class ProjectTermsBatchTaskSettingsControl
+    partial class ProjectTermsView
     {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.groupBoxFilters = new System.Windows.Forms.GroupBox();
+            this.groupBoxSettings = new System.Windows.Forms.GroupBox();
+            this.buttonExtractTerms = new System.Windows.Forms.Button();
+            this.buttonIncludeFile = new System.Windows.Forms.Button();
             this.labelErrorRegex = new System.Windows.Forms.Label();
-            this.buttonWordCloud = new System.Windows.Forms.Button();
+            this.buttonShowWordCloud = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.checkBoxRegex = new System.Windows.Forms.CheckBox();
             this.buttonSave = new System.Windows.Forms.Button();
@@ -26,42 +49,61 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.textBoxTerm = new System.Windows.Forms.TextBox();
             this.labelBlackList = new System.Windows.Forms.Label();
             this.listViewBlackList = new System.Windows.Forms.ListView();
-            this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.groupBoxFilters.SuspendLayout();
+            this.Terms = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.progressBarExtractTerms = new System.Windows.Forms.ProgressBar();
+            this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
-            // groupBoxFilters
+            // groupBoxSettings
             // 
-            this.groupBoxFilters.Controls.Add(this.labelErrorRegex);
-            this.groupBoxFilters.Controls.Add(this.buttonWordCloud);
-            this.groupBoxFilters.Controls.Add(this.label2);
-            this.groupBoxFilters.Controls.Add(this.checkBoxRegex);
-            this.groupBoxFilters.Controls.Add(this.buttonSave);
-            this.groupBoxFilters.Controls.Add(this.buttonLoad);
-            this.groupBoxFilters.Controls.Add(this.buttonDelete);
-            this.groupBoxFilters.Controls.Add(this.buttonResetList);
-            this.groupBoxFilters.Controls.Add(this.numericUpDownTermsLength);
-            this.groupBoxFilters.Controls.Add(this.numericUpDownTermsOccurrences);
-            this.groupBoxFilters.Controls.Add(this.labelTermsLength);
-            this.groupBoxFilters.Controls.Add(this.labelOccurrences);
-            this.groupBoxFilters.Controls.Add(this.label1);
-            this.groupBoxFilters.Controls.Add(this.labelTerm);
-            this.groupBoxFilters.Controls.Add(this.buttonAdd);
-            this.groupBoxFilters.Controls.Add(this.textBoxTerm);
-            this.groupBoxFilters.Controls.Add(this.labelBlackList);
-            this.groupBoxFilters.Controls.Add(this.listViewBlackList);
-            this.groupBoxFilters.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.groupBoxFilters.Location = new System.Drawing.Point(3, 3);
-            this.groupBoxFilters.Name = "groupBoxFilters";
-            this.groupBoxFilters.Size = new System.Drawing.Size(581, 410);
-            this.groupBoxFilters.TabIndex = 2;
-            this.groupBoxFilters.TabStop = false;
-            this.groupBoxFilters.Text = "Project terms filters";
+            this.groupBoxSettings.Controls.Add(this.buttonExtractTerms);
+            this.groupBoxSettings.Controls.Add(this.buttonIncludeFile);
+            this.groupBoxSettings.Controls.Add(this.labelErrorRegex);
+            this.groupBoxSettings.Controls.Add(this.buttonShowWordCloud);
+            this.groupBoxSettings.Controls.Add(this.label2);
+            this.groupBoxSettings.Controls.Add(this.checkBoxRegex);
+            this.groupBoxSettings.Controls.Add(this.buttonSave);
+            this.groupBoxSettings.Controls.Add(this.buttonLoad);
+            this.groupBoxSettings.Controls.Add(this.buttonDelete);
+            this.groupBoxSettings.Controls.Add(this.buttonResetList);
+            this.groupBoxSettings.Controls.Add(this.numericUpDownTermsLength);
+            this.groupBoxSettings.Controls.Add(this.numericUpDownTermsOccurrences);
+            this.groupBoxSettings.Controls.Add(this.labelTermsLength);
+            this.groupBoxSettings.Controls.Add(this.labelOccurrences);
+            this.groupBoxSettings.Controls.Add(this.label1);
+            this.groupBoxSettings.Controls.Add(this.labelTerm);
+            this.groupBoxSettings.Controls.Add(this.buttonAdd);
+            this.groupBoxSettings.Controls.Add(this.textBoxTerm);
+            this.groupBoxSettings.Controls.Add(this.labelBlackList);
+            this.groupBoxSettings.Controls.Add(this.listViewBlackList);
+            this.groupBoxSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.groupBoxSettings.Location = new System.Drawing.Point(10, 6);
+            this.groupBoxSettings.Name = "groupBoxSettings";
+            this.groupBoxSettings.Size = new System.Drawing.Size(581, 417);
+            this.groupBoxSettings.TabIndex = 3;
+            this.groupBoxSettings.TabStop = false;
+            this.groupBoxSettings.Text = "Project terms settings";
+            // 
+            // buttonExtractTerms
+            // 
+            this.buttonExtractTerms.Location = new System.Drawing.Point(3, 372);
+            this.buttonExtractTerms.Name = "buttonExtractTerms";
+            this.buttonExtractTerms.Size = new System.Drawing.Size(176, 23);
+            this.buttonExtractTerms.TabIndex = 25;
+            this.buttonExtractTerms.UseVisualStyleBackColor = true;
+            this.buttonExtractTerms.Click += new System.EventHandler(this.buttonExtractTerms_Click);
+            // 
+            // buttonIncludeFile
+            // 
+            this.buttonIncludeFile.Location = new System.Drawing.Point(400, 372);
+            this.buttonIncludeFile.Name = "buttonIncludeFile";
+            this.buttonIncludeFile.Size = new System.Drawing.Size(176, 23);
+            this.buttonIncludeFile.TabIndex = 24;
+            this.buttonIncludeFile.Text = "Include terms file to the project";
+            this.buttonIncludeFile.UseVisualStyleBackColor = true;
+            this.buttonIncludeFile.Click += new System.EventHandler(this.buttonIncludeFile_Click);
             // 
             // labelErrorRegex
             // 
@@ -71,15 +113,15 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.labelErrorRegex.Size = new System.Drawing.Size(0, 13);
             this.labelErrorRegex.TabIndex = 22;
             // 
-            // buttonWordCloud
+            // buttonShowWordCloud
             // 
-            this.buttonWordCloud.Location = new System.Drawing.Point(5, 372);
-            this.buttonWordCloud.Name = "buttonWordCloud";
-            this.buttonWordCloud.Size = new System.Drawing.Size(161, 23);
-            this.buttonWordCloud.TabIndex = 21;
-            this.buttonWordCloud.Text = "Preview the extracted terms";
-            this.buttonWordCloud.UseVisualStyleBackColor = true;
-            this.buttonWordCloud.Click += new System.EventHandler(this.buttonWordCloud_Click);
+            this.buttonShowWordCloud.Location = new System.Drawing.Point(201, 372);
+            this.buttonShowWordCloud.Name = "buttonShowWordCloud";
+            this.buttonShowWordCloud.Size = new System.Drawing.Size(176, 23);
+            this.buttonShowWordCloud.TabIndex = 21;
+            this.buttonShowWordCloud.Text = "Preview the extracted terms";
+            this.buttonShowWordCloud.UseVisualStyleBackColor = true;
+            this.buttonShowWordCloud.Click += new System.EventHandler(this.buttonShowWordCloud_Click);
             // 
             // label2
             // 
@@ -152,6 +194,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.numericUpDownTermsLength.Name = "numericUpDownTermsLength";
             this.numericUpDownTermsLength.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsLength.TabIndex = 11;
+            this.numericUpDownTermsLength.ValueChanged += new System.EventHandler(this.numericUpDownTermsLength_ValueChanged);
             // 
             // numericUpDownTermsOccurrences
             // 
@@ -164,6 +207,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             this.numericUpDownTermsOccurrences.Name = "numericUpDownTermsOccurrences";
             this.numericUpDownTermsOccurrences.Size = new System.Drawing.Size(50, 20);
             this.numericUpDownTermsOccurrences.TabIndex = 10;
+            this.numericUpDownTermsOccurrences.ValueChanged += new System.EventHandler(this.numericUpDownTermsOccurrences_ValueChanged);
             // 
             // labelTermsLength
             // 
@@ -230,56 +274,73 @@ namespace Sdl.Community.ProjectTerms.Plugin
             // 
             // listViewBlackList
             // 
+            this.listViewBlackList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Terms});
             this.listViewBlackList.FullRowSelect = true;
             this.listViewBlackList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.listViewBlackList.Columns.Add("Terms", 178);
-            this.listViewBlackList.Location = new System.Drawing.Point(7, 37);
+            this.listViewBlackList.Location = new System.Drawing.Point(10, 37);
             this.listViewBlackList.Name = "listViewBlackList";
-            this.listViewBlackList.Size = new System.Drawing.Size(182, 205);
+            this.listViewBlackList.Size = new System.Drawing.Size(185, 205);
             this.listViewBlackList.TabIndex = 0;
             this.listViewBlackList.UseCompatibleStateImageBehavior = false;
             this.listViewBlackList.View = System.Windows.Forms.View.Details;
             // 
-            // errorProvider1
+            // Terms
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.Terms.Width = 178;
             // 
-            // ProjectTermsBatchTaskSettingsControl
+            // progressBarExtractTerms
             // 
-            this.Controls.Add(this.groupBoxFilters);
-            this.Name = "ProjectTermsBatchTaskSettingsControl";
-            this.Size = new System.Drawing.Size(587, 425);
-            this.groupBoxFilters.ResumeLayout(false);
-            this.groupBoxFilters.PerformLayout();
+            this.progressBarExtractTerms.Location = new System.Drawing.Point(10, 429);
+            this.progressBarExtractTerms.Name = "progressBarExtractTerms";
+            this.progressBarExtractTerms.Size = new System.Drawing.Size(577, 23);
+            this.progressBarExtractTerms.TabIndex = 4;
+            // 
+            // ProjectTermsView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(600, 461);
+            this.Controls.Add(this.progressBarExtractTerms);
+            this.Controls.Add(this.groupBoxSettings);
+            this.MaximizeBox = false;
+            this.Name = "ProjectTermsView";
+            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Project Terms";
+            this.Load += new System.EventHandler(this.ProjectTermsView_Load);
+            this.groupBoxSettings.ResumeLayout(false);
+            this.groupBoxSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingSource1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
-        private GroupBox groupBoxFilters;
-        private ListView listViewBlackList;
-        private Label labelTermsLength;
-        private Label labelOccurrences;
-        private Label label1;
-        private Label labelTerm;
-        private Button buttonAdd;
-        private TextBox textBoxTerm;
-        private Label labelBlackList;
-        private BindingSource bindingSource1;
-        private System.ComponentModel.IContainer components;
-        private NumericUpDown numericUpDownTermsLength;
-        private NumericUpDown numericUpDownTermsOccurrences;
-        private ErrorProvider errorProvider1;
-        private Button buttonResetList;
-        private Button buttonDelete;
-        private Button buttonSave;
-        private Button buttonLoad;
-        private Label label2;
-        private CheckBox checkBoxRegex;
-        private Button buttonWordCloud;
-        private Label labelErrorRegex;
+        #endregion
+
+        private System.Windows.Forms.GroupBox groupBoxSettings;
+        private System.Windows.Forms.Button buttonIncludeFile;
+        private System.Windows.Forms.Label labelErrorRegex;
+        private System.Windows.Forms.Button buttonShowWordCloud;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox checkBoxRegex;
+        private System.Windows.Forms.Button buttonSave;
+        private System.Windows.Forms.Button buttonLoad;
+        private System.Windows.Forms.Button buttonDelete;
+        private System.Windows.Forms.Button buttonResetList;
+        private System.Windows.Forms.NumericUpDown numericUpDownTermsLength;
+        private System.Windows.Forms.NumericUpDown numericUpDownTermsOccurrences;
+        private System.Windows.Forms.Label labelTermsLength;
+        private System.Windows.Forms.Label labelOccurrences;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label labelTerm;
+        private System.Windows.Forms.Button buttonAdd;
+        private System.Windows.Forms.TextBox textBoxTerm;
+        private System.Windows.Forms.Label labelBlackList;
+        private System.Windows.Forms.ListView listViewBlackList;
+        private System.Windows.Forms.ProgressBar progressBarExtractTerms;
+        private System.Windows.Forms.ColumnHeader Terms;
+        private System.Windows.Forms.Button buttonExtractTerms;
     }
 }

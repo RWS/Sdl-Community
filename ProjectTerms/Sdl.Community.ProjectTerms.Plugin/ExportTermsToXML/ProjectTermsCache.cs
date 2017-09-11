@@ -23,11 +23,11 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                             select new XElement("term", new XAttribute("count", term.Occurrences), term.Text)))
                 );
 
-                if (!Directory.Exists(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath))))
-                    Utils.Utils.CreateDirectory(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath)));
-
                 if (!wordCloudFile)
                 {
+                    if (!Directory.Exists(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath))))
+                        Utils.Utils.CreateDirectory(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath)));
+
                     doc.Save(Utils.Utils.GetXMLFilePath(projectPath));
                 }
                 else
@@ -61,7 +61,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
             }
             catch (Exception e)
             {
-                throw new ProjectTermsException(PluginResources.Error_ReadXmlFile + e.Message);
+                throw new ProjectTermsException(PluginResources.Error_ReadXmlFile);
             }
         }
     }

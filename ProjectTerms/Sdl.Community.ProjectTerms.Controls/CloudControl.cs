@@ -28,7 +28,7 @@ namespace Sdl.Community.ProjectTerms.Controls
             m_MinTermWeight = 0;
             m_MaxTermWeight = 0;
 
-            MaxFontSize = 30;
+            MaxFontSize = 50;
             MinFontSize = 10;
            
             this.BorderStyle = BorderStyle.FixedSingle;

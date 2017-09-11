@@ -130,16 +130,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PluginResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="ProjectTermsBatchTask.cs" />
-    <Compile Include="ProjectTermsBatchTaskSettings.cs" />
-    <Compile Include="ProjectTermsBatchTaskSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ProjectTermsBatchTaskSettingsControl.Designer.cs">
-      <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ProjectTermsBatchTaskSettingsPage.cs" />
-    <Compile Include="ProjectTermsViewModel.cs" />
+    <Compile Include="ProjectTermsAction\ProjectTermsAction.cs" />
+    <Compile Include="ProjectTermsAction\ProjectTermsFilesControllerAction.cs" />
+    <Compile Include="ViewModels\ProjectTermsViewModel.cs" />
     <Compile Include="ExtractTerms\ProjectTermsExtractor.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -147,15 +140,29 @@
     <Compile Include="TermbaseIntegrationAction\TermbaseDefinitionFile.cs" />
     <Compile Include="TermbaseIntegrationAction\TermbaseGeneration.cs" />
     <Compile Include="TermbaseIntegrationAction\TermbaseGenerationAction.cs" />
+    <Compile Include="Utils\ProgressEventArgs.cs" />
+    <Compile Include="Utils\ProgressIndicator.cs" />
+    <Compile Include="Utils\Filters.cs" />
     <Compile Include="Utils\Utils.cs" />
-    <Compile Include="WordCloudForm.cs">
+    <Compile Include="Utils\ProjectTermsCloudResult.cs" />
+    <Compile Include="ViewPart\ProjectTermsViewPart.cs" />
+    <Compile Include="ViewPart\ProjectTermsViewPartControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ViewPart\ProjectTermsViewPartControl.Designer.cs">
+      <DependentUpon>ProjectTermsViewPartControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewPart\ProjectTermsViewPartFiles.cs" />
+    <Compile Include="ViewPart\ProjectTermsViewPartProject.cs" />
+    <Compile Include="Views\ProjectTermsView.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WordCloudForm.Designer.cs">
-      <DependentUpon>WordCloudForm.cs</DependentUpon>
+    <Compile Include="Views\ProjectTermsView.Designer.cs">
+      <DependentUpon>ProjectTermsView.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\wordcloud.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -163,9 +170,11 @@
     </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="Resources\termbaseDefaultDefinitionFile.xdt" />
-    <EmbeddedResource Include="ReportRenderStylesheet.xsl" />
-    <EmbeddedResource Include="WordCloudForm.resx">
-      <DependentUpon>WordCloudForm.cs</DependentUpon>
+    <EmbeddedResource Include="ViewPart\ProjectTermsViewPartControl.resx">
+      <DependentUpon>ProjectTermsViewPartControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Views\ProjectTermsView.resx">
+      <DependentUpon>ProjectTermsView.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
@@ -202,11 +211,6 @@
       <Project>{154a450e-3d19-42d3-ae88-e059729f647d}</Project>
       <Name>Sdl.Community.ProjectTerms.Controls</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="ProjectTermsBatchTaskSettingsControl.resx">
-      <DependentUpon>ProjectTermsBatchTaskSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
 </Project>

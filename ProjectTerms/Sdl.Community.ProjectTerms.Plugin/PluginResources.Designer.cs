@@ -61,6 +61,33 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to blackListTerms.txt.
+        /// </summary>
+        public static string BlacklistFileName {
+            get {
+                return ResourceManager.GetString("BlacklistFileName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract Terms From Selected Files.
+        /// </summary>
+        public static string Button_ExtractTermsFiles {
+            get {
+                return ResourceManager.GetString("Button_ExtractTermsFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extract Terms From Project.
+        /// </summary>
+        public static string Button_ExtractTermsProject {
+            get {
+                return ResourceManager.GetString("Button_ExtractTermsProject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _project.
         /// </summary>
         public static string Constant_ProjectType {
@@ -79,7 +106,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Adding languages to termbase definition file failed!.
+        ///   Looks up a localized string similar to Unable to add languages to the termbase definition file!.
         /// </summary>
         public static string Error_AddLanguages {
             get {
@@ -88,7 +115,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add xml file in the Studio project failed!.
+        ///   Looks up a localized string similar to Unable to add the XML file to the project!.
         /// </summary>
         public static string Error_AddXMlToProject {
             get {
@@ -97,7 +124,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection to termbase repository failed!.
+        ///   Looks up a localized string similar to Unable to connect to the termbase repository!.
         /// </summary>
         public static string Error_ConnectToTermbaseLocalRepository {
             get {
@@ -106,7 +133,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder failed to create!.
+        ///   Looks up a localized string similar to Unable to create the folder!.
         /// </summary>
         public static string Error_CreateDirectory {
             get {
@@ -115,7 +142,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to XML entry creation failed!.
+        ///   Looks up a localized string similar to Unable to create the XML entry!.
         /// </summary>
         public static string Error_CreateEntry {
             get {
@@ -124,7 +151,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The termbase generation failed!.
+        ///   Looks up a localized string similar to Unable to generate the termbase!.
         /// </summary>
         public static string Error_CreateTermbase {
             get {
@@ -133,7 +160,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extraction .sdlxliff content failed!.
+        ///   Looks up a localized string similar to Unable to extract the SDLXLIFF content!.
         /// </summary>
         public static string Error_ExtractContent {
             get {
@@ -142,7 +169,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extract the project languages failed!.
+        ///   Looks up a localized string similar to Unable to read the project languages!.
         /// </summary>
         public static string Error_GetProjectLanguages {
             get {
@@ -151,7 +178,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Extraction from embedded resource file failed!.
+        ///   Looks up a localized string similar to Unable to extract the embedded resource file!.
         /// </summary>
         public static string Error_GetResourceTextFile {
             get {
@@ -160,7 +187,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Including termbase to Studio failed!.
+        ///   Looks up a localized string similar to Unable to open the termbase in Studio!.
         /// </summary>
         public static string Error_IncludeTermbaseInStudio {
             get {
@@ -169,7 +196,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Population termbase failed!.
+        ///   Looks up a localized string similar to Unable to update the termbase!.
         /// </summary>
         public static string Error_PopulateTermbase {
             get {
@@ -178,7 +205,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The xml file failed to be read!.
+        ///   Looks up a localized string similar to Please extract the terms first!.
         /// </summary>
         public static string Error_ReadXmlFile {
             get {
@@ -187,7 +214,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The regex expression is not valid! Please review once again!.
+        ///   Looks up a localized string similar to Invalid regular expression, please review the rules!.
         /// </summary>
         public static string Error_Regex {
             get {
@@ -196,7 +223,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The folder failed to remove!.
+        ///   Looks up a localized string similar to Unable to delete the folder!.
         /// </summary>
         public static string Error_RemoveDirectory {
             get {
@@ -205,7 +232,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The xml file failed to be saved!.
+        ///   Looks up a localized string similar to Unable to save the XML file!.
         /// </summary>
         public static string Error_Save {
             get {
@@ -214,7 +241,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Storing termbase definition file locally failed!.
+        ///   Looks up a localized string similar to Unable to save the termbase definition!.
         /// </summary>
         public static string Error_SaveTermbaseDefinitionToTempLocation {
             get {
@@ -223,7 +250,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Termbase generation settings failed!.
+        ///   Looks up a localized string similar to Unable to read the termbase settings!.
         /// </summary>
         public static string Error_Settings {
             get {
@@ -259,7 +286,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Term already exists!.
+        ///   Looks up a localized string similar to The terms were extracted successfully..
+        /// </summary>
+        public static string Message_ExtractedTerms {
+            get {
+                return ResourceManager.GetString("Message_ExtractedTerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The term exists in the list!.
         /// </summary>
         public static string MessageContent_buttonAdd {
             get {
@@ -268,7 +304,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your list is empty!.
+        ///   Looks up a localized string similar to The list is empty!.
         /// </summary>
         public static string MessageContent_buttonDelete_Empty {
             get {
@@ -286,7 +322,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Blacklist is not define!.
+        ///   Looks up a localized string similar to Unable to find the blacklist! Please save the list once!.
         /// </summary>
         public static string MessageContent_buttonLoad {
             get {
@@ -295,7 +331,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot skip the setting part.
+        ///   Looks up a localized string similar to Please open the settings window!.
         /// </summary>
         public static string MessageContent_SkipSettings {
             get {
@@ -336,6 +372,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon wordcloud {
+            get {
+                object obj = ResourceManager.GetObject("wordcloud", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
             }
         }
         
