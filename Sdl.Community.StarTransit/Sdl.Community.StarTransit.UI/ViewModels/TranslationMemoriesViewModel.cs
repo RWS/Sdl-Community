@@ -16,6 +16,7 @@ using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.Toolkit.Core;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
@@ -36,8 +37,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private string _visibility;
         private bool _isNoneChecked;
         private LanguagePair _selectedItem;
-
-        private  readonly string _initialFolderPath; 
+		private StarTranslationMemoryMetadata _tmMetadata;
+        private  readonly string _initialFolderPath;
+		private string _isTmErrorMessageVisible;
 
         public TranslationMemoriesViewModel(PackageDetailsViewModel packageDetailsViewModel)
         {
@@ -56,6 +58,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             LanguagePairs = pairs;
             _buttonName = "Browse";
             _visibility = "Hidden";
+			_isTmErrorMessageVisible = "Hidden";
             _isNoneChecked = true;
             _title = "Please select Translation memory  for pair " + pairs[0].PairName;
 
@@ -65,7 +68,23 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     "Translation Memories");
         }
 
-        public bool IsNoneChecked
+		public string TmMessage
+		{
+			get
+			{
+				return _isTmErrorMessageVisible;
+			}
+			set
+			{
+				if (Equals(value, _isTmErrorMessageVisible))
+				{
+					return;
+				}
+				_isTmErrorMessageVisible = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool IsNoneChecked
         {
             get { return _isNoneChecked; }
             set
@@ -209,14 +228,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 SelectedItem.CreateNewTm = true;
                 SelectedItem.HasTm = true;
                 IsEnabled = true;
-            }
+				TmMessage = "Hidden";
+			}
             if (IsBrowseChecked)
             {
                 ButtonName = "Browse";
                 TmName = string.Empty;
                 Visibility = "Visible";
                 IsEnabled = false;
-            }
+				TmMessage = "Hidden";
+			}
             if (IsNoneChecked)
             {
                 Visibility = "Hidden";
@@ -227,7 +248,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     SelectedItem.TmName = null;
                     SelectedItem.HasTm = false;
                 }
-            }
+				TmMessage = "Hidden";
+			}
            
         }
 
@@ -245,22 +267,56 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
                 folderDialog.InitialDirectory = _initialFolderPath;
                 folderDialog.Filter = @"Text Files (.sdltm)|*.sdltm";
+
                 var result = folderDialog.ShowDialog();
-                
-                if (result == DialogResult.OK)
+				
+
+				if (result == DialogResult.OK)
                 {
                     var selectedTm = folderDialog.FileName;
-                    SelectedItem.ChoseExistingTm = true;
-                    SelectedItem.TmPath = selectedTm;
-                    TmName = GetTmName(selectedTm);
-                    SelectedItem.TmName = TmName;
-                    IsEnabled = false;
-                }
+					_tmMetadata = GetTmLanguageDirection(selectedTm);
+					if (TmLanguageMatchesProjectLanguage())
+					{
+						SelectedItem.ChoseExistingTm = true;
+						SelectedItem.TmPath = selectedTm;
+						TmName = GetTmName(selectedTm);
+						SelectedItem.TmName = TmName;
+						IsEnabled = false;
+						TmMessage = "Hidden";
+					}
+					else
+					{
+						TmMessage = "Visible";
+					}
+					
+					
+					
+				}
             }
       
         }
 
-        public PackageModel GetPackageModel()
+		private bool TmLanguageMatchesProjectLanguage()
+		{
+			if(SelectedItem.SourceLanguage.Name.Equals(_tmMetadata.SourceLanguage)&&
+				SelectedItem.TargetLanguage.Name.Equals(_tmMetadata.TargetLanguage))
+			{
+				return true;
+			}
+			return false;
+		}
+		private StarTranslationMemoryMetadata GetTmLanguageDirection(string tmPath)
+		{
+			var tmInfo = new FileBasedTranslationMemory(tmPath);
+			var tmLanguageDirection = tmInfo.LanguageDirection;
+			var tmMetadata = new StarTranslationMemoryMetadata
+			{
+				SourceLanguage = tmLanguageDirection.SourceLanguage.Name,
+				TargetLanguage = tmLanguageDirection.TargetLanguage.Name
+			};
+			return tmMetadata;
+		}
+		public PackageModel GetPackageModel()
         {
             _package.LanguagePairs = LanguagePairs;
             

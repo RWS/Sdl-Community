@@ -78,6 +78,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"></RowDefinition>
                         <RowDefinition Height="auto"></RowDefinition>
+						<RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="60"></RowDefinition>
                     </Grid.RowDefinitions>
 
@@ -94,6 +95,7 @@
                    <Button x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}"  Grid.Row="1" Grid.Column="1" Width="auto" Height="30" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="Tm name:" Margin="20,15,22,15"/>
                     <TextBox x:Name="TmName"  Grid.Row="2" Grid.Column="1" Width="auto" Height="20" Text="{Binding TmName ,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Margin="0,0,30,0" IsEnabled="{Binding IsEnabled}"/>
+					<TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" Grid.Column="0" Grid.Row="3">Project language and Selected Tm language doesn't match</TextBlock>
 
                 </Grid>
            
