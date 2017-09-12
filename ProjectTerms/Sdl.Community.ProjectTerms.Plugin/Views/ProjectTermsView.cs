@@ -5,6 +5,8 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Sdl.Community.ProjectTerms.Plugin.Views
@@ -40,6 +42,19 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             {
                 buttonExtractTerms.Text = PluginResources.Button_ExtractTermsFiles;
             }
+
+            if (!File.Exists(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true)))
+            {
+                buttonAdd.Enabled = false;
+                buttonDelete.Enabled = false;
+                buttonResetList.Enabled = false;
+                buttonSave.Enabled = false;
+                buttonLoad.Enabled = false;
+                buttonIncludeFile.Enabled = false;
+                buttonShowWordCloud.Enabled = false;
+                numericUpDownTermsOccurrences.Enabled = false;
+                numericUpDownTermsLength.Enabled = false;
+            }
         }
 
         private void buttonExtractTerms_Click(object sender, EventArgs e)
@@ -60,6 +75,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 progressBarExtractTerms.Visible = false;
                 buttonShowWordCloud.Enabled = true;
                 buttonIncludeFile.Enabled = true;
+
+                buttonAdd.Enabled = true;
+                buttonDelete.Enabled = true;
+                buttonResetList.Enabled = true;
+                buttonSave.Enabled = true;
+                buttonLoad.Enabled = true;
+                buttonIncludeFile.Enabled = true;
+                buttonShowWordCloud.Enabled = true;
+                numericUpDownTermsOccurrences.Enabled = true;
+                numericUpDownTermsLength.Enabled = true;
 
                 buttonShowWordCloud.PerformClick();
             }, (progress) => { progressBarExtractTerms.Value = progress; });
@@ -117,35 +142,54 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             viewModel.Filters.Length = (int)numericUpDownTermsLength.Value;
         }
 
+        private void AddTerm(string term)
+        {
+            listViewBlackList.Items.Add(new ListViewItem(term));
+            viewModel.Filters.Blacklist.Add(term);
+            textBoxTerm.Text = "";
+            ButtonsEnabled(true);
+        }
+
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             string term = textBoxTerm.Text.ToLower();
 
-            if (listViewBlackList.FindItemWithText(term) != null)
-            {
-                textBoxTerm.Text = "";
-                MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
-                return;
-            }
-
             if (checkboxEnabled)
             {
-                string exp = textBoxTerm.Text.ToString();
-                if (!Utils.Utils.VerifyRegexPattern(exp))
+                if (!Utils.Utils.VerifyRegexPattern(term))
                 {
                     labelErrorRegex.Text = PluginResources.Error_Regex;
                     return;
                 }
                 else
                 {
+                    var regex = new Regex(term);
+                    viewModel.ReadProjectTermsFromFile();
+                    var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
+                    foreach (var item in blacklistRegex)
+                    {
+                        if (listViewBlackList.FindItemWithText(item.Text) != null)
+                        {
+                            textBoxTerm.Text = "";
+                            MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
+                            return;
+                        }
 
+                        AddTerm(item.Text);
+                    }
                 }
             }
+            else
+            {
+                if (listViewBlackList.FindItemWithText(term) != null)
+                {
+                    textBoxTerm.Text = "";
+                    MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
+                    return;
+                }
 
-            listViewBlackList.Items.Add(new ListViewItem(term));
-            viewModel.Filters.Blacklist.Add(term);
-            textBoxTerm.Text = "";
-            ButtonsEnabled(true);
+                AddTerm(term);
+            }
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)

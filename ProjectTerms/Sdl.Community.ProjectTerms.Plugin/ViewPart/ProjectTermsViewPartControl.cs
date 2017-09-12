@@ -1,6 +1,4 @@
 ﻿using System.Windows.Forms;
-using System.Collections.Generic;
-using Sdl.Community.ProjectTerms.Controls.Interfaces;
 using System;
 
 namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
