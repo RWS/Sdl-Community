@@ -11,6 +11,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System.Linq;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.ProjectAutomation.FileBased;
+using System.Reflection;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
@@ -107,19 +108,21 @@ namespace Sdl.Community.ProjectTerms.Plugin
             return sourceFilesToProcessed;
         }
 
-        private bool CheckXmlProjectTermsFileExists()
+        private Guid[] GetXmlFileId()
         {
+            var filesId = new List<Guid>();
             var sourceFiles = Utils.Utils.GetCurrentProject().GetSourceLanguageFiles();
             foreach (var file in sourceFiles)
             {
                 if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
                 {
-                    return true;
+                    filesId.Add(file.Id);
                 }
             }
 
-            return false;
+            return filesId.ToArray();
         }
+
         #endregion
 
         #region Extract Project Terms
@@ -153,7 +156,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
             worker.RunWorkerAsync();
         }
 
-        public void ExtractProjectTerms()
+        private void ExtractProjectTerms()
         {
             sourceProjectFilesToProcessed = GetFiles();
             var projectPath = Utils.Utils.GetProjecPath();
@@ -228,17 +231,33 @@ namespace Sdl.Community.ProjectTerms.Plugin
             cache.Save(Utils.Utils.GetProjecPath(), Terms);
         }
 
+        private void RemoveFileById(Guid id)
+        {
+            var fileController = SdlTradosStudio.Application.GetController<FilesController>();
+
+            MethodInfo getFilesViewService = typeof(FilesController).GetMethod("GetFilesViewService", BindingFlags.NonPublic | BindingFlags.Instance);
+            //dynamic result = getFilesViewService.Invoke(fileController, null);
+
+            object result = getFilesViewService.Invoke(fileController, null);
+            //var folder = ((IFilesViewService)result).SelectedFiles;
+
+            fileController.RemoveSelectedFiles();
+        }
+
         public void AddXMlFileToProject()
         {
             GenerateXmlTermsFile();
-            OnProgress(15);
+            OnProgress(30);
 
             var xmlFolder = Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath()));
-            if (CheckXmlProjectTermsFileExists())
+            var filesId = GetXmlFileId();
+
+            if (filesId != null)
             {
-                // Todo: to remove the existed file with reflexion
+                // Todo: to remove the existed file
+                //RemoveFileById(fileId);
             }
-            OnProgress(30);
+            OnProgress(50);
 
             IncludeFileToProject(Utils.Utils.GetCurrentProject(), xmlFolder, false);
 
@@ -251,12 +270,13 @@ namespace Sdl.Community.ProjectTerms.Plugin
             {
                 project.AddFolderWithFiles(xmlFolder, recursion);
                 var projectFiles = project.GetSourceLanguageFiles();
-                var scan = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+                var addedFileId = GetXmlFileId();
+                var scan = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.Scan);
                 OnProgress(70);
-                var convertTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                var convertTask = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
                 OnProgress(90);
-                var copyTask = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.CopyToTargetLanguages);
-                var preTran = project.RunAutomaticTask(projectFiles.GetIds(), AutomaticTaskTemplateIds.PreTranslateFiles);
+                var copyTask = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.CopyToTargetLanguages);
+                var preTran = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.PreTranslateFiles);
                 OnProgress(100);
             }
             catch (Exception e)
