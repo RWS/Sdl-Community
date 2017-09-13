@@ -281,6 +281,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 						SelectedItem.TmPath = selectedTm;
 						TmName = GetTmName(selectedTm);
 						SelectedItem.TmName = TmName;
+						SelectedItem.HasTm = true;
 						IsEnabled = false;
 						TmMessage = "Hidden";
 					}
