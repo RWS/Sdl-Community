@@ -89,19 +89,16 @@ namespace Sdl.Community.Qualitivity.Tracking
         /// <param name="doc"></param>
         public static void TrackNewDocumentEntry(Document doc)
         {
-            var firstOrDefault = doc.Files.FirstOrDefault();
-            if (firstOrDefault == null || Tracked.DictCacheDocumentItems.ContainsKey(firstOrDefault.Id.ToString()))
+            var projectFile = doc.Files.FirstOrDefault();
+            if (projectFile == null || Tracked.DictCacheDocumentItems.ContainsKey(projectFile.Id.ToString()))
                 return;
-            var orDefault = doc.Files.FirstOrDefault();
-            if (orDefault == null) return;
+            
             var trackedDocuments = new TrackedDocuments
             {
-                DocumentIdFirstOrDefault = orDefault.Id.ToString(),
+                DocumentIdFirstOrDefault = projectFile.Id.ToString(),
                 ActivityDescription = string.Empty,
                 ActivityType = doc.Mode.ToString()
             };
-
-
 
             #region  |  client information  |
 
@@ -126,12 +123,12 @@ namespace Sdl.Community.Qualitivity.Tracking
             #endregion
 
             #region  |  Tracked Document Documents  |
-            foreach (var projectFile in doc.Files)
+            foreach (var file in doc.Files)
             {
                 var trackedDocument = new TrackedDocument
                 {
-                    Id = projectFile.Id.ToString(),
-                    Name = projectFile.Name,
+                    Id = file.Id.ToString(),
+                    Name = file.Name,
                     SourceLanguage = project.SourceLanguage,
                     TargetLanguage = doc.ActiveFile.Language.CultureInfo.Name
                 };
@@ -139,8 +136,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 
                 #region  |  get file path  |
-                var localPath = projectFile.LocalFilePath;
-                var targetLanguageId = projectFile.Language.CultureInfo.Name;
+                var localPath = file.LocalFilePath;
+                var targetLanguageId = file.Language.CultureInfo.Name;
                 var projectFilePath = string.Empty;
                 try
                 {
@@ -155,8 +152,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                 trackedDocument.Path = projectFilePath;
 
-                trackedDocument.TranslationMatchTypesOriginal = InitializeDocumentStatisticalState(Tracked.ActiveDocument, projectFile.Id.ToString());
-                trackedDocument.ConfirmationStatusOriginal = InitalizeDocumentConfirmationStatisticalState(Tracked.ActiveDocument, projectFile.Id.ToString());
+                trackedDocument.TranslationMatchTypesOriginal = InitializeDocumentStatisticalState(Tracked.ActiveDocument, file.Id.ToString());
+                trackedDocument.ConfirmationStatusOriginal = InitalizeDocumentConfirmationStatisticalState(Tracked.ActiveDocument, file.Id.ToString());
                 trackedDocument.TotalSegments = doc.SegmentPairs.Count();
 
                 trackedDocument.DatetimeOpened = DateTime.Now;
@@ -176,7 +173,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
             foreach (var trackedDocument in trackedDocuments.Documents)
             {
-                var document = new Sdl.Community.Structures.Documents.Document
+                var document = new Structures.Documents.Document
                 {
                     DocumentId = trackedDocument.Id,
                     DocumentName = trackedDocument.Name,
@@ -195,8 +192,10 @@ namespace Sdl.Community.Qualitivity.Tracking
             #region  |  get the quality metric items  |
 
             trackedDocuments.QualityMetrics = new List<QualityMetric>();
-            foreach (var trackedDocument in trackedDocuments.Documents)
-                trackedDocuments.QualityMetrics.AddRange(Helper.GetAllQualityMetricRecordsFromDocument(trackedDocuments.ProjectId, trackedDocument.Id));
+	        foreach (var trackedDocument in trackedDocuments.Documents)
+	        {
+		        trackedDocuments.QualityMetrics.AddRange(Helper.GetAllQualityMetricRecordsFromDocument(trackedDocuments.ProjectId, trackedDocument.Id));
+	        }
 
             #endregion
 
@@ -211,24 +210,31 @@ namespace Sdl.Community.Qualitivity.Tracking
 
             try
             {
-                var activity = new Activity { Id = -1 };
+                var activity = new Activity
+                {
+	                Id = -1
+                };
 
                 var query = new Query();
 
-
                 var project = Helper.GetProjectFromId(trackedDocuments.ProjectId);
 
-                if (project == null || project.Id == -1)
-                    project = NewQualitivityProject(Tracked.ActiveDocument);
+	            if (project == null || project.Id == -1)
+	            {
+		            project = NewQualitivityProject(Tracked.ActiveDocument);
+	            }
 
                 activity.ProjectId = project.Id;
 
                 var companyProfile = Helper.GetClientFromId(project.CompanyProfileId);
-                if (companyProfile != null)
-                    activity.CompanyProfileId = companyProfile.Id;
-                else
-                    activity.CompanyProfileId = -1;
-
+	            if (companyProfile != null)
+	            {
+		            activity.CompanyProfileId = companyProfile.Id;
+	            }
+	            else
+	            {
+		            activity.CompanyProfileId = -1;
+	            }
 
                 if (trackedDocuments.Documents.Count > 1)
                 {
@@ -236,15 +242,25 @@ namespace Sdl.Community.Qualitivity.Tracking
                     DateTime? latestDatetime = null;
                     foreach (var trackedDocument in trackedDocuments.Documents)
                     {
-                        if (!earliestDatetime.HasValue)
-                            earliestDatetime = trackedDocument.DatetimeOpened;
-                        else if (trackedDocument.DatetimeOpened != null && trackedDocument.DatetimeOpened.Value < earliestDatetime.Value)
-                            earliestDatetime = trackedDocument.DatetimeOpened;
+	                    if (!earliestDatetime.HasValue)
+	                    {
+		                    earliestDatetime = trackedDocument.DatetimeOpened;
+	                    }
+                        else if (trackedDocument.DatetimeOpened != null &&
+                                 trackedDocument.DatetimeOpened.Value < earliestDatetime.Value)
+	                    {
+		                    earliestDatetime = trackedDocument.DatetimeOpened;
+	                    }
 
-                        if (!latestDatetime.HasValue)
-                            latestDatetime = trackedDocument.DatetimeClosed;
-                        else if (trackedDocument.DatetimeClosed != null && trackedDocument.DatetimeClosed.Value > latestDatetime.Value)
-                            latestDatetime = trackedDocument.DatetimeClosed;
+	                    if (!latestDatetime.HasValue)
+	                    {
+		                    latestDatetime = trackedDocument.DatetimeClosed;
+	                    }
+                        else if (trackedDocument.DatetimeClosed != null &&
+                                 trackedDocument.DatetimeClosed.Value > latestDatetime.Value)
+	                    {
+		                    latestDatetime = trackedDocument.DatetimeClosed;
+	                    }
                     }
 
                     activity.Started = earliestDatetime;
@@ -255,11 +271,16 @@ namespace Sdl.Community.Qualitivity.Tracking
                     activity.Name = trackedDocuments.Documents[0].Name;
 
                     var datetimeOpened = trackedDocuments.Documents[0].DatetimeOpened;
-                    if (datetimeOpened != null)
-                        activity.Started = datetimeOpened.Value;
+	                if (datetimeOpened != null)
+	                {
+		                activity.Started = datetimeOpened.Value;
+	                }
+
                     var datetimeClosed = trackedDocuments.Documents[0].DatetimeClosed;
-                    if (datetimeClosed != null)
-                        activity.Stopped = datetimeClosed.Value;
+	                if (datetimeClosed != null)
+	                {
+		                activity.Stopped = datetimeClosed.Value;
+	                }
                 }
 
                 activity.ActivityStatus = Activity.Status.New;
@@ -298,7 +319,7 @@ namespace Sdl.Community.Qualitivity.Tracking
                 };
                 activity.MetricReportSettings = qmrs;
 
-                var f = new TrackProjectActivity
+                var projectActivity = new TrackProjectActivity
                 {
                     Projects = new List<Project> { project },
                     Activity = activity,
@@ -306,13 +327,14 @@ namespace Sdl.Community.Qualitivity.Tracking
                     IsEdit = false
                 };
 
+                projectActivity.ShowDialog();
+	            if (!projectActivity.Saved)
+	            {
+		            return;
+	            }
 
-                f.ShowDialog();
-                if (!f.Saved) return;
-
-                activity = f.Activity;
+                activity = projectActivity.Activity;
                 activity.Id = query.CreateActivity(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, activity);
-
 
                 try
                 {
@@ -353,8 +375,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                     Cursor.Current = Cursors.Default;
                 }
 
-
-
                 //update document activites
                 project.Activities.Add(activity);
 
@@ -362,9 +382,9 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Tracked.TarckerCheckNewActivityId = activity.Id;
                 Tracked.TarckerCheckNewProjectId = project.Id;
 
-                if (f.CompanyProfile != null && f.CompanyProfile.Id != -1 && activity.CompanyProfileId == -1)
+                if (projectActivity.CompanyProfile != null && projectActivity.CompanyProfile.Id != -1 && activity.CompanyProfileId == -1)
                 {
-                    activity.CompanyProfileId = f.CompanyProfile.Id;
+                    activity.CompanyProfileId = projectActivity.CompanyProfile.Id;
                     project.CompanyProfileId = activity.CompanyProfileId;
 
                     foreach (var tpa in project.Activities)
@@ -374,7 +394,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                     Tracked.TarckerCheckNewProjectAdded = true;
                 }
-
                 else
                 {
                     Tracked.TarckerCheckNewActivityAdded = true;
@@ -398,9 +417,13 @@ namespace Sdl.Community.Qualitivity.Tracking
                 {
                     foreach (var project in Tracked.TrackingProjects.TrackerProjects)
                     {
-                        if (project.StudioProjectId != projectInfo.Id.ToString() &&
-                            string.Compare(project.StudioProjectPath, projectInfo.LocalProjectFolder.Trim(),
-                                StringComparison.OrdinalIgnoreCase) != 0) continue;
+	                    if (project.StudioProjectId != projectInfo.Id.ToString() &&
+	                        string.Compare(project.StudioProjectPath, projectInfo.LocalProjectFolder.Trim(),
+		                        StringComparison.OrdinalIgnoreCase) != 0)
+	                    {
+		                    continue;
+	                    }
+
                         newProject = project;
                         break;
                     }
@@ -426,20 +449,18 @@ namespace Sdl.Community.Qualitivity.Tracking
                             Due = projectInfo.DueDate ?? DateTime.Now.AddDays(7)
                         };
 
-
-
-                        if (newProject.Due < DateTime.Now)
-                            newProject.Due = DateTime.Now.AddDays(1);
+	                    if (newProject.Due < DateTime.Now)
+	                    {
+		                    newProject.Due = DateTime.Now.AddDays(1);
+	                    }
 
                         newProject.Completed = DateTime.Now;
-
 
                         newProject.Id = query.CreateProject(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, newProject);
                         Tracked.TrackingProjects.TrackerProjects.Add(newProject);
 
                         Tracked.TarckerCheckNewProjectId = newProject.Id;
                         Tracked.TarckerCheckNewProjectAdded = true;
-
                     }
                 }
             }
@@ -451,11 +472,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 
             return newProject;
         }
-
         public static List<StateCountItem> InitializeDocumentStatisticalState(Document doc, string fileId)
         {
-
-
             var stateCountItems = new List<StateCountItem>();
 
             var pmSegments = 0;
@@ -509,7 +527,6 @@ namespace Sdl.Community.Qualitivity.Tracking
             var newTags = 0;
 
             var projectFile = doc.Files.First(a => a.Id.ToString() == fileId);
-
 
             //var sourceLanguageId = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo.Name;
             //var tmName = "TM_" + sourceLanguageId + ".sdltm";
@@ -717,9 +734,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Value = newSegments
             });
 
-
-
-
             stateCountItems.Add(new StateCountItem
             {
                 Name = "PMWords",
@@ -788,16 +802,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Value = newWords
             });
 
-
-
-
-
-
-
-
-
-
-
             stateCountItems.Add(new StateCountItem
             {
                 Name = "PMCharacters",
@@ -865,9 +869,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Name = "NewCharacters",
                 Value = newCharacters
             });
-
-
-
 
             stateCountItems.Add(new StateCountItem
             {
@@ -938,9 +939,8 @@ namespace Sdl.Community.Qualitivity.Tracking
             });
 
             return stateCountItems;
-
-
         }
+
         public static List<StateCountItem> InitalizeDocumentConfirmationStatisticalState(Document doc, string fileId)
         {
 
@@ -976,13 +976,11 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Value = documentTotalNotTranslatedOriginal
             });
 
-
             tccsos.Add(new StateCountItem
             {
                 Name = "Draft",
                 Value = documentTotalDraftOriginal
             });
-
 
             tccsos.Add(new StateCountItem
             {
@@ -990,13 +988,11 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Value = documentTotalTranslatedOriginal
             });
 
-
             tccsos.Add(new StateCountItem
             {
                 Name = "TranslationRejected",
                 Value = documentTotalTranslationRejectedOriginal
             });
-
 
             tccsos.Add(new StateCountItem
             {
@@ -1011,7 +1007,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                 Value = documentTotalSignOffRejectedOriginal
             });
 
-
             tccsos.Add(new StateCountItem
             {
                 Name = "SignedOff",
@@ -1024,7 +1019,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
         }
 
-
         public static List<ContentSection> GetRecordContentSections(List<SegmentSection> segmentSections, ContentSection.LanguageType languageType, ref string content)
         {
             var contentSections = new List<ContentSection>();
@@ -1035,7 +1029,11 @@ namespace Sdl.Community.Qualitivity.Tracking
                     var objText = segmentSection as Text;
 
                     var section = new ContentSection { LangType = languageType };
-                    if (objText == null) continue;
+	                if (objText == null)
+	                {
+		                continue;
+	                }
+
                     section.Content = objText.Value;
                     section.CntType = ContentSection.ContentType.Text;
                     section.RevisionMarker = null;
@@ -1054,8 +1052,12 @@ namespace Sdl.Community.Qualitivity.Tracking
                     }
                     contentSections.Add(section);
 
-                    if (objText.Revision == null || (objText.Revision != null && objText.Revision.RevType != Sdl.Community.Parser.RevisionMarker.RevisionType.Delete))
-                        content += objText.Value;
+	                if (objText.Revision == null || (objText.Revision != null &&
+	                                                 objText.Revision.RevType !=
+	                                                 Parser.RevisionMarker.RevisionType.Delete))
+	                {
+		                content += objText.Value;
+	                }
                 }
                 else
                 {
@@ -1073,6 +1075,7 @@ namespace Sdl.Community.Qualitivity.Tracking
                             RevisionMarker = null,
                             HasRevision = false
                         };
+
                         if (objTag.Revision != null)
                         {
                             section.HasRevision = true;
@@ -1088,7 +1091,7 @@ namespace Sdl.Community.Qualitivity.Tracking
                         contentSections.Add(section);
                     }
 
-                    if (objTag != null && (objTag.Revision == null || (objTag.Revision != null && objTag.Revision.RevType != Sdl.Community.Parser.RevisionMarker.RevisionType.Delete)))
+                    if (objTag != null && (objTag.Revision == null || (objTag.Revision != null && objTag.Revision.RevType != Parser.RevisionMarker.RevisionType.Delete)))
                         content += objTag.TextEquivalent;
                 }
             }
@@ -1101,7 +1104,7 @@ namespace Sdl.Community.Qualitivity.Tracking
             {
                 Id = -1,
                 DocumentId = trackedDocuments.ActiveDocument.Id,
-                TranslatableDocument = new Sdl.Community.Structures.Documents.Document
+                TranslatableDocument = new Structures.Documents.Document
                 {
                     DocumentId = trackedDocuments.ActiveDocument.Id,
                     DocumentName = trackedDocuments.ActiveDocument.Name,
@@ -1115,17 +1118,23 @@ namespace Sdl.Community.Qualitivity.Tracking
                 DocumentActivityType = trackedDocuments.ActivityType
             };
 
-
             #region  |  attach the quality metric items to the records  |
-
 
             foreach (var qualityMetric in trackedDocuments.QualityMetrics)
             {
                 if (!qualityMetric.Updated) continue;
                 foreach (var record in trackedDocuments.ActiveDocument.TrackedRecords)
                 {
-                    if (record.ParagraphId != qualityMetric.ParagraphId || record.SegmentId != qualityMetric.SegmentId) continue;
-                    if (record.QualityMetrics.Exists(a => a.Id == qualityMetric.Id)) continue;
+	                if (record.ParagraphId != qualityMetric.ParagraphId || record.SegmentId != qualityMetric.SegmentId)
+	                {
+		                continue;
+	                }
+
+	                if (record.QualityMetrics.Exists(a => a.Id == qualityMetric.Id))
+	                {
+		                continue;
+	                }
+
                     record.QualityMetrics.Add(qualityMetric);
                     break;
                 }
@@ -1133,7 +1142,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 
             #endregion
-
 
             documentActivity.Records = trackedDocuments.ActiveDocument.TrackedRecords;
             documentActivity.Started = trackedDocuments.ActiveDocument.DatetimeOpened;
@@ -1148,14 +1156,10 @@ namespace Sdl.Community.Qualitivity.Tracking
             return documentActivity;
         }
 
-
-
         public static void InitializeActiveSegment(TrackedDocuments trackedDocuments)
         {
-
             try
             {
-
                 trackedDocuments.ActiveSegment = new TrackedSegment
                 {
                     CurrentSegmentOpened = DateTime.Now,
@@ -1166,8 +1170,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                 trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged = false;
                 trackedDocuments.ActiveSegment.CurrentSegmentSelected = Tracked.ActiveDocument.GetActiveSegmentPair();
-
-
 
                 try
                 {
@@ -1185,25 +1187,17 @@ namespace Sdl.Community.Qualitivity.Tracking
                 }
                 if (trackedDocuments.ActiveSegment.CurrentSegmentSelected != null)
                 {
-
-
                     trackedDocuments.ActiveSegment.CurrentISegmentPairProperties = trackedDocuments.ActiveSegment.CurrentSegmentSelected.Properties.Clone() as ISegmentPairProperties;
                     trackedDocuments.ActiveSegment.CurrentDocumentId = Tracked.ActiveDocument.ActiveFile.Id.ToString();
                     trackedDocuments.ActiveSegment.CurrentSegmentId = trackedDocuments.ActiveSegment.CurrentSegmentSelected.Properties.Id.Id;
                     trackedDocuments.ActiveSegment.CurrentParagraphId = trackedDocuments.ActiveSegment.CurrentSegmentSelected.GetParagraphUnitProperties().ParagraphUnitId.Id;
                     trackedDocuments.ActiveSegment.CurrentSegmentUniqueId = trackedDocuments.ActiveSegment.CurrentParagraphId + "." + trackedDocuments.ActiveSegment.CurrentSegmentId;
 
-
-
                     // check if there has been a change in the record structure; if yes, then add it to the container
                     if (!Tracked.DocumentSegmentPairs.ContainsKey(trackedDocuments.ActiveSegment.CurrentSegmentUniqueId))
                         TrackSegmentPair(trackedDocuments.ActiveSegment.CurrentSegmentUniqueId);
 
-
-
                     QualitivityRevisionController.SetCurrentSelectedSegmentId(trackedDocuments.ActiveSegment.CurrentParagraphId, trackedDocuments.ActiveSegment.CurrentSegmentId);
-
-
 
                     trackedDocuments.ActiveSegment.CurrentKeyStrokes = new List<KeyStroke>();
 
@@ -1213,30 +1207,26 @@ namespace Sdl.Community.Qualitivity.Tracking
                             , ContentSection.LanguageType.Target
                             , ref trackingSegmentContentTrg);
 
-
-
                     trackedDocuments.ActiveSegment.CurrentTargetSections = new List<ContentSection>();
                     foreach (var section in targetSectionsCurrent)
                         trackedDocuments.ActiveSegment.CurrentTargetSections.Add((ContentSection)section.Clone());
 
-
-                    foreach (var t in trackedDocuments.ActiveSegment.CurrentTargetSections)
+                    foreach (var contentSection in trackedDocuments.ActiveSegment.CurrentTargetSections)
                     {
-                        if (t.RevisionMarker == null || t.RevisionMarker.RevType != RevisionMarker.RevisionType.Delete)
-                            continue;
-                        t.Content = string.Empty;
-                        t.RevisionMarker = null;
-                    }
+	                    if (contentSection.RevisionMarker == null || contentSection.RevisionMarker.RevType != RevisionMarker.RevisionType.Delete)
+	                    {
+		                    continue;
+	                    }
 
+                        contentSection.Content = string.Empty;
+                        contentSection.RevisionMarker = null;
+                    }
                 }
                 else
                 {
-
                     QualitivityRevisionController.SetCurrentSelectedSegmentId(string.Empty, string.Empty);
                     trackedDocuments.ActiveSegment = new TrackedSegment();
                 }
-
-
             }
             catch (Exception ex)
             {
@@ -1252,26 +1242,26 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                 #region  |  check the current segment  |
 
-
                 trackedDocuments.ActiveSegment.CurrentSegmentClosed = DateTime.Now;
                 trackedDocuments.ActiveSegment.CurrentSegmentTimer.Stop();
-
 
                 var targetCommentsChanged = false;
                 #region  |  targetCommentsChanged  |
                 ContentProcessor.ProcessSegment(trackedDocuments.ActiveSegment.CurrentSegmentSelected.Target, true, new List<string>());
 
-
                 var trackingTargetComments = new List<Comment>();
-                var targetSegmentComments = new List<Sdl.Community.Parser.Comment>();
+                var targetSegmentComments = new List<Parser.Comment>();
 
                 foreach (var comment in ContentProcessor.Comments)
                 {
-                    targetSegmentComments.Add((Sdl.Community.Parser.Comment)comment.Clone());
+                    targetSegmentComments.Add((Parser.Comment)comment.Clone());
 
                     var newComment = new Comment { Author = comment.Author };
-                    if (comment.Date.HasValue)
-                        newComment.Created = new DateTime(comment.Date.Value.Ticks);
+	                if (comment.Date.HasValue)
+	                {
+		                newComment.Created = new DateTime(comment.Date.Value.Ticks);
+	                }
+
                     newComment.Severity = comment.Severity;
                     newComment.Content = comment.Text;
                     newComment.Version = comment.Version;
@@ -1293,7 +1283,11 @@ namespace Sdl.Community.Qualitivity.Tracking
                     {
                         foreach (var trackedComment in Tracked.DocumentSegmentPairs[trackedDocuments.ActiveSegment.CurrentSegmentUniqueId].Comments)
                         {
-                            if (trackedComment.Date != comment.Created.Value) continue;
+	                        if (trackedComment.Date != comment.Created.Value)
+	                        {
+		                        continue;
+	                        }
+
                             if (trackedComment.Text.Trim() != comment.Content.Trim())
                             {
                                 trackingTargetCommentsChanged.Add(comment);
@@ -1338,11 +1332,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                 #endregion
 
-
-                if (Convert.ToBoolean(Tracked.Settings.GetTrackingProperty(@"recordNonUpdatedSegments").Value) || Tracked.DocumentSegmentPairs[trackedDocuments.ActiveSegment.CurrentSegmentUniqueId].ConfirmationLevel
-                    != trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.ConfirmationLevel.ToString() || trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged || targetCommentsChanged || qualityMetricChanged)
+                if (Convert.ToBoolean(Tracked.Settings.GetTrackingProperty(@"recordNonUpdatedSegments").Value) 
+					|| Tracked.DocumentSegmentPairs[trackedDocuments.ActiveSegment.CurrentSegmentUniqueId].ConfirmationLevel
+							!= trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.ConfirmationLevel.ToString() 
+					|| trackedDocuments.ActiveSegment.CurrentSegmentContentHasChanged 
+					|| targetCommentsChanged 
+					|| qualityMetricChanged)
                 {
-
                     var record = new Record
                     {
                         Id = -1,
@@ -1399,7 +1395,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                     #region  |  translationOrigins  |
 
-
                     record.TranslationOrigins.Original.ConfirmationLevel = Tracked.DocumentSegmentPairs[trackedDocuments.ActiveSegment.CurrentSegmentUniqueId].ConfirmationLevel;
                     record.TranslationOrigins.Updated.ConfirmationLevel = trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.ConfirmationLevel.ToString();
 
@@ -1414,8 +1409,10 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                     if (trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.OriginBeforeAdaptation != null)
                     {
-                        if (record.TranslationOrigins.UpdatedPrevious == null)
-                            record.TranslationOrigins.UpdatedPrevious = new TranslationOrigin(TranslationOrigin.LanguageType.UpdatedPrevious);
+	                    if (record.TranslationOrigins.UpdatedPrevious == null)
+	                    {
+		                    record.TranslationOrigins.UpdatedPrevious = new TranslationOrigin(TranslationOrigin.LanguageType.UpdatedPrevious);
+	                    }
 
                         record.TranslationOrigins.UpdatedPrevious.TranslationStatus = Helper.GetTranslationStatus(trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.OriginBeforeAdaptation);
                         record.TranslationOrigins.UpdatedPrevious.OriginType = trackedDocuments.ActiveSegment.CurrentISegmentPairProperties.TranslationOrigin.OriginBeforeAdaptation.OriginType;
@@ -1423,7 +1420,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                     }
 
                     #endregion
-
 
                     var trackingSegmentContentTrgPrevious = string.Empty;
                     record.ContentSections.TargetOriginalSections = GetRecordContentSections(
@@ -1434,14 +1430,11 @@ namespace Sdl.Community.Qualitivity.Tracking
 
                     ContentProcessor.ProcessSegment(trackedDocuments.ActiveSegment.CurrentSegmentSelected.Target, true, Tracked.DocumentSegmentPairs[trackedDocuments.ActiveSegment.CurrentSegmentUniqueId].RevisionMarkerUniqueIds);
 
-
-
                     var trackingSegmentContentTrg = string.Empty;
                     record.ContentSections.TargetUpdatedSections = GetRecordContentSections(
                         ContentProcessor.SegmentSections
                         , ContentSection.LanguageType.TargetUpdated
                         , ref trackingSegmentContentTrg);
-
 
                     record.Comments = new List<Comment>();
                     record.Comments.AddRange(trackingTargetCommentsChanged);
@@ -1449,10 +1442,7 @@ namespace Sdl.Community.Qualitivity.Tracking
                     //add the item to the segments being tracked
                     trackedDocuments.ActiveDocument.TrackedRecords.Add(record);
 
-
                     #region  |  add key strokes  |
-
-
 
                     if (Convert.ToBoolean(Tracked.Settings.GetTrackingProperty("recordKeyStokes").Value))
                     {
@@ -1554,41 +1544,46 @@ namespace Sdl.Community.Qualitivity.Tracking
                 MessageBox.Show(ex.Message);
             }
         }
+
         public static void TrackSegmentPairs(Document doc)
         {
             Tracked.DocumentSegmentPairs = new Dictionary<string, SegmentPair>();
 
             foreach (var segPair in doc.SegmentPairs)
             {
-                var seg = GetParsedSegmentPair(segPair);
-                var uniqueId = seg.ParagraphId + "." + seg.Id;
+                var segmentPair = GetParsedSegmentPair(segPair);
+                var uniqueId = segmentPair.ParagraphId + "." + segmentPair.Id;
 
                 // this should never happen, but check that the segment is not already in the dictionary
-                if (Tracked.DocumentSegmentPairs.ContainsKey(uniqueId))
-                    continue;
+	            if (Tracked.DocumentSegmentPairs.ContainsKey(uniqueId))
+	            {
+		            continue;
+	            }
 
-                Tracked.DocumentSegmentPairs.Add(uniqueId, seg);
+                Tracked.DocumentSegmentPairs.Add(uniqueId, segmentPair);
             }
         }
         private static void TrackSegmentPair(string currentSegmentUniqueId)
         {
-            if (Tracked.DocumentSegmentPairs.ContainsKey(currentSegmentUniqueId))
-                return;
-            var seg = GetParsedSegmentPair(Tracked.ActiveDocument.ActiveSegmentPair);
-            var uniqueId = seg.ParagraphId + "." + seg.Id;
+	        if (Tracked.DocumentSegmentPairs.ContainsKey(currentSegmentUniqueId))
+	        {
+		        return;
+	        }
+
+            var segmentPair = GetParsedSegmentPair(Tracked.ActiveDocument.ActiveSegmentPair);
+            var uniqueId = segmentPair.ParagraphId + "." + segmentPair.Id;
 
             // this should never happen, check!
             Debug.Assert(uniqueId != currentSegmentUniqueId, "Misalignment between active segment and segment being processed!");
 
-            Tracked.DocumentSegmentPairs.Add(uniqueId, seg);
+            Tracked.DocumentSegmentPairs.Add(uniqueId, segmentPair);
         }
 
         private static SegmentPair GetParsedSegmentPair(ISegmentPair segPair)
         {
             ContentProcessor.ProcessSegment(segPair.Target, true, new List<string>());
 
-
-            var seg = new SegmentPair
+            var segmentPair = new SegmentPair
             {
                 Id = segPair.Properties.Id.Id,
                 ParagraphId = segPair.GetParagraphUnitProperties().ParagraphUnitId.Id,
@@ -1601,31 +1596,38 @@ namespace Sdl.Community.Qualitivity.Tracking
                 RevisionMarkerUniqueIds = ContentProcessor.RevisionMarkersUniqueIds
             };
 
+	        foreach (var comment in ContentProcessor.Comments)
+	        {
+		        segmentPair.Comments.Add((Parser.Comment)comment.Clone());
+	        }
 
+            segmentPair.Origin = new Parser.TranslationOrigin();
+	        if (segPair.Properties.TranslationOrigin == null)
+	        {
+		        return segmentPair;
+	        }
 
-            foreach (var comment in ContentProcessor.Comments)
-                seg.Comments.Add((Sdl.Community.Parser.Comment)comment.Clone());
+            segmentPair.Origin.IsRepeated = segPair.Properties.TranslationOrigin.IsRepeated;
+            segmentPair.Origin.IsStructureContextMatch = segPair.Properties.TranslationOrigin.IsStructureContextMatch;
+            segmentPair.Origin.MatchPercentage = segPair.Properties.TranslationOrigin.MatchPercent;
+            segmentPair.Origin.OriginSystem = segPair.Properties.TranslationOrigin.OriginSystem ?? string.Empty;
+            segmentPair.Origin.OriginType = segPair.Properties.TranslationOrigin.OriginType;
+            segmentPair.Origin.RepetitionTableId = segPair.Properties.TranslationOrigin.RepetitionTableId.Id;
+            segmentPair.Origin.TextContextMatchLevel = segPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
 
-            seg.Origin = new Sdl.Community.Parser.TranslationOrigin();
-            if (segPair.Properties.TranslationOrigin == null) return seg;
-            seg.Origin.IsRepeated = segPair.Properties.TranslationOrigin.IsRepeated;
-            seg.Origin.IsStructureContextMatch = segPair.Properties.TranslationOrigin.IsStructureContextMatch;
-            seg.Origin.MatchPercentage = segPair.Properties.TranslationOrigin.MatchPercent;
-            seg.Origin.OriginSystem = segPair.Properties.TranslationOrigin.OriginSystem ?? string.Empty;
-            seg.Origin.OriginType = segPair.Properties.TranslationOrigin.OriginType;
-            seg.Origin.RepetitionTableId = segPair.Properties.TranslationOrigin.RepetitionTableId.Id;
-            seg.Origin.TextContextMatchLevel = segPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
-            return seg;
+			return segmentPair;
         }
         public static void InitializeDocumentTracking(Document doc)
         {
-            if (doc == null) return;
+	        #region  |  initialize document cache item  |
 
-            #region  |  initialize document cache item  |
+            var projectFile = doc?.Files.FirstOrDefault();
+	        if (projectFile == null)
+	        {
+		        return;
+	        }
 
-            var firstOrDefault = doc.Files.FirstOrDefault();
-            if (firstOrDefault == null) return;
-            var trackedDocuments = Tracked.DictCacheDocumentItems[firstOrDefault.Id.ToString()];
+            var trackedDocuments = Tracked.DictCacheDocumentItems[projectFile.Id.ToString()];
 
             //get active document
             trackedDocuments.ActiveDocument = trackedDocuments.Documents.Find(a => a.Id == doc.ActiveFile.Id.ToString());
@@ -1654,17 +1656,13 @@ namespace Sdl.Community.Qualitivity.Tracking
             doc.Selection.Source.Changed += TrackedDocumentEvents.SourceChanged;
             doc.Selection.Target.Changed += TrackedDocumentEvents.TargetChanged;
 
-
-
-
             #endregion
             try
             {
 
                 TrackSegmentPairs(doc);
 
-                if ((Tracked.TrackingState == Tracked.TimerState.Started
-                     || Tracked.TrackingState == Tracked.TimerState.Paused)
+                if ((Tracked.TrackingState == Tracked.TimerState.Started || Tracked.TrackingState == Tracked.TimerState.Paused)
                     && trackedDocuments.ActiveDocument.Id != string.Empty)
                 {
                     InitializeActiveSegment(trackedDocuments);
@@ -1675,7 +1673,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                 MessageBox.Show(ex.Message);
             }
         }
-
 
         public static List<Activity> DuplicateProjectActivity_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -1688,40 +1685,33 @@ namespace Sdl.Community.Qualitivity.Tracking
         private static List<Activity> DuplicateProjectActivity_DoWork(List<Activity> projectActivities)
         {
             var query = new Query();
-            var activitiesCloned = new List<Activity>();
-            try
-            {
 
+            var activitiesCloned = new List<Activity>();
+
+            try
+            {			
                 query.ProgressChanged += ProgressChanged;
 
-
                 var totalDocumentActivities = projectActivities.Sum(activity => activity.Activities.Count);
-
 
                 ProgressWindow.ProgressDialog.DocumentCurrentIndex = 0;
                 ProgressWindow.ProgressDialog.DocumentsMaximum = totalDocumentActivities;
                 ProgressWindow.ProgressDialog.DocumentProgressLabelStringFormat = PluginResources.Updating_0_of_1_documents;
                 ProgressWindow.ProgressDialog.DialogProcessingMessage = PluginResources.Create_New_Document_Activity_Message;
 
-
                 foreach (var activity in projectActivities)
                 {
-
-
                     var activityClone = (Activity)activity.Clone();
                     activityClone.Id = -1;
                     activityClone.Name = activityClone.Name + "_copy";
 
-
                     activityClone.Id = query.CreateActivity(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, activityClone);
                     activitiesCloned.Add(activityClone);
-
 
                     var documentActivities = query.GetDocumentActivities(
                         Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath + "_" + activity.ProjectId.ToString().PadLeft(6, '0')
                         , Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath
                         , activity.Id, null);
-
 
                     foreach (var documentActivity in documentActivities)
                     {
@@ -1735,9 +1725,6 @@ namespace Sdl.Community.Qualitivity.Tracking
                             , documentActivityClone);
                     }
                 }
-
-
-
             }
             finally
             {
@@ -1749,7 +1736,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 
         public static List<DocumentActivity> CreateDocumentActivity_DoWork(object sender, DoWorkEventArgs e)
         {
-
             var documentActivities = CreateDocumentActivity_DoWork(e.Argument as List<DocumentActivity>);
             e.Result = documentActivities;
             return documentActivities;
