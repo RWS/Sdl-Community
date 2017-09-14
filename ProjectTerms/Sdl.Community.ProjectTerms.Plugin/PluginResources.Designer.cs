@@ -61,6 +61,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon applogo {
+            get {
+                object obj = ResourceManager.GetObject("applogo", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to blackListTerms.txt.
         /// </summary>
         public static string BlacklistFileName {
@@ -268,6 +278,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No matches found!.
+        /// </summary>
+        public static string Info_NotMatch {
+            get {
+                return ResourceManager.GetString("Info_NotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your termbase was successfully added to the project!.
         /// </summary>
         public static string Info_SuccessfullyAdded {
@@ -331,6 +350,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This action cannot be run for multiples files!.
+        /// </summary>
+        public static string MessageContent_multipleFilesTermbase {
+            get {
+                return ResourceManager.GetString("MessageContent_multipleFilesTermbase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please open the settings window!.
         /// </summary>
         public static string MessageContent_SkipSettings {
@@ -372,16 +400,6 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon wordcloud {
-            get {
-                object obj = ResourceManager.GetObject("wordcloud", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

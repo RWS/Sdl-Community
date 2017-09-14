@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectTermsView));
             this.groupBoxSettings = new System.Windows.Forms.GroupBox();
             this.buttonExtractTerms = new System.Windows.Forms.Button();
             this.buttonIncludeFile = new System.Windows.Forms.Button();
@@ -78,7 +79,7 @@
             this.groupBoxSettings.Controls.Add(this.textBoxTerm);
             this.groupBoxSettings.Controls.Add(this.labelBlackList);
             this.groupBoxSettings.Controls.Add(this.listViewBlackList);
-            this.groupBoxSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.groupBoxSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.groupBoxSettings.Location = new System.Drawing.Point(10, 6);
             this.groupBoxSettings.Name = "groupBoxSettings";
             this.groupBoxSettings.Size = new System.Drawing.Size(581, 417);
@@ -88,6 +89,7 @@
             // 
             // buttonExtractTerms
             // 
+            this.buttonExtractTerms.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonExtractTerms.Location = new System.Drawing.Point(3, 372);
             this.buttonExtractTerms.Name = "buttonExtractTerms";
             this.buttonExtractTerms.Size = new System.Drawing.Size(176, 23);
@@ -97,6 +99,7 @@
             // 
             // buttonIncludeFile
             // 
+            this.buttonIncludeFile.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonIncludeFile.Location = new System.Drawing.Point(400, 372);
             this.buttonIncludeFile.Name = "buttonIncludeFile";
             this.buttonIncludeFile.Size = new System.Drawing.Size(176, 23);
@@ -108,6 +111,7 @@
             // labelErrorRegex
             // 
             this.labelErrorRegex.AutoSize = true;
+            this.labelErrorRegex.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.labelErrorRegex.Location = new System.Drawing.Point(201, 81);
             this.labelErrorRegex.Name = "labelErrorRegex";
             this.labelErrorRegex.Size = new System.Drawing.Size(0, 13);
@@ -115,6 +119,7 @@
             // 
             // buttonShowWordCloud
             // 
+            this.buttonShowWordCloud.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonShowWordCloud.Location = new System.Drawing.Point(201, 372);
             this.buttonShowWordCloud.Name = "buttonShowWordCloud";
             this.buttonShowWordCloud.Size = new System.Drawing.Size(176, 23);
@@ -126,6 +131,7 @@
             // label2
             // 
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.label2.Location = new System.Drawing.Point(5, 356);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(571, 2);
@@ -135,6 +141,7 @@
             // checkBoxRegex
             // 
             this.checkBoxRegex.AutoSize = true;
+            this.checkBoxRegex.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.checkBoxRegex.Location = new System.Drawing.Point(358, 55);
             this.checkBoxRegex.Name = "checkBoxRegex";
             this.checkBoxRegex.Size = new System.Drawing.Size(138, 17);
@@ -145,6 +152,7 @@
             // 
             // buttonSave
             // 
+            this.buttonSave.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonSave.Location = new System.Drawing.Point(201, 219);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(130, 23);
@@ -155,6 +163,7 @@
             // 
             // buttonLoad
             // 
+            this.buttonLoad.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonLoad.Location = new System.Drawing.Point(201, 190);
             this.buttonLoad.Name = "buttonLoad";
             this.buttonLoad.Size = new System.Drawing.Size(130, 23);
@@ -165,6 +174,7 @@
             // 
             // buttonDelete
             // 
+            this.buttonDelete.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonDelete.Location = new System.Drawing.Point(201, 130);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(130, 23);
@@ -175,6 +185,7 @@
             // 
             // buttonResetList
             // 
+            this.buttonResetList.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonResetList.Location = new System.Drawing.Point(201, 160);
             this.buttonResetList.Name = "buttonResetList";
             this.buttonResetList.Size = new System.Drawing.Size(130, 23);
@@ -212,6 +223,7 @@
             // labelTermsLength
             // 
             this.labelTermsLength.AutoSize = true;
+            this.labelTermsLength.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.labelTermsLength.Location = new System.Drawing.Point(10, 315);
             this.labelTermsLength.Name = "labelTermsLength";
             this.labelTermsLength.Size = new System.Drawing.Size(71, 13);
@@ -221,6 +233,7 @@
             // labelOccurrences
             // 
             this.labelOccurrences.AutoSize = true;
+            this.labelOccurrences.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.labelOccurrences.Location = new System.Drawing.Point(10, 285);
             this.labelOccurrences.Name = "labelOccurrences";
             this.labelOccurrences.Size = new System.Drawing.Size(104, 13);
@@ -230,6 +243,7 @@
             // label1
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.label1.Location = new System.Drawing.Point(6, 261);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(571, 2);
@@ -239,6 +253,7 @@
             // labelTerm
             // 
             this.labelTerm.AutoSize = true;
+            this.labelTerm.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.labelTerm.Location = new System.Drawing.Point(198, 34);
             this.labelTerm.Name = "labelTerm";
             this.labelTerm.Size = new System.Drawing.Size(111, 13);
@@ -247,6 +262,7 @@
             // 
             // buttonAdd
             // 
+            this.buttonAdd.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.buttonAdd.Location = new System.Drawing.Point(201, 100);
             this.buttonAdd.Name = "buttonAdd";
             this.buttonAdd.Size = new System.Drawing.Size(130, 23);
@@ -266,6 +282,7 @@
             // labelBlackList
             // 
             this.labelBlackList.AutoSize = true;
+            this.labelBlackList.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.labelBlackList.Location = new System.Drawing.Point(7, 18);
             this.labelBlackList.Name = "labelBlackList";
             this.labelBlackList.Size = new System.Drawing.Size(49, 13);
@@ -291,6 +308,7 @@
             // 
             // progressBarExtractTerms
             // 
+            this.progressBarExtractTerms.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.progressBarExtractTerms.Location = new System.Drawing.Point(10, 429);
             this.progressBarExtractTerms.Name = "progressBarExtractTerms";
             this.progressBarExtractTerms.Size = new System.Drawing.Size(577, 23);
@@ -303,11 +321,12 @@
             this.ClientSize = new System.Drawing.Size(600, 461);
             this.Controls.Add(this.progressBarExtractTerms);
             this.Controls.Add(this.groupBoxSettings);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.MaximizeBox = false;
             this.Name = "ProjectTermsView";
-            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Project Terms";
+            this.Text = "ProjectTermExtract";
             this.Load += new System.EventHandler(this.ProjectTermsView_Load);
             this.groupBoxSettings.ResumeLayout(false);
             this.groupBoxSettings.PerformLayout();

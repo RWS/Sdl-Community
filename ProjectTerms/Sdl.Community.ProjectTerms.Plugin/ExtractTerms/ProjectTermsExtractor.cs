@@ -105,7 +105,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
                     {
                         foreach (var term in GetTerms(text))
                         {
-                            sourceTerms.Add(term.ToLower());
+                            if (term != "")
+                            {
+                                sourceTerms.Add(term.ToLower());
+                            }
                         }
                     }
 
@@ -122,7 +125,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
         protected virtual IEnumerable<string> GetTerms(string text)
         {
             var term = new StringBuilder();
-            var containsLetter = false;
             var terms = new List<string>();
 
             foreach (char ch in text)
@@ -130,7 +132,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 if (char.IsLetter(ch))
                 {
                     term.Append(ch);
-                    containsLetter = true;
                 }
                 else if (char.IsDigit(ch))
                 {
@@ -138,12 +139,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 }
                 else
                 {
-                    if (!term.Equals("") && containsLetter)
+                    if (!term.Equals(""))
                     {
                         terms.Add(term.ToString());
                     }
                     term.Clear();
-                    containsLetter = false;
                 }
             }
 

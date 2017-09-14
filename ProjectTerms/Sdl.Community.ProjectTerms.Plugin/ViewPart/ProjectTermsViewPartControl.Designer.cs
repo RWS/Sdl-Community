@@ -60,7 +60,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
             this._tableLayoutPanel.SetColumnSpan(this.cloudControl, 3);
             this.cloudControl.LayoutType = Sdl.Community.ProjectTerms.Controls.LayoutType.Spiral;
             this.cloudControl.Location = new System.Drawing.Point(3, 3);
-            this.cloudControl.MaxFontSize = 50;
+            this.cloudControl.MaxFontSize = 25;
             this.cloudControl.MinFontSize = 6;
             this.cloudControl.Name = "cloudControl";
             this.cloudControl.Palette = new System.Drawing.Color[] {

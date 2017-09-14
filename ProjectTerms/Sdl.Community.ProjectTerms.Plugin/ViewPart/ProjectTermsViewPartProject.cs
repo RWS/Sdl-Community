@@ -7,7 +7,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ViewPart
         Id = "CodingBreeze.ProjectsTermsViewPart",
         Name = "Project Terms Cloud",
         Description = "Show contents of the project terms in a word cloud.",
-        Icon = "wordcloud")]
+        Icon = "applogo")]
     [ViewPartLayout(Dock = DockType.Bottom, LocationByType = typeof(ProjectsController))]
     public class ProjectTermsViewPartProject : ProjectTermsViewPart
     {

@@ -163,18 +163,18 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 }
                 else
                 {
+                    //var regex = new Regex(@"(?<!\S)" + term + @"(?!\S)");
                     var regex = new Regex(term);
                     viewModel.ReadProjectTermsFromFile();
                     var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
+                    if (blacklistRegex.Count == 0)
+                    {
+                        MessageBox.Show(PluginResources.Info_NotMatch, PluginResources.MessageType_Info);
+                        textBoxTerm.Text = "";
+                        return;
+                    }
                     foreach (var item in blacklistRegex)
                     {
-                        if (listViewBlackList.FindItemWithText(item.Text) != null)
-                        {
-                            textBoxTerm.Text = "";
-                            MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
-                            return;
-                        }
-
                         AddTerm(item.Text);
                     }
                 }
