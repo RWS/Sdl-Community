@@ -237,10 +237,6 @@
   <data name="BlacklistFileName" xml:space="preserve">
     <value>blackListTerms.txt</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="wordcloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\wordcloud.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Message_ExtractedTerms" xml:space="preserve">
     <value>The terms were extracted successfully.</value>
     <comment>Terms was extracted with success!</comment>
@@ -250,5 +246,15 @@
   </data>
   <data name="Button_ExtractTermsProject" xml:space="preserve">
     <value>Extract Terms From Project</value>
+  </data>
+  <data name="Info_NotMatch" xml:space="preserve">
+    <value>No matches found!</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="applogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\applogo.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MessageContent_multipleFilesTermbase" xml:space="preserve">
+    <value>This action cannot be run for multiples files!</value>
   </data>
 </root>

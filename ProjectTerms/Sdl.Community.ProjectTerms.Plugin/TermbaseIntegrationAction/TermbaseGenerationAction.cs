@@ -12,7 +12,7 @@ using System.Globalization;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Plugin;
 using System.IO;
-using Sdl.Community.ProjectTerms.Plugin.Utils;
+using System.Linq;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -24,6 +24,12 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
         {
             try
             {
+                if (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.Count() > 1)
+                {
+                    MessageBox.Show(PluginResources.MessageContent_multipleFilesTermbase, PluginResources.MessageType_Info);
+                    return;
+                }
+
                 var termbaseCreator = new TermbaseGeneration();
 
                 var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
@@ -46,6 +52,7 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 File.Copy(termbase._Path, termbasePath);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator, termbasePath);
+                termbase.Close();
 
                 DisplayMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
             }

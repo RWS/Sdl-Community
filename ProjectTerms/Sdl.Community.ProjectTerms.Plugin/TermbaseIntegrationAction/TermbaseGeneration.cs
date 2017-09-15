@@ -37,7 +37,6 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             {
                 project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 selectedFile = SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault();
-
                 termbasePath = Path.Combine(Path.GetTempPath() + "\\Tb", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
                 if(!Directory.Exists(Path.GetDirectoryName(termbasePath)))
                 {

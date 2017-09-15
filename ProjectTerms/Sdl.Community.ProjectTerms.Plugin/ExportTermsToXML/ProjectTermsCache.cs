@@ -25,10 +25,29 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 
                 if (!wordCloudFile)
                 {
-                    if (!Directory.Exists(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath))))
-                        Utils.Utils.CreateDirectory(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath)));
+                    var directoryPath = Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(projectPath));
+                    var cacheFile = string.Empty;
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Utils.Utils.CreateDirectory(directoryPath);
+                        cacheFile = Utils.Utils.GetXMLFilePath(projectPath);
+                    }
+                    else
+                    {
+                        var fileName = Utils.Utils.GetExistedFileName(directoryPath);
+                        
+                        if (fileName != "")
+                        {
+                            Utils.Utils.RemoveDirectoryFiles(directoryPath);
+                            cacheFile = Path.Combine(projectPath + "\\tmp", fileName);
+                        }
+                        else
+                        {
+                            cacheFile = Utils.Utils.GetXMLFilePath(projectPath);
+                        }
+                    }
 
-                    doc.Save(Utils.Utils.GetXMLFilePath(projectPath));
+                    doc.Save(cacheFile);
                 }
                 else
                 {

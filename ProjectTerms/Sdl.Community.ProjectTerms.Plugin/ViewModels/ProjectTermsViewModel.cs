@@ -60,9 +60,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
             if (Project != null)
             {
-                if (File.Exists(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true)))
+                var path = Path.GetDirectoryName(Utils.Utils.GetSelectedProjectPath());
+                if (File.Exists(Utils.Utils.GetXMLFilePath(path, true)))
                 {
-                    Terms = cache.ReadXmlFile(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath(), true));
+                    Terms = cache.ReadXmlFile(Utils.Utils.GetXMLFilePath(path, true));
                 }
                 else
                 {
@@ -108,19 +109,18 @@ namespace Sdl.Community.ProjectTerms.Plugin
             return sourceFilesToProcessed;
         }
 
-        private Guid[] GetXmlFileId()
+        private Guid GetXmlFileId()
         {
-            var filesId = new List<Guid>();
             var sourceFiles = Utils.Utils.GetCurrentProject().GetSourceLanguageFiles();
             foreach (var file in sourceFiles)
             {
                 if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
                 {
-                    filesId.Add(file.Id);
+                    return file.Id;
                 }
             }
 
-            return filesId.ToArray();
+            return Guid.Empty;
         }
 
         #endregion
@@ -218,6 +218,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 }
 
                 resultCallback(result);
+
             };
             worker.RunWorkerAsync();
         }
@@ -231,17 +232,29 @@ namespace Sdl.Community.ProjectTerms.Plugin
             cache.Save(Utils.Utils.GetProjecPath(), Terms);
         }
 
-        private void RemoveFileById(Guid id)
+        private void UpdateExistedFile(Guid id)
         {
-            var fileController = SdlTradosStudio.Application.GetController<FilesController>();
 
-            MethodInfo getFilesViewService = typeof(FilesController).GetMethod("GetFilesViewService", BindingFlags.NonPublic | BindingFlags.Instance);
-            //dynamic result = getFilesViewService.Invoke(fileController, null);
+            var exitedFileName = Utils.Utils.GetExistedFileName(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())));
+            var existedFilePath = Path.Combine(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())), exitedFileName);
+            Utils.Utils.GetCurrentProject().AddNewFileVersion(id, existedFilePath);
+            var scan = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.Scan);
+            var convertTask = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+            var targetFiles = Utils.Utils.GetCurrentProject().GetTargetLanguageFiles();
+            foreach (var file in targetFiles)
+            {
+                if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
+                {
+                    File.Delete(file.LocalFilePath);
+                }
+            }
 
-            object result = getFilesViewService.Invoke(fileController, null);
-            //var folder = ((IFilesViewService)result).SelectedFiles;
-
-            fileController.RemoveSelectedFiles();
+            var sourceXmlFile = Utils.Utils.GetCurrentProject().GetSourceLanguageFiles().FirstOrDefault(x => x.Name.StartsWith(Path.GetFileNameWithoutExtension(Utils.Utils.GetProjecPath())));
+            foreach (var file in targetFiles)
+            {
+                if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
+                    File.Copy(sourceXmlFile.LocalFilePath, file.LocalFilePath);
+            }
         }
 
         public void AddXMlFileToProject()
@@ -252,16 +265,15 @@ namespace Sdl.Community.ProjectTerms.Plugin
             var xmlFolder = Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath()));
             var filesId = GetXmlFileId();
 
-            if (filesId != null)
+            if (filesId != Guid.Empty)
             {
-                // Todo: to remove the existed file
-                //RemoveFileById(fileId);
+                UpdateExistedFile(filesId);
+            }
+            else
+            {
+                IncludeFileToProject(Utils.Utils.GetCurrentProject(), xmlFolder, false);
             }
             OnProgress(50);
-
-            IncludeFileToProject(Utils.Utils.GetCurrentProject(), xmlFolder, false);
-
-            Utils.Utils.RemoveDirectory(xmlFolder);
         }
 
         private void IncludeFileToProject(IProject project, string xmlFolder, bool recursion)
@@ -271,12 +283,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 project.AddFolderWithFiles(xmlFolder, recursion);
                 var projectFiles = project.GetSourceLanguageFiles();
                 var addedFileId = GetXmlFileId();
-                var scan = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.Scan);
+                var scan = project.RunAutomaticTask(new Guid[] { addedFileId }, AutomaticTaskTemplateIds.Scan);
                 OnProgress(70);
-                var convertTask = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                var convertTask = project.RunAutomaticTask(new Guid[] { addedFileId }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
                 OnProgress(90);
-                var copyTask = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.CopyToTargetLanguages);
-                var preTran = project.RunAutomaticTask(addedFileId, AutomaticTaskTemplateIds.PreTranslateFiles);
+                var copyTask = project.RunAutomaticTask(new Guid[] { addedFileId }, AutomaticTaskTemplateIds.CopyToTargetLanguages);
                 OnProgress(100);
             }
             catch (Exception e)

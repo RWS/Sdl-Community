@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.ProjectTerms.Plugin</RootNamespace>
-    <AssemblyName>Sdl.Community.ProjectTerms</AssemblyName>
+    <AssemblyName>Sdl.Community.projectTermExtract</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -173,7 +173,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\wordcloud.ico" />
+    <None Include="Resources\applogo.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
