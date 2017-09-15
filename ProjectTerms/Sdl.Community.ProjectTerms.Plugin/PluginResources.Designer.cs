@@ -350,7 +350,7 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot generate the termbase only for the extracted project terms xml file!.
+        ///   Looks up a localized string similar to You can only generate the termbase from the extracted project terms XML file..
         /// </summary>
         public static string MessageContent_GenerateTermbaseAction {
             get {
