@@ -198,6 +198,7 @@
     <Compile Include="Structures\Project.cs" />
     <Compile Include="Structures\ProjectVersion.cs" />
     <Compile Include="Structures\Settings.cs" />
+    <Compile Include="Structures\VersionDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Add.ico" />

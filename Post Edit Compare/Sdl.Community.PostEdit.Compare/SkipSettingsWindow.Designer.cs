@@ -90,6 +90,7 @@
             this.skippBtn.TabIndex = 0;
             this.skippBtn.Text = "Skip report settings";
             this.skippBtn.UseVisualStyleBackColor = true;
+            this.skippBtn.Click += new System.EventHandler(this.skippBtn_Click);
             // 
             // reportBtn
             // 

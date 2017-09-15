@@ -10,6 +10,7 @@ using System.Linq;
 using System.Collections.Generic;
 using PostEdit.Compare.Forms;
 using Sdl.Community.PostEdit.Compare;
+using static Sdl.Community.PostEdit.Compare.Core.Comparison.PairedFiles;
 //using PostEdit.Compare;
 //using PostEdit.Compare.Model;
 
@@ -84,7 +85,7 @@ namespace Sdl.Community.PostEdit.Versions
 		{
 			var projectController= SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedProjectsId = new List<string>();
-
+			var pairFilesList = new List<PairedFile>();
 			foreach (var studioProject in projectController.SelectedProjects)
 			{
 				var id = studioProject.GetProjectInfo().Id.ToString();
@@ -95,10 +96,22 @@ namespace Sdl.Community.PostEdit.Versions
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
 
-			var skipWindow = new SkipSettingsWindow();
-			skipWindow.ShowDialog();
 			//IModel mModel = new Model();
 			//var postEditCompare = new FormMain(mModel);
+			foreach(var project in selectedVersionProjects)
+			{
+
+				var versionDetails = Helper.CreateVersionDetails(project);
+
+				var filesPairs = Helper.GetPairedFiles(versionDetails);
+				//pairFilesList.AddRange(filesPairs);
+			}
+			
+			//postEditCompare.Parse
+
+			var skipWindow = new SkipSettingsWindow();
+			skipWindow.ShowDialog();
+		
 
 			//Controller.AddProjectVersionsToList(selectedVersionProjects[0].projectVersions);
 			//postEditCompare.CreateReport();
