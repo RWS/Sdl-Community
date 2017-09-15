@@ -810,7 +810,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     + Math.Round(languageRate.PriceNew * pempAnalysisData.newWords, 2)
                 ).ToString(CultureInfo.InvariantCulture));
 
-                xmlTxtWriter.WriteAttributeString("currency", priceGroup.Currency);
+				if (priceGroup != null)
+				{
+					xmlTxtWriter.WriteAttributeString("currency", priceGroup.Currency);
+				}
+                
 
 
 
@@ -1499,7 +1503,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 + Math.Round(filesTotalPostEditNewPrice, 2)
             ).ToString(CultureInfo.InvariantCulture));
 
-            xmlTxtWriter.WriteAttributeString("currency", priceGroup.Currency);
+			if (priceGroup != null)
+			{
+				xmlTxtWriter.WriteAttributeString("currency", priceGroup.Currency);
+			}
+           
 
             xmlTxtWriter.WriteEndElement();
 
@@ -2267,48 +2275,63 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
         {
             var languageRate = new Settings.Price();
 
-
-            foreach (var p in priceGroup.GroupPrices)
+			if (priceGroup != null)
+			{
+				foreach (var p in priceGroup.GroupPrices)
+				{
+					if (string.Compare(p.Source, fileUnitProperties.SourceLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0
+						|| string.Compare(p.Target, fileUnitProperties.TargetLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0)
+						continue;
+					languageRate = p;
+					break;
+				}
+			}
+       
+            if (languageRate.PriceBase <= 0)
             {
-                if (string.Compare(p.Source, fileUnitProperties.SourceLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0
-                    || string.Compare(p.Target, fileUnitProperties.TargetLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0)
-                    continue;
-                languageRate = p;
-                break;
+				if (priceGroup != null)
+				{
+					foreach (var p in priceGroup.GroupPrices)
+					{
+						if (string.Compare(p.Source, "*", StringComparison.OrdinalIgnoreCase) != 0
+							|| string.Compare(p.Target, fileUnitProperties.TargetLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0)
+							continue;
+						languageRate = p;
+						break;
+					}
+				}
+                
             }
             if (languageRate.PriceBase <= 0)
             {
-                foreach (var p in priceGroup.GroupPrices)
-                {
-                    if (string.Compare(p.Source, "*", StringComparison.OrdinalIgnoreCase) != 0
-                        || string.Compare(p.Target, fileUnitProperties.TargetLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0)
-                        continue;
-                    languageRate = p;
-                    break;
-                }
+				if (priceGroup != null)
+				{
+					foreach (var p in priceGroup.GroupPrices)
+					{
+						if (
+							string.Compare(p.Source, fileUnitProperties.SourceLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0
+							|| string.Compare(p.Target, "*", StringComparison.OrdinalIgnoreCase) != 0)
+							continue;
+						languageRate = p;
+						break;
+					}
+				}
+             
             }
             if (languageRate.PriceBase <= 0)
             {
-                foreach (var p in priceGroup.GroupPrices)
-                {
-                    if (
-                        string.Compare(p.Source, fileUnitProperties.SourceLanguageIdUpdated, StringComparison.OrdinalIgnoreCase) != 0
-                        || string.Compare(p.Target, "*", StringComparison.OrdinalIgnoreCase) != 0)
-                        continue;
-                    languageRate = p;
-                    break;
-                }
-            }
-            if (languageRate.PriceBase <= 0)
-            {
-                foreach (var p in priceGroup.GroupPrices)
-                {
-                    if (string.Compare(p.Source, "*", StringComparison.OrdinalIgnoreCase) != 0
-                        || string.Compare(p.Target, "*", StringComparison.OrdinalIgnoreCase) != 0)
-                        continue;
-                    languageRate = p;
-                    break;
-                }
+				if (priceGroup != null)
+				{
+					foreach (var p in priceGroup.GroupPrices)
+					{
+						if (string.Compare(p.Source, "*", StringComparison.OrdinalIgnoreCase) != 0
+							|| string.Compare(p.Target, "*", StringComparison.OrdinalIgnoreCase) != 0)
+							continue;
+						languageRate = p;
+						break;
+					}
+				}
+              
             }
 
 
