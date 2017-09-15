@@ -1094,56 +1094,56 @@ namespace Sdl.Community.PostEdit.Versions
                     _viewContent.Value.label_TOTAL_PROJECT_VERSIONS_SELECTED.Text = "0";
                     _viewContent.Value.listView_postEditCompareProjectVersions.Items.Clear();
 
-                    #region  |  add project versions to list  |
+					#region  |  add project versions to list  |
+					AddProjectVersionsToList(project.projectVersions);
+					//foreach (var projectVersion in project.projectVersions)
+					//{
+					//    var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
+					//    item.SubItems.Add(projectVersion.name);
+					//    item.SubItems.Add(projectVersion.description);
+					//    item.SubItems.Add(projectVersion.createdAt);
 
-                    foreach (var projectVersion in project.projectVersions)
-                    {
-                        var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
-                        item.SubItems.Add(projectVersion.name);
-                        item.SubItems.Add(projectVersion.description);
-                        item.SubItems.Add(projectVersion.createdAt);
+					//    var sourceLanguage = projectVersion.sourceLanguage.name;
+					//    var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
 
-                        var sourceLanguage = projectVersion.sourceLanguage.name;
-                        var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
+					//    item.SubItems.Add(sourceLanguage);
+					//    item.SubItems.Add(targetLanguages);
+					//    item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
+					//    item.SubItems.Add(projectVersion.shallowCopy.ToString());
 
-                        item.SubItems.Add(sourceLanguage);
-                        item.SubItems.Add(targetLanguages);
-                        item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
-                        item.SubItems.Add(projectVersion.shallowCopy.ToString());
-
-                        var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
-                        item.SubItems.Add(fileCount);
-
-
-                        item.SubItems.Add(projectVersion.location);
-                        item.Tag = projectVersion;
+					//    var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
+					//    item.SubItems.Add(fileCount);
 
 
-                        if (Directory.Exists(projectVersion.location))
-                        {
-                            if (projectVersion.filesCopiedCount == 0)
-                            {
-                                item.ImageKey = @"Warning";
-                            }
-                            else if (projectVersion.translatableCount > 0)
-                            {
-                                item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
-                            }
-                            else
-                            {
-                                item.ImageKey = @"Yellow";
-                            }
-                        }
-                        else
-                        {
-                            item.ImageKey = @"Red";
-                        }
+					//    item.SubItems.Add(projectVersion.location);
+					//    item.Tag = projectVersion;
 
 
-                    }
-                    #endregion
+					//    if (Directory.Exists(projectVersion.location))
+					//    {
+					//        if (projectVersion.filesCopiedCount == 0)
+					//        {
+					//            item.ImageKey = @"Warning";
+					//        }
+					//        else if (projectVersion.translatableCount > 0)
+					//        {
+					//            item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
+					//        }
+					//        else
+					//        {
+					//            item.ImageKey = @"Yellow";
+					//        }
+					//    }
+					//    else
+					//    {
+					//        item.ImageKey = @"Red";
+					//    }
 
-                    _viewContent.Value.label_TOTAL_PROJECT_VERSIONS.Text = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Count.ToString();
+
+					//}
+					#endregion
+
+					_viewContent.Value.label_TOTAL_PROJECT_VERSIONS.Text = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Count.ToString();
 
 
                 }
@@ -1158,6 +1158,55 @@ namespace Sdl.Community.PostEdit.Versions
             }
         }
 
+
+		 public void AddProjectVersionsToList(List<ProjectVersion> projectVersions)
+		{
+			foreach (var projectVersion in projectVersions)
+			{
+				var item = _viewContent.Value.listView_postEditCompareProjectVersions.Items.Add(projectVersion.id);
+				item.SubItems.Add(projectVersion.name);
+				item.SubItems.Add(projectVersion.description);
+				item.SubItems.Add(projectVersion.createdAt);
+
+				var sourceLanguage = projectVersion.sourceLanguage.name;
+				var targetLanguages = projectVersion.targetLanguages.Aggregate(string.Empty, (current, language) => current + (current.Trim() != string.Empty ? ", " : string.Empty) + language.name);
+
+				item.SubItems.Add(sourceLanguage);
+				item.SubItems.Add(targetLanguages);
+				item.SubItems.Add(projectVersion.filesCopiedCount.ToString());
+				item.SubItems.Add(projectVersion.shallowCopy.ToString());
+
+				var fileCount = string.Format(PluginResources._0_translatable_1_reference, projectVersion.translatableCount, projectVersion.referenceCount);
+				item.SubItems.Add(fileCount);
+
+
+				item.SubItems.Add(projectVersion.location);
+				item.Tag = projectVersion;
+
+
+				if (Directory.Exists(projectVersion.location))
+				{
+					if (projectVersion.filesCopiedCount == 0)
+					{
+						item.ImageKey = @"Warning";
+					}
+					else if (projectVersion.translatableCount > 0)
+					{
+						item.ImageKey = projectVersion.shallowCopy ? "Blue" : "Green";
+					}
+					else
+					{
+						item.ImageKey = @"Yellow";
+					}
+				}
+				else
+				{
+					item.ImageKey = @"Red";
+				}
+
+
+			}
+		}
         private void ViewControlAdd(ProjectVersion projectVersion)
         {
             try

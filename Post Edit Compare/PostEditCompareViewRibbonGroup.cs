@@ -6,7 +6,10 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-
+using System.Linq;
+using System.Collections.Generic;
+using PostEdit.Compare.Forms;
+using Sdl.Community.PostEdit.Compare;
 //using PostEdit.Compare;
 //using PostEdit.Compare.Model;
 
@@ -47,9 +50,7 @@ namespace Sdl.Community.PostEdit.Versions
 
 
 
-
-
-    [Action("ContextCreateProjectVersionAction", typeof(PostEditCompareViewController), Name = "CreateProjectVersion_Name", Description = "CreateProjectVersion_Description", Icon = "CreateProjectVersion_Icon")]
+	[Action("ContextCreateProjectVersionAction", typeof(PostEditCompareViewController), Name = "CreateProjectVersion_Name", Description = "CreateProjectVersion_Description", Icon = "CreateProjectVersion_Icon")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 3, DisplayType.Default, "", true)]
     [Shortcut(Keys.Control | Keys.Alt | Keys.V)]
     public class ContextCreateProjectVersionAction : AbstractViewControllerAction<PostEditCompareViewController>
@@ -70,8 +71,47 @@ namespace Sdl.Community.PostEdit.Versions
         }
     }
 
+	[Action("CreateReport",
+  typeof(PostEditCompareViewController),
+  Name = "Create Comparison Report",
+  Description = "Create Comparison Report",
+  Icon = "CompareProjects_Icon")]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
+	//[Shortcut(Keys.Control | Keys.Alt | Keys.C)]
+	public class CreateProjectReport : AbstractViewControllerAction<PostEditCompareViewController>
+	{
+		protected override void Execute()
+		{
+			var projectController= SdlTradosStudio.Application.GetController<ProjectsController>();
+			var selectedProjectsId = new List<string>();
 
-    [RibbonGroup("PostEditCompareRibbonGroup", "PostEditCompareRibbonGroup_Name")]
+			foreach (var studioProject in projectController.SelectedProjects)
+			{
+				var id = studioProject.GetProjectInfo().Id.ToString();
+				selectedProjectsId.Add(id);
+			}
+
+			var projectsFromSettings = Controller.Settings.projects;
+			var selectedVersionProjects = projectsFromSettings
+				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
+
+			var skipWindow = new SkipSettingsWindow();
+			skipWindow.ShowDialog();
+			//IModel mModel = new Model();
+			//var postEditCompare = new FormMain(mModel);
+
+			//Controller.AddProjectVersionsToList(selectedVersionProjects[0].projectVersions);
+			//postEditCompare.CreateReport();
+			//var reportWizard = new ReportWizard();
+
+			//reportWizard.ShowDialog();
+
+		}
+	}
+
+
+
+	[RibbonGroup("PostEditCompareRibbonGroup", "PostEditCompareRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 0)]
     class PostEditCompareRibbonGroup : AbstractRibbonGroup
     {
