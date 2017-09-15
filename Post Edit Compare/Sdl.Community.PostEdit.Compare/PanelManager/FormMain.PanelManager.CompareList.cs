@@ -5219,7 +5219,7 @@ namespace PostEdit.Compare
         #region  |  report  |
 
         //create report
-        private void CreateReport()
+        public  void CreateReport()
         {
             var lv = _panelCompare.listView_main;
 

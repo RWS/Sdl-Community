@@ -198,6 +198,7 @@
     <Compile Include="Structures\Project.cs" />
     <Compile Include="Structures\ProjectVersion.cs" />
     <Compile Include="Structures\Settings.cs" />
+    <Compile Include="Structures\VersionDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Add.ico" />
@@ -285,6 +286,9 @@
       <Project>{b9aa109e-e936-4e92-a0af-7297902270cd}</Project>
       <Name>Sdl.Community.PostEdit.Compare</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
