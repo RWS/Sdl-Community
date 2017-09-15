@@ -257,4 +257,7 @@
   <data name="MessageContent_multipleFilesTermbase" xml:space="preserve">
     <value>This action cannot be run for multiples files!</value>
   </data>
+  <data name="MessageContent_GenerateTermbaseAction" xml:space="preserve">
+    <value>You cannot generate the termbase only for the extracted project terms xml file!</value>
+  </data>
 </root>

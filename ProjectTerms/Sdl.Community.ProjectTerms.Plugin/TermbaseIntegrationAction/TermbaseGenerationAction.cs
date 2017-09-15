@@ -13,6 +13,7 @@ using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Plugin;
 using System.IO;
 using System.Linq;
+using Sdl.Community.ProjectTerms.Plugin.Utils;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -27,6 +28,13 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 if (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.Count() > 1)
                 {
                     MessageBox.Show(PluginResources.MessageContent_multipleFilesTermbase, PluginResources.MessageType_Info);
+                    return;
+                }
+                var selectedFileName = Path.GetFileNameWithoutExtension(SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault().Name);
+                var extractedXmlFileName = Utils.GetXmlFileName(Utils.GetProjecPath());
+                if (selectedFileName != extractedXmlFileName)
+                {
+                    MessageBox.Show(PluginResources.MessageContent_GenerateTermbaseAction, PluginResources.MessageType_Info);
                     return;
                 }
 

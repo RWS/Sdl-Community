@@ -350,6 +350,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot generate the termbase only for the extracted project terms xml file!.
+        /// </summary>
+        public static string MessageContent_GenerateTermbaseAction {
+            get {
+                return ResourceManager.GetString("MessageContent_GenerateTermbaseAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This action cannot be run for multiples files!.
         /// </summary>
         public static string MessageContent_multipleFilesTermbase {
