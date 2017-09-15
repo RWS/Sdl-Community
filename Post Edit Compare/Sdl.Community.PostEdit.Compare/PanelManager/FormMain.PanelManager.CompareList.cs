@@ -5218,8 +5218,56 @@ namespace PostEdit.Compare
         #endregion
         #region  |  report  |
 
-        //create report
-        public  void CreateReport()
+		public Processor CreateProcessor()
+		{
+			var processor = new Processor();
+			#region  |  initialze Processor settings  |
+			Processor.Settings.comparisonType = Application.Settings.ReportViewerSettings.comparisonType;
+			Processor.Settings.ComparisonIncludeTags = Application.Settings.ReportViewerSettings.ComparisonIncludeTags;
+			Processor.Settings.IncludeIndividualFileInformation = true;
+
+
+			Processor.Settings.UseCustomStyleSheet = false;
+			Processor.Settings.FilePathCustomStyleSheet = string.Empty;
+
+			Processor.Settings.StyleNewText = Application.Settings.ReportViewerSettings.StyleNewText;
+			Processor.Settings.StyleRemovedText = Application.Settings.ReportViewerSettings.StyleRemovedText;
+			Processor.Settings.StyleNewTag = Application.Settings.ReportViewerSettings.StyleNewTag;
+			Processor.Settings.StyleRemovedTag = Application.Settings.ReportViewerSettings.StyleRemovedTag;
+
+
+			Processor.Settings.SearchSubFolders = false;
+
+
+			Processor.Settings.ReportDirectory = Application.Settings.ApplicationSettingsPath;
+			Processor.Settings.ReportFileName = Path.Combine(Application.Settings.ApplicationSettingsPath, "PostEdit.Compare.Report" + ".xml");
+			Processor.Settings.ViewReportWhenFinishedProcessing = false;
+
+
+			Processor.Settings.reportFormat = Settings.ReportFormat.Html;
+
+			Processor.Settings.ReportFilterSegmentsWithNoChanges = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
+			Processor.Settings.ReportFilterChangedTargetContent = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
+			Processor.Settings.ReportFilterSegmentStatusChanged = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
+			Processor.Settings.ReportFilterSegmentsContainingComments = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
+			Processor.Settings.ReportFilterLockedSegments = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
+
+			Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
+
+			Processor.Settings.ShowOriginalSourceSegment = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
+			Processor.Settings.ShowOriginalTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
+			Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
+			Processor.Settings.ShowUpdatedTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
+			Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
+			Processor.Settings.ShowTargetComparison = Application.Settings.ReportViewerSettings.ShowTargetComparison;
+			Processor.Settings.ShowSegmentComments = Application.Settings.ReportViewerSettings.ShowSegmentComments;
+			Processor.Settings.ShowSegmentLocked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
+
+			#endregion
+			return processor;
+		}
+		//create report
+		public  void CreateReport()
         {
             var lv = _panelCompare.listView_main;
 
@@ -5236,51 +5284,9 @@ namespace PostEdit.Compare
                 _timer.Start();
 
 
-                var comparer = new Processor();
+				var comparer = CreateProcessor();
 
-                #region  |  initialze Processor settings  |
-                Processor.Settings.comparisonType = Application.Settings.ReportViewerSettings.comparisonType;
-                Processor.Settings.ComparisonIncludeTags = Application.Settings.ReportViewerSettings.ComparisonIncludeTags;
-                Processor.Settings.IncludeIndividualFileInformation = true;
-
-
-                Processor.Settings.UseCustomStyleSheet = false;
-                Processor.Settings.FilePathCustomStyleSheet = string.Empty;
-
-                Processor.Settings.StyleNewText = Application.Settings.ReportViewerSettings.StyleNewText;
-                Processor.Settings.StyleRemovedText = Application.Settings.ReportViewerSettings.StyleRemovedText;
-                Processor.Settings.StyleNewTag = Application.Settings.ReportViewerSettings.StyleNewTag;
-                Processor.Settings.StyleRemovedTag = Application.Settings.ReportViewerSettings.StyleRemovedTag;
-
-
-                Processor.Settings.SearchSubFolders = false;
-
-
-                Processor.Settings.ReportDirectory = Application.Settings.ApplicationSettingsPath;
-                Processor.Settings.ReportFileName = Path.Combine(Application.Settings.ApplicationSettingsPath, "PostEdit.Compare.Report" + ".xml");
-                Processor.Settings.ViewReportWhenFinishedProcessing = false;
-
-
-                Processor.Settings.reportFormat = Settings.ReportFormat.Html;
-
-                Processor.Settings.ReportFilterSegmentsWithNoChanges = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
-                Processor.Settings.ReportFilterChangedTargetContent = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
-                Processor.Settings.ReportFilterSegmentStatusChanged = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
-                Processor.Settings.ReportFilterSegmentsContainingComments = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
-                Processor.Settings.ReportFilterLockedSegments = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
-
-                Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
-
-                Processor.Settings.ShowOriginalSourceSegment = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
-                Processor.Settings.ShowOriginalTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
-                Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
-                Processor.Settings.ShowUpdatedTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
-                Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
-                Processor.Settings.ShowTargetComparison = Application.Settings.ReportViewerSettings.ShowTargetComparison;
-                Processor.Settings.ShowSegmentComments = Application.Settings.ReportViewerSettings.ShowSegmentComments;
-                Processor.Settings.ShowSegmentLocked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
-
-                #endregion
+               
 
 
                 var f = new ReportWizard();
@@ -5496,10 +5502,14 @@ namespace PostEdit.Compare
 
         }
 
-        private void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
+        public void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
         {
             try
             {
+				if (RateGroup == null)
+				{
+					RateGroup=new Settings.PriceGroup();
+				}
                 comparer.ProgressComparer += ComparerProgress;
                 comparer.ProgressParser += ParserProgress;
                 comparer.ProgressFiles += FilesProgress;
@@ -5557,7 +5567,7 @@ namespace PostEdit.Compare
             }
         }
 
-        private void CreateComparisonReport(bool hitCancel, Processor comparer)
+        public void CreateComparisonReport(bool hitCancel, Processor comparer)
         {
             var reportFileName = Processor.Settings.ReportFileName + "_" + Guid.NewGuid() + "";
 

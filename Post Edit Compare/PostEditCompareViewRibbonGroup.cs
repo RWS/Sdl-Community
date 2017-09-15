@@ -96,24 +96,28 @@ namespace Sdl.Community.PostEdit.Versions
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
 
-			//IModel mModel = new Model();
-			//var postEditCompare = new FormMain(mModel);
 			foreach(var project in selectedVersionProjects)
 			{
 
 				var versionDetails = Helper.CreateVersionDetails(project);
 
 				var filesPairs = Helper.GetPairedFiles(versionDetails);
-				//pairFilesList.AddRange(filesPairs);
+				pairFilesList.AddRange(filesPairs);
 			}
-			
-			//postEditCompare.Parse
 
 			var skipWindow = new SkipSettingsWindow();
 			skipWindow.ShowDialog();
-		
 
-			//Controller.AddProjectVersionsToList(selectedVersionProjects[0].projectVersions);
+			
+			//var customizeSettings = skipWindow.SkipSettings;
+			IModel mModel = new Model();
+			var postEditCompare = new FormMain(mModel);
+			var comparer = postEditCompare.CreateProcessor();
+			var cancel = false;
+			postEditCompare.ParseContentFromFiles(comparer, pairFilesList,ref cancel);
+			postEditCompare.CreateComparisonReport(cancel, comparer);
+			
+		
 			//postEditCompare.CreateReport();
 			//var reportWizard = new ReportWizard();
 

@@ -101,6 +101,7 @@
             this.reportBtn.TabIndex = 1;
             this.reportBtn.Text = "Set report settings";
             this.reportBtn.UseVisualStyleBackColor = true;
+            this.reportBtn.Click += new System.EventHandler(this.reportBtn_Click);
             // 
             // SkipSettingsWindow
             // 
