@@ -60,7 +60,6 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 File.Copy(termbase._Path, termbasePath);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator, termbasePath);
-                //termbase.Close();
 
                 DisplayMessage(PluginResources.Info_SuccessfullyAdded, PluginResources.MessageTitle);
             }

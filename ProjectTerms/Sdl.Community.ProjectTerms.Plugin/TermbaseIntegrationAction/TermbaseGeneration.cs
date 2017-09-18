@@ -40,7 +40,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 termbasePath = Path.Combine(Path.GetTempPath() + "\\Tb", Path.GetFileNameWithoutExtension(selectedFile.LocalFilePath) + ".sdltb");
                 if(!Directory.Exists(Path.GetDirectoryName(termbasePath)))
                 {
-                    Directory.CreateDirectory(termbasePath);
+                    Directory.CreateDirectory(Path.GetDirectoryName(termbasePath));
                 }
             }
             catch (Exception e)
