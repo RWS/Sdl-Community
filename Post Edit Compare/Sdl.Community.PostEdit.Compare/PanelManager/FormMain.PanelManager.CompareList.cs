@@ -5285,19 +5285,14 @@ namespace PostEdit.Compare
 
 
 				var comparer = CreateProcessor();
-
-               
+				         
 
 
                 var f = new ReportWizard();
 
+				InitializeReportWizard(f);
 
-                f.comboBox_priceGroup.Items.Clear();
-                foreach (var p in Application.Settings.PriceGroups)
-                    f.comboBox_priceGroup.Items.Add(p.Name);
-
-                if (f.comboBox_priceGroup.Items.Count > 0)
-                    f.comboBox_priceGroup.SelectedIndex = 0;
+            
 
                 if (lv.SelectedIndices.Count > 0)
                     f.radioButton_compareSelectedFiles.Checked = true;
@@ -5306,37 +5301,7 @@ namespace PostEdit.Compare
 
 
 
-                f.checkBox_viewFilesWithNoTranslationDifferences.Checked = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
-                f.checkBox_showGoogleChartsInReport.Checked = Application.Settings.ReportViewerSettings.ShowGoogleChartsInReport;
-                f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked = Application.Settings.ReportViewerSettings.CalculateSummaryAnalysisBasedOnFilteredRows;
-
-                f.checkBox_viewSegmentsWithNoChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
-                f.checkBox_viewSegmentsWithTranslationChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
-                f.checkBox_viewSegmentsWithStatusChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
-                f.checkBox_viewSegmentsWithComments.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
-                f.checkBox_viewLockedSegments.Checked = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
-
-                f.checkBox_includeAllSubfolders.Checked = true;
-
-                f.checkBox_showOriginalSourceSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
-                f.checkBox_showOriginalTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
-                f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
-                f.checkBox_showUpdatedTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
-                f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
-                f.checkBox_showTargetSegmentComparison.Checked = Application.Settings.ReportViewerSettings.ShowTargetComparison;
-                f.checkBox_showSegmentComments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentComments;
-                f.checkBox_showLockedSegments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
-
-                f.checkBox_showSegmentStatus.Checked = Application.Settings.ReportViewerSettings.ShowSegmentStatus;
-                f.checkBox_showSegmentMatch.Checked = Application.Settings.ReportViewerSettings.ShowSegmentMatch;
-                f.checkBox_showSegmentTERPAnalysis.Checked = Application.Settings.ReportViewerSettings.ShowSegmentTerp;
-                f.textBox_javaExecutablePath.Text = Application.Settings.ReportViewerSettings.JavaExecutablePath;
-                f.checkBox_showSegmentPEM.Checked = Application.Settings.ReportViewerSettings.ShowSegmentPem;
-
-
-                f.comboBox_segments_match_value_original.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesOriginal;
-                f.comboBox_segments_match_value_updated.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesUpdated;
-                f.tagVisualizationComboBox.SelectedItem = Application.Settings.ReportViewerSettings.TagVisualStyle.ToString();
+                
 
                 var iFiles = 0;
                 if (_panelCompare.listView_main.SelectedIndices.Count > 0)
@@ -5501,8 +5466,50 @@ namespace PostEdit.Compare
 
 
         }
+		public void InitializeReportWizard(ReportWizard f)
+		{
+			f.comboBox_priceGroup.Items.Clear();
+			foreach (var p in Application.Settings.PriceGroups)
+				f.comboBox_priceGroup.Items.Add(p.Name);
 
-        public void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
+			if (f.comboBox_priceGroup.Items.Count > 0)
+				f.comboBox_priceGroup.SelectedIndex = 0;
+
+			f.checkBox_viewFilesWithNoTranslationDifferences.Checked = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
+			f.checkBox_showGoogleChartsInReport.Checked = Application.Settings.ReportViewerSettings.ShowGoogleChartsInReport;
+			f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked = Application.Settings.ReportViewerSettings.CalculateSummaryAnalysisBasedOnFilteredRows;
+
+			f.checkBox_viewSegmentsWithNoChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
+			f.checkBox_viewSegmentsWithTranslationChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
+			f.checkBox_viewSegmentsWithStatusChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
+			f.checkBox_viewSegmentsWithComments.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
+			f.checkBox_viewLockedSegments.Checked = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
+
+			f.checkBox_includeAllSubfolders.Checked = true;
+
+			f.checkBox_showOriginalSourceSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
+			f.checkBox_showOriginalTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
+			f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
+			f.checkBox_showUpdatedTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
+			f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
+			f.checkBox_showTargetSegmentComparison.Checked = Application.Settings.ReportViewerSettings.ShowTargetComparison;
+			f.checkBox_showSegmentComments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentComments;
+			f.checkBox_showLockedSegments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
+
+			f.checkBox_showSegmentStatus.Checked = Application.Settings.ReportViewerSettings.ShowSegmentStatus;
+			f.checkBox_showSegmentMatch.Checked = Application.Settings.ReportViewerSettings.ShowSegmentMatch;
+			f.checkBox_showSegmentTERPAnalysis.Checked = Application.Settings.ReportViewerSettings.ShowSegmentTerp;
+			f.textBox_javaExecutablePath.Text = Application.Settings.ReportViewerSettings.JavaExecutablePath;
+			f.checkBox_showSegmentPEM.Checked = Application.Settings.ReportViewerSettings.ShowSegmentPem;
+
+
+			f.comboBox_segments_match_value_original.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesOriginal;
+			f.comboBox_segments_match_value_updated.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesUpdated;
+			f.tagVisualizationComboBox.SelectedItem = Application.Settings.ReportViewerSettings.TagVisualStyle.ToString();
+		}
+
+
+		public void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
         {
             try
             {
@@ -5649,11 +5656,10 @@ namespace PostEdit.Compare
 
                     if (!cancel)
                     {
-                        ReportDialog.PanelReportViewer.webBrowserReport.Navigate(
-                            new Uri(Path.Combine("file://", reportFileName + ".html")));
+						ReportDialog.PanelReportViewer.webBrowserReport.Navigate(
+							new Uri(Path.Combine("file://", reportFileName + ".html")));
 
-
-                        try
+						try
                         {
                             ReportDialog.ViewSegmentsWithNoChanges = Processor.Settings.ReportFilterSegmentsWithNoChanges;
                             ReportDialog.ViewSegmentsWithTranslationChanges = Processor.Settings.ReportFilterChangedTargetContent;

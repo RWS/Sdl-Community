@@ -83,9 +83,44 @@ namespace Sdl.Community.PostEdit.Versions
 	{
 		protected override void Execute()
 		{
-			var projectController= SdlTradosStudio.Application.GetController<ProjectsController>();
+		
+
+			IModel mModel = new Model();
+			var postEditCompare = new FormMain(mModel);
+		
+
+			var skipWindow = new SkipSettingsWindow();
+			skipWindow.ShowDialog();
+
+			if (skipWindow.CustomizeSettings)
+			{
+				var reportWizard = new ReportWizard();
+				postEditCompare.InitializeReportWizard(reportWizard);
+				reportWizard.ShowDialog();
+				CreateReport(postEditCompare);
+			}
+			else
+			{
+				CreateReport(postEditCompare);
+			}
+						
+			//var customizeSettings = skipWindow.SkipSettings;
+		
+			//postEditCompare.ParseContentFromFiles(comparer, pairFilesList,ref cancel);
+			//postEditCompare.CreateComparisonReport(cancel, comparer);
+			
+		
+			//postEditCompare.CreateReport();
+			
+
+		}
+		private void CreateReport(FormMain postEditCompare)
+		{
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedProjectsId = new List<string>();
-			var pairFilesList = new List<PairedFile>();
+			//var pairFilesList = new List<PairedFile>();
+			var comparer = postEditCompare.CreateProcessor();
+			var cancel = false;
 			foreach (var studioProject in projectController.SelectedProjects)
 			{
 				var id = studioProject.GetProjectInfo().Id.ToString();
@@ -96,33 +131,17 @@ namespace Sdl.Community.PostEdit.Versions
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
 
-			foreach(var project in selectedVersionProjects)
+			foreach (var project in selectedVersionProjects)
 			{
 
 				var versionDetails = Helper.CreateVersionDetails(project);
 
 				var filesPairs = Helper.GetPairedFiles(versionDetails);
-				pairFilesList.AddRange(filesPairs);
+
+				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
+				postEditCompare.CreateComparisonReport(cancel, comparer);
+				//pairFilesList.AddRange(filesPairs);
 			}
-
-			var skipWindow = new SkipSettingsWindow();
-			skipWindow.ShowDialog();
-
-			
-			//var customizeSettings = skipWindow.SkipSettings;
-			IModel mModel = new Model();
-			var postEditCompare = new FormMain(mModel);
-			var comparer = postEditCompare.CreateProcessor();
-			var cancel = false;
-			postEditCompare.ParseContentFromFiles(comparer, pairFilesList,ref cancel);
-			postEditCompare.CreateComparisonReport(cancel, comparer);
-			
-		
-			//postEditCompare.CreateReport();
-			//var reportWizard = new ReportWizard();
-
-			//reportWizard.ShowDialog();
-
 		}
 	}
 
