@@ -78,16 +78,12 @@ namespace Sdl.Community.PostEdit.Versions
   Description = "Create Comparison Report",
   Icon = "CompareProjects_Icon")]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
-	//[Shortcut(Keys.Control | Keys.Alt | Keys.C)]
 	public class CreateProjectReport : AbstractViewControllerAction<PostEditCompareViewController>
 	{
 		protected override void Execute()
 		{
-		
-
 			IModel mModel = new Model();
 			var postEditCompare = new FormMain(mModel);
-		
 
 			var skipWindow = new SkipSettingsWindow();
 			skipWindow.ShowDialog();
@@ -101,20 +97,17 @@ namespace Sdl.Community.PostEdit.Versions
 				postEditCompare.SetPriceGroup(reportWizard);
 				CreateReport(postEditCompare);
 			}
-			else
+			if (skipWindow.SkipSettings)
 			{
-
 				postEditCompare.SetPriceGroup(reportWizard);
 				CreateReport(postEditCompare);
 			}
-						
-
 		}
+
 		private void CreateReport(FormMain postEditCompare)
 		{
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedProjectsId = new List<string>();
-			//var pairFilesList = new List<PairedFile>();
 			var comparer = postEditCompare.CreateProcessor();
 			var cancel = false;
 			foreach (var studioProject in projectController.SelectedProjects)
@@ -136,7 +129,6 @@ namespace Sdl.Community.PostEdit.Versions
 
 				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
 				postEditCompare.CreateComparisonReport(cancel, comparer);
-				//pairFilesList.AddRange(filesPairs);
 			}
 		}
 	}
