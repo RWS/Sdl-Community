@@ -296,7 +296,11 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You already have a termbase for this file! Please remove it and generate it again!.
+        ///   Looks up a localized string similar to   1. Go to Project Settings -&gt; All Language Pairs -&gt; Termbases and remove the 	termbase from your Project and then close Studio
+        ///  2. Go to your Projects folder in Windows Explorer and delete the Tb folder
+        ///  3. Go to c:\Users\[username]\AppData\Local\Temp\ and delete the Tb folder
+        ///
+        ///Restart Studio and now you should be able to generate the new termbase..
         /// </summary>
         public static string Info_TermbaseExists {
             get {
@@ -346,6 +350,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string MessageContent_buttonLoad {
             get {
                 return ResourceManager.GetString("MessageContent_buttonLoad", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only generate the termbase from the extracted project terms XML file..
+        /// </summary>
+        public static string MessageContent_GenerateTermbaseAction {
+            get {
+                return ResourceManager.GetString("MessageContent_GenerateTermbaseAction", resourceCulture);
             }
         }
         

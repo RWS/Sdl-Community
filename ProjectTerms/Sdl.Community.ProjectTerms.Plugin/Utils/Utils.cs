@@ -109,5 +109,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
         {
             return SdlTradosStudio.Application.GetController<ProjectsController>().SelectedProjects.First().FilePath;
         }
+
+        public static string GetXmlFileName(string projectPath)
+        {
+            var xmlFileDirectory = projectPath + "\\tmp";
+            if (Directory.Exists(xmlFileDirectory))
+            {
+                return Path.GetFileNameWithoutExtension(Directory.GetFiles(xmlFileDirectory)[0]) + ".xml";
+            }
+
+            return string.Empty;
+        }
     }
 }
