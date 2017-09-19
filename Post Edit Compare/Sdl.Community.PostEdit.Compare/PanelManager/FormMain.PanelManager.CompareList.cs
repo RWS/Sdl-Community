@@ -5394,52 +5394,10 @@ namespace PostEdit.Compare
 
                 if (!f.Saved) return;
                 {
-                    if (f.comboBox_priceGroup.Items.Count > 0)
-                    {
-                        foreach (var p in Application.Settings.PriceGroups)
-                        {
-                            if (string.Compare(p.Name, f.comboBox_priceGroup.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase) != 0)
-                                continue;
-                            RateGroup = p;
-                            break;
-                        }
-                    }
-
-                    Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = f.checkBox_viewFilesWithNoTranslationDifferences.Checked;
-                    Processor.Settings.ShowGoogleChartsInReport = f.checkBox_showGoogleChartsInReport.Checked;
-                    Processor.Settings.CalculateSummaryAnalysisBasedOnFilteredRows = f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked;
-
-                    Processor.Settings.ReportFilterSegmentsWithNoChanges = f.checkBox_viewSegmentsWithNoChanges.Checked;
-                    Processor.Settings.ReportFilterChangedTargetContent = f.checkBox_viewSegmentsWithTranslationChanges.Checked;
-                    Processor.Settings.ReportFilterSegmentStatusChanged = f.checkBox_viewSegmentsWithStatusChanges.Checked;
-                    Processor.Settings.ReportFilterSegmentsContainingComments = f.checkBox_viewSegmentsWithComments.Checked;
-                    Processor.Settings.ReportFilterLockedSegments = f.checkBox_viewLockedSegments.Checked;
-
-                    Processor.Settings.ReportFilterTranslationMatchValuesOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
-                    Processor.Settings.ReportFilterTranslationMatchValuesUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
-                    Processor.Settings.TagVisualStyle = (Settings.TagVisual)Enum.Parse(typeof(Settings.TagVisual), f.tagVisualizationComboBox.SelectedItem.ToString(), true);
-
-                    Processor.Settings.ShowOriginalSourceSegment = f.checkBox_showOriginalSourceSegment.Checked;
-                    Processor.Settings.ShowOriginalTargetSegment = f.checkBox_showOriginalTargetSegment.Checked;
-                    Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked;
-                    Processor.Settings.ShowUpdatedTargetSegment = f.checkBox_showUpdatedTargetSegment.Checked;
-                    Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked;
-                    Processor.Settings.ShowTargetComparison = f.checkBox_showTargetSegmentComparison.Checked;
-                    Processor.Settings.ShowSegmentComments = f.checkBox_showSegmentComments.Checked;
-                    Processor.Settings.ShowSegmentLocked = f.checkBox_showLockedSegments.Checked;
-
-                    Processor.Settings.ShowSegmentStatus = f.checkBox_showSegmentStatus.Checked;
-                    Processor.Settings.ShowSegmentMatch = f.checkBox_showSegmentMatch.Checked;
-                    Processor.Settings.ShowSegmentTerp = f.checkBox_showSegmentTERPAnalysis.Checked;
-                    Processor.Settings.JavaExecutablePath = f.textBox_javaExecutablePath.Text;
-                    Processor.Settings.ShowSegmentPem = f.checkBox_showSegmentPEM.Checked;
-
-
-
+					SetPriceGroup(f);
+                  
                     var pairedFiles = GetPairedFiles(f, lv);
-
-
-
+					
                     if (pairedFiles.Count == 0)
                     {
                         MessageBox.Show(this, Resources.FormMain_CreateReport_Empty_file_comparison_list, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -5466,6 +5424,50 @@ namespace PostEdit.Compare
 
 
         }
+
+		public void SetPriceGroup(ReportWizard f)
+		{
+			if (f.comboBox_priceGroup.Items.Count > 0)
+			{
+				foreach (var p in Application.Settings.PriceGroups)
+				{
+					if (string.Compare(p.Name, f.comboBox_priceGroup.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase) != 0)
+						continue;
+					RateGroup = p;
+					break;
+				}
+			}
+
+			Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = f.checkBox_viewFilesWithNoTranslationDifferences.Checked;
+			Processor.Settings.ShowGoogleChartsInReport = f.checkBox_showGoogleChartsInReport.Checked;
+			Processor.Settings.CalculateSummaryAnalysisBasedOnFilteredRows = f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked;
+
+			Processor.Settings.ReportFilterSegmentsWithNoChanges = f.checkBox_viewSegmentsWithNoChanges.Checked;
+			Processor.Settings.ReportFilterChangedTargetContent = f.checkBox_viewSegmentsWithTranslationChanges.Checked;
+			Processor.Settings.ReportFilterSegmentStatusChanged = f.checkBox_viewSegmentsWithStatusChanges.Checked;
+			Processor.Settings.ReportFilterSegmentsContainingComments = f.checkBox_viewSegmentsWithComments.Checked;
+			Processor.Settings.ReportFilterLockedSegments = f.checkBox_viewLockedSegments.Checked;
+
+			Processor.Settings.ReportFilterTranslationMatchValuesOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
+			Processor.Settings.ReportFilterTranslationMatchValuesUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
+			Processor.Settings.TagVisualStyle = (Settings.TagVisual)Enum.Parse(typeof(Settings.TagVisual), f.tagVisualizationComboBox.SelectedItem.ToString(), true);
+
+			Processor.Settings.ShowOriginalSourceSegment = f.checkBox_showOriginalSourceSegment.Checked;
+			Processor.Settings.ShowOriginalTargetSegment = f.checkBox_showOriginalTargetSegment.Checked;
+			Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked;
+			Processor.Settings.ShowUpdatedTargetSegment = f.checkBox_showUpdatedTargetSegment.Checked;
+			Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked;
+			Processor.Settings.ShowTargetComparison = f.checkBox_showTargetSegmentComparison.Checked;
+			Processor.Settings.ShowSegmentComments = f.checkBox_showSegmentComments.Checked;
+			Processor.Settings.ShowSegmentLocked = f.checkBox_showLockedSegments.Checked;
+
+			Processor.Settings.ShowSegmentStatus = f.checkBox_showSegmentStatus.Checked;
+			Processor.Settings.ShowSegmentMatch = f.checkBox_showSegmentMatch.Checked;
+			Processor.Settings.ShowSegmentTerp = f.checkBox_showSegmentTERPAnalysis.Checked;
+			Processor.Settings.JavaExecutablePath = f.textBox_javaExecutablePath.Text;
+			Processor.Settings.ShowSegmentPem = f.checkBox_showSegmentPEM.Checked;
+		}
+
 		public void InitializeReportWizard(ReportWizard f)
 		{
 			f.comboBox_priceGroup.Items.Clear();

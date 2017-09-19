@@ -92,26 +92,22 @@ namespace Sdl.Community.PostEdit.Versions
 			var skipWindow = new SkipSettingsWindow();
 			skipWindow.ShowDialog();
 
+			var reportWizard = new ReportWizard();
+			postEditCompare.InitializeReportWizard(reportWizard);
+
 			if (skipWindow.CustomizeSettings)
 			{
-				var reportWizard = new ReportWizard();
-				postEditCompare.InitializeReportWizard(reportWizard);
 				reportWizard.ShowDialog();
+				postEditCompare.SetPriceGroup(reportWizard);
 				CreateReport(postEditCompare);
 			}
 			else
 			{
+
+				postEditCompare.SetPriceGroup(reportWizard);
 				CreateReport(postEditCompare);
 			}
 						
-			//var customizeSettings = skipWindow.SkipSettings;
-		
-			//postEditCompare.ParseContentFromFiles(comparer, pairFilesList,ref cancel);
-			//postEditCompare.CreateComparisonReport(cancel, comparer);
-			
-		
-			//postEditCompare.CreateReport();
-			
 
 		}
 		private void CreateReport(FormMain postEditCompare)
