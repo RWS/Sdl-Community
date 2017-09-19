@@ -93,13 +93,16 @@ namespace Sdl.Community.PostEdit.Versions
 
 			if (skipWindow.CustomizeSettings)
 			{
+				reportWizard.IsFromProjectsViewCall = true;
 				reportWizard.ShowDialog();
 				postEditCompare.SetPriceGroup(reportWizard);
+				
 				CreateReport(postEditCompare);
 			}
 			if (skipWindow.SkipSettings)
 			{
 				postEditCompare.SetPriceGroup(reportWizard);
+
 				CreateReport(postEditCompare);
 			}
 		}
