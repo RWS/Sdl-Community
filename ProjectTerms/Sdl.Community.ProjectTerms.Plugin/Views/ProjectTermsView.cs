@@ -152,7 +152,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            string term = textBoxTerm.Text.ToLower();
+            string term = textBoxTerm.Text;
 
             if (checkboxEnabled)
             {
@@ -181,7 +181,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             }
             else
             {
-                if (listViewBlackList.FindItemWithText(term) != null)
+                if (CheckExactMatch(term))
                 {
                     textBoxTerm.Text = "";
                     MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
@@ -190,6 +190,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
                 AddTerm(term);
             }
+        }
+
+        private bool CheckExactMatch(string term)
+        {
+            foreach (ListViewItem item in listViewBlackList.Items)
+            {
+                if (Regex.IsMatch(item.Text.ToString(), @"(^|\s)" + term + @"(\s|$)")) return true;
+            }
+
+            return false;
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -224,26 +234,27 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-            string blackListFilePath = Utils.Utils.GenerateBlackListPath();
-            if (!File.Exists(blackListFilePath))
+            openFileDialogLoadFile.Filter ="TXT|*.txt";
+            if (openFileDialogLoadFile.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show(PluginResources.MessageContent_buttonLoad, PluginResources.MessageType_Info);
-                return;
-            }
-
-            using (StreamReader rw = new StreamReader(blackListFilePath))
-            {
-                listViewBlackList.Items.Clear();
-
-                string term = string.Empty;
-                while ((term = rw.ReadLine()) != null)
+                if (!File.Exists(openFileDialogLoadFile.FileName))
                 {
-                    listViewBlackList.Items.Add(new ListViewItem(term));
-                    viewModel.Filters.Blacklist.Add(term);
+                    MessageBox.Show(PluginResources.MessageContent_buttonLoad, PluginResources.MessageType_Info);
+                    return;
+                }
+
+                using (StreamReader rw = new StreamReader(openFileDialogLoadFile.FileName))
+                {
+                    listViewBlackList.Items.Clear();
+
+                    string term = string.Empty;
+                    while ((term = rw.ReadLine()) != null)
+                    {
+                        listViewBlackList.Items.Add(new ListViewItem(term));
+                        viewModel.Filters.Blacklist.Add(term);
+                    }
                 }
             }
-
-            ButtonsEnabled(false);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)

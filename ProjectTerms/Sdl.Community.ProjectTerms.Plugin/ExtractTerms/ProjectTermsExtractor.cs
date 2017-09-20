@@ -73,7 +73,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
                     for (int i = 0; i < extractor.SourceText.Count; i++)
                     {
                         if (string.IsNullOrWhiteSpace(extractor.SourceText[i]) || string.IsNullOrWhiteSpace(extractor.TargetText[i])) continue;
-                        AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
+                        AddItemToBilingualContentPair(extractor.SourceText[i], extractor.TargetText[i], file.Language.DisplayName);
                     }
                 }
             }
@@ -107,7 +107,7 @@ namespace Sdl.Community.ProjectTerms.Plugin
                         {
                             if (term != "")
                             {
-                                sourceTerms.Add(term.ToLower());
+                                sourceTerms.Add(term);
                             }
                         }
                     }

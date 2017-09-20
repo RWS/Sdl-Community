@@ -52,6 +52,7 @@
             this.listViewBlackList = new System.Windows.Forms.ListView();
             this.Terms = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.progressBarExtractTerms = new System.Windows.Forms.ProgressBar();
+            this.openFileDialogLoadFile = new System.Windows.Forms.OpenFileDialog();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -322,7 +323,6 @@
             this.Controls.Add(this.progressBarExtractTerms);
             this.Controls.Add(this.groupBoxSettings);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.ImeMode = System.Windows.Forms.ImeMode.NoControl;
             this.MaximizeBox = false;
             this.Name = "ProjectTermsView";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -361,5 +361,6 @@
         private System.Windows.Forms.ProgressBar progressBarExtractTerms;
         private System.Windows.Forms.ColumnHeader Terms;
         private System.Windows.Forms.Button buttonExtractTerms;
+        private System.Windows.Forms.OpenFileDialog openFileDialogLoadFile;
     }
 }
