@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.ProjectTerms.Plugin</PlugInName>
+  <PlugInName>projectTermExtract</PlugInName>
   <Version>1.0</Version>
-  <Description>Sdl.Community.ProjectTerms.Plugin</Description>
-  <Author>SDL.Community</Author>
+  <Description>Extract project terms and generate a termbase</Description>
+  <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>Sdl.Community.ProjectTerms.Controls.dll</File>
