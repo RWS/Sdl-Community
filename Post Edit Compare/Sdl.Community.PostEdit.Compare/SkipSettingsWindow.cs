@@ -16,17 +16,17 @@ namespace Sdl.Community.PostEdit.Compare
 	{
 		public bool SkipSettings { get; set; }
 		public bool CustomizeSettings { get; set; }
+
 		public SkipSettingsWindow()
 		{
 			InitializeComponent();
 		}
 
-		private void skippBtn_Click(object sender, EventArgs e)
+		public void skippBtn_Click(object sender, EventArgs e)
 		{
 			SkipSettings = true;
 			CustomizeSettings = false;
-			Close();
-		
+			Close();		
 		}
 
 		private void reportBtn_Click(object sender, EventArgs e)
@@ -35,5 +35,11 @@ namespace Sdl.Community.PostEdit.Compare
 			CustomizeSettings = true;
 			Close();
 		}
+
+		private void SkipSettingsWindow_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			Close();
+		}
+
 	}
 }

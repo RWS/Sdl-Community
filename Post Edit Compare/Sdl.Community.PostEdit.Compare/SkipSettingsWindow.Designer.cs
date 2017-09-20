@@ -58,9 +58,9 @@
             this.skipWindowLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.skipWindowLabel.AutoSize = true;
             this.skipWindowLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.skipWindowLabel.Location = new System.Drawing.Point(14, 152);
+            this.skipWindowLabel.Location = new System.Drawing.Point(98, 156);
             this.skipWindowLabel.Name = "skipWindowLabel";
-            this.skipWindowLabel.Size = new System.Drawing.Size(635, 25);
+            this.skipWindowLabel.Size = new System.Drawing.Size(467, 17);
             this.skipWindowLabel.TabIndex = 0;
             this.skipWindowLabel.Text = "Please select if you want to customize the report or skip the options step.";
             this.skipWindowLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -113,6 +113,7 @@
             this.Name = "SkipSettingsWindow";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Settings";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SkipSettingsWindow_FormClosing);
             this.skipWindowPanel.ResumeLayout(false);
             this.skipWindowPanel.PerformLayout();
             this.buttonsPanel.ResumeLayout(false);
