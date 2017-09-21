@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Community.ProjectTerms.Telemetry;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using System;
@@ -21,21 +22,34 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
 
         public static void RemoveDirectory(string directoryPath)
         {
+            ITelemetryTracker telemetryTracker = new TelemetryTracker();
+
             try
             {
+                telemetryTracker.StartTrackRequest("Removing the directory");
+                telemetryTracker.TrackEvent("Removing the directory", null);
+
                 RemoveDirectoryFiles(directoryPath);
                 Directory.Delete(directoryPath);
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_RemoveDirectory + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_RemoveDirectory + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+
                 throw new ProjectTermsException(PluginResources.Error_RemoveDirectory + e.Message);
             }
         }
 
         public static void CreateDirectory(string directoryPath)
         {
+            ITelemetryTracker telemetryTracker = new TelemetryTracker();
+
             try
             {
+                telemetryTracker.StartTrackRequest("Creating the directory");
+                telemetryTracker.TrackEvent("Creating the directory", null);
+
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
@@ -47,7 +61,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
             }
             catch (Exception e)
             {
-
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_CreateDirectory + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_CreateDirectory + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_CreateDirectory + e.Message);
             }
         }

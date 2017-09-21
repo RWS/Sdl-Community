@@ -27,7 +27,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             InitializeComponent();
             progressBarExtractTerms.Visible = false;
 
-            viewModel = ProjectTermsViewModel.Instance;
+            viewModel = new ProjectTermsViewModel();
             viewModel.Filters = ExtractFilters();
         }
 

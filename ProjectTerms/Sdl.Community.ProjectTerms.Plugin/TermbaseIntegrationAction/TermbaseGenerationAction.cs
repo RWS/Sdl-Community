@@ -14,6 +14,7 @@ using Sdl.Community.ProjectTerms.Plugin;
 using System.IO;
 using System.Linq;
 using Sdl.Community.ProjectTerms.Plugin.Utils;
+using Sdl.Community.ProjectTerms.Telemetry;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -88,8 +89,13 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 
         private void IncludeTermbaseInStudio(ITermbase termbase, TermbaseGeneration termbaseCreator, string termbasePath)
         {
+            ITelemetryTracker telemetryTracker = new TelemetryTracker();
+
             try
             {
+                telemetryTracker.StartTrackRequest("Including the termbase into Trados Studio");
+                telemetryTracker.TrackEvent("Including the termbase into Trados Studio", null);
+
                 #region TbConfig
                 var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 TermbaseConfiguration termbaseConfig = project.GetTermbaseConfiguration();
@@ -123,6 +129,8 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message));
+                telemetryTracker.TrackTrace((new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message);
             }
         }

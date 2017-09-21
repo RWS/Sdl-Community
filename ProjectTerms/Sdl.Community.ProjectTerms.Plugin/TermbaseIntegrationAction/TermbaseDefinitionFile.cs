@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Community.ProjectTerms.Telemetry;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 {
     public class TermbaseDefinitionFile
     {
+        private static ITelemetryTracker telemetryTracker = new TelemetryTracker();
+
         /// <summary>
         /// Extract the content from embedded resource file 
         /// </summary>
@@ -17,6 +20,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Reading embedded .xdt file");
+                telemetryTracker.TrackEvent("Reading embedded .xdt file", null);
+
                 var result = string.Empty;
 
                 using (Stream stream = typeof(TermbaseDefinitionFile).Assembly.GetManifestResourceStream("Sdl.Community.ProjectTerms.Plugin.Resources." + fileName))
@@ -31,6 +37,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new TermbaseDefinitionException(PluginResources.Error_GetResourceTextFile + e.Message));
+                telemetryTracker.TrackTrace((new TermbaseDefinitionException(PluginResources.Error_GetResourceTextFile + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new TermbaseDefinitionException(PluginResources.Error_GetResourceTextFile + e.Message);
             }
         }
@@ -43,6 +51,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Saving embedded .xdt file locally");
+                telemetryTracker.TrackEvent("Saving embedded .xdt file locally", null);
+
                 var tempLocationPath = Path.GetTempPath();
                 var termbaseDefinitionPath = Path.Combine(tempLocationPath + "Termbases", "termbaseDefinition.xdt");
                 Utils.Utils.CreateDirectory(Path.GetDirectoryName(termbaseDefinitionPath));
@@ -55,6 +66,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new TermbaseDefinitionException(PluginResources.Error_SaveTermbaseDefinitionToTempLocation + e.Message));
+                telemetryTracker.TrackTrace((new TermbaseDefinitionException(PluginResources.Error_SaveTermbaseDefinitionToTempLocation + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new TermbaseDefinitionException(PluginResources.Error_SaveTermbaseDefinitionToTempLocation + e.Message);
             }
         }
@@ -68,6 +81,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Adding languages into .xdt file");
+                telemetryTracker.TrackEvent("Adding languages into .xdt file", null);
+
                 var doc = new XmlDocument();
                 doc.Load(termbaseDefinitionPath);
 
@@ -87,6 +103,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new TermbaseDefinitionException(PluginResources.Error_AddLanguages + e.Message));
+                telemetryTracker.TrackTrace((new TermbaseDefinitionException(PluginResources.Error_AddLanguages + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new TermbaseDefinitionException(PluginResources.Error_AddLanguages + e.Message);
             }
         }

@@ -278,6 +278,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to update the existed file!.
+        /// </summary>
+        public static string Error_UpdateExitedFile {
+            get {
+                return ResourceManager.GetString("Error_UpdateExitedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No matches found!.
         /// </summary>
         public static string Info_NotMatch {

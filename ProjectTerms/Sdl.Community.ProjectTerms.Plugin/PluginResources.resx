@@ -266,4 +266,7 @@ Restart Studio and now you should be able to generate the new termbase.</value>
   <data name="MessageContent_GenerateTermbaseAction" xml:space="preserve">
     <value>You can only generate the termbase from the extracted project terms XML file.</value>
   </data>
+  <data name="Error_UpdateExitedFile" xml:space="preserve">
+    <value>Unable to update the existed file!</value>
+  </data>
 </root>

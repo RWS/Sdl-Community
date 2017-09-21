@@ -6,7 +6,9 @@
   <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
+    <File>Sdl.Community.ProjectTerms.Telemetry.dll</File>
     <File>Sdl.Community.ProjectTerms.Controls.dll</File>
     <File>Sdl.Community.Toolkit.Core.dll</File>
+    <File>Microsoft.ApplicationInsights.dll</File>
   </Include>
 </PluginPackage>
