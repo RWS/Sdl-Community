@@ -13,7 +13,7 @@ namespace Sdl.Community.ProjectTerms.Controls.Utils
                 terms.GroupBy(
                     term => term,
                     (term, equivalentTerms) => new Term(term, equivalentTerms.Count()),
-                    StringComparer.InvariantCultureIgnoreCase)
+                    StringComparer.InvariantCulture)
                     .Cast<ITerm>();
         }
 

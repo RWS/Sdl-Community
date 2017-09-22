@@ -12,12 +12,15 @@ using System.Linq;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.ProjectAutomation.FileBased;
 using System.Reflection;
+using Sdl.Community.ProjectTerms.Telemetry;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsViewModel
     {
-        public static ProjectTermsViewModel Instance = new ProjectTermsViewModel();
+        private ITelemetryTracker telemetryTracker;
+
+        //public static ProjectTermsViewModel Instance = new ProjectTermsViewModel();
         private ProjectTermsExtractor extractor;
         private ProjectTermsCache cache;
         private List<ProjectFile> sourceProjectFilesToProcessed;
@@ -34,11 +37,15 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public ProjectTermsViewModel()
         {
+            telemetryTracker = new TelemetryTracker();
+
             Initialize();
         }
 
         public void Initialize()
         {
+            
+
             extractor = new ProjectTermsExtractor();
             cache = new ProjectTermsCache();
 
@@ -122,7 +129,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
             return Guid.Empty;
         }
-
         #endregion
 
         #region Extract Project Terms
@@ -234,27 +240,39 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         private void UpdateExistedFile(Guid id)
         {
-
-            var exitedFileName = Utils.Utils.GetExistedFileName(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())));
-            var existedFilePath = Path.Combine(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())), exitedFileName);
-            Utils.Utils.GetCurrentProject().AddNewFileVersion(id, existedFilePath);
-            var scan = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.Scan);
-            var convertTask = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
-            var targetFiles = Utils.Utils.GetCurrentProject().GetTargetLanguageFiles();
-            foreach (var file in targetFiles)
+            try
             {
-                if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
+                telemetryTracker.StartTrackRequest("Updating xml file");
+                telemetryTracker.TrackEvent("Updating xml file", null);
+
+                var exitedFileName = Utils.Utils.GetExistedFileName(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())));
+                var existedFilePath = Path.Combine(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())), exitedFileName);
+                Utils.Utils.GetCurrentProject().AddNewFileVersion(id, existedFilePath);
+                var scan = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.Scan);
+                var convertTask = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                var targetFiles = Utils.Utils.GetCurrentProject().GetTargetLanguageFiles();
+                foreach (var file in targetFiles)
                 {
-                    File.Delete(file.LocalFilePath);
+                    if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
+                    {
+                        File.Delete(file.LocalFilePath);
+                    }
+                }
+
+                var sourceXmlFile = Utils.Utils.GetCurrentProject().GetSourceLanguageFiles().FirstOrDefault(x => x.Name.StartsWith(Path.GetFileNameWithoutExtension(Utils.Utils.GetProjecPath())));
+                foreach (var file in targetFiles)
+                {
+                    if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
+                        File.Copy(sourceXmlFile.LocalFilePath, file.LocalFilePath);
                 }
             }
-
-            var sourceXmlFile = Utils.Utils.GetCurrentProject().GetSourceLanguageFiles().FirstOrDefault(x => x.Name.StartsWith(Path.GetFileNameWithoutExtension(Utils.Utils.GetProjecPath())));
-            foreach (var file in targetFiles)
+            catch (Exception e)
             {
-                if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
-                    File.Copy(sourceXmlFile.LocalFilePath, file.LocalFilePath);
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_UpdateExitedFile + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_UpdateExitedFile + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+                throw new ProjectTermsException(PluginResources.Error_UpdateExitedFile + e.Message);
             }
+
         }
 
         public void AddXMlFileToProject()
@@ -280,6 +298,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Adding xml file into the Trados Studio");
+                telemetryTracker.TrackEvent("Adding xml file into the Trados Studio", null);
+
                 project.AddFolderWithFiles(xmlFolder, recursion);
                 var projectFiles = project.GetSourceLanguageFiles();
                 var addedFileId = GetXmlFileId();
@@ -292,6 +313,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_AddXMlToProject + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_AddXMlToProject + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_AddXMlToProject + e.Message);
             }
         }

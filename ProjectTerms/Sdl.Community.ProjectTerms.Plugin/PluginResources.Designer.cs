@@ -278,6 +278,15 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to update the existed file!.
+        /// </summary>
+        public static string Error_UpdateExitedFile {
+            get {
+                return ResourceManager.GetString("Error_UpdateExitedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No matches found!.
         /// </summary>
         public static string Info_NotMatch {
@@ -296,11 +305,13 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to   1. Go to Project Settings -&gt; All Language Pairs -&gt; Termbases and remove the 	termbase from your Project and then close Studio
+        ///   Looks up a localized string similar to   You already have a termbase for this file so you are going to have to remove it to be able to create a new one.  This will require three manual actions due to limitations in the API:
+        ///
+        ///  1. Go to Project Settings -&gt; All Language Pairs -&gt; Termbases and remove the termbase from your Project and then close Studio
         ///  2. Go to your Projects folder in Windows Explorer and delete the Tb folder
         ///  3. Go to c:\Users\[username]\AppData\Local\Temp\ and delete the Tb folder
         ///
-        ///Restart Studio and now you should be able to generate the new termbase..
+        ///Restart Studio and now you should be ab [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Info_TermbaseExists {
             get {

@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.ProjectTerms.Controls.Interfaces;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Community.ProjectTerms.Telemetry;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,10 +12,19 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
 {
     public class ProjectTermsCache
     {
+        private ITelemetryTracker telemetryTracker;
+        public ProjectTermsCache()
+        {
+            telemetryTracker = new TelemetryTracker();
+        }
+
         public void Save(string projectPath, IEnumerable<ITerm> terms, bool wordCloudFile = false)
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Saving the xml file");
+                telemetryTracker.TrackEvent("Saving the xml file", null);
+
                 XDocument doc = new XDocument();
                 doc.Add(
                     new XElement("projectTerms",
@@ -47,6 +57,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
                         }
                     }
 
+
                     doc.Save(cacheFile);
                 }
                 else
@@ -56,6 +67,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_Save + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_Save + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+
                 throw new ProjectTermsException(PluginResources.Error_Save + e.Message);
             }
         }
@@ -64,6 +78,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Reading the xml file");
+                telemetryTracker.TrackEvent("Reading the xml file", null);
+
                 var xmlTerms = new List<ITerm>();
                 XmlDocument doc = new XmlDocument();
                 doc.Load(filePath);
@@ -80,6 +97,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.ExportTermsToXML
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(e);
+                telemetryTracker.TrackTrace(e.StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_ReadXmlFile);
             }
         }
