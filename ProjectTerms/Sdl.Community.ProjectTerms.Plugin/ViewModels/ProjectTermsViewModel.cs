@@ -272,7 +272,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_UpdateExitedFile + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_UpdateExitedFile + e.Message);
             }
-
         }
 
         public void AddXMlFileToProject()
@@ -298,8 +297,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
-                telemetryTracker.StartTrackRequest("Adding xml file into the Trados Studio");
-                telemetryTracker.TrackEvent("Adding xml file into the Trados Studio", null);
+                telemetryTracker.StartTrackRequest("Adding xml file into Studio");
+                telemetryTracker.TrackEvent("Adding xml file into Studio", null);
 
                 project.AddFolderWithFiles(xmlFolder, recursion);
                 var projectFiles = project.GetSourceLanguageFiles();

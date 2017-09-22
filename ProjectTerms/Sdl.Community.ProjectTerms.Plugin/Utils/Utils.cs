@@ -94,9 +94,28 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
         public static string GetXMLFilePath(string projectPath, bool wordCloudFile = false)
         {
             if (!wordCloudFile)
-                return Path.Combine(projectPath + "\\tmp", Path.GetFileNameWithoutExtension(projectPath) + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
+            {
+                var projectName = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.GetProjectInfo().Name;
+                return Path.Combine(projectPath + "\\tmp", projectName + DateTime.Now.ToString("_yyyy_MM_dd_HH_mm", System.Globalization.DateTimeFormatInfo.InvariantInfo) + ".xml");
+            }
             else
+
+            {
                 return Path.Combine(projectPath, PluginResources.WordCloudFileName + ".xml");
+            }
+        }
+
+        public static string GetParentDirectory(string path, int parentCount)
+        {
+            if (string.IsNullOrEmpty(path) || parentCount < 1)
+                return path;
+
+            string parent = System.IO.Path.GetDirectoryName(path);
+
+            if (--parentCount > 0)
+                return GetParentDirectory(parent, parentCount);
+
+            return parent;
         }
 
         public static string GetProjecPath()
