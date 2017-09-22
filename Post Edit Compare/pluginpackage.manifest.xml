@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Post-Edit Compare</PlugInName>
-  <Version>2.7</Version>
+  <Version>2.8</Version>
   <Description>Post-Edit Compare</Description>
   <Author>Sdl Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
