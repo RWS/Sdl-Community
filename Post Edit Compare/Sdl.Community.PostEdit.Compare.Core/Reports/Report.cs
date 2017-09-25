@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
@@ -705,7 +706,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     , progressCurrentFileName
                     , TERpErrors);
 
-                if (pempAnalysisData.totalWords > 0)
+				
+
+
+				if (pempAnalysisData.totalWords > 0)
                 {
                     pempAnalysisData.exactPercent = Math.Round(pempAnalysisData.exactWords, 2);
                     if (pempAnalysisData.exactWords > 0)
@@ -731,8 +735,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (pempAnalysisData.newWords > 0)
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
+					var pemExcelModel = ExcelReportHelper.CreateExcelDataModels(pempAnalysisData);
+					//ExcelReport.CreateExcelReport(pemExcelModel);
 
-                    filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
+					filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
                     filesTotalPostEditP99Segments += pempAnalysisData.fuzzy99Segments;
                     filesTotalPostEditP94Segments += pempAnalysisData.fuzzy94Segments;
                     filesTotalPostEditP84Segments += pempAnalysisData.fuzzy84Segments;
@@ -765,6 +771,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     filesTotalPostEditTotalWords += pempAnalysisData.exactWords + pempAnalysisData.fuzzy99Words + pempAnalysisData.fuzzy94Words + pempAnalysisData.fuzzy84Words + pempAnalysisData.fuzzy74Words + pempAnalysisData.newWords;
                     filesTotalPostEditTotalCharacters += pempAnalysisData.exactCharacters + pempAnalysisData.fuzzy99Characters + pempAnalysisData.fuzzy94Characters + pempAnalysisData.fuzzy84Characters + pempAnalysisData.fuzzy74Characters + pempAnalysisData.newCharacters;
                     filesTotalPostEditTotalTags += pempAnalysisData.exactTags + pempAnalysisData.fuzzy99Tags + pempAnalysisData.fuzzy94Tags + pempAnalysisData.fuzzy84Tags + pempAnalysisData.fuzzy74Tags + pempAnalysisData.newTags;
+
+
                 }
 
                 #region  |  pemp Analysis   |
@@ -3072,7 +3080,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
         }
 
 
-        private class PEMpAnalysisData
+        public class PEMpAnalysisData
         {
             public decimal exactSegments { get; set; }
             public decimal exactWords { get; set; }
