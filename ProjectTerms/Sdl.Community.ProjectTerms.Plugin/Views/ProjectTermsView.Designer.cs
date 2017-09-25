@@ -53,6 +53,7 @@
             this.Terms = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.progressBarExtractTerms = new System.Windows.Forms.ProgressBar();
             this.openFileDialogLoadFile = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialogBlacklist = new System.Windows.Forms.SaveFileDialog();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -362,5 +363,6 @@
         private System.Windows.Forms.ColumnHeader Terms;
         private System.Windows.Forms.Button buttonExtractTerms;
         private System.Windows.Forms.OpenFileDialog openFileDialogLoadFile;
+        private System.Windows.Forms.SaveFileDialog saveFileDialogBlacklist;
     }
 }

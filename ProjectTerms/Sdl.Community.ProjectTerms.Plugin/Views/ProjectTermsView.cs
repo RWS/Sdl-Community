@@ -259,19 +259,20 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            string blackListFilePath = Utils.Utils.GenerateBlackListPath();
-
-            if (File.Exists(blackListFilePath)) File.Delete(blackListFilePath);
-
-            using (StreamWriter sw = new StreamWriter(blackListFilePath))
+            saveFileDialogBlacklist.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (saveFileDialogBlacklist.ShowDialog() == DialogResult.OK)
             {
-                foreach (ListViewItem item in listViewBlackList.Items)
-                {
-                    sw.WriteLine(item.Text);
-                }
-            }
+                openFileDialogLoadFile.FileName = "";
 
-            ButtonsEnabled(false);
+                using (Stream s = File.Create(saveFileDialogBlacklist.FileName))
+                using (StreamWriter sw = new StreamWriter(s))
+                {
+                    foreach (ListViewItem item in listViewBlackList.Items)
+                    {
+                        sw.WriteLine(item.Text);
+                    }
+                }
+            } 
         }
 
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)
