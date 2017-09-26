@@ -47,9 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelTableModel\Constants.cs" />
-    <Compile Include="ExcelTableModel\PostEditModificationsExcelTableModel.cs" />
     <Compile Include="PostEditModificationsAnalysis\PEMModel.cs" />
-    <Compile Include="PostEditModificationsAnalysis\PEMResults.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
