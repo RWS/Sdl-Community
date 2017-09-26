@@ -201,14 +201,14 @@ namespace Sdl.Community.NumberVerifier
             _ControlSettings.Reset("GetSourceDecimalCustomSeparator");
             _Control.GetTargetDecimalCustomSeparator = _ControlSettings.GetTargetDecimalCustomSeparator;
             _ControlSettings.Reset("GetTargetDecimalCustomSeparator");
-			_ControlSettings.Reset("GetAlphanumericsCustomSeparator");
 			_Control.GetAlphanumericsCustomSeparator = _ControlSettings.GetAlphanumericsCustomSeparator;
+			_ControlSettings.Reset("GetAlphanumericsCustomSeparator");
 
 		}
-        #endregion
+		#endregion
 
 
-        public override bool ValidateInput()
+		public override bool ValidateInput()
         {
             return _Control.ValidateChildren();
         }
@@ -278,56 +278,56 @@ namespace Sdl.Community.NumberVerifier
 
 		public override void OnDeactivate()
         {
-   //         _ControlSettings.AddedNumbersErrorType = _Control.AddedNumbersErrorType;
-   //         _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
-   //         _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
-   //         _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
-   //		  _ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
+			//         _ControlSettings.AddedNumbersErrorType = _Control.AddedNumbersErrorType;
+			//         _ControlSettings.RemovedNumbersErrorType = _Control.RemovedNumbersErrorType;
+			//         _ControlSettings.ModifiedNumbersErrorType = _Control.ModifiedNumbersErrorType;
+			//         _ControlSettings.ModifiedAlphanumericsErrorType = _Control.ModifiedAlphanumericsErrorType;
+			//		  _ControlSettings.CustomsSeparatorsAlphanumerics = _Control.CustomsSeparatorsAlphanumerics;
 
-   //         _ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
-   //         _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
-   //         _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
-   //         _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
-   //         _ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
-   //         _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
-   //         _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
-   //         _ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
-   //         _ControlSettings.PreventLocalizations = _Control.PreventLocalizations;
-   //         _ControlSettings.RequireLocalizations = _Control.RequireLocalizations;
-   //         _ControlSettings.SourceThousandsSpace = _Control.SourceThousandsSpace;
-   //         _ControlSettings.SourceThousandsNobreakSpace = _Control.SourceThousandsNobreakSpace;
-   //         _ControlSettings.SourceThousandsThinSpace = _Control.SourceThousandsThinSpace;
-   //         _ControlSettings.SourceThousandsNobreakThinSpace = _Control.SourceThousandsNobreakThinSpace;
-   //         _ControlSettings.SourceThousandsComma = _Control.SourceThousandsComma;
-   //         _ControlSettings.SourceThousandsPeriod = _Control.SourceThousandsPeriod;
-   //         _ControlSettings.SourceNoSeparator = _Control.SourceNoSeparator;
-   //         _ControlSettings.TargetThousandsSpace = _Control.TargetThousandsSpace;
-   //         _ControlSettings.TargetThousandsNobreakSpace = _Control.TargetThousandsNobreakSpace;
-   //         _ControlSettings.TargetThousandsThinSpace = _Control.TargetThousandsThinSpace;
-   //         _ControlSettings.TargetThousandsNobreakThinSpace = _Control.TargetThousandsNobreakThinSpace;
-   //         _ControlSettings.TargetThousandsComma = _Control.TargetThousandsComma;
-   //         _ControlSettings.TargetThousandsPeriod = _Control.TargetThousandsPeriod;
-   //         _ControlSettings.TargetNoSeparator = _Control.TargetNoSeparator;
-   //         _ControlSettings.SourceDecimalComma = _Control.SourceDecimalComma;
-   //         _ControlSettings.SourceDecimalPeriod = _Control.SourceDecimalPeriod;
-   //         _ControlSettings.TargetDecimalComma = _Control.TargetDecimalComma;
-   //         _ControlSettings.TargetDecimalPeriod = _Control.TargetDecimalPeriod;
-   //         _ControlSettings.ExcludeLockedSegments = _Control.ExcludeLockedSegments;
-   //         _ControlSettings.Exclude100Percents = _Control.Exclude100Percents;
-   //         _ControlSettings.ExcludeUntranslatedSegments = _Control.ExcludeUntranslatedSegments;
-   //         _ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
-   //         _ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
-   //         _ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
-   //         _ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
-   //         _ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
-   //         _ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
-   //         _ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
-   //         _ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
-   //         _ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
-   //         _ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
-   //         _ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
-   //		  _ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
-   //		  _ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
+			//         _ControlSettings.ReportAddedNumbers = _Control.ReportAddedNumbers;
+			//         _ControlSettings.ReportRemovedNumbers = _Control.ReportRemovedNumbers;
+			//         _ControlSettings.ReportModifiedNumbers = _Control.ReportModifiedNumbers;
+			//         _ControlSettings.ReportModifiedAlphanumerics = _Control.ReportModifiedAlphanumerics;
+			//         _ControlSettings.ReportBriefMessages = _Control.ReportBriefMessages;
+			//         _ControlSettings.ReportExtendedMessages = _Control.ReportExtendedMessages;
+			//         _ControlSettings.ExcludeTagText = _Control.ExcludeTagText;
+			//         _ControlSettings.AllowLocalizations = _Control.AllowLocalizations;
+			//         _ControlSettings.PreventLocalizations = _Control.PreventLocalizations;
+			//         _ControlSettings.RequireLocalizations = _Control.RequireLocalizations;
+			//         _ControlSettings.SourceThousandsSpace = _Control.SourceThousandsSpace;
+			//         _ControlSettings.SourceThousandsNobreakSpace = _Control.SourceThousandsNobreakSpace;
+			//         _ControlSettings.SourceThousandsThinSpace = _Control.SourceThousandsThinSpace;
+			//         _ControlSettings.SourceThousandsNobreakThinSpace = _Control.SourceThousandsNobreakThinSpace;
+			//         _ControlSettings.SourceThousandsComma = _Control.SourceThousandsComma;
+			//         _ControlSettings.SourceThousandsPeriod = _Control.SourceThousandsPeriod;
+			//         _ControlSettings.SourceNoSeparator = _Control.SourceNoSeparator;
+			//         _ControlSettings.TargetThousandsSpace = _Control.TargetThousandsSpace;
+			//         _ControlSettings.TargetThousandsNobreakSpace = _Control.TargetThousandsNobreakSpace;
+			//         _ControlSettings.TargetThousandsThinSpace = _Control.TargetThousandsThinSpace;
+			//         _ControlSettings.TargetThousandsNobreakThinSpace = _Control.TargetThousandsNobreakThinSpace;
+			//         _ControlSettings.TargetThousandsComma = _Control.TargetThousandsComma;
+			//         _ControlSettings.TargetThousandsPeriod = _Control.TargetThousandsPeriod;
+			//         _ControlSettings.TargetNoSeparator = _Control.TargetNoSeparator;
+			//         _ControlSettings.SourceDecimalComma = _Control.SourceDecimalComma;
+			//         _ControlSettings.SourceDecimalPeriod = _Control.SourceDecimalPeriod;
+			//         _ControlSettings.TargetDecimalComma = _Control.TargetDecimalComma;
+			//         _ControlSettings.TargetDecimalPeriod = _Control.TargetDecimalPeriod;
+			//         _ControlSettings.ExcludeLockedSegments = _Control.ExcludeLockedSegments;
+			//         _ControlSettings.Exclude100Percents = _Control.Exclude100Percents;
+			//         _ControlSettings.ExcludeUntranslatedSegments = _Control.ExcludeUntranslatedSegments;
+			//         _ControlSettings.ExcludeDraftSegments = _Control.ExcludeDraftSegments;
+			//         _ControlSettings.SourceOmitLeadingZero = _Control.SourceOmitLeadingZero;
+			//         _ControlSettings.TargetOmitLeadingZero = _Control.TargetOmitLeadingZero;
+			//         _ControlSettings.SourceThousandsCustomSeparator = _Control.SourceThousandsCustomSeparator;
+			//         _ControlSettings.TargetThousandsCustomSeparator = _Control.TargetThousandsCustomSeparator;
+			//         _ControlSettings.SourceDecimalCustomSeparator = _Control.SourceDecimalCustomSeparator;
+			//         _ControlSettings.TargetDecimalCustomSeparator = _Control.TargetDecimalCustomSeparator;
+			//         _ControlSettings.GetSourceThousandsCustomSeparator = _Control.GetSourceThousandsCustomSeparator;
+			//         _ControlSettings.GetTargetThousandsCustomSeparator = _Control.GetTargetThousandsCustomSeparator;
+			//         _ControlSettings.GetSourceDecimalCustomSeparator = _Control.GetSourceDecimalCustomSeparator;
+			//         _ControlSettings.GetTargetDecimalCustomSeparator = _Control.GetTargetDecimalCustomSeparator;
+			_ControlSettings.GetAlphanumericsCustomSeparator = _Control.GetAlphanumericsCustomSeparator;
+			_ControlSettings.HindiNumberVerification = _Control.HindiNumberVerification;
 		}
 
 		// Call EndEdit after all changes have been saved in the Save() call.
