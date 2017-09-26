@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExcelTableModel\Constants.cs" />
     <Compile Include="ExcelTableModel\PostEditModificationsExcelTableModel.cs" />
     <Compile Include="PostEditModificationsAnalysis\PEMModel.cs" />
     <Compile Include="PostEditModificationsAnalysis\PEMResults.cs" />

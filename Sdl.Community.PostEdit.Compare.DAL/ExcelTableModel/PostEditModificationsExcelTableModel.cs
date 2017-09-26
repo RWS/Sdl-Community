@@ -8,10 +8,11 @@ namespace Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel
 {
 	public class PostEditModificationsExcelTableModel
 	{
-		public string AnalysisBand { get; set; }
-		public string Segments { get; set; }
-		public string Words { get; set; }
-		public string Characters { get; set; }
-		public string Percent { get; set; }
+		public string HeaderValue { get; set; }
+		//public string AnalysisBand { get; set; }
+		//public string Segments { get; set; }
+		//public string Words { get; set; }
+		//public string Characters { get; set; }
+		//public string Percent { get; set; }
 	}
 }

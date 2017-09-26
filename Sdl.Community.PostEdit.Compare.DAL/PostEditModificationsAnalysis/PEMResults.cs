@@ -8,6 +8,7 @@ namespace Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis
 {
 	public class PEMResults
 	{
+		public string PropertyName { get; set; }
 		public decimal SegmentsNo { get; set; }
 		public decimal WordsNo { get; set; }
 		public decimal CharactersNo { get; set; }
