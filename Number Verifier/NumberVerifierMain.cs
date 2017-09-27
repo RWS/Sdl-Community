@@ -762,6 +762,36 @@ namespace Sdl.Community.NumberVerifier
 			ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
 			bool noSeparator, bool omitLeadingZero)
 		{
+			string[] shortFormats = {"d/M/yy", "dd/MM/yy", "d.M.yy", "dd.MM.yy", "dd/M/yy", "dd.M.yy"};
+
+			string[] longFormats = {"M/d/yyyy h:mm:ss tt", "M/d/yyyy h:mm tt",
+				   "MM/dd/yyyy hh:mm:ss", "M/d/yyyy h:mm:ss",
+				   "M/d/yyyy hh:mm tt", "M/d/yyyy hh tt",
+				   "M/d/yyyy h:mm", "M/d/yyyy h:mm",
+				   "MM/dd/yyyy hh:mm", "M/dd/yyyy hh:mm",
+				   
+				   "d/M/yyyy h:mm:ss tt", "d/M/yyyy h:mm tt",
+				   "dd/MM/yyyy hh:mm:ss", "d/M/yyyy h:mm:ss",
+				   "d/M/yyyy hh:mm tt", "d/M/yyyy hh tt",
+				   "d/M/yyyy h:mm", "d/M/yyyy h:mm",
+
+				   "dd/M/yyyy", "dd/MM/yyyy", "d/M/yyyy",
+				   "dd.M.yyyy", "dd.MM.yyyy", "d.M.yyyy",
+
+				   "d.M.yyyy h:mm:ss tt", "d.M.yyyy h:mm tt",
+				   "dd.MM.yyyy hh:mm:ss", "d.M.yyyy h:mm:ss",
+				   "d.M.yyyy hh:mm tt", "d.M.yyyy hh tt",
+				   "d.M.yyyy h:mm", "d.M.yyyy h:mm"};
+
+			DateTime dateValue;			
+			if (DateTime.TryParseExact(text, shortFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
+			{
+				text = dateValue.ToString("dd/MM/yy");
+			}
+			if (DateTime.TryParseExact(text, longFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
+			{
+				text = dateValue.ToShortDateString();
+			}
 
 			var separators = string.Concat(thousandSeparators, decimalSeparators);
 			//skip the "-" in case of: - 23 (dash, space, number)
