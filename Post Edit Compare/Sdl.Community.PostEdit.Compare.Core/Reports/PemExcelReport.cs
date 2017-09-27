@@ -50,7 +50,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 				{
 					var typeValue = worksheet.Cells[analysisBandCell.Start.Row, j].Text;
 					var value = GetMatchingResultValue(matchValue, typeValue, analyseResults);
-					worksheet.Cells[i, j].Value = value;
+				
+						worksheet.Cells[i, j].Value = value;
+					
+					
 				}
 			}
 
@@ -78,6 +81,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			foreach(var column in columnValues)
 			{
 				worksheet.Cells[rowIndex, 1].Value = column;
+				worksheet.Cells[rowIndex, 1].Style.Font.Bold = true;
 				rowIndex++;
 			}
 			
@@ -114,9 +118,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
 			foreach (var item in tableHeader)
 			{
-				worksheet.Cells[rowNr, columnNr].Value = item;  
+				worksheet.Cells[rowNr, columnNr].Value = item;
+				worksheet.Cells[rowNr, columnNr].AutoFitColumns();
+				worksheet.Cells[rowNr, columnNr].Style.Font.Bold = true;
 				columnNr++;
-
+				
 			}
 			xlPackage.Save();
 		}
