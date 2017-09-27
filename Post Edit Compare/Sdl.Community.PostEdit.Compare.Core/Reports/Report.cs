@@ -735,8 +735,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (pempAnalysisData.newWords > 0)
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
-					var pemExcelModel = ExcelReportHelper.CreateExcelDataModels(pempAnalysisData);
-					ExcelReport.CreateExcelReport(pemExcelModel);
+					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
+					PemExcelReport.CreatePemExcelReport(pemExcelModel);
 
 					filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
                     filesTotalPostEditP99Segments += pempAnalysisData.fuzzy99Segments;

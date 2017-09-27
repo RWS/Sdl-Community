@@ -11,9 +11,9 @@ using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
-	public static class ExcelReport
+	public static class PemExcelReport
 	{
-		public static void CreateExcelReport(List<PEMModel> analyseResults)
+		public static void CreatePemExcelReport(List<PEMModel> analyseResults)
 		{
 			//save report to specific folder is not implemented yet
 			var reportPath = Path.Combine(@"C:\Users\aghisa\Desktop", "report.xlsx");
@@ -24,7 +24,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			{
 				// get handle to the existing worksheet
 				var worksheet = xlPackage.Workbook.Worksheets.Add("Test");
-
+				
 				CreateTableHeader(xlPackage, worksheet);
 				CreateFirstColumnValues(xlPackage, worksheet);
 				FillTableWithAnalyseResults(xlPackage, worksheet, analyseResults);
