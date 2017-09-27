@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 
@@ -24,7 +25,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			{
 				// get handle to the existing worksheet
 				var worksheet = xlPackage.Workbook.Worksheets.Add("Test");
-				
+
+				ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
 				CreateTableHeader(xlPackage, worksheet);
 				CreateFirstColumnValues(xlPackage, worksheet);
 				FillTableWithAnalyseResults(xlPackage, worksheet, analyseResults);
@@ -36,17 +38,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 		private static void FillTableWithAnalyseResults(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
 		{
 			var analysisBandCell = worksheet.Cells.FirstOrDefault(c => c.Value.Equals(Constants.AnalysisBand));
-			var rowIndex = analysisBandCell.Rows + 1;
-			var columnIndex = analysisBandCell.Columns + 1;
+			var rowIndex = analysisBandCell.Start.Row + 1;
+			var columnIndex = analysisBandCell.Start.Column + 1;
 			var matchValuesTest = new List<string>();
 			var matchValue = string.Empty;
-			for (var i = rowIndex; i <= GetFirstColumnValues().Count+1; i++)
+			for (var i = rowIndex; i <= GetFirstColumnValues().Count+ analysisBandCell.Start.Row; i++)
 			{
 				matchValue = worksheet.Cells[i, 1].Text;
 
 				for (var j = columnIndex; j <= GetTableHeaderValues().Count+1; j++)
 				{
-					var typeValue = worksheet.Cells[1, j].Text;
+					var typeValue = worksheet.Cells[analysisBandCell.Start.Row, j].Text;
 					var value = GetMatchingResultValue(matchValue, typeValue, analyseResults);
 					worksheet.Cells[i, j].Value = value;
 				}
@@ -99,21 +101,20 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 		private static void CreateTableHeader(ExcelPackage xlPackage, ExcelWorksheet worksheet)
 		{
 			var tableHeader = GetTableHeaderValues();
-			int rowNr;//= worksheet.Dimension.End.Row; 
-			int columnNr;//= worksheet.Dimension.End.Column;
+			int rowNr;
+			var columnNr =1;
 			if (worksheet.Dimension == null)
 			{
 				rowNr = 1;
-				columnNr = 1;
 			}
 			else
 			{
-				rowNr = worksheet.Dimension.End.Row; 
-				columnNr = worksheet.Dimension.End.Column;
+				rowNr = worksheet.Dimension.End.Row + 2; // leave  1 empty row
 			}
+
 			foreach (var item in tableHeader)
 			{
-				worksheet.Cells[rowNr, columnNr].Value = item;
+				worksheet.Cells[rowNr, columnNr].Value = item;  
 				columnNr++;
 
 			}

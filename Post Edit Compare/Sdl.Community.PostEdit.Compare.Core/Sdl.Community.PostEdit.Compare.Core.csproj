@@ -123,6 +123,7 @@
     <Compile Include="Comparison\Text\ComparisionTextUnit.cs" />
     <Compile Include="Comparison\Text\TextComparer.cs" />
     <Compile Include="Comparison\PairedFiles.cs" />
+    <Compile Include="Helper\ExcelReportHelper.cs" />
     <Compile Include="Helper\PemExcelReportHelper.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
