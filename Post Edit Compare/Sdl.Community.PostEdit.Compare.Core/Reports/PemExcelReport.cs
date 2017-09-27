@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
 using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
@@ -27,6 +29,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 				var worksheet = xlPackage.Workbook.Worksheets.Add("Test");
 
 				ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
+				ExcelReportHelper.TableTitle(xlPackage, worksheet, "Post-Edit Modifications Analysis", GetTableHeaderValues().Count);
+				
 				CreateTableHeader(xlPackage, worksheet);
 				CreateFirstColumnValues(xlPackage, worksheet);
 				FillTableWithAnalyseResults(xlPackage, worksheet, analyseResults);
@@ -36,7 +40,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 		}
 
 		private static void FillTableWithAnalyseResults(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
-		{
+		{	
 			var analysisBandCell = worksheet.Cells.FirstOrDefault(c => c.Value.Equals(Constants.AnalysisBand));
 			var rowIndex = analysisBandCell.Start.Row + 1;
 			var columnIndex = analysisBandCell.Start.Column + 1;
@@ -46,14 +50,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			{
 				matchValue = worksheet.Cells[i, 1].Text;
 
-				for (var j = columnIndex; j <= GetTableHeaderValues().Count+1; j++)
+				for (var j = columnIndex; j <= GetTableHeaderValues().Count + 1; j++)
 				{
 					var typeValue = worksheet.Cells[analysisBandCell.Start.Row, j].Text;
 					var value = GetMatchingResultValue(matchValue, typeValue, analyseResults);
-				
-						worksheet.Cells[i, j].Value = value;
-					
-					
+
+					worksheet.Cells[i, j].Value = value;
 				}
 			}
 
@@ -120,6 +122,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			{
 				worksheet.Cells[rowNr, columnNr].Value = item;
 				worksheet.Cells[rowNr, columnNr].AutoFitColumns();
+				worksheet.Cells[rowNr, columnNr].Style.Fill.PatternType = ExcelFillStyle.Solid;
+				worksheet.Cells[rowNr, columnNr].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+				worksheet.Cells[rowNr, columnNr].Style.Font.Color.SetColor(Color.White);
 				worksheet.Cells[rowNr, columnNr].Style.Font.Bold = true;
 				columnNr++;
 				
