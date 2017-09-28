@@ -735,8 +735,16 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (pempAnalysisData.newWords > 0)
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
+					// creates the excel file and adds a worksheet
+					var excelReportPakage = ExcelReportHelper.CreateExcelReport(@"C:\Users\aghisa\Desktop");
+					var currentWorksheet = ExcelReportHelper.CreateWorksheetForReport(excelReportPakage,"TestName");
+
 					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
-					PemExcelReport.CreatePemExcelReport(pemExcelModel);
+					PemExcelReport.CreatePemExcelReport(excelReportPakage, currentWorksheet, pemExcelModel);
+					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
+					//var test = excelReportPakage.Workbook.Worksheets["TestName"];
+					TerpExcelReport.CreateTerpExcelReport(excelReportPakage, currentWorksheet, terpExcelModel);
+
 
 					filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
                     filesTotalPostEditP99Segments += pempAnalysisData.fuzzy99Segments;
@@ -3178,7 +3186,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             }
         }
 
-        private class TERpAnalysisData
+        public class TERpAnalysisData
         {
 
             public decimal terp00NumEr { get; set; }

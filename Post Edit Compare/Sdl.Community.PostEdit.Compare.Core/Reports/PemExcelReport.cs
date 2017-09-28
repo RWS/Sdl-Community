@@ -16,31 +16,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
 	public static class PemExcelReport
 	{
-		public static void CreatePemExcelReport(List<PEMModel> analyseResults)
+		public static void CreatePemExcelReport(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
 		{
-			//save report to specific folder is not implemented yet
-			var reportPath = Path.Combine(@"C:\Users\aghisa\Desktop", "report.xlsx");
-			if (File.Exists(reportPath)) { File.Delete(reportPath); };
-			var newFile = new FileInfo(Path.Combine(@"C:\Users\aghisa\Desktop", "report.xlsx"));
+			ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
+			ExcelReportHelper.TableTitle(xlPackage, worksheet, "Post-Edit Modifications Analysis", GetTableHeaderValues().Count);
 
-			using (ExcelPackage xlPackage = new ExcelPackage(newFile))
-			{
-				// get handle to the existing worksheet
-				var worksheet = xlPackage.Workbook.Worksheets.Add("Test");
+			ExcelReportHelper.CreateTableHeader(xlPackage, worksheet, GetTableHeaderValues());
+			ExcelReportHelper.CreateFirstColumnValues(xlPackage, worksheet,GetFirstColumnValues());
 
-				ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
-				ExcelReportHelper.TableTitle(xlPackage, worksheet, "Post-Edit Modifications Analysis", GetTableHeaderValues().Count);
-				
-				CreateTableHeader(xlPackage, worksheet);
-				CreateFirstColumnValues(xlPackage, worksheet);
-				FillTableWithAnalyseResults(xlPackage, worksheet, analyseResults);
-
-			}
+			FillTableWithAnalyseResults(xlPackage, worksheet, analyseResults);
 
 		}
 
 		private static void FillTableWithAnalyseResults(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
-		{	
+		{
+			var test = worksheet.Cells;
+			var select = test.Value;
 			var analysisBandCell = worksheet.Cells.FirstOrDefault(c => c.Value.Equals(Constants.AnalysisBand));
 			var rowIndex = analysisBandCell.Start.Row + 1;
 			var columnIndex = analysisBandCell.Start.Column + 1;
@@ -74,22 +65,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			return null;
 		}
 
-
-		private static void CreateFirstColumnValues(ExcelPackage xlPackage, ExcelWorksheet worksheet)
-		{
-			var columnValues = GetFirstColumnValues();
-			var rowIndex= worksheet.Dimension.End.Row+1;
-			
-			foreach(var column in columnValues)
-			{
-				worksheet.Cells[rowIndex, 1].Value = column;
-				worksheet.Cells[rowIndex, 1].Style.Font.Bold = true;
-				rowIndex++;
-			}
-			
-			xlPackage.Save();
-		}
-
 		private static List<string> GetFirstColumnValues()
 		{
 			var columnValues = new List<string>
@@ -103,33 +78,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 				Constants.Total
 			};
 			return columnValues;
-		}
-		private static void CreateTableHeader(ExcelPackage xlPackage, ExcelWorksheet worksheet)
-		{
-			var tableHeader = GetTableHeaderValues();
-			int rowNr;
-			var columnNr =1;
-			if (worksheet.Dimension == null)
-			{
-				rowNr = 1;
-			}
-			else
-			{
-				rowNr = worksheet.Dimension.End.Row + 2; // leave  1 empty row
-			}
-
-			foreach (var item in tableHeader)
-			{
-				worksheet.Cells[rowNr, columnNr].Value = item;
-				worksheet.Cells[rowNr, columnNr].AutoFitColumns();
-				worksheet.Cells[rowNr, columnNr].Style.Fill.PatternType = ExcelFillStyle.Solid;
-				worksheet.Cells[rowNr, columnNr].Style.Fill.BackgroundColor.SetColor(Color.LightGray);
-				worksheet.Cells[rowNr, columnNr].Style.Font.Color.SetColor(Color.White);
-				worksheet.Cells[rowNr, columnNr].Style.Font.Bold = true;
-				columnNr++;
-				
-			}
-			xlPackage.Save();
 		}
 
 		private static List<string> GetTableHeaderValues()
