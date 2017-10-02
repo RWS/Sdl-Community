@@ -40,5 +40,17 @@ namespace Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel
 		public static string Terp40 { get { return "40% - 49%"; } }
 		public static string Terp50 { get { return "50% +"; } }
 		#endregion
+
+		#region Files versions table
+		public static string Versions { get { return "Versions"; } }
+		public static string Language { get { return "Language"; } }
+		public static string NotTranslated { get { return "Not Translated"; } }
+		public static string Draft { get { return "Draft"; } }
+		public static string Translated { get { return "Translated"; } }
+		public static string TranslationRejected { get { return "Translation Rejected"; } }
+		public static string TranslationApproved { get { return "Translation Approved"; } }
+		#endregion
+		public static string SignOffRejected { get { return "Sign-Off Rejected"; } }
+		public static string SignedOff { get { return "Signed Off "; } }
 	}
 }

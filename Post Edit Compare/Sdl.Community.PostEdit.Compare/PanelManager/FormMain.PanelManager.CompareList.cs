@@ -36,8 +36,9 @@ namespace PostEdit.Compare
         private PanelEventsLog _panelEventsLog;
 
         private DeserializeDockContent _deserializeDockContentCompare;
-
-        private bool IsInitializingPanel { get; set; }
+		private static string _excelReportPathAutoSave;
+		private static string _sheetName;
+		private bool IsInitializingPanel { get; set; }
 
         private void InitializePanelCompare()
         {
@@ -5620,7 +5621,9 @@ namespace PostEdit.Compare
                             includeHeaderTitle,
                             RateGroup,
                             terpResults,
-                            exParsing
+                            exParsing,
+							_excelReportPathAutoSave,
+							_sheetName
                         };
 
                         ProgressWindow.ProgressDialogWorker.DoWork +=
@@ -5774,19 +5777,12 @@ namespace PostEdit.Compare
                     {
                         try
                         {
-                            var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
-                            var reportNameAutoSave = Path.GetFileName(Processor.Settings.ReportFileName);
-                            if (reportNameAutoSave != null)
-                                reportNameAutoSave = reportNameAutoSave.Substring(0, reportNameAutoSave.Length - 4);
+							var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
 
-                            reportNameAutoSave += "." + DateTime.Now.Year
-                                                  + "" + DateTime.Now.Month.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Day.ToString().PadLeft(2, '0')
-                                                  + "T" + DateTime.Now.Hour.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Minute.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Second.ToString().PadLeft(2, '0');
+							var reportNameAutoSave = SetAutoSavePath();
+							reportNameAutoSave = GetAutoSaveFileName(reportNameAutoSave);
 
-                            if (Application.Settings.ReportsCreateMonthlySubFolders)
+							if (Application.Settings.ReportsCreateMonthlySubFolders)
                             {
                                 reportPathAutoSave = Path.Combine(reportPathAutoSave,
                                     DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'));
@@ -5827,9 +5823,10 @@ namespace PostEdit.Compare
                             };
 
                             update_comparison_log(comparisonLogEntry);
-
-                            #endregion
-                        }
+							//clear autosave path
+							reportPathAutoSave = string.Empty;
+							#endregion
+						}
                         catch (Exception ex)
                         {
                             Cursor = Cursors.Default;
@@ -5839,7 +5836,9 @@ namespace PostEdit.Compare
                         finally
                         {
                             Cursor = Cursors.Default;
-                        }
+							
+
+						}
                     }
                 }
             }
@@ -5855,7 +5854,38 @@ namespace PostEdit.Compare
             }
         }
 
-        private void toolStripButton_viewSegmentsWithNoChanges_Click(object sender, EventArgs e)
+		public void SetExcelSheetName(string sheetName)
+		{
+			_sheetName = sheetName;
+		}
+
+		public void SetExcelReportPath(string excelReportPath)
+		{
+			_excelReportPathAutoSave = excelReportPath;
+		}
+
+		public string SetAutoSavePath()
+		{
+			var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
+			var reportNameAutoSave = Path.GetFileName(Processor.Settings.ReportFileName);
+			if (reportNameAutoSave != null)
+				reportNameAutoSave = reportNameAutoSave.Substring(0, reportNameAutoSave.Length - 4);
+
+			return reportPathAutoSave;
+		}
+		public  string GetAutoSaveFileName(string reportNameAutoSave)
+		{
+			reportNameAutoSave += "." + DateTime.Now.Year
+												 + "" + DateTime.Now.Month.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Day.ToString().PadLeft(2, '0')
+												 + "T" + DateTime.Now.Hour.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Minute.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Second.ToString().PadLeft(2, '0');
+
+			return reportNameAutoSave;
+		}
+
+		private void toolStripButton_viewSegmentsWithNoChanges_Click(object sender, EventArgs e)
         {
             ReportDialog.ViewSegmentsWithNoChanges = !ReportDialog.ViewSegmentsWithNoChanges;
             ReportDialog.toolStripButton_viewSegmentsWithNoChanges.CheckState = ReportDialog.ViewSegmentsWithNoChanges ? CheckState.Checked : CheckState.Unchecked;
@@ -6202,10 +6232,12 @@ namespace PostEdit.Compare
             var priceGroup = (Settings.PriceGroup)objects[4];
             var terpResults = (List<TERp.DocumentResult>)objects[5];
             var exParsing = (Exception)objects[6];
+			var excelReportFilePath = (string)objects[7];
+			var sheetName = (string)objects[8];
 
-            try
+			try
             {
-                comparer.CreateReport(reportFilePath, fileComparisonParagraphUnits, priceGroup, out terpResults);
+                comparer.CreateReport(reportFilePath, excelReportFilePath, sheetName, fileComparisonParagraphUnits, priceGroup, out terpResults);
                 objects[5] = terpResults;
             }
             catch (Exception ex)
@@ -6239,7 +6271,7 @@ namespace PostEdit.Compare
                 }
 
                 List<TERp.DocumentResult> terpResults;
-                comparer.CreateReport(ReportDialog.ReportFileFullPath, fileComparisonParagraphUnits, RateGroup, out terpResults);
+                comparer.CreateReport(ReportDialog.ReportFileFullPath,string.Empty, string.Empty,fileComparisonParagraphUnits, RateGroup, out terpResults);
 
                 ReportDialog.PanelReportViewer.webBrowserReport.Url = new Uri(Path.Combine("file://", ReportDialog.ReportFileFullPath + ".html"));
                 System.Windows.Forms.Application.DoEvents();

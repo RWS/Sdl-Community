@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using OfficeOpenXml;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Versions.Structures;
 
 namespace Sdl.Community.PostEdit.Versions
@@ -96,7 +98,7 @@ namespace Sdl.Community.PostEdit.Versions
 			modifiedFiles.AddRange(GetFilesFromFolder(modifiedOriginalPathFolder));
 
 
-			var pairedFiles = CreatePairedFiles(originalFiles,modifiedFiles);
+			var pairedFiles = CreatePairedFiles(originalFiles, modifiedFiles);
 
 			return pairedFiles;
 		}
@@ -106,7 +108,7 @@ namespace Sdl.Community.PostEdit.Versions
 			var files = new List<string>();
 			if (Directory.Exists(folderPath))
 			{
-				files= Directory.GetFiles(folderPath).ToList();
+				files = Directory.GetFiles(folderPath).ToList();
 			}
 			return files;
 		}
@@ -145,20 +147,40 @@ namespace Sdl.Community.PostEdit.Versions
 			return pairedFiles;
 		}
 
-			
 
-	public static VersionDetails CreateVersionDetails(Project project)
+
+		public static VersionDetails CreateVersionDetails(Project project)
 		{
 			var versionDetails = new VersionDetails
 			{
 				OriginalFileLocation = project.projectVersions[0].location,
 				ModifiedFileLocation = project.projectVersions[project.projectVersions.Count - 1].location,
-				SourceLanguage=project.sourceLanguage,
+				SourceLanguage = project.sourceLanguage,
 				TargetLanguages = project.targetLanguages
 			};
 
 			return versionDetails;
-		
+
+		}
+
+		public static bool WorksheetExists(ExcelPackage xlPackage, string worksheetName)
+		{
+			var smallerSheetName = ExcelReportHelper.NormalizeWorksheetName(worksheetName);
+
+			var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault(w =>w.Name.Equals(smallerSheetName));
+
+			if (worksheet != null)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public static void AddNewWorksheetToReport(ExcelPackage xlPackage, string worksheetName)
+		{
+			xlPackage.Workbook.Worksheets.Add(worksheetName);
+			xlPackage.Save();
 		}
 	}
+	
 }

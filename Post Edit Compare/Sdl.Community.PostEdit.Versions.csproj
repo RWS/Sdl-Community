@@ -62,6 +62,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking">
       <HintPath>Sdl.Community.PostEdit.Compare\3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
     </Reference>
