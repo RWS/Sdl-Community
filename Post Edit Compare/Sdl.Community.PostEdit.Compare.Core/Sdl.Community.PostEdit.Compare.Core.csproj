@@ -128,6 +128,7 @@
     <Compile Include="Helper\TerpExcelReportHelper.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\FileInformationExcelReport.cs" />
     <Compile Include="Reports\PemExcelReport.cs" />
     <Compile Include="Reports\Report.cs" />
     <Compile Include="Reports\ReportUtils.cs" />

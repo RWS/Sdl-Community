@@ -18,7 +18,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 	{
 		public static void CreatePemExcelReport(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
 		{
-			ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
+			//ExcelReportHelper.CreateReportHeader(xlPackage, worksheet);
 			ExcelReportHelper.TableTitle(xlPackage, worksheet, "Post-Edit Modifications Analysis", GetTableHeaderValues().Count);
 
 			ExcelReportHelper.CreateTableHeader(xlPackage, worksheet, GetTableHeaderValues());

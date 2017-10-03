@@ -9,6 +9,8 @@ using System.Xml;
 using Sdl.Community.PostEdit.Compare.Core.Comparison;
 using Sdl.Community.PostEdit.Compare.Core.Helper;
 using Sdl.Community.PostEdit.Compare.Core.SDLXLIFF;
+using Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel;
+using Sdl.Community.PostEdit.Compare.DAL.PostEditModificationsAnalysis;
 
 namespace Sdl.Community.PostEdit.Compare.Core.Reports
 {
@@ -734,12 +736,63 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (pempAnalysisData.newWords > 0)
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
-					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
+					
 
 					var currentPackage = ExcelReportHelper.GetExcelPackage(excelReportFilePath);
 					var currentWorksheet = currentPackage.Workbook.Worksheets[sheetName];
+
+					//Create files information table
+					//var filesInfo = new List<FilesInformationModel>
+					//{
+					//	new List<FilesInformationModel> = Tuple.Create(Constants.Ori)
+					//	//{
+					//	//	Version = "Original",
+					//	//	FilePath = fileUnitProperties.FilePathOriginal,
+					//	//	Language =fileUnitProperties.SourceLanguageIdOriginal + " / " + fileUnitProperties.TargetLanguageIdOriginal
+					//	//},
+					//	//new FilesInformationModel
+					//	//{
+					//	//	Version = "Updated",
+					//	//	FilePath = fileUnitProperties.FilePathUpdated,
+					//	//	Language =fileUnitProperties.SourceLanguageIdUpdated + " / " + fileUnitProperties.TargetLanguageIdUpdated
+					//	//}
+					//};
+
+					var filesInfo = new List<FilesInformationModel>
+			{
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Original,Constants.Versions,Constants.Original)
+				},
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Original,Constants.Language,fileUnitProperties.SourceLanguageIdOriginal + " / " + fileUnitProperties.TargetLanguageIdOriginal)
+				},
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Original,Constants.FilePath,fileUnitProperties.FilePathOriginal)
+				},
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Updated,Constants.Versions,Constants.Updated)
+				},
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Updated,Constants.Language,fileUnitProperties.SourceLanguageIdUpdated + " / " + fileUnitProperties.TargetLanguageIdUpdated)
+				},
+				new FilesInformationModel
+				{
+					FilesInfo = Tuple.Create(Constants.Updated,Constants.FilePath,fileUnitProperties.FilePathUpdated)
+				},
+
+			};
+					FileInformationExcelReport.CreateFileTable(currentPackage, currentWorksheet, filesInfo);
+
+					//create  pem table
+					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
 					PemExcelReport.CreatePemExcelReport(currentPackage, currentWorksheet, pemExcelModel);
 
+					//create terp table
 					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
 					TerpExcelReport.CreateTerpExcelReport(currentPackage, currentWorksheet, terpExcelModel);
 					currentPackage.Save();

@@ -44,6 +44,9 @@ namespace Sdl.Community.PostEdit.Compare.DAL.ExcelTableModel
 		#region Files versions table
 		public static string Versions { get { return "Versions"; } }
 		public static string Language { get { return "Language"; } }
+		public static string Original { get { return "Original"; } }
+		public static string Updated { get { return "Updated"; } }
+		public static string FilePath { get { return "File path"; } }
 		public static string NotTranslated { get { return "Not Translated"; } }
 		public static string Draft { get { return "Draft"; } }
 		public static string Translated { get { return "Translated"; } }
