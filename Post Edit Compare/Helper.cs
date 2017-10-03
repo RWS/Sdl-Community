@@ -70,7 +70,6 @@ namespace Sdl.Community.PostEdit.Versions
 
 		public static List<PairedFiles.PairedFile> GetPairedFiles(VersionDetails versionDetails)
 		{
-			//var filesList = new List<string>();
 			var originalFiles = new List<string>();
 			var modifiedFiles = new List<string>();
 

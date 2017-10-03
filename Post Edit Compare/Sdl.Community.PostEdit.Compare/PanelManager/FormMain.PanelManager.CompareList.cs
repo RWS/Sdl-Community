@@ -5797,7 +5797,9 @@ namespace PostEdit.Compare
                             File.Copy(reportFileName, reportFullPathAutoSave + ".xml", true);
                             File.Delete(reportFileName);
 
-                            if (terpResults != null)
+						
+
+							if (terpResults != null)
                             {
                                 foreach (var documentResult in terpResults)
                                 {
@@ -6245,7 +6247,10 @@ namespace PostEdit.Compare
 				//create the excel report
 				if (string.IsNullOrEmpty(excelReportFilePath))
 				{
-					var excelReportFullPath = @"C:\Users\aghisa\Documents\PostEdit.Compare\test.xlsx";
+					var projectSettingsPath = Application.Settings.ApplicationSettingsPath;
+					var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
+					var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
+					_excelReportPathAutoSave = excelReportFullPath;
 					excelReportFilePath = excelReportFullPath;
 					sheetName = "Sheet1";
 					// create excel report

@@ -31,9 +31,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>> fileComparisonFileParagraphUnits,
             bool transformReport, Settings.PriceGroup priceGroup, out List<TERp.DocumentResult> terpResults)
         {
-			//var excelReportFilePath = Path.GetFileNameWithoutExtension(reportFilePath)+".xlsx";
-			//var package = ExcelReportHelper.CreateExcelReport(excelReportFilePath);
-
 			terpResults = new List<TERp.DocumentResult>();
             if (Processor.Settings.ShowSegmentTerp && File.Exists(Processor.Settings.JavaExecutablePath))
                 terpResults = TERp.Process(reportFilePath
@@ -737,20 +734,13 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     if (pempAnalysisData.newWords > 0)
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
-					// creates the excel file and adds a worksheet
-					//trebuie sa iau pathul de pe constanta
-					//var excelReportPakage = ExcelReportHelper.GetExcelPackage("");//ExcelReportHelper.CreateExcelReport(@"C:\Users\aghisa\Desktop");
-					//var currentWorksheet = ExcelReportHelper.CreateWorksheetForReport(excelReportPakage,"TestName");
-
 					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
 
 					var currentPackage = ExcelReportHelper.GetExcelPackage(excelReportFilePath);
 					var currentWorksheet = currentPackage.Workbook.Worksheets[sheetName];
 					PemExcelReport.CreatePemExcelReport(currentPackage, currentWorksheet, pemExcelModel);
 
-					//poate ca trebuie inchis sus pachetul
 					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
-					////var test = excelReportPakage.Workbook.Worksheets["TestName"];
 					TerpExcelReport.CreateTerpExcelReport(currentPackage, currentWorksheet, terpExcelModel);
 					currentPackage.Save();
 

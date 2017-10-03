@@ -28,43 +28,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			xlPackage.Save();
 		}
 
-		public static void CreateExcelReport(string filePath,string sheetName)
-			
+		public static void CreateExcelReport(string filePath,string sheetName)	
 		{
-			//var reportPath = Path.Combine(filePath, "report.xlsx");
-			//if (File.Exists(reportPath)) { File.Delete(reportPath); };
-			//var newFile = new FileInfo(reportPath);
-			//if (File.Exists(filePath))
-			//{
-			//	File.Delete(filePath);
-
-			//}
-			//else {
-			//	File.Create(filePath);
-			//}
-
-			//var newFile = new FileInfo(filePath);
-			//var xlPackage = new ExcelPackage(newFile);
-			//return xlPackage;
-
-			//ExcelPackage excelPackage;
-			//if (!File.Exists(filePath))
-			//{
-			//	var fileInfoPath = new FileInfo(filePath);
-			//	excelPackage = new ExcelPackage(fileInfoPath);
-			//}
-			//else
-			//{
-			//	//var xlPackage = new ExcelPackage(newFile)
-			//	var fileStream = File.OpenRead(filePath);
-			//	excelPackage = new ExcelPackage(fileStream);
-			//}
-			//return excelPackage;
-			//if (!fileInfoPath.Exists)
-			//{
-
-			//}
-
 			var newFile = new FileInfo(filePath);
 			if (newFile.Exists)
 			{
@@ -96,8 +61,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 
 		public static ExcelPackage GetExcelPackage(string filePath)
 		{
-
-			//var fileStream = File.OpenRead(filePath);
 			var fileInfo = new FileInfo(filePath);
 			var excelPackage = new ExcelPackage(fileInfo);
 			return excelPackage;

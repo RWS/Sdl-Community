@@ -126,28 +126,12 @@ namespace Sdl.Community.PostEdit.Versions
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
 
-			var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
-			var reportNameAutoSave = postEditCompare.SetAutoSavePath();
-			reportNameAutoSave = postEditCompare.GetAutoSaveFileName(reportNameAutoSave);
-
-			if (Application.Settings.ReportsCreateMonthlySubFolders)
-			{
-				reportPathAutoSave = Path.Combine(reportPathAutoSave,
-								   DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'), "Excel Reports");
-				if (!Directory.Exists(reportPathAutoSave))
-					Directory.CreateDirectory(reportPathAutoSave);
-			}
-			else
-			{
-				reportPathAutoSave = Path.Combine(reportPathAutoSave, "Excel Reports");
-			}
-
-			var excelReportFullPath = Path.Combine(reportPathAutoSave, reportNameAutoSave+".xlsx");
+			var projectSettingsPath = Application.Settings.ApplicationSettingsPath;
+			var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
+			var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
 
 			// create excel report
 			ExcelReportHelper.CreateExcelReport(excelReportFullPath, selectedVersionProjects[0].name);
-
-			
 
 			foreach (var project in selectedVersionProjects)
 			{
@@ -170,6 +154,29 @@ namespace Sdl.Community.PostEdit.Versions
 				postEditCompare.CreateComparisonReport(cancel, comparer);
 			}
 
+			//Auto save the report only after the report was generated for selected projects
+			if (Application.Settings.ReportsAutoSave)
+			{
+				if (Application.Settings.ReportsAutoSaveFullPath.Trim() != string.Empty && Directory.Exists(Application.Settings.ReportsAutoSaveFullPath))
+				{
+					// autosave excel report file
+					var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
+
+					var reportNameAutoSave = postEditCompare.SetAutoSavePath();
+					reportNameAutoSave = postEditCompare.GetAutoSaveFileName(reportNameAutoSave);
+
+					if (Application.Settings.ReportsCreateMonthlySubFolders)
+					{
+						reportPathAutoSave = Path.Combine(reportPathAutoSave,
+							DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'));
+						if (!Directory.Exists(reportPathAutoSave))
+							Directory.CreateDirectory(reportPathAutoSave);
+					}
+
+					var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave);
+					File.Copy(excelReportFullPath, reportFullPathAutoSave + ".xlsx", true);
+				}
+			}
 			postEditCompare.SetExcelReportPath(string.Empty);
 			
 		}
