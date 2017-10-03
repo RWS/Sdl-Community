@@ -7,6 +7,5 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
         public ProgressEventArgs() { }
 
         public int Percent { get; internal set; }
-        public string StatusMessage { get; internal set; }
     }
 }
