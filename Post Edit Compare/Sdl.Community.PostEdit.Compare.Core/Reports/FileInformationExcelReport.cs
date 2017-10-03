@@ -50,8 +50,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 					}
 				}
 
-				xlPackage.Save();
-				
+				xlPackage.Save();				
 			}
 		}
 		private static string GetMatchingResultValue(string matchValue, string typeValue, List<FilesInformationModel> filesInfo)
