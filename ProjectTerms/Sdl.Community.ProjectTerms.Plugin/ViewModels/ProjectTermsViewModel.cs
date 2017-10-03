@@ -20,7 +20,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
     {
         private ITelemetryTracker telemetryTracker;
 
-        //public static ProjectTermsViewModel Instance = new ProjectTermsViewModel();
         private ProjectTermsExtractor extractor;
         private ProjectTermsCache cache;
         private List<ProjectFile> sourceProjectFilesToProcessed;
@@ -247,10 +246,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
                 var exitedFileName = Utils.Utils.GetExistedFileName(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())));
                 var existedFilePath = Path.Combine(Path.GetDirectoryName(Utils.Utils.GetXMLFilePath(Utils.Utils.GetProjecPath())), exitedFileName);
-                Utils.Utils.GetCurrentProject().AddNewFileVersion(id, existedFilePath);
-                var scan = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.Scan);
-                var convertTask = Utils.Utils.GetCurrentProject().RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
-                var targetFiles = Utils.Utils.GetCurrentProject().GetTargetLanguageFiles();
+                var currentProject = Utils.Utils.GetCurrentProject();
+                currentProject.AddNewFileVersion(id, existedFilePath);
+                var scan = currentProject.RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.Scan);
+                var convertTask = currentProject.RunAutomaticTask(new Guid[] { id }, AutomaticTaskTemplateIds.ConvertToTranslatableFormat);
+                var targetFiles = currentProject.GetTargetLanguageFiles();
                 foreach (var file in targetFiles)
                 {
                     if (file.Name.Contains(Utils.Utils.GetCurrentProject().GetProjectInfo().Name))
