@@ -125,11 +125,7 @@ namespace Sdl.Community.PostEdit.Versions
 			var projectsFromSettings = Controller.Settings.projects;
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
-			//var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
-			//aici ar trebui sa creez fisierul excel ca sa fiu sigura ca se creeaza un singur fisier pt mai multe proiecte selectate
-			// dar de fiecare data cand se selecteaza alte proiecte ma asigur ca  se creeaza alt raport
 
-			//var excelSavePath = postEditCompare.SetAutoSavePath();
 			var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
 			var reportNameAutoSave = postEditCompare.SetAutoSavePath();
 			reportNameAutoSave = postEditCompare.GetAutoSaveFileName(reportNameAutoSave);
@@ -147,7 +143,6 @@ namespace Sdl.Community.PostEdit.Versions
 			}
 
 			var excelReportFullPath = Path.Combine(reportPathAutoSave, reportNameAutoSave+".xlsx");
-			postEditCompare.SetExcelReportPath(excelReportFullPath);
 
 			// create excel report
 			ExcelReportHelper.CreateExcelReport(excelReportFullPath, selectedVersionProjects[0].name);
@@ -156,6 +151,8 @@ namespace Sdl.Community.PostEdit.Versions
 
 			foreach (var project in selectedVersionProjects)
 			{
+				// excel report path is cleared after each autosave, set the path again
+				postEditCompare.SetExcelReportPath(excelReportFullPath);
 				var package = ExcelReportHelper.GetExcelPackage(excelReportFullPath);
 				var normalizedName = ExcelReportHelper.NormalizeWorksheetName(project.name);
 				var worksheetExists = Helper.WorksheetExists(package, project.name);
@@ -172,6 +169,9 @@ namespace Sdl.Community.PostEdit.Versions
 				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
 				postEditCompare.CreateComparisonReport(cancel, comparer);
 			}
+
+			postEditCompare.SetExcelReportPath(string.Empty);
+			
 		}
 	}
 

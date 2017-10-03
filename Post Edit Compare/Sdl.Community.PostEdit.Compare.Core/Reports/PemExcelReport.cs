@@ -32,7 +32,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 		{
 			var test = worksheet.Cells;
 			var select = test.Value;
-			var analysisBandCell = worksheet.Cells.FirstOrDefault(c => c.Value.Equals(Constants.AnalysisBand));
+			var analysisBandCell = worksheet.Cells.Last(c => c.Value.Equals(Constants.AnalysisBand));
 			var rowIndex = analysisBandCell.Start.Row + 1;
 			var columnIndex = analysisBandCell.Start.Column + 1;
 			var matchValuesTest = new List<string>();
