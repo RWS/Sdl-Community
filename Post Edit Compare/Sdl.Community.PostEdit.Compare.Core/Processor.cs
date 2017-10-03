@@ -169,7 +169,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
         #region |  create report  |
 
 
-        public void CreateReport(string reportFilePath,
+        public void CreateReport(string reportFilePath,string excelReportFilePath,string sheetName,
             Dictionary<Comparison.Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparison.Comparer.ComparisonParagraphUnit>>> fileComparisonParagraphUnits
             , Settings.PriceGroup priceGroup, out List<TERp.DocumentResult> terpResults)
         {
@@ -181,7 +181,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
                 var transformXmlReport = (Settings.reportFormat == Settings.ReportFormat.Html ? true : false);
 
 
-                report.CreateXmlReport(reportFilePath, fileComparisonParagraphUnits, transformXmlReport, priceGroup, out terpResults);
+                report.CreateXmlReport(reportFilePath, excelReportFilePath, sheetName,fileComparisonParagraphUnits, transformXmlReport, priceGroup, out terpResults);
 
 
                 if (Settings.ViewReportWhenFinishedProcessing)

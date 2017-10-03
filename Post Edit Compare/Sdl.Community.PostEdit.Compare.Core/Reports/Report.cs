@@ -27,12 +27,14 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             Html
         }
 
-        public void CreateXmlReport(string reportFilePath,
+        public void CreateXmlReport(string reportFilePath,string excelReportFilePath,string sheetName,
             Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>> fileComparisonFileParagraphUnits,
             bool transformReport, Settings.PriceGroup priceGroup, out List<TERp.DocumentResult> terpResults)
         {
+			//var excelReportFilePath = Path.GetFileNameWithoutExtension(reportFilePath)+".xlsx";
+			//var package = ExcelReportHelper.CreateExcelReport(excelReportFilePath);
 
-            terpResults = new List<TERp.DocumentResult>();
+			terpResults = new List<TERp.DocumentResult>();
             if (Processor.Settings.ShowSegmentTerp && File.Exists(Processor.Settings.JavaExecutablePath))
                 terpResults = TERp.Process(reportFilePath
                     , fileComparisonFileParagraphUnits
@@ -736,15 +738,21 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                         pempAnalysisData.newPercent = Math.Round(pempAnalysisData.newWords / pempAnalysisData.totalWords * 100, 2);
 
 					// creates the excel file and adds a worksheet
-					var excelReportPakage = ExcelReportHelper.CreateExcelReport(@"C:\Users\aghisa\Desktop");
-					var currentWorksheet = ExcelReportHelper.CreateWorksheetForReport(excelReportPakage,"TestName");
+					//trebuie sa iau pathul de pe constanta
+					//var excelReportPakage = ExcelReportHelper.GetExcelPackage("");//ExcelReportHelper.CreateExcelReport(@"C:\Users\aghisa\Desktop");
+					//var currentWorksheet = ExcelReportHelper.CreateWorksheetForReport(excelReportPakage,"TestName");
 
 					var pemExcelModel = PemExcelReportHelper.CreatePemExcelDataModels(pempAnalysisData);
-					PemExcelReport.CreatePemExcelReport(excelReportPakage, currentWorksheet, pemExcelModel);
-					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
-					//var test = excelReportPakage.Workbook.Worksheets["TestName"];
-					TerpExcelReport.CreateTerpExcelReport(excelReportPakage, currentWorksheet, terpExcelModel);
 
+					var currentPackage = ExcelReportHelper.GetExcelPackage(excelReportFilePath);
+					var currentWorksheet = currentPackage.Workbook.Worksheets[sheetName];
+					PemExcelReport.CreatePemExcelReport(currentPackage, currentWorksheet, pemExcelModel);
+
+					//poate ca trebuie inchis sus pachetul
+					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
+					////var test = excelReportPakage.Workbook.Worksheets["TestName"];
+					TerpExcelReport.CreateTerpExcelReport(currentPackage, currentWorksheet, terpExcelModel);
+					currentPackage.Save();
 
 					filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
                     filesTotalPostEditP99Segments += pempAnalysisData.fuzzy99Segments;
@@ -1806,7 +1814,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             xmlTxtWriter.WriteEndElement();
 
             #endregion
-
+			//aici ar trebui creat obiectul pt tabelu cu versiuni
             if (Processor.Settings.ShowGoogleChartsInReport)
             {
                 xsltContent.Insert(scriptIndex, ReportUtils.GetTranslationModificationsColumnChartScriptTotalsLevel(filesChangesPmSegments, filesSourcePmSegments, filesChangesCmSegments, filesSourceCmSegments, filesChangesRepsSegments, filesSourceRepsSegments, filesChangesExactSegments, filesSourceExactSegments, filesChangesFuzzy99Segments, filesChangesFuzzy94Segments, filesChangesFuzzy84Segments, filesChangesFuzzy74Segments, filesSourceFuzzy99Segments, filesSourceFuzzy94Segments, filesSourceFuzzy84Segments, filesSourceFuzzy74Segments, filesChangesNewSegments, filesSourceNewSegments, filesChangesAtSegments, filesSoruceAtSegments, filesTotalContentChangesPercentage));

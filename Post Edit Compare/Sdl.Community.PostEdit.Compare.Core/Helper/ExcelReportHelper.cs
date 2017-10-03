@@ -28,16 +28,81 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			xlPackage.Save();
 		}
 
-		public static ExcelPackage CreateExcelReport(string filePath)
+		public static void CreateExcelReport(string filePath,string sheetName)
+			
 		{
-			var reportPath = Path.Combine(filePath, "report.xlsx");
-			if (File.Exists(reportPath)) { File.Delete(reportPath); };
-			var newFile = new FileInfo(reportPath);
+			//var reportPath = Path.Combine(filePath, "report.xlsx");
+			//if (File.Exists(reportPath)) { File.Delete(reportPath); };
+			//var newFile = new FileInfo(reportPath);
+			//if (File.Exists(filePath))
+			//{
+			//	File.Delete(filePath);
 
-			var xlPackage = new ExcelPackage(newFile);
-			return xlPackage;
+			//}
+			//else {
+			//	File.Create(filePath);
+			//}
+
+			//var newFile = new FileInfo(filePath);
+			//var xlPackage = new ExcelPackage(newFile);
+			//return xlPackage;
+
+			//ExcelPackage excelPackage;
+			//if (!File.Exists(filePath))
+			//{
+			//	var fileInfoPath = new FileInfo(filePath);
+			//	excelPackage = new ExcelPackage(fileInfoPath);
+			//}
+			//else
+			//{
+			//	//var xlPackage = new ExcelPackage(newFile)
+			//	var fileStream = File.OpenRead(filePath);
+			//	excelPackage = new ExcelPackage(fileStream);
+			//}
+			//return excelPackage;
+			//if (!fileInfoPath.Exists)
+			//{
+
+			//}
+
+			var newFile = new FileInfo(filePath);
+			if (newFile.Exists)
+			{
+				newFile.Delete();  // ensures we create a new workbook
+				newFile = new FileInfo(filePath);
+			}
+			using (var package = new ExcelPackage(newFile))
+			{
+				// Add a new worksheet to the empty workbook
+				var worksheet = package.Workbook.Worksheets.Add(NormalizeWorksheetName(sheetName));
+				package.Save();
+			}
 
 		}
+
+		public static string NormalizeWorksheetName(string sheetName)
+		{
+			var count = sheetName.Count();
+			var normalizedName = string.Empty;
+			if (count > 30)
+			{
+				normalizedName = sheetName.Substring(0, 30);
+				return normalizedName;
+			}
+			
+			
+			return sheetName;
+		}
+
+		public static ExcelPackage GetExcelPackage(string filePath)
+		{
+
+			//var fileStream = File.OpenRead(filePath);
+			var fileInfo = new FileInfo(filePath);
+			var excelPackage = new ExcelPackage(fileInfo);
+			return excelPackage;
+		}
+
 
 		public static ExcelWorksheet CreateWorksheetForReport(ExcelPackage xlPackage , string worksheetName)
 		{

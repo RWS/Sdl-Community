@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using PostEdit.Compare.Forms;
 using Sdl.Community.PostEdit.Compare;
 using static Sdl.Community.PostEdit.Compare.Core.Comparison.PairedFiles;
+using Application = PostEdit.Compare.Cache.Application;
+using System.IO;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 //using PostEdit.Compare;
 //using PostEdit.Compare.Model;
 
@@ -123,9 +126,42 @@ namespace Sdl.Community.PostEdit.Versions
 			var selectedVersionProjects = projectsFromSettings
 				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
 
+			var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
+			var reportNameAutoSave = postEditCompare.SetAutoSavePath();
+			reportNameAutoSave = postEditCompare.GetAutoSaveFileName(reportNameAutoSave);
+
+			if (Application.Settings.ReportsCreateMonthlySubFolders)
+			{
+				reportPathAutoSave = Path.Combine(reportPathAutoSave,
+								   DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'), "Excel Reports");
+				if (!Directory.Exists(reportPathAutoSave))
+					Directory.CreateDirectory(reportPathAutoSave);
+			}
+			else
+			{
+				reportPathAutoSave = Path.Combine(reportPathAutoSave, "Excel Reports");
+			}
+
+			var excelReportFullPath = Path.Combine(reportPathAutoSave, reportNameAutoSave+".xlsx");
+
+			// create excel report
+			ExcelReportHelper.CreateExcelReport(excelReportFullPath, selectedVersionProjects[0].name);
+
+			
+
 			foreach (var project in selectedVersionProjects)
 			{
+				// excel report path is cleared after each autosave, set the path again
+				postEditCompare.SetExcelReportPath(excelReportFullPath);
+				var package = ExcelReportHelper.GetExcelPackage(excelReportFullPath);
+				var normalizedName = ExcelReportHelper.NormalizeWorksheetName(project.name);
+				var worksheetExists = Helper.WorksheetExists(package, project.name);
+				if (!worksheetExists)
+				{
+					Helper.AddNewWorksheetToReport(package, normalizedName);
+				}
 
+				postEditCompare.SetExcelSheetName(normalizedName);
 				var versionDetails = Helper.CreateVersionDetails(project);
 
 				var filesPairs = Helper.GetPairedFiles(versionDetails);
@@ -133,6 +169,9 @@ namespace Sdl.Community.PostEdit.Versions
 				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
 				postEditCompare.CreateComparisonReport(cancel, comparer);
 			}
+
+			postEditCompare.SetExcelReportPath(string.Empty);
+			
 		}
 	}
 

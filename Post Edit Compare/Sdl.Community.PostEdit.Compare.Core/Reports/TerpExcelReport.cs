@@ -29,9 +29,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 		private static void FillTableWithAnalyseResults(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<TERpModel> analyseResults)
 		{
 			var rangeCellQueryResult =
-								from cell in worksheet.Cells
+								(from cell in worksheet.Cells
 									where cell.Value?.ToString() == Constants.Range
-								select cell;
+								select cell).Last();
 
 			if (rangeCellQueryResult != null)
 			{
