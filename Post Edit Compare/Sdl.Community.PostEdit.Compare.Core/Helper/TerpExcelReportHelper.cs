@@ -24,6 +24,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			var terp30 = GetTerp30Values(terpData);
 			var terp40 = GetTerp40Values(terpData);
 			var terp50 = GetTerp50Values(terpData);
+			var terpTotal = GetTerpTotalValues(terpData);
 
 			terpModelList.AddRange(terp0);
 			terpModelList.AddRange(terp01);
@@ -33,6 +34,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			terpModelList.AddRange(terp30);
 			terpModelList.AddRange(terp40);
 			terpModelList.AddRange(terp50);
+			terpModelList.AddRange(terpTotal);
 			return terpModelList;
 		}
 
@@ -348,44 +350,84 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			};
 			return terp50MatchValueList;
 		}
-		//private static List<TERpModel> GetTerpTotalValues(TERpAnalysisData terpData)
-		//{
-		//	var terpTotalMatchValueList = new List<TERpModel>
-		//	{
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Segments,terpData.t)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Words,terpData.terp50SrcWd)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.RefWords,terpData.terp50NumWd)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Errors,terpData.terp50NumEr)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Ins,terpData.terp50Ins)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Del,terpData.terp50Del)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Sub,terpData.terp50Sub)
-		//		},
-		//		new TERpModel
-		//		{
-		//			TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Shft,terpData.terp50Shft)
-		//		},
-		//	};
-		//	return terp50MatchValueList;
-		//}
+		private static List<TERpModel> GetTerpTotalValues(TERpAnalysisData terpData)
+		{
+			var totalValues = GetTerpTotalValueSegments(terpData);
+			var terpTotalMatchValueList = new List<TERpModel>
+			{
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Segments,totalValues.Segments)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Words,totalValues.Words)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.RefWords,totalValues.RefWords)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Errors,totalValues.Errors)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Ins,totalValues.Ins)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Del,totalValues.Del)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Sub,totalValues.Sub)
+				},
+				new TERpModel
+				{
+					TERpAnalyseResult = Tuple.Create(Constants.Total,Constants.Shft,totalValues.Shft)
+				},
+			};
+			return terpTotalMatchValueList;
+		}
+
+		private static TERpTotalValues GetTerpTotalValueSegments(TERpAnalysisData terpData)
+		{
+			var terpTotal = new TERpTotalValues();
+			var totalSegments = terpData.terp00Segments + terpData.terp01Segments+ terpData.terp06Segments + terpData.terp20Segments + terpData.terp10Segments
+				+ terpData.terp30Segments + terpData.terp40Segments + terpData.terp50Segments;
+
+			var totalWords = terpData.terp00SrcWd + terpData.terp01SrcWd + terpData.terp06SrcWd + terpData.terp20SrcWd + terpData.terp10SrcWd
+				+ terpData.terp30SrcWd + terpData.terp40SrcWd + terpData.terp50SrcWd;
+
+			var refWords = terpData.terp00NumWd + terpData.terp01NumWd + terpData.terp06NumWd + terpData.terp20NumWd + terpData.terp10NumWd
+			+ terpData.terp30NumWd + terpData.terp40NumWd + terpData.terp50NumWd;
+
+			var errors = terpData.terp00NumEr + terpData.terp01NumEr + terpData.terp06NumEr + terpData.terp20NumEr + terpData.terp10NumEr
+			+ terpData.terp30NumEr + terpData.terp40NumEr + terpData.terp50NumEr;
+
+			var ins = terpData.terp00Ins + terpData.terp01Ins + terpData.terp06Ins + terpData.terp20Ins + terpData.terp10Ins
+			+ terpData.terp30Ins + terpData.terp40Ins + terpData.terp50Ins;
+
+			var del = terpData.terp00Del + terpData.terp01Del + terpData.terp06Del + terpData.terp20Del + terpData.terp10Del
+			+ terpData.terp30Del + terpData.terp40Del + terpData.terp50Del;
+
+			var sub = terpData.terp00Sub + terpData.terp01Sub + terpData.terp06Sub + terpData.terp20Sub + terpData.terp10Sub
+			+ terpData.terp30Sub + terpData.terp40Sub + terpData.terp50Sub;
+
+			var shft = terpData.terp00Shft + terpData.terp01Shft + terpData.terp06Shft + terpData.terp20Shft + terpData.terp10Shft
+			+ terpData.terp30Shft + terpData.terp40Shft + terpData.terp50Shft;
+
+			terpTotal.Segments = totalSegments;
+			terpTotal.Words = totalWords;
+			terpTotal.RefWords = refWords;
+			terpTotal.Errors = errors;
+			terpTotal.Ins = ins;
+			terpTotal.Del = del;
+			terpTotal.Sub = sub;
+			terpTotal.Shft = shft;
+
+			return terpTotal;
+		}
 	}
 }

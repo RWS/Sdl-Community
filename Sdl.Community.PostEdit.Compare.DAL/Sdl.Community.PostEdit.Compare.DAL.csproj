@@ -51,6 +51,7 @@
     <Compile Include="PostEditModificationsAnalysis\PEMModel.cs" />
     <Compile Include="PostEditModificationsAnalysis\PEMTotalCost.cs" />
     <Compile Include="PostEditModificationsAnalysis\TERpModel.cs" />
+    <Compile Include="PostEditModificationsAnalysis\TERpTotalValues.cs" />
     <Compile Include="PostEditModificationsAnalysis\VersionDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
