@@ -55,7 +55,8 @@ namespace Sdl.Community.MtEnhancedProvider
         private Dictionary<string, MtTag> GetSourceTagsDict()
         {
             dict = new Dictionary<string, MtTag>(); //try this
-            //build dict
+													//build dict
+			var startTagIndex = 0;
             for (var i = 0; i < sourceSegment.Elements.Count; i++)
             {
                 var elType = sourceSegment.Elements[i].GetType();
@@ -63,9 +64,26 @@ namespace Sdl.Community.MtEnhancedProvider
                 if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag") //if tag, add to dictionary
                 {
                     var theTag = new MtTag((Tag)sourceSegment.Elements[i].Duplicate());
-                    var tagNumber = sourceSegment.Elements.IndexOf(theTag.SdlTag);//this is a number we will assign the tag
-                    var tagText = "<tg" + tagNumber + ">"; //create our abbreviated tag to send to google
+					var tagText = string.Empty;
+					if (theTag.SdlTag.Type == TagType.Start)
+					{
+						startTagIndex = i;
+						tagText = "<tg" + i + ">";
+					}
+					if(theTag.SdlTag.Type == TagType.End)
+					{
+						tagText = "</tg" + startTagIndex + ">";
+					}
+					if(theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
+					{
+						tagText = "</tg" + i + ">";
+					}
+                    //var tagNumber = sourceSegment.Elements.IndexOf(theTag.SdlTag);//this is a number we will assign the tag
+                    //var tagText = "<tg" + tagNumber + ">"; //create our abbreviated tag to send to google
                     preparedSourceText += tagText;
+
+
+
 
                     //now we have to figure out whether this tag is preceded and/or followed by whitespace
                     if (i > 0 && !sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
@@ -186,16 +204,19 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             //first create a regex to put our array separators around the tags
             var str = returnedText;
-            var pattern = @"\<tg[0-9]*\>"; //do we need to be more exlusive, i.e. only \<tg.*?\>
-            var rgx = new Regex(pattern);
+			/*var pattern = @"\<tg[0-9]*\>";*/ //do we need to be more exlusive, i.e. only \<tg.*?\>
+
+			var pattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)";
+
+			var rgx = new Regex(pattern);
             var matches = rgx.Matches(returnedText);
 
             foreach (Match myMatch in matches)
             {
-                str = str.Replace(myMatch.Value, "***" + myMatch.Value + "***"); //puts our separator around tagtexts
+                str = str.Replace(myMatch.Value, "```" + myMatch.Value + "```"); //puts our separator around tagtexts
             }
 
-            var stringSeparators = new string[] { "***" }; //split at our inserted marker....is there a better way?
+            var stringSeparators = new string[] { "```" }; //split at our inserted marker....is there a better way?
             var strAr = str.Split(stringSeparators, StringSplitOptions.None);
             return strAr;
         }
