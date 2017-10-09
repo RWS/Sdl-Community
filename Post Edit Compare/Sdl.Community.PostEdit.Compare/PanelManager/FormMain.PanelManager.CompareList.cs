@@ -5791,7 +5791,7 @@ namespace PostEdit.Compare
                                     Directory.CreateDirectory(reportPathAutoSave);
                             }
 
-                            var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave);
+                            var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave.Substring(reportNameAutoSave.LastIndexOf(@"\") + 1));
 
                             File.Copy(reportFileName + ".html", reportFullPathAutoSave + ".html", true);
                             File.Copy(reportFileName, reportFullPathAutoSave + ".xml", true);

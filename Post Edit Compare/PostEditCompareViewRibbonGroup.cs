@@ -162,8 +162,8 @@ namespace Sdl.Community.PostEdit.Versions
 					// autosave excel report file
 					var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
 
-					var reportNameAutoSave = postEditCompare.SetAutoSavePath();
-					reportNameAutoSave = postEditCompare.GetAutoSaveFileName(reportNameAutoSave);
+					var reportNameAutoSavePath = postEditCompare.SetAutoSavePath();
+					reportNameAutoSavePath = postEditCompare.GetAutoSaveFileName(reportNameAutoSavePath);
 
 					if (Application.Settings.ReportsCreateMonthlySubFolders)
 					{
@@ -173,6 +173,7 @@ namespace Sdl.Community.PostEdit.Versions
 							Directory.CreateDirectory(reportPathAutoSave);
 					}
 
+					var reportNameAutoSave = reportNameAutoSavePath.Substring(reportNameAutoSavePath.LastIndexOf(@"\")+1);
 					var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave);
 					File.Copy(excelReportFullPath, reportFullPathAutoSave + ".xlsx", true);
 				}

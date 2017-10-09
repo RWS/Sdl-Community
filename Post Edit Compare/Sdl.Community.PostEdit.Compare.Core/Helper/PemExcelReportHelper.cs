@@ -53,11 +53,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.Total,Constants.Percent,analysisData.totalPercent)
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.Total,Constants.Total,new decimal())
 				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
 			};
 			return totalValuesList;
 		}
@@ -83,11 +83,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.New,Constants.Percent,analysisData.newPercent)
-				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.New,Constants.Total,new decimal())
+				},
 			};
 			return newValuesList;
 		}
@@ -111,11 +111,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.Fuzzy74,Constants.Percent,analysisData.fuzzy74Percent)
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.Fuzzy74,Constants.Total,new decimal())
 				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
 			};
 			return fuzzy74ValuesList;
 		}
@@ -139,11 +139,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.Fuzzy84,Constants.Percent,analysisData.fuzzy84Percent)
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.Fuzzy84,Constants.Total,new decimal())
 				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
 			};
 			return fuzzy84ValuesList;
 		}
@@ -167,11 +167,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.Fuzzy94,Constants.Percent,analysisData.fuzzy94Percent)
-				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.Fuzzy94,Constants.Total,new decimal())
+				},
 			};
 			return fuzzy94ValuesList;
 		}
@@ -194,11 +194,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.Fuzzy99,Constants.Percent,analysisData.fuzzy99Percent)
-				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.Fuzzy99,Constants.Total,new decimal())
+				},
 			};
 			return fuzzy99ValuesList;
 		}
@@ -221,11 +221,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 				new PEMModel
 				{
 					AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Percent,analysisData.exactPercent)
-				}
-				//new PEMModel
-				//{
-				//	AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,analysisData.tot)
-				//},
+				},
+				new PEMModel
+				{
+					AnalyseResult = Tuple.Create(Constants.ExactMatch,Constants.Total,new decimal())
+				},
 			};
 			return exactMatchValuesList;
 		}
