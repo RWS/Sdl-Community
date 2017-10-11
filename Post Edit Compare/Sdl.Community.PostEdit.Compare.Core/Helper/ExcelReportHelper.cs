@@ -20,6 +20,13 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 		private static List<TERpModel> _terpTotal=new List<TERpModel>();
 		private  static PEMpAnalysisData _pemTotalValues=new PEMpAnalysisData();
 		private static TERpAnalysisData _terpTotalValues = new TERpAnalysisData();
+		private static int _perfectCount = 0;
+		private static int _fuzzy74Count = 0;
+		private static int _fuzzy84Count = 0;
+		private static int _fuzzy94Count = 0;
+		private static int _fuzzy99Count = 0;
+		private static int _newCount = 0;
+
 		public static void CreateReportHeader(ExcelPackage xlPackage, ExcelWorksheet worksheet)
 		{
 			worksheet.Cells["A1"].Value = "Post-Edit Comparison Report" ;
@@ -130,26 +137,46 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 			xlPackage.Save();
 		}
 
-		public static void SetTotalTablesValues(List<PEMModel>pemTotal,List<TERpModel> terpTotal)
-		{
-			if (pemTotal != null)
-			{
-				_pemTotal.AddRange(pemTotal);
-			}
-			if (terpTotal != null)
-			{
-				_terpTotal.AddRange(terpTotal);
-			}
-		}
-
 		public static void ClearTotalValues()
 		{
 			_pemTotalValues = new PEMpAnalysisData();
 			_terpTotalValues = new TERpAnalysisData();
+			_perfectCount = 0;
+			_fuzzy74Count = 0;
+			_fuzzy84Count = 0;
+			_fuzzy94Count = 0;
+			_fuzzy99Count = 0;
+			_newCount = 0;
 		}
 
 		public static void CreateTotalsTables(ExcelPackage xlPackage, ExcelWorksheet worksheet)
 		{
+			if (_pemTotalValues.exactPercent > 0&& _perfectCount>0)
+			{
+				_pemTotalValues.exactPercent = _pemTotalValues.exactPercent / _perfectCount;
+			}
+			if (_pemTotalValues.fuzzy74Percent > 0 && _fuzzy74Count>0)
+			{
+				_pemTotalValues.fuzzy74Percent = _pemTotalValues.fuzzy74Percent / _fuzzy74Count;
+			}
+			if (_pemTotalValues.fuzzy84Percent > 0&& _fuzzy84Count>0)
+			{
+				_pemTotalValues.fuzzy84Percent = _pemTotalValues.fuzzy84Percent / _fuzzy84Count;
+			}
+			if (_pemTotalValues.fuzzy94Percent > 0 && _fuzzy94Count > 0)
+			{
+				_pemTotalValues.fuzzy94Percent = _pemTotalValues.fuzzy94Percent / _fuzzy94Count;
+			}
+			if (_pemTotalValues.fuzzy99Percent > 0 && _fuzzy99Count > 0)
+			{
+				_pemTotalValues.fuzzy99Percent = _pemTotalValues.fuzzy99Percent / _fuzzy99Count;
+			}
+			if (_pemTotalValues.newPercent > 0 && _newCount > 0)
+			{
+				_pemTotalValues.newPercent = _pemTotalValues.newPercent / _newCount;
+			}
+			_pemTotalValues.totalPercent = _pemTotalValues.exactPercent + _pemTotalValues.fuzzy74Percent+ _pemTotalValues.fuzzy84Percent +
+				_pemTotalValues.fuzzy94Percent + _pemTotalValues.fuzzy99Percent + _pemTotalValues.newPercent;
 			GeneratePemTotalTables(xlPackage, worksheet);
 			GenerateTerpTotalTables(xlPackage, worksheet);
 
@@ -285,11 +312,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 		{
 			_pemTotalValues.exactCharacters = _pemTotalValues.exactCharacters + pempAnalysisData.exactCharacters;
 			_pemTotalValues.exactPercent = _pemTotalValues.exactPercent + pempAnalysisData.exactPercent;
+
+			if (_pemTotalValues.exactPercent > 0)
+			{
+				_perfectCount++;
+			}
 			_pemTotalValues.exactSegments = _pemTotalValues.exactSegments + pempAnalysisData.exactSegments;
 			_pemTotalValues.exactTags = _pemTotalValues.exactTags + pempAnalysisData.exactTags;
 			_pemTotalValues.exactWords = _pemTotalValues.exactWords + pempAnalysisData.exactWords;
 
 			_pemTotalValues.fuzzy74Percent = _pemTotalValues.fuzzy74Percent + pempAnalysisData.fuzzy74Percent;
+
+			if (_pemTotalValues.fuzzy74Percent > 0)
+			{
+				_fuzzy74Count++;
+			}
+
 			_pemTotalValues.fuzzy74Characters = _pemTotalValues.fuzzy74Characters + pempAnalysisData.fuzzy74Characters;
 			_pemTotalValues.fuzzy74Segments = _pemTotalValues.fuzzy74Segments + pempAnalysisData.fuzzy74Segments;
 			_pemTotalValues.fuzzy74Tags = _pemTotalValues.fuzzy74Tags + pempAnalysisData.fuzzy74Tags;
@@ -297,24 +335,42 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 
 			_pemTotalValues.fuzzy84Characters = _pemTotalValues.fuzzy84Characters + pempAnalysisData.fuzzy84Characters;
 			_pemTotalValues.fuzzy84Percent = _pemTotalValues.fuzzy84Percent + pempAnalysisData.fuzzy84Percent;
+
+			if (_pemTotalValues.fuzzy84Percent > 0)
+			{
+				_fuzzy84Count++;
+			}
 			_pemTotalValues.fuzzy84Segments = _pemTotalValues.fuzzy84Segments + pempAnalysisData.fuzzy84Segments;
 			_pemTotalValues.fuzzy84Words = _pemTotalValues.fuzzy84Words + pempAnalysisData.fuzzy84Words;
 			_pemTotalValues.fuzzy84Tags = _pemTotalValues.fuzzy84Tags + pempAnalysisData.fuzzy84Tags;
 
 			_pemTotalValues.fuzzy94Characters = _pemTotalValues.fuzzy94Characters + pempAnalysisData.fuzzy94Characters;
 			_pemTotalValues.fuzzy94Percent = _pemTotalValues.fuzzy94Percent + pempAnalysisData.fuzzy94Percent;
+
+			if (_pemTotalValues.fuzzy94Percent > 0)
+			{
+				_fuzzy94Count++;
+			}
 			_pemTotalValues.fuzzy94Segments = _pemTotalValues.fuzzy94Segments + pempAnalysisData.fuzzy94Segments;
 			_pemTotalValues.fuzzy94Tags = _pemTotalValues.fuzzy94Tags + pempAnalysisData.fuzzy94Tags;
 			_pemTotalValues.fuzzy94Words = _pemTotalValues.fuzzy94Words = pempAnalysisData.fuzzy94Words;
 
 			_pemTotalValues.fuzzy99Characters = _pemTotalValues.fuzzy99Characters + pempAnalysisData.fuzzy99Characters;
 			_pemTotalValues.fuzzy99Percent = _pemTotalValues.fuzzy99Percent + pempAnalysisData.fuzzy99Percent;
+			if (_pemTotalValues.fuzzy99Percent > 0)
+			{
+				_fuzzy99Count++;
+			}
 			_pemTotalValues.fuzzy99Segments = _pemTotalValues.fuzzy99Segments + pempAnalysisData.fuzzy99Segments;
 			_pemTotalValues.fuzzy99Tags = _pemTotalValues.fuzzy99Tags + pempAnalysisData.fuzzy99Tags;
 			_pemTotalValues.fuzzy99Words = _pemTotalValues.fuzzy99Words + pempAnalysisData.fuzzy99Words;
 
 			_pemTotalValues.newCharacters = _pemTotalValues.newCharacters + pempAnalysisData.newCharacters;
 			_pemTotalValues.newPercent = _pemTotalValues.newPercent + pempAnalysisData.newPercent;
+			if (_pemTotalValues.newPercent > 0)
+			{
+				_newCount++;
+			}
 			_pemTotalValues.newSegments = _pemTotalValues.newSegments + pempAnalysisData.newSegments;
 			_pemTotalValues.newTags = _pemTotalValues.newTags + pempAnalysisData.newTags;
 			_pemTotalValues.newWords = _pemTotalValues.newWords + pempAnalysisData.newWords;

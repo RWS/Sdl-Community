@@ -1884,12 +1884,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			var worksheet = package.Workbook.Worksheets[sheetName];
 
 			//Insert total table on the top of the sheet
-			//ExcelReportHelper.CreateTotalsTables(package, worksheet);
 
-			//Clear total values
-			//ExcelReportHelper.ClearTotalValues();
-			//ExcelReportHelper.GeneratePemTotalTables(package, worksheet);
-			ExcelReportHelper.CreateTotalsTables(package, worksheet);
 			ExcelReportHelper.ClearTotalValues();
 			if (transformReport)
 			{
