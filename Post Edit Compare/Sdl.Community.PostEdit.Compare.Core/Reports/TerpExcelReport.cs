@@ -58,7 +58,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			
 		}
 
-		private static decimal? GetMatchingResultValue(string matchValue, string typeValue, List<TERpModel> analyseResults)
+		public static decimal? GetMatchingResultValue(string matchValue, string typeValue, List<TERpModel> analyseResults)
 		{
 			var analyseResult = analyseResults.FirstOrDefault(m => (m.TERpAnalyseResult.Item1.Equals(matchValue))
 			&& (m.TERpAnalyseResult.Item2.Equals(typeValue)));
@@ -70,7 +70,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			return null;
 		}
 
-		private static List<string> GetTableHeaderValues()
+		public  static List<string> GetTableHeaderValues()
 		{
 			var headerValues = new List<string>
 			{
@@ -86,7 +86,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			};
 			return headerValues;
 		}
-		private static List<string> GetFirstColumnValues()
+		public static List<string> GetFirstColumnValues()
 		{
 			var columnValues = new List<string>
 			{

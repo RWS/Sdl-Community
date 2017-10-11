@@ -741,22 +741,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 					var currentPackage = ExcelReportHelper.GetExcelPackage(excelReportFilePath);
 					var currentWorksheet = currentPackage.Workbook.Worksheets[sheetName];
 
-					//Create files information table
-					//var filesInfo = new List<FilesInformationModel>
-					//{
-					//	new List<FilesInformationModel> = Tuple.Create(Constants.Ori)
-					//	//{
-					//	//	Version = "Original",
-					//	//	FilePath = fileUnitProperties.FilePathOriginal,
-					//	//	Language =fileUnitProperties.SourceLanguageIdOriginal + " / " + fileUnitProperties.TargetLanguageIdOriginal
-					//	//},
-					//	//new FilesInformationModel
-					//	//{
-					//	//	Version = "Updated",
-					//	//	FilePath = fileUnitProperties.FilePathUpdated,
-					//	//	Language =fileUnitProperties.SourceLanguageIdUpdated + " / " + fileUnitProperties.TargetLanguageIdUpdated
-					//	//}
-					//};
 
 					var filesInfo = new List<FilesInformationModel>
 			{
@@ -796,6 +780,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 					var terpExcelModel = TerpExcelReportHelper.CreateTerpExcelDataModels(terpAnalysisData);
 					TerpExcelReport.CreateTerpExcelReport(currentPackage, currentWorksheet, terpExcelModel);
 					currentPackage.Save();
+
+					ExcelReportHelper.PemAnalysisTotal(pempAnalysisData);
+					ExcelReportHelper.TerpAnalysisTotal(terpAnalysisData);
 
 					filesTotalPostEditExactSegments += pempAnalysisData.exactSegments;
                     filesTotalPostEditP99Segments += pempAnalysisData.fuzzy99Segments;
@@ -1893,9 +1880,22 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 w.Flush();
                 w.Close();
             }
+			var package= ExcelReportHelper.GetExcelPackage(excelReportFilePath);
+			var worksheet = package.Workbook.Worksheets[sheetName];
 
-            if (transformReport)
-                ReportUtils.TransformXmlReport(reportFilePath);
+			//Insert total table on the top of the sheet
+			//ExcelReportHelper.CreateTotalsTables(package, worksheet);
+
+			//Clear total values
+			//ExcelReportHelper.ClearTotalValues();
+			//ExcelReportHelper.GeneratePemTotalTables(package, worksheet);
+			ExcelReportHelper.CreateTotalsTables(package, worksheet);
+			ExcelReportHelper.ClearTotalValues();
+			if (transformReport)
+			{
+				ReportUtils.TransformXmlReport(reportFilePath);
+			}
+             
         }
 
         private static void InnerFileFilteredParagraphCount(Dictionary<string, Comparer.ComparisonParagraphUnit> comparisonParagraphUnits, out int innerFileFilteredParagraphCount, out int innerFileFilteredSegmentCount)
