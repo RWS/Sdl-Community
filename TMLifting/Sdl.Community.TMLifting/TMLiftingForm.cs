@@ -7,6 +7,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Community.GroupShareKit;
+using System.Threading.Tasks;
+using Sdl.Community.GroupShareKit.Clients;
+using System.Reflection;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -14,8 +22,10 @@ namespace Sdl.Community.TMLifting
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
+		private readonly BackgroundWorker _bwGS;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
+		//private readonly BindingSource _bs;
 
         public TMLiftingForm()
         {
@@ -24,7 +34,9 @@ namespace Sdl.Community.TMLifting
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-        }
+			_bwGS = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+			//_bs = new BindingSource();
+		}
 
         protected override void OnLoad(EventArgs e)
         {
@@ -34,9 +46,44 @@ namespace Sdl.Community.TMLifting
             _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             _bw.ProgressChanged += bw_ProgressChanged;
             reIndexCheckBox.Checked = true;
-        }
 
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+			//_bwGS.DoWork += bwGS_DoWork;
+			//_bwGS.RunWorkerCompleted += bwGS_RunWorkerCompleted;
+			//_bwGS.ProgressChanged += bwGS_ProgressChanged;
+			
+		}
+
+		//private void bwGS_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		//{
+		//	progressBar1.Value = e.ProgressPercentage;
+		//	label1.Text = "Processing....." + progressBar1.Value.ToString() + "%";
+		//}
+
+		//private void bwGS_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		//{
+		//	dataGridView1.DataSource = _bs;
+		//}
+
+		//private async void bwGS_DoWork(object sender, DoWorkEventArgs e)
+		//{
+		//	try
+		//	{
+		//		var sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync();
+		//		foreach (var item in sbTMs.ServerBasedTMDetails)
+		//		{
+		//			_bs.DataSource = typeof(TranslationMemoryDetails);
+		//			_bs.Add(item);					
+		//		}
+
+
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		MessageBox.Show(ex.ToString());
+		//	}
+		//}
+
+		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             rtbStatus.Text = e.UserState.ToString();
         }
@@ -191,5 +238,16 @@ namespace Sdl.Community.TMLifting
             _bw.CancelAsync();
             rtbStatus.AppendText(@"Process will be canceled");
         }
-    }
+
+		private async void button1_Click(object sender, EventArgs e)
+		{
+			var sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync();
+			dataGridView1.DataSource = sbTMs.ServerBasedTMDetails.Select(tm => new
+			{ Name = tm.Name, Location = tm.Location, Description = tm.Description}).ToList();
+		}
+
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+		}
+	}
 }

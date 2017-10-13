@@ -30,7 +30,17 @@ namespace Sdl.Community.TMLifting
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnCancel = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.btnStart = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cleanBtn = new System.Windows.Forms.Button();
+            this.cancelBtn = new System.Windows.Forms.Button();
             this.upLiftCheckBox = new System.Windows.Forms.CheckBox();
             this.reIndexCheckBox = new System.Windows.Forms.CheckBox();
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
@@ -39,11 +49,94 @@ namespace Sdl.Community.TMLifting
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
             this.lstTms = new System.Windows.Forms.ListBox();
-            this.cancelBtn = new System.Windows.Forms.Button();
-            this.cleanBtn = new System.Windows.Forms.Button();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.itemsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabPage2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.tabPage1.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.dataGridView1);
+            this.tabPage2.Controls.Add(this.btnCancel);
+            this.tabPage2.Controls.Add(this.progressBar1);
+            this.tabPage2.Controls.Add(this.btnStart);
+            this.tabPage2.Controls.Add(this.label1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1038, 564);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn,
+            this.descriptionDataGridViewTextBoxColumn,
+            this.locationDataGridViewTextBoxColumn});
+            this.dataGridView1.Location = new System.Drawing.Point(46, 6);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(462, 371);
+            this.dataGridView1.TabIndex = 6;
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(316, 494);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 5;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(173, 439);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(151, 11);
+            this.progressBar1.TabIndex = 4;
+            // 
+            // btnStart
+            // 
+            this.btnStart.Location = new System.Drawing.Point(173, 494);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.TabIndex = 3;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(233, 411);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.panel1);
+            this.tabPage1.Controls.Add(this.panel2);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(1038, 564);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -55,18 +148,40 @@ namespace Sdl.Community.TMLifting
             this.panel1.Controls.Add(this.btnBrowse);
             this.panel1.Controls.Add(this.btnReindex);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 534);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel1.Location = new System.Drawing.Point(3, 525);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(786, 55);
-            this.panel1.TabIndex = 0;
+            this.panel1.Size = new System.Drawing.Size(1032, 36);
+            this.panel1.TabIndex = 2;
+            // 
+            // cleanBtn
+            // 
+            this.cleanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cleanBtn.Location = new System.Drawing.Point(850, 6);
+            this.cleanBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.cleanBtn.Name = "cleanBtn";
+            this.cleanBtn.Size = new System.Drawing.Size(50, 23);
+            this.cleanBtn.TabIndex = 6;
+            this.cleanBtn.Text = "Clean";
+            this.cleanBtn.UseVisualStyleBackColor = true;
+            // 
+            // cancelBtn
+            // 
+            this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelBtn.Location = new System.Drawing.Point(904, 6);
+            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(50, 23);
+            this.cancelBtn.TabIndex = 5;
+            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
             // 
             // upLiftCheckBox
             // 
             this.upLiftCheckBox.AutoSize = true;
-            this.upLiftCheckBox.Location = new System.Drawing.Point(449, 15);
+            this.upLiftCheckBox.Location = new System.Drawing.Point(299, 10);
+            this.upLiftCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.upLiftCheckBox.Name = "upLiftCheckBox";
-            this.upLiftCheckBox.Size = new System.Drawing.Size(65, 24);
+            this.upLiftCheckBox.Size = new System.Drawing.Size(50, 17);
             this.upLiftCheckBox.TabIndex = 4;
             this.upLiftCheckBox.Text = "Uplift";
             this.upLiftCheckBox.UseVisualStyleBackColor = true;
@@ -74,9 +189,10 @@ namespace Sdl.Community.TMLifting
             // reIndexCheckBox
             // 
             this.reIndexCheckBox.AutoSize = true;
-            this.reIndexCheckBox.Location = new System.Drawing.Point(320, 15);
+            this.reIndexCheckBox.Location = new System.Drawing.Point(213, 10);
+            this.reIndexCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.reIndexCheckBox.Name = "reIndexCheckBox";
-            this.reIndexCheckBox.Size = new System.Drawing.Size(93, 24);
+            this.reIndexCheckBox.Size = new System.Drawing.Size(69, 17);
             this.reIndexCheckBox.TabIndex = 3;
             this.reIndexCheckBox.Text = "Re-Index";
             this.reIndexCheckBox.UseVisualStyleBackColor = true;
@@ -84,56 +200,48 @@ namespace Sdl.Community.TMLifting
             // chkLoadStudioTMs
             // 
             this.chkLoadStudioTMs.AutoSize = true;
-            this.chkLoadStudioTMs.Location = new System.Drawing.Point(141, 17);
-            this.chkLoadStudioTMs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkLoadStudioTMs.Location = new System.Drawing.Point(94, 11);
             this.chkLoadStudioTMs.Name = "chkLoadStudioTMs";
-            this.chkLoadStudioTMs.Size = new System.Drawing.Size(148, 24);
+            this.chkLoadStudioTMs.Size = new System.Drawing.Size(107, 17);
             this.chkLoadStudioTMs.TabIndex = 2;
             this.chkLoadStudioTMs.Text = "Load Studio TMs";
             this.chkLoadStudioTMs.UseVisualStyleBackColor = true;
-            this.chkLoadStudioTMs.CheckedChanged += new System.EventHandler(this.chkLoadStudioTMs_CheckedChanged);
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(18, 9);
-            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnBrowse.Location = new System.Drawing.Point(12, 6);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(112, 35);
+            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "Browse ...";
             this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // btnReindex
             // 
             this.btnReindex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReindex.Location = new System.Drawing.Point(684, 9);
-            this.btnReindex.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnReindex.Location = new System.Drawing.Point(959, 6);
             this.btnReindex.Name = "btnReindex";
-            this.btnReindex.Size = new System.Drawing.Size(84, 35);
+            this.btnReindex.Size = new System.Drawing.Size(56, 23);
             this.btnReindex.TabIndex = 0;
             this.btnReindex.Text = "Process";
             this.btnReindex.UseVisualStyleBackColor = true;
-            this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
             // 
             // panel2
             // 
             this.panel2.Controls.Add(this.rtbStatus);
             this.panel2.Controls.Add(this.lstTms);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(786, 534);
-            this.panel2.TabIndex = 1;
+            this.panel2.Size = new System.Drawing.Size(1032, 558);
+            this.panel2.TabIndex = 3;
             // 
             // rtbStatus
             // 
             this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbStatus.Location = new System.Drawing.Point(0, 284);
-            this.rtbStatus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
             this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(786, 250);
+            this.rtbStatus.Size = new System.Drawing.Size(1032, 372);
             this.rtbStatus.TabIndex = 1;
             this.rtbStatus.Text = "";
             // 
@@ -142,66 +250,90 @@ namespace Sdl.Community.TMLifting
             this.lstTms.AllowDrop = true;
             this.lstTms.Dock = System.Windows.Forms.DockStyle.Top;
             this.lstTms.FormattingEnabled = true;
-            this.lstTms.ItemHeight = 20;
             this.lstTms.Location = new System.Drawing.Point(0, 0);
-            this.lstTms.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(786, 284);
+            this.lstTms.Size = new System.Drawing.Size(1032, 186);
             this.lstTms.TabIndex = 0;
-            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
-            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
             // 
-            // cancelBtn
+            // tabControl1
             // 
-            this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelBtn.Location = new System.Drawing.Point(602, 9);
-            this.cancelBtn.Name = "cancelBtn";
-            this.cancelBtn.Size = new System.Drawing.Size(75, 35);
-            this.cancelBtn.TabIndex = 5;
-            this.cancelBtn.Text = "Cancel";
-            this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(3, 3);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(1046, 590);
+            this.tabControl1.TabIndex = 0;
             // 
-            // cleanBtn
+            // itemsBindingSource1
             // 
-            this.cleanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cleanBtn.Location = new System.Drawing.Point(520, 9);
-            this.cleanBtn.Name = "cleanBtn";
-            this.cleanBtn.Size = new System.Drawing.Size(75, 35);
-            this.cleanBtn.TabIndex = 6;
-            this.cleanBtn.Text = "Clean";
-            this.cleanBtn.UseVisualStyleBackColor = true;
-            this.cleanBtn.Click += new System.EventHandler(this.cleanBtn_Click);
+            this.itemsBindingSource1.DataMember = "Items";
             // 
-            // ReindexForm
+            // locationDataGridViewTextBoxColumn
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // TMLiftingForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "ReindexForm";
-            this.Size = new System.Drawing.Size(786, 589);
+            this.Controls.Add(this.tabControl1);
+            this.Name = "TMLiftingForm";
+            this.Size = new System.Drawing.Size(1140, 596);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.tabPage1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
+            this.tabControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource1)).EndInit();
             this.ResumeLayout(false);
 
         }
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnReindex;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ListBox lstTms;
-        private System.Windows.Forms.CheckBox chkLoadStudioTMs;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.RichTextBox rtbStatus;
-        private System.Windows.Forms.CheckBox upLiftCheckBox;
-        private System.Windows.Forms.CheckBox reIndexCheckBox;
-        private System.Windows.Forms.Button cleanBtn;
-        private System.Windows.Forms.Button cancelBtn;
-    }
+		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Button cleanBtn;
+		private System.Windows.Forms.Button cancelBtn;
+		private System.Windows.Forms.CheckBox upLiftCheckBox;
+		private System.Windows.Forms.CheckBox reIndexCheckBox;
+		private System.Windows.Forms.CheckBox chkLoadStudioTMs;
+		private System.Windows.Forms.Button btnBrowse;
+		private System.Windows.Forms.Button btnReindex;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.RichTextBox rtbStatus;
+		private System.Windows.Forms.ListBox lstTms;
+		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Button btnStart;
+		private System.Windows.Forms.ProgressBar progressBar1;
+		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
+		private System.Windows.Forms.BindingSource itemsBindingSource1;
+	}
 }
 
