@@ -63,6 +63,34 @@ namespace Sdl.Community.xmlReader {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        public static System.Drawing.Icon _default {
+            get {
+                object obj = ResourceManager.GetObject("_default", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to INSTRUCTIONS.
+        /// </summary>
+        public static string Instruction_Title {
+            get {
+                return ResourceManager.GetString("Instruction_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your raport..
+        /// </summary>
+        public static string Instructions_Message {
+            get {
+                return ResourceManager.GetString("Instructions_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         public static System.Drawing.Icon logo {
             get {
                 object obj = ResourceManager.GetObject("logo", resourceCulture);
@@ -76,6 +104,15 @@ namespace Sdl.Community.xmlReader {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reports.
+        /// </summary>
+        public static string Reports_Title {
+            get {
+                return ResourceManager.GetString("Reports_Title", resourceCulture);
             }
         }
     }

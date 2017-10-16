@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.xmlReader.View;
 
 namespace Sdl.Community.xmlReader
 {
@@ -19,7 +19,9 @@ namespace Sdl.Community.xmlReader
     {
         protected override void Execute()
         {
-            MessageBox.Show(@"hello!", "info");
+            var xmlReaderForm = new XmlReaderForm();
+            var parent = xmlReaderForm.ParentForm;
+            xmlReaderForm.ShowDialog(parent);
         }
     }
 }
