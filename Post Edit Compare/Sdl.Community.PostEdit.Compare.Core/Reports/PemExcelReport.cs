@@ -30,9 +30,12 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
 		private static void FillTableWithAnalyseResults(ExcelPackage xlPackage, ExcelWorksheet worksheet, List<PEMModel> analyseResults)
 		{
-			var test = worksheet.Cells;
-			var select = test.Value;
-			var analysisBandCell = worksheet.Cells.Last(c => c.Value.Equals(Constants.AnalysisBand));
+		
+			//var analysisBandCell = worksheet.Cells.Last(c => c.Value.Equals(Constants.AnalysisBand));
+			var analysisBandCell =
+								(from cell in worksheet.Cells
+								 where cell.Value?.ToString() == Constants.AnalysisBand
+								 select cell).Last();
 			var rowIndex = analysisBandCell.Start.Row + 1;
 			var columnIndex = analysisBandCell.Start.Column + 1;
 			var matchValuesTest = new List<string>();
@@ -53,7 +56,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			xlPackage.Save();
 		}
 
-		private static decimal? GetMatchingResultValue(string matchValue,string typeValue, List<PEMModel> analyseResults)
+		public static decimal? GetMatchingResultValue(string matchValue,string typeValue, List<PEMModel> analyseResults)
 		{
 			var analyseResult = analyseResults.FirstOrDefault(m => (m.AnalyseResult.Item1.Equals(matchValue))
 			&& (m.AnalyseResult.Item2.Equals(typeValue)));
@@ -65,7 +68,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			return null;
 		}
 
-		private static List<string> GetFirstColumnValues()
+		public static List<string> GetFirstColumnValues()
 		{
 			var columnValues = new List<string>
 			{
@@ -80,7 +83,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			return columnValues;
 		}
 
-		private static List<string> GetTableHeaderValues()
+		public static List<string> GetTableHeaderValues()
 		{
 			var headerValues = new List<string>
 			{
