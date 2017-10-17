@@ -148,7 +148,7 @@ namespace Sdl.Community.PostEdit.Versions
 				postEditCompare.SetExcelSheetName(normalizedName);
 				var versionDetails = Helper.CreateVersionDetails(project);
 
-				var filesPairs = Helper.GetPairedFiles(versionDetails);
+				var filesPairs = Helper.GetPairedFiles(versionDetails,project);
 
 				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
 				postEditCompare.CreateComparisonReport(cancel, comparer);
