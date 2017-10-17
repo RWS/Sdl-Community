@@ -31,13 +31,16 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlReaderForm));
             this.groupBoxXmlFiles = new System.Windows.Forms.GroupBox();
-            this.treeViewXmlFiles = new System.Windows.Forms.TreeView();
             this.imageListXmlFiles = new System.Windows.Forms.ImageList(this.components);
             this.labelReports = new System.Windows.Forms.Label();
             this.textBoxInstructions = new System.Windows.Forms.TextBox();
             this.buttonConvertToExcel = new System.Windows.Forms.Button();
             this.labelInstructions = new System.Windows.Forms.Label();
+            this.contextMenuStripMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeViewXmlFiles = new Sdl.Community.xmlReader.View.TreeViewMultipleSelection();
             this.groupBoxXmlFiles.SuspendLayout();
+            this.contextMenuStripMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxXmlFiles
@@ -50,26 +53,12 @@
             this.groupBoxXmlFiles.TabStop = false;
             this.groupBoxXmlFiles.Text = "  Group by languages  ";
             // 
-            // treeViewXmlFiles
-            // 
-            this.treeViewXmlFiles.AllowDrop = true;
-            this.treeViewXmlFiles.BackColor = System.Drawing.SystemColors.Control;
-            this.treeViewXmlFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.treeViewXmlFiles.ImageIndex = 0;
-            this.treeViewXmlFiles.ImageList = this.imageListXmlFiles;
-            this.treeViewXmlFiles.Location = new System.Drawing.Point(7, 20);
-            this.treeViewXmlFiles.Name = "treeViewXmlFiles";
-            this.treeViewXmlFiles.SelectedImageIndex = 0;
-            this.treeViewXmlFiles.Size = new System.Drawing.Size(232, 207);
-            this.treeViewXmlFiles.TabIndex = 0;
-            this.treeViewXmlFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragDrop);
-            this.treeViewXmlFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragEnter);
-            // 
             // imageListXmlFiles
             // 
             this.imageListXmlFiles.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListXmlFiles.ImageStream")));
             this.imageListXmlFiles.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListXmlFiles.Images.SetKeyName(0, "default.ico");
+            this.imageListXmlFiles.Images.SetKeyName(1, "1033.bmp");
             // 
             // labelReports
             // 
@@ -114,6 +103,37 @@
             this.labelInstructions.TabIndex = 4;
             this.labelInstructions.Text = "label1";
             // 
+            // contextMenuStripMenu
+            // 
+            this.contextMenuStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+            this.contextMenuStripMenu.Name = "contextMenuStripMenu";
+            this.contextMenuStripMenu.Size = new System.Drawing.Size(108, 26);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // treeViewXmlFiles
+            // 
+            this.treeViewXmlFiles.AllowDrop = true;
+            this.treeViewXmlFiles.BackColor = System.Drawing.SystemColors.Control;
+            this.treeViewXmlFiles.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.treeViewXmlFiles.ContextMenuStrip = this.contextMenuStripMenu;
+            this.treeViewXmlFiles.ImageIndex = 0;
+            this.treeViewXmlFiles.ImageList = this.imageListXmlFiles;
+            this.treeViewXmlFiles.Location = new System.Drawing.Point(6, 19);
+            this.treeViewXmlFiles.Name = "treeViewXmlFiles";
+            this.treeViewXmlFiles.SelectedImageIndex = 0;
+            this.treeViewXmlFiles.SelectedNodes = ((System.Collections.Generic.List<System.Windows.Forms.TreeNode>)(resources.GetObject("treeViewXmlFiles.SelectedNodes")));
+            this.treeViewXmlFiles.Size = new System.Drawing.Size(233, 208);
+            this.treeViewXmlFiles.TabIndex = 0;
+            this.treeViewXmlFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragDrop);
+            this.treeViewXmlFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragEnter);
+            // 
             // XmlReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -131,6 +151,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "XML Reader";
             this.groupBoxXmlFiles.ResumeLayout(false);
+            this.contextMenuStripMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -139,11 +160,13 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBoxXmlFiles;
-        private System.Windows.Forms.TreeView treeViewXmlFiles;
         private System.Windows.Forms.ImageList imageListXmlFiles;
         private System.Windows.Forms.Label labelReports;
         private System.Windows.Forms.TextBox textBoxInstructions;
         private System.Windows.Forms.Button buttonConvertToExcel;
         private System.Windows.Forms.Label labelInstructions;
+        private TreeViewMultipleSelection treeViewXmlFiles;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripMenu;
+        private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
     }
 }

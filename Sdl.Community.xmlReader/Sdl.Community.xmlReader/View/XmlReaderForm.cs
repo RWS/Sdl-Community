@@ -20,6 +20,7 @@ namespace Sdl.Community.xmlReader.View
             buttonConvertToExcel.BackColor = Color.FromArgb(80, 120, 200);
 
             treeViewXmlFiles.ItemHeight = 20;
+            
         }
 
         private int FindNodeIndexByLanguageCode(string langCode)
@@ -53,6 +54,14 @@ namespace Sdl.Community.xmlReader.View
             return ((fileName.Split('_')[1]).ToString()).Substring(0, 5);
         }
 
+        private void treeViewXmlFiles_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.All;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
         private void treeViewXmlFiles_DragDrop(object sender, DragEventArgs e)
         {
             string[] xmlFilePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
@@ -64,19 +73,26 @@ namespace Sdl.Community.xmlReader.View
                 var targetlangCode = FindTargetLanguageCode(fileName);
 
                 var indexNodeByLanguageCode = FindNodeIndexByLanguageCode(targetlangCode);
+                string xmlFileNameIntoTreeView;
                 if (indexNodeByLanguageCode != 0)
                 {
-                    treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Add("_", fileName, 10000);
+                    xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count + 1) + ")";
+                    treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Add("0", xmlFileNameIntoTreeView, 0);
                 }
                 else
                 {
                     if (treeViewXmlFiles.Nodes.Count >= 1 && treeViewXmlFiles.Nodes[0].Text.ToString().Equals(targetlangCode))
-                        treeViewXmlFiles.Nodes[0].Nodes.Add("_", fileName, 10000);
+                    {
+                        xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count + 1) + ")";
+                        treeViewXmlFiles.Nodes[0].Nodes.Add("0", xmlFileNameIntoTreeView, 0);
+                    }
                     else
                     {
-                        treeViewXmlFiles.Nodes.Add(targetlangCode);
+                        treeViewXmlFiles.Nodes.Add("1", targetlangCode, 1, 1);
                         indexNodeByLanguageCode = FindNodeIndexByLanguageCode(targetlangCode);
-                        treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Add("_", fileName, 10000);
+                        xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count + 1) + ")";
+                        xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count) + ")";
+                        treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Add("0", xmlFileNameIntoTreeView, 0);
                     }
                 }
             }
@@ -86,12 +102,13 @@ namespace Sdl.Community.xmlReader.View
             treeViewXmlFiles.ShowRootLines = false;
         }
 
-        private void treeViewXmlFiles_DragEnter(object sender, DragEventArgs e)
+        private void deleteToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.All;
-            else
-                e.Effect = DragDropEffects.None;
+            var nodes = treeViewXmlFiles.SelectedNodes;
+            foreach (TreeNode node in nodes)
+            {
+                node.Remove();
+            }
         }
     }
 }
