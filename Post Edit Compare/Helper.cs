@@ -68,33 +68,53 @@ namespace Sdl.Community.PostEdit.Versions
 			return dateTime;
 		}
 
-		public static List<PairedFiles.PairedFile> GetPairedFiles(VersionDetails versionDetails)
+		public static List<PairedFiles.PairedFile> GetPairedFiles(VersionDetails versionDetails,Project project)
 		{
 			var originalFiles = new List<string>();
 			var modifiedFiles = new List<string>();
 
-			//get target files 
-			foreach (var folder in versionDetails.TargetLanguages)
-			{
-				var originalFilesPath = Path.Combine(versionDetails.OriginalFileLocation,
-					folder.id);
-				originalFiles.AddRange(GetFilesFromFolder(originalFilesPath));
+			var pathToLanguageFolder = Path.Combine(versionDetails.OriginalFileLocation, versionDetails.SourceLanguage.id);
+			if (Directory.Exists(pathToLanguageFolder)){
+				foreach (var folder in versionDetails.TargetLanguages)
+				{
+					var originalFilesPath = Path.Combine(versionDetails.OriginalFileLocation,
+						folder.id);
+					originalFiles.AddRange(GetFilesFromFolder(originalFilesPath));
 
-				var modifiedFilesPath = Path.Combine(versionDetails.ModifiedFileLocation,
-					folder.id);
-				modifiedFiles.AddRange(GetFilesFromFolder(modifiedFilesPath));
+					var modifiedFilesPath = Path.Combine(versionDetails.ModifiedFileLocation,
+						folder.id);
+					modifiedFiles.AddRange(GetFilesFromFolder(modifiedFilesPath));
 
-			}
+				}
 
-			//get files from source folder for initial files
-			var sourceOriginalPathFolder = Path.Combine(versionDetails.OriginalFileLocation,
+				//get files from source folder for initial files
+				var sourceOriginalPathFolder = Path.Combine(versionDetails.OriginalFileLocation,
+					versionDetails.SourceLanguage.id);
+				originalFiles.AddRange(GetFilesFromFolder(sourceOriginalPathFolder));
+
+				//get files from source folder for modified files
+				var modifiedOriginalPathFolder = Path.Combine(versionDetails.ModifiedFileLocation,
 				versionDetails.SourceLanguage.id);
-			originalFiles.AddRange(GetFilesFromFolder(sourceOriginalPathFolder));
+				modifiedFiles.AddRange(GetFilesFromFolder(modifiedOriginalPathFolder));
+			}
+			else
+			{
+				// that means the project is created as "Translate single document" - only one target language is available
 
-			//get files from source folder for modified files
-			var modifiedOriginalPathFolder = Path.Combine(versionDetails.ModifiedFileLocation,
-			versionDetails.SourceLanguage.id);
-			modifiedFiles.AddRange(GetFilesFromFolder(modifiedOriginalPathFolder));
+				var originalFile = Directory.GetFiles(versionDetails.OriginalFileLocation, "*.sdlxliff").FirstOrDefault();
+				if (!string.IsNullOrEmpty(originalFile))
+				{
+					originalFiles.Add(originalFile);
+				}
+
+				var updatedFile = Directory.GetFiles(versionDetails.ModifiedFileLocation, "*.sdlxliff").FirstOrDefault();
+				if (!string.IsNullOrEmpty(updatedFile))
+				{
+					modifiedFiles.Add(updatedFile);
+				}
+			}
+			
+	
 
 
 			var pairedFiles = CreatePairedFiles(originalFiles, modifiedFiles);
@@ -139,6 +159,11 @@ namespace Sdl.Community.PostEdit.Versions
 				if (pairFile != null)
 				{
 					pairFile.UpdatedFilePath = fileInfo;
+				}
+				else
+				{
+					//this is for the case when project is created with "Translate as single document"
+					pairedFiles[0].UpdatedFilePath = fileInfo;
 				}
 
 			}
