@@ -5,4 +5,7 @@
   <Description>Sdl.Community.xmlReader</Description>
   <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <Include>
+    <File>Sdl.Community.Toolkit.Core.dll</File>
+  </Include>
 </PluginPackage>

@@ -125,7 +125,7 @@
     <value>xmlReader</value>
   </data>
   <data name="Instructions_Message" xml:space="preserve">
-    <value>Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your raport.</value>
+    <value>Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report.</value>
   </data>
   <data name="Instruction_Title" xml:space="preserve">
     <value>INSTRUCTIONS</value>

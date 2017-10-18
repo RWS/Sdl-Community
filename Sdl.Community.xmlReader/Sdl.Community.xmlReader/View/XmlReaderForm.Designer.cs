@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.xmlReader.View
+﻿namespace Sdl.Community.XmlReader.View
 {
     partial class XmlReaderForm
     {
@@ -31,34 +31,49 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlReaderForm));
             this.groupBoxXmlFiles = new System.Windows.Forms.GroupBox();
+            this.contextMenuStripMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageListXmlFiles = new System.Windows.Forms.ImageList(this.components);
             this.labelReports = new System.Windows.Forms.Label();
             this.textBoxInstructions = new System.Windows.Forms.TextBox();
             this.buttonConvertToExcel = new System.Windows.Forms.Button();
             this.labelInstructions = new System.Windows.Forms.Label();
-            this.contextMenuStripMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.treeViewXmlFiles = new Sdl.Community.xmlReader.View.TreeViewMultipleSelection();
+            this.buttonClean = new System.Windows.Forms.Button();
+            this.treeViewXmlFiles = new Sdl.Community.XmlReader.View.TreeViewMultipleSelection();
             this.groupBoxXmlFiles.SuspendLayout();
             this.contextMenuStripMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxXmlFiles
             // 
+            this.groupBoxXmlFiles.Controls.Add(this.buttonClean);
             this.groupBoxXmlFiles.Controls.Add(this.treeViewXmlFiles);
             this.groupBoxXmlFiles.Location = new System.Drawing.Point(12, 30);
             this.groupBoxXmlFiles.Name = "groupBoxXmlFiles";
-            this.groupBoxXmlFiles.Size = new System.Drawing.Size(245, 233);
+            this.groupBoxXmlFiles.Size = new System.Drawing.Size(245, 291);
             this.groupBoxXmlFiles.TabIndex = 0;
             this.groupBoxXmlFiles.TabStop = false;
             this.groupBoxXmlFiles.Text = "  Group by languages  ";
+            // 
+            // contextMenuStripMenu
+            // 
+            this.contextMenuStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
+            this.contextMenuStripMenu.Name = "contextMenuStripMenu";
+            this.contextMenuStripMenu.Size = new System.Drawing.Size(108, 26);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
+            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
             // 
             // imageListXmlFiles
             // 
             this.imageListXmlFiles.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListXmlFiles.ImageStream")));
             this.imageListXmlFiles.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListXmlFiles.Images.SetKeyName(0, "default.ico");
-            this.imageListXmlFiles.Images.SetKeyName(1, "1033.bmp");
             // 
             // labelReports
             // 
@@ -74,10 +89,11 @@
             // 
             this.textBoxInstructions.BackColor = System.Drawing.SystemColors.Control;
             this.textBoxInstructions.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.textBoxInstructions.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.textBoxInstructions.Location = new System.Drawing.Point(270, 38);
             this.textBoxInstructions.Multiline = true;
             this.textBoxInstructions.Name = "textBoxInstructions";
-            this.textBoxInstructions.Size = new System.Drawing.Size(62, 146);
+            this.textBoxInstructions.Size = new System.Drawing.Size(79, 203);
             this.textBoxInstructions.TabIndex = 2;
             // 
             // buttonConvertToExcel
@@ -86,7 +102,7 @@
             this.buttonConvertToExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonConvertToExcel.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
             this.buttonConvertToExcel.ForeColor = System.Drawing.SystemColors.Window;
-            this.buttonConvertToExcel.Location = new System.Drawing.Point(273, 212);
+            this.buttonConvertToExcel.Location = new System.Drawing.Point(273, 270);
             this.buttonConvertToExcel.Name = "buttonConvertToExcel";
             this.buttonConvertToExcel.Size = new System.Drawing.Size(109, 45);
             this.buttonConvertToExcel.TabIndex = 3;
@@ -103,19 +119,19 @@
             this.labelInstructions.TabIndex = 4;
             this.labelInstructions.Text = "label1";
             // 
-            // contextMenuStripMenu
+            // buttonClean
             // 
-            this.contextMenuStripMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteToolStripMenuItem});
-            this.contextMenuStripMenu.Name = "contextMenuStripMenu";
-            this.contextMenuStripMenu.Size = new System.Drawing.Size(108, 26);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            this.buttonClean.FlatAppearance.BorderSize = 0;
+            this.buttonClean.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClean.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.buttonClean.ForeColor = System.Drawing.SystemColors.Window;
+            this.buttonClean.Location = new System.Drawing.Point(157, 15);
+            this.buttonClean.Name = "buttonClean";
+            this.buttonClean.Size = new System.Drawing.Size(82, 23);
+            this.buttonClean.TabIndex = 1;
+            this.buttonClean.Text = "Clean all";
+            this.buttonClean.UseVisualStyleBackColor = true;
+            this.buttonClean.Click += new System.EventHandler(this.buttonClean_Click);
             // 
             // treeViewXmlFiles
             // 
@@ -125,11 +141,11 @@
             this.treeViewXmlFiles.ContextMenuStrip = this.contextMenuStripMenu;
             this.treeViewXmlFiles.ImageIndex = 0;
             this.treeViewXmlFiles.ImageList = this.imageListXmlFiles;
-            this.treeViewXmlFiles.Location = new System.Drawing.Point(6, 19);
+            this.treeViewXmlFiles.Location = new System.Drawing.Point(6, 42);
             this.treeViewXmlFiles.Name = "treeViewXmlFiles";
             this.treeViewXmlFiles.SelectedImageIndex = 0;
             this.treeViewXmlFiles.SelectedNodes = ((System.Collections.Generic.List<System.Windows.Forms.TreeNode>)(resources.GetObject("treeViewXmlFiles.SelectedNodes")));
-            this.treeViewXmlFiles.Size = new System.Drawing.Size(233, 208);
+            this.treeViewXmlFiles.Size = new System.Drawing.Size(233, 243);
             this.treeViewXmlFiles.TabIndex = 0;
             this.treeViewXmlFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragDrop);
             this.treeViewXmlFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.treeViewXmlFiles_DragEnter);
@@ -138,7 +154,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 275);
+            this.ClientSize = new System.Drawing.Size(406, 333);
             this.Controls.Add(this.labelInstructions);
             this.Controls.Add(this.buttonConvertToExcel);
             this.Controls.Add(this.textBoxInstructions);
@@ -168,5 +184,6 @@
         private TreeViewMultipleSelection treeViewXmlFiles;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripMenu;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.Button buttonClean;
     }
 }

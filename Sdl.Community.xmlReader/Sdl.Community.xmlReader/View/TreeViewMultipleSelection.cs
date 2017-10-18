@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sdl.Community.xmlReader.View
+namespace Sdl.Community.XmlReader.View
 {
     public class TreeViewMultipleSelection : System.Windows.Forms.TreeView
     {
@@ -15,7 +12,6 @@ namespace Sdl.Community.xmlReader.View
             m_SelectedNodes = new List<TreeNode>();
             base.SelectedNode = null;
         }
-        #region Selected Node(s) Properties
 
         private List<TreeNode> m_SelectedNodes = null;
         public List<TreeNode> SelectedNodes
@@ -37,8 +33,6 @@ namespace Sdl.Community.xmlReader.View
             }
         }
 
-        // Note we use the new keyword to Hide the native treeview's 
-        // SelectedNode property.
         private TreeNode m_SelectedNode;
         public new TreeNode SelectedNode
         {
@@ -55,8 +49,6 @@ namespace Sdl.Community.xmlReader.View
                 }
             }
         }
-
-        #endregion
 
         protected override void OnGotFocus(EventArgs e)
         {

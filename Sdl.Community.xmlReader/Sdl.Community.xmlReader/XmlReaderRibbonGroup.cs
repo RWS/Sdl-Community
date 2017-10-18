@@ -3,9 +3,9 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Community.xmlReader.View;
+using Sdl.Community.XmlReader.View;
 
-namespace Sdl.Community.xmlReader
+namespace Sdl.Community.XmlReader
 {
     [RibbonGroup("Sdl.Community.xmlReaderRibbonButton", Name = "", ContextByType = typeof(ProjectsController))]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
