@@ -17,6 +17,16 @@ namespace Sdl.Community.DeepLMTProvider
 			
             InitializeComponent();
 			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
+			contentInformationLabl.Text = "DeepL API is a paid sutomated translation service. To use this service, set up a DeepL account and create a API Key.";
+			foreach (Control control in contentLayoutPanel.Controls)
+			{
+			
+				var index = mainTableLayout.GetRow(control);
+				if (index != 1)
+				{
+					mainTableLayout.SetColumnSpan(control, 2);
+				}
+			}
 		}
 
 		private void MainTableLayout_CellPaint(object sender, TableLayoutCellPaintEventArgs e)

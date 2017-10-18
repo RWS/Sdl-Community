@@ -33,9 +33,16 @@
             this.titlePanel = new System.Windows.Forms.Panel();
             this.subtitleLabel = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
+            this.contentLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.contentInformationLabl = new System.Windows.Forms.Label();
+            this.apiKeyLbl = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.descriptionLbl = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.titlePanel.SuspendLayout();
+            this.contentLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTableLayout
@@ -43,14 +50,14 @@
             this.mainTableLayout.AutoSize = true;
             this.mainTableLayout.ColumnCount = 1;
             this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.mainTableLayout.Controls.Add(this.headerLayoutPanel, 0, 0);
+            this.mainTableLayout.Controls.Add(this.contentLayoutPanel, 0, 1);
             this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayout.Name = "mainTableLayout";
             this.mainTableLayout.RowCount = 3;
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.mainTableLayout.Size = new System.Drawing.Size(284, 261);
             this.mainTableLayout.TabIndex = 0;
@@ -102,6 +109,81 @@
             this.titleLabel.TabIndex = 0;
             this.titleLabel.Text = "DeepL Platform";
             // 
+            // contentLayoutPanel
+            // 
+            this.contentLayoutPanel.ColumnCount = 2;
+            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentLayoutPanel.Controls.Add(this.contentInformationLabl, 0, 0);
+            this.contentLayoutPanel.Controls.Add(this.apiKeyLbl, 0, 1);
+            this.contentLayoutPanel.Controls.Add(this.textBox1, 1, 1);
+            this.contentLayoutPanel.Controls.Add(this.descriptionLbl, 0, 2);
+            this.contentLayoutPanel.Controls.Add(this.linkLabel1, 0, 3);
+            this.contentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentLayoutPanel.Location = new System.Drawing.Point(3, 123);
+            this.contentLayoutPanel.Name = "contentLayoutPanel";
+            this.contentLayoutPanel.RowCount = 4;
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.contentLayoutPanel.Size = new System.Drawing.Size(278, 114);
+            this.contentLayoutPanel.TabIndex = 1;
+            // 
+            // contentInformationLabl
+            // 
+            this.contentInformationLabl.AutoSize = true;
+            this.contentInformationLabl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.contentInformationLabl.Location = new System.Drawing.Point(9, 2);
+            this.contentInformationLabl.Name = "contentInformationLabl";
+            this.contentInformationLabl.Size = new System.Drawing.Size(51, 20);
+            this.contentInformationLabl.TabIndex = 0;
+            // 
+            // apiKeyLbl
+            // 
+            this.apiKeyLbl.AutoSize = true;
+            this.apiKeyLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.apiKeyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.apiKeyLbl.Location = new System.Drawing.Point(3, 26);
+            this.apiKeyLbl.Name = "apiKeyLbl";
+            this.apiKeyLbl.Size = new System.Drawing.Size(51, 20);
+            this.apiKeyLbl.TabIndex = 1;
+            this.apiKeyLbl.Text = "API Key*";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.textBox1.Location = new System.Drawing.Point(167, 23);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 26);
+            this.textBox1.TabIndex = 2;
+            // 
+            // descriptionLbl
+            // 
+            this.descriptionLbl.AutoSize = true;
+            this.descriptionLbl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.descriptionLbl.Location = new System.Drawing.Point(10, 42);
+            this.descriptionLbl.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.descriptionLbl.Name = "descriptionLbl";
+            this.descriptionLbl.Size = new System.Drawing.Size(51, 20);
+            this.descriptionLbl.TabIndex = 3;
+            this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkLabel1.Location = new System.Drawing.Point(13, 82);
+            this.linkLabel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(80, 20);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
+            // 
             // DeepLMtDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -119,6 +201,8 @@
             this.headerLayoutPanel.ResumeLayout(false);
             this.titlePanel.ResumeLayout(false);
             this.titlePanel.PerformLayout();
+            this.contentLayoutPanel.ResumeLayout(false);
+            this.contentLayoutPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -131,5 +215,11 @@
 		private System.Windows.Forms.Panel titlePanel;
 		private System.Windows.Forms.Label titleLabel;
 		private System.Windows.Forms.Label subtitleLabel;
+		private System.Windows.Forms.TableLayoutPanel contentLayoutPanel;
+		private System.Windows.Forms.Label contentInformationLabl;
+		private System.Windows.Forms.Label apiKeyLbl;
+		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.Label descriptionLbl;
+		private System.Windows.Forms.LinkLabel linkLabel1;
 	}
 }
