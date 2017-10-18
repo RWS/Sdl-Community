@@ -25,6 +25,7 @@ namespace Sdl.Community.DeepLMTProvider
         {
             var dialog = new DeepLMtDialog();
             var provider = new DeepLMtTranslationProvider();
+			dialog.ShowDialog();
             return new ITranslationProvider[] { provider };
         }
 

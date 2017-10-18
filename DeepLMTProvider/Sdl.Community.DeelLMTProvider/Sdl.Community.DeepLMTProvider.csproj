@@ -82,6 +82,9 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DeepLMtDialog.resx">
+      <DependentUpon>DeepLMtDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>
