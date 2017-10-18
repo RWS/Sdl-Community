@@ -31,8 +31,8 @@
             this.mainTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.headerLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.titlePanel = new System.Windows.Forms.Panel();
-            this.titleLabel = new System.Windows.Forms.Label();
             this.subtitleLabel = new System.Windows.Forms.Label();
+            this.titleLabel = new System.Windows.Forms.Label();
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.titlePanel.SuspendLayout();
@@ -58,7 +58,7 @@
             // headerLayoutPanel
             // 
             this.headerLayoutPanel.AutoSize = true;
-            this.headerLayoutPanel.BackColor = System.Drawing.SystemColors.Control;
+            this.headerLayoutPanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.headerLayoutPanel.ColumnCount = 2;
             this.headerLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.headerLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
@@ -73,7 +73,7 @@
             // 
             // titlePanel
             // 
-            this.titlePanel.BackColor = System.Drawing.SystemColors.Control;
+            this.titlePanel.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.titlePanel.Controls.Add(this.subtitleLabel);
             this.titlePanel.Controls.Add(this.titleLabel);
             this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -81,16 +81,6 @@
             this.titlePanel.Name = "titlePanel";
             this.titlePanel.Size = new System.Drawing.Size(188, 108);
             this.titlePanel.TabIndex = 0;
-            // 
-            // titleLabel
-            // 
-            this.titleLabel.AutoSize = true;
-            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(7, 19);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(107, 15);
-            this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "DeepL Platform";
             // 
             // subtitleLabel
             // 
@@ -101,6 +91,16 @@
             this.subtitleLabel.Size = new System.Drawing.Size(290, 15);
             this.subtitleLabel.TabIndex = 1;
             this.subtitleLabel.Text = "Specify yout DeepL Translation API account settings.";
+            // 
+            // titleLabel
+            // 
+            this.titleLabel.AutoSize = true;
+            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.titleLabel.Location = new System.Drawing.Point(7, 19);
+            this.titleLabel.Name = "titleLabel";
+            this.titleLabel.Size = new System.Drawing.Size(107, 15);
+            this.titleLabel.TabIndex = 0;
+            this.titleLabel.Text = "DeepL Platform";
             // 
             // DeepLMtDialog
             // 
@@ -113,7 +113,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add Connection to DeepL Translation API";
-            this.TransparencyKey = System.Drawing.Color.White;
+            this.TransparencyKey = System.Drawing.Color.Gray;
             this.mainTableLayout.ResumeLayout(false);
             this.mainTableLayout.PerformLayout();
             this.headerLayoutPanel.ResumeLayout(false);

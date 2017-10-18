@@ -14,7 +14,17 @@ namespace Sdl.Community.DeepLMTProvider
     {
         public DeepLMtDialog()
         {
+			
             InitializeComponent();
-        }
-    }
+			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
+		}
+
+		private void MainTableLayout_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
+		{
+			if (e.Row == 0)
+			{
+				e.Graphics.FillRectangle(Brushes.White, e.CellBounds);
+			}
+		}
+	}
 }
