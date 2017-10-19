@@ -62,9 +62,9 @@
             this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayout.Name = "mainTableLayout";
             this.mainTableLayout.RowCount = 3;
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
-            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
+            this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.mainTableLayout.Size = new System.Drawing.Size(656, 374);
             this.mainTableLayout.TabIndex = 0;
             // 
@@ -81,7 +81,7 @@
             this.headerLayoutPanel.Name = "headerLayoutPanel";
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.headerLayoutPanel.Size = new System.Drawing.Size(646, 74);
+            this.headerLayoutPanel.Size = new System.Drawing.Size(646, 67);
             this.headerLayoutPanel.TabIndex = 0;
             // 
             // titlePanel
@@ -92,14 +92,14 @@
             this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titlePanel.Location = new System.Drawing.Point(3, 3);
             this.titlePanel.Name = "titlePanel";
-            this.titlePanel.Size = new System.Drawing.Size(446, 68);
+            this.titlePanel.Size = new System.Drawing.Size(446, 61);
             this.titlePanel.TabIndex = 0;
             // 
             // subtitleLabel
             // 
             this.subtitleLabel.AutoSize = true;
             this.subtitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subtitleLabel.Location = new System.Drawing.Point(32, 52);
+            this.subtitleLabel.Location = new System.Drawing.Point(19, 34);
             this.subtitleLabel.Name = "subtitleLabel";
             this.subtitleLabel.Size = new System.Drawing.Size(290, 15);
             this.subtitleLabel.TabIndex = 1;
@@ -126,14 +126,14 @@
             this.contentLayoutPanel.Controls.Add(this.descriptionLbl, 0, 2);
             this.contentLayoutPanel.Controls.Add(this.linkLabel1, 0, 3);
             this.contentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentLayoutPanel.Location = new System.Drawing.Point(5, 87);
+            this.contentLayoutPanel.Location = new System.Drawing.Point(5, 80);
             this.contentLayoutPanel.Name = "contentLayoutPanel";
             this.contentLayoutPanel.RowCount = 4;
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.contentLayoutPanel.Size = new System.Drawing.Size(646, 94);
+            this.contentLayoutPanel.Size = new System.Drawing.Size(646, 231);
             this.contentLayoutPanel.TabIndex = 1;
             // 
             // contentInformationLabl
@@ -188,7 +188,7 @@
             this.linkLabel1.Location = new System.Drawing.Point(3, 119);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(123, 26);
+            this.linkLabel1.Size = new System.Drawing.Size(123, 112);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
@@ -199,16 +199,16 @@
             this.buttonsPanel.Controls.Add(this.cancelBtn);
             this.buttonsPanel.Controls.Add(this.okButton);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 189);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 319);
             this.buttonsPanel.Name = "buttonsPanel";
-            this.buttonsPanel.Size = new System.Drawing.Size(646, 180);
+            this.buttonsPanel.Size = new System.Drawing.Size(646, 50);
             this.buttonsPanel.TabIndex = 2;
             // 
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelBtn.Location = new System.Drawing.Point(559, 143);
+            this.cancelBtn.Location = new System.Drawing.Point(559, 13);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(80, 30);
             this.cancelBtn.TabIndex = 1;
@@ -219,7 +219,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.okButton.Location = new System.Drawing.Point(471, 143);
+            this.okButton.Location = new System.Drawing.Point(471, 13);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(82, 30);
             this.okButton.TabIndex = 0;
