@@ -13,7 +13,19 @@ namespace Sdl.Community.DeepLMTProvider
     {
 
 		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-        public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deelp");
+
+		public DeepLTranslationOptions Options
+		{
+			get;
+			set;
+		}
+
+		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		{
+			Options = options;
+		}
+
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deelp");
 
         public Uri Uri => new TranslationProviderUriBuilder(ListTranslationProviderScheme).Uri;
 

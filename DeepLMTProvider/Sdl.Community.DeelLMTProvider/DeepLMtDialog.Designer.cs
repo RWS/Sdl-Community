@@ -37,7 +37,7 @@
             this.contentLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.contentInformationLabl = new System.Windows.Forms.Label();
             this.apiKeyLbl = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.apiKey = new System.Windows.Forms.TextBox();
             this.descriptionLbl = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.buttonsPanel = new System.Windows.Forms.Panel();
@@ -134,7 +134,7 @@
             this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
             this.contentLayoutPanel.Controls.Add(this.contentInformationLabl, 0, 0);
             this.contentLayoutPanel.Controls.Add(this.apiKeyLbl, 0, 1);
-            this.contentLayoutPanel.Controls.Add(this.textBox1, 1, 1);
+            this.contentLayoutPanel.Controls.Add(this.apiKey, 1, 1);
             this.contentLayoutPanel.Controls.Add(this.descriptionLbl, 0, 2);
             this.contentLayoutPanel.Controls.Add(this.linkLabel1, 0, 3);
             this.contentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -168,15 +168,15 @@
             this.apiKeyLbl.TabIndex = 1;
             this.apiKeyLbl.Text = "API Key *";
             // 
-            // textBox1
+            // apiKey
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.apiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(132, 35);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.PasswordChar = '*';
-            this.textBox1.Size = new System.Drawing.Size(510, 26);
-            this.textBox1.TabIndex = 2;
+            this.apiKey.Location = new System.Drawing.Point(132, 35);
+            this.apiKey.Name = "apiKey";
+            this.apiKey.PasswordChar = '*';
+            this.apiKey.Size = new System.Drawing.Size(510, 26);
+            this.apiKey.TabIndex = 2;
             // 
             // descriptionLbl
             // 
@@ -220,6 +220,7 @@
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cancelBtn.Location = new System.Drawing.Point(558, 1);
             this.cancelBtn.Name = "cancelBtn";
@@ -231,6 +232,7 @@
             // okButton
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okButton.Location = new System.Drawing.Point(470, 1);
             this.okButton.Name = "okButton";
@@ -238,6 +240,7 @@
             this.okButton.TabIndex = 0;
             this.okButton.Text = "OK";
             this.okButton.UseVisualStyleBackColor = true;
+            this.okButton.Click += new System.EventHandler(this.okButton_Click);
             // 
             // DeepLMtDialog
             // 
@@ -275,7 +278,7 @@
 		private System.Windows.Forms.TableLayoutPanel contentLayoutPanel;
 		private System.Windows.Forms.Label contentInformationLabl;
 		private System.Windows.Forms.Label apiKeyLbl;
-		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.TextBox apiKey;
 		private System.Windows.Forms.Label descriptionLbl;
 		private System.Windows.Forms.LinkLabel linkLabel1;
 		private System.Windows.Forms.Panel buttonsPanel;

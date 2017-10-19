@@ -8,12 +8,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.DeelLMTProvider;
 
 namespace Sdl.Community.DeepLMTProvider
 {
     public partial class DeepLMtDialog : Form
     {
-		public DeepLMtDialog()
+		public DeepLTranslationOptions Options { get; set; }
+		public DeepLMtDialog(DeepLTranslationOptions options)
 		{
 
 			InitializeComponent();
@@ -43,6 +45,7 @@ namespace Sdl.Community.DeepLMTProvider
 				logoPicture.Width = image.Width;
 			}
 
+			Options = options;
 		}
 
 		private void MainTableLayout_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
@@ -56,6 +59,15 @@ namespace Sdl.Community.DeepLMTProvider
 			if (e.Row > 0)
 			{
 				e.Graphics.DrawLine(Pens.LightGray, e.CellBounds.Location, new Point(e.CellBounds.Right, e.CellBounds.Top));
+			}
+			
+		}
+
+		private void okButton_Click(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrWhiteSpace(apiKey.Text))
+			{
+				Options.ApiKey = apiKey.Text;
 			}
 			
 		}

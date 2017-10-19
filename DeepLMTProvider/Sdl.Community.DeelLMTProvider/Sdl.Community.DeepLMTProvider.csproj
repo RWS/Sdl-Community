@@ -76,6 +76,8 @@
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
     <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
+    <Compile Include="DeepLTranslationOptions.cs" />
+    <Compile Include="DeepLTranslationProviderConnecter.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

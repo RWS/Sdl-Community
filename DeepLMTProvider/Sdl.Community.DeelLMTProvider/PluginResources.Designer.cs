@@ -77,5 +77,14 @@ namespace Sdl.Community.DeelLMTProvider {
                 return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to [segment already translated...source not re-sent].
+        /// </summary>
+        internal static string TranslationLookupDraftNotResentMessage {
+            get {
+                return ResourceManager.GetString("TranslationLookupDraftNotResentMessage", resourceCulture);
+            }
+        }
     }
 }

@@ -123,4 +123,7 @@
   <data name="Plugin_NiceName" xml:space="preserve">
     <value>DeepL MT Provider</value>
   </data>
+  <data name="TranslationLookupDraftNotResentMessage" xml:space="preserve">
+    <value>[segment already translated...source not re-sent]</value>
+  </data>
 </root>
