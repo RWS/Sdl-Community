@@ -18,7 +18,10 @@ namespace Sdl.Community.DeepLMTProvider
 
 			InitializeComponent();
 			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
+
 			contentInformationLabl.Text = "DeepL API is a paid sutomated translation service. To use this service, set up a DeepL account and create a API Key.";
+
+			//programatically merge columns 
 			foreach (Control control in contentLayoutPanel.Controls)
 			{
 
@@ -26,13 +29,13 @@ namespace Sdl.Community.DeepLMTProvider
 				if (index != 1)
 				{
 					mainTableLayout.SetColumnSpan(control, 2);
+					
 				}
 			}
 
-			var name = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-			using (var imgStream = Assembly.GetExecutingAssembly()
-	.GetManifestResourceStream(
-	"Sdl.Community.DeelLMTProvider.Resources.DeepL.png"))
+			
+			//read logo from resource and add it to image box
+			using (var imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Sdl.Community.DeelLMTProvider.Resources.DeepL.png"))
 			{
 				var image = new Bitmap(imgStream);
 				logoPicture.Image = image;
@@ -44,10 +47,17 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private void MainTableLayout_CellPaint(object sender, TableLayoutCellPaintEventArgs e)
 		{
+			//fill first row with white
 			if (e.Row == 0)
 			{
 				e.Graphics.FillRectangle(Brushes.White, e.CellBounds);
 			}
+			//draw top line for rows starting from index 1
+			if (e.Row > 0)
+			{
+				e.Graphics.DrawLine(Pens.LightGray, e.CellBounds.Location, new Point(e.CellBounds.Right, e.CellBounds.Top));
+			}
+			
 		}
 	}
 }
