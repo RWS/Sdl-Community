@@ -33,6 +33,7 @@
             this.titlePanel = new System.Windows.Forms.Panel();
             this.subtitleLabel = new System.Windows.Forms.Label();
             this.titleLabel = new System.Windows.Forms.Label();
+            this.logoPicture = new System.Windows.Forms.PictureBox();
             this.contentLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.contentInformationLabl = new System.Windows.Forms.Label();
             this.apiKeyLbl = new System.Windows.Forms.Label();
@@ -45,6 +46,7 @@
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.titlePanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPicture)).BeginInit();
             this.contentLayoutPanel.SuspendLayout();
             this.buttonsPanel.SuspendLayout();
             this.SuspendLayout();
@@ -76,6 +78,7 @@
             this.headerLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.headerLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.headerLayoutPanel.Controls.Add(this.titlePanel, 0, 0);
+            this.headerLayoutPanel.Controls.Add(this.logoPicture, 1, 0);
             this.headerLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.headerLayoutPanel.Location = new System.Drawing.Point(5, 5);
             this.headerLayoutPanel.Name = "headerLayoutPanel";
@@ -114,6 +117,16 @@
             this.titleLabel.Size = new System.Drawing.Size(107, 15);
             this.titleLabel.TabIndex = 0;
             this.titleLabel.Text = "DeepL Platform";
+            // 
+            // logoPicture
+            // 
+            this.logoPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.logoPicture.InitialImage = global::Sdl.Community.DeelLMTProvider.Properties.Resources.DeepL;
+            this.logoPicture.Location = new System.Drawing.Point(555, 3);
+            this.logoPicture.Name = "logoPicture";
+            this.logoPicture.Size = new System.Drawing.Size(100, 38);
+            this.logoPicture.TabIndex = 1;
+            this.logoPicture.TabStop = false;
             // 
             // contentLayoutPanel
             // 
@@ -244,6 +257,7 @@
             this.headerLayoutPanel.ResumeLayout(false);
             this.titlePanel.ResumeLayout(false);
             this.titlePanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.logoPicture)).EndInit();
             this.contentLayoutPanel.ResumeLayout(false);
             this.contentLayoutPanel.PerformLayout();
             this.buttonsPanel.ResumeLayout(false);
@@ -268,5 +282,6 @@
 		private System.Windows.Forms.Panel buttonsPanel;
 		private System.Windows.Forms.Button cancelBtn;
 		private System.Windows.Forms.Button okButton;
+		private System.Windows.Forms.PictureBox logoPicture;
 	}
 }
