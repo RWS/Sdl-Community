@@ -32,13 +32,13 @@ namespace Sdl.Community.Qualitivity.Dialogs
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("General", 0, 0);
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Language Rates", 11, 11);
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Clients", 1, 1);
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Activity Tracking", 9, 9);
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Quality Metrics", 12, 12);
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
+            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("General", 0, 0);
+            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("Language Rates", 11, 11);
+            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Clients", 1, 1);
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Activity Tracking", 9, 9);
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Quality Metrics", 12, 12);
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -410,42 +410,42 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.treeView_main.ItemHeight = 36;
             this.treeView_main.Location = new System.Drawing.Point(5, 5);
             this.treeView_main.Name = "treeView_main";
-            treeNode1.ImageIndex = 0;
-            treeNode1.Name = "Node_general";
-            treeNode1.SelectedImageIndex = 0;
-            treeNode1.Text = "General";
-            treeNode2.ImageIndex = 11;
-            treeNode2.Name = "Node_language_rates";
-            treeNode2.SelectedImageIndex = 11;
-            treeNode2.Text = "Language Rates";
-            treeNode3.ImageIndex = 1;
-            treeNode3.Name = "Node_clients";
-            treeNode3.SelectedImageIndex = 1;
-            treeNode3.Text = "Clients";
-            treeNode4.ImageIndex = 8;
-            treeNode4.Name = "Node_my_info";
-            treeNode4.SelectedImageIndex = 8;
-            treeNode4.Text = "My Details";
-            treeNode5.ImageIndex = 9;
-            treeNode5.Name = "Node_activity_tracking";
-            treeNode5.SelectedImageIndex = 9;
-            treeNode5.Text = "Activity Tracking";
-            treeNode6.ImageIndex = 12;
-            treeNode6.Name = "Node_quality_metrics";
-            treeNode6.SelectedImageIndex = 12;
-            treeNode6.Text = "Quality Metrics";
-            treeNode7.ImageIndex = 10;
-            treeNode7.Name = "Node_backup";
-            treeNode7.SelectedImageIndex = 10;
-            treeNode7.Text = "Backup";
+            treeNode8.ImageIndex = 0;
+            treeNode8.Name = "Node_general";
+            treeNode8.SelectedImageIndex = 0;
+            treeNode8.Text = "General";
+            treeNode9.ImageIndex = 11;
+            treeNode9.Name = "Node_language_rates";
+            treeNode9.SelectedImageIndex = 11;
+            treeNode9.Text = "Language Rates";
+            treeNode10.ImageIndex = 1;
+            treeNode10.Name = "Node_clients";
+            treeNode10.SelectedImageIndex = 1;
+            treeNode10.Text = "Clients";
+            treeNode11.ImageIndex = 8;
+            treeNode11.Name = "Node_my_info";
+            treeNode11.SelectedImageIndex = 8;
+            treeNode11.Text = "My Details";
+            treeNode12.ImageIndex = 9;
+            treeNode12.Name = "Node_activity_tracking";
+            treeNode12.SelectedImageIndex = 9;
+            treeNode12.Text = "Activity Tracking";
+            treeNode13.ImageIndex = 12;
+            treeNode13.Name = "Node_quality_metrics";
+            treeNode13.SelectedImageIndex = 12;
+            treeNode13.Text = "Quality Metrics";
+            treeNode14.ImageIndex = 10;
+            treeNode14.Name = "Node_backup";
+            treeNode14.SelectedImageIndex = 10;
+            treeNode14.Text = "Backup";
             this.treeView_main.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1,
-            treeNode2,
-            treeNode3,
-            treeNode4,
-            treeNode5,
-            treeNode6,
-            treeNode7});
+            treeNode8,
+            treeNode9,
+            treeNode10,
+            treeNode11,
+            treeNode12,
+            treeNode13,
+            treeNode14});
             this.treeView_main.SelectedImageIndex = 0;
             this.treeView_main.Size = new System.Drawing.Size(221, 523);
             this.treeView_main.TabIndex = 21;
