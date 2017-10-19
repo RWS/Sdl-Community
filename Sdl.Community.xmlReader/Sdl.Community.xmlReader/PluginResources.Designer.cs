@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.xmlReader {
+namespace Sdl.Community.XmlReader {
     using System;
     
     
@@ -80,7 +80,7 @@ namespace Sdl.Community.xmlReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your raport..
+        ///   Looks up a localized string similar to Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report..
         /// </summary>
         public static string Instructions_Message {
             get {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 
-namespace Sdl.Community.xmlReader.View
+namespace Sdl.Community.XmlReader.View
 {
     public partial class XmlReaderForm : Form
     {
@@ -12,16 +12,20 @@ namespace Sdl.Community.xmlReader.View
 
             labelInstructions.Text = PluginResources.Instruction_Title;
             textBoxInstructions.Text = PluginResources.Instructions_Message;
+            textBoxInstructions.Enabled = false;
             labelInstructions.Font = new Font("Arial", 11, FontStyle.Bold);
 
             labelReports.Text = PluginResources.Reports_Title;
             labelReports.Font = new Font("Arial", 11, FontStyle.Bold);
 
             buttonConvertToExcel.BackColor = Color.FromArgb(80, 120, 200);
+            buttonClean.BackColor = Color.FromArgb(80, 120, 200);
+            buttonClean.Visible = false;
 
             treeViewXmlFiles.ItemHeight = 20;
-            
+
         }
+
 
         private int FindNodeIndexByLanguageCode(string langCode)
         {
@@ -64,6 +68,7 @@ namespace Sdl.Community.xmlReader.View
 
         private void treeViewXmlFiles_DragDrop(object sender, DragEventArgs e)
         {
+            
             string[] xmlFilePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
             int i;
@@ -88,15 +93,19 @@ namespace Sdl.Community.xmlReader.View
                     }
                     else
                     {
-                        treeViewXmlFiles.Nodes.Add("1", targetlangCode, 1, 1);
+                        var imageStudioCode = Helper.GetImageStudioCodeByLanguageCode(targetlangCode);
+                        var imagePath = Helper.GetImagePathByStudioCode(imageStudioCode);
+                        treeViewXmlFiles.ImageList.Images.Add(imageStudioCode.ToString(), (Bitmap)Image.FromFile(imagePath, true));
+
+                        treeViewXmlFiles.Nodes.Add("1", targetlangCode, imageStudioCode.ToString());
                         indexNodeByLanguageCode = FindNodeIndexByLanguageCode(targetlangCode);
                         xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count + 1) + ")";
-                        xmlFileNameIntoTreeView = fileName + " (" + (treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Count) + ")";
                         treeViewXmlFiles.Nodes[indexNodeByLanguageCode].Nodes.Add("0", xmlFileNameIntoTreeView, 0);
                     }
                 }
             }
 
+            buttonClean.Visible = true;
             treeViewXmlFiles.ExpandAll();
             treeViewXmlFiles.ShowPlusMinus = false;
             treeViewXmlFiles.ShowRootLines = false;
@@ -109,6 +118,12 @@ namespace Sdl.Community.xmlReader.View
             {
                 node.Remove();
             }
+        }
+
+        private void buttonClean_Click(object sender, System.EventArgs e)
+        {
+            buttonClean.Visible = false;
+            treeViewXmlFiles.Nodes.Clear();
         }
     }
 }
