@@ -60,9 +60,6 @@
   <ItemGroup>
     <Compile Include="Configuration\TrackingProjects.cs" />
     <Compile Include="Documents\Document.cs" />
-    <Compile Include="DQF\DQFProjectTask.cs" />
-    <Compile Include="DQF\DQFProject.cs" />
-    <Compile Include="DQF\DQFSettings.cs" />
     <Compile Include="Projects\Activities\ActivityReports.cs" />
     <Compile Include="Projects\Activities\ComparisonSettings.cs" />
     <Compile Include="Projects\Activities\ActivityRates.cs" />

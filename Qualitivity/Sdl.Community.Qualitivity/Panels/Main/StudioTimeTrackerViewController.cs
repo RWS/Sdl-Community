@@ -1,22 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using BrightIdeasSoftware;
-using Sdl.Community.DQF.Core;
 using Sdl.Community.Hooks;
 using Sdl.Community.Parser;
 using Sdl.Community.Qualitivity.Dialogs;
-using Sdl.Community.Qualitivity.Dialogs.DQF;
 using Sdl.Community.Qualitivity.Dialogs.Export;
 using Sdl.Community.Qualitivity.Panels.Activity_Records;
 using Sdl.Community.Qualitivity.Panels.Document_Reports;
-using Sdl.Community.Qualitivity.Panels.DQF;
 using Sdl.Community.Qualitivity.Panels.Properties;
 using Sdl.Community.Qualitivity.Panels.QualityMetrics;
 using Sdl.Community.Qualitivity.Progress;
@@ -24,7 +12,6 @@ using Sdl.Community.Qualitivity.Tracking;
 using Sdl.Community.Report;
 using Sdl.Community.Structures.Configuration;
 using Sdl.Community.Structures.Documents;
-using Sdl.Community.Structures.DQF;
 using Sdl.Community.Structures.Profile;
 using Sdl.Community.Structures.PropertyView;
 using Sdl.Community.TM.Database;
@@ -34,6 +21,15 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
 using Activity = Sdl.Community.Structures.Projects.Activities.Activity;
 using DocumentActivities = Sdl.Community.Structures.Projects.Activities.DocumentActivities;
 using Project = Sdl.Community.Structures.Projects.Project;
@@ -124,8 +120,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 							_viewNavigation.Value.editTimeTrackerProjectToolStripMenuItem.Enabled = true;
 							_viewNavigation.Value.removeTimeTrackerProjectToolStripMenuItem.Enabled = true;
-
-							_viewNavigation.Value.newDQFProjectToolStripMenuItem.Enabled = true;
 						}
 					}
 					else if (_viewContent.Value.objectListView1.SelectedItems.Count > 0)
@@ -224,31 +218,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 				#endregion
 
-
-				#region  |  DQF Project  |
-
-
-
-				_viewNavigation.Value.newDQFProjectToolStripMenuItem.Enabled = ProjectActivityNewEnabled;
-				IsEnabledCreateNewDqfProject = ProjectActivityNewEnabled;
-				DqfProjectEnabled = ProjectActivityNewEnabled;
-				DqfProjectImportEnabled = ProjectActivityNewEnabled;
-
-
-				DqfProjectSaveEnabled = QualitivityViewDqfController.Control.Value.treeView_dqf_projects.SelectedNode != null;
-
-				if (_viewContent.Value.objectListView1.SelectedItems.Count > 0 && QualitivityViewDqfController.Control.Value.treeView_dqf_projects.SelectedNode != null)
-				{
-					DqfProjectTaskEnabled = true;
-				}
-				else
-				{
-					DqfProjectTaskEnabled = false;
-				}
-				#endregion
-
-
-
 				if (CheckEnabledObjectsEvent != null)
 					CheckEnabledObjectsEvent(this, EventArgs.Empty);
 
@@ -273,7 +242,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 			IsLoading = true;
 
-			IsEnabledCreateNewDqfProject = false;
 			IsEnabledCreateNewActivityProject = false;
 			IsEnabledCreateNewQualityMetric = false;
 
@@ -296,11 +264,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			ProjectActivityCreateReportEnabled = false;
 			ProjectActivityExportExcelEnabled = false;
 
-			DqfProjectEnabled = false;
-			DqfProjectImportEnabled = false;
-			DqfProjectSaveEnabled = false;
-			DqfProjectTaskEnabled = false;
-
 
 			#region  |  initialize the tracker cache  |
 
@@ -318,9 +281,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 
 			#endregion
-
-
-
 
 			LoadCurrencies();
 
@@ -347,9 +307,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			Tracked.Settings.BackupSettings.BackupProperties = query.GetBackupSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath);
 			Tracked.Settings.GeneralSettings.GeneralProperties = query.GetGeneralSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath);
 			Tracked.Settings.TrackingSettings.TrackingProperties = query.GetTrackerSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath);
-
-			Tracked.Settings.DqfSettings = query.GetDqfSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath);
-
 
 
 
@@ -397,7 +354,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 			InitializeViewControl();
 
-			InitializeDqfControl();
 			CheckEnabledObjects();
 
 
@@ -433,7 +389,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			if (!TimeTrackerProjectNewEnabled)
 			{
 				IsEnabledCreateNewActivityProject = false;
-				IsEnabledCreateNewDqfProject = false;
 			}
 			else if (ProjectsController.SelectedProjects.FirstOrDefault() != null)
 			{
@@ -675,7 +630,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 		#region  |  Navigation control  |
 
-		public bool IsEnabledCreateNewDqfProject { get; set; }
 		public bool IsEnabledCreateNewActivityProject { get; set; }
 		public bool IsEnabledCreateNewQualityMetric { get; set; }
 
@@ -724,7 +678,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 				_viewNavigation.Value.treeView_navigation.DoubleClick += treeView_navigation_DoubleClick;
 				_viewNavigation.Value.treeView_navigation.AfterSelect += treeView_navigation_AfterSelect;
 				_viewNavigation.Value.treeView_navigation.KeyUp += treeView_navigation_KeyUp;
-				_viewNavigation.Value.newDQFProjectToolStripMenuItem.Click += newDQFProjectToolStripMenuItem_Click;
 
 				UpdateNavigationControl(null);
 
@@ -891,70 +844,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		{
 			RemoveTimeTrackerProject();
 		}
-		private void newDQFProjectToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (_viewNavigation.Value.treeView_navigation.SelectedNode == null) return;
-			if (_viewNavigation.Value.treeView_navigation.SelectedNode.Tag == null ||
-				_viewNavigation.Value.treeView_navigation.SelectedNode.Tag.GetType() != typeof(Project)) return;
-			if (Tracked.Settings.DqfSettings.UserKey.Trim() == string.Empty)
-			{
-				MessageBox.Show(PluginResources.The_DQF_API_key_cannot_be_null + "\r\n\r\n"
-				+ PluginResources.To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key
-					, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			}
-			else
-			{
-				var project = _viewNavigation.Value.treeView_navigation.SelectedNode.Tag as Project;
-
-
-				if (project == null) return;
-
-				var f = new DqfProjectCreate { DqfProject = new DqfProject { Name = project.Name } };
-				f.ShowDialog();
-				if (!f.Saved) return;
-
-				try
-				{
-					var dqfProject = f.DqfProject;
-					dqfProject.ProjectId = project.Id;
-					dqfProject.ProjectIdStudio = project.StudioProjectId;
-					dqfProject.SourceLanguage = project.SourceLanguage;
-					dqfProject.Created = DateTime.Now;
-					dqfProject.DqfPmanagerKey = Tracked.Settings.DqfSettings.UserKey;
-					dqfProject.DqfProjectId = -1;
-					dqfProject.DqfProjectKey = string.Empty;
-					dqfProject.Imported = false;
-
-					var processor = new global::Sdl.Community.DQF.Processor();
-					var productivityProject = new ProductivityProject
-					{
-						Name = dqfProject.Name,
-						QualityLevel = dqfProject.QualityLevel,
-						SourceLanguage = dqfProject.SourceLanguage,
-						Process = dqfProject.Process,
-						ContentType = dqfProject.ContentType,
-						Industry = dqfProject.Industry
-					};
-					productivityProject = processor.PostDqfProject(Tracked.Settings.DqfSettings.UserKey, productivityProject);
-					dqfProject.DqfProjectId = productivityProject.ProjectId;
-					dqfProject.DqfProjectKey = productivityProject.ProjectKey;
-
-					var query = new Query();
-					dqfProject.Id = query.CreateDqfProject(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, dqfProject);
-
-					var tn = QualitivityViewDqfController.Control.Value.treeView_dqf_projects.Nodes.Add(dqfProject.Name);
-					tn.ImageIndex = 0;
-					tn.SelectedImageIndex = tn.ImageIndex;
-					tn.Tag = dqfProject;
-
-					project.DqfProjects.Add(dqfProject);
-				}
-				catch (Exception ex)
-				{
-					MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-		}
 
 		public void treeView_navigation_AfterSelect(object sender, TreeViewEventArgs e)
 		{
@@ -981,10 +870,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 					TimeTrackerProjectEditEnabled = false;
 					TimeTrackerProjectRemoveEnabled = false;
 				}
-
-				QualitivityViewDqfControl.Project = SelectedProject;
-				QualitivityViewDqfController.Control.Value.initialize_dqfProjects();
-
 
 				FilterViewerControl(-1);
 			}
@@ -1690,11 +1575,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 						}
 					}
 				}
-
-				if (_viewNavigation.Value.treeView_navigation.Nodes.Count == 0)
-				{
-					ClearDqfProjectList();
-				}
 			}
 			catch (Exception ex)
 			{
@@ -1740,7 +1620,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			_viewContent.Value.objectListView1.DoubleClick += objectListView1_DoubleClick;
 			_viewContent.Value.objectListView1.KeyUp += objectListView1_KeyUp;
 
-			_viewContent.Value.contextMenuStrip_listView.Opening += contextMenuStrip_listView_Opening;
 			_viewContent.Value.newProjectActivityToolStripMenuItem.Click += newProjectActivityToolStripMenuItem_Click;
 			_viewContent.Value.editProjectActivityToolStripMenuItem.Click += editProjectActivityToolStripMenuItem_Click;
 			_viewContent.Value.removeProjectActivityToolStripMenuItem.Click += removeProjectActivityToolStripMenuItem_Click;
@@ -1748,18 +1627,8 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 			_viewContent.Value.exportActivitiesToExcelToolStripMenuItem.Click += exportActivitesToExcelToolStripMenuItem_Click;
 			_viewContent.Value.createAnActivitiesReportToolStripMenuItem.Click += createAnActivitiesReportToolStripMenuItem_Click;
 			_viewContent.Value.mergeProjectActivitiesToolStripMenuItem.Click += mergeProjectActivitiesToolStripMenuItem_Click;
-			_viewContent.Value.addDQFProjectTaskToolStripMenuItem.Click += addDQFProjectTaskToolStripMenuItem_Click;
-
 		}
-
-		private void contextMenuStrip_listView_Opening(object sender, CancelEventArgs e)
-		{
-			if (_viewContent.Value.objectListView1.SelectedItems.Count > 0 && QualitivityViewDqfController.Control.Value.treeView_dqf_projects.SelectedNode != null)
-				_viewContent.Value.addDQFProjectTaskToolStripMenuItem.Enabled = true;
-			else
-				_viewContent.Value.addDQFProjectTaskToolStripMenuItem.Enabled = false;
-		}
-
+		
 		private void mergeProjectActivitiesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			MergeProjectActivities();
@@ -1825,18 +1694,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 					}
 
 					documentActivities = Helper.GetDocumentActivityObjects(SelectedActivities[0]);
-				}
-				if (SelectedActivities.Count > 0)
-				{
-					SelectedProject = Helper.GetProjectFromId(SelectedActivities[0].ProjectId);
-
-					QualitivityViewDqfControl.Activity = SelectedActivities[0];
-					QualitivityViewDqfControl.Project = SelectedProject;
-					QualitivityViewDqfController.Control.Value.initialize_dqfProjects();
-				}
-				else
-				{
-					QualitivityViewDqfControl.Activity = null;
 				}
 
 				QualitivityViewTrackChangesController.NavigationTreeView = _viewNavigation.Value.treeView_navigation;
@@ -2795,165 +2652,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		}
 
 		#endregion
-
-		#region  |  DQF Project  |
-
-		public bool DqfProjectEnabled { get; set; }
-		public bool DqfProjectImportEnabled { get; set; }
-		public bool DqfProjectSaveEnabled { get; set; }
-		public bool DqfProjectTaskEnabled { get; set; }
-
-		public void ClearDqfProjectList()
-		{
-			QualitivityViewDqfController.Control.Value.ClearDqfProjectList();
-		}
-
-		private void InitializeDqfControl()
-		{
-			QualitivityViewDqfController.Control.Value.ProjectSelectionChanged += Value_projectSelectionChanged;
-		}
-
-		private void Value_projectSelectionChanged()
-		{
-			CheckEnabledObjects();
-		}
-
-		private void addDQFProjectTaskToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			AddNewDqfProjectTask();
-		}
-
-		public void CreateNewDqfProject()
-		{
-
-			if (Tracked.Settings.DqfSettings.UserKey.Trim() == string.Empty)
-			{
-				MessageBox.Show(PluginResources.The_DQF_API_key_cannot_be_null + "\r\n\r\n"
-								+ PluginResources.To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key_in_the_plugin_setting_area
-					, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			}
-
-			CurrentSelectedProject = ProjectsController.SelectedProjects.FirstOrDefault();
-			if (CurrentSelectedProject != null)
-			{
-				CurrentProjectInfo = CurrentSelectedProject.GetProjectInfo();
-			}
-			if (CurrentSelectedProject == null || CurrentProjectInfo == null) return;
-			var project = Tracked.TrackingProjects.TrackerProjects.Find(a => a.StudioProjectId == CurrentProjectInfo.Id.ToString());
-			if (project == null)
-			{
-				project = new Project
-				{
-					Name = CurrentProjectInfo.Name,
-					Path = CurrentProjectInfo.LocalProjectFolder,
-					Description = CurrentProjectInfo.Description ?? string.Empty,
-					CompanyProfileId = -1,
-					Created = CurrentProjectInfo.CreatedAt,
-					Started = DateTime.Now,
-					Due = CurrentProjectInfo.DueDate ?? DateTime.Now.AddDays(7),
-					ProjectStatus = CurrentProjectInfo.IsCompleted ? @"Completed" : @"In progress"
-				};
-				project.Completed = project.Due;
-
-
-				project.StudioProjectId = CurrentProjectInfo.Id.ToString();
-				project.StudioProjectName = CurrentProjectInfo.Name;
-				project.StudioProjectPath = CurrentProjectInfo.LocalProjectFolder;
-				project.SourceLanguage = CurrentProjectInfo.SourceLanguage.CultureInfo.Name;
-
-				var query = new Query();
-				project.Id = query.CreateProject(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, project);
-				Tracked.TrackingProjects.TrackerProjects.Add(project);
-				UpdateNavigationControl(project);
-			}
-
-			var f = new DqfProjectCreate { DqfProject = new DqfProject { Name = project.Name } };
-			f.ShowDialog();
-			if (!f.Saved) return;
-
-			try
-			{
-				var dqfProject = f.DqfProject;
-				dqfProject.ProjectId = project.Id;
-				dqfProject.ProjectIdStudio = project.StudioProjectId;
-				dqfProject.SourceLanguage = project.SourceLanguage;
-				dqfProject.Created = DateTime.Now;
-				dqfProject.DqfPmanagerKey = Tracked.Settings.DqfSettings.UserKey;
-				dqfProject.DqfProjectId = -1;
-				dqfProject.DqfProjectKey = string.Empty;
-				dqfProject.Imported = false;
-
-				var processor = new global::Sdl.Community.DQF.Processor();
-				var productivityProject = new ProductivityProject
-				{
-					Name = dqfProject.Name,
-					QualityLevel = dqfProject.QualityLevel,
-					SourceLanguage = dqfProject.SourceLanguage,
-					Process = dqfProject.Process,
-					ContentType = dqfProject.ContentType,
-					Industry = dqfProject.Industry
-				};
-				productivityProject = processor.PostDqfProject(Tracked.Settings.DqfSettings.UserKey, productivityProject);
-				dqfProject.DqfProjectId = productivityProject.ProjectId;
-				dqfProject.DqfProjectKey = productivityProject.ProjectKey;
-
-				var query = new Query();
-				dqfProject.Id = query.CreateDqfProject(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseProjectsPath, dqfProject);
-
-				var tn = QualitivityViewDqfController.Control.Value.treeView_dqf_projects.Nodes.Add(dqfProject.Name);
-				tn.ImageIndex = 0;
-				tn.SelectedImageIndex = tn.ImageIndex;
-				tn.Tag = dqfProject;
-
-				project.DqfProjects.Add(dqfProject);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-		}
-		public void CreateNewDqfProject2()
-		{
-			QualitivityViewDqfController.Control.Value.NewDqfProject();
-		}
-		public void ImportDqfProjectSettings()
-		{
-			QualitivityViewDqfController.Control.Value.ImportDqfProjectSettings();
-		}
-		public void SaveDqfProjectSettings()
-		{
-			QualitivityViewDqfController.Control.Value.SaveDqfProjectSettings();
-		}
-		public void AddNewDqfProjectTask()
-		{
-			if (QualitivityViewDqfController.Control.Value.treeView_dqf_projects.SelectedNode == null) return;
-			if (Tracked.Settings.DqfSettings.TranslatorKey.Trim() == string.Empty)
-			{
-				MessageBox.Show(PluginResources.The_Translator_DQF_API_key_cannot_be_null + "\r\n\r\n"
-								+ PluginResources.To_create_TAUS_DQF_Project_Task_you_must_first_save_your_Translator_DQF_API_key_
-					, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-			}
-			else
-			{
-				var dqfProject = QualitivityViewDqfController.Control.Value.treeView_dqf_projects.SelectedNode.Tag as DqfProject;
-
-				var selectedActivity = (Activity)_viewContent.Value.objectListView1.SelectedObjects[0];
-
-				var f = new DqfAddTasks();
-				f.DqfProject = dqfProject;
-				f.Project = SelectedProject;
-				f.Activity = selectedActivity;
-				f.DocumentActivities = Helper.GetDocumentActivityObjects(selectedActivity);
-				f.ShowDialog();
-				if (f.Finished)
-				{
-					QualitivityViewDqfController.Control.Value.treeView_dqf_projects_AfterSelect(null, null);
-				}
-			}
-		}
-
-		#endregion
-
+		
 		#region  |  Settings  |
 
 		public void LoadSettings(int index = 0)
@@ -2984,12 +2683,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 				{
 					query.SaveTrackerSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath, f.settings.TrackingSettings.TrackingProperties);
 				}
-
-				if (f.ChangedItems.Exists(a => a.Type == Dialogs.Settings.ChangedItem.ItemType.DqfSettings))
-				{
-					query.SaveDqfSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath, f.settings.DqfSettings);
-				}
-			
+							
 				if (f.ChangedItems.Exists(a => a.Type == Dialogs.Settings.ChangedItem.ItemType.QualityMetricsGroup))
 				{
 					query.SaveQualityMetricGroupSettings(Tracked.Settings.ApplicationPaths.ApplicationMyDocumentsDatabaseSettingsPath, f.settings.QualityMetricGroupSettings.QualityMetricGroups);
