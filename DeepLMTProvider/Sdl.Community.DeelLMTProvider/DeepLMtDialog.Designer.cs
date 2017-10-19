@@ -129,10 +129,10 @@
             this.contentLayoutPanel.Location = new System.Drawing.Point(5, 57);
             this.contentLayoutPanel.Name = "contentLayoutPanel";
             this.contentLayoutPanel.RowCount = 4;
-            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.66667F));
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.66667F));
+            this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 26.66667F));
             this.contentLayoutPanel.Size = new System.Drawing.Size(658, 158);
             this.contentLayoutPanel.TabIndex = 1;
             // 
@@ -150,9 +150,9 @@
             this.apiKeyLbl.AutoSize = true;
             this.apiKeyLbl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.apiKeyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.apiKeyLbl.Location = new System.Drawing.Point(3, 15);
+            this.apiKeyLbl.Location = new System.Drawing.Point(3, 31);
             this.apiKeyLbl.Name = "apiKeyLbl";
-            this.apiKeyLbl.Size = new System.Drawing.Size(125, 32);
+            this.apiKeyLbl.Size = new System.Drawing.Size(125, 42);
             this.apiKeyLbl.TabIndex = 1;
             this.apiKeyLbl.Text = "API Key*";
             // 
@@ -160,8 +160,9 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(134, 18);
+            this.textBox1.Location = new System.Drawing.Point(134, 34);
             this.textBox1.Name = "textBox1";
+            this.textBox1.PasswordChar = '*';
             this.textBox1.Size = new System.Drawing.Size(521, 26);
             this.textBox1.TabIndex = 2;
             // 
@@ -170,10 +171,10 @@
             this.descriptionLbl.AutoSize = true;
             this.descriptionLbl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.descriptionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.descriptionLbl.Location = new System.Drawing.Point(3, 57);
+            this.descriptionLbl.Location = new System.Drawing.Point(3, 83);
             this.descriptionLbl.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(125, 52);
+            this.descriptionLbl.Size = new System.Drawing.Size(125, 32);
             this.descriptionLbl.TabIndex = 3;
             this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -185,10 +186,10 @@
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
             this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(153)))), ((int)(((byte)(216)))));
-            this.linkLabel1.Location = new System.Drawing.Point(3, 119);
+            this.linkLabel1.Location = new System.Drawing.Point(3, 125);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(125, 39);
+            this.linkLabel1.Size = new System.Drawing.Size(125, 33);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
