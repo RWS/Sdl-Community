@@ -48,6 +48,7 @@
             // mainTableLayout
             // 
             this.mainTableLayout.AutoSize = true;
+            this.mainTableLayout.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Outset;
             this.mainTableLayout.ColumnCount = 1;
             this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainTableLayout.Controls.Add(this.headerLayoutPanel, 0, 0);
@@ -170,6 +171,7 @@
             this.descriptionLbl.Size = new System.Drawing.Size(51, 20);
             this.descriptionLbl.TabIndex = 3;
             this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
+            this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // linkLabel1
             // 
@@ -183,6 +185,7 @@
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
+            this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // DeepLMtDialog
             // 
