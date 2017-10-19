@@ -12,11 +12,20 @@ namespace Sdl.Community.DeepLMTProvider
 {
     public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
-        public ITranslationProvider TranslationProvider => throw new NotImplementedException();
+		private DeepLMtTranslationProvider _deepLMtTranslationProvider;
+		private LanguagePair _languageDirection;
 
-        public CultureInfo SourceLanguage => throw new NotImplementedException();
+		public DeepLMtTranslationProviderLanguageDirection(DeepLMtTranslationProvider deepLMtTranslationProvider, LanguagePair languageDirection)
+		{
+			_deepLMtTranslationProvider = deepLMtTranslationProvider;
+			_languageDirection = languageDirection;
+		}
 
-        public CultureInfo TargetLanguage => throw new NotImplementedException();
+		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
+
+        public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+
+        public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
         public bool CanReverseLanguageDirection => throw new NotImplementedException();
 

@@ -68,5 +68,14 @@ namespace Sdl.Community.DeelLMTProvider {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DeepL MT Provider.
+        /// </summary>
+        internal static string Plugin_NiceName {
+            get {
+                return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
+            }
+        }
     }
 }

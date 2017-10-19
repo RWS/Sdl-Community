@@ -166,7 +166,7 @@
             this.apiKeyLbl.Name = "apiKeyLbl";
             this.apiKeyLbl.Size = new System.Drawing.Size(123, 43);
             this.apiKeyLbl.TabIndex = 1;
-            this.apiKeyLbl.Text = "API Key*";
+            this.apiKeyLbl.Text = "API Key *";
             // 
             // textBox1
             // 
