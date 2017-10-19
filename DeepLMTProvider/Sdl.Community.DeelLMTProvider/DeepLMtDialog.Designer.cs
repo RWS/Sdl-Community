@@ -39,10 +39,14 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.descriptionLbl = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.buttonsPanel = new System.Windows.Forms.Panel();
+            this.okButton = new System.Windows.Forms.Button();
+            this.cancelBtn = new System.Windows.Forms.Button();
             this.mainTableLayout.SuspendLayout();
             this.headerLayoutPanel.SuspendLayout();
             this.titlePanel.SuspendLayout();
             this.contentLayoutPanel.SuspendLayout();
+            this.buttonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainTableLayout
@@ -53,6 +57,7 @@
             this.mainTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.mainTableLayout.Controls.Add(this.headerLayoutPanel, 0, 0);
             this.mainTableLayout.Controls.Add(this.contentLayoutPanel, 0, 1);
+            this.mainTableLayout.Controls.Add(this.buttonsPanel, 0, 2);
             this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
             this.mainTableLayout.Name = "mainTableLayout";
@@ -187,6 +192,36 @@
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
             this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // buttonsPanel
+            // 
+            this.buttonsPanel.Controls.Add(this.cancelBtn);
+            this.buttonsPanel.Controls.Add(this.okButton);
+            this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 189);
+            this.buttonsPanel.Name = "buttonsPanel";
+            this.buttonsPanel.Size = new System.Drawing.Size(646, 180);
+            this.buttonsPanel.TabIndex = 2;
+            // 
+            // okButton
+            // 
+            this.okButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.okButton.Location = new System.Drawing.Point(471, 143);
+            this.okButton.Name = "okButton";
+            this.okButton.Size = new System.Drawing.Size(82, 30);
+            this.okButton.TabIndex = 0;
+            this.okButton.Text = "OK";
+            this.okButton.UseVisualStyleBackColor = true;
+            // 
+            // cancelBtn
+            // 
+            this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cancelBtn.Location = new System.Drawing.Point(559, 143);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(80, 30);
+            this.cancelBtn.TabIndex = 1;
+            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
+            // 
             // DeepLMtDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -206,6 +241,7 @@
             this.titlePanel.PerformLayout();
             this.contentLayoutPanel.ResumeLayout(false);
             this.contentLayoutPanel.PerformLayout();
+            this.buttonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -224,5 +260,8 @@
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.Label descriptionLbl;
 		private System.Windows.Forms.LinkLabel linkLabel1;
+		private System.Windows.Forms.Panel buttonsPanel;
+		private System.Windows.Forms.Button cancelBtn;
+		private System.Windows.Forms.Button okButton;
 	}
 }
