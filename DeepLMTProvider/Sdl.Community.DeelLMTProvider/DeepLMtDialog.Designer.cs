@@ -118,8 +118,8 @@
             // contentLayoutPanel
             // 
             this.contentLayoutPanel.ColumnCount = 2;
-            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
+            this.contentLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
             this.contentLayoutPanel.Controls.Add(this.contentInformationLabl, 0, 0);
             this.contentLayoutPanel.Controls.Add(this.apiKeyLbl, 0, 1);
             this.contentLayoutPanel.Controls.Add(this.textBox1, 1, 1);
@@ -152,7 +152,7 @@
             this.apiKeyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.apiKeyLbl.Location = new System.Drawing.Point(3, 15);
             this.apiKeyLbl.Name = "apiKeyLbl";
-            this.apiKeyLbl.Size = new System.Drawing.Size(317, 32);
+            this.apiKeyLbl.Size = new System.Drawing.Size(123, 32);
             this.apiKeyLbl.TabIndex = 1;
             this.apiKeyLbl.Text = "API Key*";
             // 
@@ -160,9 +160,9 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(326, 18);
+            this.textBox1.Location = new System.Drawing.Point(132, 18);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(317, 26);
+            this.textBox1.Size = new System.Drawing.Size(511, 26);
             this.textBox1.TabIndex = 2;
             // 
             // descriptionLbl
@@ -173,7 +173,7 @@
             this.descriptionLbl.Location = new System.Drawing.Point(3, 57);
             this.descriptionLbl.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(317, 26);
+            this.descriptionLbl.Size = new System.Drawing.Size(123, 52);
             this.descriptionLbl.TabIndex = 3;
             this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -183,10 +183,12 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkLabel1.Location = new System.Drawing.Point(3, 93);
+            this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
+            this.linkLabel1.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(153)))), ((int)(((byte)(216)))));
+            this.linkLabel1.Location = new System.Drawing.Point(3, 119);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(317, 13);
+            this.linkLabel1.Size = new System.Drawing.Size(123, 26);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
