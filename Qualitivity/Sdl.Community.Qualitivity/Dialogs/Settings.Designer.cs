@@ -32,14 +32,13 @@ namespace Sdl.Community.Qualitivity.Dialogs
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode9 = new System.Windows.Forms.TreeNode("General", 0, 0);
-            System.Windows.Forms.TreeNode treeNode10 = new System.Windows.Forms.TreeNode("Language Rates", 11, 11);
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Clients", 1, 1);
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Activity Tracking", 9, 9);
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Quality Metrics", 12, 12);
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("TAUS DQF", 13, 13);
-            System.Windows.Forms.TreeNode treeNode16 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("General", 0, 0);
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Language Rates", 11, 11);
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Clients", 1, 1);
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("My Details", 8, 8);
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Activity Tracking", 9, 9);
+            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("Quality Metrics", 12, 12);
+            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("Backup", 10, 10);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel8 = new System.Windows.Forms.Panel();
@@ -99,7 +98,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripSplitButton_new_metric_group = new System.Windows.Forms.ToolStripSplitButton();
             this.sAEJ2450ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tAUSDQFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mQMCoreStandardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lISAQAMetricToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton_metric_group_edit = new System.Windows.Forms.ToolStripButton();
@@ -211,20 +209,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.checkBox_autoStartTrackingOnDocumentOpenEvent = new System.Windows.Forms.CheckBox();
             this.checkBox_record_segments_that_are_updated = new System.Windows.Forms.CheckBox();
             this.checkBox_recordNonUpdatedSegments = new System.Windows.Forms.CheckBox();
-            this.panel_dqf_panel = new System.Windows.Forms.Panel();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.linkLabel_create_new_translator_api_key = new System.Windows.Forms.LinkLabel();
-            this.label43 = new System.Windows.Forms.Label();
-            this.label50 = new System.Windows.Forms.Label();
-            this.panel10 = new System.Windows.Forms.Panel();
-            this.label45 = new System.Windows.Forms.Label();
-            this.label46 = new System.Windows.Forms.Label();
-            this.label49 = new System.Windows.Forms.Label();
-            this.label47 = new System.Windows.Forms.Label();
-            this.textBox_profile_user_dqf_key = new System.Windows.Forms.TextBox();
-            this.textBox_profile_user_translator_dqf_key = new System.Windows.Forms.TextBox();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label41 = new System.Windows.Forms.Label();
             this.panel_language_rates = new System.Windows.Forms.Panel();
             this.panel11 = new System.Windows.Forms.Panel();
             this.listView_price_groups = new System.Windows.Forms.ListView();
@@ -336,8 +320,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.toolStrip_clients.SuspendLayout();
             this.panel_activity_tracking.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_idleTimeOutMinutes)).BeginInit();
-            this.panel_dqf_panel.SuspendLayout();
-            this.panel10.SuspendLayout();
             this.panel_language_rates.SuspendLayout();
             this.panel11.SuspendLayout();
             this.contextMenuStrip_price_groups_listview.SuspendLayout();
@@ -428,47 +410,42 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.treeView_main.ItemHeight = 36;
             this.treeView_main.Location = new System.Drawing.Point(5, 5);
             this.treeView_main.Name = "treeView_main";
-            treeNode9.ImageIndex = 0;
-            treeNode9.Name = "Node_general";
-            treeNode9.SelectedImageIndex = 0;
-            treeNode9.Text = "General";
-            treeNode10.ImageIndex = 11;
-            treeNode10.Name = "Node_language_rates";
-            treeNode10.SelectedImageIndex = 11;
-            treeNode10.Text = "Language Rates";
-            treeNode11.ImageIndex = 1;
-            treeNode11.Name = "Node_clients";
-            treeNode11.SelectedImageIndex = 1;
-            treeNode11.Text = "Clients";
-            treeNode12.ImageIndex = 8;
-            treeNode12.Name = "Node_my_info";
-            treeNode12.SelectedImageIndex = 8;
-            treeNode12.Text = "My Details";
-            treeNode13.ImageIndex = 9;
-            treeNode13.Name = "Node_activity_tracking";
-            treeNode13.SelectedImageIndex = 9;
-            treeNode13.Text = "Activity Tracking";
-            treeNode14.ImageIndex = 12;
-            treeNode14.Name = "Node_quality_metrics";
-            treeNode14.SelectedImageIndex = 12;
-            treeNode14.Text = "Quality Metrics";
-            treeNode15.ImageIndex = 13;
-            treeNode15.Name = "Node_taus_dqf";
-            treeNode15.SelectedImageIndex = 13;
-            treeNode15.Text = "TAUS DQF";
-            treeNode16.ImageIndex = 10;
-            treeNode16.Name = "Node_backup";
-            treeNode16.SelectedImageIndex = 10;
-            treeNode16.Text = "Backup";
+            treeNode1.ImageIndex = 0;
+            treeNode1.Name = "Node_general";
+            treeNode1.SelectedImageIndex = 0;
+            treeNode1.Text = "General";
+            treeNode2.ImageIndex = 11;
+            treeNode2.Name = "Node_language_rates";
+            treeNode2.SelectedImageIndex = 11;
+            treeNode2.Text = "Language Rates";
+            treeNode3.ImageIndex = 1;
+            treeNode3.Name = "Node_clients";
+            treeNode3.SelectedImageIndex = 1;
+            treeNode3.Text = "Clients";
+            treeNode4.ImageIndex = 8;
+            treeNode4.Name = "Node_my_info";
+            treeNode4.SelectedImageIndex = 8;
+            treeNode4.Text = "My Details";
+            treeNode5.ImageIndex = 9;
+            treeNode5.Name = "Node_activity_tracking";
+            treeNode5.SelectedImageIndex = 9;
+            treeNode5.Text = "Activity Tracking";
+            treeNode6.ImageIndex = 12;
+            treeNode6.Name = "Node_quality_metrics";
+            treeNode6.SelectedImageIndex = 12;
+            treeNode6.Text = "Quality Metrics";
+            treeNode7.ImageIndex = 10;
+            treeNode7.Name = "Node_backup";
+            treeNode7.SelectedImageIndex = 10;
+            treeNode7.Text = "Backup";
             this.treeView_main.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode9,
-            treeNode10,
-            treeNode11,
-            treeNode12,
-            treeNode13,
-            treeNode14,
-            treeNode15,
-            treeNode16});
+            treeNode1,
+            treeNode2,
+            treeNode3,
+            treeNode4,
+            treeNode5,
+            treeNode6,
+            treeNode7});
             this.treeView_main.SelectedImageIndex = 0;
             this.treeView_main.Size = new System.Drawing.Size(221, 523);
             this.treeView_main.TabIndex = 21;
@@ -491,7 +468,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.imageList_settings_navigation.Images.SetKeyName(10, "HDD-Green-Backup-64.png");
             this.imageList_settings_navigation.Images.SetKeyName(11, "Coins-64x64.png");
             this.imageList_settings_navigation.Images.SetKeyName(12, "Tasks-48.png");
-            this.imageList_settings_navigation.Images.SetKeyName(13, "tausdata1.png");
+            this.imageList_settings_navigation.Images.SetKeyName(13, "");
             // 
             // panel3
             // 
@@ -500,7 +477,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.panel3.Controls.Add(this.panel_backup);
             this.panel3.Controls.Add(this.panel_clients);
             this.panel3.Controls.Add(this.panel_activity_tracking);
-            this.panel3.Controls.Add(this.panel_dqf_panel);
             this.panel3.Controls.Add(this.panel_language_rates);
             this.panel3.Controls.Add(this.panel_my_info);
             this.panel3.Controls.Add(this.panel4);
@@ -1006,7 +982,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             // 
             this.toolStripSplitButton_new_metric_group.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.sAEJ2450ToolStripMenuItem,
-            this.tAUSDQFToolStripMenuItem,
             this.mQMCoreStandardToolStripMenuItem,
             this.lISAQAMetricToolStripMenuItem});
             this.toolStripSplitButton_new_metric_group.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton_new_metric_group.Image")));
@@ -1022,13 +997,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.sAEJ2450ToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
             this.sAEJ2450ToolStripMenuItem.Text = "SAE J2450";
             this.sAEJ2450ToolStripMenuItem.Click += new System.EventHandler(this.sAEJ2450ToolStripMenuItem_Click);
-            // 
-            // tAUSDQFToolStripMenuItem
-            // 
-            this.tAUSDQFToolStripMenuItem.Name = "tAUSDQFToolStripMenuItem";
-            this.tAUSDQFToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
-            this.tAUSDQFToolStripMenuItem.Text = "TAUS DQF";
-            this.tAUSDQFToolStripMenuItem.Click += new System.EventHandler(this.tAUSDQFToolStripMenuItem_Click);
             // 
             // mQMCoreStandardToolStripMenuItem
             // 
@@ -2209,154 +2177,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.checkBox_recordNonUpdatedSegments.UseVisualStyleBackColor = true;
             this.checkBox_recordNonUpdatedSegments.CheckedChanged += new System.EventHandler(this.checkBox_recordNonUpdatedSegments_CheckedChanged);
             // 
-            // panel_dqf_panel
-            // 
-            this.panel_dqf_panel.Controls.Add(this.richTextBox2);
-            this.panel_dqf_panel.Controls.Add(this.linkLabel_create_new_translator_api_key);
-            this.panel_dqf_panel.Controls.Add(this.label43);
-            this.panel_dqf_panel.Controls.Add(this.label50);
-            this.panel_dqf_panel.Controls.Add(this.panel10);
-            this.panel_dqf_panel.Controls.Add(this.label49);
-            this.panel_dqf_panel.Controls.Add(this.label47);
-            this.panel_dqf_panel.Controls.Add(this.textBox_profile_user_dqf_key);
-            this.panel_dqf_panel.Controls.Add(this.textBox_profile_user_translator_dqf_key);
-            this.panel_dqf_panel.Controls.Add(this.label40);
-            this.panel_dqf_panel.Controls.Add(this.label41);
-            this.panel_dqf_panel.Location = new System.Drawing.Point(676, 103);
-            this.panel_dqf_panel.Name = "panel_dqf_panel";
-            this.panel_dqf_panel.Size = new System.Drawing.Size(205, 152);
-            this.panel_dqf_panel.TabIndex = 44;
-            // 
-            // richTextBox2
-            // 
-            this.richTextBox2.BackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.richTextBox2.Location = new System.Drawing.Point(32, 68);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.ReadOnly = true;
-            this.richTextBox2.Size = new System.Drawing.Size(542, 115);
-            this.richTextBox2.TabIndex = 13;
-            this.richTextBox2.Text = resources.GetString("richTextBox2.Text");
-            this.richTextBox2.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox2_LinkClicked);
-            // 
-            // linkLabel_create_new_translator_api_key
-            // 
-            this.linkLabel_create_new_translator_api_key.AutoSize = true;
-            this.linkLabel_create_new_translator_api_key.Location = new System.Drawing.Point(420, 233);
-            this.linkLabel_create_new_translator_api_key.Name = "linkLabel_create_new_translator_api_key";
-            this.linkLabel_create_new_translator_api_key.Size = new System.Drawing.Size(138, 13);
-            this.linkLabel_create_new_translator_api_key.TabIndex = 10;
-            this.linkLabel_create_new_translator_api_key.TabStop = true;
-            this.linkLabel_create_new_translator_api_key.Text = "Request Translator API Key";
-            this.linkLabel_create_new_translator_api_key.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_create_new_translator_api_key_LinkClicked);
-            // 
-            // label43
-            // 
-            this.label43.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label43.Location = new System.Drawing.Point(32, 258);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(371, 17);
-            this.label43.TabIndex = 9;
-            this.label43.Text = "Specify your Translator API key or request a new one.";
-            // 
-            // label50
-            // 
-            this.label50.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label50.Location = new System.Drawing.Point(32, 280);
-            this.label50.Name = "label50";
-            this.label50.Size = new System.Drawing.Size(533, 82);
-            this.label50.TabIndex = 9;
-            this.label50.Text = resources.GetString("label50.Text");
-            // 
-            // panel10
-            // 
-            this.panel10.Controls.Add(this.label45);
-            this.panel10.Controls.Add(this.label46);
-            this.panel10.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel10.Location = new System.Drawing.Point(0, 122);
-            this.panel10.Name = "panel10";
-            this.panel10.Size = new System.Drawing.Size(205, 30);
-            this.panel10.TabIndex = 12;
-            // 
-            // label45
-            // 
-            this.label45.AutoSize = true;
-            this.label45.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label45.ForeColor = System.Drawing.Color.Red;
-            this.label45.Location = new System.Drawing.Point(15, 7);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(16, 20);
-            this.label45.TabIndex = 9;
-            this.label45.Text = "*";
-            // 
-            // label46
-            // 
-            this.label46.AutoSize = true;
-            this.label46.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label46.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label46.Location = new System.Drawing.Point(30, 7);
-            this.label46.Name = "label46";
-            this.label46.Size = new System.Drawing.Size(77, 13);
-            this.label46.TabIndex = 6;
-            this.label46.Text = "Required fields";
-            // 
-            // label49
-            // 
-            this.label49.AutoSize = true;
-            this.label49.Location = new System.Drawing.Point(32, 211);
-            this.label49.Name = "label49";
-            this.label49.Size = new System.Drawing.Size(98, 13);
-            this.label49.TabIndex = 6;
-            this.label49.Text = "Translator API Key:";
-            // 
-            // label47
-            // 
-            this.label47.AutoSize = true;
-            this.label47.Location = new System.Drawing.Point(32, 26);
-            this.label47.Name = "label47";
-            this.label47.Size = new System.Drawing.Size(129, 13);
-            this.label47.TabIndex = 6;
-            this.label47.Text = "Project Manager API Key:";
-            // 
-            // textBox_profile_user_dqf_key
-            // 
-            this.textBox_profile_user_dqf_key.Location = new System.Drawing.Point(32, 43);
-            this.textBox_profile_user_dqf_key.Name = "textBox_profile_user_dqf_key";
-            this.textBox_profile_user_dqf_key.Size = new System.Drawing.Size(533, 20);
-            this.textBox_profile_user_dqf_key.TabIndex = 7;
-            this.textBox_profile_user_dqf_key.TextChanged += new System.EventHandler(this.textBox_profile_user_dqf_key_TextChanged);
-            // 
-            // textBox_profile_user_translator_dqf_key
-            // 
-            this.textBox_profile_user_translator_dqf_key.Location = new System.Drawing.Point(32, 229);
-            this.textBox_profile_user_translator_dqf_key.Name = "textBox_profile_user_translator_dqf_key";
-            this.textBox_profile_user_translator_dqf_key.Size = new System.Drawing.Size(382, 20);
-            this.textBox_profile_user_translator_dqf_key.TabIndex = 7;
-            this.textBox_profile_user_translator_dqf_key.TextChanged += new System.EventHandler(this.textBox_profile_user_translator_dqf_key_TextChanged);
-            // 
-            // label40
-            // 
-            this.label40.AutoSize = true;
-            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label40.ForeColor = System.Drawing.Color.Red;
-            this.label40.Location = new System.Drawing.Point(16, 230);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(16, 20);
-            this.label40.TabIndex = 9;
-            this.label40.Text = "*";
-            // 
-            // label41
-            // 
-            this.label41.AutoSize = true;
-            this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label41.ForeColor = System.Drawing.Color.Red;
-            this.label41.Location = new System.Drawing.Point(16, 44);
-            this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(16, 20);
-            this.label41.TabIndex = 9;
-            this.label41.Text = "*";
-            // 
             // panel_language_rates
             // 
             this.panel_language_rates.Controls.Add(this.panel11);
@@ -3101,10 +2921,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.panel_activity_tracking.ResumeLayout(false);
             this.panel_activity_tracking.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_idleTimeOutMinutes)).EndInit();
-            this.panel_dqf_panel.ResumeLayout(false);
-            this.panel_dqf_panel.PerformLayout();
-            this.panel10.ResumeLayout(false);
-            this.panel10.PerformLayout();
             this.panel_language_rates.ResumeLayout(false);
             this.panel11.ResumeLayout(false);
             this.contextMenuStrip_price_groups_listview.ResumeLayout(false);
@@ -3336,7 +3152,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
         private Splitter splitter4;
         private ToolStripSplitButton toolStripSplitButton_new_metric_group;
         private ToolStripMenuItem sAEJ2450ToolStripMenuItem;
-        private ToolStripMenuItem tAUSDQFToolStripMenuItem;
         private TreeView treeView_metric_group;
         private Panel panel7;
         private ContextMenuStrip contextMenuStrip_metric_group;
@@ -3355,23 +3170,9 @@ namespace Sdl.Community.Qualitivity.Dialogs
         private ComboBox comboBox_quality_metric_groups;
         private RichTextBox richTextBox1;
         private ToolStripMenuItem mQMCoreStandardToolStripMenuItem;
-        private Panel panel_dqf_panel;
-        private Panel panel10;
-        private Label label45;
-        private Label label49;
-        private Label label47;
-        private TextBox textBox_profile_user_translator_dqf_key;
-        private TextBox textBox_profile_user_dqf_key;
-        private Label label41;
-        private Label label40;
-        private Label label46;
         private ToolStripMenuItem lISAQAMetricToolStripMenuItem;
-        private RichTextBox richTextBox2;
-        private Label label43;
-        private Label label50;
         private Panel panel19;
         private Label label_quality_metrics_count;
-        private LinkLabel linkLabel_create_new_translator_api_key;
         private CheckBox checkBox_auto_add_language_rate;
         private CheckBox checkBox_auto_add_hourly_rate;
         private PictureBox pictureBox2;

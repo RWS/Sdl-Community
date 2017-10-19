@@ -598,12 +598,6 @@
     <EmbeddedResource Include="Flags\zt.gif" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\Studio.Time.Tracker.DQF.Default.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Reports\Studio.Time.Tracker.DQF.Empty.html" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Reports\Report.StyleSheet.03.xslt">
       <SubType>Designer</SubType>
     </EmbeddedResource>

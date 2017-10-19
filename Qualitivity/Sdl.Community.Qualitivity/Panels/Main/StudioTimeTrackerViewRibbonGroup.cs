@@ -65,61 +65,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
         }
     }
 
-
-    [Action("QualitivityProfessionalCreateDQFProject",
-        typeof(ProjectsController),
-        Name = "New DQF Project",
-        Description = "Create a new TAUS DQF Project",
-        Icon = "QualitivityDQFController_Icon")]
-    [ActionLayout(typeof(QualitivityProfessionalMainProjectRibbonGroup), ZIndex = 1, DisplayType = DisplayType.Normal)]
-    [Shortcut(Keys.Control | Keys.Alt | Keys.D)]
-    public class QualitivityProfessionalCreateDqfProject : AbstractViewControllerAction<QualitivityViewController>
-    {
-
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.IsEnabledCreateNewDqfProject;
-        }
-        protected override void Execute()
-        {
-            Controller.CreateNewDqfProject();
-        }
-    }
-
-
-
-
-
-
-
-
-    [Action("QualitivityContextCreateDQFProject", typeof(QualitivityViewController)
-        , Name = "New DQF Project", Description = "Create a new TAUS DQF Project", Icon = "QualitivityDQFController_Icon")]
-    [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 3, DisplayType.Default, "", true)]
-    [Shortcut(Keys.Control | Keys.Alt | Keys.D)]
-    public class QualitivityContextCreateDqfProject : AbstractViewControllerAction<QualitivityViewController>
-    {
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.IsEnabledCreateNewDqfProject;
-        }
-        protected override void Execute()
-        {
-            Controller.CreateNewDqfProject();
-        }
-    }
+	
 
     [Action("QualitivityContextCreateQualitivityProject", typeof(QualitivityViewController)
         , Name = "New Qualitivity Project", Description = "Create a new Qualitivity Project", Icon = "QualitivityCreateProjectAction_Icon")]
@@ -144,16 +90,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
     }
 
 
-
-
-
-
-
-
-
-
-
-
+	
     [Action("QualitivityRevisionQualityMetrics", typeof(EditorController), Icon = "QualitivityRevisionController_Icon", Name = "Add new Quality Metric")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.EditorDocumentContextMenuLocation)
         , 1, DisplayType.Default, "Add new Quality Metric", true)]
@@ -203,103 +140,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             Controller.ViewOnlineHelp();
         }
     }
-
-
-
-
-
-
-    [RibbonGroup("QualitivityTAUSDQFGroup", "TAUS DQF")]
-    [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 1)]
-    internal class QualitivityTausdqfGroup : AbstractRibbonGroup
-    {
-    }
-
-
-    [Action("QualitivityTAUSDQFNewProject", typeof(QualitivityViewController), Name = "New DQF Project", Description = "Create a new DQF Project", Icon = "QualitivityDQFController_Icon")]
-    [ActionLayout(typeof(QualitivityTausdqfGroup), ZIndex = 3, DisplayType = DisplayType.Large)]
-    public class QualitivityTausdqfNewProject : AbstractViewControllerAction<QualitivityViewController>
-    {
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.DqfProjectEnabled;
-        }
-        protected override void Execute()
-        {
-            Controller.CreateNewDqfProject2();
-        }
-    }
-    [Action("QualitivityTAUSDQFImportSettings", typeof(QualitivityViewController), Name = "Import Settings", Description = "Import DQF Project Settings", Icon = "QualitivityDQFImportProjectController_Icon")]
-    [ActionLayout(typeof(QualitivityTausdqfGroup), ZIndex = 2, DisplayType = DisplayType.Normal)]
-    public class QualitivityTausdqfImportProjectSettings : AbstractViewControllerAction<QualitivityViewController>
-    {
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.DqfProjectImportEnabled;
-        }
-        protected override void Execute()
-        {
-            Controller.ImportDqfProjectSettings();
-        }
-    }
-    [Action("QualitivityTAUSDQFSaveSettings", typeof(QualitivityViewController), Name = "Save Settings", Description = "Save DQF Project Settings", Icon = "QualitivityDQFSaveProjectController_Icon")]
-    [ActionLayout(typeof(QualitivityTausdqfGroup), ZIndex = 1, DisplayType = DisplayType.Normal)]
-    public class QualitivityTausdqfSaveProjectSettings : AbstractViewControllerAction<QualitivityViewController>
-    {
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.DqfProjectSaveEnabled;
-        }
-        protected override void Execute()
-        {
-            Controller.SaveDqfProjectSettings();
-        }
-    }
-    [Action("QualitivityTAUSDQFNewProjectTask", typeof(QualitivityViewController), Name = "New DQF Task", Description = "Create a new DQF Project Task", Icon = "QualitivityDQFNewProjectController_Icon")]
-    [ActionLayout(typeof(QualitivityTausdqfGroup), ZIndex = 0, DisplayType = DisplayType.Normal)]
-    public class QualitivityTausdqfNewProjectTask : AbstractViewControllerAction<QualitivityViewController>
-    {
-        public override void Initialize()
-        {
-            Enabled = false;
-            Controller.CheckEnabledObjectsEvent += Controller_CheckEnabledObjectsEvent;
-        }
-
-        private void Controller_CheckEnabledObjectsEvent(object sender, EventArgs e)
-        {
-            Enabled = Controller.DqfProjectTaskEnabled;
-        }
-        protected override void Execute()
-        {
-            Controller.AddNewDqfProjectTask();
-        }
-    }
-
-
-
-
-
-
-
-
+	
 
     [RibbonGroup("QualitivityToolsRibbonGroup", "QualitivityToolsRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 2)]
@@ -348,21 +189,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
         }
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	
 
 
     [RibbonGroup("QualitivityTimeTrackingRibbonGroup", "QualitivityTimeTrackingRibbonGroup_Name")]
@@ -417,11 +244,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
         }
 
     }
-
-
-
-
-
+	
 
     [RibbonGroup("QualitivityProjectTasksRibbonGroup", "QualitivityProjectTasksRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 4)]
@@ -519,21 +342,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     [RibbonGroup("QualitivityProjectsRibbonGroup", "QualitivityProjectsRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 5)]
     internal class QualitivityProjectsRibbonGroup : AbstractRibbonGroup
@@ -608,20 +416,13 @@ namespace Sdl.Community.Qualitivity.Panels.Main
     }
 
 
-
-
-
-
-
-
     [RibbonGroup("QualitivityConfigurationRibbonGroup", "QualitivityConfigurationRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 6)]
     internal class QualitivityConfigurationRibbonGroup : AbstractRibbonGroup
     {
     }
 
-
-
+	
 
     [Action("QualitivityConfiguration", typeof(QualitivityViewController), Name = "QualitivityConfiguration_Name", Description = "QualitivityConfiguration_Description", Icon = "QualitivitySettings_Icon")]
     [ActionLayout(typeof(QualitivityConfigurationRibbonGroup), 4, DisplayType.Large)]
