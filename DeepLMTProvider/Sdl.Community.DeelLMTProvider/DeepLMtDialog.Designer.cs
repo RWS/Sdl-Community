@@ -65,7 +65,7 @@
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 65F));
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-            this.mainTableLayout.Size = new System.Drawing.Size(656, 374);
+            this.mainTableLayout.Size = new System.Drawing.Size(668, 261);
             this.mainTableLayout.TabIndex = 0;
             // 
             // headerLayoutPanel
@@ -81,7 +81,7 @@
             this.headerLayoutPanel.Name = "headerLayoutPanel";
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.headerLayoutPanel.Size = new System.Drawing.Size(646, 67);
+            this.headerLayoutPanel.Size = new System.Drawing.Size(658, 44);
             this.headerLayoutPanel.TabIndex = 0;
             // 
             // titlePanel
@@ -92,14 +92,14 @@
             this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titlePanel.Location = new System.Drawing.Point(3, 3);
             this.titlePanel.Name = "titlePanel";
-            this.titlePanel.Size = new System.Drawing.Size(446, 61);
+            this.titlePanel.Size = new System.Drawing.Size(454, 38);
             this.titlePanel.TabIndex = 0;
             // 
             // subtitleLabel
             // 
             this.subtitleLabel.AutoSize = true;
             this.subtitleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.subtitleLabel.Location = new System.Drawing.Point(19, 34);
+            this.subtitleLabel.Location = new System.Drawing.Point(19, 16);
             this.subtitleLabel.Name = "subtitleLabel";
             this.subtitleLabel.Size = new System.Drawing.Size(290, 15);
             this.subtitleLabel.TabIndex = 1;
@@ -109,7 +109,7 @@
             // 
             this.titleLabel.AutoSize = true;
             this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(7, 19);
+            this.titleLabel.Location = new System.Drawing.Point(4, 1);
             this.titleLabel.Name = "titleLabel";
             this.titleLabel.Size = new System.Drawing.Size(107, 15);
             this.titleLabel.TabIndex = 0;
@@ -126,14 +126,14 @@
             this.contentLayoutPanel.Controls.Add(this.descriptionLbl, 0, 2);
             this.contentLayoutPanel.Controls.Add(this.linkLabel1, 0, 3);
             this.contentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.contentLayoutPanel.Location = new System.Drawing.Point(5, 80);
+            this.contentLayoutPanel.Location = new System.Drawing.Point(5, 57);
             this.contentLayoutPanel.Name = "contentLayoutPanel";
             this.contentLayoutPanel.RowCount = 4;
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.contentLayoutPanel.Size = new System.Drawing.Size(646, 231);
+            this.contentLayoutPanel.Size = new System.Drawing.Size(658, 158);
             this.contentLayoutPanel.TabIndex = 1;
             // 
             // contentInformationLabl
@@ -152,7 +152,7 @@
             this.apiKeyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.apiKeyLbl.Location = new System.Drawing.Point(3, 15);
             this.apiKeyLbl.Name = "apiKeyLbl";
-            this.apiKeyLbl.Size = new System.Drawing.Size(123, 32);
+            this.apiKeyLbl.Size = new System.Drawing.Size(125, 32);
             this.apiKeyLbl.TabIndex = 1;
             this.apiKeyLbl.Text = "API Key*";
             // 
@@ -160,9 +160,9 @@
             // 
             this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(132, 18);
+            this.textBox1.Location = new System.Drawing.Point(134, 18);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(511, 26);
+            this.textBox1.Size = new System.Drawing.Size(521, 26);
             this.textBox1.TabIndex = 2;
             // 
             // descriptionLbl
@@ -173,7 +173,7 @@
             this.descriptionLbl.Location = new System.Drawing.Point(3, 57);
             this.descriptionLbl.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.descriptionLbl.Name = "descriptionLbl";
-            this.descriptionLbl.Size = new System.Drawing.Size(123, 52);
+            this.descriptionLbl.Size = new System.Drawing.Size(125, 52);
             this.descriptionLbl.TabIndex = 3;
             this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -188,7 +188,7 @@
             this.linkLabel1.Location = new System.Drawing.Point(3, 119);
             this.linkLabel1.Margin = new System.Windows.Forms.Padding(3, 10, 3, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(123, 112);
+            this.linkLabel1.Size = new System.Drawing.Size(125, 39);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Click here to obtain your API Key from DeepL";
@@ -199,16 +199,16 @@
             this.buttonsPanel.Controls.Add(this.cancelBtn);
             this.buttonsPanel.Controls.Add(this.okButton);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonsPanel.Location = new System.Drawing.Point(5, 319);
+            this.buttonsPanel.Location = new System.Drawing.Point(5, 223);
             this.buttonsPanel.Name = "buttonsPanel";
-            this.buttonsPanel.Size = new System.Drawing.Size(646, 50);
+            this.buttonsPanel.Size = new System.Drawing.Size(658, 33);
             this.buttonsPanel.TabIndex = 2;
             // 
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cancelBtn.Location = new System.Drawing.Point(559, 13);
+            this.cancelBtn.Location = new System.Drawing.Point(571, 0);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(80, 30);
             this.cancelBtn.TabIndex = 1;
@@ -219,7 +219,7 @@
             // 
             this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.okButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.okButton.Location = new System.Drawing.Point(471, 13);
+            this.okButton.Location = new System.Drawing.Point(483, 0);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(82, 30);
             this.okButton.TabIndex = 0;
@@ -231,7 +231,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(656, 374);
+            this.ClientSize = new System.Drawing.Size(668, 261);
             this.Controls.Add(this.mainTableLayout);
             this.Name = "DeepLMtDialog";
             this.ShowIcon = false;
