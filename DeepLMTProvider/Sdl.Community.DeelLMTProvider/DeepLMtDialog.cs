@@ -9,18 +9,20 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.DeelLMTProvider;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider
 {
     public partial class DeepLMtDialog : Form
     {
+		private ITranslationProviderCredentialStore _credentialStore;
 		public DeepLTranslationOptions Options { get; set; }
-		public DeepLMtDialog(DeepLTranslationOptions options)
+		public DeepLMtDialog(DeepLTranslationOptions options, ITranslationProviderCredentialStore  credentialStore)
 		{
 
 			InitializeComponent();
 			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
-
+			_credentialStore = credentialStore;
 			contentInformationLabl.Text = "DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.";
 
 			//programatically merge columns 
@@ -46,6 +48,10 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			Options = options;
+			if (options != null)
+			{
+				apiKey.Text = options.ApiKey;
+			}
 		}
 
 		private void MainTableLayout_CellPaint(object sender, TableLayoutCellPaintEventArgs e)

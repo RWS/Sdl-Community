@@ -28,7 +28,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 			//get credentials
 			var getCredGt = GetCredentials(credentialStore, "deeplprovider:///");
-			var dialog = new DeepLMtDialog(options);
+			var dialog = new DeepLMtDialog(options,credentialStore);
 			if (dialog.ShowDialog(owner) == DialogResult.OK)
 			{
 				var provider = new DeepLMtTranslationProvider(options);
@@ -65,11 +65,33 @@ namespace Sdl.Community.DeepLMTProvider
 
 		//TO DO
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			var editProvider = translationProvider as DeepLMtTranslationProvider;
 
-        public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
+			if (editProvider == null)
+			{
+				return false;
+			}
+
+			//get saved key if there is one and put it into options
+			var savedCredentials = GetCredentials(credentialStore, "deeplprovider:///");
+			if (savedCredentials != null)
+			{
+				editProvider.Options.ApiKey = savedCredentials.Credential;
+			}
+
+			var dialog = new DeepLMtDialog(editProvider.Options,credentialStore);
+			if (dialog.ShowDialog(owner) == DialogResult.OK)
+			{
+				editProvider.Options = dialog.Options;
+				var apiKey = editProvider.Options.ApiKey;
+				SetDeeplCredentials(credentialStore, apiKey, true);
+				return true;
+			}
+			return false;
+		}
+
+		public bool GetCredentialsFromUser(IWin32Window owner, Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
         {
             throw new NotImplementedException();
         }
