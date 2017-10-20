@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
+﻿using Sdl.Community.TMBackup.Helpers;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Sdl.Community.TMBackup
@@ -20,31 +14,29 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_BackupFrom_Click(object sender, EventArgs e)
 		{
-			OpenFileDialog fromDialog = new OpenFileDialog();
+			var fromFolderDialog = new FolderSelectDialog();
 
-			fromDialog.InitialDirectory = "c:\\";
-			fromDialog.Filter = "TM files (*.sdltm)|*.sdltm| TB files (*sdltb.*)|*sdltb.*";
-			fromDialog.FilterIndex = 2;
-			fromDialog.Multiselect = true;
-			fromDialog.RestoreDirectory = true;
-
-			if (fromDialog.ShowDialog() == DialogResult.OK && fromDialog.FileNames.Any())
+			if (fromFolderDialog.ShowDialog())
 			{
-				foreach(var fileName in fromDialog.FileNames)
+				if (fromFolderDialog.Files.Any())
 				{
-					txt_BackupFrom.Text = txt_BackupFrom.Text + fileName + ";";
+					foreach (var folderName in fromFolderDialog.Files)
+					{
+						txt_BackupFrom.Text = txt_BackupFrom.Text + folderName + ";";
+					}
+					txt_BackupFrom.Text.Remove(txt_BackupFrom.Text.Length - 1);
 				}
-				txt_BackupFrom.Text.Remove(txt_BackupFrom.Text.Length - 1);
 			}
 		}
 
 		private void btn_BackupTo_Click(object sender, EventArgs e)
 		{
-			FolderBrowserDialog folderDialog = new FolderBrowserDialog();
-			if (folderDialog.ShowDialog() == DialogResult.OK)
+			var toFolderDialog = new FolderSelectDialog();
+
+			if (toFolderDialog.ShowDialog())
 			{
-				txt_BackupTo.Text = folderDialog.SelectedPath;
-			}			
+				txt_BackupTo.Text = toFolderDialog.FileName;
+			}					
 		}
 
 		private void btn_Details_Click(object sender, EventArgs e)
