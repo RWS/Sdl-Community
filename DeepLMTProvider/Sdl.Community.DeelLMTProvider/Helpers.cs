@@ -23,19 +23,9 @@ namespace Sdl.Community.DeelLMTProvider
 		}
 
 		public static string ProcessWebException(WebException exception)
-		{
-			var strResponse = string.Empty;
-			using (var response = (HttpWebResponse)exception.Response)
-			{
-				using (var responseStream = response.GetResponseStream())
-				{
-					using (var sr = new StreamReader(responseStream, Encoding.ASCII))
-					{
-						strResponse = sr.ReadToEnd();
-					}
-				}
-			}
-			return string.Format("Http status code={0}, error message={1}", exception.Status, strResponse);
+		{			
+			var response = (HttpWebResponse)exception.Response;		
+			return string.Format("Http status code={0}, error message= {1}", response.StatusCode, exception.Message);
 		}
 
 	}

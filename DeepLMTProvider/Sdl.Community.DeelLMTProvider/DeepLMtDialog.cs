@@ -65,11 +65,21 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
-			if (!string.IsNullOrWhiteSpace(apiKey.Text))
-			{
-				Options.ApiKey = apiKey.Text;
-			}
+			if (!ValidateForm()) return;
+			Options.ApiKey = apiKey.Text;
+		
+		}
+
+		private bool ValidateForm()
+		{
 			
+			if (string.IsNullOrWhiteSpace(apiKey.Text))
+			{
+				MessageBox.Show("Api Key is required");
+				DialogResult = DialogResult.None;
+				return false;
+			}
+			return true;
 		}
 	}
 }
