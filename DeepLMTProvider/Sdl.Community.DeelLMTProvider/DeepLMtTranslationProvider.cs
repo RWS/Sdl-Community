@@ -29,7 +29,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public Uri Uri => new TranslationProviderUriBuilder(ListTranslationProviderScheme).Uri;
 
-        public string Name => "Deepl Translator provider using DeepL Translator ";
+        public string Name => "DeepL Translator provider using DeepL Translator ";
 
         public bool SupportsTaggedInput => true;
 

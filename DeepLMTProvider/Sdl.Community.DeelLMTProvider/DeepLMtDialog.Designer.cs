@@ -61,7 +61,7 @@
             this.mainTableLayout.Controls.Add(this.buttonsPanel, 0, 2);
             this.mainTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.mainTableLayout.Location = new System.Drawing.Point(0, 0);
-            this.mainTableLayout.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.mainTableLayout.Margin = new System.Windows.Forms.Padding(2);
             this.mainTableLayout.Name = "mainTableLayout";
             this.mainTableLayout.RowCount = 3;
             this.mainTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -81,7 +81,7 @@
             this.headerLayoutPanel.Controls.Add(this.logoPicture, 1, 0);
             this.headerLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.headerLayoutPanel.Location = new System.Drawing.Point(2, 2);
-            this.headerLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.headerLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
             this.headerLayoutPanel.Name = "headerLayoutPanel";
             this.headerLayoutPanel.RowCount = 1;
             this.headerLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -95,7 +95,7 @@
             this.titlePanel.Controls.Add(this.titleLabel);
             this.titlePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.titlePanel.Location = new System.Drawing.Point(2, 2);
-            this.titlePanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.titlePanel.Margin = new System.Windows.Forms.Padding(2);
             this.titlePanel.Name = "titlePanel";
             this.titlePanel.Size = new System.Drawing.Size(358, 45);
             this.titlePanel.TabIndex = 0;
@@ -107,9 +107,9 @@
             this.subtitleLabel.Location = new System.Drawing.Point(7, 16);
             this.subtitleLabel.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.subtitleLabel.Name = "subtitleLabel";
-            this.subtitleLabel.Size = new System.Drawing.Size(290, 15);
+            this.subtitleLabel.Size = new System.Drawing.Size(291, 15);
             this.subtitleLabel.TabIndex = 1;
-            this.subtitleLabel.Text = "Specify yout DeepL Translation API account settings.";
+            this.subtitleLabel.Text = "Specify your DeepL Translation API account settings.";
             // 
             // titleLabel
             // 
@@ -125,9 +125,9 @@
             // logoPicture
             // 
             this.logoPicture.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.logoPicture.InitialImage = global::Sdl.Community.DeelLMTProvider.Properties.Resources.DeepL;
+            this.logoPicture.InitialImage = global::Sdl.Community.DeepLMTProvider.Properties.Resources.DeepL;
             this.logoPicture.Location = new System.Drawing.Point(449, 2);
-            this.logoPicture.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.logoPicture.Margin = new System.Windows.Forms.Padding(2);
             this.logoPicture.Name = "logoPicture";
             this.logoPicture.Size = new System.Drawing.Size(67, 25);
             this.logoPicture.TabIndex = 1;
@@ -145,7 +145,7 @@
             this.contentLayoutPanel.Controls.Add(this.linkLabel1, 0, 3);
             this.contentLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentLayoutPanel.Location = new System.Drawing.Point(2, 55);
-            this.contentLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.contentLayoutPanel.Margin = new System.Windows.Forms.Padding(2);
             this.contentLayoutPanel.Name = "contentLayoutPanel";
             this.contentLayoutPanel.RowCount = 4;
             this.contentLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
@@ -182,7 +182,7 @@
             this.apiKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.apiKey.Location = new System.Drawing.Point(105, 35);
-            this.apiKey.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.apiKey.Margin = new System.Windows.Forms.Padding(2);
             this.apiKey.Name = "apiKey";
             this.apiKey.PasswordChar = '*';
             this.apiKey.Size = new System.Drawing.Size(411, 20);
@@ -198,7 +198,7 @@
             this.descriptionLbl.Name = "descriptionLbl";
             this.descriptionLbl.Size = new System.Drawing.Size(99, 38);
             this.descriptionLbl.TabIndex = 3;
-            this.descriptionLbl.Text = "This API Key will be used for all projects that use DeepL Translation API";
+            this.descriptionLbl.Text = "This API Key will be used for all projects that use the DeepL Translation API";
             this.descriptionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // linkLabel1
@@ -223,7 +223,7 @@
             this.buttonsPanel.Controls.Add(this.okButton);
             this.buttonsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.buttonsPanel.Location = new System.Drawing.Point(2, 227);
-            this.buttonsPanel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonsPanel.Margin = new System.Windows.Forms.Padding(2);
             this.buttonsPanel.Name = "buttonsPanel";
             this.buttonsPanel.Size = new System.Drawing.Size(518, 36);
             this.buttonsPanel.TabIndex = 2;
@@ -234,7 +234,7 @@
             this.cancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cancelBtn.Location = new System.Drawing.Point(460, 8);
-            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.cancelBtn.Name = "cancelBtn";
             this.cancelBtn.Size = new System.Drawing.Size(53, 19);
             this.cancelBtn.TabIndex = 1;
@@ -247,7 +247,7 @@
             this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.okButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.okButton.Location = new System.Drawing.Point(401, 8);
-            this.okButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.okButton.Margin = new System.Windows.Forms.Padding(2);
             this.okButton.Name = "okButton";
             this.okButton.Size = new System.Drawing.Size(55, 19);
             this.okButton.TabIndex = 0;
@@ -262,7 +262,7 @@
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(522, 265);
             this.Controls.Add(this.mainTableLayout);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "DeepLMtDialog";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

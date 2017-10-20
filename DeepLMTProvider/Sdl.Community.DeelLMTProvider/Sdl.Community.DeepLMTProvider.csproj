@@ -8,8 +8,8 @@
     <ProjectGuid>{5BAEE9B8-1C76-4CA0-9921-4F3C82746A17}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.DeelLMTProvider</RootNamespace>
-    <AssemblyName>Sdl.Community.DeelLMTProvider</AssemblyName>
+    <RootNamespace>Sdl.Community.DeepLMTProvider</RootNamespace>
+    <AssemblyName>Sdl.Community.DeepLMTProvider</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

@@ -21,7 +21,7 @@ namespace Sdl.Community.DeepLMTProvider
 			InitializeComponent();
 			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
 
-			contentInformationLabl.Text = "DeepL API is a paid sutomated translation service. To use this service, set up a DeepL account and create a API Key.";
+			contentInformationLabl.Text = "DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.";
 
 			//programatically merge columns 
 			foreach (Control control in contentLayoutPanel.Controls)
@@ -37,7 +37,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 			
 			//read logo from resource and add it to image box
-			using (var imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Sdl.Community.DeelLMTProvider.Resources.DeepL.png"))
+			using (var imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Sdl.Community.DeepLMTProvider.Resources.DeepL.png"))
 			{
 				var image = new Bitmap(imgStream);
 				logoPicture.Image = image;

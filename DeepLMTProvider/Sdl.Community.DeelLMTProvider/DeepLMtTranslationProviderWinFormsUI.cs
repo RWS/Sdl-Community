@@ -63,6 +63,7 @@ namespace Sdl.Community.DeepLMTProvider
 			return cred;
 		}
 
+		//TO DO
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
         {
             throw new NotImplementedException();
@@ -75,9 +76,11 @@ namespace Sdl.Community.DeepLMTProvider
 
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
-            var info = new TranslationProviderDisplayInfo();
-            info.Name = "DeepL Translation provider";
-            return info;
+			var info = new TranslationProviderDisplayInfo()
+			{
+				Name = "DeepL Translation provider"
+			};
+			return info;
         }
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)

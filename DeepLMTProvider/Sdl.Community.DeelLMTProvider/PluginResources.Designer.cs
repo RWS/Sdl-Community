@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.DeelLMTProvider {
+namespace Sdl.Community.DeepLMTProvider {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.DeelLMTProvider {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.DeelLMTProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.DeepLMTProvider.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace Sdl.Community.DeelLMTProvider {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.DeelLMTProvider.
+        ///   Looks up a localized string similar to Sdl.Community.DeepLMTProvider.
         /// </summary>
         internal static string Plugin_Name {
             get {
