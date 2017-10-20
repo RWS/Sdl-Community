@@ -172,6 +172,7 @@
             this.txt_BackupTime.Location = new System.Drawing.Point(136, 55);
             this.txt_BackupTime.Multiline = true;
             this.txt_BackupTime.Name = "txt_BackupTime";
+            this.txt_BackupTime.ReadOnly = true;
             this.txt_BackupTime.Size = new System.Drawing.Size(400, 27);
             this.txt_BackupTime.TabIndex = 15;
             // 
@@ -180,6 +181,7 @@
             this.txt_BackupFileDesc.Location = new System.Drawing.Point(136, 22);
             this.txt_BackupFileDesc.Multiline = true;
             this.txt_BackupFileDesc.Name = "txt_BackupFileDesc";
+            this.txt_BackupFileDesc.ReadOnly = true;
             this.txt_BackupFileDesc.Size = new System.Drawing.Size(400, 27);
             this.txt_BackupFileDesc.TabIndex = 16;
             // 
