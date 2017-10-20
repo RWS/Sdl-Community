@@ -6,6 +6,8 @@
   <Author></Author>
   <Include>
     <File>Newtonsoft.Json.dll</File>
+    <File>Sdl.Community.DeepLMTProvider.Telemetry.dll</File>
+    <File>Microsoft.ApplicationInsights.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>

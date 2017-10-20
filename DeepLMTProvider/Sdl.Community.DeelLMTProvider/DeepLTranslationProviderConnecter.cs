@@ -6,17 +6,20 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.Community.DeelLMTProvider.Model;
+using Sdl.Community.DeepLMTProvider.Telemetry;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeelLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
+		private ITelemetryTracker _telemetryTracker;
 		public string ApiKey { get; set; }
 
 		public DeepLTranslationProviderConnecter(string key)
 		{
 			ApiKey = key;
+			_telemetryTracker = new TelemetryTracker();
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
@@ -41,8 +44,8 @@ namespace Sdl.Community.DeelLMTProvider
 				catch (WebException e) //will come back 400 bad request if there is a problem
 				{
 					var eReason = Helpers.ProcessWebException(e);
-					//get our localized error message from the resources file
-					//string message = PluginResources.ApiConnectorGoogleAuthErrorMsg1 + Environment.NewLine + PluginResources.ApiConnectorGoogleAuthErrorMsg2;
+					_telemetryTracker.TrackException(e);
+					_telemetryTracker.TrackTrace(e.StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
 					throw new Exception(eReason);
 				}
 			}
