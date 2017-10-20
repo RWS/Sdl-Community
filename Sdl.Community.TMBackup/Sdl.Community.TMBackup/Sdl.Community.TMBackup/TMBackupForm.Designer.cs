@@ -35,15 +35,15 @@
             this.lbl_BackupFrom = new System.Windows.Forms.Label();
             this.lbl_BackupTo = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.lbl_Description = new System.Windows.Forms.Label();
             this.txt_Description = new System.Windows.Forms.TextBox();
+            this.lbl_Description = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
-            this.lbl_BackupTime = new System.Windows.Forms.Label();
-            this.txt_BackupTime = new System.Windows.Forms.TextBox();
-            this.txt_BackupFileDesc = new System.Windows.Forms.TextBox();
-            this.btn_Details = new System.Windows.Forms.Button();
             this.btn_Change = new System.Windows.Forms.Button();
+            this.btn_Details = new System.Windows.Forms.Button();
+            this.txt_BackupFileDesc = new System.Windows.Forms.TextBox();
+            this.txt_BackupTime = new System.Windows.Forms.TextBox();
+            this.lbl_BackupTime = new System.Windows.Forms.Label();
+            this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
             this.btn_Create = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
@@ -55,32 +55,37 @@
             this.txt_BackupFrom.Location = new System.Drawing.Point(136, 10);
             this.txt_BackupFrom.Multiline = true;
             this.txt_BackupFrom.Name = "txt_BackupFrom";
-            this.txt_BackupFrom.Size = new System.Drawing.Size(400, 28);
+            this.txt_BackupFrom.ReadOnly = true;
+            this.txt_BackupFrom.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txt_BackupFrom.Size = new System.Drawing.Size(400, 87);
             this.txt_BackupFrom.TabIndex = 2;
             // 
             // btn_BackupFrom
             // 
-            this.btn_BackupFrom.Location = new System.Drawing.Point(542, 10);
+            this.btn_BackupFrom.Location = new System.Drawing.Point(542, 35);
             this.btn_BackupFrom.Name = "btn_BackupFrom";
             this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
             this.btn_BackupFrom.TabIndex = 3;
             this.btn_BackupFrom.Text = "Browse";
             this.btn_BackupFrom.UseVisualStyleBackColor = true;
+            this.btn_BackupFrom.Click += new System.EventHandler(this.btn_BackupFrom_Click);
             // 
             // btn_BackupTo
             // 
-            this.btn_BackupTo.Location = new System.Drawing.Point(542, 44);
+            this.btn_BackupTo.Location = new System.Drawing.Point(542, 121);
             this.btn_BackupTo.Name = "btn_BackupTo";
             this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
             this.btn_BackupTo.TabIndex = 4;
             this.btn_BackupTo.Text = "Browse";
             this.btn_BackupTo.UseVisualStyleBackColor = true;
+            this.btn_BackupTo.Click += new System.EventHandler(this.btn_BackupTo_Click);
             // 
             // txt_BackupTo
             // 
-            this.txt_BackupTo.Location = new System.Drawing.Point(136, 44);
+            this.txt_BackupTo.Location = new System.Drawing.Point(136, 121);
             this.txt_BackupTo.Multiline = true;
             this.txt_BackupTo.Name = "txt_BackupTo";
+            this.txt_BackupTo.ReadOnly = true;
             this.txt_BackupTo.Size = new System.Drawing.Size(400, 27);
             this.txt_BackupTo.TabIndex = 5;
             // 
@@ -96,7 +101,7 @@
             // lbl_BackupTo
             // 
             this.lbl_BackupTo.AutoSize = true;
-            this.lbl_BackupTo.Location = new System.Drawing.Point(20, 51);
+            this.lbl_BackupTo.Location = new System.Drawing.Point(20, 128);
             this.lbl_BackupTo.Name = "lbl_BackupTo";
             this.lbl_BackupTo.Size = new System.Drawing.Size(56, 13);
             this.lbl_BackupTo.TabIndex = 12;
@@ -115,25 +120,25 @@
             this.panel1.Controls.Add(this.txt_BackupTo);
             this.panel1.Location = new System.Drawing.Point(-9, 35);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(697, 136);
+            this.panel1.Size = new System.Drawing.Size(697, 196);
             this.panel1.TabIndex = 13;
-            // 
-            // lbl_Description
-            // 
-            this.lbl_Description.AutoSize = true;
-            this.lbl_Description.Location = new System.Drawing.Point(20, 80);
-            this.lbl_Description.Name = "lbl_Description";
-            this.lbl_Description.Size = new System.Drawing.Size(60, 13);
-            this.lbl_Description.TabIndex = 13;
-            this.lbl_Description.Text = "Description";
             // 
             // txt_Description
             // 
-            this.txt_Description.Location = new System.Drawing.Point(136, 77);
+            this.txt_Description.Location = new System.Drawing.Point(136, 154);
             this.txt_Description.Multiline = true;
             this.txt_Description.Name = "txt_Description";
             this.txt_Description.Size = new System.Drawing.Size(400, 27);
             this.txt_Description.TabIndex = 14;
+            // 
+            // lbl_Description
+            // 
+            this.lbl_Description.AutoSize = true;
+            this.lbl_Description.Location = new System.Drawing.Point(20, 157);
+            this.lbl_Description.Name = "lbl_Description";
+            this.lbl_Description.Size = new System.Drawing.Size(60, 13);
+            this.lbl_Description.TabIndex = 13;
+            this.lbl_Description.Text = "Description";
             // 
             // panel2
             // 
@@ -144,37 +149,30 @@
             this.panel2.Controls.Add(this.txt_BackupTime);
             this.panel2.Controls.Add(this.lbl_BackupTime);
             this.panel2.Controls.Add(this.lbl_BackupFileDesc);
-            this.panel2.Location = new System.Drawing.Point(-9, 159);
+            this.panel2.Location = new System.Drawing.Point(-9, 237);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(697, 103);
+            this.panel2.Size = new System.Drawing.Size(707, 103);
             this.panel2.TabIndex = 14;
             // 
-            // lbl_BackupFileDesc
+            // btn_Change
             // 
-            this.lbl_BackupFileDesc.AutoSize = true;
-            this.lbl_BackupFileDesc.Location = new System.Drawing.Point(20, 25);
-            this.lbl_BackupFileDesc.Name = "lbl_BackupFileDesc";
-            this.lbl_BackupFileDesc.Size = new System.Drawing.Size(84, 13);
-            this.lbl_BackupFileDesc.TabIndex = 0;
-            this.lbl_BackupFileDesc.Text = "What to backup";
+            this.btn_Change.Location = new System.Drawing.Point(542, 55);
+            this.btn_Change.Name = "btn_Change";
+            this.btn_Change.Size = new System.Drawing.Size(104, 27);
+            this.btn_Change.TabIndex = 18;
+            this.btn_Change.Text = "Change ↓";
+            this.btn_Change.UseVisualStyleBackColor = true;
+            this.btn_Change.Click += new System.EventHandler(this.btn_Change_Click);
             // 
-            // lbl_BackupTime
+            // btn_Details
             // 
-            this.lbl_BackupTime.AutoSize = true;
-            this.lbl_BackupTime.Location = new System.Drawing.Point(20, 58);
-            this.lbl_BackupTime.Name = "lbl_BackupTime";
-            this.lbl_BackupTime.Size = new System.Drawing.Size(87, 13);
-            this.lbl_BackupTime.TabIndex = 1;
-            this.lbl_BackupTime.Text = "When to backup";
-            // 
-            // txt_BackupTime
-            // 
-            this.txt_BackupTime.Location = new System.Drawing.Point(136, 55);
-            this.txt_BackupTime.Multiline = true;
-            this.txt_BackupTime.Name = "txt_BackupTime";
-            this.txt_BackupTime.ReadOnly = true;
-            this.txt_BackupTime.Size = new System.Drawing.Size(400, 27);
-            this.txt_BackupTime.TabIndex = 15;
+            this.btn_Details.Location = new System.Drawing.Point(542, 22);
+            this.btn_Details.Name = "btn_Details";
+            this.btn_Details.Size = new System.Drawing.Size(104, 27);
+            this.btn_Details.TabIndex = 17;
+            this.btn_Details.Text = "Details";
+            this.btn_Details.UseVisualStyleBackColor = true;
+            this.btn_Details.Click += new System.EventHandler(this.btn_Details_Click);
             // 
             // txt_BackupFileDesc
             // 
@@ -185,27 +183,36 @@
             this.txt_BackupFileDesc.Size = new System.Drawing.Size(400, 27);
             this.txt_BackupFileDesc.TabIndex = 16;
             // 
-            // btn_Details
+            // txt_BackupTime
             // 
-            this.btn_Details.Location = new System.Drawing.Point(542, 22);
-            this.btn_Details.Name = "btn_Details";
-            this.btn_Details.Size = new System.Drawing.Size(104, 27);
-            this.btn_Details.TabIndex = 17;
-            this.btn_Details.Text = "Details";
-            this.btn_Details.UseVisualStyleBackColor = true;
+            this.txt_BackupTime.Location = new System.Drawing.Point(136, 55);
+            this.txt_BackupTime.Multiline = true;
+            this.txt_BackupTime.Name = "txt_BackupTime";
+            this.txt_BackupTime.ReadOnly = true;
+            this.txt_BackupTime.Size = new System.Drawing.Size(400, 27);
+            this.txt_BackupTime.TabIndex = 15;
             // 
-            // btn_Change
+            // lbl_BackupTime
             // 
-            this.btn_Change.Location = new System.Drawing.Point(542, 55);
-            this.btn_Change.Name = "btn_Change";
-            this.btn_Change.Size = new System.Drawing.Size(104, 27);
-            this.btn_Change.TabIndex = 18;
-            this.btn_Change.Text = "Change ↓";
-            this.btn_Change.UseVisualStyleBackColor = true;
+            this.lbl_BackupTime.AutoSize = true;
+            this.lbl_BackupTime.Location = new System.Drawing.Point(20, 58);
+            this.lbl_BackupTime.Name = "lbl_BackupTime";
+            this.lbl_BackupTime.Size = new System.Drawing.Size(87, 13);
+            this.lbl_BackupTime.TabIndex = 1;
+            this.lbl_BackupTime.Text = "When to backup";
+            // 
+            // lbl_BackupFileDesc
+            // 
+            this.lbl_BackupFileDesc.AutoSize = true;
+            this.lbl_BackupFileDesc.Location = new System.Drawing.Point(20, 25);
+            this.lbl_BackupFileDesc.Name = "lbl_BackupFileDesc";
+            this.lbl_BackupFileDesc.Size = new System.Drawing.Size(84, 13);
+            this.lbl_BackupFileDesc.TabIndex = 0;
+            this.lbl_BackupFileDesc.Text = "What to backup";
             // 
             // btn_Create
             // 
-            this.btn_Create.Location = new System.Drawing.Point(416, 268);
+            this.btn_Create.Location = new System.Drawing.Point(424, 346);
             this.btn_Create.Name = "btn_Create";
             this.btn_Create.Size = new System.Drawing.Size(104, 27);
             this.btn_Create.TabIndex = 18;
@@ -214,7 +221,7 @@
             // 
             // btn_Cancel
             // 
-            this.btn_Cancel.Location = new System.Drawing.Point(526, 268);
+            this.btn_Cancel.Location = new System.Drawing.Point(534, 346);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(104, 27);
             this.btn_Cancel.TabIndex = 19;
@@ -225,7 +232,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(652, 308);
+            this.ClientSize = new System.Drawing.Size(653, 379);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_Create);
             this.Controls.Add(this.panel2);
