@@ -25,11 +25,11 @@ namespace Sdl.Community.DeepLMTProvider
 			Options = options;
 		}
 
-		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deelp");
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deepl");
 
         public Uri Uri => new TranslationProviderUriBuilder(ListTranslationProviderScheme).Uri;
 
-        public string Name => "DeepLMtTranslationProvider";
+        public string Name => "Deepl Translator provider using DeepL Translator ";
 
         public bool SupportsTaggedInput => true;
 

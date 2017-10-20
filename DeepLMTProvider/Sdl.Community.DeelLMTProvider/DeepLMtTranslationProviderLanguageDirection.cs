@@ -92,8 +92,10 @@ namespace Sdl.Community.DeepLMTProvider
 			var sourcetext = newseg.ToPlain();
 
 			translatedText = LookupDeepl(sourcetext);
+			translation.Add(translatedText);
 
-			return null;
+			results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
+			return results;
 			#endregion
 		}
 
