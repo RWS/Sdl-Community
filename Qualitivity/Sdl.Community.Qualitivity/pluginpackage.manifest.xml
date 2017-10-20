@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Qualitivity</PlugInName>
-  <Version>2.6.4.1</Version>
+  <Version>2.6.4.2</Version>
   <Description>Qualitivity </Description>
   <Author>Sdl Community</Author>
   <Include>

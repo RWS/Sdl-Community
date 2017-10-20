@@ -28,134 +28,236 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.txt_TMSelection = new System.Windows.Forms.TextBox();
-            this.btn_TMSelection = new System.Windows.Forms.Button();
-            this.btn_TMBackupDestination = new System.Windows.Forms.Button();
-            this.txt_TMBackupDestination = new System.Windows.Forms.TextBox();
-            this.lbl_ScheduleBackup = new System.Windows.Forms.Label();
-            this.radioBtn_Daily = new System.Windows.Forms.RadioButton();
-            this.radioBtn_Weekly = new System.Windows.Forms.RadioButton();
-            this.radioBtn_Montly = new System.Windows.Forms.RadioButton();
-            this.radioBtn_Customized = new System.Windows.Forms.RadioButton();
+            this.txt_BackupFrom = new System.Windows.Forms.TextBox();
+            this.btn_BackupFrom = new System.Windows.Forms.Button();
+            this.btn_BackupTo = new System.Windows.Forms.Button();
+            this.txt_BackupTo = new System.Windows.Forms.TextBox();
+            this.lbl_BackupFrom = new System.Windows.Forms.Label();
+            this.lbl_BackupTo = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.lbl_Description = new System.Windows.Forms.Label();
+            this.txt_Description = new System.Windows.Forms.TextBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
+            this.lbl_BackupTime = new System.Windows.Forms.Label();
+            this.txt_BackupTime = new System.Windows.Forms.TextBox();
+            this.txt_BackupFileDesc = new System.Windows.Forms.TextBox();
+            this.btn_Details = new System.Windows.Forms.Button();
+            this.btn_Change = new System.Windows.Forms.Button();
+            this.btn_Create = new System.Windows.Forms.Button();
+            this.btn_Cancel = new System.Windows.Forms.Button();
+            this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // txt_TMSelection
+            // txt_BackupFrom
             // 
-            this.txt_TMSelection.Location = new System.Drawing.Point(27, 84);
-            this.txt_TMSelection.Multiline = true;
-            this.txt_TMSelection.Name = "txt_TMSelection";
-            this.txt_TMSelection.Size = new System.Drawing.Size(181, 46);
-            this.txt_TMSelection.TabIndex = 2;
+            this.txt_BackupFrom.Location = new System.Drawing.Point(136, 10);
+            this.txt_BackupFrom.Multiline = true;
+            this.txt_BackupFrom.Name = "txt_BackupFrom";
+            this.txt_BackupFrom.Size = new System.Drawing.Size(400, 28);
+            this.txt_BackupFrom.TabIndex = 2;
             // 
-            // btn_TMSelection
+            // btn_BackupFrom
             // 
-            this.btn_TMSelection.Location = new System.Drawing.Point(27, 46);
-            this.btn_TMSelection.Name = "btn_TMSelection";
-            this.btn_TMSelection.Size = new System.Drawing.Size(181, 27);
-            this.btn_TMSelection.TabIndex = 3;
-            this.btn_TMSelection.Text = "Choose TM";
-            this.btn_TMSelection.UseVisualStyleBackColor = true;
+            this.btn_BackupFrom.Location = new System.Drawing.Point(542, 10);
+            this.btn_BackupFrom.Name = "btn_BackupFrom";
+            this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
+            this.btn_BackupFrom.TabIndex = 3;
+            this.btn_BackupFrom.Text = "Browse";
+            this.btn_BackupFrom.UseVisualStyleBackColor = true;
             // 
-            // btn_TMBackupDestination
+            // btn_BackupTo
             // 
-            this.btn_TMBackupDestination.Location = new System.Drawing.Point(339, 46);
-            this.btn_TMBackupDestination.Name = "btn_TMBackupDestination";
-            this.btn_TMBackupDestination.Size = new System.Drawing.Size(181, 27);
-            this.btn_TMBackupDestination.TabIndex = 4;
-            this.btn_TMBackupDestination.Text = "Select TM backup destination";
-            this.btn_TMBackupDestination.UseVisualStyleBackColor = true;
+            this.btn_BackupTo.Location = new System.Drawing.Point(542, 44);
+            this.btn_BackupTo.Name = "btn_BackupTo";
+            this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
+            this.btn_BackupTo.TabIndex = 4;
+            this.btn_BackupTo.Text = "Browse";
+            this.btn_BackupTo.UseVisualStyleBackColor = true;
             // 
-            // txt_TMBackupDestination
+            // txt_BackupTo
             // 
-            this.txt_TMBackupDestination.Location = new System.Drawing.Point(339, 84);
-            this.txt_TMBackupDestination.Multiline = true;
-            this.txt_TMBackupDestination.Name = "txt_TMBackupDestination";
-            this.txt_TMBackupDestination.Size = new System.Drawing.Size(181, 46);
-            this.txt_TMBackupDestination.TabIndex = 5;
+            this.txt_BackupTo.Location = new System.Drawing.Point(136, 44);
+            this.txt_BackupTo.Multiline = true;
+            this.txt_BackupTo.Name = "txt_BackupTo";
+            this.txt_BackupTo.Size = new System.Drawing.Size(400, 27);
+            this.txt_BackupTo.TabIndex = 5;
             // 
-            // lbl_ScheduleBackup
+            // lbl_BackupFrom
             // 
-            this.lbl_ScheduleBackup.AutoSize = true;
-            this.lbl_ScheduleBackup.Location = new System.Drawing.Point(24, 157);
-            this.lbl_ScheduleBackup.Name = "lbl_ScheduleBackup";
-            this.lbl_ScheduleBackup.Size = new System.Drawing.Size(91, 13);
-            this.lbl_ScheduleBackup.TabIndex = 6;
-            this.lbl_ScheduleBackup.Text = "Schedule backup";
+            this.lbl_BackupFrom.AutoSize = true;
+            this.lbl_BackupFrom.Location = new System.Drawing.Point(20, 18);
+            this.lbl_BackupFrom.Name = "lbl_BackupFrom";
+            this.lbl_BackupFrom.Size = new System.Drawing.Size(67, 13);
+            this.lbl_BackupFrom.TabIndex = 11;
+            this.lbl_BackupFrom.Text = "Backup from";
             // 
-            // radioBtn_Daily
+            // lbl_BackupTo
             // 
-            this.radioBtn_Daily.AutoSize = true;
-            this.radioBtn_Daily.Location = new System.Drawing.Point(27, 186);
-            this.radioBtn_Daily.Name = "radioBtn_Daily";
-            this.radioBtn_Daily.Size = new System.Drawing.Size(48, 17);
-            this.radioBtn_Daily.TabIndex = 7;
-            this.radioBtn_Daily.TabStop = true;
-            this.radioBtn_Daily.Text = "Daily";
-            this.radioBtn_Daily.UseVisualStyleBackColor = true;
+            this.lbl_BackupTo.AutoSize = true;
+            this.lbl_BackupTo.Location = new System.Drawing.Point(20, 51);
+            this.lbl_BackupTo.Name = "lbl_BackupTo";
+            this.lbl_BackupTo.Size = new System.Drawing.Size(56, 13);
+            this.lbl_BackupTo.TabIndex = 12;
+            this.lbl_BackupTo.Text = "Backup to";
             // 
-            // radioBtn_Weekly
+            // panel1
             // 
-            this.radioBtn_Weekly.AutoSize = true;
-            this.radioBtn_Weekly.Location = new System.Drawing.Point(27, 209);
-            this.radioBtn_Weekly.Name = "radioBtn_Weekly";
-            this.radioBtn_Weekly.Size = new System.Drawing.Size(61, 17);
-            this.radioBtn_Weekly.TabIndex = 8;
-            this.radioBtn_Weekly.TabStop = true;
-            this.radioBtn_Weekly.Text = "Weekly";
-            this.radioBtn_Weekly.UseVisualStyleBackColor = true;
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.txt_Description);
+            this.panel1.Controls.Add(this.lbl_Description);
+            this.panel1.Controls.Add(this.lbl_BackupFrom);
+            this.panel1.Controls.Add(this.lbl_BackupTo);
+            this.panel1.Controls.Add(this.txt_BackupFrom);
+            this.panel1.Controls.Add(this.btn_BackupFrom);
+            this.panel1.Controls.Add(this.btn_BackupTo);
+            this.panel1.Controls.Add(this.txt_BackupTo);
+            this.panel1.Location = new System.Drawing.Point(-9, 35);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(697, 136);
+            this.panel1.TabIndex = 13;
             // 
-            // radioBtn_Montly
+            // lbl_Description
             // 
-            this.radioBtn_Montly.AutoSize = true;
-            this.radioBtn_Montly.Location = new System.Drawing.Point(27, 232);
-            this.radioBtn_Montly.Name = "radioBtn_Montly";
-            this.radioBtn_Montly.Size = new System.Drawing.Size(56, 17);
-            this.radioBtn_Montly.TabIndex = 9;
-            this.radioBtn_Montly.TabStop = true;
-            this.radioBtn_Montly.Text = "Montly";
-            this.radioBtn_Montly.UseVisualStyleBackColor = true;
+            this.lbl_Description.AutoSize = true;
+            this.lbl_Description.Location = new System.Drawing.Point(20, 80);
+            this.lbl_Description.Name = "lbl_Description";
+            this.lbl_Description.Size = new System.Drawing.Size(60, 13);
+            this.lbl_Description.TabIndex = 13;
+            this.lbl_Description.Text = "Description";
             // 
-            // radioBtn_Customized
+            // txt_Description
             // 
-            this.radioBtn_Customized.AutoSize = true;
-            this.radioBtn_Customized.Location = new System.Drawing.Point(27, 255);
-            this.radioBtn_Customized.Name = "radioBtn_Customized";
-            this.radioBtn_Customized.Size = new System.Drawing.Size(67, 17);
-            this.radioBtn_Customized.TabIndex = 10;
-            this.radioBtn_Customized.TabStop = true;
-            this.radioBtn_Customized.Text = "Between";
-            this.radioBtn_Customized.UseVisualStyleBackColor = true;
+            this.txt_Description.Location = new System.Drawing.Point(136, 77);
+            this.txt_Description.Multiline = true;
+            this.txt_Description.Name = "txt_Description";
+            this.txt_Description.Size = new System.Drawing.Size(400, 27);
+            this.txt_Description.TabIndex = 14;
+            // 
+            // panel2
+            // 
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.btn_Change);
+            this.panel2.Controls.Add(this.btn_Details);
+            this.panel2.Controls.Add(this.txt_BackupFileDesc);
+            this.panel2.Controls.Add(this.txt_BackupTime);
+            this.panel2.Controls.Add(this.lbl_BackupTime);
+            this.panel2.Controls.Add(this.lbl_BackupFileDesc);
+            this.panel2.Location = new System.Drawing.Point(-9, 159);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(697, 103);
+            this.panel2.TabIndex = 14;
+            // 
+            // lbl_BackupFileDesc
+            // 
+            this.lbl_BackupFileDesc.AutoSize = true;
+            this.lbl_BackupFileDesc.Location = new System.Drawing.Point(20, 25);
+            this.lbl_BackupFileDesc.Name = "lbl_BackupFileDesc";
+            this.lbl_BackupFileDesc.Size = new System.Drawing.Size(84, 13);
+            this.lbl_BackupFileDesc.TabIndex = 0;
+            this.lbl_BackupFileDesc.Text = "What to backup";
+            // 
+            // lbl_BackupTime
+            // 
+            this.lbl_BackupTime.AutoSize = true;
+            this.lbl_BackupTime.Location = new System.Drawing.Point(20, 58);
+            this.lbl_BackupTime.Name = "lbl_BackupTime";
+            this.lbl_BackupTime.Size = new System.Drawing.Size(87, 13);
+            this.lbl_BackupTime.TabIndex = 1;
+            this.lbl_BackupTime.Text = "When to backup";
+            // 
+            // txt_BackupTime
+            // 
+            this.txt_BackupTime.Location = new System.Drawing.Point(136, 55);
+            this.txt_BackupTime.Multiline = true;
+            this.txt_BackupTime.Name = "txt_BackupTime";
+            this.txt_BackupTime.ReadOnly = true;
+            this.txt_BackupTime.Size = new System.Drawing.Size(400, 27);
+            this.txt_BackupTime.TabIndex = 15;
+            // 
+            // txt_BackupFileDesc
+            // 
+            this.txt_BackupFileDesc.Location = new System.Drawing.Point(136, 22);
+            this.txt_BackupFileDesc.Multiline = true;
+            this.txt_BackupFileDesc.Name = "txt_BackupFileDesc";
+            this.txt_BackupFileDesc.ReadOnly = true;
+            this.txt_BackupFileDesc.Size = new System.Drawing.Size(400, 27);
+            this.txt_BackupFileDesc.TabIndex = 16;
+            // 
+            // btn_Details
+            // 
+            this.btn_Details.Location = new System.Drawing.Point(542, 22);
+            this.btn_Details.Name = "btn_Details";
+            this.btn_Details.Size = new System.Drawing.Size(104, 27);
+            this.btn_Details.TabIndex = 17;
+            this.btn_Details.Text = "Details";
+            this.btn_Details.UseVisualStyleBackColor = true;
+            // 
+            // btn_Change
+            // 
+            this.btn_Change.Location = new System.Drawing.Point(542, 55);
+            this.btn_Change.Name = "btn_Change";
+            this.btn_Change.Size = new System.Drawing.Size(104, 27);
+            this.btn_Change.TabIndex = 18;
+            this.btn_Change.Text = "Change ↓";
+            this.btn_Change.UseVisualStyleBackColor = true;
+            // 
+            // btn_Create
+            // 
+            this.btn_Create.Location = new System.Drawing.Point(416, 268);
+            this.btn_Create.Name = "btn_Create";
+            this.btn_Create.Size = new System.Drawing.Size(104, 27);
+            this.btn_Create.TabIndex = 18;
+            this.btn_Create.Text = "Create";
+            this.btn_Create.UseVisualStyleBackColor = true;
+            // 
+            // btn_Cancel
+            // 
+            this.btn_Cancel.Location = new System.Drawing.Point(526, 268);
+            this.btn_Cancel.Name = "btn_Cancel";
+            this.btn_Cancel.Size = new System.Drawing.Size(104, 27);
+            this.btn_Cancel.TabIndex = 19;
+            this.btn_Cancel.Text = "Cancel";
+            this.btn_Cancel.UseVisualStyleBackColor = true;
             // 
             // TMBackupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(608, 322);
-            this.Controls.Add(this.radioBtn_Customized);
-            this.Controls.Add(this.radioBtn_Montly);
-            this.Controls.Add(this.radioBtn_Weekly);
-            this.Controls.Add(this.radioBtn_Daily);
-            this.Controls.Add(this.lbl_ScheduleBackup);
-            this.Controls.Add(this.txt_TMBackupDestination);
-            this.Controls.Add(this.btn_TMBackupDestination);
-            this.Controls.Add(this.btn_TMSelection);
-            this.Controls.Add(this.txt_TMSelection);
+            this.ClientSize = new System.Drawing.Size(652, 308);
+            this.Controls.Add(this.btn_Cancel);
+            this.Controls.Add(this.btn_Create);
+            this.Controls.Add(this.panel2);
+            this.Controls.Add(this.panel1);
             this.Name = "TMBackupForm";
-            this.Text = "TMBackupForm";
+            this.Text = "New backup";
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
 
 		#endregion
-		private System.Windows.Forms.TextBox txt_TMSelection;
-		private System.Windows.Forms.Button btn_TMSelection;
-		private System.Windows.Forms.Button btn_TMBackupDestination;
-		private System.Windows.Forms.TextBox txt_TMBackupDestination;
-		private System.Windows.Forms.Label lbl_ScheduleBackup;
-		private System.Windows.Forms.RadioButton radioBtn_Daily;
-		private System.Windows.Forms.RadioButton radioBtn_Weekly;
-		private System.Windows.Forms.RadioButton radioBtn_Montly;
-		private System.Windows.Forms.RadioButton radioBtn_Customized;
+		private System.Windows.Forms.TextBox txt_BackupFrom;
+		private System.Windows.Forms.Button btn_BackupFrom;
+		private System.Windows.Forms.Button btn_BackupTo;
+		private System.Windows.Forms.TextBox txt_BackupTo;
+		private System.Windows.Forms.Label lbl_BackupFrom;
+		private System.Windows.Forms.Label lbl_BackupTo;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Label lbl_Description;
+		private System.Windows.Forms.TextBox txt_Description;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Label lbl_BackupTime;
+		private System.Windows.Forms.Label lbl_BackupFileDesc;
+		private System.Windows.Forms.TextBox txt_BackupFileDesc;
+		private System.Windows.Forms.TextBox txt_BackupTime;
+		private System.Windows.Forms.Button btn_Change;
+		private System.Windows.Forms.Button btn_Details;
+		private System.Windows.Forms.Button btn_Create;
+		private System.Windows.Forms.Button btn_Cancel;
 	}
 }
