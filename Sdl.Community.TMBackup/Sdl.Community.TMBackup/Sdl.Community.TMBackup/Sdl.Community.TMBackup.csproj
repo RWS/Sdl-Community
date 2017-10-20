@@ -99,6 +99,7 @@
       <DependentUpon>TMBackupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TMBackupRibbon.cs" />
+    <Compile Include="ViewModels\TMBackupViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
