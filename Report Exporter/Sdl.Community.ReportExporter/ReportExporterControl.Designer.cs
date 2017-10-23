@@ -70,7 +70,7 @@
 			this.projListbox.FormattingEnabled = true;
 			this.projListbox.Location = new System.Drawing.Point(19, 16);
 			this.projListbox.Name = "projListbox";
-			this.projListbox.Size = new System.Drawing.Size(176, 381);
+			this.projListbox.Size = new System.Drawing.Size(178, 394);
 			this.projListbox.TabIndex = 1;
 			// 
 			// outputLbl
@@ -97,6 +97,7 @@
 			this.browseBtn.TabIndex = 4;
 			this.browseBtn.Text = "Browse";
 			this.browseBtn.UseVisualStyleBackColor = true;
+			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
 			// 
 			// includeHeaderCheck
 			// 
@@ -120,9 +121,9 @@
 			// languagesListBox
 			// 
 			this.languagesListBox.FormattingEnabled = true;
-			this.languagesListBox.Location = new System.Drawing.Point(216, 93);
+			this.languagesListBox.Location = new System.Drawing.Point(216, 88);
 			this.languagesListBox.Name = "languagesListBox";
-			this.languagesListBox.Size = new System.Drawing.Size(250, 304);
+			this.languagesListBox.Size = new System.Drawing.Size(250, 334);
 			this.languagesListBox.TabIndex = 7;
 			// 
 			// ReportExporterControl

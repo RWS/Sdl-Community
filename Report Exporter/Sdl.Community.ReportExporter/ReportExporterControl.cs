@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.ReportExporter.Helpers;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.ReportExporter
@@ -19,5 +20,14 @@ namespace Sdl.Community.ReportExporter
 		}
 
 		public ReportExporterSettings Settings { get; set; }
+
+		private void browseBtn_Click(object sender, EventArgs e)
+		{
+			var folderDialog = new FolderSelectDialog();
+			if (folderDialog.ShowDialog())
+			{
+				outputPathField.Text = folderDialog.FileName;
+			}
+		}
 	}
 }
