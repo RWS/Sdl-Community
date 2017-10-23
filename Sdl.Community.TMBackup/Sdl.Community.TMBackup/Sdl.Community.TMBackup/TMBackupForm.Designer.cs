@@ -36,7 +36,7 @@
             this.lbl_BackupTo = new System.Windows.Forms.Label();
             this.txt_Description = new System.Windows.Forms.TextBox();
             this.lbl_Description = new System.Windows.Forms.Label();
-            this.btn_Create = new System.Windows.Forms.Button();
+            this.btn_SaveSettings = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.btn_Change = new System.Windows.Forms.Button();
             this.btn_Details = new System.Windows.Forms.Button();
@@ -123,14 +123,15 @@
             this.lbl_Description.TabIndex = 13;
             this.lbl_Description.Text = "Description";
             // 
-            // btn_Create
+            // btn_SaveSettings
             // 
-            this.btn_Create.Location = new System.Drawing.Point(433, 357);
-            this.btn_Create.Name = "btn_Create";
-            this.btn_Create.Size = new System.Drawing.Size(104, 27);
-            this.btn_Create.TabIndex = 18;
-            this.btn_Create.Text = "Create";
-            this.btn_Create.UseVisualStyleBackColor = true;
+            this.btn_SaveSettings.Location = new System.Drawing.Point(433, 357);
+            this.btn_SaveSettings.Name = "btn_SaveSettings";
+            this.btn_SaveSettings.Size = new System.Drawing.Size(104, 27);
+            this.btn_SaveSettings.TabIndex = 18;
+            this.btn_SaveSettings.Text = "Save Settings";
+            this.btn_SaveSettings.UseVisualStyleBackColor = true;
+            this.btn_SaveSettings.Click += new System.EventHandler(this.btn_SaveSettings_Click);
             // 
             // btn_Cancel
             // 
@@ -149,6 +150,7 @@
             this.btn_Change.TabIndex = 25;
             this.btn_Change.Text = "Change ↓";
             this.btn_Change.UseVisualStyleBackColor = true;
+            this.btn_Change.Click += new System.EventHandler(this.btn_Change_Click);
             // 
             // btn_Details
             // 
@@ -233,7 +235,7 @@
             this.Controls.Add(this.lbl_BackupFileDesc);
             this.Controls.Add(this.txt_BackupTo);
             this.Controls.Add(this.btn_Cancel);
-            this.Controls.Add(this.btn_Create);
+            this.Controls.Add(this.btn_SaveSettings);
             this.Name = "TMBackupForm";
             this.Text = "New backup";
             this.ResumeLayout(false);
@@ -250,7 +252,7 @@
 		private System.Windows.Forms.Label lbl_BackupTo;
 		private System.Windows.Forms.Label lbl_Description;
 		private System.Windows.Forms.TextBox txt_Description;
-		private System.Windows.Forms.Button btn_Create;
+		private System.Windows.Forms.Button btn_SaveSettings;
 		private System.Windows.Forms.Button btn_Cancel;
 		private System.Windows.Forms.Button btn_Change;
 		private System.Windows.Forms.Button btn_Details;

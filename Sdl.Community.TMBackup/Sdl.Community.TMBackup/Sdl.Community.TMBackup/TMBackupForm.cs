@@ -46,6 +46,12 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Change_Click(object sender, EventArgs e)
 		{
+			TMBackupChangeForm changeForm = new TMBackupChangeForm();
+			changeForm.ShowDialog();
+		}
+
+		private void btn_SaveSettings_Click(object sender, EventArgs e)
+		{
 
 		}
 	}
