@@ -31,9 +31,6 @@
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.col_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbl_RulesDescription = new System.Windows.Forms.Label();
             this.btn_Add = new System.Windows.Forms.Button();
             this.btn_UpArrow = new System.Windows.Forms.Button();
@@ -41,6 +38,9 @@
             this.btn_DownArrow = new System.Windows.Forms.Button();
             this.btn_Reset = new System.Windows.Forms.Button();
             this.lbl_Line = new System.Windows.Forms.Label();
+            this.col_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -76,26 +76,8 @@
             this.dataGridView1.Location = new System.Drawing.Point(12, 23);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(421, 43);
+            this.dataGridView1.Size = new System.Drawing.Size(432, 43);
             this.dataGridView1.TabIndex = 9;
-            // 
-            // col_Action
-            // 
-            this.col_Action.HeaderText = "Action";
-            this.col_Action.Name = "col_Action";
-            this.col_Action.ReadOnly = true;
-            // 
-            // col_Type
-            // 
-            this.col_Type.HeaderText = "Type";
-            this.col_Type.Name = "col_Type";
-            this.col_Type.ReadOnly = true;
-            // 
-            // col_Pattern
-            // 
-            this.col_Pattern.HeaderText = "Pattern";
-            this.col_Pattern.Name = "col_Pattern";
-            this.col_Pattern.ReadOnly = true;
             // 
             // lbl_RulesDescription
             // 
@@ -165,6 +147,24 @@
             this.lbl_Line.Size = new System.Drawing.Size(567, 2);
             this.lbl_Line.TabIndex = 16;
             // 
+            // col_Action
+            // 
+            this.col_Action.FillWeight = 45.68528F;
+            this.col_Action.HeaderText = "Action";
+            this.col_Action.Name = "col_Action";
+            // 
+            // col_Type
+            // 
+            this.col_Type.FillWeight = 127.1574F;
+            this.col_Type.HeaderText = "Type";
+            this.col_Type.Name = "col_Type";
+            // 
+            // col_Pattern
+            // 
+            this.col_Pattern.FillWeight = 127.1574F;
+            this.col_Pattern.HeaderText = "Pattern";
+            this.col_Pattern.Name = "col_Pattern";
+            // 
             // TMBackupDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -192,9 +192,6 @@
 		private System.Windows.Forms.Button btn_Ok;
 		private System.Windows.Forms.Button btn_Cancel;
 		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Action;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Type;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Pattern;
 		private System.Windows.Forms.Label lbl_RulesDescription;
 		private System.Windows.Forms.Button btn_Add;
 		private System.Windows.Forms.Button btn_UpArrow;
@@ -202,5 +199,8 @@
 		private System.Windows.Forms.Button btn_DownArrow;
 		private System.Windows.Forms.Button btn_Reset;
 		private System.Windows.Forms.Label lbl_Line;
+		private System.Windows.Forms.DataGridViewTextBoxColumn col_Action;
+		private System.Windows.Forms.DataGridViewTextBoxColumn col_Type;
+		private System.Windows.Forms.DataGridViewTextBoxColumn col_Pattern;
 	}
 }

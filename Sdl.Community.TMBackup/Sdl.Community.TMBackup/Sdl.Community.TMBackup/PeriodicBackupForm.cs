@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Sdl.Community.TMBackup.Helpers;
+using System;
 using System.Windows.Forms;
-using Sdl.Community.TMBackup.Helpers;
 
 namespace Sdl.Community.TMBackup
 {
@@ -29,8 +22,8 @@ namespace Sdl.Community.TMBackup
 		}
 
 		private void InitializeTimeTypeDropDown()
-		{
-			cmbBox_Interval.DataSource = Enum.GetValues(typeof(Enums.TimeTypes));
+		{			
+			cmbBox_Interval.DataSource = EnumHelper.GetTimeTypeDescription();
 		}
 
 		private void btn_Close_Click(object sender, EventArgs e)

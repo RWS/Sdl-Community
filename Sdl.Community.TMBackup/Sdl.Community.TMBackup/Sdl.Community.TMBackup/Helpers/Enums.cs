@@ -1,20 +1,16 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
 
 namespace Sdl.Community.TMBackup.Helpers
 {
 	public class Enums
 	{
-		[Flags]
 		public enum TimeTypes
 		{
-			[Display(Name = "seconds")]
+			[Description("seconds")]
 			Seconds = 0,
-
-			[Display(Name = "minutes")]
+			[Description("minutes")]
 			Minutes = 1,
-
-			[Display(Name = "horus")]
+			[Description("hours")]
 			Hours = 2
 		}
 	}
