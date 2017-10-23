@@ -37,11 +37,13 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.languagesListBox = new System.Windows.Forms.CheckedListBox();
+			this.copyBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.copyBtn);
 			this.mainPanel.Controls.Add(this.languagesListBox);
 			this.mainPanel.Controls.Add(this.label1);
 			this.mainPanel.Controls.Add(this.includeHeaderCheck);
@@ -94,7 +96,7 @@
 			// 
 			this.browseBtn.Location = new System.Drawing.Point(472, 16);
 			this.browseBtn.Name = "browseBtn";
-			this.browseBtn.Size = new System.Drawing.Size(105, 23);
+			this.browseBtn.Size = new System.Drawing.Size(152, 23);
 			this.browseBtn.TabIndex = 4;
 			this.browseBtn.Text = "Browse";
 			this.browseBtn.UseVisualStyleBackColor = true;
@@ -127,6 +129,15 @@
 			this.languagesListBox.Size = new System.Drawing.Size(250, 334);
 			this.languagesListBox.TabIndex = 7;
 			// 
+			// copyBtn
+			// 
+			this.copyBtn.Location = new System.Drawing.Point(473, 88);
+			this.copyBtn.Name = "copyBtn";
+			this.copyBtn.Size = new System.Drawing.Size(151, 23);
+			this.copyBtn.TabIndex = 8;
+			this.copyBtn.Text = "Copy to clipboard";
+			this.copyBtn.UseVisualStyleBackColor = true;
+			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -151,5 +162,6 @@
 		private System.Windows.Forms.CheckBox includeHeaderCheck;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckedListBox languagesListBox;
+		private System.Windows.Forms.Button copyBtn;
 	}
 }

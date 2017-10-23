@@ -20,7 +20,7 @@ namespace Sdl.Community.ReportExporter
 	public partial class ReportExporterControl : UserControl, ISettingsAware<ReportExporterSettings>
 	{
 		private readonly string _projectXmlPath;
-
+		private List<string> _reportsList = new List<string>();
 		public ReportExporterControl()
 		{
 			InitializeComponent();
@@ -95,7 +95,7 @@ namespace Sdl.Community.ReportExporter
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//Settings.Test = new List<string>{"From control"};
+			
 			if (projListbox.SelectedItem == null) return;
 
 			languagesListBox.Items.Clear();
@@ -115,6 +115,7 @@ namespace Sdl.Community.ReportExporter
 					if (!IsNullOrEmpty(item.PathToReport))
 					{
 						languagesListBox.Items.Add(item);
+						_reportsList.Add(item.PathToReport);
 					}
 					else
 					{
@@ -122,6 +123,7 @@ namespace Sdl.Community.ReportExporter
 					}
 				}
 
+				Settings.Test = _reportsList;
 				outputPathField.Text = selectedProject.ProjectFolderPath + @"\Reports";
 			}
 			
