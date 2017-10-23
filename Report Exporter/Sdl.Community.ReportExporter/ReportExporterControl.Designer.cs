@@ -72,6 +72,7 @@
 			this.projListbox.Name = "projListbox";
 			this.projListbox.Size = new System.Drawing.Size(178, 394);
 			this.projListbox.TabIndex = 1;
+			this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
 			// 
 			// outputLbl
 			// 

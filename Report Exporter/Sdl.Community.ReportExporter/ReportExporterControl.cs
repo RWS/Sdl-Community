@@ -12,6 +12,7 @@ using System.Xml;
 using Sdl.Community.ReportExporter.Helpers;
 using Sdl.Community.ReportExporter.Model;
 using Sdl.Desktop.IntegrationApi;
+using static System.String;
 using Help = Sdl.Community.ReportExporter.Helpers.Help;
 
 namespace Sdl.Community.ReportExporter
@@ -57,7 +58,7 @@ namespace Sdl.Community.ReportExporter
 		private ProjectDetails CreateProjectDetails(XmlNode projNode)
 		{
 			var projectDetails = new ProjectDetails();
-			var projectFolderPath = string.Empty;
+			var projectFolderPath = Empty;
 
 			var selectSingleNode = projNode.SelectSingleNode("ProjectInfo");
 			if (selectSingleNode?.Attributes != null)
@@ -74,7 +75,9 @@ namespace Sdl.Community.ReportExporter
 			}
 			else
 			{
-				projectDetails.ProjectPath = _projectXmlPath + projectFolderPath;
+				var projectsFolderPath = _projectXmlPath.Substring
+					(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+				projectDetails.ProjectPath = projectsFolderPath + projectFolderPath;
 			}
 			return projectDetails;
 		}
@@ -88,6 +91,39 @@ namespace Sdl.Community.ReportExporter
 			{
 				outputPathField.Text = folderDialog.FileName;
 			}
+		}
+
+		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (projListbox.SelectedItem == null) return;
+
+			languagesListBox.Items.Clear();
+
+			var selectedProject = projListbox.SelectedItem as ProjectDetails;
+			var doc = new XmlDocument();
+			if (selectedProject != null)
+			{
+				doc.Load(selectedProject.ProjectPath);
+
+				var languages =Help.LoadLanguageDirections(doc);
+				Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
+
+				//add resutls to the list view
+				foreach (var item in languages.Values)
+				{
+					if (!IsNullOrEmpty(item.PathToReport))
+					{
+						languagesListBox.Items.Add(item);
+					}
+					else
+					{
+						languagesListBox.Items.Add("No report");
+					}
+				}
+
+				outputPathField.Text = selectedProject.ProjectFolderPath + @"\Reports";
+			}
+			
 		}
 	}
 }

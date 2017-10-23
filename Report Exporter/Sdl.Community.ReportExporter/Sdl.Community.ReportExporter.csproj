@@ -87,6 +87,7 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Help.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\ProjectDetails.cs" />
     <Compile Include="ReportExporterControl.cs">
       <SubType>UserControl</SubType>
