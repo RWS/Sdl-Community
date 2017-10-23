@@ -141,6 +141,7 @@
             this.btn_Cancel.TabIndex = 19;
             this.btn_Cancel.Text = "Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
+            this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
             // 
             // btn_Change
             // 
@@ -160,6 +161,7 @@
             this.btn_Details.TabIndex = 24;
             this.btn_Details.Text = "Details";
             this.btn_Details.UseVisualStyleBackColor = true;
+            this.btn_Details.Click += new System.EventHandler(this.btn_Details_Click);
             // 
             // txt_BackupFileDesc
             // 

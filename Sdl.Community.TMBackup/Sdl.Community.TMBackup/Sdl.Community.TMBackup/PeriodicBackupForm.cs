@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.TMBackup.Helpers;
 
 namespace Sdl.Community.TMBackup
 {
@@ -16,6 +17,7 @@ namespace Sdl.Community.TMBackup
 		{
 			InitializeComponent();
 
+			InitializeTimeTypeDropDown();
 			SetDateTimeFormat();
 		}	
 		
@@ -24,6 +26,16 @@ namespace Sdl.Community.TMBackup
 			timePicker_At.Format = DateTimePickerFormat.Custom;
 			timePicker_At.CustomFormat = "HH:mm:ss tt";
 			timePicker_At.ShowUpDown = true;
+		}
+
+		private void InitializeTimeTypeDropDown()
+		{
+			cmbBox_Interval.DataSource = Enum.GetValues(typeof(Enums.TimeTypes));
+		}
+
+		private void btn_Close_Click(object sender, EventArgs e)
+		{
+			this.Close();
 		}
 	}
 }
