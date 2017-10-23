@@ -95,6 +95,7 @@ namespace Sdl.Community.ReportExporter
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			//Settings.Test = new List<string>{"From control"};
 			if (projListbox.SelectedItem == null) return;
 
 			languagesListBox.Items.Clear();

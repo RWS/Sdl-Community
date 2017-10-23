@@ -9,5 +9,12 @@ namespace Sdl.Community.ReportExporter
 {
 	public class ReportExporterSettings : SettingsGroup
 	{
+		
+		public List<string> Test
+		{
+			get => GetSetting<List<string>>(nameof(Test));
+			set => GetSetting<List<string>>(nameof(Test)).Value = value;
+		}
+		
 	}
 }

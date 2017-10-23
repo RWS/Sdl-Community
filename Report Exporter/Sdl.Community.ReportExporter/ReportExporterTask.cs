@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.ReportExporter
 {
@@ -17,7 +19,14 @@ namespace Sdl.Community.ReportExporter
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(ReportExporterSettings), typeof(ReportExporterSettingsPage))]
-	public class ReportExporterTask
+	public class ReportExporterTask: AbstractFileContentProcessingAutomaticTask
 	{
+		
+	
+		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
+		{
+
+			var settings = GetSetting<ReportExporterSettings>();
+		}
 	}
 }
