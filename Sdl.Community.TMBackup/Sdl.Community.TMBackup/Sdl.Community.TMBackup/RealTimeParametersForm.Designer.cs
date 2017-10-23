@@ -62,6 +62,7 @@
             // 
             // cmbBox_Interval
             // 
+            this.cmbBox_Interval.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbBox_Interval.FormattingEnabled = true;
             this.cmbBox_Interval.Location = new System.Drawing.Point(289, 17);
             this.cmbBox_Interval.Name = "cmbBox_Interval";
@@ -85,6 +86,7 @@
             this.btn_Close.TabIndex = 5;
             this.btn_Close.Text = "Close";
             this.btn_Close.UseVisualStyleBackColor = true;
+            this.btn_Close.Click += new System.EventHandler(this.btn_Close_Click);
             // 
             // RealTimeParametersForm
             // 

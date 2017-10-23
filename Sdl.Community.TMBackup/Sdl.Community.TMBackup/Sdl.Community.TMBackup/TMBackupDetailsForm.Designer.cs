@@ -73,10 +73,10 @@
             this.col_Action,
             this.col_Type,
             this.col_Pattern});
-            this.dataGridView1.Location = new System.Drawing.Point(20, 23);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 23);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(413, 52);
+            this.dataGridView1.Size = new System.Drawing.Size(421, 43);
             this.dataGridView1.TabIndex = 9;
             // 
             // col_Action
@@ -101,7 +101,7 @@
             // 
             this.lbl_RulesDescription.AutoSize = true;
             this.lbl_RulesDescription.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lbl_RulesDescription.Location = new System.Drawing.Point(17, 110);
+            this.lbl_RulesDescription.Location = new System.Drawing.Point(17, 131);
             this.lbl_RulesDescription.Name = "lbl_RulesDescription";
             this.lbl_RulesDescription.Size = new System.Drawing.Size(281, 13);
             this.lbl_RulesDescription.TabIndex = 10;
