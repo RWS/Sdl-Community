@@ -128,6 +128,7 @@
 			this.languagesListBox.Name = "languagesListBox";
 			this.languagesListBox.Size = new System.Drawing.Size(250, 334);
 			this.languagesListBox.TabIndex = 7;
+			this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.languagesListBox_SelectedIndexChanged_1);
 			// 
 			// copyBtn
 			// 

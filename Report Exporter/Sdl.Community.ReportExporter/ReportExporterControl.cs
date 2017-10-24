@@ -21,11 +21,66 @@ namespace Sdl.Community.ReportExporter
 	{
 		private readonly string _projectXmlPath;
 		private List<string> _reportsList = new List<string>();
+		private List<ReportDetails> _selectedProjectsForReport;
 		public ReportExporterControl()
 		{
 			InitializeComponent();
 			_projectXmlPath = Help.GetStudioProjectsPath();
+			_selectedProjectsForReport = new List<ReportDetails>();
 			LoadProjectsList();
+			projListbox.SelectedIndex = 0;
+			
+			languagesListBox.CheckOnClick = true;
+		}
+
+		private void AddNewProject(List<LanguageDirection> languages)
+		{
+			var projectDetails = projListbox.SelectedItem as ProjectDetails;
+			var selectedProjectName = Empty;
+
+			if (projectDetails != null)
+			{
+				 selectedProjectName = projectDetails.ProjectName;
+			}
+			
+			var reportDetails = new ReportDetails
+			{
+				ProjectName = selectedProjectName,
+				LanguagesForPoject = new Dictionary<LanguageDirection, bool>()
+			};
+			foreach (LanguageDirection language in languages)
+			{
+				reportDetails.LanguagesForPoject.Add(language, false);
+
+			}
+			//add to list where we'll keep information about checkboxes state
+			_selectedProjectsForReport.Add(reportDetails);
+
+			
+		}
+
+
+
+		private void FillLanguagesList()
+		{
+			var projectDetails = projListbox.SelectedItem as ProjectDetails;
+			if (projectDetails != null)
+			{
+				var selectedProjectName = projectDetails.ProjectName;
+				var existSelectedProjInList = _selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
+				if (existSelectedProjInList != null)
+				{
+					var languageList = existSelectedProjInList
+						.LanguagesForPoject;
+
+					foreach (var language in languageList)
+					{
+						languagesListBox.Items.Add(language.Key, language.Value);
+					}
+
+				}
+				
+			}
 		}
 
 		/// <summary>
@@ -48,6 +103,7 @@ namespace Sdl.Community.ReportExporter
 					projListbox.Items.Add(CreateProjectDetails((XmlNode)item));
 				}
 			}
+			
 		}
 
 		/// <summary>
@@ -108,24 +164,41 @@ namespace Sdl.Community.ReportExporter
 
 				var languages =Help.LoadLanguageDirections(doc);
 				Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
-
+				var projectLanguages= languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
 				//add resutls to the list view
-				foreach (var item in languages.Values)
-				{
-					if (!IsNullOrEmpty(item.PathToReport))
-					{
-						languagesListBox.Items.Add(item);
-						_reportsList.Add(item.PathToReport);
-					}
-					else
-					{
-						languagesListBox.Items.Add("No report");
-					}
-				}
 
-				Settings.Test = _reportsList;
+				var selectedProjectExists = _selectedProjectsForReport.Any(n => n.ProjectName.Equals(selectedProject.ProjectName));
+
+				if (!selectedProjectExists)
+				{
+					AddNewProject(projectLanguages);
+				}
+				FillLanguagesList();
+
+				//Settings.Test = _reportsList;
 				outputPathField.Text = selectedProject.ProjectFolderPath + @"\Reports";
 			}
+			
+		}
+		
+		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
+		{
+			var projectDetails = (ProjectDetails)projListbox.SelectedItem;
+			if (projectDetails != null)
+			{
+				var selectedProjectName = projectDetails.ProjectName;
+				var selectedLanguage = (LanguageDirection)languagesListBox.SelectedItem;
+				var index = languagesListBox.SelectedIndex;
+				var isChecked = languagesListBox.GetItemChecked(index);
+
+				var selectedProject = _selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
+				if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
+				{
+					selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
+				}
+			}
+
+
 			
 		}
 	}
