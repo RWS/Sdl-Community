@@ -22,6 +22,7 @@ namespace Sdl.Community.ReportExporter
 		private readonly string _projectXmlPath;
 		private List<string> _reportsList = new List<string>();
 		private List<ReportDetails> _selectedProjectsForReport;
+
 		public ReportExporterControl()
 		{
 			InitializeComponent();
@@ -197,9 +198,7 @@ namespace Sdl.Community.ReportExporter
 					selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
 				}
 			}
-
-
-			
+			Settings.ProjectsList = _selectedProjectsForReport;
 		}
 	}
 }

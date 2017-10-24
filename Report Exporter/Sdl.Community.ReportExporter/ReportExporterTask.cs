@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,21 +26,39 @@ namespace Sdl.Community.ReportExporter
 	
 	public class ReportExporterTask: AbstractFileContentProcessingAutomaticTask
 	{
-
-		//[STAThread]
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 
-			var projects = GetSetting<ReportExporterSettings>().Test;
+			var projects = GetSetting<ReportExporterSettings>().ProjectsList;
 			foreach (var project in projects)
 			{
-				var report = new StudioAnalysisReport(project);
-				//Clipboard.SetText(report.ToCsv(true));
-				Thread thread = new Thread(() => Clipboard.SetText(report.ToCsv(true)));
-				thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
-				thread.Start();
-				thread.Join();
+				// check which languages to export
+				var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
+				foreach (var languageReport in checkedLanguages)
+				{
+					var csvFullReportPath =
+						languageReport.Key.PathToReport.Substring(0, languageReport.Key
+							                                             .PathToReport.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+
+					//write report to Reports folder
+					using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
+					                                 languageReport.Key.TargetLang.Name + ".csv"))
+					{
+						var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+						sw.Write(report.ToCsv(true));
+					}
+
+				}
 			}
+			//foreach (var project in projects)
+			//{
+			//	var report = new StudioAnalysisReport(project);
+			//	//Clipboard.SetText(report.ToCsv(true));
+			//	Thread thread = new Thread(() => Clipboard.SetText(report.ToCsv(true)));
+			//	thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
+			//	thread.Start();
+			//	thread.Join();
+			//}
 		}
 	}
 }
