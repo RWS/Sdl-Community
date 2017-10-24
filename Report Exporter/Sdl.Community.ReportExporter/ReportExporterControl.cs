@@ -32,7 +32,11 @@ namespace Sdl.Community.ReportExporter
 
 			languagesListBox.CheckOnClick = true;
 			IsClipboardEnabled();
+			
+			includeHeaderCheck.Checked = true;
+	
 		}
+
 
 		private void AddNewProject(List<LanguageDirection> languages)
 		{
@@ -204,14 +208,14 @@ namespace Sdl.Community.ReportExporter
 			if (selectedLanguage != null)
 			{
 				var report = new StudioAnalysisReport(selectedLanguage.PathToReport);
-				Clipboard.SetText(report.ToCsv(true));
+				Clipboard.SetText(report.ToCsv(includeHeaderCheck.Checked));
 			}//check from  selected project if we have any language checked
 			else
 			{
 				var selectedReport = GetSelectedReport();
 				var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
 				var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
-				Clipboard.SetText(copyReport.ToCsv(true));
+				Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked));
 			}
 		
 
@@ -224,5 +228,13 @@ namespace Sdl.Community.ReportExporter
 			copyBtn.Enabled = selectedLanguagesCount == 1;
 		}
 
+		private void includeHeaderCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			if (Settings != null)
+			{
+				Settings.IncludeHeader = includeHeaderCheck.Checked;
+			}
+		
+		}
 	}
 }

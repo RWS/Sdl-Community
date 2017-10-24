@@ -11,17 +11,25 @@ namespace Sdl.Community.ReportExporter
 {
 	public class ReportExporterSettings : SettingsGroup
 	{
-		//public ObservableCollection<string> ProjectsList = new ObservableCollection<string>();
-		//public List<string> Test
-		//{
-		//	get => GetSetting<List<string>>(nameof(Test));
-		//	set => GetSetting<List<string>>(nameof(Test)).Value = value;
-		//}
+		public bool IncludeHeader {
+			get => GetSetting<bool>(nameof(IncludeHeader));
+			set => GetSetting<bool>(nameof(IncludeHeader)).Value = value;
+		}
 
 		public List<ReportDetails> ProjectsList
 		{
 			get => GetSetting<List<ReportDetails>>(nameof(ProjectsList));
 			set => GetSetting<List<ReportDetails>>(nameof(ProjectsList)).Value = value;
+		}
+
+		protected override object GetDefaultValue(string settingId)
+		{
+			switch (settingId)
+			{
+				case nameof(IncludeHeader):
+					return true;
+			}
+			return base.GetDefaultValue(settingId);
 		}
 	}
 }

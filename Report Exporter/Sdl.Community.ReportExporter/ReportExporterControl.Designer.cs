@@ -89,6 +89,7 @@
 			this.includeHeaderCheck.TabIndex = 5;
 			this.includeHeaderCheck.Text = "Include header in export";
 			this.includeHeaderCheck.UseVisualStyleBackColor = true;
+			this.includeHeaderCheck.CheckedChanged += new System.EventHandler(this.includeHeaderCheck_CheckedChanged);
 			// 
 			// projListbox
 			// 

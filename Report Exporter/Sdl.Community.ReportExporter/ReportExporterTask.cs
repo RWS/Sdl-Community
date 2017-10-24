@@ -28,9 +28,8 @@ namespace Sdl.Community.ReportExporter
 	{
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-
-			var projects = GetSetting<ReportExporterSettings>().ProjectsList;
-			foreach (var project in projects)
+			var settings = GetSetting<ReportExporterSettings>();
+			foreach (var project in settings.ProjectsList)
 			{
 				// check which languages to export
 				var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
@@ -45,20 +44,11 @@ namespace Sdl.Community.ReportExporter
 					                                 languageReport.Key.TargetLang.Name + ".csv"))
 					{
 						var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-						sw.Write(report.ToCsv(true));
+						sw.Write(report.ToCsv(settings.IncludeHeader));
 					}
 
 				}
 			}
-			//foreach (var project in projects)
-			//{
-			//	var report = new StudioAnalysisReport(project);
-			//	//Clipboard.SetText(report.ToCsv(true));
-			//	Thread thread = new Thread(() => Clipboard.SetText(report.ToCsv(true)));
-			//	thread.SetApartmentState(ApartmentState.STA); //Set the thread to STA
-			//	thread.Start();
-			//	thread.Join();
-			//}
 		}
 	}
 }
