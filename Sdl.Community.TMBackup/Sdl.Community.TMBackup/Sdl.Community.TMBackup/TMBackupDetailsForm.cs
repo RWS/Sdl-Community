@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.TMBackup.Models;
 
 namespace Sdl.Community.TMBackup
 {
@@ -19,7 +20,13 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
-
+			BackupDetailsModel backupDetailsModel = new BackupDetailsModel();
+			backupDetailsModel.BackupAction = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[0].Value.ToString();
+			backupDetailsModel.BackupType = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[1].Value.ToString();
+			backupDetailsModel.BackupPattern = dataGridView1.Rows[dataGridView1.Rows.Count - 2].Cells[2].Value.ToString();
+			
+			Persistence persistence = new Persistence();
+			persistence.SaveDetailsFormInfo(backupDetailsModel);
 		}
 
 		private void btn_Delete_Click(object sender, EventArgs e)

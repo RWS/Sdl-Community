@@ -2,6 +2,7 @@
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.TMBackup.Models;
 
 namespace Sdl.Community.TMBackup
 {
@@ -58,7 +59,15 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
 		{
+			BackupModel backupModel = new BackupModel();
+			backupModel.BackupFrom = txt_BackupFrom.Text;
+			backupModel.BackupTo = txt_BackupTo.Text;
+			backupModel.Description = txt_Description.Text;
+			backupModel.BackupDetails = txt_BackupDetails.Text;
+			backupModel.BackupTime = txt_BackupTime.Text;
 
+			Persistence persistence = new Persistence();
+			persistence.SaveBackupFormInfo(backupModel);
 		}
 	}
 }
