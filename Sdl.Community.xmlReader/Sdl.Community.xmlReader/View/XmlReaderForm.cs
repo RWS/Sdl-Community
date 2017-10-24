@@ -9,7 +9,10 @@ namespace Sdl.Community.XmlReader.View
         public XmlReaderForm()
         {
             InitializeComponent();
+        }
 
+        private void XmlReaderForm_Load(object sender, System.EventArgs e)
+        {
             labelInstructions.Text = PluginResources.Instruction_Title;
             textBoxInstructions.Text = PluginResources.Instructions_Message;
             textBoxInstructions.Enabled = false;
@@ -24,8 +27,15 @@ namespace Sdl.Community.XmlReader.View
 
             treeViewXmlFiles.ItemHeight = 20;
 
-        }
+            buttonConvertToExcel.Anchor = (AnchorStyles.Bottom | AnchorStyles.Right);
+            buttonClean.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
+            textBoxInstructions.Anchor = AnchorStyles.Right;
+            labelInstructions.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
+            groupBoxXmlFiles.Anchor = (AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right);
 
+            Size size = new Size(406, 360);
+            MinimumSize = size;
+        }
 
         private int FindNodeIndexByLanguageCode(string langCode)
         {
@@ -68,7 +78,6 @@ namespace Sdl.Community.XmlReader.View
 
         private void treeViewXmlFiles_DragDrop(object sender, DragEventArgs e)
         {
-            
             string[] xmlFilePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
 
             int i;
@@ -95,6 +104,7 @@ namespace Sdl.Community.XmlReader.View
                     {
                         var imageStudioCode = Helper.GetImageStudioCodeByLanguageCode(targetlangCode);
                         var imagePath = Helper.GetImagePathByStudioCode(imageStudioCode);
+                        if (imagePath == string.Empty) imagePath = Helper.GetImagePathByStudioCode(0);
                         treeViewXmlFiles.ImageList.Images.Add(imageStudioCode.ToString(), (Bitmap)Image.FromFile(imagePath, true));
 
                         treeViewXmlFiles.Nodes.Add("1", targetlangCode, imageStudioCode.ToString());
