@@ -40,7 +40,7 @@
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.btn_Change = new System.Windows.Forms.Button();
             this.btn_Details = new System.Windows.Forms.Button();
-            this.txt_BackupFileDesc = new System.Windows.Forms.TextBox();
+            this.txt_BackupDetails = new System.Windows.Forms.TextBox();
             this.txt_BackupTime = new System.Windows.Forms.TextBox();
             this.lbl_BackupTime = new System.Windows.Forms.Label();
             this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
@@ -163,14 +163,14 @@
             this.btn_Details.UseVisualStyleBackColor = true;
             this.btn_Details.Click += new System.EventHandler(this.btn_Details_Click);
             // 
-            // txt_BackupFileDesc
+            // txt_BackupDetails
             // 
-            this.txt_BackupFileDesc.Location = new System.Drawing.Point(137, 255);
-            this.txt_BackupFileDesc.Multiline = true;
-            this.txt_BackupFileDesc.Name = "txt_BackupFileDesc";
-            this.txt_BackupFileDesc.ReadOnly = true;
-            this.txt_BackupFileDesc.Size = new System.Drawing.Size(400, 27);
-            this.txt_BackupFileDesc.TabIndex = 23;
+            this.txt_BackupDetails.Location = new System.Drawing.Point(137, 255);
+            this.txt_BackupDetails.Multiline = true;
+            this.txt_BackupDetails.Name = "txt_BackupDetails";
+            this.txt_BackupDetails.ReadOnly = true;
+            this.txt_BackupDetails.Size = new System.Drawing.Size(400, 27);
+            this.txt_BackupDetails.TabIndex = 23;
             // 
             // txt_BackupTime
             // 
@@ -227,7 +227,7 @@
             this.Controls.Add(this.lbl_Description);
             this.Controls.Add(this.btn_Details);
             this.Controls.Add(this.lbl_BackupFrom);
-            this.Controls.Add(this.txt_BackupFileDesc);
+            this.Controls.Add(this.txt_BackupDetails);
             this.Controls.Add(this.lbl_BackupTo);
             this.Controls.Add(this.txt_BackupTime);
             this.Controls.Add(this.txt_BackupFrom);
@@ -258,7 +258,7 @@
 		private System.Windows.Forms.Button btn_Cancel;
 		private System.Windows.Forms.Button btn_Change;
 		private System.Windows.Forms.Button btn_Details;
-		private System.Windows.Forms.TextBox txt_BackupFileDesc;
+		private System.Windows.Forms.TextBox txt_BackupDetails;
 		private System.Windows.Forms.TextBox txt_BackupTime;
 		private System.Windows.Forms.Label lbl_BackupTime;
 		private System.Windows.Forms.Label lbl_BackupFileDesc;

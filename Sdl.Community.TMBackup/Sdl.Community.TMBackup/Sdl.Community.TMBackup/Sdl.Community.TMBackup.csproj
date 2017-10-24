@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>False</Private>
@@ -115,6 +118,7 @@
     <Compile Include="PeriodicBackupForm.Designer.cs">
       <DependentUpon>PeriodicBackupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Persistence.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -150,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
+    <None Include="Properties\DataSources\Sdl.Community.TMBackup.Models.BackupDetailsModel.datasource" />
     <None Include="Resources\TMBackup_Icon.ico" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
