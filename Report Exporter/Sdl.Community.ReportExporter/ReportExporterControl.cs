@@ -20,7 +20,6 @@ namespace Sdl.Community.ReportExporter
 	public partial class ReportExporterControl : UserControl, ISettingsAware<ReportExporterSettings>
 	{
 		private readonly string _projectXmlPath;
-		private List<string> _reportsList = new List<string>();
 		private List<ReportDetails> _selectedProjectsForReport;
 
 		public ReportExporterControl()
@@ -30,8 +29,9 @@ namespace Sdl.Community.ReportExporter
 			_selectedProjectsForReport = new List<ReportDetails>();
 			LoadProjectsList();
 			projListbox.SelectedIndex = 0;
-			
+
 			languagesListBox.CheckOnClick = true;
+			IsClipboardEnabled();
 		}
 
 		private void AddNewProject(List<LanguageDirection> languages)
@@ -41,9 +41,9 @@ namespace Sdl.Community.ReportExporter
 
 			if (projectDetails != null)
 			{
-				 selectedProjectName = projectDetails.ProjectName;
+				selectedProjectName = projectDetails.ProjectName;
 			}
-			
+
 			var reportDetails = new ReportDetails
 			{
 				ProjectName = selectedProjectName,
@@ -56,11 +56,7 @@ namespace Sdl.Community.ReportExporter
 			}
 			//add to list where we'll keep information about checkboxes state
 			_selectedProjectsForReport.Add(reportDetails);
-
-			
 		}
-
-
 
 		private void FillLanguagesList()
 		{
@@ -68,7 +64,8 @@ namespace Sdl.Community.ReportExporter
 			if (projectDetails != null)
 			{
 				var selectedProjectName = projectDetails.ProjectName;
-				var existSelectedProjInList = _selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
+				var existSelectedProjInList =
+					_selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
 				if (existSelectedProjInList != null)
 				{
 					var languageList = existSelectedProjInList
@@ -80,7 +77,7 @@ namespace Sdl.Community.ReportExporter
 					}
 
 				}
-				
+
 			}
 		}
 
@@ -93,18 +90,18 @@ namespace Sdl.Community.ReportExporter
 			var projectXmlDocument = new XmlDocument();
 
 			projectXmlDocument.Load(_projectXmlPath);
-			
+
 			var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
 			if (projectsNodeList == null) return;
 			foreach (var item in projectsNodeList)
 			{
-				var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
+				var projectInfo = ((XmlNode) item).SelectSingleNode("./ProjectInfo");
 				if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
 				{
-					projListbox.Items.Add(CreateProjectDetails((XmlNode)item));
+					projListbox.Items.Add(CreateProjectDetails((XmlNode) item));
 				}
 			}
-			
+
 		}
 
 		/// <summary>
@@ -152,7 +149,7 @@ namespace Sdl.Community.ReportExporter
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			
+
 			if (projListbox.SelectedItem == null) return;
 
 			languagesListBox.Items.Clear();
@@ -163,9 +160,9 @@ namespace Sdl.Community.ReportExporter
 			{
 				doc.Load(selectedProject.ProjectPath);
 
-				var languages =Help.LoadLanguageDirections(doc);
+				var languages = Help.LoadLanguageDirections(doc);
 				Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
-				var projectLanguages= languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
+				var projectLanguages = languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
 				//add resutls to the list view
 
 				var selectedProjectExists = _selectedProjectsForReport.Any(n => n.ProjectName.Equals(selectedProject.ProjectName));
@@ -175,30 +172,66 @@ namespace Sdl.Community.ReportExporter
 					AddNewProject(projectLanguages);
 				}
 				FillLanguagesList();
-
-				//Settings.Test = _reportsList;
 				outputPathField.Text = selectedProject.ProjectFolderPath + @"\Reports";
 			}
-			
+			IsClipboardEnabled();
+
 		}
-		
+
 		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
 		{
-			var projectDetails = (ProjectDetails)projListbox.SelectedItem;
+			var projectDetails = (ProjectDetails) projListbox.SelectedItem;
 			if (projectDetails != null)
 			{
-				var selectedProjectName = projectDetails.ProjectName;
-				var selectedLanguage = (LanguageDirection)languagesListBox.SelectedItem;
+				var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
 				var index = languagesListBox.SelectedIndex;
 				var isChecked = languagesListBox.GetItemChecked(index);
 
-				var selectedProject = _selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
+				var selectedProject = GetSelectedReport();
 				if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
 				{
 					selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
 				}
 			}
+			IsClipboardEnabled();
 			Settings.ProjectsList = _selectedProjectsForReport;
 		}
+
+		private ReportDetails GetSelectedReport()
+		{
+			var projectDetails = (ProjectDetails) projListbox.SelectedItem;
+			var selectedProjectName = projectDetails.ProjectName;
+			var selectedProject = _selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
+
+			return selectedProject;
+		}
+
+		private void copyBtn_Click(object sender, EventArgs e)
+		{
+			var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
+		
+			if (selectedLanguage != null)
+			{
+				var report = new StudioAnalysisReport(selectedLanguage.PathToReport);
+				Clipboard.SetText(report.ToCsv(true));
+			}//check from  selected project if we have any language checked
+			else
+			{
+				var selectedReport = GetSelectedReport();
+				var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
+				var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
+				Clipboard.SetText(copyReport.ToCsv(true));
+			}
+		
+
+		}
+
+		private void IsClipboardEnabled()
+		{
+			var selectedReport = GetSelectedReport();
+			var selectedLanguagesCount = selectedReport.LanguagesForPoject.Count(c => c.Value);
+			copyBtn.Enabled = selectedLanguagesCount == 1;
+		}
+
 	}
 }
