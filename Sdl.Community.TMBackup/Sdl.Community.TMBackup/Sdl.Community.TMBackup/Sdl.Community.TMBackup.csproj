@@ -104,6 +104,11 @@
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Models\BackupDetailsModel.cs" />
+    <Compile Include="Models\BackupModel.cs" />
+    <Compile Include="Models\ChangeSettingsModel.cs" />
+    <Compile Include="Models\PeriodicBackupModel.cs" />
+    <Compile Include="Models\RealTimeBackupModel.cs" />
     <Compile Include="PeriodicBackupForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,7 +147,6 @@
       <DependentUpon>TMBackupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TMBackupRibbon.cs" />
-    <Compile Include="ViewModels\TMBackupViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
@@ -173,6 +177,7 @@
       <DependentUpon>TMBackupForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>
