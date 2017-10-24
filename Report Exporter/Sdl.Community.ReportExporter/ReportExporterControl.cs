@@ -137,15 +137,7 @@ namespace Sdl.Community.ReportExporter
 		}
 
 		public ReportExporterSettings Settings { get; set; }
-
-		private void browseBtn_Click(object sender, EventArgs e)
-		{
-			var folderDialog = new FolderSelectDialog();
-			if (folderDialog.ShowDialog())
-			{
-				outputPathField.Text = folderDialog.FileName;
-			}
-		}
+		
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -172,7 +164,6 @@ namespace Sdl.Community.ReportExporter
 					AddNewProject(projectLanguages);
 				}
 				FillLanguagesList();
-				outputPathField.Text = selectedProject.ProjectFolderPath + @"\Reports";
 			}
 			IsClipboardEnabled();
 
