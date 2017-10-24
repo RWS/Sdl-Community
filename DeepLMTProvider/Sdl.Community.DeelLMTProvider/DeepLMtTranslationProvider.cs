@@ -5,17 +5,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
+using Sdl.Community.DeelLMTProvider;
 
 namespace Sdl.Community.DeepLMTProvider
 {
     public class DeepLMtTranslationProvider : ITranslationProvider
     {
-        public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
-        public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deelp");
+
+		public static readonly string ListTranslationProviderScheme = "deepltranslationprovider";
+
+		public DeepLTranslationOptions Options
+		{
+			get;
+			set;
+		}
+
+		public DeepLMtTranslationProvider(DeepLTranslationOptions options)
+		{
+			Options = options;
+		}
+
+		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deepl");
 
         public Uri Uri => new TranslationProviderUriBuilder(ListTranslationProviderScheme).Uri;
 
-        public string Name => "DeepLMtTranslationProvider";
+        public string Name => "DeepL Translator provider using DeepL Translator ";
 
         public bool SupportsTaggedInput => true;
 
@@ -55,7 +69,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public ITranslationProviderLanguageDirection GetLanguageDirection(LanguagePair languageDirection)
         {
-            throw new NotImplementedException();
+			return new DeepLMtTranslationProviderLanguageDirection(this, languageDirection);
         }
 
         public void LoadState(string translationProviderState)
@@ -75,8 +89,10 @@ namespace Sdl.Community.DeepLMTProvider
 
         public bool SupportsLanguageDirection(LanguagePair languageDirection)
         {
-            //see mt
-            return true;
+			
+			return
+				Helpers.IsSuportedLanguagePair(languageDirection.SourceCulture.TwoLetterISOLanguageName.ToUpper(), 
+				languageDirection.TargetCulture.TwoLetterISOLanguageName.ToUpper());
         }
     }
 }

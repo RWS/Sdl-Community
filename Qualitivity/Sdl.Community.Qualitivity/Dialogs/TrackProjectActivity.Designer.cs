@@ -1749,7 +1749,6 @@ namespace Sdl.Community.Qualitivity.Dialogs
             this.imageList_tab.Images.SetKeyName(7, "1998_low_cost_clock.ico");
             this.imageList_tab.Images.SetKeyName(8, "Funny-Search-32.png");
             this.imageList_tab.Images.SetKeyName(9, "Edit-Yes-32.png");
-            this.imageList_tab.Images.SetKeyName(10, "tausdata1.png");
             // 
             // TrackProjectActivity
             // 

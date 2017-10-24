@@ -45,7 +45,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             this.createAnActivitiesReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportActivitiesToExcelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.addDQFProjectTaskToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
@@ -95,8 +94,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             this.toolStripSeparator2,
             this.createAnActivitiesReportToolStripMenuItem,
             this.exportActivitiesToExcelToolStripMenuItem,
-            this.toolStripSeparator3,
-            this.addDQFProjectTaskToolStripMenuItem});
+            this.toolStripSeparator3});
             this.contextMenuStrip_listView.Name = "contextMenuStrip1";
             this.contextMenuStrip_listView.Size = new System.Drawing.Size(266, 198);
             // 
@@ -162,14 +160,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(262, 6);
-            // 
-            // addDQFProjectTaskToolStripMenuItem
-            // 
-            this.addDQFProjectTaskToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("addDQFProjectTaskToolStripMenuItem.Image")));
-            this.addDQFProjectTaskToolStripMenuItem.Name = "addDQFProjectTaskToolStripMenuItem";
-            this.addDQFProjectTaskToolStripMenuItem.Size = new System.Drawing.Size(265, 22);
-            this.addDQFProjectTaskToolStripMenuItem.Text = "New DQF Project Task";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(262, 6);         
             // 
             // imageList1
             // 
@@ -754,12 +745,9 @@ namespace Sdl.Community.Qualitivity.Panels.Main
         private Label label5;
         internal Label label_TOTAL_PROJECT_ACTIVITIES;
         private ToolStripSeparator toolStripSeparator3;
-        public ToolStripMenuItem addDQFProjectTaskToolStripMenuItem;
         public ContextMenuStrip contextMenuStrip_listView;
         private OLVColumn olvColumn_source;
         private OLVColumn olvColumn_target;
         private OLVColumn olvColumn_custom_total;
-
-
     }
 }

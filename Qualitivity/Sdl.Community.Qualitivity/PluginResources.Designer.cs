@@ -196,15 +196,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure that you want to remove the selected DQF Project?.
-        /// </summary>
-        internal static string Are_you_sure_that_you_want_to_remove_the_selected_DQF_Project {
-            get {
-                return ResourceManager.GetString("Are_you_sure_that_you_want_to_remove_the_selected_DQF_Project", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Are you sure that you want to remove the selected project activities?.
         /// </summary>
         internal static string Are_you_sure_that_you_want_to_remove_the_selected_project_activities {
@@ -476,51 +467,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DQF Project Import File.
-        /// </summary>
-        internal static string DQF_Project_Import_File {
-            get {
-                return ResourceManager.GetString("DQF_Project_Import_File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DQF Project Task - Step 1 of 3.
-        /// </summary>
-        internal static string DQF_Project_Task_Step_1_of_3 {
-            get {
-                return ResourceManager.GetString("DQF_Project_Task_Step_1_of_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DQF Project Task - Step 2 of 3.
-        /// </summary>
-        internal static string DQF_Project_Task_Step_2_of_3 {
-            get {
-                return ResourceManager.GetString("DQF_Project_Task_Step_2_of_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DQF Project Task - Step 3 of 3.
-        /// </summary>
-        internal static string DQF_Project_Task_Step_3_of_3 {
-            get {
-                return ResourceManager.GetString("DQF_Project_Task_Step_3_of_3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DQF Project Task Wizard.
-        /// </summary>
-        internal static string DQF_Project_Task_Wizard_Title {
-            get {
-                return ResourceManager.GetString("DQF_Project_Task_Wizard_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error while reading the xml file!.
         /// </summary>
         internal static string Error_while_reading_the_xml_file_ {
@@ -779,15 +725,6 @@ namespace Sdl.Community.Qualitivity {
         internal static string Note_you_will_not_be_able_to_recover_this_data_if_you_continue {
             get {
                 return ResourceManager.GetString("Note_you_will_not_be_able_to_recover_this_data_if_you_continue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open TAUS DQF Project Import File.
-        /// </summary>
-        internal static string Open_TAUS_DQF_Project_Import_File {
-            get {
-                return ResourceManager.GetString("Open_TAUS_DQF_Project_Import_File", resourceCulture);
             }
         }
         
@@ -1233,46 +1170,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon QualitivityDQFController_Icon {
-            get {
-                object obj = ResourceManager.GetObject("QualitivityDQFController_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon QualitivityDQFImportProjectController_Icon {
-            get {
-                object obj = ResourceManager.GetObject("QualitivityDQFImportProjectController_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon QualitivityDQFNewProjectController_Icon {
-            get {
-                object obj = ResourceManager.GetObject("QualitivityDQFNewProjectController_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        internal static System.Drawing.Icon QualitivityDQFSaveProjectController_Icon {
-            get {
-                object obj = ResourceManager.GetObject("QualitivityDQFSaveProjectController_Icon", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Edit Qualitivity Project.
         /// </summary>
         internal static string QualitivityEditProjectAction_Description {
@@ -1696,15 +1593,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Save TAUS DQF Project Import File.
-        /// </summary>
-        internal static string Save_TAUS_DQF_Project_Import_File {
-            get {
-                return ResourceManager.GetString("Save_TAUS_DQF_Project_Import_File", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Save the Qualitity Metrics Group to file.
         /// </summary>
         internal static string Save_the_Qualitity_Metrics_Group_to_file {
@@ -1921,33 +1809,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The DQF API key cannot be null!.
-        /// </summary>
-        internal static string The_DQF_API_key_cannot_be_null {
-            get {
-                return ResourceManager.GetString("The_DQF_API_key_cannot_be_null", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The DQF Project &apos;{0}&apos; already exists in the list.
-        /// </summary>
-        internal static string The_DQF_Project_0_already_exists_in_the_list {
-            get {
-                return ResourceManager.GetString("The_DQF_Project_0_already_exists_in_the_list", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The DQF project name already exists!.
-        /// </summary>
-        internal static string The_DQF_project_name_already_exists {
-            get {
-                return ResourceManager.GetString("The_DQF_project_name_already_exists", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The last backup for Qualitivity was performed {0} days ago, on the {1}.
         /// </summary>
         internal static string The_last_backup_for_Qualitivity_was_performed_0_days_ago_on_the_1_ {
@@ -2056,15 +1917,6 @@ namespace Sdl.Community.Qualitivity {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Translator DQF API key cannot be null!.
-        /// </summary>
-        internal static string The_Translator_DQF_API_key_cannot_be_null {
-            get {
-                return ResourceManager.GetString("The_Translator_DQF_API_key_cannot_be_null", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This is an example of deleted &lt;tag/&gt; formatting..
         /// </summary>
         internal static string This_is_an_example_of_deleted__tag___formatting_ {
@@ -2115,43 +1967,6 @@ namespace Sdl.Community.Qualitivity {
         internal static string Title_Qualitivity {
             get {
                 return ResourceManager.GetString("Title_Qualitivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area.
-        /// </summary>
-        internal static string To_create_a_TAUS_DQF_Project__you_must_first_save_your_DQF_API_key_ {
-            get {
-                return ResourceManager.GetString("To_create_a_TAUS_DQF_Project__you_must_first_save_your_DQF_API_key_", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area.
-        /// </summary>
-        internal static string To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key {
-            get {
-                return ResourceManager.GetString("To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area.
-        /// </summary>
-        internal static string To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key_in_the_plugin_setting_area {
-            get {
-                return ResourceManager.GetString("To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key_in_the_plugin_s" +
-                        "etting_area", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To create TAUS DQF Project Task, you must first save your Translator DQF API key in the plugin setting area.
-        /// </summary>
-        internal static string To_create_TAUS_DQF_Project_Task_you_must_first_save_your_Translator_DQF_API_key_ {
-            get {
-                return ResourceManager.GetString("To_create_TAUS_DQF_Project_Task_you_must_first_save_your_Translator_DQF_API_key_", resourceCulture);
             }
         }
         
