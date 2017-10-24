@@ -180,6 +180,7 @@
             this.btn_Set.TabIndex = 14;
             this.btn_Set.Text = "Set";
             this.btn_Set.UseVisualStyleBackColor = true;
+            this.btn_Set.Click += new System.EventHandler(this.btn_Set_Click);
             // 
             // btn_Close
             // 

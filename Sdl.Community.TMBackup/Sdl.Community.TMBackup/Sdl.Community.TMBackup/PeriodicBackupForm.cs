@@ -30,5 +30,10 @@ namespace Sdl.Community.TMBackup
 		{
 			this.Close();
 		}
+
+		private void btn_Set_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
