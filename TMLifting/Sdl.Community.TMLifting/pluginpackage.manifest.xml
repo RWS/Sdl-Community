@@ -7,7 +7,5 @@
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
   <Include>
     <File>Sdl.Community.Toolkit.Core.dll</File>
-    <!--<File>Sdl.Community.GroupShareKit.dll</File>-->
-    <!--<File>System.Net.Http.dll</File>-->
   </Include>
  </PluginPackage>

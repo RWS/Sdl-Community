@@ -227,6 +227,7 @@
     <EmbeddedResource Include="GSKit\System.Net.Http.dll" />
     <EmbeddedResource Include="GSKit\Sdl.TmService.Sdk.dll" />
     <EmbeddedResource Include="GSKit\Newtonsoft.Json.dll" />
+    <EmbeddedResource Include="GSKit\Sdl.TranslationStudio.ProjectManagement.dll" />
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="Resources\256x256.png" />
     <Content Include="Resources\128x128.png" />
