@@ -17,7 +17,7 @@ using Help = Sdl.Community.ReportExporter.Helpers.Help;
 
 namespace Sdl.Community.ReportExporter
 {
-	public partial class ReportExporterControl : UserControl, ISettingsAware<ReportExporterSettings>
+	public partial class ReportExporterControl : Form
 	{
 		private readonly string _projectXmlPath;
 		private List<ReportDetails> _selectedProjectsForReport;
@@ -140,7 +140,7 @@ namespace Sdl.Community.ReportExporter
 			return projectDetails;
 		}
 
-		public ReportExporterSettings Settings { get; set; }
+
 		
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
@@ -189,7 +189,6 @@ namespace Sdl.Community.ReportExporter
 				}
 			}
 			IsClipboardEnabled();
-			Settings.ProjectsList = _selectedProjectsForReport;
 		}
 
 		private ReportDetails GetSelectedReport()
@@ -230,11 +229,6 @@ namespace Sdl.Community.ReportExporter
 
 		private void includeHeaderCheck_CheckedChanged(object sender, EventArgs e)
 		{
-			if (Settings != null)
-			{
-				Settings.IncludeHeader = includeHeaderCheck.Checked;
-			}
-		
 		}
 	}
 }

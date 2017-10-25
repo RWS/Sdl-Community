@@ -35,11 +35,17 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
+			this.csvBtn = new System.Windows.Forms.Button();
+			this.button1 = new System.Windows.Forms.Button();
+			this.exitBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.exitBtn);
+			this.mainPanel.Controls.Add(this.button1);
+			this.mainPanel.Controls.Add(this.csvBtn);
 			this.mainPanel.Controls.Add(this.copyBtn);
 			this.mainPanel.Controls.Add(this.languagesListBox);
 			this.mainPanel.Controls.Add(this.label1);
@@ -49,14 +55,14 @@
 			this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainPanel.Name = "mainPanel";
-			this.mainPanel.Size = new System.Drawing.Size(774, 501);
+			this.mainPanel.Size = new System.Drawing.Size(569, 436);
 			this.mainPanel.TabIndex = 0;
 			// 
 			// copyBtn
 			// 
-			this.copyBtn.Location = new System.Drawing.Point(432, 64);
+			this.copyBtn.Location = new System.Drawing.Point(431, 75);
 			this.copyBtn.Name = "copyBtn";
-			this.copyBtn.Size = new System.Drawing.Size(151, 23);
+			this.copyBtn.Size = new System.Drawing.Size(108, 23);
 			this.copyBtn.TabIndex = 8;
 			this.copyBtn.Text = "Copy to clipboard";
 			this.copyBtn.UseVisualStyleBackColor = true;
@@ -65,7 +71,7 @@
 			// languagesListBox
 			// 
 			this.languagesListBox.FormattingEnabled = true;
-			this.languagesListBox.Location = new System.Drawing.Point(218, 64);
+			this.languagesListBox.Location = new System.Drawing.Point(218, 75);
 			this.languagesListBox.Name = "languagesListBox";
 			this.languagesListBox.Size = new System.Drawing.Size(208, 349);
 			this.languagesListBox.TabIndex = 7;
@@ -74,7 +80,7 @@
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(215, 48);
+			this.label1.Location = new System.Drawing.Point(215, 59);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(145, 13);
 			this.label1.TabIndex = 6;
@@ -83,7 +89,7 @@
 			// includeHeaderCheck
 			// 
 			this.includeHeaderCheck.AutoSize = true;
-			this.includeHeaderCheck.Location = new System.Drawing.Point(218, 16);
+			this.includeHeaderCheck.Location = new System.Drawing.Point(220, 28);
 			this.includeHeaderCheck.Name = "includeHeaderCheck";
 			this.includeHeaderCheck.Size = new System.Drawing.Size(140, 17);
 			this.includeHeaderCheck.TabIndex = 5;
@@ -94,7 +100,7 @@
 			// projListbox
 			// 
 			this.projListbox.FormattingEnabled = true;
-			this.projListbox.Location = new System.Drawing.Point(19, 16);
+			this.projListbox.Location = new System.Drawing.Point(19, 30);
 			this.projListbox.Name = "projListbox";
 			this.projListbox.Size = new System.Drawing.Size(178, 394);
 			this.projListbox.TabIndex = 1;
@@ -103,19 +109,46 @@
 			// selectProjLbl
 			// 
 			this.selectProjLbl.AutoSize = true;
-			this.selectProjLbl.Location = new System.Drawing.Point(16, 0);
+			this.selectProjLbl.Location = new System.Drawing.Point(16, 9);
 			this.selectProjLbl.Name = "selectProjLbl";
 			this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
+			// csvBtn
+			// 
+			this.csvBtn.Location = new System.Drawing.Point(432, 107);
+			this.csvBtn.Name = "csvBtn";
+			this.csvBtn.Size = new System.Drawing.Size(107, 23);
+			this.csvBtn.TabIndex = 9;
+			this.csvBtn.Text = "Copy to CSV files";
+			this.csvBtn.UseVisualStyleBackColor = true;
+			// 
+			// button1
+			// 
+			this.button1.Location = new System.Drawing.Point(433, 136);
+			this.button1.Name = "button1";
+			this.button1.Size = new System.Drawing.Size(107, 23);
+			this.button1.TabIndex = 10;
+			this.button1.Text = "Open Target Folder";
+			this.button1.UseVisualStyleBackColor = true;
+			// 
+			// exitBtn
+			// 
+			this.exitBtn.Location = new System.Drawing.Point(432, 401);
+			this.exitBtn.Name = "exitBtn";
+			this.exitBtn.Size = new System.Drawing.Size(107, 23);
+			this.exitBtn.TabIndex = 11;
+			this.exitBtn.Text = "Exit";
+			this.exitBtn.UseVisualStyleBackColor = true;
+			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.ClientSize = new System.Drawing.Size(569, 436);
 			this.Controls.Add(this.mainPanel);
 			this.Name = "ReportExporterControl";
-			this.Size = new System.Drawing.Size(774, 501);
 			this.mainPanel.ResumeLayout(false);
 			this.mainPanel.PerformLayout();
 			this.ResumeLayout(false);
@@ -131,5 +164,8 @@
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckedListBox languagesListBox;
 		private System.Windows.Forms.Button copyBtn;
+		private System.Windows.Forms.Button exitBtn;
+		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button csvBtn;
 	}
 }
