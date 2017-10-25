@@ -54,6 +54,7 @@
             this.progressBarExtractTerms = new System.Windows.Forms.ProgressBar();
             this.openFileDialogLoadFile = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialogBlacklist = new System.Windows.Forms.SaveFileDialog();
+            this.checkBoxCaseSensitive = new System.Windows.Forms.CheckBox();
             this.groupBoxSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsLength)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownTermsOccurrences)).BeginInit();
@@ -61,6 +62,7 @@
             // 
             // groupBoxSettings
             // 
+            this.groupBoxSettings.Controls.Add(this.checkBoxCaseSensitive);
             this.groupBoxSettings.Controls.Add(this.buttonExtractTerms);
             this.groupBoxSettings.Controls.Add(this.buttonIncludeFile);
             this.groupBoxSettings.Controls.Add(this.labelErrorRegex);
@@ -316,6 +318,16 @@
             this.progressBarExtractTerms.Size = new System.Drawing.Size(577, 23);
             this.progressBarExtractTerms.TabIndex = 4;
             // 
+            // checkBoxCaseSensitive
+            // 
+            this.checkBoxCaseSensitive.AutoSize = true;
+            this.checkBoxCaseSensitive.Location = new System.Drawing.Point(358, 81);
+            this.checkBoxCaseSensitive.Name = "checkBoxCaseSensitive";
+            this.checkBoxCaseSensitive.Size = new System.Drawing.Size(82, 17);
+            this.checkBoxCaseSensitive.TabIndex = 26;
+            this.checkBoxCaseSensitive.Text = "Ignore case";
+            this.checkBoxCaseSensitive.UseVisualStyleBackColor = true;
+            // 
             // ProjectTermsView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -364,5 +376,6 @@
         private System.Windows.Forms.Button buttonExtractTerms;
         private System.Windows.Forms.OpenFileDialog openFileDialogLoadFile;
         private System.Windows.Forms.SaveFileDialog saveFileDialogBlacklist;
+        private System.Windows.Forms.CheckBox checkBoxCaseSensitive;
     }
 }
