@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
 			this.copyBtn = new System.Windows.Forms.Button();
 			this.languagesListBox = new System.Windows.Forms.CheckedListBox();
@@ -123,6 +124,7 @@
 			this.csvBtn.TabIndex = 9;
 			this.csvBtn.Text = "Copy to CSV files";
 			this.csvBtn.UseVisualStyleBackColor = true;
+			this.csvBtn.Click += new System.EventHandler(this.csvBtn_Click);
 			// 
 			// button1
 			// 
@@ -141,6 +143,7 @@
 			this.exitBtn.TabIndex = 11;
 			this.exitBtn.Text = "Exit";
 			this.exitBtn.UseVisualStyleBackColor = true;
+			this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
 			// 
 			// ReportExporterControl
 			// 
@@ -148,7 +151,10 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(569, 436);
 			this.Controls.Add(this.mainPanel);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "ReportExporterControl";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.Text = "SDL Trados Studio 2017 – Export Analysis Reports";
 			this.mainPanel.ResumeLayout(false);
 			this.mainPanel.PerformLayout();
 			this.ResumeLayout(false);

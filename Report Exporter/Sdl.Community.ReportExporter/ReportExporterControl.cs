@@ -30,6 +30,7 @@ namespace Sdl.Community.ReportExporter
 			LoadProjectsList();
 			projListbox.SelectedIndex = 0;
 
+			//set for language list box check box should be checked/unchecked when row is selected
 			languagesListBox.CheckOnClick = true;
 			IsClipboardEnabled();
 			
@@ -229,6 +230,35 @@ namespace Sdl.Community.ReportExporter
 
 		private void includeHeaderCheck_CheckedChanged(object sender, EventArgs e)
 		{
+		}
+
+		private void exitBtn_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void csvBtn_Click(object sender, EventArgs e)
+		{
+			foreach (var project in _selectedProjectsForReport)
+			{
+				// check which languages to export
+				var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
+				foreach (var languageReport in checkedLanguages)
+				{
+					var csvFullReportPath =
+						languageReport.Key.PathToReport.Substring(0, languageReport.Key
+																		 .PathToReport.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+
+					//write report to Reports folder
+					using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
+													 languageReport.Key.TargetLang.Name + ".csv"))
+					{
+						var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+						sw.Write(report.ToCsv(includeHeaderCheck.Checked));
+					}
+
+				}
+			}
 		}
 	}
 }

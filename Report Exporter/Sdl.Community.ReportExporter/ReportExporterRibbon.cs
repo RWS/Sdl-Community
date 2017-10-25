@@ -23,7 +23,7 @@ namespace Sdl.Community.ReportExporter
 	{
 	}
 
-	[Action("Sdl.Community.ReportExporter", Name = "Report Exporter", Icon = "migrate", Description = "Studio Report Exporter")]
+	[Action("Sdl.Community.ReportExporter", Name = "Report Exporter", Icon = "folder2_blue", Description = "Studio Report Exporter")]
 	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
 	class StudioMigrationUtilityViewPartAction : AbstractAction
 	{
