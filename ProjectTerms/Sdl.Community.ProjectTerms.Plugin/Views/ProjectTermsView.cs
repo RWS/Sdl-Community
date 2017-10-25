@@ -150,6 +150,25 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             ButtonsEnabled(true);
         }
 
+        private void PopulateBlacklist(Regex regex)
+        {
+            viewModel.ReadProjectTermsFromFile();
+            var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
+            if (blacklistRegex.Count == 0)
+            {
+                MessageBox.Show(PluginResources.Info_NotMatch, PluginResources.MessageType_Info);
+                textBoxTerm.Text = "";
+                return;
+            }
+            foreach (var item in blacklistRegex)
+            {
+                if (CheckExactMatch(item.Text)) continue;
+                AddTerm(item.Text);
+            }
+
+            textBoxTerm.Text = "";
+        }
+
         private void buttonAdd_Click(object sender, EventArgs e)
         {
             string term = textBoxTerm.Text;
@@ -163,21 +182,13 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 }
                 else
                 {
-                    //var regex = new Regex(@"(?<!\S)" + term + @"(?!\S)");
                     var regex = new Regex(term);
-                    viewModel.ReadProjectTermsFromFile();
-                    var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
-                    if (blacklistRegex.Count == 0)
-                    {
-                        MessageBox.Show(PluginResources.Info_NotMatch, PluginResources.MessageType_Info);
-                        textBoxTerm.Text = "";
-                        return;
-                    }
-                    foreach (var item in blacklistRegex)
-                    {
-                        AddTerm(item.Text);
-                    }
+                    PopulateBlacklist(regex);
                 }
+            } else if (checkBoxCaseSensitive.Checked)
+            {
+                var regex = new Regex(@"(?<!\S)" + term + @"(?!\S)", RegexOptions.IgnoreCase);
+                PopulateBlacklist(regex);
             }
             else
             {
