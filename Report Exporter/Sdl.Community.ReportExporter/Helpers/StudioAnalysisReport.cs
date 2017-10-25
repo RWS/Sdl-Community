@@ -47,43 +47,52 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 		}
 
-		public string ToCsv(bool includeHeader)
+		public string ToCsv(bool includeHeader, OptionalInformation aditionalHeaders)
 		{
 			var csvSeparator = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ListSeparator;
 			var csvNewLine = Environment.NewLine;
-			var csvHeader = GetCsvHeaderRow(csvSeparator, AnalyzedFiles.First().Fuzzies);
+			var csvHeader = GetCsvHeaderRow(csvSeparator, AnalyzedFiles.First().Fuzzies, aditionalHeaders);
 
-			StringBuilder _sb = new StringBuilder();
+			var sb = new StringBuilder();
 
 			if (includeHeader)
 			{
-				_sb.Append(csvHeader).Append(csvNewLine);
+				sb.Append(csvHeader).Append(csvNewLine);
 			}
 
 			foreach (var file in AnalyzedFiles)
 			{
-				_sb.Append(file.FileName).Append(csvSeparator)
+				sb.Append(file.FileName).Append(csvSeparator)
 					.Append(file.Repeated.Words).Append(csvSeparator)
 					// the 100% match is actually a sum of Exact, Perfect and InContextExact matches
 					.Append((file.Exact.Words + file.Perfect.Words + file.InContextExact.Words).ToString()).Append(csvSeparator);
 
 				foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
 				{
-					_sb.Append(fuzzy.Words).Append(csvSeparator);
+					sb.Append(fuzzy.Words).Append(csvSeparator);
 
-					var _internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
-					_sb.Append(_internalFuzzy != null ? _internalFuzzy.Words : 0).Append(csvSeparator);
+					var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
+					sb.Append(internalFuzzy != null ? internalFuzzy.Words : 0).Append(csvSeparator);
 				}
 
-				_sb.Append(file.Untranslated.Words).Append(csvSeparator)
+				if (aditionalHeaders.IncludeAdaptiveMt)
+				{
+					sb.Append(file.NewBaseline.Words).Append(csvSeparator);
+				}
+				if (aditionalHeaders.IncludeFragmentMatches)
+				{
+					sb.Append(file.NewLearnings.Words).Append(csvSeparator);
+				}
+				
+					sb.Append(file.Untranslated.Words).Append(csvSeparator)
 					.Append(file.Total.Words).Append(csvSeparator)
 					.Append(csvNewLine);
 			}
 
-			return _sb.ToString();
+			return sb.ToString();
 		}
 
-		private string GetCsvHeaderRow(string separator, IEnumerable<BandResult> fuzzies)
+		private string GetCsvHeaderRow(string separator, IEnumerable<BandResult> fuzzies, OptionalInformation aditionalHeaders)
 		{
 			List<string> _headerColumns = new List<string>() { "\"Filename\"",
 				"\"Reps\"",
@@ -98,7 +107,14 @@ namespace Sdl.Community.ReportExporter.Helpers
 						_headerColumns.Add(string.Format("\"{0}% - {1}% (AP)\"", br.Max, br.Min));
 					}
 				);
-
+			if (aditionalHeaders.IncludeAdaptiveMt)
+			{
+				_headerColumns.Add("\"AdaptiveMT Baseline\"");
+			}
+			if (aditionalHeaders.IncludeFragmentMatches)
+			{
+				_headerColumns.Add("\"AdaptiveMT with Learnings\"");
+			}
 			_headerColumns.Add("\"New\"");
 			_headerColumns.Add("\"Total Words\"");
 

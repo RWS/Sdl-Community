@@ -52,7 +52,15 @@ namespace Sdl.Community.ReportExporter.Model
 		{
 			get { return Results.Where(r => r.BandName.ToLower() == "fuzzy"); }
 		}
+		public BandResult NewBaseline
+		{
+			get { return Results.SingleOrDefault(r => r.BandName.ToLower() == "newbaseline"); }
+		}
 
+		public BandResult NewLearnings
+		{
+			get { return Results.SingleOrDefault(r => r.BandName.ToLower() == "newlearnings"); }
+		}
 		public IEnumerable<BandResult> InternalFuzzies
 		{
 			get { return Results.Where(r => r.BandName.ToLower() == "internalfuzzy"); }
@@ -67,5 +75,6 @@ namespace Sdl.Community.ReportExporter.Model
 		{
 			return Results.SingleOrDefault(r => r.BandName.ToLower() == "internalfuzzy" && r.Min == min && r.Max == max);
 		}
+	
 	}
 }

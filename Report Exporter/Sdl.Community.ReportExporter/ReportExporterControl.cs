@@ -22,7 +22,7 @@ namespace Sdl.Community.ReportExporter
 	{
 		private readonly string _projectXmlPath;
 		private readonly List<ReportDetails> _selectedProjectsForReport;
-
+		private readonly OptionalInformation _optionalInformation;
 		public ReportExporterControl()
 		{
 			InitializeComponent();
@@ -36,7 +36,12 @@ namespace Sdl.Community.ReportExporter
 			IsClipboardEnabled();
 			
 			includeHeaderCheck.Checked = true;
-	
+			_optionalInformation = new OptionalInformation
+			{
+				IncludeAdaptiveMt = adaptiveMT.Checked,
+				IncludeFragmentMatches = fragmentMatches.Checked
+			};
+
 		}
 
 
@@ -209,14 +214,14 @@ namespace Sdl.Community.ReportExporter
 				if (selectedLanguage != null)
 				{
 					var report = new StudioAnalysisReport(selectedLanguage.PathToReport);
-					Clipboard.SetText(report.ToCsv(includeHeaderCheck.Checked));
+					Clipboard.SetText(report.ToCsv(includeHeaderCheck.Checked,_optionalInformation));
 				}//check from  selected project if we have any language checked
 				else
 				{
 					var selectedReport = GetSelectedReport();
 					var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
 					var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
-					Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked));
+					Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked,_optionalInformation));
 				}
 
 				MessageBox.Show(this, @"Copy to clipboard successful.", @"Copy result", MessageBoxButtons.OK,
@@ -262,8 +267,9 @@ namespace Sdl.Community.ReportExporter
 						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
 						                                 languageReport.Key.TargetLang.Name + ".csv"))
 						{
-							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-							sw.Write(report.ToCsv(includeHeaderCheck.Checked));
+							//var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+							var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
+							sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 						}
 
 					}
@@ -298,6 +304,16 @@ namespace Sdl.Community.ReportExporter
 					Process.Start("explorer.exe", "\"" + reportPath + "\"");
 				}
 			}
+		}
+
+		private void adaptiveMT_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeAdaptiveMt = adaptiveMT.Checked;
+		}
+
+		private void fragmentMatches_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeFragmentMatches = fragmentMatches.Checked;
 		}
 	}
 }

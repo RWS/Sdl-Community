@@ -40,7 +40,6 @@
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
 			this.optionsLabel = new System.Windows.Forms.Label();
-			this.internalFuzzy = new System.Windows.Forms.CheckBox();
 			this.fragmentMatches = new System.Windows.Forms.CheckBox();
 			this.adaptiveMT = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
@@ -50,7 +49,6 @@
 			// 
 			this.mainPanel.Controls.Add(this.adaptiveMT);
 			this.mainPanel.Controls.Add(this.fragmentMatches);
-			this.mainPanel.Controls.Add(this.internalFuzzy);
 			this.mainPanel.Controls.Add(this.optionsLabel);
 			this.mainPanel.Controls.Add(this.exitBtn);
 			this.mainPanel.Controls.Add(this.targetBtn);
@@ -163,35 +161,27 @@
 			this.optionsLabel.TabIndex = 12;
 			this.optionsLabel.Text = "Aditional Report Information";
 			// 
-			// internalFuzzy
-			// 
-			this.internalFuzzy.AutoSize = true;
-			this.internalFuzzy.Location = new System.Drawing.Point(436, 216);
-			this.internalFuzzy.Name = "internalFuzzy";
-			this.internalFuzzy.Size = new System.Drawing.Size(96, 17);
-			this.internalFuzzy.TabIndex = 13;
-			this.internalFuzzy.Text = "Internal fuzzies";
-			this.internalFuzzy.UseVisualStyleBackColor = true;
-			// 
 			// fragmentMatches
 			// 
 			this.fragmentMatches.AutoSize = true;
-			this.fragmentMatches.Location = new System.Drawing.Point(436, 240);
+			this.fragmentMatches.Location = new System.Drawing.Point(436, 214);
 			this.fragmentMatches.Name = "fragmentMatches";
 			this.fragmentMatches.Size = new System.Drawing.Size(113, 17);
 			this.fragmentMatches.TabIndex = 14;
 			this.fragmentMatches.Text = "Fragment matches";
 			this.fragmentMatches.UseVisualStyleBackColor = true;
+			this.fragmentMatches.CheckedChanged += new System.EventHandler(this.fragmentMatches_CheckedChanged);
 			// 
 			// adaptiveMT
 			// 
 			this.adaptiveMT.AutoSize = true;
-			this.adaptiveMT.Location = new System.Drawing.Point(436, 264);
+			this.adaptiveMT.Location = new System.Drawing.Point(436, 237);
 			this.adaptiveMT.Name = "adaptiveMT";
 			this.adaptiveMT.Size = new System.Drawing.Size(87, 17);
 			this.adaptiveMT.TabIndex = 15;
 			this.adaptiveMT.Text = "Adaptive MT";
 			this.adaptiveMT.UseVisualStyleBackColor = true;
+			this.adaptiveMT.CheckedChanged += new System.EventHandler(this.adaptiveMT_CheckedChanged);
 			// 
 			// ReportExporterControl
 			// 
@@ -226,6 +216,5 @@
 		private System.Windows.Forms.Label optionsLabel;
 		private System.Windows.Forms.CheckBox adaptiveMT;
 		private System.Windows.Forms.CheckBox fragmentMatches;
-		private System.Windows.Forms.CheckBox internalFuzzy;
 	}
 }
