@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Sdl.Community.ReportExporter
 	public partial class ReportExporterControl : Form
 	{
 		private readonly string _projectXmlPath;
-		private List<ReportDetails> _selectedProjectsForReport;
+		private readonly List<ReportDetails> _selectedProjectsForReport;
 
 		public ReportExporterControl()
 		{
@@ -160,8 +161,8 @@ namespace Sdl.Community.ReportExporter
 				var languages = Help.LoadLanguageDirections(doc);
 				Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
 				var projectLanguages = languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
+				
 				//add resutls to the list view
-
 				var selectedProjectExists = _selectedProjectsForReport.Any(n => n.ProjectName.Equals(selectedProject.ProjectName));
 
 				if (!selectedProjectExists)
@@ -171,7 +172,6 @@ namespace Sdl.Community.ReportExporter
 				FillLanguagesList();
 			}
 			IsClipboardEnabled();
-
 		}
 
 		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -204,20 +204,29 @@ namespace Sdl.Community.ReportExporter
 		private void copyBtn_Click(object sender, EventArgs e)
 		{
 			var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
-		
-			if (selectedLanguage != null)
+			try
 			{
-				var report = new StudioAnalysisReport(selectedLanguage.PathToReport);
-				Clipboard.SetText(report.ToCsv(includeHeaderCheck.Checked));
-			}//check from  selected project if we have any language checked
-			else
-			{
-				var selectedReport = GetSelectedReport();
-				var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
-				var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
-				Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked));
+				if (selectedLanguage != null)
+				{
+					var report = new StudioAnalysisReport(selectedLanguage.PathToReport);
+					Clipboard.SetText(report.ToCsv(includeHeaderCheck.Checked));
+				}//check from  selected project if we have any language checked
+				else
+				{
+					var selectedReport = GetSelectedReport();
+					var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
+					var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
+					Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked));
+				}
+
+				MessageBox.Show(this, @"Copy to clipboard successful.", @"Copy result", MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
 			}
-		
+			catch( Exception exception)
+			{
+				Console.WriteLine(exception);
+				throw;
+			}
 
 		}
 
@@ -239,24 +248,54 @@ namespace Sdl.Community.ReportExporter
 
 		private void csvBtn_Click(object sender, EventArgs e)
 		{
-			foreach (var project in _selectedProjectsForReport)
+			try
 			{
-				// check which languages to export
-				var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
-				foreach (var languageReport in checkedLanguages)
+				foreach (var project in _selectedProjectsForReport)
 				{
-					var csvFullReportPath =
-						languageReport.Key.PathToReport.Substring(0, languageReport.Key
-																		 .PathToReport.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
-
-					//write report to Reports folder
-					using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
-													 languageReport.Key.TargetLang.Name + ".csv"))
+					// check which languages to export
+					var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
+					foreach (var languageReport in checkedLanguages)
 					{
-						var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-						sw.Write(report.ToCsv(includeHeaderCheck.Checked));
-					}
+						var csvFullReportPath = GetReportFolderPath(languageReport.Key.PathToReport);
 
+						//write report to Reports folder
+						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
+						                                 languageReport.Key.TargetLang.Name + ".csv"))
+						{
+							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+							sw.Write(report.ToCsv(includeHeaderCheck.Checked));
+						}
+
+					}
+				}
+
+				MessageBox.Show(this, @"Export successful.", @"Export result", MessageBoxButtons.OK,
+					MessageBoxIcon.Information);
+			}
+			catch (Exception exception)
+			{
+				Console.WriteLine(exception);
+				throw;
+			}
+	
+		}
+
+		private string GetReportFolderPath(string projectFolderPath)
+		{
+			var reportFolderPath =
+				projectFolderPath.Substring(0, projectFolderPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+			return reportFolderPath;
+		}
+
+		private void targetBtn_Click(object sender, EventArgs e)
+		{
+			var selectedProject = (ProjectDetails)projListbox.SelectedItem;
+			if (selectedProject != null)
+			{
+				var reportPath = Path.Combine(selectedProject.ProjectFolderPath, "Reports");
+				if (Directory.Exists(reportPath))
+				{
+					Process.Start("explorer.exe", "\"" + reportPath + "\"");
 				}
 			}
 		}

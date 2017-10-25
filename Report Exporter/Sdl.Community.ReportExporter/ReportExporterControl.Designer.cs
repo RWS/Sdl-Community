@@ -30,22 +30,22 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.exitBtn = new System.Windows.Forms.Button();
+			this.targetBtn = new System.Windows.Forms.Button();
+			this.csvBtn = new System.Windows.Forms.Button();
 			this.copyBtn = new System.Windows.Forms.Button();
 			this.languagesListBox = new System.Windows.Forms.CheckedListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.csvBtn = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
-			this.exitBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
 			this.mainPanel.Controls.Add(this.exitBtn);
-			this.mainPanel.Controls.Add(this.button1);
+			this.mainPanel.Controls.Add(this.targetBtn);
 			this.mainPanel.Controls.Add(this.csvBtn);
 			this.mainPanel.Controls.Add(this.copyBtn);
 			this.mainPanel.Controls.Add(this.languagesListBox);
@@ -58,6 +58,36 @@
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(569, 436);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// exitBtn
+			// 
+			this.exitBtn.Location = new System.Drawing.Point(432, 401);
+			this.exitBtn.Name = "exitBtn";
+			this.exitBtn.Size = new System.Drawing.Size(107, 23);
+			this.exitBtn.TabIndex = 11;
+			this.exitBtn.Text = "Exit";
+			this.exitBtn.UseVisualStyleBackColor = true;
+			this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
+			// 
+			// targetBtn
+			// 
+			this.targetBtn.Location = new System.Drawing.Point(433, 136);
+			this.targetBtn.Name = "targetBtn";
+			this.targetBtn.Size = new System.Drawing.Size(107, 23);
+			this.targetBtn.TabIndex = 10;
+			this.targetBtn.Text = "Open Target Folder";
+			this.targetBtn.UseVisualStyleBackColor = true;
+			this.targetBtn.Click += new System.EventHandler(this.targetBtn_Click);
+			// 
+			// csvBtn
+			// 
+			this.csvBtn.Location = new System.Drawing.Point(432, 107);
+			this.csvBtn.Name = "csvBtn";
+			this.csvBtn.Size = new System.Drawing.Size(107, 23);
+			this.csvBtn.TabIndex = 9;
+			this.csvBtn.Text = "Copy to CSV files";
+			this.csvBtn.UseVisualStyleBackColor = true;
+			this.csvBtn.Click += new System.EventHandler(this.csvBtn_Click);
 			// 
 			// copyBtn
 			// 
@@ -116,42 +146,15 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
-			// csvBtn
-			// 
-			this.csvBtn.Location = new System.Drawing.Point(432, 107);
-			this.csvBtn.Name = "csvBtn";
-			this.csvBtn.Size = new System.Drawing.Size(107, 23);
-			this.csvBtn.TabIndex = 9;
-			this.csvBtn.Text = "Copy to CSV files";
-			this.csvBtn.UseVisualStyleBackColor = true;
-			this.csvBtn.Click += new System.EventHandler(this.csvBtn_Click);
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(433, 136);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(107, 23);
-			this.button1.TabIndex = 10;
-			this.button1.Text = "Open Target Folder";
-			this.button1.UseVisualStyleBackColor = true;
-			// 
-			// exitBtn
-			// 
-			this.exitBtn.Location = new System.Drawing.Point(432, 401);
-			this.exitBtn.Name = "exitBtn";
-			this.exitBtn.Size = new System.Drawing.Size(107, 23);
-			this.exitBtn.TabIndex = 11;
-			this.exitBtn.Text = "Exit";
-			this.exitBtn.UseVisualStyleBackColor = true;
-			this.exitBtn.Click += new System.EventHandler(this.exitBtn_Click);
-			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(569, 436);
 			this.Controls.Add(this.mainPanel);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximizeBox = false;
 			this.Name = "ReportExporterControl";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "SDL Trados Studio 2017 – Export Analysis Reports";
@@ -171,7 +174,7 @@
 		private System.Windows.Forms.CheckedListBox languagesListBox;
 		private System.Windows.Forms.Button copyBtn;
 		private System.Windows.Forms.Button exitBtn;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button targetBtn;
 		private System.Windows.Forms.Button csvBtn;
 	}
 }
