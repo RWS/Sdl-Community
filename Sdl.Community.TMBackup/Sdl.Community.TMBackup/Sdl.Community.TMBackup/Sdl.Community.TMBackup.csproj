@@ -103,6 +103,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\EnumHelper.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
@@ -154,7 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="pluginpackage.manifest.xml" />
-    <None Include="Properties\DataSources\Sdl.Community.TMBackup.Models.BackupDetailsModel.datasource" />
+    <None Include="app.config" />
     <None Include="Resources\TMBackup_Icon.ico" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>

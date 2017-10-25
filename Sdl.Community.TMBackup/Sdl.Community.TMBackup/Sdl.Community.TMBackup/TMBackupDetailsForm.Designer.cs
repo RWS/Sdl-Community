@@ -31,10 +31,6 @@
             this.components = new System.ComponentModel.Container();
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.col_Action = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_Pattern = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lbl_RulesDescription = new System.Windows.Forms.Label();
             this.btn_Add = new System.Windows.Forms.Button();
             this.btn_UpArrow = new System.Windows.Forms.Button();
@@ -43,8 +39,12 @@
             this.btn_Reset = new System.Windows.Forms.Button();
             this.lbl_Line = new System.Windows.Forms.Label();
             this.backupDetailsModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.backupActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupTypeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupPatternDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_Ok
@@ -66,40 +66,6 @@
             this.btn_Cancel.Text = "Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
             this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
-            // 
-            // dataGridView1
-            // 
-            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.col_Action,
-            this.col_Type,
-            this.col_Pattern});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 23);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(421, 63);
-            this.dataGridView1.TabIndex = 9;
-            // 
-            // col_Action
-            // 
-            this.col_Action.FillWeight = 45.68528F;
-            this.col_Action.HeaderText = "Action";
-            this.col_Action.Name = "col_Action";
-            // 
-            // col_Type
-            // 
-            this.col_Type.FillWeight = 127.1574F;
-            this.col_Type.HeaderText = "Type";
-            this.col_Type.Name = "col_Type";
-            // 
-            // col_Pattern
-            // 
-            this.col_Pattern.FillWeight = 127.1574F;
-            this.col_Pattern.HeaderText = "Pattern";
-            this.col_Pattern.Name = "col_Pattern";
             // 
             // lbl_RulesDescription
             // 
@@ -173,13 +139,48 @@
             // 
             this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.TMBackup.Models.BackupDetailsModel);
             // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AutoGenerateColumns = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.backupActionDataGridViewTextBoxColumn,
+            this.backupTypeDataGridViewTextBoxColumn,
+            this.backupPatternDataGridViewTextBoxColumn});
+            this.dataGridView1.DataSource = this.backupDetailsModelBindingSource;
+            this.dataGridView1.Location = new System.Drawing.Point(20, 13);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(373, 91);
+            this.dataGridView1.TabIndex = 17;
+            this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating_1);
+            this.dataGridView1.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_RowValidating);
+            // 
+            // backupActionDataGridViewTextBoxColumn
+            // 
+            this.backupActionDataGridViewTextBoxColumn.DataPropertyName = "BackupAction";
+            this.backupActionDataGridViewTextBoxColumn.HeaderText = "Action";
+            this.backupActionDataGridViewTextBoxColumn.Name = "backupActionDataGridViewTextBoxColumn";
+            // 
+            // backupTypeDataGridViewTextBoxColumn
+            // 
+            this.backupTypeDataGridViewTextBoxColumn.DataPropertyName = "BackupType";
+            this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type";
+            this.backupTypeDataGridViewTextBoxColumn.Name = "backupTypeDataGridViewTextBoxColumn";
+            // 
+            // backupPatternDataGridViewTextBoxColumn
+            // 
+            this.backupPatternDataGridViewTextBoxColumn.DataPropertyName = "BackupPattern";
+            this.backupPatternDataGridViewTextBoxColumn.HeaderText = "Pattern";
+            this.backupPatternDataGridViewTextBoxColumn.Name = "backupPatternDataGridViewTextBoxColumn";
+            // 
             // TMBackupDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(541, 206);
-            this.Controls.Add(this.lbl_Line);
+            this.ClientSize = new System.Drawing.Size(546, 214);
             this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.lbl_Line);
             this.Controls.Add(this.lbl_RulesDescription);
             this.Controls.Add(this.btn_Add);
             this.Controls.Add(this.btn_UpArrow);
@@ -190,8 +191,8 @@
             this.Controls.Add(this.btn_Ok);
             this.Name = "TMBackupDetailsForm";
             this.Text = "What to backup";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -207,10 +208,10 @@
 		private System.Windows.Forms.Button btn_DownArrow;
 		private System.Windows.Forms.Button btn_Reset;
 		private System.Windows.Forms.Label lbl_Line;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Action;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Type;
-		private System.Windows.Forms.DataGridViewTextBoxColumn col_Pattern;
 		private System.Windows.Forms.BindingSource backupDetailsModelBindingSource;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.DataGridViewTextBoxColumn backupActionDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn backupTypeDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn backupPatternDataGridViewTextBoxColumn;
 	}
 }
