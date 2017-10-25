@@ -30,6 +30,9 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.adaptiveMT = new System.Windows.Forms.CheckBox();
+			this.adaptiveLearnings = new System.Windows.Forms.CheckBox();
+			this.optionsLabel = new System.Windows.Forms.Label();
 			this.exitBtn = new System.Windows.Forms.Button();
 			this.targetBtn = new System.Windows.Forms.Button();
 			this.csvBtn = new System.Windows.Forms.Button();
@@ -39,16 +42,13 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.optionsLabel = new System.Windows.Forms.Label();
-			this.fragmentMatches = new System.Windows.Forms.CheckBox();
-			this.adaptiveMT = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
 			this.mainPanel.Controls.Add(this.adaptiveMT);
-			this.mainPanel.Controls.Add(this.fragmentMatches);
+			this.mainPanel.Controls.Add(this.adaptiveLearnings);
 			this.mainPanel.Controls.Add(this.optionsLabel);
 			this.mainPanel.Controls.Add(this.exitBtn);
 			this.mainPanel.Controls.Add(this.targetBtn);
@@ -62,8 +62,39 @@
 			this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainPanel.Name = "mainPanel";
-			this.mainPanel.Size = new System.Drawing.Size(590, 440);
+			this.mainPanel.Size = new System.Drawing.Size(626, 447);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// adaptiveMT
+			// 
+			this.adaptiveMT.AutoSize = true;
+			this.adaptiveMT.Location = new System.Drawing.Point(436, 237);
+			this.adaptiveMT.Name = "adaptiveMT";
+			this.adaptiveMT.Size = new System.Drawing.Size(130, 17);
+			this.adaptiveMT.TabIndex = 15;
+			this.adaptiveMT.Text = "Adaptive MT Baseline";
+			this.adaptiveMT.UseVisualStyleBackColor = true;
+			this.adaptiveMT.CheckedChanged += new System.EventHandler(this.adaptiveMT_CheckedChanged);
+			// 
+			// adaptiveLearnings
+			// 
+			this.adaptiveLearnings.AutoSize = true;
+			this.adaptiveLearnings.Location = new System.Drawing.Point(436, 214);
+			this.adaptiveLearnings.Name = "adaptiveLearnings";
+			this.adaptiveLearnings.Size = new System.Drawing.Size(158, 17);
+			this.adaptiveLearnings.TabIndex = 14;
+			this.adaptiveLearnings.Text = "Adaptive MT with Learnings";
+			this.adaptiveLearnings.UseVisualStyleBackColor = true;
+			this.adaptiveLearnings.CheckedChanged += new System.EventHandler(this.fragmentMatches_CheckedChanged);
+			// 
+			// optionsLabel
+			// 
+			this.optionsLabel.AutoSize = true;
+			this.optionsLabel.Location = new System.Drawing.Point(433, 189);
+			this.optionsLabel.Name = "optionsLabel";
+			this.optionsLabel.Size = new System.Drawing.Size(137, 13);
+			this.optionsLabel.TabIndex = 12;
+			this.optionsLabel.Text = "Aditional Report Information";
 			// 
 			// exitBtn
 			// 
@@ -152,42 +183,11 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
-			// optionsLabel
-			// 
-			this.optionsLabel.AutoSize = true;
-			this.optionsLabel.Location = new System.Drawing.Point(433, 189);
-			this.optionsLabel.Name = "optionsLabel";
-			this.optionsLabel.Size = new System.Drawing.Size(137, 13);
-			this.optionsLabel.TabIndex = 12;
-			this.optionsLabel.Text = "Aditional Report Information";
-			// 
-			// fragmentMatches
-			// 
-			this.fragmentMatches.AutoSize = true;
-			this.fragmentMatches.Location = new System.Drawing.Point(436, 214);
-			this.fragmentMatches.Name = "fragmentMatches";
-			this.fragmentMatches.Size = new System.Drawing.Size(113, 17);
-			this.fragmentMatches.TabIndex = 14;
-			this.fragmentMatches.Text = "Fragment matches";
-			this.fragmentMatches.UseVisualStyleBackColor = true;
-			this.fragmentMatches.CheckedChanged += new System.EventHandler(this.fragmentMatches_CheckedChanged);
-			// 
-			// adaptiveMT
-			// 
-			this.adaptiveMT.AutoSize = true;
-			this.adaptiveMT.Location = new System.Drawing.Point(436, 237);
-			this.adaptiveMT.Name = "adaptiveMT";
-			this.adaptiveMT.Size = new System.Drawing.Size(87, 17);
-			this.adaptiveMT.TabIndex = 15;
-			this.adaptiveMT.Text = "Adaptive MT";
-			this.adaptiveMT.UseVisualStyleBackColor = true;
-			this.adaptiveMT.CheckedChanged += new System.EventHandler(this.adaptiveMT_CheckedChanged);
-			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(590, 440);
+			this.ClientSize = new System.Drawing.Size(626, 447);
 			this.Controls.Add(this.mainPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -215,6 +215,6 @@
 		private System.Windows.Forms.Button csvBtn;
 		private System.Windows.Forms.Label optionsLabel;
 		private System.Windows.Forms.CheckBox adaptiveMT;
-		private System.Windows.Forms.CheckBox fragmentMatches;
+		private System.Windows.Forms.CheckBox adaptiveLearnings;
 	}
 }

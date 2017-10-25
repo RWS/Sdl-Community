@@ -34,12 +34,12 @@ namespace Sdl.Community.ReportExporter
 			//set for language list box check box should be checked/unchecked when row is selected
 			languagesListBox.CheckOnClick = true;
 			IsClipboardEnabled();
-			
+			IsCsvBtnEnabled();
 			includeHeaderCheck.Checked = true;
 			_optionalInformation = new OptionalInformation
 			{
-				IncludeAdaptiveMt = adaptiveMT.Checked,
-				IncludeFragmentMatches = fragmentMatches.Checked
+				IncludeAdaptiveBaseline = adaptiveMT.Checked,
+				IncludeAdaptiveLearnings = adaptiveLearnings.Checked
 			};
 
 		}
@@ -177,6 +177,7 @@ namespace Sdl.Community.ReportExporter
 				FillLanguagesList();
 			}
 			IsClipboardEnabled();
+			IsCsvBtnEnabled();
 		}
 
 		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
@@ -195,6 +196,7 @@ namespace Sdl.Community.ReportExporter
 				}
 			}
 			IsClipboardEnabled();
+			IsCsvBtnEnabled();
 		}
 
 		private ReportDetails GetSelectedReport()
@@ -242,6 +244,13 @@ namespace Sdl.Community.ReportExporter
 			copyBtn.Enabled = selectedLanguagesCount == 1;
 		}
 
+		private void IsCsvBtnEnabled()
+		{
+			var selectedReport = GetSelectedReport();
+			var selectedLanguagesCount = selectedReport.LanguagesForPoject.Count(c => c.Value);
+			csvBtn.Enabled = selectedLanguagesCount >= 1;
+		}
+
 		private void includeHeaderCheck_CheckedChanged(object sender, EventArgs e)
 		{
 		}
@@ -267,8 +276,8 @@ namespace Sdl.Community.ReportExporter
 						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
 						                                 languageReport.Key.TargetLang.Name + ".csv"))
 						{
-							//var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-							var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
+							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+							//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
 							sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 						}
 
@@ -308,12 +317,12 @@ namespace Sdl.Community.ReportExporter
 
 		private void adaptiveMT_CheckedChanged(object sender, EventArgs e)
 		{
-			_optionalInformation.IncludeAdaptiveMt = adaptiveMT.Checked;
+			_optionalInformation.IncludeAdaptiveBaseline = adaptiveMT.Checked;
 		}
 
 		private void fragmentMatches_CheckedChanged(object sender, EventArgs e)
 		{
-			_optionalInformation.IncludeFragmentMatches = fragmentMatches.Checked;
+			_optionalInformation.IncludeAdaptiveLearnings = adaptiveLearnings.Checked;
 		}
 	}
 }

@@ -8,7 +8,7 @@ namespace Sdl.Community.ReportExporter.Model
 {
 	public class OptionalInformation
 	{
-		public bool IncludeAdaptiveMt { get; set; }
-		public bool IncludeFragmentMatches { get; set; }
+		public bool IncludeAdaptiveBaseline { get; set; }
+		public bool IncludeAdaptiveLearnings { get; set; }
 	}
 }
