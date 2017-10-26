@@ -29,8 +29,8 @@ namespace Sdl.Community.TMBackup
 
 					backupDetailsModelList.Add(backupDetailsModel);
 
-					//Persistence persistence = new Persistence();
-					//persistence.SaveDetailsFormInfo(backupDetailsModelList);					
+					Persistence persistence = new Persistence();
+					persistence.SaveDetailsFormInfo(backupDetailsModelList);					
 				}
 			}
 			dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
