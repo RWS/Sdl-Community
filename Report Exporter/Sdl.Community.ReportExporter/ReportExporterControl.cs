@@ -39,7 +39,8 @@ namespace Sdl.Community.ReportExporter
 			_optionalInformation = new OptionalInformation
 			{
 				IncludeAdaptiveBaseline = adaptiveMT.Checked,
-				IncludeAdaptiveLearnings = adaptiveLearnings.Checked
+				IncludeAdaptiveLearnings = adaptiveLearnings.Checked,
+				IncludeInternalFuzzies = internalFuzzies.Checked
 			};
 
 		}
@@ -324,6 +325,11 @@ namespace Sdl.Community.ReportExporter
 		private void fragmentMatches_CheckedChanged(object sender, EventArgs e)
 		{
 			_optionalInformation.IncludeAdaptiveLearnings = adaptiveLearnings.Checked;
+		}
+
+		private void internalFuzzies_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeInternalFuzzies = internalFuzzies.Checked;
 		}
 	}
 }

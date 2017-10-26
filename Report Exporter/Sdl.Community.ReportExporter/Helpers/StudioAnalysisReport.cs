@@ -87,6 +87,19 @@ namespace Sdl.Community.ReportExporter.Helpers
 					sb.Append(file.NewLearnings.FullRecallWords).Append(csvSeparator)
 						.Append(file.NewLearnings.PartialRecallWords).Append(csvSeparator);
 				}
+				if (aditionalHeaders.IncludeInternalFuzzies)
+				{
+					foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
+					{
+						var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
+						sb.Append(internalFuzzy != null ? internalFuzzy.FullRecallWords : 0).Append(csvSeparator);
+					}
+					foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
+					{
+						var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
+						sb.Append(internalFuzzy != null ? internalFuzzy.PartialRecallWords : 0).Append(csvSeparator);
+					}
+				}
 
 				sb.Append(file.Untranslated.Words).Append(csvSeparator)
 					.Append(file.Total.Words).Append(csvSeparator)
@@ -121,6 +134,26 @@ namespace Sdl.Community.ReportExporter.Helpers
 				headerColumns.Add("\"AdaptiveMT with Learnings (whole TU)\"");
 				headerColumns.Add("\"AdaptiveMT with Learnings (TU fragment)\"");
 			}
+
+			if (aditionalHeaders.IncludeInternalFuzzies)
+			{
+				fuzzies.OrderByDescending(br => br.Max)
+					.ToList()
+					.ForEach(br =>
+						{
+							headerColumns.Add(string.Format("\"{0}% - {1}% (I.F Whole TU)\"", br.Max, br.Min));
+							
+						}
+					);
+				fuzzies.OrderByDescending(br => br.Max)
+					.ToList()
+					.ForEach(br =>
+						{
+							headerColumns.Add(string.Format("\"{0}% - {1}% (I.F TU Fragment)\"", br.Max, br.Min));
+						}
+					);
+			}
+
 			headerColumns.Add("\"New\"");
 			headerColumns.Add("\"Total Words\"");
 

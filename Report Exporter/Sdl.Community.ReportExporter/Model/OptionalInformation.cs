@@ -10,5 +10,6 @@ namespace Sdl.Community.ReportExporter.Model
 	{
 		public bool IncludeAdaptiveBaseline { get; set; }
 		public bool IncludeAdaptiveLearnings { get; set; }
+		public bool IncludeInternalFuzzies { get; set; }
 	}
 }

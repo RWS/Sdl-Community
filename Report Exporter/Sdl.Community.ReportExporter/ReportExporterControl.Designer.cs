@@ -42,11 +42,13 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
+			this.internalFuzzies = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.internalFuzzies);
 			this.mainPanel.Controls.Add(this.adaptiveMT);
 			this.mainPanel.Controls.Add(this.adaptiveLearnings);
 			this.mainPanel.Controls.Add(this.optionsLabel);
@@ -183,6 +185,17 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
+			// internalFuzzies
+			// 
+			this.internalFuzzies.AutoSize = true;
+			this.internalFuzzies.Location = new System.Drawing.Point(436, 261);
+			this.internalFuzzies.Name = "internalFuzzies";
+			this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
+			this.internalFuzzies.TabIndex = 16;
+			this.internalFuzzies.Text = "Internal Fuzzies";
+			this.internalFuzzies.UseVisualStyleBackColor = true;
+			this.internalFuzzies.CheckedChanged += new System.EventHandler(this.internalFuzzies_CheckedChanged);
+			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -216,5 +229,6 @@
 		private System.Windows.Forms.Label optionsLabel;
 		private System.Windows.Forms.CheckBox adaptiveMT;
 		private System.Windows.Forms.CheckBox adaptiveLearnings;
+		private System.Windows.Forms.CheckBox internalFuzzies;
 	}
 }
