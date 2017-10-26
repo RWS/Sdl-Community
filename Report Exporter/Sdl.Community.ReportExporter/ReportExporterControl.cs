@@ -165,6 +165,7 @@ namespace Sdl.Community.ReportExporter
 
 				var languages = Help.LoadLanguageDirections(doc);
 				Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
+
 				var projectLanguages = languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
 				
 				//add resutls to the list view
