@@ -11,6 +11,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupForm()
 		{
 			InitializeComponent();
+
+			GetBackupFormInfo();
 		}
 
 		private void btn_BackupFrom_Click(object sender, EventArgs e)
@@ -52,6 +54,8 @@ namespace Sdl.Community.TMBackup
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
+			
+			GetBackupFormInfo();
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -70,6 +74,30 @@ namespace Sdl.Community.TMBackup
 
 			Persistence persistence = new Persistence();
 			persistence.SaveBackupFormInfo(backupModel);
+		}
+
+		private void GetBackupFormInfo()
+		{
+			Persistence persistence = new Persistence();
+			var result = persistence.ReadFormInformation();
+
+			if (result.BackupModel != null)
+			{
+				txt_BackupFrom.Text = result.BackupModel.BackupFrom;
+				txt_BackupTo.Text = result.BackupModel.BackupTo;
+				txt_BackupTime.Text = result.BackupModel.BackupTime;
+				txt_Description.Text = result.BackupModel.Description;
+			}
+
+			if (result.BackupDetailsModelList != null)
+			{
+				string res = string.Empty;
+				foreach (var backupDetail in result.BackupDetailsModelList)
+				{
+					res = res + backupDetail.BackupAction + ", " + backupDetail.BackupType + ", " + backupDetail.BackupPattern + ";  ";
+				}
+				txt_BackupDetails.Text = res;
+			}
 		}
 	}
 }

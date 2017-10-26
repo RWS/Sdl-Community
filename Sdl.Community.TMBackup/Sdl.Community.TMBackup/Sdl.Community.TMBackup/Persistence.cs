@@ -52,15 +52,27 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if(request == null)
+			if (request == null)
 			{
 				request = new JsonRequestModel();
+				request.BackupDetailsModelList = backupDetailsModelList;
+				var json = JsonConvert.SerializeObject(request);
+
+				File.WriteAllText(_persistancePath, json);
 			}
+			else
+			{
+				foreach (var backupItem in request.BackupDetailsModelList)
+				{
+					if (!backupDetailsModelList.Contains(backupItem))
+					{
+						request.BackupDetailsModelList = backupDetailsModelList;
+						var json = JsonConvert.SerializeObject(request);
 
-			request.BackupDetailsModelList = backupDetailsModelList;
-			var json = JsonConvert.SerializeObject(request);
-
-			File.WriteAllText(_persistancePath, json);
+						File.WriteAllText(_persistancePath, json);
+					}
+				}
+			}			
 		}
 
 		public void SaveChangeSettings(ChangeSettingsModel changeSettingsModel)
@@ -112,6 +124,18 @@ namespace Sdl.Community.TMBackup
 			var json = JsonConvert.SerializeObject(request);
 
 			File.WriteAllText(_persistancePath, json);
+		}
+
+		public JsonRequestModel ReadFormInformation()
+		{
+			if (File.Exists(_persistancePath))
+			{
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+				return request;
+			}
+			return new JsonRequestModel();
 		}
 	}
 }
