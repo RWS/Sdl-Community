@@ -113,6 +113,7 @@
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\PeriodicBackupModel.cs" />
     <Compile Include="Models\RealTimeBackupModel.cs" />
+    <Compile Include="Models\JsonRequestModel.cs" />
     <Compile Include="PeriodicBackupForm.cs">
       <SubType>Form</SubType>
     </Compile>

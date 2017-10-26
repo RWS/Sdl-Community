@@ -16,22 +16,6 @@ namespace Sdl.Community.TMBackup
 				@"SDL Community\TMBackup\TMBackup.json");
 		}
 
-		//private void CheckIfJsonFileExist(Object recoveredJson)
-		//{
-		//	if (!File.Exists(_persistancePath))
-		//	{
-		//		var directory = Path.GetDirectoryName(_persistancePath);
-		//		if (directory != null && !Directory.Exists(directory))
-		//		{
-		//			Directory.CreateDirectory(directory);					
-		//		}
-
-		//		var json = JsonConvert.SerializeObject(recoveredJson);
-
-		//		File.WriteAllText(_persistancePath, json);
-		//	}
-		//}
-
 		private void CheckIfJsonFileExist()
 		{
 			if (!File.Exists(_persistancePath))
@@ -41,6 +25,7 @@ namespace Sdl.Community.TMBackup
 				{
 					Directory.CreateDirectory(directory);
 				}
+				File.WriteAllText(_persistancePath, string.Empty);
 			}
 		}
 
@@ -49,23 +34,81 @@ namespace Sdl.Community.TMBackup
 			CheckIfJsonFileExist();
 
 			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<BackupModel>(jsonText);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
-			request = backupModel;
+			request.BackupModel = backupModel;
 			var json = JsonConvert.SerializeObject(request);
 
 			File.WriteAllText(_persistancePath, json);
 		}
-
-
+		
 		public void SaveDetailsFormInfo(List<BackupDetailsModel> backupDetailsModelList)
 		{
 			CheckIfJsonFileExist();
 
 			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<List<BackupDetailsModel>>(jsonText);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if(request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
-			request = backupDetailsModelList;
+			request.BackupDetailsModelList = backupDetailsModelList;
+			var json = JsonConvert.SerializeObject(request);
+
+			File.WriteAllText(_persistancePath, json);
+		}
+
+		public void SaveChangeSettings(ChangeSettingsModel changeSettingsModel)
+		{
+			CheckIfJsonFileExist();
+
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
+
+			request.ChangeSettingsModel = changeSettingsModel;
+			var json = JsonConvert.SerializeObject(request);
+
+			File.WriteAllText(_persistancePath, json);
+		}
+
+		public void SavePeriodicBackupInfo(PeriodicBackupModel periodicBackupModel)
+		{
+			CheckIfJsonFileExist();
+
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
+
+			request.PeriodicBackupModel = periodicBackupModel;
+			var json = JsonConvert.SerializeObject(request);
+
+			File.WriteAllText(_persistancePath, json);
+		}
+
+		public void SaveRealTimeInfo(RealTimeBackupModel realTimeBackupModel)
+		{
+			CheckIfJsonFileExist();
+
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
+
+			request.RealTimeBackupModel = realTimeBackupModel;
 			var json = JsonConvert.SerializeObject(request);
 
 			File.WriteAllText(_persistancePath, json);

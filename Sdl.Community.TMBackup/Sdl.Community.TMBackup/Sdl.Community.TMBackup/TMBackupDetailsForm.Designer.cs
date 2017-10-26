@@ -49,7 +49,7 @@
             // 
             // btn_Ok
             // 
-            this.btn_Ok.Location = new System.Drawing.Point(358, 167);
+            this.btn_Ok.Location = new System.Drawing.Point(369, 167);
             this.btn_Ok.Name = "btn_Ok";
             this.btn_Ok.Size = new System.Drawing.Size(75, 23);
             this.btn_Ok.TabIndex = 7;
@@ -59,7 +59,7 @@
             // 
             // btn_Cancel
             // 
-            this.btn_Cancel.Location = new System.Drawing.Point(450, 167);
+            this.btn_Cancel.Location = new System.Drawing.Point(459, 167);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_Cancel.TabIndex = 8;
@@ -79,7 +79,7 @@
             // 
             // btn_Add
             // 
-            this.btn_Add.Location = new System.Drawing.Point(450, 23);
+            this.btn_Add.Location = new System.Drawing.Point(459, 13);
             this.btn_Add.Name = "btn_Add";
             this.btn_Add.Size = new System.Drawing.Size(75, 23);
             this.btn_Add.TabIndex = 11;
@@ -89,7 +89,7 @@
             // 
             // btn_UpArrow
             // 
-            this.btn_UpArrow.Location = new System.Drawing.Point(492, 81);
+            this.btn_UpArrow.Location = new System.Drawing.Point(501, 71);
             this.btn_UpArrow.Name = "btn_UpArrow";
             this.btn_UpArrow.Size = new System.Drawing.Size(33, 23);
             this.btn_UpArrow.TabIndex = 15;
@@ -99,7 +99,7 @@
             // 
             // btn_Delete
             // 
-            this.btn_Delete.Location = new System.Drawing.Point(450, 52);
+            this.btn_Delete.Location = new System.Drawing.Point(459, 42);
             this.btn_Delete.Name = "btn_Delete";
             this.btn_Delete.Size = new System.Drawing.Size(75, 23);
             this.btn_Delete.TabIndex = 12;
@@ -109,7 +109,7 @@
             // 
             // btn_DownArrow
             // 
-            this.btn_DownArrow.Location = new System.Drawing.Point(450, 81);
+            this.btn_DownArrow.Location = new System.Drawing.Point(459, 71);
             this.btn_DownArrow.Name = "btn_DownArrow";
             this.btn_DownArrow.Size = new System.Drawing.Size(35, 23);
             this.btn_DownArrow.TabIndex = 14;
@@ -119,7 +119,7 @@
             // 
             // btn_Reset
             // 
-            this.btn_Reset.Location = new System.Drawing.Point(450, 110);
+            this.btn_Reset.Location = new System.Drawing.Point(459, 100);
             this.btn_Reset.Name = "btn_Reset";
             this.btn_Reset.Size = new System.Drawing.Size(75, 23);
             this.btn_Reset.TabIndex = 13;
@@ -143,6 +143,7 @@
             // 
             this.dataGridView1.AutoGenerateColumns = false;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.backupActionDataGridViewTextBoxColumn,
@@ -151,7 +152,7 @@
             this.dataGridView1.DataSource = this.backupDetailsModelBindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(20, 13);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(373, 91);
+            this.dataGridView1.Size = new System.Drawing.Size(424, 110);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating_1);
             this.dataGridView1.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_RowValidating);
@@ -167,12 +168,14 @@
             this.backupTypeDataGridViewTextBoxColumn.DataPropertyName = "BackupType";
             this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type";
             this.backupTypeDataGridViewTextBoxColumn.Name = "backupTypeDataGridViewTextBoxColumn";
+            this.backupTypeDataGridViewTextBoxColumn.Width = 140;
             // 
             // backupPatternDataGridViewTextBoxColumn
             // 
             this.backupPatternDataGridViewTextBoxColumn.DataPropertyName = "BackupPattern";
             this.backupPatternDataGridViewTextBoxColumn.HeaderText = "Pattern";
             this.backupPatternDataGridViewTextBoxColumn.Name = "backupPatternDataGridViewTextBoxColumn";
+            this.backupPatternDataGridViewTextBoxColumn.Width = 140;
             // 
             // TMBackupDetailsForm
             // 
