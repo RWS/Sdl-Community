@@ -25,6 +25,7 @@ namespace Sdl.Community.TMBackup
 				{
 					Directory.CreateDirectory(directory);
 				}
+				File.WriteAllText(_persistancePath, string.Empty);
 			}
 		}
 
@@ -34,6 +35,10 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
 			request.BackupModel = backupModel;
 			var json = JsonConvert.SerializeObject(request);
@@ -47,6 +52,10 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if(request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
 			request.BackupDetailsModelList = backupDetailsModelList;
 			var json = JsonConvert.SerializeObject(request);
@@ -60,6 +69,10 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
 			request.ChangeSettingsModel = changeSettingsModel;
 			var json = JsonConvert.SerializeObject(request);
@@ -73,6 +86,10 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
 			request.PeriodicBackupModel = periodicBackupModel;
 			var json = JsonConvert.SerializeObject(request);
@@ -86,6 +103,10 @@ namespace Sdl.Community.TMBackup
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+			if (request == null)
+			{
+				request = new JsonRequestModel();
+			}
 
 			request.RealTimeBackupModel = realTimeBackupModel;
 			var json = JsonConvert.SerializeObject(request);

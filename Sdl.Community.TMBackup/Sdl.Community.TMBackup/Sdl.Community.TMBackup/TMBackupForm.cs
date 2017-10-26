@@ -50,6 +50,8 @@ namespace Sdl.Community.TMBackup
 		{
 			TMBackupDetailsForm detailsForm = new TMBackupDetailsForm();
 			detailsForm.ShowDialog();
+
+			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
