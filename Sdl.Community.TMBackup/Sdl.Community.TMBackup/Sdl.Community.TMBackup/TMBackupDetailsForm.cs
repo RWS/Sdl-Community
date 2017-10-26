@@ -3,6 +3,7 @@ using Sdl.Community.TMBackup.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
@@ -13,6 +14,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm()
 		{
 			InitializeComponent();
+
+			GetBackupDetailsInfo();
 		}
 
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
@@ -105,6 +108,17 @@ namespace Sdl.Community.TMBackup
 				{
 					dataGridView1[e.ColumnIndex, e.RowIndex].ErrorText = string.Empty;
 				}
+			}
+		}
+
+		private void GetBackupDetailsInfo()
+		{
+			Persistence persistence = new Persistence();
+			var request = persistence.ReadFormInformation();
+
+			if(request != null && request.BackupDetailsModelList.Any())
+			{
+				dataGridView1.DataSource = request.BackupDetailsModelList;
 			}
 		}
 	}
