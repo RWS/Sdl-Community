@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Sdl.Community.TMBackup.Helpers;
+using Sdl.Community.TMBackup.Models;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Sdl.Community.TMBackup.Helpers;
-using Sdl.Community.TMBackup.Models;
 
 namespace Sdl.Community.TMBackup
 {
@@ -11,9 +11,6 @@ namespace Sdl.Community.TMBackup
 	  public TMBackupDetailsForm()
 		{
 			InitializeComponent();
-
-			dataGridView1.CellValidating += new DataGridViewCellValidatingEventHandler(dataGridView1_CellValidating_1);
-			dataGridView1.RowValidating += new DataGridViewCellCancelEventHandler(dataGridView1_RowValidating);
 		}
 
 
@@ -23,24 +20,19 @@ namespace Sdl.Community.TMBackup
 
 			foreach (DataGridViewRow row in dataGridView1.Rows)
 			{
-				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()))
+				if (row.Cells[0].Value != null)
 				{
 					BackupDetailsModel backupDetailsModel = new BackupDetailsModel();
 					backupDetailsModel.BackupAction = row.Cells[0].Value.ToString();
 					backupDetailsModel.BackupType = row.Cells[1].Value.ToString();
-					backupDetailsModel.BackupType = row.Cells[2].Value.ToString();
+					backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
 
 					backupDetailsModelList.Add(backupDetailsModel);
 
 					//Persistence persistence = new Persistence();
-					//persistence.SaveDetailsFormInfo(backupDetailsModelList);
-
-					
+					//persistence.SaveDetailsFormInfo(backupDetailsModelList);					
 				}
 			}
-			dataGridView1.Refresh();
-			dataGridView1.DataSource = backupDetailsModelList;
-			dataGridView1.Rows.Add();
 			dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
 		}
 
