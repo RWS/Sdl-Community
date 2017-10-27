@@ -282,8 +282,8 @@ namespace Sdl.Community.ReportExporter
 						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
 						                                 languageReport.Key.TargetLang.Name + ".csv"))
 						{
-							//var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-							var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
+							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+							//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
 							sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 						}
 
