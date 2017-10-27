@@ -3,12 +3,13 @@ using Sdl.Community.TMBackup.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupDetailsForm : Form
 	{
+		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
+
 		public static string BackupDetailsInfo { get; set; }
 
 		public TMBackupDetailsForm()
@@ -18,25 +19,12 @@ namespace Sdl.Community.TMBackup
 			GetBackupDetailsInfo();
 		}
 
-		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
-		
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
-			foreach (DataGridViewRow row in dataGridView1.Rows)
-			{
-				if (row.Cells[0].Value != null)
-				{
-					BackupDetailsModel backupDetailsModel = new BackupDetailsModel();
-					backupDetailsModel.BackupAction = row.Cells[0].Value.ToString();
-					backupDetailsModel.BackupType = row.Cells[1].Value.ToString();
-					backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
+			Persistence persistence = new Persistence();
+			persistence.SaveDetailsFormInfo(_backupDetailsModelList);
 
-					_backupDetailsModelList.Add(backupDetailsModel);
-
-					Persistence persistence = new Persistence();
-					persistence.SaveDetailsFormInfo(_backupDetailsModelList);					
-				}
-			}
+			GetBackupDetailsInfo();
 			dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
 		}
 
@@ -116,9 +104,47 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
 
-			if(request != null && request.BackupDetailsModelList.Any())
+			if(request != null && request.BackupDetailsModelList != null)
 			{
-				dataGridView1.DataSource = request.BackupDetailsModelList;
+				// create backupModel which is used as a new row where user can add another Action
+				BackupDetailsModel emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
+				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
+
+				dataGridView1.DataSource = request.BackupDetailsModelList;		
+			}
+		}
+		
+		private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+		{
+			if (e.RowIndex > -1)
+			{
+				var dataGrid = (DataGridView)sender;
+				var row = dataGrid.Rows[e.RowIndex];
+				BackupDetailsModel backupDetailsModel = new BackupDetailsModel();
+
+				if (row != null)
+				{
+					if (row.Cells[0].Value != null)
+					{
+						backupDetailsModel.BackupAction = row.Cells[0].Value.ToString();
+					}
+					if (row.Cells[1].Value != null)
+					{
+						backupDetailsModel.BackupType = row.Cells[1].Value.ToString();
+					}
+					if (row.Cells[2].Value != null)
+					{
+						backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
+					}
+
+					// add all values to the model which will be used to persist data into Json file
+					if (!string.IsNullOrEmpty(backupDetailsModel.BackupAction)
+						&& !string.IsNullOrEmpty(backupDetailsModel.BackupType)
+						&& !string.IsNullOrEmpty(backupDetailsModel.BackupPattern))
+					{
+						_backupDetailsModelList.Add(backupDetailsModel);
+					}
+				}
 			}
 		}
 	}
