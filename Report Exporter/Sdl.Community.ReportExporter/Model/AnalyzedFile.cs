@@ -56,6 +56,14 @@ namespace Sdl.Community.ReportExporter.Model
 		{
 			get { return Results.SingleOrDefault(r => r.BandName.ToLower() == "newbaseline"); }
 		}
+		public BandResult Locked
+		{
+			get { return Results.SingleOrDefault(r => r.BandName.ToLower() == "locked"); }
+		}
+		public BandResult CrossRep
+		{
+			get { return Results.SingleOrDefault(r => r.BandName.ToLower() == "crossfilerepeated"); }
+		}
 
 		public BandResult NewLearnings
 		{

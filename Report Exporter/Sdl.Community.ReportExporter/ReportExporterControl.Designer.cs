@@ -43,11 +43,19 @@
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
 			this.internalFuzzies = new System.Windows.Forms.CheckBox();
+			this.locked = new System.Windows.Forms.CheckBox();
+			this.perfectMatch = new System.Windows.Forms.CheckBox();
+			this.contextMatch = new System.Windows.Forms.CheckBox();
+			this.crossRep = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.crossRep);
+			this.mainPanel.Controls.Add(this.contextMatch);
+			this.mainPanel.Controls.Add(this.perfectMatch);
+			this.mainPanel.Controls.Add(this.locked);
 			this.mainPanel.Controls.Add(this.internalFuzzies);
 			this.mainPanel.Controls.Add(this.adaptiveMT);
 			this.mainPanel.Controls.Add(this.adaptiveLearnings);
@@ -70,7 +78,7 @@
 			// adaptiveMT
 			// 
 			this.adaptiveMT.AutoSize = true;
-			this.adaptiveMT.Location = new System.Drawing.Point(436, 237);
+			this.adaptiveMT.Location = new System.Drawing.Point(431, 213);
 			this.adaptiveMT.Name = "adaptiveMT";
 			this.adaptiveMT.Size = new System.Drawing.Size(130, 17);
 			this.adaptiveMT.TabIndex = 15;
@@ -81,7 +89,7 @@
 			// adaptiveLearnings
 			// 
 			this.adaptiveLearnings.AutoSize = true;
-			this.adaptiveLearnings.Location = new System.Drawing.Point(436, 214);
+			this.adaptiveLearnings.Location = new System.Drawing.Point(432, 190);
 			this.adaptiveLearnings.Name = "adaptiveLearnings";
 			this.adaptiveLearnings.Size = new System.Drawing.Size(158, 17);
 			this.adaptiveLearnings.TabIndex = 14;
@@ -92,7 +100,7 @@
 			// optionsLabel
 			// 
 			this.optionsLabel.AutoSize = true;
-			this.optionsLabel.Location = new System.Drawing.Point(433, 189);
+			this.optionsLabel.Location = new System.Drawing.Point(433, 174);
 			this.optionsLabel.Name = "optionsLabel";
 			this.optionsLabel.Size = new System.Drawing.Size(137, 13);
 			this.optionsLabel.TabIndex = 12;
@@ -141,16 +149,16 @@
 			// languagesListBox
 			// 
 			this.languagesListBox.FormattingEnabled = true;
-			this.languagesListBox.Location = new System.Drawing.Point(218, 75);
+			this.languagesListBox.Location = new System.Drawing.Point(249, 75);
 			this.languagesListBox.Name = "languagesListBox";
-			this.languagesListBox.Size = new System.Drawing.Size(208, 349);
+			this.languagesListBox.Size = new System.Drawing.Size(177, 349);
 			this.languagesListBox.TabIndex = 7;
 			this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.languagesListBox_SelectedIndexChanged_1);
 			// 
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(215, 59);
+			this.label1.Location = new System.Drawing.Point(246, 59);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(145, 13);
 			this.label1.TabIndex = 6;
@@ -159,7 +167,7 @@
 			// includeHeaderCheck
 			// 
 			this.includeHeaderCheck.AutoSize = true;
-			this.includeHeaderCheck.Location = new System.Drawing.Point(220, 28);
+			this.includeHeaderCheck.Location = new System.Drawing.Point(251, 30);
 			this.includeHeaderCheck.Name = "includeHeaderCheck";
 			this.includeHeaderCheck.Size = new System.Drawing.Size(140, 17);
 			this.includeHeaderCheck.TabIndex = 5;
@@ -172,7 +180,7 @@
 			this.projListbox.FormattingEnabled = true;
 			this.projListbox.Location = new System.Drawing.Point(19, 30);
 			this.projListbox.Name = "projListbox";
-			this.projListbox.Size = new System.Drawing.Size(178, 394);
+			this.projListbox.Size = new System.Drawing.Size(221, 394);
 			this.projListbox.TabIndex = 1;
 			this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
 			// 
@@ -188,13 +196,57 @@
 			// internalFuzzies
 			// 
 			this.internalFuzzies.AutoSize = true;
-			this.internalFuzzies.Location = new System.Drawing.Point(436, 261);
+			this.internalFuzzies.Location = new System.Drawing.Point(431, 236);
 			this.internalFuzzies.Name = "internalFuzzies";
 			this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
 			this.internalFuzzies.TabIndex = 16;
 			this.internalFuzzies.Text = "Internal Fuzzies";
 			this.internalFuzzies.UseVisualStyleBackColor = true;
 			this.internalFuzzies.CheckedChanged += new System.EventHandler(this.internalFuzzies_CheckedChanged);
+			// 
+			// locked
+			// 
+			this.locked.AutoSize = true;
+			this.locked.Location = new System.Drawing.Point(431, 260);
+			this.locked.Name = "locked";
+			this.locked.Size = new System.Drawing.Size(62, 17);
+			this.locked.TabIndex = 17;
+			this.locked.Text = "Locked";
+			this.locked.UseVisualStyleBackColor = true;
+			this.locked.CheckedChanged += new System.EventHandler(this.locked_CheckedChanged);
+			// 
+			// perfectMatch
+			// 
+			this.perfectMatch.AutoSize = true;
+			this.perfectMatch.Location = new System.Drawing.Point(431, 284);
+			this.perfectMatch.Name = "perfectMatch";
+			this.perfectMatch.Size = new System.Drawing.Size(93, 17);
+			this.perfectMatch.TabIndex = 18;
+			this.perfectMatch.Text = "Perfect Match";
+			this.perfectMatch.UseVisualStyleBackColor = true;
+			this.perfectMatch.CheckedChanged += new System.EventHandler(this.perfectMatch_CheckedChanged);
+			// 
+			// contextMatch
+			// 
+			this.contextMatch.AutoSize = true;
+			this.contextMatch.Location = new System.Drawing.Point(431, 308);
+			this.contextMatch.Name = "contextMatch";
+			this.contextMatch.Size = new System.Drawing.Size(95, 17);
+			this.contextMatch.TabIndex = 19;
+			this.contextMatch.Text = "Context Match";
+			this.contextMatch.UseVisualStyleBackColor = true;
+			this.contextMatch.CheckedChanged += new System.EventHandler(this.contextMatch_CheckedChanged);
+			// 
+			// crossRep
+			// 
+			this.crossRep.AutoSize = true;
+			this.crossRep.Location = new System.Drawing.Point(431, 332);
+			this.crossRep.Name = "crossRep";
+			this.crossRep.Size = new System.Drawing.Size(127, 17);
+			this.crossRep.TabIndex = 20;
+			this.crossRep.Text = "Cross File Repetitions";
+			this.crossRep.UseVisualStyleBackColor = true;
+			this.crossRep.CheckedChanged += new System.EventHandler(this.crossRep_CheckedChanged);
 			// 
 			// ReportExporterControl
 			// 
@@ -230,5 +282,9 @@
 		private System.Windows.Forms.CheckBox adaptiveMT;
 		private System.Windows.Forms.CheckBox adaptiveLearnings;
 		private System.Windows.Forms.CheckBox internalFuzzies;
+		private System.Windows.Forms.CheckBox crossRep;
+		private System.Windows.Forms.CheckBox contextMatch;
+		private System.Windows.Forms.CheckBox perfectMatch;
+		private System.Windows.Forms.CheckBox locked;
 	}
 }

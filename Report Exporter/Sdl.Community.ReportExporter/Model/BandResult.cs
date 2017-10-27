@@ -17,7 +17,10 @@ namespace Sdl.Community.ReportExporter.Model
 		public int Min { get; set; }
 		public int Max { get; set; }
 		public int FullRecallWords { get; set; }
-		public int PartialRecallWords { get; set; }
+		public int Locked { get; set; }
+		public int PerfectMatch { get; set; }
+		public int ContextMatch { get; set; }
+		public int CrossRep { get; set; }
 
 		public BandResult(string bandName)
 		{

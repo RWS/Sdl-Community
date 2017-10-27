@@ -40,7 +40,11 @@ namespace Sdl.Community.ReportExporter
 			{
 				IncludeAdaptiveBaseline = adaptiveMT.Checked,
 				IncludeAdaptiveLearnings = adaptiveLearnings.Checked,
-				IncludeInternalFuzzies = internalFuzzies.Checked
+				IncludeInternalFuzzies = internalFuzzies.Checked,
+				IncludeContextMatch = contextMatch.Checked,
+				IncludeCrossRep = crossRep.Checked,
+				IncludeLocked = locked.Checked,
+				IncludePerfectMatch = perfectMatch.Checked
 			};
 
 		}
@@ -278,8 +282,8 @@ namespace Sdl.Community.ReportExporter
 						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
 						                                 languageReport.Key.TargetLang.Name + ".csv"))
 						{
-							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-							//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
+							//var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+							var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
 							sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 						}
 
@@ -330,6 +334,26 @@ namespace Sdl.Community.ReportExporter
 		private void internalFuzzies_CheckedChanged(object sender, EventArgs e)
 		{
 			_optionalInformation.IncludeInternalFuzzies = internalFuzzies.Checked;
+		}
+
+		private void locked_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeLocked = locked.Checked;
+		}
+
+		private void perfectMatch_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludePerfectMatch = perfectMatch.Checked;
+		}
+
+		private void contextMatch_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeContextMatch = contextMatch.Checked;
+		}
+
+		private void crossRep_CheckedChanged(object sender, EventArgs e)
+		{
+			_optionalInformation.IncludeCrossRep = crossRep.Checked;
 		}
 	}
 }

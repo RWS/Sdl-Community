@@ -37,7 +37,6 @@ namespace Sdl.Community.ReportExporter.Helpers
 							Tags = r.Attribute("tags") != null ? int.Parse(r.Attribute("tags").Value) : 0,
 							Min = r.Attribute("min") != null ? int.Parse(r.Attribute("min").Value) : 0,
 							Max = r.Attribute("max") != null ? int.Parse(r.Attribute("max").Value) : 0,
-							PartialRecallWords = r.Attribute("partialRecallWords")!= null?int.Parse(r.Attribute("partialRecallWords").Value) : 0,
 							FullRecallWords = r.Attribute("fullRecallWords") != null ? int.Parse(r.Attribute("fullRecallWords").Value) : 0,
 						}
 				};
@@ -65,9 +64,27 @@ namespace Sdl.Community.ReportExporter.Helpers
 			foreach (var file in AnalyzedFiles)
 			{
 				sb.Append(file.FileName).Append(csvSeparator)
-					.Append(file.Repeated.Words).Append(csvSeparator)
-					// the 100% match is actually a sum of Exact, Perfect and InContextExact matches
-					.Append((file.Exact.Words + file.Perfect.Words + file.InContextExact.Words).ToString()).Append(csvSeparator);
+					.Append(file.Repeated.Words).Append(csvSeparator);
+
+				if (aditionalHeaders.IncludeLocked)
+				{
+					sb.Append(file.Locked.Words).Append(csvSeparator);
+				}
+				if (aditionalHeaders.IncludePerfectMatch)
+				{
+					sb.Append(file.Perfect.Words).Append(csvSeparator);
+				}
+				if (aditionalHeaders.IncludeContextMatch)
+				{
+					sb.Append(file.InContextExact.Words).Append(csvSeparator);
+				}
+				if (aditionalHeaders.IncludeCrossRep)
+				{
+					sb.Append(file.CrossRep.Words).Append(csvSeparator);
+				}
+
+				// the 100% match is actually a sum of Exact, Perfect and InContextExact matches
+				sb.Append((file.Exact.Words + file.Perfect.Words + file.InContextExact.Words).ToString()).Append(csvSeparator);
 
 				foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
 				{
@@ -79,13 +96,11 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 				if (aditionalHeaders.IncludeAdaptiveBaseline)
 				{
-					sb.Append(file.NewBaseline.FullRecallWords).Append(csvSeparator)
-						.Append(file.NewBaseline.PartialRecallWords).Append(csvSeparator);
+					sb.Append(file.NewBaseline.FullRecallWords).Append(csvSeparator);
 				}
 				if (aditionalHeaders.IncludeAdaptiveLearnings)
 				{
-					sb.Append(file.NewLearnings.FullRecallWords).Append(csvSeparator)
-						.Append(file.NewLearnings.PartialRecallWords).Append(csvSeparator);
+					sb.Append(file.NewLearnings.FullRecallWords).Append(csvSeparator);
 				}
 				if (aditionalHeaders.IncludeInternalFuzzies)
 				{
@@ -93,11 +108,6 @@ namespace Sdl.Community.ReportExporter.Helpers
 					{
 						var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
 						sb.Append(internalFuzzy != null ? internalFuzzy.FullRecallWords : 0).Append(csvSeparator);
-					}
-					foreach (var fuzzy in file.Fuzzies.OrderByDescending(fz => fz.Max))
-					{
-						var internalFuzzy = file.InternalFuzzy(fuzzy.Min, fuzzy.Max);
-						sb.Append(internalFuzzy != null ? internalFuzzy.PartialRecallWords : 0).Append(csvSeparator);
 					}
 				}
 
@@ -112,10 +122,30 @@ namespace Sdl.Community.ReportExporter.Helpers
 		private string GetCsvHeaderRow(string separator, IEnumerable<BandResult> fuzzies, OptionalInformation aditionalHeaders)
 		{
 			var headerColumns = new List<string> { "\"Filename\"",
-				"\"Reps\"",
-				"\"100% (TM)\""
+				"\"Repetitions\"",
 			};
 
+			if (aditionalHeaders.IncludeLocked)
+			{
+				headerColumns.Add("\"Locked\"");
+			}
+
+			if (aditionalHeaders.IncludePerfectMatch)
+			{
+				headerColumns.Add("\"Perfect Match\"");
+			}
+
+			if (aditionalHeaders.IncludeContextMatch)
+			{
+				headerColumns.Add("\"Context Match\"");
+			}
+
+			if (aditionalHeaders.IncludeCrossRep)
+			{
+				headerColumns.Add("\"Cross File Repetitions\"");
+			}
+
+			headerColumns.Add("\"100% (TM)\"");
 			fuzzies.OrderByDescending(br => br.Max)
 				.ToList()
 				.ForEach(br =>
@@ -126,13 +156,11 @@ namespace Sdl.Community.ReportExporter.Helpers
 				);
 			if (aditionalHeaders.IncludeAdaptiveBaseline)
 			{
-				headerColumns.Add("\"AdaptiveMT Baseline (whole TU)\"");
-				headerColumns.Add("\"AdaptiveMT Baseline (TU fragment)\"");
+				headerColumns.Add("\"AdaptiveMT Baseline\"");
 			}
 			if (aditionalHeaders.IncludeAdaptiveLearnings)
 			{
-				headerColumns.Add("\"AdaptiveMT with Learnings (whole TU)\"");
-				headerColumns.Add("\"AdaptiveMT with Learnings (TU fragment)\"");
+				headerColumns.Add("\"AdaptiveMT with Learnings\"");
 			}
 
 			if (aditionalHeaders.IncludeInternalFuzzies)
@@ -141,15 +169,8 @@ namespace Sdl.Community.ReportExporter.Helpers
 					.ToList()
 					.ForEach(br =>
 						{
-							headerColumns.Add(string.Format("\"{0}% - {1}% (I.F Whole TU)\"", br.Max, br.Min));
+							headerColumns.Add(string.Format("\"{0}% - {1}% (Internal)\"", br.Max, br.Min));
 							
-						}
-					);
-				fuzzies.OrderByDescending(br => br.Max)
-					.ToList()
-					.ForEach(br =>
-						{
-							headerColumns.Add(string.Format("\"{0}% - {1}% (I.F TU Fragment)\"", br.Max, br.Min));
 						}
 					);
 			}
