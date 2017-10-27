@@ -80,10 +80,10 @@ namespace Sdl.Community.TMBackup
 							var json = JsonConvert.SerializeObject(request);
 							File.WriteAllText(_persistancePath, json);
 						}
-						//else
-						//{
-						//	MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
-						//}
+						else
+						{
+							MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+						}
 					}
 				}
 				else

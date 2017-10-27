@@ -24,6 +24,8 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			persistence.SaveDetailsFormInfo(_backupDetailsModelList);
 
+			_backupDetailsModelList.Clear();
+
 			GetBackupDetailsInfo();
 			dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
 		}
