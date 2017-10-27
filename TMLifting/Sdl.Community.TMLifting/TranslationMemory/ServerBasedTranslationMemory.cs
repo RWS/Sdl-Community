@@ -15,17 +15,42 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Runtime.Serialization;
 using System.IO;
+using Sdl.Community.TMLifting.Helpers;
 
 namespace Sdl.Community.TMLifting.TranslationMemory
 {
 	public class ServerBasedTranslationMemory
 	{
+		private readonly Assembly _sdlTranslationStudioProjectManagementAssembly;
+
 		public List<TranslationMemoryDetails> ServerBasedTMDetails { get; set; }
 		public GroupShareClient GroupShareClient { get; set; }
 
 		public ServerBasedTranslationMemory()
 		{
-			
+			var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(s => s.EndsWith("Sdl.Community.TMLifting.GSKit.Sdl.TranslationStudio.ProjectManagement.dll"));
+			if (resources.Any())
+			{
+				var resourceName = resources.First();
+				using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+				{
+					var block = new byte[stream.Length];
+					try
+					{
+						stream.Read(block, 0, block.Length);
+
+						_sdlTranslationStudioProjectManagementAssembly = Assembly.Load(block);
+					}
+					catch (IOException)
+					{
+
+					}
+					catch (BadImageFormatException)
+					{
+
+					}
+				}
+			}
 		}
 		public async Task<ServerBasedTranslationMemory> InitializeAsync(string userName, string password, string uri)
 		{
@@ -45,64 +70,48 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 			return ret.InitializeAsync(userName, password, uri );
 		}
 
-		public void GetUserCredentials()
+		public async Task<IEnumerable<Uri>> GetServers()
 		{
-			var thisAssembly = Assembly.GetExecutingAssembly();
-			var resources = thisAssembly.GetManifestResourceNames().Where(s => s.EndsWith("Sdl.Community.TMLifting.GSKit.Sdl.TranslationStudio.ProjectManagement.dll"));
-			if (resources.Any())
-			{
-				var resourceName = resources.First();
-				using (var stream = thisAssembly.GetManifestResourceStream(resourceName))
-				{
-					var block = new byte[stream.Length];
-					try
-					{
-						stream.Read(block, 0, block.Length);
-						var sdlTranslationStudioProjectManagementAssembly = Assembly.Load(block);
-						var projectServersFacadeType = sdlTranslationStudioProjectManagementAssembly.GetType("Sdl.TranslationStudio.ProjectManagement.ProjectServerSettings.Facade.ProjectServersFacade");
-						var x = Activator.CreateInstance(projectServersFacadeType);
-						var constructor = projectServersFacadeType.GetConstructor(
-						BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-						null, Type.EmptyTypes, null);
-						var projectServersFacadeInstance = constructor.Invoke(new object[] { });
-						var method = projectServersFacadeType.GetMethod("GetUserCredentials",BindingFlags.NonPublic | BindingFlags.Instance);
-						var result = method.Invoke(projectServersFacadeInstance, new object[] { new Uri("http://gs2017dev.sdl.com")});
-					}
-					catch (IOException)
-					{
+			//http://gs2017dev.sdl.com
 
-					}
-					catch (BadImageFormatException)
-					{
+			var projectServersFacadeType = GetProjectServersFacadeType();
+			var constructor = projectServersFacadeType.GetConstructor(
+			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+			null, Type.EmptyTypes, null);
+			var projectServersFacadeInstance = constructor.Invoke(new object[] { });
+			var getAllServersMethod = projectServersFacadeType.GetMethod("GetAllServers", BindingFlags.Public | BindingFlags.Instance);
+			var servers = await (dynamic) getAllServersMethod.Invoke(projectServersFacadeInstance, new object[] { });
 
-					}
-				}
-			}
-				/////////////////////
-			//	var sdlTranslationStudioProjectManagementAssembly = Assembly.LoadFrom(@"C:\Repository\SDL-Community\TMLifting\Sdl.Community.TMLifting\GSKit\Sdl.TranslationStudio.ProjectManagement.dll");
-			//var nullServerConnectionServiceType = sdlTranslationStudioProjectManagementAssembly.GetType("Sdl.TranslationStudio.ProjectManagement.ProjectServerSettings.Facade.Nulls.NullServerConnectionService");
-
-			//var nullServerConnectionServiceCtor = nullServerConnectionServiceType.GetConstructor(
-			//			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-			//			null, Type.EmptyTypes, null);
-			//var nullServerConnectionServiceInstance = Activator.CreateInstance(nullServerConnectionServiceType);
-			//var getUserCredentialsMethods = nullServerConnectionServiceType.GetMethods();
-			//var x = getUserCredentialsMethods[0].Name;
-			//var method = nullServerConnectionServiceType.GetMethod("GetUserCredentials");
-			//var result = method.Invoke(nullServerConnectionServiceInstance, new object[] { new Uri("http://gs2017dev.sdl.com"), false });
-
-			//var result = method.Invoke(serverConnectionServicInstance, new object[] { new Uri("http://gs2017dev.sdl.com"), false });
-			//return Sdl.Desktop.Platform.StudioPlatform.Studio.ActiveWindow.ServiceContext.GetService<Sdl.Desktop.Platform.ServerConnectionPlugin.IServerConnectionService>().GetUserCredentials(new Uri("http://gs2017dev.sdl.com"), false);
-
+			return servers;
 		}
 
-		public static I CreateInstance<I>() where I : class
+		public UserCredentials GetUserCredentials(Uri uri)
 		{
-			var serverConnectionPluginAssembly =
-				Assembly.LoadFrom(@"C:\Repository\SDL-Community\TMLifting\Sdl.Community.TMLifting\GSKit\Sdl.Desktop.Platform.ServerConnectionPlugin.dll");
+			var projectServersFacadeType = GetProjectServersFacadeType();
+			var constructor = projectServersFacadeType.GetConstructor(
+			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+			null, Type.EmptyTypes, null);
+			var projectServersFacadeInstance = constructor.Invoke(new object[] { });
+			var getUserCredentialsMethod = projectServersFacadeType.GetMethod("GetUserCredentials",BindingFlags.NonPublic | BindingFlags.Instance);
+			dynamic credentials = getUserCredentialsMethod.Invoke(projectServersFacadeInstance, new object[] { uri });
+			if (credentials != null)
+			{
+				var userCredentials = new UserCredentials()
+				{
+					Password = credentials.Password,
+					UserName = credentials.UserName
+				};
+				return userCredentials;
+			}
+			else
+			{
+				return new UserCredentials();
+			}			
+		}
 
-			var serverConnectionService = serverConnectionPluginAssembly.GetType("Sdl.Desktop.Platform.ServerConnectionPlugin.IServerConnectionService");
-			return Activator.CreateInstance(serverConnectionService) as I;
+		private Type GetProjectServersFacadeType()
+		{
+			return _sdlTranslationStudioProjectManagementAssembly.GetType("Sdl.TranslationStudio.ProjectManagement.ProjectServerSettings.Facade.ProjectServersFacade");
 		}
 	}
 }
