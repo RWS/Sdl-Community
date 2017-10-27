@@ -1,13 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Qualitivity", "Sdl.Community.Qualitivity.csproj", "{AC39EA6C-DDDE-4C47-8E9C-10796087CE32}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Comparison", "..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj", "{455EA006-C9E9-46F9-87BA-4482ECBEC69F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DQF", "..\Sdl.Community.Qualitivity.DQF\Sdl.Community.DQF.csproj", "{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Hooks", "..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj", "{82679AF5-C839-4F26-B84E-9970A0C5665B}"
 EndProject
@@ -43,12 +41,6 @@ Global
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{455EA006-C9E9-46F9-87BA-4482ECBEC69F}.Release|x64.ActiveCfg = Release|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Release|Any CPU.Build.0 = Release|Any CPU
-		{72FCBDD2-8F58-4D66-B9C7-FFC48025AF27}.Release|x64.ActiveCfg = Release|Any CPU
 		{82679AF5-C839-4F26-B84E-9970A0C5665B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{82679AF5-C839-4F26-B84E-9970A0C5665B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82679AF5-C839-4F26-B84E-9970A0C5665B}.Debug|x64.ActiveCfg = Debug|Any CPU

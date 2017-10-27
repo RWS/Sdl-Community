@@ -193,18 +193,6 @@
   <data name="QualitivityRevisionController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Tasks.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="QualitivityDQFController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\tausdata_1tE_icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="QualitivityDQFImportProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Document-Import.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="QualitivityDQFNewProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Gnome-Bookmark-New.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="QualitivityDQFSaveProjectController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\Save-download.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="QualitivityViewActivityRecordsController_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\Bar-Chart.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -375,9 +363,6 @@ Please wait until processing has completed.</value>
   <data name="Note_The_current_change_will_be_ignored" xml:space="preserve">
     <value>Note: The current change will be ignored.</value>
   </data>
-  <data name="DQF_Project_Task_Wizard_Title" xml:space="preserve">
-    <value>DQF Project Task Wizard</value>
-  </data>
   <data name="no_help_found" xml:space="preserve">
     <value>no help found!</value>
   </data>
@@ -411,15 +396,6 @@ Please wait until processing has completed.</value>
   <data name="Total_Tasks" xml:space="preserve">
     <value>Total Tasks:	</value>
   </data>
-  <data name="DQF_Project_Task_Step_1_of_3" xml:space="preserve">
-    <value>DQF Project Task - Step 1 of 3</value>
-  </data>
-  <data name="DQF_Project_Task_Step_2_of_3" xml:space="preserve">
-    <value>DQF Project Task - Step 2 of 3</value>
-  </data>
-  <data name="DQF_Project_Task_Step_3_of_3" xml:space="preserve">
-    <value>DQF Project Task - Step 3 of 3</value>
-  </data>
   <data name="_0_entries_processed" xml:space="preserve">
     <value>{0} entries processed</value>
   </data>
@@ -449,12 +425,6 @@ Please wait until processing has completed.</value>
   </data>
   <data name="Click_No_to_cancel" xml:space="preserve">
     <value>Click 'No' to cancel</value>
-  </data>
-  <data name="The_DQF_API_key_cannot_be_null" xml:space="preserve">
-    <value>The DQF API key cannot be null!</value>
-  </data>
-  <data name="To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key" xml:space="preserve">
-    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
   </data>
   <data name="Are_you_sure_that_you_want_to_remove_the_selected_project_activities" xml:space="preserve">
     <value>Are you sure that you want to remove the selected project activities?</value>
@@ -510,41 +480,11 @@ Please wait until processing has completed.</value>
   <data name="Month_0" xml:space="preserve">
     <value>Month: {0}</value>
   </data>
-  <data name="To_create_a_TAUS_DQF_Project_you_must_first_save_your_DQF_API_key_in_the_plugin_setting_area" xml:space="preserve">
-    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
-  </data>
-  <data name="The_Translator_DQF_API_key_cannot_be_null" xml:space="preserve">
-    <value>The Translator DQF API key cannot be null!</value>
-  </data>
-  <data name="To_create_TAUS_DQF_Project_Task_you_must_first_save_your_Translator_DQF_API_key_" xml:space="preserve">
-    <value>To create TAUS DQF Project Task, you must first save your Translator DQF API key in the plugin setting area</value>
-  </data>
   <data name="Expand_all_companyProfiles" xml:space="preserve">
     <value>Expand all companyProfiles</value>
   </data>
   <data name="Search_project_name" xml:space="preserve">
     <value>Search project name</value>
-  </data>
-  <data name="To_create_a_TAUS_DQF_Project__you_must_first_save_your_DQF_API_key_" xml:space="preserve">
-    <value>To create a TAUS DQF Project, you must first save your DQF API key in the plugin setting area</value>
-  </data>
-  <data name="The_DQF_project_name_already_exists" xml:space="preserve">
-    <value>The DQF project name already exists!</value>
-  </data>
-  <data name="Open_TAUS_DQF_Project_Import_File" xml:space="preserve">
-    <value>Open TAUS DQF Project Import File</value>
-  </data>
-  <data name="DQF_Project_Import_File" xml:space="preserve">
-    <value>DQF Project Import File</value>
-  </data>
-  <data name="The_DQF_Project_0_already_exists_in_the_list" xml:space="preserve">
-    <value>The DQF Project '{0}' already exists in the list</value>
-  </data>
-  <data name="Save_TAUS_DQF_Project_Import_File" xml:space="preserve">
-    <value>Save TAUS DQF Project Import File</value>
-  </data>
-  <data name="Are_you_sure_that_you_want_to_remove_the_selected_DQF_Project" xml:space="preserve">
-    <value>Are you sure that you want to remove the selected DQF Project?</value>
   </data>
   <data name="Click_Click_Yes_to_continue" xml:space="preserve">
     <value>Click 'Yes' to continue</value>

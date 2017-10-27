@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Structures.DQF;
 using Sdl.Community.Structures.iProperties;
 using Sdl.Community.Structures.Profile;
 using Sdl.Community.Structures.QualityMetrics;
@@ -19,7 +18,6 @@ namespace Sdl.Community.Structures.Configuration
         public BackupSettings BackupSettings { get; set; }
         public TrackingSettings TrackingSettings { get; set; }
         public ViewSettings ViewSettings { get; set; }
-        public DqfSettings DqfSettings { get; set; }
         public QualityMetricGroupSettings QualityMetricGroupSettings { get; set; }
         public QualityMetricGroup QualityMetricGroup { get; set; }
 
@@ -37,7 +35,6 @@ namespace Sdl.Community.Structures.Configuration
             SettingsInitialization.Initialize_TrackerSettings(this);
             SettingsInitialization.Initialize_ViewSettings(this);
 
-            DqfSettings = new DqfSettings();
             LanguageRateGroups = new List<LanguageRateGroup>();
             UserProfile = new UserProfile();
             CompanyProfiles = new List<CompanyProfile>();
@@ -74,7 +71,6 @@ namespace Sdl.Community.Structures.Configuration
                 ApplicationPaths = (ApplicationPaths)ApplicationPaths.Clone(),
                 GeneralSettings = (GeneralSettings)GeneralSettings.Clone(),
                 BackupSettings = (BackupSettings)BackupSettings.Clone(),
-                DqfSettings = (DqfSettings)DqfSettings.Clone(),
                 TrackingSettings = (TrackingSettings)TrackingSettings.Clone(),
                 ViewSettings = (ViewSettings)ViewSettings.Clone(),
                 UserProfile = (UserProfile)UserProfile.Clone(),

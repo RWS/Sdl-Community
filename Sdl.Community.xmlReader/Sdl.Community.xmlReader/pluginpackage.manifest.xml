@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+  <PlugInName>Sdl.Community.xmlReader</PlugInName>
+  <Version>1.0</Version>
+  <Description>Sdl.Community.xmlReader</Description>
+  <Author>SDL Community</Author>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <Include>
+    <File>Sdl.Community.Toolkit.Core.dll</File>
+  </Include>
+</PluginPackage>

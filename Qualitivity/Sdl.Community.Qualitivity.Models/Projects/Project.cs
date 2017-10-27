@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sdl.Community.Structures.DQF;
 using Sdl.Community.Structures.Projects.Activities;
 
 namespace Sdl.Community.Structures.Projects
@@ -35,8 +34,6 @@ namespace Sdl.Community.Structures.Projects
 
         public List<Activity> Activities { get; set; }
 
-        public List<DqfProject> DqfProjects { get; set; }
-
 
         public Project()
         {
@@ -59,8 +56,6 @@ namespace Sdl.Community.Structures.Projects
             Due = null;
 
             Activities = new List<Activity>();
-            DqfProjects = new List<DqfProject>();
-
         }
 
         public object Clone()
@@ -85,22 +80,11 @@ namespace Sdl.Community.Structures.Projects
                 Activities = new List<Activity>()
             };
 
-
-
-
-
-
-
-            foreach (var tpa in Activities)
-                tp.Activities.Add((Activity)tpa.Clone());
-
-            tp.DqfProjects = new List<DqfProject>();
-            foreach (var dqfProject in DqfProjects)
-                tp.DqfProjects.Add((DqfProject)dqfProject.Clone());
-
+			foreach (var tpa in Activities)
+			{
+				tp.Activities.Add((Activity)tpa.Clone());
+			}
             return tp;
-
-
         }
     }
 }
