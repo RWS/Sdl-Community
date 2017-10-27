@@ -100,6 +100,15 @@ namespace Sdl.Community.ReportExporter.Helpers
 				RunAnalyseBatchTask(Path.GetFullPath(projectPath));
 
 			}
+			else
+			{
+				var files = Directory.GetFiles(reportFolderPath);
+				var exist = files.Any(file => file.Contains("Analyze Files"));
+				if (!exist)
+				{
+					RunAnalyseBatchTask(Path.GetFullPath(projectPath));
+				}
+			}
 		}
 
 		private static void RunAnalyseBatchTask(string projectFolderPath)
