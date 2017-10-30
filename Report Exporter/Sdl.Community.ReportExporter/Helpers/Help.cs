@@ -93,7 +93,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 
 		private static void ReportsFolderExists(string projectFolderPath)
 		{
-			var projectPath = Path.GetFullPath(projectFolderPath.Replace(@"file:///", string.Empty));
+			var projectPath = new Uri(projectFolderPath).LocalPath;//Path.GetFullPath(projectFolderPath.Replace(@"file:///", string.Empty));
 			var reportFolderPath =Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
 			if (!Directory.Exists(reportFolderPath))
 			{

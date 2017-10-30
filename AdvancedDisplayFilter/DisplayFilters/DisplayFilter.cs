@@ -3,6 +3,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using static System.Int32;
 
 namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
@@ -26,6 +27,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
         public DisplayFilter(DisplayFilterSettings settings, Document document)
         {
             ActiveDocument = document;
+
             Settings = settings;
         }
 
@@ -38,6 +40,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
                         
             if (rowInfo.IsSegment)
             {
+	            //var id = Parse(rowInfo.SegmentPair.Properties.Id.Id);
+	            //if (success)
+	            //{
+		           // success = id % 2 == 0;
+	            //}
                 if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
                     success = rowInfo.IsSegmentReviewTypes(Settings);
 
