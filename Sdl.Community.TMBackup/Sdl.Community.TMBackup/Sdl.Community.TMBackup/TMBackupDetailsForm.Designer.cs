@@ -155,6 +155,7 @@
             this.dataGridView1.Size = new System.Drawing.Size(424, 110);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating_1);
+            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
             this.dataGridView1.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_RowValidating);
             // 
             // backupActionDataGridViewTextBoxColumn

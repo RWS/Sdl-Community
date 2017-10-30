@@ -3,6 +3,9 @@ using System;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Sdl.Community.TMBackup.Helpers;
 
 namespace Sdl.Community.TMBackup
 {
@@ -62,16 +65,34 @@ namespace Sdl.Community.TMBackup
 			}
 			else
 			{
-				foreach (var backupItem in request.BackupDetailsModelList)
+				if (request.BackupDetailsModelList.Any())
 				{
-					if (!backupDetailsModelList.Contains(backupItem))
+					foreach (var backupItem in backupDetailsModelList)
 					{
-						request.BackupDetailsModelList = backupDetailsModelList;
-						var json = JsonConvert.SerializeObject(request);
+						var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupAction == backupItem.BackupAction
+																					 && b.BackupType == backupItem.BackupType
+																					 && b.BackupPattern == backupItem.BackupPattern)
+																			 .FirstOrDefault();
+						if (existingBackupItem == null)
+						{
+							request.BackupDetailsModelList.Add(backupItem);
 
-						File.WriteAllText(_persistancePath, json);
+							var json = JsonConvert.SerializeObject(request);
+							File.WriteAllText(_persistancePath, json);
+						}
+						else
+						{
+							MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+						}
 					}
 				}
+				else
+				{
+					request.BackupDetailsModelList = backupDetailsModelList;
+
+					var json = JsonConvert.SerializeObject(request);
+					File.WriteAllText(_persistancePath, json);
+				}			
 			}			
 		}
 

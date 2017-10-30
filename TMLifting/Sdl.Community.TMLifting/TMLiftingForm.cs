@@ -7,6 +7,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Community.GroupShareKit;
+using System.Threading.Tasks;
+using Sdl.Community.GroupShareKit.Clients;
+using System.Reflection;
+using System.Net.Http;
+using Newtonsoft.Json;
+using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -14,19 +22,32 @@ namespace Sdl.Community.TMLifting
     {
         private readonly TranslationMemoryHelper _tmHelper;
         private readonly BackgroundWorker _bw;
+		private readonly BackgroundWorker _bwGS;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
+		private TranslationMemory.ServerBasedTranslationMemory _sbTMs;
+		private readonly List<Panel> _listPanel;
+		private UserCredentials _userCredentials;
+		//private readonly 
 
-        public TMLiftingForm()
+		//private readonly BindingSource _bs;
+
+		public TMLiftingForm()
         {
             InitializeComponent();
             _tmHelper = new TranslationMemoryHelper();
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-        }
+			_bwGS = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+			_sbTMs = new TranslationMemory.ServerBasedTranslationMemory();
+			_userCredentials = new UserCredentials();
 
-        protected override void OnLoad(EventArgs e)
+			//_sbLrc.Controls.
+			//_bs = new BindingSource();
+		}
+
+        protected override async void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
@@ -34,9 +55,39 @@ namespace Sdl.Community.TMLifting
             _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             _bw.ProgressChanged += bw_ProgressChanged;
             reIndexCheckBox.Checked = true;
-        }
+			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
+			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers(); ;
+			
 
-        void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
+		}
+
+		private async void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if(tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
+			{
+				if (comboBoxServerBasedTM.SelectedItem != null)
+				{
+					_userCredentials = _sbTMs.GetUserCredentials(comboBoxServerBasedTM.SelectedItem as Uri);
+					if(_userCredentials.UserName != "N/A" && _userCredentials.Password != "N/A")
+					{
+						_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(_userCredentials.UserName, _userCredentials.Password, comboBoxServerBasedTM.SelectedItem.ToString());
+
+						gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+						gridServerBasedTMs.Visible = true;
+					}
+					else
+					{
+						var form = new LoginPage();
+						form.Show();
+					}					
+				}
+			}
+			var a = sender.GetType();
+			var b = e;
+			
+		}
+
+		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             rtbStatus.Text = e.UserState.ToString();
         }
@@ -191,5 +242,35 @@ namespace Sdl.Community.TMLifting
             _bw.CancelAsync();
             rtbStatus.AppendText(@"Process will be canceled");
         }
-    }
+
+		private async void btnOkServerBased_Click(object sender, EventArgs e)
+		{
+			//var a = StudioPlatform.Studio.ActiveWindow.ServiceContext.GetService<IServerConnectionService>().GetUserCredentials(new Uri("http://gs2017dev.sdl.com"), false);
+			var servers = await _sbTMs.GetServers();
+
+			var serverString = servers.First().ToString();
+
+			var userCredentials = _sbTMs.GetUserCredentials(servers.First());
+
+			//_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
+
+			_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userCredentials.UserName, userCredentials.Password, serverString);
+			
+			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+			gridServerBasedTMs.Visible = true;
+		}
+
+		private async void reindexBtn_Click(object sender, EventArgs e)
+		{
+			var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
+			var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
+			var x = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+		}
+
+		private void connectToServer_Click(object sender, EventArgs e)
+		{
+			var form = new LoginPage();
+			form.Show();
+		}
+	}
 }

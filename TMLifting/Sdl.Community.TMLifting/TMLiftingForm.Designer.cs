@@ -30,20 +30,207 @@ namespace Sdl.Community.TMLifting
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            this.tabPageServerBasedTM = new System.Windows.Forms.TabPage();
+            this.server = new System.Windows.Forms.Label();
+            this.comboBoxServerBasedTM = new System.Windows.Forms.ComboBox();
+            this.connectToServer = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
+            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FuzzyIndexes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TmId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reindexBtn = new System.Windows.Forms.Button();
+            this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.rtbStatus = new System.Windows.Forms.RichTextBox();
+            this.lstTms = new System.Windows.Forms.ListBox();
+            this.tabControlTMLifting = new System.Windows.Forms.TabControl();
+            this.itemsBindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.cleanBtn = new System.Windows.Forms.Button();
+            this.cancelBtn = new System.Windows.Forms.Button();
             this.upLiftCheckBox = new System.Windows.Forms.CheckBox();
             this.reIndexCheckBox = new System.Windows.Forms.CheckBox();
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.rtbStatus = new System.Windows.Forms.RichTextBox();
-            this.lstTms = new System.Windows.Forms.ListBox();
-            this.cancelBtn = new System.Windows.Forms.Button();
-            this.cleanBtn = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
+            this.tabPageServerBasedTM.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
+            this.tabPageFileBasedTM.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.tabControlTMLifting.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // tabPageServerBasedTM
+            // 
+            this.tabPageServerBasedTM.BackColor = System.Drawing.Color.White;
+            this.tabPageServerBasedTM.Controls.Add(this.server);
+            this.tabPageServerBasedTM.Controls.Add(this.comboBoxServerBasedTM);
+            this.tabPageServerBasedTM.Controls.Add(this.connectToServer);
+            this.tabPageServerBasedTM.Controls.Add(this.groupBox1);
+            this.tabPageServerBasedTM.Controls.Add(this.reindexBtn);
+            this.tabPageServerBasedTM.Location = new System.Drawing.Point(4, 22);
+            this.tabPageServerBasedTM.Name = "tabPageServerBasedTM";
+            this.tabPageServerBasedTM.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageServerBasedTM.Size = new System.Drawing.Size(1038, 564);
+            this.tabPageServerBasedTM.TabIndex = 1;
+            this.tabPageServerBasedTM.Text = "Server-Based Translation Memories";
+            // 
+            // server
+            // 
+            this.server.AutoSize = true;
+            this.server.Location = new System.Drawing.Point(6, 58);
+            this.server.Name = "server";
+            this.server.Size = new System.Drawing.Size(41, 13);
+            this.server.TabIndex = 12;
+            this.server.Text = "Server:";
+            // 
+            // comboBoxServerBasedTM
+            // 
+            this.comboBoxServerBasedTM.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBoxServerBasedTM.Location = new System.Drawing.Point(63, 50);
+            this.comboBoxServerBasedTM.Name = "comboBoxServerBasedTM";
+            this.comboBoxServerBasedTM.Size = new System.Drawing.Size(410, 21);
+            this.comboBoxServerBasedTM.TabIndex = 11;
+            // 
+            // connectToServer
+            // 
+            this.connectToServer.Location = new System.Drawing.Point(479, 50);
+            this.connectToServer.Name = "connectToServer";
+            this.connectToServer.Size = new System.Drawing.Size(75, 23);
+            this.connectToServer.TabIndex = 10;
+            this.connectToServer.Text = "Connect";
+            this.connectToServer.UseVisualStyleBackColor = true;
+            this.connectToServer.Click += new System.EventHandler(this.connectToServer_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.gridServerBasedTMs);
+            this.groupBox1.Location = new System.Drawing.Point(9, 122);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(570, 400);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Translation Memories";
+            // 
+            // gridServerBasedTMs
+            // 
+            this.gridServerBasedTMs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridServerBasedTMs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.nameDataGridViewTextBoxColumn,
+            this.descriptionDataGridViewTextBoxColumn,
+            this.locationDataGridViewTextBoxColumn,
+            this.FuzzyIndexes,
+            this.TmId});
+            this.gridServerBasedTMs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridServerBasedTMs.Location = new System.Drawing.Point(3, 16);
+            this.gridServerBasedTMs.Name = "gridServerBasedTMs";
+            this.gridServerBasedTMs.Size = new System.Drawing.Size(564, 381);
+            this.gridServerBasedTMs.TabIndex = 6;
+            this.gridServerBasedTMs.Visible = false;
+            // 
+            // nameDataGridViewTextBoxColumn
+            // 
+            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
+            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
+            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
+            this.nameDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // descriptionDataGridViewTextBoxColumn
+            // 
+            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
+            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
+            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
+            this.descriptionDataGridViewTextBoxColumn.Width = 150;
+            // 
+            // locationDataGridViewTextBoxColumn
+            // 
+            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
+            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
+            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
+            // 
+            // FuzzyIndexes
+            // 
+            this.FuzzyIndexes.HeaderText = "FuzzyIndexes";
+            this.FuzzyIndexes.Name = "FuzzyIndexes";
+            // 
+            // TmId
+            // 
+            this.TmId.HeaderText = "TmId";
+            this.TmId.Name = "TmId";
+            this.TmId.Visible = false;
+            // 
+            // reindexBtn
+            // 
+            this.reindexBtn.Location = new System.Drawing.Point(792, 435);
+            this.reindexBtn.Name = "reindexBtn";
+            this.reindexBtn.Size = new System.Drawing.Size(75, 23);
+            this.reindexBtn.TabIndex = 8;
+            this.reindexBtn.Text = "Reindex";
+            this.reindexBtn.UseVisualStyleBackColor = true;
+            this.reindexBtn.Click += new System.EventHandler(this.reindexBtn_Click);
+            // 
+            // tabPageFileBasedTM
+            // 
+            this.tabPageFileBasedTM.Controls.Add(this.panel2);
+            this.tabPageFileBasedTM.Location = new System.Drawing.Point(4, 22);
+            this.tabPageFileBasedTM.Name = "tabPageFileBasedTM";
+            this.tabPageFileBasedTM.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageFileBasedTM.Size = new System.Drawing.Size(1038, 564);
+            this.tabPageFileBasedTM.TabIndex = 0;
+            this.tabPageFileBasedTM.Text = "File-Based Translation Memories";
+            this.tabPageFileBasedTM.UseVisualStyleBackColor = true;
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.rtbStatus);
+            this.panel2.Controls.Add(this.lstTms);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel2.Location = new System.Drawing.Point(3, 3);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1032, 558);
+            this.panel2.TabIndex = 3;
+            // 
+            // rtbStatus
+            // 
+            this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
+            this.rtbStatus.Name = "rtbStatus";
+            this.rtbStatus.Size = new System.Drawing.Size(1032, 372);
+            this.rtbStatus.TabIndex = 1;
+            this.rtbStatus.Text = "";
+            // 
+            // lstTms
+            // 
+            this.lstTms.AllowDrop = true;
+            this.lstTms.Dock = System.Windows.Forms.DockStyle.Top;
+            this.lstTms.FormattingEnabled = true;
+            this.lstTms.Location = new System.Drawing.Point(0, 0);
+            this.lstTms.Name = "lstTms";
+            this.lstTms.Size = new System.Drawing.Size(1032, 186);
+            this.lstTms.TabIndex = 0;
+            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
+            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
+            // 
+            // tabControlTMLifting
+            // 
+            this.tabControlTMLifting.Controls.Add(this.tabPageFileBasedTM);
+            this.tabControlTMLifting.Controls.Add(this.tabPageServerBasedTM);
+            this.tabControlTMLifting.Location = new System.Drawing.Point(3, 3);
+            this.tabControlTMLifting.Name = "tabControlTMLifting";
+            this.tabControlTMLifting.SelectedIndex = 0;
+            this.tabControlTMLifting.Size = new System.Drawing.Size(1046, 590);
+            this.tabControlTMLifting.TabIndex = 0;
+            // 
+            // itemsBindingSource1
+            // 
+            this.itemsBindingSource1.DataMember = "Items";
             // 
             // panel1
             // 
@@ -55,18 +242,40 @@ namespace Sdl.Community.TMLifting
             this.panel1.Controls.Add(this.btnBrowse);
             this.panel1.Controls.Add(this.btnReindex);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 534);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.panel1.Location = new System.Drawing.Point(0, 619);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(786, 55);
-            this.panel1.TabIndex = 0;
+            this.panel1.Size = new System.Drawing.Size(1140, 36);
+            this.panel1.TabIndex = 3;
+            // 
+            // cleanBtn
+            // 
+            this.cleanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cleanBtn.Location = new System.Drawing.Point(958, 6);
+            this.cleanBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.cleanBtn.Name = "cleanBtn";
+            this.cleanBtn.Size = new System.Drawing.Size(50, 23);
+            this.cleanBtn.TabIndex = 6;
+            this.cleanBtn.Text = "Clean";
+            this.cleanBtn.UseVisualStyleBackColor = true;
+            // 
+            // cancelBtn
+            // 
+            this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelBtn.Location = new System.Drawing.Point(1012, 6);
+            this.cancelBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.cancelBtn.Name = "cancelBtn";
+            this.cancelBtn.Size = new System.Drawing.Size(50, 23);
+            this.cancelBtn.TabIndex = 5;
+            this.cancelBtn.Text = "Cancel";
+            this.cancelBtn.UseVisualStyleBackColor = true;
             // 
             // upLiftCheckBox
             // 
             this.upLiftCheckBox.AutoSize = true;
-            this.upLiftCheckBox.Location = new System.Drawing.Point(449, 15);
+            this.upLiftCheckBox.Location = new System.Drawing.Point(299, 10);
+            this.upLiftCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.upLiftCheckBox.Name = "upLiftCheckBox";
-            this.upLiftCheckBox.Size = new System.Drawing.Size(65, 24);
+            this.upLiftCheckBox.Size = new System.Drawing.Size(50, 17);
             this.upLiftCheckBox.TabIndex = 4;
             this.upLiftCheckBox.Text = "Uplift";
             this.upLiftCheckBox.UseVisualStyleBackColor = true;
@@ -74,9 +283,10 @@ namespace Sdl.Community.TMLifting
             // reIndexCheckBox
             // 
             this.reIndexCheckBox.AutoSize = true;
-            this.reIndexCheckBox.Location = new System.Drawing.Point(320, 15);
+            this.reIndexCheckBox.Location = new System.Drawing.Point(213, 10);
+            this.reIndexCheckBox.Margin = new System.Windows.Forms.Padding(2);
             this.reIndexCheckBox.Name = "reIndexCheckBox";
-            this.reIndexCheckBox.Size = new System.Drawing.Size(93, 24);
+            this.reIndexCheckBox.Size = new System.Drawing.Size(69, 17);
             this.reIndexCheckBox.TabIndex = 3;
             this.reIndexCheckBox.Text = "Re-Index";
             this.reIndexCheckBox.UseVisualStyleBackColor = true;
@@ -84,124 +294,82 @@ namespace Sdl.Community.TMLifting
             // chkLoadStudioTMs
             // 
             this.chkLoadStudioTMs.AutoSize = true;
-            this.chkLoadStudioTMs.Location = new System.Drawing.Point(141, 17);
-            this.chkLoadStudioTMs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.chkLoadStudioTMs.Location = new System.Drawing.Point(94, 11);
             this.chkLoadStudioTMs.Name = "chkLoadStudioTMs";
-            this.chkLoadStudioTMs.Size = new System.Drawing.Size(148, 24);
+            this.chkLoadStudioTMs.Size = new System.Drawing.Size(107, 17);
             this.chkLoadStudioTMs.TabIndex = 2;
             this.chkLoadStudioTMs.Text = "Load Studio TMs";
             this.chkLoadStudioTMs.UseVisualStyleBackColor = true;
-            this.chkLoadStudioTMs.CheckedChanged += new System.EventHandler(this.chkLoadStudioTMs_CheckedChanged);
             // 
             // btnBrowse
             // 
-            this.btnBrowse.Location = new System.Drawing.Point(18, 9);
-            this.btnBrowse.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnBrowse.Location = new System.Drawing.Point(12, 6);
             this.btnBrowse.Name = "btnBrowse";
-            this.btnBrowse.Size = new System.Drawing.Size(112, 35);
+            this.btnBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "Browse ...";
             this.btnBrowse.UseVisualStyleBackColor = true;
-            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // btnReindex
             // 
             this.btnReindex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnReindex.Location = new System.Drawing.Point(684, 9);
-            this.btnReindex.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnReindex.Location = new System.Drawing.Point(1067, 6);
             this.btnReindex.Name = "btnReindex";
-            this.btnReindex.Size = new System.Drawing.Size(84, 35);
+            this.btnReindex.Size = new System.Drawing.Size(56, 23);
             this.btnReindex.TabIndex = 0;
             this.btnReindex.Text = "Process";
             this.btnReindex.UseVisualStyleBackColor = true;
-            this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
             // 
-            // panel2
+            // TMLiftingForm
             // 
-            this.panel2.Controls.Add(this.rtbStatus);
-            this.panel2.Controls.Add(this.lstTms);
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(786, 534);
-            this.panel2.TabIndex = 1;
-            // 
-            // rtbStatus
-            // 
-            this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbStatus.Location = new System.Drawing.Point(0, 284);
-            this.rtbStatus.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(786, 250);
-            this.rtbStatus.TabIndex = 1;
-            this.rtbStatus.Text = "";
-            // 
-            // lstTms
-            // 
-            this.lstTms.AllowDrop = true;
-            this.lstTms.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lstTms.FormattingEnabled = true;
-            this.lstTms.ItemHeight = 20;
-            this.lstTms.Location = new System.Drawing.Point(0, 0);
-            this.lstTms.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(786, 284);
-            this.lstTms.TabIndex = 0;
-            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
-            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
-            // 
-            // cancelBtn
-            // 
-            this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelBtn.Location = new System.Drawing.Point(602, 9);
-            this.cancelBtn.Name = "cancelBtn";
-            this.cancelBtn.Size = new System.Drawing.Size(75, 35);
-            this.cancelBtn.TabIndex = 5;
-            this.cancelBtn.Text = "Cancel";
-            this.cancelBtn.UseVisualStyleBackColor = true;
-            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
-            // 
-            // cleanBtn
-            // 
-            this.cleanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cleanBtn.Location = new System.Drawing.Point(520, 9);
-            this.cleanBtn.Name = "cleanBtn";
-            this.cleanBtn.Size = new System.Drawing.Size(75, 35);
-            this.cleanBtn.TabIndex = 6;
-            this.cleanBtn.Text = "Clean";
-            this.cleanBtn.UseVisualStyleBackColor = true;
-            this.cleanBtn.Click += new System.EventHandler(this.cleanBtn_Click);
-            // 
-            // ReindexForm
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.Name = "ReindexForm";
-            this.Size = new System.Drawing.Size(786, 589);
+            this.Controls.Add(this.tabControlTMLifting);
+            this.Name = "TMLiftingForm";
+            this.Size = new System.Drawing.Size(1140, 655);
+            this.tabPageServerBasedTM.ResumeLayout(false);
+            this.tabPageServerBasedTM.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).EndInit();
+            this.tabPageFileBasedTM.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.tabControlTMLifting.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.itemsBindingSource1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnReindex;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.ListBox lstTms;
-        private System.Windows.Forms.CheckBox chkLoadStudioTMs;
-        private System.Windows.Forms.Button btnBrowse;
-        private System.Windows.Forms.RichTextBox rtbStatus;
-        private System.Windows.Forms.CheckBox upLiftCheckBox;
-        private System.Windows.Forms.CheckBox reIndexCheckBox;
-        private System.Windows.Forms.Button cleanBtn;
-        private System.Windows.Forms.Button cancelBtn;
-    }
+		private System.Windows.Forms.TabPage tabPageServerBasedTM;
+		private System.Windows.Forms.TabPage tabPageFileBasedTM;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.RichTextBox rtbStatus;
+		private System.Windows.Forms.ListBox lstTms;
+		private System.Windows.Forms.TabControl tabControlTMLifting;
+		private System.Windows.Forms.DataGridView gridServerBasedTMs;
+		private System.Windows.Forms.BindingSource itemsBindingSource1;
+		private System.Windows.Forms.Button reindexBtn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
+		private System.Windows.Forms.DataGridViewTextBoxColumn FuzzyIndexes;
+		private System.Windows.Forms.DataGridViewTextBoxColumn TmId;
+		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.Button connectToServer;
+		private System.Windows.Forms.Label server;
+		private System.Windows.Forms.ComboBox comboBoxServerBasedTM;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Button cleanBtn;
+		private System.Windows.Forms.Button cancelBtn;
+		private System.Windows.Forms.CheckBox upLiftCheckBox;
+		private System.Windows.Forms.CheckBox reIndexCheckBox;
+		private System.Windows.Forms.CheckBox chkLoadStudioTMs;
+		private System.Windows.Forms.Button btnBrowse;
+		private System.Windows.Forms.Button btnReindex;
+	}
 }
 
