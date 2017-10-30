@@ -106,6 +106,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupedBtn = new System.Windows.Forms.RadioButton();
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.label1 = new System.Windows.Forms.Label();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -601,6 +602,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// tabPage_segmentNumbers
 			// 
+			this.tabPage_segmentNumbers.Controls.Add(this.label1);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
@@ -654,6 +656,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
 			// 
 			// DisplayFilterControl
 			// 
@@ -775,5 +782,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private RadioButton commaBtn;
 		private TextBox segmentsBox;
 		private ContextMenuStrip contextMenuStrip1;
+		private Label label1;
 	}
 }

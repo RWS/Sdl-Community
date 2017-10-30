@@ -192,14 +192,18 @@ namespace Sdl.Community.ReportExporter
 			if (projectDetails != null)
 			{
 				var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
-				var index = languagesListBox.SelectedIndex;
-				var isChecked = languagesListBox.GetItemChecked(index);
-
-				var selectedProject = GetSelectedReport();
-				if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
+				if (selectedLanguage != null)
 				{
-					selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
+					var index = languagesListBox.SelectedIndex;
+					var isChecked = languagesListBox.GetItemChecked(index);
+
+					var selectedProject = GetSelectedReport();
+					if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
+					{
+						selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
+					}
 				}
+			
 			}
 			IsClipboardEnabled();
 			IsCsvBtnEnabled();
