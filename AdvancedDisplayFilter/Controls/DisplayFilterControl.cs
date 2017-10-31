@@ -1419,9 +1419,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void groupedBtn_CheckedChanged(object sender, EventArgs e)
 		{
-			if (commaBtn.Checked)
+			if (groupedBtn.Checked)
 			{
-				groupedBtn.Enabled = true;
+				segmentsBox.Enabled = true;
 			}
 		}
 	}
