@@ -131,6 +131,7 @@
             this.btn_Now.TabIndex = 9;
             this.btn_Now.Text = "Now";
             this.btn_Now.UseVisualStyleBackColor = true;
+            this.btn_Now.Click += new System.EventHandler(this.btn_Now_Click);
             // 
             // lbl_BackupDescription
             // 
