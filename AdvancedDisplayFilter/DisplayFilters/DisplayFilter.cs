@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -94,13 +95,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
                     success = rowInfo.IsContextInfoTypes(Settings);
 
 				// check custom settings
+	            var rowId = rowInfo.SegmentPair.Properties.Id.Id;
 				if (success && CustomSettings.EvenNo)
 				{
-					success = Helpers.SegmentNumbersHelper.IsEven(rowInfo.SegmentPair.Properties.Id.Id);
+					success = SegmentNumbersHelper.IsEven(rowId);
 				}
 	            if (success && CustomSettings.OddsNo)
 	            {
-		            success = Helpers.SegmentNumbersHelper.IsOdd(rowInfo.SegmentPair.Properties.Id.Id);
+		            success = SegmentNumbersHelper.IsOdd(rowId);
+	            }
+	            if (success && CustomSettings.CommaSeparated &&
+	                !string.IsNullOrWhiteSpace(CustomSettings.CommaSeparatedVelues))
+	            {
+		            success = SegmentNumbersHelper.ContainsId(rowId,
+			            CustomSettings.CommaSeparatedVelues);
+	            }
+	            if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
+	            {
+		            success = SegmentNumbersHelper.IdInRange(rowId, CustomSettings.GroupedList);
 	            }
 			}
 

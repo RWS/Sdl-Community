@@ -130,6 +130,7 @@
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
+    <Compile Include="Models\SegmentRange.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -625,6 +625,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.evenBtn.Name = "evenBtn";
 			this.evenBtn.TabStop = true;
 			this.evenBtn.UseVisualStyleBackColor = true;
+			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
 			// 
 			// oddBtn
 			// 
@@ -632,6 +633,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.oddBtn.Name = "oddBtn";
 			this.oddBtn.TabStop = true;
 			this.oddBtn.UseVisualStyleBackColor = true;
+			this.oddBtn.CheckedChanged += new System.EventHandler(this.oddBtn_CheckedChanged);
 			// 
 			// commaBtn
 			// 
@@ -639,6 +641,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.commaBtn.Name = "commaBtn";
 			this.commaBtn.TabStop = true;
 			this.commaBtn.UseVisualStyleBackColor = true;
+			this.commaBtn.CheckedChanged += new System.EventHandler(this.commaBtn_CheckedChanged);
 			// 
 			// groupedBtn
 			// 
@@ -646,6 +649,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupedBtn.Name = "groupedBtn";
 			this.groupedBtn.TabStop = true;
 			this.groupedBtn.UseVisualStyleBackColor = true;
+			this.groupedBtn.CheckedChanged += new System.EventHandler(this.groupedBtn_CheckedChanged);
 			// 
 			// segmentsBox
 			// 

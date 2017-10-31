@@ -55,17 +55,31 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CommaSeparated = commaBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked
+					
 				};
-			    return customSettings;
+			    if (commaBtn.Checked)
+			    {
+				    customSettings.CommaSeparatedVelues = segmentsBox.Text;
+			    }
+			    if (groupedBtn.Checked)
+			    {
+				    customSettings.GroupedList = segmentsBox.Text;
+			    }
+				return customSettings;
 		    }
-		    set
-		    {
-				if (value == null) return;
-			    oddBtn.Checked = value.OddsNo;
-			    evenBtn.Checked = value.EvenNo;
-			    commaBtn.Checked = value.CommaSeparated;
-			    groupedBtn.Checked = value.Grouped;
-		    }
+		  //  set
+		  //  {
+				//if (value == null) return;
+			 //   oddBtn.Checked = value.OddsNo;
+			 //   evenBtn.Checked = value.EvenNo;
+			 //   commaBtn.Checked = value.CommaSeparated;
+			 //   groupedBtn.Checked = value.Grouped;
+
+			 //   if (oddBtn.Checked || evenBtn.Checked)
+			 //   {
+				    
+			 //   }
+		  //  }
 	    }
 
 	    private DisplayFilterSettings DisplayFilterSettings
@@ -723,8 +737,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied_filtersTab(settings);
                     InvalidateIconsFilterApplied_commentsTab(settings);
                     InvalidateIconsFilterApplied_contextInfoTab(settings);
+	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
 
-                    SetStatusBackgroundColorCode(IsFilterApplied(settings));
+
+					SetStatusBackgroundColorCode(IsFilterApplied(settings));
                 }
                 else
                 {
@@ -734,6 +750,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_filters);
                     InvalidateIconsFilterApplied(tabPage_comments);
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
+	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
+
                 }
             }
         }
@@ -833,7 +851,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 
         }
-        private void InvalidateIconsFilterEdited(TabPage tabPage)
+
+	    private void InvalidateIconsFilterApplied_segmentNumbers(CustomFilterSettings customFilterSettings)
+	    {
+		    if (customFilterSettings.CommaSeparated || customFilterSettings.EvenNo || customFilterSettings.Grouped ||
+		        customFilterSettings.OddsNo)
+		    {
+			    tabPage_segmentNumbers.ImageIndex = 0;
+		    }
+		    else
+		    {
+				tabPage_segmentNumbers.ImageIndex = -1;
+			}
+	    }
+
+		private void InvalidateIconsFilterEdited(TabPage tabPage)
         {
 
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
@@ -1351,8 +1383,38 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             columnHeader_filtersSelected_name.Width = width;
         }
 
+		private void evenBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (evenBtn.Checked)
+			{
+				segmentsBox.Enabled = false;
+			}
+		}
 
-    }
+		private void oddBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (oddBtn.Checked)
+			{
+				segmentsBox.Enabled = false;
+			}
+		}
+
+		private void commaBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (commaBtn.Checked)
+			{
+				segmentsBox.Enabled = true;
+			}
+		}
+
+		private void groupedBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (commaBtn.Checked)
+			{
+				groupedBtn.Enabled = true;
+			}
+		}
+	}
 
 
 
