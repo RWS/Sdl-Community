@@ -32,7 +32,23 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Delete_Click(object sender, EventArgs e)
 		{
+			List<BackupDetailsModel> removedActionsList = new List<BackupDetailsModel>();
+			if (dataGridView1.SelectedRows.Count > 0)
+			{
+				foreach(DataGridViewRow selectedRow in dataGridView1.SelectedRows)
+				{
+					removedActionsList.Add(new BackupDetailsModel
+					{
+						BackupAction = selectedRow.Cells[0].Value.ToString(),
+						BackupType = selectedRow.Cells[1].Value.ToString(),
+						BackupPattern = selectedRow.Cells[2].Value.ToString()
+					});
+				}
+				Persistence persistence = new Persistence();
+				persistence.DeleteDetailsFromInfo(removedActionsList);
 
+				GetBackupDetailsInfo();
+			}
 		}
 
 		private void btn_Reset_Click(object sender, EventArgs e)
@@ -68,7 +84,9 @@ namespace Sdl.Community.TMBackup
 		
 		private void dataGridView1_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
 		{
-			if (dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryActionColumnIndex].FormattedValue.ToString() == string.Empty)
+			if (dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryActionColumnIndex].FormattedValue.ToString() == string.Empty &&
+				!string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryTypeColumnIndex].FormattedValue.ToString()) &&
+				!string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryPatternColumnIndex].FormattedValue.ToString()))
 			{
 				e.Cancel = true;
 				dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryTypeColumnIndex].ErrorText = Constants.MandatoryValue;
@@ -87,7 +105,16 @@ namespace Sdl.Community.TMBackup
 
 		private void dataGridView1_CellValidating_1(object sender, DataGridViewCellValidatingEventArgs e)
 		{
-			if (e.ColumnIndex == Constants.MandatoryActionColumnIndex || e.ColumnIndex == Constants.MandatoryTypeColumnIndex || e.ColumnIndex == Constants.MandatoryPatternColumnIndex)
+			var dataGrid = (DataGridView)sender;
+			bool isEmptyRow = false;
+			foreach (DataGridViewCell cell in dataGrid.Rows[dataGrid.Rows.Count-1].Cells)
+			{
+				if (string.IsNullOrEmpty(cell.Value.ToString()))
+				{
+					isEmptyRow = true;
+				}
+			}
+			if (!isEmptyRow && e.ColumnIndex == Constants.MandatoryActionColumnIndex || e.ColumnIndex == Constants.MandatoryTypeColumnIndex || e.ColumnIndex == Constants.MandatoryPatternColumnIndex)
 			{
 				if (e.FormattedValue.ToString() == string.Empty)
 				{
