@@ -67,20 +67,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			    }
 				return customSettings;
 		    }
-		  //  set
-		  //  {
+			set
+			{
 				//if (value == null) return;
-			 //   oddBtn.Checked = value.OddsNo;
-			 //   evenBtn.Checked = value.EvenNo;
-			 //   commaBtn.Checked = value.CommaSeparated;
-			 //   groupedBtn.Checked = value.Grouped;
+				//oddBtn.Checked = value.OddsNo;
+				//evenBtn.Checked = value.EvenNo;
+				//commaBtn.Checked = value.CommaSeparated;
+				//groupedBtn.Checked = value.Grouped;
+				//segmentsBox.Text = value.text
 
-			 //   if (oddBtn.Checked || evenBtn.Checked)
-			 //   {
-				    
-			 //   }
-		  //  }
-	    }
+				;
+			}
+		}
 
 	    private DisplayFilterSettings DisplayFilterSettings
         {
@@ -352,6 +350,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[1]);
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
+	        segmentsBox.Enabled = false;
         }
 
 
@@ -361,9 +360,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         private void InitializeSettings()
         {
-            #region  |  content panel  |
+			#region segments number
 
-            textBox_source.Text = string.Empty;
+	        evenBtn.Checked = false;
+	        oddBtn.Checked = false;
+	        commaBtn.Checked = false;
+	        groupedBtn.Checked = false;
+	        segmentsBox.Text = string.Empty;
+	        segmentsBox.Enabled = false;
+
+#endregion
+
+			#region  |  content panel  |
+
+			textBox_source.Text = string.Empty;
             textBox_target.Text = string.Empty;
 
             checkBox_regularExpression.Checked = false;
