@@ -10,9 +10,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;
 
@@ -22,7 +23,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
     {
         #region  |  Delegates  |
 
-        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result);
+        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings,FilteredCountsCallback result);
         public event OnApplyFilterHandler OnApplyDisplayFilter;
 
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
@@ -37,14 +38,37 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private EditorController EditorController { get; set; }
         private Document ActiveDocument { get; set; }
 
-        public DisplayFilters.DisplayFilter DisplayFilter { get; set; }
+        public DisplayFilter DisplayFilter { get; set; }
 
         public IList<IContextInfo> ContextInfoList { get; set; }
 
         private int TotalSegmentPairsCount { get; set; }
         private int FilteredSegmentPairsCount { get; set; }
 
-        private DisplayFilterSettings DisplayFilterSettings
+	    private CustomFilterSettings CustomFilter
+	    {
+		    get
+		    {
+			    var customSettings = new CustomFilterSettings
+			    {
+				    OddsNo =oddBtn.Checked,
+					CommaSeparated = commaBtn.Checked,
+					EvenNo = evenBtn.Checked,
+					Grouped = groupedBtn.Checked
+				};
+			    return customSettings;
+		    }
+		    set
+		    {
+				if (value == null) return;
+			    oddBtn.Checked = value.OddsNo;
+			    evenBtn.Checked = value.EvenNo;
+			    commaBtn.Checked = value.CommaSeparated;
+			    groupedBtn.Checked = value.Grouped;
+		    }
+	    }
+
+	    private DisplayFilterSettings DisplayFilterSettings
         {
             get
             {
@@ -468,7 +492,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             if (OnApplyDisplayFilter != null)
             {
                 var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
-                OnApplyDisplayFilter(DisplayFilterSettings, result);
+                OnApplyDisplayFilter(DisplayFilterSettings,CustomFilter, result);
             }
         }
 
@@ -529,7 +553,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private void ActiveDocument_DocumentFilterChanged(object sender, DocumentFilterEventArgs e)
         {
             if (e.DisplayFilter == null
-                || e.DisplayFilter.GetType() != typeof(DisplayFilters.DisplayFilter))
+                || e.DisplayFilter.GetType() != typeof(DisplayFilter))
                 InitializeSettings();
 
 
@@ -553,21 +577,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 PopulateContextInfoList();
 
                 if (ActiveDocument.DisplayFilter != null &&
-                    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
                     //invalidate UI with display settings recovered from the active document
-                    DisplayFilterSettings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
+                    DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
                 }
 
                 UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
-        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result)
+        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings,FilteredCountsCallback result)
         {
             if (ActiveDocument == null)
                 return;
 
-            DisplayFilter = new DisplayFilters.DisplayFilter(displayFilterSettings, ActiveDocument);
+            DisplayFilter = new DisplayFilter(displayFilterSettings,customFilterSettings, ActiveDocument);
 
             ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
 
@@ -691,9 +715,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             if (ActiveDocument != null)
             {
                 if (ActiveDocument.DisplayFilter != null
-                    && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                    && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
-                    var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                    var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                     InvalidateIconsFilterApplied_contentTab(settings);
                     InvalidateIconsFilterApplied_filtersTab(settings);
@@ -813,9 +837,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
 
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
-                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
             {
-                var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                 if (tabPage == tabPage_content
                     && (!string.IsNullOrEmpty(settings.SourceText)
@@ -1270,9 +1294,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_contextInfo.EndUpdate();
 
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
-                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
             {
-                var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                 if (settings.ContextInfoTypes.Any())
                 {

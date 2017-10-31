@@ -1,11 +1,10 @@
 ﻿using System.Linq;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
-using static System.Int32;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
-namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
+namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 {
     public class DisplayFilter : IDisplayFilter
     {
@@ -14,7 +13,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
         /// <summary>
         /// Display filter settings
         /// </summary>
-        public DisplayFilterSettings Settings { get; private set; }
+        public DisplayFilterSettings Settings { get; }
+		public CustomFilterSettings CustomSettings { get; }
 
 
         #endregion
@@ -24,11 +24,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 
         #endregion
         #region  |  Constructor  |
-        public DisplayFilter(DisplayFilterSettings settings, Document document)
+        public DisplayFilter(DisplayFilterSettings settings, CustomFilterSettings customSettings,Document document)
         {
             ActiveDocument = document;
 
             Settings = settings;
+	        CustomSettings = customSettings;
         }
 
         #endregion
@@ -40,11 +41,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
                         
             if (rowInfo.IsSegment)
             {
-	            //var id = Parse(rowInfo.SegmentPair.Properties.Id.Id);
-	            //if (success)
-	            //{
-		           // success = id % 2 == 0;
-	            //}
+	           
                 if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
                     success = rowInfo.IsSegmentReviewTypes(Settings);
 
@@ -95,9 +92,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
                 
                 if (success && Settings.ContextInfoTypes.Any())
                     success = rowInfo.IsContextInfoTypes(Settings);
-            }
 
-            return success;
+				// check custom settings
+				if (success && CustomSettings.EvenNo)
+				{
+					success = Helpers.SegmentNumbersHelper.IsEven(rowInfo.SegmentPair.Properties.Id.Id);
+				}
+	            if (success && CustomSettings.OddsNo)
+	            {
+		            success = Helpers.SegmentNumbersHelper.IsOdd(rowInfo.SegmentPair.Properties.Id.Id);
+	            }
+			}
+
+			return success;
         }
 
     }

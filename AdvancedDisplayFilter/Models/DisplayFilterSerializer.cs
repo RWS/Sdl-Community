@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace Sdl.Community.AdvancedDisplayFilter.Models
+namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
 {
     public class DisplayFilterSerializer
     {
