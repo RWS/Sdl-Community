@@ -55,7 +55,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					CommaSeparated = commaBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
-					UseRegexCommentSearch = commentRegexBox.Checked
+					UseRegexCommentSearch = commentRegexBox.Checked,
+					RevertSerach = reverseBox.Checked
 					
 				};
 			    if (commaBtn.Checked)

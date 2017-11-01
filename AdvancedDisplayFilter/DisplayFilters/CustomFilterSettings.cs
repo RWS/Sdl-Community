@@ -16,5 +16,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string GroupedList { get; set; }
 		public bool UseRegexCommentSearch { get; set; }
 		public string CommentRegex { get; set; }
+		public bool RevertSerach { get; set; }
+		public string RevertRegex { get; set; }
 	}
 }

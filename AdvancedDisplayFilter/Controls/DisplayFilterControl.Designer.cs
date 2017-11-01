@@ -108,6 +108,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.label1 = new System.Windows.Forms.Label();
 			this.commentRegexBox = new System.Windows.Forms.CheckBox();
+			this.reverseBox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -175,6 +176,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.Controls.Add(this.textBox_target, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_regularExpression, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.label_tab_content_filter_message, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.reverseBox, 0, 6);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			// 
 			// label_source
@@ -674,6 +676,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.commentRegexBox.Name = "commentRegexBox";
 			this.commentRegexBox.UseVisualStyleBackColor = true;
 			// 
+			// reverseBox
+			// 
+			resources.ApplyResources(this.reverseBox, "reverseBox");
+			this.reverseBox.Name = "reverseBox";
+			this.reverseBox.UseVisualStyleBackColor = true;
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -796,5 +804,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private ContextMenuStrip contextMenuStrip1;
 		private Label label1;
 		private CheckBox commentRegexBox;
+		private CheckBox reverseBox;
 	}
 }

@@ -71,16 +71,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		        if (success && Settings.SegmentContentTypes != null && Settings.SegmentContentTypes.Any())
 			        success = rowInfo.IsSegmentContentTypes(Settings);
 
-
-		        if (success && Settings.SourceText.Trim() != string.Empty)
-			        success = rowInfo.IsTextFoundInSource(Settings);
-
-
-		        if (success && Settings.TargetText.Trim() != string.Empty)
-			        success = rowInfo.IsTextFoundInTarget(Settings);
+				// if is revert search use custom helper method 
+		        if (success && !CustomSettings.RevertSerach)
+		        {
+					if (success && Settings.SourceText.Trim() != string.Empty)
+				        success = rowInfo.IsTextFoundInSource(Settings);
 
 
-		        if (success && !CustomSettings.UseRegexCommentSearch && Settings.CommentText.Trim() != string.Empty)
+			        if (success && Settings.TargetText.Trim() != string.Empty)
+				        success = rowInfo.IsTextFoundInTarget(Settings);
+
+				}
+
+				if (success && !CustomSettings.UseRegexCommentSearch && Settings.CommentText.Trim() != string.Empty)
 			        success = rowInfo.IsTextFoundInComment(Settings);
 
 
@@ -124,8 +127,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 
 			        success = CommentsHelper.IsCommentTextFoundWithRegex(commentsList, CustomSettings.CommentRegex);
 		        }
+				//revert search
+		        if (success && CustomSettings.RevertSerach && Settings.SourceText.Trim() != string.Empty)
+		        {
+			        success = ContentHelper.ReverseSearch(rowInfo.SegmentPair.Source.GetString(),Settings.SourceText.Trim());
 
-	        }
+		        }
+		        if (success && CustomSettings.RevertSerach && Settings.TargetText.Trim() != string.Empty)
+		        {
+			        success = ContentHelper.ReverseSearch(rowInfo.SegmentPair.Target.GetString(), Settings.TargetText.Trim());
+
+		        }
+
+			}
 
 	        return success;
         }
