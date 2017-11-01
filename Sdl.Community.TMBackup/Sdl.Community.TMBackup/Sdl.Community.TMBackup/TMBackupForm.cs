@@ -46,6 +46,8 @@ namespace Sdl.Community.TMBackup
 		{
 			TMBackupChangeForm changeForm = new TMBackupChangeForm();
 			changeForm.ShowDialog();
+
+			txt_BackupTime.Text = TMBackupChangeForm.BackupTimeInfo;
 		}
 
 		private void btn_Details_Click(object sender, EventArgs e)
@@ -100,6 +102,8 @@ namespace Sdl.Community.TMBackup
 				}
 				txt_BackupDetails.Text = res;
 			}
+
+			txt_BackupTime.Text = TMBackupChangeForm.BackupTimeInfo;
 		}
 	}
 }

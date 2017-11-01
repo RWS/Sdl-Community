@@ -34,6 +34,7 @@
             this.btn_TimeDetails = new System.Windows.Forms.Button();
             this.txtBox_timeInterval = new System.Windows.Forms.TextBox();
             this.btn_RealTimeDetails = new System.Windows.Forms.Button();
+            this.btn_Ok = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // radioBtn_RealTimeChange
@@ -101,11 +102,22 @@
             this.btn_RealTimeDetails.UseVisualStyleBackColor = true;
             this.btn_RealTimeDetails.Click += new System.EventHandler(this.btn_RealTimeDetails_Click);
             // 
+            // btn_Ok
+            // 
+            this.btn_Ok.Location = new System.Drawing.Point(363, 89);
+            this.btn_Ok.Name = "btn_Ok";
+            this.btn_Ok.Size = new System.Drawing.Size(100, 23);
+            this.btn_Ok.TabIndex = 7;
+            this.btn_Ok.Text = "Ok";
+            this.btn_Ok.UseVisualStyleBackColor = true;
+            this.btn_Ok.Click += new System.EventHandler(this.btn_Ok_Click);
+            // 
             // TMBackupChangeForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 116);
+            this.ClientSize = new System.Drawing.Size(482, 124);
+            this.Controls.Add(this.btn_Ok);
             this.Controls.Add(this.btn_RealTimeDetails);
             this.Controls.Add(this.txtBox_timeInterval);
             this.Controls.Add(this.btn_TimeDetails);
@@ -127,5 +139,6 @@
 		private System.Windows.Forms.Button btn_TimeDetails;
 		private System.Windows.Forms.TextBox txtBox_timeInterval;
 		private System.Windows.Forms.Button btn_RealTimeDetails;
+		private System.Windows.Forms.Button btn_Ok;
 	}
 }
