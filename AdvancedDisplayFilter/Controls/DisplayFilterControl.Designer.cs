@@ -43,6 +43,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.textBox_target = new System.Windows.Forms.TextBox();
 			this.checkBox_regularExpression = new System.Windows.Forms.CheckBox();
 			this.label_tab_content_filter_message = new System.Windows.Forms.Label();
+			this.reverseBox = new System.Windows.Forms.CheckBox();
 			this.tabPage_filters = new System.Windows.Forms.TabPage();
 			this.panel8 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -70,6 +71,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.textBox_commentAuthor = new System.Windows.Forms.TextBox();
 			this.label_commentAuthor = new System.Windows.Forms.Label();
 			this.label_tab_comments_filter_message = new System.Windows.Forms.Label();
+			this.commentRegexBox = new System.Windows.Forms.CheckBox();
 			this.tabPage_contextInfo = new System.Windows.Forms.TabPage();
 			this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
 			this.label_documentStructure_message = new System.Windows.Forms.Label();
@@ -79,6 +81,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader_description = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
+			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.label1 = new System.Windows.Forms.Label();
+			this.segmentsBox = new System.Windows.Forms.TextBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.groupedBtn = new System.Windows.Forms.RadioButton();
+			this.commaBtn = new System.Windows.Forms.RadioButton();
+			this.oddBtn = new System.Windows.Forms.RadioButton();
+			this.evenBtn = new System.Windows.Forms.RadioButton();
+			this.tabPage_colorPicker = new System.Windows.Forms.TabPage();
+			this.pickerPanel = new System.Windows.Forms.Panel();
+			this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
+			this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
+			this.colorWheel = new Cyotek.Windows.Forms.ColorWheel();
 			this.imageList_filter = new System.Windows.Forms.ImageList(this.components);
 			this.splitter_filterExpression = new System.Windows.Forms.Splitter();
 			this.panel_buffer = new System.Windows.Forms.Panel();
@@ -98,17 +113,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.pictureBox_filterStatusBarImage = new System.Windows.Forms.PictureBox();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.evenBtn = new System.Windows.Forms.RadioButton();
-			this.oddBtn = new System.Windows.Forms.RadioButton();
-			this.commaBtn = new System.Windows.Forms.RadioButton();
-			this.groupedBtn = new System.Windows.Forms.RadioButton();
-			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.label1 = new System.Windows.Forms.Label();
-			this.commentRegexBox = new System.Windows.Forms.CheckBox();
-			this.reverseBox = new System.Windows.Forms.CheckBox();
+			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -125,6 +131,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel3.SuspendLayout();
 			this.tabPage_contextInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
+			this.tabPage_segmentNumbers.SuspendLayout();
+			this.groupBox1.SuspendLayout();
+			this.tabPage_colorPicker.SuspendLayout();
+			this.pickerPanel.SuspendLayout();
 			this.toolStrip_filter.SuspendLayout();
 			this.panel_filterExpression.SuspendLayout();
 			this.panel_filterStatus.SuspendLayout();
@@ -132,8 +142,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.tabPage_segmentNumbers.SuspendLayout();
-			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -154,10 +162,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_comments);
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
+			this.tabControl_filter.Controls.Add(this.tabPage_colorPicker);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
 			this.tabControl_filter.ImageList = this.imageList_filter;
 			this.tabControl_filter.Name = "tabControl_filter";
 			this.tabControl_filter.SelectedIndex = 0;
+			this.tabControl_filter.SelectedIndexChanged += new System.EventHandler(this.tabControl_filter_SelectedIndexChanged);
 			// 
 			// tabPage_content
 			// 
@@ -224,6 +234,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label_tab_content_filter_message, "label_tab_content_filter_message");
 			this.tableLayoutPanel1.SetColumnSpan(this.label_tab_content_filter_message, 2);
 			this.label_tab_content_filter_message.Name = "label_tab_content_filter_message";
+			// 
+			// reverseBox
+			// 
+			resources.ApplyResources(this.reverseBox, "reverseBox");
+			this.reverseBox.Name = "reverseBox";
+			this.reverseBox.UseVisualStyleBackColor = true;
 			// 
 			// tabPage_filters
 			// 
@@ -418,6 +434,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel3.SetColumnSpan(this.label_tab_comments_filter_message, 2);
 			this.label_tab_comments_filter_message.Name = "label_tab_comments_filter_message";
 			// 
+			// commentRegexBox
+			// 
+			resources.ApplyResources(this.commentRegexBox, "commentRegexBox");
+			this.commentRegexBox.Name = "commentRegexBox";
+			this.commentRegexBox.UseVisualStyleBackColor = true;
+			// 
 			// tabPage_contextInfo
 			// 
 			this.tabPage_contextInfo.Controls.Add(this.tableLayoutPanel4);
@@ -480,6 +502,100 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.label_contextInfoSelected, "label_contextInfoSelected");
 			this.label_contextInfoSelected.Name = "label_contextInfoSelected";
+			// 
+			// tabPage_segmentNumbers
+			// 
+			this.tabPage_segmentNumbers.Controls.Add(this.label1);
+			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
+			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
+			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
+			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
+			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
+			// 
+			// label1
+			// 
+			resources.ApplyResources(this.label1, "label1");
+			this.label1.Name = "label1";
+			// 
+			// segmentsBox
+			// 
+			resources.ApplyResources(this.segmentsBox, "segmentsBox");
+			this.segmentsBox.Name = "segmentsBox";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.groupedBtn);
+			this.groupBox1.Controls.Add(this.commaBtn);
+			this.groupBox1.Controls.Add(this.oddBtn);
+			this.groupBox1.Controls.Add(this.evenBtn);
+			resources.ApplyResources(this.groupBox1, "groupBox1");
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.TabStop = false;
+			// 
+			// groupedBtn
+			// 
+			resources.ApplyResources(this.groupedBtn, "groupedBtn");
+			this.groupedBtn.Name = "groupedBtn";
+			this.groupedBtn.TabStop = true;
+			this.groupedBtn.UseVisualStyleBackColor = true;
+			this.groupedBtn.CheckedChanged += new System.EventHandler(this.groupedBtn_CheckedChanged);
+			// 
+			// commaBtn
+			// 
+			resources.ApplyResources(this.commaBtn, "commaBtn");
+			this.commaBtn.Name = "commaBtn";
+			this.commaBtn.TabStop = true;
+			this.commaBtn.UseVisualStyleBackColor = true;
+			this.commaBtn.CheckedChanged += new System.EventHandler(this.commaBtn_CheckedChanged);
+			// 
+			// oddBtn
+			// 
+			resources.ApplyResources(this.oddBtn, "oddBtn");
+			this.oddBtn.Name = "oddBtn";
+			this.oddBtn.TabStop = true;
+			this.oddBtn.UseVisualStyleBackColor = true;
+			this.oddBtn.CheckedChanged += new System.EventHandler(this.oddBtn_CheckedChanged);
+			// 
+			// evenBtn
+			// 
+			resources.ApplyResources(this.evenBtn, "evenBtn");
+			this.evenBtn.Name = "evenBtn";
+			this.evenBtn.TabStop = true;
+			this.evenBtn.UseVisualStyleBackColor = true;
+			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
+			// 
+			// tabPage_colorPicker
+			// 
+			this.tabPage_colorPicker.Controls.Add(this.pickerPanel);
+			resources.ApplyResources(this.tabPage_colorPicker, "tabPage_colorPicker");
+			this.tabPage_colorPicker.Name = "tabPage_colorPicker";
+			this.tabPage_colorPicker.UseVisualStyleBackColor = true;
+			// 
+			// pickerPanel
+			// 
+			this.pickerPanel.Controls.Add(this.screenColorPicker);
+			this.pickerPanel.Controls.Add(this.colorEditor);
+			this.pickerPanel.Controls.Add(this.colorWheel);
+			resources.ApplyResources(this.pickerPanel, "pickerPanel");
+			this.pickerPanel.Name = "pickerPanel";
+			// 
+			// screenColorPicker
+			// 
+			this.screenColorPicker.Color = System.Drawing.Color.Empty;
+			resources.ApplyResources(this.screenColorPicker, "screenColorPicker");
+			this.screenColorPicker.Name = "screenColorPicker";
+			this.screenColorPicker.ColorChanged += new System.EventHandler(this.screenColorPicker_ColorChanged);
+			// 
+			// colorEditor
+			// 
+			resources.ApplyResources(this.colorEditor, "colorEditor");
+			this.colorEditor.Name = "colorEditor";
+			// 
+			// colorWheel
+			// 
+			this.colorWheel.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+			resources.ApplyResources(this.colorWheel, "colorWheel");
+			this.colorWheel.Name = "colorWheel";
 			// 
 			// imageList_filter
 			// 
@@ -604,83 +720,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.columnHeader2, "columnHeader2");
 			// 
-			// tabPage_segmentNumbers
-			// 
-			this.tabPage_segmentNumbers.Controls.Add(this.label1);
-			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
-			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
-			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
-			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
-			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.groupedBtn);
-			this.groupBox1.Controls.Add(this.commaBtn);
-			this.groupBox1.Controls.Add(this.oddBtn);
-			this.groupBox1.Controls.Add(this.evenBtn);
-			resources.ApplyResources(this.groupBox1, "groupBox1");
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.TabStop = false;
-			// 
-			// evenBtn
-			// 
-			resources.ApplyResources(this.evenBtn, "evenBtn");
-			this.evenBtn.Name = "evenBtn";
-			this.evenBtn.TabStop = true;
-			this.evenBtn.UseVisualStyleBackColor = true;
-			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
-			// 
-			// oddBtn
-			// 
-			resources.ApplyResources(this.oddBtn, "oddBtn");
-			this.oddBtn.Name = "oddBtn";
-			this.oddBtn.TabStop = true;
-			this.oddBtn.UseVisualStyleBackColor = true;
-			this.oddBtn.CheckedChanged += new System.EventHandler(this.oddBtn_CheckedChanged);
-			// 
-			// commaBtn
-			// 
-			resources.ApplyResources(this.commaBtn, "commaBtn");
-			this.commaBtn.Name = "commaBtn";
-			this.commaBtn.TabStop = true;
-			this.commaBtn.UseVisualStyleBackColor = true;
-			this.commaBtn.CheckedChanged += new System.EventHandler(this.commaBtn_CheckedChanged);
-			// 
-			// groupedBtn
-			// 
-			resources.ApplyResources(this.groupedBtn, "groupedBtn");
-			this.groupedBtn.Name = "groupedBtn";
-			this.groupedBtn.TabStop = true;
-			this.groupedBtn.UseVisualStyleBackColor = true;
-			this.groupedBtn.CheckedChanged += new System.EventHandler(this.groupedBtn_CheckedChanged);
-			// 
-			// segmentsBox
-			// 
-			resources.ApplyResources(this.segmentsBox, "segmentsBox");
-			this.segmentsBox.Name = "segmentsBox";
-			// 
 			// contextMenuStrip1
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-			// 
-			// label1
-			// 
-			resources.ApplyResources(this.label1, "label1");
-			this.label1.Name = "label1";
-			// 
-			// commentRegexBox
-			// 
-			resources.ApplyResources(this.commentRegexBox, "commentRegexBox");
-			this.commentRegexBox.Name = "commentRegexBox";
-			this.commentRegexBox.UseVisualStyleBackColor = true;
-			// 
-			// reverseBox
-			// 
-			resources.ApplyResources(this.reverseBox, "reverseBox");
-			this.reverseBox.Name = "reverseBox";
-			this.reverseBox.UseVisualStyleBackColor = true;
 			// 
 			// DisplayFilterControl
 			// 
@@ -710,6 +753,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_contextInfo.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
+			this.tabPage_segmentNumbers.ResumeLayout(false);
+			this.tabPage_segmentNumbers.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
+			this.groupBox1.PerformLayout();
+			this.tabPage_colorPicker.ResumeLayout(false);
+			this.pickerPanel.ResumeLayout(false);
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -718,10 +767,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.tabPage_segmentNumbers.ResumeLayout(false);
-			this.tabPage_segmentNumbers.PerformLayout();
-			this.groupBox1.ResumeLayout(false);
-			this.groupBox1.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -805,5 +850,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Label label1;
 		private CheckBox commentRegexBox;
 		private CheckBox reverseBox;
+		private TabPage tabPage_colorPicker;
+		private Panel pickerPanel;
+		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
+		private Cyotek.Windows.Forms.ColorWheel colorWheel;
+		private Cyotek.Windows.Forms.ColorEditor colorEditor;
+		private Cyotek.Windows.Forms.ScreenColorPicker screenColorPicker;
 	}
 }

@@ -358,6 +358,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
 	        segmentsBox.Enabled = false;
+
+	        //colorPicker.ShowDialog();
+	        //colorPicker.ShowHelp = true;
         }
 
 
@@ -1430,6 +1433,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				segmentsBox.Enabled = true;
 			}
+		}
+
+		private void tabControl_filter_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			//var selectedTabText = ((TabControl)sender).SelectedTab.Text ;
+			//if (selectedTabText.Equals("Color picker"))
+			//{
+				
+			//}
+		}
+
+		private void screenColorPicker_ColorChanged(object sender, EventArgs e)
+		{
+			colorEditor.Color = screenColorPicker.Color;
 		}
 	}
 

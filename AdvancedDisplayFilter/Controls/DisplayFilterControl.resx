@@ -175,7 +175,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_source.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 20</value>
+    <value>638, 20</value>
   </data>
   <data name="textBox_source.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -274,7 +274,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_target.Size" type="System.Drawing.Size, System.Drawing">
-    <value>129, 20</value>
+    <value>638, 20</value>
   </data>
   <data name="textBox_target.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -340,7 +340,7 @@
     <value>0, 2, 0, 0</value>
   </data>
   <data name="label_tab_content_filter_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>254, 32</value>
+    <value>763, 32</value>
   </data>
   <data name="label_tab_content_filter_message.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -403,7 +403,7 @@
     <value>7</value>
   </data>
   <data name="tableLayoutPanel1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 173</value>
+    <value>773, 364</value>
   </data>
   <data name="tableLayoutPanel1.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -433,7 +433,7 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_content.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 181</value>
+    <value>781, 372</value>
   </data>
   <data name="tabPage_content.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -475,7 +475,7 @@
     <value>2, 2, 4, 0</value>
   </data>
   <data name="label_tab_filter_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 32</value>
+    <value>769, 32</value>
   </data>
   <data name="label_tab_filter_message.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -589,13 +589,13 @@
     <value>Fill</value>
   </data>
   <data name="panel9.Location" type="System.Drawing.Point, System.Drawing">
-    <value>72, 38</value>
+    <value>364, 38</value>
   </data>
   <data name="panel9.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel9.Size" type="System.Drawing.Size, System.Drawing">
-    <value>45, 133</value>
+    <value>45, 324</value>
   </data>
   <data name="panel9.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -625,7 +625,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="listView_selected.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 115</value>
+    <value>358, 306</value>
   </data>
   <data name="listView_selected.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -691,7 +691,7 @@
     <value>2, 0, 0, 2</value>
   </data>
   <data name="panel5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 18</value>
+    <value>358, 18</value>
   </data>
   <data name="panel5.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -712,13 +712,13 @@
     <value>Fill</value>
   </data>
   <data name="panel10.Location" type="System.Drawing.Point, System.Drawing">
-    <value>121, 38</value>
+    <value>413, 38</value>
   </data>
   <data name="panel10.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel10.Size" type="System.Drawing.Size, System.Drawing">
-    <value>67, 133</value>
+    <value>358, 324</value>
   </data>
   <data name="panel10.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -748,7 +748,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="listView_available.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 115</value>
+    <value>358, 306</value>
   </data>
   <data name="listView_available.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -814,7 +814,7 @@
     <value>2, 0, 0, 2</value>
   </data>
   <data name="panel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 18</value>
+    <value>358, 18</value>
   </data>
   <data name="panel4.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -841,7 +841,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel11.Size" type="System.Drawing.Size, System.Drawing">
-    <value>66, 133</value>
+    <value>358, 324</value>
   </data>
   <data name="panel11.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -874,7 +874,7 @@
     <value>2</value>
   </data>
   <data name="tableLayoutPanel2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 173</value>
+    <value>773, 364</value>
   </data>
   <data name="tableLayoutPanel2.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -904,7 +904,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel8.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 173</value>
+    <value>773, 364</value>
   </data>
   <data name="panel8.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -931,7 +931,7 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_filters.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 181</value>
+    <value>781, 372</value>
   </data>
   <data name="tabPage_filters.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -967,7 +967,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="comboBox_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 21</value>
+    <value>594, 21</value>
   </data>
   <data name="comboBox_commentSeverity.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
@@ -1072,7 +1072,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_commentText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 20</value>
+    <value>594, 20</value>
   </data>
   <data name="textBox_commentText.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1099,7 +1099,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>127, 20</value>
+    <value>594, 20</value>
   </data>
   <data name="textBox_commentAuthor.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1171,7 +1171,7 @@
     <value>0, 2, 0, 0</value>
   </data>
   <data name="label_tab_comments_filter_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>296, 32</value>
+    <value>763, 32</value>
   </data>
   <data name="label_tab_comments_filter_message.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1234,7 +1234,7 @@
     <value>5</value>
   </data>
   <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 173</value>
+    <value>773, 364</value>
   </data>
   <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -1264,7 +1264,7 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_comments.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 181</value>
+    <value>781, 372</value>
   </data>
   <data name="tabPage_comments.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -1306,7 +1306,7 @@
     <value>0, 2, 0, 0</value>
   </data>
   <data name="label_documentStructure_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 32</value>
+    <value>769, 32</value>
   </data>
   <data name="label_documentStructure_message.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -1351,7 +1351,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="listView_contextInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>186, 105</value>
+    <value>769, 296</value>
   </data>
   <data name="listView_contextInfo.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1375,7 +1375,7 @@
     <value>NoControl</value>
   </data>
   <data name="linkLabel_contextInfoClearSelection.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 145</value>
+    <value>2, 336</value>
   </data>
   <data name="linkLabel_contextInfoClearSelection.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1411,7 +1411,7 @@
     <value>NoControl</value>
   </data>
   <data name="label_contextInfoSelected.Location" type="System.Drawing.Point, System.Drawing">
-    <value>127, 145</value>
+    <value>710, 336</value>
   </data>
   <data name="label_contextInfoSelected.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 0, 2, 0</value>
@@ -1453,7 +1453,7 @@
     <value>3</value>
   </data>
   <data name="tableLayoutPanel4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>190, 173</value>
+    <value>773, 364</value>
   </data>
   <data name="tableLayoutPanel4.TabIndex" type="System.Int32, mscorlib">
     <value>11</value>
@@ -1483,7 +1483,7 @@
     <value>4, 4, 4, 4</value>
   </data>
   <data name="tabPage_contextInfo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 181</value>
+    <value>781, 372</value>
   </data>
   <data name="tabPage_contextInfo.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -1540,7 +1540,7 @@
     <value>True</value>
   </data>
   <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 34</value>
+    <value>182, 34</value>
   </data>
   <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -1696,7 +1696,7 @@
     <value>3, 3, 3, 3</value>
   </data>
   <data name="tabPage_segmentNumbers.Size" type="System.Drawing.Size, System.Drawing">
-    <value>198, 181</value>
+    <value>781, 372</value>
   </data>
   <data name="tabPage_segmentNumbers.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -1716,6 +1716,117 @@
   <data name="&gt;&gt;tabPage_segmentNumbers.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="screenColorPicker.Location" type="System.Drawing.Point, System.Drawing">
+    <value>468, 3</value>
+  </data>
+  <data name="screenColorPicker.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 119</value>
+  </data>
+  <data name="screenColorPicker.Text" xml:space="preserve">
+    <value>screenColorPicker1</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Name" xml:space="preserve">
+    <value>screenColorPicker</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ScreenColorPicker, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="colorEditor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>194, 3</value>
+  </data>
+  <data name="colorEditor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 260</value>
+  </data>
+  <data name="colorEditor.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Name" xml:space="preserve">
+    <value>colorEditor</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ColorEditor, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="colorWheel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 3</value>
+  </data>
+  <data name="colorWheel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>159, 140</value>
+  </data>
+  <data name="colorWheel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;colorWheel.Name" xml:space="preserve">
+    <value>colorWheel</value>
+  </data>
+  <data name="&gt;&gt;colorWheel.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ColorWheel, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;colorWheel.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorWheel.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="pickerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pickerPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="pickerPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>781, 372</value>
+  </data>
+  <data name="pickerPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Name" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Parent" xml:space="preserve">
+    <value>tabPage_colorPicker</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="tabPage_colorPicker.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 27</value>
+  </data>
+  <data name="tabPage_colorPicker.Size" type="System.Drawing.Size, System.Drawing">
+    <value>781, 372</value>
+  </data>
+  <data name="tabPage_colorPicker.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="tabPage_colorPicker.Text" xml:space="preserve">
+    <value>Color picker</value>
+  </data>
+  <data name="&gt;&gt;tabPage_colorPicker.Name" xml:space="preserve">
+    <value>tabPage_colorPicker</value>
+  </data>
+  <data name="&gt;&gt;tabPage_colorPicker.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;tabPage_colorPicker.Parent" xml:space="preserve">
+    <value>tabControl_filter</value>
+  </data>
+  <data name="&gt;&gt;tabPage_colorPicker.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
   <data name="tabControl_filter.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -1727,7 +1838,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAUQBBAFEAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAUwBBAFMAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -1782,7 +1893,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="tabControl_filter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 212</value>
+    <value>789, 403</value>
   </data>
   <data name="tabControl_filter.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -1806,13 +1917,13 @@
     <value>NoControl</value>
   </data>
   <data name="splitter_filterExpression.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 247</value>
+    <value>1, 438</value>
   </data>
   <data name="splitter_filterExpression.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="splitter_filterExpression.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 2</value>
+    <value>789, 2</value>
   </data>
   <data name="splitter_filterExpression.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1842,7 +1953,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="panel_buffer.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 8</value>
+    <value>789, 8</value>
   </data>
   <data name="panel_buffer.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -1983,7 +2094,7 @@
     <value>2, 0, 0, 0</value>
   </data>
   <data name="toolStrip_filter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 27</value>
+    <value>789, 27</value>
   </data>
   <data name="toolStrip_filter.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2010,7 +2121,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="filterExpressionControl.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 42</value>
+    <value>787, 42</value>
   </data>
   <data name="filterExpressionControl.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2031,7 +2142,7 @@
     <value>Bottom</value>
   </data>
   <data name="panel_filterExpression.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 249</value>
+    <value>1, 440</value>
   </data>
   <data name="panel_filterExpression.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2043,7 +2154,7 @@
     <value>0, 0, 2, 0</value>
   </data>
   <data name="panel_filterExpression.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 42</value>
+    <value>789, 42</value>
   </data>
   <data name="panel_filterExpression.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2073,7 +2184,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_filterStatusBarMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>174, 19</value>
+    <value>757, 19</value>
   </data>
   <data name="label_filterStatusBarMessage.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2109,7 +2220,7 @@
     <value>2, 0, 0, 0</value>
   </data>
   <data name="panel_filterStatusBarMessage.Size" type="System.Drawing.Size, System.Drawing">
-    <value>176, 19</value>
+    <value>759, 19</value>
   </data>
   <data name="panel_filterStatusBarMessage.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2176,7 +2287,7 @@
     <value>Right</value>
   </data>
   <data name="panel_filterStatusBarImage.Location" type="System.Drawing.Point, System.Drawing">
-    <value>176, 0</value>
+    <value>759, 0</value>
   </data>
   <data name="panel_filterStatusBarImage.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2215,7 +2326,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="panel_filterStatusBar.Size" type="System.Drawing.Size, System.Drawing">
-    <value>204, 19</value>
+    <value>787, 19</value>
   </data>
   <data name="panel_filterStatusBar.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -2236,7 +2347,7 @@
     <value>Bottom</value>
   </data>
   <data name="panel_filterStatus.Location" type="System.Drawing.Point, System.Drawing">
-    <value>1, 291</value>
+    <value>1, 482</value>
   </data>
   <data name="panel_filterStatus.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
@@ -2245,7 +2356,7 @@
     <value>0, 2, 2, 0</value>
   </data>
   <data name="panel_filterStatus.Size" type="System.Drawing.Size, System.Drawing">
-    <value>206, 21</value>
+    <value>789, 21</value>
   </data>
   <data name="panel_filterStatus.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -2275,7 +2386,7 @@
     <value>1, 0, 0, 0</value>
   </data>
   <data name="panel_body.Size" type="System.Drawing.Size, System.Drawing">
-    <value>207, 312</value>
+    <value>790, 503</value>
   </data>
   <data name="panel_body.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2316,6 +2427,9 @@
   <data name="&gt;&gt;contextMenuStrip1.Type" xml:space="preserve">
     <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <metadata name="colorEditorManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>429, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -2326,7 +2440,7 @@
     <value>2, 2, 2, 2</value>
   </data>
   <data name="$this.Size" type="System.Drawing.Size, System.Drawing">
-    <value>207, 312</value>
+    <value>790, 503</value>
   </data>
   <data name="&gt;&gt;columnHeader_filtersSelected_name.Name" xml:space="preserve">
     <value>columnHeader_filtersSelected_name</value>
@@ -2405,6 +2519,12 @@
   </data>
   <data name="&gt;&gt;columnHeader2.Type" xml:space="preserve">
     <value>System.Windows.Forms.ColumnHeader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorEditorManager.Name" xml:space="preserve">
+    <value>colorEditorManager</value>
+  </data>
+  <data name="&gt;&gt;colorEditorManager.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ColorEditorManager, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>

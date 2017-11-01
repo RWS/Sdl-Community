@@ -47,6 +47,10 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>3rd party\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
+    </Reference>
     <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
       <Private>True</Private>
@@ -147,7 +151,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="3rd party\Cyotek.Windows.Forms.ColorPicker.dll" />
     <Content Include="Images\filter.ico" />
+    <EmbeddedResource Include="Resources\eyedropper.png" />
     <None Include="..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
