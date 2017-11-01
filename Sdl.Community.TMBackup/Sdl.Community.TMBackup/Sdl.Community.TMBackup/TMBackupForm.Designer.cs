@@ -62,6 +62,7 @@
             // 
             // btn_BackupFrom
             // 
+            this.btn_BackupFrom.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_BackupFrom.Location = new System.Drawing.Point(543, 66);
             this.btn_BackupFrom.Name = "btn_BackupFrom";
             this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
@@ -72,6 +73,7 @@
             // 
             // btn_BackupTo
             // 
+            this.btn_BackupTo.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_BackupTo.Location = new System.Drawing.Point(543, 138);
             this.btn_BackupTo.Name = "btn_BackupTo";
             this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
@@ -137,6 +139,7 @@
             // 
             // btn_SaveSettings
             // 
+            this.btn_SaveSettings.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_SaveSettings.Location = new System.Drawing.Point(433, 357);
             this.btn_SaveSettings.Name = "btn_SaveSettings";
             this.btn_SaveSettings.Size = new System.Drawing.Size(104, 27);
@@ -147,6 +150,7 @@
             // 
             // btn_Cancel
             // 
+            this.btn_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_Cancel.Location = new System.Drawing.Point(543, 357);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(104, 27);
@@ -157,6 +161,7 @@
             // 
             // btn_Change
             // 
+            this.btn_Change.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_Change.Location = new System.Drawing.Point(543, 288);
             this.btn_Change.Name = "btn_Change";
             this.btn_Change.Size = new System.Drawing.Size(104, 27);
@@ -167,6 +172,7 @@
             // 
             // btn_Details
             // 
+            this.btn_Details.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.btn_Details.Location = new System.Drawing.Point(543, 255);
             this.btn_Details.Name = "btn_Details";
             this.btn_Details.Size = new System.Drawing.Size(104, 27);
