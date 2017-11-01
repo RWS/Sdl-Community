@@ -74,6 +74,8 @@ namespace Sdl.Community.TMBackup
 
 			Persistence persistence = new Persistence();
 			persistence.SaveBackupFormInfo(backupModel);
+
+			this.Close();
 		}
 
 		private void GetBackupFormInfo()

@@ -157,7 +157,7 @@ namespace Sdl.Community.TMBackup
 			{
 				request = new JsonRequestModel();
 			}
-
+			
 			request.RealTimeBackupModel = realTimeBackupModel;
 			var json = JsonConvert.SerializeObject(request);
 
