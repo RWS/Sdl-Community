@@ -54,7 +54,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				    OddsNo =oddBtn.Checked,
 					CommaSeparated = commaBtn.Checked,
 					EvenNo = evenBtn.Checked,
-					Grouped = groupedBtn.Checked
+					Grouped = groupedBtn.Checked,
+					UseRegexCommentSearch = commentRegexBox.Checked
 					
 				};
 			    if (commaBtn.Checked)
@@ -64,6 +65,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			    if (groupedBtn.Checked)
 			    {
 				    customSettings.GroupedList = segmentsBox.Text;
+			    }
+			    if (commentRegexBox.Checked)
+			    {
+				    customSettings.CommentRegex = textBox_commentText.Text;
+
 			    }
 				return customSettings;
 		    }

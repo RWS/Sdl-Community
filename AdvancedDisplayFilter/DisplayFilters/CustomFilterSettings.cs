@@ -14,5 +14,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool Grouped { get; set; }
 		public string CommaSeparatedVelues { get; set; }
 		public string GroupedList { get; set; }
+		public bool UseRegexCommentSearch { get; set; }
+		public string CommentRegex { get; set; }
 	}
 }

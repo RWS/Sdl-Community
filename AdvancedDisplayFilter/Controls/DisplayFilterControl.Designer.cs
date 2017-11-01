@@ -107,6 +107,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.label1 = new System.Windows.Forms.Label();
+			this.commentRegexBox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -369,6 +370,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel3.Controls.Add(this.textBox_commentAuthor, 1, 2);
 			this.tableLayoutPanel3.Controls.Add(this.label_commentAuthor, 0, 2);
 			this.tableLayoutPanel3.Controls.Add(this.label_tab_comments_filter_message, 0, 0);
+			this.tableLayoutPanel3.Controls.Add(this.commentRegexBox, 0, 4);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			// 
 			// comboBox_commentSeverity
@@ -666,6 +668,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label1, "label1");
 			this.label1.Name = "label1";
 			// 
+			// commentRegexBox
+			// 
+			resources.ApplyResources(this.commentRegexBox, "commentRegexBox");
+			this.commentRegexBox.Name = "commentRegexBox";
+			this.commentRegexBox.UseVisualStyleBackColor = true;
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -787,5 +795,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TextBox segmentsBox;
 		private ContextMenuStrip contextMenuStrip1;
 		private Label label1;
+		private CheckBox commentRegexBox;
 	}
 }
