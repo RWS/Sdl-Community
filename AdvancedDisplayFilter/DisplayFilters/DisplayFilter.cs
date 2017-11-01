@@ -138,9 +138,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			        success = ContentHelper.ReverseSearch(rowInfo.SegmentPair.Target.GetString(), Settings.TargetText.Trim());
 
 		        }
-		        if (success)
+		        if (success && CustomSettings.Colors.Count>0)
 		        {
-			        success = ColorPickerHelper.ContainsColor(rowInfo);
+			        success = ColorPickerHelper.ContainsColor(rowInfo,CustomSettings.Colors);
 		        }
 
 			}

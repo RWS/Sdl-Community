@@ -13,6 +13,7 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;
@@ -27,6 +28,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         public event OnApplyFilterHandler OnApplyDisplayFilter;
 
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
+		private List<string> _selectedColors = new List<string>();
         #endregion
 
         #region  |  Properties  |
@@ -45,47 +47,38 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private int TotalSegmentPairsCount { get; set; }
         private int FilteredSegmentPairsCount { get; set; }
 
-	    private CustomFilterSettings CustomFilter
+	    private CustomFilterSettings _customSettings;
+		private CustomFilterSettings CustomFilter
 	    {
-		    get
-		    {
-			    var customSettings = new CustomFilterSettings
-			    {
-				    OddsNo =oddBtn.Checked,
+			get
+			{
+				var customSettings = new CustomFilterSettings
+				{
+					OddsNo = oddBtn.Checked,
 					CommaSeparated = commaBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					RevertSerach = reverseBox.Checked,
-					Colors = new List<Color>()
-					
+					Colors = _selectedColors
+
 				};
-			    if (commaBtn.Checked)
-			    {
-				    customSettings.CommaSeparatedVelues = segmentsBox.Text;
-			    }
-			    if (groupedBtn.Checked)
-			    {
-				    customSettings.GroupedList = segmentsBox.Text;
-			    }
-			    if (commentRegexBox.Checked)
-			    {
-				    customSettings.CommentRegex = textBox_commentText.Text;
+				if (commaBtn.Checked)
+				{
+					customSettings.CommaSeparatedVelues = segmentsBox.Text;
+				}
+				if (groupedBtn.Checked)
+				{
+					customSettings.GroupedList = segmentsBox.Text;
+				}
+				if (commentRegexBox.Checked)
+				{
+					customSettings.CommentRegex = textBox_commentText.Text;
 
-			    }
+				}
 				return customSettings;
-		    }
-			set
-			{
-				//if (value == null) return;
-				//oddBtn.Checked = value.OddsNo;
-				//evenBtn.Checked = value.EvenNo;
-				//commaBtn.Checked = value.CommaSeparated;
-				//groupedBtn.Checked = value.Grouped;
-				//segmentsBox.Text = value.text
-
-				;
 			}
+			set => CustomFilter.Colors = value.Colors;
 		}
 
 	    private DisplayFilterSettings DisplayFilterSettings
@@ -1436,20 +1429,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		}
 
-		private void screenColorPicker_ColorChanged(object sender, EventArgs e)
-		{
-			colorEditor.Color = screenColorPicker.Color;
-			CustomFilter.Colors.Add(screenColorPicker.Color);
-		}
 
 		private void screenColorPicker_MouseUp(object sender, MouseEventArgs e)
 		{
 			colorEditor.Color = screenColorPicker.Color;
-			CustomFilter.Colors.Add(screenColorPicker.Color);
+			
 		}
 
 		private void addColorBtn_Click(object sender, EventArgs e)
 		{
+			var hexCode = ColorPickerHelper.GetHexCode(screenColorPicker.Color.R, screenColorPicker.Color.G,
+				screenColorPicker.Color.B);
+			_selectedColors.Add(hexCode);
 			AddNewTextBox();
 		}
 
@@ -1469,6 +1460,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void clearColorsBtn_Click(object sender, EventArgs e)
 		{
 			colorsPanel.Controls.Clear();
+			_selectedColors.Clear();
 		}
 	}
 

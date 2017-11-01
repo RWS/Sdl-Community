@@ -20,6 +20,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string CommentRegex { get; set; }
 		public bool RevertSerach { get; set; }
 		public string RevertRegex { get; set; }
-		public List<Color> Colors { get; set; }
+		public List<string> Colors { get; set; }
 	}
 }

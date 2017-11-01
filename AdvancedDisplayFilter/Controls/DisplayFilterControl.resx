@@ -1818,14 +1818,40 @@
   <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="screenColorPicker.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        nEY0MfkbupEMyBgBK9EAAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="screenColorPicker.Location" type="System.Drawing.Point, System.Drawing">
     <value>468, 3</value>
   </data>
   <data name="screenColorPicker.Size" type="System.Drawing.Size, System.Drawing">
     <value>125, 119</value>
-  </data>
-  <data name="screenColorPicker.Text" xml:space="preserve">
-    <value>screenColorPicker1</value>
   </data>
   <data name="&gt;&gt;screenColorPicker.Name" xml:space="preserve">
     <value>screenColorPicker</value>

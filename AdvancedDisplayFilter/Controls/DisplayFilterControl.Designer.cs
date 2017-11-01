@@ -613,6 +613,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// screenColorPicker
 			// 
 			this.screenColorPicker.Color = System.Drawing.Color.Empty;
+			this.screenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("screenColorPicker.Image")));
 			resources.ApplyResources(this.screenColorPicker, "screenColorPicker");
 			this.screenColorPicker.Name = "screenColorPicker";
 			this.screenColorPicker.MouseUp += new System.Windows.Forms.MouseEventHandler(this.screenColorPicker_MouseUp);
