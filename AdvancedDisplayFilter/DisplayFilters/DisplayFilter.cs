@@ -138,6 +138,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			        success = ContentHelper.ReverseSearch(rowInfo.SegmentPair.Target.GetString(), Settings.TargetText.Trim());
 
 		        }
+		        if (success)
+		        {
+			        success = ColorPickerHelper.ContainsColor(rowInfo);
+		        }
 
 			}
 

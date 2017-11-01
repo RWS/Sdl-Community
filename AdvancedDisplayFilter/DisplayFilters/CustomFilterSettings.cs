@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cyotek.Windows.Forms;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 {
@@ -18,5 +20,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string CommentRegex { get; set; }
 		public bool RevertSerach { get; set; }
 		public string RevertRegex { get; set; }
+		public List<Color> Colors { get; set; }
 	}
 }

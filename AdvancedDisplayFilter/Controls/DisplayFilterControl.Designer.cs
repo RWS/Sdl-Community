@@ -167,7 +167,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.ImageList = this.imageList_filter;
 			this.tabControl_filter.Name = "tabControl_filter";
 			this.tabControl_filter.SelectedIndex = 0;
-			this.tabControl_filter.SelectedIndexChanged += new System.EventHandler(this.tabControl_filter_SelectedIndexChanged);
 			// 
 			// tabPage_content
 			// 
@@ -584,7 +583,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.screenColorPicker.Color = System.Drawing.Color.Empty;
 			resources.ApplyResources(this.screenColorPicker, "screenColorPicker");
 			this.screenColorPicker.Name = "screenColorPicker";
-			this.screenColorPicker.ColorChanged += new System.EventHandler(this.screenColorPicker_ColorChanged);
+			this.screenColorPicker.MouseUp += new System.Windows.Forms.MouseEventHandler(this.screenColorPicker_MouseUp);
 			// 
 			// colorEditor
 			// 

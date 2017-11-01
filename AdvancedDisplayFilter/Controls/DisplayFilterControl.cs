@@ -56,7 +56,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
-					RevertSerach = reverseBox.Checked
+					RevertSerach = reverseBox.Checked,
+					Colors = new List<Color>()
 					
 				};
 			    if (commaBtn.Checked)
@@ -1435,18 +1436,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		}
 
-		private void tabControl_filter_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			//var selectedTabText = ((TabControl)sender).SelectedTab.Text ;
-			//if (selectedTabText.Equals("Color picker"))
-			//{
-				
-			//}
-		}
-
 		private void screenColorPicker_ColorChanged(object sender, EventArgs e)
 		{
 			colorEditor.Color = screenColorPicker.Color;
+			CustomFilter.Colors.Add(screenColorPicker.Color);
+		}
+
+		private void screenColorPicker_MouseUp(object sender, MouseEventArgs e)
+		{
+			colorEditor.Color = screenColorPicker.Color;
+			CustomFilter.Colors.Add(screenColorPicker.Color);
 		}
 	}
 

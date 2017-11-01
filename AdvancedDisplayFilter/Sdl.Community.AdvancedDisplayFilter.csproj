@@ -131,6 +131,7 @@
     <Compile Include="DisplayFilters\CustomFilterSettings.cs" />
     <Compile Include="DisplayFilters\DisplayFilter.cs" />
     <Compile Include="DisplayFilters\NumericValidationUtil.cs" />
+    <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
     <Compile Include="Helpers\ContentHelper.cs" />
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
