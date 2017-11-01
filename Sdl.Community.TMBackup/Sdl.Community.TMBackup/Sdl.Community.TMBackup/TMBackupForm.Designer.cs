@@ -50,6 +50,8 @@
             // 
             // txt_BackupFrom
             // 
+            this.txt_BackupFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_BackupFrom.Location = new System.Drawing.Point(137, 41);
             this.txt_BackupFrom.Multiline = true;
             this.txt_BackupFrom.Name = "txt_BackupFrom";
@@ -80,6 +82,8 @@
             // 
             // txt_BackupTo
             // 
+            this.txt_BackupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_BackupTo.Location = new System.Drawing.Point(137, 134);
             this.txt_BackupTo.Multiline = true;
             this.txt_BackupTo.Name = "txt_BackupTo";
@@ -90,6 +94,8 @@
             // 
             // lbl_BackupFrom
             // 
+            this.lbl_BackupFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupFrom.AutoSize = true;
             this.lbl_BackupFrom.Location = new System.Drawing.Point(21, 49);
             this.lbl_BackupFrom.Name = "lbl_BackupFrom";
@@ -99,6 +105,8 @@
             // 
             // lbl_BackupTo
             // 
+            this.lbl_BackupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupTo.AutoSize = true;
             this.lbl_BackupTo.Location = new System.Drawing.Point(21, 145);
             this.lbl_BackupTo.Name = "lbl_BackupTo";
@@ -108,6 +116,8 @@
             // 
             // txt_Description
             // 
+            this.txt_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_Description.Location = new System.Drawing.Point(137, 185);
             this.txt_Description.Multiline = true;
             this.txt_Description.Name = "txt_Description";
@@ -116,6 +126,8 @@
             // 
             // lbl_Description
             // 
+            this.lbl_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Description.AutoSize = true;
             this.lbl_Description.Location = new System.Drawing.Point(21, 188);
             this.lbl_Description.Name = "lbl_Description";
@@ -165,6 +177,8 @@
             // 
             // txt_BackupDetails
             // 
+            this.txt_BackupDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_BackupDetails.Location = new System.Drawing.Point(137, 255);
             this.txt_BackupDetails.Multiline = true;
             this.txt_BackupDetails.Name = "txt_BackupDetails";
@@ -174,6 +188,8 @@
             // 
             // txt_BackupTime
             // 
+            this.txt_BackupTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_BackupTime.Location = new System.Drawing.Point(137, 288);
             this.txt_BackupTime.Multiline = true;
             this.txt_BackupTime.Name = "txt_BackupTime";
@@ -183,6 +199,8 @@
             // 
             // lbl_BackupTime
             // 
+            this.lbl_BackupTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupTime.AutoSize = true;
             this.lbl_BackupTime.Location = new System.Drawing.Point(21, 291);
             this.lbl_BackupTime.Name = "lbl_BackupTime";
@@ -192,6 +210,8 @@
             // 
             // lbl_BackupFileDesc
             // 
+            this.lbl_BackupFileDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupFileDesc.AutoSize = true;
             this.lbl_BackupFileDesc.Location = new System.Drawing.Point(21, 258);
             this.lbl_BackupFileDesc.Name = "lbl_BackupFileDesc";
@@ -201,6 +221,8 @@
             // 
             // lbl_Line2
             // 
+            this.lbl_Line2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbl_Line2.Location = new System.Drawing.Point(-7, 341);
             this.lbl_Line2.Name = "lbl_Line2";
@@ -209,6 +231,8 @@
             // 
             // lbl_Line1
             // 
+            this.lbl_Line1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.lbl_Line1.Location = new System.Drawing.Point(-7, 228);
             this.lbl_Line1.Name = "lbl_Line1";

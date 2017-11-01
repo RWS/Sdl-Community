@@ -2,6 +2,7 @@
 using System;
 using System.Windows.Forms;
 using Sdl.Community.TMBackup.Models;
+using System.Globalization;
 
 namespace Sdl.Community.TMBackup
 {
@@ -47,7 +48,9 @@ namespace Sdl.Community.TMBackup
 		private void btn_Now_Click(object sender, EventArgs e)
 		{
 			dateTimePicker_FirstBackup.Value = DateTime.Now;
-			timePicker_At.Text = DateTime.Now.Hour.ToString();
+
+			var currentDate = DateTime.Now;
+			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
 		}
 
 		private void InitializeFormData()
