@@ -1716,6 +1716,108 @@
   <data name="&gt;&gt;tabPage_segmentNumbers.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
+  <data name="colorsPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="colorsPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>608, 22</value>
+  </data>
+  <data name="colorsPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
+  </data>
+  <data name="colorsPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Name" xml:space="preserve">
+    <value>colorsPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="clearColorsBtn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="clearColorsBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>468, 169</value>
+  </data>
+  <data name="clearColorsBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="clearColorsBtn.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="clearColorsBtn.Text" xml:space="preserve">
+    <value>Clear colors</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Name" xml:space="preserve">
+    <value>clearColorsBtn</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="addColorBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>468, 129</value>
+  </data>
+  <data name="addColorBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="addColorBtn.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="addColorBtn.Text" xml:space="preserve">
+    <value>Add color</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Name" xml:space="preserve">
+    <value>addColorBtn</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>630, 4</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 13</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Selected Colors</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
   <data name="screenColorPicker.Location" type="System.Drawing.Point, System.Drawing">
     <value>468, 3</value>
   </data>
@@ -1735,7 +1837,7 @@
     <value>pickerPanel</value>
   </data>
   <data name="&gt;&gt;screenColorPicker.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>4</value>
   </data>
   <data name="colorEditor.Location" type="System.Drawing.Point, System.Drawing">
     <value>194, 3</value>
@@ -1756,7 +1858,7 @@
     <value>pickerPanel</value>
   </data>
   <data name="&gt;&gt;colorEditor.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>5</value>
   </data>
   <data name="colorWheel.Location" type="System.Drawing.Point, System.Drawing">
     <value>3, 3</value>
@@ -1777,7 +1879,7 @@
     <value>pickerPanel</value>
   </data>
   <data name="&gt;&gt;colorWheel.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>6</value>
   </data>
   <data name="pickerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -1838,7 +1940,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAVQBBAFUAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAVwBBAFcAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ

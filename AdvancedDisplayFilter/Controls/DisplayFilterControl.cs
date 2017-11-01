@@ -1447,6 +1447,29 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			colorEditor.Color = screenColorPicker.Color;
 			CustomFilter.Colors.Add(screenColorPicker.Color);
 		}
+
+		private void addColorBtn_Click(object sender, EventArgs e)
+		{
+			AddNewTextBox();
+		}
+
+	    int _count = 1;
+	    public TextBox AddNewTextBox()
+	    {
+		    var txt = new TextBox();
+		    colorsPanel.Controls.Add(txt);
+		    txt.Top = _count * 25;
+		    txt.Enabled = false;
+		    txt.BackColor = colorEditor.Color;
+			txt.BorderStyle = BorderStyle.None;
+		    _count = _count + 1;
+		    return txt;
+	    }
+
+		private void clearColorsBtn_Click(object sender, EventArgs e)
+		{
+			colorsPanel.Controls.Clear();
+		}
 	}
 
 

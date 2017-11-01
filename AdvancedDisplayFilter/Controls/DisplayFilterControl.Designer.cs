@@ -91,6 +91,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.evenBtn = new System.Windows.Forms.RadioButton();
 			this.tabPage_colorPicker = new System.Windows.Forms.TabPage();
 			this.pickerPanel = new System.Windows.Forms.Panel();
+			this.colorsPanel = new System.Windows.Forms.Panel();
+			this.clearColorsBtn = new System.Windows.Forms.Button();
+			this.addColorBtn = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
 			this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
 			this.colorWheel = new Cyotek.Windows.Forms.ColorWheel();
@@ -572,11 +576,39 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// pickerPanel
 			// 
+			this.pickerPanel.Controls.Add(this.colorsPanel);
+			this.pickerPanel.Controls.Add(this.clearColorsBtn);
+			this.pickerPanel.Controls.Add(this.addColorBtn);
+			this.pickerPanel.Controls.Add(this.label2);
 			this.pickerPanel.Controls.Add(this.screenColorPicker);
 			this.pickerPanel.Controls.Add(this.colorEditor);
 			this.pickerPanel.Controls.Add(this.colorWheel);
 			resources.ApplyResources(this.pickerPanel, "pickerPanel");
 			this.pickerPanel.Name = "pickerPanel";
+			// 
+			// colorsPanel
+			// 
+			resources.ApplyResources(this.colorsPanel, "colorsPanel");
+			this.colorsPanel.Name = "colorsPanel";
+			// 
+			// clearColorsBtn
+			// 
+			resources.ApplyResources(this.clearColorsBtn, "clearColorsBtn");
+			this.clearColorsBtn.Name = "clearColorsBtn";
+			this.clearColorsBtn.UseVisualStyleBackColor = true;
+			this.clearColorsBtn.Click += new System.EventHandler(this.clearColorsBtn_Click);
+			// 
+			// addColorBtn
+			// 
+			resources.ApplyResources(this.addColorBtn, "addColorBtn");
+			this.addColorBtn.Name = "addColorBtn";
+			this.addColorBtn.UseVisualStyleBackColor = true;
+			this.addColorBtn.Click += new System.EventHandler(this.addColorBtn_Click);
+			// 
+			// label2
+			// 
+			resources.ApplyResources(this.label2, "label2");
+			this.label2.Name = "label2";
 			// 
 			// screenColorPicker
 			// 
@@ -758,6 +790,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupBox1.PerformLayout();
 			this.tabPage_colorPicker.ResumeLayout(false);
 			this.pickerPanel.ResumeLayout(false);
+			this.pickerPanel.PerformLayout();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -855,5 +888,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Cyotek.Windows.Forms.ColorWheel colorWheel;
 		private Cyotek.Windows.Forms.ColorEditor colorEditor;
 		private Cyotek.Windows.Forms.ScreenColorPicker screenColorPicker;
+		private Button clearColorsBtn;
+		private Button addColorBtn;
+		private Label label2;
+		private Panel colorsPanel;
 	}
 }
