@@ -10,7 +10,7 @@ namespace Sdl.Community.TMBackup.Models
 
 		public DateTime FirstBackup { get; set; }
 
-		public DateTime BackupAt { get; set; }
+		public string BackupAt { get; set; }
 
 		public bool IsRunOption { get; set; }
 

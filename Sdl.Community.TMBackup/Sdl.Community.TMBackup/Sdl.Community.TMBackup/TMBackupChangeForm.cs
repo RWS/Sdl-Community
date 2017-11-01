@@ -27,6 +27,9 @@ namespace Sdl.Community.TMBackup
 
 		private void radioBtn_RealTimeChange_CheckedChanged(object sender, EventArgs e)
 		{
+			btn_TimeDetails.Enabled = false;
+			btn_RealTimeDetails.Enabled = true;
+
 			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsRealTimeOptionChecked = radioBtn_RealTimeChange.Checked;
 
@@ -36,6 +39,9 @@ namespace Sdl.Community.TMBackup
 
 		private void radioBtn_TimeChange_CheckedChanged(object sender, EventArgs e)
 		{
+			btn_RealTimeDetails.Enabled = false;
+			btn_TimeDetails.Enabled = true;
+
 			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsPeriodicOptionChecked = radioBtn_TimeChange.Checked;
 
@@ -45,6 +51,9 @@ namespace Sdl.Community.TMBackup
 
 		private void radioBtn_Manually_CheckedChanged(object sender, EventArgs e)
 		{
+			btn_RealTimeDetails.Enabled = false;
+			btn_TimeDetails.Enabled = false;
+
 			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsManuallyOptionChecked = radioBtn_Manually.Checked;
 
@@ -63,6 +72,6 @@ namespace Sdl.Community.TMBackup
 				radioBtn_TimeChange.Checked = result.ChangeSettingsModel != null ?  result.ChangeSettingsModel.IsPeriodicOptionChecked : false;
 				radioBtn_Manually.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsManuallyOptionChecked : false;
 			}
-		}
+		}		
 	}
 }

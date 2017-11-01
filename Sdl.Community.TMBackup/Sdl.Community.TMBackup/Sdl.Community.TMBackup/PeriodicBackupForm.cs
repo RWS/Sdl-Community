@@ -34,7 +34,7 @@ namespace Sdl.Community.TMBackup
 			periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
 			periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 			periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
-			periodicBackupModel.BackupAt = timePicker_At.Value;
+			periodicBackupModel.BackupAt = timePicker_At.Text;
 			periodicBackupModel.IsRunOption = radioBtn_RunOption.Checked;
 			periodicBackupModel.IsWaitOption = radioBtn_WaitOption.Checked;
 
@@ -47,7 +47,7 @@ namespace Sdl.Community.TMBackup
 		private void btn_Now_Click(object sender, EventArgs e)
 		{
 			dateTimePicker_FirstBackup.Value = DateTime.Now;
-			//timePicker_At.Value = DateTime.Now.Hour;
+			timePicker_At.Text = DateTime.Now.Hour.ToString();
 		}
 
 		private void InitializeFormData()
@@ -62,7 +62,7 @@ namespace Sdl.Community.TMBackup
 				cmbBox_Interval.SelectedItem = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.TimeType : string.Empty;
 				txtBox_TimeInterval.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupInterval.ToString() : string.Empty;
 				dateTimePicker_FirstBackup.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.FirstBackup : DateTime.Now;
-				timePicker_At.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : DateTime.Now;
+				timePicker_At.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : string.Empty;
 				radioBtn_RunOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsRunOption: false;
 				radioBtn_WaitOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsWaitOption : false;
 			}
