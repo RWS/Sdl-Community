@@ -13,16 +13,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		public static bool ContainsColor(DisplayFilterRowInfo rowInfo,List<string> colorsCode)
 		{
 			//get text from segment including tags 
-			var text = rowInfo.SegmentPair.Source.GetString(true);
+			var sourceText = rowInfo.SegmentPair.Source.GetString(true);
 
 			foreach (var code in colorsCode)
 			{
-				if (text.Contains(string.Format("color=\"{0}\"", code)))
+				if (sourceText.Contains(string.Format("color=\"{0}\"", code)))
 				{
 					return true;
 				}
 			}
 
+			var targetText = rowInfo.SegmentPair.Target.GetString(true);
+			foreach (var code in colorsCode)
+			{
+				if (targetText.Contains(string.Format("color=\"{0}\"", code)))
+				{
+					return true;
+				}
+			}
 			return false;
 		}
 

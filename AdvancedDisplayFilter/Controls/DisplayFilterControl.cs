@@ -353,8 +353,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	        segmentsBox.Enabled = false;
 
-	        //colorPicker.ShowDialog();
-	        //colorPicker.ShowHelp = true;
         }
 
 
@@ -372,6 +370,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        groupedBtn.Checked = false;
 	        segmentsBox.Text = string.Empty;
 	        segmentsBox.Enabled = false;
+
+	        ClearColorPicker();
 
 #endregion
 
@@ -526,7 +526,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         public void ClearFilter()
         {
-
             InitializeSettings();
 
             ApplyFilter();
@@ -583,8 +582,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             if (e.DisplayFilter == null
                 || e.DisplayFilter.GetType() != typeof(DisplayFilter))
                 InitializeSettings();
-
-
+			
             UpdateFilteredCountDisplay(e.FilteredSegmentPairsCount, e.TotalSegmentPairsCount);
         }
         private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
@@ -752,6 +750,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied_commentsTab(settings);
                     InvalidateIconsFilterApplied_contextInfoTab(settings);
 	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
+	                InvalidateIconsFilterApplied_colorPicker(CustomFilter);
 
 
 					SetStatusBackgroundColorCode(IsFilterApplied(settings));
@@ -765,12 +764,25 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_comments);
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
 	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
+	                InvalidateIconsFilterApplied(tabPage_colorPicker);
 
-                }
+				}
             }
         }
 
-        private void SetStatusBackgroundColorCode(bool visible)
+	    private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
+	    {
+		    if (customFilter.Colors.Count > 0)
+		    {
+			    tabPage_colorPicker.ImageIndex = 0;
+		    }
+		    else
+		    {
+			    tabPage_colorPicker.ImageIndex = -1;
+		    }
+	    }
+
+	    private void SetStatusBackgroundColorCode(bool visible)
         {
             panel_filterStatusBarImage.Visible = visible;
             panel_filterStatusBar.BackColor = visible ? SystemColors.GradientInactiveCaption : Color.Transparent;
@@ -1457,10 +1469,22 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		    return txt;
 	    }
 
+	    private void ClearColorPicker()
+	    {
+			//reinitialize index for text boxes
+		    _count = 1;
+			colorsPanel.Controls.Clear();
+		    _selectedColors.Clear();
+		}
+
 		private void clearColorsBtn_Click(object sender, EventArgs e)
 		{
-			colorsPanel.Controls.Clear();
-			_selectedColors.Clear();
+			ClearColorPicker();
+		}
+
+		private void colorWheel_ColorChanged(object sender, EventArgs e)
+		{
+			colorEditor.Color = colorWheel.Color;
 		}
 	}
 

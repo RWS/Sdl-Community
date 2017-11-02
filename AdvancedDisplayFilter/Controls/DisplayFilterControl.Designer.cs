@@ -628,6 +628,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.colorWheel.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
 			resources.ApplyResources(this.colorWheel, "colorWheel");
 			this.colorWheel.Name = "colorWheel";
+			this.colorWheel.ColorChanged += new System.EventHandler(this.colorWheel_ColorChanged);
 			// 
 			// imageList_filter
 			// 
