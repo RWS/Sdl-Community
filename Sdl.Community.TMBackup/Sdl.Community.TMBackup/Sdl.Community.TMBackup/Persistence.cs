@@ -104,9 +104,15 @@ namespace Sdl.Community.TMBackup
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 			if (request != null)
 			{
-				foreach (var item in removedBackupDetailsList )
+				foreach (var item in removedBackupDetailsList)
 				{
-					request.BackupDetailsModelList.Remove(item);
+					var requestItem = request.BackupDetailsModelList
+						.Where(r => r.BackupAction == item.BackupAction && r.BackupType == item.BackupType && r.BackupPattern == item.BackupPattern)
+						.FirstOrDefault();
+					if (requestItem != null)
+					{
+						request.BackupDetailsModelList.Remove(requestItem);
+					}
 				}
 				var json = JsonConvert.SerializeObject(request);
 				File.WriteAllText(_persistancePath, json);
