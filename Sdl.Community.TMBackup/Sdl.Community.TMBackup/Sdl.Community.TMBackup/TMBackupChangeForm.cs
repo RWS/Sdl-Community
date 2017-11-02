@@ -7,8 +7,6 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupChangeForm : Form
 	{
-		public static string BackupTimeInfo { get; set; }
-
 		public TMBackupChangeForm()
 		{
 			InitializeComponent();
@@ -79,35 +77,43 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
-			Persistence persistence = new Persistence();
+			GetBackupTimeInfo();
+			this.Close();
+		}
+
+		public string GetBackupTimeInfo()
+		{
+		string backupTimeInfo = string.Empty;
+
+		Persistence persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 
-			if(jsonResult != null && jsonResult.PeriodicBackupModel != null && radioBtn_TimeChange.Checked)
+			if (jsonResult != null && jsonResult.PeriodicBackupModel != null && radioBtn_TimeChange.Checked)
 			{
-				BackupTimeInfo = BackupTimeInfo + "Backup interval: " + jsonResult.PeriodicBackupModel.BackupInterval + " " +
+				backupTimeInfo = backupTimeInfo + "Backup interval: " + jsonResult.PeriodicBackupModel.BackupInterval + " " +
 					jsonResult.PeriodicBackupModel.TimeType + ", " + "First backup on: " +
 					jsonResult.PeriodicBackupModel.FirstBackup + ", " + "at " +
 					jsonResult.PeriodicBackupModel.BackupAt + ", ";
 
-				if(jsonResult.PeriodicBackupModel.IsRunOption)
+				if (jsonResult.PeriodicBackupModel.IsRunOption)
 				{
-					BackupTimeInfo = BackupTimeInfo + Constants.RunOption;
+					backupTimeInfo = backupTimeInfo + Constants.RunOption;
 				}
 				else
 				{
-					BackupTimeInfo = BackupTimeInfo + Constants.WaitOption;
+					backupTimeInfo = backupTimeInfo + Constants.WaitOption;
 				}
 
 			}
 			else if (jsonResult != null && jsonResult.RealTimeBackupModel != null && radioBtn_RealTimeChange.Checked)
 			{
-				BackupTimeInfo = "At: " + jsonResult.RealTimeBackupModel.BackupInterval + " " + jsonResult.RealTimeBackupModel.TimeType;
+				backupTimeInfo = "At: " + jsonResult.RealTimeBackupModel.BackupInterval + " " + jsonResult.RealTimeBackupModel.TimeType;
 			}
 			else if (radioBtn_Manually.Checked)
 			{
-				BackupTimeInfo = Constants.ManuallyOption;
+				backupTimeInfo = Constants.ManuallyOption;
 			}
-			this.Close();
+			return backupTimeInfo;
 		}
 	}
 }
