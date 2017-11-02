@@ -270,6 +270,7 @@
             this.Controls.Add(this.btn_SaveSettings);
             this.MaximumSize = new System.Drawing.Size(3000, 440);
             this.Name = "TMBackupForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "New backup";
             this.ResumeLayout(false);
             this.PerformLayout();

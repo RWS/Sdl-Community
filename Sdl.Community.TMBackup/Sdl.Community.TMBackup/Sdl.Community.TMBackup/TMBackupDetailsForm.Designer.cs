@@ -195,6 +195,7 @@
             this.Controls.Add(this.btn_Ok);
             this.MaximumSize = new System.Drawing.Size(562, 253);
             this.Name = "TMBackupDetailsForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "What to backup";
             ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

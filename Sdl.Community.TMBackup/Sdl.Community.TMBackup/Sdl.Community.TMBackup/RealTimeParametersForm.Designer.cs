@@ -102,6 +102,7 @@
             this.Controls.Add(this.label1);
             this.MaximumSize = new System.Drawing.Size(442, 143);
             this.Name = "RealTimeParametersForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Real-time parameters";
             this.ResumeLayout(false);
             this.PerformLayout();
