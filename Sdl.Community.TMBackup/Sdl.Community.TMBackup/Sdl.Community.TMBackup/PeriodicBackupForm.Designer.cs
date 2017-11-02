@@ -52,7 +52,7 @@
             this.txt_Schedule.Location = new System.Drawing.Point(12, 12);
             this.txt_Schedule.Name = "txt_Schedule";
             this.txt_Schedule.ReadOnly = true;
-            this.txt_Schedule.Size = new System.Drawing.Size(553, 20);
+            this.txt_Schedule.Size = new System.Drawing.Size(537, 20);
             this.txt_Schedule.TabIndex = 0;
             this.txt_Schedule.Text = "Schedule";
             // 
@@ -62,7 +62,7 @@
             this.txtBox_MissedBackups.Location = new System.Drawing.Point(12, 128);
             this.txtBox_MissedBackups.Name = "txtBox_MissedBackups";
             this.txtBox_MissedBackups.ReadOnly = true;
-            this.txtBox_MissedBackups.Size = new System.Drawing.Size(553, 20);
+            this.txtBox_MissedBackups.Size = new System.Drawing.Size(537, 20);
             this.txtBox_MissedBackups.TabIndex = 1;
             this.txtBox_MissedBackups.Text = "Missed backups";
             // 
@@ -175,7 +175,7 @@
             // 
             // btn_Set
             // 
-            this.btn_Set.Location = new System.Drawing.Point(378, 269);
+            this.btn_Set.Location = new System.Drawing.Point(393, 267);
             this.btn_Set.Name = "btn_Set";
             this.btn_Set.Size = new System.Drawing.Size(75, 23);
             this.btn_Set.TabIndex = 14;
@@ -185,7 +185,7 @@
             // 
             // btn_Close
             // 
-            this.btn_Close.Location = new System.Drawing.Point(474, 269);
+            this.btn_Close.Location = new System.Drawing.Point(474, 267);
             this.btn_Close.Name = "btn_Close";
             this.btn_Close.Size = new System.Drawing.Size(75, 23);
             this.btn_Close.TabIndex = 15;
@@ -197,7 +197,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(575, 312);
+            this.ClientSize = new System.Drawing.Size(557, 301);
             this.Controls.Add(this.btn_Close);
             this.Controls.Add(this.btn_Set);
             this.Controls.Add(this.lbl_Line);
@@ -214,6 +214,7 @@
             this.Controls.Add(this.lbl_BackupInterval);
             this.Controls.Add(this.txtBox_MissedBackups);
             this.Controls.Add(this.txt_Schedule);
+            this.MaximumSize = new System.Drawing.Size(573, 340);
             this.Name = "PeriodicBackupForm";
             this.Text = "Periodic backup";
             this.ResumeLayout(false);

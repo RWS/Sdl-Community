@@ -39,7 +39,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(28, 21);
+            this.label1.Location = new System.Drawing.Point(12, 20);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(173, 13);
             this.label1.TabIndex = 0;
@@ -55,9 +55,9 @@
             // 
             // txtBox_Interval
             // 
-            this.txtBox_Interval.Location = new System.Drawing.Point(233, 18);
+            this.txtBox_Interval.Location = new System.Drawing.Point(221, 17);
             this.txtBox_Interval.Name = "txtBox_Interval";
-            this.txtBox_Interval.Size = new System.Drawing.Size(38, 20);
+            this.txtBox_Interval.Size = new System.Drawing.Size(50, 20);
             this.txtBox_Interval.TabIndex = 2;
             // 
             // cmbBox_Interval
@@ -93,13 +93,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(427, 102);
+            this.ClientSize = new System.Drawing.Size(426, 104);
             this.Controls.Add(this.btn_Close);
             this.Controls.Add(this.btn_Set);
             this.Controls.Add(this.cmbBox_Interval);
             this.Controls.Add(this.txtBox_Interval);
             this.Controls.Add(this.lbl_Line);
             this.Controls.Add(this.label1);
+            this.MaximumSize = new System.Drawing.Size(442, 143);
             this.Name = "RealTimeParametersForm";
             this.Text = "Real-time parameters";
             this.ResumeLayout(false);
