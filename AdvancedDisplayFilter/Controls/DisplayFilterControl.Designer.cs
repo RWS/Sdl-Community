@@ -119,6 +119,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
+			this.tabPage_fuzzyValue = new System.Windows.Forms.TabPage();
+			this.fuzzyPanel = new System.Windows.Forms.Panel();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label4 = new System.Windows.Forms.Label();
+			this.fuzzyMin = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.fuzzyMax = new System.Windows.Forms.TextBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -146,6 +153,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
+			this.tabPage_fuzzyValue.SuspendLayout();
+			this.fuzzyPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -167,6 +176,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
 			this.tabControl_filter.Controls.Add(this.tabPage_colorPicker);
+			this.tabControl_filter.Controls.Add(this.tabPage_fuzzyValue);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
 			this.tabControl_filter.ImageList = this.imageList_filter;
 			this.tabControl_filter.Name = "tabControl_filter";
@@ -758,6 +768,48 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// tabPage_fuzzyValue
+			// 
+			this.tabPage_fuzzyValue.Controls.Add(this.fuzzyPanel);
+			resources.ApplyResources(this.tabPage_fuzzyValue, "tabPage_fuzzyValue");
+			this.tabPage_fuzzyValue.Name = "tabPage_fuzzyValue";
+			this.tabPage_fuzzyValue.UseVisualStyleBackColor = true;
+			// 
+			// fuzzyPanel
+			// 
+			this.fuzzyPanel.Controls.Add(this.fuzzyMax);
+			this.fuzzyPanel.Controls.Add(this.label5);
+			this.fuzzyPanel.Controls.Add(this.fuzzyMin);
+			this.fuzzyPanel.Controls.Add(this.label4);
+			this.fuzzyPanel.Controls.Add(this.label3);
+			resources.ApplyResources(this.fuzzyPanel, "fuzzyPanel");
+			this.fuzzyPanel.Name = "fuzzyPanel";
+			// 
+			// label3
+			// 
+			resources.ApplyResources(this.label3, "label3");
+			this.label3.Name = "label3";
+			// 
+			// label4
+			// 
+			resources.ApplyResources(this.label4, "label4");
+			this.label4.Name = "label4";
+			// 
+			// fuzzyMin
+			// 
+			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
+			this.fuzzyMin.Name = "fuzzyMin";
+			// 
+			// label5
+			// 
+			resources.ApplyResources(this.label5, "label5");
+			this.label5.Name = "label5";
+			// 
+			// fuzzyMax
+			// 
+			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
+			this.fuzzyMax.Name = "fuzzyMax";
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -801,6 +853,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
+			this.tabPage_fuzzyValue.ResumeLayout(false);
+			this.fuzzyPanel.ResumeLayout(false);
+			this.fuzzyPanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -894,5 +949,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Button addColorBtn;
 		private Label label2;
 		private Panel colorsPanel;
+		private TabPage tabPage_fuzzyValue;
+		private Panel fuzzyPanel;
+		private Label label4;
+		private Label label3;
+		private TextBox fuzzyMin;
+		private Label label5;
+		private TextBox fuzzyMax;
 	}
 }

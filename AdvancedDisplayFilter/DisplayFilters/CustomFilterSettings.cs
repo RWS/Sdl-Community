@@ -21,5 +21,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool RevertSerach { get; set; }
 		public string RevertRegex { get; set; }
 		public List<string> Colors { get; set; }
+		public string FuzzyMin { get; set; }
+		public string FuzzyMax { get; set; }
 	}
 }

@@ -60,7 +60,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					RevertSerach = reverseBox.Checked,
-					Colors = _selectedColors
+					Colors = _selectedColors,
+					FuzzyMin = fuzzyMin.Text,
+					FuzzyMax = fuzzyMax.Text
 
 				};
 				if (commaBtn.Checked)
@@ -370,7 +372,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        groupedBtn.Checked = false;
 	        segmentsBox.Text = string.Empty;
 	        segmentsBox.Enabled = false;
-
+	        fuzzyMin.Text = string.Empty;
+	        fuzzyMax.Text = string.Empty;
 	        ClearColorPicker();
 
 #endregion
@@ -751,6 +754,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied_contextInfoTab(settings);
 	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
 	                InvalidateIconsFilterApplied_colorPicker(CustomFilter);
+	                InvalidateIconsFilterApplied_fuzzyValues(CustomFilter);
 
 
 					SetStatusBackgroundColorCode(IsFilterApplied(settings));
@@ -765,10 +769,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
 	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
 	                InvalidateIconsFilterApplied(tabPage_colorPicker);
+	                InvalidateIconsFilterApplied(tabPage_fuzzyValue);
 
 				}
             }
         }
+
+	    private void InvalidateIconsFilterApplied_fuzzyValues(CustomFilterSettings customFilter)
+	    {
+		    if (!string.IsNullOrWhiteSpace(customFilter.FuzzyMin) && !string.IsNullOrWhiteSpace(customFilter.FuzzyMax))
+		    {
+			    tabPage_fuzzyValue.ImageIndex = 0;
+		    }
+		    else
+		    {
+				tabPage_fuzzyValue.ImageIndex = -1;
+			}
+	    }
 
 	    private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
 	    {

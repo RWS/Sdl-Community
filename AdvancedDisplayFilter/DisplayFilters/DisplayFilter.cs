@@ -143,6 +143,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			        success = ColorPickerHelper.ContainsColor(rowInfo,CustomSettings.Colors);
 		        }
 
+				//fuzzy
+		        if (success && !string.IsNullOrWhiteSpace(CustomSettings.FuzzyMin) &&
+		            !string.IsNullOrWhiteSpace(CustomSettings.FuzzyMax))
+		        {
+			        success = FuzzyHelper.IsInFuzzyRange(rowInfo, CustomSettings.FuzzyMin, CustomSettings.FuzzyMax);
+
+		        }
+
 			}
 
 	        return success;
