@@ -216,6 +216,7 @@
             this.Controls.Add(this.txt_Schedule);
             this.MaximumSize = new System.Drawing.Size(573, 340);
             this.Name = "PeriodicBackupForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Periodic backup";
             this.ResumeLayout(false);
             this.PerformLayout();
