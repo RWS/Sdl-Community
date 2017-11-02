@@ -104,7 +104,7 @@
             // 
             // btn_Ok
             // 
-            this.btn_Ok.Location = new System.Drawing.Point(363, 89);
+            this.btn_Ok.Location = new System.Drawing.Point(363, 106);
             this.btn_Ok.Name = "btn_Ok";
             this.btn_Ok.Size = new System.Drawing.Size(100, 23);
             this.btn_Ok.TabIndex = 7;
@@ -116,7 +116,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(482, 124);
+            this.ClientSize = new System.Drawing.Size(477, 137);
             this.Controls.Add(this.btn_Ok);
             this.Controls.Add(this.btn_RealTimeDetails);
             this.Controls.Add(this.txtBox_timeInterval);
@@ -124,6 +124,7 @@
             this.Controls.Add(this.radioBtn_Manually);
             this.Controls.Add(this.radioBtn_TimeChange);
             this.Controls.Add(this.radioBtn_RealTimeChange);
+            this.MaximumSize = new System.Drawing.Size(493, 180);
             this.Name = "TMBackupChangeForm";
             this.Text = "Change settings";
             this.ResumeLayout(false);
