@@ -47,11 +47,17 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
+			this.reportOutputPath = new System.Windows.Forms.TextBox();
+			this.browseBtn = new System.Windows.Forms.Button();
+			this.label2 = new System.Windows.Forms.Label();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.label2);
+			this.mainPanel.Controls.Add(this.browseBtn);
+			this.mainPanel.Controls.Add(this.reportOutputPath);
 			this.mainPanel.Controls.Add(this.crossRep);
 			this.mainPanel.Controls.Add(this.contextMatch);
 			this.mainPanel.Controls.Add(this.perfectMatch);
@@ -72,13 +78,13 @@
 			this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.mainPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainPanel.Name = "mainPanel";
-			this.mainPanel.Size = new System.Drawing.Size(626, 447);
+			this.mainPanel.Size = new System.Drawing.Size(811, 455);
 			this.mainPanel.TabIndex = 0;
 			// 
 			// crossRep
 			// 
 			this.crossRep.AutoSize = true;
-			this.crossRep.Location = new System.Drawing.Point(431, 332);
+			this.crossRep.Location = new System.Drawing.Point(458, 384);
 			this.crossRep.Name = "crossRep";
 			this.crossRep.Size = new System.Drawing.Size(127, 17);
 			this.crossRep.TabIndex = 20;
@@ -89,7 +95,7 @@
 			// contextMatch
 			// 
 			this.contextMatch.AutoSize = true;
-			this.contextMatch.Location = new System.Drawing.Point(431, 308);
+			this.contextMatch.Location = new System.Drawing.Point(458, 361);
 			this.contextMatch.Name = "contextMatch";
 			this.contextMatch.Size = new System.Drawing.Size(95, 17);
 			this.contextMatch.TabIndex = 19;
@@ -100,7 +106,7 @@
 			// perfectMatch
 			// 
 			this.perfectMatch.AutoSize = true;
-			this.perfectMatch.Location = new System.Drawing.Point(431, 284);
+			this.perfectMatch.Location = new System.Drawing.Point(458, 338);
 			this.perfectMatch.Name = "perfectMatch";
 			this.perfectMatch.Size = new System.Drawing.Size(93, 17);
 			this.perfectMatch.TabIndex = 18;
@@ -111,7 +117,7 @@
 			// locked
 			// 
 			this.locked.AutoSize = true;
-			this.locked.Location = new System.Drawing.Point(431, 355);
+			this.locked.Location = new System.Drawing.Point(458, 407);
 			this.locked.Name = "locked";
 			this.locked.Size = new System.Drawing.Size(62, 17);
 			this.locked.TabIndex = 17;
@@ -122,7 +128,7 @@
 			// internalFuzzies
 			// 
 			this.internalFuzzies.AutoSize = true;
-			this.internalFuzzies.Location = new System.Drawing.Point(432, 261);
+			this.internalFuzzies.Location = new System.Drawing.Point(458, 315);
 			this.internalFuzzies.Name = "internalFuzzies";
 			this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
 			this.internalFuzzies.TabIndex = 16;
@@ -133,7 +139,7 @@
 			// adaptiveMT
 			// 
 			this.adaptiveMT.AutoSize = true;
-			this.adaptiveMT.Location = new System.Drawing.Point(431, 238);
+			this.adaptiveMT.Location = new System.Drawing.Point(458, 292);
 			this.adaptiveMT.Name = "adaptiveMT";
 			this.adaptiveMT.Size = new System.Drawing.Size(130, 17);
 			this.adaptiveMT.TabIndex = 15;
@@ -144,7 +150,7 @@
 			// adaptiveLearnings
 			// 
 			this.adaptiveLearnings.AutoSize = true;
-			this.adaptiveLearnings.Location = new System.Drawing.Point(431, 215);
+			this.adaptiveLearnings.Location = new System.Drawing.Point(458, 269);
 			this.adaptiveLearnings.Name = "adaptiveLearnings";
 			this.adaptiveLearnings.Size = new System.Drawing.Size(158, 17);
 			this.adaptiveLearnings.TabIndex = 14;
@@ -155,7 +161,7 @@
 			// optionsLabel
 			// 
 			this.optionsLabel.AutoSize = true;
-			this.optionsLabel.Location = new System.Drawing.Point(432, 183);
+			this.optionsLabel.Location = new System.Drawing.Point(455, 241);
 			this.optionsLabel.Name = "optionsLabel";
 			this.optionsLabel.Size = new System.Drawing.Size(137, 13);
 			this.optionsLabel.TabIndex = 12;
@@ -163,7 +169,7 @@
 			// 
 			// exitBtn
 			// 
-			this.exitBtn.Location = new System.Drawing.Point(432, 401);
+			this.exitBtn.Location = new System.Drawing.Point(694, 401);
 			this.exitBtn.Name = "exitBtn";
 			this.exitBtn.Size = new System.Drawing.Size(107, 23);
 			this.exitBtn.TabIndex = 11;
@@ -173,7 +179,7 @@
 			// 
 			// targetBtn
 			// 
-			this.targetBtn.Location = new System.Drawing.Point(433, 136);
+			this.targetBtn.Location = new System.Drawing.Point(693, 117);
 			this.targetBtn.Name = "targetBtn";
 			this.targetBtn.Size = new System.Drawing.Size(107, 23);
 			this.targetBtn.TabIndex = 10;
@@ -183,7 +189,7 @@
 			// 
 			// csvBtn
 			// 
-			this.csvBtn.Location = new System.Drawing.Point(432, 107);
+			this.csvBtn.Location = new System.Drawing.Point(694, 88);
 			this.csvBtn.Name = "csvBtn";
 			this.csvBtn.Size = new System.Drawing.Size(107, 23);
 			this.csvBtn.TabIndex = 9;
@@ -193,7 +199,7 @@
 			// 
 			// copyBtn
 			// 
-			this.copyBtn.Location = new System.Drawing.Point(431, 75);
+			this.copyBtn.Location = new System.Drawing.Point(693, 59);
 			this.copyBtn.Name = "copyBtn";
 			this.copyBtn.Size = new System.Drawing.Size(108, 23);
 			this.copyBtn.TabIndex = 8;
@@ -248,11 +254,36 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
+			// reportOutputPath
+			// 
+			this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
+			this.reportOutputPath.Name = "reportOutputPath";
+			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
+			this.reportOutputPath.TabIndex = 21;
+			// 
+			// browseBtn
+			// 
+			this.browseBtn.Location = new System.Drawing.Point(693, 26);
+			this.browseBtn.Name = "browseBtn";
+			this.browseBtn.Size = new System.Drawing.Size(108, 23);
+			this.browseBtn.TabIndex = 22;
+			this.browseBtn.Text = "Browse";
+			this.browseBtn.UseVisualStyleBackColor = true;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(458, 10);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(96, 13);
+			this.label2.TabIndex = 23;
+			this.label2.Text = "Report output path";
+			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(626, 447);
+			this.ClientSize = new System.Drawing.Size(811, 455);
 			this.Controls.Add(this.mainPanel);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -286,5 +317,8 @@
 		private System.Windows.Forms.CheckBox contextMatch;
 		private System.Windows.Forms.CheckBox perfectMatch;
 		private System.Windows.Forms.CheckBox locked;
+		private System.Windows.Forms.Button browseBtn;
+		private System.Windows.Forms.TextBox reportOutputPath;
+		private System.Windows.Forms.Label label2;
 	}
 }
