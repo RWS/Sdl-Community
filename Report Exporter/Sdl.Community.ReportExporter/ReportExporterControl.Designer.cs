@@ -30,6 +30,11 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.crossRep = new System.Windows.Forms.CheckBox();
+			this.contextMatch = new System.Windows.Forms.CheckBox();
+			this.perfectMatch = new System.Windows.Forms.CheckBox();
+			this.locked = new System.Windows.Forms.CheckBox();
+			this.internalFuzzies = new System.Windows.Forms.CheckBox();
 			this.adaptiveMT = new System.Windows.Forms.CheckBox();
 			this.adaptiveLearnings = new System.Windows.Forms.CheckBox();
 			this.optionsLabel = new System.Windows.Forms.Label();
@@ -42,11 +47,6 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.ListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.internalFuzzies = new System.Windows.Forms.CheckBox();
-			this.locked = new System.Windows.Forms.CheckBox();
-			this.perfectMatch = new System.Windows.Forms.CheckBox();
-			this.contextMatch = new System.Windows.Forms.CheckBox();
-			this.crossRep = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -75,10 +75,65 @@
 			this.mainPanel.Size = new System.Drawing.Size(626, 447);
 			this.mainPanel.TabIndex = 0;
 			// 
+			// crossRep
+			// 
+			this.crossRep.AutoSize = true;
+			this.crossRep.Location = new System.Drawing.Point(431, 332);
+			this.crossRep.Name = "crossRep";
+			this.crossRep.Size = new System.Drawing.Size(127, 17);
+			this.crossRep.TabIndex = 20;
+			this.crossRep.Text = "Cross File Repetitions";
+			this.crossRep.UseVisualStyleBackColor = true;
+			this.crossRep.CheckedChanged += new System.EventHandler(this.crossRep_CheckedChanged);
+			// 
+			// contextMatch
+			// 
+			this.contextMatch.AutoSize = true;
+			this.contextMatch.Location = new System.Drawing.Point(431, 308);
+			this.contextMatch.Name = "contextMatch";
+			this.contextMatch.Size = new System.Drawing.Size(95, 17);
+			this.contextMatch.TabIndex = 19;
+			this.contextMatch.Text = "Context Match";
+			this.contextMatch.UseVisualStyleBackColor = true;
+			this.contextMatch.CheckedChanged += new System.EventHandler(this.contextMatch_CheckedChanged);
+			// 
+			// perfectMatch
+			// 
+			this.perfectMatch.AutoSize = true;
+			this.perfectMatch.Location = new System.Drawing.Point(431, 284);
+			this.perfectMatch.Name = "perfectMatch";
+			this.perfectMatch.Size = new System.Drawing.Size(93, 17);
+			this.perfectMatch.TabIndex = 18;
+			this.perfectMatch.Text = "Perfect Match";
+			this.perfectMatch.UseVisualStyleBackColor = true;
+			this.perfectMatch.CheckedChanged += new System.EventHandler(this.perfectMatch_CheckedChanged);
+			// 
+			// locked
+			// 
+			this.locked.AutoSize = true;
+			this.locked.Location = new System.Drawing.Point(431, 355);
+			this.locked.Name = "locked";
+			this.locked.Size = new System.Drawing.Size(62, 17);
+			this.locked.TabIndex = 17;
+			this.locked.Text = "Locked";
+			this.locked.UseVisualStyleBackColor = true;
+			this.locked.CheckedChanged += new System.EventHandler(this.locked_CheckedChanged);
+			// 
+			// internalFuzzies
+			// 
+			this.internalFuzzies.AutoSize = true;
+			this.internalFuzzies.Location = new System.Drawing.Point(432, 261);
+			this.internalFuzzies.Name = "internalFuzzies";
+			this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
+			this.internalFuzzies.TabIndex = 16;
+			this.internalFuzzies.Text = "Internal Fuzzies";
+			this.internalFuzzies.UseVisualStyleBackColor = true;
+			this.internalFuzzies.CheckedChanged += new System.EventHandler(this.internalFuzzies_CheckedChanged);
+			// 
 			// adaptiveMT
 			// 
 			this.adaptiveMT.AutoSize = true;
-			this.adaptiveMT.Location = new System.Drawing.Point(431, 213);
+			this.adaptiveMT.Location = new System.Drawing.Point(431, 238);
 			this.adaptiveMT.Name = "adaptiveMT";
 			this.adaptiveMT.Size = new System.Drawing.Size(130, 17);
 			this.adaptiveMT.TabIndex = 15;
@@ -89,7 +144,7 @@
 			// adaptiveLearnings
 			// 
 			this.adaptiveLearnings.AutoSize = true;
-			this.adaptiveLearnings.Location = new System.Drawing.Point(432, 190);
+			this.adaptiveLearnings.Location = new System.Drawing.Point(431, 215);
 			this.adaptiveLearnings.Name = "adaptiveLearnings";
 			this.adaptiveLearnings.Size = new System.Drawing.Size(158, 17);
 			this.adaptiveLearnings.TabIndex = 14;
@@ -100,7 +155,7 @@
 			// optionsLabel
 			// 
 			this.optionsLabel.AutoSize = true;
-			this.optionsLabel.Location = new System.Drawing.Point(433, 174);
+			this.optionsLabel.Location = new System.Drawing.Point(432, 183);
 			this.optionsLabel.Name = "optionsLabel";
 			this.optionsLabel.Size = new System.Drawing.Size(137, 13);
 			this.optionsLabel.TabIndex = 12;
@@ -132,7 +187,7 @@
 			this.csvBtn.Name = "csvBtn";
 			this.csvBtn.Size = new System.Drawing.Size(107, 23);
 			this.csvBtn.TabIndex = 9;
-			this.csvBtn.Text = "Copy to CSV files";
+			this.csvBtn.Text = "Export to CSV";
 			this.csvBtn.UseVisualStyleBackColor = true;
 			this.csvBtn.Click += new System.EventHandler(this.csvBtn_Click);
 			// 
@@ -192,61 +247,6 @@
 			this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
-			// 
-			// internalFuzzies
-			// 
-			this.internalFuzzies.AutoSize = true;
-			this.internalFuzzies.Location = new System.Drawing.Point(431, 236);
-			this.internalFuzzies.Name = "internalFuzzies";
-			this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
-			this.internalFuzzies.TabIndex = 16;
-			this.internalFuzzies.Text = "Internal Fuzzies";
-			this.internalFuzzies.UseVisualStyleBackColor = true;
-			this.internalFuzzies.CheckedChanged += new System.EventHandler(this.internalFuzzies_CheckedChanged);
-			// 
-			// locked
-			// 
-			this.locked.AutoSize = true;
-			this.locked.Location = new System.Drawing.Point(431, 260);
-			this.locked.Name = "locked";
-			this.locked.Size = new System.Drawing.Size(62, 17);
-			this.locked.TabIndex = 17;
-			this.locked.Text = "Locked";
-			this.locked.UseVisualStyleBackColor = true;
-			this.locked.CheckedChanged += new System.EventHandler(this.locked_CheckedChanged);
-			// 
-			// perfectMatch
-			// 
-			this.perfectMatch.AutoSize = true;
-			this.perfectMatch.Location = new System.Drawing.Point(431, 284);
-			this.perfectMatch.Name = "perfectMatch";
-			this.perfectMatch.Size = new System.Drawing.Size(93, 17);
-			this.perfectMatch.TabIndex = 18;
-			this.perfectMatch.Text = "Perfect Match";
-			this.perfectMatch.UseVisualStyleBackColor = true;
-			this.perfectMatch.CheckedChanged += new System.EventHandler(this.perfectMatch_CheckedChanged);
-			// 
-			// contextMatch
-			// 
-			this.contextMatch.AutoSize = true;
-			this.contextMatch.Location = new System.Drawing.Point(431, 308);
-			this.contextMatch.Name = "contextMatch";
-			this.contextMatch.Size = new System.Drawing.Size(95, 17);
-			this.contextMatch.TabIndex = 19;
-			this.contextMatch.Text = "Context Match";
-			this.contextMatch.UseVisualStyleBackColor = true;
-			this.contextMatch.CheckedChanged += new System.EventHandler(this.contextMatch_CheckedChanged);
-			// 
-			// crossRep
-			// 
-			this.crossRep.AutoSize = true;
-			this.crossRep.Location = new System.Drawing.Point(431, 332);
-			this.crossRep.Name = "crossRep";
-			this.crossRep.Size = new System.Drawing.Size(127, 17);
-			this.crossRep.TabIndex = 20;
-			this.crossRep.Text = "Cross File Repetitions";
-			this.crossRep.UseVisualStyleBackColor = true;
-			this.crossRep.CheckedChanged += new System.EventHandler(this.crossRep_CheckedChanged);
 			// 
 			// ReportExporterControl
 			// 
