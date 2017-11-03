@@ -181,6 +181,19 @@ namespace Sdl.Community.ReportExporter
 					AddNewProject(projectLanguages);
 				}
 				FillLanguagesList();
+
+				if (languages.Count.Equals(1))
+				{
+					//check the language
+					languagesListBox.SelectedIndex = 0;
+					languagesListBox.SetItemChecked(0,true);
+					var project = GetSelectedReport();
+					var selectedLanguage = (LanguageDirection)languagesListBox.SelectedItem;
+					if (project.LanguagesForPoject.ContainsKey(selectedLanguage))
+					{
+						project.LanguagesForPoject[selectedLanguage] = true;
+					}
+				}
 			}
 			IsClipboardEnabled();
 			IsCsvBtnEnabled();
