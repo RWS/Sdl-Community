@@ -13,6 +13,8 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.ReportExporter
 {
@@ -25,7 +27,7 @@ namespace Sdl.Community.ReportExporter
 
 	[Action("Sdl.Community.ReportExporter", Name = "Report Exporter", Icon = "folder2_blue", Description = "Studio Report Exporter")]
 	[ActionLayout(typeof(ReportExporterRibbon), 20, DisplayType.Large)]
-	class StudioMigrationUtilityViewPartAction : AbstractAction
+	class ReportExporterViewPartAction : AbstractAction
 	{
 
 		protected override void Execute()
@@ -34,5 +36,20 @@ namespace Sdl.Community.ReportExporter
 			exporter.ShowDialog();
 		}
 	}
+
+	//[Action("Sdl.Community.ReportExporter.Button",
+	//	Name = "Report Exporter",
+	//	Description = "Studio Report Exporter",
+	//	Icon = "folder2_blue")]
+	//[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
+	//public class ReportExporter : AbstractAction
+	//{
+		
+	//	protected override void Execute()
+	//	{
+	//		var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+	//		var selectedProjects = projectController.SelectedProjects;
+	//	}
+	//}
 
 }

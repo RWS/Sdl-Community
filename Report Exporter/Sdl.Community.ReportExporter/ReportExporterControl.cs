@@ -30,6 +30,8 @@ namespace Sdl.Community.ReportExporter
 			_selectedProjectsForReport = new List<ReportDetails>();
 			LoadProjectsList();
 			projListbox.SelectedIndex = 0;
+			//projListbox.SelectionMode = SelectionMode.MultiSimple;
+			
 
 			//set for language list box check box should be checked/unchecked when row is selected
 			languagesListBox.CheckOnClick = true;
@@ -343,13 +345,12 @@ namespace Sdl.Community.ReportExporter
 
 		private void targetBtn_Click(object sender, EventArgs e)
 		{
-			var selectedProject = (ProjectDetails)projListbox.SelectedItem;
+			var selectedProject = GetSelectedProject();
 			if (selectedProject != null)
 			{
-				var reportPath = Path.Combine(selectedProject.ProjectFolderPath, "Reports");
-				if (Directory.Exists(reportPath))
+				if (Directory.Exists(selectedProject.ReportPath))
 				{
-					Process.Start("explorer.exe", "\"" + reportPath + "\"");
+					Process.Start("explorer.exe", "\"" + selectedProject.ReportPath + "\"");
 				}
 			}
 		}
