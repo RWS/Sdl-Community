@@ -3,7 +3,6 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.Community.XmlReader.View;
 
 namespace Sdl.Community.XmlReader
 {
@@ -19,9 +18,11 @@ namespace Sdl.Community.XmlReader
     {
         protected override void Execute()
         {
-            var xmlReaderForm = new XmlReaderForm();
-            var parent = xmlReaderForm.ParentForm;
-            xmlReaderForm.ShowDialog(parent);
+            var xmlReaderWindow = new MainWindow();
+            xmlReaderWindow.Show();
+            //var xmlReaderForm = new XmlReaderForm();
+            //var parent = xmlReaderForm.ParentForm;
+            //xmlReaderForm.ShowDialog(parent);
         }
     }
 }

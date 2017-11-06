@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Sdl.Community.XmlReader
 {
-    public static class Helper
+    public static class Helper1
     {
         public static string GetStudioInstalationPath()
         {
