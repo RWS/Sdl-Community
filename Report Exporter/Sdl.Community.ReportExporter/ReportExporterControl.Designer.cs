@@ -260,6 +260,7 @@
 			this.reportOutputPath.Name = "reportOutputPath";
 			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
 			this.reportOutputPath.TabIndex = 21;
+			this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
 			// 
 			// browseBtn
 			// 
@@ -269,6 +270,7 @@
 			this.browseBtn.TabIndex = 22;
 			this.browseBtn.Text = "Browse";
 			this.browseBtn.UseVisualStyleBackColor = true;
+			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
 			// 
 			// label2
 			// 

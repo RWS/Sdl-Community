@@ -46,7 +46,6 @@ namespace Sdl.Community.ReportExporter
 				IncludeLocked = locked.Checked,
 				IncludePerfectMatch = perfectMatch.Checked
 			};
-
 		}
 
 
@@ -182,12 +181,21 @@ namespace Sdl.Community.ReportExporter
 				}
 				FillLanguagesList();
 
+				var project = GetSelectedProject();
+				if (project.ReportPath != null)
+				{
+					reportOutputPath.Text = project.ReportPath;
+				}
+				else
+				{
+					reportOutputPath.Text = Empty;
+				}
 				if (languages.Count.Equals(1))
 				{
 					//check the language
 					languagesListBox.SelectedIndex = 0;
 					languagesListBox.SetItemChecked(0,true);
-					var project = GetSelectedReport();
+					
 					var selectedLanguage = (LanguageDirection)languagesListBox.SelectedItem;
 					if (project.LanguagesForPoject.ContainsKey(selectedLanguage))
 					{
@@ -210,7 +218,7 @@ namespace Sdl.Community.ReportExporter
 					var index = languagesListBox.SelectedIndex;
 					var isChecked = languagesListBox.GetItemChecked(index);
 
-					var selectedProject = GetSelectedReport();
+					var selectedProject = GetSelectedProject();
 					if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
 					{
 						selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
@@ -222,7 +230,7 @@ namespace Sdl.Community.ReportExporter
 			IsCsvBtnEnabled();
 		}
 
-		private ReportDetails GetSelectedReport()
+		private ReportDetails GetSelectedProject()
 		{
 			var projectDetails = (ProjectDetails) projListbox.SelectedItem;
 			var selectedProjectName = projectDetails.ProjectName;
@@ -243,7 +251,7 @@ namespace Sdl.Community.ReportExporter
 				}//check from  selected project if we have any language checked
 				else
 				{
-					var selectedReport = GetSelectedReport();
+					var selectedReport = GetSelectedProject();
 					var language = selectedReport.LanguagesForPoject.FirstOrDefault(c => c.Value);
 					var copyReport = new StudioAnalysisReport(language.Key.PathToReport);
 					Clipboard.SetText(copyReport.ToCsv(includeHeaderCheck.Checked,_optionalInformation));
@@ -262,14 +270,14 @@ namespace Sdl.Community.ReportExporter
 
 		private void IsClipboardEnabled()
 		{
-			var selectedReport = GetSelectedReport();
+			var selectedReport = GetSelectedProject();
 			var selectedLanguagesCount = selectedReport.LanguagesForPoject.Count(c => c.Value);
 			copyBtn.Enabled = selectedLanguagesCount == 1;
 		}
 
 		private void IsCsvBtnEnabled()
 		{
-			var selectedReport = GetSelectedReport();
+			var selectedReport = GetSelectedProject();
 			var selectedLanguagesCount = selectedReport.LanguagesForPoject.Count(c => c.Value);
 			csvBtn.Enabled = selectedLanguagesCount >= 1;
 		}
@@ -293,16 +301,19 @@ namespace Sdl.Community.ReportExporter
 					var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
 					foreach (var languageReport in checkedLanguages)
 					{
-						var csvFullReportPath = GetReportFolderPath(languageReport.Key.PathToReport);
 
-						//write report to Reports folder
-						using (var sw = new StreamWriter(csvFullReportPath + Path.DirectorySeparatorChar +
-						                                 languageReport.Key.TargetLang.Name + ".csv"))
+						if (project.ReportPath != null)
 						{
-							var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
-							//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
-							sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+							//write report to Reports folder
+							using (var sw = new StreamWriter(project.ReportPath + Path.DirectorySeparatorChar +
+							                                 languageReport.Key.TargetLang.Name + ".csv"))
+							{
+								var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+								//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
+								sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
+							}
 						}
+						
 
 					}
 				}
@@ -318,6 +329,11 @@ namespace Sdl.Community.ReportExporter
 	
 		}
 
+		/// <summary>
+		/// Gets the path to Reports folder from Studio project folder
+		/// </summary>
+		/// <param name="projectFolderPath"></param>
+		/// <returns></returns>
 		private string GetReportFolderPath(string projectFolderPath)
 		{
 			var reportFolderPath =
@@ -371,6 +387,30 @@ namespace Sdl.Community.ReportExporter
 		private void crossRep_CheckedChanged(object sender, EventArgs e)
 		{
 			_optionalInformation.IncludeCrossRep = crossRep.Checked;
+		}
+
+		private void browseBtn_Click(object sender, EventArgs e)
+		{
+			var folderPath = new FolderSelectDialog();
+			if (folderPath.ShowDialog())
+			{
+				reportOutputPath.Text = folderPath.FileName;
+			}
+
+			var selectedProject = GetSelectedProject();
+			selectedProject.ReportPath = folderPath.FileName;
+
+		}
+
+		private void reportOutputPath_KeyUp(object sender, KeyEventArgs e)
+		{
+			var reportPath = ((TextBox) sender).Text;
+			if (!IsNullOrWhiteSpace(reportPath))
+			{
+				var selectedProject = GetSelectedProject();
+				selectedProject.ReportPath = reportPath;
+			}
+			
 		}
 	}
 }

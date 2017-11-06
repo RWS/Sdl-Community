@@ -108,7 +108,6 @@
     <Compile Include="ReportExporterControl.Designer.cs">
       <DependentUpon>ReportExporterControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ReportExporterSettings.cs" />
     <Compile Include="ReportExporterRibbon.cs" />
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>

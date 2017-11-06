@@ -11,5 +11,6 @@ namespace Sdl.Community.ReportExporter.Model
 	{
 		public string ProjectName { get; set; }
 		public Dictionary<LanguageDirection,bool> LanguagesForPoject { get; set; }
+		public string ReportPath { get; set; }
 	}
 }
