@@ -18,6 +18,7 @@ using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
+	public delegate void AddServerBasedTMsDetails(string userName, string password, string uri);
     public partial class TMLiftingForm : UserControl
     {
         private readonly TranslationMemoryHelper _tmHelper;
@@ -26,11 +27,7 @@ namespace Sdl.Community.TMLifting
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
 		private TranslationMemory.ServerBasedTranslationMemory _sbTMs;
-		private readonly List<Panel> _listPanel;
 		private UserCredentials _userCredentials;
-		//private readonly 
-
-		//private readonly BindingSource _bs;
 
 		public TMLiftingForm()
         {
@@ -56,9 +53,7 @@ namespace Sdl.Community.TMLifting
             _bw.ProgressChanged += bw_ProgressChanged;
             reIndexCheckBox.Checked = true;
 			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
-			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers(); ;
-			
-
+			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
 		}
 
 		private async void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
@@ -72,19 +67,33 @@ namespace Sdl.Community.TMLifting
 					{
 						_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(_userCredentials.UserName, _userCredentials.Password, comboBoxServerBasedTM.SelectedItem.ToString());
 
-						gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+						gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails.Select(tm => new
+						{ Name = tm.Name, Description = tm.Description, Location = tm.Location }).ToList(); ;
 						gridServerBasedTMs.Visible = true;
 					}
 					else
 					{
-						var form = new LoginPage();
+						var form = new LoginPage(comboBoxServerBasedTM.Text);
+						form.AddDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
 						form.Show();
-					}					
+					}
 				}
-			}
-			var a = sender.GetType();
-			var b = e;
-			
+			}	
+		}
+		private async void AddDetailsCallbackFn(string userName, string password, string uri)
+		{
+			_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userName, password, uri);
+			//gridServerBasedTMs.DataSource = from tm in _sbTMs.ServerBasedTMDetails
+			//								select new
+			//								{
+			//									tm.Name,
+			//									tm.Description,
+			//									tm.Location
+			//								};
+			//gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails.Select(tm => new
+			{ Name = tm.Name, Description = tm.Description, Location = tm.Location }).ToList();
+			gridServerBasedTMs.Visible = true;
 		}
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -137,13 +146,23 @@ namespace Sdl.Community.TMLifting
             }
         }
 
-        private void btnReindex_Click(object sender, EventArgs e)
+        private async void btnReindex_Click(object sender, EventArgs e)
         {
-            btnReindex.Enabled = false;
+			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
+			{
+				btnReindex.Enabled = false;
 
-            var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
+				var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
 
-            _bw.RunWorkerAsync(tms);
+				_bw.RunWorkerAsync(tms);
+			}
+			else
+			{
+				var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
+				var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
+				var x = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+			}
+
         }
 
         private void chkLoadStudioTMs_CheckedChanged(object sender, EventArgs e)
@@ -243,34 +262,28 @@ namespace Sdl.Community.TMLifting
             rtbStatus.AppendText(@"Process will be canceled");
         }
 
-		private async void btnOkServerBased_Click(object sender, EventArgs e)
-		{
-			//var a = StudioPlatform.Studio.ActiveWindow.ServiceContext.GetService<IServerConnectionService>().GetUserCredentials(new Uri("http://gs2017dev.sdl.com"), false);
-			var servers = await _sbTMs.GetServers();
+		//private async void btnOkServerBased_Click(object sender, EventArgs e)
+		//{
+		//	//var a = StudioPlatform.Studio.ActiveWindow.ServiceContext.GetService<IServerConnectionService>().GetUserCredentials(new Uri("http://gs2017dev.sdl.com"), false);
+		//	var servers = await _sbTMs.GetServers();
 
-			var serverString = servers.First().ToString();
+		//	var serverString = servers.First().ToString();
 
-			var userCredentials = _sbTMs.GetUserCredentials(servers.First());
+		//	var userCredentials = _sbTMs.GetUserCredentials(servers.First());
 
-			//_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
+		//	//_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 
-			_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userCredentials.UserName, userCredentials.Password, serverString);
+		//	_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userCredentials.UserName, userCredentials.Password, serverString);
 			
-			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
-			gridServerBasedTMs.Visible = true;
-		}
-
-		private async void reindexBtn_Click(object sender, EventArgs e)
-		{
-			var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
-			var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
-			var x = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
-		}
+		//	gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+		//	gridServerBasedTMs.Visible = true;
+		//}
 
 		private void connectToServer_Click(object sender, EventArgs e)
 		{
-			var form = new LoginPage();
-			form.Show();
+			var form = new LoginPage(comboBoxServerBasedTM.Text);
+			form.AddDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+			form.ShowDialog();
 		}
 	}
 }
