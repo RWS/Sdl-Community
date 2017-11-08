@@ -42,7 +42,6 @@ namespace Sdl.Community.TMLifting
             this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.FuzzyIndexes = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TmId = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reindexBtn = new System.Windows.Forms.Button();
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
@@ -57,6 +56,7 @@ namespace Sdl.Community.TMLifting
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabPageServerBasedTM.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
@@ -70,11 +70,11 @@ namespace Sdl.Community.TMLifting
             // tabPageServerBasedTM
             // 
             this.tabPageServerBasedTM.BackColor = System.Drawing.Color.White;
+            this.tabPageServerBasedTM.Controls.Add(this.progressBar1);
             this.tabPageServerBasedTM.Controls.Add(this.server);
             this.tabPageServerBasedTM.Controls.Add(this.comboBoxServerBasedTM);
             this.tabPageServerBasedTM.Controls.Add(this.connectToServer);
             this.tabPageServerBasedTM.Controls.Add(this.groupBox1);
-            this.tabPageServerBasedTM.Controls.Add(this.reindexBtn);
             this.tabPageServerBasedTM.Location = new System.Drawing.Point(4, 22);
             this.tabPageServerBasedTM.Name = "tabPageServerBasedTM";
             this.tabPageServerBasedTM.Padding = new System.Windows.Forms.Padding(3);
@@ -166,16 +166,6 @@ namespace Sdl.Community.TMLifting
             this.TmId.Name = "TmId";
             this.TmId.Visible = false;
             // 
-            // reindexBtn
-            // 
-            this.reindexBtn.Location = new System.Drawing.Point(792, 435);
-            this.reindexBtn.Name = "reindexBtn";
-            this.reindexBtn.Size = new System.Drawing.Size(75, 23);
-            this.reindexBtn.TabIndex = 8;
-            this.reindexBtn.Text = "Reindex";
-            this.reindexBtn.UseVisualStyleBackColor = true;
-            this.reindexBtn.Click += new System.EventHandler(this.reindexBtn_Click);
-            // 
             // tabPageFileBasedTM
             // 
             this.tabPageFileBasedTM.Controls.Add(this.panel2);
@@ -257,6 +247,7 @@ namespace Sdl.Community.TMLifting
             this.cleanBtn.TabIndex = 6;
             this.cleanBtn.Text = "Clean";
             this.cleanBtn.UseVisualStyleBackColor = true;
+            this.cleanBtn.Click += new System.EventHandler(this.cleanBtn_Click);
             // 
             // cancelBtn
             // 
@@ -268,6 +259,7 @@ namespace Sdl.Community.TMLifting
             this.cancelBtn.TabIndex = 5;
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
+            this.cancelBtn.Click += new System.EventHandler(this.cancelBtn_Click);
             // 
             // upLiftCheckBox
             // 
@@ -300,6 +292,7 @@ namespace Sdl.Community.TMLifting
             this.chkLoadStudioTMs.TabIndex = 2;
             this.chkLoadStudioTMs.Text = "Load Studio TMs";
             this.chkLoadStudioTMs.UseVisualStyleBackColor = true;
+            this.chkLoadStudioTMs.CheckedChanged += new System.EventHandler(this.chkLoadStudioTMs_CheckedChanged);
             // 
             // btnBrowse
             // 
@@ -309,6 +302,7 @@ namespace Sdl.Community.TMLifting
             this.btnBrowse.TabIndex = 1;
             this.btnBrowse.Text = "Browse ...";
             this.btnBrowse.UseVisualStyleBackColor = true;
+            this.btnBrowse.Click += new System.EventHandler(this.btnBrowse_Click);
             // 
             // btnReindex
             // 
@@ -319,6 +313,14 @@ namespace Sdl.Community.TMLifting
             this.btnReindex.TabIndex = 0;
             this.btnReindex.Text = "Process";
             this.btnReindex.UseVisualStyleBackColor = true;
+            this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(76, 535);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(808, 23);
+            this.progressBar1.TabIndex = 4;
             // 
             // TMLiftingForm
             // 
@@ -352,7 +354,6 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.TabControl tabControlTMLifting;
 		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 		private System.Windows.Forms.BindingSource itemsBindingSource1;
-		private System.Windows.Forms.Button reindexBtn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
@@ -370,6 +371,7 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.CheckBox chkLoadStudioTMs;
 		private System.Windows.Forms.Button btnBrowse;
 		private System.Windows.Forms.Button btnReindex;
+		private System.Windows.Forms.ProgressBar progressBar1;
 	}
 }
 
