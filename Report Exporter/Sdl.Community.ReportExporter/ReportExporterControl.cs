@@ -30,14 +30,14 @@ namespace Sdl.Community.ReportExporter
 			InitializeComponent();
 			InitializeSettings();
 
-			projListbox.SelectedIndex = 0;
+			//projListbox.SelectedIndex = 0;
 			//projListbox.SelectionMode = SelectionMode.MultiSimple;
 			
 
 			
-			IsClipboardEnabled();
-			IsCsvBtnEnabled();
-			includeHeaderCheck.Checked = true;
+			//IsClipboardEnabled();
+			//IsCsvBtnEnabled();
+			
 
 		}
 
@@ -45,8 +45,11 @@ namespace Sdl.Community.ReportExporter
 		private void InitializeSettings()
 		{
 			//set for language list box check box should be checked/unchecked when row is selected
-			languagesListBox.CheckOnClick = true;
-
+			//languagesListBox.CheckOnClick = true;
+			copyBtn.Enabled = false;
+			csvBtn.Enabled = false;
+			targetBtn.Enabled = false;
+			includeHeaderCheck.Checked = true;
 			_projectXmlPath = Help.GetStudioProjectsPath();
 			_selectedProjectsForReport = new List<ReportDetails>();
 			LoadProjectsList();
@@ -66,7 +69,6 @@ namespace Sdl.Community.ReportExporter
 		{
 			InitializeComponent();
 			InitializeSettings();
-			projListbox.SelectionMode = SelectionMode.MultiSimple;
 
 			//convert projects from list into list model
 			var projectList = projListbox.Items.Cast<ProjectDetails>().ToList();
@@ -85,6 +87,7 @@ namespace Sdl.Community.ReportExporter
 			foreach (var index in selectedIndexList)
 			{
 				projListbox.SetSelected(index, true);
+				projListbox.SetItemCheckState(index,CheckState.Checked);
 			}
 		}
 
@@ -391,8 +394,9 @@ namespace Sdl.Community.ReportExporter
 				_selectedProjectsForReport.Clear();
 				_selectedProjectsFromStudioView.Clear();
 				projListbox.SelectedItems.Clear();
+				UncheckAllProjects();
 				languagesListBox.Items.Clear();
-				projListbox.SelectionMode = SelectionMode.One;
+				
 
 				MessageBox.Show(this, @"Export successful.", @"Export result", MessageBoxButtons.OK,
 					MessageBoxIcon.Information);
@@ -403,6 +407,14 @@ namespace Sdl.Community.ReportExporter
 				throw;
 			}
 	
+		}
+
+		private void UncheckAllProjects()
+		{
+			while (projListbox.CheckedIndices.Count > 0)
+			{
+				projListbox.SetItemChecked(projListbox.CheckedIndices[0], false);
+			}
 		}
 
 		/// <summary>

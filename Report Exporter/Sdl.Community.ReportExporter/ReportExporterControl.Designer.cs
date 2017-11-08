@@ -30,6 +30,9 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.label2 = new System.Windows.Forms.Label();
+			this.browseBtn = new System.Windows.Forms.Button();
+			this.reportOutputPath = new System.Windows.Forms.TextBox();
 			this.crossRep = new System.Windows.Forms.CheckBox();
 			this.contextMatch = new System.Windows.Forms.CheckBox();
 			this.perfectMatch = new System.Windows.Forms.CheckBox();
@@ -45,11 +48,8 @@
 			this.languagesListBox = new System.Windows.Forms.CheckedListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
-			this.projListbox = new System.Windows.Forms.ListBox();
+			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.reportOutputPath = new System.Windows.Forms.TextBox();
-			this.browseBtn = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -80,6 +80,33 @@
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(811, 455);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(458, 10);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(96, 13);
+			this.label2.TabIndex = 23;
+			this.label2.Text = "Report output path";
+			// 
+			// browseBtn
+			// 
+			this.browseBtn.Location = new System.Drawing.Point(693, 26);
+			this.browseBtn.Name = "browseBtn";
+			this.browseBtn.Size = new System.Drawing.Size(108, 23);
+			this.browseBtn.TabIndex = 22;
+			this.browseBtn.Text = "Browse";
+			this.browseBtn.UseVisualStyleBackColor = true;
+			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
+			// 
+			// reportOutputPath
+			// 
+			this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
+			this.reportOutputPath.Name = "reportOutputPath";
+			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
+			this.reportOutputPath.TabIndex = 21;
+			this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
 			// 
 			// crossRep
 			// 
@@ -209,6 +236,7 @@
 			// 
 			// languagesListBox
 			// 
+			this.languagesListBox.CheckOnClick = true;
 			this.languagesListBox.FormattingEnabled = true;
 			this.languagesListBox.Location = new System.Drawing.Point(249, 75);
 			this.languagesListBox.Name = "languagesListBox";
@@ -238,6 +266,7 @@
 			// 
 			// projListbox
 			// 
+			this.projListbox.CheckOnClick = true;
 			this.projListbox.FormattingEnabled = true;
 			this.projListbox.Location = new System.Drawing.Point(19, 30);
 			this.projListbox.Name = "projListbox";
@@ -253,33 +282,6 @@
 			this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
-			// 
-			// reportOutputPath
-			// 
-			this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
-			this.reportOutputPath.Name = "reportOutputPath";
-			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
-			this.reportOutputPath.TabIndex = 21;
-			this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
-			// 
-			// browseBtn
-			// 
-			this.browseBtn.Location = new System.Drawing.Point(693, 26);
-			this.browseBtn.Name = "browseBtn";
-			this.browseBtn.Size = new System.Drawing.Size(108, 23);
-			this.browseBtn.TabIndex = 22;
-			this.browseBtn.Text = "Browse";
-			this.browseBtn.UseVisualStyleBackColor = true;
-			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(458, 10);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(96, 13);
-			this.label2.TabIndex = 23;
-			this.label2.Text = "Report output path";
 			// 
 			// ReportExporterControl
 			// 
@@ -303,7 +305,6 @@
 
 		private System.Windows.Forms.Panel mainPanel;
 		private System.Windows.Forms.Label selectProjLbl;
-		private System.Windows.Forms.ListBox projListbox;
 		private System.Windows.Forms.CheckBox includeHeaderCheck;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckedListBox languagesListBox;
@@ -322,5 +323,6 @@
 		private System.Windows.Forms.Button browseBtn;
 		private System.Windows.Forms.TextBox reportOutputPath;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckedListBox projListbox;
 	}
 }
