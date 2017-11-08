@@ -86,6 +86,7 @@
             this.serverNameTxtBox.Name = "serverNameTxtBox";
             this.serverNameTxtBox.Size = new System.Drawing.Size(249, 20);
             this.serverNameTxtBox.TabIndex = 14;
+            this.serverNameTxtBox.TextChanged += new System.EventHandler(this.serverNameTxtBox_TextChanged);
             // 
             // label5
             // 
@@ -169,6 +170,7 @@
             this.btnOkServerBased.TabIndex = 3;
             this.btnOkServerBased.Text = "Ok";
             this.btnOkServerBased.UseVisualStyleBackColor = true;
+            this.btnOkServerBased.Click += new System.EventHandler(this.btnOkServerBased_Click);
             // 
             // cancelBtnServerBased
             // 
