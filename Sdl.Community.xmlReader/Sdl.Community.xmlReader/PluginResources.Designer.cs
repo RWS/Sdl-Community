@@ -39,7 +39,7 @@ namespace Sdl.Community.XmlReader {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.xmlReader.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.XmlReader.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -71,20 +71,11 @@ namespace Sdl.Community.XmlReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSTRUCTIONS.
+        ///   Looks up a localized string similar to Analyze Files.
         /// </summary>
-        public static string Instruction_Title {
+        public static string FileName {
             get {
-                return ResourceManager.GetString("Instruction_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report..
-        /// </summary>
-        public static string Instructions_Message {
-            get {
-                return ResourceManager.GetString("Instructions_Message", resourceCulture);
+                return ResourceManager.GetString("FileName", resourceCulture);
             }
         }
         
@@ -99,20 +90,11 @@ namespace Sdl.Community.XmlReader {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to xmlReader.
+        ///   Looks up a localized string similar to XmlReader.
         /// </summary>
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Reports.
-        /// </summary>
-        public static string Reports_Title {
-            get {
-                return ResourceManager.GetString("Reports_Title", resourceCulture);
             }
         }
     }

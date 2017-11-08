@@ -3,28 +3,13 @@ using Sdl.Community.XmlReader.Model;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sdl.Community.XmlReader.Data
+namespace Sdl.Community.XmlReader.Repository
 {
-    public class LocalDatabase
+    public static class XmlFilesRepository
     {
-        private static List<TargetLanguageCode> _languageCodes;
+        private static List<TargetLanguageCode> _languageCodes = new List<TargetLanguageCode>();
 
-        public LocalDatabase()
-        {
-            _languageCodes = new List<TargetLanguageCode>();
-        }
-
-        public static void MockLanguageCodes()
-        {
-            _languageCodes = new List<TargetLanguageCode>();
-
-            AddFile(@"C:\Users\lparaschivescu\Downloads\Analyze Files de-DE_en-GB.xml");
-            AddFile(@"C:\Users\lparaschivescu\Downloads\Analyze Files en-US_en-GB.xml");
-            AddFile(@"C:\Users\lparaschivescu\Downloads\Analyze Files en-GB_it-IT.xml");
-            AddFile(@"C:\Users\lparaschivescu\Downloads\Analyze Files en-US_az-Cyrl-AZ - Copy.xml");
-        }
-
-        public static void AddFile(string analyzeFilePath)
+        public static TargetLanguageCode AddFile(string analyzeFilePath)
         {
             var languageCode = Helper.GetTargetLanguageCode(Helper.GetFileName(analyzeFilePath));
             var targetLanguageCode = _languageCodes.FirstOrDefault(x => x.LanguageCode.Equals(languageCode));
@@ -46,9 +31,10 @@ namespace Sdl.Community.XmlReader.Data
                 Path = analyzeFilePath
             });
 
+            return targetLanguageCode;
         }
 
-        public void DeleteFile(string languageCode, string fileName)
+        public static void DeleteFile(string languageCode, string fileName)
         {
             var targetLanguageCode = _languageCodes.FirstOrDefault(x => x.LanguageCode.Equals(languageCode));
             if (targetLanguageCode == null) return;
@@ -59,7 +45,7 @@ namespace Sdl.Community.XmlReader.Data
             targetLanguageCode.AnalyzeFiles.Remove(analyzeFile);
         }
 
-        public void ResetLanguageCodes() { _languageCodes.Clear(); }
+        public static void ResetLanguageCodes() { _languageCodes.Clear(); }
 
         public static List<TargetLanguageCode> GetLanguageCodes() { return _languageCodes; }
 

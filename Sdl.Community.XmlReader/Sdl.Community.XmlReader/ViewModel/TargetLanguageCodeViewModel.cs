@@ -1,5 +1,4 @@
-﻿using Sdl.Community.XmlReader.Data;
-using Sdl.Community.XmlReader.Model;
+﻿using Sdl.Community.XmlReader.Model;
 
 namespace Sdl.Community.XmlReader
 {
@@ -12,14 +11,14 @@ namespace Sdl.Community.XmlReader
             _targetLanguageCode = targetLanguageCode;
         }
 
-        public string TargetLanguageCode { get { return _targetLanguageCode.LanguageCode; } }
-
-        protected override void LoadChildren()
+        public string TargetLanguageCode
         {
-            foreach (AnalyzeFile analyzeFile in LocalDatabase.GetAnalyzeFilesByLanguageCode(_targetLanguageCode.LanguageCode))
-            {
-                base.Children.Add(new AnalyzeFileViewModel(analyzeFile, this));
-            }
+            get { return _targetLanguageCode.LanguageCode; }
+        }
+
+        public void AddChild(AnalyzeFile analyzeFile)
+        {
+            Children.Add(new AnalyzeFileViewModel(analyzeFile, this));
         }
     }
 }
