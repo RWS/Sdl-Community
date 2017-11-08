@@ -6,23 +6,20 @@ using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.XmlReader
 {
-    [RibbonGroup("Sdl.Community.xmlReaderRibbonButton", Name = "", ContextByType = typeof(ProjectsController))]
+    [RibbonGroup("Sdl.Community.XmlReaderRibbonButton", Name = "", ContextByType = typeof(ProjectsController))]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
     public class XmlReaderRibbonGroup : AbstractRibbonGroup
     {
     }
 
-    [Action("Sdl.Community.xmlReader.GenerateXmlReaderAction", Name = "xml Reader", Icon = "logo", Description = "Read xml files and export them as Excel...")]
+    [Action("Sdl.Community.XmlReader.GenerateXmlReaderAction", Name = "xml Reader", Icon = "logo", Description = "Read xml files and export them as Excel...")]
     [ActionLayout(typeof(XmlReaderRibbonGroup), 250, DisplayType.Large)]
     class GenerateXmlReaderAction : AbstractAction
     {
         protected override void Execute()
         {
             var xmlReaderWindow = new MainWindow();
-            xmlReaderWindow.Show();
-            //var xmlReaderForm = new XmlReaderForm();
-            //var parent = xmlReaderForm.ParentForm;
-            //xmlReaderForm.ShowDialog(parent);
+            xmlReaderWindow.ShowDialog();
         }
     }
 }

@@ -122,18 +122,12 @@
     <value>Resources\logo.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>xmlReader</value>
-  </data>
-  <data name="Instructions_Message" xml:space="preserve">
-    <value>Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report.</value>
-  </data>
-  <data name="Instruction_Title" xml:space="preserve">
-    <value>INSTRUCTIONS</value>
-  </data>
-  <data name="Reports_Title" xml:space="preserve">
-    <value>Reports</value>
+    <value>XmlReader</value>
   </data>
   <data name="_default" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\default.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Analyze Files</value>
   </data>
 </root>

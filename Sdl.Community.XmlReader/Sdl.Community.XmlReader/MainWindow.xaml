@@ -6,7 +6,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.Community.XmlReader"
         mc:Ignorable="d"
-        Title="Xml Reader" Height="289.195" Width="376.695">
+        Title="Xml Reader" Height="349.959" Width="483.596"
+        Closing="MainWindow_Closing" FontSize="14">
+
+    <Window.Resources>
+        <Style x:Key="labelStyle" TargetType="{x:Type Label}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <Style x:Key="buttonStyle" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontFamily" Value="Arial"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Background" Value="#5078C8"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" 
+                            BorderThickness="2"
+                            Padding="4,2" 
+                            BorderBrush="#FFFF" 
+                            CornerRadius="3" 
+                            Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="BorderBrush" Value="#4682B4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
 
     <Grid Margin="0,0,0,0">
         <Grid.RowDefinitions>
@@ -18,12 +55,12 @@
             <ColumnDefinition Width="7*"/>
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        <Label Name="ReportLabel">Report</Label>
+        <Label Style="{StaticResource labelStyle}">Reports</Label>
         <GroupBox Grid.Row="1" Name="XmlFiles" Header="Group by languages">
-            <TreeView BorderThickness="0" ItemsSource="{Binding XmlFiles}">
+            <TreeView BorderThickness="0" ItemsSource="{Binding XmlFiles}" AllowDrop="True" Drop="treeView_Drop" DragEnter="treeView_DragEnter">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsExpanded" Value="True"/>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                         <Setter Property="FontWeight" Value="Normal"/>
                         <Style.Triggers>
@@ -47,11 +84,9 @@
                 </TreeView.Resources>
             </TreeView>
         </GroupBox>
-        <Button Grid.Row="2" BorderThickness="0" Margin="2" Background="LightBlue">Clean all</Button>
-        <Label Grid.Column="1" Name="InstructionLabel">INSTRUCTIONS</Label>
-        <TextBox Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,10,0,0" BorderThickness="0">Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report.</TextBox>
-        <Button Grid.Row="2" Grid.Column="1" BorderThickness="0" Margin="2" Background="LightBlue">Excel</Button>
+        <Button Style="{StaticResource buttonStyle}" Grid.Row="2" Click="buttonCleanAll_Click">Clean all</Button>
+        <Label Grid.Column="1" Style="{StaticResource labelStyle}">INSTRUCTIONS</Label>
+        <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,10,0,0" Text="Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report."></TextBlock>
+        <Button Style="{StaticResource buttonStyle}" Grid.Row="2" Grid.Column="1">Excel</Button>
     </Grid>
-
-
 </Window>

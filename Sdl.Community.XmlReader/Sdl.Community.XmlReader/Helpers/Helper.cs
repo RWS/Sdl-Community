@@ -1,5 +1,4 @@
-﻿using Sdl.Community.XmlReader.Properties;
-using System.IO;
+﻿using System.IO;
 
 namespace Sdl.Community.XmlReader.Helpers
 {
@@ -15,7 +14,7 @@ namespace Sdl.Community.XmlReader.Helpers
         {
             var fileName = GetFileName(filePath);
 
-            if (!fileName.Contains(Resources.FileName))
+            if (!fileName.Contains(PluginResources.FileName))
             {
                 return null;
             }
