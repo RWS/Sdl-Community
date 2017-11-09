@@ -30,6 +30,8 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.browseBtn = new System.Windows.Forms.Button();
 			this.reportOutputPath = new System.Windows.Forms.TextBox();
@@ -50,13 +52,15 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
+			this.loadBtn = new System.Windows.Forms.Button();
+			this.clearBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.clearBtn);
+			this.mainPanel.Controls.Add(this.loadBtn);
 			this.mainPanel.Controls.Add(this.projectStatusComboBox);
 			this.mainPanel.Controls.Add(this.label3);
 			this.mainPanel.Controls.Add(this.label2);
@@ -84,6 +88,28 @@
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(811, 455);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// projectStatusComboBox
+			// 
+			this.projectStatusComboBox.FormattingEnabled = true;
+			this.projectStatusComboBox.Items.AddRange(new object[] {
+            "All",
+            "InProgress",
+            "Completed"});
+			this.projectStatusComboBox.Location = new System.Drawing.Point(458, 76);
+			this.projectStatusComboBox.Name = "projectStatusComboBox";
+			this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
+			this.projectStatusComboBox.TabIndex = 25;
+			this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.projectStatusComboBox_SelectedIndexChanged);
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(458, 59);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(71, 13);
+			this.label3.TabIndex = 24;
+			this.label3.Text = "Project status";
 			// 
 			// label2
 			// 
@@ -287,27 +313,25 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
-			// label3
+			// loadBtn
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(458, 59);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(71, 13);
-			this.label3.TabIndex = 24;
-			this.label3.Text = "Project status";
+			this.loadBtn.Location = new System.Drawing.Point(694, 147);
+			this.loadBtn.Name = "loadBtn";
+			this.loadBtn.Size = new System.Drawing.Size(105, 23);
+			this.loadBtn.TabIndex = 26;
+			this.loadBtn.Text = "Load projects";
+			this.loadBtn.UseVisualStyleBackColor = true;
+			this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
 			// 
-			// projectStatusComboBox
+			// clearBtn
 			// 
-			this.projectStatusComboBox.FormattingEnabled = true;
-			this.projectStatusComboBox.Items.AddRange(new object[] {
-            "All",
-            "InProgress",
-            "Completed"});
-			this.projectStatusComboBox.Location = new System.Drawing.Point(458, 76);
-			this.projectStatusComboBox.Name = "projectStatusComboBox";
-			this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
-			this.projectStatusComboBox.TabIndex = 25;
-			this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.projectStatusComboBox_SelectedIndexChanged);
+			this.clearBtn.Location = new System.Drawing.Point(693, 177);
+			this.clearBtn.Name = "clearBtn";
+			this.clearBtn.Size = new System.Drawing.Size(106, 23);
+			this.clearBtn.TabIndex = 27;
+			this.clearBtn.Text = "Clear external list";
+			this.clearBtn.UseVisualStyleBackColor = true;
+			this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
 			// 
 			// ReportExporterControl
 			// 
@@ -352,5 +376,7 @@
 		private System.Windows.Forms.CheckedListBox projListbox;
 		private System.Windows.Forms.ComboBox projectStatusComboBox;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button loadBtn;
+		private System.Windows.Forms.Button clearBtn;
 	}
 }
