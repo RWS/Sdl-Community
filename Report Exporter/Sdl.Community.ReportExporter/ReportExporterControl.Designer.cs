@@ -50,11 +50,15 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
+			this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.projectStatusComboBox);
+			this.mainPanel.Controls.Add(this.label3);
 			this.mainPanel.Controls.Add(this.label2);
 			this.mainPanel.Controls.Add(this.browseBtn);
 			this.mainPanel.Controls.Add(this.reportOutputPath);
@@ -283,6 +287,28 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(458, 59);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(71, 13);
+			this.label3.TabIndex = 24;
+			this.label3.Text = "Project status";
+			// 
+			// projectStatusComboBox
+			// 
+			this.projectStatusComboBox.FormattingEnabled = true;
+			this.projectStatusComboBox.Items.AddRange(new object[] {
+            "All",
+            "InProgress",
+            "Completed"});
+			this.projectStatusComboBox.Location = new System.Drawing.Point(458, 76);
+			this.projectStatusComboBox.Name = "projectStatusComboBox";
+			this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
+			this.projectStatusComboBox.TabIndex = 25;
+			this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.projectStatusComboBox_SelectedIndexChanged);
+			// 
 			// ReportExporterControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,5 +350,7 @@
 		private System.Windows.Forms.TextBox reportOutputPath;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckedListBox projListbox;
+		private System.Windows.Forms.ComboBox projectStatusComboBox;
+		private System.Windows.Forms.Label label3;
 	}
 }

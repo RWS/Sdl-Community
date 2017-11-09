@@ -23,7 +23,8 @@ namespace Sdl.Community.ReportExporter
 		private  string _projectXmlPath;
 		private  List<ReportDetails> _selectedProjectsForReport;
 		private  OptionalInformation _optionalInformation;
-		private List<ProjectDetails> _selectedProjectsFromStudioView = new List<ProjectDetails>();
+		private List<ProjectDetails> _allStudioProjectsDetails;
+		private readonly List<ProjectDetails> _selectedProjectsFromStudioView = new List<ProjectDetails>();
 
 		public ReportExporterControl()
 		{
@@ -40,6 +41,8 @@ namespace Sdl.Community.ReportExporter
 			includeHeaderCheck.Checked = true;
 			_projectXmlPath = Help.GetStudioProjectsPath();
 			_selectedProjectsForReport = new List<ReportDetails>();
+			_allStudioProjectsDetails = new List<ProjectDetails>();
+			projectStatusComboBox.SelectedIndex = 0;
 			LoadProjectsList();
 
 			_optionalInformation = new OptionalInformation
@@ -144,7 +147,9 @@ namespace Sdl.Community.ReportExporter
 				var projectInfo = ((XmlNode) item).SelectSingleNode("./ProjectInfo");
 				if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
 				{
-					projListbox.Items.Add(CreateProjectDetails((XmlNode) item));
+					var projectDetails = CreateProjectDetails((XmlNode) item);
+					projListbox.Items.Add(projectDetails);
+					_allStudioProjectsDetails.Add(projectDetails);
 				}
 			}
 
@@ -493,6 +498,38 @@ namespace Sdl.Community.ReportExporter
 				selectedProject.ReportPath = reportPath;
 			}
 			
+		}
+
+		private void projectStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var selectedStatus = ((ComboBox) sender).SelectedItem;
+
+			if (selectedStatus.Equals("InProgress"))
+			{
+				var inProgressProjects = _allStudioProjectsDetails.Where(s => s.Status.Equals("InProgress")).ToList();
+				projListbox.Items.Clear();
+				foreach (var project in inProgressProjects)
+				{
+					projListbox.Items.Add(project, false);
+				}
+			}
+			if (selectedStatus.Equals("Completed"))
+			{
+				var inProgressProjects = _allStudioProjectsDetails.Where(s => s.Status.Equals("Completed")).ToList();
+				projListbox.Items.Clear();
+				foreach (var project in inProgressProjects)
+				{
+					projListbox.Items.Add(project, false);
+				}
+			}
+			if (selectedStatus.Equals("All"))
+			{
+				projListbox.Items.Clear();
+				foreach (var project in _allStudioProjectsDetails)
+				{
+					projListbox.Items.Add(project, false);
+				}
+			}
 		}
 	}
 }
