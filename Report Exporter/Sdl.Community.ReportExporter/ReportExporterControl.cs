@@ -29,23 +29,11 @@ namespace Sdl.Community.ReportExporter
 		{
 			InitializeComponent();
 			InitializeSettings();
-
-			//projListbox.SelectedIndex = 0;
-			//projListbox.SelectionMode = SelectionMode.MultiSimple;
-			
-
-			
-			//IsClipboardEnabled();
-			//IsCsvBtnEnabled();
-			
-
 		}
 
 
 		private void InitializeSettings()
 		{
-			//set for language list box check box should be checked/unchecked when row is selected
-			//languagesListBox.CheckOnClick = true;
 			copyBtn.Enabled = false;
 			csvBtn.Enabled = false;
 			targetBtn.Enabled = false;
@@ -191,6 +179,8 @@ namespace Sdl.Community.ReportExporter
 					(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
 				projectDetails.ProjectPath = projectsFolderPath + projectFolderPath;
 			}
+			var projectStatus = ProjectInformation.GetProjectStatus(projectDetails.ProjectPath);
+			projectDetails.Status = projectStatus;
 			return projectDetails;
 		}
 
