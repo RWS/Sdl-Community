@@ -96,6 +96,23 @@ namespace Sdl.Community.TMBackup
 			}			
 		}
 
+		public void UpdateBackupDetailsForm(List<BackupDetailsModel> backupDetailsModelList)
+		{
+			CheckIfJsonFileExist();
+
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+			if(request != null && request.BackupDetailsModelList.Any())
+			{
+				request.BackupDetailsModelList.Clear();
+				request.BackupDetailsModelList = backupDetailsModelList;
+
+				var json = JsonConvert.SerializeObject(request);
+				File.WriteAllText(_persistancePath, json);
+			}
+		}
+
 		public void DeleteDetailsFromInfo(List<BackupDetailsModel> removedBackupDetailsList)
 		{
 			CheckIfJsonFileExist();

@@ -6,6 +6,7 @@
   <Author></Author>
   <Include>
     <File>Newtonsoft.Json.dll</File>
+    <File>ASquare.WindowsTaskScheduler.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>
