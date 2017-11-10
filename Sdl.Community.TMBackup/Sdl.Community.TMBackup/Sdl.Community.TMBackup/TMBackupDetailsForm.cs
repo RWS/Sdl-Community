@@ -66,6 +66,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_UpArrow_Click(object sender, EventArgs e)
 		{
+			// To do: refactorize functionality into MoveRow method for both DownArrow and UpArrow
 			//MoveRow(true);
 
 			_backupDetailsModelList.Clear();
@@ -73,7 +74,10 @@ namespace Sdl.Community.TMBackup
 
 			foreach (DataGridViewRow row in dataGridView1.Rows)
 			{
-				rowList.Add(row);
+				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[2].Value.ToString()))
+				{
+					rowList.Add(row);
+				}
 			}
 
 			if (dataGridView1.RowCount <= 0 || dataGridView1.SelectedRows.Count <= 0)
@@ -110,8 +114,9 @@ namespace Sdl.Community.TMBackup
 
 			GetBackupDetailsInfo();
 
-			//dataGridView1.ClearSelection();
-			//dataGridView1.Rows[index - 1].Selected = true;
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[index - 1].Selected = true;
+			dataGridView1.CurrentCell = dataGridView1.Rows[index - 1].Cells[0];
 		}
 
 		private void btn_Ok_Click(object sender, EventArgs e)
@@ -157,7 +162,7 @@ namespace Sdl.Community.TMBackup
 			bool isEmptyRow = false;
 			foreach (DataGridViewCell cell in dataGrid.Rows[dataGrid.Rows.Count - 1].Cells)
 			{
-				if (string.IsNullOrEmpty(cell.Value.ToString()))
+				if (cell.Value == null)
 				{
 					isEmptyRow = true;
 				}
