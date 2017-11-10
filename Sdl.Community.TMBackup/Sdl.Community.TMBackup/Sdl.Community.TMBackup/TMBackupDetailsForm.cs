@@ -61,7 +61,57 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_DownArrow_Click(object sender, EventArgs e)
 		{
-			MoveRow(false);
+			//MoveRow(false);
+
+			_backupDetailsModelList.Clear();
+			BindingList<DataGridViewRow> rowList = new BindingList<DataGridViewRow>();
+
+			foreach (DataGridViewRow row in dataGridView1.Rows)
+			{
+				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[2].Value.ToString()))
+				{
+					rowList.Add(row);
+				}
+			}
+
+			if (dataGridView1.RowCount <= 0 || dataGridView1.SelectedRows.Count <= 0)
+			{
+				return;
+			}
+
+			// check if selected row is the last row with values from the grid
+			var index = dataGridView1.SelectedCells[0].OwningRow.Index;			
+			if (index == dataGridView1.Rows.Count - 2)
+			{
+				return;
+			}
+
+			var nextRow = rowList[index + 1];
+			rowList.Remove(nextRow);
+			rowList.Insert(index, nextRow);
+
+			var bindingSource = new BindingSource();
+			bindingSource.DataSource = rowList;
+
+			foreach (DataGridViewRow item in bindingSource)
+			{
+				BackupDetailsModel bdm = new BackupDetailsModel();
+				bdm.BackupAction = item.Cells[0].Value != null ? item.Cells[0].Value.ToString() : null;
+				bdm.BackupType = item.Cells[1].Value != null ? item.Cells[1].Value.ToString() : null;
+				bdm.BackupPattern = item.Cells[2].Value != null ? item.Cells[2].Value.ToString() : null;
+
+				_backupDetailsModelList.Add(bdm);
+			}
+			dataGridView1.DataSource = _backupDetailsModelList;
+
+			Persistence persistence = new Persistence();
+			persistence.UpdateBackupDetailsForm(_backupDetailsModelList);
+
+			GetBackupDetailsInfo();
+
+			dataGridView1.ClearSelection();
+			dataGridView1.Rows[index + 1].Selected = true;
+			dataGridView1.CurrentCell = dataGridView1.Rows[index + 1].Cells[0];
 		}
 
 		private void btn_UpArrow_Click(object sender, EventArgs e)
