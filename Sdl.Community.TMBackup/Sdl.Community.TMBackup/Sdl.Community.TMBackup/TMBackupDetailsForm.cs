@@ -60,63 +60,50 @@ namespace Sdl.Community.TMBackup
 		}
 
 		private void btn_DownArrow_Click(object sender, EventArgs e)
-		{
-			MoveRow(false);
+		{			
+			var rowList = AddRowsToList();
+			if (rowList != null)
+			{
+				// check if selected row is the last row with values from the grid
+				var index = dataGridView1.SelectedCells[0].OwningRow.Index;
+				if (index == dataGridView1.Rows.Count - 2)
+				{
+					return;
+				}
+
+				// move selected row down
+				var nextRow = rowList[index + 1];
+				rowList.Remove(nextRow);
+				rowList.Insert(index, nextRow);
+
+				AddRowsInformation(rowList);
+
+				dataGridView1.Rows[index + 1].Selected = true;
+				dataGridView1.CurrentCell = dataGridView1.Rows[index + 1].Cells[0];
+			}
 		}
 
 		private void btn_UpArrow_Click(object sender, EventArgs e)
-		{
-			// To do: refactorize functionality into MoveRow method for both DownArrow and UpArrow
-			//MoveRow(true);
-
-			_backupDetailsModelList.Clear();
-			BindingList<DataGridViewRow> rowList = new BindingList<DataGridViewRow>();
-
-			foreach (DataGridViewRow row in dataGridView1.Rows)
+		{		
+			var rowList = AddRowsToList();
+			if (rowList != null)
 			{
-				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[2].Value.ToString()))
+				var index = dataGridView1.SelectedCells[0].OwningRow.Index;
+				if (index == 0)
 				{
-					rowList.Add(row);
+					return;
 				}
+
+				// move selected row up
+				var prevRow = rowList[index - 1];
+				rowList.Remove(prevRow);
+				rowList.Insert(index, prevRow);
+
+				AddRowsInformation(rowList);
+							
+				dataGridView1.Rows[index - 1].Selected = true;
+				dataGridView1.CurrentCell = dataGridView1.Rows[index - 1].Cells[0];
 			}
-
-			if (dataGridView1.RowCount <= 0 || dataGridView1.SelectedRows.Count <= 0)
-			{
-				return;
-			}
-
-			var index = dataGridView1.SelectedCells[0].OwningRow.Index;
-			if (index == 0)
-			{
-				return;
-			}
-
-			var prevRow = rowList[index - 1];
-			rowList.Remove(prevRow);
-			rowList.Insert(index, prevRow);
-
-			var bindingSource = new BindingSource();
-			bindingSource.DataSource = rowList;
-
-			foreach (DataGridViewRow item in bindingSource)
-			{
-				BackupDetailsModel bdm = new BackupDetailsModel();
-				bdm.BackupAction = item.Cells[0].Value != null ? item.Cells[0].Value.ToString() : null;
-				bdm.BackupType = item.Cells[1].Value != null ? item.Cells[1].Value.ToString() : null;
-				bdm.BackupPattern = item.Cells[2].Value != null ? item.Cells[2].Value.ToString() : null;
-
-				_backupDetailsModelList.Add(bdm);
-			}
-			dataGridView1.DataSource = _backupDetailsModelList;
-
-			Persistence persistence = new Persistence();
-			persistence.UpdateBackupDetailsForm(_backupDetailsModelList);
-
-			GetBackupDetailsInfo();
-
-			dataGridView1.ClearSelection();
-			dataGridView1.Rows[index - 1].Selected = true;
-			dataGridView1.CurrentCell = dataGridView1.Rows[index - 1].Cells[0];
 		}
 
 		private void btn_Ok_Click(object sender, EventArgs e)
@@ -230,40 +217,29 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		private void MoveRow(bool isPreviewsRow)
+		// Add rows to a BindingList which can be used when moving up/down the selected row on the grid
+		private BindingList<DataGridViewRow> AddRowsToList()
 		{
 			_backupDetailsModelList.Clear();
 			BindingList<DataGridViewRow> rowList = new BindingList<DataGridViewRow>();
 
 			foreach (DataGridViewRow row in dataGridView1.Rows)
 			{
-				rowList.Add(row);
+				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[2].Value.ToString()))
+				{
+					rowList.Add(row);
+				}
 			}
-
 			if (dataGridView1.RowCount <= 0 || dataGridView1.SelectedRows.Count <= 0)
 			{
-				return;
+				return null;
 			}
+			return rowList;
+		}
 
-			var index = dataGridView1.SelectedCells[0].OwningRow.Index;
-			if (index == 0)
-			{
-				return;
-			}
-
-			if (isPreviewsRow)
-			{
-				var prevRow = rowList[index - 1];
-				rowList.Remove(prevRow);
-				rowList.Insert(index, prevRow);
-			}
-			else
-			{
-				var nextRow = rowList[index + 1];
-				rowList.Remove(nextRow);
-				rowList.Insert(index, nextRow);
-			}
-
+		// Add rows information from grid to a BindingList which will be used as data source when moving row up/down
+		private void AddRowsInformation(BindingList<DataGridViewRow> rowList)
+		{
 			var bindingSource = new BindingSource();
 			bindingSource.DataSource = rowList;
 
@@ -278,8 +254,11 @@ namespace Sdl.Community.TMBackup
 			}
 			dataGridView1.DataSource = _backupDetailsModelList;
 
+			Persistence persistence = new Persistence();
+			persistence.UpdateBackupDetailsForm(_backupDetailsModelList);
+
+			GetBackupDetailsInfo();
 			dataGridView1.ClearSelection();
-			dataGridView1.Rows[index - 1].Selected = true;
 		}
 	}
 }
