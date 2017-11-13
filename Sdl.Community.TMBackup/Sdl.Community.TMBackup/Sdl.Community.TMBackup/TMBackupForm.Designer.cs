@@ -63,7 +63,7 @@
             // btn_BackupFrom
             // 
             this.btn_BackupFrom.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_BackupFrom.Location = new System.Drawing.Point(511, 63);
+            this.btn_BackupFrom.Location = new System.Drawing.Point(511, 68);
             this.btn_BackupFrom.Name = "btn_BackupFrom";
             this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
             this.btn_BackupFrom.TabIndex = 3;
@@ -74,7 +74,7 @@
             // btn_BackupTo
             // 
             this.btn_BackupTo.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_BackupTo.Location = new System.Drawing.Point(511, 138);
+            this.btn_BackupTo.Location = new System.Drawing.Point(511, 135);
             this.btn_BackupTo.Name = "btn_BackupTo";
             this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
             this.btn_BackupTo.TabIndex = 4;
@@ -140,7 +140,7 @@
             // btn_SaveSettings
             // 
             this.btn_SaveSettings.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_SaveSettings.Location = new System.Drawing.Point(401, 357);
+            this.btn_SaveSettings.Location = new System.Drawing.Point(401, 354);
             this.btn_SaveSettings.Name = "btn_SaveSettings";
             this.btn_SaveSettings.Size = new System.Drawing.Size(104, 27);
             this.btn_SaveSettings.TabIndex = 18;
@@ -151,7 +151,7 @@
             // btn_Cancel
             // 
             this.btn_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Cancel.Location = new System.Drawing.Point(511, 357);
+            this.btn_Cancel.Location = new System.Drawing.Point(511, 354);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(104, 27);
             this.btn_Cancel.TabIndex = 19;
@@ -162,7 +162,7 @@
             // btn_Change
             // 
             this.btn_Change.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Change.Location = new System.Drawing.Point(511, 288);
+            this.btn_Change.Location = new System.Drawing.Point(511, 285);
             this.btn_Change.Name = "btn_Change";
             this.btn_Change.Size = new System.Drawing.Size(104, 27);
             this.btn_Change.TabIndex = 25;
@@ -173,7 +173,7 @@
             // btn_Details
             // 
             this.btn_Details.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Details.Location = new System.Drawing.Point(511, 255);
+            this.btn_Details.Location = new System.Drawing.Point(511, 252);
             this.btn_Details.Name = "btn_Details";
             this.btn_Details.Size = new System.Drawing.Size(104, 27);
             this.btn_Details.TabIndex = 24;
@@ -249,7 +249,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(627, 401);
+            this.ClientSize = new System.Drawing.Size(627, 394);
             this.Controls.Add(this.lbl_Line1);
             this.Controls.Add(this.lbl_Line2);
             this.Controls.Add(this.txt_Description);

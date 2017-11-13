@@ -18,6 +18,7 @@ namespace Sdl.Community.ReportExporter.Model
 			ProjectPath = projectPath;
 		}
 
+		public string Status { get; set; }
 		public string ProjectName
 		{
 			get;

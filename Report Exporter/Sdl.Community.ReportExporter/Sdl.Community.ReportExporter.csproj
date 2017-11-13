@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Community.Toolkit.Core, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.6.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
@@ -94,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Help.cs" />
+    <Compile Include="Helpers\ProjectInformation.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\StudioAnalysisReport.cs" />
     <Compile Include="Model\AnalyzedFile.cs" />

@@ -30,6 +30,11 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
+			this.label3 = new System.Windows.Forms.Label();
+			this.label2 = new System.Windows.Forms.Label();
+			this.browseBtn = new System.Windows.Forms.Button();
+			this.reportOutputPath = new System.Windows.Forms.TextBox();
 			this.crossRep = new System.Windows.Forms.CheckBox();
 			this.contextMatch = new System.Windows.Forms.CheckBox();
 			this.perfectMatch = new System.Windows.Forms.CheckBox();
@@ -45,16 +50,19 @@
 			this.languagesListBox = new System.Windows.Forms.CheckedListBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
-			this.projListbox = new System.Windows.Forms.ListBox();
+			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.reportOutputPath = new System.Windows.Forms.TextBox();
-			this.browseBtn = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
+			this.loadBtn = new System.Windows.Forms.Button();
+			this.clearBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.clearBtn);
+			this.mainPanel.Controls.Add(this.loadBtn);
+			this.mainPanel.Controls.Add(this.projectStatusComboBox);
+			this.mainPanel.Controls.Add(this.label3);
 			this.mainPanel.Controls.Add(this.label2);
 			this.mainPanel.Controls.Add(this.browseBtn);
 			this.mainPanel.Controls.Add(this.reportOutputPath);
@@ -80,6 +88,55 @@
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(811, 455);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// projectStatusComboBox
+			// 
+			this.projectStatusComboBox.FormattingEnabled = true;
+			this.projectStatusComboBox.Items.AddRange(new object[] {
+            "All",
+            "InProgress",
+            "Completed"});
+			this.projectStatusComboBox.Location = new System.Drawing.Point(458, 76);
+			this.projectStatusComboBox.Name = "projectStatusComboBox";
+			this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
+			this.projectStatusComboBox.TabIndex = 25;
+			this.projectStatusComboBox.SelectedIndexChanged += new System.EventHandler(this.projectStatusComboBox_SelectedIndexChanged);
+			// 
+			// label3
+			// 
+			this.label3.AutoSize = true;
+			this.label3.Location = new System.Drawing.Point(458, 59);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(71, 13);
+			this.label3.TabIndex = 24;
+			this.label3.Text = "Project status";
+			// 
+			// label2
+			// 
+			this.label2.AutoSize = true;
+			this.label2.Location = new System.Drawing.Point(458, 10);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(96, 13);
+			this.label2.TabIndex = 23;
+			this.label2.Text = "Report output path";
+			// 
+			// browseBtn
+			// 
+			this.browseBtn.Location = new System.Drawing.Point(693, 26);
+			this.browseBtn.Name = "browseBtn";
+			this.browseBtn.Size = new System.Drawing.Size(108, 23);
+			this.browseBtn.TabIndex = 22;
+			this.browseBtn.Text = "Browse";
+			this.browseBtn.UseVisualStyleBackColor = true;
+			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
+			// 
+			// reportOutputPath
+			// 
+			this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
+			this.reportOutputPath.Name = "reportOutputPath";
+			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
+			this.reportOutputPath.TabIndex = 21;
+			this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
 			// 
 			// crossRep
 			// 
@@ -209,6 +266,7 @@
 			// 
 			// languagesListBox
 			// 
+			this.languagesListBox.CheckOnClick = true;
 			this.languagesListBox.FormattingEnabled = true;
 			this.languagesListBox.Location = new System.Drawing.Point(249, 75);
 			this.languagesListBox.Name = "languagesListBox";
@@ -238,6 +296,7 @@
 			// 
 			// projListbox
 			// 
+			this.projListbox.CheckOnClick = true;
 			this.projListbox.FormattingEnabled = true;
 			this.projListbox.Location = new System.Drawing.Point(19, 30);
 			this.projListbox.Name = "projListbox";
@@ -254,32 +313,25 @@
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
 			// 
-			// reportOutputPath
+			// loadBtn
 			// 
-			this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
-			this.reportOutputPath.Name = "reportOutputPath";
-			this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
-			this.reportOutputPath.TabIndex = 21;
-			this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
+			this.loadBtn.Location = new System.Drawing.Point(694, 147);
+			this.loadBtn.Name = "loadBtn";
+			this.loadBtn.Size = new System.Drawing.Size(105, 23);
+			this.loadBtn.TabIndex = 26;
+			this.loadBtn.Text = "Load projects";
+			this.loadBtn.UseVisualStyleBackColor = true;
+			this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
 			// 
-			// browseBtn
+			// clearBtn
 			// 
-			this.browseBtn.Location = new System.Drawing.Point(693, 26);
-			this.browseBtn.Name = "browseBtn";
-			this.browseBtn.Size = new System.Drawing.Size(108, 23);
-			this.browseBtn.TabIndex = 22;
-			this.browseBtn.Text = "Browse";
-			this.browseBtn.UseVisualStyleBackColor = true;
-			this.browseBtn.Click += new System.EventHandler(this.browseBtn_Click);
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(458, 10);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(96, 13);
-			this.label2.TabIndex = 23;
-			this.label2.Text = "Report output path";
+			this.clearBtn.Location = new System.Drawing.Point(693, 177);
+			this.clearBtn.Name = "clearBtn";
+			this.clearBtn.Size = new System.Drawing.Size(106, 23);
+			this.clearBtn.TabIndex = 27;
+			this.clearBtn.Text = "Clear external list";
+			this.clearBtn.UseVisualStyleBackColor = true;
+			this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
 			// 
 			// ReportExporterControl
 			// 
@@ -303,7 +355,6 @@
 
 		private System.Windows.Forms.Panel mainPanel;
 		private System.Windows.Forms.Label selectProjLbl;
-		private System.Windows.Forms.ListBox projListbox;
 		private System.Windows.Forms.CheckBox includeHeaderCheck;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.CheckedListBox languagesListBox;
@@ -322,5 +373,10 @@
 		private System.Windows.Forms.Button browseBtn;
 		private System.Windows.Forms.TextBox reportOutputPath;
 		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckedListBox projListbox;
+		private System.Windows.Forms.ComboBox projectStatusComboBox;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Button loadBtn;
+		private System.Windows.Forms.Button clearBtn;
 	}
 }
