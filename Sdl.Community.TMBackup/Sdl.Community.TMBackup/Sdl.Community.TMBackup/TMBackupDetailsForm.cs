@@ -9,19 +9,29 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupDetailsForm : Form
 	{
+		#region Private fields
 		private BindingSource _source = new BindingSource();
 
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
+		#endregion
 
+		#region Public properties
 		public static string BackupDetailsInfo { get; set; }
 
+		public List<BackupDetailsModel> BackupDetails { get; }
+		#endregion
+
+
+		#region Constructors
 		public TMBackupDetailsForm()
 		{
 			InitializeComponent();
 
-			GetBackupDetailsInfo();
+			BackupDetails = InitializeBackupDetails();
 		}
+		#endregion
 
+		#region Actions
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
 			Persistence persistence = new Persistence();
@@ -56,7 +66,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Reset_Click(object sender, EventArgs e)
 		{
-
+			dataGridView1.DataSource = BackupDetails;
 		}
 
 		private void btn_DownArrow_Click(object sender, EventArgs e)
@@ -167,7 +177,9 @@ namespace Sdl.Community.TMBackup
 				}
 			}
 		}
+		#endregion
 
+		#region Private methods
 		private void GetBackupDetailsInfo()
 		{
 			Persistence persistence = new Persistence();
@@ -260,5 +272,24 @@ namespace Sdl.Community.TMBackup
 			GetBackupDetailsInfo();
 			dataGridView1.ClearSelection();
 		}
+
+		// Method used in the Reset functionality (the GetBackupDetailsInfo() cannot be used in this case,
+		// because the dataGridView1.DataSource will be always the one depending on the selection and the Reset will not be work correctly anymore.
+		private List<BackupDetailsModel> InitializeBackupDetails()
+		{
+			Persistence persistence = new Persistence();
+			var request = persistence.ReadFormInformation();
+
+			if (request != null && request.BackupDetailsModelList != null)
+			{
+				// create backupModel which is used as a new row where user can add another Action
+				BackupDetailsModel emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
+				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
+
+				dataGridView1.DataSource = request.BackupDetailsModelList;
+			}
+			return request.BackupDetailsModelList;
+		}
+		#endregion
 	}
 }
