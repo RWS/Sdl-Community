@@ -1,11 +1,11 @@
-﻿using Sdl.Community.XmlReader.Repository;
-using Sdl.Community.XmlReader.Helpers;
-using Sdl.Community.XmlReader.Model;
+﻿using Sdl.Community.XmlReader.WPF.Helpers;
+using Sdl.Community.XmlReader.WPF.Models;
+using Sdl.Community.XmlReader.WPF.Repository;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Sdl.Community.XmlReader
+namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
     public class XmlFileViewModel
     {
@@ -16,7 +16,8 @@ namespace Sdl.Community.XmlReader
             if (codes == null)
             {
                 _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
-            } else
+            }
+            else
             {
                 _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code)));
             }
@@ -40,7 +41,8 @@ namespace Sdl.Community.XmlReader
             if (existedTargetLanguageCodeViewModel != null)
             {
                 existedTargetLanguageCodeViewModel.AddChild(analyzeFile);
-            } else
+            }
+            else
             {
                 TargetLanguageCodeViewModel targetLanguageCodeViewModel = new TargetLanguageCodeViewModel(targetlanguageCode);
                 _xmlFiles.Add(targetLanguageCodeViewModel);

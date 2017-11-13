@@ -6,6 +6,6 @@
   <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
-    <File>Sdl.Community.Toolkit.Core.dll</File>
+    <File>Sdl.Community.XmlReader.WPF.dll</File>
   </Include>
 </PluginPackage>
