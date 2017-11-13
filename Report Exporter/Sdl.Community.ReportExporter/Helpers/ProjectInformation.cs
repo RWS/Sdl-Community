@@ -4,6 +4,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.ReportExporter.Model;
+using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
@@ -49,6 +51,29 @@ namespace Sdl.Community.ReportExporter.Helpers
 				return projectStatus;
 			}
 			return string.Empty;
+		}
+
+		public static ProjectDetails GetExternalProjectDetails(string path)
+		{
+			var fileBasedProject = new FileBasedProject(path);
+			var projectInfo = fileBasedProject.GetProjectInfo();
+			var analyseTask = fileBasedProject.RunAutomaticTask(fileBasedProject.GetTargetLanguageFiles().GetIds(), AutomaticTaskTemplateIds.AnalyzeFiles, (sender, e)
+					=>
+				{
+				}
+				, (sender, e) =>
+				{
+
+				});
+			var projectDetails = new ProjectDetails
+			{
+				ProjectName = projectInfo.Name,
+				ProjectPath = projectInfo.Uri.LocalPath,
+				Status = GetInternalProjectStatus(fileBasedProject)
+			};
+			ProjectController.Close(fileBasedProject);
+
+			return projectDetails;
 		}
 	}
 }
