@@ -232,10 +232,10 @@ namespace Sdl.Community.ReportExporter
 						FillLanguagesList(project);
 					}
 				}
-				if (_selectedProjectsFromStudioView.Count != 1)
+				copyBtn.Enabled = _selectedProjectsFromStudioView.Count == 1;
+				if (_selectedProjectsFromStudioView.Count > 0)
 				{
-					copyBtn.Enabled = false;
-					
+					csvBtn.Enabled = true;
 				}
 			}
 			else
@@ -281,16 +281,13 @@ namespace Sdl.Community.ReportExporter
 							project.LanguagesForPoject[selectedLanguage] = true;
 						}
 					}
-					if (projListbox.Items.Count != 1)
+					copyBtn.Enabled = projListbox.SelectedItems.Count == 1;
+					if (projListbox.SelectedItems.Count > 0)
 					{
-						copyBtn.Enabled = false;
-
+						csvBtn.Enabled = true;
 					}
 				}
 			}
-
-			//IsClipboardEnabled();
-			//IsCsvBtnEnabled();
 		}
 
 		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
