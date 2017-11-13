@@ -20,8 +20,7 @@ namespace Sdl.Community.TMBackup
 
 		public List<BackupDetailsModel> BackupDetails { get; }
 		#endregion
-
-
+		
 		#region Constructors
 		public TMBackupDetailsForm()
 		{
