@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
@@ -25,7 +26,9 @@ namespace Sdl.Community.ReportExporter
 		private  OptionalInformation _optionalInformation;
 		private List<ProjectDetails> _allStudioProjectsDetails;
 		private List<ProjectDetails> _externalProjects = new List<ProjectDetails>();
-		private readonly List<ProjectDetails> _selectedProjectsFromStudioView = new List<ProjectDetails>();
+		 readonly List<ProjectDetails> _selectedProjectsFromStudioView = new List<ProjectDetails>();
+		private BindingList<LanguageDetails> _languages = new BindingList<LanguageDetails>();
+		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private bool _areExternalStudioProjects;
 
 		public ReportExporterControl()
@@ -113,27 +116,31 @@ namespace Sdl.Community.ReportExporter
 			_selectedProjectsForReport.Add(reportDetails);
 		}
 
-		private void FillLanguagesList(ProjectDetails projectDetails)
-		{
-			if (projectDetails != null)
-			{
-				languagesListBox.Items.Clear();
-				var selectedProjectName = projectDetails.ProjectName;
-				var existSelectedProjInList =
-					_selectedProjectsForReport.FirstOrDefault(n => n.ProjectName.Equals(selectedProjectName));
-				if (existSelectedProjInList != null)
-				{
-					var languageList = existSelectedProjInList
-						.LanguagesForPoject;
 
-					foreach (var language in languageList)
+ 		private void FillLanguagesList()
+		{
+			var selectedProjectsToExport = _projectsDataSource.Where(e => e.ShouldBeExported).ToList();
+		
+			foreach (var selectedProject in selectedProjectsToExport)
+			{
+				foreach (var language in selectedProject.LanguagesForPoject)
+				{
+					var languageDetails = _languages.FirstOrDefault(n => n.LanguageName.Equals(language.Key));
+					if (languageDetails == null)
 					{
-						languagesListBox.Items.Add(language.Key, language.Value);
+						var newLanguage = new LanguageDetails
+						{
+							LanguageName = language.Key,
+							IsChecked = false
+						};
+						_languages.Add(newLanguage);
 					}
 
 				}
-
 			}
+			languagesListBox.DataSource = _languages;
+			languagesListBox.DisplayMember = "LanguageName";
+			languagesListBox.ValueMember = "IsChecked";
 		}
 
 		/// <summary>
@@ -156,15 +163,16 @@ namespace Sdl.Community.ReportExporter
 					var reportExist = ReportFolderExist((XmlNode)item);
 					if (reportExist)
 					{
-						var projectDetails = CreateProjectDetails((XmlNode)item);
-
-						projListbox.Items.Add(projectDetails);
+						var projectDetails = CreateProjectDetails((XmlNode) item);
+						_projectsDataSource.Add(projectDetails);
 						_allStudioProjectsDetails.Add(projectDetails);
 					}
-					
+
 				}
 			}
-
+			projListbox.DataSource = _projectsDataSource;
+			projListbox.ValueMember = "ShouldBeExported";
+			projListbox.DisplayMember = "ProjectName";
 		}
 
 		private bool ReportFolderExist(XmlNode projectInfoNode)
@@ -203,8 +211,13 @@ namespace Sdl.Community.ReportExporter
 		/// <returns></returns>
 		private ProjectDetails CreateProjectDetails(XmlNode projNode)
 		{
-			var projectDetails = new ProjectDetails();
+			var projectDetails = new ProjectDetails
+			{
+				LanguagesForPoject = new Dictionary<string, bool>(),
+				ShouldBeExported = false
+			};
 			var projectFolderPath = Empty;
+			var doc = new XmlDocument();
 
 			var selectSingleNode = projNode.SelectSingleNode("ProjectInfo");
 			if (selectSingleNode?.Attributes != null)
@@ -226,19 +239,28 @@ namespace Sdl.Community.ReportExporter
 				projectDetails.ProjectPath = projectsFolderPath + projectFolderPath;
 			}
 			var projectStatus = ProjectInformation.GetProjectStatus(projectDetails.ProjectPath);
+
+			doc.Load(projectDetails.ProjectPath);
+
+			var projectLanguages = Help.LoadLanguageDirections(doc);
+
+			SetLanguagesForProject(projectDetails, projectLanguages);
+
 			projectDetails.Status = projectStatus;
 			return projectDetails;
 		}
 
-
-		
+		private void SetLanguagesForProject(ProjectDetails project, Dictionary<string, LanguageDirection> languages)
+		{
+			foreach (var language in languages)
+			{
+				project.LanguagesForPoject.Add(language.Value.TargetLang.EnglishName,false);
+			}
+		}
 
 		private void projListbox_SelectedIndexChanged(object sender, EventArgs e)
 		{
-
 			if (projListbox.SelectedItem == null) return;
-
-			languagesListBox.Items.Clear();
 			var doc = new XmlDocument();
 			ProjectDetails selectedProject;
 
@@ -251,7 +273,8 @@ namespace Sdl.Community.ReportExporter
 						selectedProject = project;
 						doc.Load(selectedProject.ProjectPath);
 						var languages = Help.LoadLanguageDirections(doc);
-						Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
+						//Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
+						//Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
 
 						var projectLanguages = languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
 
@@ -264,7 +287,7 @@ namespace Sdl.Community.ReportExporter
 							AddNewProject(project, projectLanguages, true);
 						}
 
-						FillLanguagesList(project);
+						FillLanguagesList();
 					}
 				}
 				copyBtn.Enabled = _selectedProjectsFromStudioView.Count == 1;
@@ -275,83 +298,92 @@ namespace Sdl.Community.ReportExporter
 			}
 			else
 			{
-				selectedProject = projListbox.SelectedItem as ProjectDetails;
+				//selectedProject = projListbox.SelectedItem as ProjectDetails;
+				var selectedItem = ((CheckedListBox) sender).Text;
+				selectedProject = _projectsDataSource.FirstOrDefault(n => n.ProjectName.Equals(selectedItem));
+				var selectedProjectIndex = _projectsDataSource.IndexOf(selectedProject);
+				if (selectedProjectIndex > -1)
+				{
+					var shouldExportProject = ((CheckedListBox)sender).GetItemChecked(selectedProjectIndex);
+					selectedProject.ShouldBeExported = shouldExportProject;
+				}
 
 				if (selectedProject != null)
 				{
 					doc.Load(selectedProject.ProjectPath);
 
-					var languages = Help.LoadLanguageDirections(doc);
-					Help.LoadReports(doc, selectedProject.ProjectFolderPath, languages);
+					Help.LoadReports(doc, selectedProject.ProjectFolderPath, selectedProject);
+					
+					FillLanguagesList();
 
-					var projectLanguages = languages.Values.Where(item => !IsNullOrEmpty(item.PathToReport)).ToList();
-
-					//add resutls to the list view
-					var selectedProjectExists = _selectedProjectsForReport.Any(n => n.ProjectName.Equals(selectedProject.ProjectName));
-
-					if (!selectedProjectExists)
+					if (selectedProject.ReportPath != null)
 					{
-						AddNewProject((ProjectDetails) projListbox.SelectedItem, projectLanguages, false);
-					}
-					FillLanguagesList((ProjectDetails) projListbox.SelectedItem);
-
-					var project = GetSelectedProject();
-					if (project.ReportPath != null)
-					{
-						reportOutputPath.Text = project.ReportPath;
+						reportOutputPath.Text = selectedProject.ReportPath;
 					}
 					else
 					{
 						reportOutputPath.Text = Empty;
 					}
-					if (languages.Count.Equals(1))
+					if (selectedProject.LanguagesForPoject.Count.Equals(1))
 					{
+						//var language = _languages.Where(n=>n.)
 						//check the language
-						languagesListBox.SelectedIndex = 0;
-						languagesListBox.SetItemChecked(0, true);
+						//languagesListBox.SelectedIndex = 0;
+						//languagesListBox.SetItemChecked(0, true);
 
-						var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
-						if (project.LanguagesForPoject.ContainsKey(selectedLanguage))
-						{
-							project.LanguagesForPoject[selectedLanguage] = true;
-						}
+						//var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
+						//if (project.LanguagesForPoject.ContainsKey(selectedLanguage))
+						//{
+						//	project.LanguagesForPoject[selectedLanguage] = true;
+						//}
 					}
 					copyBtn.Enabled = projListbox.SelectedItems.Count == 1;
 					if (projListbox.SelectedItems.Count > 0)
 					{
 						csvBtn.Enabled = true;
 					}
+					RefreshLanguageListbox();
 				}
 			}
 		}
 
 		private void languagesListBox_SelectedIndexChanged_1(object sender, EventArgs e)
 		{
-			var projectDetails = (ProjectDetails) projListbox.SelectedItem;
-			if (projectDetails != null)
-			{
-				var selectedLanguage = (LanguageDirection) languagesListBox.SelectedItem;
-				if (selectedLanguage != null)
-				{
-					var index = languagesListBox.SelectedIndex;
-					var isChecked = languagesListBox.GetItemChecked(index);
 
-					var selectedProject = GetSelectedProject();
-					if (selectedProject != null)
-					{
-						if (selectedProject.LanguagesForPoject.ContainsKey(selectedLanguage))
-						{
-							selectedProject.LanguagesForPoject[selectedLanguage] = isChecked;
-						}
-					}
-					
+			var selectedLanguage = (LanguageDetails) languagesListBox.SelectedItem;
+			if (selectedLanguage != null)
+			{
+				var index = languagesListBox.SelectedIndex;
+				var shouldExportLanguage = languagesListBox.GetItemChecked(index);
+
+				var projectsWithSelectedLaguage = _projectsDataSource
+					.Where(p => p.ShouldBeExported && p.LanguagesForPoject.ContainsKey(selectedLanguage.LanguageName)).ToList();
+				foreach (var project in projectsWithSelectedLaguage)
+				{
+					var language = project.LanguagesForPoject.FirstOrDefault(l => l.Key.Equals(selectedLanguage.LanguageName));
+					project.LanguagesForPoject[language.Key] = shouldExportLanguage;
 				}
-			
+
+				var languageToUpdate = _languages.FirstOrDefault(n => n.LanguageName.Equals(selectedLanguage.LanguageName));
+				if (languageToUpdate != null)
+				{
+					languageToUpdate.IsChecked = shouldExportLanguage;
+				}
 			}
+
+			RefreshLanguageListbox();
 			IsClipboardEnabled();
 			IsCsvBtnEnabled();
 		}
 
+		private void RefreshLanguageListbox()
+		{
+			for (var i = 0; i < languagesListBox.Items.Count; i++)
+			{
+				var language = (LanguageDetails)languagesListBox.Items[i];
+				languagesListBox.SetItemChecked(i, language.IsChecked);
+			}
+		}
 		private ReportDetails GetSelectedProject()
 		{
 			var projectDetails = (ProjectDetails) projListbox.SelectedItem;
@@ -426,10 +458,11 @@ namespace Sdl.Community.ReportExporter
 			{
 				if (!IsNullOrEmpty(reportOutputPath.Text))
 				{
-					foreach (var project in _selectedProjectsForReport)
+					var projectsToBeExported = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+					foreach (var project in projectsToBeExported)
 					{
 						// check which languages to export
-						var checkedLanguages = project.LanguagesForPoject.Where(c => c.Value);
+						var checkedLanguages = project.LanguagesForPoject.Where(l=>l.Value).ToList();
 						foreach (var languageReport in checkedLanguages)
 						{
 
@@ -440,9 +473,9 @@ namespace Sdl.Community.ReportExporter
 
 							//write report to Reports folder
 							using (var sw = new StreamWriter(project.ReportPath + Path.DirectorySeparatorChar + project.ProjectName + "_" +
-							                                 languageReport.Key.TargetLang.Name + ".csv"))
+							                                 languageReport.Key + ".csv"))
 							{
-								var report = new StudioAnalysisReport(languageReport.Key.PathToReport);
+								var report = new StudioAnalysisReport(project.PathToAnalyseResult);
 								//var report = new StudioAnalysisReport(@"C:\Users\aghisa\Desktop\enhanced_analysis.xml");
 								sw.Write(report.ToCsv(includeHeaderCheck.Checked, _optionalInformation));
 							}
@@ -452,9 +485,9 @@ namespace Sdl.Community.ReportExporter
 					//Clear all lists
 					_selectedProjectsForReport.Clear();
 					_selectedProjectsFromStudioView.Clear();
-					projListbox.SelectedItems.Clear();
+					
 					UncheckAllProjects();
-					languagesListBox.Items.Clear();
+					_languages.Clear();
 
 
 					MessageBox.Show(this, @"Export successful.", @"Export result", MessageBoxButtons.OK,
@@ -477,9 +510,19 @@ namespace Sdl.Community.ReportExporter
 
 		private void UncheckAllProjects()
 		{
-			while (projListbox.CheckedIndices.Count > 0)
+			var projectsToUncheck = _projectsDataSource.Where(p => p.ShouldBeExported).ToList();
+			foreach (var project in projectsToUncheck)
 			{
-				projListbox.SetItemChecked(projListbox.CheckedIndices[0], false);
+				project.ShouldBeExported = false;
+				foreach (var language in project.LanguagesForPoject.ToList())
+				{
+					project.LanguagesForPoject[language.Key] = false;
+				}
+			}
+			for (var i = 0; i < projListbox.Items.Count; i++)
+			{
+				var project = (ProjectDetails)projListbox.Items[i];
+				projListbox.SetItemChecked(i, project.ShouldBeExported);
 			}
 		}
 
@@ -556,33 +599,37 @@ namespace Sdl.Community.ReportExporter
 		private void projectStatusComboBox_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			var selectedStatus = ((ComboBox) sender).SelectedItem;
-			projListbox.Items.Clear();
-			languagesListBox.Items.Clear();
+			var projectsBindingList = new BindingList<ProjectDetails>();
+			_languages.Clear();
+
 			var projects = _areExternalStudioProjects ? _externalProjects : _allStudioProjectsDetails;
 			if (selectedStatus.Equals("InProgress"))
 			{
 				var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
-				
+
 				foreach (var project in inProgressProjects)
 				{
-					projListbox.Items.Add(project, false);
+					projectsBindingList.Add(project);
 				}
+
 			}
 			if (selectedStatus.Equals("Completed"))
 			{
 				var completedProjects = projects.Where(s => s.Status.Equals("Completed")).ToList();
 				foreach (var project in completedProjects)
 				{
-					projListbox.Items.Add(project, false);
+					projectsBindingList.Add(project);
 				}
 			}
 			if (selectedStatus.Equals("All"))
 			{
 				foreach (var project in projects)
 				{
-					projListbox.Items.Add(project, false);
+					projectsBindingList.Add(project);
 				}
 			}
+			_projectsDataSource = projectsBindingList;
+			projListbox.DataSource = _projectsDataSource;
 		}
 
 		private void loadBtn_Click(object sender, EventArgs e)
@@ -593,7 +640,7 @@ namespace Sdl.Community.ReportExporter
 			{
 				_areExternalStudioProjects = true;
 				projListbox.Items.Clear();
-				languagesListBox.Items.Clear();
+				_languages.Clear();
 				var projectsPathList = Directory.GetFiles(loadFolderPath.FileName, "*.sdlproj", SearchOption.AllDirectories);
 				foreach (var projectPath in projectsPathList)
 				{
@@ -613,7 +660,7 @@ namespace Sdl.Community.ReportExporter
 		{
 			_areExternalStudioProjects = false;
 			projListbox.Items.Clear();
-			languagesListBox.Items.Clear();
+			_languages.Clear();
 			
 			foreach (var project in _allStudioProjectsDetails)
 			{

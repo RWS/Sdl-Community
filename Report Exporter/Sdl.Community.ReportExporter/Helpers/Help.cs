@@ -63,7 +63,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 			return languages;
 		}
 
-		public static void LoadReports(XmlDocument doc, string projectPath, Dictionary<string, LanguageDirection> languages)
+		public static void LoadReports(XmlDocument doc, string projectPath, ProjectDetails project)
 		{
 			var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
 			if (automaticTaskNode != null)
@@ -85,8 +85,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 							    "Sdl.ProjectApi.AutomaticTasks.Analysis")
 							{
 								//always overwrite the previous path, we are only interested into last analyze
-								languages[report.Attributes["LanguageDirectionGuid"].Value].PathToReport =
-									projectPath + "\\" + report.Attributes["PhysicalPath"].Value;
+								project.PathToAnalyseResult = Path.Combine(projectPath, report.Attributes["PhysicalPath"].Value);
 							}
 						}
 					}
