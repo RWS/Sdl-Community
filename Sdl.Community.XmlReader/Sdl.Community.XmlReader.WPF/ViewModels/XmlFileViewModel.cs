@@ -50,6 +50,23 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
             }
         }
 
+        public void RemoveParent(TargetLanguageCodeViewModel parent)
+        {
+            _xmlFiles.Remove(parent);
+            XmlFilesRepository.DeleteParent(parent.TargetLanguageCode);
+        }
+
+        public void RemoveChildren(string languageCode, List<AnalyzeFileViewModel> analyzeFilesViewModel)
+        {
+            foreach (var analyzeFile in analyzeFilesViewModel)
+            {
+                var targetLanguageCode = _xmlFiles.FirstOrDefault(x => x.TargetLanguageCode.Equals(languageCode));
+                targetLanguageCode.Children.Remove(analyzeFile);
+
+                XmlFilesRepository.RemoveFile(languageCode, analyzeFile.AnalyzeFileName);
+            }
+        }
+
         public void ResetLists()
         {
             _xmlFiles.Clear();

@@ -1,5 +1,6 @@
 ﻿using Sdl.Community.XmlReader.WPF.ViewModels;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
 
@@ -48,5 +49,40 @@ namespace Sdl.Community.XmlReader.WPF
         {
             _viewModel.ResetLists();
         }
+        
+        public void treeView_RemoveItems(object sender, EventArgs e)
+        {
+            List<TargetLanguageCodeViewModel> parentsToRemove = new List<TargetLanguageCodeViewModel>();
+            foreach (var parentItem in _viewModel.XmlFiles)
+            {
+                if (parentItem.IsSelected)
+                {
+                    parentsToRemove.Add(parentItem);
+                    continue;
+                }
+
+                List<AnalyzeFileViewModel> childrenToRemove = new List<AnalyzeFileViewModel>();
+                foreach (var childItem in parentItem.Children)
+                {
+                    var child = childItem as AnalyzeFileViewModel;
+                    if (parentItem.Children.Count == 1 && childItem.IsSelected)
+                    {
+                        parentsToRemove.Add(parentItem);
+                    }
+                    else if (child.IsSelected)
+                    {
+                        childrenToRemove.Add(child);
+                    }
+                }
+
+                _viewModel.RemoveChildren(parentItem.TargetLanguageCode, childrenToRemove);
+            }
+
+            foreach (var parent in parentsToRemove)
+            {
+                _viewModel.RemoveParent(parent);
+            }
+        }
+
     }
 }

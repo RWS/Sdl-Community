@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="Models\AnalyzeFile.cs" />
     <Compile Include="Models\TargetLanguageCode.cs" />
+    <Compile Include="MultiSelectTreeView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
