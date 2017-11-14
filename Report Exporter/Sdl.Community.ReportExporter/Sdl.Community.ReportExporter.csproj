@@ -100,6 +100,7 @@
     <Compile Include="Helpers\StudioAnalysisReport.cs" />
     <Compile Include="Model\AnalyzedFile.cs" />
     <Compile Include="Model\BandResult.cs" />
+    <Compile Include="Model\LanguageDetails.cs" />
     <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\OptionalInformation.cs" />
     <Compile Include="Model\ProjectDetails.cs" />
