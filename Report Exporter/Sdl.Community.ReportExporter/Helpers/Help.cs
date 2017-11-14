@@ -68,77 +68,53 @@ namespace Sdl.Community.ReportExporter.Helpers
 			var automaticTaskNode = doc.SelectNodes("/Project/Tasks/AutomaticTask");
 			if (automaticTaskNode != null)
 			{
-				ReportsFolderExists(automaticTaskNode[0].BaseURI);
-				foreach (var node in automaticTaskNode)
+				var reportsFolderExist=ReportsFolderExists(automaticTaskNode[0].BaseURI);
+				if (reportsFolderExist)
 				{
-					var task = (XmlNode) node;
-					var reportNodes = task.SelectNodes("Reports/Report");
-
-					if (reportNodes == null) continue;
-
-					foreach (var reportNode in reportNodes)
+					foreach (var node in automaticTaskNode)
 					{
-						var report = (XmlNode) reportNode;
-						if (report.Attributes != null && report.Attributes["TaskTemplateId"].Value ==
-						    "Sdl.ProjectApi.AutomaticTasks.Analysis")
+						var task = (XmlNode)node;
+						var reportNodes = task.SelectNodes("Reports/Report");
+
+						if (reportNodes == null) continue;
+
+						foreach (var reportNode in reportNodes)
 						{
-							//always overwrite the previous path, we are only interested into last analyze
-							languages[report.Attributes["LanguageDirectionGuid"].Value].PathToReport =
-								projectPath + "\\" + report.Attributes["PhysicalPath"].Value;
+							var report = (XmlNode)reportNode;
+							if (report.Attributes != null && report.Attributes["TaskTemplateId"].Value ==
+							    "Sdl.ProjectApi.AutomaticTasks.Analysis")
+							{
+								//always overwrite the previous path, we are only interested into last analyze
+								languages[report.Attributes["LanguageDirectionGuid"].Value].PathToReport =
+									projectPath + "\\" + report.Attributes["PhysicalPath"].Value;
+							}
 						}
 					}
 				}
+				
 			}
 		}
 
-		private static void ReportsFolderExists(string projectFolderPath)
+		public static bool ReportFileExist(string reportFolderPath)
 		{
-			var projectPath = new Uri(projectFolderPath).LocalPath;//Path.GetFullPath(projectFolderPath.Replace(@"file:///", string.Empty));
-			var reportFolderPath =Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
-			if (!Directory.Exists(reportFolderPath))
-			{
-				RunAnalyseBatchTask(Path.GetFullPath(projectPath));
-
-			}
-			else
+			if (Directory.Exists(reportFolderPath))
 			{
 				var files = Directory.GetFiles(reportFolderPath);
 				var exist = files.Any(file => file.Contains("Analyze Files"));
-				if (!exist)
+				if (exist)
 				{
-					RunAnalyseBatchTask(Path.GetFullPath(projectPath));
+					return true;
 				}
 			}
+			return false;
 		}
 
-		private static void RunAnalyseBatchTask(string projectFolderPath)
+		private static bool ReportsFolderExists(string projectFolderPath)
 		{
-			var studioProjects = SdlTradosStudio.Application.GetController<ProjectsController>().GetAllProjects();
-			
-			var project = studioProjects.FirstOrDefault(p => p.FilePath.Equals(projectFolderPath));
+			var projectPath = new Uri(projectFolderPath).LocalPath;
+			var reportFolderPath =Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)), "Reports");
 
-			if (project != null)
-			{
-				var projectFilesList = project.GetTargetLanguageFiles().GetIds();
-
-				var analyseTask = project.RunAutomaticTask(projectFilesList, AutomaticTaskTemplateIds.AnalyzeFiles, (sender, e)
-						=>
-					{
-					}
-					, (sender, e) =>
-					{
-
-					});
-
-				//	if (analyseTask.Status == TaskStatus.Completed)
-				//	{
-				//		var reportNodes = node.SelectNodes(@"Reports/Report");
-
-				//		return reportNodes;
-				//	}
-				//}
-				//return null;
-			}
+			return ReportFileExist(reportFolderPath);
 		}
 
 	}

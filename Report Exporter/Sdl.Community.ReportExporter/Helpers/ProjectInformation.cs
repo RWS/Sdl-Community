@@ -57,14 +57,7 @@ namespace Sdl.Community.ReportExporter.Helpers
 		{
 			var fileBasedProject = new FileBasedProject(path);
 			var projectInfo = fileBasedProject.GetProjectInfo();
-			var analyseTask = fileBasedProject.RunAutomaticTask(fileBasedProject.GetTargetLanguageFiles().GetIds(), AutomaticTaskTemplateIds.AnalyzeFiles, (sender, e)
-					=>
-				{
-				}
-				, (sender, e) =>
-				{
 
-				});
 			var projectDetails = new ProjectDetails
 			{
 				ProjectName = projectInfo.Name,

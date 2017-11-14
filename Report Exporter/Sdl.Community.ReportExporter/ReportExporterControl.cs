@@ -153,12 +153,47 @@ namespace Sdl.Community.ReportExporter
 				var projectInfo = ((XmlNode) item).SelectSingleNode("./ProjectInfo");
 				if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
 				{
-					var projectDetails = CreateProjectDetails((XmlNode) item);
-					projListbox.Items.Add(projectDetails);
-					_allStudioProjectsDetails.Add(projectDetails);
+					var reportExist = ReportFolderExist((XmlNode)item);
+					if (reportExist)
+					{
+						var projectDetails = CreateProjectDetails((XmlNode)item);
+
+						projListbox.Items.Add(projectDetails);
+						_allStudioProjectsDetails.Add(projectDetails);
+					}
+					
 				}
 			}
 
+		}
+
+		private bool ReportFolderExist(XmlNode projectInfoNode)
+		{
+			if (projectInfoNode?.Attributes != null)
+			{
+				var filePath = Empty;
+				
+					if (projectInfoNode.Attributes["ProjectFilePath"] != null)
+					{
+						filePath = projectInfoNode.Attributes["ProjectFilePath"].Value;
+						if (!Path.IsPathRooted(filePath))
+						{
+							//project is located inside "Projects" folder in Studio
+							var projectsFolderPath = _projectXmlPath.Substring
+								(0, _projectXmlPath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+							var projectName = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal));
+							filePath = Path.Combine(projectsFolderPath, projectName, "Reports");
+						}
+						else
+						{
+						//is external project
+							var reportsPath = filePath.Substring(0, filePath.LastIndexOf(@"\", StringComparison.Ordinal) + 1);
+							filePath = Path.Combine(reportsPath, "Reports");
+						}
+					}
+				return Help.ReportFileExist(filePath);
+			}
+			return false;
 		}
 
 		/// <summary>
@@ -562,9 +597,14 @@ namespace Sdl.Community.ReportExporter
 				var projectsPathList = Directory.GetFiles(loadFolderPath.FileName, "*.sdlproj", SearchOption.AllDirectories);
 				foreach (var projectPath in projectsPathList)
 				{
-					var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);
-					_externalProjects.Add(projectDetails);
-					projListbox.Items.Add(projectDetails);
+					var reportFolderPath = Path.Combine(projectPath.Substring(0, projectPath.LastIndexOf(@"\", StringComparison.Ordinal)),"Reports");
+					if (Help.ReportFileExist(reportFolderPath))
+					{
+						var projectDetails = ProjectInformation.GetExternalProjectDetails(projectPath);
+						_externalProjects.Add(projectDetails);
+						projListbox.Items.Add(projectDetails);
+					}
+					
 				}
 			}
 		}
