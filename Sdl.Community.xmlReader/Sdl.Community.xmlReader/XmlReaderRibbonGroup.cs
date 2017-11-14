@@ -3,6 +3,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.XmlReader.WPF;
 
 namespace Sdl.Community.XmlReader
 {

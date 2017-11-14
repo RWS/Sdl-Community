@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.XmlReader.Model
+﻿namespace Sdl.Community.XmlReader.WPF.Models
 {
     public class AnalyzeFile
     {

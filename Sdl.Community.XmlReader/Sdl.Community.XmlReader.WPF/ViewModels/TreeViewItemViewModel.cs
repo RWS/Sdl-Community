@@ -1,12 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace Sdl.Community.XmlReader
+namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
-    /// <summary>
-    /// Base class for all ViewModel classes displayed by TreeViewItems.  
-    /// This acts as an adapter between a raw data object and a TreeViewItem.
-    /// </summary>
     public class TreeViewItemViewModel : INotifyPropertyChanged
     {
         readonly ObservableCollection<TreeViewItemViewModel> _children;

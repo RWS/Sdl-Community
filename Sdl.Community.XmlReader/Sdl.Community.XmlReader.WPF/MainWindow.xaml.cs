@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Sdl.Community.XmlReader.WPF.ViewModels;
+using System;
 using System.ComponentModel;
 using System.Windows;
 
-namespace Sdl.Community.XmlReader
+namespace Sdl.Community.XmlReader.WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

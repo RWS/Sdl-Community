@@ -1,10 +1,9 @@
 ﻿using System.IO;
 
-namespace Sdl.Community.XmlReader.Helpers
+namespace Sdl.Community.XmlReader.WPF.Helpers
 {
     public static class Helper
     {
-
         public static string GetFileName(string filePath)
         {
             return Path.GetFileNameWithoutExtension(filePath);
@@ -14,7 +13,7 @@ namespace Sdl.Community.XmlReader.Helpers
         {
             var fileName = GetFileName(filePath);
 
-            if (!fileName.Contains(PluginResources.FileName))
+            if (!fileName.Contains(Properties.Resources.FileName))
             {
                 return null;
             }

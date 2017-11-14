@@ -1,12 +1,12 @@
-﻿<Window 
-        x:Class="Sdl.Community.XmlReader.MainWindow"
+﻿<Window x:Class="Sdl.Community.XmlReader.WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sdl.Community.XmlReader"
+        xmlns:local="clr-namespace:Sdl.Community.XmlReader.WPF"
+        xmlns:vm="clr-namespace:Sdl.Community.XmlReader.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="Xml Reader" Height="349.959" Width="483.596"
+        Title="MainWindow" Height="398.517" Width="544.703"
         Closing="MainWindow_Closing" FontSize="14">
 
     <Window.Resources>
@@ -71,12 +71,12 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type local:TargetLanguageCodeViewModel}" ItemsSource="{Binding Children}">
+                    <HierarchicalDataTemplate DataType="{x:Type vm:TargetLanguageCodeViewModel}" ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding TargetLanguageCode}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    <DataTemplate DataType="{x:Type local:AnalyzeFileViewModel}">
+                    <DataTemplate DataType="{x:Type vm:AnalyzeFileViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="{Binding AnalyzeFileName}"/>
                         </StackPanel>

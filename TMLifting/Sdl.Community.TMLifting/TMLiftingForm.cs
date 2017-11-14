@@ -28,6 +28,7 @@ namespace Sdl.Community.TMLifting
         private readonly StringBuilder _elapsedTime;
 		private TranslationMemory.ServerBasedTranslationMemory _sbTMs;
 		private UserCredentials _userCredentials;
+		private AlertForm alert;
 
 		public TMLiftingForm()
         {
@@ -39,9 +40,6 @@ namespace Sdl.Community.TMLifting
 			_bwGS = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 			_sbTMs = new TranslationMemory.ServerBasedTranslationMemory();
 			_userCredentials = new UserCredentials();
-
-			//_sbLrc.Controls.
-			//_bs = new BindingSource();
 		}
 
         protected override async void OnLoad(EventArgs e)
@@ -98,8 +96,11 @@ namespace Sdl.Community.TMLifting
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            rtbStatus.Text = e.UserState.ToString();
-        }
+            //rtbStatus.Text = e.UserState.ToString();
+			alert.Message = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
+			alert.ProgressValue = e.ProgressPercentage;
+			progressBar1.Value = e.ProgressPercentage;
+		}
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
@@ -128,7 +129,8 @@ namespace Sdl.Community.TMLifting
                 _stopWatch.Stop();
                 rtbStatus.AppendText("Process canceled.");
             }
-        }
+			alert.Close();
+		}
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -148,6 +150,9 @@ namespace Sdl.Community.TMLifting
 
         private async void btnReindex_Click(object sender, EventArgs e)
         {
+			// create a new instance of the alert form	
+			alert = new AlertForm();
+			alert.Show();
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
 				btnReindex.Enabled = false;

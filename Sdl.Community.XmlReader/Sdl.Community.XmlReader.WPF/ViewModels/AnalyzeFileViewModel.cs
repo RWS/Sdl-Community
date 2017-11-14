@@ -1,6 +1,6 @@
-﻿using Sdl.Community.XmlReader.Model;
+﻿using Sdl.Community.XmlReader.WPF.Models;
 
-namespace Sdl.Community.XmlReader
+namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
     public class AnalyzeFileViewModel : TreeViewItemViewModel
     {

@@ -1,9 +1,9 @@
-﻿using Sdl.Community.XmlReader.Helpers;
-using Sdl.Community.XmlReader.Model;
+﻿using Sdl.Community.XmlReader.WPF.Helpers;
+using Sdl.Community.XmlReader.WPF.Models;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sdl.Community.XmlReader.Repository
+namespace Sdl.Community.XmlReader.WPF.Repository
 {
     public static class XmlFilesRepository
     {
