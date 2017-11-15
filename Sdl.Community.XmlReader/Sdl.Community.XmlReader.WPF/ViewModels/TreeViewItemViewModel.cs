@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq.Expressions;
 
 namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
@@ -20,10 +23,11 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string propertyName)
+        protected virtual void OnPropertyChanged<T>(Expression<Func<T>> propertyExpression)
         {
+            var body = propertyExpression.Body as MemberExpression;
             if (this.PropertyChanged != null)
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                this.PropertyChanged(this, new PropertyChangedEventArgs(body.Member.Name));
         }
 
         /// <summary>
@@ -61,7 +65,7 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
                 if (value != _isSelected)
                 {
                     _isSelected = value;
-                    this.OnPropertyChanged("IsSelected");
+                    this.OnPropertyChanged(() => IsSelected);
                 }
             }
         }

@@ -34,7 +34,7 @@ namespace Sdl.Community.XmlReader.WPF.Repository
             return targetLanguageCode;
         }
 
-        public static void DeleteFile(string languageCode, string fileName)
+        public static void RemoveFile(string languageCode, string fileName)
         {
             var targetLanguageCode = _languageCodes.FirstOrDefault(x => x.LanguageCode.Equals(languageCode));
             if (targetLanguageCode == null) return;
@@ -43,6 +43,13 @@ namespace Sdl.Community.XmlReader.WPF.Repository
             if (analyzeFile == null) return;
 
             targetLanguageCode.AnalyzeFiles.Remove(analyzeFile);
+        }
+
+        public static void DeleteParent(string languageCode)
+        {
+            var targetLanguageCode = _languageCodes.FirstOrDefault(x => x.LanguageCode.Equals(languageCode));
+            if (targetLanguageCode == null) return;
+            _languageCodes.Remove(targetLanguageCode);
         }
 
         public static void ResetLanguageCodes() { _languageCodes.Clear(); }
