@@ -54,11 +54,13 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
+			this.selectAll = new System.Windows.Forms.CheckBox();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
 			// 
+			this.mainPanel.Controls.Add(this.selectAll);
 			this.mainPanel.Controls.Add(this.clearBtn);
 			this.mainPanel.Controls.Add(this.loadBtn);
 			this.mainPanel.Controls.Add(this.projectStatusComboBox);
@@ -95,7 +97,7 @@
 			this.clearBtn.Name = "clearBtn";
 			this.clearBtn.Size = new System.Drawing.Size(106, 23);
 			this.clearBtn.TabIndex = 27;
-			this.clearBtn.Text = "Clear external list";
+			this.clearBtn.Text = "Clear external";
 			this.clearBtn.UseVisualStyleBackColor = true;
 			this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
 			// 
@@ -318,9 +320,9 @@
 			// 
 			this.projListbox.CheckOnClick = true;
 			this.projListbox.FormattingEnabled = true;
-			this.projListbox.Location = new System.Drawing.Point(19, 30);
+			this.projListbox.Location = new System.Drawing.Point(19, 60);
 			this.projListbox.Name = "projListbox";
-			this.projListbox.Size = new System.Drawing.Size(221, 394);
+			this.projListbox.Size = new System.Drawing.Size(221, 364);
 			this.projListbox.TabIndex = 1;
 			this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
 			// 
@@ -332,6 +334,17 @@
 			this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
+			// 
+			// selectAll
+			// 
+			this.selectAll.AutoSize = true;
+			this.selectAll.Location = new System.Drawing.Point(19, 31);
+			this.selectAll.Name = "selectAll";
+			this.selectAll.Size = new System.Drawing.Size(109, 17);
+			this.selectAll.TabIndex = 28;
+			this.selectAll.Text = "Select all projects";
+			this.selectAll.UseVisualStyleBackColor = true;
+			this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
 			// 
 			// ReportExporterControl
 			// 
@@ -378,5 +391,6 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Button loadBtn;
 		private System.Windows.Forms.Button clearBtn;
+		private System.Windows.Forms.CheckBox selectAll;
 	}
 }
