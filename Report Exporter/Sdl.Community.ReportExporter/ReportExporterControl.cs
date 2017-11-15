@@ -423,11 +423,7 @@ namespace Sdl.Community.ReportExporter
 					//Clear all lists
 					UncheckAllProjects();
 					_languages.Clear();
-					if (_areExternalStudioProjects)
-					{
-						_projectsDataSource.Clear();
-					}
-
+					selectAll.Checked = false;
 					MessageBox.Show(this, @"Export successful.", @"Export result", MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 				}
@@ -539,7 +535,7 @@ namespace Sdl.Community.ReportExporter
 			var projectsBindingList = new BindingList<ProjectDetails>();
 			_languages.Clear();
 
-			var projects = _areExternalStudioProjects ? _externalProjects : _allStudioProjectsDetails;
+			var projects = _allStudioProjectsDetails;//_areExternalStudioProjects ? _externalProjects : _allStudioProjectsDetails;
 			if (selectedStatus.Equals("InProgress"))
 			{
 				var inProgressProjects = projects.Where(s => s.Status.Equals("InProgress")).ToList();
@@ -608,15 +604,38 @@ namespace Sdl.Community.ReportExporter
 		private void clearBtn_Click(object sender, EventArgs e)
 		{
 			_areExternalStudioProjects = false;
-			projListbox.Items.Clear();
+			
+			_projectsDataSource.Clear();
 			_languages.Clear();
-
 			foreach (var project in _allStudioProjectsDetails)
 			{
-				projListbox.Items.Add(project, false);
+				_projectsDataSource.Add(project);
 			}
+
+			projListbox.DataSource = _projectsDataSource;
 			copyBtn.Enabled = false;
 			csvBtn.Enabled = false;
+		}
+
+		private void selectAll_CheckedChanged(object sender, EventArgs e)
+		{
+			var selectAll = ((CheckBox) sender).Checked;
+			foreach (var project in _projectsDataSource)
+			{
+				project.ShouldBeExported = selectAll;
+				foreach (var language in project.LanguagesForPoject.ToList())
+				{
+					project.LanguagesForPoject[language.Key] = selectAll;
+				}
+			}
+
+			
+			RefreshProjectsListBox();
+			foreach (var language in _languages)
+			{
+				language.IsChecked = selectAll;
+			}
+			RefreshLanguageListbox();
 		}
 	}
 }
