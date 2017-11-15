@@ -392,6 +392,11 @@ namespace Sdl.Community.ReportExporter
 
 		private void csvBtn_Click(object sender, EventArgs e)
 		{
+			GenerateReport();
+		}
+
+		private void GenerateReport()
+		{
 			try
 			{
 				if (!IsNullOrEmpty(reportOutputPath.Text))
@@ -526,6 +531,10 @@ namespace Sdl.Community.ReportExporter
 			if (!IsNullOrWhiteSpace(reportPath))
 			{
 				targetBtn.Enabled = true;
+			}
+			if (e.KeyCode == Keys.Enter)
+			{
+				GenerateReport();
 			}
 		}
 
