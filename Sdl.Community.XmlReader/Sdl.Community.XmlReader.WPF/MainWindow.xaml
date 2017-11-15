@@ -189,7 +189,8 @@
                 <TreeView.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type vm:TargetLanguageCodeViewModel}" ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding TargetLanguageCode}"/>
+                            <Image Source="{Binding IconUri, Mode=OneWay}" Height="16" Width="20"/>
+                            <TextBlock Text="{Binding TargetLanguageCode}" Margin="5 0 0 0"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <DataTemplate DataType="{x:Type vm:AnalyzeFileViewModel}">
