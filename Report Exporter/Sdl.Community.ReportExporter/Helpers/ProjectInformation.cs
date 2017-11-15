@@ -62,8 +62,14 @@ namespace Sdl.Community.ReportExporter.Helpers
 			{
 				ProjectName = projectInfo.Name,
 				ProjectPath = projectInfo.Uri.LocalPath,
-				Status = GetInternalProjectStatus(fileBasedProject)
+				Status = GetInternalProjectStatus(fileBasedProject),
+				LanguagesForPoject =  new Dictionary<string, bool>(),
+				ShouldBeExported = true
 			};
+			foreach (var language in projectInfo.TargetLanguages)
+			{
+				projectDetails.LanguagesForPoject.Add(language.DisplayName,true);
+			}
 			ProjectController.Close(fileBasedProject);
 
 			return projectDetails;

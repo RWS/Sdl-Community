@@ -30,6 +30,8 @@
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
 			this.mainPanel = new System.Windows.Forms.Panel();
+			this.clearBtn = new System.Windows.Forms.Button();
+			this.loadBtn = new System.Windows.Forms.Button();
 			this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
 			this.label3 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
@@ -52,8 +54,6 @@
 			this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
 			this.projListbox = new System.Windows.Forms.CheckedListBox();
 			this.selectProjLbl = new System.Windows.Forms.Label();
-			this.loadBtn = new System.Windows.Forms.Button();
-			this.clearBtn = new System.Windows.Forms.Button();
 			this.mainPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -88,6 +88,26 @@
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.Size = new System.Drawing.Size(811, 455);
 			this.mainPanel.TabIndex = 0;
+			// 
+			// clearBtn
+			// 
+			this.clearBtn.Location = new System.Drawing.Point(693, 177);
+			this.clearBtn.Name = "clearBtn";
+			this.clearBtn.Size = new System.Drawing.Size(106, 23);
+			this.clearBtn.TabIndex = 27;
+			this.clearBtn.Text = "Clear external list";
+			this.clearBtn.UseVisualStyleBackColor = true;
+			this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
+			// 
+			// loadBtn
+			// 
+			this.loadBtn.Location = new System.Drawing.Point(694, 147);
+			this.loadBtn.Name = "loadBtn";
+			this.loadBtn.Size = new System.Drawing.Size(105, 23);
+			this.loadBtn.TabIndex = 26;
+			this.loadBtn.Text = "Load  external ";
+			this.loadBtn.UseVisualStyleBackColor = true;
+			this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
 			// 
 			// projectStatusComboBox
 			// 
@@ -312,26 +332,6 @@
 			this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
 			this.selectProjLbl.TabIndex = 0;
 			this.selectProjLbl.Text = "Select project:";
-			// 
-			// loadBtn
-			// 
-			this.loadBtn.Location = new System.Drawing.Point(694, 147);
-			this.loadBtn.Name = "loadBtn";
-			this.loadBtn.Size = new System.Drawing.Size(105, 23);
-			this.loadBtn.TabIndex = 26;
-			this.loadBtn.Text = "Load projects";
-			this.loadBtn.UseVisualStyleBackColor = true;
-			this.loadBtn.Click += new System.EventHandler(this.loadBtn_Click);
-			// 
-			// clearBtn
-			// 
-			this.clearBtn.Location = new System.Drawing.Point(693, 177);
-			this.clearBtn.Name = "clearBtn";
-			this.clearBtn.Size = new System.Drawing.Size(106, 23);
-			this.clearBtn.TabIndex = 27;
-			this.clearBtn.Text = "Clear external list";
-			this.clearBtn.UseVisualStyleBackColor = true;
-			this.clearBtn.Click += new System.EventHandler(this.clearBtn_Click);
 			// 
 			// ReportExporterControl
 			// 
