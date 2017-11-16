@@ -1478,11 +1478,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    {
 		    var txt = new TextBox();
 		    colorsPanel.Controls.Add(txt);
-		    txt.Top = _count * 25;
+		    txt.Top = _count * 15;
+			txt.Size = new Size
+			{
+				Height = 5,
+				Width = 15
+			};
 		    txt.Enabled = false;
 		    txt.BackColor = colorEditor.Color;
 			txt.BorderStyle = BorderStyle.None;
-		    _count = _count + 1;
+		    _count++;
 		    return txt;
 	    }
 
@@ -1499,9 +1504,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			ClearColorPicker();
 		}
 
-		private void colorWheel_ColorChanged(object sender, EventArgs e)
+
+		private void colorEditor_ColorChanged(object sender, EventArgs e)
 		{
-			colorEditor.Color = colorWheel.Color;
+			//var hexCode = ColorPickerHelper.GetHexCode(colorEditor.Color.R, colorEditor.Color.G,
+			//	colorEditor.Color.B);
+			screenColorPicker.Color = colorEditor.Color;
 		}
 	}
 

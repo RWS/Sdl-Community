@@ -97,7 +97,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.label2 = new System.Windows.Forms.Label();
 			this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
 			this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
-			this.colorWheel = new Cyotek.Windows.Forms.ColorWheel();
+			this.tabPage_fuzzyValue = new System.Windows.Forms.TabPage();
+			this.fuzzyPanel = new System.Windows.Forms.Panel();
+			this.fuzzyMax = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.fuzzyMin = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
 			this.imageList_filter = new System.Windows.Forms.ImageList(this.components);
 			this.splitter_filterExpression = new System.Windows.Forms.Splitter();
 			this.panel_buffer = new System.Windows.Forms.Panel();
@@ -119,13 +125,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
-			this.tabPage_fuzzyValue = new System.Windows.Forms.TabPage();
-			this.fuzzyPanel = new System.Windows.Forms.Panel();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.fuzzyMin = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.fuzzyMax = new System.Windows.Forms.TextBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -146,6 +145,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupBox1.SuspendLayout();
 			this.tabPage_colorPicker.SuspendLayout();
 			this.pickerPanel.SuspendLayout();
+			this.tabPage_fuzzyValue.SuspendLayout();
+			this.fuzzyPanel.SuspendLayout();
 			this.toolStrip_filter.SuspendLayout();
 			this.panel_filterExpression.SuspendLayout();
 			this.panel_filterStatus.SuspendLayout();
@@ -153,8 +154,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.tabPage_fuzzyValue.SuspendLayout();
-			this.fuzzyPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -592,7 +591,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.pickerPanel.Controls.Add(this.label2);
 			this.pickerPanel.Controls.Add(this.screenColorPicker);
 			this.pickerPanel.Controls.Add(this.colorEditor);
-			this.pickerPanel.Controls.Add(this.colorWheel);
 			resources.ApplyResources(this.pickerPanel, "pickerPanel");
 			this.pickerPanel.Name = "pickerPanel";
 			// 
@@ -632,13 +630,49 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.colorEditor, "colorEditor");
 			this.colorEditor.Name = "colorEditor";
+			this.colorEditor.ColorChanged += new System.EventHandler(this.colorEditor_ColorChanged);
 			// 
-			// colorWheel
+			// tabPage_fuzzyValue
 			// 
-			this.colorWheel.Color = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-			resources.ApplyResources(this.colorWheel, "colorWheel");
-			this.colorWheel.Name = "colorWheel";
-			this.colorWheel.ColorChanged += new System.EventHandler(this.colorWheel_ColorChanged);
+			this.tabPage_fuzzyValue.Controls.Add(this.fuzzyPanel);
+			resources.ApplyResources(this.tabPage_fuzzyValue, "tabPage_fuzzyValue");
+			this.tabPage_fuzzyValue.Name = "tabPage_fuzzyValue";
+			this.tabPage_fuzzyValue.UseVisualStyleBackColor = true;
+			// 
+			// fuzzyPanel
+			// 
+			this.fuzzyPanel.Controls.Add(this.fuzzyMax);
+			this.fuzzyPanel.Controls.Add(this.label5);
+			this.fuzzyPanel.Controls.Add(this.fuzzyMin);
+			this.fuzzyPanel.Controls.Add(this.label4);
+			this.fuzzyPanel.Controls.Add(this.label3);
+			resources.ApplyResources(this.fuzzyPanel, "fuzzyPanel");
+			this.fuzzyPanel.Name = "fuzzyPanel";
+			// 
+			// fuzzyMax
+			// 
+			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
+			this.fuzzyMax.Name = "fuzzyMax";
+			// 
+			// label5
+			// 
+			resources.ApplyResources(this.label5, "label5");
+			this.label5.Name = "label5";
+			// 
+			// fuzzyMin
+			// 
+			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
+			this.fuzzyMin.Name = "fuzzyMin";
+			// 
+			// label4
+			// 
+			resources.ApplyResources(this.label4, "label4");
+			this.label4.Name = "label4";
+			// 
+			// label3
+			// 
+			resources.ApplyResources(this.label3, "label3");
+			this.label3.Name = "label3";
 			// 
 			// imageList_filter
 			// 
@@ -768,48 +802,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// tabPage_fuzzyValue
-			// 
-			this.tabPage_fuzzyValue.Controls.Add(this.fuzzyPanel);
-			resources.ApplyResources(this.tabPage_fuzzyValue, "tabPage_fuzzyValue");
-			this.tabPage_fuzzyValue.Name = "tabPage_fuzzyValue";
-			this.tabPage_fuzzyValue.UseVisualStyleBackColor = true;
-			// 
-			// fuzzyPanel
-			// 
-			this.fuzzyPanel.Controls.Add(this.fuzzyMax);
-			this.fuzzyPanel.Controls.Add(this.label5);
-			this.fuzzyPanel.Controls.Add(this.fuzzyMin);
-			this.fuzzyPanel.Controls.Add(this.label4);
-			this.fuzzyPanel.Controls.Add(this.label3);
-			resources.ApplyResources(this.fuzzyPanel, "fuzzyPanel");
-			this.fuzzyPanel.Name = "fuzzyPanel";
-			// 
-			// label3
-			// 
-			resources.ApplyResources(this.label3, "label3");
-			this.label3.Name = "label3";
-			// 
-			// label4
-			// 
-			resources.ApplyResources(this.label4, "label4");
-			this.label4.Name = "label4";
-			// 
-			// fuzzyMin
-			// 
-			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
-			this.fuzzyMin.Name = "fuzzyMin";
-			// 
-			// label5
-			// 
-			resources.ApplyResources(this.label5, "label5");
-			this.label5.Name = "label5";
-			// 
-			// fuzzyMax
-			// 
-			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
-			this.fuzzyMax.Name = "fuzzyMax";
-			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -845,6 +837,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_colorPicker.ResumeLayout(false);
 			this.pickerPanel.ResumeLayout(false);
 			this.pickerPanel.PerformLayout();
+			this.tabPage_fuzzyValue.ResumeLayout(false);
+			this.fuzzyPanel.ResumeLayout(false);
+			this.fuzzyPanel.PerformLayout();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -853,9 +848,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.tabPage_fuzzyValue.ResumeLayout(false);
-			this.fuzzyPanel.ResumeLayout(false);
-			this.fuzzyPanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -942,7 +934,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TabPage tabPage_colorPicker;
 		private Panel pickerPanel;
 		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
-		private Cyotek.Windows.Forms.ColorWheel colorWheel;
 		private Cyotek.Windows.Forms.ColorEditor colorEditor;
 		private Cyotek.Windows.Forms.ScreenColorPicker screenColorPicker;
 		private Button clearColorsBtn;
