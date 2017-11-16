@@ -19,7 +19,7 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
             }
             else
             {
-                _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code)));
+                _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code, null)));
             }
         }
 
@@ -44,7 +44,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
             }
             else
             {
-                TargetLanguageCodeViewModel targetLanguageCodeViewModel = new TargetLanguageCodeViewModel(targetlanguageCode);
+                var iconUri = Helper.GetImagePathByStudioCode(Helper.GetImageStudioCodeByLanguageCode(targetlanguageCode.LanguageCode));
+                TargetLanguageCodeViewModel targetLanguageCodeViewModel = new TargetLanguageCodeViewModel(targetlanguageCode, iconUri);
                 _xmlFiles.Add(targetLanguageCodeViewModel);
                 targetLanguageCodeViewModel.AddChild(analyzeFile);
             }

@@ -27,7 +27,6 @@ namespace Sdl.Community.XmlReader.WPF
             _viewModel.ResetLists();
         }
 
-        // Allow to drag and drop into the treeView only files
         public void treeView_DragEnter(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
