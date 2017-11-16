@@ -30,6 +30,7 @@
 		{
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReportExporterControl));
       this.mainPanel = new System.Windows.Forms.Panel();
+      this.selectAll = new System.Windows.Forms.CheckBox();
       this.clearBtn = new System.Windows.Forms.Button();
       this.loadBtn = new System.Windows.Forms.Button();
       this.projectStatusComboBox = new System.Windows.Forms.ComboBox();
@@ -54,7 +55,6 @@
       this.includeHeaderCheck = new System.Windows.Forms.CheckBox();
       this.projListbox = new System.Windows.Forms.CheckedListBox();
       this.selectProjLbl = new System.Windows.Forms.Label();
-      this.selectAll = new System.Windows.Forms.CheckBox();
       this.mainPanel.SuspendLayout();
       this.SuspendLayout();
       // 
@@ -91,9 +91,20 @@
       this.mainPanel.Size = new System.Drawing.Size(811, 455);
       this.mainPanel.TabIndex = 0;
       // 
+      // selectAll
+      // 
+      this.selectAll.AutoSize = true;
+      this.selectAll.Location = new System.Drawing.Point(12, 426);
+      this.selectAll.Name = "selectAll";
+      this.selectAll.Size = new System.Drawing.Size(109, 17);
+      this.selectAll.TabIndex = 28;
+      this.selectAll.Text = "Select all projects";
+      this.selectAll.UseVisualStyleBackColor = true;
+      this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
+      // 
       // clearBtn
       // 
-      this.clearBtn.Location = new System.Drawing.Point(693, 177);
+      this.clearBtn.Location = new System.Drawing.Point(690, 253);
       this.clearBtn.Name = "clearBtn";
       this.clearBtn.Size = new System.Drawing.Size(106, 23);
       this.clearBtn.TabIndex = 27;
@@ -103,7 +114,7 @@
       // 
       // loadBtn
       // 
-      this.loadBtn.Location = new System.Drawing.Point(694, 147);
+      this.loadBtn.Location = new System.Drawing.Point(690, 224);
       this.loadBtn.Name = "loadBtn";
       this.loadBtn.Size = new System.Drawing.Size(105, 23);
       this.loadBtn.TabIndex = 26;
@@ -118,7 +129,7 @@
             "All",
             "InProgress",
             "Completed"});
-      this.projectStatusComboBox.Location = new System.Drawing.Point(458, 76);
+      this.projectStatusComboBox.Location = new System.Drawing.Point(432, 133);
       this.projectStatusComboBox.Name = "projectStatusComboBox";
       this.projectStatusComboBox.Size = new System.Drawing.Size(121, 21);
       this.projectStatusComboBox.TabIndex = 25;
@@ -127,7 +138,7 @@
       // label3
       // 
       this.label3.AutoSize = true;
-      this.label3.Location = new System.Drawing.Point(458, 59);
+      this.label3.Location = new System.Drawing.Point(432, 117);
       this.label3.Name = "label3";
       this.label3.Size = new System.Drawing.Size(71, 13);
       this.label3.TabIndex = 24;
@@ -136,7 +147,7 @@
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(458, 10);
+      this.label2.Location = new System.Drawing.Point(430, 10);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(96, 13);
       this.label2.TabIndex = 23;
@@ -144,7 +155,7 @@
       // 
       // browseBtn
       // 
-      this.browseBtn.Location = new System.Drawing.Point(693, 26);
+      this.browseBtn.Location = new System.Drawing.Point(690, 55);
       this.browseBtn.Name = "browseBtn";
       this.browseBtn.Size = new System.Drawing.Size(108, 23);
       this.browseBtn.TabIndex = 22;
@@ -154,16 +165,16 @@
       // 
       // reportOutputPath
       // 
-      this.reportOutputPath.Location = new System.Drawing.Point(458, 29);
+      this.reportOutputPath.Location = new System.Drawing.Point(433, 29);
       this.reportOutputPath.Name = "reportOutputPath";
-      this.reportOutputPath.Size = new System.Drawing.Size(229, 20);
+      this.reportOutputPath.Size = new System.Drawing.Size(366, 20);
       this.reportOutputPath.TabIndex = 21;
       this.reportOutputPath.KeyUp += new System.Windows.Forms.KeyEventHandler(this.reportOutputPath_KeyUp);
       // 
       // crossRep
       // 
       this.crossRep.AutoSize = true;
-      this.crossRep.Location = new System.Drawing.Point(458, 384);
+      this.crossRep.Location = new System.Drawing.Point(432, 384);
       this.crossRep.Name = "crossRep";
       this.crossRep.Size = new System.Drawing.Size(127, 17);
       this.crossRep.TabIndex = 20;
@@ -174,7 +185,7 @@
       // contextMatch
       // 
       this.contextMatch.AutoSize = true;
-      this.contextMatch.Location = new System.Drawing.Point(458, 361);
+      this.contextMatch.Location = new System.Drawing.Point(432, 361);
       this.contextMatch.Name = "contextMatch";
       this.contextMatch.Size = new System.Drawing.Size(95, 17);
       this.contextMatch.TabIndex = 19;
@@ -185,7 +196,7 @@
       // perfectMatch
       // 
       this.perfectMatch.AutoSize = true;
-      this.perfectMatch.Location = new System.Drawing.Point(458, 338);
+      this.perfectMatch.Location = new System.Drawing.Point(432, 338);
       this.perfectMatch.Name = "perfectMatch";
       this.perfectMatch.Size = new System.Drawing.Size(93, 17);
       this.perfectMatch.TabIndex = 18;
@@ -196,7 +207,7 @@
       // locked
       // 
       this.locked.AutoSize = true;
-      this.locked.Location = new System.Drawing.Point(458, 407);
+      this.locked.Location = new System.Drawing.Point(432, 407);
       this.locked.Name = "locked";
       this.locked.Size = new System.Drawing.Size(62, 17);
       this.locked.TabIndex = 17;
@@ -207,7 +218,7 @@
       // internalFuzzies
       // 
       this.internalFuzzies.AutoSize = true;
-      this.internalFuzzies.Location = new System.Drawing.Point(458, 315);
+      this.internalFuzzies.Location = new System.Drawing.Point(432, 315);
       this.internalFuzzies.Name = "internalFuzzies";
       this.internalFuzzies.Size = new System.Drawing.Size(99, 17);
       this.internalFuzzies.TabIndex = 16;
@@ -218,7 +229,7 @@
       // adaptiveMT
       // 
       this.adaptiveMT.AutoSize = true;
-      this.adaptiveMT.Location = new System.Drawing.Point(458, 292);
+      this.adaptiveMT.Location = new System.Drawing.Point(432, 292);
       this.adaptiveMT.Name = "adaptiveMT";
       this.adaptiveMT.Size = new System.Drawing.Size(130, 17);
       this.adaptiveMT.TabIndex = 15;
@@ -229,7 +240,7 @@
       // adaptiveLearnings
       // 
       this.adaptiveLearnings.AutoSize = true;
-      this.adaptiveLearnings.Location = new System.Drawing.Point(458, 269);
+      this.adaptiveLearnings.Location = new System.Drawing.Point(432, 269);
       this.adaptiveLearnings.Name = "adaptiveLearnings";
       this.adaptiveLearnings.Size = new System.Drawing.Size(158, 17);
       this.adaptiveLearnings.TabIndex = 14;
@@ -240,7 +251,7 @@
       // optionsLabel
       // 
       this.optionsLabel.AutoSize = true;
-      this.optionsLabel.Location = new System.Drawing.Point(455, 241);
+      this.optionsLabel.Location = new System.Drawing.Point(429, 253);
       this.optionsLabel.Name = "optionsLabel";
       this.optionsLabel.Size = new System.Drawing.Size(137, 13);
       this.optionsLabel.TabIndex = 12;
@@ -248,7 +259,7 @@
       // 
       // exitBtn
       // 
-      this.exitBtn.Location = new System.Drawing.Point(694, 401);
+      this.exitBtn.Location = new System.Drawing.Point(692, 420);
       this.exitBtn.Name = "exitBtn";
       this.exitBtn.Size = new System.Drawing.Size(107, 23);
       this.exitBtn.TabIndex = 11;
@@ -258,7 +269,7 @@
       // 
       // targetBtn
       // 
-      this.targetBtn.Location = new System.Drawing.Point(693, 117);
+      this.targetBtn.Location = new System.Drawing.Point(688, 195);
       this.targetBtn.Name = "targetBtn";
       this.targetBtn.Size = new System.Drawing.Size(107, 23);
       this.targetBtn.TabIndex = 10;
@@ -268,7 +279,7 @@
       // 
       // csvBtn
       // 
-      this.csvBtn.Location = new System.Drawing.Point(694, 88);
+      this.csvBtn.Location = new System.Drawing.Point(688, 166);
       this.csvBtn.Name = "csvBtn";
       this.csvBtn.Size = new System.Drawing.Size(107, 23);
       this.csvBtn.TabIndex = 9;
@@ -278,7 +289,7 @@
       // 
       // copyBtn
       // 
-      this.copyBtn.Location = new System.Drawing.Point(693, 59);
+      this.copyBtn.Location = new System.Drawing.Point(688, 137);
       this.copyBtn.Name = "copyBtn";
       this.copyBtn.Size = new System.Drawing.Size(108, 23);
       this.copyBtn.TabIndex = 8;
@@ -290,16 +301,16 @@
       // 
       this.languagesListBox.CheckOnClick = true;
       this.languagesListBox.FormattingEnabled = true;
-      this.languagesListBox.Location = new System.Drawing.Point(249, 75);
+      this.languagesListBox.Location = new System.Drawing.Point(249, 29);
       this.languagesListBox.Name = "languagesListBox";
-      this.languagesListBox.Size = new System.Drawing.Size(177, 349);
+      this.languagesListBox.Size = new System.Drawing.Size(177, 394);
       this.languagesListBox.TabIndex = 7;
       this.languagesListBox.SelectedIndexChanged += new System.EventHandler(this.languagesListBox_SelectedIndexChanged_1);
       // 
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(246, 59);
+      this.label1.Location = new System.Drawing.Point(246, 10);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(145, 13);
       this.label1.TabIndex = 6;
@@ -308,7 +319,7 @@
       // includeHeaderCheck
       // 
       this.includeHeaderCheck.AutoSize = true;
-      this.includeHeaderCheck.Location = new System.Drawing.Point(249, 32);
+      this.includeHeaderCheck.Location = new System.Drawing.Point(433, 55);
       this.includeHeaderCheck.Name = "includeHeaderCheck";
       this.includeHeaderCheck.Size = new System.Drawing.Size(140, 17);
       this.includeHeaderCheck.TabIndex = 5;
@@ -320,31 +331,20 @@
       // 
       this.projListbox.CheckOnClick = true;
       this.projListbox.FormattingEnabled = true;
-      this.projListbox.Location = new System.Drawing.Point(19, 60);
+      this.projListbox.Location = new System.Drawing.Point(12, 26);
       this.projListbox.Name = "projListbox";
-      this.projListbox.Size = new System.Drawing.Size(221, 364);
+      this.projListbox.Size = new System.Drawing.Size(221, 394);
       this.projListbox.TabIndex = 1;
       this.projListbox.SelectedIndexChanged += new System.EventHandler(this.projListbox_SelectedIndexChanged);
       // 
       // selectProjLbl
       // 
       this.selectProjLbl.AutoSize = true;
-      this.selectProjLbl.Location = new System.Drawing.Point(16, 10);
+      this.selectProjLbl.Location = new System.Drawing.Point(9, 10);
       this.selectProjLbl.Name = "selectProjLbl";
       this.selectProjLbl.Size = new System.Drawing.Size(75, 13);
       this.selectProjLbl.TabIndex = 0;
       this.selectProjLbl.Text = "Select project:";
-      // 
-      // selectAll
-      // 
-      this.selectAll.AutoSize = true;
-      this.selectAll.Location = new System.Drawing.Point(19, 31);
-      this.selectAll.Name = "selectAll";
-      this.selectAll.Size = new System.Drawing.Size(109, 17);
-      this.selectAll.TabIndex = 28;
-      this.selectAll.Text = "Select all projects";
-      this.selectAll.UseVisualStyleBackColor = true;
-      this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
       // 
       // ReportExporterControl
       // 
