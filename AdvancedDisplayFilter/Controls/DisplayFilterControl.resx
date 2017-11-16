@@ -207,6 +207,297 @@
   <data name="&gt;&gt;tabPage_filters.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="tableLayoutPanel3.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="tableLayoutPanel3.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
+    <value>GrowAndShrink</value>
+  </data>
+  <data name="tableLayoutPanel3.ColumnCount" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="comboBox_commentSeverity.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="comboBox_commentSeverity.Location" type="System.Drawing.Point, System.Drawing">
+    <value>173, 86</value>
+  </data>
+  <data name="comboBox_commentSeverity.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="comboBox_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
+    <value>594, 21</value>
+  </data>
+  <data name="comboBox_commentSeverity.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;comboBox_commentSeverity.Name" xml:space="preserve">
+    <value>comboBox_commentSeverity</value>
+  </data>
+  <data name="&gt;&gt;comboBox_commentSeverity.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;comboBox_commentSeverity.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;comboBox_commentSeverity.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="label_commentText.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="label_commentText.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label_commentText.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label_commentText.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 36</value>
+  </data>
+  <data name="label_commentText.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="label_commentText.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 24</value>
+  </data>
+  <data name="label_commentText.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="label_commentText.Text" xml:space="preserve">
+    <value>Text:</value>
+  </data>
+  <data name="label_commentText.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label_commentText.Name" xml:space="preserve">
+    <value>label_commentText</value>
+  </data>
+  <data name="&gt;&gt;label_commentText.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_commentText.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;label_commentText.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="label_commentSeverity.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="label_commentSeverity.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label_commentSeverity.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label_commentSeverity.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 84</value>
+  </data>
+  <data name="label_commentSeverity.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="label_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 24</value>
+  </data>
+  <data name="label_commentSeverity.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="label_commentSeverity.Text" xml:space="preserve">
+    <value>Severity:</value>
+  </data>
+  <data name="label_commentSeverity.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label_commentSeverity.Name" xml:space="preserve">
+    <value>label_commentSeverity</value>
+  </data>
+  <data name="&gt;&gt;label_commentSeverity.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_commentSeverity.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;label_commentSeverity.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="textBox_commentText.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="textBox_commentText.Location" type="System.Drawing.Point, System.Drawing">
+    <value>173, 38</value>
+  </data>
+  <data name="textBox_commentText.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="textBox_commentText.Size" type="System.Drawing.Size, System.Drawing">
+    <value>594, 20</value>
+  </data>
+  <data name="textBox_commentText.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentText.Name" xml:space="preserve">
+    <value>textBox_commentText</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentText.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentText.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentText.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="textBox_commentAuthor.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="textBox_commentAuthor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>173, 62</value>
+  </data>
+  <data name="textBox_commentAuthor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="textBox_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>594, 20</value>
+  </data>
+  <data name="textBox_commentAuthor.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentAuthor.Name" xml:space="preserve">
+    <value>textBox_commentAuthor</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentAuthor.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentAuthor.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;textBox_commentAuthor.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="label_commentAuthor.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="label_commentAuthor.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label_commentAuthor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label_commentAuthor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 60</value>
+  </data>
+  <data name="label_commentAuthor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="label_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 24</value>
+  </data>
+  <data name="label_commentAuthor.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="label_commentAuthor.Text" xml:space="preserve">
+    <value>Author:</value>
+  </data>
+  <data name="label_commentAuthor.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
+    <value>MiddleLeft</value>
+  </data>
+  <data name="&gt;&gt;label_commentAuthor.Name" xml:space="preserve">
+    <value>label_commentAuthor</value>
+  </data>
+  <data name="&gt;&gt;label_commentAuthor.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_commentAuthor.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;label_commentAuthor.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Bottom, Left, Right</value>
+  </data>
+  <data name="label_tab_comments_filter_message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 4</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 0, 2, 0</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>0, 2, 0, 0</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Size" type="System.Drawing.Size, System.Drawing">
+    <value>763, 32</value>
+  </data>
+  <data name="label_tab_comments_filter_message.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="label_tab_comments_filter_message.Text" xml:space="preserve">
+    <value>Display segments with the following comment attributes:</value>
+  </data>
+  <data name="&gt;&gt;label_tab_comments_filter_message.Name" xml:space="preserve">
+    <value>label_tab_comments_filter_message</value>
+  </data>
+  <data name="&gt;&gt;label_tab_comments_filter_message.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label_tab_comments_filter_message.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;label_tab_comments_filter_message.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="commentRegexBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="commentRegexBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 111</value>
+  </data>
+  <data name="commentRegexBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 17</value>
+  </data>
+  <data name="commentRegexBox.TabIndex" type="System.Int32, mscorlib">
+    <value>9</value>
+  </data>
+  <data name="commentRegexBox.Text" xml:space="preserve">
+    <value>Use regex for  comments text</value>
+  </data>
+  <data name="&gt;&gt;commentRegexBox.Name" xml:space="preserve">
+    <value>commentRegexBox</value>
+  </data>
+  <data name="&gt;&gt;commentRegexBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;commentRegexBox.Parent" xml:space="preserve">
+    <value>tableLayoutPanel3</value>
+  </data>
+  <data name="&gt;&gt;commentRegexBox.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="tableLayoutPanel3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="tableLayoutPanel3.Location" type="System.Drawing.Point, System.Drawing">
+    <value>4, 4</value>
+  </data>
+  <data name="tableLayoutPanel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 2, 2, 2</value>
+  </data>
+  <data name="tableLayoutPanel3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>2, 4, 4, 4</value>
+  </data>
+  <data name="tableLayoutPanel3.RowCount" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
+    <value>773, 364</value>
+  </data>
+  <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
   <data name="&gt;&gt;tableLayoutPanel3.Name" xml:space="preserve">
     <value>tableLayoutPanel3</value>
   </data>
@@ -297,6 +588,24 @@
   <data name="&gt;&gt;tabPage_contextInfo.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>201, 7</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>233, 13</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Example of grouped list: 1-2, 17-45, 56, 100-150</value>
+  </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
   </data>
@@ -309,6 +618,18 @@
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>204, 23</value>
+  </data>
+  <data name="segmentsBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>230, 97</value>
+  </data>
+  <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
   <data name="&gt;&gt;segmentsBox.Name" xml:space="preserve">
     <value>segmentsBox</value>
   </data>
@@ -320,6 +641,66 @@
   </data>
   <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Name" xml:space="preserve">
+    <value>groupedBtn</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;commaBtn.Name" xml:space="preserve">
+    <value>commaBtn</value>
+  </data>
+  <data name="&gt;&gt;commaBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;commaBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;commaBtn.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Name" xml:space="preserve">
+    <value>oddBtn</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Name" xml:space="preserve">
+    <value>evenBtn</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 7</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>188, 113</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Number options</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -359,188 +740,6 @@
   </data>
   <data name="&gt;&gt;tabPage_segmentNumbers.ZOrder" xml:space="preserve">
     <value>4</value>
-  </data>
-  <data name="colorsPanel.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="colorsPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>367, 23</value>
-  </data>
-  <data name="colorsPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 100</value>
-  </data>
-  <data name="colorsPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;colorsPanel.Name" xml:space="preserve">
-    <value>colorsPanel</value>
-  </data>
-  <data name="&gt;&gt;colorsPanel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;colorsPanel.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;colorsPanel.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="clearColorsBtn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="clearColorsBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 158</value>
-  </data>
-  <data name="clearColorsBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="clearColorsBtn.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="clearColorsBtn.Text" xml:space="preserve">
-    <value>Clear colors</value>
-  </data>
-  <data name="&gt;&gt;clearColorsBtn.Name" xml:space="preserve">
-    <value>clearColorsBtn</value>
-  </data>
-  <data name="&gt;&gt;clearColorsBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;clearColorsBtn.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;clearColorsBtn.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="addColorBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 129</value>
-  </data>
-  <data name="addColorBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>75, 23</value>
-  </data>
-  <data name="addColorBtn.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="addColorBtn.Text" xml:space="preserve">
-    <value>Add color</value>
-  </data>
-  <data name="&gt;&gt;addColorBtn.Name" xml:space="preserve">
-    <value>addColorBtn</value>
-  </data>
-  <data name="&gt;&gt;addColorBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;addColorBtn.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;addColorBtn.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>364, 4</value>
-  </data>
-  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 13</value>
-  </data>
-  <data name="label2.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="label2.Text" xml:space="preserve">
-    <value>Selected Colors</value>
-  </data>
-  <data name="&gt;&gt;label2.Name" xml:space="preserve">
-    <value>label2</value>
-  </data>
-  <data name="&gt;&gt;label2.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="screenColorPicker.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        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
-        0QAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="screenColorPicker.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 4</value>
-  </data>
-  <data name="screenColorPicker.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 119</value>
-  </data>
-  <data name="&gt;&gt;screenColorPicker.Name" xml:space="preserve">
-    <value>screenColorPicker</value>
-  </data>
-  <data name="&gt;&gt;screenColorPicker.Type" xml:space="preserve">
-    <value>Cyotek.Windows.Forms.ScreenColorPicker, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
-  </data>
-  <data name="&gt;&gt;screenColorPicker.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;screenColorPicker.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="colorEditor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>3, 0</value>
-  </data>
-  <data name="colorEditor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 260</value>
-  </data>
-  <data name="colorEditor.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;colorEditor.Name" xml:space="preserve">
-    <value>colorEditor</value>
-  </data>
-  <data name="&gt;&gt;colorEditor.Type" xml:space="preserve">
-    <value>Cyotek.Windows.Forms.ColorEditor, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
-  </data>
-  <data name="&gt;&gt;colorEditor.Parent" xml:space="preserve">
-    <value>pickerPanel</value>
-  </data>
-  <data name="&gt;&gt;colorEditor.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="pickerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="pickerPanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 0</value>
-  </data>
-  <data name="pickerPanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>781, 372</value>
-  </data>
-  <data name="pickerPanel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
   </data>
   <data name="&gt;&gt;pickerPanel.Name" xml:space="preserve">
     <value>pickerPanel</value>
@@ -628,7 +827,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAWQBBAFkAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAWwBBAFsAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -1846,405 +2045,6 @@
   <data name="&gt;&gt;label_fitlers_available.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="tableLayoutPanel3.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="tableLayoutPanel3.ColumnCount" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Name" xml:space="preserve">
-    <value>comboBox_commentSeverity</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Name" xml:space="preserve">
-    <value>label_commentText</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Name" xml:space="preserve">
-    <value>label_commentSeverity</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Name" xml:space="preserve">
-    <value>textBox_commentText</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Name" xml:space="preserve">
-    <value>textBox_commentAuthor</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Name" xml:space="preserve">
-    <value>label_commentAuthor</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Name" xml:space="preserve">
-    <value>label_tab_comments_filter_message</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Name" xml:space="preserve">
-    <value>commentRegexBox</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="tableLayoutPanel3.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Fill</value>
-  </data>
-  <data name="tableLayoutPanel3.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="tableLayoutPanel3.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="tableLayoutPanel3.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 4, 4, 4</value>
-  </data>
-  <data name="tableLayoutPanel3.RowCount" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="tableLayoutPanel3.Size" type="System.Drawing.Size, System.Drawing">
-    <value>773, 364</value>
-  </data>
-  <data name="tableLayoutPanel3.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel3.Name" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel3.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TableLayoutPanel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel3.Parent" xml:space="preserve">
-    <value>tabPage_comments</value>
-  </data>
-  <data name="&gt;&gt;tableLayoutPanel3.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="tableLayoutPanel3.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="comboBox_commentSeverity" Row="3" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentText" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_commentSeverity" Row="3" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentText" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="textBox_commentAuthor" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label_commentAuthor" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="label_tab_comments_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="commentRegexBox" Row="4" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
-  </data>
-  <data name="comboBox_commentSeverity.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="comboBox_commentSeverity.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 86</value>
-  </data>
-  <data name="comboBox_commentSeverity.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="comboBox_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 21</value>
-  </data>
-  <data name="comboBox_commentSeverity.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Name" xml:space="preserve">
-    <value>comboBox_commentSeverity</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;comboBox_commentSeverity.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="label_commentText.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="label_commentText.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label_commentText.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label_commentText.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 36</value>
-  </data>
-  <data name="label_commentText.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label_commentText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 24</value>
-  </data>
-  <data name="label_commentText.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="label_commentText.Text" xml:space="preserve">
-    <value>Text:</value>
-  </data>
-  <data name="label_commentText.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Name" xml:space="preserve">
-    <value>label_commentText</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentText.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="label_commentSeverity.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="label_commentSeverity.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label_commentSeverity.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label_commentSeverity.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 84</value>
-  </data>
-  <data name="label_commentSeverity.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label_commentSeverity.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 24</value>
-  </data>
-  <data name="label_commentSeverity.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="label_commentSeverity.Text" xml:space="preserve">
-    <value>Severity:</value>
-  </data>
-  <data name="label_commentSeverity.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Name" xml:space="preserve">
-    <value>label_commentSeverity</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentSeverity.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="textBox_commentText.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="textBox_commentText.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 38</value>
-  </data>
-  <data name="textBox_commentText.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="textBox_commentText.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 20</value>
-  </data>
-  <data name="textBox_commentText.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Name" xml:space="preserve">
-    <value>textBox_commentText</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentText.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="textBox_commentAuthor.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="textBox_commentAuthor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>173, 62</value>
-  </data>
-  <data name="textBox_commentAuthor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 2, 2, 2</value>
-  </data>
-  <data name="textBox_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>594, 20</value>
-  </data>
-  <data name="textBox_commentAuthor.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Name" xml:space="preserve">
-    <value>textBox_commentAuthor</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;textBox_commentAuthor.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="label_commentAuthor.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="label_commentAuthor.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label_commentAuthor.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label_commentAuthor.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 60</value>
-  </data>
-  <data name="label_commentAuthor.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label_commentAuthor.Size" type="System.Drawing.Size, System.Drawing">
-    <value>165, 24</value>
-  </data>
-  <data name="label_commentAuthor.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="label_commentAuthor.Text" xml:space="preserve">
-    <value>Author:</value>
-  </data>
-  <data name="label_commentAuthor.TextAlign" type="System.Drawing.ContentAlignment, System.Drawing">
-    <value>MiddleLeft</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Name" xml:space="preserve">
-    <value>label_commentAuthor</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_commentAuthor.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Bottom, Left, Right</value>
-  </data>
-  <data name="label_tab_comments_filter_message.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Location" type="System.Drawing.Point, System.Drawing">
-    <value>4, 4</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>2, 0, 2, 0</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>0, 2, 0, 0</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Size" type="System.Drawing.Size, System.Drawing">
-    <value>763, 32</value>
-  </data>
-  <data name="label_tab_comments_filter_message.TabIndex" type="System.Int32, mscorlib">
-    <value>8</value>
-  </data>
-  <data name="label_tab_comments_filter_message.Text" xml:space="preserve">
-    <value>Display segments with the following comment attributes:</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Name" xml:space="preserve">
-    <value>label_tab_comments_filter_message</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;label_tab_comments_filter_message.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="commentRegexBox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="commentRegexBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 111</value>
-  </data>
-  <data name="commentRegexBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 17</value>
-  </data>
-  <data name="commentRegexBox.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="commentRegexBox.Text" xml:space="preserve">
-    <value>Use regex for  comments text</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Name" xml:space="preserve">
-    <value>commentRegexBox</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.Parent" xml:space="preserve">
-    <value>tableLayoutPanel3</value>
-  </data>
-  <data name="&gt;&gt;commentRegexBox.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="tableLayoutPanel4.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
     <value>GrowAndShrink</value>
   </data>
@@ -2482,132 +2282,6 @@
   <data name="&gt;&gt;label_contextInfoSelected.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 125</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 13</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Example of grouped list: 1-2, 17-45, 56, 100-150</value>
-  </data>
-  <data name="&gt;&gt;label1.Name" xml:space="preserve">
-    <value>label1</value>
-  </data>
-  <data name="&gt;&gt;label1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="segmentsBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 144</value>
-  </data>
-  <data name="segmentsBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>0, 34</value>
-  </data>
-  <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;segmentsBox.Name" xml:space="preserve">
-    <value>segmentsBox</value>
-  </data>
-  <data name="&gt;&gt;segmentsBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;segmentsBox.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Name" xml:space="preserve">
-    <value>groupedBtn</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Name" xml:space="preserve">
-    <value>commaBtn</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Name" xml:space="preserve">
-    <value>oddBtn</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Name" xml:space="preserve">
-    <value>evenBtn</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 7</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>188, 113</value>
-  </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Number options</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
-    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="groupedBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -2715,6 +2389,275 @@
   </data>
   <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
     <value>3</value>
+  </data>
+  <data name="pickerPanel.AutoScroll" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Name" xml:space="preserve">
+    <value>colorsPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Name" xml:space="preserve">
+    <value>clearColorsBtn</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Name" xml:space="preserve">
+    <value>addColorBtn</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Name" xml:space="preserve">
+    <value>screenColorPicker</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ScreenColorPicker, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Name" xml:space="preserve">
+    <value>colorEditor</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ColorEditor, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="pickerPanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="pickerPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="pickerPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>781, 372</value>
+  </data>
+  <data name="pickerPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Name" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.Parent" xml:space="preserve">
+    <value>tabPage_colorPicker</value>
+  </data>
+  <data name="&gt;&gt;pickerPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="colorsPanel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="colorsPanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>367, 23</value>
+  </data>
+  <data name="colorsPanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 100</value>
+  </data>
+  <data name="colorsPanel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Name" xml:space="preserve">
+    <value>colorsPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Panel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorsPanel.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="clearColorsBtn.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="clearColorsBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>222, 158</value>
+  </data>
+  <data name="clearColorsBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="clearColorsBtn.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="clearColorsBtn.Text" xml:space="preserve">
+    <value>Clear colors</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Name" xml:space="preserve">
+    <value>clearColorsBtn</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;clearColorsBtn.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="addColorBtn.Location" type="System.Drawing.Point, System.Drawing">
+    <value>222, 129</value>
+  </data>
+  <data name="addColorBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="addColorBtn.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="addColorBtn.Text" xml:space="preserve">
+    <value>Add color</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Name" xml:space="preserve">
+    <value>addColorBtn</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;addColorBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="label2.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>364, 4</value>
+  </data>
+  <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 13</value>
+  </data>
+  <data name="label2.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="label2.Text" xml:space="preserve">
+    <value>Selected Colors</value>
+  </data>
+  <data name="&gt;&gt;label2.Name" xml:space="preserve">
+    <value>label2</value>
+  </data>
+  <data name="&gt;&gt;label2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label2.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;label2.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="screenColorPicker.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        0QAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="screenColorPicker.Location" type="System.Drawing.Point, System.Drawing">
+    <value>222, 4</value>
+  </data>
+  <data name="screenColorPicker.Size" type="System.Drawing.Size, System.Drawing">
+    <value>125, 119</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Name" xml:space="preserve">
+    <value>screenColorPicker</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ScreenColorPicker, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;screenColorPicker.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="colorEditor.Location" type="System.Drawing.Point, System.Drawing">
+    <value>3, 0</value>
+  </data>
+  <data name="colorEditor.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 260</value>
+  </data>
+  <data name="colorEditor.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Name" xml:space="preserve">
+    <value>colorEditor</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Type" xml:space="preserve">
+    <value>Cyotek.Windows.Forms.ColorEditor, Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.Parent" xml:space="preserve">
+    <value>pickerPanel</value>
+  </data>
+  <data name="&gt;&gt;colorEditor.ZOrder" xml:space="preserve">
+    <value>5</value>
   </data>
   <data name="&gt;&gt;fuzzyMax.Name" xml:space="preserve">
     <value>fuzzyMax</value>

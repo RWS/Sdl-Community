@@ -517,10 +517,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// tabPage_segmentNumbers
 			// 
+			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
 			this.tabPage_segmentNumbers.Controls.Add(this.label1);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
-			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
 			// 
@@ -585,13 +585,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// pickerPanel
 			// 
+			resources.ApplyResources(this.pickerPanel, "pickerPanel");
 			this.pickerPanel.Controls.Add(this.colorsPanel);
 			this.pickerPanel.Controls.Add(this.clearColorsBtn);
 			this.pickerPanel.Controls.Add(this.addColorBtn);
 			this.pickerPanel.Controls.Add(this.label2);
 			this.pickerPanel.Controls.Add(this.screenColorPicker);
 			this.pickerPanel.Controls.Add(this.colorEditor);
-			resources.ApplyResources(this.pickerPanel, "pickerPanel");
 			this.pickerPanel.Name = "pickerPanel";
 			// 
 			// colorsPanel
