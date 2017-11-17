@@ -176,7 +176,7 @@ namespace Sdl.Community.TMBackup
 						foreach (var subdirectory in subdirectories)
 						{
 							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
+							CheckForSubfolders(currentDirInfo, txt_BackupTo.Text);
 
 						}
 					}
@@ -190,16 +190,12 @@ namespace Sdl.Community.TMBackup
 			var subdirectories = directory.GetDirectories();
 			var path = root + @"\" + directory.Parent;
 			var subdirectoryFiles = Directory.GetFiles(directory.FullName);
+
 			if (subdirectoryFiles.Length != 0)
 			{
-				var subdirectoryToMovePath = Path.Combine(path, directory.Name);
-				if (!Directory.Exists(subdirectoryToMovePath))
-				{
-					Directory.CreateDirectory(subdirectoryToMovePath);
-				}
-				MoveFilesToAcceptedFolder(subdirectoryFiles, subdirectoryToMovePath);
-
+				MoveFilesToAcceptedFolder(subdirectoryFiles, path);
 			}
+
 			if (subdirectories.Length != 0)
 			{
 				foreach (var subdirectory in subdirectories)
@@ -207,8 +203,8 @@ namespace Sdl.Community.TMBackup
 					CheckForSubfolders(subdirectory, path);
 				}
 			}
-
 		}
+
 		private void MoveFilesToAcceptedFolder(string[] files, string acceptedFolderPath)
 		{
 			foreach (var subFile in files)
@@ -228,6 +224,7 @@ namespace Sdl.Community.TMBackup
 				}
 				catch (Exception e)
 				{
+					MessageBox.Show("Files were not copied correctly. Please try again!", "Informative message");
 				}
 			}
 		}
