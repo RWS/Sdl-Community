@@ -24,7 +24,6 @@ namespace Sdl.Community.ReportExporter
 		private string _projectXmlPath;
 		private OptionalInformation _optionalInformation;
 		private List<ProjectDetails> _allStudioProjectsDetails;
-		private List<ProjectDetails> _externalProjects = new List<ProjectDetails>();
 		private readonly BindingList<LanguageDetails> _languages = new BindingList<LanguageDetails>();
 		private BindingList<ProjectDetails> _projectsDataSource = new BindingList<ProjectDetails>();
 		private bool _areExternalStudioProjects;
@@ -267,14 +266,19 @@ namespace Sdl.Community.ReportExporter
 				//that means no other project has this language selected so we can uncheck the language ox
 				if (count.Equals(0))
 				{
-					var languageToBeUnselected = _languages.FirstOrDefault(l => l.LanguageName.Equals(languageName));
-					if (languageToBeUnselected != null)
+					var languageToBeDeleted = _languages.FirstOrDefault(l => l.LanguageName.Equals(languageName));
+					if (languageToBeDeleted != null)
 					{
-						languageToBeUnselected.IsChecked = false;
+						_languages.Remove(languageToBeDeleted);
 					}
 				}
 			}
 
+			// if the are any projects selected clear language list
+			if (_projectsDataSource.Count(p => p.ShouldBeExported).Equals(0))
+			{
+				_languages.Clear();
+			}
 			RefreshLanguageListbox();
 		}
 
@@ -676,6 +680,7 @@ namespace Sdl.Community.ReportExporter
 		private void selectAll_CheckedChanged(object sender, EventArgs e)
 		{
 			var selectAll = ((CheckBox) sender).Checked;
+
 			foreach (var project in _projectsDataSource)
 			{
 				project.ShouldBeExported = selectAll;
@@ -684,12 +689,17 @@ namespace Sdl.Community.ReportExporter
 					project.LanguagesForPoject[language.Key] = selectAll;
 				}
 			}
-
-			
 			RefreshProjectsListBox();
-			foreach (var language in _languages)
+			if (selectAll)
 			{
-				language.IsChecked = selectAll;
+				foreach (var language in _languages)
+				{
+					language.IsChecked =true;
+				}
+			}
+			else
+			{
+				_languages.Clear();
 			}
 			RefreshLanguageListbox();
 		}
