@@ -68,7 +68,7 @@ namespace Sdl.Community.ReportExporter
 				var selectedProject = _projectsDataSource.FirstOrDefault(p => p.ProjectPath.Equals(path));
 				if (selectedProject != null)
 				{
-					PrepareProjectToExport(selectedProject, true);
+					PrepareProjectToExport(selectedProject);
 				}
 			}
 
@@ -225,13 +225,60 @@ namespace Sdl.Community.ReportExporter
 			if (selectedProjectIndex > -1)
 			{
 				var shouldExportProject = ((CheckedListBox)sender).GetItemChecked(selectedProjectIndex);
-				PrepareProjectToExport(selectedProject, shouldExportProject);
+
+				if (shouldExportProject)
+				{
+					PrepareProjectToExport(selectedProject);
+				}//that means user deselected a project
+				else
+				{
+					if (selectedProject != null)
+					{
+						selectedProject.ShouldBeExported = false;
+						ShouldUnselectLanguages(selectedProject);
+					}
+				}
+				
 			}
 			IsClipboardEnabled();
 
 		}
 
-		private void PrepareProjectToExport(ProjectDetails selectedProject,bool shouldExportProject)
+		private void ShouldUnselectLanguages(ProjectDetails selectedProject)
+		{
+			var selectedLanguagesFromProject = selectedProject.LanguagesForPoject.Where(n => n.Value).Select(n => n.Key).ToList();
+			var count = 0;
+			foreach (var languageName in selectedLanguagesFromProject)
+			{
+				//unselect language for project in data source list
+				selectedProject.LanguagesForPoject[languageName] = false;
+
+				var projectsToBeExported = _projectsDataSource.Where(n => n.LanguagesForPoject.ContainsKey(languageName)
+				                                                          && n.ShouldBeExported).ToList();
+				foreach (var project in projectsToBeExported)
+				{
+					var languageShouldBeExported = project.LanguagesForPoject[languageName];
+					if (languageShouldBeExported)
+					{
+						count++;
+					}
+				}
+                             
+				//that means no other project has this language selected so we can uncheck the language ox
+				if (count.Equals(0))
+				{
+					var languageToBeUnselected = _languages.FirstOrDefault(l => l.LanguageName.Equals(languageName));
+					if (languageToBeUnselected != null)
+					{
+						languageToBeUnselected.IsChecked = false;
+					}
+				}
+			}
+
+			RefreshLanguageListbox();
+		}
+
+		private void PrepareProjectToExport(ProjectDetails selectedProject)
 		{
 			if (selectedProject != null)
 			{
@@ -244,7 +291,7 @@ namespace Sdl.Community.ReportExporter
 					doc.Load(selectedProject.ProjectPath);
 					Help.LoadReports(doc, selectedProject.ProjectFolderPath, selectedProject);
 					
-					selectedProject.ShouldBeExported = shouldExportProject;
+					selectedProject.ShouldBeExported = true;
 					//if an project has only one language select that language
 					if (selectedProject.LanguagesForPoject!=null)
 					{
