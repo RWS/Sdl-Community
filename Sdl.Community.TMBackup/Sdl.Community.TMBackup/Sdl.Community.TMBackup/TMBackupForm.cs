@@ -3,6 +3,9 @@ using System;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.TMBackup.Models;
+using Microsoft.Win32.TaskScheduler;
+using System.IO;
+using System.Collections.Generic;
 
 namespace Sdl.Community.TMBackup
 {
@@ -18,6 +21,7 @@ namespace Sdl.Community.TMBackup
 		private void btn_BackupFrom_Click(object sender, EventArgs e)
 		{
 			var fromFolderDialog = new FolderSelectDialog();
+			txt_BackupFrom.Text = string.Empty;
 
 			if (fromFolderDialog.ShowDialog())
 			{
@@ -39,7 +43,7 @@ namespace Sdl.Community.TMBackup
 			if (toFolderDialog.ShowDialog())
 			{
 				txt_BackupTo.Text = toFolderDialog.FileName;
-			}					
+			}
 		}
 
 		private void btn_Change_Click(object sender, EventArgs e)
@@ -56,7 +60,7 @@ namespace Sdl.Community.TMBackup
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
-			
+
 			GetBackupFormInfo();
 		}
 
@@ -78,6 +82,9 @@ namespace Sdl.Community.TMBackup
 			persistence.SaveBackupFormInfo(backupModel);
 
 			this.Close();
+
+			//CreateTaskScheduler();
+			BackupFilesRecursive(txt_BackupFrom.Text);
 		}
 
 		private void GetBackupFormInfo()
@@ -105,6 +112,124 @@ namespace Sdl.Community.TMBackup
 
 			TMBackupChangeForm tmBackupChangeForm = new TMBackupChangeForm();
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
+		}
+
+		private void CreateTaskScheduler()
+		{
+			Persistence persistence = new Persistence();
+			var jsonRequestModel = persistence.ReadFormInformation();
+
+			// Get the service on the remote machine
+			using (TaskService ts = new TaskService(string.Empty))
+			{
+				// Create a new task definition and assign properties
+				TaskDefinition td = ts.NewTask();
+				td.RegistrationInfo.Description = "Backup files";
+
+				// Create a trigger that will fire the task at this time every other day
+				td.Triggers.Add(new DailyTrigger { DaysInterval = 2 });
+
+				// Create an action that will launch Notepad whenever the trigger fires
+				td.Actions.Add(new ExecAction("notepad.exe", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				@"SDL Community\TMBackup\TaskScheduler.log", null)));
+
+				// Register the task in the root folder
+				ts.RootFolder.RegisterTaskDefinition(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				@"SDL Community\TMBackup"), td);
+			}
+		}
+
+		private string GetAcceptedRequestsFolder(string path)
+		{
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+			return path;
+		}
+
+		internal void BackupFilesRecursive(string sourcePaths)
+		{
+			List<string> splittedSourcePathList = sourcePaths.Split(';').ToList<string>();
+
+			foreach (var sourcePath in splittedSourcePathList)
+			{
+				if (!string.IsNullOrEmpty(sourcePath))
+				{
+					var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
+
+					// create the directory "Accepted request"
+					if (!Directory.Exists(txt_BackupTo.Text))
+					{
+						Directory.CreateDirectory(txt_BackupTo.Text);
+					}
+
+					var files = Directory.GetFiles(sourcePath);
+					if (files.Length != 0)
+					{
+						MoveFilesToAcceptedFolder(files, txt_BackupTo.Text);
+					} //that means we have a subfolder in watch folder
+					else
+					{
+
+						var subdirectories = Directory.GetDirectories(sourcePath);
+						foreach (var subdirectory in subdirectories)
+						{
+							var currentDirInfo = new DirectoryInfo(subdirectory);
+							CheckForSubfolders(currentDirInfo, acceptedRequestFolder);
+
+						}
+					}
+				}
+			}
+		}
+
+		private void CheckForSubfolders(DirectoryInfo directory, string root)
+		{
+			var sourcePath = this.txt_BackupFrom.Text;
+			var subdirectories = directory.GetDirectories();
+			var path = root + @"\" + directory.Parent;
+			var subdirectoryFiles = Directory.GetFiles(directory.FullName);
+			if (subdirectoryFiles.Length != 0)
+			{
+				var subdirectoryToMovePath = Path.Combine(path, directory.Name);
+				if (!Directory.Exists(subdirectoryToMovePath))
+				{
+					Directory.CreateDirectory(subdirectoryToMovePath);
+				}
+				MoveFilesToAcceptedFolder(subdirectoryFiles, subdirectoryToMovePath);
+
+			}
+			if (subdirectories.Length != 0)
+			{
+				foreach (var subdirectory in subdirectories)
+				{
+					CheckForSubfolders(subdirectory, path);
+				}
+			}
+
+		}
+		private void MoveFilesToAcceptedFolder(string[] files, string acceptedFolderPath)
+		{
+			foreach (var subFile in files)
+			{
+				var dirName = new DirectoryInfo(subFile).Name;
+				var parentName = new DirectoryInfo(subFile).Parent != null ? new DirectoryInfo(subFile).Parent.Name : string.Empty;
+
+				var fileName = subFile.Substring(subFile.LastIndexOf(@"\", StringComparison.Ordinal));
+				var destinationPath = Path.Combine(acceptedFolderPath, parentName);
+				if (!Directory.Exists(destinationPath))
+				{
+					Directory.CreateDirectory(destinationPath);
+				}
+				try
+				{
+					File.Copy(subFile, destinationPath + fileName, true);
+				}
+				catch (Exception e)
+				{
+				}
+			}
 		}
 	}
 }
