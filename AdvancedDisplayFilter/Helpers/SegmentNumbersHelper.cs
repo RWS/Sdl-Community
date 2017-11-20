@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,28 +34,75 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		public static bool IdInRange(string segmentId, string segmentsIds)
 		{
 			segmentsIds = segmentsIds.Replace(" ", string.Empty);
-			var rangeList = segmentsIds.Split(',').ToList();
-			var segmentsRangeList = new List<SegmentRange>();
-
-			foreach (var range in rangeList)
+			var ids = segmentsIds.Split(',').ToList();
+			var idMachesRange = false;
+			var valueMatches = false;
+			var rangeList = GetRangeList(ids);
+			var exactValuesList = GetExactValueList(ids);
+			if (rangeList.Count > 0)
 			{
-				var minValue = range.Substring(0, range.IndexOf('-'));
-				var maxValue = range.Substring(range.IndexOf('-') + 1);
-				var segmentRange = new SegmentRange
-				{
-					Min = Parse(minValue),
-					Max = Parse(maxValue)
-				};
-				segmentsRangeList.Add(segmentRange);
+				idMachesRange = IsInRangeList(segmentId, rangeList);
 			}
-			foreach (var segment in segmentsRangeList)
+
+			if (exactValuesList.Count > 0)
 			{
-				if (Enumerable.Range(segment.Min, segment.Max-segment.Min+1).Contains(Parse(segmentId)))
-				{
-					return true;
-				}
+				valueMatches = exactValuesList.Contains(Parse(segmentId));
+			}
+
+			if (idMachesRange || valueMatches)
+			{
+				return true;
 			}
 			return false;
+		}
+
+		private static bool IsInRangeList(string segmentId, List<SegmentRange> rangeList)
+		{
+			var isInRange = false;
+			foreach (var range in rangeList)
+			{
+				if (Enumerable.Range(range.Min, range.Max - range.Min + 1).Contains(Parse(segmentId)))
+				{
+					isInRange = true;
+				}
+			}
+			return isInRange;
+		}
+
+		private static List<int> GetExactValueList(List<string> idsList)
+		{
+			var exactValuesList = new List<int>();
+			foreach (var id in idsList)
+			{
+				if (!id.Contains("-"))
+				{
+					exactValuesList.Add(Parse(id));
+				}
+			}
+			return exactValuesList;
+		}
+	
+
+		private static List<SegmentRange> GetRangeList(List<string> idsRange)
+		{
+			var segmentsRangeList = new List<SegmentRange>();
+
+			foreach (var idRange in idsRange)
+			{
+				if (idRange.Contains("-"))
+				{
+					var minValue = idRange.Substring(0, idRange.IndexOf('-'));
+					var maxValue = idRange.Substring(idRange.IndexOf('-') + 1);
+					var segmentRange = new SegmentRange
+					{
+						Min = Parse(minValue),
+						Max = Parse(maxValue)
+					};
+					segmentsRangeList.Add(segmentRange);
+				}
+			}
+
+			return segmentsRangeList;
 		}
 	}
 }

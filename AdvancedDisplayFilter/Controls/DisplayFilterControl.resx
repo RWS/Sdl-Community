@@ -1564,7 +1564,7 @@
     <value>True</value>
   </data>
   <data name="groupedBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 90</value>
+    <value>12, 71</value>
   </data>
   <data name="groupedBtn.Size" type="System.Drawing.Size, System.Drawing">
     <value>86, 17</value>
@@ -1586,33 +1586,6 @@
   </data>
   <data name="&gt;&gt;groupedBtn.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="commaBtn.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="commaBtn.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 67</value>
-  </data>
-  <data name="commaBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>125, 17</value>
-  </data>
-  <data name="commaBtn.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="commaBtn.Text" xml:space="preserve">
-    <value>Comma separated list</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Name" xml:space="preserve">
-    <value>commaBtn</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;commaBtn.ZOrder" xml:space="preserve">
-    <value>1</value>
   </data>
   <data name="oddBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1639,7 +1612,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;oddBtn.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="evenBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1666,7 +1639,7 @@
     <value>groupBox1</value>
   </data>
   <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 7</value>
@@ -2128,7 +2101,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAWwBBAFsAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAXQBBAF0AQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ

@@ -55,7 +55,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				var customSettings = new CustomFilterSettings
 				{
 					OddsNo = oddBtn.Checked,
-					CommaSeparated = commaBtn.Checked,
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
@@ -65,10 +64,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					FuzzyMax = fuzzyMax.Text
 
 				};
-				if (commaBtn.Checked)
-				{
-					customSettings.CommaSeparatedVelues = segmentsBox.Text;
-				}
 				if (groupedBtn.Checked)
 				{
 					customSettings.GroupedList = segmentsBox.Text;
@@ -368,7 +363,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	        evenBtn.Checked = false;
 	        oddBtn.Checked = false;
-	        commaBtn.Checked = false;
 	        groupedBtn.Checked = false;
 	        segmentsBox.Text = string.Empty;
 	        segmentsBox.Enabled = false;
@@ -897,7 +891,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	    private void InvalidateIconsFilterApplied_segmentNumbers(CustomFilterSettings customFilterSettings)
 	    {
-		    if (customFilterSettings.CommaSeparated || customFilterSettings.EvenNo || customFilterSettings.Grouped ||
+		    if (  customFilterSettings.EvenNo || customFilterSettings.Grouped ||
 		        customFilterSettings.OddsNo)
 		    {
 			    tabPage_segmentNumbers.ImageIndex = 0;
@@ -1441,15 +1435,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				segmentsBox.Enabled = false;
 			}
 		}
-
-		private void commaBtn_CheckedChanged(object sender, EventArgs e)
-		{
-			if (commaBtn.Checked)
-			{
-				segmentsBox.Enabled = true;
-			}
-		}
-
+		
 		private void groupedBtn_CheckedChanged(object sender, EventArgs e)
 		{
 			if (groupedBtn.Checked)

@@ -12,7 +12,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 	{
 		public bool OddsNo { get; set; }
 		public bool EvenNo { get; set; }
-		public bool CommaSeparated { get; set; }
 		public bool Grouped { get; set; }
 		public string CommaSeparatedVelues { get; set; }
 		public string GroupedList { get; set; }

@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Models
 {
-	public class SegmentRange
+	public class SegmentExctValue
 	{
-		public int Min { get; set; }
-		public int Max { get; set; }
-		
+		public int ExactValue { get; set; }
 	}
 }

@@ -108,12 +108,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		        {
 			        success = SegmentNumbersHelper.IsOdd(rowId);
 		        }
-		        if (success && CustomSettings.CommaSeparated &&
-		            !string.IsNullOrWhiteSpace(CustomSettings.CommaSeparatedVelues))
-		        {
-			        success = SegmentNumbersHelper.ContainsId(rowId,
-				        CustomSettings.CommaSeparatedVelues);
-		        }
 		        if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
 		        {
 			        success = SegmentNumbersHelper.IdInRange(rowId, CustomSettings.GroupedList);
