@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sdl.Community.TMBackup.Models
+namespace Sdl.Community.BackupService.Models
 {
 	public class JsonRequestModel
 	{

@@ -1,6 +1,8 @@
-﻿namespace Sdl.Community.TMBackup.Helpers
+﻿using System;
+
+namespace Sdl.Community.BackupService.Helpers
 {
-	public class Constants
+	public static class Constants
 	{
 		public const int MandatoryActionColumnIndex = 0;
 		public const int MandatoryTypeColumnIndex = 1;
@@ -14,5 +16,7 @@
 		public const string WaitOption = "Wait until next scheduled time and run only then";
 
 		public const string ManuallyOption = "Process will be started manually.";
+
+		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
 	}
 }

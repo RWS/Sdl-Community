@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Sdl.Community.TMBackup.Helpers
+namespace Sdl.Community.BackupService.Helpers
 {
 	public class Enums
 	{

@@ -1,11 +1,10 @@
-﻿using Sdl.Community.TMBackup.Helpers;
+﻿using Microsoft.Win32.TaskScheduler;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.TMBackup.Models;
-using Microsoft.Win32.TaskScheduler;
-using System.IO;
-using System.Collections.Generic;
 
 namespace Sdl.Community.TMBackup
 {
@@ -83,8 +82,7 @@ namespace Sdl.Community.TMBackup
 
 			this.Close();
 
-			//CreateTaskScheduler();
-			BackupFilesRecursive(txt_BackupFrom.Text);
+			CreateTaskScheduler();
 		}
 
 		private void GetBackupFormInfo()
@@ -119,113 +117,16 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			var jsonRequestModel = persistence.ReadFormInformation();
 
-			// Get the service on the remote machine
-			using (TaskService ts = new TaskService(string.Empty))
+
+			// Create a new task definition for the local machine and assign properties
+			TaskDefinition td = TaskService.Instance.NewTask();
+			td.RegistrationInfo.Description = "Backup files";
+
+			if(jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked)
 			{
-				// Create a new task definition and assign properties
-				TaskDefinition td = ts.NewTask();
-				td.RegistrationInfo.Description = "Backup files";
+				//var st = trigger.StartBoundary;
 
-				// Create a trigger that will fire the task at this time every other day
-				td.Triggers.Add(new DailyTrigger { DaysInterval = 2 });
-
-				// Create an action that will launch Notepad whenever the trigger fires
-				td.Actions.Add(new ExecAction("notepad.exe", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup\TaskScheduler.log", null)));
-
-				// Register the task in the root folder
-				ts.RootFolder.RegisterTaskDefinition(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup"), td);
-			}
-		}
-
-		private string GetAcceptedRequestsFolder(string path)
-		{
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
-			return path;
-		}
-
-		internal void BackupFilesRecursive(string sourcePaths)
-		{
-			List<string> splittedSourcePathList = sourcePaths.Split(';').ToList<string>();
-
-			foreach (var sourcePath in splittedSourcePathList)
-			{
-				if (!string.IsNullOrEmpty(sourcePath))
-				{
-					var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
-
-					// create the directory "Accepted request"
-					if (!Directory.Exists(txt_BackupTo.Text))
-					{
-						Directory.CreateDirectory(txt_BackupTo.Text);
-					}
-
-					var files = Directory.GetFiles(sourcePath);
-					if (files.Length != 0)
-					{
-						MoveFilesToAcceptedFolder(files, txt_BackupTo.Text);
-					} //that means we have a subfolder in watch folder
-					else
-					{
-
-						var subdirectories = Directory.GetDirectories(sourcePath);
-						foreach (var subdirectory in subdirectories)
-						{
-							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, txt_BackupTo.Text);
-
-						}
-					}
-				}
-			}
-		}
-
-		private void CheckForSubfolders(DirectoryInfo directory, string root)
-		{
-			var sourcePath = this.txt_BackupFrom.Text;
-			var subdirectories = directory.GetDirectories();
-			var path = root + @"\" + directory.Parent;
-			var subdirectoryFiles = Directory.GetFiles(directory.FullName);
-
-			if (subdirectoryFiles.Length != 0)
-			{
-				MoveFilesToAcceptedFolder(subdirectoryFiles, path);
-			}
-
-			if (subdirectories.Length != 0)
-			{
-				foreach (var subdirectory in subdirectories)
-				{
-					CheckForSubfolders(subdirectory, path);
-				}
-			}
-		}
-
-		private void MoveFilesToAcceptedFolder(string[] files, string acceptedFolderPath)
-		{
-			foreach (var subFile in files)
-			{
-				var dirName = new DirectoryInfo(subFile).Name;
-				var parentName = new DirectoryInfo(subFile).Parent != null ? new DirectoryInfo(subFile).Parent.Name : string.Empty;
-
-				var fileName = subFile.Substring(subFile.LastIndexOf(@"\", StringComparison.Ordinal));
-				var destinationPath = Path.Combine(acceptedFolderPath, parentName);
-				if (!Directory.Exists(destinationPath))
-				{
-					Directory.CreateDirectory(destinationPath);
-				}
-				try
-				{
-					File.Copy(subFile, destinationPath + fileName, true);
-				}
-				catch (Exception e)
-				{
-					MessageBox.Show("Files were not copied correctly. Please try again!", "Informative message");
-				}
+				//td.Triggers.Add(trigger);
 			}
 		}
 	}

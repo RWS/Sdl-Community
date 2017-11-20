@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Sdl.Community.TMBackup.Helpers
+namespace Sdl.Community.BackupService.Helpers
 {
 	public class FolderSelectDialog : IDisposable
 	{

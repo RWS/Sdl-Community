@@ -1,8 +1,9 @@
-﻿using Sdl.Community.TMBackup.Helpers;
+﻿using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 using System;
-using System.Windows.Forms;
-using Sdl.Community.TMBackup.Models;
 using System.Globalization;
+using System.Windows.Forms;
 
 namespace Sdl.Community.TMBackup
 {

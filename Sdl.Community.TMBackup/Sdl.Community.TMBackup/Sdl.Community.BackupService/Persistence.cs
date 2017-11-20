@@ -1,13 +1,13 @@
-﻿using Sdl.Community.TMBackup.Models;
+﻿using Newtonsoft.Json;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 using System;
-using System.IO;
-using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.TMBackup.Helpers;
 
-namespace Sdl.Community.TMBackup
+namespace Sdl.Community.BackupService
 {
 	public class Persistence
 	{

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sdl.Community.TMBackup.Helpers
+namespace Sdl.Community.BackupService.Helpers
 {
 	internal class Reflector
 	{
