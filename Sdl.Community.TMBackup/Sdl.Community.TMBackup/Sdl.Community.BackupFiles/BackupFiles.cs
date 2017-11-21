@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Win32.TaskScheduler;
 using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using static Sdl.Community.BackupService.Helpers.Enums;
 
 namespace Sdl.Community.BackupFiles
 {
@@ -12,6 +15,11 @@ namespace Sdl.Community.BackupFiles
 		static void Main(string[] args)
 		{
 			BackupFilesRecursive();
+
+			if (args[0].Equals("Daily"))
+			{
+				UpdateDailyTaskTrigger();
+			}
 		}
 
 		#region Private methods
@@ -106,6 +114,45 @@ namespace Sdl.Community.BackupFiles
 				{
 					MessageBox.Show("Files were not copied correctly. Please try again!", "Informative message");
 				}
+			}
+		}
+
+		private static void UpdateDailyTaskTrigger()
+		{
+			var startDate = DateTime.Now;
+			Service service = new Service();
+			var jsonResult = service.GetJsonInformation();
+
+			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			{
+				startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
+				UpdateTaskByInterval(startDate);
+			}
+
+			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			{
+				startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
+				UpdateTaskByInterval(startDate);
+			}
+
+			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+			{
+				startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
+				UpdateTaskByInterval(startDate);
+			}
+		}
+
+		private static void UpdateTaskByInterval(DateTime startDate)
+		{
+			using (TaskService ts = new TaskService())
+			{
+				Task task = ts.GetTask("DailyScheduler");
+				TaskDefinition td = task.Definition;
+				foreach (Trigger trigger in task.Definition.Triggers)
+				{
+					trigger.StartBoundary = startDate;
+				}
+				ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
 			}
 		}
 		#endregion

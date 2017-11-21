@@ -5,6 +5,8 @@ using Sdl.Community.BackupService.Models;
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using static Sdl.Community.BackupService.Helpers.Enums;
+using System.IO;
 
 namespace Sdl.Community.TMBackup
 {
@@ -117,16 +119,65 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			var jsonRequestModel = persistence.ReadFormInformation();
 
+			DateTime startDate = DateTime.Now;
 
 			// Create a new task definition for the local machine and assign properties
 			TaskDefinition td = TaskService.Instance.NewTask();
 			td.RegistrationInfo.Description = "Backup files";
 
-			if(jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked)
+			if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked)
 			{
-				//var st = trigger.StartBoundary;
+				DailyTrigger daily = new DailyTrigger();
 
-				//td.Triggers.Add(trigger);
+				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+				{
+					startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+					using (TaskService ts = new TaskService())
+					{
+						daily.StartBoundary = startDate;
+						td.Triggers.Add(daily);
+
+						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
+						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+					}					
+				}
+
+				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+				{
+					using (TaskService ts = new TaskService())
+					{
+						startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+						daily.StartBoundary = startDate;
+						td.Triggers.Add(daily);
+
+						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
+						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+					}
+				}
+
+				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+				{
+					using (TaskService ts = new TaskService())
+					{
+						startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+						daily.StartBoundary = startDate;
+						td.Triggers.Add(daily);
+
+						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"),"Daily"));
+						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+					}
+				}
+			}
+			else if(jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked)
+			{
+
+			}
+			else
+			{
+
 			}
 		}
 	}
