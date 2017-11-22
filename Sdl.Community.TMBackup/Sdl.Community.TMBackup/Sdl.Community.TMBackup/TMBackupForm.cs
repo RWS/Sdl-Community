@@ -171,7 +171,7 @@ namespace Sdl.Community.TMBackup
 		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td)
 		{
 			DailyTrigger daily = new DailyTrigger();
-
+			
 			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 			{
 				startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
@@ -203,39 +203,51 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
+		// Add periodic time scheduler depending on user setup.
 		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td)
 		{
 			DailyTrigger daily = new DailyTrigger();
-			DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
 
-			startDate = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
-
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-			{				
-				startDate = startDate.AddHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-
+			if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
+			{
+				startDate = DateTime.Now;
 				using (TaskService ts = new TaskService())
 				{
 					AddTrigger(daily, startDate, td);
 				}
 			}
-
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			else
 			{
-				startDate = startDate.AddMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				using (TaskService ts = new TaskService())
+				DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+				startDate = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 				{
-					AddTrigger(daily, startDate, td);
+					startDate = startDate.AddHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
 				}
-			}
 
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-			{
-				startDate = startDate.AddSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-
-				using (TaskService ts = new TaskService())
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 				{
-					AddTrigger(daily, startDate, td);
+					startDate = startDate.AddMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
+				}
+
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+				{
+					startDate = startDate.AddSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
 				}
 			}
 		}
