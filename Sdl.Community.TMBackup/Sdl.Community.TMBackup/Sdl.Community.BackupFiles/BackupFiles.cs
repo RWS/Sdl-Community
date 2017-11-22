@@ -1,11 +1,11 @@
-﻿using System;
+﻿using Microsoft.Win32.TaskScheduler;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using Microsoft.Win32.TaskScheduler;
-using Sdl.Community.BackupService;
-using Sdl.Community.BackupService.Helpers;
+using System.Text;
 using static Sdl.Community.BackupService.Helpers.Enums;
 
 namespace Sdl.Community.BackupFiles
@@ -34,38 +34,47 @@ namespace Sdl.Community.BackupFiles
 
 		private static void BackupFilesRecursive()
 		{
-			Service service = new Service();
-			var jsonResult = service.GetJsonInformation();
-
-			List<string> splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
-
-			foreach (var sourcePath in splittedSourcePathList)
+			try
 			{
-				if (!string.IsNullOrEmpty(sourcePath))
+				Service service = new Service();
+				var jsonResult = service.GetJsonInformation();
+				if (jsonResult != null && jsonResult.BackupModel != null)
 				{
-					var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
+					List<string> splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
 
-					// create the directory "Accepted request"
-					if (!Directory.Exists(jsonResult.BackupModel.BackupTo))
+					foreach (var sourcePath in splittedSourcePathList)
 					{
-						Directory.CreateDirectory(jsonResult.BackupModel.BackupTo);
-					}
-
-					var files = Directory.GetFiles(sourcePath);
-					if (files.Length != 0)
-					{
-						MoveFilesToAcceptedFolder(files, jsonResult.BackupModel.BackupTo);
-					} //that means we have a subfolder in watch folder
-					else
-					{
-						var subdirectories = Directory.GetDirectories(sourcePath);
-						foreach (var subdirectory in subdirectories)
+						if (!string.IsNullOrEmpty(sourcePath))
 						{
-							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, jsonResult.BackupModel.BackupTo);
+							var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
+
+							// create the directory "Accepted request"
+							if (!Directory.Exists(jsonResult.BackupModel.BackupTo))
+							{
+								Directory.CreateDirectory(jsonResult.BackupModel.BackupTo);
+							}
+
+							var files = Directory.GetFiles(sourcePath);
+							if (files.Length != 0)
+							{
+								MoveFilesToAcceptedFolder(files, jsonResult.BackupModel.BackupTo);
+							} //that means we have a subfolder in watch folder
+							else
+							{
+								var subdirectories = Directory.GetDirectories(sourcePath);
+								foreach (var subdirectory in subdirectories)
+								{
+									var currentDirInfo = new DirectoryInfo(subdirectory);
+									CheckForSubfolders(currentDirInfo, jsonResult.BackupModel.BackupTo);
+								}
+							}
 						}
 					}
 				}
+			}
+			catch(Exception ex)
+			{
+				MessageLogger.LogFileMessage(ex.Message);
 			}
 		}
 
@@ -74,21 +83,24 @@ namespace Sdl.Community.BackupFiles
 			Service service = new Service();
 			var jsonResult = service.GetJsonInformation();
 
-			var sourcePath = jsonResult.BackupModel.BackupFrom;
-			var subdirectories = directory.GetDirectories();
-			var path = root + @"\" + directory.Parent;
-			var subdirectoryFiles = Directory.GetFiles(directory.FullName);
-
-			if (subdirectoryFiles.Length != 0)
+			if (jsonResult != null && jsonResult.BackupModel != null)
 			{
-				MoveFilesToAcceptedFolder(subdirectoryFiles, path);
-			}
+				var sourcePath = jsonResult.BackupModel.BackupFrom;
+				var subdirectories = directory.GetDirectories();
+				var path = root + @"\" + directory.Parent;
+				var subdirectoryFiles = Directory.GetFiles(directory.FullName);
 
-			if (subdirectories.Length != 0)
-			{
-				foreach (var subdirectory in subdirectories)
+				if (subdirectoryFiles.Length != 0)
 				{
-					CheckForSubfolders(subdirectory, path);
+					MoveFilesToAcceptedFolder(subdirectoryFiles, path);
+				}
+
+				if (subdirectories.Length != 0)
+				{
+					foreach (var subdirectory in subdirectories)
+					{
+						CheckForSubfolders(subdirectory, path);
+					}
 				}
 			}
 		}
@@ -110,35 +122,45 @@ namespace Sdl.Community.BackupFiles
 				{
 					File.Copy(subFile, destinationPath + fileName, true);
 				}
-				catch (Exception e)
+				catch (Exception ex)
 				{
-					MessageBox.Show("Files were not copied correctly. Please try again!", "Informative message");
+					MessageLogger.LogFileMessage(ex.Message);
 				}
 			}
 		}
 
 		private static void UpdateDailyTaskTrigger()
 		{
-			var startDate = DateTime.Now;
-			Service service = new Service();
-			var jsonResult = service.GetJsonInformation();
-
-			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			try
 			{
-				startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
-				UpdateTaskByInterval(startDate);
+				var startDate = DateTime.Now;
+				Service service = new Service();
+				var jsonResult = service.GetJsonInformation();
+
+				if (jsonResult != null && jsonResult.RealTimeBackupModel != null)
+				{
+					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+					{
+						startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
+						UpdateTaskByInterval(startDate);
+					}
+
+					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+					{
+						startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
+						UpdateTaskByInterval(startDate);
+					}
+
+					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+					{
+						startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
+						UpdateTaskByInterval(startDate);
+					}
+				}
 			}
-
-			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			catch(Exception ex)
 			{
-				startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
-				UpdateTaskByInterval(startDate);
-			}
-
-			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-			{
-				startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
-				UpdateTaskByInterval(startDate);
+				MessageLogger.LogFileMessage(ex.Message);
 			}
 		}
 
@@ -147,14 +169,24 @@ namespace Sdl.Community.BackupFiles
 			using (TaskService ts = new TaskService())
 			{
 				Task task = ts.GetTask("DailyScheduler");
-				TaskDefinition td = task.Definition;
-				foreach (Trigger trigger in task.Definition.Triggers)
+				if (task != null)
 				{
-					trigger.StartBoundary = startDate;
+					TaskDefinition td = task.Definition;
+					foreach (Trigger trigger in task.Definition.Triggers)
+					{
+						trigger.StartBoundary = startDate;
+					}
+					try
+					{
+						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+					}
+					catch (Exception ex)
+					{
+						MessageLogger.LogFileMessage(ex.Message);
+					}
 				}
-				ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
 			}
-		}
+		}	
 		#endregion
 	}
 }

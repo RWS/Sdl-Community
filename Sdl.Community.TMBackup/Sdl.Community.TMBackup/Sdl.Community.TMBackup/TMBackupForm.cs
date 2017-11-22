@@ -121,63 +121,75 @@ namespace Sdl.Community.TMBackup
 
 			DateTime startDate = DateTime.Now;
 
-			// Create a new task definition for the local machine and assign properties
-			TaskDefinition td = TaskService.Instance.NewTask();
-			td.RegistrationInfo.Description = "Backup files";
-
-			if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked)
+			if (jsonRequestModel != null)
 			{
-				DailyTrigger daily = new DailyTrigger();
+				// Create a new task definition for the local machine and assign properties
+				TaskDefinition td = TaskService.Instance.NewTask();
+				td.RegistrationInfo.Description = "Backup files";
 
-				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+				if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked && jsonRequestModel.RealTimeBackupModel != null)
 				{
-					startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+					DailyTrigger daily = new DailyTrigger();
 
-					using (TaskService ts = new TaskService())
+					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 					{
-						daily.StartBoundary = startDate;
-						td.Triggers.Add(daily);
+						startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
 
-						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
-						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
-					}					
-				}
+						using (TaskService ts = new TaskService())
+						{
+							AddTrigger(daily, startDate, td);
+						}
+					}
 
-				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-				{
-					using (TaskService ts = new TaskService())
+					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 					{
 						startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
 
-						daily.StartBoundary = startDate;
-						td.Triggers.Add(daily);
-
-						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
-						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+						using (TaskService ts = new TaskService())
+						{
+							AddTrigger(daily, startDate, td);
+						}
 					}
-				}
 
-				if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-				{
-					using (TaskService ts = new TaskService())
+					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
 					{
 						startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
 
-						daily.StartBoundary = startDate;
-						td.Triggers.Add(daily);
-
-						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"),"Daily"));
-						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+						using (TaskService ts = new TaskService())
+						{
+							AddTrigger(daily, startDate, td);
+						}
 					}
 				}
-			}
-			else if(jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked)
-			{
 
-			}
-			else
-			{
+				else if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked)
+				{
 
+				}
+
+				else
+				{
+
+				}
+			}
+		}
+		
+		private void AddTrigger(DailyTrigger daily, DateTime startDate, TaskDefinition td)
+		{
+			using (TaskService ts = new TaskService())
+			{
+				daily.StartBoundary = startDate;
+				td.Triggers.Add(daily);
+
+				td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
+				try
+				{
+					ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+				}
+				catch (Exception ex)
+				{
+					MessageLogger.LogFileMessage(ex.Message);
+				}
 			}
 		}
 	}
