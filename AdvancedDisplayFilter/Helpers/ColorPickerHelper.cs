@@ -40,5 +40,34 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			return hexCode;
 		}
+
+		public static bool ContainsColorForIdmlFileType(DisplayFilterRowInfo rowInfo, List<string> customSettingsColors)
+		{
+			var visitor = new TagDataVisitor();
+			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
+			//visitor.VisitSegment(rowInfo.SegmentPair.Source);
+			//var test = rowInfo.SegmentPair.Source.AllSubItems.Cast<MarkupDataContainer>();
+			//foreach (var a in test)
+			//{
+				
+			//}
+			//foreach (var location in rowInfo.SegmentPair.Source.AllSubItems)
+			//{
+			//	var test1 = (MarkupData)location.
+			//	//foreach (IAbstractMarkupDataContainer level in location.)
+			//	//{
+			//	//	if (level.ItemAtLocation != null)
+			//	//	{
+			//	//		var test = level.ItemAtLocation.ParentParagraph.Locations;
+			//	//		foreach (var a in test)
+			//	//		{
+			//	//			var b=a.Levels[0].Parent;
+			//	//		}
+			//	//		// var test = lever.ItemAtLocation.
+			//	//	}
+			//	//}
+			//}
+			return false;
+		}
 	}
 }

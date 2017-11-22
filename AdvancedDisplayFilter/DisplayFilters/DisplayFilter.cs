@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -17,6 +18,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
         /// </summary>
         public DisplayFilterSettings Settings { get; }
 		public CustomFilterSettings CustomSettings { get; }
+	    public string FileType { get; set; }
 
 
         #endregion
@@ -32,6 +34,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 
             Settings = settings;
 	        CustomSettings = customSettings;
+	        if (document.ActiveFileProperties != null)
+	        {
+				FileType = document.ActiveFileProperties.FileConversionProperties.FileTypeDefinitionId.Id;
+			}
+	        
         }
 
         #endregion
@@ -134,7 +141,18 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		        }
 		        if (success && CustomSettings.Colors.Count>0)
 		        {
-			        success = ColorPickerHelper.ContainsColor(rowInfo,CustomSettings.Colors);
+			        if (FileType != null)
+			        {
+						if (FileType.Contains("IDML"))
+						{
+							success = ColorPickerHelper.ContainsColorForIdmlFileType(rowInfo, CustomSettings.Colors);
+						}
+						else
+						{
+							success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
+						}
+					}
+			     
 		        }
 
 				//fuzzy
