@@ -114,6 +114,7 @@ namespace Sdl.Community.TMBackup
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}
 
+		// Create task scheduler for the backup files process.
 		private void CreateTaskScheduler()
 		{
 			Persistence persistence = new Persistence();
@@ -129,37 +130,7 @@ namespace Sdl.Community.TMBackup
 
 				if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked && jsonRequestModel.RealTimeBackupModel != null)
 				{
-					DailyTrigger daily = new DailyTrigger();
-
-					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-					{
-						startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-						using (TaskService ts = new TaskService())
-						{
-							AddTrigger(daily, startDate, td);
-						}
-					}
-
-					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-					{
-						startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-						using (TaskService ts = new TaskService())
-						{
-							AddTrigger(daily, startDate, td);
-						}
-					}
-
-					if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-					{
-						startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-						using (TaskService ts = new TaskService())
-						{
-							AddTrigger(daily, startDate, td);
-						}
-					}
+					AddRealTimeScheduler(jsonRequestModel, startDate, td);
 				}
 
 				else if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked)
@@ -174,6 +145,7 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 		
+		// Add trigger which executes the backup files console application.
 		private void AddTrigger(DailyTrigger daily, DateTime startDate, TaskDefinition td)
 		{
 			using (TaskService ts = new TaskService())
@@ -189,6 +161,42 @@ namespace Sdl.Community.TMBackup
 				catch (Exception ex)
 				{
 					MessageLogger.LogFileMessage(ex.Message);
+				}
+			}
+		}
+
+		// Add real time scheduler for options: seconds, minutes, hours.
+		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td)
+		{
+			DailyTrigger daily = new DailyTrigger();
+
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			{
+				startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			{
+				startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+			{
+				startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
 				}
 			}
 		}
