@@ -3,6 +3,10 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using Sdl.Community.BackupService.Helpers;
 
 namespace Sdl.Community.TMBackup
 {
@@ -17,6 +21,30 @@ namespace Sdl.Community.TMBackup
 		{
 			protected override void Execute()
 			{
+				if (!Directory.Exists(Constants.DeployPath))
+				{
+					Directory.CreateDirectory(Constants.DeployPath);
+				}
+
+				var directoryFiles = new List<string>(Directory.GetFiles(Constants.DeployPath));
+	
+				if(!directoryFiles.Contains(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe")))			
+				{
+					var executingAssembly = Assembly.GetExecutingAssembly();
+					var exeStream = executingAssembly.GetManifestResourceStream("Sdl.Community.TMBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe");
+					using (exeStream)
+					{
+						if (exeStream != null)
+						{
+							var fileStream = File.Create(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), (int)exeStream.Length);
+							var assemblyData = new byte[(int)exeStream.Length];
+							exeStream.Read(assemblyData, 0, assemblyData.Length);
+							fileStream.Write(assemblyData, 0, assemblyData.Length);
+							fileStream.Close();
+						}
+					}
+				}
+
 				TMBackupForm tmBackupForm = new TMBackupForm();
 				tmBackupForm.ShowDialog();
 			}

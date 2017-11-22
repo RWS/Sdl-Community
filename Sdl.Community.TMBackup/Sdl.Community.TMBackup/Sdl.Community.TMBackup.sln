@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TMBackup", "Sdl.Community.TMBackup\Sdl.Community.TMBackup.csproj", "{3E604C82-F989-44B7-95FF-CA66CBE21188}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.BackupFiles", "Sdl.Community.BackupFiles\Sdl.Community.BackupFiles.csproj", "{3D71BB28-5887-497B-91DF-9C85BA431A45}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.BackupService", "Sdl.Community.BackupService\Sdl.Community.BackupService.csproj", "{8C9C20FA-0A8C-4293-9DFB-5D8165CCEF28}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{3E604C82-F989-44B7-95FF-CA66CBE21188}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E604C82-F989-44B7-95FF-CA66CBE21188}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E604C82-F989-44B7-95FF-CA66CBE21188}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D71BB28-5887-497B-91DF-9C85BA431A45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D71BB28-5887-497B-91DF-9C85BA431A45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D71BB28-5887-497B-91DF-9C85BA431A45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D71BB28-5887-497B-91DF-9C85BA431A45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9C20FA-0A8C-4293-9DFB-5D8165CCEF28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9C20FA-0A8C-4293-9DFB-5D8165CCEF28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9C20FA-0A8C-4293-9DFB-5D8165CCEF28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9C20FA-0A8C-4293-9DFB-5D8165CCEF28}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

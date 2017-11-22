@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sdl.Community.TMBackup.Models
+namespace Sdl.Community.BackupService.Models
 {
 	public class PeriodicBackupModel
 	{

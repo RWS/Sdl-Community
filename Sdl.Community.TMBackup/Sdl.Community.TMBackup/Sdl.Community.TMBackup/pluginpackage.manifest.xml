@@ -5,8 +5,10 @@
   <Description>Plugin description</Description>
   <Author></Author>
   <Include>
+    <File>Sdl.Community.BackupService.dll</File>
+    <File>Sdl.Community.Backup.dll</File>
     <File>Newtonsoft.Json.dll</File>
-    <File>ASquare.WindowsTaskScheduler.dll</File>
+    <File>Microsoft.Win32.TaskScheduler.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>

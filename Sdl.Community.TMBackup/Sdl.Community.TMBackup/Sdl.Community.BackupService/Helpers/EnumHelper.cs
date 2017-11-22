@@ -3,7 +3,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace Sdl.Community.TMBackup.Helpers
+namespace Sdl.Community.BackupService.Helpers
 {
 	public static class EnumHelper
 	{

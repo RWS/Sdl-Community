@@ -137,7 +137,7 @@
             // 
             // backupDetailsModelBindingSource
             // 
-            this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.TMBackup.Models.BackupDetailsModel);
+            this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.BackupService.Models.BackupDetailsModel);
             // 
             // dataGridView1
             // 

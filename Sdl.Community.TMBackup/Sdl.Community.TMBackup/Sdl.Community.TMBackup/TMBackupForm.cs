@@ -1,11 +1,14 @@
-﻿using Sdl.Community.TMBackup.Helpers;
+﻿using Microsoft.Win32.TaskScheduler;
+using Sdl.Community.BackupService;
+using Sdl.Community.BackupService.Helpers;
+using Sdl.Community.BackupService.Models;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.TMBackup.Models;
-using Microsoft.Win32.TaskScheduler;
+using static Sdl.Community.BackupService.Helpers.Enums;
 using System.IO;
-using System.Collections.Generic;
+using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 namespace Sdl.Community.TMBackup
 {
@@ -83,8 +86,7 @@ namespace Sdl.Community.TMBackup
 
 			this.Close();
 
-			//CreateTaskScheduler();
-			BackupFilesRecursive(txt_BackupFrom.Text);
+			CreateTaskScheduler();
 		}
 
 		private void GetBackupFormInfo()
@@ -114,117 +116,138 @@ namespace Sdl.Community.TMBackup
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}
 
+		// Create task scheduler for the backup files process.
 		private void CreateTaskScheduler()
 		{
 			Persistence persistence = new Persistence();
 			var jsonRequestModel = persistence.ReadFormInformation();
 
-			// Get the service on the remote machine
-			using (TaskService ts = new TaskService(string.Empty))
+			DateTime startDate = DateTime.Now;
+
+			if (jsonRequestModel != null && jsonRequestModel.ChangeSettingsModel != null)
 			{
-				// Create a new task definition and assign properties
-				TaskDefinition td = ts.NewTask();
+				// Create a new task definition for the local machine and assign properties
+				TaskDefinition td = TaskService.Instance.NewTask();
 				td.RegistrationInfo.Description = "Backup files";
 
-				// Create a trigger that will fire the task at this time every other day
-				td.Triggers.Add(new DailyTrigger { DaysInterval = 2 });
-
-				// Create an action that will launch Notepad whenever the trigger fires
-				td.Actions.Add(new ExecAction("notepad.exe", Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup\TaskScheduler.log", null)));
-
-				// Register the task in the root folder
-				ts.RootFolder.RegisterTaskDefinition(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				@"SDL Community\TMBackup"), td);
-			}
-		}
-
-		private string GetAcceptedRequestsFolder(string path)
-		{
-			if (!Directory.Exists(path))
-			{
-				Directory.CreateDirectory(path);
-			}
-			return path;
-		}
-
-		internal void BackupFilesRecursive(string sourcePaths)
-		{
-			List<string> splittedSourcePathList = sourcePaths.Split(';').ToList<string>();
-
-			foreach (var sourcePath in splittedSourcePathList)
-			{
-				if (!string.IsNullOrEmpty(sourcePath))
+				if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked && jsonRequestModel.RealTimeBackupModel != null)
 				{
-					var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
+					AddRealTimeScheduler(jsonRequestModel, startDate, td);
+				}
 
-					// create the directory "Accepted request"
-					if (!Directory.Exists(txt_BackupTo.Text))
-					{
-						Directory.CreateDirectory(txt_BackupTo.Text);
-					}
+				else if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
+				{
+					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td);
+				}
 
-					var files = Directory.GetFiles(sourcePath);
-					if (files.Length != 0)
-					{
-						MoveFilesToAcceptedFolder(files, txt_BackupTo.Text);
-					} //that means we have a subfolder in watch folder
-					else
-					{
+				else
+				{
 
-						var subdirectories = Directory.GetDirectories(sourcePath);
-						foreach (var subdirectory in subdirectories)
-						{
-							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, txt_BackupTo.Text);
-
-						}
-					}
 				}
 			}
 		}
-
-		private void CheckForSubfolders(DirectoryInfo directory, string root)
+		
+		// Add trigger which executes the backup files console application.
+		private void AddTrigger(DailyTrigger daily, DateTime startDate, TaskDefinition td)
 		{
-			var sourcePath = this.txt_BackupFrom.Text;
-			var subdirectories = directory.GetDirectories();
-			var path = root + @"\" + directory.Parent;
-			var subdirectoryFiles = Directory.GetFiles(directory.FullName);
-
-			if (subdirectoryFiles.Length != 0)
+			using (TaskService ts = new TaskService())
 			{
-				MoveFilesToAcceptedFolder(subdirectoryFiles, path);
-			}
+				daily.StartBoundary = startDate;
+				td.Triggers.Add(daily);
 
-			if (subdirectories.Length != 0)
-			{
-				foreach (var subdirectory in subdirectories)
-				{
-					CheckForSubfolders(subdirectory, path);
-				}
-			}
-		}
-
-		private void MoveFilesToAcceptedFolder(string[] files, string acceptedFolderPath)
-		{
-			foreach (var subFile in files)
-			{
-				var dirName = new DirectoryInfo(subFile).Name;
-				var parentName = new DirectoryInfo(subFile).Parent != null ? new DirectoryInfo(subFile).Parent.Name : string.Empty;
-
-				var fileName = subFile.Substring(subFile.LastIndexOf(@"\", StringComparison.Ordinal));
-				var destinationPath = Path.Combine(acceptedFolderPath, parentName);
-				if (!Directory.Exists(destinationPath))
-				{
-					Directory.CreateDirectory(destinationPath);
-				}
+				td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
 				try
 				{
-					File.Copy(subFile, destinationPath + fileName, true);
+					ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
 				}
-				catch (Exception e)
+				catch (Exception ex)
 				{
-					MessageBox.Show("Files were not copied correctly. Please try again!", "Informative message");
+					MessageLogger.LogFileMessage(ex.Message);
+				}
+			}
+		}
+
+		// Add real time scheduler for options: seconds, minutes, hours.
+		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td)
+		{
+			DailyTrigger daily = new DailyTrigger();
+			
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			{
+				startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			{
+				startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+
+			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+			{
+				startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+		}
+
+		// Add periodic time scheduler depending on user setup.
+		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td)
+		{
+			DailyTrigger daily = new DailyTrigger();
+
+			if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
+			{
+				startDate = DateTime.Now;
+				using (TaskService ts = new TaskService())
+				{
+					AddTrigger(daily, startDate, td);
+				}
+			}
+			else
+			{
+				DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+				startDate = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+				{
+					startDate = startDate.AddHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
+				}
+
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+				{
+					startDate = startDate.AddMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
+				}
+
+				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+				{
+					startDate = startDate.AddSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+
+					using (TaskService ts = new TaskService())
+					{
+						AddTrigger(daily, startDate, td);
+					}
 				}
 			}
 		}
