@@ -35,7 +35,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					var green = colors[1];
 					var blue = colors[2];
 					var hexCode =GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
-					_colorCodeList.Add(hexCode);
+					if (!_colorCodeList.Contains(hexCode))
+					{
+						_colorCodeList.Add(hexCode);
+					}
+					
 				}
 				
 			}

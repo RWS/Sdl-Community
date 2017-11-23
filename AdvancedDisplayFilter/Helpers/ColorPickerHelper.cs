@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.Toolkit.FileType;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -45,29 +46,17 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			var visitor = new TagDataVisitor();
 			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
-			//visitor.VisitSegment(rowInfo.SegmentPair.Source);
-			//var test = rowInfo.SegmentPair.Source.AllSubItems.Cast<MarkupDataContainer>();
-			//foreach (var a in test)
-			//{
-				
-			//}
-			//foreach (var location in rowInfo.SegmentPair.Source.AllSubItems)
-			//{
-			//	var test1 = (MarkupData)location.
-			//	//foreach (IAbstractMarkupDataContainer level in location.)
-			//	//{
-			//	//	if (level.ItemAtLocation != null)
-			//	//	{
-			//	//		var test = level.ItemAtLocation.ParentParagraph.Locations;
-			//	//		foreach (var a in test)
-			//	//		{
-			//	//			var b=a.Levels[0].Parent;
-			//	//		}
-			//	//		// var test = lever.ItemAtLocation.
-			//	//	}
-			//	//}
-			//}
 			return false;
 		}
+
+		public static List<string> GetColorsList(ISegment segment)
+		{
+			var visitor = new TagDataVisitor();
+			var colorCodes = visitor.GetTagsColorCode(segment);
+
+			return colorCodes;
+		}
+
+		
 	}
 }

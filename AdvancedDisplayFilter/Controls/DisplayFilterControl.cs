@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
@@ -329,9 +330,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             AddGroupsToOriginTypeListview();
 
             InitializeSettings();
+			// colorsListView.View = View.List;
+	        colorsListView.CheckBoxes = false;
+			colorsListView.View = View.Tile;
+	        colorsListView.TileSize = new Size(70, 20);
 
 
-            listView_available.ListViewItemSorter = new ListViewItemComparer();
+			listView_available.ListViewItemSorter = new ListViewItemComparer();
             listView_selected.ListViewItemSorter = new ListViewItemComparer();
 
 
@@ -350,29 +355,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
 	        segmentsBox.Enabled = false;
-
-
-			var item = new ListViewItem("#F45623");
-
-	        item.BackColor = Color.Blue;
-
-
-	        var item1 = new ListViewItem("#F45623");
-
-	        item1.BackColor = Color.Red;
-
-
-	        var item2 = new ListViewItem("#F45623");
-
-	        item2.BackColor = Color.Aquamarine;
-
-	        colorsListView.Items.Add(item);
-	        colorsListView.Items.Add(item1);
-	        colorsListView.Items.Add(item2);
-
-
-	        colorsListView.View = View.List;
-	     
         }
 
 
@@ -533,9 +515,48 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             #endregion
 
             InitializeTabPageIcons();
+			AvailableColorsList = new List<string>();
         }
 
-        public void ApplyFilter()
+	    private void PopulateColorList()
+	    {
+		    AvailableColorsList.Clear();
+			foreach (var segmentPair in ActiveDocument.SegmentPairs)
+		    {
+			    var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
+			    if (colorCodesList == null || colorCodesList.Count <= 0) continue;
+			    foreach (var color in colorCodesList)
+			    {
+				    if (!AvailableColorsList.Contains(color))
+				    {
+					    AvailableColorsList.Add(color);
+				    }
+			    }
+		    }
+
+		    SetAddColorsToListView();
+	    }
+
+	    private void SetAddColorsToListView()
+	    {
+		   colorsListView.Items.Clear();
+			if (AvailableColorsList != null)
+		    {
+			    foreach (var color in AvailableColorsList)
+			    {
+				    var hexaCode = string.Concat("#", color);
+
+				    var colorItem = new ListViewItem(hexaCode)
+				    {
+					    BackColor = ColorTranslator.FromHtml(hexaCode),
+						ForeColor = Color.White
+				    };
+				    colorsListView.Items.Add(colorItem);
+			    }
+		    }
+	    }
+
+	    public void ApplyFilter()
         {
             if (OnApplyDisplayFilter != null)
             {
@@ -629,6 +650,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
                 }
 
+				PopulateColorList();
                 UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
