@@ -3,9 +3,9 @@ using Sdl.Community.BackupService;
 using Sdl.Community.BackupService.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using static Sdl.Community.BackupService.Helpers.Enums;
 
 namespace Sdl.Community.BackupFiles
@@ -19,6 +19,10 @@ namespace Sdl.Community.BackupFiles
 			if (args[0].Equals("Daily"))
 			{
 				UpdateDailyTaskTrigger();
+			}
+			if(args[0].Equals("WindowsInitialize"))
+			{
+				TriggerWhenWindowsStart(true);
 			}
 		}
 
@@ -137,7 +141,7 @@ namespace Sdl.Community.BackupFiles
 				Service service = new Service();
 				var jsonResult = service.GetJsonInformation();
 
-				if (jsonResult != null && jsonResult.RealTimeBackupModel != null)
+				if (jsonResult != null && jsonResult.RealTimeBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked)
 				{
 					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 					{
@@ -155,6 +159,37 @@ namespace Sdl.Community.BackupFiles
 					{
 						startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
 						UpdateTaskByInterval(startDate);
+					}
+				}
+				if (jsonResult != null && jsonResult.PeriodicBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked)
+				{
+					if (jsonResult.PeriodicBackupModel.IsRunOption)
+					{
+						startDate = DateTime.Now;
+						UpdateTaskByInterval(startDate);
+					}
+					else
+					{
+						DateTime atScheduleTime = DateTime.Parse(jsonResult.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+						startDate = jsonResult.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+
+						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+						{
+							startDate = startDate.AddHours(jsonResult.PeriodicBackupModel.BackupInterval);
+							UpdateTaskByInterval(startDate);
+						}
+
+						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+						{
+							startDate = startDate.AddMinutes(jsonResult.PeriodicBackupModel.BackupInterval);
+							UpdateTaskByInterval(startDate);
+						}
+
+						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+						{
+							startDate = startDate.AddSeconds(jsonResult.PeriodicBackupModel.BackupInterval);
+							UpdateTaskByInterval(startDate);
+						}
 					}
 				}
 			}
@@ -186,7 +221,20 @@ namespace Sdl.Community.BackupFiles
 					}
 				}
 			}
-		}	
+		}
+
+		private static void TriggerWhenWindowsStart(bool isWindowsInitialize)
+		{
+			Service service = new Service();
+
+			var jsonResult = service.GetJsonInformation();
+
+			if ((jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked) ||
+				 (jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked))
+			{
+				service.CreateTaskScheduler(isWindowsInitialize);
+			}
+		}
 		#endregion
 	}
 }
