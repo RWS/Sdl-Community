@@ -46,6 +46,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         private int TotalSegmentPairsCount { get; set; }
         private int FilteredSegmentPairsCount { get; set; }
+	    public List<string> AvailableColorsList { get; set; }
 
 	    private CustomFilterSettings _customSettings;
 		private CustomFilterSettings CustomFilter
@@ -350,6 +351,28 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	        segmentsBox.Enabled = false;
 
+
+			var item = new ListViewItem("#F45623");
+
+	        item.BackColor = Color.Blue;
+
+
+	        var item1 = new ListViewItem("#F45623");
+
+	        item1.BackColor = Color.Red;
+
+
+	        var item2 = new ListViewItem("#F45623");
+
+	        item2.BackColor = Color.Aquamarine;
+
+	        colorsListView.Items.Add(item);
+	        colorsListView.Items.Add(item1);
+	        colorsListView.Items.Add(item2);
+
+
+	        colorsListView.View = View.List;
+	     
         }
 
 
