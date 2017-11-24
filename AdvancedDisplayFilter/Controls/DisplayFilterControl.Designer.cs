@@ -104,6 +104,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.label4 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
 			this.tabPage_Colors = new System.Windows.Forms.TabPage();
+			this.colorLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+			this.label6 = new System.Windows.Forms.Label();
+			this.colorsListView = new System.Windows.Forms.ListView();
 			this.imageList_filter = new System.Windows.Forms.ImageList(this.components);
 			this.splitter_filterExpression = new System.Windows.Forms.Splitter();
 			this.panel_buffer = new System.Windows.Forms.Panel();
@@ -125,9 +128,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
-			this.colorLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.label6 = new System.Windows.Forms.Label();
-			this.colorsListView = new System.Windows.Forms.ListView();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -151,6 +151,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_fuzzyValue.SuspendLayout();
 			this.fuzzyPanel.SuspendLayout();
 			this.tabPage_Colors.SuspendLayout();
+			this.colorLayoutPanel.SuspendLayout();
 			this.toolStrip_filter.SuspendLayout();
 			this.panel_filterExpression.SuspendLayout();
 			this.panel_filterStatus.SuspendLayout();
@@ -158,7 +159,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.colorLayoutPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -678,6 +678,26 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_Colors.Name = "tabPage_Colors";
 			this.tabPage_Colors.UseVisualStyleBackColor = true;
 			// 
+			// colorLayoutPanel
+			// 
+			resources.ApplyResources(this.colorLayoutPanel, "colorLayoutPanel");
+			this.colorLayoutPanel.Controls.Add(this.label6, 0, 0);
+			this.colorLayoutPanel.Controls.Add(this.colorsListView, 0, 1);
+			this.colorLayoutPanel.Name = "colorLayoutPanel";
+			// 
+			// label6
+			// 
+			resources.ApplyResources(this.label6, "label6");
+			this.label6.Name = "label6";
+			// 
+			// colorsListView
+			// 
+			this.colorsListView.CheckBoxes = true;
+			resources.ApplyResources(this.colorsListView, "colorsListView");
+			this.colorsListView.Name = "colorsListView";
+			this.colorsListView.UseCompatibleStateImageBehavior = false;
+			this.colorsListView.SelectedIndexChanged += new System.EventHandler(this.colorsListView_SelectedIndexChanged);
+			// 
 			// imageList_filter
 			// 
 			this.imageList_filter.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList_filter.ImageStream")));
@@ -806,25 +826,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// colorLayoutPanel
-			// 
-			resources.ApplyResources(this.colorLayoutPanel, "colorLayoutPanel");
-			this.colorLayoutPanel.Controls.Add(this.label6, 0, 0);
-			this.colorLayoutPanel.Controls.Add(this.colorsListView, 0, 1);
-			this.colorLayoutPanel.Name = "colorLayoutPanel";
-			// 
-			// label6
-			// 
-			resources.ApplyResources(this.label6, "label6");
-			this.label6.Name = "label6";
-			// 
-			// colorsListView
-			// 
-			this.colorsListView.CheckBoxes = true;
-			resources.ApplyResources(this.colorsListView, "colorsListView");
-			this.colorsListView.Name = "colorsListView";
-			this.colorsListView.UseCompatibleStateImageBehavior = false;
-			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -864,6 +865,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.fuzzyPanel.ResumeLayout(false);
 			this.fuzzyPanel.PerformLayout();
 			this.tabPage_Colors.ResumeLayout(false);
+			this.colorLayoutPanel.ResumeLayout(false);
+			this.colorLayoutPanel.PerformLayout();
 			this.toolStrip_filter.ResumeLayout(false);
 			this.toolStrip_filter.PerformLayout();
 			this.panel_filterExpression.ResumeLayout(false);
@@ -872,8 +875,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.colorLayoutPanel.ResumeLayout(false);
-			this.colorLayoutPanel.PerformLayout();
 			this.ResumeLayout(false);
 
         }

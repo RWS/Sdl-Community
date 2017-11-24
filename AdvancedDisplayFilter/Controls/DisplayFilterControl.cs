@@ -29,7 +29,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         public event OnApplyFilterHandler OnApplyDisplayFilter;
 
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
-		private List<string> _selectedColors = new List<string>();
         #endregion
 
         #region  |  Properties  |
@@ -61,7 +60,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					RevertSerach = reverseBox.Checked,
-					Colors = _selectedColors,
+					Colors = AvailableColorsList,
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text
 
@@ -75,9 +74,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					customSettings.CommentRegex = textBox_commentText.Text;
 
 				}
+				if (ActiveDocument.ActiveFileProperties != null)
+				{
+					customSettings.FileType = ActiveDocument.ActiveFileProperties.FileConversionProperties.FileTypeDefinitionId.Id;
+				}
 				return customSettings;
 			}
-			set => CustomFilter.Colors = value.Colors;
 		}
 
 	    private DisplayFilterSettings DisplayFilterSettings
@@ -355,7 +357,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
 	        segmentsBox.Enabled = false;
-        }
+	       
+		}
 
 
 
@@ -557,15 +560,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    }
 
 	    public void ApplyFilter()
-        {
-            if (OnApplyDisplayFilter != null)
-            {
-                var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
-                OnApplyDisplayFilter(DisplayFilterSettings,CustomFilter, result);
-            }
-        }
+	    {
+		    if (OnApplyDisplayFilter != null)
+		    {
+			    var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
+			    OnApplyDisplayFilter(DisplayFilterSettings, CustomFilter, result);
+		    }
+	    }
 
-        public void ClearFilter()
+	    public void ClearFilter()
         {
             InitializeSettings();
 
@@ -630,7 +633,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             InitializeSettings();
 
-            if (ActiveDocument != null)
+			if (ActiveDocument != null)
                 ActiveDocument.DocumentFilterChanged -= ActiveDocument_DocumentFilterChanged;
 
             // get a reference to the active document            
@@ -651,7 +654,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 }
 
 				PopulateColorList();
-                UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
+
+				UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
         private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings,FilteredCountsCallback result)
@@ -660,8 +664,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 return;
 
             DisplayFilter = new DisplayFilter(displayFilterSettings,customFilterSettings, ActiveDocument);
-
-            ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
+			ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
 
             result.Invoke(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
         }
@@ -1500,7 +1503,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			var hexCode = ColorPickerHelper.GetHexCode(screenColorPicker.Color.R, screenColorPicker.Color.G,
 				screenColorPicker.Color.B);
-			_selectedColors.Add(hexCode);
+			//_selectedColors.Add(hexCode);
 			AddNewTextBox();
 		}
 
@@ -1527,7 +1530,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			//reinitialize index for text boxes
 		    _count = 1;
 			colorsPanel.Controls.Clear();
-		    _selectedColors.Clear();
+		   // _selectedColors.Clear();
 		}
 
 		private void clearColorsBtn_Click(object sender, EventArgs e)
@@ -1538,11 +1541,29 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void colorEditor_ColorChanged(object sender, EventArgs e)
 		{
-			//var hexCode = ColorPickerHelper.GetHexCode(colorEditor.Color.R, colorEditor.Color.G,
-			//	colorEditor.Color.B);
 			screenColorPicker.Color = colorEditor.Color;
 		}
-	}
+
+	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
+	    {
+		    var selectedColors = colorsListView.SelectedItems;
+		  
+			if (AvailableColorsList != null)
+		    {
+			    AvailableColorsList.Clear();
+				foreach (ListViewItem color in selectedColors)
+			    {
+				    var colorCode = color.Text;
+
+				    if (!AvailableColorsList.Contains(colorCode))
+				    {
+					    AvailableColorsList.Add(colorCode);
+				    }
+			    }
+			}
+		 
+	    }
+    }
 
 
 
