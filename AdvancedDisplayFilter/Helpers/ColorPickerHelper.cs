@@ -18,7 +18,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			foreach (var code in colorsCode)
 			{
-				if (sourceText.Contains(string.Format("color=\"{0}\"", code)))
+				if (sourceText.Contains(string.Format("color=\"{0}\"", code.Substring(1,code.Length-1))))
 				{
 					return true;
 				}
@@ -27,7 +27,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			var targetText = rowInfo.SegmentPair.Target.GetString(true);
 			foreach (var code in colorsCode)
 			{
-				if (targetText.Contains(string.Format("color=\"{0}\"", code)))
+				if (targetText.Contains(string.Format("color=\"{0}\"", code.Substring(1, code.Length-1))))
 				{
 					return true;
 				}
@@ -46,6 +46,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			var visitor = new TagDataVisitor();
 			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
+
+			foreach (var selectedColor in customSettingsColors)
+			{
+				if (colorCodes.Contains(selectedColor.Substring(1, selectedColor.Length - 1)))
+				{
+					return true;
+				}
+			}
+
 			return false;
 		}
 
