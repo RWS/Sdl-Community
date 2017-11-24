@@ -7,6 +7,9 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using static Sdl.Community.BackupService.Helpers.Enums;
+using Microsoft.Win32;
+using System.Runtime.CompilerServices;
+using System.Reflection;
 
 namespace Sdl.Community.BackupFiles
 {
@@ -14,12 +17,21 @@ namespace Sdl.Community.BackupFiles
 	{
 		static void Main(string[] args)
 		{
-			BackupFilesRecursive();
+			//	var registryParam = GetRegistryParam();
+
+			LoadAssemblies();
+
+			foreach (var arg in args)
+			{
+				MessageLogger.LogFileMessage(arg);
+			}
+		    BackupFilesRecursive();
 
 			if (args[0].Equals("Daily"))
 			{
 				UpdateDailyTaskTrigger();
 			}
+
 			if(args[0].Equals("WindowsInitialize"))
 			{
 				TriggerWhenWindowsStart(true);
@@ -235,6 +247,49 @@ namespace Sdl.Community.BackupFiles
 				service.CreateTaskScheduler(isWindowsInitialize);
 			}
 		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private static void LoadAssemblies()
+		{
+			Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
+			Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+			{
+				var shortName = new AssemblyName(args.Name).Name;
+				if (_assemblies.TryGetValue(shortName, out var assembly))
+				{
+					return assembly;
+				}
+				return null;
+			}
+			var appAssembly = typeof(BackupFiles).Assembly;
+			foreach (var resourceName in appAssembly.GetManifestResourceNames())
+			{
+				if (resourceName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
+				{
+					using (var stream = appAssembly.GetManifestResourceStream(resourceName))
+					{
+						var assemblyData = new byte[(int)stream.Length];
+						stream.Read(assemblyData, 0, assemblyData.Length);
+						var assembly = Assembly.Load(assemblyData);
+						_assemblies.Add(assembly.GetName().Name, assembly);
+					}
+				}
+			}
+			AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+		}
+
+		//private static string GetRegistryParam()
+		//{
+
+		//	RegistryKey myKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Sdl.Community.BackupFiles", false);
+		//	string value = myKey.GetValue("Sdl.Community.BackupFiles").ToString();
+
+
+		//	RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Sdl.Community.BackupFiles",false);
+		//	string name = (string)rk.GetValue("Sdl.Community.BackupFiles");
+
+		//	return name;
+		//}
 		#endregion
 	}
 }

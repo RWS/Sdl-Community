@@ -39,7 +39,7 @@ namespace Sdl.Community.TMBackup
 				key.CreateSubKey("Sdl.Community.BackupFiles");
 
 				// Add the value in the registry so that the application runs at startup
-				key.SetValue("Sdl.Community.BackupFiles", path);
+				key.SetValue("Sdl.Community.BackupFiles", path + Constants.RegistryParam, RegistryValueKind.String);
 			}
 		}
 
