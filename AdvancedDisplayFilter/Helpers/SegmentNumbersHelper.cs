@@ -101,7 +101,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					segmentsRangeList.Add(segmentRange);
 				}
 			}
-
 			return segmentsRangeList;
 		}
 	}

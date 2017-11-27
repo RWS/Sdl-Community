@@ -40,8 +40,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
             if (tokens[0].type != NumberToken.TokenType.Number 
                 || tokens[tokens.Count - 1].type != NumberToken.TokenType.Number)
                 return false;
-
-
+			
             SetNumberValueTypes(tokens);
 
             // check for invalid tokens            

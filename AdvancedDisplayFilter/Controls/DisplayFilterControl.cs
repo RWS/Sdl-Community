@@ -63,7 +63,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					Colors = AvailableColorsList,
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text
-
 				};
 				if (groupedBtn.Checked)
 				{
@@ -74,18 +73,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					customSettings.CommentRegex = textBox_commentText.Text;
 
 				}
-				if (ActiveDocument != null)
-				{
-					if (ActiveDocument.Files != null)
-					{
-						customSettings.FileType = ActiveDocument.Files.ToList()[0].FileTypeId;
-					}
-					//if (ActiveDocument.ActiveFileProperties != null)
-					//{
-					//	customSettings.FileType = ActiveDocument.ActiveFileProperties.FileConversionProperties.FileTypeDefinitionId.Id;
-					//}
-				}
-				
 				return customSettings;
 			}
 		}
@@ -106,8 +93,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     CommentSeverity = comboBox_commentSeverity.SelectedIndex,
                     ShowAllContent = false
                 };
-
-
+				
                 foreach (var contextInfo in listView_contextInfo.SelectedItems
                     .Cast<ListViewItem>().Select(selectedItem => selectedItem.Tag as IContextInfo)
                     .Where(contextInfo => contextInfo != null
@@ -211,7 +197,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupLockingTypesAvailable &&
                                     value.SegmentLockingTypes.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -224,7 +209,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupContentTypesAvailable &&
                                     value.SegmentContentTypes.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -238,7 +222,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupStatusAvailable &&
                                     value.ConfirmationLevels.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -246,7 +229,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     if (value.OriginTypes.Any())
                     {
-
                         foreach (var item in listView_available.Items.Cast<ListViewItem>()
                             .Where(
                                 item =>
@@ -259,7 +241,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     if (value.PreviousOriginTypes.Any())
                     {
-
                         foreach (var item in listView_available.Items.Cast<ListViewItem>()
                             .Where(
                                 item =>
@@ -317,7 +298,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         internal static ListViewGroup GroupLockingTypesAvailable { get; set; }
         internal static ListViewGroup GroupContentTypesAvailable { get; set; }
 
-
         private static ListViewGroup GroupStatusSelected { get; set; }
         private static ListViewGroup GroupOriginSelected { get; set; }
         private static ListViewGroup GroupPreviousOriginSelected { get; set; }
@@ -345,10 +325,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			colorsListView.View = View.Tile;
 	        colorsListView.TileSize = new Size(70, 20);
 
-
 			listView_available.ListViewItemSorter = new ListViewItemComparer();
             listView_selected.ListViewItemSorter = new ListViewItemComparer();
-
 
             EditorController = GetEditorController();
             EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -357,7 +335,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
             OnApplyDisplayFilter += ApplyDisplayFilter;
 
-
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Collapsed);
             listView_selected.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal);
 
@@ -365,13 +342,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
 	        segmentsBox.Enabled = false;
-	       
 		}
-
-
-
         #endregion
-
 
         private void InitializeSettings()
         {
@@ -384,7 +356,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        segmentsBox.Enabled = false;
 	        fuzzyMin.Text = string.Empty;
 	        fuzzyMax.Text = string.Empty;
-
 #endregion
 
 			#region  |  content panel  |
@@ -394,16 +365,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
             checkBox_regularExpression.Checked = false;
             checkBox_caseSensitive.Checked = false;
-
             #endregion
 
             #region  |  filters panel  |
-
             try
             {
                 listView_available.BeginUpdate();
                 listView_selected.BeginUpdate();
-
 
                 listView_available.Items.Clear();
                 listView_selected.Items.Clear();
@@ -414,7 +382,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 _item.Group = GroupGeneralAvailable;
                 _item.Tag = StringResources.DisplayFilterControl_ShowAllContent;
 
-
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.RepetitionType)))
                 {
                     var item =
@@ -424,7 +391,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Tag = type;
                 }
 
-
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
                 {
                     var item =
@@ -433,8 +399,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupReviewTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentLockingType)))
                 {
                     var item =
@@ -443,8 +408,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupLockingTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentContentType)))
                 {
                     var item =
@@ -453,8 +417,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupContentTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.ConfirmationLevel)))
                 {
                     var item =
@@ -508,7 +471,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 comboBox_commentSeverity.Items.Add(severity.ToString());
 
             comboBox_commentSeverity.SelectedIndex = 0;
-
             #endregion
 
             #region  |  context info panel  |
@@ -543,7 +505,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				    }
 			    }
 		    }
-
 		    SetAddColorsToListView();
 	    }
 
@@ -555,7 +516,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			    foreach (var color in AvailableColorsList)
 			    {
 				    var hexaCode = string.Concat("#", color);
-
 				    var colorItem = new ListViewItem(hexaCode)
 				    {
 					    BackColor = ColorTranslator.FromHtml(hexaCode),
@@ -578,7 +538,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    public void ClearFilter()
         {
             InitializeSettings();
-
             ApplyFilter();
         }
 
@@ -598,7 +557,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 sw.Flush();
             }
         }
-
         public void LoadFilter()
         {
             var loadSettingsDialog = new OpenFileDialog
@@ -606,7 +564,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 Title = StringResources.DisplayFilterControl_LoadFilter_Load_Filter_Settings,
                 Filter = StringResources.DisplayFilterControl_Settings_XML_File_sdladfsettings
             };
-
 
             if (loadSettingsDialog.ShowDialog() != DialogResult.OK) return;
             try
@@ -626,8 +583,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 MessageBox.Show(ex.Message);
             }
         }
-
-
         private void ActiveDocument_DocumentFilterChanged(object sender, DocumentFilterEventArgs e)
         {
             if (e.DisplayFilter == null
@@ -659,7 +614,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     //invalidate UI with display settings recovered from the active document
                     DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
                 }
-
 				PopulateColorList();
 
 				UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
@@ -758,15 +712,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.SegmentContentType)Enum.Parse(
                         typeof(DisplayFilterSettings.SegmentContentType), item, true))) + ")");
 
-
             if (DisplayFilterSettings.CommentText != string.Empty)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_text + ":\"" + DisplayFilterSettings.CommentText + "\"");
             if (DisplayFilterSettings.CommentAuthor != string.Empty)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_author + ":\"" + DisplayFilterSettings.CommentAuthor + "\"");
             if (DisplayFilterSettings.CommentSeverity > 0)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_severity + ":\"" + (DisplayFilterSettings.CommentSeverityType)DisplayFilterSettings.CommentSeverity + "\"");
-
-
+			
             if (DisplayFilterSettings.ContextInfoTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Document_structure + ":"
                     + "(" + DisplayFilterSettings.ContextInfoTypes.Aggregate(string.Empty, (current, item) => current
@@ -779,8 +731,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        {
 			        if (CustomFilter.Colors.Count > 0)
 			        {
-				        //filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors+":\"");
-
 				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
 				                                        + "(" + CustomFilter.Colors.Aggregate(string.Empty,
 					                                        (current, item) => current
@@ -799,7 +749,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         #region  |  Helpers  |
 
-
         #region  |  Tab icons  |
 
         private void InitializeTabPageIcons()
@@ -811,7 +760,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         }
         private void CheckEnabledFilterIcons()
         {
-            if (ActiveDocument != null)
+			if (ActiveDocument != null)
             {
                 if (ActiveDocument.DisplayFilter != null
                     && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
@@ -825,8 +774,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
 	                InvalidateIconsFilterApplied_colorPicker(CustomFilter);
 	                InvalidateIconsFilterApplied_fuzzyValues(CustomFilter);
-
-
+					
 					SetStatusBackgroundColorCode(IsFilterApplied(settings));
                 }
                 else
@@ -840,7 +788,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
 	               InvalidateIconsFilterApplied(tabPage_Colors);
 	                InvalidateIconsFilterApplied(tabPage_fuzzyValue);
-
 				}
             }
         }
@@ -874,9 +821,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             panel_filterStatusBarImage.Visible = visible;
             panel_filterStatusBar.BackColor = visible ? SystemColors.GradientInactiveCaption : Color.Transparent;
         }
+
         private bool IsFilterApplied(DisplayFilterSettings settings)
         {
-            if (!string.IsNullOrEmpty(settings.SourceText)
+	        if (!string.IsNullOrEmpty(settings.SourceText)
                 || !string.IsNullOrEmpty(settings.TargetText)
                 || settings.ContextInfoTypes.Any()
                 || settings.SegmentReviewTypes.Any()
@@ -894,11 +842,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+	        return false;
         }
+
         private void InvalidateIconsFilterApplied(TabPage tabPage)
         {
             tabPage.ImageIndex = -1;
@@ -914,11 +860,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_content.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_filtersTab(DisplayFilterSettings settings)
         {
-
             if (settings.SegmentReviewTypes.Any()
                 || settings.ConfirmationLevels.Any()
                 || settings.OriginTypes.Any()
@@ -935,11 +879,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_filters.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_commentsTab(DisplayFilterSettings settings)
         {
-
             if (!string.IsNullOrEmpty(settings.CommentText)
                 || !string.IsNullOrEmpty(settings.CommentAuthor)
                 || settings.CommentSeverity > 0)
@@ -950,7 +892,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_comments.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_contextInfoTab(DisplayFilterSettings settings)
         {
@@ -980,7 +921,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void InvalidateIconsFilterEdited(TabPage tabPage)
         {
-
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
                 && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
             {
@@ -1009,7 +949,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     || settings.SegmentReviewTypes.Any()
                     || settings.ShowAllContent))
                 {
-
                     var list1 = new List<string> { DisplayFilterSettings.ShowAllContent.ToString() };
                     list1.AddRange(DisplayFilterSettings.OriginTypes);
                     list1.AddRange(DisplayFilterSettings.PreviousOriginTypes);
@@ -1018,7 +957,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     list1.AddRange(DisplayFilterSettings.SegmentReviewTypes);
                     list1.AddRange(DisplayFilterSettings.SegmentLockingTypes);
                     list1.AddRange(DisplayFilterSettings.SegmentContentTypes);
-
 
                     var list2 = new List<string> { settings.ShowAllContent.ToString() };
                     list2.AddRange(settings.OriginTypes);
@@ -1060,7 +998,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     tabPage.ImageIndex = string.Join(", ", list) == string.Join(", ", settings.ContextInfoTypes)
                         ? 0
                         : 1;
-
                 }
                 else
                     tabPage.ImageIndex = 1;
@@ -1070,8 +1007,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 tabPage.ImageIndex = 1;
             }
         }
-
-
+		
         #endregion
 
         #region  |  Filter Attributes group  |
@@ -1111,7 +1047,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     itemFrom.Remove();
                 }
-
                 SelectDefaultItem(from, itemIndex);
 
                 listView_available.Sort();
@@ -1213,7 +1148,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         }
         private void AddGroupsToOriginTypeListview()
         {
-
             listView_available.ShowGroups = true;
             listView_selected.ShowGroups = true;
 
@@ -1303,7 +1237,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         #endregion
 
         #region  |  ToolbarStrip events  |
-
         private void toolStripButton_applyFilter_Click(object sender, EventArgs e)
         {
             ApplyFilter();
@@ -1323,11 +1256,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             LoadFilter();
         }
-
         #endregion
 
         #region  |  Content tab events  |
-
         private void textBox_source_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
@@ -1339,7 +1270,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             if (e.KeyCode == Keys.Return)
                 ApplyFilter();
         }
-
 
         private void textBox_source_TextChanged(object sender, EventArgs e)
         {
@@ -1364,7 +1294,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         #endregion
 
         #region  |  Filter Attributes tab events  |
-
 
         private void button_add_Click(object sender, EventArgs e)
         {
@@ -1393,8 +1322,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             CheckEnabledActionButtons();
         }
-
-
         #endregion
 
         #region  |  Comments tab events  |
@@ -1410,9 +1337,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             if (e.KeyCode == Keys.Return)
                 ApplyFilter();
         }
-
-
-
+		
         private void textBox_commentText_TextChanged(object sender, EventArgs e)
         {
             InvalidateIconsFilterEdited(tabPage_comments);
@@ -1427,7 +1352,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             InvalidateIconsFilterEdited(tabPage_comments);
         }
-
         #endregion
 
         #region  |  Contextinfo tab events  |
@@ -1470,11 +1394,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             label_contextInfoSelected.Text = string.Format("Selected: {0}", listView_contextInfo.SelectedItems.Count);
         }
-
         #endregion
-
-       
-
+		
         private void listView_contextInfo_Resize(object sender, EventArgs e)
         {
             var width = ((ListView)sender).Width - 20 - SystemInformation.VerticalScrollBarWidth;
@@ -1519,8 +1440,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				segmentsBox.Enabled = true;
 			}
 		}
-
-
+		
 	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
 	    {
 		    var selectedColors = colorsListView.SelectedItems;
@@ -1541,8 +1461,4 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		 
 	    }
     }
-
-
-
-
 }

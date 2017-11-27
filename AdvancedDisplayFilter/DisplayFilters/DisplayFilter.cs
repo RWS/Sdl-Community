@@ -138,17 +138,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.Colors.Count > 0)
 				{
-					if (CustomSettings.FileType != null)
-					{
-						if (CustomSettings.FileType.Contains("IDML"))
-						{
-							success = ColorPickerHelper.ContainsColorForIdmlFileType(rowInfo, CustomSettings.Colors);
-						}
-						else
-						{
-							success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
-						}
-					}
+					success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
 				}
 
 				//fuzzy

@@ -22,6 +22,5 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public List<string> Colors { get; set; }
 		public string FuzzyMin { get; set; }
 		public string FuzzyMax { get; set; }
-		public string FileType { get; set; }
 	}
 }
