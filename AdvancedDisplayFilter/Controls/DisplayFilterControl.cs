@@ -74,10 +74,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					customSettings.CommentRegex = textBox_commentText.Text;
 
 				}
-				if (ActiveDocument.ActiveFileProperties != null)
+				if (ActiveDocument != null)
 				{
-					customSettings.FileType = ActiveDocument.ActiveFileProperties.FileConversionProperties.FileTypeDefinitionId.Id;
+					if (ActiveDocument.Files != null)
+					{
+						customSettings.FileType = ActiveDocument.Files.ToList()[0].FileTypeId;
+					}
+					//if (ActiveDocument.ActiveFileProperties != null)
+					//{
+					//	customSettings.FileType = ActiveDocument.ActiveFileProperties.FileConversionProperties.FileTypeDefinitionId.Id;
+					//}
 				}
+				
 				return customSettings;
 			}
 		}
@@ -376,7 +384,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        segmentsBox.Enabled = false;
 	        fuzzyMin.Text = string.Empty;
 	        fuzzyMax.Text = string.Empty;
-	        ClearColorPicker();
 
 #endregion
 
@@ -765,6 +772,27 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + "(" + DisplayFilterSettings.ContextInfoTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
                     + ContextInfoList.FirstOrDefault(a => a.ContextType == item).DisplayCode) + ")");
+
+	        if (CustomFilter != null)
+	        {
+		        if (CustomFilter.Colors != null)
+		        {
+			        if (CustomFilter.Colors.Count > 0)
+			        {
+				        //filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors+":\"");
+
+				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
+				                                        + "(" + CustomFilter.Colors.Aggregate(string.Empty,
+					                                        (current, item) => current
+					                                                           + (current != string.Empty
+						                                                           ? " " + "|" + " "
+						                                                           : string.Empty)
+					                                                           + CustomFilter.Colors.FirstOrDefault(a => a == item)) +
+				                                        ")");
+			        }
+		        }
+	        }
+	        
         }
 
 
@@ -810,7 +838,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_comments);
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
 	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
-	                InvalidateIconsFilterApplied(tabPage_colorPicker);
+	               InvalidateIconsFilterApplied(tabPage_Colors);
 	                InvalidateIconsFilterApplied(tabPage_fuzzyValue);
 
 				}
@@ -833,13 +861,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    {
 		    if (customFilter.Colors.Count > 0)
 		    {
-			    tabPage_colorPicker.ImageIndex = 0;
+			    tabPage_Colors.ImageIndex = 0;
 		    }
 		    else
 		    {
-			    tabPage_colorPicker.ImageIndex = -1;
-		    }
-	    }
+				  tabPage_Colors.ImageIndex = -1;
+			}
+		}
 
 	    private void SetStatusBackgroundColorCode(bool visible)
         {
@@ -1492,57 +1520,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		}
 
-
-		private void screenColorPicker_MouseUp(object sender, MouseEventArgs e)
-		{
-			colorEditor.Color = screenColorPicker.Color;
-			
-		}
-
-		private void addColorBtn_Click(object sender, EventArgs e)
-		{
-			var hexCode = ColorPickerHelper.GetHexCode(screenColorPicker.Color.R, screenColorPicker.Color.G,
-				screenColorPicker.Color.B);
-			//_selectedColors.Add(hexCode);
-			AddNewTextBox();
-		}
-
-	    int _count = 1;
-	    public TextBox AddNewTextBox()
-	    {
-		    var txt = new TextBox();
-		    colorsPanel.Controls.Add(txt);
-		    txt.Top = _count * 15;
-			txt.Size = new Size
-			{
-				Height = 5,
-				Width = 15
-			};
-		    txt.Enabled = false;
-		    txt.BackColor = colorEditor.Color;
-			txt.BorderStyle = BorderStyle.None;
-		    _count++;
-		    return txt;
-	    }
-
-	    private void ClearColorPicker()
-	    {
-			//reinitialize index for text boxes
-		    _count = 1;
-			colorsPanel.Controls.Clear();
-		   // _selectedColors.Clear();
-		}
-
-		private void clearColorsBtn_Click(object sender, EventArgs e)
-		{
-			ClearColorPicker();
-		}
-
-
-		private void colorEditor_ColorChanged(object sender, EventArgs e)
-		{
-			screenColorPicker.Color = colorEditor.Color;
-		}
 
 	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
 	    {

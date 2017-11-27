@@ -277,4 +277,7 @@
   <data name="DisplayFilterControl_Document_structure" xml:space="preserve">
     <value>Document Structure</value>
   </data>
+  <data name="DisplayFilterControl_Colors" xml:space="preserve">
+    <value>Colors</value>
+  </data>
 </root>

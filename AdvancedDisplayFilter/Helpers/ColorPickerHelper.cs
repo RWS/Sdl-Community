@@ -11,27 +11,65 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public static class ColorPickerHelper
 	{
-		public static bool ContainsColor(DisplayFilterRowInfo rowInfo,List<string> colorsCode)
+		//public static bool ContainsColor(DisplayFilterRowInfo rowInfo,List<string> colorsCode)
+		//{
+		//	//get text from segment including tags 
+		//	var sourceText = rowInfo.SegmentPair.Source.GetString(true);
+
+		//	foreach (var code in colorsCode)
+		//	{
+		//		var color = code.Substring(1, code.Length - 1);
+		//		if (sourceText.Contains(string.Format("color={0}", color)))
+		//		{
+		//			return true;
+		//		}
+		//	}
+
+		//	var targetText = rowInfo.SegmentPair.Target.GetString(true);
+		//	foreach (var code in colorsCode)
+		//	{
+		//		if (targetText.Contains(string.Format("color={0}", code.Substring(1, code.Length-1))))
+		//		{
+		//			return true;
+		//		}
+		//	}
+		//	return false;
+		//}
+
+
+		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCode)
 		{
 			//get text from segment including tags 
-			var sourceText = rowInfo.SegmentPair.Source.GetString(true);
+			//var sourceText = rowInfo.SegmentPair.Source.GetString(true);
 
-			foreach (var code in colorsCode)
+			//foreach (var code in colorsCode)
+			//{
+			//	if (sourceText.Contains(string.Format("color=\"{0}\"", code.Substring(1, code.Length - 1))))
+			//	{
+			//		return true;
+			//	}
+			//}
+
+			//var targetText = rowInfo.SegmentPair.Target.GetString(true);
+			//foreach (var code in colorsCode)
+			//{
+			//	if (targetText.Contains(string.Format("color=\"{0}\"", code.Substring(1, code.Length - 1))))
+			//	{
+			//		return true;
+			//	}
+			//}
+			//return false;
+
+			var visitor = new TagDataVisitor();
+			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
+			foreach (var selectedColor in colorsCode)
 			{
-				if (sourceText.Contains(string.Format("color=\"{0}\"", code.Substring(1,code.Length-1))))
+				if (colorCodes.Contains(selectedColor.Substring(1, selectedColor.Length - 1)))
 				{
 					return true;
 				}
 			}
 
-			var targetText = rowInfo.SegmentPair.Target.GetString(true);
-			foreach (var code in colorsCode)
-			{
-				if (targetText.Contains(string.Format("color=\"{0}\"", code.Substring(1, code.Length-1))))
-				{
-					return true;
-				}
-			}
 			return false;
 		}
 

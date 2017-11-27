@@ -22,26 +22,48 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			VisitChildren(segment);
 			return _colorCodeList;
 		}
+
 		public void VisitTagPair(ITagPair tagPair)
 		{
 			foreach (var formatingProperty in tagPair.StartTagProperties.Formatting)
 			{
-				var key = formatingProperty.Key;
-				if (key.Equals("TextColor"))
+				try
 				{
-					var color = formatingProperty.Value.StringValue;
-					var colors = color.Split(',');
-					var red = colors[0];
-					var green = colors[1];
-					var blue = colors[2];
-					var hexCode =GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
-					if (!_colorCodeList.Contains(hexCode))
+					var key = formatingProperty.Key;
+					if (key.Equals("TextColor"))
 					{
-						_colorCodeList.Add(hexCode);
+						var color = formatingProperty.Value.StringValue;
+						var colors = color.Split(',');
+						var red = string.Empty;
+						var green = string.Empty;
+						var blue = string.Empty;
+						//for  files which color code is like this "0,12,12,12"
+						if (colors.Count().Equals(4))
+						{
+							red = colors[1];
+							green = colors[2];
+							blue = colors[3];
+						}
+						//"0,12,12,12"
+						if (colors.Count().Equals(3))
+						{
+							red = colors[0];
+							green = colors[1];
+							blue = colors[2];
+						}
+
+						var hexCode = GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
+						if (!_colorCodeList.Contains(hexCode))
+						{
+							_colorCodeList.Add(hexCode);
+						}
+
 					}
+				}
+				catch (Exception e)
+				{
 					
 				}
-				
 			}
 			VisitChildren(tagPair);
 		}
@@ -52,13 +74,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			return hexCode;
 		}
-
-		//public List<string> GetTags(ISegment segment)
-		//{
-		//	_colorCodeList.Clear();
-		//	VisitChildren(segment);
-		//	return _colorCodeList;
-		//}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{

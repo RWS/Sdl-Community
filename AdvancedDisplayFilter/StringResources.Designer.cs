@@ -97,6 +97,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colors.
+        /// </summary>
+        internal static string DisplayFilterControl_Colors {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Colors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment Author.
         /// </summary>
         internal static string DisplayFilterControl_Comment_author {

@@ -88,14 +88,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupedBtn = new System.Windows.Forms.RadioButton();
 			this.oddBtn = new System.Windows.Forms.RadioButton();
 			this.evenBtn = new System.Windows.Forms.RadioButton();
-			this.tabPage_colorPicker = new System.Windows.Forms.TabPage();
-			this.pickerPanel = new System.Windows.Forms.Panel();
-			this.colorsPanel = new System.Windows.Forms.Panel();
-			this.clearColorsBtn = new System.Windows.Forms.Button();
-			this.addColorBtn = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
-			this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
 			this.tabPage_fuzzyValue = new System.Windows.Forms.TabPage();
 			this.fuzzyPanel = new System.Windows.Forms.Panel();
 			this.fuzzyMax = new System.Windows.Forms.TextBox();
@@ -146,8 +138,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabPage_segmentNumbers.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			this.tabPage_colorPicker.SuspendLayout();
-			this.pickerPanel.SuspendLayout();
 			this.tabPage_fuzzyValue.SuspendLayout();
 			this.fuzzyPanel.SuspendLayout();
 			this.tabPage_Colors.SuspendLayout();
@@ -179,7 +169,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_comments);
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
-			this.tabControl_filter.Controls.Add(this.tabPage_colorPicker);
 			this.tabControl_filter.Controls.Add(this.tabPage_fuzzyValue);
 			this.tabControl_filter.Controls.Add(this.tabPage_Colors);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
@@ -573,62 +562,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.evenBtn.UseVisualStyleBackColor = true;
 			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
 			// 
-			// tabPage_colorPicker
-			// 
-			this.tabPage_colorPicker.Controls.Add(this.pickerPanel);
-			resources.ApplyResources(this.tabPage_colorPicker, "tabPage_colorPicker");
-			this.tabPage_colorPicker.Name = "tabPage_colorPicker";
-			this.tabPage_colorPicker.UseVisualStyleBackColor = true;
-			// 
-			// pickerPanel
-			// 
-			resources.ApplyResources(this.pickerPanel, "pickerPanel");
-			this.pickerPanel.Controls.Add(this.colorsPanel);
-			this.pickerPanel.Controls.Add(this.clearColorsBtn);
-			this.pickerPanel.Controls.Add(this.addColorBtn);
-			this.pickerPanel.Controls.Add(this.label2);
-			this.pickerPanel.Controls.Add(this.screenColorPicker);
-			this.pickerPanel.Controls.Add(this.colorEditor);
-			this.pickerPanel.Name = "pickerPanel";
-			// 
-			// colorsPanel
-			// 
-			resources.ApplyResources(this.colorsPanel, "colorsPanel");
-			this.colorsPanel.Name = "colorsPanel";
-			// 
-			// clearColorsBtn
-			// 
-			resources.ApplyResources(this.clearColorsBtn, "clearColorsBtn");
-			this.clearColorsBtn.Name = "clearColorsBtn";
-			this.clearColorsBtn.UseVisualStyleBackColor = true;
-			this.clearColorsBtn.Click += new System.EventHandler(this.clearColorsBtn_Click);
-			// 
-			// addColorBtn
-			// 
-			resources.ApplyResources(this.addColorBtn, "addColorBtn");
-			this.addColorBtn.Name = "addColorBtn";
-			this.addColorBtn.UseVisualStyleBackColor = true;
-			this.addColorBtn.Click += new System.EventHandler(this.addColorBtn_Click);
-			// 
-			// label2
-			// 
-			resources.ApplyResources(this.label2, "label2");
-			this.label2.Name = "label2";
-			// 
-			// screenColorPicker
-			// 
-			this.screenColorPicker.Color = System.Drawing.Color.Empty;
-			this.screenColorPicker.Image = ((System.Drawing.Image)(resources.GetObject("screenColorPicker.Image")));
-			resources.ApplyResources(this.screenColorPicker, "screenColorPicker");
-			this.screenColorPicker.Name = "screenColorPicker";
-			this.screenColorPicker.MouseUp += new System.Windows.Forms.MouseEventHandler(this.screenColorPicker_MouseUp);
-			// 
-			// colorEditor
-			// 
-			resources.ApplyResources(this.colorEditor, "colorEditor");
-			this.colorEditor.Name = "colorEditor";
-			this.colorEditor.ColorChanged += new System.EventHandler(this.colorEditor_ColorChanged);
-			// 
 			// tabPage_fuzzyValue
 			// 
 			this.tabPage_fuzzyValue.Controls.Add(this.fuzzyPanel);
@@ -858,9 +791,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
-			this.tabPage_colorPicker.ResumeLayout(false);
-			this.pickerPanel.ResumeLayout(false);
-			this.pickerPanel.PerformLayout();
 			this.tabPage_fuzzyValue.ResumeLayout(false);
 			this.fuzzyPanel.ResumeLayout(false);
 			this.fuzzyPanel.PerformLayout();
@@ -957,15 +887,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Label label1;
 		private CheckBox commentRegexBox;
 		private CheckBox reverseBox;
-		private TabPage tabPage_colorPicker;
-		private Panel pickerPanel;
 		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
-		private Cyotek.Windows.Forms.ColorEditor colorEditor;
-		private Cyotek.Windows.Forms.ScreenColorPicker screenColorPicker;
-		private Button clearColorsBtn;
-		private Button addColorBtn;
-		private Label label2;
-		private Panel colorsPanel;
 		private TabPage tabPage_fuzzyValue;
 		private Panel fuzzyPanel;
 		private Label label4;
