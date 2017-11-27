@@ -8,7 +8,7 @@ namespace Sdl.Community.BackupService.Helpers
 	{
 		public static void LogFileMessage(string exceptionMessage)
 		{
-			string path = Path.Combine(Constants.DeployPath, @"\Log.txt");
+			string path = Path.Combine(Constants.DeployPath, "Log.txt");
 
 			if (!File.Exists(path))
 			{
@@ -26,7 +26,7 @@ namespace Sdl.Community.BackupService.Helpers
 			// Create the file and write information.
 			using (FileStream fs = File.Create(path))
 			{
-				Byte[] info = new UTF8Encoding(true).GetBytes(string.Concat(Constants.InformativeErrorMessage, exceptionMessage));
+				Byte[] info = new UTF8Encoding(true).GetBytes(string.Concat(Constants.InformativeErrorMessage, Environment.NewLine, exceptionMessage));
 				fs.Write(info, 0, info.Length);
 			}
 		}		

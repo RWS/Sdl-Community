@@ -24,6 +24,7 @@ namespace Sdl.Community.BackupService
 			var jsonRequestModel = GetJsonInformation();
 
 			DateTime startDate = DateTime.Now;
+			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
 
 			if (jsonRequestModel != null && jsonRequestModel.ChangeSettingsModel != null)
 			{
@@ -33,12 +34,12 @@ namespace Sdl.Community.BackupService
 
 				if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked && jsonRequestModel.RealTimeBackupModel != null)
 				{
-					AddRealTimeScheduler(jsonRequestModel, startDate, td, isWindowsInitialize);
+					AddRealTimeScheduler(jsonRequestModel, startDate, td, tr);
 				}
 
 				else if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
 				{
-					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, isWindowsInitialize);
+					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr);
 				}
 
 				else
@@ -62,24 +63,15 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Add trigger which executes the backup files console application.
-		private void AddTrigger(DailyTrigger daily, DateTime startDate, TaskDefinition td, bool isWindowsInitialize)
+		private void AddTrigger(Trigger trigger, TaskDefinition td)
 		{
 			using (TaskService ts = new TaskService())
 			{
-				daily.StartBoundary = startDate;
-				td.Triggers.Add(daily);
+				td.Triggers.Add(trigger);
 
-				if (isWindowsInitialize)
-				{
-					//td.Actions.Add(new ExecAction("Sdl.Community.TmBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe"), "WindowsInitialize"));
-					td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "WindowsInitialize"));
-				}
-				else
-				{
-					// above line used for deploy
-					//td.Actions.Add(new ExecAction("Sdl.Community.TmBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe"), "Daily"));
-					td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
-				}
+				// above line used for deploy
+				//td.Actions.Add(new ExecAction("Sdl.Community.TmBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe"), "Daily"));
+				td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
 
 				try
 				{
@@ -93,88 +85,61 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Add real time scheduler for options: seconds, minutes, hours.
-		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, bool isWindowsInitialize)
+		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
 		{
-			DailyTrigger daily = new DailyTrigger();
-
+			tr.StartBoundary = startDate;
+			
 			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 			{
-				startDate = startDate.AddHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-				using (TaskService ts = new TaskService())
-				{
-					AddTrigger(daily, startDate, td, isWindowsInitialize);
-				}
+				tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+				AddTrigger(tr, td);
 			}
 
 			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 			{
-				startDate = startDate.AddMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-				using (TaskService ts = new TaskService())
-				{
-					AddTrigger(daily, startDate, td, isWindowsInitialize);
-				}
+				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+				AddTrigger(tr, td);				
 			}
 
 			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
 			{
-				startDate = startDate.AddSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-
-				using (TaskService ts = new TaskService())
-				{
-					AddTrigger(daily, startDate, td, isWindowsInitialize);
-				}
+				tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
+				AddTrigger(tr, td);				
 			}
 		}
 
 		// Add periodic time scheduler depending on user setup.
-		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, bool isWindowsInitialize)
+		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
 		{
-			DailyTrigger daily = new DailyTrigger();
-
-			if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
-			{
-				startDate = DateTime.Now;
-				using (TaskService ts = new TaskService())
-				{
-					AddTrigger(daily, startDate, td, isWindowsInitialize);
-				}
-			}
-			else
-			{
+			// Ask Paul if is needed anymore the run and wait option because the task is starting automatically.
+			//if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
+			//{
+			//	tr.StartBoundary = DateTime.Now;
+			//	AddTrigger(tr, td);
+			//}
+			//else
+			//{
 				DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
-				startDate = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+				tr.StartBoundary = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
 				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 				{
-					startDate = startDate.AddHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-
-					using (TaskService ts = new TaskService())
-					{
-						AddTrigger(daily, startDate, td, isWindowsInitialize);
-					}
+					tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+					AddTrigger(tr, td);
 				}
 
 				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 				{
-					startDate = startDate.AddMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-					using (TaskService ts = new TaskService())
-					{
-						AddTrigger(daily, startDate, td, isWindowsInitialize);
-					}
+					tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+					AddTrigger(tr, td);
 				}
 
 				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
 				{
-					startDate = startDate.AddSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-
-					using (TaskService ts = new TaskService())
-					{
-						AddTrigger(daily, startDate, td, isWindowsInitialize);
-					}
+					tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+					AddTrigger(tr, td);				
 				}
-			}
+			//}
 		}
 	}
 }
