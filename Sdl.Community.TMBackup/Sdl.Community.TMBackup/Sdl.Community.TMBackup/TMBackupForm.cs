@@ -82,7 +82,7 @@ namespace Sdl.Community.TMBackup
 			this.Close();
 
 			Service service = new Service();
-			service.CreateTaskScheduler(false);
+			service.CreateTaskScheduler();
 		}
 
 		private void GetBackupFormInfo()

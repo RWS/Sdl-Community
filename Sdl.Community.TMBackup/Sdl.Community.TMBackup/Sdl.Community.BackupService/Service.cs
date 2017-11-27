@@ -19,7 +19,7 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Create task scheduler for the backup files process.
-		public void CreateTaskScheduler(bool isWindowsInitialize)
+		public void CreateTaskScheduler()
 		{
 			var jsonRequestModel = GetJsonInformation();
 
@@ -37,27 +37,9 @@ namespace Sdl.Community.BackupService
 					AddRealTimeScheduler(jsonRequestModel, startDate, td, tr);
 				}
 
-				else if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
+				if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
 				{
 					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr);
-				}
-
-				else
-				{   // To do: implement manually scheduler				
-					// Get info from the UI to manually start scheduler					
-					using (TaskService ts = new TaskService())
-					{
-						//td.Actions.Add(new ExecAction("Sdl.Community.TmBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe"), "Daily"));
-						td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\Sdl.Community.TMBackup\Sdl.Community.TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
-						try
-						{
-							ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
-						}
-						catch (Exception ex)
-						{
-							MessageLogger.LogFileMessage(ex.Message);
-						}
-					}
 				}
 			}
 		}
@@ -111,7 +93,7 @@ namespace Sdl.Community.BackupService
 		// Add periodic time scheduler depending on user setup.
 		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
 		{
-			// Ask Paul if is needed anymore the run and wait option because the task is starting automatically.
+			// Ask Paul if is needed anymore the run and wait option because the task knows to start automatically.
 			//if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
 			//{
 			//	tr.StartBoundary = DateTime.Now;
