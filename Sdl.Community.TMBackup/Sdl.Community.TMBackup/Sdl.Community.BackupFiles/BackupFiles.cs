@@ -1,15 +1,9 @@
-﻿using Microsoft.Win32.TaskScheduler;
-using Sdl.Community.BackupService;
+﻿using Sdl.Community.BackupService;
 using Sdl.Community.BackupService.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using static Sdl.Community.BackupService.Helpers.Enums;
-using Microsoft.Win32;
-using System.Runtime.CompilerServices;
-using System.Reflection;
 
 namespace Sdl.Community.BackupFiles
 {
@@ -17,25 +11,7 @@ namespace Sdl.Community.BackupFiles
 	{
 		static void Main(string[] args)
 		{
-			//	var registryParam = GetRegistryParam();
-
-			//LoadAssemblies();
-
-			//foreach (var arg in args)
-			//{
-			//	MessageLogger.LogFileMessage(arg);
-			//}
 		    BackupFilesRecursive();
-
-			//if (args[0].Equals("Daily"))
-			//{
-			//	UpdateDailyTaskTrigger();
-			//}
-
-			//if(args[0].Equals("WindowsInitialize"))
-			//{
-			//	TriggerWhenWindowsStart(true);
-			//}
 		}
 
 		#region Private methods
@@ -144,152 +120,6 @@ namespace Sdl.Community.BackupFiles
 				}
 			}
 		}
-
-		//private static void UpdateDailyTaskTrigger()
-		//{
-		//	try
-		//	{
-		//		var startDate = DateTime.Now;
-		//		Service service = new Service();
-		//		var jsonResult = service.GetJsonInformation();
-
-		//		if (jsonResult != null && jsonResult.RealTimeBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked)
-		//		{
-		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-		//			{
-		//				startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
-		//				UpdateTaskByInterval(startDate);
-		//			}
-
-		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-		//			{
-		//				startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
-		//				UpdateTaskByInterval(startDate);
-		//			}
-
-		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-		//			{
-		//				startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
-		//				UpdateTaskByInterval(startDate);
-		//			}
-		//		}
-		//		if (jsonResult != null && jsonResult.PeriodicBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked)
-		//		{
-		//			if (jsonResult.PeriodicBackupModel.IsRunOption)
-		//			{
-		//				startDate = DateTime.Now;
-		//				UpdateTaskByInterval(startDate);
-		//			}
-		//			else
-		//			{
-		//				DateTime atScheduleTime = DateTime.Parse(jsonResult.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
-		//				startDate = jsonResult.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
-
-		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-		//				{
-		//					startDate = startDate.AddHours(jsonResult.PeriodicBackupModel.BackupInterval);
-		//					UpdateTaskByInterval(startDate);
-		//				}
-
-		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-		//				{
-		//					startDate = startDate.AddMinutes(jsonResult.PeriodicBackupModel.BackupInterval);
-		//					UpdateTaskByInterval(startDate);
-		//				}
-
-		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-		//				{
-		//					startDate = startDate.AddSeconds(jsonResult.PeriodicBackupModel.BackupInterval);
-		//					UpdateTaskByInterval(startDate);
-		//				}
-		//			}
-		//		}
-		//	}
-		//	catch(Exception ex)
-		//	{
-		//		MessageLogger.LogFileMessage(ex.Message);
-		//	}
-		//}
-
-		//private static void UpdateTaskByInterval(DateTime startDate)
-		//{
-		//	using (TaskService ts = new TaskService())
-		//	{
-		//		Task task = ts.GetTask("DailyScheduler");
-		//		if (task != null)
-		//		{
-		//			TaskDefinition td = task.Definition;
-		//			foreach (Trigger trigger in task.Definition.Triggers)
-		//			{
-		//				trigger.StartBoundary = startDate;
-		//			}
-		//			try
-		//			{
-		//				ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
-		//			}
-		//			catch (Exception ex)
-		//			{
-		//				MessageLogger.LogFileMessage(ex.Message);
-		//			}
-		//		}
-		//	}
-		//}
-
-		//private static void TriggerWhenWindowsStart(bool isWindowsInitialize)
-		//{
-		//	Service service = new Service();
-
-		//	var jsonResult = service.GetJsonInformation();
-
-		//	if ((jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked) ||
-		//		 (jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked))
-		//	{
-		//		service.CreateTaskScheduler(isWindowsInitialize);
-		//	}
-		//}
-
-		//[MethodImpl(MethodImplOptions.NoInlining)]
-		//private static void LoadAssemblies()
-		//{
-		//	Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
-		//	Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
-		//	{
-		//		var shortName = new AssemblyName(args.Name).Name;
-		//		if (_assemblies.TryGetValue(shortName, out var assembly))
-		//		{
-		//			return assembly;
-		//		}
-		//		return null;
-		//	}
-		//	var appAssembly = typeof(BackupFiles).Assembly;
-		//	foreach (var resourceName in appAssembly.GetManifestResourceNames())
-		//	{
-		//		if (resourceName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
-		//		{
-		//			using (var stream = appAssembly.GetManifestResourceStream(resourceName))
-		//			{
-		//				var assemblyData = new byte[(int)stream.Length];
-		//				stream.Read(assemblyData, 0, assemblyData.Length);
-		//				var assembly = Assembly.Load(assemblyData);
-		//				_assemblies.Add(assembly.GetName().Name, assembly);
-		//			}
-		//		}
-		//	}
-		//	AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
-		//}
-
-		//private static string GetRegistryParam()
-		//{
-
-		//	RegistryKey myKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Sdl.Community.BackupFiles", false);
-		//	string value = myKey.GetValue("Sdl.Community.BackupFiles").ToString();
-
-
-		//	RegistryKey rk = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run\Sdl.Community.BackupFiles",false);
-		//	string name = (string)rk.GetValue("Sdl.Community.BackupFiles");
-
-		//	return name;
-		//}
 		#endregion
 	}
 }

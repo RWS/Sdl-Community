@@ -64,12 +64,5 @@
       <Name>Sdl.Community.BackupService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Sdl.Community.BackupService.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Microsoft.Win32.TaskScheduler.dll" />
-    <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
