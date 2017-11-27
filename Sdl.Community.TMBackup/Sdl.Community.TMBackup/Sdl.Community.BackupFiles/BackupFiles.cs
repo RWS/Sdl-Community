@@ -19,23 +19,23 @@ namespace Sdl.Community.BackupFiles
 		{
 			//	var registryParam = GetRegistryParam();
 
-			LoadAssemblies();
+			//LoadAssemblies();
 
-			foreach (var arg in args)
-			{
-				MessageLogger.LogFileMessage(arg);
-			}
+			//foreach (var arg in args)
+			//{
+			//	MessageLogger.LogFileMessage(arg);
+			//}
 		    BackupFilesRecursive();
 
-			if (args[0].Equals("Daily"))
-			{
-				UpdateDailyTaskTrigger();
-			}
+			//if (args[0].Equals("Daily"))
+			//{
+			//	UpdateDailyTaskTrigger();
+			//}
 
-			if(args[0].Equals("WindowsInitialize"))
-			{
-				TriggerWhenWindowsStart(true);
-			}
+			//if(args[0].Equals("WindowsInitialize"))
+			//{
+			//	TriggerWhenWindowsStart(true);
+			//}
 		}
 
 		#region Private methods
@@ -145,138 +145,138 @@ namespace Sdl.Community.BackupFiles
 			}
 		}
 
-		private static void UpdateDailyTaskTrigger()
-		{
-			try
-			{
-				var startDate = DateTime.Now;
-				Service service = new Service();
-				var jsonResult = service.GetJsonInformation();
+		//private static void UpdateDailyTaskTrigger()
+		//{
+		//	try
+		//	{
+		//		var startDate = DateTime.Now;
+		//		Service service = new Service();
+		//		var jsonResult = service.GetJsonInformation();
 
-				if (jsonResult != null && jsonResult.RealTimeBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked)
-				{
-					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-					{
-						startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
-						UpdateTaskByInterval(startDate);
-					}
+		//		if (jsonResult != null && jsonResult.RealTimeBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked)
+		//		{
+		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+		//			{
+		//				startDate = startDate.AddHours(jsonResult.RealTimeBackupModel.BackupInterval);
+		//				UpdateTaskByInterval(startDate);
+		//			}
 
-					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-					{
-						startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
-						UpdateTaskByInterval(startDate);
-					}
+		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+		//			{
+		//				startDate = startDate.AddMinutes(jsonResult.RealTimeBackupModel.BackupInterval);
+		//				UpdateTaskByInterval(startDate);
+		//			}
 
-					if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-					{
-						startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
-						UpdateTaskByInterval(startDate);
-					}
-				}
-				if (jsonResult != null && jsonResult.PeriodicBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked)
-				{
-					if (jsonResult.PeriodicBackupModel.IsRunOption)
-					{
-						startDate = DateTime.Now;
-						UpdateTaskByInterval(startDate);
-					}
-					else
-					{
-						DateTime atScheduleTime = DateTime.Parse(jsonResult.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
-						startDate = jsonResult.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+		//			if (jsonResult.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+		//			{
+		//				startDate = startDate.AddSeconds(jsonResult.RealTimeBackupModel.BackupInterval);
+		//				UpdateTaskByInterval(startDate);
+		//			}
+		//		}
+		//		if (jsonResult != null && jsonResult.PeriodicBackupModel != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked)
+		//		{
+		//			if (jsonResult.PeriodicBackupModel.IsRunOption)
+		//			{
+		//				startDate = DateTime.Now;
+		//				UpdateTaskByInterval(startDate);
+		//			}
+		//			else
+		//			{
+		//				DateTime atScheduleTime = DateTime.Parse(jsonResult.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+		//				startDate = jsonResult.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
-						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-						{
-							startDate = startDate.AddHours(jsonResult.PeriodicBackupModel.BackupInterval);
-							UpdateTaskByInterval(startDate);
-						}
+		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+		//				{
+		//					startDate = startDate.AddHours(jsonResult.PeriodicBackupModel.BackupInterval);
+		//					UpdateTaskByInterval(startDate);
+		//				}
 
-						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-						{
-							startDate = startDate.AddMinutes(jsonResult.PeriodicBackupModel.BackupInterval);
-							UpdateTaskByInterval(startDate);
-						}
+		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+		//				{
+		//					startDate = startDate.AddMinutes(jsonResult.PeriodicBackupModel.BackupInterval);
+		//					UpdateTaskByInterval(startDate);
+		//				}
 
-						if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-						{
-							startDate = startDate.AddSeconds(jsonResult.PeriodicBackupModel.BackupInterval);
-							UpdateTaskByInterval(startDate);
-						}
-					}
-				}
-			}
-			catch(Exception ex)
-			{
-				MessageLogger.LogFileMessage(ex.Message);
-			}
-		}
+		//				if (jsonResult.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+		//				{
+		//					startDate = startDate.AddSeconds(jsonResult.PeriodicBackupModel.BackupInterval);
+		//					UpdateTaskByInterval(startDate);
+		//				}
+		//			}
+		//		}
+		//	}
+		//	catch(Exception ex)
+		//	{
+		//		MessageLogger.LogFileMessage(ex.Message);
+		//	}
+		//}
 
-		private static void UpdateTaskByInterval(DateTime startDate)
-		{
-			using (TaskService ts = new TaskService())
-			{
-				Task task = ts.GetTask("DailyScheduler");
-				if (task != null)
-				{
-					TaskDefinition td = task.Definition;
-					foreach (Trigger trigger in task.Definition.Triggers)
-					{
-						trigger.StartBoundary = startDate;
-					}
-					try
-					{
-						ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
-					}
-					catch (Exception ex)
-					{
-						MessageLogger.LogFileMessage(ex.Message);
-					}
-				}
-			}
-		}
+		//private static void UpdateTaskByInterval(DateTime startDate)
+		//{
+		//	using (TaskService ts = new TaskService())
+		//	{
+		//		Task task = ts.GetTask("DailyScheduler");
+		//		if (task != null)
+		//		{
+		//			TaskDefinition td = task.Definition;
+		//			foreach (Trigger trigger in task.Definition.Triggers)
+		//			{
+		//				trigger.StartBoundary = startDate;
+		//			}
+		//			try
+		//			{
+		//				ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+		//			}
+		//			catch (Exception ex)
+		//			{
+		//				MessageLogger.LogFileMessage(ex.Message);
+		//			}
+		//		}
+		//	}
+		//}
 
-		private static void TriggerWhenWindowsStart(bool isWindowsInitialize)
-		{
-			Service service = new Service();
+		//private static void TriggerWhenWindowsStart(bool isWindowsInitialize)
+		//{
+		//	Service service = new Service();
 
-			var jsonResult = service.GetJsonInformation();
+		//	var jsonResult = service.GetJsonInformation();
 
-			if ((jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked) ||
-				 (jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked))
-			{
-				service.CreateTaskScheduler(isWindowsInitialize);
-			}
-		}
+		//	if ((jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsRealTimeOptionChecked) ||
+		//		 (jsonResult != null && jsonResult.ChangeSettingsModel != null && jsonResult.ChangeSettingsModel.IsPeriodicOptionChecked))
+		//	{
+		//		service.CreateTaskScheduler(isWindowsInitialize);
+		//	}
+		//}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private static void LoadAssemblies()
-		{
-			Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
-			Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
-			{
-				var shortName = new AssemblyName(args.Name).Name;
-				if (_assemblies.TryGetValue(shortName, out var assembly))
-				{
-					return assembly;
-				}
-				return null;
-			}
-			var appAssembly = typeof(BackupFiles).Assembly;
-			foreach (var resourceName in appAssembly.GetManifestResourceNames())
-			{
-				if (resourceName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
-				{
-					using (var stream = appAssembly.GetManifestResourceStream(resourceName))
-					{
-						var assemblyData = new byte[(int)stream.Length];
-						stream.Read(assemblyData, 0, assemblyData.Length);
-						var assembly = Assembly.Load(assemblyData);
-						_assemblies.Add(assembly.GetName().Name, assembly);
-					}
-				}
-			}
-			AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
-		}
+		//[MethodImpl(MethodImplOptions.NoInlining)]
+		//private static void LoadAssemblies()
+		//{
+		//	Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
+		//	Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
+		//	{
+		//		var shortName = new AssemblyName(args.Name).Name;
+		//		if (_assemblies.TryGetValue(shortName, out var assembly))
+		//		{
+		//			return assembly;
+		//		}
+		//		return null;
+		//	}
+		//	var appAssembly = typeof(BackupFiles).Assembly;
+		//	foreach (var resourceName in appAssembly.GetManifestResourceNames())
+		//	{
+		//		if (resourceName.EndsWith(".dll", StringComparison.InvariantCultureIgnoreCase))
+		//		{
+		//			using (var stream = appAssembly.GetManifestResourceStream(resourceName))
+		//			{
+		//				var assemblyData = new byte[(int)stream.Length];
+		//				stream.Read(assemblyData, 0, assemblyData.Length);
+		//				var assembly = Assembly.Load(assemblyData);
+		//				_assemblies.Add(assembly.GetName().Name, assembly);
+		//			}
+		//		}
+		//	}
+		//	AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+		//}
 
 		//private static string GetRegistryParam()
 		//{
