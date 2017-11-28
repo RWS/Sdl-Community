@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using static System.Int32;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -125,12 +127,66 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return segmentsRangeList;
 		}
 
-		public static bool IsSplitSegment(string rowId)
+		/// <summary>
+		/// Sslit segments : 1 a , 1 a b, 1 b c
+		/// </summary>
+		/// <param name="rowId"></param>
+		/// <param name="currentDocument"></param>
+		/// <returns></returns>
+		public static bool IsSplitSegment(string rowId, Document currentDocument)
 		{
 			var regex = new Regex("^[0-9 ]*[a-z ]+$");
 			var match = regex.Match(rowId);
+			if (match.Success)
+			{
+				var isMergedSegment = IsMergedSegment(rowId, currentDocument);
+				if (isMergedSegment)
+				{
+					//is not split segment
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
+		/// <summary>
+		/// Merged segments has ids like this 1a and appears only once
+		/// </summary>
+		/// <param name="rowId"></param>
+		/// <param name="currentDocument"></param>
+		/// <returns></returns>
+		public static bool IsMergedSegment(string rowId, Document currentDocument)
+		{
+			var count = 0;
+			var match = Regex.Matches(rowId, "[1-9]*");
+			if (match.Count > 0)
+			{
+				rowId = match[0].Value;
+			}
 
-			return match.Success;
+			var segments = currentDocument.SegmentPairs.ToList();
+			foreach (var segment in segments)
+			{
+				var currentSegmentId = segment.Source.Properties.Id.Id;
+				//take only number value from id
+				var currentSegmentMatch = Regex.Matches(currentSegmentId, "[1-9]*");
+				if (currentSegmentMatch.Count > 0)
+				{
+					currentSegmentId = currentSegmentMatch[0].Value;
+				}
+				//count how many times same id appears in segments id
+				if (rowId.Equals(currentSegmentId))
+				{
+					count++;
+				}
+				//this means is split segment
+				if (count.Equals(2))
+				{
+					return false;
+				}
+			}
+
+			return true;
 		}
 	}
 }

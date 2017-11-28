@@ -17,5 +17,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string FuzzyMin { get; set; }
 		public string FuzzyMax { get; set; }
 		public bool SplitSegments { get; set; }
+		public bool MergedSegments { get; set; }
 	}
 }

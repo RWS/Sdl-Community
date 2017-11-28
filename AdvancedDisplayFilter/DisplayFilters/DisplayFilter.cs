@@ -113,7 +113,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.SplitSegments)
 				{
-					success = SegmentNumbersHelper.IsSplitSegment(rowId);
+					success = SegmentNumbersHelper.IsSplitSegment(rowId,ActiveDocument);
 				}
 				if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
 				{
