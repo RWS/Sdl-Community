@@ -362,6 +362,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        fuzzyMin.Text = string.Empty;
 	        fuzzyMax.Text = string.Empty;
 	        splitCheckBox.Checked = false;
+			colorsListView.SelectedItems.Clear();
 #endregion
 
 			#region  |  content panel  |
