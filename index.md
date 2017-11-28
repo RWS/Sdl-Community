@@ -47,8 +47,8 @@ Documentation column will redirect to the source code for the selected plugin.
 | Plugin Name | Description |
 | --- | --- |
 | [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
-| [Advenced Display Filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| Bring Back The Button | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
+| [Advanced Display Filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
+| [Bring Back The Button]| [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
 | [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
@@ -68,7 +68,7 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 | [Variables Manager](http://appstore.sdl.com/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
 | [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| Controlled Machine Translation Providers |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
+| [Controlled Machine Translation Providers] |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
 | [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
 | [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
 | [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
@@ -76,7 +76,20 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
-
+| [DeepLMTProvider]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)]|
+| [Embeded Content Processor]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Embeded%20Content%20Processor)|
+| [InvoiceAndQuotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
+| [Legacy Converter]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
+| [Legit]() | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
+| [ProjectTerms]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
+| [Report Exporter]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Report%20Exporter)|
+| [ExcelTerminology]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.ExcelTerminology)|
+| [TMBackup]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMBackup)|
+| [UpLiftAutomation]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.UpLiftAutomationV4)|
+| [XMLReader]() | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.XmlReader/Sdl.Community.XmlReader.WPF)|
+| [SdlXliff Compare]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlXliff%20Compare)|
+| [Studio Beta APIs]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Beta%20APIs)|
+| [TMX]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMX)|
 ## We want your feedback
 
 If you have any suggestions or find any issues please go [here](https://github.com/sdl/SDL-Community/issues) and let us know.
