@@ -55,10 +55,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
 					RevertSerach = reverseBox.Checked,
-					Colors = AvailableColorsList,
+					Colors = new List<string>(),
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text
 				};
+				foreach (ListViewItem color in colorsListView.SelectedItems)
+				{
+					var colorCode = color.Text;
+
+					if (!customSettings.Colors.Contains(colorCode))
+					{
+						customSettings.Colors.Add(colorCode);
+					}
+				}
 				if (groupedBtn.Checked)
 				{
 					customSettings.GroupedList = segmentsBox.Text;

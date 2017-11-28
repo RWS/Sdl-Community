@@ -9,24 +9,41 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 	{
 		public static bool IsEven(string segmentId)
 		{
-			var id = Parse(segmentId);
+			//in case of split segments the id looks like this: 1 a b 
+			var id = 0;
+			if (segmentId.Contains(" "))
+			{
+				var idSplit = segmentId.Split(' ');
+				if (idSplit.Any())
+				{
+					id = Parse(idSplit[0]);
+				}
+			}
+			else
+			{
+				id = Parse(segmentId);
+			}
 			return id % 2 == 0;
 		}
 
 		public static bool IsOdd(string segmentId)
 		{
-			var id = Parse(segmentId);
+			var id = 0;
+			if (segmentId.Contains(" "))
+			{
+				var idSplit = segmentId.Split(' ');
+				if (idSplit.Any())
+				{
+					id = Parse(idSplit[0]);
+				}
+			}
+			else
+			{
+				id = Parse(segmentId);
+			}
 			return id % 2 == 1;
 		}
-
-		public static bool ContainsId(string segmentId, string segmentsIds)
-		{
-			segmentsIds= segmentsIds.Replace(" ",string.Empty);
-			var ids = segmentsIds.Split(',').ToList();
-
-			return ids.Contains(segmentId);
-		}
-
+		
 		public static bool IdInRange(string segmentId, string segmentsIds)
 		{
 			segmentsIds = segmentsIds.Replace(" ", string.Empty);
@@ -35,6 +52,17 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			var valueMatches = false;
 			var rangeList = GetRangeList(ids);
 			var exactValuesList = GetExactValueList(ids);
+
+			//check if is split segment
+			if (segmentId.Contains(" "))
+			{
+				var splitId = segmentId.Split(' ');
+				if (splitId.Any())
+				{
+					segmentId = splitId[0];
+				}
+			}
+
 			if (rangeList.Count > 0)
 			{
 				idMachesRange = IsInRangeList(segmentId, rangeList);
