@@ -115,6 +115,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				{
 					success = SegmentNumbersHelper.IsSplitSegment(rowId,ActiveDocument);
 				}
+				if (success && CustomSettings.MergedSegments)
+				{
+					success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument);
+				}
 				if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
 				{
 					success = SegmentNumbersHelper.IdInRange(rowId, CustomSettings.GroupedList);

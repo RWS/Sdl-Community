@@ -135,9 +135,8 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		/// <returns></returns>
 		public static bool IsSplitSegment(string rowId, Document currentDocument)
 		{
-			var regex = new Regex("^[0-9 ]*[a-z ]+$");
-			var match = regex.Match(rowId);
-			if (match.Success)
+			var isCompex = IsComplexId(rowId);
+			if (isCompex)
 			{
 				var isMergedSegment = IsMergedSegment(rowId, currentDocument);
 				if (isMergedSegment)
@@ -149,6 +148,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 			return false;
 		}
+
+		private static bool IsComplexId(string id)
+		{
+			var regex = new Regex("^[0-9 ]*[a-z ]+$");
+			var match = regex.Match(id);
+			return match.Success;
+		}
 		/// <summary>
 		/// Merged segments has ids like this 1a and appears only once
 		/// </summary>
@@ -157,36 +163,44 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		/// <returns></returns>
 		public static bool IsMergedSegment(string rowId, Document currentDocument)
 		{
+			var isCompexId = IsComplexId(rowId);
 			var count = 0;
-			var match = Regex.Matches(rowId, "[1-9]*");
-			if (match.Count > 0)
+			if (isCompexId)
 			{
-				rowId = match[0].Value;
-			}
+				var match = Regex.Matches(rowId, "[1-9]*");
+				if (match.Count > 0)
+				{
+					rowId = match[0].Value;
+				}
 
-			var segments = currentDocument.SegmentPairs.ToList();
-			foreach (var segment in segments)
-			{
-				var currentSegmentId = segment.Source.Properties.Id.Id;
-				//take only number value from id
-				var currentSegmentMatch = Regex.Matches(currentSegmentId, "[1-9]*");
-				if (currentSegmentMatch.Count > 0)
+				var segments = currentDocument.SegmentPairs.ToList();
+				foreach (var segment in segments)
 				{
-					currentSegmentId = currentSegmentMatch[0].Value;
+					var currentSegmentId = segment.Source.Properties.Id.Id;
+					//take only number value from id
+					var currentSegmentMatch = Regex.Matches(currentSegmentId, "[1-9]*");
+					if (currentSegmentMatch.Count > 0)
+					{
+						currentSegmentId = currentSegmentMatch[0].Value;
+					}
+					//count how many times same id appears in segments id
+					if (rowId.Equals(currentSegmentId))
+					{
+						count++;
+					}
+					//this means is split segment
+					if (count.Equals(2))
+					{
+						return false;
+					}
 				}
-				//count how many times same id appears in segments id
-				if (rowId.Equals(currentSegmentId))
+				if (count.Equals(1))
 				{
-					count++;
-				}
-				//this means is split segment
-				if (count.Equals(2))
-				{
-					return false;
+					return true;
 				}
 			}
-
-			return true;
+			
+			return  false;
 		}
 	}
 }

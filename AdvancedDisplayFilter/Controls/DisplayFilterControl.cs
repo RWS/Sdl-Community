@@ -58,7 +58,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					Colors = new List<string>(),
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text,
-					SplitSegments = splitCheckBox.Checked
+					SplitSegments = splitCheckBox.Checked,
+					MergedSegments = mergedCheckbox.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -362,6 +363,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        fuzzyMin.Text = string.Empty;
 	        fuzzyMax.Text = string.Empty;
 	        splitCheckBox.Checked = false;
+	        mergedCheckbox.Checked = false;
 			colorsListView.SelectedItems.Clear();
 #endregion
 
