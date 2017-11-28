@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using static System.Int32;
 
@@ -49,11 +45,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				valueMatches = exactValuesList.Contains(Parse(segmentId));
 			}
 
-			if (idMachesRange || valueMatches)
-			{
-				return true;
-			}
-			return false;
+			return idMachesRange || valueMatches;
 		}
 
 		private static bool IsInRangeList(string segmentId, List<SegmentRange> rangeList)

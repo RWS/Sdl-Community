@@ -9,7 +9,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public class TagDataVisitor:IMarkupDataVisitor
 	{
-		private List<string>_colorCodeList;
+		private readonly List<string>_colorCodeList;
 
 		public TagDataVisitor()
 		{
@@ -25,13 +25,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			foreach (var formatingProperty in tagPair.StartTagProperties.Formatting)
-			{
-				try
+			if (tagPair.StartTagProperties.Formatting != null)
+				foreach (var formatingProperty in tagPair.StartTagProperties.Formatting)
 				{
-					var key = formatingProperty.Key;
-					if (key.Equals("TextColor"))
+					try
 					{
+						var key = formatingProperty.Key;
+						if (!key.Equals("TextColor")) continue;
 						var color = formatingProperty.Value.StringValue;
 						var colors = color.Split(',');
 						var red = string.Empty;
@@ -57,20 +57,17 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						{
 							_colorCodeList.Add(hexCode);
 						}
-
+					}
+					catch (Exception e)
+					{
 					}
 				}
-				catch (Exception e)
-				{
-					
-				}
-			}
 			VisitChildren(tagPair);
 		}
 
 		public static string GetHexCode(byte red, byte green, byte blue)
 		{
-			var hexCode = string.Format("{0:X2}{1:X2}{2:X2}", red, green, blue);
+			var hexCode = $"{red:X2}{green:X2}{blue:X2}";
 
 			return hexCode;
 		}
@@ -86,10 +83,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitSegment(ISegment segment)
 		{
-			//foreach (var VARIABLE in segment.AllSubItems)
-			//{
-				
-			//}
 			VisitChildren(segment);
 		}
 

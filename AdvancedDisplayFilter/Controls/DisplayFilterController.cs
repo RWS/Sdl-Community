@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    [ViewPart(
+	[ViewPart(
     Id = "CommunityAdvancedDisplayFilterViewPart",
     Name = "AdvancedDisplayFilterViewPart_Name",
     Description = "AdvancedDisplayFilterViewPart_Description",

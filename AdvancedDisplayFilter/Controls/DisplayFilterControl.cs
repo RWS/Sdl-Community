@@ -1,13 +1,8 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -21,7 +16,7 @@ using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    public partial class DisplayFilterControl : UserControl
+	public partial class DisplayFilterControl : UserControl
     {
         #region  |  Delegates  |
 
