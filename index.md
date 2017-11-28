@@ -76,7 +76,6 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
-| [DeepLMTProvider]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)|
 | [Embeded Content Processor]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Embeded%20Content%20Processor)|
 | [InvoiceAndQuotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
 | [Legacy Converter](http://appstore.sdl.com/language/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
