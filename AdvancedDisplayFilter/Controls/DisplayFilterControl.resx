@@ -1509,11 +1509,38 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="splitCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="splitCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>9, 125</value>
+  </data>
+  <data name="splitCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 17</value>
+  </data>
+  <data name="splitCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="splitCheckBox.Text" xml:space="preserve">
+    <value>Split segments</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
+    <value>splitCheckBox</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 132</value>
+    <value>6, 152</value>
   </data>
   <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
     <value>233, 13</value>
@@ -1534,10 +1561,10 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>9, 148</value>
+    <value>6, 178</value>
   </data>
   <data name="segmentsBox.Multiline" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1558,7 +1585,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="groupedBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1663,7 +1690,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="tabPage_segmentNumbers.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -1678,7 +1705,7 @@
     <value>5</value>
   </data>
   <data name="tabPage_segmentNumbers.Text" xml:space="preserve">
-    <value>Segment Numbers</value>
+    <value>Segment</value>
   </data>
   <data name="&gt;&gt;tabPage_segmentNumbers.Name" xml:space="preserve">
     <value>tabPage_segmentNumbers</value>
@@ -1991,7 +2018,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAZQBBAGUAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAZwBBAGcAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ

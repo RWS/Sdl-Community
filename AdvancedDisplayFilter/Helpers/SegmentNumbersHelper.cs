@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using static System.Int32;
 
@@ -122,6 +123,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				}
 			}
 			return segmentsRangeList;
+		}
+
+		public static bool IsSplitSegment(string rowId)
+		{
+			var regex = new Regex("^[0-9 ]*[a-z ]+$");
+			var match = regex.Match(rowId);
+
+			return match.Success;
 		}
 	}
 }

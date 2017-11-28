@@ -280,4 +280,25 @@
   <data name="DisplayFilterControl_Colors" xml:space="preserve">
     <value>Colors</value>
   </data>
+  <data name="DisplayFilterControl_EvenSegments" xml:space="preserve">
+    <value>Even segments number</value>
+  </data>
+  <data name="DisplayFilterControl_Fuzzy" xml:space="preserve">
+    <value>Fuzzy values between</value>
+  </data>
+  <data name="DisplayFilterControl_GroupedList" xml:space="preserve">
+    <value>Grouped list</value>
+  </data>
+  <data name="DisplayFilterControl_OddSegments" xml:space="preserve">
+    <value>Odd segments number</value>
+  </data>
+  <data name="DisplayFilterControl_ReverseSearch" xml:space="preserve">
+    <value>Reverse the  search</value>
+  </data>
+  <data name="DisplayFilterControl_SplitSegments" xml:space="preserve">
+    <value>Split segments</value>
+  </data>
+  <data name="DisplayFilterControl_UseRegexComments" xml:space="preserve">
+    <value>Use regex for comment text</value>
+  </data>
 </root>

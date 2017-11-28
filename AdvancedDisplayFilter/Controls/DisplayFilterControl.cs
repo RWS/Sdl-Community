@@ -57,7 +57,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					RevertSerach = reverseBox.Checked,
 					Colors = new List<string>(),
 					FuzzyMin = fuzzyMin.Text,
-					FuzzyMax = fuzzyMax.Text
+					FuzzyMax = fuzzyMax.Text,
+					SplitSegments = splitCheckBox.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -106,7 +107,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     settings.ContextInfoTypes.Add(contextInfo.ContextType);
                 }
 
-                foreach (ListViewItem item in this.listView_selected.Items)
+                foreach (ListViewItem item in listView_selected.Items)
                 {
                     if (item.Group == GroupGeneralSelected
                         && item.Tag.ToString() == StringResources.DisplayFilterControl_ShowAllContent)
@@ -360,6 +361,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        segmentsBox.Enabled = false;
 	        fuzzyMin.Text = string.Empty;
 	        fuzzyMax.Text = string.Empty;
+	        splitCheckBox.Checked = false;
 #endregion
 
 			#region  |  content panel  |
@@ -731,6 +733,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	        if (CustomFilter != null)
 	        {
+				//filter color
 		        if (CustomFilter.Colors != null)
 		        {
 			        if (CustomFilter.Colors.Count > 0)
@@ -745,7 +748,28 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				                                        ")");
 			        }
 		        }
-	        }
+
+		        if (CustomFilter.SplitSegments)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" + CustomFilter.SplitSegments + "\"");
+
+		        if (CustomFilter.EvenNo)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" + CustomFilter.EvenNo + "\"");
+
+		        if (CustomFilter.OddsNo)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" + CustomFilter.OddsNo + "\"");
+
+		        if (CustomFilter.Grouped)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" + CustomFilter.Grouped + "\"");
+
+		        if (CustomFilter.RevertSerach)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_ReverseSearch + ":\"" + CustomFilter.RevertSerach + "\"");
+
+		        if (CustomFilter.UseRegexCommentSearch)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UseRegexComments + ":\"" + CustomFilter.UseRegexCommentSearch + "\"");
+
+		        if (CustomFilter.FuzzyMax!=string.Empty && CustomFilter.FuzzyMin != string.Empty)
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin  + " and " + CustomFilter.FuzzyMax + "\"");
+			}
 	        
         }
 
@@ -1464,5 +1488,5 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			}
 		 
 	    }
-    }
+	}
 }
