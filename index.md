@@ -76,7 +76,21 @@ Documentation column will redirect to the source code for the selected plugin.
 | [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
 | [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
-| [DeepLMTProvider]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)]|
+| [DeepLMTProvider]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)|
+| [Embeded Content Processor]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Embeded%20Content%20Processor)|
+| [InvoiceAndQuotes]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/InvoiceAndQuotes)|
+| [Legacy Converter](http://appstore.sdl.com/language/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
+| [Legit](http://appstore.sdl.com/language/app/sdl-legit/299/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legit)|
+| [ProjectTerms]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
+| [Report Exporter](http://appstore.sdl.com/language/app/sdl-trados-studio-export-analysis-reports/3/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Report%20Exporter)|
+| [ExcelTerminology](http://appstore.sdl.com/language/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.ExcelTerminology)|
+| [TMBackup]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMBackup)|
+| [UpLiftAutomation]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.UpLiftAutomationV4)|
+| [XMLReader]() | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.XmlReader/Sdl.Community.XmlReader.WPF)|
+| [SdlXliff Compare](http://appstore.sdl.com/language/app/sdlxliff-compare/89/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlXliff%20Compare)|
+| [Studio Beta APIs]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Beta%20APIs)|
+| [TMX]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMX)|
+
 
 ## We want your feedback
 
