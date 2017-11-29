@@ -82,6 +82,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
+			this.mergedCheckbox = new System.Windows.Forms.RadioButton();
+			this.splitCheckBox = new System.Windows.Forms.RadioButton();
 			this.label1 = new System.Windows.Forms.Label();
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -121,9 +124,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
-			this.splitCheckBox = new System.Windows.Forms.RadioButton();
-			this.mergedCheckbox = new System.Windows.Forms.RadioButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -141,6 +141,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_contextInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabPage_segmentNumbers.SuspendLayout();
+			this.segmentsGroupBox.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabPage_fuzzyValue.SuspendLayout();
 			this.fuzzyPanel.SuspendLayout();
@@ -153,7 +154,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.segmentsGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -252,6 +252,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.reverseBox, "reverseBox");
 			this.reverseBox.Name = "reverseBox";
 			this.reverseBox.UseVisualStyleBackColor = true;
+			this.reverseBox.CheckedChanged += new System.EventHandler(this.reverseBox_CheckedChanged);
 			// 
 			// tabPage_filters
 			// 
@@ -451,6 +452,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.commentRegexBox, "commentRegexBox");
 			this.commentRegexBox.Name = "commentRegexBox";
 			this.commentRegexBox.UseVisualStyleBackColor = true;
+			this.commentRegexBox.CheckedChanged += new System.EventHandler(this.commentRegexBox_CheckedChanged);
 			// 
 			// tabPage_contextInfo
 			// 
@@ -525,6 +527,30 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
 			// 
+			// segmentsGroupBox
+			// 
+			this.segmentsGroupBox.Controls.Add(this.mergedCheckbox);
+			this.segmentsGroupBox.Controls.Add(this.splitCheckBox);
+			resources.ApplyResources(this.segmentsGroupBox, "segmentsGroupBox");
+			this.segmentsGroupBox.Name = "segmentsGroupBox";
+			this.segmentsGroupBox.TabStop = false;
+			// 
+			// mergedCheckbox
+			// 
+			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
+			this.mergedCheckbox.Name = "mergedCheckbox";
+			this.mergedCheckbox.TabStop = true;
+			this.mergedCheckbox.UseVisualStyleBackColor = true;
+			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
+			// 
+			// splitCheckBox
+			// 
+			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
+			this.splitCheckBox.Name = "splitCheckBox";
+			this.splitCheckBox.TabStop = true;
+			this.splitCheckBox.UseVisualStyleBackColor = true;
+			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
+			// 
 			// label1
 			// 
 			resources.ApplyResources(this.label1, "label1");
@@ -589,6 +615,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
 			this.fuzzyMax.Name = "fuzzyMax";
+			this.fuzzyMax.TextChanged += new System.EventHandler(this.fuzzyMax_TextChanged);
 			// 
 			// label5
 			// 
@@ -599,6 +626,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
 			this.fuzzyMin.Name = "fuzzyMin";
+			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
 			// 
 			// label4
 			// 
@@ -765,28 +793,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// segmentsGroupBox
-			// 
-			this.segmentsGroupBox.Controls.Add(this.mergedCheckbox);
-			this.segmentsGroupBox.Controls.Add(this.splitCheckBox);
-			resources.ApplyResources(this.segmentsGroupBox, "segmentsGroupBox");
-			this.segmentsGroupBox.Name = "segmentsGroupBox";
-			this.segmentsGroupBox.TabStop = false;
-			// 
-			// splitCheckBox
-			// 
-			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
-			this.splitCheckBox.Name = "splitCheckBox";
-			this.splitCheckBox.TabStop = true;
-			this.splitCheckBox.UseVisualStyleBackColor = true;
-			// 
-			// mergedCheckbox
-			// 
-			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
-			this.mergedCheckbox.Name = "mergedCheckbox";
-			this.mergedCheckbox.TabStop = true;
-			this.mergedCheckbox.UseVisualStyleBackColor = true;
-			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -817,6 +823,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel4.PerformLayout();
 			this.tabPage_segmentNumbers.ResumeLayout(false);
 			this.tabPage_segmentNumbers.PerformLayout();
+			this.segmentsGroupBox.ResumeLayout(false);
+			this.segmentsGroupBox.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			this.tabPage_fuzzyValue.ResumeLayout(false);
@@ -833,8 +841,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.segmentsGroupBox.ResumeLayout(false);
-			this.segmentsGroupBox.PerformLayout();
 			this.ResumeLayout(false);
 
         }
