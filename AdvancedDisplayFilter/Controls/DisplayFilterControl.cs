@@ -364,6 +364,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        fuzzyMax.Text = string.Empty;
 	        splitCheckBox.Checked = false;
 	        mergedCheckbox.Checked = false;
+	        reverseBox.Checked = false;
+	        commentRegexBox.Checked = false;
 			colorsListView.SelectedItems.Clear();
 #endregion
 
@@ -985,13 +987,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     && (!string.IsNullOrEmpty(settings.SourceText)
                     || !string.IsNullOrEmpty(settings.TargetText)))
                 {
-                    var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
-                                checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
+					
+					var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
+								checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
 
-                    var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
-                                settings.IsRegularExpression + ", " + settings.IsCaseSensitive;
+					var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
+								settings.IsRegularExpression + ", " + settings.IsCaseSensitive;
 
-                    tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
+					tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
                 }
                 else if (tabPage == tabPage_filters
                     && (settings.SegmentReviewTypes.Any()
@@ -1478,6 +1481,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				segmentsBox.Enabled = false;
 			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
 		private void oddBtn_CheckedChanged(object sender, EventArgs e)
@@ -1486,6 +1490,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				segmentsBox.Enabled = false;
 			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 		
 		private void groupedBtn_CheckedChanged(object sender, EventArgs e)
@@ -1494,6 +1499,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			{
 				segmentsBox.Enabled = true;
 			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 		
 	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
@@ -1513,7 +1519,37 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				    }
 			    }
 			}
-		 
-	    }
+		    InvalidateIconsFilterEdited(tabPage_Colors);
+		}
+
+		private void reverseBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_content);
+		}
+
+		private void commentRegexBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_comments);
+		}
+
+		private void splitCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void mergedCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void fuzzyMin_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_fuzzyValue);
+		}
+
+		private void fuzzyMax_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_fuzzyValue);
+		}
 	}
 }
