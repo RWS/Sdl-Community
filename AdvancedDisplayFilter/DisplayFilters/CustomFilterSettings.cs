@@ -19,5 +19,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool SplitSegments { get; set; }
 		public bool MergedSegments { get; set; }
 		public bool SourceEqualsTarget { get; set; }
+		public bool IsEqualsCaseSensitive { get; set; }
 	}
 }

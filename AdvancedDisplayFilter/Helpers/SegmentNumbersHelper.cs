@@ -205,13 +205,13 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return  false;
 		}
 
-		public static bool IsSourceEqualsToTarget(ISegmentPair segmentPair)
+		public static bool IsSourceEqualsToTarget(ISegmentPair segmentPair,bool caseSensitive)
 		{
 			var textVisitor = new SegmentTextVisitor();
 			var sourceText = textVisitor.GetText(segmentPair.Source);
 			var targetText = textVisitor.GetText(segmentPair.Target);
 
-			var isEqual = string.CompareOrdinal(sourceText,targetText);
+			var isEqual = string.Compare(sourceText,targetText,!caseSensitive);
 			return isEqual.Equals(0);
 		}
 	}

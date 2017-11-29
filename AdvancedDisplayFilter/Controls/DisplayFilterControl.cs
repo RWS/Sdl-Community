@@ -60,7 +60,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					FuzzyMax = fuzzyMax.Text,
 					SplitSegments = splitCheckBox.Checked,
 					MergedSegments = mergedCheckbox.Checked,
-					SourceEqualsTarget = sourceSameBox.Checked
+					SourceEqualsTarget = sourceSameBox.Checked,
+					IsEqualsCaseSensitive = equalsCaseSensitive.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -368,6 +369,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        reverseBox.Checked = false;
 	        commentRegexBox.Checked = false;
 	        sourceSameBox.Checked = false;
+	        equalsCaseSensitive.Checked = false;
 			colorsListView.SelectedItems.Clear();
 #endregion
 
@@ -799,6 +801,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SourceEqualsTarget + ":\"" +
 			                                        CustomFilter.SourceEqualsTarget + "\"");
+		        }
+
+		        if (CustomFilter.IsEqualsCaseSensitive)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCase+ ":\"" +
+			                                        CustomFilter.IsEqualsCaseSensitive + "\"");
 		        }
 
 				if (CustomFilter.FuzzyMax != string.Empty && CustomFilter.FuzzyMin != string.Empty)
@@ -1562,6 +1570,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void equalsCaseSensitive_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}

@@ -307,4 +307,7 @@
   <data name="DisplayFilterControl_SourceEqualsTarget" xml:space="preserve">
     <value>Source text equals target text</value>
   </data>
+  <data name="DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCase" xml:space="preserve">
+    <value>Source text equals target text case sensitive</value>
+  </data>
 </root>

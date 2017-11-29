@@ -1509,6 +1509,33 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 296</value>
+  </data>
+  <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 17</value>
+  </data>
+  <data name="equalsCaseSensitive.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="equalsCaseSensitive.Text" xml:space="preserve">
+    <value>Is case sensitive</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
+    <value>equalsCaseSensitive</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
   <data name="sourceSameBox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -1534,7 +1561,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
   </data>
   <data name="mergedCheckbox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1612,7 +1639,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsGroupBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>2</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1639,7 +1666,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
   <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>6, 138</value>
@@ -1663,7 +1690,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>4</value>
   </data>
   <data name="groupedBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1768,7 +1795,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="tabPage_segmentNumbers.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -2096,7 +2123,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAbQBBAG0AQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAcQBBAHEAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ

@@ -121,7 +121,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.SourceEqualsTarget)
 				{
-					success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair);
+					success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair,CustomSettings.IsEqualsCaseSensitive);
 				}
 				if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
 				{

@@ -82,6 +82,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.equalsCaseSensitive = new System.Windows.Forms.CheckBox();
+			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
 			this.mergedCheckbox = new System.Windows.Forms.RadioButton();
 			this.splitCheckBox = new System.Windows.Forms.RadioButton();
@@ -124,7 +126,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -521,6 +522,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
+			this.tabPage_segmentNumbers.Controls.Add(this.equalsCaseSensitive);
 			this.tabPage_segmentNumbers.Controls.Add(this.sourceSameBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.label1);
@@ -528,6 +530,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
+			// 
+			// equalsCaseSensitive
+			// 
+			resources.ApplyResources(this.equalsCaseSensitive, "equalsCaseSensitive");
+			this.equalsCaseSensitive.Name = "equalsCaseSensitive";
+			this.equalsCaseSensitive.UseVisualStyleBackColor = true;
+			this.equalsCaseSensitive.CheckedChanged += new System.EventHandler(this.equalsCaseSensitive_CheckedChanged);
+			// 
+			// sourceSameBox
+			// 
+			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
+			this.sourceSameBox.Name = "sourceSameBox";
+			this.sourceSameBox.UseVisualStyleBackColor = true;
+			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
 			// 
 			// segmentsGroupBox
 			// 
@@ -795,13 +811,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// sourceSameBox
-			// 
-			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
-			this.sourceSameBox.Name = "sourceSameBox";
-			this.sourceSameBox.UseVisualStyleBackColor = true;
-			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
-			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -949,5 +958,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private RadioButton mergedCheckbox;
 		private RadioButton splitCheckBox;
 		private CheckBox sourceSameBox;
+		private CheckBox equalsCaseSensitive;
 	}
 }

@@ -502,6 +502,16 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source text equals target text case sensitive.
+        /// </summary>
+        internal static string DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCase {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCa" +
+                        "se", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Split segments.
         /// </summary>
         internal static string DisplayFilterControl_SplitSegments {
