@@ -301,4 +301,7 @@
   <data name="DisplayFilterControl_UseRegexComments" xml:space="preserve">
     <value>Use regex for comment text</value>
   </data>
+  <data name="DisplayFilterControl_MergedSegments" xml:space="preserve">
+    <value>Merged segments</value>
+  </data>
 </root>

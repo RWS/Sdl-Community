@@ -736,7 +736,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	        if (CustomFilter != null)
 	        {
-				//filter color
+		        //filter color
 		        if (CustomFilter.Colors != null)
 		        {
 			        if (CustomFilter.Colors.Count > 0)
@@ -753,27 +753,51 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        }
 
 		        if (CustomFilter.SplitSegments)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" + CustomFilter.SplitSegments + "\"");
-
-		        if (CustomFilter.EvenNo)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" + CustomFilter.EvenNo + "\"");
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
+			                                        CustomFilter.SplitSegments + "\"");
+		        }
+		        if (CustomFilter.MergedSegments)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilter.MergedSegments + "\"");
+		        }
+				if (CustomFilter.EvenNo)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +
+			                                        CustomFilter.EvenNo + "\"");
+		        }
 
 		        if (CustomFilter.OddsNo)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" + CustomFilter.OddsNo + "\"");
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" +
+			                                        CustomFilter.OddsNo + "\"");
+		        }
 
 		        if (CustomFilter.Grouped)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" + CustomFilter.Grouped + "\"");
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" +
+			                                        CustomFilter.Grouped + "\"");
+		        }
 
 		        if (CustomFilter.RevertSerach)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_ReverseSearch + ":\"" + CustomFilter.RevertSerach + "\"");
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_ReverseSearch + ":\"" +
+			                                        CustomFilter.RevertSerach + "\"");
+		        }
 
 		        if (CustomFilter.UseRegexCommentSearch)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UseRegexComments + ":\"" + CustomFilter.UseRegexCommentSearch + "\"");
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UseRegexComments + ":\"" +
+			                                        CustomFilter.UseRegexCommentSearch + "\"");
+		        }
 
-		        if (CustomFilter.FuzzyMax!=string.Empty && CustomFilter.FuzzyMin != string.Empty)
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin  + " and " + CustomFilter.FuzzyMax + "\"");
-			}
-	        
+		        if (CustomFilter.FuzzyMax != string.Empty && CustomFilter.FuzzyMin != string.Empty)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin +
+			                                        " and " + CustomFilter.FuzzyMax + "\"");
+		        }
+	        }
+
         }
 
 

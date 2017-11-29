@@ -82,7 +82,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
-			this.splitCheckBox = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -121,7 +120,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
-			this.mergedCheckbox = new System.Windows.Forms.CheckBox();
+			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
+			this.splitCheckBox = new System.Windows.Forms.RadioButton();
+			this.mergedCheckbox = new System.Windows.Forms.RadioButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -151,6 +153,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
+			this.segmentsGroupBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -515,19 +518,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
-			this.tabPage_segmentNumbers.Controls.Add(this.mergedCheckbox);
-			this.tabPage_segmentNumbers.Controls.Add(this.splitCheckBox);
+			this.tabPage_segmentNumbers.Controls.Add(this.segmentsGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.label1);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
-			// 
-			// splitCheckBox
-			// 
-			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
-			this.splitCheckBox.Name = "splitCheckBox";
-			this.splitCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// label1
 			// 
@@ -769,10 +765,26 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// segmentsGroupBox
+			// 
+			this.segmentsGroupBox.Controls.Add(this.mergedCheckbox);
+			this.segmentsGroupBox.Controls.Add(this.splitCheckBox);
+			resources.ApplyResources(this.segmentsGroupBox, "segmentsGroupBox");
+			this.segmentsGroupBox.Name = "segmentsGroupBox";
+			this.segmentsGroupBox.TabStop = false;
+			// 
+			// splitCheckBox
+			// 
+			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
+			this.splitCheckBox.Name = "splitCheckBox";
+			this.splitCheckBox.TabStop = true;
+			this.splitCheckBox.UseVisualStyleBackColor = true;
+			// 
 			// mergedCheckbox
 			// 
 			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
 			this.mergedCheckbox.Name = "mergedCheckbox";
+			this.mergedCheckbox.TabStop = true;
 			this.mergedCheckbox.UseVisualStyleBackColor = true;
 			// 
 			// DisplayFilterControl
@@ -821,6 +833,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
+			this.segmentsGroupBox.ResumeLayout(false);
+			this.segmentsGroupBox.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -915,7 +929,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TableLayoutPanel colorLayoutPanel;
 		private Label label6;
 		private ListView colorsListView;
-		private CheckBox splitCheckBox;
-		private CheckBox mergedCheckbox;
+		private GroupBox segmentsGroupBox;
+		private System.ComponentModel.BackgroundWorker backgroundWorker1;
+		private RadioButton mergedCheckbox;
+		private RadioButton splitCheckBox;
 	}
 }
