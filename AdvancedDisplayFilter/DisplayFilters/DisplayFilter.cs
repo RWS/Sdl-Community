@@ -119,6 +119,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				{
 					success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument);
 				}
+				if (success && CustomSettings.SourceEqualsTarget)
+				{
+					success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair);
+				}
 				if (success && CustomSettings.Grouped && !string.IsNullOrWhiteSpace(CustomSettings.GroupedList))
 				{
 					success = SegmentNumbersHelper.IdInRange(rowId, CustomSettings.GroupedList);

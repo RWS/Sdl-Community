@@ -138,6 +138,7 @@
     <Compile Include="Helpers\CommentsHelper.cs" />
     <Compile Include="Helpers\ContentHelper.cs" />
     <Compile Include="Helpers\FuzzyHelper.cs" />
+    <Compile Include="Helpers\SegmentTextVisitor.cs" />
     <Compile Include="Helpers\TagDataVisitor.cs" />
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />

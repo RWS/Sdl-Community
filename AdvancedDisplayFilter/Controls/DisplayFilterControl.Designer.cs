@@ -124,6 +124,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -520,6 +521,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
+			this.tabPage_segmentNumbers.Controls.Add(this.sourceSameBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.label1);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
@@ -793,6 +795,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// sourceSameBox
+			// 
+			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
+			this.sourceSameBox.Name = "sourceSameBox";
+			this.sourceSameBox.UseVisualStyleBackColor = true;
+			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -939,5 +948,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
 		private RadioButton mergedCheckbox;
 		private RadioButton splitCheckBox;
+		private CheckBox sourceSameBox;
 	}
 }

@@ -59,7 +59,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text,
 					SplitSegments = splitCheckBox.Checked,
-					MergedSegments = mergedCheckbox.Checked
+					MergedSegments = mergedCheckbox.Checked,
+					SourceEqualsTarget = sourceSameBox.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -366,6 +367,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        mergedCheckbox.Checked = false;
 	        reverseBox.Checked = false;
 	        commentRegexBox.Checked = false;
+	        sourceSameBox.Checked = false;
 			colorsListView.SelectedItems.Clear();
 #endregion
 
@@ -793,7 +795,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			                                        CustomFilter.UseRegexCommentSearch + "\"");
 		        }
 
-		        if (CustomFilter.FuzzyMax != string.Empty && CustomFilter.FuzzyMin != string.Empty)
+		        if (CustomFilter.SourceEqualsTarget)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SourceEqualsTarget + ":\"" +
+			                                        CustomFilter.SourceEqualsTarget + "\"");
+		        }
+
+				if (CustomFilter.FuzzyMax != string.Empty && CustomFilter.FuzzyMin != string.Empty)
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin +
 			                                        " and " + CustomFilter.FuzzyMax + "\"");
@@ -965,18 +973,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 	    private void InvalidateIconsFilterApplied_segmentNumbers(CustomFilterSettings customFilterSettings)
 	    {
-		    if (  customFilterSettings.EvenNo || customFilterSettings.Grouped ||
-		        customFilterSettings.OddsNo)
+		    if (customFilterSettings.EvenNo || customFilterSettings.Grouped ||
+		        customFilterSettings.OddsNo || customFilterSettings.SplitSegments ||
+		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget)
 		    {
 			    tabPage_segmentNumbers.ImageIndex = 0;
 		    }
 		    else
 		    {
-				tabPage_segmentNumbers.ImageIndex = -1;
-			}
+			    tabPage_segmentNumbers.ImageIndex = -1;
+		    }
 	    }
 
-		private void InvalidateIconsFilterEdited(TabPage tabPage)
+	    private void InvalidateIconsFilterEdited(TabPage tabPage)
         {
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
                 && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
@@ -1550,6 +1559,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void fuzzyMax_TextChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_fuzzyValue);
+		}
+
+		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 	}
 }

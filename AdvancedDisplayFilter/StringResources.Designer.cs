@@ -493,6 +493,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source text equals target text.
+        /// </summary>
+        internal static string DisplayFilterControl_SourceEqualsTarget {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_SourceEqualsTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Split segments.
         /// </summary>
         internal static string DisplayFilterControl_SplitSegments {

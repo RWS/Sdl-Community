@@ -304,4 +304,7 @@
   <data name="DisplayFilterControl_MergedSegments" xml:space="preserve">
     <value>Merged segments</value>
   </data>
+  <data name="DisplayFilterControl_SourceEqualsTarget" xml:space="preserve">
+    <value>Source text equals target text</value>
+  </data>
 </root>

@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
+using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using static System.Int32;
 
@@ -201,6 +203,16 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			}
 			
 			return  false;
+		}
+
+		public static bool IsSourceEqualsToTarget(ISegmentPair segmentPair)
+		{
+			var textVisitor = new SegmentTextVisitor();
+			var sourceText = textVisitor.GetText(segmentPair.Source);
+			var targetText = textVisitor.GetText(segmentPair.Target);
+
+			var isEqual = string.CompareOrdinal(sourceText,targetText);
+			return isEqual.Equals(0);
 		}
 	}
 }
