@@ -181,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditCollection.cs" />
+    <Compile Include="Model\TagInfo.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">
       <AutoGen>True</AutoGen>

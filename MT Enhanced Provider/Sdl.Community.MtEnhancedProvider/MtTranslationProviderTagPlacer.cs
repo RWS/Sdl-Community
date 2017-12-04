@@ -1,21 +1,9 @@
-﻿/* Copyright 2015 Patrick Porter
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.*/
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.MtEnhancedProvider
@@ -31,10 +19,12 @@ namespace Sdl.Community.MtEnhancedProvider
         private Segment sourceSegment;
         private Dictionary<string, MtTag> dict;
 
+	    public List<TagInfo> TagsInfo { get; set; }
         public MtTranslationProviderTagPlacer(Segment _sourceSegment)
         {
             sourceSegment = _sourceSegment;
-            dict = GetSourceTagsDict(); //fills the dictionary and populates our string to send to google
+	        TagsInfo = new List<TagInfo>();
+			dict = GetSourceTagsDict(); //fills the dictionary and populates our string to send to google
 
         }
 
@@ -56,7 +46,6 @@ namespace Sdl.Community.MtEnhancedProvider
         {
             dict = new Dictionary<string, MtTag>(); //try this
 													//build dict
-			var startTagIndex = 0;
             for (var i = 0; i < sourceSegment.Elements.Count; i++)
             {
                 var elType = sourceSegment.Elements[i].GetType();
@@ -65,26 +54,44 @@ namespace Sdl.Community.MtEnhancedProvider
                 {
                     var theTag = new MtTag((Tag)sourceSegment.Elements[i].Duplicate());
 					var tagText = string.Empty;
+
+	                var tagInfo = new TagInfo
+	                {
+		                TagType = theTag.SdlTag.Type,
+		                Index = i,
+		                IsClosed = false,
+		                TagId = theTag.SdlTag.TagID
+	                };
+	                if (!TagsInfo.Any(n => n.TagId.Equals(tagInfo.TagId)))
+	                {
+		                TagsInfo.Add(tagInfo);
+					}
+
+	                var tag = GetCorrespondingTag(theTag.SdlTag.TagID);
 					if (theTag.SdlTag.Type == TagType.Start)
 					{
-						startTagIndex = i;
-						tagText = "<tg" + i + ">";
+						if (tag != null)
+						{
+							tagText = "<tg" + tag.TagId + ">";
+						}
 					}
 					if(theTag.SdlTag.Type == TagType.End)
 					{
-						tagText = "</tg" + startTagIndex + ">";
+						if (tag != null)
+						{
+							tag.IsClosed = true;
+							tagText = "</tg" + tag.Index + ">";
+						}
 					}
 					if(theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
 					{
-						tagText = "</tg" + i + ">";
+						if (tag != null)
+						{
+							tagText = "</tg" + tag.TagId + ">";
+						}
 					}
-                    //var tagNumber = sourceSegment.Elements.IndexOf(theTag.SdlTag);//this is a number we will assign the tag
-                    //var tagText = "<tg" + tagNumber + ">"; //create our abbreviated tag to send to google
+
                     preparedSourceText += tagText;
-
-
-
-
                     //now we have to figure out whether this tag is preceded and/or followed by whitespace
                     if (i > 0 && !sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
                     {
@@ -114,10 +121,15 @@ namespace Sdl.Community.MtEnhancedProvider
                     preparedSourceText += str;
                 }
             }
-
+			TagsInfo.Clear();
             return dict;
         }
 
+	    private TagInfo GetCorrespondingTag(string tagId)
+	    {
+		   return TagsInfo.FirstOrDefault(t => t.TagId.Equals(tagId));
+
+	    }
         /// <summary>
         /// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
         /// </summary>
