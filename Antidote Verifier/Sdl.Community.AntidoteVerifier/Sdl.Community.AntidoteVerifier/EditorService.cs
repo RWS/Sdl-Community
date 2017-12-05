@@ -21,29 +21,43 @@ namespace Sdl.Community.AntidoteVerifier
     public class EditorService : IEditorService
     {
         private Document _document;
-        private Dictionary<int, KeyValuePair<int,string>> _segmentMetadata;
+        private Dictionary<int, KeyValuePair<string,string>> _segmentMetadata;
         
         public EditorService(Document document)
         {
             _document = document;
-            _segmentMetadata = new Dictionary<int, KeyValuePair<int,string>>();
+            _segmentMetadata = new Dictionary<int, KeyValuePair<string,string>>();
             Initialize();
         }
 
         private void Initialize()
         {
             _segmentMetadata.Clear();
-            var activeSegmentId = int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
-            int index = 1;
-            foreach (var segmentPair in _document.SegmentPairs)
-            {
-                var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
-                if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
-                var currentId = int.Parse(segmentPair.Properties.Id.Id);
-                if (currentId < activeSegmentId) continue;
-                _segmentMetadata.Add(index, new KeyValuePair<int, string>(currentId, paragraphUnitId));
-                index++;
-            }
+	        var activeSegmentId = _document.ActiveSegmentPair.Properties.Id.Id;//int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+	        var currentSegmentIndex = _document.SegmentPairs.ToList().FindIndex(i=>i.Properties.Id.Id.Equals(activeSegmentId));
+
+	        var index = 1;
+	        for (var i = currentSegmentIndex; i < _document.SegmentPairs.Count(); i++)
+	        {
+		        var segmentPair = _document.SegmentPairs.ToList()[i];
+				var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+		        var currentId = segmentPair.Properties.Id.Id;
+
+				if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
+				_segmentMetadata.Add(index,new KeyValuePair<string, string>(currentId, paragraphUnitId));
+		        index++;
+	        }
+	
+			//int index = 1;
+            //foreach (var segmentPair in _document.SegmentPairs)
+            //{
+            //    var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
+            //    if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
+            //    var currentId = int.Parse(segmentPair.Properties.Id.Id);
+            //   // if (currentId < activeSegmentId) continue;
+            //  //  _segmentMetadata.Add(index, new KeyValuePair<string, string>(currentId, paragraphUnitId));
+            //    index++;
+            //}
         }
 
         private ISegmentPair GetSegmentPair(int index)
