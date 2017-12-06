@@ -35,29 +35,43 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				if (rowInfo.ContextInfo[0].DefaultFormatting["TextColor"] != null)
 				{
 					var color = rowInfo.ContextInfo[0].DefaultFormatting["TextColor"].StringValue;
-					var colors = color.Split(',');
-
-					var red = string.Empty;
-					var green = string.Empty;
-					var blue = string.Empty;
-				
-					//for  files which color code is like this "0,12,12,12"
-					if (colors.Count().Equals(4))
+					if (rowInfo.ContextInfo[0].HasMetaData)
 					{
-						red = colors[1];
-						green = colors[2];
-						blue = colors[3];
+						foreach (var metaData in rowInfo.ContextInfo[0].MetaData)
+						{
+							if(metaData.Key.Equals("node"))
+							{
+								var style = metaData.Value;
+								//check if there is no style which overrides text color property
+								if (style.Contains("No character style"))
+								{
+									var colors = color.Split(',');
 
-						return ParseColorCode(red, green, blue);
-					}
-					//"12,12,12"
-					if (colors.Count().Equals(3))
-					{
-						red = colors[0];
-						green = colors[1];
-						blue = colors[2];
+									var red = string.Empty;
+									var green = string.Empty;
+									var blue = string.Empty;
 
-						return ParseColorCode(red, green, blue);
+									//for  files which color code is like this "0,12,12,12"
+									if (colors.Count().Equals(4))
+									{
+										red = colors[1];
+										green = colors[2];
+										blue = colors[3];
+
+										return ParseColorCode(red, green, blue);
+									}
+									//"12,12,12"
+									if (colors.Count().Equals(3))
+									{
+										red = colors[0];
+										green = colors[1];
+										blue = colors[2];
+
+										return ParseColorCode(red, green, blue);
+									}
+								}
+							}
+						}
 					}
 				}
 		
