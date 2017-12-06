@@ -52,7 +52,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 							blue = colors[2];
 						}
 
-						var hexCode = GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
+						var hexCode = ColorPickerHelper.GetHexCode(byte.Parse(red), byte.Parse(green), byte.Parse(blue));
 						if (!_colorCodeList.Contains(hexCode))
 						{
 							_colorCodeList.Add(hexCode);
@@ -65,12 +65,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			VisitChildren(tagPair);
 		}
 
-		public static string GetHexCode(byte red, byte green, byte blue)
-		{
-			var hexCode = $"{red:X2}{green:X2}{blue:X2}";
-
-			return hexCode;
-		}
+	
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
