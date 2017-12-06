@@ -2,34 +2,473 @@
   <Object>
     <Tree>
       <Node ID="0">
-        <TextChild>Entry level</TextChild>
-        <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">0</NodeType>
-        <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
-        <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-        <labels />
-        <description />
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Entry level
+        </TextChild>
+        <NodeType
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+          0
+        </NodeType>
+        <Mandatory
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+          1
+        </Mandatory>
+        <Multiply
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+          1
+        </Multiply>
+        <Readonly
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+          0
+        </Readonly>
+        <labels
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+        </labels>
+        <description
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+        </description>
         <Node ID="0">
-          <TextChild>Index level</TextChild>
-          <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</NodeType>
-          <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
-          <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-          <labels />
-          <description />
+          <TextChild
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            Index level
+          </TextChild>
+          <NodeType
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+            2
+          </NodeType>
+          <Mandatory
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            1
+          </Mandatory>
+          <Multiply
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            1
+          </Multiply>
+          <Readonly
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Readonly>
+          <labels
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          </labels>
+          <description
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          </description>
           <Node ID="0">
-            <TextChild>Term level</TextChild>
-            <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">3</NodeType>
-            <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
-            <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-            <labels />
-            <description />
+            <TextChild
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              Term level
+            </TextChild>
+            <NodeType
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+              3
+            </NodeType>
+            <Mandatory
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              1
+            </Mandatory>
+            <Multiply
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              1
+            </Multiply>
+            <Readonly
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              0
+            </Readonly>
+            <labels
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            </labels>
+            <description
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            </description>
+            <Node ID="0">
+              <TextChild
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+                Type
+              </TextChild>
+              <NodeType
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+                1
+              </NodeType>
+              <Mandatory
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Mandatory>
+              <Multiply
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Multiply>
+              <Readonly
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Readonly>
+              <labels></labels>
+              <description></description>
+            </Node>
+            <Node ID="0">
+              <TextChild
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+                Part of Speech
+              </TextChild>
+              <NodeType
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+                1
+              </NodeType>
+              <Mandatory
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Mandatory>
+              <Multiply
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Multiply>
+              <Readonly
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Readonly>
+              <labels></labels>
+              <description></description>
+            </Node>
+            <Node ID="0">
+              <TextChild
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+                Status
+              </TextChild>
+              <NodeType
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+                1
+              </NodeType>
+              <Mandatory
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Mandatory>
+              <Multiply
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Multiply>
+              <Readonly
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Readonly>
+              <labels
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              </labels>
+              <description
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              </description>
+            </Node>
+            <Node ID="0">
+              <TextChild
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+                Notes
+              </TextChild>
+              <NodeType
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+                1
+              </NodeType>
+              <Mandatory
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Mandatory>
+              <Multiply
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                1
+              </Multiply>
+              <Readonly
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+                0
+              </Readonly>
+              <labels
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              </labels>
+              <description
+								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              </description>
+            </Node>
           </Node>
+          <Node ID="0">
+            <TextChild
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              Notes
+            </TextChild>
+            <NodeType
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+              1
+            </NodeType>
+            <Mandatory
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              0
+            </Mandatory>
+            <Multiply
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              1
+            </Multiply>
+            <Readonly
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              0
+            </Readonly>
+            <labels></labels>
+            <description></description>
+          </Node>
+          <Node ID="0">
+            <TextChild
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+              Definition
+            </TextChild>
+            <NodeType
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+              1
+            </NodeType>
+            <Mandatory
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              0
+            </Mandatory>
+            <Multiply
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              1
+            </Multiply>
+            <Readonly
+							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+              0
+            </Readonly>
+            <labels></labels>
+            <description></description>
+          </Node>
+        </Node>
+        <Node ID="0">
+          <TextChild
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            Notes
+          </TextChild>
+          <NodeType
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+            1
+          </NodeType>
+          <Mandatory
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Mandatory>
+          <Multiply
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            1
+          </Multiply>
+          <Readonly
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Readonly>
+          <labels></labels>
+          <description></description>
+        </Node>
+        <Node ID="0">
+          <TextChild
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            Illustration
+          </TextChild>
+          <NodeType
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+            1
+          </NodeType>
+          <Mandatory
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Mandatory>
+          <Multiply
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            1
+          </Multiply>
+          <Readonly
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Readonly>
+          <labels></labels>
+          <description></description>
+        </Node>
+        <Node ID="0">
+          <TextChild
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            Subject
+          </TextChild>
+          <NodeType
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+            1
+          </NodeType>
+          <Mandatory
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Mandatory>
+          <Multiply
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            1
+          </Multiply>
+          <Readonly
+						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+            0
+          </Readonly>
+          <labels></labels>
+          <description></description>
         </Node>
       </Node>
     </Tree>
-    <Languages>
+    <Languages>    
     </Languages>
     <TerminologyFields>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Notes
+        </TextChild>
+        <Structure>
+          <Type>Text</Type>
+          <History>F</History>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Definition
+        </TextChild>
+        <Structure>
+          <Type>Text</Type>
+          <History>F</History>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Status
+        </TextChild>
+        <Structure>
+          <Type>Picklist</Type>
+          <History>F</History>
+          <PicklistValue>Approved</PicklistValue>
+          <PicklistValue>Forbidden</PicklistValue>
+          <PicklistValue>Preferred</PicklistValue>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Illustration
+        </TextChild>
+        <Structure>
+          <Type>Multimedia File</Type>
+          <History>F</History>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Type
+        </TextChild>
+        <Structure>
+          <Type>Picklist</Type>
+          <History>F</History>
+          <PicklistValue>Acronym</PicklistValue>
+          <PicklistValue>Full form</PicklistValue>
+          <PicklistValue>Short form</PicklistValue>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Subject
+        </TextChild>
+        <Structure>
+          <Type>Picklist</Type>
+          <History>F</History>
+          <PicklistValue>IT and Telecom</PicklistValue>
+          <PicklistValue>Finance and Insurance</PicklistValue>
+          <PicklistValue>General Marketing</PicklistValue>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Part of Speech
+        </TextChild>
+        <Structure>
+          <Type>Picklist</Type>
+          <History>F</History>
+          <PicklistValue>noun</PicklistValue>
+          <PicklistValue>verb</PicklistValue>
+          <PicklistValue>adjective</PicklistValue>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Context
+        </TextChild>
+        <Structure>
+          <Type>Text</Type>
+          <History>F</History>
+        </Structure>
+      </Node>
+      <Node ID="0">
+        <TextChild
+					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          Source
+        </TextChild>
+        <Structure>
+          <Type>Text</Type>
+          <History>F</History>
+        </Structure>
+      </Node>
     </TerminologyFields>
+    <Option
+			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
+      2
+    </Option>
+    <CaseSensitive
+			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+      0
+    </CaseSensitive>
+    <IgnoreNonAlpha
+			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
+      1
+    </IgnoreNonAlpha>
+    <TermbaseDescription>Sample termbase included with SDL Trados Studio and SDL MultiTerm. Contains terms from printer hardware as well as some general marketing terms.</TermbaseDescription>
+    <CopyrightText>(c) 2009-2011 SDL</CopyrightText>
+    <SplashImage></SplashImage>
+    <IconFile></IconFile>
+    <RefInfo></RefInfo>
   </Object>
-  <Schema />
+  <Schema>
+    <Schema name="Termbase Definition">
+      <ElementType ID="1" name="mtf" content="eltOnly" order="many">
+        <description></description>
+        <ElementType ID="2" name="conceptGrp" content="eltOnly" order="many">
+          <description></description>
+          <ElementType ID="3" name="languageGrp" content="eltOnly" order="many">
+            <Occurences>
+              <Level minOccurs="0" maxOccurs="*"/>
+            </Occurences>
+            <ElementType ID="4" name="language" content="empty" order="many">
+              <Occurences>
+                <Level minOccurs="1" maxOccurs="1"/>
+              </Occurences>
+            </ElementType>
+          </ElementType>
+        </ElementType>
+      </ElementType>
+    </Schema>
+  </Schema>
+  <EmptyEntry>
+    <conceptGrp>
+      <system type="entryClass">1</system>
+    </conceptGrp>
+  </EmptyEntry>
+  <DummyEntry>
+    <conceptGrp>
+      <concept>1</concept>
+      <system type="entryClass">1</system>
+    </conceptGrp>
+  </DummyEntry>
+  <FullEntry>
+    <conceptGrp>
+      <concept>1</concept>
+      <system type="entryClass">1</system>     
+    </conceptGrp>
+  </FullEntry>
 </Output>

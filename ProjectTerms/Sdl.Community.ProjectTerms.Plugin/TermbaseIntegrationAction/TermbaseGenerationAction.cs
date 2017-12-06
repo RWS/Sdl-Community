@@ -44,8 +44,12 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
                 var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
                 var termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
                 TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(),"EmptyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "DummyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "FullEntry");
+				TermbaseDefinitionFile.AddSchemaElements(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
 
-                var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
+				var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)
                 {
                     DisplayMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
@@ -56,8 +60,12 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 
                 string termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.FilePath), "Tb");
 
-                if (!Directory.Exists(termbaseDirectoryPath)) Directory.CreateDirectory(termbaseDirectoryPath);
-                string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
+				if (!Directory.Exists(termbaseDirectoryPath))
+				{
+					Directory.CreateDirectory(termbaseDirectoryPath);
+				}
+
+				string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
                 File.Copy(termbase._Path, termbasePath);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator, termbasePath);
