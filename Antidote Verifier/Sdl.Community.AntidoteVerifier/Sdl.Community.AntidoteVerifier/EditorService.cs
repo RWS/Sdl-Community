@@ -33,7 +33,7 @@ namespace Sdl.Community.AntidoteVerifier
         private void Initialize()
         {
             _segmentMetadata.Clear();
-	        var activeSegmentId = _document.ActiveSegmentPair.Properties.Id.Id;//int.Parse(_document.ActiveSegmentPair.Properties.Id.Id);
+	        var activeSegmentId = _document.ActiveSegmentPair.Properties.Id.Id;
 	        var currentSegmentIndex = _document.SegmentPairs.ToList().FindIndex(i=>i.Properties.Id.Id.Equals(activeSegmentId));
 
 	        var index = 1;
@@ -47,17 +47,6 @@ namespace Sdl.Community.AntidoteVerifier
 				_segmentMetadata.Add(index,new KeyValuePair<string, string>(currentId, paragraphUnitId));
 		        index++;
 	        }
-	
-			//int index = 1;
-            //foreach (var segmentPair in _document.SegmentPairs)
-            //{
-            //    var paragraphUnitId = segmentPair.GetParagraphUnitProperties().ParagraphUnitId.Id;
-            //    if (string.IsNullOrEmpty(segmentPair.Target.GetString())) continue;
-            //    var currentId = int.Parse(segmentPair.Properties.Id.Id);
-            //   // if (currentId < activeSegmentId) continue;
-            //  //  _segmentMetadata.Add(index, new KeyValuePair<string, string>(currentId, paragraphUnitId));
-            //    index++;
-            //}
         }
 
         private ISegmentPair GetSegmentPair(int index)
