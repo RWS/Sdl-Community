@@ -857,7 +857,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied_contextInfoTab(settings);
 	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
 	                InvalidateIconsFilterApplied_colorPicker(CustomFilter);
-	                InvalidateIconsFilterApplied_fuzzyValues(CustomFilter);
 					
 					SetStatusBackgroundColorCode(IsFilterApplied(settings));
                 }
@@ -871,22 +870,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
 	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
 	               InvalidateIconsFilterApplied(tabPage_Colors);
-	                InvalidateIconsFilterApplied(tabPage_fuzzyValue);
+
 				}
             }
         }
 
-	    private void InvalidateIconsFilterApplied_fuzzyValues(CustomFilterSettings customFilter)
-	    {
-		    if (!string.IsNullOrWhiteSpace(customFilter.FuzzyMin) && !string.IsNullOrWhiteSpace(customFilter.FuzzyMax))
-		    {
-			    tabPage_fuzzyValue.ImageIndex = 0;
-		    }
-		    else
-		    {
-				tabPage_fuzzyValue.ImageIndex = -1;
-			}
-	    }
+	  
 
 	    private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
 	    {
@@ -1002,7 +991,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		    {
 			    tabPage_segmentNumbers.ImageIndex = -1;
 		    }
-	    }
+		    if (!string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) && !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax))
+		    {
+			    tabPage_segmentNumbers.ImageIndex = 0;
+		    }
+		    else
+		    {
+			    tabPage_segmentNumbers.ImageIndex = -1;
+		    }
+		}
 
 	    private void InvalidateIconsFilterEdited(TabPage tabPage)
         {
@@ -1570,15 +1567,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 
-		private void fuzzyMin_TextChanged(object sender, EventArgs e)
-		{
-			InvalidateIconsFilterEdited(tabPage_fuzzyValue);
-		}
-
-		private void fuzzyMax_TextChanged(object sender, EventArgs e)
-		{
-			InvalidateIconsFilterEdited(tabPage_fuzzyValue);
-		}
+		
 
 		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
 		{
@@ -1586,6 +1575,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void equalsCaseSensitive_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void fuzzyMin_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void fuzzyMax_TextChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}

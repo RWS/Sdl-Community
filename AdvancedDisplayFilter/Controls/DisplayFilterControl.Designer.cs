@@ -82,6 +82,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.fuzzyMax = new System.Windows.Forms.TextBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.fuzzyMin = new System.Windows.Forms.TextBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
 			this.equalsCaseSensitive = new System.Windows.Forms.CheckBox();
 			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
@@ -93,13 +98,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.groupedBtn = new System.Windows.Forms.RadioButton();
 			this.oddBtn = new System.Windows.Forms.RadioButton();
 			this.evenBtn = new System.Windows.Forms.RadioButton();
-			this.tabPage_fuzzyValue = new System.Windows.Forms.TabPage();
-			this.fuzzyPanel = new System.Windows.Forms.Panel();
-			this.fuzzyMax = new System.Windows.Forms.TextBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.fuzzyMin = new System.Windows.Forms.TextBox();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.tabPage_Colors = new System.Windows.Forms.TabPage();
 			this.colorLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.label6 = new System.Windows.Forms.Label();
@@ -145,8 +143,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.SuspendLayout();
 			this.segmentsGroupBox.SuspendLayout();
 			this.groupBox1.SuspendLayout();
-			this.tabPage_fuzzyValue.SuspendLayout();
-			this.fuzzyPanel.SuspendLayout();
 			this.tabPage_Colors.SuspendLayout();
 			this.colorLayoutPanel.SuspendLayout();
 			this.toolStrip_filter.SuspendLayout();
@@ -176,7 +172,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabControl_filter.Controls.Add(this.tabPage_comments);
 			this.tabControl_filter.Controls.Add(this.tabPage_contextInfo);
 			this.tabControl_filter.Controls.Add(this.tabPage_segmentNumbers);
-			this.tabControl_filter.Controls.Add(this.tabPage_fuzzyValue);
 			this.tabControl_filter.Controls.Add(this.tabPage_Colors);
 			resources.ApplyResources(this.tabControl_filter, "tabControl_filter");
 			this.tabControl_filter.ImageList = this.imageList_filter;
@@ -522,6 +517,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
+			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMax);
+			this.tabPage_segmentNumbers.Controls.Add(this.label5);
+			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMin);
+			this.tabPage_segmentNumbers.Controls.Add(this.label4);
+			this.tabPage_segmentNumbers.Controls.Add(this.label3);
 			this.tabPage_segmentNumbers.Controls.Add(this.equalsCaseSensitive);
 			this.tabPage_segmentNumbers.Controls.Add(this.sourceSameBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsGroupBox);
@@ -530,6 +530,33 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
+			// 
+			// fuzzyMax
+			// 
+			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
+			this.fuzzyMax.Name = "fuzzyMax";
+			this.fuzzyMax.TextChanged += new System.EventHandler(this.fuzzyMax_TextChanged);
+			// 
+			// label5
+			// 
+			resources.ApplyResources(this.label5, "label5");
+			this.label5.Name = "label5";
+			// 
+			// fuzzyMin
+			// 
+			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
+			this.fuzzyMin.Name = "fuzzyMin";
+			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
+			// 
+			// label4
+			// 
+			resources.ApplyResources(this.label4, "label4");
+			this.label4.Name = "label4";
+			// 
+			// label3
+			// 
+			resources.ApplyResources(this.label3, "label3");
+			this.label3.Name = "label3";
 			// 
 			// equalsCaseSensitive
 			// 
@@ -611,50 +638,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.evenBtn.TabStop = true;
 			this.evenBtn.UseVisualStyleBackColor = true;
 			this.evenBtn.CheckedChanged += new System.EventHandler(this.evenBtn_CheckedChanged);
-			// 
-			// tabPage_fuzzyValue
-			// 
-			this.tabPage_fuzzyValue.Controls.Add(this.fuzzyPanel);
-			resources.ApplyResources(this.tabPage_fuzzyValue, "tabPage_fuzzyValue");
-			this.tabPage_fuzzyValue.Name = "tabPage_fuzzyValue";
-			this.tabPage_fuzzyValue.UseVisualStyleBackColor = true;
-			// 
-			// fuzzyPanel
-			// 
-			this.fuzzyPanel.Controls.Add(this.fuzzyMax);
-			this.fuzzyPanel.Controls.Add(this.label5);
-			this.fuzzyPanel.Controls.Add(this.fuzzyMin);
-			this.fuzzyPanel.Controls.Add(this.label4);
-			this.fuzzyPanel.Controls.Add(this.label3);
-			resources.ApplyResources(this.fuzzyPanel, "fuzzyPanel");
-			this.fuzzyPanel.Name = "fuzzyPanel";
-			// 
-			// fuzzyMax
-			// 
-			resources.ApplyResources(this.fuzzyMax, "fuzzyMax");
-			this.fuzzyMax.Name = "fuzzyMax";
-			this.fuzzyMax.TextChanged += new System.EventHandler(this.fuzzyMax_TextChanged);
-			// 
-			// label5
-			// 
-			resources.ApplyResources(this.label5, "label5");
-			this.label5.Name = "label5";
-			// 
-			// fuzzyMin
-			// 
-			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
-			this.fuzzyMin.Name = "fuzzyMin";
-			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
-			// 
-			// label4
-			// 
-			resources.ApplyResources(this.label4, "label4");
-			this.label4.Name = "label4";
-			// 
-			// label3
-			// 
-			resources.ApplyResources(this.label3, "label3");
-			this.label3.Name = "label3";
 			// 
 			// tabPage_Colors
 			// 
@@ -845,9 +828,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.segmentsGroupBox.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
-			this.tabPage_fuzzyValue.ResumeLayout(false);
-			this.fuzzyPanel.ResumeLayout(false);
-			this.fuzzyPanel.PerformLayout();
 			this.tabPage_Colors.ResumeLayout(false);
 			this.colorLayoutPanel.ResumeLayout(false);
 			this.colorLayoutPanel.PerformLayout();
@@ -942,13 +922,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private CheckBox commentRegexBox;
 		private CheckBox reverseBox;
 		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
-		private TabPage tabPage_fuzzyValue;
-		private Panel fuzzyPanel;
-		private Label label4;
-		private Label label3;
-		private TextBox fuzzyMin;
-		private Label label5;
-		private TextBox fuzzyMax;
 		private TabPage tabPage_Colors;
 		private TableLayoutPanel colorLayoutPanel;
 		private Label label6;
@@ -959,5 +932,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private RadioButton splitCheckBox;
 		private CheckBox sourceSameBox;
 		private CheckBox equalsCaseSensitive;
+		private TextBox fuzzyMax;
+		private Label label5;
+		private TextBox fuzzyMin;
+		private Label label4;
+		private Label label3;
 	}
 }
