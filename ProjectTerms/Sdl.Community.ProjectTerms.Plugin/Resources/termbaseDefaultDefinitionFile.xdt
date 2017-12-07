@@ -448,6 +448,20 @@
               <Occurences>
                 <Level minOccurs="1" maxOccurs="1"/>
               </Occurences>
+              <AttributeType name="type" type="languages" values="">
+                <description></description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1"/>
+                  <Level minOccurs="0" maxOccurs="*"/>
+                </Occurences>
+              </AttributeType>
+              <AttributeType name="lang" type="locals" values="">
+                <description></description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1"/>
+                  <Level minOccurs="0" maxOccurs="*"/>
+                </Occurences>
+              </AttributeType>
             </ElementType>
           </ElementType>
         </ElementType>

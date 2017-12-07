@@ -43,11 +43,11 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 
                 var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
                 var termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
-                TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
-				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(),"EmptyEntry");
-				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "DummyEntry");
-				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "FullEntry");
-				TermbaseDefinitionFile.AddSchemaElements(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
+                TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetLanguagesForXdt());
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetLanguagesForXdt(),"EmptyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetLanguagesForXdt(), "DummyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetLanguagesForXdt(), "FullEntry");
+				TermbaseDefinitionFile.AddSchemaElements(termbaseDefinitionPath, termbaseCreator.GetLanguagesForXdt());
 
 				var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)

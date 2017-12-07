@@ -191,9 +191,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 telemetryTracker.StartTrackRequest("Extracting project languages in order to complete the .xdt file");
                 telemetryTracker.TrackEvent("Extracting project languages in order to complete the .xdt file", null);
 
-                if (project == null) Settings();
+				if (project == null)
+				{
+					Settings();
+				}
 
-                var sourceLanguage = project.GetProjectInfo().SourceLanguage;
+				var sourceLanguage = project.GetProjectInfo().SourceLanguage;
                 langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
                 var targetLanguages = project.GetProjectInfo().TargetLanguages;
                 foreach (var lang in targetLanguages)
@@ -210,5 +213,45 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
             }
         }
-    }
+
+		/// <summary>
+		/// Extract project languages names (ISOLanguageName (eg: EN) and first name from the entire language (eg: English) to include them in the .xdt schema)
+		/// </summary>
+		/// <returns>dictionary with all source and target languages of current project</returns>
+		public Dictionary<string, string> GetLanguagesForXdt()
+		{
+			try
+			{
+				Dictionary<string, string> languages = new Dictionary<string, string> ();
+
+				if (project == null)
+				{
+					Settings();
+				}
+
+				telemetryTracker.StartTrackRequest("Extracting project languages in order to complete the .xdt file");
+				telemetryTracker.TrackEvent("Extracting project languages in order to complete the .xdt file", null);
+
+				var sourceLanguage = project.GetProjectInfo().SourceLanguage;
+				var targetLanguages = project.GetProjectInfo().TargetLanguages;
+
+				var shortSourceLanguageName = sourceLanguage.CultureInfo != null ? sourceLanguage.CultureInfo.TwoLetterISOLanguageName.ToUpper() : string.Empty;
+
+				languages.Add(sourceLanguage.DisplayName.Split(' ')[0], shortSourceLanguageName);
+				foreach(var targetLanguage in targetLanguages)
+				{
+					string shortTargetLanguage = targetLanguage.CultureInfo != null ? targetLanguage.CultureInfo.TwoLetterISOLanguageName.ToUpper() : string.Empty;
+					languages.Add(targetLanguage.DisplayName.Split(' ')[0], shortTargetLanguage);
+				}
+
+				return languages;
+			}
+			catch (Exception e)
+			{
+				telemetryTracker.TrackException(new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message));
+				telemetryTracker.TrackTrace((new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
+				throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
+			}
+		}
+	}
 }
