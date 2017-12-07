@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
 namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
@@ -9,11 +10,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 	public static class ColorPickerHelper
 	{
 		private static List<string> _selectedColorsCode = new List<string>();
+
 		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCode)
 		{
 			_selectedColorsCode = colorsCode;
 			var visitor = new TagDataVisitor();
-
 			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);
 			foreach (var selectedColor in colorsCode)
 			{
@@ -23,63 +24,67 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 			}
-			var colorTextWithoutTag=DefaultFormatingContainsColor(rowInfo);
+			var colorTextWithoutTag = DefaultFormatingColorCode(rowInfo.ContextInfo);
+			var containsColor = ContainsColor(colorTextWithoutTag);
 
-			return colorTextWithoutTag;
+			return containsColor;
 		}
 
-		private static bool DefaultFormatingContainsColor(DisplayFilterRowInfo rowInfo)
+		public static string DefaultFormatingColorCode(IList<IContextInfo> contextInfo)
 		{
-			if (rowInfo.ContextInfo != null && rowInfo.ContextInfo[0].DefaultFormatting!=null)
+			if (contextInfo != null && contextInfo.Count > 0)
 			{
-				if (rowInfo.ContextInfo[0].DefaultFormatting["TextColor"] != null)
+				var defaultFormatting = contextInfo[0].DefaultFormatting;
+				if (defaultFormatting != null )
 				{
-					var color = rowInfo.ContextInfo[0].DefaultFormatting["TextColor"].StringValue;
-					if (rowInfo.ContextInfo[0].HasMetaData)
+					if (contextInfo[0].DefaultFormatting["TextColor"] != null)
 					{
-						foreach (var metaData in rowInfo.ContextInfo[0].MetaData)
+						var color = defaultFormatting["TextColor"].StringValue;
+						if (contextInfo[0].HasMetaData)
 						{
-							if(metaData.Key.Equals("node"))
+							foreach (var metaData in contextInfo[0].MetaData)
 							{
-								var style = metaData.Value;
-								//check if there is no style which overrides text color property
-								if (style.Contains("No character style"))
+								if (metaData.Key.Equals("node"))
 								{
-									var colors = color.Split(',');
-
-									var red = string.Empty;
-									var green = string.Empty;
-									var blue = string.Empty;
-
-									//for  files which color code is like this "0,12,12,12"
-									if (colors.Count().Equals(4))
+									var style = metaData.Value;
+									//check if there is no style which overrides text color property
+									if (style.Contains("No character style"))
 									{
-										red = colors[1];
-										green = colors[2];
-										blue = colors[3];
+										var colors = color.Split(',');
+										var red = string.Empty;
+										var green = string.Empty;
+										var blue = string.Empty;
 
-										return ParseColorCode(red, green, blue);
-									}
-									//"12,12,12"
-									if (colors.Count().Equals(3))
-									{
-										red = colors[0];
-										green = colors[1];
-										blue = colors[2];
+										//for  files which color code is like this "0,12,12,12"
+										if (colors.Count().Equals(4))
+										{
+											red = colors[1];
+											green = colors[2];
+											blue = colors[3];
 
-										return ParseColorCode(red, green, blue);
+											return ParseColorCode(red, green, blue);
+										}
+										//"12,12,12"
+										if (colors.Count().Equals(3))
+										{
+											red = colors[0];
+											green = colors[1];
+											blue = colors[2];
+
+											return ParseColorCode(red, green, blue);
+										}
 									}
 								}
 							}
 						}
 					}
+					
 				}
-		
 			}
-			return false;
+			return string.Empty;
 		}
 
-		public static bool ParseColorCode(string red, string green, string blue)
+		public static string ParseColorCode(string red, string green, string blue)
 		{
 			var redSuccess = byte.TryParse(red, out byte redByteCode);
 			var greenSuccess = byte.TryParse(green, out byte greenByteCode);
@@ -87,14 +92,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			if (redSuccess && greenSuccess && blueSuccess)
 			{
-				var hexCode = GetHexCode(redByteCode,greenByteCode,blueByteCode);
-
-				if (_selectedColorsCode.Contains("#"+hexCode))
-				{
-					return true;
-				}
+				return  GetHexCode(redByteCode,greenByteCode,blueByteCode);
 			}
-			return false;
+			return string.Empty;
+		}
+
+		public static bool ContainsColor(string colorCode)
+		{
+			return _selectedColorsCode.Contains("#" + colorCode);
 		}
 
 		public static string GetHexCode(byte red, byte green, byte blue)
@@ -111,7 +116,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 			return colorCodes;
 		}
-
 		
 	}
 }

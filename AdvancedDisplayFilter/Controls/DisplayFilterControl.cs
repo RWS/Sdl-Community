@@ -505,20 +505,31 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			AvailableColorsList = new List<string>();
         }
 
+	    private void AddColor(string color)
+	    {
+		    if (!string.IsNullOrEmpty(color))
+		    {
+				if (!AvailableColorsList.Contains(color))
+				{
+					AvailableColorsList.Add(color);
+				}
+			}
+		   
+	    }
 	    private void PopulateColorList()
 	    {
 		    AvailableColorsList.Clear();
 			foreach (var segmentPair in ActiveDocument.SegmentPairs)
 		    {
 			    var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
-			    if (colorCodesList == null || colorCodesList.Count <= 0) continue;
 			    foreach (var color in colorCodesList)
 			    {
-				    if (!AvailableColorsList.Contains(color))
-				    {
-					    AvailableColorsList.Add(color);
-				    }
+				    AddColor(color);
 			    }
+			    if (colorCodesList.Count > 0) continue;
+			    var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
+			    var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
+			    AddColor(colorCode);
 		    }
 		    SetAddColorsToListView();
 	    }
@@ -627,7 +638,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
                     //invalidate UI with display settings recovered from the active document
-                    DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
+                    DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
                 }
 				PopulateColorList();
 
