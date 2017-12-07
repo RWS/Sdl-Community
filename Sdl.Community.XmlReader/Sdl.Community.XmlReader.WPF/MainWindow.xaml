@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Sdl.Community.XmlReader.WPF"
         xmlns:vm="clr-namespace:Sdl.Community.XmlReader.WPF.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="398.517" Width="544.703"
+        Title="Xml Reader" Height="398.517" Width="544.703"
         Closing="MainWindow_Closing" FontSize="14">
 
     <Window.Resources>

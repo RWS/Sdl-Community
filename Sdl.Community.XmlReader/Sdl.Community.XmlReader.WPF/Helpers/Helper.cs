@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
+using System.Xml;
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
 {
@@ -9,27 +11,31 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
         {
             return Path.GetFileNameWithoutExtension(filePath);
         }
+		
+	    public static string GetTargetLanguageCode(string filePath)
+	    {
+		    var doc = new XmlDocument();
+		    doc.Load(filePath);
 
-        public static string GetXMLFileName(string filePath)
-        {
-            var fileName = GetFileName(filePath);
+		    var languageNodeAttributes = doc.GetElementsByTagName("language")[0].Attributes;
+		    var languageLcid = string.Empty;
+		    if (languageNodeAttributes == null) return string.Empty;
 
-            if (!fileName.Contains(Properties.Resources.FileName))
-            {
-                return null;
-            }
+		    foreach (XmlNode attribute in languageNodeAttributes)
+		    {
+			    if (attribute.Name.Equals("lcid"))
+			    {
+				    languageLcid = attribute.Value;
+			    }
 
-            // The xml file name always should follow this pattern "Analyze Files 'souce_code''_''target_code'\.*.xml"
-            // After the target code can be '- Copy' if the user has many analyze file with exact source/target language code 
-            return fileName;
-        }
+		    }
+		    int.TryParse(languageLcid, out int lcid);
+		    var languageCultureInfoName = new CultureInfo(lcid).Name;
 
-        public static string GetTargetLanguageCode(string fileName)
-        {
-            // az-Cyrl-AZ - Copy
-            return (fileName.Split('_')[1]).Split(' ')[0];
-        }
-        #endregion
+		    return languageCultureInfoName;
+	    }
+
+	    #endregion
 
 
         #region Studio language's flags
@@ -71,7 +77,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
                 {
                     var fileName = Path.GetFileName(file);
 
-                    if (fileName.Equals(code.ToString() + ".bmp"))
+                    if (fileName.Equals(code + ".bmp"))
                     {
                         return Path.Combine(studioFlagsDirectory, fileName);
 

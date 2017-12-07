@@ -13,7 +13,7 @@ namespace Sdl.Community.XmlReader
     {
     }
 
-    [Action("Sdl.Community.XmlReader.GenerateXmlReaderAction", Name = "xml Reader", Icon = "logo", Description = "Read xml files and export them as Excel...")]
+    [Action("Sdl.Community.XmlReader.GenerateXmlReaderAction", Name = "Xml Reader", Icon = "logo", Description = "Read xml files and export them as Excel...")]
     [ActionLayout(typeof(XmlReaderRibbonGroup), 250, DisplayType.Large)]
     class GenerateXmlReaderAction : AbstractAction
     {

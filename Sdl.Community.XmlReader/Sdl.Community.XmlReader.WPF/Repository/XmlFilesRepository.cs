@@ -1,6 +1,7 @@
 ﻿using Sdl.Community.XmlReader.WPF.Helpers;
 using Sdl.Community.XmlReader.WPF.Models;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Sdl.Community.XmlReader.WPF.Repository
@@ -11,7 +12,7 @@ namespace Sdl.Community.XmlReader.WPF.Repository
 
         public static TargetLanguageCode AddFile(string analyzeFilePath)
         {
-            var languageCode = Helper.GetTargetLanguageCode(Helper.GetFileName(analyzeFilePath));
+            var languageCode = Helper.GetTargetLanguageCode(analyzeFilePath);
             var targetLanguageCode = _languageCodes.FirstOrDefault(x => x.LanguageCode.Equals(languageCode));
 
             if (targetLanguageCode == null)
@@ -25,10 +26,12 @@ namespace Sdl.Community.XmlReader.WPF.Repository
                 _languageCodes.Add(targetLanguageCode);
             }
 
+	        var fileName = string.Format("{0} {1}", Path.GetFileNameWithoutExtension(analyzeFilePath),
+		        targetLanguageCode.AnalyzeFiles.Count + 1);
             targetLanguageCode.AnalyzeFiles.Add(new AnalyzeFile
             {
-                Name = Helper.GetXMLFileName(analyzeFilePath) + " " + (targetLanguageCode.AnalyzeFiles.Count + 1),
-                Path = analyzeFilePath
+                Name = fileName,
+				Path = analyzeFilePath
             });
 
             return targetLanguageCode;
