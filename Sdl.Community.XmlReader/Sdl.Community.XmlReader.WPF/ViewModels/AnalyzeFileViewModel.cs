@@ -10,13 +10,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
             _analyzeFile = analyzeFile;
         }
 
-        public string AnalyzeFileName
-        {
-            get { return _analyzeFile.Name; }
-        }
-        public string AnalyzeFilePath
-        {
-            get { return _analyzeFile.Path; }
-        }
+        public string AnalyzeFileName => _analyzeFile.Name;
+
+	    public string AnalyzeFilePath => _analyzeFile.Path;
     }
 }

@@ -80,7 +80,6 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
                     if (fileName.Equals(code + ".bmp"))
                     {
                         return Path.Combine(studioFlagsDirectory, fileName);
-
                     }
                 }
             }

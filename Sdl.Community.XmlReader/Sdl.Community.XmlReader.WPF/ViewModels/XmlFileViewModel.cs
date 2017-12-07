@@ -9,26 +9,21 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
     public class XmlFileViewModel
     {
-        private ObservableCollection<TargetLanguageCodeViewModel> _xmlFiles;
-
-        public XmlFileViewModel(List<TargetLanguageCode> codes)
+	    public XmlFileViewModel(List<TargetLanguageCode> codes)
         {
             if (codes == null)
             {
-                _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
+                XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
             }
             else
             {
-                _xmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code, null)));
+                XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code, null)));
             }
         }
 
-        public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles
-        {
-            get { return _xmlFiles; }
-        }
+        public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
 
-        public void AddFile(string filePath)
+	    public void AddFile(string filePath)
         {
             if (Helper.GetFileName(filePath) == null)
             {
@@ -37,7 +32,7 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 
             var targetlanguageCode = XmlFilesRepository.AddFile(filePath);
             var analyzeFile = targetlanguageCode.AnalyzeFiles.LastOrDefault();
-            var existedTargetLanguageCodeViewModel = _xmlFiles.FirstOrDefault(x => x.TargetLanguageCode.Equals(targetlanguageCode.LanguageCode));
+            var existedTargetLanguageCodeViewModel = XmlFiles.FirstOrDefault(x => x.TargetLanguageCode.Equals(targetlanguageCode.LanguageCode));
             if (existedTargetLanguageCodeViewModel != null)
             {
                 existedTargetLanguageCodeViewModel.AddChild(analyzeFile);
@@ -45,15 +40,15 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
             else
             {
                 var iconUri = Helper.GetImagePathByStudioCode(Helper.GetImageStudioCodeByLanguageCode(targetlanguageCode.LanguageCode));
-                TargetLanguageCodeViewModel targetLanguageCodeViewModel = new TargetLanguageCodeViewModel(targetlanguageCode, iconUri);
-                _xmlFiles.Add(targetLanguageCodeViewModel);
+                var targetLanguageCodeViewModel = new TargetLanguageCodeViewModel(targetlanguageCode, iconUri);
+                XmlFiles.Add(targetLanguageCodeViewModel);
                 targetLanguageCodeViewModel.AddChild(analyzeFile);
             }
         }
 
         public void RemoveParent(TargetLanguageCodeViewModel parent)
         {
-            _xmlFiles.Remove(parent);
+            XmlFiles.Remove(parent);
             XmlFilesRepository.DeleteParent(parent.TargetLanguageCode);
         }
 
@@ -61,7 +56,7 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
         {
             foreach (var analyzeFile in analyzeFilesViewModel)
             {
-                var targetLanguageCode = _xmlFiles.FirstOrDefault(x => x.TargetLanguageCode.Equals(languageCode));
+                var targetLanguageCode = XmlFiles.FirstOrDefault(x => x.TargetLanguageCode.Equals(languageCode));
                 targetLanguageCode.Children.Remove(analyzeFile);
 
                 XmlFilesRepository.RemoveFile(languageCode, analyzeFile.AnalyzeFileName);
@@ -70,7 +65,7 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 
         public void ResetLists()
         {
-            _xmlFiles.Clear();
+            XmlFiles.Clear();
             XmlFilesRepository.ResetLanguageCodes();
         }
     }
