@@ -77,7 +77,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 		/// </summary>
 		/// <param name="termbaseDefinitionPath"></param>
 		/// <param name="langs"></param>
-		public static void AddLanguages(string termbaseDefinitionPath, Dictionary<string, string> langs)
+		public static void AddLanguages(string termbaseDefinitionPath, Dictionary<string, string> languages)
 		{
 			try
 			{
@@ -87,16 +87,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 				var doc = new XmlDocument();
 				doc.Load(termbaseDefinitionPath);
 
-				var langTag = doc.GetElementsByTagName("Languages")[0];
-				foreach (var lang in langs.Keys)
+				var languageTag = doc.GetElementsByTagName("Languages")[0];
+				foreach (var language in languages.Keys)
 				{
 					var nodeItemLocale = doc.CreateNode(XmlNodeType.Element, "ItemLocale", null);
-					nodeItemLocale.InnerText = langs[lang];
-					langTag.AppendChild(nodeItemLocale);
+					nodeItemLocale.InnerText = languages[language];
+					languageTag.AppendChild(nodeItemLocale);
 
 					var nodeItemText = doc.CreateNode(XmlNodeType.Element, "ItemText", null);
-					nodeItemText.InnerText = lang;
-					langTag.AppendChild(nodeItemText);
+					nodeItemText.InnerText = language;
+					languageTag.AppendChild(nodeItemText);
 				}
 
 				doc.Save(termbaseDefinitionPath);
@@ -114,7 +114,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 		/// </summary>
 		/// <param name="termbaseDefinitionPath">termbase definition path</param>
 		/// <param name="langs">project languages</param>
-		public static void AddLanguageGroups(string termbaseDefinitionPath, Dictionary<string, string> langs, string entryType)
+		public static void AddLanguageGroups(string termbaseDefinitionPath, Dictionary<string, string> languages, string entryType)
 		{
 			try
 			{
@@ -127,13 +127,15 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 				var entryTag = doc.GetElementsByTagName(entryType)[0];
 				var conceptGrpTag = entryTag.ChildNodes[0];
 
-				foreach (var lang in langs.Keys)
+				foreach (var language in languages.Keys)
 				{
 					var nodeLanguageGrp = doc.CreateNode(XmlNodeType.Element, "languageGrp", null);
 					var nodeLanguage = doc.CreateElement("language");
-					nodeLanguage.SetAttribute("type", langs[lang]);
-					nodeLanguage.SetAttribute("lang", lang);
+					nodeLanguage.SetAttribute("type", language);
+					nodeLanguage.SetAttribute("lang", languages[language]);
 					nodeLanguageGrp.AppendChild(nodeLanguage);
+
+					conceptGrpTag.AppendChild(nodeLanguageGrp);
 				}
 
 				doc.Save(termbaseDefinitionPath);
@@ -151,7 +153,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 		/// </summary>
 		/// <param name="termbaseDefinitionPath">termbase defitinion path</param>
 		/// <param name="langs">project languages</param>
-		public static void AddSchemaElements(string termbaseDefinitionPath, Dictionary<string, string> langs)
+		public static void AddSchemaElements(string termbaseDefinitionPath, Dictionary<string, string> languages)
 		{
 			try
 			{
@@ -162,24 +164,29 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 				doc.Load(termbaseDefinitionPath);
 
 				var schemaTag = doc.GetElementsByTagName("Schema")[0];
-				var elementTypeNode = doc.GetElementsByTagName("ElementType")[3];
+				var elementTypeNode = doc.GetElementsByTagName("ElementType")[8];
 
-				string longNameLanguages = string.Join("|", langs.Keys);
-				string shortNameLanguages = string.Join("|", langs.Values);
+				string longNameLanguages = string.Join("|", languages.Keys);
+				string shortNameLanguages = string.Join("|", languages.Values);
+				
+				XmlAttributeCollection attributeTypeAttributes = doc.GetElementsByTagName("AttributeType")[1].Attributes;
 
-				var attributeTypeTag = doc.CreateElement("AttributeType");
-				attributeTypeTag.SetAttribute("name", "type");
-				attributeTypeTag.SetAttribute("type", "languages");
-				attributeTypeTag.SetAttribute("values", longNameLanguages);
-				elementTypeNode.AppendChild(attributeTypeTag);
-				doc.Save(termbaseDefinitionPath);
-
-				var attributeTypeLangTag = doc.CreateElement("AttributeType");
-				attributeTypeTag.SetAttribute("name", "lang");
-				attributeTypeTag.SetAttribute("type", "locales");
-				attributeTypeTag.SetAttribute("values", shortNameLanguages);
-				elementTypeNode.AppendChild(attributeTypeLangTag);
-
+				foreach (XmlAttribute attribute in attributeTypeAttributes)
+				{
+					if(attribute.Name == "values")
+					{
+						attribute.Value = longNameLanguages;
+					}
+				}
+				
+				XmlAttributeCollection attributeTypeLangAttributes = doc.GetElementsByTagName("AttributeType")[2].Attributes;
+				foreach (XmlAttribute attribute in attributeTypeLangAttributes)
+				{
+					if (attribute.Name == "values")
+					{
+						attribute.Value = shortNameLanguages;
+					}
+				}
 				doc.Save(termbaseDefinitionPath);
 			}
 			catch (Exception e)

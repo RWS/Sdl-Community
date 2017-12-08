@@ -126,7 +126,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 telemetryTracker.StartTrackRequest("Creating entry xml element in order to populate the termbase");
                 telemetryTracker.TrackEvent("Creating entry xml element in order to populate the termbase", null);
 
-                return new XElement("conceptGrp",
+				return new XElement("conceptGrp",
                     // Add source text
                     new XElement("languageGrp",
                         new XElement("language", new XAttribute("lang", sourceLang.IsoAbbreviation.ToUpper()), new XAttribute("type", sourceLang.DisplayName.ToUpper())),
@@ -191,9 +191,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 telemetryTracker.StartTrackRequest("Extracting project languages in order to complete the .xdt file");
                 telemetryTracker.TrackEvent("Extracting project languages in order to complete the .xdt file", null);
 
-                if (project == null) Settings();
+				if (project == null)
+				{
+					Settings();
+				}
 
-                var sourceLanguage = project.GetProjectInfo().SourceLanguage;
+				var sourceLanguage = project.GetProjectInfo().SourceLanguage;
                 langs[sourceLanguage.DisplayName] = sourceLanguage.IsoAbbreviation.ToUpper();
                 var targetLanguages = project.GetProjectInfo().TargetLanguages;
                 foreach (var lang in targetLanguages)
@@ -210,5 +213,5 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
                 throw new TermbaseGenerationException(PluginResources.Error_GetProjectLanguages + e.Message);
             }
         }
-    }
+	}
 }
