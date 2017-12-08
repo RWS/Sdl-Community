@@ -18,13 +18,9 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 		{
 			var reportAssembly = Assembly.GetExecutingAssembly()
 				.GetManifestResourceNames().FirstOrDefault(s => s.EndsWith("Sdl.Community.XmlReader.WPF._3rd_party.Sdl.ProjectApi.Reporting.dll"));
+
 			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(reportAssembly))
 			{
-				if (stream.CanSeek)
-				{
-					stream.Seek(0, SeekOrigin.Begin);
-				}
-
 				var block = new byte[stream.Length];
 				try
 				{
@@ -36,17 +32,16 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 				{
 				}
 			}
-			Type typeReport = _reportAssembly.GetType(
+
+			var typeReport = _reportAssembly.GetType(
 				"Sdl.ProjectApi.Reporting.ReportDefinition");
 
-		
-			var reportConstructor = typeReport.GetConstructor(
-				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-				null, Type.EmptyTypes, null);
+
+			var reportConstructor = typeReport.GetConstructor(Type.EmptyTypes);
 
 			if (reportConstructor != null)
 			{
-				dynamic reportInstance = reportConstructor.Invoke(new object[] { });
+				object reportInstance = reportConstructor.Invoke(new object[] { });
 			}
 	
 		}
