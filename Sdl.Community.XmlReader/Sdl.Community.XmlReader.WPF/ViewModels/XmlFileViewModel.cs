@@ -3,27 +3,48 @@ using Sdl.Community.XmlReader.WPF.Models;
 using Sdl.Community.XmlReader.WPF.Repository;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Sdl.Community.XmlReader.WPF.Annotations;
 
 namespace Sdl.Community.XmlReader.WPF.ViewModels
 {
-    public class XmlFileViewModel
-    {
-	    public XmlFileViewModel(List<TargetLanguageCode> codes)
-        {
-            if (codes == null)
-            {
-                XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
-            }
-            else
-            {
-                XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(codes.Select(code => new TargetLanguageCodeViewModel(code, null)));
-            }
-        }
+	public class XmlFileViewModel : INotifyPropertyChanged
+	{
+		private ICommand _clearCommand;
+		private ICommand _generateExcelCommand;
+		public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
 
-        public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
 
-	    public void AddFile(string filePath)
+		public XmlFileViewModel(List<TargetLanguageCode> codes)
+		{
+			if (codes == null)
+			{
+				XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
+			}
+			else
+			{
+				XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>(
+					codes.Select(code => new TargetLanguageCodeViewModel(code, null)));
+			}
+		}
+
+
+		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ResetLists, true));
+
+		public ICommand GenerateExcelCommand => _generateExcelCommand ??
+		                                        (_generateExcelCommand = new CommandHandler(GenerateExcel, true));
+
+		private void GenerateExcel()
+		{
+			//var report = new Report();
+			Report.GetReportDefinition();
+		}
+	
+
+	public void AddFile(string filePath)
         {
             if (Helper.GetFileName(filePath) == null)
             {
@@ -65,8 +86,16 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 
         public void ResetLists()
         {
-            XmlFiles.Clear();
-            XmlFilesRepository.ResetLanguageCodes();
-        }
-    }
+			XmlFiles.Clear();
+	        XmlFilesRepository.ResetLanguageCodes();
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
 }

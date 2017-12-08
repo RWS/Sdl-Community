@@ -19,7 +19,7 @@ namespace Sdl.Community.XmlReader.WPF
             WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             _viewModel = new XmlFileViewModel(null);
-            base.DataContext = _viewModel;
+            DataContext = _viewModel;
         }
 
         public void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -37,18 +37,16 @@ namespace Sdl.Community.XmlReader.WPF
 
         public void treeView_Drop(object sender, DragEventArgs e)
         {
-            string[] xmlFilePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
-            for (int i = 0; i < xmlFilePaths.Length; i++)
-            {
-                _viewModel.AddFile(xmlFilePaths[i]);
-            }
+	        var xmlFilePaths = (string[])e.Data.GetData(DataFormats.FileDrop, false);
+	        if (xmlFilePaths != null)
+	        {
+		        foreach (var filePath in xmlFilePaths)
+		        {
+			        _viewModel.AddFile(filePath);
+		        }
+	        }
         }
 
-        public void buttonCleanAll_Click(object sender, EventArgs e)
-        {
-            _viewModel.ResetLists();
-        }
-        
         public void treeView_RemoveItems(object sender, EventArgs e)
         {
             List<TargetLanguageCodeViewModel> parentsToRemove = new List<TargetLanguageCodeViewModel>();

@@ -201,9 +201,9 @@
                 </TreeView.Resources>
             </local:MultiSelectTreeView>
         </GroupBox>
-        <Button Style="{StaticResource buttonStyle}" Grid.Row="2" Click="buttonCleanAll_Click">Clean all</Button>
+		<Button Style="{StaticResource buttonStyle}" Grid.Row="2" Command="{Binding ClearCommand}">Clean all</Button>
         <Label Grid.Column="1" Style="{StaticResource labelStyle}">INSTRUCTIONS</Label>
         <TextBlock Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" Margin="0,10,0,0" Text="Drag and drop your xml analysis files into the pane on the left. Click on Excel below to generate your report."></TextBlock>
-        <Button Style="{StaticResource buttonStyle}" Grid.Row="2" Grid.Column="1">Excel</Button>
+		<Button Style="{StaticResource buttonStyle}" Grid.Row="2" Grid.Column="1" Command="{Binding GenerateExcelCommand}">Excel</Button>
     </Grid>
 </Window>
