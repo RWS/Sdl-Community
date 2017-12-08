@@ -164,13 +164,12 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 				doc.Load(termbaseDefinitionPath);
 
 				var schemaTag = doc.GetElementsByTagName("Schema")[0];
-				var elementTypeNode = doc.GetElementsByTagName("ElementType")[3];
+				var elementTypeNode = doc.GetElementsByTagName("ElementType")[8];
 
 				string longNameLanguages = string.Join("|", languages.Keys);
 				string shortNameLanguages = string.Join("|", languages.Values);
-
-
-				XmlAttributeCollection attributeTypeAttributes = doc.GetElementsByTagName("AttributeType")[0].Attributes;
+				
+				XmlAttributeCollection attributeTypeAttributes = doc.GetElementsByTagName("AttributeType")[1].Attributes;
 
 				foreach (XmlAttribute attribute in attributeTypeAttributes)
 				{
@@ -180,7 +179,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 					}
 				}
 				
-				XmlAttributeCollection attributeTypeLangAttributes = doc.GetElementsByTagName("AttributeType")[1].Attributes;
+				XmlAttributeCollection attributeTypeLangAttributes = doc.GetElementsByTagName("AttributeType")[2].Attributes;
 				foreach (XmlAttribute attribute in attributeTypeLangAttributes)
 				{
 					if (attribute.Name == "values")
