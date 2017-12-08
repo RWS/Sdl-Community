@@ -37,7 +37,9 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 				"Sdl.ProjectApi.Reporting.ReportDefinition");
 
 
-			var reportConstructor = typeReport.GetConstructor(Type.EmptyTypes);
+			var reportConstructor = typeReport.GetConstructor(
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+				null, Type.EmptyTypes, null);
 
 			if (reportConstructor != null)
 			{
