@@ -10,11 +10,8 @@ namespace Sdl.Community.ProjectTerms.Controls.Utils
         public static IEnumerable<ITerm> CountOccurences(this IEnumerable<string> terms)
         {
             return
-                terms.GroupBy(
-                    term => term,
-                    (term, equivalentTerms) => new Term(term, equivalentTerms.Count()),
-                    StringComparer.InvariantCulture)
-                    .Cast<ITerm>();
+                terms.GroupBy(term => term, (term, equivalentTerms) => new Term(term, equivalentTerms.Count()), StringComparer.InvariantCulture)
+                     .Cast<ITerm>();
         }
 
         public static IEnumerable<ITerm> FilterByOccurrences(this IEnumerable<ITerm> terms, int occurrences)
@@ -39,9 +36,7 @@ namespace Sdl.Community.ProjectTerms.Controls.Utils
 
         public static IOrderedEnumerable<T> SortByOccurences<T>(this IEnumerable<T> words) where T : ITerm
         {
-            return
-                words.OrderByDescending(
-                    word => word.Occurrences);
+            return words.OrderByDescending(word => word.Occurrences);
         }
     }
 }
