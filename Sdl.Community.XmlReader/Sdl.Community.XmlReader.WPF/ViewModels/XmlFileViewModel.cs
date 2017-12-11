@@ -42,12 +42,10 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 			var folderPath = new FolderSelectDialog();
 			if (folderPath.ShowDialog())
 			{
-				Report.GenerateExcelReport(folderPath.FileName);
+				var selectedItems = XmlFiles.Where(f => f.IsSelected).ToList();
+				Report.GenerateExcelReport(folderPath.FileName, selectedItems);
 			}
-			
-
 		}
-	
 
 	public void AddFile(string filePath)
         {

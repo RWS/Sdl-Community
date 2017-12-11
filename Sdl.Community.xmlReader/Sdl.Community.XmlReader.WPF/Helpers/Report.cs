@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
-
+using Sdl.Community.XmlReader.WPF.ViewModels;
 
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
@@ -53,7 +53,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			}
 		}
 
-		public static void GenerateExcelReport(string folderPath)
+		public static void GenerateExcelReport(string folderPath,List<TargetLanguageCodeViewModel> selectedItems)
 		{
 			GetReportDefinition();
 
@@ -70,25 +70,33 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 
 				var reportFormat = _excelRenderer.ReportFormats[0];
 				var renderMethod = reportingType.GetMethod(Constants.RenderReportMethod);
-				var content =
-					File.ReadAllText(
-						@"C:\Users\aghisa\Documents\Studio 2017\Projects\BedAndBreakfast\Reports\Analyze Files en-GB_en-AU.xml");
-				if (renderMethod != null)
+				foreach (var item in selectedItems)
 				{
-					var report = renderMethod.Invoke(_excelRenderer,
-						new[]
-						{
-							content, _reportDefinition, reportFormat
-						});
-
-					if (report != null)
+					foreach (dynamic report in item.Children)
 					{
-						using (Stream s = File.Create(Path.Combine(folderPath, "andreaReport.xlsx")))
+						
+						var content = File.ReadAllText(report.AnalyzeFilePath);
+							
+						if (renderMethod != null)
 						{
-							s.Write(report, 0, report.Length);
+							var reportRawData = renderMethod.Invoke(_excelRenderer,
+								new[]
+								{
+									content, _reportDefinition, reportFormat
+								});
+
+							if (reportRawData != null)
+							{
+								var reportName = string.Concat("generatedReport_", report.AnalyzeFileName, ".xlsx");
+								using (Stream s = File.Create(Path.Combine(folderPath, reportName)))
+								{
+									s.Write(reportRawData, 0, reportRawData.Length);
+								}
+							}
 						}
 					}
 				}
+		
 			}
 		}
 
