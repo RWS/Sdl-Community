@@ -12,6 +12,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 		public static  string StudioLocation => ExecutingStudioLocation();
 		public static string ProjectApiDll = "Sdl.ProjectApi.Reporting.dll";
 		public static string AnalysidDll = "Sdl.ProjectApi.AutomaticTasks.Analysis.dll";
+		public static string  XmlReportingDll="Sdl.ProjectApi.Reporting.XmlReporting.dll";
 
 		private static string ExecutingStudioLocation()
 		{

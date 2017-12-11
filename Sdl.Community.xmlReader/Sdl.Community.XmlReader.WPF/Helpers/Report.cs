@@ -15,7 +15,10 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 	{
 		private  static Assembly _reportAssembly;
 		private static Assembly _automaticTasksAnalysisAssembly;
+		private static Assembly _xmlReportingAssembly;
 		private static dynamic _reportDefinition;
+		private static dynamic _excelRenderer;
+		
 
 		public static dynamic GetReportDefinition()
 		{
@@ -52,6 +55,43 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			return _reportDefinition;
 		}
 
+		public static void GetExcelRenderer()
+		{
+			_xmlReportingAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.XmlReportingDll));
+
+			var reportingType = _xmlReportingAssembly.GetType("Sdl.ProjectApi.Reporting.XmlReporting.MhtReportRenderer");
+			var reportingConstructor = reportingType.GetConstructor(
+				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
+				null, Type.EmptyTypes, null);
+
+			if (reportingConstructor != null)
+			{
+				_excelRenderer = reportingConstructor.Invoke(new object[] { });
+
+				var reportFormat = _excelRenderer.ReportFormats[0];
+				var renderMethod = reportingType.GetMethod("RenderReport");
+				var content =
+					File.ReadAllText(
+						@"C:\Users\aghisa\Documents\Studio 2017\Projects\BedAndBreakfast\Reports\Analyze Files en-GB_en-AU.xml");
+				if (renderMethod != null)
+				{
+					dynamic report = renderMethod.Invoke(_excelRenderer,
+						new[]
+						{content
+							,
+							_reportDefinition, reportFormat
+						});
+
+					if (report != null)
+					{
+						using (Stream s = File.Create(@"C:\Users\aghisa\Desktop\andreaReport.mht"))
+						{
+							s.Write(report, 0, report.Length);
+						}
+					}
+				}
+			}
+		}
 		
 	}
 }

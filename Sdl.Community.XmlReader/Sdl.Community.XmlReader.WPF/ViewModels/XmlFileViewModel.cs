@@ -41,6 +41,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 		{
 			
 			var reportDefinition = Report.GetReportDefinition();
+			Report.GetExcelRenderer();
+
 		}
 	
 
