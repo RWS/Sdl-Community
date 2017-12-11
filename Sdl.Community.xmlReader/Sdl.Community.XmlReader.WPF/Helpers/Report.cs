@@ -20,13 +20,12 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 		private static dynamic _excelRenderer;
 		
 
-		public static dynamic GetReportDefinition()
+		private static void GetReportDefinition()
 		{
 			_reportAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.ProjectApiDll));
 			_automaticTasksAnalysisAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.AnalysidDll));
 
-			var typeReport = _reportAssembly.GetType(
-				"Sdl.ProjectApi.Reporting.ReportDefinition");
+			var typeReport = _reportAssembly.GetType(Constants.ReportDefinitionType);
 
 			var reportConstructor = typeReport.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
@@ -52,14 +51,15 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 					}
 				}
 			}
-			return _reportDefinition;
 		}
 
-		public static void GetExcelRenderer()
+		public static void GenerateExcelReport()
 		{
+			GetReportDefinition();
+
 			_xmlReportingAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.XmlReportingDll));
 
-			var reportingType = _xmlReportingAssembly.GetType("Sdl.ProjectApi.Reporting.XmlReporting.MhtReportRenderer");
+			var reportingType = _xmlReportingAssembly.GetType(Constants.ExcelReportRendererType);
 			var reportingConstructor = reportingType.GetConstructor(
 				BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
 				null, Type.EmptyTypes, null);
@@ -69,22 +69,20 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 				_excelRenderer = reportingConstructor.Invoke(new object[] { });
 
 				var reportFormat = _excelRenderer.ReportFormats[0];
-				var renderMethod = reportingType.GetMethod("RenderReport");
+				var renderMethod = reportingType.GetMethod(Constants.RenderReportMethod);
 				var content =
 					File.ReadAllText(
 						@"C:\Users\aghisa\Documents\Studio 2017\Projects\BedAndBreakfast\Reports\Analyze Files en-GB_en-AU.xml");
 				if (renderMethod != null)
 				{
-					dynamic report = renderMethod.Invoke(_excelRenderer,
+					var report = renderMethod.Invoke(_excelRenderer,
 						new[]
-						{content
-							,
-							_reportDefinition, reportFormat
-						});
+						{content,_reportDefinition, reportFormat
+						}); 
 
 					if (report != null)
 					{
-						using (Stream s = File.Create(@"C:\Users\aghisa\Desktop\andreaReport.mht"))
+						using (Stream s = File.Create(@"C:\Users\aghisa\Desktop\andreaReport.xlsx"))
 						{
 							s.Write(report, 0, report.Length);
 						}
