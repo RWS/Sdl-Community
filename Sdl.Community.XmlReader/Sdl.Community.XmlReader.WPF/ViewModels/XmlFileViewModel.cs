@@ -39,7 +39,12 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 
 		private void GenerateExcel()
 		{
-			Report.GenerateExcelReport();
+			var folderPath = new FolderSelectDialog();
+			if (folderPath.ShowDialog())
+			{
+				Report.GenerateExcelReport(folderPath.FileName);
+			}
+			
 
 		}
 	

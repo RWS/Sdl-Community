@@ -11,19 +11,19 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.XmlReader.WPF.Helpers
 {
-	public  static class Report
+	public static class Report
 	{
-		private  static Assembly _reportAssembly;
+		private static Assembly _reportAssembly;
 		private static Assembly _automaticTasksAnalysisAssembly;
 		private static Assembly _xmlReportingAssembly;
 		private static dynamic _reportDefinition;
 		private static dynamic _excelRenderer;
-		
+
 
 		private static void GetReportDefinition()
 		{
-			_reportAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.ProjectApiDll));
-			_automaticTasksAnalysisAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.AnalysidDll));
+			_reportAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation, Constants.ProjectApiDll));
+			_automaticTasksAnalysisAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation, Constants.AnalysidDll));
 
 			var typeReport = _reportAssembly.GetType(Constants.ReportDefinitionType);
 
@@ -44,7 +44,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 					using (var stream = _automaticTasksAnalysisAssembly.GetManifestResourceStream(xslResourceName))
 					{
 						_reportDefinition.Uri = _automaticTasksAnalysisAssembly.GetName().FullName;
-						var len = (int)stream.Length;
+						var len = (int) stream.Length;
 						var data = new byte[len];
 						stream.Read(data, 0, len);
 						_reportDefinition.Data = data;
@@ -53,11 +53,11 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 			}
 		}
 
-		public static void GenerateExcelReport()
+		public static void GenerateExcelReport(string folderPath)
 		{
 			GetReportDefinition();
 
-			_xmlReportingAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation,Constants.XmlReportingDll));
+			_xmlReportingAssembly = Assembly.LoadFrom(Path.Combine(Constants.StudioLocation, Constants.XmlReportingDll));
 
 			var reportingType = _xmlReportingAssembly.GetType(Constants.ExcelReportRendererType);
 			var reportingConstructor = reportingType.GetConstructor(
@@ -77,12 +77,13 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 				{
 					var report = renderMethod.Invoke(_excelRenderer,
 						new[]
-						{content,_reportDefinition, reportFormat
-						}); 
+						{
+							content, _reportDefinition, reportFormat
+						});
 
 					if (report != null)
 					{
-						using (Stream s = File.Create(@"C:\Users\aghisa\Desktop\andreaReport.xlsx"))
+						using (Stream s = File.Create(Path.Combine(folderPath, "andreaReport.xlsx")))
 						{
 							s.Write(report, 0, report.Length);
 						}
@@ -90,6 +91,6 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 				}
 			}
 		}
-		
+
 	}
 }
