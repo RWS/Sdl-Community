@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandHandler.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\Report.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -107,9 +108,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <EmbeddedResource Include="3rd party\Sdl.ProjectApi.Reporting.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
