@@ -39,8 +39,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 
 		private void GenerateExcel()
 		{
-			//var report = new Report();
-			Report.GetReportDefinition();
+			
+			var reportDefinition = Report.GetReportDefinition();
 		}
 	
 
