@@ -6,17 +6,23 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
+using Sdl.Community.XmlReader.WPF.ViewModels;
 
 namespace Sdl.Community.XmlReader.WPF
 {
     public class MultiSelectTreeView : TreeView
     {
-        public MultiSelectTreeView()
+	    private static XmlFileViewModel _xmlViewModel;
+		public MultiSelectTreeView()
         {
             GotFocus += OnTreeViewItemGotFocus;
             PreviewMouseLeftButtonDown += OnTreeViewItemPreviewMouseDown;
             PreviewMouseLeftButtonUp += OnTreeViewItemPreviewMouseUp;
         }
+		public MultiSelectTreeView(XmlFileViewModel xmlViewModel)
+		{
+			_xmlViewModel = xmlViewModel;
+		}
 
         private static TreeViewItem _selectTreeViewItemOnMouseUp;
 
@@ -115,6 +121,8 @@ namespace Sdl.Community.XmlReader.WPF
                 {
                     SelectSingleItem(treeView, treeViewItem);
                 }
+	            _xmlViewModel.IsGenerateEnabled = true;
+
             }
         }
 

@@ -99,6 +99,7 @@ namespace Sdl.Community.XmlReader.WPF.Helpers
 		
 			}
 		}
+		
 
 	}
 }

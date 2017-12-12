@@ -1,4 +1,5 @@
-﻿using Sdl.Community.XmlReader.WPF.Helpers;
+﻿using System;
+using Sdl.Community.XmlReader.WPF.Helpers;
 using Sdl.Community.XmlReader.WPF.Models;
 using Sdl.Community.XmlReader.WPF.Repository;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.XmlReader.WPF.Annotations;
 
@@ -15,11 +17,18 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 	{
 		private ICommand _clearCommand;
 		private ICommand _generateExcelCommand;
+		private string _messageVisibility;
+		private bool _isGenerateEnabled;
+		private bool _isClearEnabled;
+
 		public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
 
 
 		public XmlFileViewModel(List<TargetLanguageCode> codes)
 		{
+			MessageVisibility = "Hidden";
+			IsGenerateEnabled = false;
+			IsClearEnabled = false;
 			if (codes == null)
 			{
 				XmlFiles = new ObservableCollection<TargetLanguageCodeViewModel>();
@@ -31,20 +40,67 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 			}
 		}
 
+		public string MessageVisibility
+		{
+			get => _messageVisibility;
+			set
+			{
+				if (Equals(value, _messageVisibility))
+				{
+					return;
+					
+				}
+				_messageVisibility = value;
+				OnPropertyChanged();
+			}
+		}
+		public bool IsGenerateEnabled
+		{
+			get => _isGenerateEnabled;
+			set
+			{
+				if (Equals(value, _isGenerateEnabled))
+				{
+					return;
+
+				}
+				_isGenerateEnabled = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public bool IsClearEnabled
+		{
+			get => _isClearEnabled;
+			set
+			{
+				if (Equals(value, _isClearEnabled))
+				{
+					return;
+
+				}
+				_isClearEnabled = value;
+				OnPropertyChanged();
+			}
+		}
 
 		public ICommand ClearCommand => _clearCommand ?? (_clearCommand = new CommandHandler(ResetLists, true));
 
 		public ICommand GenerateExcelCommand => _generateExcelCommand ??
 		                                        (_generateExcelCommand = new CommandHandler(GenerateExcel, true));
 
-		private void GenerateExcel()
+		private async void GenerateExcel()
 		{
 			var folderPath = new FolderSelectDialog();
 			if (folderPath.ShowDialog())
 			{
 				var selectedItems = XmlFiles.Where(f => f.IsSelected).ToList();
-				Report.GenerateExcelReport(folderPath.FileName, selectedItems);
+				MessageVisibility = "Visible";
+				await Task.Run(()=> Report.GenerateExcelReport(folderPath.FileName, selectedItems));
+				MessageVisibility = "Hidden";
+
 			}
+			
 		}
 
 	public void AddFile(string filePath)
@@ -91,7 +147,9 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
         {
 			XmlFiles.Clear();
 	        XmlFilesRepository.ResetLanguageCodes();
-		}
+	        IsClearEnabled = false;
+	        IsGenerateEnabled = false;
+        }
 
 		public event PropertyChangedEventHandler PropertyChanged;
 

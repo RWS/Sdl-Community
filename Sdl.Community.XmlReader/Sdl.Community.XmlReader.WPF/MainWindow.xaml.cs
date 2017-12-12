@@ -16,10 +16,12 @@ namespace Sdl.Community.XmlReader.WPF
         public MainWindow()
         {
             InitializeComponent();
-            WindowStartupLocation = WindowStartupLocation.CenterScreen;
+	       
+			WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             _viewModel = new XmlFileViewModel(null);
-            DataContext = _viewModel;
+	        var multiSelect = new MultiSelectTreeView(_viewModel);
+		   DataContext = _viewModel;
         }
 
         public void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -44,6 +46,7 @@ namespace Sdl.Community.XmlReader.WPF
 		        {
 			        _viewModel.AddFile(filePath);
 		        }
+		        _viewModel.IsClearEnabled = true;
 	        }
         }
 
