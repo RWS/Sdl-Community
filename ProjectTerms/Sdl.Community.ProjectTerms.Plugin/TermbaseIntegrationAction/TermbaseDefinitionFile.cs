@@ -135,6 +135,9 @@ namespace Sdl.Community.ProjectTerms.Plugin.TermbaseIntegrationAction
 					nodeLanguage.SetAttribute("lang", languages[language]);
 					nodeLanguageGrp.AppendChild(nodeLanguage);
 
+					var termGrp = doc.CreateElement("termGrp");
+					nodeLanguageGrp.AppendChild(termGrp);
+
 					conceptGrpTag.AppendChild(nodeLanguageGrp);
 				}
 
