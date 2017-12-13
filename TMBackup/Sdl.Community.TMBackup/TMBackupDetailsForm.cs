@@ -26,8 +26,6 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm()
 		{
 			InitializeComponent();
-
-			BackupDetails = InitializeBackupDetails();
 		}
 		#endregion
 
@@ -63,59 +61,7 @@ namespace Sdl.Community.TMBackup
 				GetBackupDetailsInfo();
 			}
 		}
-
-		private void btn_Reset_Click(object sender, EventArgs e)
-		{
-			dataGridView1.DataSource = BackupDetails;
-		}
-
-		private void btn_DownArrow_Click(object sender, EventArgs e)
-		{			
-			var rowList = AddRowsToList();
-			if (rowList != null)
-			{
-				// check if selected row is the last row with values from the grid
-				var index = dataGridView1.SelectedCells[0].OwningRow.Index;
-				if (index == dataGridView1.Rows.Count - 2)
-				{
-					return;
-				}
-
-				// move selected row down
-				var nextRow = rowList[index + 1];
-				rowList.Remove(nextRow);
-				rowList.Insert(index, nextRow);
-
-				AddRowsInformation(rowList);
-
-				dataGridView1.Rows[index + 1].Selected = true;
-				dataGridView1.CurrentCell = dataGridView1.Rows[index + 1].Cells[0];
-			}
-		}
-
-		private void btn_UpArrow_Click(object sender, EventArgs e)
-		{		
-			var rowList = AddRowsToList();
-			if (rowList != null)
-			{
-				var index = dataGridView1.SelectedCells[0].OwningRow.Index;
-				if (index == 0)
-				{
-					return;
-				}
-
-				// move selected row up
-				var prevRow = rowList[index - 1];
-				rowList.Remove(prevRow);
-				rowList.Insert(index, prevRow);
-
-				AddRowsInformation(rowList);
-							
-				dataGridView1.Rows[index - 1].Selected = true;
-				dataGridView1.CurrentCell = dataGridView1.Rows[index - 1].Cells[0];
-			}
-		}
-
+		
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
 
