@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupForm));
             this.txt_BackupFrom = new System.Windows.Forms.TextBox();
             this.btn_BackupFrom = new System.Windows.Forms.Button();
             this.btn_BackupTo = new System.Windows.Forms.Button();
@@ -46,6 +47,8 @@
             this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
             this.lbl_Line2 = new System.Windows.Forms.Label();
             this.lbl_Line1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // txt_BackupFrom
@@ -245,11 +248,21 @@
             this.lbl_Line1.Size = new System.Drawing.Size(654, 2);
             this.lbl_Line1.TabIndex = 27;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(2, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(39, 39);
+            this.pictureBox1.TabIndex = 28;
+            this.pictureBox1.TabStop = false;
+            // 
             // TMBackupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(627, 394);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lbl_Line1);
             this.Controls.Add(this.lbl_Line2);
             this.Controls.Add(this.txt_Description);
@@ -272,6 +285,7 @@
             this.Name = "TMBackupForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "New backup";
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -296,5 +310,6 @@
 		private System.Windows.Forms.Label lbl_BackupFileDesc;
 		private System.Windows.Forms.Label lbl_Line2;
 		private System.Windows.Forms.Label lbl_Line1;
+		private System.Windows.Forms.PictureBox pictureBox1;
 	}
 }
