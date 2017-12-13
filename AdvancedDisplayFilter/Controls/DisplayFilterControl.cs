@@ -20,9 +20,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
     {
         #region  |  Delegates  |
 
-        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings,FilteredCountsCallback result);
+        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings,bool reverse,FilteredCountsCallback result);
         public event OnApplyFilterHandler OnApplyDisplayFilter;
-
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
         #endregion
 
@@ -54,7 +53,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					EvenNo = evenBtn.Checked,
 					Grouped = groupedBtn.Checked,
 					UseRegexCommentSearch = commentRegexBox.Checked,
-					RevertSerach = reverseBox.Checked,
 					Colors = new List<string>(),
 					FuzzyMin = fuzzyMin.Text,
 					FuzzyMax = fuzzyMax.Text,
@@ -366,7 +364,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        fuzzyMax.Text = string.Empty;
 	        splitCheckBox.Checked = false;
 	        mergedCheckbox.Checked = false;
-	        reverseBox.Checked = false;
 	        commentRegexBox.Checked = false;
 	        sourceSameBox.Checked = false;
 	        equalsCaseSensitive.Checked = false;
@@ -552,19 +549,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		    }
 	    }
 
-	    public void ApplyFilter()
+	    public void ApplyFilter(bool reverseSearch)
 	    {
 		    if (OnApplyDisplayFilter != null)
 		    {
 			    var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
-			    OnApplyDisplayFilter(DisplayFilterSettings, CustomFilter, result);
+			    OnApplyDisplayFilter(DisplayFilterSettings, CustomFilter, reverseSearch,result);
 		    }
 	    }
 
 	    public void ClearFilter()
         {
             InitializeSettings();
-            ApplyFilter();
+            ApplyFilter(false);
         }
 
         public void SaveFilter()
@@ -602,7 +599,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 // deserialize the to the settings xml
                 DisplayFilterSettings = DisplayFilterSerializer.DeserializeSettings<DisplayFilterSettings>(settingsXml);
 
-                ApplyFilter();
+                ApplyFilter(false);
             }
             catch (Exception ex)
             {
@@ -645,12 +642,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
-        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings,FilteredCountsCallback result)
+        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings,bool reverse,FilteredCountsCallback result)
         {
             if (ActiveDocument == null)
                 return;
 
-            DisplayFilter = new DisplayFilter(displayFilterSettings,customFilterSettings, ActiveDocument);
+            DisplayFilter = new DisplayFilter(displayFilterSettings,customFilterSettings, reverse,ActiveDocument);
 			ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
 
             result.Invoke(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
@@ -794,12 +791,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" +
 			                                        CustomFilter.Grouped + "\"");
-		        }
-
-		        if (CustomFilter.RevertSerach)
-		        {
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_ReverseSearch + ":\"" +
-			                                        CustomFilter.RevertSerach + "\"");
 		        }
 
 		        if (CustomFilter.UseRegexCommentSearch)
@@ -1322,7 +1313,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         #region  |  ToolbarStrip events  |
         private void toolStripButton_applyFilter_Click(object sender, EventArgs e)
         {
-            ApplyFilter();
+            ApplyFilter(false);
         }
 
         private void toolStripButton_clearFilter_Click(object sender, EventArgs e)
@@ -1345,13 +1336,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private void textBox_source_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 
         private void textBox_target_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 
         private void textBox_source_TextChanged(object sender, EventArgs e)
@@ -1412,13 +1403,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private void textBox_commentText_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 
         private void textBox_commentAuthor_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 		
         private void textBox_commentText_TextChanged(object sender, EventArgs e)
@@ -1587,6 +1578,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private void fuzzyMax_TextChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void reverseBtn_Click(object sender, EventArgs e)
+		{
+			ApplyFilter(true);
 		}
 	}
 }

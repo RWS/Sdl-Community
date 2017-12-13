@@ -142,7 +142,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_source.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 24</value>
+    <value>44, 24</value>
   </data>
   <data name="label_source.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
@@ -169,13 +169,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="textBox_source.Location" type="System.Drawing.Point, System.Drawing">
-    <value>129, 38</value>
+    <value>52, 38</value>
   </data>
   <data name="textBox_source.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_source.Size" type="System.Drawing.Size, System.Drawing">
-    <value>638, 20</value>
+    <value>715, 20</value>
   </data>
   <data name="textBox_source.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -241,7 +241,7 @@
     <value>2, 0, 2, 0</value>
   </data>
   <data name="label_target.Size" type="System.Drawing.Size, System.Drawing">
-    <value>121, 24</value>
+    <value>44, 24</value>
   </data>
   <data name="label_target.TabIndex" type="System.Int32, mscorlib">
     <value>4</value>
@@ -268,13 +268,13 @@
     <value>Top, Bottom, Left, Right</value>
   </data>
   <data name="textBox_target.Location" type="System.Drawing.Point, System.Drawing">
-    <value>129, 62</value>
+    <value>52, 62</value>
   </data>
   <data name="textBox_target.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>2, 2, 2, 2</value>
   </data>
   <data name="textBox_target.Size" type="System.Drawing.Size, System.Drawing">
-    <value>638, 20</value>
+    <value>715, 20</value>
   </data>
   <data name="textBox_target.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -360,33 +360,6 @@
   <data name="&gt;&gt;label_tab_content_filter_message.ZOrder" xml:space="preserve">
     <value>6</value>
   </data>
-  <data name="reverseBox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="reverseBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 145</value>
-  </data>
-  <data name="reverseBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>119, 17</value>
-  </data>
-  <data name="reverseBox.TabIndex" type="System.Int32, mscorlib">
-    <value>9</value>
-  </data>
-  <data name="reverseBox.Text" xml:space="preserve">
-    <value>Reverse the search</value>
-  </data>
-  <data name="&gt;&gt;reverseBox.Name" xml:space="preserve">
-    <value>reverseBox</value>
-  </data>
-  <data name="&gt;&gt;reverseBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;reverseBox.Parent" xml:space="preserve">
-    <value>tableLayoutPanel1</value>
-  </data>
-  <data name="&gt;&gt;reverseBox.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
   <data name="tableLayoutPanel1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -421,7 +394,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="5" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_target" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="reverseBox" Row="6" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,10,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="label_source" Row="1" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_source" Row="1" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_caseSensitive" Row="5" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_target" Row="2" RowSpan="1" Column="0" ColumnSpan="1" /&gt;&lt;Control Name="textBox_target" Row="2" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="checkBox_regularExpression" Row="4" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;Control Name="label_tab_content_filter_message" Row="0" RowSpan="1" Column="0" ColumnSpan="2" /&gt;&lt;/Controls&gt;&lt;Columns Styles="AutoSize,0,AutoSize,0" /&gt;&lt;Rows Styles="Absolute,32,Absolute,24,Absolute,24,Absolute,10,Absolute,24,Absolute,24,AutoSize,0" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="tabPage_content.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -2084,7 +2057,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAdQBBAHUAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAdwBBAHcAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2332,6 +2305,31 @@
   </data>
   <data name="toolStripButton_loadFilter.ToolTipText" xml:space="preserve">
     <value>Load filter settings</value>
+  </data>
+  <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI4SURBVEhLvZTfS1NhGMffwgsvUqFACIzwP+hPELoI0266
+        yJY7Ozun469pXWn70fAIBzZ3MYbuOMXjlTTIFnNFIF3kpTEHK6QlXeRFiNRF7kK6dHa++izO5jvdnPaB
+        L3je5/l+3u3AZP+LS6qqdjwbHdVcrqGkokgZSXRsSE7xi1MUc4goOg5TfMYMO9hFB1044DpSEhjYeh78
+        9Ho8mXg8/iqbzUb/7O1phUJBrSbYRQddOOCCk/SMdXfd3Zcl8Ucul4vwBLUEDrjgJD1j97q79s0cILaH
+        Pb+fjAx/VcfH1yLh8HvDmF82P9lSMvn6xZtUahHB3zjDDDvYRQfdogdO0jPmdAiblsG5BE7SM6ZpWnvv
+        I9s2b/EsgQtO0h/h8/muC0Lvd16hlsABF2lLCQQC1+p5XejCQTo+oVCoSZblTzzBSUEHXdKcjPljaexT
+        Hq/xRLxgFx2qV4dZaBjo7//AE1qDHexSrTbM4uVh1+BbnhjBDDu0XsIV3e5v1oWNRl2+SUeVURQ5XS7H
+        GY2P0azb1ZYZxwHSpAtbdFwZ99iYv/wCnNG4BKu8+gvcbg+kz33e9XQ6PbNgGCltYmKIxv/gyat6Rbgg
+        puvv8M9sMpN6mf21Fc7n87dofMiZ5SAYDCqQCyvRVZRvGAO70c8rd2hcnxwkEonOjzvfIlZJ65y0DUnd
+        clD+DSyy3bLn2uXA7/XaZ2OxZfOSp7cT6qJVWrecx7m8ltMoXnIh8iIt0877V6eUNnqsAGN/AbqCptON
+        3cHkAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="reverseBtn.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="reverseBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="reverseBtn.Text" xml:space="preserve">
+    <value>Reverse Filter</value>
   </data>
   <data name="toolStrip_filter.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 0</value>
@@ -2780,6 +2778,12 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;reverseBtn.Name" xml:space="preserve">
+    <value>reverseBtn</value>
+  </data>
+  <data name="&gt;&gt;reverseBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>

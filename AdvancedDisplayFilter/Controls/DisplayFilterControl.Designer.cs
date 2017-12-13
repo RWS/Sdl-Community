@@ -43,7 +43,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.textBox_target = new System.Windows.Forms.TextBox();
 			this.checkBox_regularExpression = new System.Windows.Forms.CheckBox();
 			this.label_tab_content_filter_message = new System.Windows.Forms.Label();
-			this.reverseBox = new System.Windows.Forms.CheckBox();
 			this.tabPage_filters = new System.Windows.Forms.TabPage();
 			this.panel8 = new System.Windows.Forms.Panel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -124,6 +123,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -195,7 +195,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel1.Controls.Add(this.textBox_target, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.checkBox_regularExpression, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.label_tab_content_filter_message, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.reverseBox, 0, 6);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			// 
 			// label_source
@@ -243,13 +242,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label_tab_content_filter_message, "label_tab_content_filter_message");
 			this.tableLayoutPanel1.SetColumnSpan(this.label_tab_content_filter_message, 2);
 			this.label_tab_content_filter_message.Name = "label_tab_content_filter_message";
-			// 
-			// reverseBox
-			// 
-			resources.ApplyResources(this.reverseBox, "reverseBox");
-			this.reverseBox.Name = "reverseBox";
-			this.reverseBox.UseVisualStyleBackColor = true;
-			this.reverseBox.CheckedChanged += new System.EventHandler(this.reverseBox_CheckedChanged);
 			// 
 			// tabPage_filters
 			// 
@@ -695,7 +687,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.toolStripButton_clearFilter,
             this.toolStripSeparator1,
             this.toolStripButton_saveFilter,
-            this.toolStripButton_loadFilter});
+            this.toolStripButton_loadFilter,
+            this.reverseBtn});
 			resources.ApplyResources(this.toolStrip_filter, "toolStrip_filter");
 			this.toolStrip_filter.Name = "toolStrip_filter";
 			// 
@@ -793,6 +786,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+			// 
+			// reverseBtn
+			// 
+			resources.ApplyResources(this.reverseBtn, "reverseBtn");
+			this.reverseBtn.Name = "reverseBtn";
+			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
 			// 
 			// DisplayFilterControl
 			// 
@@ -920,7 +919,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private ContextMenuStrip contextMenuStrip1;
 		private Label label1;
 		private CheckBox commentRegexBox;
-		private CheckBox reverseBox;
 		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
 		private TabPage tabPage_Colors;
 		private TableLayoutPanel colorLayoutPanel;
@@ -937,5 +935,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private TextBox fuzzyMin;
 		private Label label4;
 		private Label label3;
+		private ToolStripButton reverseBtn;
 	}
 }
