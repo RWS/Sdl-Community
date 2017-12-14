@@ -11,7 +11,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string GroupedList { get; set; }
 		public bool UseRegexCommentSearch { get; set; }
 		public string CommentRegex { get; set; }
-		public string RevertRegex { get; set; }
+		public bool Unique { get; set; }
 		public List<string> Colors { get; set; }
 		public string FuzzyMin { get; set; }
 		public string FuzzyMax { get; set; }

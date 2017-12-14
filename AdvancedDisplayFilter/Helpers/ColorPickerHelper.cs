@@ -13,6 +13,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public static bool ContainsColor(DisplayFilterRowInfo rowInfo, List<string> colorsCode)
 		{
+			
 			_selectedColorsCode = colorsCode;
 			var visitor = new TagDataVisitor();
 			var colorCodes = visitor.GetTagsColorCode(rowInfo.SegmentPair.Source);

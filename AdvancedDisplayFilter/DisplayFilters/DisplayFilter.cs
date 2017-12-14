@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
 using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
@@ -69,10 +71,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
 					success = rowInfo.IsPreviousOriginTypeFound(Settings);
 
-
+				//aici primesc false
 				if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
-					success = rowInfo.IsRepetitionTypes(Settings);
-
+				{
+					if (!Settings.RepetitionTypes.Contains("Unique"))
+					{
+						success = rowInfo.IsRepetitionTypes(Settings);
+					}
+					
+				}
 
 				if (success && Settings.SegmentLockingTypes != null && Settings.SegmentLockingTypes.Any())
 					success = rowInfo.IsSegmentLockingTypes(Settings);
@@ -142,7 +149,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.Colors.Count > 0)
 				{
-					success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
+					try
+					{
+						success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
+					}catch(Exception e) { }
 				}
 
 				//fuzzy
@@ -152,7 +162,33 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 					success = FuzzyHelper.IsInFuzzyRange(rowInfo, CustomSettings.FuzzyMin, CustomSettings.FuzzyMax);
 
 				}
+				//unique 
+				if (success && CustomSettings.Unique)
+				{
+					
+					var settings =new DisplayFilterSettings
+					{
+						RepetitionTypes = new List<string>
+						{
+							"FirstOccurrences"
+						}
+				};
+					
+					var isFirst = rowInfo.IsRepetitionsFirstOccurrences(settings);
+					if (isFirst)
+					{
+					return true;
+					}
 
+					var isRepeted = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
+
+					if (!isRepeted)
+					{
+						return true;
+					}
+
+					return false;
+				}
 			}
 			return success;
 		}
@@ -248,7 +284,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			}
 			if (!success && CustomSettings.Colors.Count > 0)
 			{
-				success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
+				try
+				{
+					success = ColorPickerHelper.ContainsColor(rowInfo, CustomSettings.Colors);
+				}catch(Exception e) { }
 			}
 
 			//fuzzy

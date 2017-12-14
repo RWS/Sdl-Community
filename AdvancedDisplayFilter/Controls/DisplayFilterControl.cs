@@ -23,6 +23,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings,bool reverse,FilteredCountsCallback result);
         public event OnApplyFilterHandler OnApplyDisplayFilter;
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
+
+	    private bool _uniqueSegments = false;
         #endregion
 
         #region  |  Properties  |
@@ -59,7 +61,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					SplitSegments = splitCheckBox.Checked,
 					MergedSegments = mergedCheckbox.Checked,
 					SourceEqualsTarget = sourceSameBox.Checked,
-					IsEqualsCaseSensitive = equalsCaseSensitive.Checked
+					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
+					Unique = _uniqueSegments
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -367,6 +370,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        commentRegexBox.Checked = false;
 	        sourceSameBox.Checked = false;
 	        equalsCaseSensitive.Checked = false;
+	        _uniqueSegments = false;
 			colorsListView.SelectedItems.Clear();
 #endregion
 
@@ -403,7 +407,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Tag = type;
                 }
 
-                foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
+				//unique 
+	            var unique = listView_available.Items.Add("Unique Occurrences");
+				unique.Group = GroupRepetitionTypesAvailable;
+	            unique.Tag = "Unique";
+
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
                 {
                     var item =
                         listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.SegmentReviewType)type));
@@ -515,20 +524,24 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    }
 	    private void PopulateColorList()
 	    {
-		    AvailableColorsList.Clear();
-			foreach (var segmentPair in ActiveDocument.SegmentPairs)
+		    try
 		    {
-			    var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
-			    foreach (var color in colorCodesList)
+			    AvailableColorsList.Clear();
+			    foreach (var segmentPair in ActiveDocument.SegmentPairs)
 			    {
-				    AddColor(color);
+				    var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
+				    foreach (var color in colorCodesList)
+				    {
+					    AddColor(color);
+				    }
+				    if (colorCodesList.Count > 0) continue;
+				    var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
+				    var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
+				    AddColor(colorCode);
 			    }
-			    if (colorCodesList.Count > 0) continue;
-			    var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
-			    var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
-			    AddColor(colorCode);
-		    }
-		    SetAddColorsToListView();
+			    SetAddColorsToListView();
+		    }catch(Exception e) { }
+
 	    }
 
 	    private void SetAddColorsToListView()
@@ -707,12 +720,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((OriginType)Enum.Parse(
                         typeof(OriginType), item, true))) + ")");
 
-            if (DisplayFilterSettings.RepetitionTypes.Any())
-                filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
-                    + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
-                    + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
-                        typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
+            //if (DisplayFilterSettings.RepetitionTypes.Any())
+            //    filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
+            //        + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
+            //        + (current != string.Empty ? " " + "|" + " " : string.Empty)
+            //        + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
+            //            typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
 
             if (DisplayFilterSettings.SegmentReviewTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Review + ":"
@@ -1371,13 +1384,35 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         private void button_add_Click(object sender, EventArgs e)
         {
-            MoveSelectedListViewItem(listView_available, listView_selected);
+	        var isSelected =IsUniqueSelected();
+	        if (isSelected)
+	        {
+		        _uniqueSegments = true;
+	        }
+			MoveSelectedListViewItem(listView_available, listView_selected);
             InvalidateIconsFilterEdited(tabPage_filters);
         }
 
+	    private bool IsUniqueSelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("Unique"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
         private void button_remove_Click(object sender, EventArgs e)
         {
-            MoveSelectedListViewItem(listView_selected, listView_available);
+	        var isSelected = IsUniqueSelected();
+	        if (isSelected)
+	        {
+		        _uniqueSegments = false;
+	        }
+			MoveSelectedListViewItem(listView_selected, listView_available);
             InvalidateIconsFilterEdited(tabPage_filters);
         }
 
