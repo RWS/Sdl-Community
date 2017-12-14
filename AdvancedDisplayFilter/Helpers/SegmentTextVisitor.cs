@@ -47,7 +47,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-
+			//foreach (var subItem in tagPair.AllSubItems)
+			//{
+			//	var test = subItem;
+			//}
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)

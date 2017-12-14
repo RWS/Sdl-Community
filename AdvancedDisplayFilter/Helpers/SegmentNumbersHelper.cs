@@ -207,12 +207,16 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public static bool IsSourceEqualsToTarget(ISegmentPair segmentPair,bool caseSensitive)
 		{
-			var textVisitor = new SegmentTextVisitor();
-			var sourceText = textVisitor.GetText(segmentPair.Source);
-			var targetText = textVisitor.GetText(segmentPair.Target);
+			if (segmentPair.Source.ToString() != string.Empty && segmentPair.Target.ToString() != string.Empty)
+			{
+				var textVisitor = new SegmentTextVisitor();
+				var sourceText = textVisitor.GetText(segmentPair.Source);
+				var targetText = textVisitor.GetText(segmentPair.Target);
 
-			var isEqual = string.Compare(sourceText,targetText,!caseSensitive);
-			return isEqual.Equals(0);
+				var isEqual = string.Compare(sourceText, targetText, !caseSensitive);
+				return isEqual.Equals(0);
+			}
+			return false;
 		}
 	}
 }
