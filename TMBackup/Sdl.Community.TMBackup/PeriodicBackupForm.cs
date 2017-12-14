@@ -27,9 +27,9 @@ namespace Sdl.Community.TMBackup
 			timePicker_At.ShowUpDown = true;
 		}
 
-	    private void btn_Close_Click(object sender, EventArgs e)
+		private void btn_Close_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void btn_Set_Click(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			persistence.SavePeriodicBackupInfo(periodicBackupModel);
 
-			this.Close();
+			Close();
 		}
 
 		private void btn_Now_Click(object sender, EventArgs e)

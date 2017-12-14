@@ -19,7 +19,6 @@ namespace Sdl.Community.TMBackup
 		#region Public properties
 		public static string BackupDetailsInfo { get; set; }
 
-		public List<BackupDetailsModel> BackupDetails { get; }
 		#endregion
 		
 		#region Constructors
@@ -27,7 +26,7 @@ namespace Sdl.Community.TMBackup
 		{
 			InitializeComponent();
 
-			BackupDetails = InitializeBackupDetails();
+			InitializeBackupDetails();
 		}
 		#endregion
 
@@ -63,21 +62,19 @@ namespace Sdl.Community.TMBackup
 				GetBackupDetailsInfo();
 			}
 		}
-		
+
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
-
 			foreach (var backupDetailModel in _backupDetailsModelList)
 			{
 				BackupDetailsInfo = BackupDetailsInfo + backupDetailModel.BackupAction + ", " + backupDetailModel.BackupType + ", " + backupDetailModel.BackupPattern + "; ";
 			}
-
-			this.Close();
+			Close();
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void dataGridView1_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
@@ -221,9 +218,8 @@ namespace Sdl.Community.TMBackup
 			dataGridView1.ClearSelection();
 		}
 
-		// Method used in the Reset functionality (the GetBackupDetailsInfo() cannot be used in this case,
-		// because the dataGridView1.DataSource will be always the one depending on the selection and the Reset will not be work correctly anymore.
-		private List<BackupDetailsModel> InitializeBackupDetails()
+		// Initizialize the Backup Details grid when opening with exiting data from json
+		private void  InitializeBackupDetails()
 		{
 			Persistence persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
@@ -236,7 +232,6 @@ namespace Sdl.Community.TMBackup
 
 				dataGridView1.DataSource = request.BackupDetailsModelList;
 			}
-			return request.BackupDetailsModelList;
 		}
 		#endregion
 	}
