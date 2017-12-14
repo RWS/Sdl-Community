@@ -64,7 +64,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
 		{
-			this.Close();
+			Close();
 		}
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
@@ -79,7 +79,7 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			persistence.SaveBackupFormInfo(backupModel);
 
-			this.Close();
+			Close();
 
 			Service service = new Service();
 			service.CreateTaskScheduler();

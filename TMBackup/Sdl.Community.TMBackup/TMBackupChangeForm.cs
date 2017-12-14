@@ -58,7 +58,7 @@ namespace Sdl.Community.TMBackup
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
 			GetBackupTimeInfo();
-			this.Close();
+			Close();
 		}
 
 		public string GetBackupTimeInfo()
