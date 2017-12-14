@@ -16,8 +16,10 @@ namespace Sdl.Community.TMBackup
 			SetDateTimeFormat();
 
 			InitializeFormData();
-		}	
-		
+
+			SetDateTimeValue();
+		}
+
 		private void SetDateTimeFormat()
 		{
 			timePicker_At.Format = DateTimePickerFormat.Custom;
@@ -46,10 +48,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Now_Click(object sender, EventArgs e)
 		{
-			dateTimePicker_FirstBackup.Value = DateTime.Now;
-
-			var currentDate = DateTime.Now;
-			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
+			SetDateTimeValue();
 		}
 
 		private void InitializeFormData()
@@ -66,6 +65,14 @@ namespace Sdl.Community.TMBackup
 				dateTimePicker_FirstBackup.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.FirstBackup : DateTime.Now;
 				timePicker_At.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : string.Empty;
 			}
+		}
+
+		private void SetDateTimeValue()
+		{
+			dateTimePicker_FirstBackup.Value = DateTime.Now;
+
+			var currentDate = DateTime.Now;
+			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
 		}
 	}
 }
