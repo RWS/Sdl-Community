@@ -32,11 +32,6 @@ namespace Sdl.Community.BackupService
 				TaskDefinition td = TaskService.Instance.NewTask();
 				td.RegistrationInfo.Description = "Backup files";
 
-				if (jsonRequestModel.ChangeSettingsModel.IsRealTimeOptionChecked && jsonRequestModel.RealTimeBackupModel != null)
-				{
-					AddRealTimeScheduler(jsonRequestModel, startDate, td, tr);
-				}
-
 				if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
 				{
 					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr);
@@ -65,63 +60,30 @@ namespace Sdl.Community.BackupService
 				}
 			}
 		}
-
-		// Add real time scheduler for options: seconds, minutes, hours.
-		private void AddRealTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
-		{
-			tr.StartBoundary = startDate;
-			
-			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-			{
-				tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-				AddTrigger(tr, td);
-			}
-
-			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-			{
-				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-				AddTrigger(tr, td);				
-			}
-
-			if (jsonRequestModel.RealTimeBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-			{
-				tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.RealTimeBackupModel.BackupInterval);
-				AddTrigger(tr, td);				
-			}
-		}
-
+		
 		// Add periodic time scheduler depending on user setup.
 		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
 		{
-			// Ask Paul if is needed anymore the run and wait option because the task knows to start automatically.
-			//if (jsonRequestModel.PeriodicBackupModel.IsRunOption)
-			//{
-			//	tr.StartBoundary = DateTime.Now;
-			//	AddTrigger(tr, td);
-			//}
-			//else
-			//{
-				DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
-				tr.StartBoundary = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
+			DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+			tr.StartBoundary = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
-				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
-				{
-					tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-					AddTrigger(tr, td);
-				}
+			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			{
+				tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+				AddTrigger(tr, td);
+			}
 
-				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-				{
-					tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-					AddTrigger(tr, td);
-				}
+			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+			{
+				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+				AddTrigger(tr, td);
+			}
 
-				if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-				{
-					tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-					AddTrigger(tr, td);				
-				}
-			//}
+			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
+			{
+				tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
+				AddTrigger(tr, td);
+			}
 		}
 	}
 }

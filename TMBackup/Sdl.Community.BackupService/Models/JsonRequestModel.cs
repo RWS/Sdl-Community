@@ -11,7 +11,5 @@ namespace Sdl.Community.BackupService.Models
 		public ChangeSettingsModel ChangeSettingsModel { get; set; }
 
 		public PeriodicBackupModel PeriodicBackupModel { get; set; }
-
-		public RealTimeBackupModel RealTimeBackupModel { get; set; }
 	}
 }

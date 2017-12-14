@@ -29,7 +29,6 @@
 		private void InitializeComponent()
 		{
             this.txt_Schedule = new System.Windows.Forms.TextBox();
-            this.txtBox_MissedBackups = new System.Windows.Forms.TextBox();
             this.lbl_BackupInterval = new System.Windows.Forms.Label();
             this.lbl_FirstBackup = new System.Windows.Forms.Label();
             this.txtBox_TimeInterval = new System.Windows.Forms.TextBox();
@@ -38,9 +37,6 @@
             this.lbl_At = new System.Windows.Forms.Label();
             this.timePicker_At = new System.Windows.Forms.DateTimePicker();
             this.btn_Now = new System.Windows.Forms.Button();
-            this.lbl_BackupDescription = new System.Windows.Forms.Label();
-            this.radioBtn_RunOption = new System.Windows.Forms.RadioButton();
-            this.radioBtn_WaitOption = new System.Windows.Forms.RadioButton();
             this.lbl_Line = new System.Windows.Forms.Label();
             this.btn_Set = new System.Windows.Forms.Button();
             this.btn_Close = new System.Windows.Forms.Button();
@@ -55,16 +51,6 @@
             this.txt_Schedule.Size = new System.Drawing.Size(537, 20);
             this.txt_Schedule.TabIndex = 0;
             this.txt_Schedule.Text = "Schedule";
-            // 
-            // txtBox_MissedBackups
-            // 
-            this.txtBox_MissedBackups.BackColor = System.Drawing.Color.LightGray;
-            this.txtBox_MissedBackups.Location = new System.Drawing.Point(12, 128);
-            this.txtBox_MissedBackups.Name = "txtBox_MissedBackups";
-            this.txtBox_MissedBackups.ReadOnly = true;
-            this.txtBox_MissedBackups.Size = new System.Drawing.Size(537, 20);
-            this.txtBox_MissedBackups.TabIndex = 1;
-            this.txtBox_MissedBackups.Text = "Missed backups";
             // 
             // lbl_BackupInterval
             // 
@@ -133,49 +119,17 @@
             this.btn_Now.UseVisualStyleBackColor = true;
             this.btn_Now.Click += new System.EventHandler(this.btn_Now_Click);
             // 
-            // lbl_BackupDescription
-            // 
-            this.lbl_BackupDescription.AutoSize = true;
-            this.lbl_BackupDescription.Location = new System.Drawing.Point(12, 163);
-            this.lbl_BackupDescription.Name = "lbl_BackupDescription";
-            this.lbl_BackupDescription.Size = new System.Drawing.Size(521, 13);
-            this.lbl_BackupDescription.TabIndex = 10;
-            this.lbl_BackupDescription.Text = "If the backup misses its scheduled run (for example, because its beckup drive was" +
-    "n\'t present), then it should :";
-            // 
-            // radioBtn_RunOption
-            // 
-            this.radioBtn_RunOption.AutoSize = true;
-            this.radioBtn_RunOption.Location = new System.Drawing.Point(28, 191);
-            this.radioBtn_RunOption.Name = "radioBtn_RunOption";
-            this.radioBtn_RunOption.Size = new System.Drawing.Size(194, 17);
-            this.radioBtn_RunOption.TabIndex = 11;
-            this.radioBtn_RunOption.TabStop = true;
-            this.radioBtn_RunOption.Text = "Run as soon as it becomes possible";
-            this.radioBtn_RunOption.UseVisualStyleBackColor = true;
-            // 
-            // radioBtn_WaitOption
-            // 
-            this.radioBtn_WaitOption.AutoSize = true;
-            this.radioBtn_WaitOption.Location = new System.Drawing.Point(28, 214);
-            this.radioBtn_WaitOption.Name = "radioBtn_WaitOption";
-            this.radioBtn_WaitOption.Size = new System.Drawing.Size(251, 17);
-            this.radioBtn_WaitOption.TabIndex = 12;
-            this.radioBtn_WaitOption.TabStop = true;
-            this.radioBtn_WaitOption.Text = "Wait until next scheduled time and run only then";
-            this.radioBtn_WaitOption.UseVisualStyleBackColor = true;
-            // 
             // lbl_Line
             // 
             this.lbl_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbl_Line.Location = new System.Drawing.Point(-2, 248);
+            this.lbl_Line.Location = new System.Drawing.Point(-3, 149);
             this.lbl_Line.Name = "lbl_Line";
             this.lbl_Line.Size = new System.Drawing.Size(588, 2);
             this.lbl_Line.TabIndex = 13;
             // 
             // btn_Set
             // 
-            this.btn_Set.Location = new System.Drawing.Point(393, 267);
+            this.btn_Set.Location = new System.Drawing.Point(378, 171);
             this.btn_Set.Name = "btn_Set";
             this.btn_Set.Size = new System.Drawing.Size(75, 23);
             this.btn_Set.TabIndex = 14;
@@ -185,7 +139,7 @@
             // 
             // btn_Close
             // 
-            this.btn_Close.Location = new System.Drawing.Point(474, 267);
+            this.btn_Close.Location = new System.Drawing.Point(474, 171);
             this.btn_Close.Name = "btn_Close";
             this.btn_Close.Size = new System.Drawing.Size(75, 23);
             this.btn_Close.TabIndex = 15;
@@ -197,13 +151,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(557, 301);
+            this.ClientSize = new System.Drawing.Size(557, 213);
             this.Controls.Add(this.btn_Close);
             this.Controls.Add(this.btn_Set);
             this.Controls.Add(this.lbl_Line);
-            this.Controls.Add(this.radioBtn_WaitOption);
-            this.Controls.Add(this.radioBtn_RunOption);
-            this.Controls.Add(this.lbl_BackupDescription);
             this.Controls.Add(this.btn_Now);
             this.Controls.Add(this.timePicker_At);
             this.Controls.Add(this.lbl_At);
@@ -212,7 +163,6 @@
             this.Controls.Add(this.txtBox_TimeInterval);
             this.Controls.Add(this.lbl_FirstBackup);
             this.Controls.Add(this.lbl_BackupInterval);
-            this.Controls.Add(this.txtBox_MissedBackups);
             this.Controls.Add(this.txt_Schedule);
             this.MaximumSize = new System.Drawing.Size(573, 340);
             this.Name = "PeriodicBackupForm";
@@ -226,7 +176,6 @@
 		#endregion
 
 		private System.Windows.Forms.TextBox txt_Schedule;
-		private System.Windows.Forms.TextBox txtBox_MissedBackups;
 		private System.Windows.Forms.Label lbl_BackupInterval;
 		private System.Windows.Forms.Label lbl_FirstBackup;
 		private System.Windows.Forms.TextBox txtBox_TimeInterval;
@@ -235,9 +184,6 @@
 		private System.Windows.Forms.Label lbl_At;
 		private System.Windows.Forms.DateTimePicker timePicker_At;
 		private System.Windows.Forms.Button btn_Now;
-		private System.Windows.Forms.Label lbl_BackupDescription;
-		private System.Windows.Forms.RadioButton radioBtn_RunOption;
-		private System.Windows.Forms.RadioButton radioBtn_WaitOption;
 		private System.Windows.Forms.Label lbl_Line;
 		private System.Windows.Forms.Button btn_Set;
 		private System.Windows.Forms.Button btn_Close;

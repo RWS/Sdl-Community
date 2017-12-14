@@ -15,33 +15,14 @@ namespace Sdl.Community.TMBackup
 			InitializeFormInfo();
 		}
 
-		private void btn_RealTimeDetails_Click(object sender, EventArgs e)
-		{
-			RealTimeParametersForm realTimeParamform = new RealTimeParametersForm();
-			realTimeParamform.ShowDialog();
-		}
-
-		private void btn_TimeDetails_Click(object sender, EventArgs e)
+			private void btn_TimeDetails_Click(object sender, EventArgs e)
 		{
 			PeriodicBackupForm periodicBackupForm = new PeriodicBackupForm();
 			periodicBackupForm.ShowDialog();
 		}
-
-		private void radioBtn_RealTimeChange_CheckedChanged(object sender, EventArgs e)
-		{
-			btn_TimeDetails.Enabled = false;
-			btn_RealTimeDetails.Enabled = true;
-
-			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
-			changeSettingModel.IsRealTimeOptionChecked = radioBtn_RealTimeChange.Checked;
-
-			Persistence persistence = new Persistence();
-			persistence.SaveChangeSettings(changeSettingModel);
-		}
-
+		
 		private void radioBtn_TimeChange_CheckedChanged(object sender, EventArgs e)
 		{
-			btn_RealTimeDetails.Enabled = false;
 			btn_TimeDetails.Enabled = true;
 
 			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
@@ -53,7 +34,6 @@ namespace Sdl.Community.TMBackup
 
 		private void radioBtn_Manually_CheckedChanged(object sender, EventArgs e)
 		{
-			btn_RealTimeDetails.Enabled = false;
 			btn_TimeDetails.Enabled = false;
 
 			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
@@ -70,7 +50,6 @@ namespace Sdl.Community.TMBackup
 
 			if(result != null)
 			{
-				radioBtn_RealTimeChange.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsRealTimeOptionChecked : false;
 				radioBtn_TimeChange.Checked = result.ChangeSettingsModel != null ?  result.ChangeSettingsModel.IsPeriodicOptionChecked : false;
 				radioBtn_Manually.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsManuallyOptionChecked : false;
 			}
@@ -105,11 +84,7 @@ namespace Sdl.Community.TMBackup
 					backupTimeInfo = backupTimeInfo + Constants.WaitOption;
 				}
 
-			}
-			else if (jsonResult != null && jsonResult.RealTimeBackupModel != null && radioBtn_RealTimeChange.Checked)
-			{
-				backupTimeInfo = "At: " + jsonResult.RealTimeBackupModel.BackupInterval + " " + jsonResult.RealTimeBackupModel.TimeType;
-			}
+			}			
 			else if (radioBtn_Manually.Checked)
 			{
 				backupTimeInfo = Constants.ManuallyOption;

@@ -37,8 +37,6 @@ namespace Sdl.Community.TMBackup
 			periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 			periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
 			periodicBackupModel.BackupAt = timePicker_At.Text;
-			periodicBackupModel.IsRunOption = radioBtn_RunOption.Checked;
-			periodicBackupModel.IsWaitOption = radioBtn_WaitOption.Checked;
 
 			Persistence persistence = new Persistence();
 			persistence.SavePeriodicBackupInfo(periodicBackupModel);
@@ -67,8 +65,6 @@ namespace Sdl.Community.TMBackup
 				txtBox_TimeInterval.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupInterval.ToString() : string.Empty;
 				dateTimePicker_FirstBackup.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.FirstBackup : DateTime.Now;
 				timePicker_At.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : string.Empty;
-				radioBtn_RunOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsRunOption: false;
-				radioBtn_WaitOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsWaitOption : false;
 			}
 		}
 	}

@@ -66,7 +66,6 @@
     <Compile Include="Models\ChangeSettingsModel.cs" />
     <Compile Include="Models\JsonRequestModel.cs" />
     <Compile Include="Models\PeriodicBackupModel.cs" />
-    <Compile Include="Models\RealTimeBackupModel.cs" />
     <Compile Include="Persistence.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
