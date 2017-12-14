@@ -385,6 +385,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reverse filter.
+        /// </summary>
+        internal static string DisplayFilterControl_Reverse {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Reverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reverse the  search.
         /// </summary>
         internal static string DisplayFilterControl_ReverseSearch {

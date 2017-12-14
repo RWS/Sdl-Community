@@ -24,7 +24,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         public event OnApplyFilterHandler OnApplyDisplayFilter;
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
 
-	    private bool _uniqueSegments = false;
+	    private bool _uniqueSegments ;
+	    private bool _reverseFilter;
         #endregion
 
         #region  |  Properties  |
@@ -49,7 +50,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    {
 			get
 			{
-				var customSettings = new CustomFilterSettings
+				_customSettings = new CustomFilterSettings
 				{
 					OddsNo = oddBtn.Checked,
 					EvenNo = evenBtn.Checked,
@@ -68,21 +69,53 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				{
 					var colorCode = color.Text;
 
-					if (!customSettings.Colors.Contains(colorCode))
+					if (!_customSettings.Colors.Contains(colorCode))
 					{
-						customSettings.Colors.Add(colorCode);
+						_customSettings.Colors.Add(colorCode);
 					}
 				}
 				if (groupedBtn.Checked)
 				{
-					customSettings.GroupedList = segmentsBox.Text;
+					_customSettings.GroupedList = segmentsBox.Text;
 				}
 				if (commentRegexBox.Checked)
 				{
-					customSettings.CommentRegex = textBox_commentText.Text;
+					_customSettings.CommentRegex = textBox_commentText.Text;
 
 				}
-				return customSettings;
+				return _customSettings;
+			}
+			set
+			{
+				if (value == null) return;
+				//segments settings 
+				
+				oddBtn.Checked = value.OddsNo;
+				evenBtn.Checked = value.EvenNo;
+				groupedBtn.Checked = value.Grouped;
+				splitCheckBox.Checked = value.SplitSegments;
+				mergedCheckbox.Checked = value.MergedSegments;
+				fuzzyMin.Text = value.FuzzyMin;
+				fuzzyMax.Text = value.FuzzyMax;
+				sourceSameBox.Checked = value.SourceEqualsTarget;
+				equalsCaseSensitive.Checked = value.IsEqualsCaseSensitive;
+				_uniqueSegments = value.Unique;
+				commentRegexBox.Checked = value.UseRegexCommentSearch;
+				_customSettings.Colors = value.Colors;
+				foreach (var color in value.Colors)
+				{
+					foreach (ListViewItem colorItem in colorsListView.Items)
+					{
+						if (colorItem.Text.Equals(color))
+						{
+							colorItem.Selected = true;
+						}
+					}
+				}
+				if (groupedBtn.Checked)
+				{
+				 segmentsBox.Text = value.GroupedList;
+				}
 			}
 		}
 
@@ -372,6 +405,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        equalsCaseSensitive.Checked = false;
 	        _uniqueSegments = false;
 			colorsListView.SelectedItems.Clear();
+	        _reverseFilter = false;
 #endregion
 
 			#region  |  content panel  |
@@ -586,8 +620,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             };
             if (saveSettingsDialog.ShowDialog() != DialogResult.OK) return;
 
-            var settingsXml = DisplayFilterSerializer.SerializeSettings(DisplayFilterSettings);
-            using (var sw = new StreamWriter(saveSettingsDialog.FileName, false, Encoding.UTF8))
+	        var setting = new SavedSettings
+	        {
+		        CustomFilterSettings = CustomFilter,
+		        DisplayFilterSettings = DisplayFilterSettings
+	        };
+
+	        var settingsXml = DisplayFilterSerializer.SerializeSettings(setting);
+			using (var sw = new StreamWriter(saveSettingsDialog.FileName, false, Encoding.UTF8))
             {
                 sw.Write(settingsXml);
                 sw.Flush();
@@ -609,8 +649,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 using (var sr = new StreamReader(loadSettingsDialog.FileName, Encoding.UTF8))
                     settingsXml = sr.ReadToEnd();
 
-                // deserialize the to the settings xml
-                DisplayFilterSettings = DisplayFilterSerializer.DeserializeSettings<DisplayFilterSettings>(settingsXml);
+				var savedSettings = DisplayFilterSerializer.DeserializeSettings<SavedSettings>(settingsXml);
+				// deserialize the to the settings xml
+	            DisplayFilterSettings = savedSettings.DisplayFilterSettings;
+	            CustomFilter = savedSettings.CustomFilterSettings;
 
                 ApplyFilter(false);
             }
@@ -720,13 +762,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((OriginType)Enum.Parse(
                         typeof(OriginType), item, true))) + ")");
 
-            //if (DisplayFilterSettings.RepetitionTypes.Any())
-            //    filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
-            //        + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
-            //        + (current != string.Empty ? " " + "|" + " " : string.Empty)
-            //        + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
-            //            typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
+			//if (DisplayFilterSettings.RepetitionTypes.Any())
+			//    filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
+			//        + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
+			//        + (current != string.Empty ? " " + "|" + " " : string.Empty)
+			//        + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
+			//            typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
 
+	        if (_reverseFilter)
+	        {
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" +
+				                                _reverseFilter + "\"");
+			}
             if (DisplayFilterSettings.SegmentReviewTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Review + ":"
                     + "(" + DisplayFilterSettings.SegmentReviewTypes.Aggregate(string.Empty, (current, item) => current
@@ -1617,6 +1664,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void reverseBtn_Click(object sender, EventArgs e)
 		{
+			_reverseFilter = true;
 			ApplyFilter(true);
 		}
 	}

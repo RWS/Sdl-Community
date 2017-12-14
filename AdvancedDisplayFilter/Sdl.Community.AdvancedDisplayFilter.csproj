@@ -47,10 +47,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Cyotek.Windows.Forms.ColorPicker, Version=1.0.0.0, Culture=neutral, PublicKeyToken=58daa28b0b2de221, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rd party\Cyotek.Windows.Forms.ColorPicker.dll</HintPath>
-    </Reference>
     <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
       <Private>True</Private>
@@ -143,6 +139,7 @@
     <Compile Include="Helpers\SegmentNumbersHelper.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
+    <Compile Include="Models\SavedSettings.cs" />
     <Compile Include="Models\SegmentRange.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

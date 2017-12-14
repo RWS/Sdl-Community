@@ -110,6 +110,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton_saveFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_loadFilter = new System.Windows.Forms.ToolStripButton();
+			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
 			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
 			this.panel_filterStatus = new System.Windows.Forms.Panel();
@@ -121,9 +122,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -721,6 +720,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStripButton_loadFilter.Name = "toolStripButton_loadFilter";
 			this.toolStripButton_loadFilter.Click += new System.EventHandler(this.toolStripButton_loadFilter_Click);
 			// 
+			// reverseBtn
+			// 
+			resources.ApplyResources(this.reverseBtn, "reverseBtn");
+			this.reverseBtn.Name = "reverseBtn";
+			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
+			// 
 			// panel_filterExpression
 			// 
 			this.panel_filterExpression.Controls.Add(this.filterExpressionControl);
@@ -786,12 +791,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-			// 
-			// reverseBtn
-			// 
-			resources.ApplyResources(this.reverseBtn, "reverseBtn");
-			this.reverseBtn.Name = "reverseBtn";
-			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
 			// 
 			// DisplayFilterControl
 			// 
@@ -919,7 +918,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private ContextMenuStrip contextMenuStrip1;
 		private Label label1;
 		private CheckBox commentRegexBox;
-		private Cyotek.Windows.Forms.ColorEditorManager colorEditorManager;
 		private TabPage tabPage_Colors;
 		private TableLayoutPanel colorLayoutPanel;
 		private Label label6;
