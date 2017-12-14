@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,7 @@ namespace Sdl.Community.DeepLMTProvider
 			InitializeComponent();
 			mainTableLayout.CellPaint += MainTableLayout_CellPaint;
 			_credentialStore = credentialStore;
-			contentInformationLabl.Text = "DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.";
+			contentInformationLabl.Text = @"DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.";
 
 			//programatically merge columns 
 			foreach (Control control in contentLayoutPanel.Controls)
@@ -39,12 +40,16 @@ namespace Sdl.Community.DeepLMTProvider
 
 			
 			//read logo from resource and add it to image box
-			using (var imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Sdl.Community.DeepLMTProvider.Resources.DeepL.png"))
+			using (var imgStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Sdl.Community.DeepLMTProvider.Resources.deepLResized.png"))
 			{
-				var image = new Bitmap(imgStream);
-				logoPicture.Image = image;
-				logoPicture.Height = image.Height;
-				logoPicture.Width = image.Width;
+				if (imgStream != null)
+				{
+					var image = new Bitmap(imgStream);
+					logoPicture.Image = image;
+					logoPicture.Height = image.Height;
+					logoPicture.Width = image.Width;
+				}
+				
 			}
 
 			Options = options;
@@ -81,11 +86,16 @@ namespace Sdl.Community.DeepLMTProvider
 			
 			if (string.IsNullOrWhiteSpace(apiKey.Text))
 			{
-				MessageBox.Show("Api Key is required");
+				MessageBox.Show(@"Api Key is required");
 				DialogResult = DialogResult.None;
 				return false;
 			}
 			return true;
+		}
+
+		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start("https://www.deepl.com/api-contact.html");
 		}
 	}
 }

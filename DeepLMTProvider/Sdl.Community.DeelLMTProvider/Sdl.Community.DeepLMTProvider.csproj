@@ -107,6 +107,8 @@
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\deepLResized.png" />
+    <EmbeddedResource Include="Resources\deepL_logo_new.png" />
     <EmbeddedResource Include="Resources\DeepL.png" />
     <EmbeddedResource Include="DeepLMtDialog.resx">
       <DependentUpon>DeepLMtDialog.cs</DependentUpon>
