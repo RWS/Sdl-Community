@@ -16,8 +16,10 @@ namespace Sdl.Community.TMBackup
 			SetDateTimeFormat();
 
 			InitializeFormData();
-		}	
-		
+
+			SetDateTimeValue();
+		}
+
 		private void SetDateTimeFormat()
 		{
 			timePicker_At.Format = DateTimePickerFormat.Custom;
@@ -37,8 +39,6 @@ namespace Sdl.Community.TMBackup
 			periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 			periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
 			periodicBackupModel.BackupAt = timePicker_At.Text;
-			periodicBackupModel.IsRunOption = radioBtn_RunOption.Checked;
-			periodicBackupModel.IsWaitOption = radioBtn_WaitOption.Checked;
 
 			Persistence persistence = new Persistence();
 			persistence.SavePeriodicBackupInfo(periodicBackupModel);
@@ -48,10 +48,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Now_Click(object sender, EventArgs e)
 		{
-			dateTimePicker_FirstBackup.Value = DateTime.Now;
-
-			var currentDate = DateTime.Now;
-			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
+			SetDateTimeValue();
 		}
 
 		private void InitializeFormData()
@@ -67,9 +64,15 @@ namespace Sdl.Community.TMBackup
 				txtBox_TimeInterval.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupInterval.ToString() : string.Empty;
 				dateTimePicker_FirstBackup.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.FirstBackup : DateTime.Now;
 				timePicker_At.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : string.Empty;
-				radioBtn_RunOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsRunOption: false;
-				radioBtn_WaitOption.Checked = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.IsWaitOption : false;
 			}
+		}
+
+		private void SetDateTimeValue()
+		{
+			dateTimePicker_FirstBackup.Value = DateTime.Now;
+
+			var currentDate = DateTime.Now;
+			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
 		}
 	}
 }

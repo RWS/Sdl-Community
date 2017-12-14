@@ -1,970 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Output>
   <Object>
     <Tree>
       <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Entry level
-        </TextChild>
-        <NodeType
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-          0
-        </NodeType>
-        <Mandatory
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-          1
-        </Mandatory>
-        <Multiply
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-          1
-        </Multiply>
-        <Readonly
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-          0
-        </Readonly>
-        <labels
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+        <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Entry level</TextChild>
+        <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">0</NodeType>
+        <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+        <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+        <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+        <labels>
         </labels>
-        <description
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+        <description>
         </description>
         <Node ID="0">
-          <TextChild
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-            Index level
-          </TextChild>
-          <NodeType
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-            2
-          </NodeType>
-          <Mandatory
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            1
-          </Mandatory>
-          <Multiply
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            1
-          </Multiply>
-          <Readonly
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Readonly>
-          <labels
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Index level</TextChild>
+          <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</NodeType>
+          <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+          <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+          <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+          <labels>
           </labels>
-          <description
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+          <description>
           </description>
           <Node ID="0">
-            <TextChild
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              Term level
-            </TextChild>
-            <NodeType
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-              3
-            </NodeType>
-            <Mandatory
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              1
-            </Mandatory>
-            <Multiply
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              1
-            </Multiply>
-            <Readonly
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              0
-            </Readonly>
-            <labels
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Term level</TextChild>
+            <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">3</NodeType>
+            <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
+            <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
+            <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+            <labels>
             </labels>
-            <description
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
+            <description>
             </description>
-            <Node ID="0">
-              <TextChild
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-                Type
-              </TextChild>
-              <NodeType
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-                1
-              </NodeType>
-              <Mandatory
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Mandatory>
-              <Multiply
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Multiply>
-              <Readonly
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Readonly>
-              <labels></labels>
-              <description></description>
-            </Node>
-            <Node ID="0">
-              <TextChild
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-                Part of Speech
-              </TextChild>
-              <NodeType
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-                1
-              </NodeType>
-              <Mandatory
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Mandatory>
-              <Multiply
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Multiply>
-              <Readonly
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Readonly>
-              <labels></labels>
-              <description></description>
-            </Node>
-            <Node ID="0">
-              <TextChild
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-                Status
-              </TextChild>
-              <NodeType
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-                1
-              </NodeType>
-              <Mandatory
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Mandatory>
-              <Multiply
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Multiply>
-              <Readonly
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Readonly>
-              <labels
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              </labels>
-              <description
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              </description>
-            </Node>
-            <Node ID="0">
-              <TextChild
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-                Notes
-              </TextChild>
-              <NodeType
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-                1
-              </NodeType>
-              <Mandatory
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Mandatory>
-              <Multiply
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                1
-              </Multiply>
-              <Readonly
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-                0
-              </Readonly>
-              <labels
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              </labels>
-              <description
-								xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              </description>
-            </Node>
           </Node>
-          <Node ID="0">
-            <TextChild
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              Notes
-            </TextChild>
-            <NodeType
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-              1
-            </NodeType>
-            <Mandatory
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              0
-            </Mandatory>
-            <Multiply
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              1
-            </Multiply>
-            <Readonly
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              0
-            </Readonly>
-            <labels></labels>
-            <description></description>
-          </Node>
-          <Node ID="0">
-            <TextChild
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-              Definition
-            </TextChild>
-            <NodeType
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-              1
-            </NodeType>
-            <Mandatory
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              0
-            </Mandatory>
-            <Multiply
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              1
-            </Multiply>
-            <Readonly
-							xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-              0
-            </Readonly>
-            <labels></labels>
-            <description></description>
-          </Node>
-        </Node>
-        <Node ID="0">
-          <TextChild
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-            Notes
-          </TextChild>
-          <NodeType
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-            1
-          </NodeType>
-          <Mandatory
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Mandatory>
-          <Multiply
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            1
-          </Multiply>
-          <Readonly
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Readonly>
-          <labels></labels>
-          <description></description>
-        </Node>
-        <Node ID="0">
-          <TextChild
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-            Illustration
-          </TextChild>
-          <NodeType
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-            1
-          </NodeType>
-          <Mandatory
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Mandatory>
-          <Multiply
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            1
-          </Multiply>
-          <Readonly
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Readonly>
-          <labels></labels>
-          <description></description>
-        </Node>
-        <Node ID="0">
-          <TextChild
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-            Subject
-          </TextChild>
-          <NodeType
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-            1
-          </NodeType>
-          <Mandatory
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Mandatory>
-          <Multiply
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            1
-          </Multiply>
-          <Readonly
-						xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-            0
-          </Readonly>
-          <labels></labels>
-          <description></description>
         </Node>
       </Node>
     </Tree>
-    <Languages>    
+    <Languages>
     </Languages>
-    <TerminologyFields>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Notes
-        </TextChild>
-        <Structure>
-          <Type>Text</Type>
-          <History>F</History>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Definition
-        </TextChild>
-        <Structure>
-          <Type>Text</Type>
-          <History>F</History>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Status
-        </TextChild>
-        <Structure>
-          <Type>Picklist</Type>
-          <History>F</History>
-          <PicklistValue>Approved</PicklistValue>
-          <PicklistValue>Forbidden</PicklistValue>
-          <PicklistValue>Preferred</PicklistValue>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Illustration
-        </TextChild>
-        <Structure>
-          <Type>Multimedia File</Type>
-          <History>F</History>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Type
-        </TextChild>
-        <Structure>
-          <Type>Picklist</Type>
-          <History>F</History>
-          <PicklistValue>Acronym</PicklistValue>
-          <PicklistValue>Full form</PicklistValue>
-          <PicklistValue>Short form</PicklistValue>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Subject
-        </TextChild>
-        <Structure>
-          <Type>Picklist</Type>
-          <History>F</History>
-          <PicklistValue>IT and Telecom</PicklistValue>
-          <PicklistValue>Finance and Insurance</PicklistValue>
-          <PicklistValue>General Marketing</PicklistValue>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Part of Speech
-        </TextChild>
-        <Structure>
-          <Type>Picklist</Type>
-          <History>F</History>
-          <PicklistValue>noun</PicklistValue>
-          <PicklistValue>verb</PicklistValue>
-          <PicklistValue>adjective</PicklistValue>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Context
-        </TextChild>
-        <Structure>
-          <Type>Text</Type>
-          <History>F</History>
-        </Structure>
-      </Node>
-      <Node ID="0">
-        <TextChild
-					xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">
-          Source
-        </TextChild>
-        <Structure>
-          <Type>Text</Type>
-          <History>F</History>
-        </Structure>
-      </Node>
-    </TerminologyFields>
-    <Option
-			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">
-      2
-    </Option>
-    <CaseSensitive
-			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-      0
-    </CaseSensitive>
-    <IgnoreNonAlpha
-			xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">
-      1
-    </IgnoreNonAlpha>
-    <TermbaseDescription>Sample termbase included with SDL Trados Studio and SDL MultiTerm. Contains terms from printer hardware as well as some general marketing terms.</TermbaseDescription>
-    <CopyrightText>(c) 2009-2011 SDL</CopyrightText>
-    <SplashImage></SplashImage>
-    <IconFile></IconFile>
-    <RefInfo></RefInfo>
+    <TerminologyFields />
+    <Option xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</Option>
+    <CaseSensitive xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</CaseSensitive>
+    <IgnoreNonAlpha xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</IgnoreNonAlpha>
+    <TermbaseDescription>
+    </TermbaseDescription>
+    <CopyrightText>
+    </CopyrightText>
+    <SplashImage>
+    </SplashImage>
+    <IconFile>
+    </IconFile>
+    <RefInfo>
+    </RefInfo>
   </Object>
   <Schema>
     <Schema name="Termbase Definition">
       <ElementType ID="1" name="mtf" content="eltOnly" order="many">
-        <description></description>
+        <description>
+        </description>
         <ElementType ID="2" name="conceptGrp" content="eltOnly" order="many">
-          <description></description>
+          <description>
+          </description>
           <Occurences>
-            <Level minOccurs="1" maxOccurs="*"/>
+            <Level minOccurs="1" maxOccurs="*" />
           </Occurences>
           <ElementType ID="3" name="concept" content="textOnly" order="many" type="ui4">
-            <description></description>
+            <description>
+            </description>
             <Occurences>
-              <Level minOccurs="1" maxOccurs="1"/>
+              <Level minOccurs="1" maxOccurs="1" />
             </Occurences>
           </ElementType>
           <ElementType ID="4" name="system" content="textOnly" order="many" type="ui4">
-            <description></description>
+            <description>
+            </description>
             <Occurences>
-              <Level minOccurs="0" maxOccurs="1"/>
+              <Level minOccurs="0" maxOccurs="1" />
             </Occurences>
           </ElementType>
           <ElementType ID="5" name="transacGrp" content="eltOnly" order="many">
-            <description></description>
+            <description>
+            </description>
             <Occurences>
-              <Level minOccurs="0" maxOccurs="*"/>
+              <Level minOccurs="0" maxOccurs="*" />
             </Occurences>
             <ElementType ID="6" name="transac" content="textOnly" order="many" type="string">
-              <description></description>
+              <description>
+              </description>
               <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
-                <Level minOccurs="0" maxOccurs="*"/>
+                <Level minOccurs="1" maxOccurs="1" />
+                <Level minOccurs="0" maxOccurs="*" />
               </Occurences>
               <AttributeType name="type" type="enumeration" values="origination|modification">
-                <description></description>
+                <description>
+                </description>
                 <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
+                  <Level minOccurs="1" maxOccurs="1" />
                 </Occurences>
               </AttributeType>
             </ElementType>
-            <ElementType id="7" name="date" content="textOnly" order="many" type="date">
-              <description></description>
+            <ElementType ID="7" name="date" content="textOnly" order="many" type="date">
+              <description>
+              </description>
               <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
-                <Level minOccurs="0" maxOccurs="*"/>
+                <Level minOccurs="1" maxOccurs="1" />
+                <Level minOccurs="0" maxOccurs="*" />
               </Occurences>
             </ElementType>
           </ElementType>
           <ElementType ID="8" name="languageGrp" content="eltOnly" order="many">
-            <description></description>
+            <description>
+            </description>
             <Occurences>
-              <Level minOccurs="0" maxOccurs="*"/>
+              <Level minOccurs="0" maxOccurs="*" />
             </Occurences>
             <ElementType ID="9" name="language" content="empty" order="many">
-              <description></description>
+              <description>
+              </description>
               <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
+                <Level minOccurs="1" maxOccurs="1" />
               </Occurences>
               <AttributeType name="type" type="languages" values="">
-                <description></description>
+                <description>
+                </description>
                 <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="0" maxOccurs="*"/>
+                  <Level minOccurs="1" maxOccurs="1" />
+                  <Level minOccurs="0" maxOccurs="*" />
                 </Occurences>
               </AttributeType>
               <AttributeType name="lang" type="locales" values="">
-                <description></description>
+                <description>
+                </description>
                 <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="0" maxOccurs="*"/>
+                  <Level minOccurs="1" maxOccurs="1" />
+                  <Level minOccurs="0" maxOccurs="*" />
                 </Occurences>
               </AttributeType>
             </ElementType>
             <ElementType ID="10" name="termGrp" content="eltOnly" order="many" readOnly="no">
-              <description></description>
+              <description>
+              </description>
               <Occurences>
-                <Level minOccurs="1" maxOccurs="*"/>
+                <Level minOccurs="1" maxOccurs="*" />
               </Occurences>
               <ElementType ID="11" name="term" content="textOnly" order="many" type="string">
-                <description></description>
+                <description>
+                </description>
                 <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
+                  <Level minOccurs="1" maxOccurs="1" />
                 </Occurences>
               </ElementType>
               <ElementType ID="12" name="transacGrp" content="eltOnly" order="many">
-                <description></description>
+                <description>
+                </description>
                 <Occurences>
-                  <Level minOccurs="0" maxOccurs="*"/>
+                  <Level minOccurs="0" maxOccurs="*" />
                 </Occurences>
                 <ElementType ID="13" name="transac" content="textOnly" order="many" type="string">
-                  <description></description>
+                  <description>
+                  </description>
                   <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
+                    <Level minOccurs="1" maxOccurs="1" />
+                    <Level minOccurs="0" maxOccurs="*" />
                   </Occurences>
                   <AttributeType name="type" type="enumeration" values="origination|modification">
-                    <description></description>
+                    <description>
+                    </description>
                     <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
+                      <Level minOccurs="1" maxOccurs="1" />
                     </Occurences>
                   </AttributeType>
                 </ElementType>
                 <ElementType ID="14" name="date" content="textOnly" order="many" type="date">
-                  <description></description>
+                  <description>
+                  </description>
                   <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
+                    <Level minOccurs="1" maxOccurs="1" />
+                    <Level minOccurs="0" maxOccurs="*" />
                   </Occurences>
                 </ElementType>
-              </ElementType>
-              <ElementType ID="15" name="descripGrp" content="eltOnly" order="many" history="F">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="*"/>
-                </Occurences>
-                <ElementType ID="16" name="descrip" content="mixed" order="many" type="enumeration" values="Acronym|Full form|Short form">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                  </Occurences>
-                  <AttributeType name="type" type="enumeration" values="Type">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="1"/>
-                    </Occurences>
-                  </AttributeType>
-                  <ElementType ID="17" name="xref" content="textOnly" order="many" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                    <AttributeType name="Tlink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Ulink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Clink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                  </ElementType>
-                </ElementType>
-              </ElementType>
-              <ElementType ID="18" name="descripGrp" content="eltOnly" order="many" history="F">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="*"/>
-                </Occurences>
-                <ElementType ID="19" name="descrip" content="mixed" order="many" type="enumeration" values="noun|verb|adjective">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                  </Occurences>
-                  <AttributeType name="type" type="enumeration" values="Part of Speech">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="1"/>
-                    </Occurences>
-                  </AttributeType>
-                  <ElementType ID="20" name="xref" content="textOnly" order="many" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                    <AttributeType name="Tlink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Ulink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Clink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                  </ElementType>
-                </ElementType>
-              </ElementType>
-              <ElementType ID="21" name="descripGrp" content="eltOnly" order="many" history="F">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="*"/>
-                </Occurences>
-                <ElementType ID="22" name="descrip" content="mixed" order="many" type="enumeration" values="Approved|Forbidden|Preferred">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                  </Occurences>
-                  <AttributeType name="type" type="enumeration" values="Status">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="1"/>
-                    </Occurences>
-                  </AttributeType>
-                  <ElementType ID="23" name="xref" content="textOnly" order="many" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                    <AttributeType name="Tlink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Ulink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Clink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                  </ElementType>
-                </ElementType>
-              </ElementType>
-              <ElementType ID="24" name="descripGrp" content="eltOnly" order="many" history="F">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="*"/>
-                </Occurences>
-                <ElementType ID="25" name="descrip" content="mixed" order="many" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                  </Occurences>
-                  <AttributeType name="type" type="enumeration" values="Notes">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                  <ElementType ID="26" name="xref" content="textOnly" order="many" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                    <AttributeType name="Tlink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Ulink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                    <AttributeType name="Clink" type="string">
-                      <description></description>
-                      <Occurences>
-                        <Level minOccurs="1" maxOccurs="1"/>
-                        <Level minOccurs="0" maxOccurs="*"/>
-                      </Occurences>
-                    </AttributeType>
-                  </ElementType>
-                </ElementType>
-              </ElementType>
-            </ElementType>
-            <ElementType ID="27" name="descripGrp" content="eltOnly" order="many" history="F">
-              <description></description>
-              <Occurences>
-                <Level minOccurs="1" maxOccurs="*"/>
-              </Occurences>
-              <ElementType ID="28" name="descrip" content="mixed" order="many" type="string">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                </Occurences>
-                <AttributeType name="type" type="enumeration" values="Notes">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <ElementType ID="29" name="xref" content="textOnly" order="many" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                  <AttributeType name="Tlink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                  <AttributeType name="Ulink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                  <AttributeType name="Clink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                </ElementType>
-              </ElementType>
-            </ElementType>
-            <ElementType ID="30" name="descripGrp" content="eltOnly" order="many" history="F">
-              <description></description>
-              <Occurences>
-                <Level minOccurs="1" maxOccurs="*"/>
-              </Occurences>
-              <ElementType ID="31" name="descrip" content="mixed" order="many" type="string">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                </Occurences>
-                <AttributeType name="type" type="enumeration" values="Definition">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <ElementType ID="32" name="xref" content="textOnly" order="many" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                  <AttributeType name="Tlink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                  <AttributeType name="Ulink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                  <AttributeType name="Clink" type="string">
-                    <description></description>
-                    <Occurences>
-                      <Level minOccurs="1" maxOccurs="1"/>
-                      <Level minOccurs="0" maxOccurs="*"/>
-                    </Occurences>
-                  </AttributeType>
-                </ElementType>
-              </ElementType>
-            </ElementType>
-          </ElementType>
-          <ElementType ID="33" name="descripGrp" content="eltOnly" order="many" history="F">
-            <description></description>
-            <Occurences>
-              <Level minOccurs="1" maxOccurs="*"/>
-            </Occurences>
-            <ElementType ID="34" name="descrip" content="mixed" order="many" type="string">
-              <description></description>
-              <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
-              </Occurences>
-              <AttributeType name="type" type="enumeration" values="Notes">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-              </AttributeType>
-              <ElementType ID="35" name="xref" content="textOnly" order="many" type="string">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-                <AttributeType name="Tlink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Ulink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Clink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-              </ElementType>
-            </ElementType>
-          </ElementType>
-          <ElementType ID="36" name="descripGrp" content="eltOnly" order="many" history="F">
-            <description></description>
-            <Occurences>
-              <Level minOccurs="1" maxOccurs="*"/>
-            </Occurences>
-            <ElementType ID="37" name="descrip" content="mixed" order="many" type="file">
-              <description></description>
-              <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
-              </Occurences>
-              <AttributeType name="type" type="enumeration" values="Illustration">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-              </AttributeType>
-              <ElementType ID="38" name="xref" content="textOnly" order="many" type="string">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-                <AttributeType name="Tlink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Ulink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Clink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-              </ElementType>
-            </ElementType>
-          </ElementType>
-          <ElementType ID="39" name="descripGrp" content="eltOnly" order="many" history="F">
-            <description></description>
-            <Occurences>
-              <Level minOccurs="1" maxOccurs="*"/>
-            </Occurences>
-            <ElementType ID="40" name="descrip" content="mixed" order="many" type="enumeration" values="IT and Telecom|Finance and Insurance|General Marketing">
-              <description></description>
-              <Occurences>
-                <Level minOccurs="1" maxOccurs="1"/>
-              </Occurences>
-              <AttributeType name="type" type="enumeration" values="Subject">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="1" maxOccurs="1"/>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-              </AttributeType>
-              <ElementType ID="41" name="xref" content="textOnly" order="many" type="string">
-                <description></description>
-                <Occurences>
-                  <Level minOccurs="0" maxOccurs="*"/>
-                </Occurences>
-                <AttributeType name="Tlink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Ulink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
-                <AttributeType name="Clink" type="string">
-                  <description></description>
-                  <Occurences>
-                    <Level minOccurs="1" maxOccurs="1"/>
-                    <Level minOccurs="0" maxOccurs="*"/>
-                  </Occurences>
-                </AttributeType>
               </ElementType>
             </ElementType>
           </ElementType>
@@ -981,12 +195,28 @@
     <conceptGrp>
       <concept>1</concept>
       <system type="entryClass">1</system>
+      <transacGrp>
+        <transac type="origination">John Kelly</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+      <transacGrp>
+        <transac type="modification">Carol Blake</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
     </conceptGrp>
   </DummyEntry>
   <FullEntry>
     <conceptGrp>
       <concept>1</concept>
-      <system type="entryClass">1</system>     
+      <system type="entryClass">1</system>
+      <transacGrp>
+        <transac type="origination">John Kelly</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+      <transacGrp>
+        <transac type="modification">Carol Blake</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
     </conceptGrp>
   </FullEntry>
 </Output>

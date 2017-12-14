@@ -121,12 +121,6 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="RealTimeParametersForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="RealTimeParametersForm.Designer.cs">
-      <DependentUpon>RealTimeParametersForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="TMBackupChangeForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -148,10 +142,11 @@
     <Compile Include="TMBackupRibbon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\TMBackup_icon.ico" />
+    <None Include="Resources\TM_backup.png" />
     <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="app.config" />
-    <None Include="Resources\TMBackup_Icon.ico" />
     <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +159,6 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RealTimeParametersForm.resx">
-      <DependentUpon>RealTimeParametersForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TMBackupChangeForm.resx">
       <DependentUpon>TMBackupChangeForm.cs</DependentUpon>

@@ -170,23 +170,6 @@ namespace Sdl.Community.BackupService
 			File.WriteAllText(_persistancePath, json);
 		}
 
-		public void SaveRealTimeInfo(RealTimeBackupModel realTimeBackupModel)
-		{
-			CheckIfJsonFileExist();
-
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request == null)
-			{
-				request = new JsonRequestModel();
-			}
-			
-			request.RealTimeBackupModel = realTimeBackupModel;
-			var json = JsonConvert.SerializeObject(request);
-
-			File.WriteAllText(_persistancePath, json);
-		}
-
 		public JsonRequestModel ReadFormInformation()
 		{
 			if (File.Exists(_persistancePath))
