@@ -57,7 +57,7 @@ namespace Sdl.Community.BackupFiles
 							}
 							
 							// get all files which have extension set up depending on actions from TMBackupDetails grid
-							var files = Directory.GetFiles(sourcePath)
+							var files = Directory.GetFiles(sourcePath, "*.*")
 												 .Where(f => fileExtensions
 												 .Contains(Path.GetExtension(f)))
 												 .ToArray();
