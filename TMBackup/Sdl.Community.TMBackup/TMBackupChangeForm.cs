@@ -63,9 +63,9 @@ namespace Sdl.Community.TMBackup
 
 		public string GetBackupTimeInfo()
 		{
-		string backupTimeInfo = string.Empty;
+			string backupTimeInfo = string.Empty;
 
-		Persistence persistence = new Persistence();
+			Persistence persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 
 			if (jsonResult != null && jsonResult.PeriodicBackupModel != null && radioBtn_TimeChange.Checked)
@@ -74,17 +74,7 @@ namespace Sdl.Community.TMBackup
 					jsonResult.PeriodicBackupModel.TimeType + ", " + "First backup on: " +
 					jsonResult.PeriodicBackupModel.FirstBackup + ", " + "at " +
 					jsonResult.PeriodicBackupModel.BackupAt + ", ";
-
-				if (jsonResult.PeriodicBackupModel.IsRunOption)
-				{
-					backupTimeInfo = backupTimeInfo + Constants.RunOption;
-				}
-				else
-				{
-					backupTimeInfo = backupTimeInfo + Constants.WaitOption;
-				}
-
-			}			
+			}
 			else if (radioBtn_Manually.Checked)
 			{
 				backupTimeInfo = Constants.ManuallyOption;
