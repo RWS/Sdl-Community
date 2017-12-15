@@ -30,6 +30,16 @@ namespace Sdl.Community.BackupFiles
 			{
 				Service service = new Service();
 				var jsonResult = service.GetJsonInformation();
+				List<string> fileExtensions = new List<string>();
+
+				if (jsonResult != null && jsonResult.BackupDetailsModelList.Any())
+				{
+					foreach (var fileExtension in jsonResult.BackupDetailsModelList)
+					{
+						fileExtensions.Add(fileExtension.BackupPattern);
+					}
+				}
+
 				if (jsonResult != null && jsonResult.BackupModel != null)
 				{
 					List<string> splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
@@ -40,13 +50,18 @@ namespace Sdl.Community.BackupFiles
 						{
 							var acceptedRequestFolder = GetAcceptedRequestsFolder(sourcePath);
 
-							// create the directory "Accepted request"
+							// create the directory where to move files
 							if (!Directory.Exists(jsonResult.BackupModel.BackupTo))
 							{
 								Directory.CreateDirectory(jsonResult.BackupModel.BackupTo);
 							}
+							
+							// get all files which have extension set up depending on actions from TMBackupDetails grid
+							var files = Directory.GetFiles(sourcePath)
+												 .Where(f => fileExtensions
+												 .Contains(Path.GetExtension(f)))
+												 .ToArray();
 
-							var files = Directory.GetFiles(sourcePath);
 							if (files.Length != 0)
 							{
 								MoveFilesToAcceptedFolder(files, jsonResult.BackupModel.BackupTo);

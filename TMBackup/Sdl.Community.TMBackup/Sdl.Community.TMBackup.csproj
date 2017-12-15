@@ -142,9 +142,9 @@
     <Compile Include="TMBackupRibbon.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
     <Content Include="Resources\TMBackup_icon.ico" />
     <None Include="Resources\TM_backup.png" />
-    <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="app.config" />
     <None Include="SdlCommunity.snk" />
