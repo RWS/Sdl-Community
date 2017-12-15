@@ -11,9 +11,5 @@ namespace Sdl.Community.BackupService.Models
 		public DateTime FirstBackup { get; set; }
 
 		public string BackupAt { get; set; }
-
-		public bool IsRunOption { get; set; }
-
-		public bool IsWaitOption { get; set; }
 	}
 }

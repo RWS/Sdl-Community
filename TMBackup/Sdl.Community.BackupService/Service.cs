@@ -36,6 +36,10 @@ namespace Sdl.Community.BackupService
 				{
 					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr);
 				}
+				if (jsonRequestModel.ChangeSettingsModel.IsManuallyOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
+				{
+					AddManuallyTimeScheduler(td, tr);
+				}
 			}
 		}
 
@@ -84,6 +88,14 @@ namespace Sdl.Community.BackupService
 				tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
 				AddTrigger(tr, td);
 			}
+		}
+
+		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr)
+		{
+			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
+			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
+			AddTrigger(tr, td);
 		}
 	}
 }
