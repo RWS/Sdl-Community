@@ -67,6 +67,7 @@
       <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.0\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -87,7 +88,10 @@
     <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
     <Compile Include="DeepLTranslationOptions.cs" />
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
+    <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="Model\DeepLTag.cs" />
+    <Compile Include="Model\TagInfo.cs" />
     <Compile Include="Model\TranslationDetails.cs" />
     <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="PluginResources.Designer.cs">

@@ -47,10 +47,16 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			//foreach (var subItem in tagPair.AllSubItems)
-			//{
-			//	var test = subItem;
-			//}
+			foreach (dynamic subItem in tagPair.AllSubItems)
+			{
+				var property = subItem.Properties;
+				if (property != null)
+				{
+					var text = property.Text;
+					_textBuilder.Append(text);
+				}
+				
+			}
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)

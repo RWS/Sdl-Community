@@ -92,12 +92,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.SourceText.Trim() != string.Empty)
 				{
 					success = rowInfo.IsTextFoundInSource(Settings);
-					//asta l-am adaugat nou ar trebui sa iau textul cu visitor
-					//if (Settings.IsRegularExpression)
-					//{
-					//	success = ContentHelper.SearchContentRegularExpression(rowInfo.SegmentPair.Source.ToString(),
-					//		Settings.SourceText);
-					//}
+				
+					if (Settings.IsRegularExpression)
+					{
+						var textVisitor = new SegmentTextVisitor();
+						var text = textVisitor.GetText(rowInfo.SegmentPair.Source);
+						success = ContentHelper.SearchContentRegularExpression(text,
+							Settings.SourceText);
+					}
 				}
 					
 			

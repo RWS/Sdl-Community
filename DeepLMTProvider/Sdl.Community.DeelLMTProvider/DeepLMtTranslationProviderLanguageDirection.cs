@@ -78,25 +78,38 @@ namespace Sdl.Community.DeepLMTProvider
 				results.Add(CreateSearchResult(segment, translation, segment.ToString()));
 				return results;
 			}
+	        var newseg = segment.Duplicate();
+	        if (newseg.HasTags)
+	        {
+		        var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+		        var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+		         translation = tagPlacer.GetTaggedSegment(translatedText);
+		        //translation.Add(translatedText);
 
-			// TO BE IMPLEMENTED:
-			// If there are tags in segment. We need to wait for information regarding how DeepL handels tags
+		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
+		        return results;
+			}
+	        else
+	        {
+		        // TO BE IMPLEMENTED:
+		        // If there are tags in segment. We need to wait for information regarding how DeepL handels tags
 
-			//for simple text
-			var sourceLang = SourceLanguage.ToString();
-			var targetLang = TargetLanguage.ToString();
-			var translatedText = "";
-			//a new seg avoids modifying the current segment object
-			var newseg = segment.Duplicate();
+		        //for simple text
+		        var sourceLang = SourceLanguage.ToString();
+		        var targetLang = TargetLanguage.ToString();
+		        //a new seg avoids modifying the current segment object
 
-			var sourcetext = newseg.ToPlain();
 
-			translatedText = LookupDeepl(sourcetext);
-			translation.Add(translatedText);
+		        var sourcetext = newseg.ToPlain();
 
-			results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-			return results;
-			#endregion
+		        var translatedText = LookupDeepl(sourcetext);
+		        translation.Add(translatedText);
+
+		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
+		        return results;
+	        }
+
+	        #endregion
 		}
 
 		private string LookupDeepl(string sourcetext)
