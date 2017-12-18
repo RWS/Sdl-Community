@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupDetailsForm));
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
             this.lbl_RulesDescription = new System.Windows.Forms.Label();
@@ -157,6 +158,7 @@
             this.Controls.Add(this.btn_Delete);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_Ok);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(562, 253);
             this.Name = "TMBackupDetailsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

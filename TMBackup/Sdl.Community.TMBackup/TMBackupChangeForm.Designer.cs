@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupChangeForm));
             this.radioBtn_TimeChange = new System.Windows.Forms.RadioButton();
             this.radioBtn_Manually = new System.Windows.Forms.RadioButton();
             this.btn_TimeDetails = new System.Windows.Forms.Button();
@@ -98,6 +99,7 @@
             this.Controls.Add(this.btn_TimeDetails);
             this.Controls.Add(this.radioBtn_Manually);
             this.Controls.Add(this.radioBtn_TimeChange);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(493, 180);
             this.Name = "TMBackupChangeForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
