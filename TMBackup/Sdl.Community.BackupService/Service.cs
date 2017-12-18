@@ -64,7 +64,7 @@ namespace Sdl.Community.BackupService
 				}
 			}
 		}
-		
+
 		// Add periodic time scheduler depending on user setup.
 		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
 		{
@@ -80,12 +80,6 @@ namespace Sdl.Community.BackupService
 			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 			{
 				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				AddTrigger(tr, td);
-			}
-
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Seconds)))
-			{
-				tr.Repetition.Interval = TimeSpan.FromSeconds(jsonRequestModel.PeriodicBackupModel.BackupInterval);
 				AddTrigger(tr, td);
 			}
 		}
