@@ -71,14 +71,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
 					success = rowInfo.IsPreviousOriginTypeFound(Settings);
 
-				//aici primesc false
 				if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
 				{
 					if (!Settings.RepetitionTypes.Contains("Unique"))
 					{
 						success = rowInfo.IsRepetitionTypes(Settings);
 					}
-					
 				}
 
 				if (success && Settings.SegmentLockingTypes != null && Settings.SegmentLockingTypes.Any())
@@ -101,9 +99,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 							Settings.SourceText);
 					}
 				}
-					
-			
-
 
 				if (success && Settings.TargetText.Trim() != string.Empty)
 					success = rowInfo.IsTextFoundInTarget(Settings);

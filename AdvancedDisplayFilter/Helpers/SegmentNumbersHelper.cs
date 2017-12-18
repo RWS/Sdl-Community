@@ -167,6 +167,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			var isCompexId = IsComplexId(rowId);
 			var count = 0;
+			var segments = currentDocument.SegmentPairs.ToList();
 			if (isCompexId)
 			{
 				var match = Regex.Matches(rowId, "[1-9]*");
@@ -174,8 +175,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				{
 					rowId = match[0].Value;
 				}
-
-				var segments = currentDocument.SegmentPairs.ToList();
 				foreach (var segment in segments)
 				{
 					var currentSegmentId = segment.Source.Properties.Id.Id;
@@ -201,7 +200,28 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					return true;
 				}
 			}
-			
+			else
+			{
+				var currentSegment = segments.FirstOrDefault(s => s.Properties.Id.Id.Equals(rowId));
+				var currentSegmentIndex = segments.IndexOf(currentSegment);
+				if (!Equals(currentSegment, segments.Last()))
+				{
+					var nextSegmentId = segments[currentSegmentIndex + 1].Properties.Id.Id;
+					var isNextSegmentComplex = IsComplexId(nextSegmentId);
+
+					if (isNextSegmentComplex)
+					{
+						//if is split segment the id has following form "12 a"
+						nextSegmentId = rowId.Split(' ')[0];
+					}
+					//the difference between ids is 1 if the segments are not merged
+					if (currentSegment != null && Parse(nextSegmentId) - Parse(currentSegment.Properties.Id.Id) > 1)
+					{
+						return true;
+					}
+
+				}
+			}
 			return  false;
 		}
 
