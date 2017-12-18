@@ -81,6 +81,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.mergedAcross = new System.Windows.Forms.CheckBox();
 			this.fuzzyMax = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.fuzzyMin = new System.Windows.Forms.TextBox();
@@ -89,8 +90,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.equalsCaseSensitive = new System.Windows.Forms.CheckBox();
 			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
-			this.mergedCheckbox = new System.Windows.Forms.RadioButton();
-			this.splitCheckBox = new System.Windows.Forms.RadioButton();
 			this.label1 = new System.Windows.Forms.Label();
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -123,7 +122,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.mergedAcross = new System.Windows.Forms.CheckBox();
+			this.splitCheckBox = new System.Windows.Forms.CheckBox();
+			this.mergedCheckbox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -509,20 +509,24 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
-			this.tabPage_segmentNumbers.Controls.Add(this.mergedAcross);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMax);
 			this.tabPage_segmentNumbers.Controls.Add(this.label5);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMin);
 			this.tabPage_segmentNumbers.Controls.Add(this.label4);
 			this.tabPage_segmentNumbers.Controls.Add(this.label3);
-			this.tabPage_segmentNumbers.Controls.Add(this.equalsCaseSensitive);
-			this.tabPage_segmentNumbers.Controls.Add(this.sourceSameBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsGroupBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.label1);
 			this.tabPage_segmentNumbers.Controls.Add(this.segmentsBox);
 			this.tabPage_segmentNumbers.Controls.Add(this.groupBox1);
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
+			// 
+			// mergedAcross
+			// 
+			resources.ApplyResources(this.mergedAcross, "mergedAcross");
+			this.mergedAcross.Name = "mergedAcross";
+			this.mergedAcross.UseVisualStyleBackColor = true;
+			this.mergedAcross.CheckedChanged += new System.EventHandler(this.mergedAcross_CheckedChanged);
 			// 
 			// fuzzyMax
 			// 
@@ -567,27 +571,14 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			// segmentsGroupBox
 			// 
+			this.segmentsGroupBox.Controls.Add(this.mergedAcross);
 			this.segmentsGroupBox.Controls.Add(this.mergedCheckbox);
 			this.segmentsGroupBox.Controls.Add(this.splitCheckBox);
+			this.segmentsGroupBox.Controls.Add(this.sourceSameBox);
+			this.segmentsGroupBox.Controls.Add(this.equalsCaseSensitive);
 			resources.ApplyResources(this.segmentsGroupBox, "segmentsGroupBox");
 			this.segmentsGroupBox.Name = "segmentsGroupBox";
 			this.segmentsGroupBox.TabStop = false;
-			// 
-			// mergedCheckbox
-			// 
-			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
-			this.mergedCheckbox.Name = "mergedCheckbox";
-			this.mergedCheckbox.TabStop = true;
-			this.mergedCheckbox.UseVisualStyleBackColor = true;
-			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
-			// 
-			// splitCheckBox
-			// 
-			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
-			this.splitCheckBox.Name = "splitCheckBox";
-			this.splitCheckBox.TabStop = true;
-			this.splitCheckBox.UseVisualStyleBackColor = true;
-			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
 			// 
 			// label1
 			// 
@@ -794,11 +785,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// mergedAcross
+			// splitCheckBox
 			// 
-			resources.ApplyResources(this.mergedAcross, "mergedAcross");
-			this.mergedAcross.Name = "mergedAcross";
-			this.mergedAcross.UseVisualStyleBackColor = true;
+			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
+			this.splitCheckBox.Name = "splitCheckBox";
+			this.splitCheckBox.UseVisualStyleBackColor = true;
+			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
+			// 
+			// mergedCheckbox
+			// 
+			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
+			this.mergedCheckbox.Name = "mergedCheckbox";
+			this.mergedCheckbox.UseVisualStyleBackColor = true;
+			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
 			// 
 			// DisplayFilterControl
 			// 
@@ -932,8 +931,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private ListView colorsListView;
 		private GroupBox segmentsGroupBox;
 		private System.ComponentModel.BackgroundWorker backgroundWorker1;
-		private RadioButton mergedCheckbox;
-		private RadioButton splitCheckBox;
 		private CheckBox sourceSameBox;
 		private CheckBox equalsCaseSensitive;
 		private TextBox fuzzyMax;
@@ -943,5 +940,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Label label3;
 		private ToolStripButton reverseBtn;
 		private CheckBox mergedAcross;
+		private CheckBox splitCheckBox;
+		private CheckBox mergedCheckbox;
 	}
 }

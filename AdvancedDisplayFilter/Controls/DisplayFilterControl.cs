@@ -1041,7 +1041,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    {
 		    if (customFilterSettings.EvenNo || customFilterSettings.Grouped ||
 		        customFilterSettings.OddsNo || customFilterSettings.SplitSegments ||
-		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget)
+		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget ||
+		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) &&
+		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax)
+		        || customFilterSettings.MergedAcross)
 		    {
 			    tabPage_segmentNumbers.ImageIndex = 0;
 		    }
@@ -1049,15 +1052,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		    {
 			    tabPage_segmentNumbers.ImageIndex = -1;
 		    }
-		    if (!string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) && !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax))
-		    {
-			    tabPage_segmentNumbers.ImageIndex = 0;
-		    }
-		    else
-		    {
-			    tabPage_segmentNumbers.ImageIndex = -1;
-		    }
-		}
+	    }
 
 	    private void InvalidateIconsFilterEdited(TabPage tabPage)
         {
@@ -1627,11 +1622,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		    InvalidateIconsFilterEdited(tabPage_Colors);
 		}
 
-		private void reverseBox_CheckedChanged(object sender, EventArgs e)
-		{
-			InvalidateIconsFilterEdited(tabPage_content);
-		}
-
 		private void commentRegexBox_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_comments);
@@ -1673,6 +1663,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			_reverseFilter = true;
 			ApplyFilter(true);
+		}
+
+		private void mergedAcross_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
 	}
 }

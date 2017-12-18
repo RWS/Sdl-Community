@@ -300,33 +300,6 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="mergedAcross.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="mergedAcross.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 249</value>
-  </data>
-  <data name="mergedAcross.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 17</value>
-  </data>
-  <data name="mergedAcross.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="mergedAcross.Text" xml:space="preserve">
-    <value>Merged segments across paragraphs</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
-    <value>mergedAcross</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
   <data name="fuzzyMax.Location" type="System.Drawing.Point, System.Drawing">
     <value>292, 338</value>
   </data>
@@ -346,7 +319,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;fuzzyMax.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>0</value>
   </data>
   <data name="label5.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -376,7 +349,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>1</value>
   </data>
   <data name="fuzzyMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>127, 338</value>
@@ -397,7 +370,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;fuzzyMin.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="label4.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -427,7 +400,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label4.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="label3.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -460,40 +433,94 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label3.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
-  <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
+  <data name="mergedAcross.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 296</value>
+  <data name="mergedAcross.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 63</value>
   </data>
-  <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 17</value>
+  <data name="mergedAcross.Size" type="System.Drawing.Size, System.Drawing">
+    <value>200, 17</value>
   </data>
-  <data name="equalsCaseSensitive.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
+  <data name="mergedAcross.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
   </data>
-  <data name="equalsCaseSensitive.Text" xml:space="preserve">
-    <value>Is case sensitive</value>
+  <data name="mergedAcross.Text" xml:space="preserve">
+    <value>Merged segments across paragraphs</value>
   </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
-    <value>equalsCaseSensitive</value>
+  <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
+    <value>mergedAcross</value>
   </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
+  <data name="&gt;&gt;mergedAcross.Type" xml:space="preserve">
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
+  <data name="&gt;&gt;mergedAcross.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
   </data>
-  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
-    <value>6</value>
+  <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="mergedCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="mergedCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 44</value>
+  </data>
+  <data name="mergedCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 17</value>
+  </data>
+  <data name="mergedCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="mergedCheckbox.Text" xml:space="preserve">
+    <value>Merged segments</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
+    <value>mergedCheckbox</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="splitCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="splitCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="splitCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 17</value>
+  </data>
+  <data name="splitCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="splitCheckBox.Text" xml:space="preserve">
+    <value>Split segments</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
+    <value>splitCheckBox</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <data name="sourceSameBox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
   <data name="sourceSameBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 272</value>
+    <value>7, 86</value>
   </data>
   <data name="sourceSameBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 17</value>
@@ -511,34 +538,37 @@
     <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;sourceSameBox.Parent" xml:space="preserve">
-    <value>tabPage_segmentNumbers</value>
+    <value>segmentsGroupBox</value>
   </data>
   <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 109</value>
+  </data>
+  <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 17</value>
+  </data>
+  <data name="equalsCaseSensitive.TabIndex" type="System.Int32, mscorlib">
     <value>7</value>
   </data>
-  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
-    <value>mergedCheckbox</value>
+  <data name="equalsCaseSensitive.Text" xml:space="preserve">
+    <value>Is case sensitive</value>
   </data>
-  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
+    <value>equalsCaseSensitive</value>
   </data>
-  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
+  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
     <value>segmentsGroupBox</value>
   </data>
-  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
-    <value>splitCheckBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
+    <value>4</value>
   </data>
   <data name="segmentsGroupBox.Font" type="System.Drawing.Font, System.Drawing">
     <value>Microsoft Sans Serif, 8.25pt</value>
@@ -547,7 +577,7 @@
     <value>7, 165</value>
   </data>
   <data name="segmentsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 80</value>
+    <value>230, 135</value>
   </data>
   <data name="segmentsGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -565,7 +595,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsGroupBox.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>5</value>
   </data>
   <data name="label1.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -592,7 +622,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>6</value>
   </data>
   <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 120</value>
@@ -616,7 +646,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>7</value>
   </data>
   <data name="&gt;&gt;groupedBtn.Name" xml:space="preserve">
     <value>groupedBtn</value>
@@ -676,7 +706,7 @@
     <value>tabPage_segmentNumbers</value>
   </data>
   <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
-    <value>11</value>
+    <value>8</value>
   </data>
   <data name="tabPage_segmentNumbers.Location" type="System.Drawing.Point, System.Drawing">
     <value>4, 27</value>
@@ -758,7 +788,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAADu
-        CQAAAk1TRnQBSQFMAgEBAgEAAewBBAHsAQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
+        CQAAAk1TRnQBSQFMAgEBAgEAAfQBBAH0AQQBEgEAARIBAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAFI
         AwABEgMAAQEBAAEgBQABQAEU/wBHAAMiATIBTwFQAU8BmwFZAV0BWQHXAVEBbQFRAfcBQAGHAUAB/QFX
         AV8BVwHoAVUBVwFVAboDOwFlAwABARQAAxIBGQNGAX8DIgEx1AADBgEIA0QBeQFKAV8BIQH7AQABhwEA
         Af8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BAAGHAQAB/wEAAYcBAAH/AQABhwEAAf8BWAFcAVgB0QMZ
@@ -2588,60 +2618,6 @@
   <data name="&gt;&gt;label_contextInfoSelected.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="mergedCheckbox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="mergedCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 44</value>
-  </data>
-  <data name="mergedCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>109, 17</value>
-  </data>
-  <data name="mergedCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="mergedCheckbox.Text" xml:space="preserve">
-    <value>Merged segments</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
-    <value>mergedCheckbox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="splitCheckBox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="splitCheckBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>12, 20</value>
-  </data>
-  <data name="splitCheckBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>93, 17</value>
-  </data>
-  <data name="splitCheckBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="splitCheckBox.Text" xml:space="preserve">
-    <value>Split segments</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
-    <value>splitCheckBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <data name="groupedBtn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
@@ -2948,16 +2924,16 @@
   <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTfS1NhGMffwgvBUigIoiD8D/oThC5yWjdR
-        1MFz5nY6DZfSlbrtMDzCga2BMfQcV2xeyQbWYh5Cii7q0laDJTKLLvIiJOoidyFdOttXn8k23+l+aB/4
-        ws77PN/Pyw5s7H9xStO0nvHRUd3tdqcUZTDjlKRVp2MwZ7fb13jBDDvYRQddOODaUxIYCHdu//J6vZlE
-        IvEim80af7e29EKhoNUT7KKDLhxwwUl6xvpsvduyU/qRy+XCPEEjgQMuOEnPWH+fbfvmjf4dRLh398/I
-        yPAXbWJiOTw19TYajS7G4/HnqdTLuGVZ8wg+4wwz7GAXHXRLHjhJz5hDFL+WBscVOEnPmK7r3YIgbPAW
-        mwlccJJ+D1VVL0rSwHdeoZHAARdpKwkEAudbeV3owkE6PqFQ6Kwsy595gsOCDrqkOZzij6VdUe4v80S8
-        YBcdqtdHsdDmcrne8YTlwQ52qdYYxeLp4YdDr3hiBDPs0HoFZ0zR32lKq+2mfIWOaqMojo/VcpzR+ACd
-        pqh1zdp3kA5TWqfj2njGxvzVF+CMxhWUy+u/wOPxQqqqvk/pdHp2Lhaz9MlJN4334cnrekW4IGIYS/gz
-        e5yxFrK/15/k8/mrNN6laTkIBoMK5OJr4z3Kl2IPNo2VN9dp3JocJJNJ24ef38LlkgvPnBuQtCwH1d9g
-        XzYjbVY8NyMHfp9PfBqJLBYveXQtqc2XS1uW8ziW13IUpUtORF6ia8Zx69y0cpkea8DYP8zIpjN6SvpM
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZRNaxNRFIav4qL40YKCoAjiP/AnCC7a+LFR
+        wQ7OpMl4CcYWV61JhtApDCQGKqHONEriqiSgRtJBRHGhyxoNRClRcWEXUkQXNovismnz2jNlEm9qPqoP
+        vJC557zPJQMJ+1/s0nX91M3xcSMYDBY4Hyn5FWXR7xupeL3eD6Jghh3sooMuHHBtKgkMpEsXv4fD4VIu
+        l3tULpfNX6urRq1W09sJdtFBFw644CQ9Y56hwTXVL3+tVCpJkaCTwAEXnKRn7IxnaO38ubPriDR8+efY
+        2OhHfXJyITk9/SKdTs9ns9mHhcLjrG3bcwg+4wwz7GAXHXQdD5ykZ8wny5+cwU4FTtIzZhjGCUmSlkWL
+        3QQuOEm/iaZpRxTlyhdRoZPAARdpG4nFYod6eV3owkE6MYlE4oCqqu9Egu2CDrqk2Z76j6WP86sLIpEo
+        2EWH6u1RL+wJBAIvRUJ3sINdqnVGvbh79Pq1JyIxghl2aL2B/ZYc7beUxT5LPU5HreHc96ZZjjMa/0G/
+        JesDs951ZJ+lLNFxa0ITE9HmC3BG4wbc8vYvCIXCkGpa5G2xWJy9n8nYxtRUkMZbiORtvSJckDLNp/gz
+        u1WyH5R/LN2uVqsnafybruUgHo9zyOVn5iuUj2b4ivn++SCNe5ODfD7vef3tc9ItOXzPvwxJz3LQ/A2c
+        7J1RVtzPXclBNBKR76ZS8/VLbpzO63Nuac9yETvyWv6Gc8k/kTsM3PFdODjDj9FjCxjbADkrph2Iwdpf
         AAAAAElFTkSuQmCC
 </value>
   </data>
