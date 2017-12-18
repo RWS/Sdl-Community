@@ -140,7 +140,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			var isCompex = IsComplexId(rowId);
 			if (isCompex)
 			{
-				var isMergedSegment = IsMergedSegment(rowId, currentDocument);
+				var isMergedSegment = IsMergedSegment(rowId, currentDocument,false);
 				if (isMergedSegment)
 				{
 					//is not split segment
@@ -163,7 +163,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		/// <param name="rowId"></param>
 		/// <param name="currentDocument"></param>
 		/// <returns></returns>
-		public static bool IsMergedSegment(string rowId, Document currentDocument)
+		public static bool IsMergedSegment(string rowId, Document currentDocument,bool mergedAcross)
 		{
 			var isCompexId = IsComplexId(rowId);
 			var count = 0;
@@ -219,10 +219,32 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 					{
 						return true;
 					}
+					if (mergedAcross)
+					{
+						//if a segment is followed by a empty and locked segment it means the segment is merged across paragraph
+						//we need also to show the empty segments too
+						var nextSegmentIsEmptyAndLockedSegment = IsEmptyAndLockedSegment(segments[currentSegmentIndex + 1]);
+						if (nextSegmentIsEmptyAndLockedSegment)
+						{
+							return true;
+						}
+						if (IsEmptyAndLockedSegment(currentSegment))
+						{
+							return true;
+						}
 
+					}
 				}
+				
 			}
 			return  false;
+		}
+
+		private static bool IsEmptyAndLockedSegment(ISegmentPair segment)
+		{
+			return segment.Source.ToString().Equals(string.Empty) &&
+			       segment.Target.ToString().Equals(string.Empty) &&
+			       segment.Properties.IsLocked;
 		}
 
 		public static bool IsSourceEqualsToTarget(ISegmentPair segmentPair,bool caseSensitive)

@@ -286,6 +286,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Merged segments across paragraphs.
+        /// </summary>
+        internal static string DisplayFilterControl_MergedAcross {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MergedAcross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Merged segments.
         /// </summary>
         internal static string DisplayFilterControl_MergedSegments {

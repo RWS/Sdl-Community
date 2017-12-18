@@ -133,10 +133,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				{
 					success = SegmentNumbersHelper.IsSplitSegment(rowId, ActiveDocument);
 				}
-				if (success && CustomSettings.MergedSegments)
+				if (success && (CustomSettings.MergedSegments||CustomSettings.MergedAcross))
 				{
-					success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument);
+					success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument,CustomSettings.MergedAcross);
 				}
+				
 				if (success && CustomSettings.SourceEqualsTarget)
 				{
 					success = SegmentNumbersHelper.IsSourceEqualsToTarget(rowInfo.SegmentPair, CustomSettings.IsEqualsCaseSensitive);
@@ -268,9 +269,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			{
 				success = SegmentNumbersHelper.IsSplitSegment(rowId, ActiveDocument);
 			}
-			if (!success && CustomSettings.MergedSegments)
+			if (!success && (CustomSettings.MergedSegments||CustomSettings.MergedAcross))
 			{
-				success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument);
+				success = SegmentNumbersHelper.IsMergedSegment(rowId, ActiveDocument,CustomSettings.MergedAcross);
 			}
 			if (!success && CustomSettings.SourceEqualsTarget)
 			{

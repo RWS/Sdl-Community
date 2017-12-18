@@ -313,4 +313,7 @@
   <data name="DisplayFilterControl_Reverse" xml:space="preserve">
     <value>Reverse filter</value>
   </data>
+  <data name="DisplayFilterControl_MergedAcross" xml:space="preserve">
+    <value>Merged segments across paragraphs</value>
+  </data>
 </root>

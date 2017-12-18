@@ -123,6 +123,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.mergedAcross = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -508,6 +509,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// tabPage_segmentNumbers
 			// 
 			resources.ApplyResources(this.tabPage_segmentNumbers, "tabPage_segmentNumbers");
+			this.tabPage_segmentNumbers.Controls.Add(this.mergedAcross);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMax);
 			this.tabPage_segmentNumbers.Controls.Add(this.label5);
 			this.tabPage_segmentNumbers.Controls.Add(this.fuzzyMin);
@@ -792,6 +794,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
+			// mergedAcross
+			// 
+			resources.ApplyResources(this.mergedAcross, "mergedAcross");
+			this.mergedAcross.Name = "mergedAcross";
+			this.mergedAcross.UseVisualStyleBackColor = true;
+			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -934,5 +942,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private Label label4;
 		private Label label3;
 		private ToolStripButton reverseBtn;
+		private CheckBox mergedAcross;
 	}
 }

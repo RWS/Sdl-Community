@@ -63,7 +63,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					MergedSegments = mergedCheckbox.Checked,
 					SourceEqualsTarget = sourceSameBox.Checked,
 					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
-					Unique = _uniqueSegments
+					Unique = _uniqueSegments,
+					MergedAcross = mergedAcross.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -102,6 +103,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				_uniqueSegments = value.Unique;
 				commentRegexBox.Checked = value.UseRegexCommentSearch;
 				_customSettings.Colors = value.Colors;
+				mergedAcross.Checked = value.MergedAcross;
 				foreach (var color in value.Colors)
 				{
 					foreach (ListViewItem colorItem in colorsListView.Items)
@@ -400,6 +402,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        fuzzyMax.Text = string.Empty;
 	        splitCheckBox.Checked = false;
 	        mergedCheckbox.Checked = false;
+	        mergedAcross.Checked = false;
 	        commentRegexBox.Checked = false;
 	        sourceSameBox.Checked = false;
 	        equalsCaseSensitive.Checked = false;
@@ -835,6 +838,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilter.MergedSegments + "\"");
 		        }
+		        if (CustomFilter.MergedAcross)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedAcross + ":\"" + CustomFilter.MergedAcross + "\"");
+				}
 				if (CustomFilter.EvenNo)
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +

@@ -17,6 +17,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string FuzzyMax { get; set; }
 		public bool SplitSegments { get; set; }
 		public bool MergedSegments { get; set; }
+		public bool MergedAcross { get; set; }
 		public bool SourceEqualsTarget { get; set; }
 		public bool IsEqualsCaseSensitive { get; set; }
 	}
