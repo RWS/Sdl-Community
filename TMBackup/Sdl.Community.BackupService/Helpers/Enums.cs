@@ -6,13 +6,11 @@ namespace Sdl.Community.BackupService.Helpers
 	public static class Enums
 	{
 		public enum TimeTypes
-		{
-			[Description("seconds")]
-			Seconds = 0,
+		{		
 			[Description("minutes")]
-			Minutes = 1,
+			Minutes = 0,
 			[Description("hours")]
-			Hours = 2
+			Hours = 1
 		}
 
 		public static string GetDescription(this Enum value)
