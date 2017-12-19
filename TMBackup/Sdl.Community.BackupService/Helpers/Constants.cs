@@ -15,6 +15,8 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string ManuallyOption = "Backup process started manually.";
 
 		public const string InformativeErrorMessage = "Files were not copied correctly. Please check the backup settings and try again!";
+		public const string BackupToErrorMessage = "'Backup to' cannot be empty. Please select folder where to backup files!";
+		public const string BackupFromErrorMessage = "'Backup from' cannot be empty. Please select folder from where to backup files!";
 
 		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
 

@@ -69,20 +69,31 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
 		{
-			BackupModel backupModel = new BackupModel();
-			backupModel.BackupFrom = txt_BackupFrom.Text;
-			backupModel.BackupTo = txt_BackupTo.Text;
-			backupModel.Description = txt_Description.Text;
-			backupModel.BackupDetails = txt_BackupDetails.Text;
-			backupModel.BackupTime = txt_BackupTime.Text;
+			if (string.IsNullOrEmpty(txt_BackupFrom.Text))
+			{
+				MessageBox.Show(Constants.BackupFromErrorMessage, Constants.InformativeMessage);
+			}
+			else if (string.IsNullOrEmpty(txt_BackupTo.Text))
+			{
+				MessageBox.Show(Constants.BackupToErrorMessage, Constants.InformativeMessage);
+			}
+			else
+			{
+				BackupModel backupModel = new BackupModel();
+				backupModel.BackupFrom = txt_BackupFrom.Text;
+				backupModel.BackupTo = txt_BackupTo.Text;
+				backupModel.Description = txt_Description.Text;
+				backupModel.BackupDetails = txt_BackupDetails.Text;
+				backupModel.BackupTime = txt_BackupTime.Text;
 
-			Persistence persistence = new Persistence();
-			persistence.SaveBackupFormInfo(backupModel);
+				Persistence persistence = new Persistence();
+				persistence.SaveBackupFormInfo(backupModel);
 
-			Close();
+				Close();
 
-			Service service = new Service();
-			service.CreateTaskScheduler();
+				Service service = new Service();
+				service.CreateTaskScheduler();
+			}
 		}
 
 		private void GetBackupFormInfo()

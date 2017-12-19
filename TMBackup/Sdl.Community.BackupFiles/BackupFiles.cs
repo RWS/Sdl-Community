@@ -43,6 +43,7 @@ namespace Sdl.Community.BackupFiles
 				if (jsonResult != null && jsonResult.BackupModel != null)
 				{
 					List<string> splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
+					string[] files = new List<string>().ToArray();
 
 					foreach (var sourcePath in splittedSourcePathList)
 					{
@@ -55,12 +56,21 @@ namespace Sdl.Community.BackupFiles
 							{
 								Directory.CreateDirectory(jsonResult.BackupModel.BackupTo);
 							}
-							
-							// get all files which have extension set up depending on actions from TMBackupDetails grid
-							var files = Directory.GetFiles(sourcePath, "*.*")
-												 .Where(f => fileExtensions
-												 .Contains(Path.GetExtension(f)))
-												 .ToArray();
+
+							// take files depending on defined action
+							if (fileExtensions.Any())
+							{
+								// get all files which have extension set up depending on actions from TMBackupDetails grid
+								files = Directory.GetFiles(sourcePath, "*.*")
+													 .Where(f => fileExtensions
+													 .Contains(Path.GetExtension(f)))
+													 .ToArray();
+							}
+							else
+							{
+								// take all files
+								files = Directory.GetFiles(sourcePath);
+							}
 
 							if (files.Length != 0)
 							{
