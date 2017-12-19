@@ -300,6 +300,15 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="fuzzyMin.Location" type="System.Drawing.Point, System.Drawing">
+    <value>8, 21</value>
+  </data>
+  <data name="fuzzyMin.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 20</value>
+  </data>
+  <data name="fuzzyMin.TabIndex" type="System.Int32, mscorlib">
+    <value>10</value>
+  </data>
   <data name="&gt;&gt;fuzzyMin.Name" xml:space="preserve">
     <value>fuzzyMin</value>
   </data>
@@ -312,6 +321,15 @@
   <data name="&gt;&gt;fuzzyMin.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="fuzzyMax.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 21</value>
+  </data>
+  <data name="fuzzyMax.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 20</value>
+  </data>
+  <data name="fuzzyMax.TabIndex" type="System.Int32, mscorlib">
+    <value>12</value>
+  </data>
   <data name="&gt;&gt;fuzzyMax.Name" xml:space="preserve">
     <value>fuzzyMax</value>
   </data>
@@ -323,6 +341,24 @@
   </data>
   <data name="&gt;&gt;fuzzyMax.ZOrder" xml:space="preserve">
     <value>1</value>
+  </data>
+  <data name="label5.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
+    <value>NoControl</value>
+  </data>
+  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
+    <value>74, 24</value>
+  </data>
+  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
+    <value>25, 13</value>
+  </data>
+  <data name="label5.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
+  <data name="label5.Text" xml:space="preserve">
+    <value>and</value>
   </data>
   <data name="&gt;&gt;label5.Name" xml:space="preserve">
     <value>label5</value>
@@ -340,7 +376,7 @@
     <value>6, 306</value>
   </data>
   <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 65</value>
+    <value>246, 65</value>
   </data>
   <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
@@ -360,6 +396,21 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="mergedAcross.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="mergedAcross.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 63</value>
+  </data>
+  <data name="mergedAcross.Size" type="System.Drawing.Size, System.Drawing">
+    <value>238, 17</value>
+  </data>
+  <data name="mergedAcross.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="mergedAcross.Text" xml:space="preserve">
+    <value>Merged segments including paragraph merge</value>
+  </data>
   <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
     <value>mergedAcross</value>
   </data>
@@ -371,6 +422,21 @@
   </data>
   <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="mergedCheckbox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="mergedCheckbox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 44</value>
+  </data>
+  <data name="mergedCheckbox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>110, 17</value>
+  </data>
+  <data name="mergedCheckbox.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="mergedCheckbox.Text" xml:space="preserve">
+    <value>Merged segments</value>
   </data>
   <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
     <value>mergedCheckbox</value>
@@ -384,6 +450,21 @@
   <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="splitCheckBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="splitCheckBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 20</value>
+  </data>
+  <data name="splitCheckBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>94, 17</value>
+  </data>
+  <data name="splitCheckBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="splitCheckBox.Text" xml:space="preserve">
+    <value>Split segments</value>
+  </data>
   <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
     <value>splitCheckBox</value>
   </data>
@@ -396,6 +477,21 @@
   <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
+  <data name="sourceSameBox.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="sourceSameBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 86</value>
+  </data>
+  <data name="sourceSameBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>164, 17</value>
+  </data>
+  <data name="sourceSameBox.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="sourceSameBox.Text" xml:space="preserve">
+    <value>Source text equals target text</value>
+  </data>
   <data name="&gt;&gt;sourceSameBox.Name" xml:space="preserve">
     <value>sourceSameBox</value>
   </data>
@@ -407,6 +503,21 @@
   </data>
   <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
     <value>3</value>
+  </data>
+  <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 109</value>
+  </data>
+  <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
+    <value>104, 17</value>
+  </data>
+  <data name="equalsCaseSensitive.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="equalsCaseSensitive.Text" xml:space="preserve">
+    <value>Is case sensitive</value>
   </data>
   <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
     <value>equalsCaseSensitive</value>
@@ -427,7 +538,7 @@
     <value>7, 165</value>
   </data>
   <data name="segmentsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 135</value>
+    <value>246, 135</value>
   </data>
   <data name="segmentsGroupBox.TabIndex" type="System.Int32, mscorlib">
     <value>5</value>
@@ -481,7 +592,7 @@
     <value>True</value>
   </data>
   <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 39</value>
+    <value>245, 39</value>
   </data>
   <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -583,7 +694,7 @@
     <value>7, 7</value>
   </data>
   <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>230, 94</value>
+    <value>246, 94</value>
   </data>
   <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -2513,159 +2624,6 @@
   <data name="&gt;&gt;label_contextInfoSelected.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="mergedAcross.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="mergedAcross.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 63</value>
-  </data>
-  <data name="mergedAcross.Size" type="System.Drawing.Size, System.Drawing">
-    <value>200, 17</value>
-  </data>
-  <data name="mergedAcross.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="mergedAcross.Text" xml:space="preserve">
-    <value>Merged segments across paragraphs</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
-    <value>mergedAcross</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="fuzzyMax.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 21</value>
-  </data>
-  <data name="fuzzyMax.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 20</value>
-  </data>
-  <data name="fuzzyMax.TabIndex" type="System.Int32, mscorlib">
-    <value>12</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Name" xml:space="preserve">
-    <value>fuzzyMax</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="label5.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label5.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="label5.Location" type="System.Drawing.Point, System.Drawing">
-    <value>74, 24</value>
-  </data>
-  <data name="label5.Size" type="System.Drawing.Size, System.Drawing">
-    <value>25, 13</value>
-  </data>
-  <data name="label5.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
-  </data>
-  <data name="label5.Text" xml:space="preserve">
-    <value>and</value>
-  </data>
-  <data name="&gt;&gt;label5.Name" xml:space="preserve">
-    <value>label5</value>
-  </data>
-  <data name="&gt;&gt;label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="fuzzyMin.Location" type="System.Drawing.Point, System.Drawing">
-    <value>8, 21</value>
-  </data>
-  <data name="fuzzyMin.Size" type="System.Drawing.Size, System.Drawing">
-    <value>52, 20</value>
-  </data>
-  <data name="fuzzyMin.TabIndex" type="System.Int32, mscorlib">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Name" xml:space="preserve">
-    <value>fuzzyMin</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="equalsCaseSensitive.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="equalsCaseSensitive.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 109</value>
-  </data>
-  <data name="equalsCaseSensitive.Size" type="System.Drawing.Size, System.Drawing">
-    <value>104, 17</value>
-  </data>
-  <data name="equalsCaseSensitive.TabIndex" type="System.Int32, mscorlib">
-    <value>7</value>
-  </data>
-  <data name="equalsCaseSensitive.Text" xml:space="preserve">
-    <value>Is case sensitive</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
-    <value>equalsCaseSensitive</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="sourceSameBox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="sourceSameBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 86</value>
-  </data>
-  <data name="sourceSameBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>164, 17</value>
-  </data>
-  <data name="sourceSameBox.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
-  <data name="sourceSameBox.Text" xml:space="preserve">
-    <value>Source text equals target text</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Name" xml:space="preserve">
-    <value>sourceSameBox</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
   <data name="colorLayoutPanel.ColumnCount" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
@@ -3187,60 +3145,6 @@
   <metadata name="backgroundWorker1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>589, 17</value>
   </metadata>
-  <data name="splitCheckBox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="splitCheckBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 20</value>
-  </data>
-  <data name="splitCheckBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>94, 17</value>
-  </data>
-  <data name="splitCheckBox.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="splitCheckBox.Text" xml:space="preserve">
-    <value>Split segments</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
-    <value>splitCheckBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="mergedCheckbox.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="mergedCheckbox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 44</value>
-  </data>
-  <data name="mergedCheckbox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>110, 17</value>
-  </data>
-  <data name="mergedCheckbox.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="mergedCheckbox.Text" xml:space="preserve">
-    <value>Merged segments</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
-    <value>mergedCheckbox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
