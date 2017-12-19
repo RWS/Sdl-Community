@@ -5,7 +5,6 @@ using System;
 using System.IO;
 using static Sdl.Community.BackupService.Helpers.Enums;
 using System.Globalization;
-using System.Reflection;
 
 namespace Sdl.Community.BackupService
 {
