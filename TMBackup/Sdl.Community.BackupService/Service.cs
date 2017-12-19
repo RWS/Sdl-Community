@@ -52,7 +52,6 @@ namespace Sdl.Community.BackupService
 				td.Triggers.Add(trigger);
 
 				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), "Daily"));
-				//td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
 
 				try
 				{

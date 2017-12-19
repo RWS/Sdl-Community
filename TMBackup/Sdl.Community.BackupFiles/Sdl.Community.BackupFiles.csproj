@@ -34,6 +34,7 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.7.2.0, Culture=neutral, PublicKeyToken=c416bc1b32d97233, processorArchitecture=MSIL">
       <HintPath>..\packages\TaskScheduler.2.7.2\lib\net452\Microsoft.Win32.TaskScheduler.dll</HintPath>
@@ -63,6 +64,10 @@
       <Project>{8c9c20fa-0a8c-4293-9dfb-5d8165ccef28}</Project>
       <Name>Sdl.Community.BackupService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sdl.Community.BackupService.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
