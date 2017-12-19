@@ -21,28 +21,14 @@ namespace Sdl.Community.TMBackup
 		{
 			protected override void Execute()
 			{
-				var path = MoveBackupFilesAppToDirectory();
-				RunBackupApp(path);
+			    MoveBackupFilesAppToDirectory();
 
 				TMBackupForm tmBackupForm = new TMBackupForm();
 				tmBackupForm.ShowDialog();
 			}
 		}
-
-		private static void RunBackupApp(string path)
-		{
-			RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-
-			if (key.GetValue("Sdl.Community.BackupFiles") == null)
-			{
-				key.CreateSubKey("Sdl.Community.BackupFiles");
-
-				// Add the value in the registry so that the application runs at startup
-				key.SetValue("Sdl.Community.BackupFiles", path + Constants.RegistryParam, RegistryValueKind.String);
-			}
-		}
-
-		private static string MoveBackupFilesAppToDirectory()
+		
+		private static void MoveBackupFilesAppToDirectory()
 		{
 			string path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
 
@@ -69,7 +55,6 @@ namespace Sdl.Community.TMBackup
 					}
 				}
 			}
-			return path;
 		}
 	}
 }
