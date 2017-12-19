@@ -34,16 +34,23 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Set_Click(object sender, EventArgs e)
 		{
-			PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
-			periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
-			periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
-			periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
-			periodicBackupModel.BackupAt = timePicker_At.Text;
+			if (string.IsNullOrEmpty(txtBox_TimeInterval.Text))
+			{
+				MessageBox.Show(Constants.IntervalErrorMessage, Constants.InformativeMessage);
+			}
+			else
+			{
+				PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
+				periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
+				periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
+				periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
+				periodicBackupModel.BackupAt = timePicker_At.Text;
 
-			Persistence persistence = new Persistence();
-			persistence.SavePeriodicBackupInfo(periodicBackupModel);
+				Persistence persistence = new Persistence();
+				persistence.SavePeriodicBackupInfo(periodicBackupModel);
 
-			Close();
+				Close();
+			}
 		}
 
 		private void btn_Now_Click(object sender, EventArgs e)
