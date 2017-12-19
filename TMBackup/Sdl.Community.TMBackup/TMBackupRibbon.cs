@@ -32,6 +32,11 @@ namespace Sdl.Community.TMBackup
 		{
 			string path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
 
+			if(!Directory.Exists(Constants.SdlCommunityPath))
+			{
+				Directory.CreateDirectory(Constants.SdlCommunityPath);
+			}
+
 			if (!Directory.Exists(Constants.DeployPath))
 			{
 				Directory.CreateDirectory(Constants.DeployPath);

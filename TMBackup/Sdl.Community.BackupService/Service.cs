@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using static Sdl.Community.BackupService.Helpers.Enums;
 using System.Globalization;
+using System.Reflection;
 
 namespace Sdl.Community.BackupService
 {
@@ -50,7 +51,8 @@ namespace Sdl.Community.BackupService
 			{
 				td.Triggers.Add(trigger);
 
-				td.Actions.Add(new ExecAction("Sdl.Community.TmBackup.BackupFilesExe.Sdl.Community.BackupFiles.exe", "Daily"));
+				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), "Daily"));
+				//td.Actions.Add(new ExecAction(Path.Combine(@"C:\Repos\TMBackup\Sdl.Community.BackupFiles\bin\Debug", "Sdl.Community.BackupFiles.exe"), "Daily"));
 
 				try
 				{
