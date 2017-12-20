@@ -115,7 +115,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 				{
 					var info = new ProcessStartInfo("\"" + JavaPath + "\"")
 					{
-						Arguments = " -jar \"" + TerpPath + "\" -r \"" + filehyp + "\" -h \"" + fileRef + "\" -n \"" + filePrefix + "\" -o sum,html",
+						Arguments = " -jar \"" + TerpPath + "\" -r \"" + filehyp + "\" -h \"" + fileRef + "\" -n \"" + filePrefix + "\" -o sum,pra,nist,html,param",
 						WindowStyle = ProcessWindowStyle.Hidden
 					};
 					var process = System.Diagnostics.Process.Start(info);

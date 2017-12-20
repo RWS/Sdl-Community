@@ -347,7 +347,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
             foreach (var fileComparisonFileParagraphUnit in fileComparisonFileParagraphUnits)
             {
-                progressCurrentFileIndex++;
+	            var capitalLettersEdited = Capitalization.CapitalLettersEdited(fileComparisonFileParagraphUnit.Value);
+				progressCurrentFileIndex++;
                 var progressMaxSegments = 0;
                 var progressCurrentSegmentIndex = 0;
                 var progressPercentage = 0;
@@ -484,8 +485,20 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 
                 var pempDict = new Dictionary<string, PEMp>();
                 var terpResult = terpResults.SingleOrDefault(a => a.OriginalDocumentPath == fileUnitProperties.FilePathOriginal && a.UpdatedDocumentPath == fileUnitProperties.FilePathUpdated);
+	            if (terpResult != null)
+	            {
+		            foreach (var segmentData in terpResult.SegmentDatas)
+		            {
+			            var corespondingEditedExists =
+				            capitalLettersEdited.TryGetValue(segmentData.ParagraphId, out int editedNumber);
+			            if (corespondingEditedExists)
+			            {
+				            segmentData.NumEr = segmentData.NumEr + editedNumber;
+			            }
 
-                xmlTxtWriter.WriteStartElement("file");
+		            }
+	            }
+	            xmlTxtWriter.WriteStartElement("file");
 
                 #region  |  file attributes  |
 
