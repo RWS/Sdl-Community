@@ -224,7 +224,7 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
 
-			if (request != null && request.BackupDetailsModelList != null)
+			if (request != null && request.BackupDetailsModelList.Count > 0)
 			{
 				// create backupModel which is used as a new row where user can add another Action
 				BackupDetailsModel emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
