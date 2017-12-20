@@ -36,24 +36,42 @@ namespace Sdl.Community.AdaptiveMT
 		protected override void Execute()
 		{
 			var editorController = GetEditorController();
-			editorController.Activate();
-			var project = GetProjectsController().CurrentProject;
-			var files = project.GetTargetLanguageFiles();
-			foreach (var file in files)
+			
+			var projects = GetProjectsController().SelectedProjects;
+			
+			foreach (var project in projects)
 			{
-				var document = editorController.Open(file.LocalFilePath);
-				var segmentPairs = document.SegmentPairs.ToList();
-				//segmentPairs[0].Properties.ConfirmationLevel = ConfirmationLevel.Translated;
-				foreach (var segmentPair in segmentPairs)
+				var providerExist = false;
+				var provider = project.GetTranslationProviderConfiguration();
+				//foreach (var entry in provider.Entries)
+				//{
+				//	if (entry.MainTranslationProvider.Enabled && entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))
+				//	{
+				//		providerExist = true;
+				//	}
+				//}
+				//if (providerExist)
+				//{
+
+				//}
+				var files = project.GetTargetLanguageFiles();
+
+				foreach (var file in files)
 				{
-					if (segmentPair.Target.ToString() != string.Empty)
+					var document = editorController.Open(file.LocalFilePath);
+					var segmentPairs = document.SegmentPairs.ToList();
+					foreach (var segmentPair in segmentPairs)
 					{
-						segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
-						editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+						if (segmentPair.Target.ToString() != string.Empty)
+						{
+							segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
+							editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+						}
+
 					}
-					
 				}
 			}
+			
 		}
 	}
 }
