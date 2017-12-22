@@ -51,48 +51,51 @@ namespace Sdl.Community.BackupService
 		
 		public void SaveDetailsFormInfo(List<BackupDetailsModel> backupDetailsModelList)
 		{
+			if(backupDetailsModelList.Any())
+			{ 
 			CheckIfJsonFileExist();
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request == null)
-			{
-				request = new JsonRequestModel();
-				request.BackupDetailsModelList = backupDetailsModelList;
-				var json = JsonConvert.SerializeObject(request);
-
-				File.WriteAllText(_persistancePath, json);
-			}
-			else
-			{
-				if (request.BackupDetailsModelList.Any())
+				if (request == null)
 				{
-					foreach (var backupItem in backupDetailsModelList)
-					{
-						var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupAction == backupItem.BackupAction
-																					 && b.BackupType == backupItem.BackupType
-																					 && b.BackupPattern == backupItem.BackupPattern)
-																			 .FirstOrDefault();
-						if (existingBackupItem == null)
-						{
-							request.BackupDetailsModelList.Add(backupItem);
+					request = new JsonRequestModel();
+					request.BackupDetailsModelList = backupDetailsModelList;
+					var json = JsonConvert.SerializeObject(request);
 
-							var json = JsonConvert.SerializeObject(request);
-							File.WriteAllText(_persistancePath, json);
-						}
-						else
-						{
-							MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
-						}
-					}
+					File.WriteAllText(_persistancePath, json);
 				}
 				else
 				{
-					request.BackupDetailsModelList = backupDetailsModelList;
+					if (request.BackupDetailsModelList.Any())
+					{
+						foreach (var backupItem in backupDetailsModelList)
+						{
+							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupAction == backupItem.BackupAction
+																						 && b.BackupType == backupItem.BackupType
+																						 && b.BackupPattern == backupItem.BackupPattern)
+																				 .FirstOrDefault();
+							if (existingBackupItem == null)
+							{
+								request.BackupDetailsModelList.Add(backupItem);
 
-					var json = JsonConvert.SerializeObject(request);
-					File.WriteAllText(_persistancePath, json);
-				}			
+								var json = JsonConvert.SerializeObject(request);
+								File.WriteAllText(_persistancePath, json);
+							}
+							else
+							{
+								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+							}
+						}
+					}
+					else
+					{
+						request.BackupDetailsModelList = backupDetailsModelList;
+
+						var json = JsonConvert.SerializeObject(request);
+						File.WriteAllText(_persistancePath, json);
+					}
+				}
 			}			
 		}
 
