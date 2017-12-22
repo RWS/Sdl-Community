@@ -67,6 +67,14 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
@@ -116,6 +124,12 @@
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.AdaptiveMT.Service\Sdl.Community.AdaptiveMT.Service.csproj">
+      <Project>{65e218c9-8749-4cbb-b64c-a25726812d5a}</Project>
+      <Name>Sdl.Community.AdaptiveMT.Service</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

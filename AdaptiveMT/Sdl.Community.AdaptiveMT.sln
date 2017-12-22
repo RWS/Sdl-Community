@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AdaptiveMT", "Sdl.Community.AdaptiveMT\Sdl.Community.AdaptiveMT.csproj", "{7371A299-ADA6-4BA2-8C93-0CA002C11B86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AdaptiveMT.Service", "Sdl.Community.AdaptiveMT.Service\Sdl.Community.AdaptiveMT.Service.csproj", "{65E218C9-8749-4CBB-B64C-A25726812D5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{7371A299-ADA6-4BA2-8C93-0CA002C11B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7371A299-ADA6-4BA2-8C93-0CA002C11B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7371A299-ADA6-4BA2-8C93-0CA002C11B86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65E218C9-8749-4CBB-B64C-A25726812D5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65E218C9-8749-4CBB-B64C-A25726812D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65E218C9-8749-4CBB-B64C-A25726812D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65E218C9-8749-4CBB-B64C-A25726812D5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

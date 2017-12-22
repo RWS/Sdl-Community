@@ -4,5 +4,9 @@
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author></Author>
+	<Include>
+		<File>Sdl.Community.AdaptiveMT.Service.dll</File>
+		<File>Newtonsoft.Json.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>
