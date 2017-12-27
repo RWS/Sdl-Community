@@ -49,9 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiClient.cs" />
-    <Compile Include="Constants.cs" />
+    <Compile Include="Clients\ApiClient.cs" />
+    <Compile Include="Clients\IJsonSerializer.cs" />
+    <Compile Include="Clients\JsonSerializerHelper.cs" />
+    <Compile Include="Helpers\ApiUrls.cs" />
+    <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Model\OosAccounts.cs" />
     <Compile Include="Model\User.cs" />
+    <Compile Include="Model\UserRequest.cs" />
+    <Compile Include="Model\UserResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

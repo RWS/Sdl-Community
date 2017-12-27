@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.AdaptiveMT.Service;
+using Sdl.Community.AdaptiveMT.Service.Clients;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
