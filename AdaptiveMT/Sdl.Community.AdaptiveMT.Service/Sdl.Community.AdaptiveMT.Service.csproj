@@ -53,7 +53,9 @@
     <Compile Include="Clients\IJsonSerializer.cs" />
     <Compile Include="Clients\JsonSerializerHelper.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
+    <Compile Include="Helpers\EngineDetails.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Model\EngineMappingDetails.cs" />
     <Compile Include="Model\OosAccounts.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserRequest.cs" />

@@ -4,8 +4,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Sdl.Community.AdaptiveMT.Service;
 using Sdl.Community.AdaptiveMT.Service.Clients;
+using Sdl.Community.AdaptiveMT.Service.Helpers;
+using Sdl.Community.AdaptiveMT.Service.Model;
 using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -44,9 +47,11 @@ namespace Sdl.Community.AdaptiveMT
 		{
 			var editorController = GetEditorController();
 			var projects = GetProjectsController().SelectedProjects;
-			var text = await ApiClient.Login("fcaputa@sdl.com", "101qwe101!!@");
-			
-			
+
+			//var text = await ApiClient.Login("fcaputa@sdl.com", "101qwe101!!@");
+
+			var providerUrl = string.Empty;
+
 			foreach (var project in projects)
 			{
 				var providerExist = false;
@@ -60,12 +65,16 @@ namespace Sdl.Community.AdaptiveMT
 					if (entry.MainTranslationProvider.Enabled && entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))
 					{
 						providerExist = true;
+						providerUrl = HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri);
+						break;//for the moment we take only the first cloud provider
+						
 					}
 				}
 				
 				var files = project.GetTargetLanguageFiles();
-				var test = new Uri(
-					"https://lc-api.sdl.com/?languagePairEngineMapping=en-US%252fde-DE%253a5a3b9b630cf26707d2cf1863&dictionariesIds=53f1d304e4b07afb2ab592c2%2c55eb45e90cf2f057e3b57bf8%2c597967090cf200d405995eb0%2c59ba6f0a0cf291b5c1c1771f");
+				var providerDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
+
+				//Confirm all segments in file needs to be uncommented later
 				//foreach (var file in files)
 				//{					
 				//	var document = editorController.Open(file, EditingMode.Translation);
