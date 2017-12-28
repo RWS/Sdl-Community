@@ -55,8 +55,12 @@
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\EngineDetails.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Model\Definition.cs" />
     <Compile Include="Model\EngineMappingDetails.cs" />
+    <Compile Include="Model\FeedbackRequest.cs" />
+    <Compile Include="Model\LanguagePair.cs" />
     <Compile Include="Model\OosAccounts.cs" />
+    <Compile Include="Model\Resource.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserRequest.cs" />
     <Compile Include="Model\UserResponse.cs" />

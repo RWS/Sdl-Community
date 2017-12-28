@@ -48,7 +48,9 @@ namespace Sdl.Community.AdaptiveMT
 			var editorController = GetEditorController();
 			var projects = GetProjectsController().SelectedProjects;
 
-			//var text = await ApiClient.Login("fcaputa@sdl.com", "101qwe101!!@");
+			var userDerails = await ApiClient.Login("fcaputa@sdl.com", "101qwe101!!@");
+
+			await ApiClient.Feedback(userDerails.Sid);
 
 			var providerUrl = string.Empty;
 

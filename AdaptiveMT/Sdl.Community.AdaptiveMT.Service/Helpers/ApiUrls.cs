@@ -10,5 +10,10 @@ namespace Sdl.Community.AdaptiveMT.Service.Helpers
 		{
 			return "{0}/studio/login".FormatUri(BaseUri);
 		}
+
+		public static Uri Feedback()
+		{
+			return "{0}/feedback".FormatUri(BaseUri);
+		}
 	}
 }
