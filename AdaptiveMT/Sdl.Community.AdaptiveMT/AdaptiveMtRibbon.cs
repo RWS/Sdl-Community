@@ -48,10 +48,11 @@ namespace Sdl.Community.AdaptiveMT
 			var editorController = GetEditorController();
 			var projects = GetProjectsController().SelectedProjects;
 
-			Helpers.Credentials.GetCredentials();
-			
-
-			//var userDerails = await ApiClient.Login("fcaputa@sdl.com", "101qwe101!!@");
+			var userCredentials = Helpers.Credentials.GetCredentials();
+			if (userCredentials!=null)
+			{
+				var userDetails = await ApiClient.Login(userCredentials.Email, userCredentials.Password);
+			}
 
 			//await ApiClient.Feedback(userDerails.Sid);
 
@@ -61,10 +62,7 @@ namespace Sdl.Community.AdaptiveMT
 			{
 				var providerExist = false;
 				var provider = project.GetTranslationProviderConfiguration();
-
-				//from gere get credentioal with reflection
-				var factory = TranslationProviderManager.GetTranslationProviderWinFormsUIs();
-
+				
 				foreach (var entry in provider.Entries)
 				{
 					if (entry.MainTranslationProvider.Enabled && entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))

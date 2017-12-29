@@ -46,6 +46,7 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 			var jsonHelper = new JsonSerializerHelper();
 			using (var client = new HttpClient())
 			{
+				//for the time beeing we harcode the date until we fix the internal server error issue
 				var feedback = new FeedbackRequest
 				{
 					LanguagePair = new LanguagePair
