@@ -28,14 +28,16 @@ namespace Sdl.Community.AdaptiveMT
 	[Action("AdaptiveMt",
 		Name = "Adaptive MT Training",
 		Description = "Adaptive MT Training"
-		)]
-	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
-	public class AdaptiveMtRibbon: AbstractAction
+	)]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "",
+		true)]
+	public class AdaptiveMtRibbon : AbstractAction
 	{
 		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
+
 		private Document ActiveDocument { get; set; }
 
 		private static EditorController GetEditorController()
@@ -43,56 +45,58 @@ namespace Sdl.Community.AdaptiveMT
 			return SdlTradosStudio.Application.GetController<EditorController>();
 		}
 
-		protected  override async void Execute()
+		protected override async void Execute()
 		{
 			var editorController = GetEditorController();
 			var projects = GetProjectsController().SelectedProjects;
 
 			var userCredentials = Helpers.Credentials.GetCredentials();
-			if (userCredentials!=null)
+			if (userCredentials != null)
 			{
 				var userDetails = await ApiClient.Login(userCredentials.Email, userCredentials.Password);
-			}
 
-			//await ApiClient.Feedback(userDerails.Sid);
+				await ApiClient.OosSession(userCredentials, userDetails.Sid);
+				await ApiClient.Feedback(userDetails.Sid);
 
-			var providerUrl = string.Empty;
+				var providerUrl = string.Empty;
 
-			foreach (var project in projects)
-			{
-				var providerExist = false;
-				var provider = project.GetTranslationProviderConfiguration();
-				
-				foreach (var entry in provider.Entries)
+				foreach (var project in projects)
 				{
-					if (entry.MainTranslationProvider.Enabled && entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))
+					var providerExist = false;
+					var provider = project.GetTranslationProviderConfiguration();
+
+					foreach (var entry in provider.Entries)
 					{
-						providerExist = true;
-						providerUrl = HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri);
-						break;//for the moment we take only the first cloud provider
-						
+						if (entry.MainTranslationProvider.Enabled &&
+						    entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))
+						{
+							providerExist = true;
+							providerUrl = HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri);
+							break; //for the moment we take only the first cloud provider
+
+						}
 					}
+
+					var files = project.GetTargetLanguageFiles();
+					var providerDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
+
+					//Confirm all segments in file needs to be uncommented later
+					//foreach (var file in files)
+					//{					
+					//	var document = editorController.Open(file, EditingMode.Translation);
+					//	var segmentPairs = document.SegmentPairs.ToList();
+					//	//Confirm each segment
+					//	foreach (var segmentPair in segmentPairs)
+					//	{
+					//		if (segmentPair.Target.ToString() != string.Empty)
+					//		{
+					//			segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
+					//			editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+
+					//		}
+					//	}
+					//}
 				}
-				
-				var files = project.GetTargetLanguageFiles();
-				var providerDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
-
-				//Confirm all segments in file needs to be uncommented later
-				//foreach (var file in files)
-				//{					
-				//	var document = editorController.Open(file, EditingMode.Translation);
-				//	var segmentPairs = document.SegmentPairs.ToList();
-				//	//Confirm each segment
-				//	foreach (var segmentPair in segmentPairs)
-				//	{
-				//		if (segmentPair.Target.ToString() != string.Empty)
-				//		{
-				//			segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
-				//			editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
-
-				//		}
-				//	}
-				//}
 			}
 		}
 	}

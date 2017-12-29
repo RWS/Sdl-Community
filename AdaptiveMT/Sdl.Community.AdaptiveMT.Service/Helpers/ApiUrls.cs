@@ -15,5 +15,9 @@ namespace Sdl.Community.AdaptiveMT.Service.Helpers
 		{
 			return "{0}/feedback".FormatUri(BaseUri);
 		}
+		public static Uri Session(string oosAccountId)
+		{
+			return "{0}/studio/session/oos-account/{1}".FormatUri(BaseUri,oosAccountId);
+		}
 	}
 }

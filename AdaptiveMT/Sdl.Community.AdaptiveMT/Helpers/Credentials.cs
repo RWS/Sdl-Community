@@ -32,7 +32,8 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 					var userRequest = new UserRequest
 					{
 						Email = userDetails.UserName,
-						Password = userDetails.Password
+						Password = userDetails.Password,
+						SelectedAccountId = userDetails.SelectedAccount.Id
 					};
 					return userRequest;
 				}

@@ -25,7 +25,9 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 		{
 			return new JsonSerializerSettings()
 			{
-				ContractResolver = new CamelCasePropertyNamesContractResolver()
+				ContractResolver = new CamelCasePropertyNamesContractResolver(),
+				DefaultValueHandling = DefaultValueHandling.Ignore,
+				NullValueHandling = NullValueHandling.Ignore
 			};
 		}
 	}

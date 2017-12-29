@@ -61,6 +61,7 @@
     <Compile Include="Model\LanguagePair.cs" />
     <Compile Include="Model\OosAccounts.cs" />
     <Compile Include="Model\Resource.cs" />
+    <Compile Include="Model\Session.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\UserRequest.cs" />
     <Compile Include="Model\UserResponse.cs" />

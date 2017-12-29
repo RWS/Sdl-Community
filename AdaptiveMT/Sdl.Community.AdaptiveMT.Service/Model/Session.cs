@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.AdaptiveMT.Service.Model
 {
-	public class UserRequest
+	public class Session
 	{
-		public string Email { get; set; }
-		public string Password { get; set; }
-		public string SelectedAccountId { get; set; }
+		public OosAccounts OosAccount { get; set; }
+		public User User { get; set; }
 	}
 }

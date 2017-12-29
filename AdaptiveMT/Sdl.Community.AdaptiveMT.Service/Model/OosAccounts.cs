@@ -8,6 +8,7 @@ namespace Sdl.Community.AdaptiveMT.Service.Model
 {
 	public class OosAccounts
 	{
-		public string Sid { get; set; }
+		public string OosAccountId { get; set; }
+		public string OosAccountName { get; set; }
 	}
 }
