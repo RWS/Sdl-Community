@@ -50,7 +50,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clients\ApiClient.cs" />
-    <Compile Include="Clients\IJsonSerializer.cs" />
     <Compile Include="Clients\JsonSerializerHelper.cs" />
     <Compile Include="Helpers\ApiUrls.cs" />
     <Compile Include="Helpers\EngineDetails.cs" />

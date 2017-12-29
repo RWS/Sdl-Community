@@ -13,89 +13,75 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 {
 	public static class ApiClient
 	{
-		public  static async Task<UserResponse> Login(string userName, string password)
+		public static async Task<UserResponse> Login(string userName, string password)
 		{
-			var jsonHelper = new JsonSerializerHelper();
-			using (var client = new HttpClient())
+			var user = new UserRequest
 			{
-				//client.BaseAddress = new Uri(ApiUrls.BaseUri);
-				client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+				Email = userName,
+				Password = password
+			};
+			var response = await SendRequest(user, string.Empty, HttpMethod.Post, ApiUrls.Login());
+			var userResponse = JsonConvert.DeserializeObject<UserResponse>(response);
 
-				var user = new UserRequest
-				{
-					Email = userName,
-					Password = password
-				};
-
-				var request = new HttpRequestMessage(HttpMethod.Post, ApiUrls.Login());
-				var content = JsonConvert.SerializeObject(user,jsonHelper.SerializerSettings());
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
-
-				var response = await client.SendAsync(request);
-				var userDetails = await response.Content.ReadAsStringAsync();
-				var userResponse = jsonHelper.Deserialize<UserResponse>(userDetails);
-
-				return userResponse;
-			}
+			return userResponse;
 		}
 
 		public static async Task OosSession(UserRequest user,string sid)
 		{
-			var jsonHelper = new JsonSerializerHelper();
-			using (var client = new HttpClient())
-			{
-				client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-				var authHeader = $"SID={sid}";
-				var request = new HttpRequestMessage(HttpMethod.Put, ApiUrls.Session(user.SelectedAccountId));
-				request.Headers.Authorization = new AuthenticationHeaderValue("LC", authHeader);
-
-				var response = await client.SendAsync(request);
-				var userDetails = await response.Content.ReadAsStringAsync();
-				var sessionResponse = jsonHelper.Deserialize<Session>(userDetails);
-			}
+			var response = await SendRequest(null, sid, HttpMethod.Put, ApiUrls.Session(user.SelectedAccountId));
+			var session = JsonConvert.DeserializeObject<Session>(response);
 		}
-
 		public static async Task Feedback(string sid)
+		{
+			var feedback = new FeedbackRequest
+			{
+				LanguagePair = new LanguagePair
+				{
+					Source = "en-US",
+					Target = "de-DE"
+				},
+				OriginalOutput = string.Empty,
+				PostEdited = "Das ist ein Katzensprung.",
+				Definition = new Definition
+				{
+					Resources = new List<Resource>
+					{
+						new Resource
+						{
+							ResourceId = "5a3b9b630cf26707d2cf1863",
+							Type = "MT"
+						}
+					}
+				},
+				Source = "This is a test."
+			};
+			var response = await SendRequest(feedback, sid, HttpMethod.Post, ApiUrls.Feedback());
+			var feedbackMessage = JsonConvert.DeserializeObject(response);
+		}
+		public static async Task<string> SendRequest(object contentBody,string sid, HttpMethod method, Uri url)
 		{
 			var jsonHelper = new JsonSerializerHelper();
 			using (var client = new HttpClient())
 			{
 				client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
-				//for the time beeing we harcode the date until we fix the internal server error issue
-				var feedback = new FeedbackRequest
+				var request = new HttpRequestMessage(method, url);
+				//for Login call we don't have sid
+				if (sid != string.Empty)
 				{
-					LanguagePair = new LanguagePair
-					{
-						Source = "en-US",
-						Target = "de-DE"
-					},
-					OriginalOutput = string.Empty,
-					PostEdited = "Das ist ein Katzensprung.",
-					Definition = new Definition
-					{
-						Resources = new List<Resource>
-						{
-							new Resource
-							{
-								ResourceId = "5a3b9b630cf26707d2cf1863",
-								Type = "MT"
-							}
-						}
-					},
-					Source = "This is a test."
-				};
-
-				var authHeader = $"SID={sid}";
-				var request = new HttpRequestMessage(HttpMethod.Post, ApiUrls.Feedback());
-				request.Headers.Authorization = new AuthenticationHeaderValue("LC", authHeader);
-				var content = JsonConvert.SerializeObject(feedback, jsonHelper.SerializerSettings());
-
-				request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
-
-				var response = await client.SendAsync(request);
-				var userDetails = await response.Content.ReadAsStringAsync();
-
+					var authHeader = $"SID={sid}";
+					request.Headers.Authorization = new AuthenticationHeaderValue("LC", authHeader);
+				}
+				if (contentBody != null)
+				{
+					var content = JsonConvert.SerializeObject(contentBody, jsonHelper.SerializerSettings());
+					request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
+				}
+				var responseMessage = await client.SendAsync(request);
+				var response = await responseMessage.Content.ReadAsStringAsync();
+				return response;
 			}
 		}
+
+	
 	}
 }
