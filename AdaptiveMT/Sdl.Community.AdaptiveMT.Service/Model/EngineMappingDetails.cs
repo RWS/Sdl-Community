@@ -11,6 +11,5 @@ namespace Sdl.Community.AdaptiveMT.Service.Model
 		public string SourceLang { get; set; }
 		public string TargetLang { get; set; }
 		public string Id { get; set; }
-		public List<string> ResourcesIds { get; set; }
 	}
 }

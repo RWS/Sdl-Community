@@ -17,48 +17,46 @@ namespace Sdl.Community.AdaptiveMT.Service.Helpers
 		/// </summary>
 		/// <param name="url"></param>
 		/// <returns></returns>
-		public static EngineMappingDetails GetDetailsFromEngineUrl(string url)
+		public static List<EngineMappingDetails> GetDetailsFromEngineUrl(string url)
 		{
-			var engineMappingDetails = new EngineMappingDetails();
-			SplitAfterDictionary(url, engineMappingDetails);
-			return engineMappingDetails;
-		}
-
-		private static void SplitAfterDictionary(string url, EngineMappingDetails engineMapping)
-		{
+			var providerLanguages = new List<EngineMappingDetails>();
+			//remove first part of the url
+			var urlWithoutBegining = url.Replace("https://lc-api.sdl.com/?languagePairEngineMapping=", string.Empty);
 			var dictionaryPattern = "&dictionariesIds=";
-			var substrings = Regex.Split(url, dictionaryPattern);
-			if (substrings.Count() >= 2)
+
+			//split the url after dictionariesId
+			var substrings = Regex.Split(urlWithoutBegining, dictionaryPattern);
+			if (substrings.Any())
 			{
-				var resourceIds = substrings[1].Split(',').ToList();
-				engineMapping.ResourcesIds = resourceIds;
-				GetIdAndLanguagePair(substrings[0], engineMapping);
+				if (substrings[0].Contains(";"))
+				{
+					var sourcePattern = ";";
+					var languagesSplit = Regex.Split(substrings[0], sourcePattern);
+
+					foreach (var language in languagesSplit)
+					{
+						var providerLanguage = GetLanguageDetails(language);
+						providerLanguages.Add(providerLanguage);
+					}
+				}
+				else
+				{
+					providerLanguages.Add(GetLanguageDetails(substrings[0]));
+				}
 			}
-			
+			return providerLanguages;
 		}
 
-		private static void GetIdAndLanguagePair(string url, EngineMappingDetails engineMapping)
+		public static EngineMappingDetails GetLanguageDetails(string language)
 		{
-			var split = url.Split('=');
-			//get  source language by spliting after "/" code
-			var sourcePattern = "%2f";
-			var substrings = Regex.Split(split[1], sourcePattern);
-
-			if (substrings.Count() >= 2)
+			var slashPosition = language.IndexOf(@"/", StringComparison.Ordinal);
+			var pointsPosition = language.IndexOf(@":", StringComparison.Ordinal);
+			var providerLanguage = new EngineMappingDetails
 			{
-				engineMapping.SourceLang = substrings[0];
-				//split after ":" code
-				var targetPattern = "%3a";
-				var targetSplit = Regex.Split(substrings[1], targetPattern);
-
-				if (targetSplit.Count() >= 2)
-				{
-					engineMapping.TargetLang = targetSplit[0];
-					engineMapping.Id = targetSplit[1];
-				}
-				
-			}
-			
+				TargetLang = language.Substring(slashPosition + 1, pointsPosition - slashPosition - 1),
+				Id = language.Substring(pointsPosition + 1)
+			};
+			return providerLanguage;
 		}
 	}
 }

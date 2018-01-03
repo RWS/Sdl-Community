@@ -70,40 +70,51 @@ namespace Sdl.Community.AdaptiveMT
 						    entry.MainTranslationProvider.Uri.AbsoluteUri.Contains("bmslanguagecloud"))
 						{
 							providerExist = true;
-							providerUrl = HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri);
+							providerUrl = HttpUtility.UrlDecode(HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri));
 							break; //for the moment we take only the first cloud provider
 
 						}
 					}
 
-					var files = project.GetTargetLanguageFiles();
-					var providerDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
-
-					foreach (var file in files)
+					if (providerExist)
 					{
-						var document = editorController.Open(file, EditingMode.Translation);
-						var segmentPairs = document.SegmentPairs.ToList();
-						//Confirm each segment
-						foreach (var segmentPair in segmentPairs)
+						var files = project.GetTargetLanguageFiles();
+						var providersDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
+
+						foreach (var file in files)
 						{
-							if (segmentPair.Target.ToString() != string.Empty)
+							var targetLanguage = file.Language.IsoAbbreviation;
+							var document = editorController.Open(file, EditingMode.Translation);
+							var segmentPairs = document.SegmentPairs.ToList();
+							var providerDetails = providersDetails.FirstOrDefault(t => t.TargetLang.Equals(targetLanguage));
+							if (providerDetails != null)
 							{
+								providerDetails.SourceLang = file.SourceFile.Language.IsoAbbreviation;
 
-								var feedbackRequest = Helpers.Api.CreateFeedbackRequest(segmentPair, providerDetails);
-
-								var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
-								if (feedbackReaponse.Success)
+								//Confirm each segment
+								foreach (var segmentPair in segmentPairs)
 								{
-									segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
-									editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+									if (segmentPair.Target.ToString() != string.Empty)
+									{
+
+										var feedbackRequest = Helpers.Api.CreateFeedbackRequest(segmentPair, providerDetails);
+
+										var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
+										if (feedbackReaponse.Success)
+										{
+											segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
+											editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+										}
+
+									}
 								}
-
 							}
+							project.Save();
 						}
+				
 					}
-					project.Save();
-				}
 
+				}
 			}
 		}
 	}

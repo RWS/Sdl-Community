@@ -27,7 +27,6 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 					Resources = new List<Resource>()
 				}
 			};
-			//TO DO: loop for each resouce Id
 			var resource = new Resource
 			{
 				Type = "MT",
