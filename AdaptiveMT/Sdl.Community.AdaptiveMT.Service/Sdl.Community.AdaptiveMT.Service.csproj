@@ -57,6 +57,7 @@
     <Compile Include="Model\Definition.cs" />
     <Compile Include="Model\EngineMappingDetails.cs" />
     <Compile Include="Model\FeedbackRequest.cs" />
+    <Compile Include="Model\FeedbackResponse.cs" />
     <Compile Include="Model\LanguagePair.cs" />
     <Compile Include="Model\OosAccounts.cs" />
     <Compile Include="Model\Resource.cs" />

@@ -56,7 +56,6 @@ namespace Sdl.Community.AdaptiveMT
 				var userDetails = await ApiClient.Login(userCredentials.Email, userCredentials.Password);
 
 				await ApiClient.OosSession(userCredentials, userDetails.Sid);
-				await ApiClient.Feedback(userDetails.Sid);
 
 				var providerUrl = string.Empty;
 
@@ -80,23 +79,31 @@ namespace Sdl.Community.AdaptiveMT
 					var files = project.GetTargetLanguageFiles();
 					var providerDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
 
-					//Confirm all segments in file needs to be uncommented later
-					//foreach (var file in files)
-					//{					
-					//	var document = editorController.Open(file, EditingMode.Translation);
-					//	var segmentPairs = document.SegmentPairs.ToList();
-					//	//Confirm each segment
-					//	foreach (var segmentPair in segmentPairs)
-					//	{
-					//		if (segmentPair.Target.ToString() != string.Empty)
-					//		{
-					//			segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
-					//			editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+					foreach (var file in files)
+					{
+						var document = editorController.Open(file, EditingMode.Translation);
+						var segmentPairs = document.SegmentPairs.ToList();
+						//Confirm each segment
+						foreach (var segmentPair in segmentPairs)
+						{
+							if (segmentPair.Target.ToString() != string.Empty)
+							{
 
-					//		}
-					//	}
-					//}
+								var feedbackRequest = Helpers.Api.CreateFeedbackRequest(segmentPair, providerDetails);
+
+								var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
+								if (feedbackReaponse.Success)
+								{
+									segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
+									editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+								}
+
+							}
+						}
+					}
+					project.Save();
 				}
+
 			}
 		}
 	}

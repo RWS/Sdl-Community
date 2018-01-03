@@ -31,32 +31,34 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 			var response = await SendRequest(null, sid, HttpMethod.Put, ApiUrls.Session(user.SelectedAccountId));
 			var session = JsonConvert.DeserializeObject<Session>(response);
 		}
-		public static async Task Feedback(string sid)
+		public static async Task<FeedbackResponse> Feedback(string sid,FeedbackRequest feedback)
 		{
-			var feedback = new FeedbackRequest
-			{
-				LanguagePair = new LanguagePair
-				{
-					Source = "en-US",
-					Target = "de-DE"
-				},
-				OriginalOutput = string.Empty,
-				PostEdited = "Das ist ein Katzensprung.",
-				Definition = new Definition
-				{
-					Resources = new List<Resource>
-					{
-						new Resource
-						{
-							ResourceId = "5a3b9b630cf26707d2cf1863",
-							Type = "MT"
-						}
-					}
-				},
-				Source = "This is a test."
-			};
+			//var feedback = new FeedbackRequest
+			//{
+			//	LanguagePair = new LanguagePair
+			//	{
+			//		Source = "en-US",
+			//		Target = "de-DE"
+			//	},
+			//	OriginalOutput = string.Empty,
+			//	PostEdited = "Das ist ein Katzensprung.",
+			//	Definition = new Definition
+			//	{
+			//		Resources = new List<Resource>
+			//		{
+			//			new Resource
+			//			{
+			//				ResourceId = "5a3b9b630cf26707d2cf1863",
+			//				Type = "MT"
+			//			}
+			//		}
+			//	},
+			//	Source = "This is a test."
+			//};
 			var response = await SendRequest(feedback, sid, HttpMethod.Post, ApiUrls.Feedback());
-			var feedbackMessage = JsonConvert.DeserializeObject(response);
+			var feedbackMessage = JsonConvert.DeserializeObject<FeedbackResponse>(response);
+			return feedbackMessage;
+
 		}
 		public static async Task<string> SendRequest(object contentBody,string sid, HttpMethod method, Uri url)
 		{
