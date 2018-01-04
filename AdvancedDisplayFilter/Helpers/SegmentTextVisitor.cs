@@ -50,7 +50,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			foreach (dynamic subItem in tagPair.AllSubItems)
 			{
-				if (IsPropertyExist(subItem, "AllSubItems"))
+				if (PropertyExist(subItem, "AllSubItems"))
 				{
 					foreach (dynamic innerSubitem in subItem.AllSubItems)
 					{
@@ -70,8 +70,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			var property = tag.Properties;
 			if (property != null)
 			{
-				var text = property.Text;
-				_textBuilder.Append(text);
+				if (PropertyExist(property, "Text"))
+				{
+					var text = property.Text;
+					_textBuilder.Append(text);
+				}
+				
 			}
 		}
 		/// <summary>
@@ -80,7 +84,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		/// <param name="tagPair"></param>
 		/// <param name="name"></param>
 		/// <returns></returns>
-		public static bool IsPropertyExist(dynamic tagPair, string name)
+		public static bool PropertyExist(dynamic tagPair, string name)
 		{
 			var tP = tagPair as ExpandoObject;
 			if (tP != null)
