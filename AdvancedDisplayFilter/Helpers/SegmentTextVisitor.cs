@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,16 +48,57 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
+			//foreach (dynamic subItem in tagPair.AllSubItems)
+			//{
+			//	var property = subItem.Properties;
+			//	if (property != null)
+			//	{
+			//		var text = property.Text;
+			//		_textBuilder.Append(text);
+			//	}
+
+			//}
+
 			foreach (dynamic subItem in tagPair.AllSubItems)
 			{
-				var property = subItem.Properties;
-				if (property != null)
+				if (IsPropertyExist(subItem, "AllSubItems"))
 				{
-					var text = property.Text;
-					_textBuilder.Append(text);
+					foreach (dynamic innerSubitem in subItem.AllSubItems)
+					{
+						AppendText(innerSubitem);
+					}
 				}
-				
+				else
+				{
+					AppendText(subItem);
+				}
+
 			}
+
+		}
+
+		private  void AppendText(dynamic tag)
+		{
+			var property = tag.Properties;
+			if (property != null)
+			{
+				var text = property.Text;
+				_textBuilder.Append(text);
+			}
+		}
+		/// <summary>
+		/// Check if tag pair contains specified property
+		/// </summary>
+		/// <param name="tagPair"></param>
+		/// <param name="name"></param>
+		/// <returns></returns>
+		public static bool IsPropertyExist(dynamic tagPair, string name)
+		{
+			var tP = tagPair as ExpandoObject;
+			if (tP != null)
+				return ((IDictionary<string, object>)tagPair).ContainsKey(name);
+
+			return tagPair.GetType().GetProperty(name) != null;
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
