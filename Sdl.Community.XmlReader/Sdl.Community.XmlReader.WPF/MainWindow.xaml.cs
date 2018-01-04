@@ -47,6 +47,8 @@ namespace Sdl.Community.XmlReader.WPF
 			        _viewModel.AddFile(filePath);
 		        }
 		        _viewModel.IsClearEnabled = true;
+		        _viewModel.ClearColor = "#5078C8";
+
 	        }
         }
 

@@ -20,7 +20,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 		private string _messageVisibility;
 		private bool _isGenerateEnabled;
 		private bool _isClearEnabled;
-
+		private string _generateColor;
+		private string _clearColor;
 		public ObservableCollection<TargetLanguageCodeViewModel> XmlFiles { get; }
 
 
@@ -28,6 +29,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 		{
 			MessageVisibility = "Hidden";
 			IsGenerateEnabled = false;
+			GenerateColor = "Gray";
+			ClearColor = "Gray";
 			IsClearEnabled = false;
 			if (codes == null)
 			{
@@ -54,6 +57,36 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 				OnPropertyChanged();
 			}
 		}
+
+		public string GenerateColor
+		{
+			get => _generateColor;
+			set
+			{
+				if (Equals(value, _generateColor))
+				{
+					return;
+
+				}
+				_generateColor = value;
+				OnPropertyChanged();
+			}
+		}
+		public string ClearColor
+		{
+			get => _clearColor;
+			set
+			{
+				if (Equals(value, _clearColor))
+				{
+					return;
+
+				}
+				_clearColor = value;
+				OnPropertyChanged();
+			}
+		}
+
 		public bool IsGenerateEnabled
 		{
 			get => _isGenerateEnabled;
@@ -149,6 +182,8 @@ namespace Sdl.Community.XmlReader.WPF.ViewModels
 	        XmlFilesRepository.ResetLanguageCodes();
 	        IsClearEnabled = false;
 	        IsGenerateEnabled = false;
+	        GenerateColor = "Gray";
+	        ClearColor = "Gray";
         }
 
 		public event PropertyChangedEventHandler PropertyChanged;

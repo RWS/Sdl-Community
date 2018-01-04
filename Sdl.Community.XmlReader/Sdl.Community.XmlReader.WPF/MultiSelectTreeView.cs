@@ -122,6 +122,8 @@ namespace Sdl.Community.XmlReader.WPF
                     SelectSingleItem(treeView, treeViewItem);
                 }
 	            _xmlViewModel.IsGenerateEnabled = true;
+	            _xmlViewModel.GenerateColor = "#5078C8";
+
 
             }
         }
