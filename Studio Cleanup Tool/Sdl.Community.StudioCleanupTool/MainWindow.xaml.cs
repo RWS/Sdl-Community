@@ -12,17 +12,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
+using Sdl.Community.StudioCleanupTool.ViewModel;
 
 namespace Sdl.Community.StudioCleanupTool
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow 
 	{
 		public MainWindow()
 		{
 			InitializeComponent();
+			var viewModel = new MainWindowViewModel();
+			DataContext = viewModel;
 		}
 	}
 }

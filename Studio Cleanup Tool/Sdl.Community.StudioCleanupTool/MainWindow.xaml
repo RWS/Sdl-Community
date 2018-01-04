@@ -1,12 +1,46 @@
-﻿<Window x:Class="Sdl.Community.StudioCleanupTool.MainWindow"
+﻿<controls:MetroWindow x:Class="Sdl.Community.StudioCleanupTool.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.Community.StudioCleanupTool"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Studio cleanup tool" Height="350" Width="525">
     <Grid>
-        
-    </Grid>
-</Window>
+	    <Grid.RowDefinitions>
+		    <RowDefinition Height="30" />
+		    <RowDefinition Height="60" />
+		    <RowDefinition Height="20" />
+		    <RowDefinition Height="20" />
+		</Grid.RowDefinitions>
+
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="4*" />
+			<ColumnDefinition Width="3*" />
+		</Grid.ColumnDefinitions>
+		<Label Grid.Column="0" Grid.Row="0">Please select Studio versions</Label>
+		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+			<StackPanel Orientation="Horizontal">
+				<ListBox 
+					Name="listBox"
+					Padding="10,0,0,0"
+					ItemsSource ="{Binding StudioVersionsCollection,Mode=TwoWay}" 
+					>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<CheckBox
+								Name="box"
+								Content="{Binding DisplayName }"
+								FontFamily="Calibri"
+								FontSize="14"
+								IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+							></CheckBox>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
+</controls:MetroWindow>
+
