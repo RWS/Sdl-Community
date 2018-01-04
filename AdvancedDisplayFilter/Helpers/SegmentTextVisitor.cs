@@ -48,17 +48,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public void VisitTagPair(ITagPair tagPair)
 		{
-			//foreach (dynamic subItem in tagPair.AllSubItems)
-			//{
-			//	var property = subItem.Properties;
-			//	if (property != null)
-			//	{
-			//		var text = property.Text;
-			//		_textBuilder.Append(text);
-			//	}
-
-			//}
-
 			foreach (dynamic subItem in tagPair.AllSubItems)
 			{
 				if (IsPropertyExist(subItem, "AllSubItems"))
@@ -72,7 +61,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 				{
 					AppendText(subItem);
 				}
-
 			}
 
 		}
@@ -115,8 +103,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 		{
 			
 		}
-
-		
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
