@@ -234,7 +234,7 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		// Disable rows from the actions grid which already have values
+		// Disable rows from the actions grid which already have values(user can only add/delete actions)
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			dataGridView1.Rows[e.RowIndex].ReadOnly = true;
