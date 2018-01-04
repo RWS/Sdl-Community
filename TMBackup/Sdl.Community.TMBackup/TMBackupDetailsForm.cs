@@ -20,7 +20,7 @@ namespace Sdl.Community.TMBackup
 		public static string BackupDetailsInfo { get; set; }
 
 		#endregion
-		
+
 		#region Constructors
 		public TMBackupDetailsForm()
 		{
@@ -219,7 +219,7 @@ namespace Sdl.Community.TMBackup
 		}
 
 		// Initizialize the Backup Details grid when opening with exiting data from json
-		private void  InitializeBackupDetails()
+		private void InitializeBackupDetails()
 		{
 			Persistence persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
@@ -231,6 +231,17 @@ namespace Sdl.Community.TMBackup
 				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
 
 				dataGridView1.DataSource = request.BackupDetailsModelList;
+			}
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions)
+		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+			if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+			{
+				dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 			}
 		}
 		#endregion
