@@ -174,6 +174,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 							segmentData.NumEr = ReportUtils.GetDecimal(columns[9]);
 							segmentData.NumWd = ReportUtils.GetDecimal(columns[10]);
 							segmentData.Terp = ReportUtils.GetDecimal(columns[11]);
+							segmentData.NumCap = 0;
 						}
 					}
 
@@ -380,6 +381,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 			public decimal NumEr { get; set; }
 			public decimal NumWd { get; set; }
 			public decimal Terp { get; set; }
+			public decimal NumCap { get; set; }
 
 			public SegmentData()
 			{
@@ -396,6 +398,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 				NumEr = 0;
 				NumWd = 0;
 				Terp = 0;
+				NumCap = 0;
 			}
 		}
 

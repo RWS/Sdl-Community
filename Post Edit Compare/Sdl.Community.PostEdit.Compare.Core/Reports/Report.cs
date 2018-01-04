@@ -493,7 +493,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 				            capitalLettersEdited.TryGetValue(segmentData.ParagraphId, out int editedNumber);
 			            if (corespondingEditedExists)
 			            {
-				            segmentData.NumEr = segmentData.NumEr + editedNumber;
+				            segmentData.NumCap = editedNumber; //segmentData.NumEr + editedNumber;
 			            }
 
 		            }
@@ -3105,7 +3105,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 xmlTxtWriter.WriteAttributeString("numEr", terpSegmentData.NumEr.ToString(CultureInfo.InvariantCulture));
                 xmlTxtWriter.WriteAttributeString("numWd", terpSegmentData.NumWd.ToString(CultureInfo.InvariantCulture));
                 xmlTxtWriter.WriteAttributeString("terp", terpSegmentData.Terp.ToString(CultureInfo.InvariantCulture));
-                xmlTxtWriter.WriteEndElement();//terp  
+	            xmlTxtWriter.WriteAttributeString("numCap",terpSegmentData.NumCap.ToString(CultureInfo.InvariantCulture));
+				xmlTxtWriter.WriteEndElement();//terp  
             }
 
             xmlTxtWriter.WriteEndElement();//target  

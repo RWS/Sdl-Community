@@ -2738,6 +2738,10 @@
               <span class="grayNoWrap">
                 Ref. words:&#160;<xsl:value-of select="statistics/target/terp/@numWd"/>
               </span>
+	            <br/>
+	            <span class="grayNoWrap">
+		            Capitalization:&#160;<xsl:value-of select="statistics/target/terp/@numCap"/>
+	            </span>
             </xsl:when>
             <xsl:otherwise>
               &#160;
