@@ -30,7 +30,7 @@ The plugin will apply these lists to the source text before sending to the machi
 
 The files can be saved with any file extension. They must have the following structure:
 
-(https://github.com/sdl/Sdl-Community/blob/master/EditCollection1.PNG)
+[](https://raw.githubusercontent.com/sdl/Sdl-Community/master/EditCollection1.PNG)
 
 
 
