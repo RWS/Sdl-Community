@@ -5,6 +5,7 @@
 1. [Intro](#intro)
 2. [Features](#features)
 3. [XML Structure](#xml-structure)
+4. [Example](#example)
 
 ## Intro
 
