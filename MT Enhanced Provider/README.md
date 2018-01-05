@@ -4,6 +4,7 @@
 
 1. [Intro](#intro)
 2. [Features](#features)
+3. [XML Structure](#xml-structure)
 
 ## Intro
 
@@ -21,6 +22,6 @@ Once installed, you will now find the option to choose MT Enhanced Plugin for Tr
 
 For more info and screenshots, have a look at the [documentation](https://web.archive.org/web/20160801113006/http://www.linguisticproductions.com/mtenhancedplugin/doc).
 
-
+## XML Structure
 
 Credits: Initial development done by [Patrick Porter](https://github.com/patrickporter)
