@@ -11,7 +11,7 @@
         FontSize="14"
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
-        Title="Studio cleanup tool" Height="700" Width="900">
+        Title="Studio cleanup tool" Height="500" Width="900">
     <Grid>
 	    <Grid.RowDefinitions>
 		    <RowDefinition Height="Auto" />
@@ -29,7 +29,7 @@
 		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StudioVersionsCollection}" FontFamily="Calibri" FontSize="14">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<UniformGrid Columns="3"/>
+					<UniformGrid Columns="3" Margin="0,0,150,0"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 
@@ -69,26 +69,56 @@
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" >Description</TextBlock>
 	    </StackPanel>
-		<Button Grid.Column="1" Grid.Row="4"  FontSize="13" FontWeight="Normal" Width="150" Margin="0,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
-			<Button.Template>
-				<ControlTemplate TargetType="{x:Type Button}">
-					<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
-						<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
-					</Border>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="True">
-							<Setter TargetName="bdr_main" Property="Background" Value="Green" />
-						</Trigger>
 
-						<Trigger Property="IsPressed" Value="True">
-							<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
-						</Trigger>
+		<StackPanel Grid.Column="1" Grid.Row="4" Margin="0,20,0,0" Orientation="Vertical">
+			<StackPanel Orientation="Horizontal">
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="47,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+					<Button.Template>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
+								<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+								</Trigger>
 
-					</ControlTemplate.Triggers>
-				</ControlTemplate>
-			</Button.Template>
+								<Trigger Property="IsPressed" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+								</Trigger>
 
-			Remove files</Button>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Button.Template>
+
+					Remove files
+				</Button>
+
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+					<Button.Template>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
+								<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+								</Trigger>
+
+								<Trigger Property="IsPressed" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+								</Trigger>
+
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Button.Template>
+
+					Repair Studio
+				</Button>
+			</StackPanel>
+		</StackPanel>
+		
+	
 	</Grid>
 </controls:MetroWindow>
 
