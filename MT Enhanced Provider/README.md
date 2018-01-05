@@ -24,7 +24,7 @@ Once installed, you will now find the option to choose MT Enhanced Plugin for Tr
 For more info and screenshots, have a look at the [documentation](https://web.archive.org/web/20160801113006/http://www.linguisticproductions.com/mtenhancedplugin/doc).
 
 ## XML Structure
-How to create the necessary xml structure in a text file for batch find/replace lists:
+How to create the necessary xml structure in a text file for batch find/replace lists?
 
 You can use a text editor (e.g. Notepad) to create files containing the necessary xml structure for use as batch find/replace lists.
 
