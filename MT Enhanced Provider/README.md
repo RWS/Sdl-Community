@@ -62,4 +62,5 @@ Keep in mind:
 * The replacements are performed incrementally in the order they appear in the file. Once a replacement is made, the next find/replace will be performed on the updated text. For that reason, with similar strings, it is better to place longer ones first. For example, if you have entries to replace “dogs” with “pets” and “dog” with “a pet”, place the entry for “dogs” first. Otherwise you may get unexpected behavior.
 
 
+
 Credits: Initial development done by [Patrick Porter](https://github.com/patrickporter)
