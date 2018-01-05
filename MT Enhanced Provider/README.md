@@ -28,7 +28,7 @@ You can use a text editor (e.g. Notepad) to create files containing the necessar
 
 The plugin will apply these lists to the source text before sending to the machine translation service and/or to the returned translated text, depending on the options configured in the plugin settings form.
 
-The files can be saved with any file extension. They must have the following structure:[](https://raw.githubusercontent.com/sdl/Sdl-Community/master/EditCollection1.PNG)
+The files can be saved with any file extension. They must have the following structure: ![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/EditCollection1.PNG)
 
 
 
