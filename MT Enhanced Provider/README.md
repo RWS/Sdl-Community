@@ -63,4 +63,7 @@ Keep in mind:
 
 
 
-Credits: Initial development done by [Patrick Porter](https://github.com/patrickporter)
+
+
+## Credits: 
+Initial development done by [Patrick Porter](https://github.com/patrickporter)
