@@ -11,20 +11,21 @@
         FontSize="14"
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
-        Title="Studio cleanup tool" Height="350" Width="525">
+        Title="Studio cleanup tool" Height="700" Width="900">
     <Grid>
 	    <Grid.RowDefinitions>
 		    <RowDefinition Height="Auto" />
 		    <RowDefinition Height="Auto" />
 		    <RowDefinition Height="Auto" />
-		    <RowDefinition Height="20" />
+		    <RowDefinition Height="Auto" />
+		    <RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="3*" />
+			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0">Please select Studio versions</Label>
+		<Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold">Please select Studio versions</Label>
 		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StudioVersionsCollection}" FontFamily="Calibri" FontSize="14">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -46,7 +47,48 @@
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
-	    <Label Grid.Column="0" Grid.Row="2" Margin="0,5,0,0">Remove folders from following locations:</Label>
+	    <Label Grid.Column="0" Grid.Row="2" Margin="0,20,0,0" FontWeight="Bold">Remove folders from following locations:</Label>
+		
+	    <ListBox 
+		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay}" 
+			Grid.Column="0"
+		    Grid.Row="3">
+		    <ListBox.ItemTemplate>
+			    <DataTemplate>
+				    <CheckBox
+					    Name="box"
+					    Content="{Binding DisplayName }"
+					    FontFamily="Calibri"
+					    FontSize="14"
+					    IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				    ></CheckBox>
+			    </DataTemplate>
+		    </ListBox.ItemTemplate>
+	    </ListBox>
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Margin="40,0,0,0">
+		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
+			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" >Description</TextBlock>
+	    </StackPanel>
+		<Button Grid.Column="1" Grid.Row="4"  FontSize="13" FontWeight="Normal" Width="150" Margin="0,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+			<Button.Template>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
+						<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
+					</Border>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+						</Trigger>
+
+						<Trigger Property="IsPressed" Value="True">
+							<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+						</Trigger>
+
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Button.Template>
+
+			Remove files</Button>
 	</Grid>
 </controls:MetroWindow>
 
