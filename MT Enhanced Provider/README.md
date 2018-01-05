@@ -24,4 +24,16 @@ For more info and screenshots, have a look at the [documentation](https://web.ar
 
 ## XML Structure
 
+You can use a text editor (e.g. Notepad) to create files containing the necessary xml structure for use as batch find/replace lists.
+
+The plugin will apply these lists to the source text before sending to the machine translation service and/or to the returned translated text, depending on the options configured in the plugin settings form.
+
+The files can be saved with any file extension. They must have the following structure:
+
+(https://github.com/sdl/Sdl-Community/blob/master/EditCollection1.PNG)
+
+
+
+
+
 Credits: Initial development done by [Patrick Porter](https://github.com/patrickporter)
