@@ -1,5 +1,4 @@
-## MT Enhanced Provider
-By Patrick Porter
+## MT Enhanced Provider for SDL Trados Studio
 
 ## Table of contents 
 
@@ -21,3 +20,5 @@ The default setting is to not re-send translated segments: only sends segments w
 Once installed, you will now find the option to choose MT Enhanced Plugin for Trados Studio as an MT provider to use in your translation projects.
 
 For more info and screenshots, have a look at the documentation.
+
+## Initial development done by [Patrick Porter](https://github.com/patrickporter)
