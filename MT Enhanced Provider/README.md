@@ -23,4 +23,4 @@ For more info and screenshots, have a look at the [documentation](https://web.ar
 
 
 
-Initial development done by [Patrick Porter](https://github.com/patrickporter)
+Credits: Initial development done by [Patrick Porter](https://github.com/patrickporter)
