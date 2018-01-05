@@ -145,8 +145,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             decimal filesTotalTerp40Shft = 0;
             decimal filesTotalTerp50Shft = 0;
 
+	        decimal filesTotalTerp00Cap = 0;
+	        decimal filesTotalTerp01Cap = 0;
+	        decimal filesTotalTerp06Cap = 0;
+	        decimal filesTotalTerp10Cap = 0;
+	        decimal filesTotalTerp20Cap = 0;
+	        decimal filesTotalTerp30Cap = 0;
+	        decimal filesTotalTerp40Cap = 0;
+	        decimal filesTotalTerp50Cap = 0;
 
-            decimal filesTotalPostEditExactSegments = 0;
+
+			decimal filesTotalPostEditExactSegments = 0;
             decimal filesTotalPostEditExactWords = 0;
             decimal filesTotalPostEditExactCharacters = 0;
             decimal filesTotalPostEditExactPercent = 0;
@@ -493,7 +502,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 				            capitalLettersEdited.TryGetValue(segmentData.ParagraphId, out int editedNumber);
 			            if (corespondingEditedExists)
 			            {
-				            segmentData.NumCap = editedNumber; //segmentData.NumEr + editedNumber;
+				            segmentData.NumCap = editedNumber;
+				            segmentData.NumEr=segmentData.NumEr + editedNumber;
 			            }
 
 		            }
@@ -625,10 +635,19 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 filesTotalTerp40Segments += terpAnalysisData.terp40Segments;
                 filesTotalTerp50Segments += terpAnalysisData.terp50Segments;
 
+	            filesTotalTerp00Cap += terpAnalysisData.terp00Cap;
+				filesTotalTerp01Cap += terpAnalysisData.terp01Cap;
+				filesTotalTerp06Cap += terpAnalysisData.terp06Cap;
+				filesTotalTerp10Cap += terpAnalysisData.terp10Cap;
+				filesTotalTerp20Cap += terpAnalysisData.terp20Cap;
+				filesTotalTerp30Cap += terpAnalysisData.terp30Cap;
+				filesTotalTerp40Cap += terpAnalysisData.terp40Cap;
+				filesTotalTerp50Cap += terpAnalysisData.terp50Cap;
 
-                #region  |  TERp  |
 
-                xmlTxtWriter.WriteStartElement("terpAnalysis");
+				#region  |  TERp  |
+
+				xmlTxtWriter.WriteStartElement("terpAnalysis");
 
                 xmlTxtWriter.WriteAttributeString("terp00SrcWd", terpAnalysisData.terp00SrcWd.ToString(CultureInfo.InvariantCulture));
                 xmlTxtWriter.WriteAttributeString("terp01SrcWd", terpAnalysisData.terp01SrcWd.ToString(CultureInfo.InvariantCulture));
@@ -702,8 +721,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 xmlTxtWriter.WriteAttributeString("terp40Shft", terpAnalysisData.terp40Shft.ToString(CultureInfo.InvariantCulture));
                 xmlTxtWriter.WriteAttributeString("terp50Shft", terpAnalysisData.terp50Shft.ToString(CultureInfo.InvariantCulture));
 
+	            xmlTxtWriter.WriteAttributeString("terp00Cap", terpAnalysisData.terp00Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp01Cap", terpAnalysisData.terp01Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp06Cap", terpAnalysisData.terp06Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp10Cap", terpAnalysisData.terp10Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp20Cap", terpAnalysisData.terp20Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp30Cap", terpAnalysisData.terp30Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp40Cap", terpAnalysisData.terp40Cap.ToString(CultureInfo.InvariantCulture));
+	            xmlTxtWriter.WriteAttributeString("terp50Cap", terpAnalysisData.terp50Cap.ToString(CultureInfo.InvariantCulture));
 
-                xmlTxtWriter.WriteEndElement();
+
+				xmlTxtWriter.WriteEndElement();
 
                 #endregion
 
@@ -1713,8 +1741,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             xmlTxtWriter.WriteAttributeString("terp40Shft", filesTotalTerp40Shft.ToString(CultureInfo.InvariantCulture));
             xmlTxtWriter.WriteAttributeString("terp50Shft", filesTotalTerp50Shft.ToString(CultureInfo.InvariantCulture));
 
+	        xmlTxtWriter.WriteAttributeString("terp00Cap", filesTotalTerp00Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp01Cap", filesTotalTerp01Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp06Cap", filesTotalTerp06Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp10Cap", filesTotalTerp10Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp20Cap", filesTotalTerp20Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp30Cap", filesTotalTerp30Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp40Cap", filesTotalTerp40Cap.ToString(CultureInfo.InvariantCulture));
+	        xmlTxtWriter.WriteAttributeString("terp50Cap", filesTotalTerp50Cap.ToString(CultureInfo.InvariantCulture));
 
-            xmlTxtWriter.WriteEndElement();
+
+			xmlTxtWriter.WriteEndElement();
 
             #endregion
 
@@ -2026,6 +2063,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp00Shft += segmentData.Shft;
                     terpAnalysisData.terp00NumEr += segmentData.NumEr;
                     terpAnalysisData.terp00NumWd += segmentData.NumWd;
+	                terpAnalysisData.terp00Cap += segmentData.NumCap;
                     terpAnalysisData.terp00Segments++;
                 }
                 else if (segmentData.Terp <= 5)
@@ -2037,7 +2075,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp01Shft += segmentData.Shft;
                     terpAnalysisData.terp01NumEr += segmentData.NumEr;
                     terpAnalysisData.terp01NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp01Segments++;
+	                terpAnalysisData.terp01Cap += segmentData.NumCap;
+					terpAnalysisData.terp01Segments++;
                 }
                 else if (segmentData.Terp <= 9)
                 {
@@ -2048,7 +2087,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp06Shft += segmentData.Shft;
                     terpAnalysisData.terp06NumEr += segmentData.NumEr;
                     terpAnalysisData.terp06NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp06Segments++;
+	                terpAnalysisData.terp06Cap += segmentData.NumCap;
+					terpAnalysisData.terp06Segments++;
                 }
                 else if (segmentData.Terp <= 19)
                 {
@@ -2059,7 +2099,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp10Shft += segmentData.Shft;
                     terpAnalysisData.terp10NumEr += segmentData.NumEr;
                     terpAnalysisData.terp10NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp10Segments++;
+	                terpAnalysisData.terp10Cap += segmentData.NumCap;
+					terpAnalysisData.terp10Segments++;
                 }
                 else if (segmentData.Terp <= 29)
                 {
@@ -2070,7 +2111,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp20Shft += segmentData.Shft;
                     terpAnalysisData.terp20NumEr += segmentData.NumEr;
                     terpAnalysisData.terp20NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp20Segments++;
+	                terpAnalysisData.terp20Cap += segmentData.NumCap;
+					terpAnalysisData.terp20Segments++;
                 }
                 else if (segmentData.Terp <= 39)
                 {
@@ -2081,7 +2123,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp30Shft += segmentData.Shft;
                     terpAnalysisData.terp30NumEr += segmentData.NumEr;
                     terpAnalysisData.terp30NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp30Segments++;
+	                terpAnalysisData.terp30Cap += segmentData.NumCap;
+					terpAnalysisData.terp30Segments++;
                 }
                 else if (segmentData.Terp <= 49)
                 {
@@ -2092,7 +2135,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp40Shft += segmentData.Shft;
                     terpAnalysisData.terp40NumEr += segmentData.NumEr;
                     terpAnalysisData.terp40NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp40Segments++;
+	                terpAnalysisData.terp40Cap += segmentData.NumCap;
+					terpAnalysisData.terp40Segments++;
                 }
                 else
                 {
@@ -2103,7 +2147,8 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                     terpAnalysisData.terp50Shft += segmentData.Shft;
                     terpAnalysisData.terp50NumEr += segmentData.NumEr;
                     terpAnalysisData.terp50NumWd += segmentData.NumWd;
-                    terpAnalysisData.terp50Segments++;
+	                terpAnalysisData.terp50Cap += segmentData.NumCap;
+					terpAnalysisData.terp50Segments++;
                 }
             }
             return terpAnalysisData;
@@ -3323,8 +3368,17 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
             public decimal terp40Shft { get; set; }
             public decimal terp50Shft { get; set; }
 
+			//Capitalization 
+	        public decimal terp00Cap { get; set; }
+	        public decimal terp01Cap { get; set; }
+	        public decimal terp06Cap { get; set; }
+	        public decimal terp10Cap { get; set; }
+	        public decimal terp20Cap { get; set; }
+	        public decimal terp30Cap { get; set; }
+	        public decimal terp40Cap { get; set; }
+	        public decimal terp50Cap { get; set; }
 
-            public List<string> ChartData { get; set; }
+			public List<string> ChartData { get; set; }
 
             public TERpAnalysisData()
             {
@@ -3402,7 +3456,16 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
                 terp40Shft = 0;
                 terp50Shft = 0;
 
-                ChartData = new List<string>();
+	            terp00Cap = 0;
+				terp01Cap = 0;
+				terp06Cap = 0;
+				terp10Cap = 0;
+				terp20Cap = 0;
+				terp30Cap = 0;
+				terp40Cap = 0;
+				terp50Cap = 0;
+
+				ChartData = new List<string>();
             }
         }
     }

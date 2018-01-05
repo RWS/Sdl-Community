@@ -165,9 +165,9 @@
 			this.panel_base.Controls.Add(this.panel_main_diff);
 			this.panel_base.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_base.Location = new System.Drawing.Point(0, 0);
-			this.panel_base.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel_base.Margin = new System.Windows.Forms.Padding(2);
 			this.panel_base.Name = "panel_base";
-			this.panel_base.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+			this.panel_base.Padding = new System.Windows.Forms.Padding(3);
 			this.panel_base.Size = new System.Drawing.Size(627, 321);
 			this.panel_base.TabIndex = 8;
 			// 
@@ -179,7 +179,7 @@
 			this.panel_main_diff.Controls.Add(this.panel3);
 			this.panel_main_diff.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_main_diff.Location = new System.Drawing.Point(3, 3);
-			this.panel_main_diff.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel_main_diff.Margin = new System.Windows.Forms.Padding(2);
 			this.panel_main_diff.Name = "panel_main_diff";
 			this.panel_main_diff.Size = new System.Drawing.Size(621, 315);
 			this.panel_main_diff.TabIndex = 0;
@@ -194,7 +194,7 @@
 			this.panel_listViewMessage.Controls.Add(this.label11);
 			this.panel_listViewMessage.Controls.Add(this.progressBar1);
 			this.panel_listViewMessage.Location = new System.Drawing.Point(218, 55);
-			this.panel_listViewMessage.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel_listViewMessage.Margin = new System.Windows.Forms.Padding(2);
 			this.panel_listViewMessage.Name = "panel_listViewMessage";
 			this.panel_listViewMessage.Size = new System.Drawing.Size(181, 70);
 			this.panel_listViewMessage.TabIndex = 7;
@@ -206,7 +206,7 @@
 			this.panel10.Controls.Add(this.label10);
 			this.panel10.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel10.Location = new System.Drawing.Point(0, 0);
-			this.panel10.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel10.Margin = new System.Windows.Forms.Padding(2);
 			this.panel10.Name = "panel10";
 			this.panel10.Size = new System.Drawing.Size(179, 14);
 			this.panel10.TabIndex = 3;
@@ -266,7 +266,7 @@
 			// progressBar1
 			// 
 			this.progressBar1.Location = new System.Drawing.Point(44, 42);
-			this.progressBar1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.progressBar1.Margin = new System.Windows.Forms.Padding(2);
 			this.progressBar1.Name = "progressBar1";
 			this.progressBar1.Size = new System.Drawing.Size(102, 8);
 			this.progressBar1.TabIndex = 1;
@@ -293,7 +293,7 @@
 			this.listView_main.FullRowSelect = true;
 			this.listView_main.HideSelection = false;
 			this.listView_main.Location = new System.Drawing.Point(0, 21);
-			this.listView_main.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.listView_main.Margin = new System.Windows.Forms.Padding(2);
 			this.listView_main.Name = "listView_main";
 			this.listView_main.OwnerDraw = true;
 			this.listView_main.ShowGroups = false;
@@ -545,7 +545,7 @@
 			this.panel1.Controls.Add(this.panel2);
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.panel1.Location = new System.Drawing.Point(0, 298);
-			this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel1.Margin = new System.Windows.Forms.Padding(2);
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(621, 17);
 			this.panel1.TabIndex = 3;
@@ -555,7 +555,7 @@
 			this.richTextBox_statusbar_comparelist.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.richTextBox_statusbar_comparelist.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.richTextBox_statusbar_comparelist.Location = new System.Drawing.Point(16, 0);
-			this.richTextBox_statusbar_comparelist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.richTextBox_statusbar_comparelist.Margin = new System.Windows.Forms.Padding(2);
 			this.richTextBox_statusbar_comparelist.Multiline = false;
 			this.richTextBox_statusbar_comparelist.Name = "richTextBox_statusbar_comparelist";
 			this.richTextBox_statusbar_comparelist.ReadOnly = true;
@@ -569,7 +569,7 @@
 			this.panel2.Controls.Add(this.pictureBox_statusBar_comparison_project_image);
 			this.panel2.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel2.Margin = new System.Windows.Forms.Padding(2);
 			this.panel2.Name = "panel2";
 			this.panel2.Size = new System.Drawing.Size(16, 15);
 			this.panel2.TabIndex = 0;
@@ -578,7 +578,7 @@
 			// 
 			this.pictureBox_statusBar_comparison_project_image.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_statusBar_comparison_project_image.Image")));
 			this.pictureBox_statusBar_comparison_project_image.Location = new System.Drawing.Point(1, 1);
-			this.pictureBox_statusBar_comparison_project_image.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.pictureBox_statusBar_comparison_project_image.Margin = new System.Windows.Forms.Padding(2);
 			this.pictureBox_statusBar_comparison_project_image.Name = "pictureBox_statusBar_comparison_project_image";
 			this.pictureBox_statusBar_comparison_project_image.Size = new System.Drawing.Size(13, 14);
 			this.pictureBox_statusBar_comparison_project_image.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -591,7 +591,7 @@
 			this.panel3.Controls.Add(this.panel_overListView_left);
 			this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel3.Location = new System.Drawing.Point(0, 0);
-			this.panel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel3.Margin = new System.Windows.Forms.Padding(2);
 			this.panel3.Name = "panel3";
 			this.panel3.Size = new System.Drawing.Size(621, 21);
 			this.panel3.TabIndex = 0;
@@ -602,7 +602,7 @@
 			this.panel_overListView_right.Controls.Add(this.panel5);
 			this.panel_overListView_right.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_overListView_right.Location = new System.Drawing.Point(304, 0);
-			this.panel_overListView_right.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel_overListView_right.Margin = new System.Windows.Forms.Padding(2);
 			this.panel_overListView_right.Name = "panel_overListView_right";
 			this.panel_overListView_right.Size = new System.Drawing.Size(317, 21);
 			this.panel_overListView_right.TabIndex = 2;
@@ -612,7 +612,7 @@
 			this.panel7.Controls.Add(this.comboBox_main_compare_right);
 			this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel7.Location = new System.Drawing.Point(0, 0);
-			this.panel7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel7.Margin = new System.Windows.Forms.Padding(2);
 			this.panel7.Name = "panel7";
 			this.panel7.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.panel7.Size = new System.Drawing.Size(193, 21);
@@ -623,7 +623,7 @@
 			this.comboBox_main_compare_right.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBox_main_compare_right.FormattingEnabled = true;
 			this.comboBox_main_compare_right.Location = new System.Drawing.Point(0, 3);
-			this.comboBox_main_compare_right.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.comboBox_main_compare_right.Margin = new System.Windows.Forms.Padding(2);
 			this.comboBox_main_compare_right.Name = "comboBox_main_compare_right";
 			this.comboBox_main_compare_right.Size = new System.Drawing.Size(193, 21);
 			this.comboBox_main_compare_right.TabIndex = 4;
@@ -633,7 +633,7 @@
 			this.panel5.Controls.Add(this.toolStrip2);
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
 			this.panel5.Location = new System.Drawing.Point(193, 0);
-			this.panel5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel5.Margin = new System.Windows.Forms.Padding(2);
 			this.panel5.Name = "panel5";
 			this.panel5.Size = new System.Drawing.Size(124, 21);
 			this.panel5.TabIndex = 2;
@@ -744,7 +744,7 @@
 			this.panel_overListView_left.Controls.Add(this.panel4);
 			this.panel_overListView_left.Dock = System.Windows.Forms.DockStyle.Left;
 			this.panel_overListView_left.Location = new System.Drawing.Point(0, 0);
-			this.panel_overListView_left.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel_overListView_left.Margin = new System.Windows.Forms.Padding(2);
 			this.panel_overListView_left.Name = "panel_overListView_left";
 			this.panel_overListView_left.Size = new System.Drawing.Size(304, 21);
 			this.panel_overListView_left.TabIndex = 0;
@@ -754,7 +754,7 @@
 			this.panel6.Controls.Add(this.comboBox_main_compare_left);
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel6.Location = new System.Drawing.Point(0, 0);
-			this.panel6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel6.Margin = new System.Windows.Forms.Padding(2);
 			this.panel6.Name = "panel6";
 			this.panel6.Padding = new System.Windows.Forms.Padding(0, 3, 0, 0);
 			this.panel6.Size = new System.Drawing.Size(216, 21);
@@ -765,7 +765,7 @@
 			this.comboBox_main_compare_left.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBox_main_compare_left.FormattingEnabled = true;
 			this.comboBox_main_compare_left.Location = new System.Drawing.Point(0, 3);
-			this.comboBox_main_compare_left.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.comboBox_main_compare_left.Margin = new System.Windows.Forms.Padding(2);
 			this.comboBox_main_compare_left.Name = "comboBox_main_compare_left";
 			this.comboBox_main_compare_left.Size = new System.Drawing.Size(216, 21);
 			this.comboBox_main_compare_left.TabIndex = 2;
@@ -775,7 +775,7 @@
 			this.panel4.Controls.Add(this.toolStrip3);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Right;
 			this.panel4.Location = new System.Drawing.Point(216, 0);
-			this.panel4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.panel4.Margin = new System.Windows.Forms.Padding(2);
 			this.panel4.Name = "panel4";
 			this.panel4.Size = new System.Drawing.Size(88, 21);
 			this.panel4.TabIndex = 0;
@@ -894,7 +894,7 @@
 			this.DockAreas = WeifenLuo.WinFormsUI.Docking.DockAreas.Document;
 			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "PanelCompare";
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.Document;
 			this.Text = "Folder Viewer";
