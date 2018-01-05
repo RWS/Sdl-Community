@@ -10,9 +10,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	{
 		private ObservableCollection<StudioVersion> _studioVersionsCollection;
 		public event PropertyChangedEventHandler PropertyChanged;
+		private int _columnsNumber;
 
 		public MainWindowViewModel()
 		{
+			_columnsNumber = 0;
 			FillStudioVersionList();
 		}
 
@@ -39,14 +41,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					IsSelected = false
 				}
 			};
+
+			ColumnsNumber = StudioVersionsCollection.Count;
 		}
 
 		public ObservableCollection<StudioVersion> StudioVersionsCollection
 		{
-			get
-			{
-				return _studioVersionsCollection;
-			}
+			get => _studioVersionsCollection;
 
 			set
 			{
@@ -55,6 +56,20 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					return;
 				}
 				OnPropertyChanged(nameof(StudioVersionsCollection));
+			}
+		}
+
+		public int ColumnsNumber
+		{
+			get => _columnsNumber;
+
+			set
+			{
+				if (Equals(value, _columnsNumber))
+				{
+					return;
+				}
+				OnPropertyChanged(nameof(ColumnsNumber));
 			}
 		}
 

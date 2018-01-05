@@ -6,41 +6,47 @@
         xmlns:local="clr-namespace:Sdl.Community.StudioCleanupTool"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
+        ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
+        BorderThickness="0"
+        FontSize="14"
+        GlowBrush="MediumSeaGreen"
+		FontFamily="Calibri"
         Title="Studio cleanup tool" Height="350" Width="525">
     <Grid>
 	    <Grid.RowDefinitions>
-		    <RowDefinition Height="30" />
-		    <RowDefinition Height="60" />
-		    <RowDefinition Height="20" />
+		    <RowDefinition Height="Auto" />
+		    <RowDefinition Height="Auto" />
+		    <RowDefinition Height="Auto" />
 		    <RowDefinition Height="20" />
 		</Grid.RowDefinitions>
 
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="4*" />
+			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="3*" />
 		</Grid.ColumnDefinitions>
-		<Label Grid.Column="0" Grid.Row="0">Please select Studio versions</Label>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1">
-			<StackPanel Orientation="Horizontal">
-				<ListBox 
-					Name="listBox"
-					Padding="10,0,0,0"
-					ItemsSource ="{Binding StudioVersionsCollection,Mode=TwoWay}" 
-					>
-					<ListBox.ItemTemplate>
-						<DataTemplate>
-							<CheckBox
-								Name="box"
-								Content="{Binding DisplayName }"
-								FontFamily="Calibri"
-								FontSize="14"
-								IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-							></CheckBox>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-			</StackPanel>
-		</StackPanel>
+		<Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0">Please select Studio versions</Label>
+		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StudioVersionsCollection}" FontFamily="Calibri" FontSize="14">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<UniformGrid Columns="3"/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+
+			<!-- ItemTemplate -->
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<CheckBox
+						Name="box"
+						Content="{Binding DisplayName }"
+						FontFamily="Calibri"
+						FontSize="14"
+						Margin="5,5,10,0"
+						IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+					</CheckBox>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	    <Label Grid.Column="0" Grid.Row="2" Margin="0,5,0,0">Remove folders from following locations:</Label>
 	</Grid>
 </controls:MetroWindow>
 
