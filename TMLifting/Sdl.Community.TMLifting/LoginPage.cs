@@ -14,7 +14,7 @@ namespace Sdl.Community.TMLifting
 {
 	public partial class LoginPage : Form
 	{
-		public AddServerBasedTMsDetails AddDetailsCallback;
+		public AddServerBasedTMsDetails _addDetailsCallback;
 		public LoginPage(string serverName)
 		{
 			InitializeComponent();
@@ -29,15 +29,15 @@ namespace Sdl.Community.TMLifting
 		private async void btnOkServerBased_Click(object sender, EventArgs e)
 		{
 			var x  = await GetServerBasedTMs();
-			AddDetailsCallback(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
+			_addDetailsCallback(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 			this.Close();
 		}
 
-		private async Task<ServerBasedTranslationMemory> GetServerBasedTMs()
+		private async Task<ServerBasedTranslationMemoryGSKit> GetServerBasedTMs()
 		{
 			try
 			{
-				return await ServerBasedTranslationMemory.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
+				return await ServerBasedTranslationMemoryGSKit.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 			}
 			catch (Exception e)
 			{
@@ -46,5 +46,9 @@ namespace Sdl.Community.TMLifting
 			}
 		}
 
+		private void cancelBtnServerBased_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 	}
 }

@@ -180,6 +180,7 @@
             this.cancelBtnServerBased.TabIndex = 10;
             this.cancelBtnServerBased.Text = "Cancel";
             this.cancelBtnServerBased.UseVisualStyleBackColor = true;
+            this.cancelBtnServerBased.Click += new System.EventHandler(this.cancelBtnServerBased_Click);
             // 
             // LoginPage
             // 

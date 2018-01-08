@@ -15,6 +15,8 @@ using System.Reflection;
 using System.Net.Http;
 using Newtonsoft.Json;
 using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
+using System.Collections.ObjectModel;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -26,9 +28,12 @@ namespace Sdl.Community.TMLifting
 		private readonly BackgroundWorker _bwGS;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
-		private TranslationMemory.ServerBasedTranslationMemory _sbTMs;
+		private TranslationMemory.ServerBasedTranslationMemoryGSKit _sbTMs;
 		private UserCredentials _userCredentials;
-		private AlertForm alert;
+		private AlertForm _alert;
+		private LoginPage _currentInstance = null;
+		private TranslationProviderServer _server;
+		private ReadOnlyCollection<ServerBasedTranslationMemory> SBTMs;
 
 		public TMLiftingForm()
         {
@@ -38,7 +43,7 @@ namespace Sdl.Community.TMLifting
             _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 			_bwGS = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-			_sbTMs = new TranslationMemory.ServerBasedTranslationMemory();
+			_sbTMs = new TranslationMemory.ServerBasedTranslationMemoryGSKit();
 			_userCredentials = new UserCredentials();
 		}
 
@@ -61,45 +66,71 @@ namespace Sdl.Community.TMLifting
 				if (comboBoxServerBasedTM.SelectedItem != null)
 				{
 					_userCredentials = _sbTMs.GetUserCredentials(comboBoxServerBasedTM.SelectedItem as Uri);
-					if(_userCredentials.UserName != "N/A" && _userCredentials.Password != "N/A")
+					if (_userCredentials.UserName != "N/A" && _userCredentials.Password != "N/A")
 					{
-						_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(_userCredentials.UserName, _userCredentials.Password, comboBoxServerBasedTM.SelectedItem.ToString());
+						_sbTMs = await TranslationMemory.ServerBasedTranslationMemoryGSKit.CreateAsync(_userCredentials.UserName, _userCredentials.Password, comboBoxServerBasedTM.SelectedItem.ToString());
 
 						gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails.Select(tm => new
 						{ Name = tm.Name, Description = tm.Description, Location = tm.Location }).ToList(); ;
 						gridServerBasedTMs.Visible = true;
 					}
+					else if (_currentInstance == null && !gridServerBasedTMs.Visible)
+					{
+						_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+						_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+						_currentInstance.FormClosed += instanceHasBeenClosed;
+						_currentInstance.Show();
+					}
 					else
 					{
-						var form = new LoginPage(comboBoxServerBasedTM.Text);
-						form.AddDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
-						form.Show();
+						if (_currentInstance != null && !gridServerBasedTMs.Visible)
+						{
+							_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+							_currentInstance.FormClosed += instanceHasBeenClosed;
+							_currentInstance.BringToFront();
+						}
+						
 					}
 				}
 			}	
 		}
+		private void instanceHasBeenClosed(object sender, FormClosedEventArgs e)
+		{
+			_currentInstance = null;
+		}
 		private async void AddDetailsCallbackFn(string userName, string password, string uri)
 		{
-			_sbTMs = await TranslationMemory.ServerBasedTranslationMemory.CreateAsync(userName, password, uri);
-			//gridServerBasedTMs.DataSource = from tm in _sbTMs.ServerBasedTMDetails
-			//								select new
-			//								{
-			//									tm.Name,
-			//									tm.Description,
-			//									tm.Location
-			//								};
-			//gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
-			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails.Select(tm => new
-			{ Name = tm.Name, Description = tm.Description, Location = tm.Location }).ToList();
+			_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(userName, password, uri);
+			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+			for (int i = 0; i < gridServerBasedTMs.Columns.Count; i++)
+			{
+				gridServerBasedTMs.Columns[i].Visible = false;
+			}
+			gridServerBasedTMs.Columns["Name"].Visible = true;
+			gridServerBasedTMs.Columns["Description"].Visible = true;
+			gridServerBasedTMs.Columns["CreatedOn"].Visible = true;
+			gridServerBasedTMs.Columns["Location"].Visible = true;
+			gridServerBasedTMs.Columns["ShouldRecomputeStatistics"].Visible = true;
+			gridServerBasedTMs.Columns["LastReIndexDate"].Visible = true;
+			gridServerBasedTMs.Columns["LastReIndexSize"].Visible = true;
+			gridServerBasedTMs.Columns.Add("Status", "Status");
+			//gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails.Select(tm => new
+			//{ Name = tm.Name, Description = tm.Description, Location = tm.Location, TranslationMemoryId = tm.TranslationMemoryId }).ToList();
+
+			//_server = new TranslationProviderServer(new Uri(uri), false, userName, password);
+			//SBTMs = _server.GetTranslationMemories(0);
+			//gridServerBasedTMs.DataSource = SBTMs.Select(tm => new
+			//{ Name = tm.Name, Description = tm.Description, TranslationMemoryId = tm.Id }).ToList();
+
+			gridServerBasedTMs.ReadOnly = true;
 			gridServerBasedTMs.Visible = true;
 		}
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             //rtbStatus.Text = e.UserState.ToString();
-			alert.Message = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
-			alert.ProgressValue = e.ProgressPercentage;
-			progressBar1.Value = e.ProgressPercentage;
+			_alert.Message = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
+			_alert.ProgressValue = e.ProgressPercentage;
 		}
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -129,7 +160,7 @@ namespace Sdl.Community.TMLifting
                 _stopWatch.Stop();
                 rtbStatus.AppendText("Process canceled.");
             }
-			alert.Close();
+			_alert.Close();
 		}
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -151,10 +182,13 @@ namespace Sdl.Community.TMLifting
         private async void btnReindex_Click(object sender, EventArgs e)
         {
 			// create a new instance of the alert form	
-			alert = new AlertForm();
-			alert.Show();
+			//_alert = new AlertForm();
+			//_alert.Show();
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
+				_alert = new AlertForm();
+				_alert.Show();
+				_alert.progressBar1.Style = ProgressBarStyle.Marquee;
 				btnReindex.Enabled = false;
 
 				var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
@@ -163,9 +197,33 @@ namespace Sdl.Community.TMLifting
 			}
 			else
 			{
+				//var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
+				//var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].Cells["TranslationMemoryId"].Value.ToString();
+				//var selectedRowId = gridServerBasedTMs.Rows[selectedRowIndex].Cells["TranslationMemoryId"].Value.ToString();
+				//var tm = _server.GetTranslationMemory(new Guid(selectedRow), 0);
+				//var isReindexed = tm.ShouldRecomputeFuzzyIndexStatistics();
+				//var a = tm.IsProjectTranslationMemory;
+				//var c = tm.Uri;
+				//var b = ServerBasedTranslationMemory.GetServerBasedTranslationMemoryPath(c);
+				//var result = ServerBasedTranslationMemory.IsServerBasedTranslationMemory(c);
+				//tm.RecomputeFuzzyIndexStatistics();
+
 				var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
 				var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
+				//alert.progressBar1.Style = ProgressBarStyle.Marquee;
+				//btnReindex.Enabled = false;
+				//_alert.progressBar1.Style = ProgressBarStyle.Marquee;
 				var x = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+				gridServerBasedTMs.Rows[selectedRowIndex].Cells["Status"].Value = x.Status;
+				var selectedTMId = selectedRow.TranslationMemoryId;
+				//while (!_sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest()).IsCompleted)
+				//{
+
+				//}
+				//while (x.Statistics == null)
+				//{
+
+				//}
 			}
 
         }
@@ -257,8 +315,18 @@ namespace Sdl.Community.TMLifting
 
         private void cleanBtn_Click(object sender, EventArgs e)
         {
-            lstTms.Items.Clear();
-            rtbStatus.Text = string.Empty;
+			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
+			{
+				//gridServerBasedTMs.Refresh();
+				_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+				_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+			}
+			else
+			{
+				lstTms.Items.Clear();
+				rtbStatus.Text = string.Empty;
+			}
+			
         }
 
         private void cancelBtn_Click(object sender, EventArgs e)
@@ -286,9 +354,26 @@ namespace Sdl.Community.TMLifting
 
 		private void connectToServer_Click(object sender, EventArgs e)
 		{
-			var form = new LoginPage(comboBoxServerBasedTM.Text);
-			form.AddDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
-			form.ShowDialog();
+			//var form = new LoginPage(comboBoxServerBasedTM.Text);
+			//form._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+			//form.ShowDialog();
+			if (_currentInstance == null)
+			{
+				_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+				_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+				_currentInstance.FormClosed += instanceHasBeenClosed;
+				_currentInstance.Show();
+			}
+			else
+			{
+				if (_currentInstance != null)
+				{
+					_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+					_currentInstance.FormClosed += instanceHasBeenClosed;
+					_currentInstance.BringToFront();
+				}
+				
+			}
 		}
 	}
 }

@@ -76,7 +76,7 @@
 		#endregion
 
 		private System.Windows.Forms.Button buttonCancel;
-		private System.Windows.Forms.ProgressBar progressBar1;
+		public System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.Label labelMessage;
 	}
 }

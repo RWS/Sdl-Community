@@ -16,17 +16,21 @@ using System.Windows.Forms;
 using System.Runtime.Serialization;
 using System.IO;
 using Sdl.Community.TMLifting.Helpers;
+using System.ComponentModel;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using System.Collections.ObjectModel;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting.TranslationMemory
 {
-	public class ServerBasedTranslationMemory
+	public class ServerBasedTranslationMemoryGSKit
 	{
 		private readonly Assembly _sdlTranslationStudioProjectManagementAssembly;
 
-		public List<TranslationMemoryDetails> ServerBasedTMDetails { get; set; }
+		public BindingList<TranslationMemoryDetails> ServerBasedTMDetails { get; set; }
 		public GroupShareClient GroupShareClient { get; set; }
 
-		public ServerBasedTranslationMemory()
+		public ServerBasedTranslationMemoryGSKit()
 		{
 			var resources = Assembly.GetExecutingAssembly().GetManifestResourceNames().Where(s => s.EndsWith("Sdl.Community.TMLifting.GSKit.Sdl.TranslationStudio.ProjectManagement.dll"));
 			if (resources.Any())
@@ -52,7 +56,7 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 				}
 			}
 		}
-		public async Task<ServerBasedTranslationMemory> InitializeAsync(string userName, string password, string uri)
+		public async Task<ServerBasedTranslationMemoryGSKit> InitializeAsync(string userName, string password, string uri)
 		{
 			var token = await GroupShareClient.GetRequestToken(userName, password, new Uri(uri), GroupShareClient.AllScopes);
 			var groupShareClient = await GroupShareClient.AuthenticateClient(token, userName, password, new Uri(uri),
@@ -60,13 +64,13 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 
 			var tmClient = await groupShareClient.TranslationMemories.GetTms();
 			this.GroupShareClient = groupShareClient;
-			this.ServerBasedTMDetails = tmClient.Items;
+			this.ServerBasedTMDetails = new BindingList<TranslationMemoryDetails> (tmClient.Items);
 			return this;
 		}
 
-		public static Task<ServerBasedTranslationMemory> CreateAsync(string userName, string password, string uri)
+		public static Task<ServerBasedTranslationMemoryGSKit> CreateAsync(string userName, string password, string uri)
 		{
-			var ret = new ServerBasedTranslationMemory();
+			var ret = new ServerBasedTranslationMemoryGSKit();
 			return ret.InitializeAsync(userName, password, uri );
 		}
 
@@ -112,6 +116,34 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 		private Type GetProjectServersFacadeType()
 		{
 			return _sdlTranslationStudioProjectManagementAssembly.GetType("Sdl.TranslationStudio.ProjectManagement.ProjectServerSettings.Facade.ProjectServersFacade");
+		}
+		public void ReindexServerBasedTM (ServerBasedTranslationMemory sbTM )
+		{
+			var langdirections = sbTM.LanguageDirections;
+
+			var iterator = new RegularIterator(100);
+
+			while (langdirections[0].ReindexTranslationUnits(ref iterator))
+			{
+				//if (!bw.CancellationPending)
+				//{
+				//    bw.ReportProgress(0, _reindexStatus.ToString());
+
+				//}
+				//else
+				//{
+				//    bw.ReportProgress(100, "");
+				//}
+				//for (int i = 0; i < 100; i++)
+				//{
+				//	bw.ReportProgress(i, _reindexStatus.ToString());
+				//}
+			}
+
+
+			//var x = SBTMs;
+			sbTM.RecomputeFuzzyIndexStatistics();
+			sbTM.Save();
 		}
 	}
 }
