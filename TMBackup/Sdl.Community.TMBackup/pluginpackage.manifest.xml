@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.TMBackup</PlugInName>
-  <Version>1.0.0.2</Version>
+  <Version>1.0.0.3</Version>
   <Description>Backup translation memory/termbase files</Description>>
   <Author></Author>
   <Include>
