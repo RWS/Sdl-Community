@@ -73,10 +73,26 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\MultiTerm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Studio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\Location.cs" />
     <Compile Include="Model\StudioVersion.cs" />
+    <Compile Include="ViewModel\MultiTermViewModel.cs" />
+    <Compile Include="ViewModel\StudioViewModel.cs" />
+    <Compile Include="Views\MultiTerm.xaml.cs">
+      <DependentUpon>MultiTerm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Studio.xaml.cs">
+      <DependentUpon>Studio.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
