@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupDetailsForm));
             this.btn_Ok = new System.Windows.Forms.Button();
             this.btn_Cancel = new System.Windows.Forms.Button();
-            this.lbl_RulesDescription = new System.Windows.Forms.Label();
             this.btn_Add = new System.Windows.Forms.Button();
             this.btn_Delete = new System.Windows.Forms.Button();
             this.lbl_Line = new System.Windows.Forms.Label();
@@ -48,7 +47,7 @@
             // btn_Ok
             // 
             this.btn_Ok.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Ok.Location = new System.Drawing.Point(334, 152);
+            this.btn_Ok.Location = new System.Drawing.Point(344, 130);
             this.btn_Ok.Name = "btn_Ok";
             this.btn_Ok.Size = new System.Drawing.Size(75, 23);
             this.btn_Ok.TabIndex = 7;
@@ -59,23 +58,13 @@
             // btn_Cancel
             // 
             this.btn_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Cancel.Location = new System.Drawing.Point(425, 152);
+            this.btn_Cancel.Location = new System.Drawing.Point(425, 130);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(75, 23);
             this.btn_Cancel.TabIndex = 8;
             this.btn_Cancel.Text = "Cancel";
             this.btn_Cancel.UseVisualStyleBackColor = true;
             this.btn_Cancel.Click += new System.EventHandler(this.btn_Cancel_Click);
-            // 
-            // lbl_RulesDescription
-            // 
-            this.lbl_RulesDescription.AutoSize = true;
-            this.lbl_RulesDescription.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lbl_RulesDescription.Location = new System.Drawing.Point(17, 121);
-            this.lbl_RulesDescription.Name = "lbl_RulesDescription";
-            this.lbl_RulesDescription.Size = new System.Drawing.Size(281, 13);
-            this.lbl_RulesDescription.TabIndex = 10;
-            this.lbl_RulesDescription.Text = "Rules are scanned from the top. First matching rule is final.";
             // 
             // btn_Add
             // 
@@ -104,7 +93,7 @@
             this.lbl_Line.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbl_Line.Location = new System.Drawing.Point(-5, 147);
+            this.lbl_Line.Location = new System.Drawing.Point(-10, 123);
             this.lbl_Line.Name = "lbl_Line";
             this.lbl_Line.Size = new System.Drawing.Size(535, 2);
             this.lbl_Line.TabIndex = 16;
@@ -129,7 +118,7 @@
             this.dataGridView1.DataSource = this.backupDetailsModelBindingSource;
             this.dataGridView1.Location = new System.Drawing.Point(10, 13);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(409, 84);
+            this.dataGridView1.Size = new System.Drawing.Size(409, 97);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating_1);
@@ -163,30 +152,27 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(512, 182);
+            this.ClientSize = new System.Drawing.Size(512, 160);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.lbl_Line);
-            this.Controls.Add(this.lbl_RulesDescription);
             this.Controls.Add(this.btn_Add);
             this.Controls.Add(this.btn_Delete);
             this.Controls.Add(this.btn_Cancel);
             this.Controls.Add(this.btn_Ok);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(561, 252);
+            this.MaximumSize = new System.Drawing.Size(528, 199);
             this.Name = "TMBackupDetailsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "What to backup";
             ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
 
 		#endregion
 		private System.Windows.Forms.Button btn_Ok;
 		private System.Windows.Forms.Button btn_Cancel;
-		private System.Windows.Forms.Label lbl_RulesDescription;
 		private System.Windows.Forms.Button btn_Add;
 		private System.Windows.Forms.Button btn_Delete;
 		private System.Windows.Forms.Label lbl_Line;
