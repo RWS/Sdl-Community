@@ -37,11 +37,6 @@ namespace Sdl.Community.TMLifting
             this.connectToServer = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
-            this.nameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.descriptionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.locationDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FuzzyIndexes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TmId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
@@ -56,7 +51,6 @@ namespace Sdl.Community.TMLifting
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabPageServerBasedTM.SuspendLayout();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
@@ -70,7 +64,6 @@ namespace Sdl.Community.TMLifting
             // tabPageServerBasedTM
             // 
             this.tabPageServerBasedTM.BackColor = System.Drawing.Color.White;
-            this.tabPageServerBasedTM.Controls.Add(this.progressBar1);
             this.tabPageServerBasedTM.Controls.Add(this.server);
             this.tabPageServerBasedTM.Controls.Add(this.comboBoxServerBasedTM);
             this.tabPageServerBasedTM.Controls.Add(this.connectToServer);
@@ -122,49 +115,12 @@ namespace Sdl.Community.TMLifting
             // gridServerBasedTMs
             // 
             this.gridServerBasedTMs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridServerBasedTMs.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nameDataGridViewTextBoxColumn,
-            this.descriptionDataGridViewTextBoxColumn,
-            this.locationDataGridViewTextBoxColumn,
-            this.FuzzyIndexes,
-            this.TmId});
             this.gridServerBasedTMs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridServerBasedTMs.Location = new System.Drawing.Point(3, 16);
             this.gridServerBasedTMs.Name = "gridServerBasedTMs";
             this.gridServerBasedTMs.Size = new System.Drawing.Size(564, 381);
             this.gridServerBasedTMs.TabIndex = 6;
             this.gridServerBasedTMs.Visible = false;
-            // 
-            // nameDataGridViewTextBoxColumn
-            // 
-            this.nameDataGridViewTextBoxColumn.DataPropertyName = "Name";
-            this.nameDataGridViewTextBoxColumn.HeaderText = "Name";
-            this.nameDataGridViewTextBoxColumn.Name = "nameDataGridViewTextBoxColumn";
-            this.nameDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // descriptionDataGridViewTextBoxColumn
-            // 
-            this.descriptionDataGridViewTextBoxColumn.DataPropertyName = "Description";
-            this.descriptionDataGridViewTextBoxColumn.HeaderText = "Description";
-            this.descriptionDataGridViewTextBoxColumn.Name = "descriptionDataGridViewTextBoxColumn";
-            this.descriptionDataGridViewTextBoxColumn.Width = 150;
-            // 
-            // locationDataGridViewTextBoxColumn
-            // 
-            this.locationDataGridViewTextBoxColumn.DataPropertyName = "Location";
-            this.locationDataGridViewTextBoxColumn.HeaderText = "Location";
-            this.locationDataGridViewTextBoxColumn.Name = "locationDataGridViewTextBoxColumn";
-            // 
-            // FuzzyIndexes
-            // 
-            this.FuzzyIndexes.HeaderText = "FuzzyIndexes";
-            this.FuzzyIndexes.Name = "FuzzyIndexes";
-            // 
-            // TmId
-            // 
-            this.TmId.HeaderText = "TmId";
-            this.TmId.Name = "TmId";
-            this.TmId.Visible = false;
             // 
             // tabPageFileBasedTM
             // 
@@ -315,13 +271,6 @@ namespace Sdl.Community.TMLifting
             this.btnReindex.UseVisualStyleBackColor = true;
             this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
             // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(76, 535);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(808, 23);
-            this.progressBar1.TabIndex = 4;
-            // 
             // TMLiftingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -354,11 +303,6 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.TabControl tabControlTMLifting;
 		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 		private System.Windows.Forms.BindingSource itemsBindingSource1;
-		private System.Windows.Forms.DataGridViewTextBoxColumn nameDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn descriptionDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn locationDataGridViewTextBoxColumn;
-		private System.Windows.Forms.DataGridViewTextBoxColumn FuzzyIndexes;
-		private System.Windows.Forms.DataGridViewTextBoxColumn TmId;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.Button connectToServer;
 		private System.Windows.Forms.Label server;
@@ -371,7 +315,6 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.CheckBox chkLoadStudioTMs;
 		private System.Windows.Forms.Button btnBrowse;
 		private System.Windows.Forms.Button btnReindex;
-		private System.Windows.Forms.ProgressBar progressBar1;
 	}
 }
 
