@@ -96,14 +96,14 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.
-		// The 5 seconds are added as a short delay to ensure that the backup is done at the current date time after the Main window is closed.
+		// The 10 seconds are added as a short delay to ensure that the backup is done at the current date time after the Main window is closed.
 		private void SetupRealDateTime(Trigger tr)
 		{
 			var dateTimeResult = DateTime.Compare(tr.StartBoundary, DateTime.UtcNow);
 
 			if (dateTimeResult > 0)
 			{
-				tr.StartBoundary = DateTime.UtcNow.AddSeconds(5);
+				tr.StartBoundary = DateTime.UtcNow.AddSeconds(10);
 			}
 		}
 	}
