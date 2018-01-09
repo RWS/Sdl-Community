@@ -504,6 +504,14 @@ namespace Sdl.Community.PostEdit.Compare.Core.Reports
 			            {
 				            segmentData.NumCap = editedNumber;
 				            segmentData.NumEr=segmentData.NumEr + editedNumber;
+				            try
+				            {
+								segmentData.Terp = Math.Round(segmentData.NumEr/ segmentData.NumWd *100,2);
+							}
+				            catch (Exception e)
+				            {
+					            
+				            }
 			            }
 
 		            }
