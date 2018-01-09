@@ -46,7 +46,8 @@
 	    <Label Grid.Column="0" Grid.Row="2" Margin="0,20,0,0" FontWeight="Bold">Remove folders from following locations:</Label>
 
 	    <ListBox 
-		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay}" 
+		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
+			SelectionMode="Multiple"
 		    Grid.Column="0"
 		    Grid.Row="3">
 		    <ListBox.ItemTemplate>
@@ -57,13 +58,15 @@
 					    FontFamily="Calibri"
 					    FontSize="14"
 					    IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				    ></CheckBox>
+						Command="{Binding SelectCommand}">
+						</CheckBox>
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
 	    </ListBox>
+
 	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Margin="40,0,0,0">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-		    <TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" >Description</TextBlock>
+			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
 	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,20,0,0" Orientation="Vertical">

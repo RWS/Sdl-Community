@@ -5,7 +5,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Sdl.Community.StudioCleanupTool.Annotations;
+using Sdl.Community.StudioCleanupTool.Helpers;
 
 namespace Sdl.Community.StudioCleanupTool.Model
 {
@@ -16,18 +18,44 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	    public string Name { get; set; }
 	    public string Path { get; set; }
 	    public string Description { get; set; }
-	    public bool IsSelected
+		private static List<string> _selectedLocations = new List<string>();
+	    private ICommand _selectCommand;
+		public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new CommandHandler(Select, true));
+
+	    private void Select()
 	    {
-		    get { return _isSelected; }
+		    if (IsSelected)
+		    {
+			    if (!_selectedLocations.Contains(DisplayName))
+			    {
+				    _selectedLocations.Add(DisplayName);
+			    }
+		    }
+		    else
+		    {
+			    _selectedLocations.Remove(DisplayName);
+		    }
+
+	    }
+		public bool IsSelected
+	    {
+		    get => _isSelected;
 		    set
 		    {
 			    if (_isSelected != value)
 			    {
 				    _isSelected = value;
-				    OnPropertyChanged();
+				    OnPropertyChanged(nameof(IsSelected));
 			    }
 		    }
 	    }
+
+	    public static List<string> GetSelectedLocations()
+	    {
+		    return _selectedLocations;
+
+	    }
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 	    [NotifyPropertyChangedInvocator]

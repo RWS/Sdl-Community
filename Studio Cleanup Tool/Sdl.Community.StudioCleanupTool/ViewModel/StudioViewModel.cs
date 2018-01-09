@@ -11,21 +11,21 @@ using Sdl.Community.StudioCleanupTool.Model;
 
 namespace Sdl.Community.StudioCleanupTool.ViewModel
 {
-    public class StudioViewModel
+    public class StudioViewModel:INotifyPropertyChanged
 	{
 	    private ObservableCollection<StudioVersion> _studioVersionsCollection;
 	    private ObservableCollection<Location> _foldersLocations;
 	    public event PropertyChangedEventHandler PropertyChanged;
-	    private int _columnsNumber;
+		private string _folderDescription;
 
-	    public StudioViewModel()
+		public StudioViewModel()
 	    {
-		    _columnsNumber = 0;
-		    FillStudioVersionList();
+		    _folderDescription = string.Empty;
+			FillStudioVersionList();
 		    FillFoldersLocationList();
-	    }
 
-	    private void FillFoldersLocationList()
+	    }
+		private void FillFoldersLocationList()
 	    {
 		    //well need to read the information from a file
 		    _foldersLocations = new ObservableCollection<Location>
@@ -116,11 +116,10 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    IsSelected = false
 			    }
 		    };
-
-		    ColumnsNumber = StudioVersionsCollection.Count;
 	    }
 
-	    public ObservableCollection<StudioVersion> StudioVersionsCollection
+	
+		public ObservableCollection<StudioVersion> StudioVersionsCollection
 	    {
 		    get => _studioVersionsCollection;
 
@@ -130,6 +129,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    return;
 			    }
+			    _studioVersionsCollection = value;
 			    OnPropertyChanged(nameof(StudioVersionsCollection));
 		    }
 	    }
@@ -144,25 +144,26 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    return;
 			    }
+			    _foldersLocations = value;
 			    OnPropertyChanged(nameof(FoldersLocationsCollection));
 		    }
 	    }
+		
+		public string FolderDescription
+		{
+			get => _folderDescription;
 
-	    public int ColumnsNumber
-	    {
-		    get => _columnsNumber;
-
-		    set
-		    {
-			    if (Equals(value, _columnsNumber))
-			    {
-				    return;
-			    }
-			    OnPropertyChanged(nameof(ColumnsNumber));
-		    }
-	    }
-
-	    [NotifyPropertyChangedInvocator]
+			set
+			{
+				if (Equals(value, _folderDescription))
+				{
+					return;
+				}
+				OnPropertyChanged(nameof(FolderDescription));
+			}
+		}
+		
+		[NotifyPropertyChangedInvocator]
 	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	    {
 		    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

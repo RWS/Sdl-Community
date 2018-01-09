@@ -5,28 +5,33 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Sdl.Community.StudioCleanupTool.Annotations;
 
-namespace Sdl.Community.StudioCleanupTool.Model
+namespace Sdl.Community.StudioCleanupTool.Helpers
 {
-	public class StudioVersion : INotifyPropertyChanged
+    public class CommandHandler : ICommand, INotifyPropertyChanged
 	{
-		private bool _isSelected;
-		public string DisplayName { get; set; }
-		public string VersionNumber { get; set; }
-		public string FullVersionNumber { get; set; }
-		public bool IsSelected
+		private Action _action;
+		private bool _canExecute;
+		public CommandHandler(Action action, bool canExecute)
 		{
-			get => _isSelected;
-			set
-			{
-				if (_isSelected != value)
-				{
-					_isSelected = value;
-					OnPropertyChanged(nameof(IsSelected));
-				}
-			}
+			_action = action;
+			_canExecute = canExecute;
 		}
+
+		public bool CanExecute(object parameter)
+		{
+			return _canExecute;
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		public void Execute(object parameter)
+		{
+			_action();
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
