@@ -6,7 +6,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Sdl.Community.StudioCleanupTool.Annotations;
+using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
 
 namespace Sdl.Community.StudioCleanupTool.ViewModel
@@ -17,16 +19,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	    private ObservableCollection<Location> _foldersLocations;
 	    public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
+		private ICommand _removeCommand;
+		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		
 
 		public StudioViewModel()
 	    {
 		    _folderDescription = string.Empty;
 			FillStudioVersionList();
 		    FillFoldersLocationList();
-
 	    }
-	
-
 		private void FillFoldersLocationList()
 	    {
 		    //well need to read the information from a file
@@ -96,14 +98,33 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		    foreach (var location in _foldersLocations)
 		    {
-				location.DescriptionChanged += Location_DescriptionChanged;
-		    }
+				location.PropertyChanged += Location_PropertyChanged;
+			}
 	    }
 
-		private void Location_DescriptionChanged(object sender)
+		private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			var lastSelectedItem = sender as Location;
-			if (lastSelectedItem != null) FolderDescription = lastSelectedItem.Description;
+			var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
+			if (lastSelectedItem != null)
+			{
+				if (lastSelectedItem.IsSelected)
+				{
+					FolderDescription = lastSelectedItem.Description;
+				}
+				else
+				{
+					
+					if (selectedLocations.Any())
+					{
+						FolderDescription = selectedLocations.First().Description;
+					}
+				}
+			}
+			if (!selectedLocations.Any())
+			{
+				FolderDescription = string.Empty;
+			}
 		}
 
 		private void FillStudioVersionList()
@@ -176,7 +197,12 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				OnPropertyChanged(nameof(FolderDescription));
 			}
 		}
-		
+		private void RemoveFiles()
+		{
+			var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
+
+		}
+
 		[NotifyPropertyChangedInvocator]
 	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	    {

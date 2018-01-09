@@ -58,7 +58,7 @@
 					    FontFamily="Calibri"
 					    FontSize="14"
 					    IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-						Command="{Binding SelectCommand}">
+						>
 						</CheckBox>
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
@@ -71,7 +71,7 @@
 
 	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,20,0,0" Orientation="Vertical">
 		    <StackPanel Orientation="Horizontal">
-			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="47,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="47,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
