@@ -25,6 +25,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    FillFoldersLocationList();
 
 	    }
+	
+
 		private void FillFoldersLocationList()
 	    {
 		    //well need to read the information from a file
@@ -91,9 +93,20 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    Description = "Removes files"
 			    },
 		    };
+
+		    foreach (var location in _foldersLocations)
+		    {
+				location.DescriptionChanged += Location_DescriptionChanged;
+		    }
 	    }
 
-	    private void FillStudioVersionList()
+		private void Location_DescriptionChanged(object sender)
+		{
+			var lastSelectedItem = sender as Location;
+			if (lastSelectedItem != null) FolderDescription = lastSelectedItem.Description;
+		}
+
+		private void FillStudioVersionList()
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersion>
 		    {
@@ -159,6 +172,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				{
 					return;
 				}
+				_folderDescription = value;
 				OnPropertyChanged(nameof(FolderDescription));
 			}
 		}

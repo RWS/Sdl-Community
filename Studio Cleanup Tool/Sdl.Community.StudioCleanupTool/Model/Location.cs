@@ -11,8 +11,16 @@ using Sdl.Community.StudioCleanupTool.Helpers;
 
 namespace Sdl.Community.StudioCleanupTool.Model
 {
-    public class Location: INotifyPropertyChanged
-    {
+
+	public delegate void DescriptionChangedEventHandler(object sender);
+	public class Location: INotifyPropertyChanged
+	{
+		public event DescriptionChangedEventHandler DescriptionChanged;
+
+		public Location()
+	    {
+		    
+	    }
 	    private bool _isSelected;
 		public string DisplayName { get; set; }
 	    public string Name { get; set; }
@@ -62,6 +70,11 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 	    {
 		    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		    if (propertyName != null && propertyName.Equals(nameof(IsSelected)))
+		    {
+			    var descriptionEvent = new DescriptionChangedEventArgs(Description);
+			    if (DescriptionChanged != null) DescriptionChanged(this);
+		    }
 	    }
     }
 }
