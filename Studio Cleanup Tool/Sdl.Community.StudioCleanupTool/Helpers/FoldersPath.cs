@@ -55,12 +55,42 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 						var localMajorFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFolderPath(userName, studioVersions));
 						documentsFolderLocationList.AddRange(localMajorFolderPath);
 					}
+					if (location.Alias.Equals("programDataMajor"))
+					{
+						var programDataMajorFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFolderPath(studioVersions));
+						documentsFolderLocationList.AddRange(programDataMajorFolderPath);
+					}
+					if (location.Alias.Equals("programDataMajorFull"))
+					{
+						var programDataMajorFullFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFullFolderPath(studioVersions));
+						documentsFolderLocationList.AddRange(programDataMajorFullFolderPath);
+					}
+					if (location.Alias.Equals("programData"))
+					{
+						var programDataFolderPath = await Task.FromResult(ProgramData.GetProgramDataFolderPath(studioVersions));
+						documentsFolderLocationList.AddRange(programDataFolderPath);
+					}
+					if (location.Alias.Equals("programFiles"))
+					{
+						var programFilesFolderPath = await Task.FromResult(GetProgramFilesFolderPath(studioVersions));
+						documentsFolderLocationList.AddRange(programFilesFolderPath);
+					}
 				}
 				
 			}
 		    return documentsFolderLocationList;
 	    }
 
+	    private static List<string> GetProgramFilesFolderPath(List<StudioVersionListItem> studioVersions)
+	    {
+			var programFilesPaths = new List<string>();
+		    foreach (var studioVersion in studioVersions)
+		    {
+			    var programFilesFolderPath = string.Format(@"C:\Program Files (x86)\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
+			    programFilesPaths.Add(programFilesFolderPath);
+		    }
+		    return programFilesPaths;
+		}
 	  
 
     }

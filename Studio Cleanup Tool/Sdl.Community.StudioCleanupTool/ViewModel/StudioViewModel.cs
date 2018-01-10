@@ -87,25 +87,28 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes files from program data",
-					Alias = "localMajor"
+					Alias = "programDataMajor"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
-				    Description = "Removes files"
-			    },
+				    Description = "Removes files",
+				    Alias = "programDataMajorFull"
+				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\Studio5\",
 				    IsSelected = false,
-				    Description = "Removes files"
-			    },
+				    Description = "Removes files",
+				    Alias = "programData"
+				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5\",
 				    IsSelected = false,
-				    Description = "Removes files"
+				    Description = "Removes files",
+					Alias = "programFiles"
 			    },
 		    };
 
@@ -148,20 +151,23 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    DisplayName = "Studio 2017",
 				    IsSelected = false,
-					MajorVersionNumber = "14"
+					MajorVersionNumber = "14",
+					FolderName ="Studio5"
 			    },
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2015",
 				    IsSelected = false,
-					MajorVersionNumber = "12"
+					MajorVersionNumber = "12",
+					FolderName = "Studio4"
 			    },
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2014",
 					MajorVersionNumber = "11",
-				    IsSelected = false
-			    }
+				    IsSelected = false,
+				    FolderName = "Studio3"
+				}
 		    };
 	    }
 
