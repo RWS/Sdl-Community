@@ -72,7 +72,8 @@
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\DescriptionChangedEventArgs.cs" />
     <Compile Include="Helpers\DocumentsFolder.cs" />
-    <Compile Include="Helpers\RoamingFolder.cs" />
+    <Compile Include="Helpers\ProgramData.cs" />
+    <Compile Include="Helpers\AppDataFolder.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -73,19 +73,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes plugins",
-				    Alias = "roamingProjectApi"
+				    Alias = "localMajor"
 				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
-				    Description = "Removes files"
+				    Description = "Removes files",
+					Alias = "localMajorFull"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
-				    Description = "Removes files from program data"
+				    Description = "Removes files from program data",
+					Alias = "localMajor"
 			    },
 			    new StudioLocationListItem
 			    {

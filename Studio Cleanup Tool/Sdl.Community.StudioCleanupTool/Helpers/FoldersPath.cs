@@ -32,18 +32,28 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					}
 					if (location.Alias.Equals("roamingMajor"))
 					{
-						var roamingMajorVersionFolderPath = await Task.FromResult(RoamingFolder.GetRoamingMajorFolderPath(userName, studioVersions));
+						var roamingMajorVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFolderPath(userName, studioVersions));
 						documentsFolderLocationList.AddRange(roamingMajorVersionFolderPath);
 					}
 					if (location.Alias.Equals("roamingMajorFull"))
 					{
-						var roamingMajorFullVersionFolderPath = await Task.FromResult(RoamingFolder.GetRoamingMajorFullFolderPath(userName, studioVersions));
+						var roamingMajorFullVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFullFolderPath(userName, studioVersions));
 						documentsFolderLocationList.AddRange(roamingMajorFullVersionFolderPath);
 					}
 					if (location.Alias.Equals("roamingProjectApi"))
 					{
-						var roamingProjectApiFolderPath = await Task.FromResult(RoamingFolder.GetRoamingProjectApiFolderPath(userName, studioVersions));
+						var roamingProjectApiFolderPath = await Task.FromResult(AppDataFolder.GetRoamingProjectApiFolderPath(userName, studioVersions));
 						documentsFolderLocationList.AddRange(roamingProjectApiFolderPath);
+					}
+					if (location.Alias.Equals("localMajorFull"))
+					{
+						var localMajorFullFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFullFolderPath(userName, studioVersions));
+						documentsFolderLocationList.AddRange(localMajorFullFolderPath);
+					}
+					if (location.Alias.Equals("localMajor"))
+					{
+						var localMajorFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFolderPath(userName, studioVersions));
+						documentsFolderLocationList.AddRange(localMajorFolderPath);
 					}
 				}
 				

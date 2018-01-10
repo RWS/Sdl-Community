@@ -7,7 +7,7 @@ using Sdl.Community.StudioCleanupTool.Model;
 
 namespace Sdl.Community.StudioCleanupTool.Helpers
 {
-    public static class RoamingFolder
+    public static class AppDataFolder
     {
 	    public static List<string> GetRoamingMajorFolderPath(string userName, List<StudioVersionListItem> studioVersions)
 	    {
@@ -17,7 +17,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}", userName,
 				    studioVersion.MajorVersionNumber);
 				majorPaths.Add(majorFolderPath);
-
 		    }
 		    return majorPaths;
 	    }
@@ -30,7 +29,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL Trados Studio\{1}.0.0.0", userName,
 				    studioVersion.MajorVersionNumber);
 			    majorPaths.Add(majorFolderPath);
-
 		    }
 		    return majorPaths;
 	    }
@@ -45,6 +43,30 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    roamninProjectApiPaths.Add(projectApiPath);
 			}
 		    return roamninProjectApiPaths;
+		}
+
+	    public static List<string> GetLocalMajorFullFolderPath(string userName, List<StudioVersionListItem> studioVersions)
+	    {
+			var majorPaths = new List<string>();
+		    foreach (var studioVersion in studioVersions)
+		    {
+			    var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}.0.0.0", userName,
+				    studioVersion.MajorVersionNumber);
+			    majorPaths.Add(majorFolderPath);
+		    }
+		    return majorPaths;
+		}
+
+	    public static List<string> GetLocalMajorFolderPath(string userName, List<StudioVersionListItem> studioVersions)
+	    {
+			var majorPaths = new List<string>();
+		    foreach (var studioVersion in studioVersions)
+		    {
+			    var majorFolderPath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL Trados Studio\{1}", userName,
+				    studioVersion.MajorVersionNumber);
+			    majorPaths.Add(majorFolderPath);
+		    }
+		    return majorPaths;
 		}
     }
 }
