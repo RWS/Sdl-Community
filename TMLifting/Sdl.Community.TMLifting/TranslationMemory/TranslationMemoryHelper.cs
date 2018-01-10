@@ -206,10 +206,6 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 				{
 					bw.ReportProgress(100, "");
 				}
-				//for (int i = 0; i < 100; i++)
-				//{
-				//	bw.ReportProgress(i, _reindexStatus.ToString());
-				//}
 			}
 
             fileBasedTm.RecomputeFuzzyIndexStatistics();
