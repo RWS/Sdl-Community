@@ -42,39 +42,42 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    {
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Projects\projects.xml",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Projects\projects.xml",
 				    IsSelected = false,
 				    Description = "Removes projects xml file",
 					Alias = "projectsXml"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Project Templates\",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Project Templates\",
 				    IsSelected = false,
 				    Description = "Removes project templates",
 					Alias = "projectTemplates"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
-				    Description = "Removes the plugins"
+				    Description = "Removes the plugins",
+					Alias = "roamingMajor"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
-				    Description = "Removes some files"
-			    },
+				    Description = "Removes some files",
+				    Alias = "roamingMajorFull"
+				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
-				    Description = "Removes plugins"
-			    },
+				    Description = "Removes plugins",
+				    Alias = "roamingProjectApi"
+				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
@@ -92,13 +95,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\Studio5\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Program Files (x86)\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
@@ -226,7 +229,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				if (selectedStudioVersions.Any())
 				{
 					var documentsFolderLocation =
-						await DocumentsFolder.GetDocumentsFolderPath(_userName, selectedStudioVersions, selectedStudioLocations);
+						await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
 					locationsToClear.AddRange(documentsFolderLocation);
 				}
 				

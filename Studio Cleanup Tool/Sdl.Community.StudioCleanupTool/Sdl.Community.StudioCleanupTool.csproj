@@ -71,6 +71,8 @@
     </Compile>
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\DescriptionChangedEventArgs.cs" />
+    <Compile Include="Helpers\DocumentsFolder.cs" />
+    <Compile Include="Helpers\RoamingFolder.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -85,7 +87,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\DocumentsFolder.cs" />
+    <Compile Include="Helpers\FoldersPath.cs" />
     <Compile Include="Model\MultiTermLocationListItem.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
     <Compile Include="Model\MultiTermVersionListItem.cs" />
