@@ -217,7 +217,6 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 			{
 				this.OnProgressChanged(0, string.Empty);
 				this.OnLogAddedChanged(string.Format(Properties.Resources.RemapException, ex.Message));
-				log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType).Error("RemapTMXTask.Execute", ex);
 			}
 		}
 
@@ -290,7 +289,6 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 			catch (Exception ex)
 			{
 				string error = string.Format("RemapTMX.Convert {0} to {1} with {2}{3}", inputFile, outputFile, flavor, System.Environment.NewLine);
-				log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType).Error(error, ex);
 			}
 		}
 

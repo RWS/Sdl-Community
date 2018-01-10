@@ -3,6 +3,10 @@
   <PlugInName>Sdl.Community.TranslationMemoryProvider</PlugInName>
   <Version>1.0</Version>
   <Description>SDL Translation Memory Provider</Description>
-  <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <Author>SDL Community</Author>
+  <Include>
+    <File>Sdl.Community.Utilities.TMTool.Lib.dll</File>
+    <File>Sdl.Community.Utilities.TMTool.Task.dll</File>
+  </Include>
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 </PluginPackage>

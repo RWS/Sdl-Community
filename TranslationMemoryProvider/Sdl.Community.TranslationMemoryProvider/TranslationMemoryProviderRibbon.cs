@@ -88,7 +88,6 @@ namespace Sdl.Community.TranslationMemoryProvider
 										_rm.GetString("AssemblyProblemTitle", CultureInfo.CurrentCulture),
 										MessageBoxButtons.OK,
 										MessageBoxIcon.Warning);
-							log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType).Error("Program.GetTasksToPerform", ex);
 						}
 					}
 				}
