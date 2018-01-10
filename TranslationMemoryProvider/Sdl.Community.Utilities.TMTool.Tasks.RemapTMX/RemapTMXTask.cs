@@ -289,6 +289,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 			catch (Exception ex)
 			{
 				string error = string.Format("RemapTMX.Convert {0} to {1} with {2}{3}", inputFile, outputFile, flavor, System.Environment.NewLine);
+				MessageBox.Show(error, "Informative message");
 			}
 		}
 
