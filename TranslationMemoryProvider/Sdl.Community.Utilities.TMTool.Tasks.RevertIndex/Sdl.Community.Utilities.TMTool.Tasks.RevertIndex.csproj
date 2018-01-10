@@ -36,8 +36,13 @@
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,10 +51,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccessRightsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AccessRightsForm.Designer.cs">
+      <DependentUpon>AccessRightsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="RevertIndexControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RevertIndexControl.Designer.cs">
+      <DependentUpon>RevertIndexControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RevertIndexSettings.cs" />
+    <Compile Include="RevertIndexTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SdlCommunity.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Lib\Sdl.Community.Utilities.TMTool.Lib.csproj">
+      <Project>{35068c4f-4167-4af1-b998-54b8f1754ce9}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Task\Sdl.Community.Utilities.TMTool.Task.csproj">
+      <Project>{6d8af615-6467-4cf4-a6d7-a0b88fb8d74b}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Task</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="AccessRightsForm.resx">
+      <DependentUpon>AccessRightsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RevertIndexControl.resx">
+      <DependentUpon>RevertIndexControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
