@@ -13,6 +13,8 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	{
 		private bool _isSelected;
 		public string DisplayName { get; set; }
+		public string MajorVersionNumber { get; set; }
+
 
 		public bool IsSelected
 		{

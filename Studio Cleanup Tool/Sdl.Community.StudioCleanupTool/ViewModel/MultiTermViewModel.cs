@@ -119,16 +119,19 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				{
 					DisplayName = "MultiTerm 2017",
 					IsSelected = false,
+					MajorVersionNumber = "14"
 
 				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2015",
 					IsSelected = false,
+					MajorVersionNumber = "12"
 				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2014",
+					MajorVersionNumber = "11",
 					IsSelected = false
 				}
 			};

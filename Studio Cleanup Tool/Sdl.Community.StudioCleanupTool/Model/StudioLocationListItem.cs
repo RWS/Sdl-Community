@@ -18,6 +18,7 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	    public string Name { get; set; }
 	    public string Path { get; set; }
 	    public string Description { get; set; }
+		public string Alias { get; set; }
 		private static List<string> _selectedLocationsDescriptions = new List<string>();
 
 		public bool IsSelected

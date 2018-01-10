@@ -85,6 +85,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DocumentsFolder.cs" />
     <Compile Include="Model\MultiTermLocationListItem.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
     <Compile Include="Model\MultiTermVersionListItem.cs" />

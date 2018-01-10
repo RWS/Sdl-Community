@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -21,7 +22,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	    public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
 		private ICommand _removeCommand;
-		private MainWindow _mainWindow;
+		private readonly MainWindow _mainWindow;
+		private readonly string _userName;
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
 		
 
@@ -29,6 +31,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		{
 			_mainWindow = mainWindow;
 		    _folderDescription = string.Empty;
+			_userName = Environment.UserName;
 			FillStudioVersionList();
 		    FillFoldersLocationList();
 	    }
@@ -41,13 +44,15 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Projects\projects.xml",
 				    IsSelected = false,
-				    Description = "Removes projects xml file"
+				    Description = "Removes projects xml file",
+					Alias = "projectsXml"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Project Templates\",
 				    IsSelected = false,
-				    Description = "Removes project templates"
+				    Description = "Removes project templates",
+					Alias = "projectTemplates"
 			    },
 			    new StudioLocationListItem
 			    {
@@ -138,18 +143,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    DisplayName = "Studio 2017",
 				    IsSelected = false,
-				    //FullVersionNumber = "11.0.0.0",
-				    //VersionNumber = "11" //need to check version number
+					MajorVersionNumber = "14"
 			    },
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2015",
 				    IsSelected = false,
-				    //FullVersionNumber = "12.0.0.0",
+					MajorVersionNumber = "12"
 			    },
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2014",
+					MajorVersionNumber = "11",
 				    IsSelected = false
 			    }
 		    };
@@ -213,8 +218,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
 				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+				var locationsToClear = new List<string>();
 				controller.SetIndeterminate();
 
+				var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
+				var selectedStudioLocations = FoldersLocationsCollection.Where(f => f.IsSelected).ToList();
+				if (selectedStudioVersions.Any())
+				{
+					var documentsFolderLocation =
+						await DocumentsFolder.GetDocumentsFolderPath(_userName, selectedStudioVersions, selectedStudioLocations);
+					locationsToClear.AddRange(documentsFolderLocation);
+				}
+				
 				//to close the message
 				//await controller.CloseAsync();
 			}
