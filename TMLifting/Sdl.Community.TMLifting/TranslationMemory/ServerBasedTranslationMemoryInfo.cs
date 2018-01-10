@@ -13,11 +13,8 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 
 		public ServerBasedTranslationMemoryInfo(Uri uri, bool isServerBasedTranslationMemory)
 		{
-			//FilePath = tmFilePath;
 			Name = ServerBasedTranslationMemory.GetServerBasedTranslationMemoryPath(uri);
-			IsServerBasedTranslationMemory = isServerBasedTranslationMemory;
-
-			//var server = ServerBasedTranslationMemory.GetServerBasedTranslationMemoryPath(Uri);
+			IsServerBasedTranslationMemory = isServerBasedTranslationMemory;			
 		}
 
 		public override string ToString()

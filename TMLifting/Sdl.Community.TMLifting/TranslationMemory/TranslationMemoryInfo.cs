@@ -19,8 +19,6 @@ namespace Sdl.Community.TMLifting.TranslationMemory
             Uri = FileBasedTranslationMemory.GetFileBasedTranslationMemoryUri(tmFilePath);
             Name = FileBasedTranslationMemory.GetFileBasedTranslationMemoryName(Uri);
             IsStudioTm = isStudioTm;
-
-			//var server = ServerBasedTranslationMemory.GetServerBasedTranslationMemoryPath(Uri);
         }
 
         public override string ToString()
