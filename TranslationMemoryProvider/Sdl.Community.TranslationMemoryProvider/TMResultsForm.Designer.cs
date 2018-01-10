@@ -35,6 +35,8 @@
             this.exportButton = new System.Windows.Forms.Button();
             this.btnOpenFolder = new System.Windows.Forms.Button();
             this.btnClose = new System.Windows.Forms.Button();
+            this.lblOperation = new System.Windows.Forms.Label();
+            this.lblProgress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // pbProgressFiles
@@ -98,11 +100,29 @@
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
             // 
+            // lblOperation
+            // 
+            this.lblOperation.AutoSize = true;
+            this.lblOperation.Location = new System.Drawing.Point(95, 13);
+            this.lblOperation.Name = "lblOperation";
+            this.lblOperation.Size = new System.Drawing.Size(0, 13);
+            this.lblOperation.TabIndex = 19;
+            // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(12, 13);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(0, 13);
+            this.lblProgress.TabIndex = 18;
+            // 
             // TMResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(642, 313);
+            this.Controls.Add(this.lblOperation);
+            this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.btnClose);
             this.Controls.Add(this.btnOpenFolder);
             this.Controls.Add(this.exportButton);
@@ -126,5 +146,7 @@
 		private System.Windows.Forms.Button exportButton;
 		private System.Windows.Forms.Button btnOpenFolder;
 		private System.Windows.Forms.Button btnClose;
+		private System.Windows.Forms.Label lblOperation;
+		private System.Windows.Forms.Label lblProgress;
 	}
 }
