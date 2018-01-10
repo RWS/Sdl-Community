@@ -227,7 +227,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
+				//var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
 				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 				var locationsToClear = new List<string>();
 				controller.SetIndeterminate();

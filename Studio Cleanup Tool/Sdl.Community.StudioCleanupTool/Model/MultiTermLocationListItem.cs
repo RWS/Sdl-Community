@@ -15,6 +15,8 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	    public string DisplayName { get; set; }
 	    public string Description { get; set; }
 
+	    public string Alias { get; set; }
+
 		public bool IsSelected
 	    {
 		    get => _isSelected;

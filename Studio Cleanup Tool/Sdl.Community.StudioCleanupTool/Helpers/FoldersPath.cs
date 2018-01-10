@@ -81,6 +81,39 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return documentsFolderLocationList;
 	    }
 
+
+	    public static async Task<List<string>> GetMultiTermFoldersPath(string userName,
+		    List<MultiTermVersionListItem> multiTermVersions, List<MultiTermLocationListItem> locations)
+	    {
+		    var foldersLocationList = new List<string>();
+			foreach (var location in locations)
+		    {
+			    if (location.Alias != null)
+			    {
+				    if (location.Alias.Equals("packageCache"))
+				    {
+					    var packageCacheLocations = await Task.FromResult(MultiTermFolders.GetPackageCachePaths(multiTermVersions));
+						foldersLocationList.AddRange(packageCacheLocations);
+					}
+				    if (location.Alias.Equals("programFiles"))
+				    {
+					    var programFilesLocations = await Task.FromResult(MultiTermFolders.ProgramFilesPaths(multiTermVersions));
+					    foldersLocationList.AddRange(programFilesLocations);
+					}
+				    if (location.Alias.Equals("appDataLocal"))
+				    {
+					    var appDataLocal = await Task.FromResult(MultiTermFolders.AppDataLocalPaths(userName,multiTermVersions));
+					    foldersLocationList.AddRange(appDataLocal);
+					}
+				    if (location.Alias.Equals("appDataRoming"))
+				    {
+					    var appDataRoaming = await Task.FromResult(MultiTermFolders.AppDataRoamingPaths(userName,multiTermVersions));
+					    foldersLocationList.AddRange(appDataRoaming);
+					}
+				}
+		    }
+		    return foldersLocationList;
+	    }
 	    private static List<string> GetProgramFilesFolderPath(List<StudioVersionListItem> studioVersions)
 	    {
 			var programFilesPaths = new List<string>();

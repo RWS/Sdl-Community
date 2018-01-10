@@ -16,7 +16,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 {
     public class MultiTermViewModel : INotifyPropertyChanged
 	{
-	    private MainWindow _mainWindow;
+	    private readonly MainWindow _mainWindow;
+		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
 		private string _folderDescription;
@@ -25,6 +26,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		public MultiTermViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
+			_userName = Environment.UserName;
 			_folderDescription = string.Empty;
 			FillMultiTermVersionList();
 			FillMultiTermLocationList();
@@ -37,25 +39,29 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				new MultiTermLocationListItem
 				{
-					DisplayName = @"c:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop2017\",
+					DisplayName = @"C:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop2017\",
 					IsSelected = false,
-					Description = "first description"
+					Description = "first description",
+					Alias = "packageCache"
 				},
 				new MultiTermLocationListItem
 				{
-					DisplayName = @"c:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\",
+					DisplayName = @"C:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\",
 					IsSelected = false,
-					Description = "second"
+					Description = "second",
+					Alias = "programFiles"
 				},new MultiTermLocationListItem
 				{
-					DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14\",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14\",
 					IsSelected = false,
-					Description = "Another"
+					Description = "Another",
+					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
-					DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14\",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14\",
 					IsSelected = false,
-					Description = "another description"
+					Description = "another description",
+					Alias = "appDataRoming"
 				}
 			};
 
@@ -79,6 +85,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				var selectedLocations = MultiTermLocationCollection.Where(s => s.IsSelected).ToList();
 				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 				controller.SetIndeterminate();
+
+				var locationsToClear = new List<string>();
+				controller.SetIndeterminate();
+
+				var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
+				var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
+				if (selectedMultiTermVersions.Any())
+				{
+					var documentsFolderLocation =
+						await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
+					locationsToClear.AddRange(documentsFolderLocation);
+				}
 
 				//to close the message
 				//await controller.CloseAsync();
@@ -119,20 +137,23 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				{
 					DisplayName = "MultiTerm 2017",
 					IsSelected = false,
-					MajorVersionNumber = "14"
+					MajorVersionNumber = "14",
+					ReleaseNumber = "2017"
 
 				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2015",
 					IsSelected = false,
-					MajorVersionNumber = "12"
+					MajorVersionNumber = "12",
+					ReleaseNumber = "2015"
 				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2014",
 					MajorVersionNumber = "11",
-					IsSelected = false
+					IsSelected = false,
+					ReleaseNumber = "2014"
 				}
 			};
 		}

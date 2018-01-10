@@ -72,6 +72,7 @@
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\DescriptionChangedEventArgs.cs" />
     <Compile Include="Helpers\DocumentsFolder.cs" />
+    <Compile Include="Helpers\MultiTermFolders.cs" />
     <Compile Include="Helpers\ProgramData.cs" />
     <Compile Include="Helpers\AppDataFolder.cs" />
     <Compile Include="MainWindow.xaml.cs">
