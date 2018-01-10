@@ -33,6 +33,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -55,6 +59,10 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
@@ -75,25 +83,77 @@
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.Licensing">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.Licensing.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyCustomTradosStudio.cs" />
+    <Compile Include="TranslationMemoryProviderRibbon.cs" />
+    <Compile Include="OptionsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="OptionsPanel.Designer.cs">
+      <DependentUpon>OptionsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="TasksManager\TasksManager.cs" />
+    <Compile Include="TMResultsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TMResultsForm.Designer.cs">
+      <DependentUpon>TMResultsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TMToolForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TMToolForm.Designer.cs">
+      <DependentUpon>TMToolForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="PluginResources.resx" />
+    <None Include="Resources\TranslationMemory.ico" />
+    <EmbeddedResource Include="OptionsPanel.resx">
+      <DependentUpon>OptionsPanel.cs</DependentUpon>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
+    <EmbeddedResource Include="PluginResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TMResultsForm.resx">
+      <DependentUpon>TMResultsForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TMToolForm.resx">
+      <DependentUpon>TMToolForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Lib\Sdl.Community.Utilities.TMTool.Lib.csproj">
+      <Project>{35068c4f-4167-4af1-b998-54b8f1754ce9}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Lib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Task\Sdl.Community.Utilities.TMTool.Task.csproj">
+      <Project>{6d8af615-6467-4cf4-a6d7-a0b88fb8d74b}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Task</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
