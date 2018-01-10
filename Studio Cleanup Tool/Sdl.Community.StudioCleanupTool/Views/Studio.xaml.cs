@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StudioCleanupTool.ViewModel;
 
 namespace Sdl.Community.StudioCleanupTool.Views
@@ -24,9 +26,6 @@ namespace Sdl.Community.StudioCleanupTool.Views
         public Studio()
         {
             InitializeComponent();
-
-			var viewModel = new StudioViewModel();
-	        DataContext = viewModel;
         }
     }
 }

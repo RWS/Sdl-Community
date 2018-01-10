@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StudioCleanupTool.Annotations;
 using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
@@ -20,11 +21,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	    public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
 		private ICommand _removeCommand;
+		private MainWindow _mainWindow;
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
 		
 
-		public StudioViewModel()
-	    {
+		public StudioViewModel(MainWindow mainWindow)
+		{
+			_mainWindow = mainWindow;
 		    _folderDescription = string.Empty;
 			FillStudioVersionList();
 		    FillFoldersLocationList();
@@ -197,9 +200,25 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				OnPropertyChanged(nameof(FolderDescription));
 			}
 		}
-		private void RemoveFiles()
+		private async void RemoveFiles()
 		{
-			var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
+			var dialog = new MetroDialogSettings
+			{
+				AffirmativeButtonText = "OK"
+
+			};
+			MessageDialogResult result =
+				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
+			if (result == MessageDialogResult.Affirmative)
+			{
+				var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
+				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+				controller.SetIndeterminate();
+
+				//to close the message
+				//await controller.CloseAsync();
+			}
+			
 
 		}
 
