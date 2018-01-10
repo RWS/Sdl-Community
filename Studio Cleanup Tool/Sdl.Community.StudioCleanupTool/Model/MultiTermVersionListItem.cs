@@ -9,12 +9,11 @@ using Sdl.Community.StudioCleanupTool.Annotations;
 
 namespace Sdl.Community.StudioCleanupTool.Model
 {
-	public class StudioVersion : INotifyPropertyChanged
+    public class MultiTermVersionListItem : INotifyPropertyChanged
 	{
 		private bool _isSelected;
 		public string DisplayName { get; set; }
-		public string VersionNumber { get; set; }
-		public string FullVersionNumber { get; set; }
+
 		public bool IsSelected
 		{
 			get => _isSelected;
@@ -27,6 +26,7 @@ namespace Sdl.Community.StudioCleanupTool.Model
 				}
 			}
 		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]

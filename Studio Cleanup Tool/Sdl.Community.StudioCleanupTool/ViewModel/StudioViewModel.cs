@@ -16,8 +16,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 {
     public class StudioViewModel:INotifyPropertyChanged
 	{
-	    private ObservableCollection<StudioVersion> _studioVersionsCollection;
-	    private ObservableCollection<Location> _foldersLocations;
+	    private ObservableCollection<StudioVersionListItem> _studioVersionsCollection;
+	    private ObservableCollection<StudioLocationListItem> _foldersLocations;
 	    public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
 		private ICommand _removeCommand;
@@ -35,65 +35,65 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private void FillFoldersLocationList()
 	    {
 		    //well need to read the information from a file
-		    _foldersLocations = new ObservableCollection<Location>
+		    _foldersLocations = new ObservableCollection<StudioLocationListItem>
 		    {
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\Documents\[Studio Version]\Projects\projects.xml",
+				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Projects\projects.xml",
 				    IsSelected = false,
 				    Description = "Removes projects xml file"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\Documents\[Studio Version]\Project Templates\",
+				    DisplayName = @"c:\Users\[USERNAME]\Documents\14\Project Templates\",
 				    IsSelected = false,
 				    Description = "Removes project templates"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\[Studio Major Version]\",
+				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes the plugins"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\[Studio Major Version].0.0.0\",
+				    DisplayName = @"c:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
 				    Description = "Removes some files"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\[Studio Major Version]\",
+				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes plugins"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\[Studio Major Version].0.0.0\",
+				    DisplayName = @"c:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\[Studio Major Version]\",
+				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes files from program data"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\[Studio Major Version].0.0.0\",
+				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\[Studio Version]\",
+				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
-			    new Location
+			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\Program Files (x86)\SDL\SDL Trados Studio\[Studio Version]\",
+				    DisplayName = @"c:\Program Files (x86)\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes files"
 			    },
@@ -107,7 +107,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		private void Location_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var lastSelectedItem = sender as Location;
+			var lastSelectedItem = sender as StudioLocationListItem;
 			var selectedLocations = FoldersLocationsCollection.Where(s => s.IsSelected).ToList();
 			if (lastSelectedItem != null)
 			{
@@ -132,31 +132,31 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		private void FillStudioVersionList()
 	    {
-		    _studioVersionsCollection = new ObservableCollection<StudioVersion>
+		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
 		    {
-			    new StudioVersion
+			    new StudioVersionListItem
 			    {
-				    DisplayName = "Studio 2014",
+				    DisplayName = "Studio 2017",
 				    IsSelected = false,
 				    //FullVersionNumber = "11.0.0.0",
 				    //VersionNumber = "11" //need to check version number
 			    },
-			    new StudioVersion
+			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2015",
 				    IsSelected = false,
 				    //FullVersionNumber = "12.0.0.0",
 			    },
-			    new StudioVersion
+			    new StudioVersionListItem
 			    {
-				    DisplayName = "Studio 2017",
+				    DisplayName = "Studio 2014",
 				    IsSelected = false
 			    }
 		    };
 	    }
 
 	
-		public ObservableCollection<StudioVersion> StudioVersionsCollection
+		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
 	    {
 		    get => _studioVersionsCollection;
 
@@ -171,7 +171,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    }
 	    }
 
-	    public ObservableCollection<Location> FoldersLocationsCollection
+	    public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
 	    {
 		    get => _foldersLocations;
 
@@ -207,7 +207,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				AffirmativeButtonText = "OK"
 
 			};
-			MessageDialogResult result =
+			var result =
 				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{

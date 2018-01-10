@@ -54,22 +54,21 @@
 			    <DataTemplate>
 				    <CheckBox
 					    Name="box"
-					    Content="{Binding DisplayName }"
+					    Content="{Binding DisplayName}"
 					    FontFamily="Calibri"
 					    FontSize="14"
-					    IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-						>
+					    IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 						</CheckBox>
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
 	    </ListBox>
 
-	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Margin="40,0,0,0">
+	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Margin="40,0,0,0" VerticalAlignment="Top" Height="250">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
-	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="0,20,0,0" Orientation="Vertical">
+	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="90,20,0,0" Orientation="Vertical">
 		    <StackPanel Orientation="Horizontal">
 				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="47,20,10,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 				    <Button.Template>

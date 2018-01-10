@@ -11,7 +11,7 @@ using Sdl.Community.StudioCleanupTool.Helpers;
 
 namespace Sdl.Community.StudioCleanupTool.Model
 {
-	public class Location: INotifyPropertyChanged
+	public class StudioLocationListItem: INotifyPropertyChanged
 	{
 	    private bool _isSelected;
 		public string DisplayName { get; set; }

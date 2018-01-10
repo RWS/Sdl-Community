@@ -85,8 +85,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Location.cs" />
-    <Compile Include="Model\StudioVersion.cs" />
+    <Compile Include="Model\MultiTermLocationListItem.cs" />
+    <Compile Include="Model\StudioLocationListItem.cs" />
+    <Compile Include="Model\MultiTermVersionListItem.cs" />
+    <Compile Include="Model\StudioVersionListItem.cs" />
     <Compile Include="ViewModel\MultiTermViewModel.cs" />
     <Compile Include="ViewModel\StudioViewModel.cs" />
     <Compile Include="Views\MultiTerm.xaml.cs">
