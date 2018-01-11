@@ -24,14 +24,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private ICommand _removeCommand;
 		private readonly MainWindow _mainWindow;
 		private readonly string _userName;
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
-		
+		private bool _isRemoveEnabled;
+		private string _removeBtnColor;
+		private string _removeForeground;
 
 		public StudioViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
 		    _folderDescription = string.Empty;
 			_userName = Environment.UserName;
+			_isRemoveEnabled = false;
+			_removeBtnColor = "LightGray";
+			_removeForeground = "Gray";
 			FillStudioVersionList();
 		    FillFoldersLocationList();
 	    }
@@ -84,21 +88,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14\",
 				    IsSelected = false,
 				    Description = "Removes files from program data",
 					Alias = "programDataMajor"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14.0.0.0\",
 				    IsSelected = false,
 				    Description = "Removes files",
 				    Alias = "programDataMajorFull"
 				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"c:\ProgramData\SDL\SDL Trados Studio\Studio5\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio5\",
 				    IsSelected = false,
 				    Description = "Removes files",
 				    Alias = "programData"
@@ -141,8 +145,26 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				FolderDescription = string.Empty;
 			}
+
+			SetRemoveBtnColors();
 		}
 
+
+		private void SetRemoveBtnColors()
+		{
+			if (AnyLocationAndVersionSelected())
+			{
+				IsRemoveEnabled = true;
+				RemoveBtnColor = "#99b433";
+				RemoveForeground = "WhiteSmoke";
+			}
+			else
+			{
+				IsRemoveEnabled = false;
+				RemoveBtnColor = "LightGray";
+				RemoveForeground = "Gray";
+			}
+		}
 		private void FillStudioVersionList()
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
@@ -169,14 +191,22 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    FolderName = "Studio3"
 				}
 		    };
+		    foreach (var studioVersion in _studioVersionsCollection)
+		    {
+				studioVersion.PropertyChanged += StudioVersion_PropertyChanged;
+		    }
 	    }
 
-	
+		private void StudioVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			SetRemoveBtnColors();
+		}
+
 		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
 	    {
-		    get => _studioVersionsCollection;
+			get => _studioVersionsCollection;
 
-		    set
+			set
 		    {
 			    if (Equals(value, _studioVersionsCollection))
 			    {
@@ -187,7 +217,10 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    }
 	    }
 
-	    public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
+
+		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+
+		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
 	    {
 		    get => _foldersLocations;
 
@@ -214,6 +247,51 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				_folderDescription = value;
 				OnPropertyChanged(nameof(FolderDescription));
+			}
+		}
+
+		public string RemoveForeground
+		{
+			get => _removeForeground;
+
+			set
+			{
+				if (Equals(value, _removeForeground))
+				{
+					return;
+				}
+				_removeForeground = value;
+				OnPropertyChanged(nameof(RemoveForeground));
+			}
+		}
+
+		public string RemoveBtnColor
+		{
+			get => _removeBtnColor;
+
+			set
+			{
+				if (Equals(value, _removeBtnColor))
+				{
+					return;
+				}
+				_removeBtnColor = value;
+				OnPropertyChanged(nameof(RemoveBtnColor));
+			}
+		}
+
+		public bool IsRemoveEnabled
+		{
+			get => _isRemoveEnabled;
+
+			set
+			{
+				if (Equals(value, _isRemoveEnabled))
+				{
+					return;
+				}
+				_isRemoveEnabled = value;
+				OnPropertyChanged(nameof(IsRemoveEnabled));
 			}
 		}
 		private async void RemoveFiles()
@@ -244,8 +322,14 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				//to close the message
 				//await controller.CloseAsync();
 			}
-			
+		}
 
+		private bool AnyLocationAndVersionSelected()
+		{
+			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
+			var selectedLocations = FoldersLocationsCollection.Where(l => l.IsSelected).ToList();
+
+			return selectedLocations.Any() && selectedVersions.Any();
 		}
 
 		[NotifyPropertyChangedInvocator]

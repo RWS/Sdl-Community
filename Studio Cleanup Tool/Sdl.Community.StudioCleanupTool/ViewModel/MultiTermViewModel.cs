@@ -22,12 +22,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
 		private string _folderDescription;
 		private ICommand _removeCommand;
+		private string _removeForeground;
+		private string _removeBtnColor;
+		private bool _isRemoveEnabled;
 
 		public MultiTermViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
 			_userName = Environment.UserName;
 			_folderDescription = string.Empty;
+			_isRemoveEnabled = false;
+			_removeBtnColor = "LightGray";
+			_removeForeground = "Gray";
 			FillMultiTermVersionList();
 			FillMultiTermLocationList();
 		}
@@ -127,6 +133,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				FolderDescription = string.Empty;
 			}
+			SetRemoveBtnColors();
 		}
 
 		private void FillMultiTermVersionList()
@@ -156,8 +163,40 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					ReleaseNumber = "2014"
 				}
 			};
+
+			foreach (var multiTermVersion in _multiTermVersionsCollection)
+			{
+				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
+			}
 		}
 
+		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			SetRemoveBtnColors();
+		}
+
+		private bool AnyLocationAndVersionSelected()
+		{
+			var selectedVersions = MultiTermVersionsCollection.Where(v => v.IsSelected).ToList();
+			var selectedLocations = MultiTermLocationCollection.Where(l => l.IsSelected).ToList();
+
+			return selectedLocations.Any() && selectedVersions.Any();
+		}
+		private void SetRemoveBtnColors()
+		{
+			if (AnyLocationAndVersionSelected())
+			{
+				IsRemoveEnabled = true;
+				RemoveBtnColor = "#99b433";
+				RemoveForeground = "WhiteSmoke";
+			}
+			else
+			{
+				IsRemoveEnabled = false;
+				RemoveBtnColor = "LightGray";
+				RemoveForeground = "Gray";
+			}
+		}
 		public ObservableCollection<MultiTermVersionListItem> MultiTermVersionsCollection
 		{
 			get => _multiTermVersionsCollection;
@@ -172,6 +211,50 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			}
 		}
 
+		public string RemoveForeground
+		{
+			get => _removeForeground;
+
+			set
+			{
+				if (Equals(value, _removeForeground))
+				{
+					return;
+				}
+				_removeForeground = value;
+				OnPropertyChanged(nameof(RemoveForeground));
+			}
+		}
+
+		public string RemoveBtnColor
+		{
+			get => _removeBtnColor;
+
+			set
+			{
+				if (Equals(value, _removeBtnColor))
+				{
+					return;
+				}
+				_removeBtnColor = value;
+				OnPropertyChanged(nameof(RemoveBtnColor));
+			}
+		}
+
+		public bool IsRemoveEnabled
+		{
+			get => _isRemoveEnabled;
+
+			set
+			{
+				if (Equals(value, _isRemoveEnabled))
+				{
+					return;
+				}
+				_isRemoveEnabled = value;
+				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
 		public string FolderDescription
 		{
 			get => _folderDescription;
