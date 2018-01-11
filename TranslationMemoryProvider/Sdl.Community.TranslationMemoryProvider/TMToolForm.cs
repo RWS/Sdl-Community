@@ -14,8 +14,6 @@ namespace Sdl.Community.TranslationMemoryProvider
 {
 	public partial class TMToolForm : Form
 	{
-		private ResourceManager _rm = new ResourceManager("Sdl.Community.TranslationMemoryProvider.PluginResource", Assembly.GetExecutingAssembly());
-
 		OptionsPanel _options;
 
 		/// <summary>
@@ -85,7 +83,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 						_files.RemoveAt(i);
 					}
 			}
-			else MessageBox.Show(_rm.GetString("filesEmptySelectedList", CultureInfo.CurrentCulture), _rm.GetString("Title", CultureInfo.CurrentCulture));
+			else MessageBox.Show(PluginResources.filesEmptySelectedList, PluginResources.Title);
 		}
 
 		private void AddFile(string filePath)
@@ -147,7 +145,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 		{
 			if (_files.Count < 1)
 			{
-				return _rm.GetString("findFilesNotAdded", CultureInfo.CurrentCulture);
+				return PluginResources.findFilesNotAdded;
 			}
 			else
 			{
@@ -164,7 +162,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 		private void btnSplitInFileAdd_Click(object sender, EventArgs e)
 		{
 			OpenFileDialog a = new OpenFileDialog();
-			a.Title = _rm.GetString("filesFileDialogTitle", CultureInfo.CurrentCulture);
+			a.Title = PluginResources.filesFileDialogTitle;
 			a.Multiselect = true;
 			a.Filter = GetFileDialogFilter();
 			if (a.ShowDialog() == DialogResult.OK)
@@ -190,7 +188,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 				lvFiles.Items.Clear();
 				_files.Clear();
 			}
-			else MessageBox.Show(_rm.GetString("filesEmptyList", CultureInfo.CurrentCulture), _rm.GetString("Title", CultureInfo.CurrentCulture));
+			else MessageBox.Show(PluginResources.filesEmptyList, PluginResources.Title);
 		}
 
 		private void btnPerform_Click(object sender, EventArgs e)
@@ -201,7 +199,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 				string errMsg = ValidateFiles();
 				if (errMsg.Length > 0 || !taskOptions.ValidateSettings(out errMsg))
 				{
-					MessageBox.Show(errMsg, _rm.GetString("Title", CultureInfo.CurrentCulture));
+					MessageBox.Show(errMsg, PluginResources.Title);
 					return;
 				}
 
