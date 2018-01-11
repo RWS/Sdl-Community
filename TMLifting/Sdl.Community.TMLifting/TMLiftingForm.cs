@@ -60,28 +60,11 @@ namespace Sdl.Community.TMLifting
 			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
 		}
 
-		//private void EncryptConfigSection(string sectionKey)
-		//{
-		//	var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-		//	var section = config.GetSection(sectionKey);
-		//	if (section != null)
-		//	{
-		//		if (!section.SectionInformation.IsProtected)
-		//		{
-		//			if (!section.ElementInformation.IsLocked)
-		//			{
-		//				section.SectionInformation.ProtectSection("DataProtectionConfigurationProvider");
-		//				section.SectionInformation.ForceSave = true;
-		//				config.Save(ConfigurationSaveMode.Full);
-		//			}
-		//		}
-		//	}
-		//}
-
 		private async void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
 			{
+				btnReindex.Enabled = false;
 				if (comboBoxServerBasedTM.SelectedItem != null)
 				{
 					_userCredentials = _sbTMs.GetUserCredentials(comboBoxServerBasedTM.SelectedItem as Uri);
@@ -171,6 +154,19 @@ namespace Sdl.Community.TMLifting
 			gridServerBasedTMs.Visible = true;
 		}
 
+		private void gridServerBasedTMs_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+		{
+			btnReindex.Enabled = (e.StateChanged == DataGridViewElementStates.Selected);
+			//if (e.StateChanged != DataGridViewElementStates.Selected)
+			//{
+			//	btnReindex.Enabled = false;
+			//}
+			//else
+			//{
+
+			//}
+		}
+
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
 			_alert.Message = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
@@ -227,14 +223,20 @@ namespace Sdl.Community.TMLifting
         {
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
-				_alert = new AlertForm();
-				_alert.Show();
-				_alert.progressBar1.Style = ProgressBarStyle.Marquee;
-				btnReindex.Enabled = false;
-
 				var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
-
-				_bw.RunWorkerAsync(tms);
+				if (tms.Capacity > 0)
+				{
+					_alert = new AlertForm();
+					_alert.Show();
+					_alert.progressBar1.Style = ProgressBarStyle.Marquee;
+					btnReindex.Enabled = false;
+					_bw.RunWorkerAsync(tms);
+				}
+				//_alert = new AlertForm();
+				//_alert.Show();
+				//_alert.progressBar1.Style = ProgressBarStyle.Marquee;
+				//btnReindex.Enabled = false;
+				//_bw.RunWorkerAsync(tms);
 			}
 			else
 			{
@@ -391,6 +393,11 @@ namespace Sdl.Community.TMLifting
 				}
 				
 			}
+		}
+
+		private void gridServerBasedTMs_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		{
+			btnReindex.Enabled = false;
 		}
 	}
 }
