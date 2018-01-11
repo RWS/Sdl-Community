@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+	<Product Id="*" Name="Sdl.Community.StudioCleanupTool.Installer" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="Sdl.Community.StudioCleanupTool.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Sdl.Community.StudioCleanupTool.Installer" />
+			</Directory>
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="CMP_MyWpfApplicationSetup">
+				<File Id="FILE_MyWpfApplication.exe" Source="$(var.Sdl.Community.StudioCleanupTool.TargetPath)" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Metro" Guid="*">
+				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\MahApps.Metro.dll"></File>
+			</Component>
+			<Component Id="Interactivity" Guid="*">
+				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\System.Windows.Interactivity.dll"></File>
+			</Component>
+		</ComponentGroup>
+	
+	</Fragment>
+	
+</Wix>
+
