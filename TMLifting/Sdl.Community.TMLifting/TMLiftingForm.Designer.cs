@@ -121,6 +121,8 @@ namespace Sdl.Community.TMLifting
             this.gridServerBasedTMs.Size = new System.Drawing.Size(564, 381);
             this.gridServerBasedTMs.TabIndex = 6;
             this.gridServerBasedTMs.Visible = false;
+            this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
+            this.gridServerBasedTMs.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridServerBasedTMs_RowStateChanged);
             // 
             // tabPageFileBasedTM
             // 
