@@ -229,7 +229,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
-		public ICommand RepairCommand => _repairCommand ?? (_removeCommand = new CommandHandler(RepairStudio, true));
+		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
 
 		private async void RepairStudio()
 		{
