@@ -7,14 +7,13 @@
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-
 		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
 		
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 		<UIRef Id="WixUI_InstallDir" />
 		
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+		<MediaTemplate EmbedCab="yes"/>
 
 		<Feature Id="ProductFeature" Title="Sdl.Community.StudioCleanupTool.Installer" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
@@ -43,14 +42,18 @@
 
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
-			<Component Id="CMP_MyWpfApplicationSetup">
-				<File Id="FILE_MyWpfApplication.exe" Source="$(var.Sdl.Community.StudioCleanupTool.TargetPath)" KeyPath="yes" />
+			<Component Id="Sdl.Community.StudioCleanupTool">
+				<File Id="Sdl.Community.StudioCleanupTool.exe" Name="Sdl.Community.StudioCleanupTool.exe" Source="$(var.Sdl.Community.StudioCleanupTool.TargetPath)" KeyPath="yes" />
 			</Component>
 
-			<Component Id="Metro" Guid="*">
+			<Component Id="Sdl.Community.StudioCleanupTool.exe.config" Guid="749595ae-e1ec-4afa-93ef-3a9ae3b938f7">
+				<File Id="Sdl.Community.StudioCleanupTool.exe.config" Name="Sdl.Community.StudioCleanupTool.exe.config" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\Sdl.Community.StudioCleanupTool.exe.config" />
+			</Component>
+			
+			<Component Id="MahApps.Metro.dll" Guid="*">
 				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\MahApps.Metro.dll"></File>
 			</Component>
-			<Component Id="Interactivity" Guid="*">
+			<Component Id="System.Windows.Interactivity.dll" Guid="*">
 				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\System.Windows.Interactivity.dll"></File>
 			</Component>
 		</ComponentGroup>
