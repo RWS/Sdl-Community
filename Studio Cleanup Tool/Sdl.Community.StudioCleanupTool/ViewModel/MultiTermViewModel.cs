@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -88,29 +89,43 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to remove this files?", MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
-				controller.SetIndeterminate();
-
-				var locationsToClear = new List<string>();
-				controller.SetIndeterminate();
-
-				var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
-				var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
-				if (selectedMultiTermVersions.Any())
+				if (!MultiTermIsRunning())
 				{
-					var documentsFolderLocation =
-						await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
-					locationsToClear.AddRange(documentsFolderLocation);
+					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+					controller.SetIndeterminate();
+
+					var locationsToClear = new List<string>();
+					controller.SetIndeterminate();
+
+					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
+					var selectedMultiTermLocations = MultiTermLocationCollection.Where(f => f.IsSelected).ToList();
+					if (selectedMultiTermVersions.Any())
+					{
+						var documentsFolderLocation =
+							await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
+						locationsToClear.AddRange(documentsFolderLocation);
+					}
+
+					await Remove.FromSelectedLocations(locationsToClear);
+
+					UnselectGrids();
+					//to close the message
+					await controller.CloseAsync();
 				}
-
-				await Remove.FromSelectedLocations(locationsToClear);
-
-				UnselectGrids();
-				//to close the message
-				await controller.CloseAsync();
-
+				else
+				{
+					await _mainWindow.ShowMessageAsync("MultiTerm in running",
+						"Please close MultiTerm in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				}
 				
 			}
+		}
+
+		private bool MultiTermIsRunning()
+		{
+			var processList = Process.GetProcesses();
+			var multiTermProcesses = processList.Where(p => p.ProcessName.Contains("MultiTerm")).ToList();
+			return multiTermProcesses.Any();
 		}
 
 		private  void UnselectGrids()
