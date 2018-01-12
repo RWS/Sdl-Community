@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
@@ -305,23 +306,55 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
-				var locationsToClear = new List<string>();
-				controller.SetIndeterminate();
-
-				var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
-				var selectedStudioLocations = FoldersLocationsCollection.Where(f => f.IsSelected).ToList();
-				if (selectedStudioVersions.Any())
+				if (!IsStudioRunning())
 				{
-					var documentsFolderLocation =
-						await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
-					locationsToClear.AddRange(documentsFolderLocation);
+					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
+					var locationsToClear = new List<string>();
+					controller.SetIndeterminate();
+
+					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
+					var selectedStudioLocations = FoldersLocationsCollection.Where(f => f.IsSelected).ToList();
+					if (selectedStudioVersions.Any())
+					{
+						var documentsFolderLocation =
+							await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
+						locationsToClear.AddRange(documentsFolderLocation);
+					}
+
+					//await  Remove.FromSelectedLocations(locationsToClear);
+
+					UnselectGrids();
+					//to close the message
+					await controller.CloseAsync();
+				}
+				else
+				{
+					await _mainWindow.ShowMessageAsync("Studio in running",
+						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 				
-				await  Remove.FromSelectedLocations(locationsToClear);
-				//to close the message
-				await controller.CloseAsync();
 			}
+		}
+
+		private void UnselectGrids()
+		{
+			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
+			foreach (var version in selectedVersions)
+			{
+				version.IsSelected = false;
+			}
+
+			var selectedLocations = FoldersLocationsCollection.Where(l => l.IsSelected).ToList();
+			foreach (var selectedLocation in selectedLocations)
+			{
+				selectedLocation.IsSelected = false;
+			}
+		}
+		private bool IsStudioRunning()
+		{
+			var processList = Process.GetProcesses();
+			var studioProcesses = processList.Where(p => p.ProcessName.Contains("SDLTradosStudio")).ToList();
+			return studioProcesses.Any();
 		}
 
 		private bool AnyLocationAndVersionSelected()
