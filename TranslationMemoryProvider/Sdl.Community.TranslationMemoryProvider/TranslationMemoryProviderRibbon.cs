@@ -35,7 +35,8 @@ namespace Sdl.Community.TranslationMemoryProvider
 				}
 				else
 				{
-					Application.Run(new TMToolForm(TMTasks));
+					TMToolForm toolForm = new TMToolForm(TMTasks);
+					toolForm.Show();
 				}
 			}
 
