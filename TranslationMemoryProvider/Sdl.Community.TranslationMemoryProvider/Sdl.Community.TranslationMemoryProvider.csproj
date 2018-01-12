@@ -96,6 +96,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Task.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Lib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.dll" />
+    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="Resources\TranslationMemory.ico" />
     <EmbeddedResource Include="OptionsPanel.resx">
       <DependentUpon>OptionsPanel.cs</DependentUpon>
