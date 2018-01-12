@@ -92,7 +92,7 @@
 				    Remove files
 			    </Button>
 
-			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Command="{Binding RepairCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">

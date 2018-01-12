@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Principal;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
+using Microsoft.Win32;
 using Sdl.Community.StudioCleanupTool.Annotations;
 using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
@@ -23,12 +25,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	    public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
 		private ICommand _removeCommand;
+		private ICommand _repairCommand;
 		private readonly MainWindow _mainWindow;
 		private readonly string _userName;
 		private bool _isRemoveEnabled;
 		private string _removeBtnColor;
 		private string _removeForeground;
-
+		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		public StudioViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
@@ -175,21 +178,27 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    DisplayName = "Studio 2017",
 				    IsSelected = false,
 					MajorVersionNumber = "14",
-					FolderName ="Studio5"
-			    },
+					MinorVersionNumber = "5",
+					FolderName ="Studio5",
+					CacheFolderName = "SDLTradosStudio2017"
+				},
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2015",
 				    IsSelected = false,
 					MajorVersionNumber = "12",
-					FolderName = "Studio4"
-			    },
+				    MinorVersionNumber = "4",
+					FolderName = "Studio4",
+				    CacheFolderName = "SDLTradosStudio2015"
+				},
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2014",
 					MajorVersionNumber = "11",
-				    IsSelected = false,
-				    FolderName = "Studio3"
+				    MinorVersionNumber = "3",
+					IsSelected = false,
+				    FolderName = "Studio3",
+				    CacheFolderName = "SDLTradosStudio2014"
 				}
 		    };
 		    foreach (var studioVersion in _studioVersionsCollection)
@@ -220,6 +229,61 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		public ICommand RepairCommand => _repairCommand ?? (_removeCommand = new CommandHandler(RepairStudio, true));
+
+		private async void RepairStudio()
+		{
+			if (!IsStudioRunning())
+			{
+				if (Directory.Exists(_packageCache))
+				{
+					var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
+					foreach (var version in selectedVersions)
+					{
+						RunRepair(version);
+					}
+				}
+			}
+			else
+			{
+				var dialog = new MetroDialogSettings
+				{
+					AffirmativeButtonText = "OK"
+
+				};
+				await _mainWindow.ShowMessageAsync("Studio in running",
+					"Please close Trados Studio in order to repair it.", MessageDialogStyle.Affirmative, dialog);
+			}
+		
+		}
+
+		private void RunRepair(StudioVersionListItem version)
+		{
+			var directoriesPath = new DirectoryInfo(_packageCache).GetDirectories()
+				.Where(n => n.Name.Contains(version.CacheFolderName))
+				.Select(n => n.FullName).ToList();
+			foreach (var directoryPath in directoriesPath)
+			{
+				var msiName = GetMsiName(version);
+				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
+				if (Directory.Exists(moduleDirectoryPath))
+				{
+					var msiFile = Path.Combine(moduleDirectoryPath,msiName);
+					if (File.Exists(msiFile))
+					{
+						Process.Start(msiFile);
+					}
+				}
+			}
+			
+		}
+
+		private string GetMsiName(StudioVersionListItem version)
+		{
+			var msiName = string.Format("TranslationStudio{0}.msi", version.MinorVersionNumber);
+			return msiName;
+		}
+
 
 		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
 	    {
@@ -321,7 +385,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 						locationsToClear.AddRange(documentsFolderLocation);
 					}
 
-					//await  Remove.FromSelectedLocations(locationsToClear);
+					await  Remove.FromSelectedLocations(locationsToClear);
 
 					UnselectGrids();
 					//to close the message
@@ -335,6 +399,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				
 			}
 		}
+
+
 
 		private void UnselectGrids()
 		{

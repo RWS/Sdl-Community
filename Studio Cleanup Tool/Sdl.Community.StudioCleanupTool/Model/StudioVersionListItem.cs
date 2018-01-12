@@ -14,7 +14,9 @@ namespace Sdl.Community.StudioCleanupTool.Model
 		private bool _isSelected;
 		public string DisplayName { get; set; }
 		public string MajorVersionNumber { get; set; }
+		public string MinorVersionNumber { get; set; }
 		public string FolderName { get; set; }
+		public string CacheFolderName { get; set; }
 
 		public bool IsSelected
 		{
