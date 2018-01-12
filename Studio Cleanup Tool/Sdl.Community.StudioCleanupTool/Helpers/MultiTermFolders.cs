@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,14 +15,33 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		  var packagePaths = new List<string>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
-			    var packagePath = string.Format(@"C:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop{0}",
-				    multiTermVersion.ReleaseNumber);
-				packagePaths.Add(packagePath);
+			    var versionName = string.Format("SDLMultiTermDesktop{0}", multiTermVersion.ReleaseNumber);
+			    var packagePathList = SdlMultiTermDesktop(versionName);
+			    if (packagePathList.Any())
+			    {
+				    packagePaths.AddRange(packagePathList);
+			    }
+				
 		    }
 		    return packagePaths;
 	    }
 
-	    public static List<string> ProgramFilesPaths(List<MultiTermVersionListItem> multiTermVersions)
+	    private  static List<string> SdlMultiTermDesktop(string versionNumber)
+	    {
+		    var packageCachePath = @"C:\ProgramData\Package Cache\SDL";
+
+		    if (Directory.Exists(packageCachePath))
+		    {
+			    var directoriesPath = new DirectoryInfo(@"C:\ProgramData\Package Cache\SDL").GetDirectories()
+				    .Where(n => n.Name.Contains(versionNumber))
+				    .Select(n => n.FullName).ToList();
+
+			    return directoriesPath;
+		    }
+			return new List<string>();
+	    }
+
+		public static List<string> ProgramFilesPaths(List<MultiTermVersionListItem> multiTermVersions)
 	    {
 			var programFilesPaths = new List<string>();
 		    foreach (var multiTermVersion in multiTermVersions)

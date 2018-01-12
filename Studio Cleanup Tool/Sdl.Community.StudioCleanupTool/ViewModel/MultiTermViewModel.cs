@@ -88,7 +88,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to remove this files?", MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				var selectedLocations = MultiTermLocationCollection.Where(s => s.IsSelected).ToList();
 				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 				controller.SetIndeterminate();
 
@@ -104,11 +103,29 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					locationsToClear.AddRange(documentsFolderLocation);
 				}
 
+				await Remove.FromSelectedLocations(locationsToClear);
+
+				UnselectGrids();
 				//to close the message
-				//await controller.CloseAsync();
+				await controller.CloseAsync();
+
+				
+			}
+		}
+
+		private  void UnselectGrids()
+		{
+			var selectedVersions = MultiTermVersionsCollection.Where(v => v.IsSelected).ToList();
+			foreach (var version in selectedVersions)
+			{
+				version.IsSelected = false;
 			}
 
-
+			var selectedLocations = MultiTermLocationCollection.Where(l => l.IsSelected).ToList();
+			foreach (var selectedLocation in selectedLocations)
+			{
+				selectedLocation.IsSelected = false;
+			}
 		}
 		private void MultiTermLocation_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
