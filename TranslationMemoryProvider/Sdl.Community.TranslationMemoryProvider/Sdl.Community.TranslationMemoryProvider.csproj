@@ -96,19 +96,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Task.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Lib.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.dll" />
-    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
     <None Include="Resources\TranslationMemory.ico" />
     <EmbeddedResource Include="OptionsPanel.resx">
       <DependentUpon>OptionsPanel.cs</DependentUpon>
@@ -134,6 +121,18 @@
       <Project>{35068c4f-4167-4af1-b998-54b8f1754ce9}</Project>
       <Name>Sdl.Community.Utilities.TMTool.Lib</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX\Sdl.Community.Utilities.TMTool.Tasks.RemapTMX.csproj">
+      <Project>{b67bebdb-8243-48cb-b638-2f93b9921039}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Tasks.RemapTMX</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates\Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.csproj">
+      <Project>{d930e738-c4ec-4806-978b-8f1d2002f5cb}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex\Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.csproj">
+      <Project>{0d96aaa4-04e8-4466-a767-6bce19468e3a}</Project>
+      <Name>Sdl.Community.Utilities.TMTool.Tasks.RevertIndex</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.Utilities.TMTool.Task\Sdl.Community.Utilities.TMTool.Task.csproj">
       <Project>{6d8af615-6467-4cf4-a6d7-a0b88fb8d74b}</Project>
