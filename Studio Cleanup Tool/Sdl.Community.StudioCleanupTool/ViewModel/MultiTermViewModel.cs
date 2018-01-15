@@ -83,7 +83,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		private string GetMsiName(MultiTermVersionListItem selectedVersion)
 		{
-			var msiName = string.Format("MTStudio{0}.msi", selectedVersion.MajorVersionNumber);
+			var msiName = string.Format("MTCore{0}.msi", selectedVersion.MajorVersionNumber);
 			return msiName;
 		}
 
