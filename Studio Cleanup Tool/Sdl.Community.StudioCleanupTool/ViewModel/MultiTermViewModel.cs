@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -21,8 +22,10 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
+		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _folderDescription;
 		private ICommand _removeCommand;
+		private ICommand _repairCommand;
 		private string _removeForeground;
 		private string _removeBtnColor;
 		private bool _isRemoveEnabled;
@@ -40,6 +43,50 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		}
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
+		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairMultiTerm, true));
+
+		private void RepairMultiTerm()
+		{
+			if (!MultiTermIsRunning())
+			{
+				if (Directory.Exists(_packageCache))
+				{
+					var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
+					foreach (var selectedVersion in selectedVersions)
+					{
+						RunRepair(selectedVersion);
+					}
+				}
+			}
+		}
+
+		private void RunRepair(MultiTermVersionListItem selectedVersion)
+		{
+			var directoriesPath = new DirectoryInfo(_packageCache).GetDirectories()
+				.Where(n => n.Name.Contains(selectedVersion.CacheFolderName))
+				.Select(n => n.FullName).ToList();
+
+			foreach (var directoryPath in directoriesPath)
+			{
+				var msiName = GetMsiName(selectedVersion);
+				var moduleDirectoryPath = Path.Combine(directoryPath, "modules");
+				if (Directory.Exists(moduleDirectoryPath))
+				{
+					var msiFile = Path.Combine(moduleDirectoryPath, msiName);
+					if (File.Exists(msiFile))
+					{
+						Process.Start(msiFile);
+					}
+				}
+			}
+		}
+
+		private string GetMsiName(MultiTermVersionListItem selectedVersion)
+		{
+			var msiName = string.Format("MTStudio{0}.msi", selectedVersion.MajorVersionNumber);
+			return msiName;
+		}
+
 		private void FillMultiTermLocationList()
 		{
 			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>
@@ -177,7 +224,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					DisplayName = "MultiTerm 2017",
 					IsSelected = false,
 					MajorVersionNumber = "14",
-					ReleaseNumber = "2017"
+					ReleaseNumber = "2017",
+					CacheFolderName = "SDLMultiTermDesktop2017"
 
 				},
 				new MultiTermVersionListItem
@@ -185,14 +233,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					DisplayName = "MultiTerm 2015",
 					IsSelected = false,
 					MajorVersionNumber = "12",
-					ReleaseNumber = "2015"
+					ReleaseNumber = "2015",
+					CacheFolderName = "SDLMultiTermDesktop2015"
 				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2014",
 					MajorVersionNumber = "11",
 					IsSelected = false,
-					ReleaseNumber = "2014"
+					ReleaseNumber = "2014",
+					CacheFolderName = "SDLMultiTermDesktop2014"
 				}
 			};
 
