@@ -12,7 +12,7 @@
         FontSize="14"
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
-        Title="Studio cleanup tool" Height="500" Width="900">
+        Title="Studio and MultiTerm cleanup tool" Height="500" Width="900">
     <Grid Height="auto">
 	    <Grid.Resources>
 		    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Sdl.Community.AdaptiveMT.Service;
@@ -107,6 +108,8 @@ namespace Sdl.Community.AdaptiveMT
 										}
 
 									}
+
+									Thread.Sleep(4000);
 								}
 							}
 							project.Save();
