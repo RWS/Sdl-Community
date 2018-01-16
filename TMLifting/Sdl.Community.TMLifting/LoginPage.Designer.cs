@@ -189,7 +189,8 @@
             this.ClientSize = new System.Drawing.Size(493, 336);
             this.Controls.Add(this.panel3);
             this.Name = "LoginPage";
-            this.Text = "LoginPage";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Login";
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.authentication_box.ResumeLayout(false);
