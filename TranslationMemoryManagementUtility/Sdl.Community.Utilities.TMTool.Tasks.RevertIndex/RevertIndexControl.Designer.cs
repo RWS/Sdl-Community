@@ -51,10 +51,10 @@
             this.gbTaskOptions.Controls.Add(this.btnBrowse);
             this.gbTaskOptions.Controls.Add(this.tbTargetFile);
             this.gbTaskOptions.Controls.Add(this.lblTargetFile);
-            this.gbTaskOptions.Location = new System.Drawing.Point(3, 3);
+            this.gbTaskOptions.Location = new System.Drawing.Point(0, 0);
             this.gbTaskOptions.Name = "gbTaskOptions";
-            this.gbTaskOptions.Size = new System.Drawing.Size(590, 111);
-            this.gbTaskOptions.TabIndex = 8;
+            this.gbTaskOptions.Size = new System.Drawing.Size(588, 111);
+            this.gbTaskOptions.TabIndex = 7;
             this.gbTaskOptions.TabStop = false;
             this.gbTaskOptions.Text = "&Revert Index Task Options";
             // 
@@ -81,7 +81,7 @@
             // btnBrowse
             // 
             this.btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnBrowse.Location = new System.Drawing.Point(509, 21);
+            this.btnBrowse.Location = new System.Drawing.Point(507, 21);
             this.btnBrowse.Name = "btnBrowse";
             this.btnBrowse.Size = new System.Drawing.Size(75, 23);
             this.btnBrowse.TabIndex = 3;
@@ -96,7 +96,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbTargetFile.Location = new System.Drawing.Point(114, 23);
             this.tbTargetFile.Name = "tbTargetFile";
-            this.tbTargetFile.Size = new System.Drawing.Size(390, 20);
+            this.tbTargetFile.Size = new System.Drawing.Size(388, 20);
             this.tbTargetFile.TabIndex = 2;
             this.tbTargetFile.DragDrop += new System.Windows.Forms.DragEventHandler(this.tbTargetFile_DragDrop);
             this.tbTargetFile.DragEnter += new System.Windows.Forms.DragEventHandler(this.tbTargetFile_DragEnter);
@@ -118,10 +118,10 @@
             this.gbScenario.Controls.Add(this.rbMixedSc);
             this.gbScenario.Controls.Add(this.rbPresegmentedSc);
             this.gbScenario.Controls.Add(this.rbDefaultSc);
-            this.gbScenario.Location = new System.Drawing.Point(3, 114);
+            this.gbScenario.Location = new System.Drawing.Point(0, 117);
             this.gbScenario.Name = "gbScenario";
-            this.gbScenario.Size = new System.Drawing.Size(590, 98);
-            this.gbScenario.TabIndex = 9;
+            this.gbScenario.Size = new System.Drawing.Size(588, 93);
+            this.gbScenario.TabIndex = 8;
             this.gbScenario.TabStop = false;
             this.gbScenario.Text = "&Import Scenario";
             // 
@@ -131,7 +131,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rbMixedSc.Location = new System.Drawing.Point(9, 65);
             this.rbMixedSc.Name = "rbMixedSc";
-            this.rbMixedSc.Size = new System.Drawing.Size(569, 17);
+            this.rbMixedSc.Size = new System.Drawing.Size(567, 17);
             this.rbMixedSc.TabIndex = 9;
             this.rbMixedSc.TabStop = true;
             this.rbMixedSc.Text = "The imported data will be primarily used in &mixed scenarios";
@@ -143,7 +143,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rbPresegmentedSc.Location = new System.Drawing.Point(9, 42);
             this.rbPresegmentedSc.Name = "rbPresegmentedSc";
-            this.rbPresegmentedSc.Size = new System.Drawing.Size(569, 17);
+            this.rbPresegmentedSc.Size = new System.Drawing.Size(567, 17);
             this.rbPresegmentedSc.TabIndex = 8;
             this.rbPresegmentedSc.TabStop = true;
             this.rbPresegmentedSc.Text = "The imported data will be primarily used with presegmented le&gacy SDL Trados ITD" +
@@ -156,7 +156,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rbDefaultSc.Location = new System.Drawing.Point(9, 19);
             this.rbDefaultSc.Name = "rbDefaultSc";
-            this.rbDefaultSc.Size = new System.Drawing.Size(569, 17);
+            this.rbDefaultSc.Size = new System.Drawing.Size(567, 17);
             this.rbDefaultSc.TabIndex = 7;
             this.rbDefaultSc.TabStop = true;
             this.rbDefaultSc.Text = "The imported data will be primarily used with &new, native source files or files " +
@@ -169,8 +169,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbScenario);
             this.Controls.Add(this.gbTaskOptions);
+            this.MinimumSize = new System.Drawing.Size(588, 210);
             this.Name = "RevertIndexControl";
-            this.Size = new System.Drawing.Size(590, 215);
+            this.Size = new System.Drawing.Size(588, 210);
             this.gbTaskOptions.ResumeLayout(false);
             this.gbTaskOptions.PerformLayout();
             this.gbScenario.ResumeLayout(false);

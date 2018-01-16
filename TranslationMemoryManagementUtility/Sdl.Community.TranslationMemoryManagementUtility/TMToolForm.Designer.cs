@@ -251,7 +251,7 @@
             this.ClientSize = new System.Drawing.Size(642, 416);
             this.Controls.Add(this.tabsPages);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(450, 350);
+            this.MinimumSize = new System.Drawing.Size(658, 455);
             this.Name = "TMToolForm";
             this.Text = "SDL Translation Memory Management 2018";
             this.Load += new System.EventHandler(this.TMToolForm_Load);

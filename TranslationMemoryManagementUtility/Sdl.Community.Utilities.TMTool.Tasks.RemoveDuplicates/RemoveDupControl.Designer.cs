@@ -48,7 +48,7 @@
             this.gbTaskOptions.Location = new System.Drawing.Point(3, 3);
             this.gbTaskOptions.Name = "gbTaskOptions";
             this.gbTaskOptions.Size = new System.Drawing.Size(582, 80);
-            this.gbTaskOptions.TabIndex = 5;
+            this.gbTaskOptions.TabIndex = 4;
             this.gbTaskOptions.TabStop = false;
             this.gbTaskOptions.Text = "Remove &Duplicates Task Options";
             // 
@@ -83,7 +83,7 @@
             this.gbScenario.Location = new System.Drawing.Point(3, 89);
             this.gbScenario.Name = "gbScenario";
             this.gbScenario.Size = new System.Drawing.Size(582, 91);
-            this.gbScenario.TabIndex = 6;
+            this.gbScenario.TabIndex = 4;
             this.gbScenario.TabStop = false;
             this.gbScenario.Text = "&Import Scenario";
             // 

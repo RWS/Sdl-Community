@@ -37,28 +37,28 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 13);
+            this.label1.Location = new System.Drawing.Point(3, 19);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 13);
-            this.label1.TabIndex = 3;
+            this.label1.TabIndex = 2;
             this.label1.Text = "TMX output folder:";
             // 
             // outputFolderBox
             // 
             this.outputFolderBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.outputFolderBox.Location = new System.Drawing.Point(104, 10);
+            this.outputFolderBox.Location = new System.Drawing.Point(104, 16);
             this.outputFolderBox.Name = "outputFolderBox";
-            this.outputFolderBox.Size = new System.Drawing.Size(449, 20);
-            this.outputFolderBox.TabIndex = 4;
+            this.outputFolderBox.Size = new System.Drawing.Size(456, 20);
+            this.outputFolderBox.TabIndex = 1;
             // 
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(559, 7);
+            this.browseButton.Location = new System.Drawing.Point(565, 15);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 23);
-            this.browseButton.TabIndex = 5;
+            this.browseButton.TabIndex = 0;
             this.browseButton.Text = "&Browse...";
             this.browseButton.UseVisualStyleBackColor = true;
             this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
@@ -66,10 +66,10 @@
             // saveTargetFolderCheckBox
             // 
             this.saveTargetFolderCheckBox.AutoSize = true;
-            this.saveTargetFolderCheckBox.Location = new System.Drawing.Point(104, 49);
+            this.saveTargetFolderCheckBox.Location = new System.Drawing.Point(104, 42);
             this.saveTargetFolderCheckBox.Name = "saveTargetFolderCheckBox";
             this.saveTargetFolderCheckBox.Size = new System.Drawing.Size(144, 17);
-            this.saveTargetFolderCheckBox.TabIndex = 6;
+            this.saveTargetFolderCheckBox.TabIndex = 3;
             this.saveTargetFolderCheckBox.Text = "Save in taget TM\'s folder";
             this.saveTargetFolderCheckBox.UseVisualStyleBackColor = true;
             this.saveTargetFolderCheckBox.CheckedChanged += new System.EventHandler(this.saveTargetFolderCheckBox_CheckedChanged);
