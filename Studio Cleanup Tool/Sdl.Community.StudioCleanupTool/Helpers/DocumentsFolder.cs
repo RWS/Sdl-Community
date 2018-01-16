@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,29 +10,47 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 {
     public static class DocumentsFolder
     {
-	    public static List<string> GetProjectTemplatesFolderPath(string userName, List<StudioVersionListItem> studioVersions)
+	    private static string _backupFolderPath =
+		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+		public static List<StudioDetails> GetProjectTemplatesFolderPath(string userName, StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 	    {
-		    var projectTempletesPath = new List<string>();
+			var studioDetails = new List<StudioDetails>();
 		    foreach (var studioVersion in studioVersions)
 		    {
-			    var ptojectTemplate = string.Format(@"C:\Users\{0}\Documents\{1}\Project Templates", userName,
+			    var projectTemplatePath = string.Format(@"C:\Users\{0}\Documents\{1}\Project Templates", userName,
 				    studioVersion.DisplayName);
-			    projectTempletesPath.Add(ptojectTemplate);
-		    }
-		    return projectTempletesPath;
+			    var directoryInfo = new DirectoryInfo(projectTemplatePath);
+				var details = new StudioDetails
+				{
+					OriginalFilePath = projectTemplatePath,
+					BackupFilePath = Path.Combine(_backupFolderPath,studioVersion.DisplayName,directoryInfo.Name),
+					Alias = selectedLocation.Alias,
+					StudioVersion = studioVersion.DisplayName
+				};
+			    studioDetails.Add(details);
+		    };
+		    return studioDetails;
+
 	    }
 
-	    public static List<string> GetProjectsFolderPath(string userName, List<StudioVersionListItem> studioVersions)
+	    public static List<StudioDetails> GetProjectsFolderPath(string userName, StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
 	    {
-		    var xmlProjectsPaths = new List<string>();
-		    foreach (var studioVersion in studioVersions)
+		    var studioDetails = new List<StudioDetails>();
+			foreach (var studioVersion in studioVersions)
 		    {
 			    var projectsXmlPath = string.Format(@"C:\Users\{0}\Documents\{1}\Projects\projects.xml", userName,
 				    studioVersion.DisplayName);
-			    xmlProjectsPaths.Add(projectsXmlPath);
+			    var directoryInfo = new DirectoryInfo(projectsXmlPath);
+				var details = new StudioDetails
+			    {
+				    OriginalFilePath = projectsXmlPath,
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    Alias = selectedLocation.Alias,
+				    StudioVersion = studioVersion.DisplayName
+				};
+				studioDetails.Add(details);
 		    }
-
-		    return xmlProjectsPaths;
-	    }
+		    return studioDetails;
+		}
 	}
 }

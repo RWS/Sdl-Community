@@ -15,6 +15,7 @@ using Microsoft.Win32;
 using Sdl.Community.StudioCleanupTool.Annotations;
 using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
+using Sdl.Community.StudioCleanupTool.Views;
 
 namespace Sdl.Community.StudioCleanupTool.ViewModel
 {
@@ -26,12 +27,14 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private string _folderDescription;
 		private ICommand _removeCommand;
 		private ICommand _repairCommand;
+		private ICommand _restoreCommand;
 		private readonly MainWindow _mainWindow;
 		private readonly string _userName;
 		private bool _isRemoveEnabled;
 		private string _removeBtnColor;
 		private string _removeForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private List<StudioDetails> _foldersToClearOrRestore = new List<StudioDetails>();
 		public StudioViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
@@ -230,6 +233,39 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
 		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairStudio, true));
+		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+
+		private async void RestoreFolders()
+		{
+			var dialog = new MetroDialogSettings
+			{
+				AffirmativeButtonText = "OK"
+
+			};
+			var result =
+				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore this folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+			if (result == MessageDialogResult.Affirmative)
+			{
+				//this needs to be uncomented
+				//if (!IsStudioRunning())
+				//{
+				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
+				controller.SetIndeterminate();
+
+				await Remove.BackupFiles(_foldersToClearOrRestore);
+
+				//UnselectGrids();
+				//to close the message
+				await controller.CloseAsync();
+				//}
+				//else
+				//{
+				//	await _mainWindow.ShowMessageAsync("Studio in running",
+				//		"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				//}
+
+			}
+		}
 
 		private async void RepairStudio()
 		{
@@ -370,10 +406,12 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				if (!IsStudioRunning())
-				{
+				//this needs to be uncomented
+				//if (!IsStudioRunning())
+				//{
+				_foldersToClearOrRestore.Clear();
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
-					var locationsToClear = new List<string>();
+					//var locationsToClear = new List<StudioDetails>();
 					controller.SetIndeterminate();
 
 					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -382,20 +420,23 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					{
 						var documentsFolderLocation =
 							await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
-						locationsToClear.AddRange(documentsFolderLocation);
+						_foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
-					await  Remove.FromSelectedLocations(locationsToClear);
+				await Remove.BackupFiles(_foldersToClearOrRestore);
 
-					UnselectGrids();
+				await  Remove.FromSelectedLocations(_foldersToClearOrRestore);
+
+
+				//UnselectGrids();
 					//to close the message
 					await controller.CloseAsync();
-				}
-				else
-				{
-					await _mainWindow.ShowMessageAsync("Studio in running",
-						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
-				}
+				//}
+				//else
+				//{
+				//	await _mainWindow.ShowMessageAsync("Studio in running",
+				//		"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				//}
 				
 			}
 		}

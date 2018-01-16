@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Sdl.Community.StudioCleanupTool.Model;
 
@@ -7,11 +8,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 {
     public static class FoldersPath
     {
-	    public static async Task<List<string>> GetFoldersPath(string userName,
+	    private static string _backupFolderPath =
+		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
+
+		public static async Task<List<StudioDetails>> GetFoldersPath(string userName,
 		    List<StudioVersionListItem> studioVersions,
 		    List<StudioLocationListItem> locations)
 	    {
-			var documentsFolderLocationList = new List<string>();
+			var foldersToBackup = new List<StudioDetails>();
 		    foreach (var location in locations)
 			{
 				if (location.Alias != null)
@@ -19,66 +23,64 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					if (location.Alias.Equals("projectsXml"))
 					{
 						var projectsXmlFolderPath =
-							await Task.FromResult(DocumentsFolder.GetProjectsFolderPath(userName,
-								studioVersions));
-						documentsFolderLocationList.AddRange(projectsXmlFolderPath);
+							await Task.FromResult(DocumentsFolder.GetProjectsFolderPath(userName,location,studioVersions));
+						foldersToBackup.AddRange(projectsXmlFolderPath);
 					}
-
 					if (location.Alias.Equals("projectTemplates"))
 					{
-						var projectTemplatesFolderPath = await Task.FromResult(DocumentsFolder.GetProjectTemplatesFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(projectTemplatesFolderPath);
+						var projectTemplatesFolderPath = await Task.FromResult(DocumentsFolder.GetProjectTemplatesFolderPath(userName,location, studioVersions));
+						foldersToBackup.AddRange(projectTemplatesFolderPath);
 
 					}
 					if (location.Alias.Equals("roamingMajor"))
 					{
-						var roamingMajorVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(roamingMajorVersionFolderPath);
+						var roamingMajorVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFolderPath(userName, location,studioVersions));
+						foldersToBackup.AddRange(roamingMajorVersionFolderPath);
 					}
 					if (location.Alias.Equals("roamingMajorFull"))
 					{
-						var roamingMajorFullVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFullFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(roamingMajorFullVersionFolderPath);
+						var roamingMajorFullVersionFolderPath = await Task.FromResult(AppDataFolder.GetRoamingMajorFullFolderPath(userName, location,studioVersions));
+						foldersToBackup.AddRange(roamingMajorFullVersionFolderPath);
 					}
 					if (location.Alias.Equals("roamingProjectApi"))
 					{
-						var roamingProjectApiFolderPath = await Task.FromResult(AppDataFolder.GetRoamingProjectApiFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(roamingProjectApiFolderPath);
+						var roamingProjectApiFolderPath = await Task.FromResult(AppDataFolder.GetRoamingProjectApiFolderPath(userName, location, studioVersions));
+						foldersToBackup.AddRange(roamingProjectApiFolderPath);
 					}
 					if (location.Alias.Equals("localMajorFull"))
 					{
-						var localMajorFullFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFullFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(localMajorFullFolderPath);
+						var localMajorFullFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFullFolderPath(userName,location, studioVersions));
+						foldersToBackup.AddRange(localMajorFullFolderPath);
 					}
 					if (location.Alias.Equals("localMajor"))
 					{
-						var localMajorFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFolderPath(userName, studioVersions));
-						documentsFolderLocationList.AddRange(localMajorFolderPath);
+						var localMajorFolderPath = await Task.FromResult(AppDataFolder.GetLocalMajorFolderPath(userName,location, studioVersions));
+						foldersToBackup.AddRange(localMajorFolderPath);
 					}
 					if (location.Alias.Equals("programDataMajor"))
 					{
-						var programDataMajorFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFolderPath(studioVersions));
-						documentsFolderLocationList.AddRange(programDataMajorFolderPath);
+						var programDataMajorFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFolderPath(location,studioVersions));
+						foldersToBackup.AddRange(programDataMajorFolderPath);
 					}
 					if (location.Alias.Equals("programDataMajorFull"))
 					{
-						var programDataMajorFullFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFullFolderPath(studioVersions));
-						documentsFolderLocationList.AddRange(programDataMajorFullFolderPath);
+						var programDataMajorFullFolderPath = await Task.FromResult(ProgramData.GetProgramDataMajorFullFolderPath(location,studioVersions));
+						foldersToBackup.AddRange(programDataMajorFullFolderPath);
 					}
 					if (location.Alias.Equals("programData"))
 					{
-						var programDataFolderPath = await Task.FromResult(ProgramData.GetProgramDataFolderPath(studioVersions));
-						documentsFolderLocationList.AddRange(programDataFolderPath);
+						var programDataFolderPath = await Task.FromResult(ProgramData.GetProgramDataFolderPath(location,studioVersions));
+						foldersToBackup.AddRange(programDataFolderPath);
 					}
 					if (location.Alias.Equals("programFiles"))
 					{
-						var programFilesFolderPath = await Task.FromResult(GetProgramFilesFolderPath(studioVersions));
-						documentsFolderLocationList.AddRange(programFilesFolderPath);
+						var programFilesFolderPath = await Task.FromResult(GetProgramFilesFolderPath(location,studioVersions));
+						foldersToBackup.AddRange(programFilesFolderPath);
 					}
 				}
 				
 			}
-		    return documentsFolderLocationList;
+		    return foldersToBackup;
 	    }
 
 
@@ -114,15 +116,23 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    }
 		    return foldersLocationList;
 	    }
-	    private static List<string> GetProgramFilesFolderPath(List<StudioVersionListItem> studioVersions)
+	    private static List<StudioDetails> GetProgramFilesFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
 	    {
-			var programFilesPaths = new List<string>();
-		    foreach (var studioVersion in studioVersions)
+		    var studioDetails = new List<StudioDetails>();
+			foreach (var studioVersion in studioVersions)
 		    {
 			    var programFilesFolderPath = string.Format(@"C:\Program Files (x86)\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
-			    programFilesPaths.Add(programFilesFolderPath);
-		    }
-		    return programFilesPaths;
+				var directoryInfo = new DirectoryInfo(programFilesFolderPath);
+			    var details = new StudioDetails
+			    {
+				    OriginalFilePath = programFilesFolderPath,
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    Alias = selectedLocation.Alias,
+				    StudioVersion = studioVersion.DisplayName
+				};
+			    studioDetails.Add(details);
+			}
+		    return studioDetails;
 		}
 	  
 

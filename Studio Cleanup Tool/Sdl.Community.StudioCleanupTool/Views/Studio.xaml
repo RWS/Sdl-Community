@@ -68,9 +68,9 @@
 			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
-	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="90,20,0,0" Orientation="Vertical">
+	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="40,20,0,0" Orientation="Vertical">
 		    <StackPanel Orientation="Horizontal">
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="47,20,10,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,20,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="{Binding RemoveBtnColor}" CornerRadius="3" >
@@ -113,7 +113,28 @@
 
 				    Repair Studio
 			    </Button>
-		    </StackPanel>
+			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Command="{Binding RestoreCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+				    <Button.Template>
+					    <ControlTemplate TargetType="{x:Type Button}">
+						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
+							    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
+						    </Border>
+						    <ControlTemplate.Triggers>
+							    <Trigger Property="IsMouseOver" Value="True">
+								    <Setter TargetName="bdr_main" Property="Background" Value="Green" />
+							    </Trigger>
+
+							    <Trigger Property="IsPressed" Value="True">
+								    <Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+							    </Trigger>
+
+						    </ControlTemplate.Triggers>
+					    </ControlTemplate>
+				    </Button.Template>
+
+				    Restore Folders
+			    </Button>
+			</StackPanel>
 	    </StackPanel>
 	</Grid>
 </UserControl>

@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Helpers\FoldersPath.cs" />
     <Compile Include="Model\MultiTermLocationListItem.cs" />
+    <Compile Include="Model\StudioDetails.cs" />
     <Compile Include="Model\StudioLocationListItem.cs" />
     <Compile Include="Model\MultiTermVersionListItem.cs" />
     <Compile Include="Model\StudioVersionListItem.cs" />

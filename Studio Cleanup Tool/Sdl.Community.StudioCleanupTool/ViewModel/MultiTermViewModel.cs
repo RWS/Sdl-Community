@@ -153,7 +153,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 						locationsToClear.AddRange(documentsFolderLocation);
 					}
 
-					await Remove.FromSelectedLocations(locationsToClear);
+					//await Remove.FromSelectedLocations(locationsToClear);
 
 					UnselectGrids();
 					//to close the message
