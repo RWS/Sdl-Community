@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using System.Resources;
-using System.Reflection;
-using System.Globalization;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	public partial class TMResultsForm : Form
 	{
@@ -184,7 +181,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 			dialog.Filter = "Text Document |*.txt";
 			dialog.Title = "Save Log File";
 			dialog.DefaultExt = ".txt";
-			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				using (StreamWriter writer = new StreamWriter(dialog.FileName))
 				{

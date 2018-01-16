@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.TranslationMemoryProvider
+﻿namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	partial class TMResultsForm
 	{

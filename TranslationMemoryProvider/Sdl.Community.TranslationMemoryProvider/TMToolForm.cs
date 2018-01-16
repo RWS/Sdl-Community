@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Resources;
 using System.Reflection;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	public partial class TMToolForm : Form
 	{

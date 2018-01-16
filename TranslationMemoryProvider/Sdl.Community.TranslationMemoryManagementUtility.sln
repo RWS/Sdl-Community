@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TranslationMemoryProvider", "Sdl.Community.TranslationMemoryProvider\Sdl.Community.TranslationMemoryProvider.csproj", "{DF51A3C1-4A82-4E08-9F78-7448ED33C271}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TranslationMemoryManagementUtility", "Sdl.Community.TranslationMemoryProvider\Sdl.Community.TranslationMemoryManagementUtility.csproj", "{DF51A3C1-4A82-4E08-9F78-7448ED33C271}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Utilities.TMTool.Lib", "Sdl.Community.Utilities.TMTool.Lib\Sdl.Community.Utilities.TMTool.Lib.csproj", "{35068C4F-4167-4AF1-B998-54B8F1754CE9}"
 EndProject
