@@ -17,7 +17,46 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 	    {
 		    await Task.Run(() => CreateBackupFolder(foldersToBackup));
 	    }
-		
+	    public static async Task RestoreBackupFiles(List<StudioDetails> foldersToBackup)
+	    {
+		    await Task.Run(() => RestoreFiles(foldersToBackup));
+	    }
+
+	    private static void RestoreFiles(List<StudioDetails> foldersToBackup)
+	    {
+			foreach (var folder in foldersToBackup)
+			{
+				//creates original folders if doesn't exist
+				if (!Directory.Exists(folder.OriginalFilePath))
+				{
+					Directory.CreateDirectory(folder.OriginalFilePath);
+				}
+				try
+				{
+					//Get files  from backup
+					var files = Directory.GetFiles(folder.BackupFilePath);
+					if (files.Length > 0)
+					{
+						MoveToBackUp(files, folder.OriginalFilePath);
+					}
+					//else
+					//{
+						//check for subdirectories
+						var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
+						foreach (var subdirectory in subdirectories)
+						{
+							var currentDirInfo = new DirectoryInfo(subdirectory);
+							CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
+						}
+					//}
+				}
+				catch (Exception e)
+				{
+					throw e;
+				}
+			}
+		}
+
 	    public static async Task FromSelectedLocations(List<StudioDetails> foldersToRemove)
 	    {
 		    try
@@ -59,15 +98,13 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					    {
 						    MoveToBackUp(files, folder.BackupFilePath);
 					    }
-					    else
+
+					    //check for subdirectories
+					    var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
+					    foreach (var subdirectory in subdirectories)
 					    {
-						    //check for subdirectories
-						    var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
-						    foreach (var subdirectory in subdirectories)
-						    {
-							    var currentDirInfo = new DirectoryInfo(subdirectory);
-							    CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
-						    }
+						    var currentDirInfo = new DirectoryInfo(subdirectory);
+						    CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
 					    }
 				    }
 				    catch (Exception e)
@@ -75,9 +112,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					    throw e;
 				    }
 			    }
-		    
-		   
-		    
 	    }
 
 	    private static void CheckForSubfolders(DirectoryInfo currentDirInfo, string backupFolderRoot)

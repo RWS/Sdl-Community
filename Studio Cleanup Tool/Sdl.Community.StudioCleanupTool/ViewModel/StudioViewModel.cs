@@ -53,70 +53,77 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    {
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Projects\projects.xml",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Projects",
 				    IsSelected = false,
 				    Description = "Removes projects xml file",
 					Alias = "projectsXml"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Project Templates\",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Project Templates",
 				    IsSelected = false,
 				    Description = "Removes project templates",
 					Alias = "projectTemplates"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
 				    Description = "Removes the plugins",
 					Alias = "roamingMajor"
-			    },
+			    },//aici
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\14.0.0.0",
+				    IsSelected = false,
+				    Description = "Removes the plugins",
+				    Alias = "roamingProjectApi"
+				},
+				new StudioLocationListItem
+			    {
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
 				    Description = "Removes some files",
 				    Alias = "roamingMajorFull"
 				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
 				    Description = "Removes plugins",
 				    Alias = "localMajor"
 				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
 				    Description = "Removes files",
 					Alias = "localMajorFull"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
 				    Description = "Removes files from program data",
 					Alias = "programDataMajor"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14.0.0.0\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
 				    Description = "Removes files",
 				    Alias = "programDataMajorFull"
 				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio5\",
+				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio5",
 				    IsSelected = false,
 				    Description = "Removes files",
 				    Alias = "programData"
 				},
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5\",
+				    DisplayName = @"C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5",
 				    IsSelected = false,
 				    Description = "Removes files",
 					Alias = "programFiles"
@@ -247,23 +254,22 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			if (result == MessageDialogResult.Affirmative)
 			{
 				//this needs to be uncomented
-				//if (!IsStudioRunning())
-				//{
-				var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
+				if (!IsStudioRunning())
+				{
+					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
 				controller.SetIndeterminate();
 
-				await Remove.BackupFiles(_foldersToClearOrRestore);
+				await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
 
-				//UnselectGrids();
+				UnselectGrids();
 				//to close the message
 				await controller.CloseAsync();
-				//}
-				//else
-				//{
-				//	await _mainWindow.ShowMessageAsync("Studio in running",
-				//		"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
-				//}
-
+				}
+				else
+				{
+					await _mainWindow.ShowMessageAsync("Studio in running",
+						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				}
 			}
 		}
 
@@ -311,7 +317,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					}
 				}
 			}
-			
 		}
 
 		private string GetMsiName(StudioVersionListItem version)
@@ -319,7 +324,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			var msiName = string.Format("TranslationStudio{0}.msi", version.MinorVersionNumber);
 			return msiName;
 		}
-
 
 		public ObservableCollection<StudioLocationListItem> FoldersLocationsCollection
 	    {
@@ -406,12 +410,10 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm","Are you sure you want to remove this files?",MessageDialogStyle.AffirmativeAndNegative,dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				//this needs to be uncomented
-				//if (!IsStudioRunning())
-				//{
-				_foldersToClearOrRestore.Clear();
+				if (!IsStudioRunning())
+				{
+					_foldersToClearOrRestore.Clear();
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
-					//var locationsToClear = new List<StudioDetails>();
 					controller.SetIndeterminate();
 
 					var selectedStudioVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -423,26 +425,22 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 						_foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
-				await Remove.BackupFiles(_foldersToClearOrRestore);
+					await Remove.BackupFiles(_foldersToClearOrRestore);
 
-				await  Remove.FromSelectedLocations(_foldersToClearOrRestore);
+					await Remove.FromSelectedLocations(_foldersToClearOrRestore);
 
-
-				//UnselectGrids();
 					//to close the message
 					await controller.CloseAsync();
-				//}
-				//else
-				//{
-				//	await _mainWindow.ShowMessageAsync("Studio in running",
-				//		"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
-				//}
-				
+				}
+				else
+				{
+					await _mainWindow.ShowMessageAsync("Studio in running",
+						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				}
+
 			}
 		}
-
-
-
+		
 		private void UnselectGrids()
 		{
 			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();

@@ -68,9 +68,9 @@
 			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
-	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="40,20,0,0" Orientation="Vertical">
+	    <StackPanel Grid.Column="1" Grid.Row="4" Margin="40,0,0,0" Orientation="Vertical">
 		    <StackPanel Orientation="Horizontal">
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,20,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,10,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="{Binding RemoveBtnColor}" CornerRadius="3" >
@@ -92,7 +92,7 @@
 				    Remove files
 			    </Button>
 
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Command="{Binding RepairCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Command="{Binding RepairCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
@@ -113,7 +113,7 @@
 
 				    Repair Studio
 			    </Button>
-			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,20,0,0" Command="{Binding RestoreCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Command="{Binding RestoreCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">

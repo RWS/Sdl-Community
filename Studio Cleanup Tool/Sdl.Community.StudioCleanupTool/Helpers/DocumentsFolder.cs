@@ -38,9 +38,9 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    var studioDetails = new List<StudioDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
-			    var projectsXmlPath = string.Format(@"C:\Users\{0}\Documents\{1}\Projects\projects.xml", userName,
-				    studioVersion.DisplayName);
-			    var directoryInfo = new DirectoryInfo(projectsXmlPath);
+				var projectsXmlPath = string.Format(@"C:\Users\{0}\Documents\{1}\Projects", userName,
+					studioVersion.DisplayName);
+				var directoryInfo = new DirectoryInfo(projectsXmlPath);
 				var details = new StudioDetails
 			    {
 				    OriginalFilePath = projectsXmlPath,
