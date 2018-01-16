@@ -35,7 +35,7 @@ namespace Sdl.Community.TMLifting
             this.server = new System.Windows.Forms.Label();
             this.comboBoxServerBasedTM = new System.Windows.Forms.ComboBox();
             this.connectToServer = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBoxTM = new System.Windows.Forms.GroupBox();
             this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
@@ -52,7 +52,7 @@ namespace Sdl.Community.TMLifting
             this.btnBrowse = new System.Windows.Forms.Button();
             this.btnReindex = new System.Windows.Forms.Button();
             this.tabPageServerBasedTM.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.groupBoxTM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
             this.tabPageFileBasedTM.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -67,11 +67,11 @@ namespace Sdl.Community.TMLifting
             this.tabPageServerBasedTM.Controls.Add(this.server);
             this.tabPageServerBasedTM.Controls.Add(this.comboBoxServerBasedTM);
             this.tabPageServerBasedTM.Controls.Add(this.connectToServer);
-            this.tabPageServerBasedTM.Controls.Add(this.groupBox1);
+            this.tabPageServerBasedTM.Controls.Add(this.groupBoxTM);
             this.tabPageServerBasedTM.Location = new System.Drawing.Point(4, 22);
             this.tabPageServerBasedTM.Name = "tabPageServerBasedTM";
             this.tabPageServerBasedTM.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageServerBasedTM.Size = new System.Drawing.Size(1038, 564);
+            this.tabPageServerBasedTM.Size = new System.Drawing.Size(1132, 587);
             this.tabPageServerBasedTM.TabIndex = 1;
             this.tabPageServerBasedTM.Text = "Server-Based Translation Memories";
             // 
@@ -102,15 +102,16 @@ namespace Sdl.Community.TMLifting
             this.connectToServer.UseVisualStyleBackColor = true;
             this.connectToServer.Click += new System.EventHandler(this.connectToServer_Click);
             // 
-            // groupBox1
+            // groupBoxTM
             // 
-            this.groupBox1.Controls.Add(this.gridServerBasedTMs);
-            this.groupBox1.Location = new System.Drawing.Point(9, 122);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(570, 400);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Translation Memories";
+            this.groupBoxTM.Controls.Add(this.gridServerBasedTMs);
+            this.groupBoxTM.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.groupBoxTM.Location = new System.Drawing.Point(3, 116);
+            this.groupBoxTM.Name = "groupBoxTM";
+            this.groupBoxTM.Size = new System.Drawing.Size(1126, 468);
+            this.groupBoxTM.TabIndex = 9;
+            this.groupBoxTM.TabStop = false;
+            this.groupBoxTM.Text = "Translation Memories";
             // 
             // gridServerBasedTMs
             // 
@@ -118,7 +119,7 @@ namespace Sdl.Community.TMLifting
             this.gridServerBasedTMs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridServerBasedTMs.Location = new System.Drawing.Point(3, 16);
             this.gridServerBasedTMs.Name = "gridServerBasedTMs";
-            this.gridServerBasedTMs.Size = new System.Drawing.Size(564, 381);
+            this.gridServerBasedTMs.Size = new System.Drawing.Size(1120, 449);
             this.gridServerBasedTMs.TabIndex = 6;
             this.gridServerBasedTMs.Visible = false;
             this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
@@ -170,10 +171,11 @@ namespace Sdl.Community.TMLifting
             // 
             this.tabControlTMLifting.Controls.Add(this.tabPageFileBasedTM);
             this.tabControlTMLifting.Controls.Add(this.tabPageServerBasedTM);
-            this.tabControlTMLifting.Location = new System.Drawing.Point(3, 3);
+            this.tabControlTMLifting.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabControlTMLifting.Location = new System.Drawing.Point(0, 0);
             this.tabControlTMLifting.Name = "tabControlTMLifting";
             this.tabControlTMLifting.SelectedIndex = 0;
-            this.tabControlTMLifting.Size = new System.Drawing.Size(1046, 590);
+            this.tabControlTMLifting.Size = new System.Drawing.Size(1140, 613);
             this.tabControlTMLifting.TabIndex = 0;
             // 
             // itemsBindingSource1
@@ -283,7 +285,7 @@ namespace Sdl.Community.TMLifting
             this.Size = new System.Drawing.Size(1140, 655);
             this.tabPageServerBasedTM.ResumeLayout(false);
             this.tabPageServerBasedTM.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
+            this.groupBoxTM.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).EndInit();
             this.tabPageFileBasedTM.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
@@ -305,7 +307,7 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.TabControl tabControlTMLifting;
 		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 		private System.Windows.Forms.BindingSource itemsBindingSource1;
-		private System.Windows.Forms.GroupBox groupBox1;
+		private System.Windows.Forms.GroupBox groupBoxTM;
 		private System.Windows.Forms.Button connectToServer;
 		private System.Windows.Forms.Label server;
 		private System.Windows.Forms.ComboBox comboBoxServerBasedTM;

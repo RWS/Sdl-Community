@@ -33,19 +33,6 @@ namespace Sdl.Community.TMLifting
 			this.Close();
 		}
 
-		private async Task<ServerBasedTranslationMemoryGSKit> GetServerBasedTMs()
-		{
-			try
-			{
-				return await ServerBasedTranslationMemoryGSKit.CreateAsync(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
-			}
-			catch (Exception e)
-			{
-				MessageBox.Show(e.ToString());
-				throw;
-			}
-		}
-
 		private void cancelBtnServerBased_Click(object sender, EventArgs e)
 		{
 			Close();

@@ -114,18 +114,5 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 		{
 			return _sdlTranslationStudioProjectManagementAssembly.GetType("Sdl.TranslationStudio.ProjectManagement.ProjectServerSettings.Facade.ProjectServersFacade");
 		}
-		//public void ReindexServerBasedTM (ServerBasedTranslationMemory sbTM )
-		//{
-		//	var langdirections = sbTM.LanguageDirections;
-
-		//	var iterator = new RegularIterator(100);
-
-		//	while (langdirections[0].ReindexTranslationUnits(ref iterator))
-		//	{
-
-		//	}
-		//	sbTM.RecomputeFuzzyIndexStatistics();
-		//	sbTM.Save();
-		//}
 	}
 }
