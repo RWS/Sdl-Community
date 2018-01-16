@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.TranslationMemoryProvider
+﻿namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	partial class TMToolForm
 	{
@@ -92,6 +92,7 @@
             this.btnClose.TabIndex = 6;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // btnSplitRemoveAll
             // 
@@ -102,6 +103,7 @@
             this.btnSplitRemoveAll.TabIndex = 5;
             this.btnSplitRemoveAll.Text = "&Remove All";
             this.btnSplitRemoveAll.UseVisualStyleBackColor = true;
+            this.btnSplitRemoveAll.Click += new System.EventHandler(this.btnSplitRemoveAll_Click);
             // 
             // btnSplitInFileRemove
             // 
@@ -112,6 +114,7 @@
             this.btnSplitInFileRemove.TabIndex = 4;
             this.btnSplitInFileRemove.Text = "Remove &Selected";
             this.btnSplitInFileRemove.UseVisualStyleBackColor = true;
+            this.btnSplitInFileRemove.Click += new System.EventHandler(this.btnSplitInFileRemove_Click);
             // 
             // btnSplitInFileAdd
             // 
@@ -122,6 +125,8 @@
             this.btnSplitInFileAdd.TabIndex = 3;
             this.btnSplitInFileAdd.Text = "&Add...";
             this.btnSplitInFileAdd.UseVisualStyleBackColor = true;
+            this.btnSplitInFileAdd.Click += new System.EventHandler(this.btnSplitInFileAdd_Click);
+            this.btnSplitInFileAdd.Resize += new System.EventHandler(this.TMToolForm_Resize);
             // 
             // lvFiles
             // 
@@ -141,6 +146,9 @@
             this.lvFiles.TabIndex = 2;
             this.lvFiles.UseCompatibleStateImageBehavior = false;
             this.lvFiles.View = System.Windows.Forms.View.Details;
+            this.lvFiles.DragDrop += new System.Windows.Forms.DragEventHandler(this.lvFiles_DragDrop);
+            this.lvFiles.DragEnter += new System.Windows.Forms.DragEventHandler(this.lvFiles_DragEnter);
+            this.lvFiles.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lvFiles_KeyDown);
             // 
             // chFiles
             // 
@@ -178,6 +186,7 @@
             this.btnPerform.TabIndex = 9;
             this.btnPerform.Text = "&Perform Task";
             this.btnPerform.UseVisualStyleBackColor = true;
+            this.btnPerform.Click += new System.EventHandler(this.btnPerform_Click);
             // 
             // btnClose2
             // 
@@ -188,6 +197,7 @@
             this.btnClose2.TabIndex = 10;
             this.btnClose2.Text = "Close";
             this.btnClose2.UseVisualStyleBackColor = true;
+            this.btnClose2.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // scTasks
             // 
@@ -212,6 +222,7 @@
             this.scTasks.Size = new System.Drawing.Size(628, 350);
             this.scTasks.SplitterDistance = 180;
             this.scTasks.TabIndex = 8;
+            this.scTasks.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.scTasks_SplitterMoved);
             // 
             // tvTasks
             // 
@@ -240,9 +251,11 @@
             this.ClientSize = new System.Drawing.Size(642, 416);
             this.Controls.Add(this.tabsPages);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(450, 350);
+            this.MinimumSize = new System.Drawing.Size(658, 455);
             this.Name = "TMToolForm";
             this.Text = "SDL Translation Memory Management 2018";
+            this.Load += new System.EventHandler(this.TMToolForm_Load);
+            this.Resize += new System.EventHandler(this.TMToolForm_Resize);
             this.tabsPages.ResumeLayout(false);
             this.tabFiles.ResumeLayout(false);
             this.tabFiles.PerformLayout();

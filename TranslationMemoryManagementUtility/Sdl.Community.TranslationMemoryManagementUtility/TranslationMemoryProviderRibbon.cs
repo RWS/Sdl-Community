@@ -10,13 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	[RibbonGroup("TM Provider", Name = "TM Provider", Description = "TM Provider", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	public class TranslationMemoryProviderRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.Community.TranslationMemoryProvider", Name = "TM Provider", Icon = "TranslationMemory", Description = "TM Provider")]
+		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "TM Provider", Icon = "TranslationMemory", Description = "TM Provider")]
 		[ActionLayout(typeof(TranslationMemoryProviderRibbon), 20, DisplayType.Large)]
 		public class TMProviderAction : AbstractAction
 		{
@@ -28,10 +28,10 @@ namespace Sdl.Community.TranslationMemoryProvider
 				if (TMTasks.Count == 0)
 				{
 					MessageBox.Show(
-						string.Format(PluginResources.errTasksNotFound,
+						string.Format(PluginResources.errTasksNotFound, tasksDir),
 									  PluginResources.Title,
 									  MessageBoxButtons.OK,
-									  MessageBoxIcon.Error));
+									  MessageBoxIcon.Error);
 				}
 				else
 				{

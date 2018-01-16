@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.TranslationMemoryProvider {
+namespace Sdl.Community.TranslationMemoryManagementUtility {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.TranslationMemoryProvider {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TranslationMemoryProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.TranslationMemoryManagementUtility.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -165,24 +165,6 @@ namespace Sdl.Community.TranslationMemoryProvider {
         internal static string findFilesNotAdded {
             get {
                 return ResourceManager.GetString("findFilesNotAdded", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You need to have a valid Studio 2009 license to run this tool..
-        /// </summary>
-        internal static string LicenseErrorMessage {
-            get {
-                return ResourceManager.GetString("LicenseErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to configure log4net logger..
-        /// </summary>
-        internal static string Log4NetConfigurationException {
-            get {
-                return ResourceManager.GetString("Log4NetConfigurationException", resourceCulture);
             }
         }
         

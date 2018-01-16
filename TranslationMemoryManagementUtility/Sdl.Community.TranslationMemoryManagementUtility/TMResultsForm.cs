@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
-using System.Resources;
-using System.Reflection;
-using System.Globalization;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	public partial class TMResultsForm : Form
 	{
@@ -115,9 +112,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 		/// </summary>
 		private void PerformTask()
 		{
-			ResourceManager rm = new ResourceManager("Sdl.Community.TranslationMemoryProvider.PluginResource", Assembly.GetExecutingAssembly());
-
-			WriteLog(string.Format(rm.GetString("logTaskStarted", CultureInfo.CurrentCulture), _task.TaskName));
+			WriteLog(string.Format(PluginResources.logTaskStarted, _task.TaskName));
 
 			int filesCount = 0;
 			foreach (string file in _files)
@@ -128,8 +123,9 @@ namespace Sdl.Community.TranslationMemoryProvider
 					_task.Execute(file);
 				}
 				else
-					WriteLog(string.Format(rm.GetString("errFileNotSupported", CultureInfo.CurrentCulture),
-						file));
+				{
+					WriteLog(string.Format(PluginResources.errFileNotSupported, file));
+				}
 			}
 
 			tmManager_OnFilesProgress(filesCount);
@@ -185,7 +181,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 			dialog.Filter = "Text Document |*.txt";
 			dialog.Title = "Save Log File";
 			dialog.DefaultExt = ".txt";
-			if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			if (dialog.ShowDialog() == DialogResult.OK)
 			{
 				using (StreamWriter writer = new StreamWriter(dialog.FileName))
 				{
@@ -220,8 +216,6 @@ namespace Sdl.Community.TranslationMemoryProvider
 		/// <param name="fileNum">file number currently processing</param>
 		private void tmManager_OnFilesProgress(int fileNum)
 		{
-			ResourceManager rm = new ResourceManager("Sdl.Community.TranslationMemoryProvider.PluginResource", Assembly.GetExecutingAssembly());
-
 			if (InvokeRequired)
 			{
 				// not in the UI thread, so need to call BeginInvoke
@@ -231,9 +225,9 @@ namespace Sdl.Community.TranslationMemoryProvider
 
 			pbProgressFiles.Value = (int)(fileNum * 100) / _files.Count;
 			if (fileNum == _files.Count)
-				pbProgress.Text = rm.GetString("progressFileFinished", CultureInfo.CurrentCulture);
+				pbProgress.Text = PluginResources.progressFileFinished;
 			else
-				pbProgress.Text = string.Format(rm.GetString("progressFile", CultureInfo.CurrentCulture), ++fileNum, _files.Count);
+				pbProgress.Text = string.Format(PluginResources.progressFile, ++fileNum, _files.Count);
 		}
 	}
 }

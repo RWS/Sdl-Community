@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.TranslationMemoryProvider
+﻿namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	partial class TMResultsForm
 	{
@@ -79,6 +79,7 @@
             this.exportButton.TabIndex = 15;
             this.exportButton.Text = "Export log...";
             this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
             // btnOpenFolder
             // 
@@ -89,6 +90,7 @@
             this.btnOpenFolder.TabIndex = 16;
             this.btnOpenFolder.Text = "&Open Target Folder...";
             this.btnOpenFolder.UseVisualStyleBackColor = true;
+            this.btnOpenFolder.Click += new System.EventHandler(this.btnOpenFolder_Click);
             // 
             // btnClose
             // 
@@ -99,6 +101,7 @@
             this.btnClose.TabIndex = 17;
             this.btnClose.Text = "Close";
             this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // lblOperation
             // 
@@ -133,6 +136,7 @@
             this.MinimumSize = new System.Drawing.Size(400, 200);
             this.Name = "TMResultsForm";
             this.Text = "SDL Translation Memory Task Results 2018";
+            this.Load += new System.EventHandler(this.TMResultsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

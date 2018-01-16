@@ -8,8 +8,8 @@
     <ProjectGuid>{DF51A3C1-4A82-4E08-9F78-7448ED33C271}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.TranslationMemoryProvider</RootNamespace>
-    <AssemblyName>Sdl.Community.TranslationMemoryProvider</AssemblyName>
+    <RootNamespace>Sdl.Community.TranslationMemoryManagementUtility</RootNamespace>
+    <AssemblyName>Sdl.Community.TranslationMemoryManagementUtility</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

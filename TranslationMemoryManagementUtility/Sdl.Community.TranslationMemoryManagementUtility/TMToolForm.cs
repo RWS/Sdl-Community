@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Resources;
 using System.Reflection;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	public partial class TMToolForm : Form
 	{
@@ -210,10 +210,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 
 		private void lvFiles_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyData == Keys.Delete)
-			{
-				RemoveSelectedFile();
-			}
+
 		}
 
 		private void lvFiles_DragDrop(object sender, DragEventArgs e)

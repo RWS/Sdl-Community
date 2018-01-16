@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Sdl.Community.TranslationMemoryProvider
+namespace Sdl.Community.TranslationMemoryManagementUtility
 {
 	public partial class OptionsPanel : UserControl
 	{

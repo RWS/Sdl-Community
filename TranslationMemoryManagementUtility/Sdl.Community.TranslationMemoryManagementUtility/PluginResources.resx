@@ -117,43 +117,68 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChunkSizeError" xml:space="preserve">
-    <value>ChunkSize should be less than Sdl.LanguagePlatform.TranslationMemoryApi.TranslationMemoryExporter.MaxTranslationUnitChunkSize and greater than 20.</value>
+  <data name="accessFileSkipped" xml:space="preserve">
+    <value>You do not have permission to modify TM '{0}'.</value>
   </data>
-  <data name="InvalidTranslationMemory" xml:space="preserve">
-    <value>Tranlation memory {0} is invalid.</value>
+  <data name="accessSubTitle" xml:space="preserve">
+    <value>Translation memory '{0}' is password-protected. Please enter administrator level password to continue:</value>
   </data>
-  <data name="NotSupportedCulture" xml:space="preserve">
-    <value>The {0} culture is not supported by Trados Translators Workbench 2007. Do you wish to proceed?</value>
+  <data name="AssemblyProblemTitle" xml:space="preserve">
+    <value>Task Assembly check.</value>
   </data>
-  <data name="OutputFolderError" xml:space="preserve">
-    <value>Output folder does not exist.</value>
+  <data name="errEmptyPsw" xml:space="preserve">
+    <value>Enter password to continue.</value>
   </data>
-  <data name="RemapException" xml:space="preserve">
-    <value>An unhalted exception ocurred while processing remap task:{0}</value>
+  <data name="errFileNotSupported" xml:space="preserve">
+    <value>\r\nCannot process file '{0}'.\r\nThis type of file is not supported.\r\n</value>
   </data>
-  <data name="SkipTM" xml:space="preserve">
-    <value>User decided to skip {0} translation memory.</value>
+  <data name="errInvalidPsw" xml:space="preserve">
+    <value>Invalid password.</value>
   </data>
-  <data name="TaskName" xml:space="preserve">
-    <value>Export for Trados 2007</value>
+  <data name="errRemDupTaskFailed" xml:space="preserve">
+    <value>Failed to remove duplicates in file '{0}'.\r\nDetails: {1}\r\n</value>
   </data>
-  <data name="TMExportFinished" xml:space="preserve">
-    <value>Translation memory {0} export finished</value>
+  <data name="errTasksNotFound" xml:space="preserve">
+    <value>No tasks were detected in directory '{0}'. Translation Memory Management tool cannot be loaded.</value>
   </data>
-  <data name="TMExportStarted" xml:space="preserve">
-    <value>Starting export {0} translation memory</value>
+  <data name="filesEmptyList" xml:space="preserve">
+    <value>The list of files is empty.</value>
   </data>
-  <data name="TmxDescription" xml:space="preserve">
-    <value>Translation Memory Export ({0})</value>
+  <data name="filesEmptySelectedList" xml:space="preserve">
+    <value>No files selected.</value>
   </data>
-  <data name="TMXFlavouredConverted" xml:space="preserve">
-    <value>TMX file {0} successfully processed.</value>
+  <data name="filesFileDialogTitle" xml:space="preserve">
+    <value>Select translation memory files to process.</value>
   </data>
-  <data name="TotalTUExported" xml:space="preserve">
-    <value>Total translation units exported: {0}</value>
+  <data name="findFilesNotAdded" xml:space="preserve">
+    <value>Please go to Files tab and add files to process.</value>
   </data>
-  <data name="TotalTUProcessed" xml:space="preserve">
-    <value>Total translation units processed: {0}</value>
+  <data name="logTaskFinished" xml:space="preserve">
+    <value>Task finished successfully. \r\n</value>
+  </data>
+  <data name="logTaskStarted" xml:space="preserve">
+    <value>Started performing {0} task in file(s)...\r\n</value>
+  </data>
+  <data name="PrerequisitesProblemTitle" xml:space="preserve">
+    <value>Prerequisites check.</value>
+  </data>
+  <data name="progressFile" xml:space="preserve">
+    <value>File {0} of {1}:</value>
+  </data>
+  <data name="progressFileFinished" xml:space="preserve">
+    <value>Finished processing files.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Translation Memory Management</value>
+  </data>
+  <data name="wrnTaskAssVersion" xml:space="preserve">
+    <value>Could not load task assembly '{0}'.\r\nDetails: {1}</value>
+  </data>
+  <data name="wrnTaskTypesMissing" xml:space="preserve">
+    <value>Could not load task assembly '{0}'. It does not contain requited types.</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="TranslationMemory" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TranslationMemory.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
