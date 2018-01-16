@@ -31,9 +31,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly MainWindow _mainWindow;
 		private readonly string _userName;
 		private bool _isRemoveEnabled;
+		private bool _isRestoreEnabled;
 		private string _removeBtnColor;
 		private string _removeForeground;
+		private string _restoreBtnColor;
+		private string _restoreForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+
 		private List<StudioDetails> _foldersToClearOrRestore = new List<StudioDetails>();
 		public StudioViewModel(MainWindow mainWindow)
 		{
@@ -41,14 +45,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    _folderDescription = string.Empty;
 			_userName = Environment.UserName;
 			_isRemoveEnabled = false;
+			_isRestoreEnabled =false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
+			_restoreBtnColor = "LightGray";
+			_restoreForeground = "Gray";
 			FillStudioVersionList();
 		    FillFoldersLocationList();
 	    }
 		private void FillFoldersLocationList()
 	    {
-		    //well need to read the information from a file
 		    _foldersLocations = new ObservableCollection<StudioLocationListItem>
 		    {
 			    new StudioLocationListItem
@@ -71,7 +77,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    IsSelected = false,
 				    Description = "Removes the plugins",
 					Alias = "roamingMajor"
-			    },//aici
+			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\14.0.0.0",
@@ -179,6 +185,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				RemoveForeground = "Gray";
 			}
 		}
+
 		private void FillStudioVersionList()
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
@@ -253,17 +260,20 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore this folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
-				//this needs to be uncomented
 				if (!IsStudioRunning())
 				{
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
-				controller.SetIndeterminate();
+					controller.SetIndeterminate();
 
-				await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
+					await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
 
-				UnselectGrids();
-				//to close the message
-				await controller.CloseAsync();
+					UnselectGrids();
+					//Set colors for restore btn
+					IsRestoreEnabled = false;
+					RestoreBtnColor = "LightGray";
+					RestoreForeground = "Gray";
+					//to close the message
+					await controller.CloseAsync();
 				}
 				else
 				{
@@ -385,6 +395,37 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			}
 		}
 
+
+		public string RestoreForeground
+		{
+			get => _restoreForeground;
+
+			set
+			{
+				if (Equals(value, _restoreForeground))
+				{
+					return;
+				}
+				_restoreForeground = value;
+				OnPropertyChanged(nameof(RestoreForeground));
+			}
+		}
+
+		public string RestoreBtnColor
+		{
+			get => _restoreBtnColor;
+
+			set
+			{
+				if (Equals(value, _restoreBtnColor))
+				{
+					return;
+				}
+				_restoreBtnColor = value;
+				OnPropertyChanged(nameof(RestoreBtnColor));
+			}
+		}
+
 		public bool IsRemoveEnabled
 		{
 			get => _isRemoveEnabled;
@@ -397,6 +438,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				_isRemoveEnabled = value;
 				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
+
+		public bool IsRestoreEnabled
+		{
+			get => _isRestoreEnabled;
+
+			set
+			{
+				if (Equals(value, _isRestoreEnabled))
+				{
+					return;
+				}
+				_isRestoreEnabled = value;
+				OnPropertyChanged(nameof(IsRestoreEnabled));
 			}
 		}
 		private async void RemoveFiles()
@@ -429,6 +485,9 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 					await Remove.FromSelectedLocations(_foldersToClearOrRestore);
 
+					IsRestoreEnabled = true;
+					RestoreBtnColor = "#99b433";
+					RestoreForeground = "WhiteSmoke";
 					//to close the message
 					await controller.CloseAsync();
 				}

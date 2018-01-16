@@ -89,7 +89,7 @@
 					    </ControlTemplate>
 				    </Button.Template>
 
-				    Remove files
+				    Remove folders
 			    </Button>
 
 				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Command="{Binding RepairCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
@@ -113,26 +113,26 @@
 
 				    Repair Studio
 			    </Button>
-			    <Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Command="{Binding RestoreCommand}" Foreground="AliceBlue"  VerticalAlignment="Center" HorizontalAlignment="Right" >
-				    <Button.Template>
-					    <ControlTemplate TargetType="{x:Type Button}">
-						    <Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3">
-							    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
-						    </Border>
-						    <ControlTemplate.Triggers>
-							    <Trigger Property="IsMouseOver" Value="True">
-								    <Setter TargetName="bdr_main" Property="Background" Value="Green" />
-							    </Trigger>
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Foreground="{Binding RestoreForeground}" Command="{Binding RestoreCommand}" IsEnabled="{Binding IsRestoreEnabled}" VerticalAlignment="Center" HorizontalAlignment="Right" >
+					<Button.Template>
+						<ControlTemplate TargetType="{x:Type Button}">
+							<Border x:Name="bdr_main"   Background="{Binding RestoreBtnColor}" CornerRadius="3" >
+								<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
+							</Border>
+							<ControlTemplate.Triggers>
+								<Trigger Property="IsMouseOver" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+								</Trigger>
 
-							    <Trigger Property="IsPressed" Value="True">
-								    <Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
-							    </Trigger>
+								<Trigger Property="IsPressed" Value="True">
+									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+								</Trigger>
 
-						    </ControlTemplate.Triggers>
-					    </ControlTemplate>
-				    </Button.Template>
+							</ControlTemplate.Triggers>
+						</ControlTemplate>
+					</Button.Template>
 
-				    Restore Folders
+					Restore folders
 			    </Button>
 			</StackPanel>
 	    </StackPanel>
