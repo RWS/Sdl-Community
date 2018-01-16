@@ -166,13 +166,15 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    }
 
 			//removes all the directories from root directory
-		    foreach (var directory in directoryInfo.GetDirectories())
-		    {
-			    directory.Delete(true);
-		    }
-	    }
+			foreach (var directory in directoryInfo.GetDirectories())
+			{
+				directory.Delete(true);
+			}
+			//remove the root directory
+			directoryInfo.Delete();
+		}
 
-	    private static bool IsDirectory(string path)
+		private static bool IsDirectory(string path)
 	    {
 		    var attributes = File.GetAttributes(path);
 		    return attributes.HasFlag(FileAttributes.Directory);
