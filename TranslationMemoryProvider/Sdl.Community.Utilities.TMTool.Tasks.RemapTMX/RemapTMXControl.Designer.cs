@@ -49,18 +49,19 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputFolderBox.Location = new System.Drawing.Point(104, 10);
             this.outputFolderBox.Name = "outputFolderBox";
-            this.outputFolderBox.Size = new System.Drawing.Size(459, 20);
+            this.outputFolderBox.Size = new System.Drawing.Size(449, 20);
             this.outputFolderBox.TabIndex = 4;
             // 
             // browseButton
             // 
             this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.browseButton.Location = new System.Drawing.Point(569, 8);
+            this.browseButton.Location = new System.Drawing.Point(559, 7);
             this.browseButton.Name = "browseButton";
             this.browseButton.Size = new System.Drawing.Size(75, 23);
             this.browseButton.TabIndex = 5;
             this.browseButton.Text = "&Browse...";
             this.browseButton.UseVisualStyleBackColor = true;
+            this.browseButton.Click += new System.EventHandler(this.BrowseButton_Click);
             // 
             // saveTargetFolderCheckBox
             // 
@@ -71,6 +72,7 @@
             this.saveTargetFolderCheckBox.TabIndex = 6;
             this.saveTargetFolderCheckBox.Text = "Save in taget TM\'s folder";
             this.saveTargetFolderCheckBox.UseVisualStyleBackColor = true;
+            this.saveTargetFolderCheckBox.CheckedChanged += new System.EventHandler(this.saveTargetFolderCheckBox_CheckedChanged);
             // 
             // RemapTMXControl
             // 

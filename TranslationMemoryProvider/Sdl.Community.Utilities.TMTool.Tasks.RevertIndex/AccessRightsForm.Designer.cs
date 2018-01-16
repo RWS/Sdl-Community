@@ -76,6 +76,7 @@
             this.btnOK.TabIndex = 9;
             this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // btnCancel
             // 
@@ -86,6 +87,7 @@
             this.btnCancel.TabIndex = 10;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // AccessRightsForm
             // 
@@ -100,6 +102,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AccessRightsForm";
             this.Text = "SDL Translation Memory Password";
+            this.Load += new System.EventHandler(this.AccessRightsForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

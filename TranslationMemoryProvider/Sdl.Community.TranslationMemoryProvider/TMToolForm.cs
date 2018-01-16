@@ -210,10 +210,7 @@ namespace Sdl.Community.TranslationMemoryProvider
 
 		private void lvFiles_KeyDown(object sender, KeyEventArgs e)
 		{
-			if (e.KeyData == Keys.Delete)
-			{
-				RemoveSelectedFile();
-			}
+
 		}
 
 		private void lvFiles_DragDrop(object sender, DragEventArgs e)
