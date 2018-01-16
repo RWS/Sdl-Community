@@ -22,7 +22,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var details = new StudioDetails
 			    {
 				    OriginalFilePath = majorFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramData",directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
 				    StudioVersion = studioVersion.DisplayName
 				};
@@ -41,7 +41,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var details = new StudioDetails
 			    {
 				    OriginalFilePath = majorFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProgramData",directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
 				    StudioVersion = studioVersion.DisplayName
 				};
@@ -60,7 +60,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var details = new StudioDetails
 			    {
 				    OriginalFilePath = programDataFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramData", directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
 				    StudioVersion = studioVersion.DisplayName
 				};

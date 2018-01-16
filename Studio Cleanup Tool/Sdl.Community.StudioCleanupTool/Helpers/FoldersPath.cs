@@ -83,7 +83,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return foldersToBackup;
 	    }
 
-
 	    public static async Task<List<string>> GetMultiTermFoldersPath(string userName,
 		    List<MultiTermVersionListItem> multiTermVersions, List<MultiTermLocationListItem> locations)
 	    {
@@ -126,7 +125,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    var details = new StudioDetails
 			    {
 				    OriginalFilePath = programFilesFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramFiles", directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
 				    StudioVersion = studioVersion.DisplayName
 				};
