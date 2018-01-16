@@ -23,8 +23,8 @@ namespace Sdl.Community.TMBackup
 			{
 			    MoveBackupFilesAppToDirectory();
 
-				TMBackupForm tmBackupForm = new TMBackupForm();
-				tmBackupForm.ShowDialog();
+				TMBackupTasksForm tmBackupTasksForm = new TMBackupTasksForm();
+				tmBackupTasksForm.ShowDialog();				
 			}
 		}
 		
