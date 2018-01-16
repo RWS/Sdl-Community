@@ -153,12 +153,6 @@
   <data name="findFilesNotAdded" xml:space="preserve">
     <value>Please go to Files tab and add files to process.</value>
   </data>
-  <data name="LicenseErrorMessage" xml:space="preserve">
-    <value>You need to have a valid Studio 2009 license to run this tool.</value>
-  </data>
-  <data name="Log4NetConfigurationException" xml:space="preserve">
-    <value>Failed to configure log4net logger.</value>
-  </data>
   <data name="logTaskFinished" xml:space="preserve">
     <value>Task finished successfully. \r\n</value>
   </data>

@@ -190,7 +190,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 				if (settings.SaveIntoTargetFolder)
 				{
 					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2007.tmx",
+					"{0}{1}{2}_Trados2017.tmx",
 					Path.GetDirectoryName(fileName),
 					Path.DirectorySeparatorChar,
 					Path.GetFileNameWithoutExtension(fileName));
@@ -198,7 +198,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RemapTMX
 				else
 				{
 					targetTMXFlavouredFile = string.Format(
-					"{0}{1}{2}_Trados2007.tmx",
+					"{0}{1}{2}_Trados2017.tmx",
 					settings.TargetFolder,
 					Path.DirectorySeparatorChar,
 					Path.GetFileNameWithoutExtension(fileName));

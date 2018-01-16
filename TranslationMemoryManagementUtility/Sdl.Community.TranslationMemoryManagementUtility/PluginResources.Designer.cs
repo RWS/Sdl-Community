@@ -169,24 +169,6 @@ namespace Sdl.Community.TranslationMemoryManagementUtility {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You need to have a valid Studio 2009 license to run this tool..
-        /// </summary>
-        internal static string LicenseErrorMessage {
-            get {
-                return ResourceManager.GetString("LicenseErrorMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Failed to configure log4net logger..
-        /// </summary>
-        internal static string Log4NetConfigurationException {
-            get {
-                return ResourceManager.GetString("Log4NetConfigurationException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Task finished successfully. \r\n.
         /// </summary>
         internal static string logTaskFinished {

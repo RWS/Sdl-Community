@@ -28,10 +28,10 @@ namespace Sdl.Community.TranslationMemoryManagementUtility
 				if (TMTasks.Count == 0)
 				{
 					MessageBox.Show(
-						string.Format(PluginResources.errTasksNotFound,
+						string.Format(PluginResources.errTasksNotFound, tasksDir),
 									  PluginResources.Title,
 									  MessageBoxButtons.OK,
-									  MessageBoxIcon.Error));
+									  MessageBoxIcon.Error);
 				}
 				else
 				{
