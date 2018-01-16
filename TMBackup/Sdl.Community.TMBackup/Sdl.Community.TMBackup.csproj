@@ -140,10 +140,19 @@
       <DependentUpon>TMBackupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="TMBackupRibbon.cs" />
+    <Compile Include="TMBackupTasksForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TMBackupTasksForm.Designer.cs">
+      <DependentUpon>TMBackupTasksForm.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
     <Content Include="Resources\TMBackup_icon.ico" />
+    <EmbeddedResource Include="TMBackupTasksForm.resx">
+      <DependentUpon>TMBackupTasksForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Resources\TM_backup.png" />
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="app.config" />

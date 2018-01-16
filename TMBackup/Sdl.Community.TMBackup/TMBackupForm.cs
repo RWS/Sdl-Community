@@ -9,13 +9,16 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupForm : Form
 	{
-		public TMBackupForm()
+		public TMBackupForm(bool isNewTask)
 		{
 			InitializeComponent();
 
-			GetBackupFormInfo();
+			if (!isNewTask)
+			{
+				GetBackupFormInfo();
+			}
 		}
-
+		
 		private void btn_BackupFrom_Click(object sender, EventArgs e)
 		{
 			var fromFolderDialog = new FolderSelectDialog();
