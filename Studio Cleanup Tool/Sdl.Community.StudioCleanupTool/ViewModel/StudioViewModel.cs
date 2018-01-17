@@ -32,8 +32,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private bool _isRemoveEnabled;
 		private bool _isRestoreEnabled;
+		private bool _isRepairEnabled;
 		private string _removeBtnColor;
 		private string _removeForeground;
+		private string _repairBtnColor;
+		private string _repairForeground;
 		private string _restoreBtnColor;
 		private string _restoreForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
@@ -46,8 +49,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			_userName = Environment.UserName;
 			_isRemoveEnabled = false;
 			_isRestoreEnabled =false;
+			_isRepairEnabled = false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
+			_repairBtnColor = "LightGray";
+			_repairForeground = "Gray";
 			_restoreBtnColor = "LightGray";
 			_restoreForeground = "Gray";
 			FillStudioVersionList();
@@ -166,13 +172,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				FolderDescription = string.Empty;
 			}
 
-			SetRemoveBtnColors();
+			SetButtonColors();
 		}
 
 
-		private void SetRemoveBtnColors()
+		private void SetButtonColors()
 		{
-			if (AnyLocationAndVersionSelected())
+			if (AnyLocationSelected()&&AnyVersionSelected())
 			{
 				IsRemoveEnabled = true;
 				RemoveBtnColor = "#99b433";
@@ -183,6 +189,19 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				IsRemoveEnabled = false;
 				RemoveBtnColor = "LightGray";
 				RemoveForeground = "Gray";
+			}
+
+			if (AnyVersionSelected())
+			{
+				IsRepairEnabled = true;
+				RepairBtnColor = "#99b433";
+				RepairForeground = "WhiteSmoke";
+			}
+			else
+			{
+				IsRepairEnabled = false;
+				RepairBtnColor = "LightGray";
+				RepairForeground = "Gray";
 			}
 		}
 
@@ -226,7 +245,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 		private void StudioVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			SetRemoveBtnColors();
+			SetButtonColors();
 		}
 
 		public ObservableCollection<StudioVersionListItem> StudioVersionsCollection
@@ -425,6 +444,35 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				OnPropertyChanged(nameof(RestoreBtnColor));
 			}
 		}
+		public string RepairForeground
+		{
+			get => _repairForeground;
+
+			set
+			{
+				if (Equals(value, _repairForeground))
+				{
+					return;
+				}
+				_repairForeground = value;
+				OnPropertyChanged(nameof(RepairForeground));
+			}
+		}
+
+		public string RepairBtnColor
+		{
+			get => _repairBtnColor;
+
+			set
+			{
+				if (Equals(value, _repairBtnColor))
+				{
+					return;
+				}
+				_repairBtnColor = value;
+				OnPropertyChanged(nameof(RepairBtnColor));
+			}
+		}
 
 		public bool IsRemoveEnabled
 		{
@@ -438,6 +486,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				_isRemoveEnabled = value;
 				OnPropertyChanged(nameof(IsRemoveEnabled));
+			}
+		}
+
+		public bool IsRepairEnabled
+		{
+			get => _isRepairEnabled;
+
+			set
+			{
+				if (Equals(value, _isRepairEnabled))
+				{
+					return;
+				}
+				_isRepairEnabled = value;
+				OnPropertyChanged(nameof(IsRepairEnabled));
 			}
 		}
 
@@ -521,12 +584,14 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			return studioProcesses.Any();
 		}
 
-		private bool AnyLocationAndVersionSelected()
+		private bool AnyLocationSelected()
 		{
-			var selectedVersions = StudioVersionsCollection.Where(v => v.IsSelected).ToList();
-			var selectedLocations = FoldersLocationsCollection.Where(l => l.IsSelected).ToList();
+			return FoldersLocationsCollection.Any(l => l.IsSelected);
+		}
 
-			return selectedLocations.Any() && selectedVersions.Any();
+		private bool AnyVersionSelected()
+		{
+			return StudioVersionsCollection.Any(v => v.IsSelected);
 		}
 
 		[NotifyPropertyChangedInvocator]
