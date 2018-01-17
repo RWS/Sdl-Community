@@ -55,7 +55,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    var studioDetails = new List<LocationDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
-			    var programDataFolderPath = string.Format(@"C:\ProgramData\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
+			    var programDataFolderPath = string.Format(@"C:\ProgramData\SDL\SDL Trados Studio\{0}\Updates", studioVersion.FolderName);
 				var directoryInfo = new DirectoryInfo(programDataFolderPath);
 			    var details = new LocationDetails
 			    {

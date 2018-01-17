@@ -130,14 +130,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				    IsSelected = false,
 				    Description = "Removes files",
 				    Alias = "programData"
-				},
-			    new StudioLocationListItem
-			    {
-				    DisplayName = @"C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5",
-				    IsSelected = false,
-				    Description = "Removes files",
-					Alias = "programFiles"
-			    },
+				}
 		    };
 
 		    foreach (var location in _foldersLocations)

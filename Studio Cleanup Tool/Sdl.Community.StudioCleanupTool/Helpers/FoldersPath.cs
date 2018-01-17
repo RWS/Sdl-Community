@@ -72,11 +72,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 						var programDataFolderPath = await Task.FromResult(ProgramData.GetProgramDataFolderPath(location,studioVersions));
 						foldersToBackup.AddRange(programDataFolderPath);
 					}
-					if (location.Alias.Equals("programFiles"))
-					{
-						var programFilesFolderPath = await Task.FromResult(GetProgramFilesFolderPath(location,studioVersions));
-						foldersToBackup.AddRange(programFilesFolderPath);
-					}
 				}
 				
 			}
@@ -115,25 +110,5 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    }
 		    return foldersLocationList;
 	    }
-	    private static List<LocationDetails> GetProgramFilesFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
-	    {
-		    var studioDetails = new List<LocationDetails>();
-			foreach (var studioVersion in studioVersions)
-		    {
-			    var programFilesFolderPath = string.Format(@"C:\Program Files (x86)\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
-				var directoryInfo = new DirectoryInfo(programFilesFolderPath);
-			    var details = new LocationDetails
-			    {
-				    OriginalFilePath = programFilesFolderPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramFiles", directoryInfo.Name),
-				    Alias = selectedLocation.Alias,
-				    StudioVersion = studioVersion.DisplayName
-				};
-			    studioDetails.Add(details);
-			}
-		    return studioDetails;
-		}
-	  
-
     }
 }
