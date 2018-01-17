@@ -93,10 +93,13 @@ namespace Sdl.Community.TMBackup
 				Persistence persistence = new Persistence();
 				persistence.SaveBackupFormInfo(backupModel);
 
-				Close();
+				Hide();
 
 				Service service = new Service();
 				service.CreateTaskScheduler();
+
+				TMBackupTasksForm tmBackupTasksForm = new TMBackupTasksForm();
+				tmBackupTasksForm.ShowDialog();
 			}			
 		}
 
