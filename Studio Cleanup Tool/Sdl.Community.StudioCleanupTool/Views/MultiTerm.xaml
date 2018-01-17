@@ -11,6 +11,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="230" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
@@ -19,6 +20,7 @@
 		    <ColumnDefinition Width="1*" />
 	    </Grid.ColumnDefinitions>
 	    <Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold">Please select MultiTerm versions</Label>
+	   
 		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MultiTermVersionsCollection}" FontFamily="Calibri" FontSize="14">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -42,11 +44,12 @@
 		</ItemsControl>
 
 	    <Label Grid.Column="0" Grid.Row="2" Margin="0,40,0,0" FontWeight="Bold">Remove folders from following locations:</Label>
-	    <ListBox 
+	    <CheckBox Grid.Column="0" Grid.Row="3" Margin="5,0,0,5" FontFamily="Calibri" FontSize="14" IsChecked="{Binding CheckAll}">Select/Unselect all</CheckBox>
+		<ListBox 
 		    ItemsSource ="{Binding MultiTermLocationCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 		    SelectionMode="Multiple"
 		    Grid.Column="0"
-		    Grid.Row="3">
+		    Grid.Row="4">
 		    <ListBox.ItemTemplate>
 			    <DataTemplate>
 				    <CheckBox
@@ -59,12 +62,12 @@
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
 	    </ListBox>
-		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" Margin="0,0,0,0" VerticalAlignment="Top" Height="100">
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="0,0,0,0" VerticalAlignment="Top" Height="100">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 		    <TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
-		<StackPanel Grid.Column="1" Grid.Row="4" Margin="0,20,0,0" Orientation="Vertical">
+		<StackPanel Grid.Column="1" Grid.Row="5" Margin="0,20,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="0,20,10,0" Foreground="{Binding RemoveForeground}" IsEnabled="{Binding IsRemoveEnabled}"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 					<Button.Template>

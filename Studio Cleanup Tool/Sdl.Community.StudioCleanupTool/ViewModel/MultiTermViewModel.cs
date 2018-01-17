@@ -37,6 +37,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private bool _isRemoveEnabled;
 		private bool _isRestoreEnabled;
 		private bool _isRepairEnabled;
+		private bool _checkAll;
 
 		public MultiTermViewModel(MainWindow mainWindow)
 		{
@@ -46,6 +47,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			_isRemoveEnabled = false;
 			_isRestoreEnabled = false;
 			_isRepairEnabled = false;
+			_checkAll = false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
 			_restoreBtnColor = "LightGray";
@@ -79,6 +81,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
 
 					UnselectGrids();
+					CheckAll = false;
 					//Set colors for restore btn
 					IsRestoreEnabled = false;
 					RestoreBtnColor = "LightGray";
@@ -350,6 +353,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				OnPropertyChanged(nameof(RestoreBtnColor));
 			}
 		}
+		public bool CheckAll
+		{
+			get => _checkAll;
+
+			set
+			{
+				if (Equals(value, _checkAll))
+				{
+					return;
+				}
+				_checkAll = value;
+				OnPropertyChanged(nameof(CheckAll));
+				CheckAllLocations(value);
+			}
+		}
 		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			SetRemoveBtnColors();
@@ -360,6 +378,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 			return MultiTermLocationCollection.Any(l => l.IsSelected);
 
+		}
+		private void CheckAllLocations(bool check)
+		{
+			foreach (var location in MultiTermLocationCollection)
+			{
+				location.IsSelected = check;
+			}
 		}
 		private void SetRemoveBtnColors()
 		{
