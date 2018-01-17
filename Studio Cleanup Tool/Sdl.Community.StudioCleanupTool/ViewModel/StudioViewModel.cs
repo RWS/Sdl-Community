@@ -6,12 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
-using Microsoft.Win32;
 using Sdl.Community.StudioCleanupTool.Annotations;
 using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
@@ -33,6 +29,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private bool _isRemoveEnabled;
 		private bool _isRestoreEnabled;
 		private bool _isRepairEnabled;
+		private bool _checkAll;
 		private string _removeBtnColor;
 		private string _removeForeground;
 		private string _repairBtnColor;
@@ -50,6 +47,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			_isRemoveEnabled = false;
 			_isRestoreEnabled =false;
 			_isRepairEnabled = false;
+			_checkAll = false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
 			_repairBtnColor = "LightGray";
@@ -489,6 +487,30 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			}
 		}
 
+		public bool CheckAll
+		{
+			get => _checkAll;
+
+			set
+			{
+				if (Equals(value, _checkAll))
+				{
+					return;
+				}
+				_checkAll = value;
+				OnPropertyChanged(nameof(CheckAll));
+				CheckAllLocations(value);
+			}
+		}
+
+		private void CheckAllLocations(bool check)
+		{
+			foreach (var location in FoldersLocationsCollection)
+			{
+				location.IsSelected = check;
+			}
+		}
+
 		public bool IsRepairEnabled
 		{
 			get => _isRepairEnabled;
@@ -576,6 +598,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				selectedLocation.IsSelected = false;
 			}
+			CheckAll = false;
 		}
 		private bool IsStudioRunning()
 		{

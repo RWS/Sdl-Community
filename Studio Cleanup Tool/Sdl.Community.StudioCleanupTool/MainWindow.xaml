@@ -12,7 +12,7 @@
         FontSize="14"
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
-        Title="Studio and MultiTerm cleanup tool" Height="510" Width="910">
+        Title="Studio and MultiTerm cleanup tool" Height="540" Width="900" >
     <Grid Height="auto">
 	    <Grid.Resources>
 		    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
@@ -29,7 +29,7 @@
 		            controls:TabControlHelper.Underlined="{Binding ElementName=AnimatedTabControlUnderlinedComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 			<TabItem Header="Studio">
-				<views:Studio DataContext="{Binding StudioViewModel}" Height="425"  />
+				<views:Studio DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto"  />
 			</TabItem>
 			<controls:MetroTabItem Header="MultiTerm">
 				<views:MultiTerm DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto"></views:MultiTerm>

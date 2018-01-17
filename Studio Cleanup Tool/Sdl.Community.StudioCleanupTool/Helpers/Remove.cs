@@ -39,20 +39,17 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					{
 						MoveToBackUp(files, folder.OriginalFilePath);
 					}
-					//else
-					//{
-						//check for subdirectories
-						var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
-						foreach (var subdirectory in subdirectories)
-						{
-							var currentDirInfo = new DirectoryInfo(subdirectory);
-							CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
-						}
-					//}
+
+					var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
+					foreach (var subdirectory in subdirectories)
+					{
+						var currentDirInfo = new DirectoryInfo(subdirectory);
+						CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
+					}
 				}
 				catch (Exception e)
 				{
-					throw e;
+					//throw e;
 				}
 			}
 		}
@@ -92,19 +89,22 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				    }
 				    try
 				    {
-					    //Get files 
-					    var files = Directory.GetFiles(folder.OriginalFilePath);
-					    if (files.Length > 0)
+					    if (Directory.Exists(folder.OriginalFilePath))
 					    {
-						    MoveToBackUp(files, folder.BackupFilePath);
-					    }
+						    //Get files 
+						    var files = Directory.GetFiles(folder.OriginalFilePath);
+						    if (files.Length > 0)
+						    {
+							    MoveToBackUp(files, folder.BackupFilePath);
+						    }
 
-					    //check for subdirectories
-					    var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
-					    foreach (var subdirectory in subdirectories)
-					    {
-						    var currentDirInfo = new DirectoryInfo(subdirectory);
-						    CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
+						    //check for subdirectories
+						    var subdirectories = Directory.GetDirectories(folder.OriginalFilePath);
+						    foreach (var subdirectory in subdirectories)
+						    {
+							    var currentDirInfo = new DirectoryInfo(subdirectory);
+							    CheckForSubfolders(currentDirInfo, folder.BackupFilePath);
+						    }
 					    }
 				    }
 				    catch (Exception e)
@@ -159,22 +159,38 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 	    }
 	    private static void Empty(DirectoryInfo directoryInfo)
 	    {
-			//removes all files from root directory
-		    foreach (var file in directoryInfo.GetFiles())
+		    if (directoryInfo.Exists)
 		    {
-			    file.Delete();
-		    }
+			    SetAttributesNormal(directoryInfo);
 
-			//removes all the directories from root directory
-			foreach (var directory in directoryInfo.GetDirectories())
-			{
-				directory.Delete(true);
+				//removes all files from root directory
+			    //foreach (var file in directoryInfo.GetFiles())
+			    //{
+				   // file.Delete();
+			    //}
+
+			    ////removes all the directories from root directory
+			    //foreach (var directory in directoryInfo.GetDirectories())
+			    //{
+				   // directory.Delete(true);
+			    //}
+			    //remove the root directory
+			    directoryInfo.Delete(true);
 			}
-			//remove the root directory
-			directoryInfo.Delete();
+			
 		}
 
-		private static bool IsDirectory(string path)
+	    private static void SetAttributesNormal(DirectoryInfo directory)
+	    {
+			foreach (var subDir in directory.GetDirectories())
+				SetAttributesNormal(subDir);
+		    foreach (var file in directory.GetFiles())
+		    {
+			    file.Attributes = FileAttributes.Normal;
+		    }
+		}
+
+	    private static bool IsDirectory(string path)
 	    {
 		    var attributes = File.GetAttributes(path);
 		    return attributes.HasFlag(FileAttributes.Directory);
