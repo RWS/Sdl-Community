@@ -22,14 +22,12 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
-		private List<LocationDetails> _foldersToClearOrRestore = new List<LocationDetails>();
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _folderDescription;
 		private ICommand _removeCommand;
 		private ICommand _repairCommand;
 		private ICommand _restoreCommand;
-		private string _restoreBtnColor;
-		private string _restoreForeground;
+		private Persistence _persistence; 
 		private string _removeForeground;
 		private string _removeBtnColor;
 		private string _repairBtnColor;
@@ -43,15 +41,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		{
 			_mainWindow = mainWindow;
 			_userName = Environment.UserName;
+			_persistence = new Persistence();
 			_folderDescription = string.Empty;
 			_isRemoveEnabled = false;
-			_isRestoreEnabled = false;
 			_isRepairEnabled = false;
 			_checkAll = false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
-			_restoreBtnColor = "LightGray";
-			_restoreForeground = "Gray";
 			_repairBtnColor = "LightGray";
 			_repairForeground = "Gray";
 			FillMultiTermVersionList();
@@ -78,14 +74,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
 					controller.SetIndeterminate();
 
-					await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
-
+					var foldersToRestore = _persistence.Load(false);
+					await Remove.RestoreBackupFiles(foldersToRestore);
 					UnselectGrids();
 					CheckAll = false;
-					//Set colors for restore btn
-					IsRestoreEnabled = false;
-					RestoreBtnColor = "LightGray";
-					RestoreForeground = "Gray";
+
 					//to close the message
 					await controller.CloseAsync();
 				}
@@ -143,28 +136,29 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		{
 			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>
 			{
-				new MultiTermLocationListItem
+				//new MultiTermLocationListItem
+				//{
+				//	DisplayName = @"C:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop2017\",
+				//	IsSelected = false,
+				//	Description = "first description",
+				//	Alias = "packageCache"
+				//},
+				//new MultiTermLocationListItem
+				//{
+				//	DisplayName = @"C:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\",
+				//	IsSelected = false,
+				//	Description = "second",
+				//	Alias = "programFiles"
+				//},
+			 new MultiTermLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop2017\",
-					IsSelected = false,
-					Description = "first description",
-					Alias = "packageCache"
-				},
-				new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\",
-					IsSelected = false,
-					Description = "second",
-					Alias = "programFiles"
-				},new MultiTermLocationListItem
-				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14\",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14",
 					IsSelected = false,
 					Description = "Another",
 					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14\",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14",
 					IsSelected = false,
 					Description = "another description",
 					Alias = "appDataRoming"
@@ -193,7 +187,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 					controller.SetIndeterminate();
 
-					_foldersToClearOrRestore.Clear();
+					var foldersToClearOrRestore = new List<LocationDetails>();
 					controller.SetIndeterminate();
 
 					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -202,18 +196,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					{
 						var documentsFolderLocation =
 							await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
-						_foldersToClearOrRestore.AddRange(documentsFolderLocation);
+						foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
-
+					//save settings 
+					_persistence.SaveSettings(foldersToClearOrRestore,false);
 					
-					await Remove.BackupFiles(_foldersToClearOrRestore);
+					await Remove.BackupFiles(foldersToClearOrRestore);
 
-					await Remove.FromSelectedLocations(_foldersToClearOrRestore);
-
-					IsRestoreEnabled = true;
-					RestoreBtnColor = "#99b433";
-					RestoreForeground = "WhiteSmoke";
+					await Remove.FromSelectedLocations(foldersToClearOrRestore);
+					
 					//to close the message
 					await controller.CloseAsync();
 				}
@@ -322,35 +314,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			foreach (var multiTermVersion in _multiTermVersionsCollection)
 			{
 				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
-			}
-		}
-		public string RestoreForeground
-		{
-			get => _restoreForeground;
-
-			set
-			{
-				if (Equals(value, _restoreForeground))
-				{
-					return;
-				}
-				_restoreForeground = value;
-				OnPropertyChanged(nameof(RestoreForeground));
-			}
-		}
-
-		public string RestoreBtnColor
-		{
-			get => _restoreBtnColor;
-
-			set
-			{
-				if (Equals(value, _restoreBtnColor))
-				{
-					return;
-				}
-				_restoreBtnColor = value;
-				OnPropertyChanged(nameof(RestoreBtnColor));
 			}
 		}
 		public bool CheckAll
