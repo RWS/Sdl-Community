@@ -10,12 +10,14 @@ namespace Sdl.Community.TMBackup
 	public partial class TMBackupForm : Form
 	{
 		private string _taskName;
+		private bool _isNewTask;
 
 		public TMBackupForm(bool isNewTask, string taskName)
 		{
 			InitializeComponent();
 
 			_taskName = taskName;
+			_isNewTask = isNewTask;
 
 			if (!isNewTask)
 			{
@@ -55,7 +57,7 @@ namespace Sdl.Community.TMBackup
 		{
 			TMBackupChangeForm changeForm = new TMBackupChangeForm();
 			changeForm.ShowDialog();
-
+			
 			txt_BackupTime.Text = changeForm.GetBackupTimeInfo();
 		}
 
@@ -65,7 +67,6 @@ namespace Sdl.Community.TMBackup
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
-
 			GetBackupFormInfo(_taskName);
 		}
 
@@ -108,7 +109,7 @@ namespace Sdl.Community.TMBackup
 			Persistence persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
-			if (result.BackupModel != null)
+			if (result.BackupModel != null && !_isNewTask)
 			{
 				txt_BackupName.Text = result.BackupModel.BackupName;
 				txt_BackupFrom.Text = result.BackupModel.BackupFrom;
@@ -127,7 +128,7 @@ namespace Sdl.Community.TMBackup
 				txt_BackupDetails.Text = res;
 			}
 
-			TMBackupChangeForm tmBackupChangeForm = new TMBackupChangeForm();
+			TMBackupChangeForm tmBackupChangeForm = new TMBackupChangeForm(_isNewTask);
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}		
 	}

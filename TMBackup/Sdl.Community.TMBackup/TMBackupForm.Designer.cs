@@ -290,7 +290,7 @@
             this.txt_BackupFromError.BackColor = System.Drawing.SystemColors.Control;
             this.txt_BackupFromError.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_BackupFromError.ForeColor = System.Drawing.Color.Red;
-            this.txt_BackupFromError.Location = new System.Drawing.Point(12, 99);
+            this.txt_BackupFromError.Location = new System.Drawing.Point(20, 99);
             this.txt_BackupFromError.Multiline = true;
             this.txt_BackupFromError.Name = "txt_BackupFromError";
             this.txt_BackupFromError.Size = new System.Drawing.Size(100, 30);
@@ -303,7 +303,7 @@
             this.txt_BackupToError.BackColor = System.Drawing.SystemColors.Control;
             this.txt_BackupToError.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_BackupToError.ForeColor = System.Drawing.Color.Red;
-            this.txt_BackupToError.Location = new System.Drawing.Point(4, 173);
+            this.txt_BackupToError.Location = new System.Drawing.Point(21, 173);
             this.txt_BackupToError.Multiline = true;
             this.txt_BackupToError.Name = "txt_BackupToError";
             this.txt_BackupToError.Size = new System.Drawing.Size(100, 30);
@@ -343,7 +343,7 @@
             this.MaximumSize = new System.Drawing.Size(3000, 440);
             this.Name = "TMBackupForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "New backup";
+            this.Text = "TM backup";
             this.ResumeLayout(false);
             this.PerformLayout();
 
