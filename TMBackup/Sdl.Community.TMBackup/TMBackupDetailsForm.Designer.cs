@@ -129,23 +129,23 @@
             // 
             this.backupActionDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.backupActionDataGridViewTextBoxColumn.DataPropertyName = "BackupAction";
-            this.backupActionDataGridViewTextBoxColumn.HeaderText = "Action";
+            this.backupActionDataGridViewTextBoxColumn.HeaderText = "Action name";
             this.backupActionDataGridViewTextBoxColumn.Name = "backupActionDataGridViewTextBoxColumn";
-            this.backupActionDataGridViewTextBoxColumn.Width = 62;
+            this.backupActionDataGridViewTextBoxColumn.Width = 91;
             // 
             // backupTypeDataGridViewTextBoxColumn
             // 
             this.backupTypeDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
             this.backupTypeDataGridViewTextBoxColumn.DataPropertyName = "BackupType";
-            this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type";
+            this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type of file";
             this.backupTypeDataGridViewTextBoxColumn.Name = "backupTypeDataGridViewTextBoxColumn";
-            this.backupTypeDataGridViewTextBoxColumn.Width = 56;
+            this.backupTypeDataGridViewTextBoxColumn.Width = 84;
             // 
             // backupPatternDataGridViewTextBoxColumn
             // 
             this.backupPatternDataGridViewTextBoxColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
             this.backupPatternDataGridViewTextBoxColumn.DataPropertyName = "BackupPattern";
-            this.backupPatternDataGridViewTextBoxColumn.HeaderText = "Pattern";
+            this.backupPatternDataGridViewTextBoxColumn.HeaderText = "Pattern (.sdltm or .sdltb)";
             this.backupPatternDataGridViewTextBoxColumn.Name = "backupPatternDataGridViewTextBoxColumn";
             // 
             // TMBackupDetailsForm
