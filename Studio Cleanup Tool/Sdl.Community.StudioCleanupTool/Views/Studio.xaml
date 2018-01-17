@@ -52,7 +52,6 @@
 		    Grid.Column="0"
 		    Grid.Row="4"
 			SelectedItem="{Binding SelectedLocation}">
-			
 			<ListBox.Resources>
 				<Style TargetType="ListBoxItem">
 					<Style.Triggers>

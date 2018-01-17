@@ -27,7 +27,6 @@
 					<UniformGrid Columns="3" Margin="0,0,0,0"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
-
 			<!-- ItemTemplate -->
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
@@ -50,8 +49,18 @@
 		    ItemsSource ="{Binding MultiTermLocationCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 		    SelectionMode="Multiple"
 		    Grid.Column="0"
+			SelectedItem="{Binding SelectedLocation}"
 		    Grid.Row="4">
-		    <ListBox.ItemTemplate>
+			<ListBox.Resources>
+				<Style TargetType="ListBoxItem">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+							<Setter Property="IsSelected" Value="True" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ListBox.Resources>
+			<ListBox.ItemTemplate>
 			    <DataTemplate>
 				    <CheckBox
 					    Margin="0,0,-40,0"
@@ -66,7 +75,7 @@
 	    </ListBox>
 		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="-0,0,0,0" VerticalAlignment="Top" Height="100">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-		    <TextBlock Margin="10,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
+			<TextBlock Margin="10,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
 
 		<StackPanel Grid.Column="1" Grid.Row="5" Margin="10,20,0,0" Orientation="Vertical">
@@ -89,7 +98,6 @@
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
 					</Button.Template>
-
 					Remove files
 				</Button>
 
@@ -111,7 +119,6 @@
 							</ControlTemplate.Triggers>
 						</ControlTemplate>
 					</Button.Template>
-
 					Repair MultiTerm
 				</Button>
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="10,20,0,0" Foreground="WhiteSmoke" Command="{Binding RestoreCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" >

@@ -22,6 +22,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
+		private MultiTermLocationListItem _selectedLocation;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _folderDescription;
 		private ICommand _removeCommand;
@@ -225,6 +226,15 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			return multiTermProcesses.Any();
 		}
 
+		public MultiTermLocationListItem SelectedLocation
+		{
+			get => _selectedLocation;
+			set
+			{
+				_selectedLocation = value;
+				OnPropertyChanged();
+			}
+		}
 		public bool IsRestoreEnabled
 		{
 			get => _isRestoreEnabled;
