@@ -28,19 +28,10 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.buttonCancel = new System.Windows.Forms.Button();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlertForm));
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.labelMessage = new System.Windows.Forms.Label();
             this.SuspendLayout();
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.Location = new System.Drawing.Point(166, 148);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 5;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
             // 
             // progressBar1
             // 
@@ -63,9 +54,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.labelMessage);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "AlertForm";
             this.Text = "AlertForm";
             this.ResumeLayout(false);
@@ -74,8 +65,6 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.Button buttonCancel;
 		public System.Windows.Forms.ProgressBar progressBar1;
 		private System.Windows.Forms.Label labelMessage;
 	}

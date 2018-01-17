@@ -34,7 +34,7 @@ namespace Sdl.Community.TMLifting
             this.tabPageServerBasedTM = new System.Windows.Forms.TabPage();
             this.server = new System.Windows.Forms.Label();
             this.comboBoxServerBasedTM = new System.Windows.Forms.ComboBox();
-            this.connectToServer = new System.Windows.Forms.Button();
+            this.connectToServerBtn = new System.Windows.Forms.Button();
             this.groupBoxTM = new System.Windows.Forms.GroupBox();
             this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
@@ -66,7 +66,7 @@ namespace Sdl.Community.TMLifting
             this.tabPageServerBasedTM.BackColor = System.Drawing.Color.White;
             this.tabPageServerBasedTM.Controls.Add(this.server);
             this.tabPageServerBasedTM.Controls.Add(this.comboBoxServerBasedTM);
-            this.tabPageServerBasedTM.Controls.Add(this.connectToServer);
+            this.tabPageServerBasedTM.Controls.Add(this.connectToServerBtn);
             this.tabPageServerBasedTM.Controls.Add(this.groupBoxTM);
             this.tabPageServerBasedTM.Location = new System.Drawing.Point(4, 22);
             this.tabPageServerBasedTM.Name = "tabPageServerBasedTM";
@@ -92,15 +92,15 @@ namespace Sdl.Community.TMLifting
             this.comboBoxServerBasedTM.Size = new System.Drawing.Size(410, 21);
             this.comboBoxServerBasedTM.TabIndex = 11;
             // 
-            // connectToServer
+            // connectToServerBtn
             // 
-            this.connectToServer.Location = new System.Drawing.Point(479, 50);
-            this.connectToServer.Name = "connectToServer";
-            this.connectToServer.Size = new System.Drawing.Size(75, 23);
-            this.connectToServer.TabIndex = 10;
-            this.connectToServer.Text = "Connect";
-            this.connectToServer.UseVisualStyleBackColor = true;
-            this.connectToServer.Click += new System.EventHandler(this.connectToServer_Click);
+            this.connectToServerBtn.Location = new System.Drawing.Point(479, 50);
+            this.connectToServerBtn.Name = "connectToServerBtn";
+            this.connectToServerBtn.Size = new System.Drawing.Size(75, 23);
+            this.connectToServerBtn.TabIndex = 10;
+            this.connectToServerBtn.Text = "Connect";
+            this.connectToServerBtn.UseVisualStyleBackColor = true;
+            this.connectToServerBtn.Click += new System.EventHandler(this.connectToServer_Click);
             // 
             // groupBoxTM
             // 
@@ -131,7 +131,7 @@ namespace Sdl.Community.TMLifting
             this.tabPageFileBasedTM.Location = new System.Drawing.Point(4, 22);
             this.tabPageFileBasedTM.Name = "tabPageFileBasedTM";
             this.tabPageFileBasedTM.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageFileBasedTM.Size = new System.Drawing.Size(1038, 564);
+            this.tabPageFileBasedTM.Size = new System.Drawing.Size(1132, 587);
             this.tabPageFileBasedTM.TabIndex = 0;
             this.tabPageFileBasedTM.Text = "File-Based Translation Memories";
             this.tabPageFileBasedTM.UseVisualStyleBackColor = true;
@@ -143,7 +143,7 @@ namespace Sdl.Community.TMLifting
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(1032, 558);
+            this.panel2.Size = new System.Drawing.Size(1126, 581);
             this.panel2.TabIndex = 3;
             // 
             // rtbStatus
@@ -151,7 +151,7 @@ namespace Sdl.Community.TMLifting
             this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.rtbStatus.Location = new System.Drawing.Point(0, 186);
             this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(1032, 372);
+            this.rtbStatus.Size = new System.Drawing.Size(1126, 395);
             this.rtbStatus.TabIndex = 1;
             this.rtbStatus.Text = "";
             // 
@@ -162,7 +162,7 @@ namespace Sdl.Community.TMLifting
             this.lstTms.FormattingEnabled = true;
             this.lstTms.Location = new System.Drawing.Point(0, 0);
             this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(1032, 186);
+            this.lstTms.Size = new System.Drawing.Size(1126, 186);
             this.lstTms.TabIndex = 0;
             this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
             this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
@@ -200,10 +200,10 @@ namespace Sdl.Community.TMLifting
             // cleanBtn
             // 
             this.cleanBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cleanBtn.Location = new System.Drawing.Point(958, 6);
+            this.cleanBtn.Location = new System.Drawing.Point(947, 6);
             this.cleanBtn.Margin = new System.Windows.Forms.Padding(2);
             this.cleanBtn.Name = "cleanBtn";
-            this.cleanBtn.Size = new System.Drawing.Size(50, 23);
+            this.cleanBtn.Size = new System.Drawing.Size(60, 23);
             this.cleanBtn.TabIndex = 6;
             this.cleanBtn.Text = "Clean";
             this.cleanBtn.UseVisualStyleBackColor = true;
@@ -212,10 +212,11 @@ namespace Sdl.Community.TMLifting
             // cancelBtn
             // 
             this.cancelBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelBtn.Location = new System.Drawing.Point(1012, 6);
+            this.cancelBtn.Enabled = false;
+            this.cancelBtn.Location = new System.Drawing.Point(1007, 6);
             this.cancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.cancelBtn.Name = "cancelBtn";
-            this.cancelBtn.Size = new System.Drawing.Size(50, 23);
+            this.cancelBtn.Size = new System.Drawing.Size(60, 23);
             this.cancelBtn.TabIndex = 5;
             this.cancelBtn.Text = "Cancel";
             this.cancelBtn.UseVisualStyleBackColor = true;
@@ -267,9 +268,10 @@ namespace Sdl.Community.TMLifting
             // btnReindex
             // 
             this.btnReindex.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnReindex.Enabled = false;
             this.btnReindex.Location = new System.Drawing.Point(1067, 6);
             this.btnReindex.Name = "btnReindex";
-            this.btnReindex.Size = new System.Drawing.Size(56, 23);
+            this.btnReindex.Size = new System.Drawing.Size(60, 23);
             this.btnReindex.TabIndex = 0;
             this.btnReindex.Text = "Process";
             this.btnReindex.UseVisualStyleBackColor = true;
@@ -308,7 +310,7 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 		private System.Windows.Forms.BindingSource itemsBindingSource1;
 		private System.Windows.Forms.GroupBox groupBoxTM;
-		private System.Windows.Forms.Button connectToServer;
+		private System.Windows.Forms.Button connectToServerBtn;
 		private System.Windows.Forms.Label server;
 		private System.Windows.Forms.ComboBox comboBoxServerBasedTM;
 		private System.Windows.Forms.Panel panel1;
