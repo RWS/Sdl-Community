@@ -11,11 +11,11 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 	    private static string _backupFolderPath =
 		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 
-		public static async Task<List<StudioDetails>> GetFoldersPath(string userName,
+		public static async Task<List<LocationDetails>> GetFoldersPath(string userName,
 		    List<StudioVersionListItem> studioVersions,
 		    List<StudioLocationListItem> locations)
 	    {
-			var foldersToBackup = new List<StudioDetails>();
+			var foldersToBackup = new List<LocationDetails>();
 		    foreach (var location in locations)
 			{
 				if (location.Alias != null)
@@ -83,10 +83,10 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return foldersToBackup;
 	    }
 
-	    public static async Task<List<StudioDetails>> GetMultiTermFoldersPath(string userName,
+	    public static async Task<List<LocationDetails>> GetMultiTermFoldersPath(string userName,
 		    List<MultiTermVersionListItem> multiTermVersions, List<MultiTermLocationListItem> locations)
 	    {
-		    var foldersLocationList = new List<StudioDetails>();
+		    var foldersLocationList = new List<LocationDetails>();
 			foreach (var location in locations)
 		    {
 			    if (location.Alias != null)
@@ -115,14 +115,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    }
 		    return foldersLocationList;
 	    }
-	    private static List<StudioDetails> GetProgramFilesFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
+	    private static List<LocationDetails> GetProgramFilesFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
 	    {
-		    var studioDetails = new List<StudioDetails>();
+		    var studioDetails = new List<LocationDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
 			    var programFilesFolderPath = string.Format(@"C:\Program Files (x86)\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
 				var directoryInfo = new DirectoryInfo(programFilesFolderPath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 			    {
 				    OriginalFilePath = programFilesFolderPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramFiles", directoryInfo.Name),

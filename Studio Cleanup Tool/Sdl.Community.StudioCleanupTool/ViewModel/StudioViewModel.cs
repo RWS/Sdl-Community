@@ -38,7 +38,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private string _restoreForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 
-		private List<StudioDetails> _foldersToClearOrRestore = new List<StudioDetails>();
+		private List<LocationDetails> _foldersToClearOrRestore = new List<LocationDetails>();
 		public StudioViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;

@@ -12,9 +12,9 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
     {
 	    private static string _backupFolderPath =
 		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
-		public static List<StudioDetails> GetPackageCachePaths(MultiTermLocationListItem selectedLocation, List<MultiTermVersionListItem> multiTermVersions)
+		public static List<LocationDetails> GetPackageCachePaths(MultiTermLocationListItem selectedLocation, List<MultiTermVersionListItem> multiTermVersions)
 		{
-			var packagePaths = new List<StudioDetails>();
+			var packagePaths = new List<LocationDetails>();
 			foreach (var multiTermVersion in multiTermVersions)
 			{
 				var versionName = string.Format("SDLMultiTermDesktop{0}", multiTermVersion.ReleaseNumber);
@@ -24,7 +24,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					foreach (var packagePath in packagePathList)
 					{
 						var directoryInfo = new DirectoryInfo(packagePath);
-						var details = new StudioDetails
+						var details = new LocationDetails
 						{
 							OriginalFilePath = packagePath,
 							BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name)
@@ -52,15 +52,15 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			return new List<string>();
 	    }
 
-		public static List<StudioDetails> ProgramFilesPaths(MultiTermLocationListItem selectedLocation,List<MultiTermVersionListItem> multiTermVersions)
+		public static List<LocationDetails> ProgramFilesPaths(MultiTermLocationListItem selectedLocation,List<MultiTermVersionListItem> multiTermVersions)
 	    {
-			var programFilesPaths = new List<StudioDetails>();
+			var programFilesPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
 			    var programFilePath = string.Format(@"c:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm{0}",
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(programFilePath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 				{
 				    OriginalFilePath = programFilePath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name)
@@ -72,15 +72,15 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return programFilesPaths;
 		}
 
-	    public static List<StudioDetails> AppDataLocalPaths(MultiTermLocationListItem selectedLocation,string userName, List<MultiTermVersionListItem> multiTermVersions)
+	    public static List<LocationDetails> AppDataLocalPaths(MultiTermLocationListItem selectedLocation,string userName, List<MultiTermVersionListItem> multiTermVersions)
 	    {
-			var appDataPaths = new List<StudioDetails>();
+			var appDataPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
 			    var appDataFilePath = string.Format(@"c:\Users\{0}\AppData\Local\SDL\SDL MultiTerm\MultiTerm{1}",userName,
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(appDataFilePath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 				{
 				    OriginalFilePath = appDataFilePath,
 					BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName,"Local",directoryInfo.Name)
@@ -91,15 +91,15 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return appDataPaths;
 		}
 
-	    public static List<StudioDetails> AppDataRoamingPaths(MultiTermLocationListItem selectedLocation,string userName, List<MultiTermVersionListItem> multiTermVersions)
+	    public static List<LocationDetails> AppDataRoamingPaths(MultiTermLocationListItem selectedLocation,string userName, List<MultiTermVersionListItem> multiTermVersions)
 	    {
-			var appDataPaths = new List<StudioDetails>();
+			var appDataPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
 			    var appDataFilePath = string.Format(@"c:\Users\{0}\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm{1}", userName,
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(appDataFilePath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 				{
 				    OriginalFilePath = appDataFilePath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name)

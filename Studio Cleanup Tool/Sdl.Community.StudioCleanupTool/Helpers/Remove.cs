@@ -11,16 +11,16 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 {
     public static class Remove
     {
-	    public static async Task BackupFiles(List<StudioDetails> foldersToBackup)
+	    public static async Task BackupFiles(List<LocationDetails> foldersToBackup)
 	    {
 		    await Task.Run(() => CreateBackupFolder(foldersToBackup));
 	    }
-	    public static async Task RestoreBackupFiles(List<StudioDetails> foldersToBackup)
+	    public static async Task RestoreBackupFiles(List<LocationDetails> foldersToBackup)
 	    {
 		    await Task.Run(() => RestoreFiles(foldersToBackup));
 	    }
 
-		private static void RestoreFiles(List<StudioDetails> foldersToBackup)
+		private static void RestoreFiles(List<LocationDetails> foldersToBackup)
 	    {
 			foreach (var folder in foldersToBackup)
 			{
@@ -51,7 +51,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			}
 		}
 
-	    public static async Task FromSelectedLocations(List<StudioDetails> foldersToRemove)
+	    public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
 	    {
 		    try
 		    {
@@ -76,7 +76,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    }
 	    }
 
-	    private static void CreateBackupFolder(List<StudioDetails> foldersToBackup)
+	    private static void CreateBackupFolder(List<LocationDetails> foldersToBackup)
 	    {
 			    foreach (var folder in foldersToBackup)
 			    {

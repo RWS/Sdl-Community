@@ -22,7 +22,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
-		private List<StudioDetails> _foldersToClearOrRestore = new List<StudioDetails>();
+		private List<LocationDetails> _foldersToClearOrRestore = new List<LocationDetails>();
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _folderDescription;
 		private ICommand _removeCommand;

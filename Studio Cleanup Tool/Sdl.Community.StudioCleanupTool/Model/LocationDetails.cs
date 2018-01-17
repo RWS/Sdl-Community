@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.StudioCleanupTool.Model
 {
-	public class StudioDetails
+	public class LocationDetails
 	{
 		public string OriginalFilePath { get; set; }
 		public string BackupFilePath { get; set; }

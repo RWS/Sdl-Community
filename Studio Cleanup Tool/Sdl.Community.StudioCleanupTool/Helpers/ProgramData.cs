@@ -12,14 +12,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
     {
 	    private static string _backupFolderPath =
 		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
-		public static List<StudioDetails> GetProgramDataMajorFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
+		public static List<LocationDetails> GetProgramDataMajorFolderPath(StudioLocationListItem selectedLocation,List<StudioVersionListItem> studioVersions)
 	    {
-		    var studioDetails = new List<StudioDetails>();
+		    var studioDetails = new List<LocationDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
 			    var majorFolderPath = string.Format(@"C:\ProgramData\SDL\SDL Trados Studio\{0}",studioVersion.MajorVersionNumber);
 			    var directoryInfo = new DirectoryInfo(majorFolderPath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 			    {
 				    OriginalFilePath = majorFolderPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramData",directoryInfo.Name),
@@ -31,14 +31,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return studioDetails;
 	    }
 
-	    public static List<StudioDetails> GetProgramDataMajorFullFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
+	    public static List<LocationDetails> GetProgramDataMajorFullFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 	    {
-		    var studioDetails = new List<StudioDetails>();
+		    var studioDetails = new List<LocationDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
 			    var majorFolderPath = string.Format(@"C:\ProgramData\SDL\SDL Trados Studio\{0}.0.0.0", studioVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(majorFolderPath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 			    {
 				    OriginalFilePath = majorFolderPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "ProgramData",directoryInfo.Name),
@@ -50,14 +50,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			return studioDetails;
 		}
 
-	    public static List<StudioDetails> GetProgramDataFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
+	    public static List<LocationDetails> GetProgramDataFolderPath(StudioLocationListItem selectedLocation, List<StudioVersionListItem> studioVersions)
 	    {
-		    var studioDetails = new List<StudioDetails>();
+		    var studioDetails = new List<LocationDetails>();
 			foreach (var studioVersion in studioVersions)
 		    {
 			    var programDataFolderPath = string.Format(@"C:\ProgramData\SDL\SDL Trados Studio\{0}", studioVersion.FolderName);
 				var directoryInfo = new DirectoryInfo(programDataFolderPath);
-			    var details = new StudioDetails
+			    var details = new LocationDetails
 			    {
 				    OriginalFilePath = programDataFolderPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProgramData", directoryInfo.Name),
