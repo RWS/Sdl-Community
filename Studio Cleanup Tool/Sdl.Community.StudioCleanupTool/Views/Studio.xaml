@@ -50,7 +50,18 @@
 		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 			SelectionMode="Multiple"
 		    Grid.Column="0"
-		    Grid.Row="4">
+		    Grid.Row="4"
+			SelectedItem="{Binding SelectedLocation}">
+			
+			<ListBox.Resources>
+				<Style TargetType="ListBoxItem">
+					<Style.Triggers>
+						<DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
+							<Setter Property="IsSelected" Value="True" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</ListBox.Resources>
 		    <ListBox.ItemTemplate>
 			    <DataTemplate>
 				    <CheckBox
@@ -66,7 +77,7 @@
 
 	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="270">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
+			<TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
 
 	    <StackPanel Grid.Column="1" Grid.Row="5" Height="150" Margin="10,0,0,0" Orientation="Vertical">

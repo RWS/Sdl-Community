@@ -13,13 +13,12 @@ namespace Sdl.Community.StudioCleanupTool.Model
 {
 	public class StudioLocationListItem: INotifyPropertyChanged
 	{
-	    private bool _isSelected;
+		private bool _isSelected;
 		public string DisplayName { get; set; }
 	    public string Name { get; set; }
 	    public string Path { get; set; }
 	    public string Description { get; set; }
 		public string Alias { get; set; }
-		private static List<string> _selectedLocationsDescriptions = new List<string>();
 
 		public bool IsSelected
 	    {
@@ -32,12 +31,6 @@ namespace Sdl.Community.StudioCleanupTool.Model
 				    OnPropertyChanged(nameof(IsSelected));
 			    }
 		    }
-	    }
-
-	    public static List<string> GetSelectedLocationsDescriptions()
-	    {
-		    return _selectedLocationsDescriptions;
-
 	    }
 
 		public event PropertyChangedEventHandler PropertyChanged;

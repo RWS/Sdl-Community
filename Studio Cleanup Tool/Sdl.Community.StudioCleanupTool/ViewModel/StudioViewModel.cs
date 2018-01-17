@@ -19,7 +19,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 	{
 	    private ObservableCollection<StudioVersionListItem> _studioVersionsCollection;
 	    private ObservableCollection<StudioLocationListItem> _foldersLocations;
-	    public event PropertyChangedEventHandler PropertyChanged;
+		private StudioLocationListItem _selectedLocation;
+		public event PropertyChangedEventHandler PropertyChanged;
 		private string _folderDescription;
 		private ICommand _removeCommand;
 		private ICommand _repairCommand;
@@ -58,6 +59,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			FillStudioVersionList();
 		    FillFoldersLocationList();
 	    }
+		
+		public StudioLocationListItem SelectedLocation
+		{
+			get => _selectedLocation;
+			set
+			{
+				_selectedLocation = value;
+				OnPropertyChanged();
+			}
+		}
 		private void FillFoldersLocationList()
 	    {
 		    _foldersLocations = new ObservableCollection<StudioLocationListItem>
