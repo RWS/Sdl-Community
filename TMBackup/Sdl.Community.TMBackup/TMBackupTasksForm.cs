@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32.TaskScheduler;
+using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
 
 namespace Sdl.Community.TMBackup
@@ -27,7 +28,7 @@ namespace Sdl.Community.TMBackup
 				List<TaskDefinitionModel> tasks = new List<TaskDefinitionModel>();
 				foreach (var task in ts.AllTasks)
 				{
-					if (task.Name.Contains("DailyScheduler"))
+					if (task.Name.Contains(Constants.TaskDetailValue))
 					{
 						var triggerInfo = string.Empty;
 						foreach (var trigger in task.Definition.Triggers)
@@ -35,9 +36,12 @@ namespace Sdl.Community.TMBackup
 							triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
 						}
 
+						var index = task.Name.IndexOf(" ") + 1;
+						var taskName = task.Name.Substring(index);
+
 						tasks.Add(new TaskDefinitionModel
 						{
-							TaskName = task.Name,
+							TaskName = taskName,
 							LastRun = task.LastRunTime,
 							NextRun = task.NextRunTime,
 							Interval = triggerInfo
@@ -50,7 +54,16 @@ namespace Sdl.Community.TMBackup
 
 		private void createNewBackupAction_Click(object sender, EventArgs e)
 		{
-			TMBackupForm tmBackupForm = new TMBackupForm(true);
+			TMBackupForm tmBackupForm = new TMBackupForm(true, string.Empty);
+			tmBackupForm.ShowDialog();
+		}
+
+		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
+			string cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+			TMBackupForm tmBackupForm = new TMBackupForm(false, cellValue);
 			tmBackupForm.ShowDialog();
 		}
 	}

@@ -26,7 +26,7 @@ namespace Sdl.Community.BackupService
 			DateTime startDate = DateTime.Now;
 			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
 
-			if (jsonRequestModel != null && jsonRequestModel.ChangeSettingsModel != null)
+			if (jsonRequestModel != null && jsonRequestModel.ChangeSettingsModel != null && jsonRequestModel.BackupModel != null)
 			{
 				// Create a new task definition for the local machine and assign properties
 				TaskDefinition td = TaskService.Instance.NewTask();
@@ -38,13 +38,13 @@ namespace Sdl.Community.BackupService
 				}
 				if (jsonRequestModel.ChangeSettingsModel.IsManuallyOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
 				{
-					AddManuallyTimeScheduler(td, tr);
+					AddManuallyTimeScheduler(td, tr, jsonRequestModel);
 				}
 			}
 		}
 
 		// Add trigger which executes the backup files console application.
-		private void AddTrigger(Trigger trigger, TaskDefinition td)
+		private void AddTrigger(Trigger trigger, TaskDefinition td, string taskName)
 		{
 			using (TaskService ts = new TaskService())
 			{
@@ -54,7 +54,7 @@ namespace Sdl.Community.BackupService
 
 				try
 				{
-					ts.RootFolder.RegisterTaskDefinition("DailyScheduler", td);
+					ts.RootFolder.RegisterTaskDefinition(taskName, td);
 				}
 				catch (Exception ex)
 				{
@@ -74,17 +74,17 @@ namespace Sdl.Community.BackupService
 			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 			{
 				tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				AddTrigger(tr, td);
+				AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
 			}
 
 			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 			{
 				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				AddTrigger(tr, td);
+				AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
 			}
 		}
 
-		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr)
+		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, JsonRequestModel jsonRequestModel)
 		{
 			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
@@ -92,7 +92,7 @@ namespace Sdl.Community.BackupService
 
 			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
 			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
-			AddTrigger(tr, td);
+			AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
 		}
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.

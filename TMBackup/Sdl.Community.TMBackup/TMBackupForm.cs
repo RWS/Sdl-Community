@@ -9,13 +9,17 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupForm : Form
 	{
-		public TMBackupForm(bool isNewTask)
+		private string _taskName;
+
+		public TMBackupForm(bool isNewTask, string taskName)
 		{
 			InitializeComponent();
 
+			_taskName = taskName;
+
 			if (!isNewTask)
 			{
-				GetBackupFormInfo();
+				GetBackupFormInfo(taskName);
 			}
 		}
 		
@@ -62,7 +66,7 @@ namespace Sdl.Community.TMBackup
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
 
-			GetBackupFormInfo();
+			GetBackupFormInfo(_taskName);
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -72,17 +76,14 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(txt_BackupFrom.Text))
-			{
-				MessageBox.Show(Constants.BackupFromErrorMessage, Constants.InformativeMessage);
-			}
-			else if (string.IsNullOrEmpty(txt_BackupTo.Text))
-			{
-				MessageBox.Show(Constants.BackupToErrorMessage, Constants.InformativeMessage);
-			}
-			else
+			txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
+			txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
+			txt_BackupNameError.Visible = string.IsNullOrEmpty(txt_BackupName.Text) ? true: false;
+
+			if (!txt_BackupFromError.Visible && !txt_BackupToError.Visible && !txt_BackupNameError.Visible)
 			{
 				BackupModel backupModel = new BackupModel();
+				backupModel.BackupName = string.Concat(Constants.TaskDetailValue, txt_BackupName.Text);
 				backupModel.BackupFrom = txt_BackupFrom.Text;
 				backupModel.BackupTo = txt_BackupTo.Text;
 				backupModel.Description = txt_Description.Text;
@@ -96,16 +97,17 @@ namespace Sdl.Community.TMBackup
 
 				Service service = new Service();
 				service.CreateTaskScheduler();
-			}
+			}			
 		}
 
-		private void GetBackupFormInfo()
+		private void GetBackupFormInfo(string taskName)
 		{
 			Persistence persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
 			if (result.BackupModel != null)
 			{
+				txt_BackupName.Text = result.BackupModel.BackupName;
 				txt_BackupFrom.Text = result.BackupModel.BackupFrom;
 				txt_BackupTo.Text = result.BackupModel.BackupTo;
 				txt_BackupTime.Text = result.BackupModel.BackupTime;
@@ -124,6 +126,6 @@ namespace Sdl.Community.TMBackup
 
 			TMBackupChangeForm tmBackupChangeForm = new TMBackupChangeForm();
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
-		}
+		}		
 	}
 }
