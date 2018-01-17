@@ -83,32 +83,32 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    return foldersToBackup;
 	    }
 
-	    public static async Task<List<string>> GetMultiTermFoldersPath(string userName,
+	    public static async Task<List<StudioDetails>> GetMultiTermFoldersPath(string userName,
 		    List<MultiTermVersionListItem> multiTermVersions, List<MultiTermLocationListItem> locations)
 	    {
-		    var foldersLocationList = new List<string>();
+		    var foldersLocationList = new List<StudioDetails>();
 			foreach (var location in locations)
 		    {
 			    if (location.Alias != null)
 			    {
 				    if (location.Alias.Equals("packageCache"))
 				    {
-					    var packageCacheLocations = await Task.FromResult(MultiTermFolders.GetPackageCachePaths(multiTermVersions));
+						var packageCacheLocations = await Task.FromResult(MultiTermFolders.GetPackageCachePaths(location,multiTermVersions));
 						foldersLocationList.AddRange(packageCacheLocations);
 					}
 				    if (location.Alias.Equals("programFiles"))
 				    {
-					    var programFilesLocations = await Task.FromResult(MultiTermFolders.ProgramFilesPaths(multiTermVersions));
+					    var programFilesLocations = await Task.FromResult(MultiTermFolders.ProgramFilesPaths(location,multiTermVersions));
 					    foldersLocationList.AddRange(programFilesLocations);
 					}
 				    if (location.Alias.Equals("appDataLocal"))
 				    {
-					    var appDataLocal = await Task.FromResult(MultiTermFolders.AppDataLocalPaths(userName,multiTermVersions));
+					    var appDataLocal = await Task.FromResult(MultiTermFolders.AppDataLocalPaths(location,userName,multiTermVersions));
 					    foldersLocationList.AddRange(appDataLocal);
 					}
 				    if (location.Alias.Equals("appDataRoming"))
 				    {
-					    var appDataRoaming = await Task.FromResult(MultiTermFolders.AppDataRoamingPaths(userName,multiTermVersions));
+					    var appDataRoaming = await Task.FromResult(MultiTermFolders.AppDataRoamingPaths(location,userName,multiTermVersions));
 					    foldersLocationList.AddRange(appDataRoaming);
 					}
 				}

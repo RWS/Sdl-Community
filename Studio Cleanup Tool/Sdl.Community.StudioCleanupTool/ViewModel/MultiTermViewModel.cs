@@ -22,13 +22,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly string _userName;
 		private ObservableCollection<MultiTermVersionListItem> _multiTermVersionsCollection;
 		private ObservableCollection<MultiTermLocationListItem> _multiTermLocationCollection;
+		private List<StudioDetails> _foldersToClearOrRestore = new List<StudioDetails>();
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
 		private string _folderDescription;
 		private ICommand _removeCommand;
 		private ICommand _repairCommand;
+		private ICommand _restoreCommand;
+		private string _restoreBtnColor;
+		private string _restoreForeground;
 		private string _removeForeground;
 		private string _removeBtnColor;
+		private string _repairBtnColor;
+		private string _repairForeground;
 		private bool _isRemoveEnabled;
+		private bool _isRestoreEnabled;
+		private bool _isRepairEnabled;
 
 		public MultiTermViewModel(MainWindow mainWindow)
 		{
@@ -36,14 +44,55 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			_userName = Environment.UserName;
 			_folderDescription = string.Empty;
 			_isRemoveEnabled = false;
+			_isRestoreEnabled = false;
+			_isRepairEnabled = false;
 			_removeBtnColor = "LightGray";
 			_removeForeground = "Gray";
+			_restoreBtnColor = "LightGray";
+			_restoreForeground = "Gray";
+			_repairBtnColor = "LightGray";
+			_repairForeground = "Gray";
 			FillMultiTermVersionList();
 			FillMultiTermLocationList();
 		}
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveFiles, true));
 		public ICommand RepairCommand => _repairCommand ?? (_repairCommand = new CommandHandler(RepairMultiTerm, true));
+		public ICommand RestoreCommand => _restoreCommand ?? (_restoreCommand = new CommandHandler(RestoreFolders, true));
+
+		private async void RestoreFolders()
+		{
+			var dialog = new MetroDialogSettings
+			{
+				AffirmativeButtonText = "OK"
+
+			};
+			var result =
+				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore this folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+			if (result == MessageDialogResult.Affirmative)
+			{
+				if (!MultiTermIsRunning())
+				{
+					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
+					controller.SetIndeterminate();
+
+					await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
+
+					UnselectGrids();
+					//Set colors for restore btn
+					IsRestoreEnabled = false;
+					RestoreBtnColor = "LightGray";
+					RestoreForeground = "Gray";
+					//to close the message
+					await controller.CloseAsync();
+				}
+				else
+				{
+					await _mainWindow.ShowMessageAsync("Studio in running",
+						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+				}
+			}
+		}
 
 		private void RepairMultiTerm()
 		{
@@ -141,7 +190,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 					controller.SetIndeterminate();
 
-					var locationsToClear = new List<string>();
+					_foldersToClearOrRestore.Clear();
 					controller.SetIndeterminate();
 
 					var selectedMultiTermVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
@@ -150,12 +199,18 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					{
 						var documentsFolderLocation =
 							await FoldersPath.GetMultiTermFoldersPath(_userName, selectedMultiTermVersions, selectedMultiTermLocations);
-						locationsToClear.AddRange(documentsFolderLocation);
+						_foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
-					//await Remove.FromSelectedLocations(locationsToClear);
 
-					UnselectGrids();
+					
+					await Remove.BackupFiles(_foldersToClearOrRestore);
+
+					await Remove.FromSelectedLocations(_foldersToClearOrRestore);
+
+					IsRestoreEnabled = true;
+					RestoreBtnColor = "#99b433";
+					RestoreForeground = "WhiteSmoke";
 					//to close the message
 					await controller.CloseAsync();
 				}
@@ -173,6 +228,21 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			var processList = Process.GetProcesses();
 			var multiTermProcesses = processList.Where(p => p.ProcessName.Contains("MultiTerm")).ToList();
 			return multiTermProcesses.Any();
+		}
+
+		public bool IsRestoreEnabled
+		{
+			get => _isRestoreEnabled;
+
+			set
+			{
+				if (Equals(value, _isRestoreEnabled))
+				{
+					return;
+				}
+				_isRestoreEnabled = value;
+				OnPropertyChanged(nameof(IsRestoreEnabled));
+			}
 		}
 
 		private  void UnselectGrids()
@@ -251,22 +321,49 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				multiTermVersion.PropertyChanged += MultiTermVersion_PropertyChanged;
 			}
 		}
+		public string RestoreForeground
+		{
+			get => _restoreForeground;
 
+			set
+			{
+				if (Equals(value, _restoreForeground))
+				{
+					return;
+				}
+				_restoreForeground = value;
+				OnPropertyChanged(nameof(RestoreForeground));
+			}
+		}
+
+		public string RestoreBtnColor
+		{
+			get => _restoreBtnColor;
+
+			set
+			{
+				if (Equals(value, _restoreBtnColor))
+				{
+					return;
+				}
+				_restoreBtnColor = value;
+				OnPropertyChanged(nameof(RestoreBtnColor));
+			}
+		}
 		private void MultiTermVersion_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			SetRemoveBtnColors();
 		}
 
-		private bool AnyLocationAndVersionSelected()
+		private bool AnyLocationSelected()
 		{
-			var selectedVersions = MultiTermVersionsCollection.Where(v => v.IsSelected).ToList();
-			var selectedLocations = MultiTermLocationCollection.Where(l => l.IsSelected).ToList();
 
-			return selectedLocations.Any() && selectedVersions.Any();
+			return MultiTermLocationCollection.Any(l => l.IsSelected);
+
 		}
 		private void SetRemoveBtnColors()
 		{
-			if (AnyLocationAndVersionSelected())
+			if (AnyLocationSelected()&&AnyVersionSelected())
 			{
 				IsRemoveEnabled = true;
 				RemoveBtnColor = "#99b433";
@@ -278,7 +375,71 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				RemoveBtnColor = "LightGray";
 				RemoveForeground = "Gray";
 			}
+
+			if (AnyVersionSelected())
+			{
+				IsRepairEnabled = true;
+				RepairBtnColor = "#99b433";
+				RepairForeground = "WhiteSmoke";
+			}
+			else
+			{
+				IsRepairEnabled = false;
+				RepairBtnColor = "LightGray";
+				RepairForeground = "Gray";
+			}
+
 		}
+
+		public bool IsRepairEnabled
+		{
+			get => _isRepairEnabled;
+
+			set
+			{
+				if (Equals(value, _isRepairEnabled))
+				{
+					return;
+				}
+				_isRepairEnabled = value;
+				OnPropertyChanged(nameof(IsRepairEnabled));
+			}
+		}
+		public string RepairForeground
+		{
+			get => _repairForeground;
+
+			set
+			{
+				if (Equals(value, _repairForeground))
+				{
+					return;
+				}
+				_repairForeground = value;
+				OnPropertyChanged(nameof(RepairForeground));
+			}
+		}
+
+		public string RepairBtnColor
+		{
+			get => _repairBtnColor;
+
+			set
+			{
+				if (Equals(value, _repairBtnColor))
+				{
+					return;
+				}
+				_repairBtnColor = value;
+				OnPropertyChanged(nameof(RepairBtnColor));
+			}
+		}
+
+		private bool AnyVersionSelected()
+		{
+			return MultiTermVersionsCollection.Any(v => v.IsSelected);
+		}
+
 		public ObservableCollection<MultiTermVersionListItem> MultiTermVersionsCollection
 		{
 			get => _multiTermVersionsCollection;

@@ -11,8 +11,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 {
     public static class Remove
     {
-	    private static string _backupFolderPath =
-		    Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SDL", "StudioCleanup");
 	    public static async Task BackupFiles(List<StudioDetails> foldersToBackup)
 	    {
 		    await Task.Run(() => CreateBackupFolder(foldersToBackup));
@@ -22,7 +20,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    await Task.Run(() => RestoreFiles(foldersToBackup));
 	    }
 
-	    private static void RestoreFiles(List<StudioDetails> foldersToBackup)
+		private static void RestoreFiles(List<StudioDetails> foldersToBackup)
 	    {
 			foreach (var folder in foldersToBackup)
 			{
@@ -49,7 +47,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				}
 				catch (Exception e)
 				{
-					//throw e;
 				}
 			}
 		}
@@ -109,7 +106,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				    }
 				    catch (Exception e)
 				    {
-					    throw e;
 				    }
 			    }
 	    }
@@ -153,7 +149,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			    }
 			    catch (Exception e)
 			    {
-				    throw e;
 			    }
 		    }
 	    }
@@ -162,19 +157,6 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    if (directoryInfo.Exists)
 		    {
 			    SetAttributesNormal(directoryInfo);
-
-				//removes all files from root directory
-			    //foreach (var file in directoryInfo.GetFiles())
-			    //{
-				   // file.Delete();
-			    //}
-
-			    ////removes all the directories from root directory
-			    //foreach (var directory in directoryInfo.GetDirectories())
-			    //{
-				   // directory.Delete(true);
-			    //}
-			    //remove the root directory
 			    directoryInfo.Delete(true);
 			}
 			
@@ -195,5 +177,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    var attributes = File.GetAttributes(path);
 		    return attributes.HasFlag(FileAttributes.Directory);
 	    }
+
+	   
     }
 }
