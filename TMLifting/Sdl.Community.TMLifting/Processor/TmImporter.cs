@@ -8,18 +8,12 @@ namespace Sdl.Community.TMLifting.Processor
     public class TmImporter
     {
         private readonly FileBasedTranslationMemory _tm;
-		private TranslationProviderServer server;
 		public ReadOnlyCollection<ServerBasedTranslationMemory> _stm;
 
 		public TmImporter(FileBasedTranslationMemory tm)
         {
             _tm = tm;
         }
-
-		//public TmImporter(ReadOnlyCollection<ServerBasedTranslationMemory> stm)
-		//{
-		//	_stm = stm;
-		//}
 
 		private static void GetImportSettings(ImportSettings importSettings)
         {

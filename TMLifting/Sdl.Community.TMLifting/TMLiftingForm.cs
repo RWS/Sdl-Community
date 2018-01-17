@@ -29,12 +29,10 @@ namespace Sdl.Community.TMLifting
 		private readonly BackgroundWorker _bwGS;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
-		private TranslationMemory.ServerBasedTranslationMemoryGSKit _sbTMs;
+		private ServerBasedTranslationMemoryGSKit _sbTMs;
 		private UserCredentials _userCredentials;
 		private AlertForm _alert;
 		private LoginPage _currentInstance = null;
-		private TranslationProviderServer _server;
-		private ReadOnlyCollection<ServerBasedTranslationMemory> SBTMs;
 
 		public TMLiftingForm()
         {
@@ -132,39 +130,38 @@ namespace Sdl.Community.TMLifting
 		}
 		private async void AddDetailsCallbackFn(string userName, string password, string uri)
 		{
-			Properties.Settings.Default.UserName = userName;
-			Properties.Settings.Default.Password = password;
-			Properties.Settings.Default.Uri = uri;
-			Properties.Settings.Default.Save();
-			_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(userName, password, uri);
-			gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
-			for (int i = 0; i < gridServerBasedTMs.Columns.Count; i++)
+			try
 			{
-				gridServerBasedTMs.Columns[i].Visible = false;
+				Properties.Settings.Default.UserName = userName;
+				Properties.Settings.Default.Password = password;
+				Properties.Settings.Default.Uri = uri;
+				Properties.Settings.Default.Save();
+				_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(userName, password, uri);
+				gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+				for (int i = 0; i < gridServerBasedTMs.Columns.Count; i++)
+				{
+					gridServerBasedTMs.Columns[i].Visible = false;
+				}
+				gridServerBasedTMs.Columns["Name"].Visible = true;
+				gridServerBasedTMs.Columns["Description"].Visible = true;
+				gridServerBasedTMs.Columns["CreatedOn"].Visible = true;
+				gridServerBasedTMs.Columns["Location"].Visible = true;
+				gridServerBasedTMs.Columns["ShouldRecomputeStatistics"].Visible = true;
+				gridServerBasedTMs.Columns["LastReIndexDate"].Visible = true;
+				gridServerBasedTMs.Columns["LastReIndexSize"].Visible = true;
+				gridServerBasedTMs.Columns.Add("Status", "Status");
+				gridServerBasedTMs.ReadOnly = true;
+				gridServerBasedTMs.Visible = true;
 			}
-			gridServerBasedTMs.Columns["Name"].Visible = true;
-			gridServerBasedTMs.Columns["Description"].Visible = true;
-			gridServerBasedTMs.Columns["CreatedOn"].Visible = true;
-			gridServerBasedTMs.Columns["Location"].Visible = true;
-			gridServerBasedTMs.Columns["ShouldRecomputeStatistics"].Visible = true;
-			gridServerBasedTMs.Columns["LastReIndexDate"].Visible = true;
-			gridServerBasedTMs.Columns["LastReIndexSize"].Visible = true;
-			gridServerBasedTMs.Columns.Add("Status", "Status");
-			gridServerBasedTMs.ReadOnly = true;
-			gridServerBasedTMs.Visible = true;
+			catch (Exception ex)
+			{
+				throw new SystemException("Authentification Failed. Please check that your credentials are correct.");				
+			}
 		}
 
 		private void gridServerBasedTMs_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
 		{
 			btnReindex.Enabled = (e.StateChanged == DataGridViewElementStates.Selected);
-			//if (e.StateChanged != DataGridViewElementStates.Selected)
-			//{
-			//	btnReindex.Enabled = false;
-			//}
-			//else
-			//{
-
-			//}
 		}
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -220,7 +217,7 @@ namespace Sdl.Community.TMLifting
         }
 
         private async void btnReindex_Click(object sender, EventArgs e)
-        {
+        {			
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
 				var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
@@ -232,18 +229,22 @@ namespace Sdl.Community.TMLifting
 					btnReindex.Enabled = false;
 					_bw.RunWorkerAsync(tms);
 				}
-				//_alert = new AlertForm();
-				//_alert.Show();
-				//_alert.progressBar1.Style = ProgressBarStyle.Marquee;
-				//btnReindex.Enabled = false;
-				//_bw.RunWorkerAsync(tms);
 			}
 			else
 			{
-				var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
-				var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
-				var x = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
-				gridServerBasedTMs.Rows[selectedRowIndex].Cells["Status"].Value = x.Status;
+				foreach (DataGridViewRow row in gridServerBasedTMs.SelectedRows)
+				{
+					var selectedRow = gridServerBasedTMs.Rows[row.Index].DataBoundItem as TranslationMemoryDetails;
+					var fuzzyIndexRespose = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+					gridServerBasedTMs.Columns["Status"].Visible = true;
+					gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = fuzzyIndexRespose.Status;
+				}
+				//var x = gridServerBasedTMs.SelectedRows;
+				//var selectedRowIndex = gridServerBasedTMs.SelectedCells[0].RowIndex;
+				//var selectedRow = gridServerBasedTMs.Rows[selectedRowIndex].DataBoundItem as TranslationMemoryDetails;
+				//var fuzzyIndexRespose = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+				//gridServerBasedTMs.Columns["Status"].Visible = true;
+				//gridServerBasedTMs.Rows[selectedRowIndex].Cells["Status"].Value = fuzzyIndexRespose.Status;
 			}
 
         }
@@ -356,16 +357,13 @@ namespace Sdl.Community.TMLifting
 							gridServerBasedTMs.Refresh();
 						}
 					}
-
 				}
-
 			}
 			else
 			{
 				lstTms.Items.Clear();
 				rtbStatus.Text = string.Empty;
-			}
-			
+			}			
         }
 
 		private void cancelBtn_Click(object sender, EventArgs e)
