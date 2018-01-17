@@ -37,11 +37,12 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private string _restoreBtnColor;
 		private string _restoreForeground;
 		private string _packageCache = @"C:\ProgramData\Package Cache\SDL";
+		private readonly Persistence _persistenceSettings;
 
-		private List<LocationDetails> _foldersToClearOrRestore = new List<LocationDetails>();
 		public StudioViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
+			_persistenceSettings = new Persistence();
 		    _folderDescription = string.Empty;
 			_userName = Environment.UserName;
 			_isRemoveEnabled = false;
@@ -267,7 +268,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 
 			};
 			var result =
-				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore this folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
+				await _mainWindow.ShowMessageAsync("Please confirm", "Are you sure you want to restore removed folders?", MessageDialogStyle.AffirmativeAndNegative, dialog);
 			if (result == MessageDialogResult.Affirmative)
 			{
 				if (!IsStudioRunning())
@@ -275,13 +276,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
 					controller.SetIndeterminate();
 
-					await Remove.RestoreBackupFiles(_foldersToClearOrRestore);
+					//load saved folders path
+					var foldersToRestore = _persistenceSettings.Load(true);
+					await Remove.RestoreBackupFiles(foldersToRestore);
 
 					UnselectGrids();
-					//Set colors for restore btn
-					IsRestoreEnabled = false;
-					RestoreBtnColor = "LightGray";
-					RestoreForeground = "Gray";
 					//to close the message
 					await controller.CloseAsync();
 				}
@@ -519,20 +518,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			}
 		}
 
-		public bool IsRestoreEnabled
-		{
-			get => _isRestoreEnabled;
-
-			set
-			{
-				if (Equals(value, _isRestoreEnabled))
-				{
-					return;
-				}
-				_isRestoreEnabled = value;
-				OnPropertyChanged(nameof(IsRestoreEnabled));
-			}
-		}
 		private async void RemoveFiles()
 		{
 			var dialog = new MetroDialogSettings
@@ -546,7 +531,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			{
 				if (!IsStudioRunning())
 				{
-					_foldersToClearOrRestore.Clear();
+					var foldersToClearOrRestore = new List<LocationDetails>();
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are removing selected files");
 					controller.SetIndeterminate();
 
@@ -556,16 +541,16 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					{
 						var documentsFolderLocation =
 							await FoldersPath.GetFoldersPath(_userName, selectedStudioVersions, selectedStudioLocations);
-						_foldersToClearOrRestore.AddRange(documentsFolderLocation);
+						foldersToClearOrRestore.AddRange(documentsFolderLocation);
 					}
 
-					await Remove.BackupFiles(_foldersToClearOrRestore);
+					//save local selected locations
+					_persistenceSettings.SaveSettings(foldersToClearOrRestore,true);
+					await Remove.BackupFiles(foldersToClearOrRestore);
 
-					await Remove.FromSelectedLocations(_foldersToClearOrRestore);
+					await Remove.FromSelectedLocations(foldersToClearOrRestore);
 
-					IsRestoreEnabled = true;
-					RestoreBtnColor = "#99b433";
-					RestoreForeground = "WhiteSmoke";
+					UnselectGrids();
 					//to close the message
 					await controller.CloseAsync();
 				}

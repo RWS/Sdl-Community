@@ -53,6 +53,11 @@
 			<Component Id="MahApps.Metro.dll" Guid="*">
 				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\MahApps.Metro.dll"></File>
 			</Component>
+
+			<Component Id="Newtonsoft.Json.dll" Guid="*">
+				<File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\Newtonsoft.Json.dll"></File>
+			</Component>
+			
 			<Component Id="System.Windows.Interactivity.dll" Guid="*">
 				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.StudioCleanupTool.TargetDir)\System.Windows.Interactivity.dll"></File>
 			</Component>

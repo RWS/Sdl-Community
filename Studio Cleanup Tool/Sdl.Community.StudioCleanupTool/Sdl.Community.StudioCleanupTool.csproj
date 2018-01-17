@@ -37,6 +37,9 @@
     <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -73,6 +76,7 @@
     <Compile Include="Helpers\DescriptionChangedEventArgs.cs" />
     <Compile Include="Helpers\DocumentsFolder.cs" />
     <Compile Include="Helpers\MultiTermFolders.cs" />
+    <Compile Include="Helpers\Persistence.cs" />
     <Compile Include="Helpers\ProgramData.cs" />
     <Compile Include="Helpers\AppDataFolder.cs" />
     <Compile Include="Helpers\Remove.cs" />
