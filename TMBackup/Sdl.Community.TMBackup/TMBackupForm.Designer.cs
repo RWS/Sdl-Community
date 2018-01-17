@@ -47,24 +47,29 @@
             this.lbl_BackupFileDesc = new System.Windows.Forms.Label();
             this.lbl_Line2 = new System.Windows.Forms.Label();
             this.lbl_Line1 = new System.Windows.Forms.Label();
+            this.txt_BackupName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txt_BackupNameError = new System.Windows.Forms.TextBox();
+            this.txt_BackupFromError = new System.Windows.Forms.TextBox();
+            this.txt_BackupToError = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txt_BackupFrom
             // 
             this.txt_BackupFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_BackupFrom.Location = new System.Drawing.Point(133, 12);
+            this.txt_BackupFrom.Location = new System.Drawing.Point(133, 53);
             this.txt_BackupFrom.Multiline = true;
             this.txt_BackupFrom.Name = "txt_BackupFrom";
             this.txt_BackupFrom.ReadOnly = true;
             this.txt_BackupFrom.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_BackupFrom.Size = new System.Drawing.Size(368, 87);
+            this.txt_BackupFrom.Size = new System.Drawing.Size(398, 87);
             this.txt_BackupFrom.TabIndex = 2;
             // 
             // btn_BackupFrom
             // 
             this.btn_BackupFrom.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_BackupFrom.Location = new System.Drawing.Point(507, 42);
+            this.btn_BackupFrom.Location = new System.Drawing.Point(537, 83);
             this.btn_BackupFrom.Name = "btn_BackupFrom";
             this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
             this.btn_BackupFrom.TabIndex = 3;
@@ -75,7 +80,7 @@
             // btn_BackupTo
             // 
             this.btn_BackupTo.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_BackupTo.Location = new System.Drawing.Point(507, 109);
+            this.btn_BackupTo.Location = new System.Drawing.Point(537, 150);
             this.btn_BackupTo.Name = "btn_BackupTo";
             this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
             this.btn_BackupTo.TabIndex = 4;
@@ -87,12 +92,12 @@
             // 
             this.txt_BackupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_BackupTo.Location = new System.Drawing.Point(133, 105);
+            this.txt_BackupTo.Location = new System.Drawing.Point(133, 146);
             this.txt_BackupTo.Multiline = true;
             this.txt_BackupTo.Name = "txt_BackupTo";
             this.txt_BackupTo.ReadOnly = true;
             this.txt_BackupTo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txt_BackupTo.Size = new System.Drawing.Size(368, 38);
+            this.txt_BackupTo.Size = new System.Drawing.Size(398, 38);
             this.txt_BackupTo.TabIndex = 5;
             // 
             // lbl_BackupFrom
@@ -100,7 +105,7 @@
             this.lbl_BackupFrom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupFrom.AutoSize = true;
-            this.lbl_BackupFrom.Location = new System.Drawing.Point(17, 42);
+            this.lbl_BackupFrom.Location = new System.Drawing.Point(17, 83);
             this.lbl_BackupFrom.Name = "lbl_BackupFrom";
             this.lbl_BackupFrom.Size = new System.Drawing.Size(67, 13);
             this.lbl_BackupFrom.TabIndex = 11;
@@ -111,7 +116,7 @@
             this.lbl_BackupTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupTo.AutoSize = true;
-            this.lbl_BackupTo.Location = new System.Drawing.Point(17, 116);
+            this.lbl_BackupTo.Location = new System.Drawing.Point(17, 157);
             this.lbl_BackupTo.Name = "lbl_BackupTo";
             this.lbl_BackupTo.Size = new System.Drawing.Size(56, 13);
             this.lbl_BackupTo.TabIndex = 12;
@@ -121,10 +126,10 @@
             // 
             this.txt_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_Description.Location = new System.Drawing.Point(133, 156);
+            this.txt_Description.Location = new System.Drawing.Point(133, 197);
             this.txt_Description.Multiline = true;
             this.txt_Description.Name = "txt_Description";
-            this.txt_Description.Size = new System.Drawing.Size(368, 27);
+            this.txt_Description.Size = new System.Drawing.Size(398, 27);
             this.txt_Description.TabIndex = 14;
             // 
             // lbl_Description
@@ -132,7 +137,7 @@
             this.lbl_Description.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Description.AutoSize = true;
-            this.lbl_Description.Location = new System.Drawing.Point(17, 159);
+            this.lbl_Description.Location = new System.Drawing.Point(17, 200);
             this.lbl_Description.Name = "lbl_Description";
             this.lbl_Description.Size = new System.Drawing.Size(60, 13);
             this.lbl_Description.TabIndex = 13;
@@ -141,7 +146,7 @@
             // btn_SaveSettings
             // 
             this.btn_SaveSettings.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_SaveSettings.Location = new System.Drawing.Point(397, 321);
+            this.btn_SaveSettings.Location = new System.Drawing.Point(436, 345);
             this.btn_SaveSettings.Name = "btn_SaveSettings";
             this.btn_SaveSettings.Size = new System.Drawing.Size(104, 27);
             this.btn_SaveSettings.TabIndex = 18;
@@ -152,7 +157,7 @@
             // btn_Cancel
             // 
             this.btn_Cancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Cancel.Location = new System.Drawing.Point(507, 321);
+            this.btn_Cancel.Location = new System.Drawing.Point(546, 345);
             this.btn_Cancel.Name = "btn_Cancel";
             this.btn_Cancel.Size = new System.Drawing.Size(104, 27);
             this.btn_Cancel.TabIndex = 19;
@@ -163,7 +168,7 @@
             // btn_Change
             // 
             this.btn_Change.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Change.Location = new System.Drawing.Point(507, 259);
+            this.btn_Change.Location = new System.Drawing.Point(537, 283);
             this.btn_Change.Name = "btn_Change";
             this.btn_Change.Size = new System.Drawing.Size(104, 27);
             this.btn_Change.TabIndex = 25;
@@ -174,7 +179,7 @@
             // btn_Details
             // 
             this.btn_Details.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.btn_Details.Location = new System.Drawing.Point(507, 226);
+            this.btn_Details.Location = new System.Drawing.Point(537, 250);
             this.btn_Details.Name = "btn_Details";
             this.btn_Details.Size = new System.Drawing.Size(104, 27);
             this.btn_Details.TabIndex = 24;
@@ -186,22 +191,22 @@
             // 
             this.txt_BackupDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_BackupDetails.Location = new System.Drawing.Point(133, 226);
+            this.txt_BackupDetails.Location = new System.Drawing.Point(133, 250);
             this.txt_BackupDetails.Multiline = true;
             this.txt_BackupDetails.Name = "txt_BackupDetails";
             this.txt_BackupDetails.ReadOnly = true;
-            this.txt_BackupDetails.Size = new System.Drawing.Size(368, 27);
+            this.txt_BackupDetails.Size = new System.Drawing.Size(398, 27);
             this.txt_BackupDetails.TabIndex = 23;
             // 
             // txt_BackupTime
             // 
             this.txt_BackupTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_BackupTime.Location = new System.Drawing.Point(133, 259);
+            this.txt_BackupTime.Location = new System.Drawing.Point(133, 283);
             this.txt_BackupTime.Multiline = true;
             this.txt_BackupTime.Name = "txt_BackupTime";
             this.txt_BackupTime.ReadOnly = true;
-            this.txt_BackupTime.Size = new System.Drawing.Size(368, 27);
+            this.txt_BackupTime.Size = new System.Drawing.Size(398, 27);
             this.txt_BackupTime.TabIndex = 22;
             // 
             // lbl_BackupTime
@@ -209,7 +214,7 @@
             this.lbl_BackupTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupTime.AutoSize = true;
-            this.lbl_BackupTime.Location = new System.Drawing.Point(17, 262);
+            this.lbl_BackupTime.Location = new System.Drawing.Point(17, 286);
             this.lbl_BackupTime.Name = "lbl_BackupTime";
             this.lbl_BackupTime.Size = new System.Drawing.Size(87, 13);
             this.lbl_BackupTime.TabIndex = 21;
@@ -220,7 +225,7 @@
             this.lbl_BackupFileDesc.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_BackupFileDesc.AutoSize = true;
-            this.lbl_BackupFileDesc.Location = new System.Drawing.Point(17, 229);
+            this.lbl_BackupFileDesc.Location = new System.Drawing.Point(17, 253);
             this.lbl_BackupFileDesc.Name = "lbl_BackupFileDesc";
             this.lbl_BackupFileDesc.Size = new System.Drawing.Size(84, 13);
             this.lbl_BackupFileDesc.TabIndex = 20;
@@ -231,9 +236,9 @@
             this.lbl_Line2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbl_Line2.Location = new System.Drawing.Point(-11, 312);
+            this.lbl_Line2.Location = new System.Drawing.Point(-11, 329);
             this.lbl_Line2.Name = "lbl_Line2";
-            this.lbl_Line2.Size = new System.Drawing.Size(653, 2);
+            this.lbl_Line2.Size = new System.Drawing.Size(683, 2);
             this.lbl_Line2.TabIndex = 26;
             // 
             // lbl_Line1
@@ -241,16 +246,81 @@
             this.lbl_Line1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbl_Line1.Location = new System.Drawing.Point(-11, 199);
+            this.lbl_Line1.Location = new System.Drawing.Point(-12, 234);
             this.lbl_Line1.Name = "lbl_Line1";
-            this.lbl_Line1.Size = new System.Drawing.Size(654, 2);
+            this.lbl_Line1.Size = new System.Drawing.Size(684, 2);
             this.lbl_Line1.TabIndex = 27;
+            // 
+            // txt_BackupName
+            // 
+            this.txt_BackupName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txt_BackupName.Location = new System.Drawing.Point(133, 12);
+            this.txt_BackupName.Multiline = true;
+            this.txt_BackupName.Name = "txt_BackupName";
+            this.txt_BackupName.Size = new System.Drawing.Size(398, 27);
+            this.txt_BackupName.TabIndex = 28;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(18, 18);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 13);
+            this.label1.TabIndex = 29;
+            this.label1.Text = "Backup name";
+            // 
+            // txt_BackupNameError
+            // 
+            this.txt_BackupNameError.BackColor = System.Drawing.SystemColors.Control;
+            this.txt_BackupNameError.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_BackupNameError.ForeColor = System.Drawing.Color.Red;
+            this.txt_BackupNameError.Location = new System.Drawing.Point(538, 12);
+            this.txt_BackupNameError.Multiline = true;
+            this.txt_BackupNameError.Name = "txt_BackupNameError";
+            this.txt_BackupNameError.Size = new System.Drawing.Size(100, 30);
+            this.txt_BackupNameError.TabIndex = 30;
+            this.txt_BackupNameError.Text = "Backup name is mandatory!";
+            this.txt_BackupNameError.Visible = false;
+            // 
+            // txt_BackupFromError
+            // 
+            this.txt_BackupFromError.BackColor = System.Drawing.SystemColors.Control;
+            this.txt_BackupFromError.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_BackupFromError.ForeColor = System.Drawing.Color.Red;
+            this.txt_BackupFromError.Location = new System.Drawing.Point(12, 99);
+            this.txt_BackupFromError.Multiline = true;
+            this.txt_BackupFromError.Name = "txt_BackupFromError";
+            this.txt_BackupFromError.Size = new System.Drawing.Size(100, 30);
+            this.txt_BackupFromError.TabIndex = 31;
+            this.txt_BackupFromError.Text = "\'Backup from\' cannot be empty. Please select folder from where to backup files!";
+            this.txt_BackupFromError.Visible = false;
+            // 
+            // txt_BackupToError
+            // 
+            this.txt_BackupToError.BackColor = System.Drawing.SystemColors.Control;
+            this.txt_BackupToError.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_BackupToError.ForeColor = System.Drawing.Color.Red;
+            this.txt_BackupToError.Location = new System.Drawing.Point(4, 173);
+            this.txt_BackupToError.Multiline = true;
+            this.txt_BackupToError.Name = "txt_BackupToError";
+            this.txt_BackupToError.Size = new System.Drawing.Size(100, 30);
+            this.txt_BackupToError.TabIndex = 32;
+            this.txt_BackupToError.Text = "\'Backup to\' cannot be empty. Please select folder where to backup files!";
+            this.txt_BackupToError.Visible = false;
             // 
             // TMBackupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(627, 359);
+            this.ClientSize = new System.Drawing.Size(657, 384);
+            this.Controls.Add(this.txt_BackupToError);
+            this.Controls.Add(this.txt_BackupFromError);
+            this.Controls.Add(this.txt_BackupNameError);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.txt_BackupName);
             this.Controls.Add(this.lbl_Line1);
             this.Controls.Add(this.lbl_Line2);
             this.Controls.Add(this.txt_Description);
@@ -298,5 +368,10 @@
 		private System.Windows.Forms.Label lbl_BackupFileDesc;
 		private System.Windows.Forms.Label lbl_Line2;
 		private System.Windows.Forms.Label lbl_Line1;
+		private System.Windows.Forms.TextBox txt_BackupName;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TextBox txt_BackupNameError;
+		private System.Windows.Forms.TextBox txt_BackupFromError;
+		private System.Windows.Forms.TextBox txt_BackupToError;
 	}
 }
