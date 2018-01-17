@@ -54,6 +54,8 @@ namespace Sdl.Community.TMBackup
 
 		private void createNewBackupAction_Click(object sender, EventArgs e)
 		{
+			Hide();
+
 			TMBackupForm tmBackupForm = new TMBackupForm(true, string.Empty);
 			tmBackupForm.ShowDialog();
 		}
@@ -62,6 +64,8 @@ namespace Sdl.Community.TMBackup
 		{
 			var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
 			string cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+
+			Hide();
 
 			TMBackupForm tmBackupForm = new TMBackupForm(false, cellValue);
 			tmBackupForm.ShowDialog();
