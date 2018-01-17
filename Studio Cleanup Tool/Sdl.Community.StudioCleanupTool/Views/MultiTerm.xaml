@@ -16,15 +16,15 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="1*" />
+		    <ColumnDefinition Width="500" />
 		    <ColumnDefinition Width="1*" />
 	    </Grid.ColumnDefinitions>
 	    <Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold">Please select MultiTerm versions</Label>
 	   
-		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MultiTermVersionsCollection}" FontFamily="Calibri" FontSize="14">
+		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MultiTermVersionsCollection}" FontFamily="Calibri">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<UniformGrid Columns="3" Margin="0,0,150,0"/>
+					<UniformGrid Columns="3" Margin="0,0,0,0"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 
@@ -46,6 +46,7 @@
 	    <Label Grid.Column="0" Grid.Row="2" Margin="0,40,0,0" FontWeight="Bold">Remove folders from following locations:</Label>
 	    <CheckBox Grid.Column="0" Grid.Row="3" Margin="5,0,0,5" FontFamily="Calibri" FontSize="14" IsChecked="{Binding CheckAll}">Select/Unselect all</CheckBox>
 		<ListBox 
+			Margin="0,0,-0,0"
 		    ItemsSource ="{Binding MultiTermLocationCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 		    SelectionMode="Multiple"
 		    Grid.Column="0"
@@ -53,6 +54,7 @@
 		    <ListBox.ItemTemplate>
 			    <DataTemplate>
 				    <CheckBox
+					    Margin="0,0,-40,0"
 					    Name="box"
 					    Content="{Binding DisplayName}"
 					    FontFamily="Calibri"
@@ -62,12 +64,12 @@
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
 	    </ListBox>
-		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="0,0,0,0" VerticalAlignment="Top" Height="100">
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="-0,0,0,0" VerticalAlignment="Top" Height="100">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-		    <TextBlock Margin="40,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
+		    <TextBlock Margin="10,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding FolderDescription}"></TextBlock>
 	    </StackPanel>
 
-		<StackPanel Grid.Column="1" Grid.Row="5" Margin="0,20,0,0" Orientation="Vertical">
+		<StackPanel Grid.Column="1" Grid.Row="5" Margin="10,20,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="0,20,10,0" Foreground="{Binding RemoveForeground}" IsEnabled="{Binding IsRemoveEnabled}"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 					<Button.Template>
