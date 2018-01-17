@@ -8,14 +8,31 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupChangeForm : Form
 	{
+		#region Private fields
+		private bool _isNewTask;
+		#endregion
+
+		#region Constructors
 		public TMBackupChangeForm()
 		{
 			InitializeComponent();
-
-			InitializeFormInfo();
 		}
 
-			private void btn_TimeDetails_Click(object sender, EventArgs e)
+		public TMBackupChangeForm(bool isNewTask)
+		{
+			InitializeComponent();
+
+			_isNewTask = isNewTask;
+
+			if (!isNewTask)
+			{
+				InitializeFormInfo();
+			}
+		}
+		#endregion
+
+		#region Events
+		private void btn_TimeDetails_Click(object sender, EventArgs e)
 		{
 			PeriodicBackupForm periodicBackupForm = new PeriodicBackupForm();
 			periodicBackupForm.ShowDialog();
@@ -43,22 +60,24 @@ namespace Sdl.Community.TMBackup
 			persistence.SaveChangeSettings(changeSettingModel);
 		}
 
+		private void btn_Ok_Click(object sender, EventArgs e)
+		{
+			GetBackupTimeInfo();
+			Close();
+		}
+		#endregion
+
+		#region Methods
 		private void InitializeFormInfo()
 		{
 			Persistence persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
-			if(result != null)
+			if (result != null)
 			{
-				radioBtn_TimeChange.Checked = result.ChangeSettingsModel != null ?  result.ChangeSettingsModel.IsPeriodicOptionChecked : false;
+				radioBtn_TimeChange.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsPeriodicOptionChecked : false;
 				radioBtn_Manually.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsManuallyOptionChecked : false;
 			}
-		}
-
-		private void btn_Ok_Click(object sender, EventArgs e)
-		{
-			GetBackupTimeInfo();
-			Close();
 		}
 
 		public string GetBackupTimeInfo()
@@ -81,5 +100,6 @@ namespace Sdl.Community.TMBackup
 			}
 			return backupTimeInfo;
 		}
+		#endregion
 	}
 }

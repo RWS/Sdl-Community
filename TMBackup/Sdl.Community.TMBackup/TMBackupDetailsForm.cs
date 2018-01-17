@@ -14,6 +14,8 @@ namespace Sdl.Community.TMBackup
 		private BindingSource _source = new BindingSource();
 
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
+
+		private bool _isNewTask;
 		#endregion
 
 		#region Public properties
@@ -25,8 +27,18 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm()
 		{
 			InitializeComponent();
+		}
 
-			InitializeBackupDetails();
+		public TMBackupDetailsForm(bool isNewTask)
+		{
+			InitializeComponent();
+
+			_isNewTask = isNewTask;
+
+			if (!isNewTask)
+			{
+				InitializeBackupDetails();
+			}
 		}
 		#endregion
 
