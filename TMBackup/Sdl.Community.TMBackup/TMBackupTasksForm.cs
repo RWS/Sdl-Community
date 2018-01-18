@@ -23,9 +23,9 @@ namespace Sdl.Community.TMBackup
 
 		public void GetBackupTasks()
 		{
-			using (TaskService ts = new TaskService())
+			using (var ts = new TaskService())
 			{
-				List<TaskDefinitionModel> tasks = new List<TaskDefinitionModel>();
+				var tasks = new List<TaskDefinitionModel>();
 				foreach (var task in ts.AllTasks)
 				{
 					if (task.Name.Contains(Constants.TaskDetailValue))
@@ -56,18 +56,18 @@ namespace Sdl.Community.TMBackup
 		{
 			Hide();
 
-			TMBackupForm tmBackupForm = new TMBackupForm(true, string.Empty);
+			var tmBackupForm = new TMBackupForm(true, string.Empty);
 			tmBackupForm.ShowDialog();
 		}
 
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
 			var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
-			string cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+			var cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
 
 			Hide();
 
-			TMBackupForm tmBackupForm = new TMBackupForm(false, cellValue);
+			var tmBackupForm = new TMBackupForm(false, cellValue);
 			tmBackupForm.ShowDialog();
 		}
 	}

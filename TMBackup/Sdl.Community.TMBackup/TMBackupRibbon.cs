@@ -30,7 +30,7 @@ namespace Sdl.Community.TMBackup
 		
 		private static void MoveBackupFilesAppToDirectory()
 		{
-			string path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
+			var path = Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe");
 
 			if(!Directory.Exists(Constants.SdlCommunityPath))
 			{

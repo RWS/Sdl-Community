@@ -13,12 +13,10 @@ namespace Sdl.Community.BackupService.Helpers
 			string name = Enum.GetName(type, value);
 			if (name != null)
 			{
-				FieldInfo field = type.GetField(name);
+				var field = type.GetField(name);
 				if (field != null)
 				{
-					DescriptionAttribute attr =
-						   Attribute.GetCustomAttribute(field,
-							 typeof(DescriptionAttribute)) as DescriptionAttribute;
+					var attr =  Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
 					if (attr != null)
 					{
 						return attr.Description;
@@ -30,7 +28,7 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public static ArrayList GetTimeTypeDescription()
 		{
-			ArrayList list = new ArrayList();
+			var list = new ArrayList();
 			var enumValues = Enum.GetValues(typeof(Enums.TimeTypes));
 
 			foreach (Enum value in enumValues)

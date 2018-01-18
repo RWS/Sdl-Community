@@ -55,7 +55,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Change_Click(object sender, EventArgs e)
 		{
-			TMBackupChangeForm changeForm = new TMBackupChangeForm();
+			var changeForm = new TMBackupChangeForm();
 			changeForm.ShowDialog();
 			
 			txt_BackupTime.Text = changeForm.GetBackupTimeInfo();
@@ -63,7 +63,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Details_Click(object sender, EventArgs e)
 		{
-			TMBackupDetailsForm detailsForm = new TMBackupDetailsForm();
+			var detailsForm = new TMBackupDetailsForm();
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
@@ -83,7 +83,7 @@ namespace Sdl.Community.TMBackup
 
 			if (!txt_BackupFromError.Visible && !txt_BackupToError.Visible && !txt_BackupNameError.Visible)
 			{
-				BackupModel backupModel = new BackupModel();
+				var backupModel = new BackupModel();
 				backupModel.BackupName = string.Concat(Constants.TaskDetailValue, txt_BackupName.Text);
 				backupModel.BackupFrom = txt_BackupFrom.Text;
 				backupModel.BackupTo = txt_BackupTo.Text;
@@ -91,22 +91,22 @@ namespace Sdl.Community.TMBackup
 				backupModel.BackupDetails = txt_BackupDetails.Text;
 				backupModel.BackupTime = txt_BackupTime.Text;
 
-				Persistence persistence = new Persistence();
+				var persistence = new Persistence();
 				persistence.SaveBackupFormInfo(backupModel);
 
 				Hide();
 
-				Service service = new Service();
+				var service = new Service();
 				service.CreateTaskScheduler();
 
-				TMBackupTasksForm tmBackupTasksForm = new TMBackupTasksForm();
+				var tmBackupTasksForm = new TMBackupTasksForm();
 				tmBackupTasksForm.ShowDialog();
 			}			
 		}
 
 		private void GetBackupFormInfo(string taskName)
 		{
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
 			if (result.BackupModel != null && !_isNewTask)
@@ -128,7 +128,7 @@ namespace Sdl.Community.TMBackup
 				txt_BackupDetails.Text = res;
 			}
 
-			TMBackupChangeForm tmBackupChangeForm = new TMBackupChangeForm(_isNewTask);
+			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask);
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}		
 	}

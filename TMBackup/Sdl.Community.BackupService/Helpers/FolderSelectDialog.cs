@@ -11,7 +11,7 @@ namespace Sdl.Community.BackupService.Helpers
 		{
 			get
 			{
-				return this.ofd.FileName;
+				return ofd.FileName;
 			}
 		}
 
@@ -24,7 +24,7 @@ namespace Sdl.Community.BackupService.Helpers
 			set
 			{
 				string str;
-				OpenFileDialog openFileDialog = this.ofd;
+				var openFileDialog = ofd;
 				str = (value == null || value.Length == 0 ? Environment.CurrentDirectory : value);
 				openFileDialog.InitialDirectory = str;
 			}
@@ -34,12 +34,12 @@ namespace Sdl.Community.BackupService.Helpers
 		{
 			get
 			{
-				return this.ofd.Title;
+				return ofd.Title;
 			}
 			set
 			{
 				string str;
-				OpenFileDialog openFileDialog = this.ofd;
+				var openFileDialog = ofd;
 				str = (value == null ? "Select a folder" : value);
 				openFileDialog.Title = str;
 			}
@@ -49,7 +49,7 @@ namespace Sdl.Community.BackupService.Helpers
 		{
 			get
 			{
-				return this.ofd.FileNames;
+				return ofd.FileNames;
 			}
 		}
 		public FolderSelectDialog()
@@ -64,14 +64,14 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public bool ShowDialog()
 		{
-			return this.ShowDialog(IntPtr.Zero);
+			return ShowDialog(IntPtr.Zero);
 		}
 
 		public bool ShowDialog(IntPtr hWndOwner)
 		{
 			bool flag = false;
 
-			Reflector reflector = new Reflector("System.Windows.Forms");
+			var reflector = new Reflector("System.Windows.Forms");
 			uint num = 0;
 			Type type = reflector.GetType("FileDialogNative.IFileDialog");
 			object obj = reflector.Call(this.ofd, "CreateVistaDialog", new object[0]);
