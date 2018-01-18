@@ -35,6 +35,7 @@
             this.rbMixedSc = new System.Windows.Forms.RadioButton();
             this.rbPresegmentedSc = new System.Windows.Forms.RadioButton();
             this.rbDefaultSc = new System.Windows.Forms.RadioButton();
+            this.txt_InfoMessage = new System.Windows.Forms.TextBox();
             this.gbTaskOptions.SuspendLayout();
             this.gbScenario.SuspendLayout();
             this.SuspendLayout();
@@ -43,11 +44,12 @@
             // 
             this.gbTaskOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.gbTaskOptions.Controls.Add(this.txt_InfoMessage);
             this.gbTaskOptions.Controls.Add(this.chPreservePsw);
             this.gbTaskOptions.Controls.Add(this.chBackup);
             this.gbTaskOptions.Location = new System.Drawing.Point(3, 3);
             this.gbTaskOptions.Name = "gbTaskOptions";
-            this.gbTaskOptions.Size = new System.Drawing.Size(582, 80);
+            this.gbTaskOptions.Size = new System.Drawing.Size(582, 106);
             this.gbTaskOptions.TabIndex = 4;
             this.gbTaskOptions.TabStop = false;
             this.gbTaskOptions.Text = "Remove &Duplicates Task Options";
@@ -55,7 +57,7 @@
             // chPreservePsw
             // 
             this.chPreservePsw.AutoSize = true;
-            this.chPreservePsw.Location = new System.Drawing.Point(9, 51);
+            this.chPreservePsw.Location = new System.Drawing.Point(9, 82);
             this.chPreservePsw.Name = "chPreservePsw";
             this.chPreservePsw.Size = new System.Drawing.Size(240, 17);
             this.chPreservePsw.TabIndex = 2;
@@ -65,7 +67,7 @@
             // chBackup
             // 
             this.chBackup.AutoSize = true;
-            this.chBackup.Location = new System.Drawing.Point(9, 28);
+            this.chBackup.Location = new System.Drawing.Point(9, 59);
             this.chBackup.Name = "chBackup";
             this.chBackup.Size = new System.Drawing.Size(190, 17);
             this.chBackup.TabIndex = 1;
@@ -80,9 +82,9 @@
             this.gbScenario.Controls.Add(this.rbMixedSc);
             this.gbScenario.Controls.Add(this.rbPresegmentedSc);
             this.gbScenario.Controls.Add(this.rbDefaultSc);
-            this.gbScenario.Location = new System.Drawing.Point(3, 89);
+            this.gbScenario.Location = new System.Drawing.Point(3, 115);
             this.gbScenario.Name = "gbScenario";
-            this.gbScenario.Size = new System.Drawing.Size(582, 91);
+            this.gbScenario.Size = new System.Drawing.Size(582, 85);
             this.gbScenario.TabIndex = 4;
             this.gbScenario.TabStop = false;
             this.gbScenario.Text = "&Import Scenario";
@@ -125,15 +127,29 @@
     "processed only with SDL Trados Studio";
             this.rbDefaultSc.UseVisualStyleBackColor = true;
             // 
+            // txt_InfoMessage
+            // 
+            this.txt_InfoMessage.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.txt_InfoMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_InfoMessage.Location = new System.Drawing.Point(9, 20);
+            this.txt_InfoMessage.Multiline = true;
+            this.txt_InfoMessage.Name = "txt_InfoMessage";
+            this.txt_InfoMessage.ReadOnly = true;
+            this.txt_InfoMessage.Size = new System.Drawing.Size(561, 33);
+            this.txt_InfoMessage.TabIndex = 3;
+            this.txt_InfoMessage.Text = "This task finds and removes duplicated source texts only. Duplicate target entrie" +
+    "s are not removed. The process is automated, the most recent entry will be retai" +
+    "ned.";
+            // 
             // RemoveDupControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.gbScenario);
             this.Controls.Add(this.gbTaskOptions);
-            this.MaximumSize = new System.Drawing.Size(588, 180);
+            this.MaximumSize = new System.Drawing.Size(588, 200);
             this.Name = "RemoveDupControl";
-            this.Size = new System.Drawing.Size(588, 180);
+            this.Size = new System.Drawing.Size(588, 200);
             this.gbTaskOptions.ResumeLayout(false);
             this.gbTaskOptions.PerformLayout();
             this.gbScenario.ResumeLayout(false);
@@ -150,5 +166,6 @@
 		private System.Windows.Forms.RadioButton rbMixedSc;
 		private System.Windows.Forms.RadioButton rbPresegmentedSc;
 		private System.Windows.Forms.RadioButton rbDefaultSc;
+		private System.Windows.Forms.TextBox txt_InfoMessage;
 	}
 }

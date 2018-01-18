@@ -31,7 +31,7 @@ namespace Sdl.Community.TMLifting
 			EmbeddedAssembly.Load(resource2, "System.Net.Http.dll");
 			EmbeddedAssembly.Load(resource3, "Sdl.TmService.Sdk.dll");
 			EmbeddedAssembly.Load(resource4, "Newtonsoft.Json.dll");
-			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);			
+			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 		}
 		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
 		{

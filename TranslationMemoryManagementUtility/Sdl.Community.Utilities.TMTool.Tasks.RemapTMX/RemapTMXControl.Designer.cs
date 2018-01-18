@@ -68,9 +68,9 @@
             this.saveTargetFolderCheckBox.AutoSize = true;
             this.saveTargetFolderCheckBox.Location = new System.Drawing.Point(104, 42);
             this.saveTargetFolderCheckBox.Name = "saveTargetFolderCheckBox";
-            this.saveTargetFolderCheckBox.Size = new System.Drawing.Size(144, 17);
+            this.saveTargetFolderCheckBox.Size = new System.Drawing.Size(147, 17);
             this.saveTargetFolderCheckBox.TabIndex = 3;
-            this.saveTargetFolderCheckBox.Text = "Save in taget TM\'s folder";
+            this.saveTargetFolderCheckBox.Text = "Save in target TM\'s folder";
             this.saveTargetFolderCheckBox.UseVisualStyleBackColor = true;
             this.saveTargetFolderCheckBox.CheckedChanged += new System.EventHandler(this.saveTargetFolderCheckBox_CheckedChanged);
             // 

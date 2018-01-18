@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginPage));
             this.panel3 = new System.Windows.Forms.Panel();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -60,7 +61,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(493, 336);
+            this.panel3.Size = new System.Drawing.Size(493, 281);
             this.panel3.TabIndex = 8;
             // 
             // checkBox1
@@ -108,7 +109,7 @@
             // 
             // helpBtnServerBased
             // 
-            this.helpBtnServerBased.Location = new System.Drawing.Point(372, 288);
+            this.helpBtnServerBased.Location = new System.Drawing.Point(372, 230);
             this.helpBtnServerBased.Name = "helpBtnServerBased";
             this.helpBtnServerBased.Size = new System.Drawing.Size(75, 23);
             this.helpBtnServerBased.TabIndex = 11;
@@ -123,7 +124,7 @@
             this.authentication_box.Controls.Add(this.label2);
             this.authentication_box.Location = new System.Drawing.Point(50, 80);
             this.authentication_box.Name = "authentication_box";
-            this.authentication_box.Size = new System.Drawing.Size(397, 202);
+            this.authentication_box.Size = new System.Drawing.Size(397, 125);
             this.authentication_box.TabIndex = 8;
             this.authentication_box.TabStop = false;
             this.authentication_box.Text = "Authentication";
@@ -164,7 +165,7 @@
             // 
             // btnOkServerBased
             // 
-            this.btnOkServerBased.Location = new System.Drawing.Point(210, 288);
+            this.btnOkServerBased.Location = new System.Drawing.Point(210, 230);
             this.btnOkServerBased.Name = "btnOkServerBased";
             this.btnOkServerBased.Size = new System.Drawing.Size(75, 23);
             this.btnOkServerBased.TabIndex = 3;
@@ -174,7 +175,7 @@
             // 
             // cancelBtnServerBased
             // 
-            this.cancelBtnServerBased.Location = new System.Drawing.Point(291, 288);
+            this.cancelBtnServerBased.Location = new System.Drawing.Point(291, 230);
             this.cancelBtnServerBased.Name = "cancelBtnServerBased";
             this.cancelBtnServerBased.Size = new System.Drawing.Size(75, 23);
             this.cancelBtnServerBased.TabIndex = 10;
@@ -186,8 +187,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(493, 336);
+            this.ClientSize = new System.Drawing.Size(493, 281);
             this.Controls.Add(this.panel3);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LoginPage";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Login";
