@@ -130,7 +130,7 @@
     <value>Invalid password.</value>
   </data>
   <data name="errRevertTaskFailed" xml:space="preserve">
-    <value>Failed to revert index in file '{0}'.\r\nDetails: {1}\r\n</value>
+    <value>Failed to reverse index in file '{0}'.\r\nDetails: {1}\r\n</value>
   </data>
   <data name="errTargetFolderLength" xml:space="preserve">
     <value>Indicate Target Folder.</value>
@@ -163,7 +163,7 @@
     <value>Translation Memory Files ({0})</value>
   </data>
   <data name="taskName" xml:space="preserve">
-    <value>Revert Index</value>
+    <value>Reverse Index</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Translation Memory Management</value>
