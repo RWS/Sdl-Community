@@ -233,7 +233,7 @@
             treeNode1.Name = "Node2";
             treeNode1.Text = "Remove Duplicates";
             treeNode2.Name = "Node1";
-            treeNode2.Text = "Revert Index";
+            treeNode2.Text = "Reverse Index";
             treeNode3.Checked = true;
             treeNode3.Name = "Node0";
             treeNode3.NodeFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));

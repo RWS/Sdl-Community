@@ -97,7 +97,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to revert index in file &apos;{0}&apos;.\r\nDetails: {1}\r\n.
+        ///   Looks up a localized string similar to Failed to reverse index in file &apos;{0}&apos;.\r\nDetails: {1}\r\n.
         /// </summary>
         internal static string errRevertTaskFailed {
             get {
@@ -196,7 +196,7 @@ namespace Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Revert Index.
+        ///   Looks up a localized string similar to Reverse Index.
         /// </summary>
         internal static string taskName {
             get {

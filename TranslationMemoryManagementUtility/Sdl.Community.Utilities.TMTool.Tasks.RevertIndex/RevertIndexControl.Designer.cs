@@ -56,7 +56,7 @@
             this.gbTaskOptions.Size = new System.Drawing.Size(588, 111);
             this.gbTaskOptions.TabIndex = 7;
             this.gbTaskOptions.TabStop = false;
-            this.gbTaskOptions.Text = "&Revert Index Task Options";
+            this.gbTaskOptions.Text = "&Reverse Index Task Options";
             // 
             // chPreservePsw
             // 
