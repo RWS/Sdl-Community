@@ -121,7 +121,14 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var msiFile = Path.Combine(moduleDirectoryPath, msiName);
 					if (File.Exists(msiFile))
 					{
-						Process.Start(msiFile);
+						var process = new ProcessStartInfo
+						{
+							FileName = "msiexec",
+							WorkingDirectory = moduleDirectoryPath,
+							Arguments = "/fa " + msiName,
+							Verb = "runas"
+						};
+						Process.Start(process);
 					}
 				}
 			}

@@ -52,11 +52,15 @@
 			SelectedItem="{Binding SelectedLocation}"
 		    Grid.Row="4">
 			<ListBox.Resources>
+
 				<Style TargetType="ListBoxItem">
+					
 					<Style.Triggers>
 						<DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True">
 							<Setter Property="IsSelected" Value="True" />
+							<Setter Property="Background" Value="Green"/>
 						</DataTrigger>
+
 					</Style.Triggers>
 				</Style>
 			</ListBox.Resources>
