@@ -46,12 +46,12 @@ namespace Sdl.Community.TMLifting
 
         protected override async void OnLoad(EventArgs e)
         {
-			//EncryptConfigSection("userSetting/Sdl.Community.TMLifting.Properties.Settings");
 			base.OnLoad(e);
             _bw.DoWork += bw_DoWork;
             _bw.RunWorkerCompleted += bw_RunWorkerCompleted;
             _bw.ProgressChanged += bw_ProgressChanged;
             reIndexCheckBox.Checked = true;
+			tabControlTMLifting.SelectedTab = tabControlTMLifting.TabPages["tabPageFileBasedTM"];
 			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
 			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
 		}
@@ -93,6 +93,7 @@ namespace Sdl.Community.TMLifting
 							gridServerBasedTMs.Columns["Status"].Visible = true;
 							gridServerBasedTMs.ReadOnly = true;
 							gridServerBasedTMs.Visible = true;
+							groupBoxTM.Controls.Add(gridServerBasedTMs);
 							connectToServerBtn.Text = "Logout";
 						}
 						catch (Exception)
