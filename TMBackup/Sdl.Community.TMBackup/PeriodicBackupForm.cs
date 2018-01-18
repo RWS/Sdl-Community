@@ -62,7 +62,7 @@ namespace Sdl.Community.TMBackup
 		{
 			cmbBox_Interval.DataSource = EnumHelper.GetTimeTypeDescription();
 
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
 			if(result != null)

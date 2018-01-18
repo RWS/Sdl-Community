@@ -34,7 +34,7 @@ namespace Sdl.Community.TMBackup
 		#region Events
 		private void btn_TimeDetails_Click(object sender, EventArgs e)
 		{
-			PeriodicBackupForm periodicBackupForm = new PeriodicBackupForm();
+			var periodicBackupForm = new PeriodicBackupForm();
 			periodicBackupForm.ShowDialog();
 		}
 		
@@ -42,10 +42,10 @@ namespace Sdl.Community.TMBackup
 		{
 			btn_TimeDetails.Enabled = true;
 
-			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
+			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsPeriodicOptionChecked = radioBtn_TimeChange.Checked;
 
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			persistence.SaveChangeSettings(changeSettingModel);
 		}
 
@@ -53,10 +53,10 @@ namespace Sdl.Community.TMBackup
 		{
 			btn_TimeDetails.Enabled = false;
 
-			ChangeSettingsModel changeSettingModel = new ChangeSettingsModel();
+			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsManuallyOptionChecked = radioBtn_Manually.Checked;
 
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			persistence.SaveChangeSettings(changeSettingModel);
 		}
 
@@ -70,7 +70,7 @@ namespace Sdl.Community.TMBackup
 		#region Methods
 		private void InitializeFormInfo()
 		{
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
 			if (result != null)
@@ -84,7 +84,7 @@ namespace Sdl.Community.TMBackup
 		{
 			string backupTimeInfo = string.Empty;
 
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 
 			if (jsonResult != null && jsonResult.PeriodicBackupModel != null && radioBtn_TimeChange.Checked)

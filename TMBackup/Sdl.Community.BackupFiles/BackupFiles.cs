@@ -32,9 +32,9 @@ namespace Sdl.Community.BackupFiles
 		{
 			try
 			{
-				Service service = new Service();
+				var service = new Service();
 				var jsonResult = service.GetJsonInformation();
-				List<string> fileExtensions = new List<string>();
+				var fileExtensions = new List<string>();
 
 				if (jsonResult != null && jsonResult.BackupDetailsModelList.Any())
 				{
@@ -46,8 +46,8 @@ namespace Sdl.Community.BackupFiles
 
 				if (jsonResult != null && jsonResult.BackupModel != null)
 				{
-					List<string> splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
-					string[] files = new List<string>().ToArray();
+					var splittedSourcePathList = jsonResult.BackupModel.BackupFrom.Split(';').ToList<string>();
+					var files = new List<string>().ToArray();
 
 					foreach (var sourcePath in splittedSourcePathList)
 					{
@@ -101,7 +101,7 @@ namespace Sdl.Community.BackupFiles
 
 		private static void CheckForSubfolders(DirectoryInfo directory, string root)
 		{
-			Service service = new Service();
+			var service = new Service();
 			var jsonResult = service.GetJsonInformation();
 
 			if (jsonResult != null && jsonResult.BackupModel != null)
@@ -153,7 +153,7 @@ namespace Sdl.Community.BackupFiles
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		private static void LoadAssemblies()
 		{
-			Dictionary<string, Assembly> _assemblies = new Dictionary<string, Assembly>();
+			var _assemblies = new Dictionary<string, Assembly>();
 			Assembly OnAssemblyResolve(object sender, ResolveEventArgs args)
 			{
 				var shortName = new AssemblyName(args.Name).Name;

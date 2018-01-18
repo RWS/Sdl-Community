@@ -45,7 +45,7 @@ namespace Sdl.Community.TMBackup
 		#region Actions
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			persistence.SaveDetailsFormInfo(_backupDetailsModelList);
 
 			_backupDetailsModelList.Clear();
@@ -56,7 +56,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Delete_Click(object sender, EventArgs e)
 		{
-			List<BackupDetailsModel> removedActionsList = new List<BackupDetailsModel>();
+			var removedActionsList = new List<BackupDetailsModel>();
 			if (dataGridView1.SelectedRows.Count > 0)
 			{
 				foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
@@ -68,7 +68,7 @@ namespace Sdl.Community.TMBackup
 						BackupPattern = selectedRow.Cells[2].Value.ToString()
 					});
 				}
-				Persistence persistence = new Persistence();
+				var persistence = new Persistence();
 				persistence.DeleteDetailsFromInfo(removedActionsList);
 
 				GetBackupDetailsInfo();
@@ -113,7 +113,8 @@ namespace Sdl.Community.TMBackup
 		private void dataGridView1_CellValidating_1(object sender, DataGridViewCellValidatingEventArgs e)
 		{
 			var dataGrid = (DataGridView)sender;
-			bool isEmptyRow = false;
+			var isEmptyRow = false;
+
 			foreach (DataGridViewCell cell in dataGrid.Rows[dataGrid.Rows.Count - 1].Cells)
 			{
 				if (cell.Value == null)
@@ -121,6 +122,7 @@ namespace Sdl.Community.TMBackup
 					isEmptyRow = true;
 				}
 			}
+
 			if (!isEmptyRow && e.ColumnIndex == Constants.MandatoryActionColumnIndex || e.ColumnIndex == Constants.MandatoryTypeColumnIndex || e.ColumnIndex == Constants.MandatoryPatternColumnIndex)
 			{
 				if (e.FormattedValue.ToString() == string.Empty)
@@ -139,7 +141,7 @@ namespace Sdl.Community.TMBackup
 		#region Private methods
 		private void GetBackupDetailsInfo()
 		{
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
 
 			if (request != null && request.BackupDetailsModelList != null)
@@ -158,7 +160,7 @@ namespace Sdl.Community.TMBackup
 			{
 				var dataGrid = (DataGridView)sender;
 				var row = dataGrid.Rows[e.RowIndex];
-				BackupDetailsModel backupDetailsModel = new BackupDetailsModel();
+				var backupDetailsModel = new BackupDetailsModel();
 
 				if (row != null)
 				{
@@ -190,7 +192,7 @@ namespace Sdl.Community.TMBackup
 		private BindingList<DataGridViewRow> AddRowsToList()
 		{
 			_backupDetailsModelList.Clear();
-			BindingList<DataGridViewRow> rowList = new BindingList<DataGridViewRow>();
+			var rowList = new BindingList<DataGridViewRow>();
 
 			foreach (DataGridViewRow row in dataGridView1.Rows)
 			{
@@ -214,7 +216,7 @@ namespace Sdl.Community.TMBackup
 
 			foreach (DataGridViewRow item in bindingSource)
 			{
-				BackupDetailsModel bdm = new BackupDetailsModel();
+				var bdm = new BackupDetailsModel();
 				bdm.BackupAction = item.Cells[0].Value != null ? item.Cells[0].Value.ToString() : null;
 				bdm.BackupType = item.Cells[1].Value != null ? item.Cells[1].Value.ToString() : null;
 				bdm.BackupPattern = item.Cells[2].Value != null ? item.Cells[2].Value.ToString() : null;
@@ -223,7 +225,7 @@ namespace Sdl.Community.TMBackup
 			}
 			dataGridView1.DataSource = _backupDetailsModelList;
 
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			persistence.UpdateBackupDetailsForm(_backupDetailsModelList);
 
 			GetBackupDetailsInfo();
@@ -233,13 +235,13 @@ namespace Sdl.Community.TMBackup
 		// Initizialize the Backup Details grid when opening with exiting data from json
 		private void InitializeBackupDetails()
 		{
-			Persistence persistence = new Persistence();
+			var persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
 
 			if (request != null && request.BackupDetailsModelList != null && request.BackupDetailsModelList.Count > 0)
 			{
 				// create backupModel which is used as a new row where user can add another Action
-				BackupDetailsModel emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
+				var emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
 				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
 
 				dataGridView1.DataSource = request.BackupDetailsModelList;
