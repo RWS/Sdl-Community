@@ -72,7 +72,7 @@ namespace Sdl.Community.TMLifting
 							Properties.Settings.Default.Password = _userCredentials.Password;
 							Properties.Settings.Default.Uri = comboBoxServerBasedTM.SelectedItem.ToString();
 							Properties.Settings.Default.Save();
-							_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
+							_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
 							gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
 							for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 							{
@@ -88,7 +88,6 @@ namespace Sdl.Community.TMLifting
 							if (!gridServerBasedTMs.Columns.Contains("Status"))
 							{
 								gridServerBasedTMs.Columns.Add("Status", "Status");
-								//gridServerBasedTMs.Columns["Status"].Visible = true;
 							}
 							gridServerBasedTMs.Columns["Status"].Visible = true;
 							gridServerBasedTMs.ReadOnly = true;
@@ -104,7 +103,7 @@ namespace Sdl.Community.TMLifting
 					else if (_currentInstance == null && !gridServerBasedTMs.Visible)
 					{
 						_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
-						_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+						_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(AddDetailsCallback);
 						_currentInstance.FormClosed += instanceHasBeenClosed;
 						_currentInstance.Show();
 					}
@@ -141,7 +140,7 @@ namespace Sdl.Community.TMLifting
 		{
 			_currentInstance = null;
 		}
-		private async void AddDetailsCallbackFn(string userName, string password, string uri)
+		private async void AddDetailsCallback(string userName, string password, string uri)
 		{
 			try
 			{
@@ -149,8 +148,8 @@ namespace Sdl.Community.TMLifting
 				Properties.Settings.Default.Password = password;
 				Properties.Settings.Default.Uri = uri;
 				Properties.Settings.Default.Save();
-				var x = gridServerBasedTMs;
-				_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(userName, password, uri);
+				//var x = gridServerBasedTMs;
+				_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
 				gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
 				for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 				{
@@ -166,7 +165,6 @@ namespace Sdl.Community.TMLifting
 				if (!gridServerBasedTMs.Columns.Contains("Status"))
 				{
 					gridServerBasedTMs.Columns.Add("Status", "Status");
-					//gridServerBasedTMs.Columns["Status"].Visible = true;
 				}
 				gridServerBasedTMs.Columns["Status"].Visible = true;
 				gridServerBasedTMs.ReadOnly = true;
@@ -371,7 +369,7 @@ namespace Sdl.Community.TMLifting
 				{
 					if (gridServerBasedTMs["Status", i].Value != null && gridServerBasedTMs["Status", i].Value.ToString() == "Queued")
 					{
-						_sbTMs = await ServerBasedTranslationMemoryGSKit.CreateAsync(
+						_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
 							Properties.Settings.Default.UserName,
 							Properties.Settings.Default.Password,
 							Properties.Settings.Default.Uri);
@@ -419,7 +417,7 @@ namespace Sdl.Community.TMLifting
 				if (_currentInstance == null)
 				{
 					_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
-					_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(this.AddDetailsCallbackFn);
+					_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(AddDetailsCallback);
 					_currentInstance.FormClosed += instanceHasBeenClosed;
 					_currentInstance.Show();
 					groupBoxTM.Controls.Add(gridServerBasedTMs);
@@ -431,15 +429,6 @@ namespace Sdl.Community.TMLifting
 					gridServerBasedTMs.Columns["Status"].Visible = true;
 				}
 			}
-			//else
-			//{
-			//	if (_currentInstance != null)
-			//	{
-			//		_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
-			//		_currentInstance.FormClosed += instanceHasBeenClosed;
-			//		_currentInstance.BringToFront();
-			//	}				
-			//}
 		}
 
 		private void gridServerBasedTMs_CellContentClick(object sender, DataGridViewCellEventArgs e)

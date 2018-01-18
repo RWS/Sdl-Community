@@ -53,23 +53,6 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 				}
 			}
 		}
-		public async Task<ServerBasedTranslationMemoryGSKit> InitializeAsync(string userName, string password, string uri)
-		{
-			var token = await GroupShareClient.GetRequestToken(userName, password, new Uri(uri), GroupShareClient.AllScopes);
-			var groupShareClient = await GroupShareClient.AuthenticateClient(token, userName, password, new Uri(uri),
-				GroupShareClient.AllScopes);
-
-			var tmClient = await groupShareClient.TranslationMemories.GetTms();
-			this.GroupShareClient = groupShareClient;
-			this.ServerBasedTMDetails = new BindingList<TranslationMemoryDetails> (tmClient.Items);
-			return this;
-		}
-
-		public static Task<ServerBasedTranslationMemoryGSKit> CreateAsync(string userName, string password, string uri)
-		{
-			var ret = new ServerBasedTranslationMemoryGSKit();
-			return ret.InitializeAsync(userName, password, uri );
-		}
 
 		public async Task<IEnumerable<Uri>> GetServers()
 		{

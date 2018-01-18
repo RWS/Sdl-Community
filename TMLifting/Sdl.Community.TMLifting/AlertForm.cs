@@ -26,7 +26,5 @@ namespace Sdl.Community.TMLifting
 		{
 			InitializeComponent();
 		}
-
-		public event EventHandler<EventArgs> Canceled;
 	}
 }
