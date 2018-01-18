@@ -7,7 +7,7 @@
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
-		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\license.rtf" />
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
 		
 		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
 		<UIRef Id="WixUI_InstallDir" />
