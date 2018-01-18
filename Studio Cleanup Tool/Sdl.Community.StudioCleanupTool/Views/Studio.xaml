@@ -45,7 +45,7 @@
 		    </ItemsControl.ItemTemplate>
 	    </ItemsControl>
 	    <Label Grid.Column="0" Grid.Row="2" Margin="0,20,0,0" FontWeight="Bold">Remove folders from following locations:</Label>
-		<CheckBox Grid.Column="0" Grid.Row="3" Margin="5,0,0,5" FontFamily="Calibri" FontSize="14" IsChecked="{Binding CheckAll}">Select/Unselect all</CheckBox>
+		<CheckBox Grid.Column="0" Grid.Row="3" Margin="2,0,0,5" FontFamily="Calibri" FontSize="14" IsChecked="{Binding CheckAll}">Select/Unselect all</CheckBox>
 	    <ListBox 
 		    ItemsSource ="{Binding FoldersLocationsCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 			SelectionMode="Multiple"
@@ -59,6 +59,24 @@
 							<Setter Property="IsSelected" Value="True" />
 						</DataTrigger>
 					</Style.Triggers>
+					<Setter Property="FocusVisualStyle" Value="{x:Null}" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="ListBoxItem">
+								<Border
+									Name="Border"
+									Padding="2"
+									SnapsToDevicePixels="true">
+									<ContentPresenter />
+								</Border>
+								<ControlTemplate.Triggers>
+									<Trigger Property="IsSelected" Value="true">
+										<Setter TargetName="Border" Property="Background" Value="#9BB441"/>
+									</Trigger>
+								</ControlTemplate.Triggers>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
 				</Style>
 			</ListBox.Resources>
 		    <ListBox.ItemTemplate>
