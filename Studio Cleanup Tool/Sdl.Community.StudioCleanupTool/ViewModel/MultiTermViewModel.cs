@@ -85,14 +85,19 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("Studio in running",
-						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+					await _mainWindow.ShowMessageAsync("MultiTerm is running",
+						"Please close MultiTerm in order to restore selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 			}
 		}
 
-		private void RepairMultiTerm()
+		private async void RepairMultiTerm()
 		{
+			var dialog = new MetroDialogSettings
+			{
+				AffirmativeButtonText = "OK"
+
+			};
 			if (!MultiTermIsRunning())
 			{
 				if (Directory.Exists(_packageCache))
@@ -103,6 +108,11 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 						RunRepair(selectedVersion);
 					}
 				}
+			}
+			else
+			{
+				await _mainWindow.ShowMessageAsync("MultiTerm is running",
+					"Please close MultiTerm to repair it.", MessageDialogStyle.Affirmative, dialog);
 			}
 		}
 
@@ -205,7 +215,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("MultiTerm in running",
+					await _mainWindow.ShowMessageAsync("MultiTerm is running",
 						"Please close MultiTerm in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 				

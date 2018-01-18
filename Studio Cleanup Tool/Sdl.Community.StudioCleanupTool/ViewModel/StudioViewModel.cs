@@ -297,8 +297,8 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("Studio in running",
-						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
+					await _mainWindow.ShowMessageAsync("Studio is running",
+						"Please close Trados Studio in order to restore selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 			}
 		}
@@ -340,7 +340,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					AffirmativeButtonText = "OK"
 
 				};
-				await _mainWindow.ShowMessageAsync("Studio in running",
+				await _mainWindow.ShowMessageAsync("Studio is running",
 					"Please close Trados Studio in order to repair it.", MessageDialogStyle.Affirmative, dialog);
 			}
 		
@@ -592,7 +592,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				else
 				{
-					await _mainWindow.ShowMessageAsync("Studio in running",
+					await _mainWindow.ShowMessageAsync("Studio is running",
 						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 
