@@ -25,7 +25,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					OriginalFilePath = projectTemplatePath,
 					BackupFilePath = Path.Combine(_backupFolderPath,studioVersion.DisplayName,directoryInfo.Name),
 					Alias = selectedLocation.Alias,
-					StudioVersion = studioVersion.DisplayName
+					Version = studioVersion.DisplayName
 				};
 			    studioDetails.Add(details);
 		    };
@@ -46,7 +46,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				    OriginalFilePath = projectsXmlPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
-				    StudioVersion = studioVersion.DisplayName
+				    Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);
 		    }

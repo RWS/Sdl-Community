@@ -27,8 +27,8 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 						var details = new LocationDetails
 						{
 							OriginalFilePath = packagePath,
-							BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name)
-
+							BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "PackageCache", directoryInfo.Name),
+							Version = multiTermVersion.DisplayName
 						};
 						packagePaths.Add(details);
 					}
@@ -57,14 +57,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			var programFilesPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
-			    var programFilePath = string.Format(@"c:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm{0}",
+			    var programFilePath = string.Format(@"C:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm{0}",
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(programFilePath);
 			    var details = new LocationDetails
 				{
 				    OriginalFilePath = programFilePath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name)
-
+				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "ProgramFiles", directoryInfo.Name),
+					Version = multiTermVersion.DisplayName
 			    };
 			    
 				programFilesPaths.Add(details);
@@ -77,14 +77,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			var appDataPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
-			    var appDataFilePath = string.Format(@"c:\Users\{0}\AppData\Local\SDL\SDL MultiTerm\MultiTerm{1}",userName,
+			    var appDataFilePath = string.Format(@"C:\Users\{0}\AppData\Local\SDL\SDL MultiTerm\MultiTerm{1}",userName,
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(appDataFilePath);
 			    var details = new LocationDetails
 				{
 				    OriginalFilePath = appDataFilePath,
-					BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName,"Local",directoryInfo.Name)
-
+					BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName,"Local",directoryInfo.Name),
+					Version = multiTermVersion.DisplayName
 			    };
 			    appDataPaths.Add(details);
 		    }
@@ -96,14 +96,14 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 			var appDataPaths = new List<LocationDetails>();
 		    foreach (var multiTermVersion in multiTermVersions)
 		    {
-			    var appDataFilePath = string.Format(@"c:\Users\{0}\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm{1}", userName,
+			    var appDataFilePath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm{1}", userName,
 				    multiTermVersion.MajorVersionNumber);
 				var directoryInfo = new DirectoryInfo(appDataFilePath);
 			    var details = new LocationDetails
 				{
 				    OriginalFilePath = appDataFilePath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name)
-
+				    BackupFilePath = Path.Combine(_backupFolderPath, multiTermVersion.DisplayName, "Roaming", directoryInfo.Name),
+					Version = multiTermVersion.DisplayName
 			    };
 			    appDataPaths.Add(details);
 			}

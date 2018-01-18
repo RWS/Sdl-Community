@@ -75,7 +75,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					var controller = await _mainWindow.ShowProgressAsync("Please wait...", "We are restoring selected folders");
 					controller.SetIndeterminate();
 
-					var foldersToRestore = _persistence.Load(false);
+					var foldersToRestore = LocationsForSelectedVersions();
 					await Remove.RestoreBackupFiles(foldersToRestore);
 					UnselectGrids();
 					CheckAll = false;
@@ -144,20 +144,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		{
 			_multiTermLocationCollection = new ObservableCollection<MultiTermLocationListItem>
 			{
-				//new MultiTermLocationListItem
-				//{
-				//	DisplayName = @"C:\ProgramData\Package Cache\SDL\SDLMultiTermDesktop2017\",
-				//	IsSelected = false,
-				//	Description = "first description",
-				//	Alias = "packageCache"
-				//},
-				//new MultiTermLocationListItem
-				//{
-				//	DisplayName = @"C:\Program Files (x86)\SDL\SDL MultiTerm\MultiTerm14\",
-				//	IsSelected = false,
-				//	Description = "second",
-				//	Alias = "programFiles"
-				//},
 			 new MultiTermLocationListItem
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14",
@@ -224,6 +210,23 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				}
 				
 			}
+		}
+
+		private List<LocationDetails> LocationsForSelectedVersions()
+		{
+			var allFolders = _persistence.Load(false);
+			var selectedVersions = MultiTermVersionsCollection.Where(s => s.IsSelected).ToList();
+			var locationsForSelectedVersion = new List<LocationDetails>();
+			if (selectedVersions.Any())
+			{
+				foreach (var version in selectedVersions)
+				{
+					var locations = allFolders.Where(v => v.Version.Equals(version.DisplayName)).ToList();
+					locationsForSelectedVersion.AddRange(locations);
+				}
+				return locationsForSelectedVersion;
+			}
+			return allFolders;
 		}
 
 		private bool MultiTermIsRunning()

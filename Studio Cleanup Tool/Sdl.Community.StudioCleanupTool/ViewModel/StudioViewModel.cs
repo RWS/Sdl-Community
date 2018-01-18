@@ -288,7 +288,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					controller.SetIndeterminate();
 
 					//load saved folders path
-					var foldersToRestore = _persistenceSettings.Load(true);
+					var foldersToRestore = LocationsForSelectedVersions();//_persistenceSettings.Load(true);
 					await Remove.RestoreBackupFiles(foldersToRestore);
 
 					UnselectGrids();
@@ -301,6 +301,23 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 						"Please close Trados Studio in order to remove selected folders.", MessageDialogStyle.Affirmative, dialog);
 				}
 			}
+		}
+
+		private List<LocationDetails> LocationsForSelectedVersions()
+		{
+			var allFolders = _persistenceSettings.Load(true);
+			var selectedVersions = StudioVersionsCollection.Where(s => s.IsSelected).ToList();
+			var locationsForSelectedVersion = new List<LocationDetails>();
+			if (selectedVersions.Any())
+			{
+				foreach (var version in selectedVersions)
+				{
+					var locations = allFolders.Where(v => v.Version.Equals(version.DisplayName)).ToList();
+					locationsForSelectedVersion.AddRange(locations);
+				}
+				return locationsForSelectedVersion;
+			}
+			return allFolders;
 		}
 
 		private async void RepairStudio()

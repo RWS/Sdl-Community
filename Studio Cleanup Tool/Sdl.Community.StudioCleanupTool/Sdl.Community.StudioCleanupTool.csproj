@@ -73,7 +73,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\CommandHandler.cs" />
-    <Compile Include="Helpers\DescriptionChangedEventArgs.cs" />
     <Compile Include="Helpers\DocumentsFolder.cs" />
     <Compile Include="Helpers\MultiTermFolders.cs" />
     <Compile Include="Helpers\Persistence.cs" />

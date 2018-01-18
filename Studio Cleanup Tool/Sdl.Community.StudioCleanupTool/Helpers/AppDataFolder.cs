@@ -27,7 +27,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					OriginalFilePath = majorFolderPath,
 					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 					Alias = selectedLocation.Alias,
-					StudioVersion = studioVersion.DisplayName
+					Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);
 			}
@@ -48,7 +48,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					OriginalFilePath = majorFolderPath,
 					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
 					Alias = selectedLocation.Alias,
-					StudioVersion = studioVersion.DisplayName
+					Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);
 			}
@@ -69,7 +69,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					OriginalFilePath = projectApiPath,
 					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName,"ProjectApi", directoryInfo.Name),
 					Alias = selectedLocation.Alias,
-					StudioVersion = studioVersion.DisplayName
+					Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);
 			}
@@ -90,7 +90,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 					OriginalFilePath = majorFolderPath,
 					BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
 					Alias = selectedLocation.Alias,
-					StudioVersion = studioVersion.DisplayName
+					Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);
 			}
@@ -110,7 +110,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				    OriginalFilePath = majorFolderPath,
 				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "SDL Trados Studio", directoryInfo.Name),
 				    Alias = selectedLocation.Alias,
-				    StudioVersion = studioVersion.DisplayName
+				    Version = studioVersion.DisplayName
 				};
 			    studioDetails.Add(details);
 			}

@@ -10,7 +10,7 @@ namespace Sdl.Community.StudioCleanupTool.Model
 	{
 		public string OriginalFilePath { get; set; }
 		public string BackupFilePath { get; set; }
-		public string StudioVersion { get; set; }
+		public string Version { get; set; }
 		public string Alias { get; set; }
 	}
 }
