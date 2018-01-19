@@ -74,70 +74,70 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Projects\projects.xml",
 				    IsSelected = false,
-				    Description = "Removes projects xml file",
+				    Description = FoldersDescriptionText.ProjectsXml(),
 					Alias = "projectsXml"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Project Templates",
 				    IsSelected = false,
-				    Description = "Removes project templates",
+				    Description = FoldersDescriptionText.ProjectsTemplates(),
 					Alias = "projectTemplates"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
-				    Description = "Removes the plugins",
+				    Description = FoldersDescriptionText.AppDataRoamingMajor(),
 					Alias = "roamingMajor"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\14.0.0.0",
 				    IsSelected = false,
-				    Description = "Removes the plugins",
+				    Description = FoldersDescriptionText.ProjectApi(),
 				    Alias = "roamingProjectApi"
 				},
 				new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
-				    Description = "Removes some files",
+				    Description = FoldersDescriptionText.AppDataRoamingMajorFull(),
 				    Alias = "roamingMajorFull"
 				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
-				    Description = "Removes plugins",
+				    Description = FoldersDescriptionText.AppDataLocalMajor(),
 				    Alias = "localMajor"
 				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
-				    Description = "Removes files",
+				    Description = FoldersDescriptionText.AppDataLocalMajorFull(),
 					Alias = "localMajorFull"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14",
 				    IsSelected = false,
-				    Description = "Removes files from program data",
+				    Description = FoldersDescriptionText.ProgramData(),
 					Alias = "programDataMajor"
 			    },
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14.0.0.0",
 				    IsSelected = false,
-				    Description = "Removes files",
+				    Description = FoldersDescriptionText.ProgramDataFull(),
 				    Alias = "programDataMajorFull"
 				},
 			    new StudioLocationListItem
 			    {
 				    DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio5",
 				    IsSelected = false,
-				    Description = "Removes files",
+				    Description = FoldersDescriptionText.ProgramDataVersionNumber(),
 				    Alias = "programData"
 				}
 		    };

@@ -158,13 +158,13 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14",
 					IsSelected = false,
-					Description = "Another",
+					Description = FoldersDescriptionText.MultiTermLocal(),
 					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
 					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14",
 					IsSelected = false,
-					Description = "another description",
+					Description =FoldersDescriptionText.MultiTermRoaming(),
 					Alias = "appDataRoming"
 				}
 			};
