@@ -4,6 +4,7 @@ using Sdl.Community.BackupService.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
@@ -39,11 +40,11 @@ namespace Sdl.Community.TMBackup
 							LastRun = task.LastRunTime,
 							NextRun = task.NextRunTime,
 							Interval = triggerInfo,
-							Status = task.State.GetDescription()
+							Status = task.State.ToString()
 						});
 					}
 				}
-				dataGridView1.DataSource = tasks;
+				GetBackupTasks();
 			}
 		}
 
@@ -64,6 +65,39 @@ namespace Sdl.Community.TMBackup
 
 			var tmBackupForm = new TMBackupForm(false, cellValue);
 			tmBackupForm.ShowDialog();
+		}
+
+		/// <summary>
+		/// Delete selected task/tasks
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (var ts = new TaskService())
+			{
+				foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
+				{
+					var task = ts.AllTasks.Where(t => t.Name.Contains(selectedRow.Cells[0].Value.ToString())).FirstOrDefault();
+					if (task != null)
+					{
+						ts.RootFolder.DeleteTask(task.Name);
+					}
+				}
+				dataGridView1.DataSource = ts.AllTasks;
+			}
+		}
+
+		// Display the context menu with the 'Delete' option of the row
+		private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+		{
+			if(e.Button == MouseButtons.Right)
+			{
+				dataGridView1.Rows[e.RowIndex].Selected = true;
+				dataGridView1.CurrentCell = this.dataGridView1.Rows[e.RowIndex].Cells[1];
+				contextMenuStrip1.Show(dataGridView1, e.Location);
+				contextMenuStrip1.Show(Cursor.Position);
+			}
 		}
 	}
 }
