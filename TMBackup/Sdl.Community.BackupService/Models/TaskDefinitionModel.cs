@@ -8,5 +8,6 @@ namespace Sdl.Community.BackupService.Models
 		public DateTime LastRun { get; set; }
 		public DateTime NextRun { get; set; }
 		public string Interval { get; set; }
+		public string Status { get; set; }
 	}
 }

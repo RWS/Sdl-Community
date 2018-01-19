@@ -35,6 +35,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.TaskNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LastRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NextRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IntervalCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -83,6 +84,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TaskNameCol,
+            this.Status,
             this.LastRunCol,
             this.NextRunCol,
             this.IntervalCol});
@@ -100,6 +102,12 @@
             this.TaskNameCol.Name = "TaskNameCol";
             this.TaskNameCol.ReadOnly = true;
             this.TaskNameCol.Width = 85;
+            // 
+            // Status
+            // 
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
             // 
             // LastRunCol
             // 
@@ -155,6 +163,7 @@
 		private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn TaskNameCol;
+		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewTextBoxColumn LastRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NextRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn IntervalCol;
