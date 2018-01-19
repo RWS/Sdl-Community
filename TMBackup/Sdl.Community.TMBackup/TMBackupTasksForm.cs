@@ -44,7 +44,7 @@ namespace Sdl.Community.TMBackup
 						});
 					}
 				}
-				GetBackupTasks();
+				dataGridView1.DataSource = tasks;
 			}
 		}
 
@@ -74,29 +74,35 @@ namespace Sdl.Community.TMBackup
 		/// <param name="e"></param>
 		private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			using (var ts = new TaskService())
+			if (dataGridView1.DataSource != null)
 			{
-				foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
+				using (var ts = new TaskService())
 				{
-					var task = ts.AllTasks.Where(t => t.Name.Contains(selectedRow.Cells[0].Value.ToString())).FirstOrDefault();
-					if (task != null)
+					foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
 					{
-						ts.RootFolder.DeleteTask(task.Name);
+						var task = ts.AllTasks.Where(t => t.Name.Contains(selectedRow.Cells[0].Value.ToString())).FirstOrDefault();
+						if (task != null)
+						{
+							ts.RootFolder.DeleteTask(task.Name);
+						}
 					}
+					GetBackupTasks();
 				}
-				dataGridView1.DataSource = ts.AllTasks;
 			}
 		}
 
-		// Display the context menu with the 'Delete' option of the row
+		// Display the context menu with the 'Delete' option for the tasks
 		private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if(e.Button == MouseButtons.Right)
 			{
-				dataGridView1.Rows[e.RowIndex].Selected = true;
-				dataGridView1.CurrentCell = this.dataGridView1.Rows[e.RowIndex].Cells[1];
-				contextMenuStrip1.Show(dataGridView1, e.Location);
-				contextMenuStrip1.Show(Cursor.Position);
+				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+				{
+					row.Selected = true;
+					dataGridView1.CurrentCell = this.dataGridView1.Rows[e.RowIndex].Cells[1];
+					contextMenuStrip1.Show(dataGridView1, e.Location);
+					contextMenuStrip1.Show(Cursor.Position);
+				}
 			}
 		}
 	}
