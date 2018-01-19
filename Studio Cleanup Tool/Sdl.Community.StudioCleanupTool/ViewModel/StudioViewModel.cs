@@ -11,7 +11,6 @@ using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StudioCleanupTool.Annotations;
 using Sdl.Community.StudioCleanupTool.Helpers;
 using Sdl.Community.StudioCleanupTool.Model;
-using Sdl.Community.StudioCleanupTool.Views;
 
 namespace Sdl.Community.StudioCleanupTool.ViewModel
 {
@@ -28,7 +27,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		private readonly MainWindow _mainWindow;
 		private readonly string _userName;
 		private bool _isRemoveEnabled;
-		private bool _isRestoreEnabled;
 		private bool _isRepairEnabled;
 		private bool _checkAll;
 		private string _removeBtnColor;
@@ -47,7 +45,6 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    _folderDescription = string.Empty;
 			_userName = Environment.UserName;
 			_isRemoveEnabled = false;
-			_isRestoreEnabled =false;
 			_isRepairEnabled = false;
 			_checkAll = false;
 			_removeBtnColor = "LightGray";
@@ -75,14 +72,14 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 		    {
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Projects",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Projects\projects.xml",
 				    IsSelected = false,
 				    Description = "Removes projects xml file",
 					Alias = "projectsXml"
 			    },
 			    new StudioLocationListItem
 			    {
-				    DisplayName = @"C:\Users\[USERNAME]\Documents\14\Project Templates",
+				    DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Project Templates",
 				    IsSelected = false,
 				    Description = "Removes project templates",
 					Alias = "projectTemplates"
