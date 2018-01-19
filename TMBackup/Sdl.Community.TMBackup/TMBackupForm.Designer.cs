@@ -52,6 +52,7 @@
             this.txt_BackupNameError = new System.Windows.Forms.TextBox();
             this.txt_BackupFromError = new System.Windows.Forms.TextBox();
             this.txt_BackupToError = new System.Windows.Forms.TextBox();
+            this.txt_TaskNameError = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txt_BackupFrom
@@ -311,11 +312,25 @@
             this.txt_BackupToError.Text = "\'Backup to\' cannot be empty. Please select folder where to backup files!";
             this.txt_BackupToError.Visible = false;
             // 
+            // txt_TaskNameError
+            // 
+            this.txt_TaskNameError.BackColor = System.Drawing.SystemColors.Control;
+            this.txt_TaskNameError.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_TaskNameError.ForeColor = System.Drawing.Color.Red;
+            this.txt_TaskNameError.Location = new System.Drawing.Point(20, 34);
+            this.txt_TaskNameError.Multiline = true;
+            this.txt_TaskNameError.Name = "txt_TaskNameError";
+            this.txt_TaskNameError.Size = new System.Drawing.Size(100, 30);
+            this.txt_TaskNameError.TabIndex = 33;
+            this.txt_TaskNameError.Text = "Task already exist with this  name!";
+            this.txt_TaskNameError.Visible = false;
+            // 
             // TMBackupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(657, 384);
+            this.Controls.Add(this.txt_TaskNameError);
             this.Controls.Add(this.txt_BackupToError);
             this.Controls.Add(this.txt_BackupFromError);
             this.Controls.Add(this.txt_BackupNameError);
@@ -373,5 +388,6 @@
 		private System.Windows.Forms.TextBox txt_BackupNameError;
 		private System.Windows.Forms.TextBox txt_BackupFromError;
 		private System.Windows.Forms.TextBox txt_BackupToError;
+		private System.Windows.Forms.TextBox txt_TaskNameError;
 	}
 }

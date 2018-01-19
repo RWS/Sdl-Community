@@ -77,11 +77,15 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
 		{
+			txt_TaskNameError.Visible = CheckTask(txt_BackupName.Text);
 			txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
 			txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
 			txt_BackupNameError.Visible = string.IsNullOrEmpty(txt_BackupName.Text) ? true: false;
 
-			if (!txt_BackupFromError.Visible && !txt_BackupToError.Visible && !txt_BackupNameError.Visible)
+			if (!txt_TaskNameError.Visible
+				&& !txt_BackupFromError.Visible
+				&& !txt_BackupToError.Visible
+				&& !txt_BackupNameError.Visible)
 			{
 				var backupModel = new BackupModel();
 				backupModel.BackupName = string.Concat(Constants.TaskDetailValue, txt_BackupName.Text);
@@ -130,6 +134,21 @@ namespace Sdl.Community.TMBackup
 
 			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask);
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
-		}		
+		}
+		
+		private bool CheckTask(string taskName)
+		{		
+			var persistence = new Persistence();
+			var result = persistence.ReadFormInformation();
+
+			if(result != null && result.BackupModel != null)
+			{
+				if(result.BackupModel.BackupName.Contains(taskName))
+				{
+					return true;
+				}				
+			}
+			return false;
+		}
 	}
 }
