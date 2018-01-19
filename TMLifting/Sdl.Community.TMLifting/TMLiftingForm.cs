@@ -1,23 +1,13 @@
 ﻿using Sdl.Community.TMLifting.Helpers;
 using Sdl.Community.TMLifting.TranslationMemory;
 using System;
-using System.Configuration;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.Community.GroupShareKit;
-using System.Threading.Tasks;
-using Sdl.Community.GroupShareKit.Clients;
-using System.Reflection;
-using System.Net.Http;
-using Newtonsoft.Json;
 using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
-using System.Collections.ObjectModel;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -148,7 +138,6 @@ namespace Sdl.Community.TMLifting
 				Properties.Settings.Default.Password = password;
 				Properties.Settings.Default.Uri = uri;
 				Properties.Settings.Default.Save();
-				//var x = gridServerBasedTMs;
 				_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
 				gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
 				for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
@@ -379,6 +368,7 @@ namespace Sdl.Community.TMLifting
 							)
 						{
 							gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
+							//var result = _sbTMs.GroupShareClient.TranslationMemories.
 							gridServerBasedTMs["Status", i].Value = "Finished";
 							gridServerBasedTMs.Refresh();
 						}

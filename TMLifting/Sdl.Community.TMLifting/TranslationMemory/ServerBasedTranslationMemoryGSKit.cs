@@ -1,22 +1,13 @@
-﻿using Sdl.Community.TMLifting.Processor;
-using Sdl.Community.Toolkit.Core.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.GroupShareKit;
-using Sdl.Community.GroupShareKit.Clients;
 using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 using System.Reflection;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
 using System.IO;
 using Sdl.Community.TMLifting.Helpers;
 using System.ComponentModel;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System.Collections.ObjectModel;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting.TranslationMemory
 {
