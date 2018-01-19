@@ -40,12 +40,13 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		    {
 				var projectsXmlPath = string.Format(@"C:\Users\{0}\Documents\{1}\Projects\projects.xml", userName,
 					studioVersion.DisplayName);
-				var directoryInfo = new DirectoryInfo(projectsXmlPath);
 				var details = new LocationDetails
 			    {
+					
 				    OriginalFilePath = projectsXmlPath,
-				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, directoryInfo.Name),
-				    Alias = selectedLocation.Alias,
+				    BackupFilePath = Path.Combine(_backupFolderPath, studioVersion.DisplayName, "Projects","projects.xml"),
+
+					Alias = selectedLocation.Alias,
 				    Version = studioVersion.DisplayName
 				};
 				studioDetails.Add(details);

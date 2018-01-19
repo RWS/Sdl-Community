@@ -97,9 +97,9 @@
 			<TextBlock Margin="5,0,50,0"  TextWrapping="WrapWithOverflow" Width="500" Text="{Binding SelectedLocation.Description}" TextAlignment="Justify"></TextBlock>
 	    </StackPanel>
 
-	    <StackPanel Grid.Column="1" Grid.Row="5" Height="150" Margin="10,0,0,0" Orientation="Vertical">
-		    <StackPanel Orientation="Horizontal">
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
+	    <StackPanel Grid.Column="1" Grid.Row="5" Width="450" Margin="10,0,0,0" Orientation="Vertical">
+		    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,10,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="{Binding RemoveBtnColor}" CornerRadius="3" >

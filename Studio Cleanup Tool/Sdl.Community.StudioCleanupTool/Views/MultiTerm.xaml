@@ -98,8 +98,8 @@
 			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="450" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
 
-		<StackPanel Grid.Column="1" Grid.Row="5" Margin="10,200,0,0" VerticalAlignment="Top" Height="270">
-			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+		<StackPanel Grid.Column="1" Grid.Row="5" Margin="10,200,0,0" VerticalAlignment="Top" Height="270" >
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" >
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="0,20,10,0" Foreground="{Binding RemoveForeground}" IsEnabled="{Binding IsRemoveEnabled}"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 					<Button.Template>
 						<ControlTemplate TargetType="{x:Type Button}">

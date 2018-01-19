@@ -9,49 +9,58 @@ using Sdl.Community.StudioCleanupTool.Model;
 
 namespace Sdl.Community.StudioCleanupTool.Helpers
 {
-    public static class Remove
-    {
-	    public static async Task BackupFiles(List<LocationDetails> foldersToBackup)
-	    {
-		    await Task.Run(() => CreateBackupFolder(foldersToBackup));
-	    }
-	    public static async Task RestoreBackupFiles(List<LocationDetails> foldersToBackup)
-	    {
-		    await Task.Run(() => RestoreFiles(foldersToBackup));
-	    }
+	public static class Remove
+	{
+		public static async Task BackupFiles(List<LocationDetails> foldersToBackup)
+		{
+			await Task.Run(() => CreateBackupFolder(foldersToBackup));
+		}
+
+		public static async Task RestoreBackupFiles(List<LocationDetails> foldersToBackup)
+		{
+			await Task.Run(() => RestoreFiles(foldersToBackup));
+		}
 
 		private static void RestoreFiles(List<LocationDetails> foldersToBackup)
-	    {
+		{
 			foreach (var folder in foldersToBackup)
 			{
-				//creates original folders if doesn't exist
-				if (!Directory.Exists(folder.OriginalFilePath))
+				if (!folder.BackupFilePath.Contains("projects.xml"))
 				{
-					Directory.CreateDirectory(folder.OriginalFilePath);
-				}
-				try
-				{
-					//Get files  from backup
-					var files = Directory.GetFiles(folder.BackupFilePath);
-					if (files.Length > 0)
+					//creates original folders if doesn't exist
+					if (!Directory.Exists(folder.OriginalFilePath))
 					{
-						MoveToBackUp(files, folder.OriginalFilePath);
+						Directory.CreateDirectory(folder.OriginalFilePath);
+					}
+					try
+					{
+						//Get files  from backup
+						var files = Directory.GetFiles(folder.BackupFilePath);
+						if (files.Length > 0)
+						{
+							MoveToBackUp(files, folder.OriginalFilePath);
+						}
+
+						var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
+						foreach (var subdirectory in subdirectories)
+						{
+							var currentDirInfo = new DirectoryInfo(subdirectory);
+							CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
+						}
+					}
+					catch (Exception e)
+					{
 					}
 
-					var subdirectories = Directory.GetDirectories(folder.BackupFilePath);
-					foreach (var subdirectory in subdirectories)
-					{
-						var currentDirInfo = new DirectoryInfo(subdirectory);
-						CheckForSubfolders(currentDirInfo, folder.OriginalFilePath);
-					}
 				}
-				catch (Exception e)
+				else
 				{
+					File.Copy(folder.BackupFilePath, folder.OriginalFilePath, true);
 				}
 			}
 		}
 
-	    public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
+	public static async Task FromSelectedLocations(List<LocationDetails> foldersToRemove)
 	    {
 		    try
 		    {
@@ -78,12 +87,28 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 
 	    private static void CreateBackupFolder(List<LocationDetails> foldersToBackup)
 	    {
-			    foreach (var folder in foldersToBackup)
+		    foreach (var folder in foldersToBackup)
+		    {
+			    if (!Directory.Exists(folder.BackupFilePath))
 			    {
-				    if (!Directory.Exists(folder.BackupFilePath))
+				    if (!folder.OriginalFilePath.Contains("projects.xml"))
 				    {
 					    Directory.CreateDirectory(folder.BackupFilePath);
 				    }
+				    else
+				    {
+					    //take any projects.xml and copy it
+					    var directoryInfo = new DirectoryInfo(folder.BackupFilePath);
+					    if (directoryInfo.Parent != null)
+					    {
+						    Directory.CreateDirectory(directoryInfo.Parent.FullName);
+					    }
+					    File.Copy(folder.OriginalFilePath, folder.BackupFilePath, true);
+					
+				    }
+			    }
+			    else
+			    {
 				    try
 				    {
 					    if (Directory.Exists(folder.OriginalFilePath))
@@ -108,6 +133,7 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				    {
 				    }
 			    }
+		    }
 	    }
 
 	    private static void CheckForSubfolders(DirectoryInfo currentDirInfo, string backupFolderRoot)
