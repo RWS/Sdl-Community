@@ -88,6 +88,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ReadMe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\Studio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -104,6 +108,9 @@
     <Compile Include="ViewModel\StudioViewModel.cs" />
     <Compile Include="Views\MultiTerm.xaml.cs">
       <DependentUpon>MultiTerm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ReadMe.xaml.cs">
+      <DependentUpon>ReadMe.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Studio.xaml.cs">
       <DependentUpon>Studio.xaml</DependentUpon>
