@@ -6,10 +6,10 @@ namespace Sdl.Community.BackupService.Models
 	{
 		public List<BackupDetailsModel> BackupDetailsModelList { get; set; }
 
-		public BackupModel BackupModel { get; set; }
+		public List<BackupModel> BackupModelList { get; set; }
 
-		public ChangeSettingsModel ChangeSettingsModel { get; set; }
+		public List<ChangeSettingsModel> ChangeSettingsModelList { get; set; }
 
-		public PeriodicBackupModel PeriodicBackupModel { get; set; }
+		public List<PeriodicBackupModel> PeriodicBackupModelList { get; set; }
 	}
 }

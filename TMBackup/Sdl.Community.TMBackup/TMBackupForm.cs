@@ -4,6 +4,7 @@ using Sdl.Community.BackupService.Models;
 using System;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Sdl.Community.TMBackup
 {
@@ -11,6 +12,8 @@ namespace Sdl.Community.TMBackup
 	{
 		private string _taskName;
 		private bool _isNewTask;
+
+		private List<BackupModel> _backupModelList = new List<BackupModel>();
 
 		public TMBackupForm(bool isNewTask, string taskName)
 		{
@@ -63,7 +66,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Details_Click(object sender, EventArgs e)
 		{
-			var detailsForm = new TMBackupDetailsForm();
+			var detailsForm = new TMBackupDetailsForm(_taskName);
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
@@ -95,13 +98,15 @@ namespace Sdl.Community.TMBackup
 				backupModel.BackupDetails = txt_BackupDetails.Text;
 				backupModel.BackupTime = txt_BackupTime.Text;
 
+				_backupModelList.Add(backupModel);
+
 				var persistence = new Persistence();
-				persistence.SaveBackupFormInfo(backupModel);
+				persistence.SaveBackupFormInfo(_backupModelList);
 
 				Hide();
 
 				var service = new Service();
-				service.CreateTaskScheduler();
+				service.CreateTaskScheduler(backupModel.BackupName);
 
 				var tmBackupTasksForm = new TMBackupTasksForm();
 				tmBackupTasksForm.ShowDialog();
@@ -112,14 +117,15 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
+			var backupModel = result != null ? result.BackupModelList !=null ? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault() : null : null;
 
-			if (result.BackupModel != null && !_isNewTask)
+			if (backupModel != null && !_isNewTask)
 			{
-				txt_BackupName.Text = result.BackupModel.BackupName;
-				txt_BackupFrom.Text = result.BackupModel.BackupFrom;
-				txt_BackupTo.Text = result.BackupModel.BackupTo;
-				txt_BackupTime.Text = result.BackupModel.BackupTime;
-				txt_Description.Text = result.BackupModel.Description;
+				txt_BackupName.Text = backupModel.BackupName;
+				txt_BackupFrom.Text = backupModel.BackupFrom;
+				txt_BackupTo.Text = backupModel.BackupTo;
+				txt_BackupTime.Text = backupModel.BackupTime;
+				txt_Description.Text = backupModel.Description;
 			}
 
 			if (result.BackupDetailsModelList != null)
@@ -132,21 +138,19 @@ namespace Sdl.Community.TMBackup
 				txt_BackupDetails.Text = res;
 			}
 
-			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask);
+			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, _taskName);
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}
-		
+
 		private bool CheckTask(string taskName)
-		{		
+		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
+			var backupModel = result != null ? result.BackupModelList != null ? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault() : null :null;
 
-			if(result != null && result.BackupModel != null)
+			if (backupModel != null && backupModel.BackupName.Contains(taskName))
 			{
-				if(result.BackupModel.BackupName.Contains(taskName))
-				{
-					return true;
-				}				
+				return true;
 			}
 			return false;
 		}

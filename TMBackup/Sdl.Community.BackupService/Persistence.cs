@@ -32,38 +32,63 @@ namespace Sdl.Community.BackupService
 			}
 		}
 
-		public void SaveBackupFormInfo(BackupModel backupModel)
+		public void SaveBackupFormInfo(List<BackupModel> backupModelList)
 		{
-			CheckIfJsonFileExist();
-
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request == null)
+			if (backupModelList.Any())
 			{
-				request = new JsonRequestModel();
+				CheckIfJsonFileExist();
+
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+				if (request == null)
+				{
+					request = new JsonRequestModel();
+					request.BackupModelList = backupModelList;
+					WriteJsonRequestModel(request);
+				}
+				else
+				{
+					if (request.BackupModelList.Any())
+					{
+						foreach (var backupModelItem in backupModelList)
+						{
+							var existingBackupModelItem = request.BackupModelList.Where(b => b.BackupName == backupModelItem.BackupName
+																						&& b.Description == backupModelItem.Description)
+																				 .FirstOrDefault();
+
+							if (existingBackupModelItem == null)
+							{
+								request.BackupModelList.Add(backupModelItem);
+								WriteJsonRequestModel(request);
+							}
+							else
+							{
+								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+							}
+						}
+					}
+					else
+					{
+						request.BackupModelList = backupModelList;
+						WriteJsonRequestModel(request);
+					}
+				}			
 			}
-
-			request.BackupModel = backupModel;
-			var json = JsonConvert.SerializeObject(request);
-
-			File.WriteAllText(_persistancePath, json);
 		}
-		
+
 		public void SaveDetailsFormInfo(List<BackupDetailsModel> backupDetailsModelList)
 		{
-			if(backupDetailsModelList.Any())
-			{ 
-			CheckIfJsonFileExist();
+			if (backupDetailsModelList.Any())
+			{
+				CheckIfJsonFileExist();
 
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 				if (request == null)
 				{
 					request = new JsonRequestModel();
 					request.BackupDetailsModelList = backupDetailsModelList;
-					var json = JsonConvert.SerializeObject(request);
-
-					File.WriteAllText(_persistancePath, json);
+					WriteJsonRequestModel(request);
 				}
 				else
 				{
@@ -78,9 +103,7 @@ namespace Sdl.Community.BackupService
 							if (existingBackupItem == null)
 							{
 								request.BackupDetailsModelList.Add(backupItem);
-
-								var json = JsonConvert.SerializeObject(request);
-								File.WriteAllText(_persistancePath, json);
+								WriteJsonRequestModel(request);
 							}
 							else
 							{
@@ -91,32 +114,29 @@ namespace Sdl.Community.BackupService
 					else
 					{
 						request.BackupDetailsModelList = backupDetailsModelList;
-
-						var json = JsonConvert.SerializeObject(request);
-						File.WriteAllText(_persistancePath, json);
+						WriteJsonRequestModel(request);
 					}
 				}
-			}			
+			}
 		}
 
-		public void UpdateBackupDetailsForm(List<BackupDetailsModel> backupDetailsModelList)
+		public void UpdateBackupDetailsForm(List<BackupDetailsModel> backupDetailsModelList, string taskName)
 		{
 			CheckIfJsonFileExist();
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if(request != null && request.BackupDetailsModelList.Any())
+			if(request != null && request.BackupDetailsModelList.Where(b=>b.BackupName.Equals(taskName)).Any())
 			{
 				request.BackupDetailsModelList.Clear();
 				request.BackupDetailsModelList = backupDetailsModelList;
 
-				var json = JsonConvert.SerializeObject(request);
-				File.WriteAllText(_persistancePath, json);
+				WriteJsonRequestModel(request);
 			}
 		}
 
-		public void DeleteDetailsFromInfo(List<BackupDetailsModel> removedBackupDetailsList)
+		public void DeleteDetailsFromInfo(List<BackupDetailsModel> removedBackupDetailsList, string taskName)
 		{
 			CheckIfJsonFileExist();
 
@@ -127,50 +147,106 @@ namespace Sdl.Community.BackupService
 				foreach (var item in removedBackupDetailsList)
 				{
 					var requestItem = request.BackupDetailsModelList
-						.Where(r => r.BackupAction == item.BackupAction && r.BackupType == item.BackupType && r.BackupPattern == item.BackupPattern)
+						.Where(r => r.BackupAction == item.BackupAction && r.BackupType == item.BackupType && r.BackupPattern == item.BackupPattern && r.BackupName.Equals(taskName))
 						.FirstOrDefault();
+
 					if (requestItem != null)
 					{
 						request.BackupDetailsModelList.Remove(requestItem);
 					}
 				}
-				var json = JsonConvert.SerializeObject(request);
-				File.WriteAllText(_persistancePath, json);
+				WriteJsonRequestModel(request);
 			}
 		}
 
-		public void SaveChangeSettings(ChangeSettingsModel changeSettingsModel)
+		public void SaveChangeSettings(List<ChangeSettingsModel> changeSettingsModelList, string taskName)
 		{
-			CheckIfJsonFileExist();
-
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request == null)
+			if (changeSettingsModelList.Any())
 			{
-				request = new JsonRequestModel();
+				CheckIfJsonFileExist();
+
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+				if (request == null)
+				{
+					request = new JsonRequestModel();
+					request.ChangeSettingsModelList = changeSettingsModelList;
+					WriteJsonRequestModel(request);
+				}
+				else
+				{
+					if (request.ChangeSettingsModelList.Any())
+					{
+						foreach (var changeSettingModelItem in changeSettingsModelList)
+						{
+							var existingChangeSettingsModelItem = request.ChangeSettingsModelList.Where(b => b.BackupName == changeSettingModelItem.BackupName
+																						&& b.IsManuallyOptionChecked == changeSettingModelItem.IsManuallyOptionChecked
+																						&& b.IsPeriodicOptionChecked == changeSettingModelItem.IsPeriodicOptionChecked)
+																				 .FirstOrDefault();
+
+							if (existingChangeSettingsModelItem == null)
+							{
+								request.ChangeSettingsModelList.Add(existingChangeSettingsModelItem);
+								WriteJsonRequestModel(request);
+							}
+							else
+							{
+								// replace the model in the request by updating it with the new values
+								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+							}
+						}
+					}
+					else
+					{
+						request.ChangeSettingsModelList = changeSettingsModelList;
+						WriteJsonRequestModel(request);
+					}
+				}
 			}
-
-			request.ChangeSettingsModel = changeSettingsModel;
-			var json = JsonConvert.SerializeObject(request);
-
-			File.WriteAllText(_persistancePath, json);
 		}
 
-		public void SavePeriodicBackupInfo(PeriodicBackupModel periodicBackupModel)
+		public void SavePeriodicBackupInfo(List<PeriodicBackupModel> periodicBackupModelList, string taskName)
 		{
-			CheckIfJsonFileExist();
-
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request == null)
+			if (periodicBackupModelList.Any())
 			{
-				request = new JsonRequestModel();
+				CheckIfJsonFileExist();
+
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+				if (request == null)
+				{
+					request = new JsonRequestModel();
+					request.PeriodicBackupModelList = periodicBackupModelList;
+					WriteJsonRequestModel(request);
+				}
+				else
+				{
+					if (request.PeriodicBackupModelList.Any())
+					{
+						foreach (var periodicBackupModelItem in periodicBackupModelList)
+						{
+							var existingperiodicBackupModelItem = request.PeriodicBackupModelList.Where(b => b.BackupName == periodicBackupModelItem.BackupName)
+																								 .FirstOrDefault();
+
+							if (existingperiodicBackupModelItem == null)
+							{
+								request.PeriodicBackupModelList.Add(existingperiodicBackupModelItem);
+								WriteJsonRequestModel(request);
+							}
+							else
+							{
+								// replace the model in the request by updating it with the new values
+								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+							}
+						}
+					}
+					else
+					{
+						request.PeriodicBackupModelList = periodicBackupModelList;
+						WriteJsonRequestModel(request);
+					}
+				}
 			}
-
-			request.PeriodicBackupModel = periodicBackupModel;
-			var json = JsonConvert.SerializeObject(request);
-
-			File.WriteAllText(_persistancePath, json);
 		}
 
 		public JsonRequestModel ReadFormInformation()
@@ -183,6 +259,12 @@ namespace Sdl.Community.BackupService
 				return request;
 			}
 			return new JsonRequestModel();
+		}
+
+		public void WriteJsonRequestModel(JsonRequestModel request)
+		{
+			var json = JsonConvert.SerializeObject(request);
+			File.WriteAllText(_persistancePath, json);
 		}
 	}
 }
