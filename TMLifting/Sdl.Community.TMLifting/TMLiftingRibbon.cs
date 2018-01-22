@@ -4,6 +4,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 using System;
 using System.Windows.Forms;
 using System.Reflection;
+using Sdl.Community.TMLifting.Helpers;
 
 namespace Sdl.Community.TMLifting
 {
@@ -23,14 +24,14 @@ namespace Sdl.Community.TMLifting
         protected override void Initialize(IViewContext context)
         {
 			
-			string resource1 = "Sdl.Community.TMLifting.GSKit.Sdl.Community.GroupShareKit.dll";
-			string resource2 = "Sdl.Community.TMLifting.GSKit.System.Net.Http.dll";
-			string resource3 = "Sdl.Community.TMLifting.GSKit.Sdl.TmService.Sdk.dll";
-			string resource4 = "Sdl.Community.TMLifting.GSKit.Newtonsoft.Json.dll";			
-			EmbeddedAssembly.Load(resource1, "Sdl.Community.GroupShareKit.dll");
-			EmbeddedAssembly.Load(resource2, "System.Net.Http.dll");
-			EmbeddedAssembly.Load(resource3, "Sdl.TmService.Sdk.dll");
-			EmbeddedAssembly.Load(resource4, "Newtonsoft.Json.dll");
+			var resourceGSKit = Constants.ProjectPathToDll + Constants.GSKitDll;
+			var resourceSystemNetHttp = Constants.ProjectPathToDll + Constants.SysNetHttpDll;
+			var resourceSdlTmServiceSdk = Constants.ProjectPathToDll + Constants.SdlTmServiceDll;
+			var resourceNewtonsoftJson = Constants.ProjectPathToDll + Constants.NewtonsoftJsonDll;			
+			EmbeddedAssembly.Load(resourceGSKit, Constants.GSKitDll);
+			EmbeddedAssembly.Load(resourceSystemNetHttp, Constants.SysNetHttpDll);
+			EmbeddedAssembly.Load(resourceSdlTmServiceSdk, Constants.SdlTmServiceDll);
+			EmbeddedAssembly.Load(resourceNewtonsoftJson, Constants.NewtonsoftJsonDll);
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 		}
 		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

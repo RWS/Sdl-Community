@@ -179,6 +179,7 @@
     <Compile Include="AlertForm.Designer.cs">
       <DependentUpon>AlertForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\EmbeddedAssembly.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />

@@ -1,22 +1,13 @@
-﻿using Sdl.Community.TMLifting.Processor;
-using Sdl.Community.Toolkit.Core.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.GroupShareKit;
-using Sdl.Community.GroupShareKit.Clients;
 using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 using System.Reflection;
-using System.Windows.Forms;
-using System.Runtime.Serialization;
 using System.IO;
 using Sdl.Community.TMLifting.Helpers;
 using System.ComponentModel;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using System.Collections.ObjectModel;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting.TranslationMemory
 {
@@ -52,23 +43,6 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 					}
 				}
 			}
-		}
-		public async Task<ServerBasedTranslationMemoryGSKit> InitializeAsync(string userName, string password, string uri)
-		{
-			var token = await GroupShareClient.GetRequestToken(userName, password, new Uri(uri), GroupShareClient.AllScopes);
-			var groupShareClient = await GroupShareClient.AuthenticateClient(token, userName, password, new Uri(uri),
-				GroupShareClient.AllScopes);
-
-			var tmClient = await groupShareClient.TranslationMemories.GetTms();
-			this.GroupShareClient = groupShareClient;
-			this.ServerBasedTMDetails = new BindingList<TranslationMemoryDetails> (tmClient.Items);
-			return this;
-		}
-
-		public static Task<ServerBasedTranslationMemoryGSKit> CreateAsync(string userName, string password, string uri)
-		{
-			var ret = new ServerBasedTranslationMemoryGSKit();
-			return ret.InitializeAsync(userName, password, uri );
 		}
 
 		public async Task<IEnumerable<Uri>> GetServers()
