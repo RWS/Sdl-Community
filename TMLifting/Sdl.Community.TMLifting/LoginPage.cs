@@ -28,7 +28,6 @@ namespace Sdl.Community.TMLifting
 
 		private async void btnOkServerBased_Click(object sender, EventArgs e)
 		{
-			//var x  = await GetServerBasedTMs();
 			_addDetailsCallback(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 			this.Close();
 		}
