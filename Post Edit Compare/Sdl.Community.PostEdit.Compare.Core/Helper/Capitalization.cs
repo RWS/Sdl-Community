@@ -13,24 +13,33 @@ namespace Sdl.Community.PostEdit.Compare.Core.Helper
 		public static Dictionary<string, int> CapitalLettersEdited(Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>> paragraphUnits)
 		{
 			var editedWordsDictionary = new Dictionary<string,int>();
-			foreach (var paragraphUnit in paragraphUnits.Values)
+			if (paragraphUnits != null)
 			{
-				foreach (var unit in paragraphUnit.Values)
+				foreach (var paragraphUnit in paragraphUnits.Values)
 				{
-					foreach (var comparitionUnits in unit.ComparisonSegmentUnits)
+					foreach (var unit in paragraphUnit.Values)
 					{
-						var newAndRemovedUnits = comparitionUnits.ComparisonTextUnits.Where(
-							u => (u.ComparisonTextUnitType == TextComparer.ComparisonTextUnitType.New) ||
-							     (u.ComparisonTextUnitType == TextComparer.ComparisonTextUnitType.Removed)).ToList();
-						var capitalizeModifiedNumber = ComparitionUnitsModified(newAndRemovedUnits);
-						if (capitalizeModifiedNumber > 0)
+						foreach (var comparitionUnits in unit.ComparisonSegmentUnits)
 						{
-							editedWordsDictionary.Add(unit.ParagraphId, capitalizeModifiedNumber);
+							var newAndRemovedUnits = comparitionUnits.ComparisonTextUnits.Where(
+								u => (u.ComparisonTextUnitType == TextComparer.ComparisonTextUnitType.New) ||
+								     (u.ComparisonTextUnitType == TextComparer.ComparisonTextUnitType.Removed)).ToList();
+							var capitalizeModifiedNumber = ComparitionUnitsModified(newAndRemovedUnits);
+							if (capitalizeModifiedNumber > 0)
+							{
+								var keyExist = editedWordsDictionary.Keys.Any(u => u.Contains(unit.ParagraphId));
+								if (!keyExist)
+								{
+									editedWordsDictionary.Add(unit.ParagraphId, capitalizeModifiedNumber);
+								}
+								
+							}
 						}
+
 					}
-					
 				}
 			}
+			
 			return editedWordsDictionary;
 		}
 
