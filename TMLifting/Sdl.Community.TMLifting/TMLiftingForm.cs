@@ -87,7 +87,7 @@ namespace Sdl.Community.TMLifting
 						}
 						catch (Exception ex)
 						{
-							throw new SystemException("Authentification Failed. Please check that your credentials are correct.");
+							throw new SystemException(Constants.AuthentificationErrorMsg);
 						}
 					}
 					else if (_currentInstance == null && !gridServerBasedTMs.Visible)
@@ -162,7 +162,7 @@ namespace Sdl.Community.TMLifting
 			}
 			catch (Exception ex)
 			{
-				throw new SystemException("Authentification Failed. Please check that your credentials are correct.");				
+				throw new SystemException(Constants.AuthentificationErrorMsg);				
 			}
 		}
 
@@ -270,6 +270,10 @@ namespace Sdl.Community.TMLifting
 				if (lstTms.Items.Count > 0)
 				{
 					btnReindex.Enabled = true;
+				}
+				else
+				{
+					rtbStatus.AppendText(Constants.NoLocalTmMsg);
 				}
             }
             else
