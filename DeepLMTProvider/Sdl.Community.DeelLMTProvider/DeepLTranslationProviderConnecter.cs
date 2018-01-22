@@ -26,7 +26,7 @@ namespace Sdl.Community.DeelLMTProvider
 		{
 			const string tagOption = @"xml";
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
-			var url = string.Format("https://api.deepl.com/v1/translate?text={0}&target_lang={1}&tag_handling={2}&auth_key={3}"
+			var url = string.Format("https://api.deepl.com/v1/translate?text={0}&target_lang={1}&tag_handling={2}&auth_key={3}&split_sentences=0"
 				, sourcetext, targetLanguage, tagOption, ApiKey);
 			var translatedText = string.Empty;
 
