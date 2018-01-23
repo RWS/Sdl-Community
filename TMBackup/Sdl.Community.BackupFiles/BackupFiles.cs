@@ -13,8 +13,10 @@ namespace Sdl.Community.BackupFiles
 	{
 		static void Main(string[] args)
 		{
-			LoadAssemblies();
+			MessageLogger.LogFileMessage(args[0]);
 
+			LoadAssemblies();
+					
 			if (args.Count() > 0)
 			{
 				BackupFilesRecursive(args[0]);
