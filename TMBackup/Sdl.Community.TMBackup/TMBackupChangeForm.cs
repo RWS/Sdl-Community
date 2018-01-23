@@ -51,6 +51,7 @@ namespace Sdl.Community.TMBackup
 			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsPeriodicOptionChecked = radioBtn_TimeChange.Checked;
 			changeSettingModel.BackupName = _taskName;
+			changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
 			_changeSettingsModelList.Add(changeSettingModel);
 
 			var persistence = new Persistence();
@@ -64,6 +65,7 @@ namespace Sdl.Community.TMBackup
 			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsManuallyOptionChecked = radioBtn_Manually.Checked;
 			changeSettingModel.BackupName = _taskName;
+			changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
 			_changeSettingsModelList.Add(changeSettingModel);
 
 			var persistence = new Persistence();

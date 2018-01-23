@@ -58,7 +58,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Change_Click(object sender, EventArgs e)
 		{
-			var changeForm = new TMBackupChangeForm();
+			var changeForm = new TMBackupChangeForm(_isNewTask, txt_BackupName.Text);
 			changeForm.ShowDialog();
 			
 			txt_BackupTime.Text = changeForm.GetBackupTimeInfo();
@@ -66,11 +66,11 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Details_Click(object sender, EventArgs e)
 		{
-			var detailsForm = new TMBackupDetailsForm(_taskName);
+			var detailsForm = new TMBackupDetailsForm(txt_BackupName.Text);
 			detailsForm.ShowDialog();
 
 			txt_BackupDetails.Text = TMBackupDetailsForm.BackupDetailsInfo;
-			GetBackupFormInfo(_taskName);
+			GetBackupFormInfo(txt_BackupName.Text);
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -91,7 +91,8 @@ namespace Sdl.Community.TMBackup
 				&& !txt_BackupNameError.Visible)
 			{
 				var backupModel = new BackupModel();
-				backupModel.BackupName = string.Concat(Constants.TaskDetailValue, txt_BackupName.Text);
+				backupModel.BackupName = (txt_BackupName.Text);
+				backupModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
 				backupModel.BackupFrom = txt_BackupFrom.Text;
 				backupModel.BackupTo = txt_BackupTo.Text;
 				backupModel.Description = txt_Description.Text;
@@ -138,7 +139,7 @@ namespace Sdl.Community.TMBackup
 				txt_BackupDetails.Text = res;
 			}
 
-			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, _taskName);
+			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, taskName);
 			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}
 

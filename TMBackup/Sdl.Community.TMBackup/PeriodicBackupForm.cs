@@ -52,6 +52,8 @@ namespace Sdl.Community.TMBackup
 				periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 				periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
 				periodicBackupModel.BackupAt = timePicker_At.Text;
+				periodicBackupModel.BackupName = _taskName;
+				periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
 				_periodicBackupModelList.Add(periodicBackupModel);
 
 				Persistence persistence = new Persistence();				

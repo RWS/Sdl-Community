@@ -15,7 +15,10 @@ namespace Sdl.Community.BackupFiles
 		{
 			LoadAssemblies();
 
-			BackupFilesRecursive(args[0]);
+			if (args.Count() > 0)
+			{
+				BackupFilesRecursive(args[0]);
+			}
 		}
 
 		#region Private methods
@@ -28,21 +31,21 @@ namespace Sdl.Community.BackupFiles
 			return path;
 		}
 
-		private static void BackupFilesRecursive(string backupName)
+		private static void BackupFilesRecursive(string trimmedBackupName)
 		{
 			try
 			{
 				var service = new Service();
 				var jsonResult = service.GetJsonInformation();
-				var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault()
+				var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).FirstOrDefault()
 													 : null : null;
-				var backupModelList = jsonResult != null ? jsonResult.BackupDetailsModelList != null ? jsonResult.BackupDetailsModelList.Where(b => b.BackupName.Equals(backupName)).ToList()
+				var backupModelList = jsonResult != null ? jsonResult.BackupDetailsModelList != null ? jsonResult.BackupDetailsModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).ToList()
 													     : null : null;
 				if (backupModel != null)
 				{
 					var fileExtensions = new List<string>();
 
-					if (backupModelList.Any())
+					if (backupModelList != null)
 					{
 						foreach (var fileExtension in backupModelList)
 						{
@@ -92,7 +95,7 @@ namespace Sdl.Community.BackupFiles
 									foreach (var subdirectory in subdirectories)
 									{
 										var currentDirInfo = new DirectoryInfo(subdirectory);
-										CheckForSubfolders(currentDirInfo, backupModel.BackupTo, backupName);
+										CheckForSubfolders(currentDirInfo, backupModel.BackupTo, trimmedBackupName);
 									}
 								}
 							}
@@ -106,11 +109,11 @@ namespace Sdl.Community.BackupFiles
 			}		
 		}
 
-		private static void CheckForSubfolders(DirectoryInfo directory, string root, string backupName)
+		private static void CheckForSubfolders(DirectoryInfo directory, string root, string trimmedBackupName)
 		{
 			var service = new Service();
 			var jsonResult = service.GetJsonInformation();
-			var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault() : null : null;
+			var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).FirstOrDefault() : null : null;
 			if (backupModel != null)
 			{
 				var sourcePath = backupModel.BackupFrom;
@@ -127,7 +130,7 @@ namespace Sdl.Community.BackupFiles
 				{
 					foreach (var subdirectory in subdirectories)
 					{
-						CheckForSubfolders(subdirectory, path, backupName);
+						CheckForSubfolders(subdirectory, path, trimmedBackupName);
 					}
 				}
 			}

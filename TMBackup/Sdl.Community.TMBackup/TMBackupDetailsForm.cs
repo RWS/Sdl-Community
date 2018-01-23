@@ -25,6 +25,7 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
+			InitializeBackupDetails();
 			_taskName = taskName;
 		}
 				
@@ -34,7 +35,7 @@ namespace Sdl.Community.TMBackup
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
 			var persistence = new Persistence();
-			persistence.SaveDetailsFormInfo(_backupDetailsModelList);
+			persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
 
 			_backupDetailsModelList.Clear();
 

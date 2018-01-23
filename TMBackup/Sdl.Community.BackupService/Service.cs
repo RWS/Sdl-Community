@@ -43,23 +43,23 @@ namespace Sdl.Community.BackupService
 				}
 				if (changeSettingsModelItem.IsManuallyOptionChecked)
 				{
-					AddManuallyTimeScheduler(td, tr, jsonRequestModel, backupName);
+					AddManuallyTimeScheduler(td, tr, backupName, changeSettingsModelItem.TrimmedBackupName);
 				}
 			}
 		}
 
 		// Add trigger which executes the backup files console application.
-		private void AddTrigger(Trigger trigger, TaskDefinition td, string taskName)
+		private void AddTrigger(Trigger trigger, TaskDefinition td, string backupName, string trimmedBackupName)
 		{
 			using (TaskService ts = new TaskService())
 			{
 				td.Triggers.Add(trigger);
 
-				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), taskName));
+				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), trimmedBackupName));
 
 				try
 				{
-					ts.RootFolder.RegisterTaskDefinition(taskName, td);
+					ts.RootFolder.RegisterTaskDefinition(string.Concat(Constants.TaskDetailValue, backupName), td);
 				}
 				catch (Exception ex)
 				{
@@ -83,18 +83,18 @@ namespace Sdl.Community.BackupService
 				if (periodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 				{
 					tr.Repetition.Interval = TimeSpan.FromHours(periodicBackupModel.BackupInterval);
-					AddTrigger(tr, td, periodicBackupModel.BackupName);
+					AddTrigger(tr, td, backupName, periodicBackupModel.TrimmedBackupName);
 				}
 
 				if (periodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
 				{
 					tr.Repetition.Interval = TimeSpan.FromMinutes(periodicBackupModel.BackupInterval);
-					AddTrigger(tr, td, periodicBackupModel.BackupName);
+					AddTrigger(tr, td, backupName, periodicBackupModel.TrimmedBackupName);
 				}
 			}
 		}
 
-		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, JsonRequestModel jsonRequestModel, string backupName)
+		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName)
 		{
 			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
@@ -102,7 +102,7 @@ namespace Sdl.Community.BackupService
 
 			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
 			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
-			AddTrigger(tr, td, backupName);
+			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.

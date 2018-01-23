@@ -48,7 +48,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.BackupModelList.Any())
+					if (request.BackupModelList != null)
 					{
 						foreach (var backupModelItem in backupModelList)
 						{
@@ -76,10 +76,16 @@ namespace Sdl.Community.BackupService
 			}
 		}
 
-		public void SaveDetailsFormInfo(List<BackupDetailsModel> backupDetailsModelList)
+		public void SaveDetailsFormInfo(List<BackupDetailsModel> backupDetailsModelList, string taskName)
 		{
-			if (backupDetailsModelList.Any())
+			if (backupDetailsModelList != null)
 			{
+				foreach(var item in backupDetailsModelList)
+				{
+					item.BackupName = taskName;
+					item.TrimmedBackupName = string.Concat(taskName.Where(c => !char.IsWhiteSpace(c)));
+				}
+
 				CheckIfJsonFileExist();
 
 				var jsonText = File.ReadAllText(_persistancePath);
@@ -92,7 +98,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.BackupDetailsModelList.Any())
+					if (request.BackupDetailsModelList != null)
 					{
 						foreach (var backupItem in backupDetailsModelList)
 						{
@@ -127,7 +133,7 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if(request != null && request.BackupDetailsModelList.Where(b=>b.BackupName.Equals(taskName)).Any())
+			if(request != null && request.BackupDetailsModelList.Where(b=>b.BackupName.Equals(taskName)) != null)
 			{
 				request.BackupDetailsModelList.Clear();
 				request.BackupDetailsModelList = backupDetailsModelList;
@@ -161,7 +167,7 @@ namespace Sdl.Community.BackupService
 
 		public void SaveChangeSettings(List<ChangeSettingsModel> changeSettingsModelList, string taskName)
 		{
-			if (changeSettingsModelList.Any())
+			if (changeSettingsModelList != null)
 			{
 				CheckIfJsonFileExist();
 
@@ -175,7 +181,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.ChangeSettingsModelList.Any())
+					if (request.ChangeSettingsModelList != null)
 					{
 						foreach (var changeSettingModelItem in changeSettingsModelList)
 						{
@@ -207,7 +213,7 @@ namespace Sdl.Community.BackupService
 
 		public void SavePeriodicBackupInfo(List<PeriodicBackupModel> periodicBackupModelList, string taskName)
 		{
-			if (periodicBackupModelList.Any())
+			if (periodicBackupModelList != null)
 			{
 				CheckIfJsonFileExist();
 
@@ -221,7 +227,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.PeriodicBackupModelList.Any())
+					if (request.PeriodicBackupModelList != null)
 					{
 						foreach (var periodicBackupModelItem in periodicBackupModelList)
 						{
