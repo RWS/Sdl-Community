@@ -74,13 +74,20 @@ namespace Sdl.Community.TMBackup
 
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var periodicBackupModelItem = result != null ? result.PeriodicBackupModelList != null ? result.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault() 
-														 : null : null;
 
-			cmbBox_Interval.SelectedItem = periodicBackupModelItem != null ? periodicBackupModelItem.TimeType : string.Empty;
-			txtBox_TimeInterval.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupInterval.ToString() : string.Empty;
-			dateTimePicker_FirstBackup.Value = periodicBackupModelItem != null ? periodicBackupModelItem.FirstBackup : DateTime.Now;
-			timePicker_At.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupAt : string.Empty;
+			if (result.PeriodicBackupModelList != null)
+			{
+				var periodicBackupModelItem = result != null
+					? result.PeriodicBackupModelList != null
+					? result.PeriodicBackupModelList[0] != null
+					? result.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
+					: null : null : null;
+
+				cmbBox_Interval.SelectedItem = periodicBackupModelItem != null ? periodicBackupModelItem.TimeType : string.Empty;
+				txtBox_TimeInterval.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupInterval.ToString() : string.Empty;
+				dateTimePicker_FirstBackup.Value = periodicBackupModelItem != null ? periodicBackupModelItem.FirstBackup : DateTime.Now;
+				timePicker_At.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupAt : string.Empty;
+			}
 		}
 
 		private void SetDateTimeValue()

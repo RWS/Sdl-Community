@@ -118,7 +118,11 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var backupModel = result != null ? result.BackupModelList !=null ? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault() : null : null;
+			var backupModel = result != null
+				? result.BackupModelList !=null
+				? result.BackupModelList[0] != null
+				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
+				: null : null : null;
 
 			if (backupModel != null && !_isNewTask)
 			{
@@ -147,7 +151,11 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var backupModel = result != null ? result.BackupModelList != null ? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault() : null :null;
+			var backupModel = result != null
+				? result.BackupModelList != null 
+				? result.BackupModelList[0] != null
+				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
+				: null :null :null;
 
 			if (backupModel != null && backupModel.BackupName.Contains(taskName))
 			{

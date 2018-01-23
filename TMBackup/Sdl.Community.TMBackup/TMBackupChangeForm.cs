@@ -85,7 +85,7 @@ namespace Sdl.Community.TMBackup
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 
-			if (jsonResult != null)
+			if (jsonResult != null && jsonResult.ChangeSettingsModelList != null && jsonResult.ChangeSettingsModelList[0] != null)
 			{
 				var changeSettingsModel = jsonResult.ChangeSettingsModelList.Where(c => c.BackupName.Equals(_taskName)).FirstOrDefault();
 
@@ -100,8 +100,11 @@ namespace Sdl.Community.TMBackup
 
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
-			var periodicBackupModel = jsonResult != null ? jsonResult.PeriodicBackupModelList != null ? jsonResult.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
-														 : null : null;
+			var periodicBackupModel = jsonResult != null
+				? jsonResult.PeriodicBackupModelList != null
+				? jsonResult.PeriodicBackupModelList[0] != null
+				? jsonResult.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
+			    : null : null : null;
 
 			if (periodicBackupModel != null && radioBtn_TimeChange.Checked)
 			{			

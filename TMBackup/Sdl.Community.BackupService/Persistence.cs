@@ -272,5 +272,44 @@ namespace Sdl.Community.BackupService
 			var json = JsonConvert.SerializeObject(request);
 			File.WriteAllText(_persistancePath, json);
 		}
+
+		public void RemoveDataFromJson(string backupName)
+		{
+			if (File.Exists(_persistancePath))
+			{
+				var jsonText = File.ReadAllText(_persistancePath);
+				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+				if (request != null
+				&& request.BackupDetailsModelList != null
+				&& request.BackupModelList != null
+				&& request.ChangeSettingsModelList != null
+				&& request.PeriodicBackupModelList != null)
+				{
+					var backupDetailsModelItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
+					var backupModelItem = request.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
+					var changeSettingsModelItem = request.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault();
+					var periodicBackupModelItem = request.PeriodicBackupModelList.Where(p => p.BackupName.Equals(backupName)).FirstOrDefault();
+
+					if (backupDetailsModelItem != null)
+					{
+						request.BackupDetailsModelList.Remove(backupDetailsModelItem);
+					}
+					if (backupModelItem != null)
+					{
+						request.BackupModelList.Remove(backupModelItem);
+					}
+					if (changeSettingsModelItem != null)
+					{
+						request.ChangeSettingsModelList.Remove(changeSettingsModelItem);
+					}
+					if (periodicBackupModelItem != null)
+					{
+						request.PeriodicBackupModelList.Remove(periodicBackupModelItem);
+					}
+					WriteJsonRequestModel(request);
+				}
+			}
+		}
 	}
 }
