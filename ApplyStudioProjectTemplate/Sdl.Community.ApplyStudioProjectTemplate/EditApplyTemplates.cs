@@ -31,9 +31,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// </summary>
         public EditApplyTemplates()
         {
-            this.InitializeComponent();
-            this.ProjectTemplates.DataSource = this.ProjectTemplatesItems;
-            this.ProjectTemplates.DisplayMember = "Name";
+            InitializeComponent();
+            ProjectTemplates.DataSource = ProjectTemplatesItems;
+            ProjectTemplates.DisplayMember = "Name";
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             get
             {
-                return this.templateList;
+                return templateList;
             }
         }
 
@@ -57,13 +57,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ProjectTemplateName_TextChanged(object sender, EventArgs e)
         {
-            if (this.ProjectTemplates.SelectedItem != null)
+            if (ProjectTemplates.SelectedItem != null)
             {
-                this.settingName = true;
-                (this.ProjectTemplates.SelectedItem as ApplyTemplate).Name = this.ProjectTemplateName.Text;
-                this.settingName = false;
-                this.ProjectTemplates.DisplayMember = string.Empty;
-                this.ProjectTemplates.DisplayMember = "Name";
+                settingName = true;
+                (ProjectTemplates.SelectedItem as ApplyTemplate).Name = ProjectTemplateName.Text;
+                settingName = false;
+                ProjectTemplates.DisplayMember = string.Empty;
+                ProjectTemplates.DisplayMember = "Name";
             }
         }
 
@@ -74,18 +74,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ProjectTemplates_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!this.settingName)
+            if (!settingName)
             {
-                if (this.ProjectTemplates.SelectedIndex < 0)
+                if (ProjectTemplates.SelectedIndex < 0)
                 {
-                    this.ProjectTemplateName.Text = string.Empty;
+                    ProjectTemplateName.Text = string.Empty;
                 }
                 else
                 {
-                    string templateName = (this.ProjectTemplates.SelectedItem as ApplyTemplate).Name;
-                    if (this.ProjectTemplateName.Text != templateName)
+                    string templateName = (ProjectTemplates.SelectedItem as ApplyTemplate).Name;
+                    if (ProjectTemplateName.Text != templateName)
                     {
-                        this.ProjectTemplateName.Text = templateName;
+                        ProjectTemplateName.Text = templateName;
                     }
                 }
             }
@@ -98,9 +98,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void RemoveTemplate_Click(object sender, EventArgs e)
         {
-            if (this.ProjectTemplates.SelectedItem != null)
+            if (ProjectTemplates.SelectedItem != null)
             {
-                this.ProjectTemplatesItems.Remove(this.ProjectTemplates.SelectedItem as ApplyTemplate);
+                ProjectTemplatesItems.Remove(ProjectTemplates.SelectedItem as ApplyTemplate);
             }
         }
 
@@ -111,7 +111,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ClearTemplates_Click(object sender, EventArgs e)
         {
-            this.ProjectTemplatesItems.Clear();
+            ProjectTemplatesItems.Clear();
         }
 
         /// <summary>
@@ -129,14 +129,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             ofd.Title = "Add template";
             if (ofd.ShowDialog() == DialogResult.OK)
             {
-                ApplyTemplate newTemplate = this.ProjectTemplatesItems.AddNew();
+                ApplyTemplate newTemplate = ProjectTemplatesItems.AddNew();
                 newTemplate.Name = Path.GetFileNameWithoutExtension(ofd.FileName);
                 newTemplate.FileLocation = ofd.FileName;
                 newTemplate.Uri = null;
                 newTemplate.Id = Guid.NewGuid();
-                this.ProjectTemplates.SelectedItem = newTemplate;
-                this.ProjectTemplates.DisplayMember = string.Empty;
-                this.ProjectTemplates.DisplayMember = "Name";
+                ProjectTemplates.SelectedItem = newTemplate;
+                ProjectTemplates.DisplayMember = string.Empty;
+                ProjectTemplates.DisplayMember = "Name";
             }
         }
     }

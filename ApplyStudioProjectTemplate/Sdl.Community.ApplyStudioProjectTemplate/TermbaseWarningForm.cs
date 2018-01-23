@@ -18,7 +18,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// </summary>
         public TermbaseWarningForm()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             get
             {
-                return !this.DontShow.Checked;
+                return !DontShow.Checked;
             }
         }
     }
