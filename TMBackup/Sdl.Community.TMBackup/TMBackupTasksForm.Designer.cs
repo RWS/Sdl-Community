@@ -172,9 +172,9 @@
             // 
             this.btn_RunTasks.BackColor = System.Drawing.SystemColors.Control;
             this.btn_RunTasks.Image = ((System.Drawing.Image)(resources.GetObject("btn_RunTasks.Image")));
-            this.btn_RunTasks.Location = new System.Drawing.Point(729, 2);
+            this.btn_RunTasks.Location = new System.Drawing.Point(717, 0);
             this.btn_RunTasks.Name = "btn_RunTasks";
-            this.btn_RunTasks.Size = new System.Drawing.Size(23, 22);
+            this.btn_RunTasks.Size = new System.Drawing.Size(33, 27);
             this.btn_RunTasks.TabIndex = 3;
             this.btn_RunTasks.UseVisualStyleBackColor = false;
             this.btn_RunTasks.Click += new System.EventHandler(this.btn_RunTasks_Click);
