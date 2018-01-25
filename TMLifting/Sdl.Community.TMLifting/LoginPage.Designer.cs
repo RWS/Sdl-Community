@@ -30,10 +30,7 @@
 		{
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginPage));
             this.panel3 = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.serverNameTxtBox = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.helpBtnServerBased = new System.Windows.Forms.Button();
             this.authentication_box = new System.Windows.Forms.GroupBox();
@@ -49,10 +46,7 @@
             // 
             // panel3
             // 
-            this.panel3.Controls.Add(this.checkBox1);
-            this.panel3.Controls.Add(this.textBox2);
             this.panel3.Controls.Add(this.serverNameTxtBox);
-            this.panel3.Controls.Add(this.label5);
             this.panel3.Controls.Add(this.label4);
             this.panel3.Controls.Add(this.helpBtnServerBased);
             this.panel3.Controls.Add(this.authentication_box);
@@ -61,25 +55,8 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(493, 281);
+            this.panel3.Size = new System.Drawing.Size(493, 241);
             this.panel3.TabIndex = 8;
-            // 
-            // checkBox1
-            // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(170, 61);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(217, 17);
-            this.checkBox1.TabIndex = 16;
-            this.checkBox1.Text = "The server requires a secure connection";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(170, 35);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(52, 20);
-            this.textBox2.TabIndex = 15;
             // 
             // serverNameTxtBox
             // 
@@ -88,15 +65,6 @@
             this.serverNameTxtBox.Size = new System.Drawing.Size(249, 20);
             this.serverNameTxtBox.TabIndex = 14;
             this.serverNameTxtBox.TextChanged += new System.EventHandler(this.serverNameTxtBox_TextChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(47, 35);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(29, 13);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Port:";
             // 
             // label4
             // 
@@ -109,7 +77,7 @@
             // 
             // helpBtnServerBased
             // 
-            this.helpBtnServerBased.Location = new System.Drawing.Point(372, 230);
+            this.helpBtnServerBased.Location = new System.Drawing.Point(372, 193);
             this.helpBtnServerBased.Name = "helpBtnServerBased";
             this.helpBtnServerBased.Size = new System.Drawing.Size(75, 23);
             this.helpBtnServerBased.TabIndex = 11;
@@ -122,7 +90,7 @@
             this.authentication_box.Controls.Add(this.label3);
             this.authentication_box.Controls.Add(this.userNameTxtBox);
             this.authentication_box.Controls.Add(this.label2);
-            this.authentication_box.Location = new System.Drawing.Point(50, 80);
+            this.authentication_box.Location = new System.Drawing.Point(50, 43);
             this.authentication_box.Name = "authentication_box";
             this.authentication_box.Size = new System.Drawing.Size(397, 125);
             this.authentication_box.TabIndex = 8;
@@ -165,7 +133,7 @@
             // 
             // btnOkServerBased
             // 
-            this.btnOkServerBased.Location = new System.Drawing.Point(210, 230);
+            this.btnOkServerBased.Location = new System.Drawing.Point(210, 193);
             this.btnOkServerBased.Name = "btnOkServerBased";
             this.btnOkServerBased.Size = new System.Drawing.Size(75, 23);
             this.btnOkServerBased.TabIndex = 3;
@@ -175,7 +143,7 @@
             // 
             // cancelBtnServerBased
             // 
-            this.cancelBtnServerBased.Location = new System.Drawing.Point(291, 230);
+            this.cancelBtnServerBased.Location = new System.Drawing.Point(291, 193);
             this.cancelBtnServerBased.Name = "cancelBtnServerBased";
             this.cancelBtnServerBased.Size = new System.Drawing.Size(75, 23);
             this.cancelBtnServerBased.TabIndex = 10;
@@ -187,7 +155,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(493, 281);
+            this.ClientSize = new System.Drawing.Size(493, 241);
             this.Controls.Add(this.panel3);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LoginPage";
@@ -204,10 +172,7 @@
 		#endregion
 
 		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.CheckBox checkBox1;
-		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.TextBox serverNameTxtBox;
-		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Button helpBtnServerBased;
 		private System.Windows.Forms.GroupBox authentication_box;
