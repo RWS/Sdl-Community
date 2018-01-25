@@ -799,6 +799,7 @@
 			this.matchRepairBox.TabIndex = 1;
 			this.matchRepairBox.Tag = "Match Repair Settings";
 			this.FormToolTip.SetToolTip(this.matchRepairBox, "Select the behaviour for applying the Match Repair settings");
+			this.matchRepairBox.SelectedIndexChanged += new System.EventHandler(this.matchRepairBox_SelectedIndexChanged);
 			this.matchRepairBox.MouseEnter += new System.EventHandler(this.matchRepairBox_MouseEnter);
 			// 
 			// ApplyTemplateForm

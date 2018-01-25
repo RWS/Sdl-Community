@@ -40,37 +40,27 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <value>
         /// The active template.
         /// </value>
-        public ApplyTemplate ActiveTemplate
-        {
-            get
-            {
-                return SelectedTemplate.SelectedItem as ApplyTemplate;
-            }
-        }
+        public ApplyTemplate ActiveTemplate => SelectedTemplate.SelectedItem as ApplyTemplate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets a value indicating whether to apply to selected projects.
         /// </summary>
         /// <value>
         ///   <c>true</c> if apply to selected projects; otherwise, <c>false</c>.
         /// </value>
-        public bool ApplyToSelected
-        {
-            get
-            {
-                return ApplyTo.SelectedIndex == 1;
-            }
-        }
+        public bool ApplyToSelected => ApplyTo.SelectedIndex == 1;
 
-        /// <summary>
+	    /// <summary>
         /// Saves the project templates.
         /// </summary>
         public void SaveProjectTemplates()
         {
-            string projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            using (XmlWriter writer = XmlWriter.Create(projectTemplatesPath, settings))
+	        var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+	        var settings = new XmlWriterSettings
+	        {
+		        Indent = true
+	        };
+	        using (XmlWriter writer = XmlWriter.Create(projectTemplatesPath, settings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("templates");
@@ -80,8 +70,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                 writer.WriteAttributeString("warning", _showWarning ? "1" : "0");
                 foreach (object comboObject in SelectedTemplate.Items)
                 {
-                    ApplyTemplate comboTemplate = comboObject as ApplyTemplate;
-                    if (comboTemplate.Id != Guid.Empty)
+	                var comboTemplate = comboObject as ApplyTemplate;
+                    if (comboTemplate != null && comboTemplate.Id != Guid.Empty)
                     {
                         comboTemplate.WriteXml(writer);
                     }
@@ -103,14 +93,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             // Add in the project templates defined in Studio
             foreach (ProjectTemplateInfo templateInfo in controller.GetProjectTemplates())
             {
-                ApplyTemplate newTemplate = new ApplyTemplate(templateInfo);
+	            var newTemplate = new ApplyTemplate(templateInfo);
                 SelectedTemplate.Items.Add(newTemplate);
             }
 
-            // Add in any extra templates manually defined
-            Guid selectedId = Guid.Empty;
+			// Add in any extra templates manually defined
+	        var selectedId = Guid.Empty;
             ApplyTo.SelectedIndex = 0;
-            string projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+	        var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
             if (File.Exists(projectTemplatesPath))
             {
                 try
@@ -163,6 +153,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     thisTemplate.BatchTasksAllLanguages = newTemplate.BatchTasksAllLanguages;
                                     thisTemplate.BatchTasksSpecificLanguages = newTemplate.BatchTasksSpecificLanguages;
                                     thisTemplate.FileTypes = newTemplate.FileTypes;
+	                                thisTemplate.MatchRepairSettings = newTemplate.MatchRepairSettings;
                                 }
                             }
                         }
@@ -228,6 +219,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             VerificationNumberVerifier.SelectedItem = selectedTemplate.VerificationNumberVerifier.ToString();
             VerificationGrammarChecker.SelectedItem = selectedTemplate.VerificationGrammarChecker.ToString();
             FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
+	        matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
             CheckChanged();
         }
 
@@ -255,6 +247,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     VerificationTagVerifier.SelectedIndex +
                                     VerificationTerminologyVerifier.SelectedIndex +
                                     VerificationNumberVerifier.SelectedIndex +
+									matchRepairBox.SelectedIndex+
                                     FileTypes.SelectedIndex;
                 OkButton.Enabled = sumOfSelected > 0;
             }
@@ -545,6 +538,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				FormToolTip.ToolTipTitle = (string)control.Tag;
 			}
+		}
+
+		private void matchRepairBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
+			if (applyTemplate != null)
+			{
+				applyTemplate.MatchRepairSettings =
+					(ApplyTemplateOptions) Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
+				CheckChanged();
+			}
+			
 		}
 	}
 }

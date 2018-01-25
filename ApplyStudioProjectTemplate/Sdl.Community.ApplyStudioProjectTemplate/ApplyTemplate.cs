@@ -47,6 +47,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             BatchTasksAllLanguages = GetApplyTemplateOptions(sourceXml, "btal");
             BatchTasksSpecificLanguages = GetApplyTemplateOptions(sourceXml, "btsl");
             FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
+	        MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
         }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             BatchTasksAllLanguages = ApplyTemplateOptions.Keep;
             BatchTasksSpecificLanguages = ApplyTemplateOptions.Keep;
             FileTypes = ApplyTemplateOptions.Keep;
+			MatchRepairSettings = ApplyTemplateOptions.Keep;
         }
 
         /// <summary>
@@ -334,6 +336,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             set;
         }
 
+	    public ApplyTemplateOptions MatchRepairSettings { get; set; }
+
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -370,6 +374,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             writer.WriteAttributeString("btal", BatchTasksAllLanguages.ToString());
             writer.WriteAttributeString("btsl", BatchTasksSpecificLanguages.ToString());
             writer.WriteAttributeString("ftts", FileTypes.ToString());
+			writer.WriteAttributeString("mrs",MatchRepairSettings.ToString());
             writer.WriteEndElement();
         }
 
