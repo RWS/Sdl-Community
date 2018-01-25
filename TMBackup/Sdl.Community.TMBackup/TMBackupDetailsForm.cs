@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
@@ -226,8 +227,12 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
-
-			if (request != null && request.BackupDetailsModelList != null && request.BackupDetailsModelList.Count > 0)
+			var backupDetails = request != null
+				? request.BackupDetailsModelList != null && request.BackupDetailsModelList.Count > 0
+				? request.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList()
+				: null
+				: null;
+			if (backupDetails != null && backupDetails.Count > 0)
 			{
 				// create backupModel which is used as a new row where user can add another Action
 				var emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
