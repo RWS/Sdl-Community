@@ -43,6 +43,7 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_Refresh = new System.Windows.Forms.Button();
+            this.btn_RunTasks = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -167,11 +168,23 @@
             this.btn_Refresh.UseVisualStyleBackColor = false;
             this.btn_Refresh.Click += new System.EventHandler(this.btn_Refresh_Click);
             // 
+            // btn_RunTasks
+            // 
+            this.btn_RunTasks.BackColor = System.Drawing.SystemColors.Control;
+            this.btn_RunTasks.Image = ((System.Drawing.Image)(resources.GetObject("btn_RunTasks.Image")));
+            this.btn_RunTasks.Location = new System.Drawing.Point(729, 2);
+            this.btn_RunTasks.Name = "btn_RunTasks";
+            this.btn_RunTasks.Size = new System.Drawing.Size(23, 22);
+            this.btn_RunTasks.TabIndex = 3;
+            this.btn_RunTasks.UseVisualStyleBackColor = false;
+            this.btn_RunTasks.Click += new System.EventHandler(this.btn_RunTasks_Click);
+            // 
             // TMBackupTasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(819, 377);
+            this.Controls.Add(this.btn_RunTasks);
             this.Controls.Add(this.btn_Refresh);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.menuStrip1);
@@ -204,5 +217,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn NextRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn IntervalCol;
 		private System.Windows.Forms.Button btn_Refresh;
+		private System.Windows.Forms.Button btn_RunTasks;
 	}
 }
