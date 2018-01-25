@@ -537,5 +537,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             new AboutBox().ShowDialog(this);
         }
-    }
+
+		private void matchRepairBox_MouseEnter(object sender, EventArgs e)
+		{
+			var control = sender as Control;
+			if (control != null)
+			{
+				FormToolTip.ToolTipTitle = (string)control.Tag;
+			}
+		}
+	}
 }

@@ -347,7 +347,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         try
                         {
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, numberVerifierSettingsId, targetProject, null);
-                        }
+							//this should be removed from here
+	                        //CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
+						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.QANV_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
