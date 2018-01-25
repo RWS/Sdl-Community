@@ -20,7 +20,6 @@ namespace Sdl.Community.TMLifting
         private readonly StringBuilder _elapsedTime;
 		private ServerBasedTranslationMemoryGSKit _sbTMs;
 		private UserCredentials _userCredentials;
-		private AlertForm _alert;
 		private LoginPage _currentInstance = null;
 
 		public TMLiftingForm()
@@ -44,6 +43,7 @@ namespace Sdl.Community.TMLifting
 			tabControlTMLifting.SelectedTab = tabControlTMLifting.TabPages["tabPageFileBasedTM"];
 			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
 			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
+			groupBoxProgress.Visible = false;
 		}
 
 		private async void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
@@ -63,7 +63,8 @@ namespace Sdl.Community.TMLifting
 							Properties.Settings.Default.Uri = comboBoxServerBasedTM.SelectedItem.ToString();
 							Properties.Settings.Default.Save();
 							_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
-							gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+							var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
+							gridServerBasedTMs.DataSource = sortedBindingList;
 							for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 							{
 								gridServerBasedTMs.Columns[i].Visible = false;
@@ -139,7 +140,8 @@ namespace Sdl.Community.TMLifting
 				Properties.Settings.Default.Uri = uri;
 				Properties.Settings.Default.Save();
 				_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
-				gridServerBasedTMs.DataSource = _sbTMs.ServerBasedTMDetails;
+				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
+				gridServerBasedTMs.DataSource = sortedBindingList;
 				for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 				{
 					gridServerBasedTMs.Columns[i].Visible = false;
@@ -173,8 +175,8 @@ namespace Sdl.Community.TMLifting
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-			_alert.Message = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
-			_alert.ProgressValue = e.ProgressPercentage;
+			labelMessage.Text = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
+			progressBarFileBased.Value = e.ProgressPercentage;
 		}
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -206,7 +208,7 @@ namespace Sdl.Community.TMLifting
 				rtbStatus.Clear();
 				rtbStatus.AppendText("Process canceled.");
             }
-			_alert.Close();
+			groupBoxProgress.Visible = false;
 		}
 
         void bw_DoWork(object sender, DoWorkEventArgs e)
@@ -232,9 +234,8 @@ namespace Sdl.Community.TMLifting
 				var tms = lstTms.Items.OfType<TranslationMemoryInfo>().ToList();
 				if (tms.Capacity > 0)
 				{
-					_alert = new AlertForm();
-					_alert.Show();
-					_alert.progressBar1.Style = ProgressBarStyle.Marquee;
+					groupBoxProgress.Visible = true;
+					progressBarFileBased.Style = ProgressBarStyle.Marquee;
 					btnReindex.Enabled = false;
 					_bw.RunWorkerAsync(tms);
 					cancelBtn.Enabled = true;
@@ -363,18 +364,15 @@ namespace Sdl.Community.TMLifting
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
 			{
 				var i = 0;
-				for (; i < gridServerBasedTMs.RowCount; i++)
+				for (; i < gridServerBasedTMs.RowCount-1; i++)
 				{
-					if (gridServerBasedTMs["Status", i].Value != null)
-					{
-						_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
-						Properties.Settings.Default.UserName,
-						Properties.Settings.Default.Password,
-						Properties.Settings.Default.Uri);
-						gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
-						gridServerBasedTMs["Status", i].Value = "";
-						gridServerBasedTMs.Refresh();
-					}
+					_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
+					Properties.Settings.Default.UserName,
+					Properties.Settings.Default.Password,
+					Properties.Settings.Default.Uri);
+					gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
+					gridServerBasedTMs["Status", i].Value = "";
+					gridServerBasedTMs.Refresh();
 				}
 			}
 			else
@@ -391,9 +389,9 @@ namespace Sdl.Community.TMLifting
 			rtbStatus.Clear();
 			rtbStatus.AppendText(@"Process will be canceled.");
 			cancelBtn.Enabled = false;
-			if (_alert.Created)
+			if (groupBoxProgress.Visible == true)
 			{
-				_alert.Close();
+				groupBoxProgress.Visible = false;
 			}
         }
 
@@ -426,6 +424,10 @@ namespace Sdl.Community.TMLifting
 		private void gridServerBasedTMs_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
 			btnReindex.Enabled = false;
+		}
+
+		private void gridServerBasedTMs_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
 		}
 	}
 }
