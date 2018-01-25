@@ -47,6 +47,17 @@ namespace Sdl.Community.BackupService
 				}
 			}
 		}
+		
+		public void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName)
+		{
+			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+
+			SetupRealDateTime(tr);
+
+			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
+			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
+			AddTrigger(tr, td, backupName, trimmedBackupName);
+		}
 
 		// Add trigger which executes the backup files console application.
 		private void AddTrigger(Trigger trigger, TaskDefinition td, string backupName, string trimmedBackupName)
@@ -92,17 +103,6 @@ namespace Sdl.Community.BackupService
 					AddTrigger(tr, td, backupName, periodicBackupModel.TrimmedBackupName);
 				}
 			}
-		}
-
-		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName)
-		{
-			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-
-			SetupRealDateTime(tr);
-
-			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
-			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
-			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.

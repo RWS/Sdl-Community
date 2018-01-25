@@ -17,7 +17,7 @@ namespace Sdl.Community.TMBackup
 			GetBackupTasks();
 		}
 
-		public void GetBackupTasks()
+		public IEnumerable<Task> GetBackupTasks()
 		{
 			using (var ts = new TaskService())
 			{
@@ -46,6 +46,7 @@ namespace Sdl.Community.TMBackup
 					}
 				}
 				dataGridView1.DataSource = tasks;
+				return ts.AllTasks;
 			}
 		}
 
@@ -116,6 +117,23 @@ namespace Sdl.Community.TMBackup
 		private void btn_Refresh_Click(object sender, EventArgs e)
 		{
 			GetBackupTasks();
-		}		
+		}
+
+		private void btn_RunTasks_Click(object sender, EventArgs e)
+		{
+			var tasks = GetBackupTasks();
+			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
+
+			foreach (var task in tasks)
+			{
+				int index = task.Name.IndexOf(" ") + 1;
+				string backupName = task.Name.Substring(index);
+
+				var trimmedTaskName = string.Concat(task.Name.Where(c => !char.IsWhiteSpace(c)));
+				var service = new Service();
+
+				service.AddManuallyTimeScheduler(task.Definition, tr, backupName, trimmedTaskName);
+			}
+		}
 	}
 }
