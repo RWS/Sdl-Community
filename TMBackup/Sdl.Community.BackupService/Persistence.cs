@@ -181,7 +181,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.ChangeSettingsModelList != null)
+					if (request.ChangeSettingsModelList != null && request.ChangeSettingsModelList.Count > 0 && request.ChangeSettingsModelList[0] != null)
 					{
 						foreach (var changeSettingModelItem in changeSettingsModelList)
 						{
@@ -227,7 +227,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.PeriodicBackupModelList != null)
+					if (request.PeriodicBackupModelList != null && request.PeriodicBackupModelList.Count>0 && request.PeriodicBackupModelList[0] != null) 
 					{
 						foreach (var periodicBackupModelItem in periodicBackupModelList)
 						{

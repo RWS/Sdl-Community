@@ -120,9 +120,10 @@ namespace Sdl.Community.TMBackup
 			var result = persistence.ReadFormInformation();
 			var backupModel = result != null
 				? result.BackupModelList !=null
+				? result.BackupModelList.Count > 0
 				? result.BackupModelList[0] != null
 				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
-				: null : null : null;
+				: null : null : null : null;
 
 			if (backupModel != null && !_isNewTask)
 			{
@@ -135,8 +136,9 @@ namespace Sdl.Community.TMBackup
 
 			if (result.BackupDetailsModelList != null)
 			{
+				var backupDetailsList = result.BackupDetailsModelList.Where(b => b.BackupName.Equals(txt_BackupName.Text)).ToList();
 				string res = string.Empty;
-				foreach (var backupDetail in result.BackupDetailsModelList)
+				foreach (var backupDetail in backupDetailsList)
 				{
 					res = res + backupDetail.BackupAction + ", " + backupDetail.BackupType + ", " + backupDetail.BackupPattern + ";  ";
 				}
