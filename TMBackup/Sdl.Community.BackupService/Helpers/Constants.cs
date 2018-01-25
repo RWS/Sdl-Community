@@ -10,6 +10,7 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public const string MandatoryValue = "Mandatory value";
 		public const string ActionAlreadyExist = "Action already exist. If you want to add a new action please try with a different name, type and pattern.";
+		public const string TaskSchedulerAlreadyExist = "Task already exist! If you want to add a new task please select a different name and scheduler settings.";
 		public const string InformativeMessage = "Informative Message";
 
 		public const string ManuallyOption = "Backup process started manually.";

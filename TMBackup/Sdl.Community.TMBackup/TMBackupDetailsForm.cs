@@ -12,10 +12,8 @@ namespace Sdl.Community.TMBackup
 	{
 		#region Private fields
 		private BindingSource _source = new BindingSource();
-
 		private List<BackupDetailsModel> _backupDetailsModelList = new List<BackupDetailsModel>();
-
-		private bool _isNewTask;
+		private string _taskName;
 		#endregion
 
 		#region Public properties
@@ -24,29 +22,20 @@ namespace Sdl.Community.TMBackup
 		#endregion
 
 		#region Constructors
-		public TMBackupDetailsForm()
+		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
+			InitializeBackupDetails();
+			_taskName = taskName;
 		}
-
-		public TMBackupDetailsForm(bool isNewTask)
-		{
-			InitializeComponent();
-
-			_isNewTask = isNewTask;
-
-			if (!isNewTask)
-			{
-				InitializeBackupDetails();
-			}
-		}
+				
 		#endregion
 
 		#region Actions
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
 			var persistence = new Persistence();
-			persistence.SaveDetailsFormInfo(_backupDetailsModelList);
+			persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
 
 			_backupDetailsModelList.Clear();
 
@@ -69,7 +58,7 @@ namespace Sdl.Community.TMBackup
 					});
 				}
 				var persistence = new Persistence();
-				persistence.DeleteDetailsFromInfo(removedActionsList);
+				persistence.DeleteDetailsFromInfo(removedActionsList, _taskName);
 
 				GetBackupDetailsInfo();
 			}
@@ -226,7 +215,7 @@ namespace Sdl.Community.TMBackup
 			dataGridView1.DataSource = _backupDetailsModelList;
 
 			var persistence = new Persistence();
-			persistence.UpdateBackupDetailsForm(_backupDetailsModelList);
+			persistence.UpdateBackupDetailsForm(_backupDetailsModelList, _taskName);
 
 			GetBackupDetailsInfo();
 			dataGridView1.ClearSelection();

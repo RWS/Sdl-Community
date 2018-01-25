@@ -3,6 +3,8 @@ using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
 using System;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
@@ -10,6 +12,9 @@ namespace Sdl.Community.TMBackup
 	{
 		#region Private fields
 		private bool _isNewTask;
+		private string _taskName;
+		private List<ChangeSettingsModel> _changeSettingsModelList = new List<ChangeSettingsModel>();
+		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
 		#endregion
 
 		#region Constructors
@@ -18,11 +23,12 @@ namespace Sdl.Community.TMBackup
 			InitializeComponent();
 		}
 
-		public TMBackupChangeForm(bool isNewTask)
+		public TMBackupChangeForm(bool isNewTask, string taskName)
 		{
 			InitializeComponent();
 
 			_isNewTask = isNewTask;
+			_taskName = taskName;
 
 			if (!isNewTask)
 			{
@@ -34,7 +40,7 @@ namespace Sdl.Community.TMBackup
 		#region Events
 		private void btn_TimeDetails_Click(object sender, EventArgs e)
 		{
-			var periodicBackupForm = new PeriodicBackupForm();
+			var periodicBackupForm = new PeriodicBackupForm(_taskName);
 			periodicBackupForm.ShowDialog();
 		}
 		
@@ -44,9 +50,12 @@ namespace Sdl.Community.TMBackup
 
 			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsPeriodicOptionChecked = radioBtn_TimeChange.Checked;
+			changeSettingModel.BackupName = _taskName;
+			changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+			_changeSettingsModelList.Add(changeSettingModel);
 
 			var persistence = new Persistence();
-			persistence.SaveChangeSettings(changeSettingModel);
+			persistence.SaveChangeSettings(_changeSettingsModelList, _taskName);
 		}
 
 		private void radioBtn_Manually_CheckedChanged(object sender, EventArgs e)
@@ -55,9 +64,12 @@ namespace Sdl.Community.TMBackup
 
 			var changeSettingModel = new ChangeSettingsModel();
 			changeSettingModel.IsManuallyOptionChecked = radioBtn_Manually.Checked;
+			changeSettingModel.BackupName = _taskName;
+			changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+			_changeSettingsModelList.Add(changeSettingModel);
 
 			var persistence = new Persistence();
-			persistence.SaveChangeSettings(changeSettingModel);
+			persistence.SaveChangeSettings(_changeSettingsModelList, _taskName);
 		}
 
 		private void btn_Ok_Click(object sender, EventArgs e)
@@ -71,12 +83,14 @@ namespace Sdl.Community.TMBackup
 		private void InitializeFormInfo()
 		{
 			var persistence = new Persistence();
-			var result = persistence.ReadFormInformation();
+			var jsonResult = persistence.ReadFormInformation();
 
-			if (result != null)
+			if (jsonResult != null && jsonResult.ChangeSettingsModelList != null && jsonResult.ChangeSettingsModelList[0] != null)
 			{
-				radioBtn_TimeChange.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsPeriodicOptionChecked : false;
-				radioBtn_Manually.Checked = result.ChangeSettingsModel != null ? result.ChangeSettingsModel.IsManuallyOptionChecked : false;
+				var changeSettingsModel = jsonResult.ChangeSettingsModelList.Where(c => c.BackupName.Equals(_taskName)).FirstOrDefault();
+
+				radioBtn_TimeChange.Checked = changeSettingsModel != null ? changeSettingsModel.IsPeriodicOptionChecked : false;
+				radioBtn_Manually.Checked = changeSettingsModel != null ? changeSettingsModel.IsManuallyOptionChecked : false;
 			}
 		}
 
@@ -86,13 +100,18 @@ namespace Sdl.Community.TMBackup
 
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
+			var periodicBackupModel = jsonResult != null
+				? jsonResult.PeriodicBackupModelList != null
+				? jsonResult.PeriodicBackupModelList[0] != null
+				? jsonResult.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
+			    : null : null : null;
 
-			if (jsonResult != null && jsonResult.PeriodicBackupModel != null && radioBtn_TimeChange.Checked)
-			{
-				backupTimeInfo = backupTimeInfo + "Backup interval: " + jsonResult.PeriodicBackupModel.BackupInterval + " " +
-					jsonResult.PeriodicBackupModel.TimeType + ", " + "First backup on: " +
-					jsonResult.PeriodicBackupModel.FirstBackup + ", " + "at " +
-					jsonResult.PeriodicBackupModel.BackupAt + ", ";
+			if (periodicBackupModel != null && radioBtn_TimeChange.Checked)
+			{			
+				backupTimeInfo = backupTimeInfo + "Backup interval: " + periodicBackupModel.BackupInterval + " " +
+					periodicBackupModel.TimeType + ", " + "First backup on: " +
+					periodicBackupModel.FirstBackup + ", " + "at " +
+					periodicBackupModel.BackupAt + ", ";
 			}
 			else if (radioBtn_Manually.Checked)
 			{

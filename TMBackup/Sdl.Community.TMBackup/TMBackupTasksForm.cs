@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using Sdl.Community.BackupService;
 
 namespace Sdl.Community.TMBackup
 {
@@ -84,6 +85,12 @@ namespace Sdl.Community.TMBackup
 						if (task != null)
 						{
 							ts.RootFolder.DeleteTask(task.Name);
+
+							var index = task.Name.IndexOf(" ") + 1;
+							var jsonTaskName = task.Name.Substring(index);
+
+							Persistence persistence = new Persistence();
+							persistence.RemoveDataFromJson(jsonTaskName);
 						}
 					}
 					GetBackupTasks();
@@ -105,5 +112,10 @@ namespace Sdl.Community.TMBackup
 				}
 			}
 		}
+
+		private void btn_Refresh_Click(object sender, EventArgs e)
+		{
+			GetBackupTasks();
+		}		
 	}
 }

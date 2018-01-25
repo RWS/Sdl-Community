@@ -2,6 +2,10 @@
 {
 	public class BackupDetailsModel
 	{
+		public string BackupName { get; set; }
+
+		public string TrimmedBackupName { get; set; }
+
 		public string BackupAction { get; set; }
 
 		public string BackupType { get; set; }

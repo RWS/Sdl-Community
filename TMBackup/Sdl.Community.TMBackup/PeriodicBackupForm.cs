@@ -4,14 +4,21 @@ using Sdl.Community.BackupService.Models;
 using System;
 using System.Globalization;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class PeriodicBackupForm : Form
 	{
-		public PeriodicBackupForm()
+		private string _taskName { get; set; }
+		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
+
+		public PeriodicBackupForm(string taskName)
 		{
 			InitializeComponent();
+
+			_taskName = taskName;
 
 			SetDateTimeFormat();
 
@@ -45,9 +52,12 @@ namespace Sdl.Community.TMBackup
 				periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
 				periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
 				periodicBackupModel.BackupAt = timePicker_At.Text;
+				periodicBackupModel.BackupName = _taskName;
+				periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+				_periodicBackupModelList.Add(periodicBackupModel);
 
-				Persistence persistence = new Persistence();
-				persistence.SavePeriodicBackupInfo(periodicBackupModel);
+				Persistence persistence = new Persistence();				
+				persistence.SavePeriodicBackupInfo(_periodicBackupModelList, _taskName);
 
 				Close();
 			}
@@ -65,12 +75,18 @@ namespace Sdl.Community.TMBackup
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
 
-			if(result != null)
+			if (result.PeriodicBackupModelList != null)
 			{
-				cmbBox_Interval.SelectedItem = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.TimeType : string.Empty;
-				txtBox_TimeInterval.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupInterval.ToString() : string.Empty;
-				dateTimePicker_FirstBackup.Value = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.FirstBackup : DateTime.Now;
-				timePicker_At.Text = result.PeriodicBackupModel != null ? result.PeriodicBackupModel.BackupAt : string.Empty;
+				var periodicBackupModelItem = result != null
+					? result.PeriodicBackupModelList != null
+					? result.PeriodicBackupModelList[0] != null
+					? result.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
+					: null : null : null;
+
+				cmbBox_Interval.SelectedItem = periodicBackupModelItem != null ? periodicBackupModelItem.TimeType : string.Empty;
+				txtBox_TimeInterval.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupInterval.ToString() : string.Empty;
+				dateTimePicker_FirstBackup.Value = periodicBackupModelItem != null ? periodicBackupModelItem.FirstBackup : DateTime.Now;
+				timePicker_At.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupAt : string.Empty;
 			}
 		}
 

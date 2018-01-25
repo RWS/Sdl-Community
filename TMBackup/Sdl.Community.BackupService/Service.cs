@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using static Sdl.Community.BackupService.Helpers.Enums;
 using System.Globalization;
+using System.Linq;
 
 namespace Sdl.Community.BackupService
 {
@@ -19,42 +20,46 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Create task scheduler for the backup files process.
-		public void CreateTaskScheduler()
+		public void CreateTaskScheduler(string backupName)
 		{
 			var jsonRequestModel = GetJsonInformation();
+			var changeSettingsModelItem = jsonRequestModel != null ? jsonRequestModel.ChangeSettingsModelList != null ? jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
+																   : null : null;
+			var periodicBackupModelItem = jsonRequestModel != null ? jsonRequestModel.PeriodicBackupModelList != null ? jsonRequestModel.PeriodicBackupModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
+															       : null : null;
 
 			DateTime startDate = DateTime.Now;
 			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
 
-			if (jsonRequestModel != null && jsonRequestModel.ChangeSettingsModel != null && jsonRequestModel.BackupModel != null)
+			if (jsonRequestModel != null && changeSettingsModelItem != null && periodicBackupModelItem != null)
 			{
 				// Create a new task definition for the local machine and assign properties
 				TaskDefinition td = TaskService.Instance.NewTask();
 				td.RegistrationInfo.Description = "Backup files";
 
-				if (jsonRequestModel.ChangeSettingsModel.IsPeriodicOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
+				if (changeSettingsModelItem.IsPeriodicOptionChecked)
 				{
-					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr);
+					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr, backupName);
 				}
-				if (jsonRequestModel.ChangeSettingsModel.IsManuallyOptionChecked && jsonRequestModel.PeriodicBackupModel != null)
+				if (changeSettingsModelItem.IsManuallyOptionChecked)
 				{
-					AddManuallyTimeScheduler(td, tr, jsonRequestModel);
+					AddManuallyTimeScheduler(td, tr, backupName, changeSettingsModelItem.TrimmedBackupName);
 				}
 			}
 		}
 
 		// Add trigger which executes the backup files console application.
-		private void AddTrigger(Trigger trigger, TaskDefinition td, string taskName)
+		private void AddTrigger(Trigger trigger, TaskDefinition td, string backupName, string trimmedBackupName)
 		{
 			using (TaskService ts = new TaskService())
 			{
 				td.Triggers.Add(trigger);
 
-				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), "Daily"));
+				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), trimmedBackupName));
 
 				try
 				{
-					ts.RootFolder.RegisterTaskDefinition(taskName, td);
+					ts.RootFolder.RegisterTaskDefinition(string.Concat(Constants.TaskDetailValue, backupName), td);
 				}
 				catch (Exception ex)
 				{
@@ -64,27 +69,32 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Add periodic time scheduler depending on user setup.
-		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr)
+		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr, string backupName)
 		{
-			DateTime atScheduleTime = DateTime.Parse(jsonRequestModel.PeriodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
-			tr.StartBoundary = jsonRequestModel.PeriodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
-
-			SetupRealDateTime(tr);
-
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+			var periodicBackupModel = jsonRequestModel != null ? jsonRequestModel.PeriodicBackupModelList != null ? jsonRequestModel.PeriodicBackupModelList.Where(p => p.BackupName.Equals(backupName)).FirstOrDefault()
+															   : null : null;
+			if (periodicBackupModel != null)
 			{
-				tr.Repetition.Interval = TimeSpan.FromHours(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
-			}
+				DateTime atScheduleTime = DateTime.Parse(periodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
+				tr.StartBoundary = periodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
-			if (jsonRequestModel.PeriodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
-			{
-				tr.Repetition.Interval = TimeSpan.FromMinutes(jsonRequestModel.PeriodicBackupModel.BackupInterval);
-				AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
+				SetupRealDateTime(tr);
+
+				if (periodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
+				{
+					tr.Repetition.Interval = TimeSpan.FromHours(periodicBackupModel.BackupInterval);
+					AddTrigger(tr, td, backupName, periodicBackupModel.TrimmedBackupName);
+				}
+
+				if (periodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Minutes)))
+				{
+					tr.Repetition.Interval = TimeSpan.FromMinutes(periodicBackupModel.BackupInterval);
+					AddTrigger(tr, td, backupName, periodicBackupModel.TrimmedBackupName);
+				}
 			}
 		}
 
-		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, JsonRequestModel jsonRequestModel)
+		private void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName)
 		{
 			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
@@ -92,7 +102,7 @@ namespace Sdl.Community.BackupService
 
 			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
 			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
-			AddTrigger(tr, td, jsonRequestModel.BackupModel.BackupName);
+			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.

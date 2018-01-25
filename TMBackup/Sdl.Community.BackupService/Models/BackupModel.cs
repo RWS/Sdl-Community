@@ -4,6 +4,8 @@
 	{
 		public string BackupName { get; set; }
 
+		public string TrimmedBackupName { get; set; }
+
 		public string BackupFrom { get; set; }
 
 		public string BackupTo { get; set; }
