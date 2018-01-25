@@ -1,24 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
+using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeelLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Model;
 using Sdl.Community.DeepLMTProvider.Telemetry;
 using Sdl.LanguagePlatform.Core;
 
-namespace Sdl.Community.DeelLMTProvider
+namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter
 	{
-		private ITelemetryTracker _telemetryTracker;
+		private readonly ITelemetryTracker _telemetryTracker;
 		public string ApiKey { get; set; }
 
 		public DeepLTranslationProviderConnecter(string key)

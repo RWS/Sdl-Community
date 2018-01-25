@@ -98,7 +98,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public TranslationProviderDisplayInfo GetDisplayInfo(Uri translationProviderUri, string translationProviderState)
         {
-			var info = new TranslationProviderDisplayInfo()
+			var info = new TranslationProviderDisplayInfo
 			{
 				Name = "DeepL Translation provider"
 			};
@@ -107,7 +107,14 @@ namespace Sdl.Community.DeepLMTProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            return true;
+			if (translationProviderUri == null)
+	        {
+		        throw new ArgumentNullException(nameof(translationProviderUri));
+	        }
+
+	        var supportsProvider= string.Equals(translationProviderUri.Scheme, DeepLMtTranslationProvider.ListTranslationProviderScheme,
+		        StringComparison.OrdinalIgnoreCase);
+	        return supportsProvider;
         }
-    }
+	}
 }

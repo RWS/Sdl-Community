@@ -39,8 +39,14 @@ namespace Sdl.Community.DeepLMTProvider
 
         public bool SupportsTranslationProviderUri(Uri translationProviderUri)
         {
-            //here see MT enhanced for the actual  value
-            return true;
-        }
+			if (translationProviderUri == null)
+	        {
+		        throw new ArgumentNullException(nameof(translationProviderUri));
+	        }
+
+	        var supportsProvider = string.Equals(translationProviderUri.Scheme, DeepLMtTranslationProvider.ListTranslationProviderScheme,
+		        StringComparison.OrdinalIgnoreCase);
+	        return supportsProvider;
+		}
     }
 }

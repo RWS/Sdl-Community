@@ -448,9 +448,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     try
                     {
                         var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
-                        project.GetType().GetMethod("UpdateServerProjectSettings").Invoke(project, null);
+	                    //var updateServerMethod = project.GetType().GetMethod("UpdateServerProjectSettings");
+						
+						project.GetType().GetMethod("UpdateServerProjectSettings").Invoke(project, new object[]{false});
                     }
-                    catch
+                    catch(Exception e)
                     {
                     }
                 }
