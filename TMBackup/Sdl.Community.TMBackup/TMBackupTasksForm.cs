@@ -21,6 +21,7 @@ namespace Sdl.Community.TMBackup
 		{
 			using (var ts = new TaskService())
 			{
+				List<Task> backupTasks = new List<Task>();
 				var tasks = new List<TaskDefinitionModel>();
 				foreach (var task in ts.AllTasks)
 				{
@@ -43,10 +44,11 @@ namespace Sdl.Community.TMBackup
 							Interval = triggerInfo,
 							Status = task.State.ToString()
 						});
+						backupTasks.Add(task);
 					}
 				}
 				dataGridView1.DataSource = tasks;
-				return ts.AllTasks;
+				return backupTasks;
 			}
 		}
 
@@ -60,13 +62,16 @@ namespace Sdl.Community.TMBackup
 
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
-			var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
-			var cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+			if (dataGridView1.Rows.Count > 0)
+			{
+				var dataIndexNo = dataGridView1.Rows[e.RowIndex].Index.ToString();
+				var cellValue = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
 
-			Hide();
+				Hide();
 
-			var tmBackupForm = new TMBackupForm(false, cellValue);
-			tmBackupForm.ShowDialog();
+				var tmBackupForm = new TMBackupForm(false, cellValue);
+				tmBackupForm.ShowDialog();
+			}
 		}
 
 		/// <summary>

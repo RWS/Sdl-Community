@@ -145,8 +145,8 @@ namespace Sdl.Community.TMBackup
 				txt_BackupDetails.Text = res;
 			}
 
-			var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, taskName);
-			txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
+			//var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, taskName);
+			//txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
 		}
 
 		private bool CheckTask(string taskName)
@@ -155,9 +155,10 @@ namespace Sdl.Community.TMBackup
 			var result = persistence.ReadFormInformation();
 			var backupModel = result != null
 				? result.BackupModelList != null 
+				? result.BackupModelList.Count > 0 
 				? result.BackupModelList[0] != null
 				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
-				: null :null :null;
+				: null :null :null : null;
 
 			if (backupModel != null && backupModel.BackupName.Contains(taskName))
 			{
