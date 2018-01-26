@@ -98,6 +98,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to set Match Repair Settings.
+        /// </summary>
+        internal static string MRS_Failed {
+            get {
+                return ResourceManager.GetString("MRS_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have a currently active project.
         /// </summary>
         internal static string No_Current_Project {

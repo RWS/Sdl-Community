@@ -181,4 +181,7 @@
   <data name="TQA_Failed" xml:space="preserve">
     <value>Failed to set the Translation Quality Assessment settings</value>
   </data>
+  <data name="MRS_Failed" xml:space="preserve">
+    <value>Failed to set Match Repair Settings</value>
+  </data>
 </root>

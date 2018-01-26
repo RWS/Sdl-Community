@@ -199,7 +199,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         {
                             // Update the translation memory filter settings
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemorySettings", targetProject, null);
-                        }
+	                        
+						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.TMAL_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -347,14 +348,25 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         try
                         {
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, numberVerifierSettingsId, targetProject, null);
-							//this should be removed from here
-	                        //CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
 						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.QANV_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
+
+	                if (selectedTemplate.MatchRepairSettings.Equals(ApplyTemplateOptions.Overwrite))
+	                {
+		                try
+		                {
+			                CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings",
+				                targetProject, null);
+		                }
+		                catch (Exception e)
+		                {
+							MessageBox.Show(e.Message, PluginResources.MRS_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						}
+	                }
 
                     // Copy grammar checking settings where applicable
                     if (selectedTemplate.VerificationGrammarChecker == ApplyTemplateOptions.Overwrite)
@@ -399,7 +411,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "PseudoTranslateSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "AnalysisTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "VerificationSettings", targetProject, null);
-                            CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
+							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
+							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
                         }
                         catch (Exception e)
@@ -428,7 +441,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "AnalysisTaskSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "VerificationSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslateTaskSettings", targetProject, targetTargetLanguage);
-                                            CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslationMemoryUpdateTaskSettings", targetProject, targetTargetLanguage);
+	                                        CopySettingsGroup(sourceTmSettings, targetTmSettings, "FuzzyMatchRepairSettings", targetProject, targetTargetLanguage);
+											CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslationMemoryUpdateTaskSettings", targetProject, targetTargetLanguage);
                                         }
                                         catch (Exception e)
                                         {
