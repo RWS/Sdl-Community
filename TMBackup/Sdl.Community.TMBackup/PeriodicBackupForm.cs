@@ -79,9 +79,10 @@ namespace Sdl.Community.TMBackup
 			{
 				var periodicBackupModelItem = result != null
 					? result.PeriodicBackupModelList != null
+					? result.PeriodicBackupModelList.Count > 0
 					? result.PeriodicBackupModelList[0] != null
 					? result.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
-					: null : null : null;
+					: null : null : null : null;
 
 				cmbBox_Interval.SelectedItem = periodicBackupModelItem != null ? periodicBackupModelItem.TimeType : string.Empty;
 				txtBox_TimeInterval.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupInterval.ToString() : string.Empty;

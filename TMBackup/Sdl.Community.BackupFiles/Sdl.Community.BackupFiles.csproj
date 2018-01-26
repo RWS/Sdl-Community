@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BackupFiles.cs" />
+    <Compile Include="BackupService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -76,16 +77,13 @@
     <EmbeddedResource Include="Resources\Newtonsoft.Json.dll" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\System.Linq.dll" />
+    <EmbeddedResource Include="Resources\Sdl.Community.BackupService.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sdl.Community.BackupService\Sdl.Community.BackupService.csproj">
       <Project>{8c9c20fa-0a8c-4293-9dfb-5d8165ccef28}</Project>
       <Name>Sdl.Community.BackupService</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Sdl.Community.BackupService.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

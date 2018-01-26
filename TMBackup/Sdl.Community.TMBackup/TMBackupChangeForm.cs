@@ -101,7 +101,7 @@ namespace Sdl.Community.TMBackup
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
 			var periodicBackupModel = jsonResult != null
-				? jsonResult.PeriodicBackupModelList != null
+				? jsonResult.PeriodicBackupModelList.Count > 0
 				? jsonResult.PeriodicBackupModelList[0] != null
 				? jsonResult.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
 			    : null : null : null;

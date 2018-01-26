@@ -33,7 +33,6 @@ namespace Sdl.Community.TMLifting
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
-            this.lstTms = new System.Windows.Forms.ListBox();
             this.tabControlTMLifting = new System.Windows.Forms.TabControl();
             this.tabPageServerBasedTM = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -50,6 +49,11 @@ namespace Sdl.Community.TMLifting
             this.cleanBtn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnReindex = new System.Windows.Forms.Button();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.lstTms = new System.Windows.Forms.ListBox();
+            this.groupBoxProgress = new System.Windows.Forms.GroupBox();
+            this.progressBarFileBased = new System.Windows.Forms.ProgressBar();
+            this.labelMessage = new System.Windows.Forms.Label();
             this.tabPageFileBasedTM.SuspendLayout();
             this.panel2.SuspendLayout();
             this.tabControlTMLifting.SuspendLayout();
@@ -58,6 +62,8 @@ namespace Sdl.Community.TMLifting
             this.groupBoxTM.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
             this.panel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
+            this.groupBoxProgress.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPageFileBasedTM
@@ -74,7 +80,7 @@ namespace Sdl.Community.TMLifting
             // panel2
             // 
             this.panel2.Controls.Add(this.rtbStatus);
-            this.panel2.Controls.Add(this.lstTms);
+            this.panel2.Controls.Add(this.tableLayoutPanel2);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(3, 3);
             this.panel2.Name = "panel2";
@@ -84,23 +90,11 @@ namespace Sdl.Community.TMLifting
             // rtbStatus
             // 
             this.rtbStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.rtbStatus.Location = new System.Drawing.Point(0, 186);
+            this.rtbStatus.Location = new System.Drawing.Point(0, 210);
             this.rtbStatus.Name = "rtbStatus";
-            this.rtbStatus.Size = new System.Drawing.Size(1126, 391);
+            this.rtbStatus.Size = new System.Drawing.Size(1126, 367);
             this.rtbStatus.TabIndex = 1;
             this.rtbStatus.Text = "";
-            // 
-            // lstTms
-            // 
-            this.lstTms.AllowDrop = true;
-            this.lstTms.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lstTms.FormattingEnabled = true;
-            this.lstTms.Location = new System.Drawing.Point(0, 0);
-            this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(1126, 186);
-            this.lstTms.TabIndex = 0;
-            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
-            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
             // 
             // tabControlTMLifting
             // 
@@ -167,6 +161,7 @@ namespace Sdl.Community.TMLifting
             this.gridServerBasedTMs.TabIndex = 6;
             this.gridServerBasedTMs.Visible = false;
             this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
+            this.gridServerBasedTMs.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridServerBasedTMs_ColumnHeaderMouseClick);
             this.gridServerBasedTMs.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridServerBasedTMs_RowStateChanged);
             // 
             // connectToServerBtn
@@ -294,6 +289,62 @@ namespace Sdl.Community.TMLifting
             this.btnReindex.UseVisualStyleBackColor = true;
             this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.groupBoxProgress, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lstTms, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1126, 210);
+            this.tableLayoutPanel2.TabIndex = 8;
+            // 
+            // lstTms
+            // 
+            this.lstTms.AllowDrop = true;
+            this.lstTms.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstTms.FormattingEnabled = true;
+            this.lstTms.Location = new System.Drawing.Point(3, 3);
+            this.lstTms.Name = "lstTms";
+            this.lstTms.Size = new System.Drawing.Size(557, 204);
+            this.lstTms.TabIndex = 1;
+            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
+            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
+            // 
+            // groupBoxProgress
+            // 
+            this.groupBoxProgress.Controls.Add(this.progressBarFileBased);
+            this.groupBoxProgress.Controls.Add(this.labelMessage);
+            this.groupBoxProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxProgress.Location = new System.Drawing.Point(566, 3);
+            this.groupBoxProgress.Name = "groupBoxProgress";
+            this.groupBoxProgress.Size = new System.Drawing.Size(557, 204);
+            this.groupBoxProgress.TabIndex = 8;
+            this.groupBoxProgress.TabStop = false;
+            this.groupBoxProgress.Text = "Progress Monitor";
+            // 
+            // progressBarFileBased
+            // 
+            this.progressBarFileBased.Location = new System.Drawing.Point(19, 57);
+            this.progressBarFileBased.Name = "progressBarFileBased";
+            this.progressBarFileBased.Size = new System.Drawing.Size(180, 23);
+            this.progressBarFileBased.TabIndex = 6;
+            // 
+            // labelMessage
+            // 
+            this.labelMessage.AutoSize = true;
+            this.labelMessage.Location = new System.Drawing.Point(16, 31);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(127, 13);
+            this.labelMessage.TabIndex = 5;
+            this.labelMessage.Text = "In progress, please wait...";
+            // 
             // TMLiftingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -312,15 +363,15 @@ namespace Sdl.Community.TMLifting
             ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
+            this.groupBoxProgress.ResumeLayout(false);
+            this.groupBoxProgress.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
 		#endregion
 		private System.Windows.Forms.TabPage tabPageFileBasedTM;
-		private System.Windows.Forms.Panel panel2;
-		private System.Windows.Forms.RichTextBox rtbStatus;
-		private System.Windows.Forms.ListBox lstTms;
 		private System.Windows.Forms.TabControl tabControlTMLifting;
 		private System.Windows.Forms.Button btnBrowse;
 		private System.Windows.Forms.CheckBox chkLoadStudioTMs;
@@ -337,6 +388,13 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.Label server;
 		private System.Windows.Forms.ComboBox comboBoxServerBasedTM;
 		private System.Windows.Forms.Button btnReindex;
+		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.RichTextBox rtbStatus;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.GroupBox groupBoxProgress;
+		public System.Windows.Forms.ProgressBar progressBarFileBased;
+		private System.Windows.Forms.Label labelMessage;
+		private System.Windows.Forms.ListBox lstTms;
 	}
 }
 
