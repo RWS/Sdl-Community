@@ -228,10 +228,12 @@ namespace Sdl.Community.TMBackup
 			var persistence = new Persistence();
 			var request = persistence.ReadFormInformation();
 			var backupDetails = request != null
-				? request.BackupDetailsModelList != null && request.BackupDetailsModelList.Count > 0
+				? request.BackupDetailsModelList != null
+				? request.BackupDetailsModelList.Count > 0
+				? request.BackupDetailsModelList[0] != null
 				? request.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList()
-				: null
-				: null;
+				: null : null : null : null;
+
 			if (backupDetails != null && backupDetails.Count > 0)
 			{
 				// create backupModel which is used as a new row where user can add another Action
