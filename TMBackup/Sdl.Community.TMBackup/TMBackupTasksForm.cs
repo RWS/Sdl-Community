@@ -129,14 +129,21 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_RunTasks_Click(object sender, EventArgs e)
 		{
-			Persistence persistence = new Persistence();
-			Service service = new Service();
+			var persistence = new Persistence();
+			var service = new Service();
 
 			_jsonRquestModel = persistence.ReadFormInformation();
 
 			if (dataGridView1.SelectedRows.Count > 0)
 			{
-				
+				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+				{
+					var backupName = row.Cells[0].Value.ToString();
+					var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
+					_backupNames.Add(backupModel.BackupName);
+					persistence.RemoveDataFromJson(backupModel.BackupName);
+				}
+				AddInfoIntoJson(persistence, service);
 			}
 			else
 			{
@@ -148,16 +155,26 @@ namespace Sdl.Community.TMBackup
 						persistence.RemoveDataFromJson(backupModel.BackupName);
 					}
 				}
+				AddInfoIntoJson(persistence, service);
+			}
+			GetBackupTasks();
+		}
 
-				persistence.SaveBackupFormInfo(_jsonRquestModel.BackupModelList);
-				foreach (var name in _backupNames)
-				{
-					persistence.SaveChangeSettings(_jsonRquestModel.ChangeSettingsModelList.Where(b=>b.BackupName.Equals(name)).ToList(), name);
-					persistence.SaveDetailsFormInfo(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).ToList(), name);
-					persistence.SavePeriodicBackupInfo(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).ToList(), name); 
+		/// <summary>
+		/// Add new information to the Json when running all/specific tasks
+		/// </summary>
+		/// <param name="persistence"></param>
+		/// <param name="service"></param>
+		private void AddInfoIntoJson(Persistence persistence, Service service)
+		{
+			foreach (var name in _backupNames)
+			{
+				persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
 
-					service.CreateTaskScheduler(name);
-				}
+				service.CreateTaskScheduler(name);
 			}
 		}
 	}

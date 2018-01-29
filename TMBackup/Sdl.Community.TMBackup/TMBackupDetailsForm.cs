@@ -26,8 +26,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
-			InitializeBackupDetails();
 			_taskName = taskName;
+			InitializeBackupDetails();
 		}
 				
 		#endregion

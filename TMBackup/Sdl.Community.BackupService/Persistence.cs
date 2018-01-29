@@ -312,5 +312,64 @@ namespace Sdl.Community.BackupService
 				}
 			}
 		}
+
+		public void SaveBackupModel(BackupModel backupModel)
+		{
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+			var item = request.BackupModelList.Where(p => p.BackupName.Equals(backupModel.BackupName)).FirstOrDefault();
+			if (item != null)
+			{
+				request.BackupModelList.Remove(item);
+			}
+
+			request.BackupModelList.Add(backupModel);
+			WriteJsonRequestModel(request);
+		}
+
+		public void SaveDetailModel(BackupDetailsModel detailsModel)
+		{
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+			var item = request.BackupDetailsModelList.Where(p => p.BackupName.Equals(detailsModel.BackupName)).FirstOrDefault();
+			if (item != null)
+			{
+				request.BackupDetailsModelList.Remove(item);
+			}
+
+			request.BackupDetailsModelList.Add(detailsModel);
+			WriteJsonRequestModel(request);
+		}
+
+		public void SavePeriodicModel(PeriodicBackupModel periodicModel)
+		{
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+			var item = request.PeriodicBackupModelList.Where(p => p.BackupName.Equals(periodicModel.BackupName)).FirstOrDefault();
+			if (item != null)
+			{
+				request.PeriodicBackupModelList.Remove(item);
+			}
+
+			request.PeriodicBackupModelList.Add(periodicModel);
+			WriteJsonRequestModel(request);
+		}
+
+		public void SaveChangeModel(ChangeSettingsModel changeModel)
+		{
+			var jsonText = File.ReadAllText(_persistancePath);
+			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
+
+			var item = request.ChangeSettingsModelList.Where(b=>b.BackupName.Equals(changeModel.BackupName)).FirstOrDefault();
+			if(item != null)
+			{
+				request.ChangeSettingsModelList.Remove(item);
+			}
+			request.ChangeSettingsModelList.Add(changeModel);
+			WriteJsonRequestModel(request);
+		}
 	}
 }
