@@ -102,7 +102,8 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupItem in backupDetailsModelList)
 						{
-							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupAction == backupItem.BackupAction
+							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)
+																						 && b.BackupAction == backupItem.BackupAction
 																						 && b.BackupType == backupItem.BackupType
 																						 && b.BackupPattern == backupItem.BackupPattern)
 																				 .FirstOrDefault();
@@ -192,7 +193,7 @@ namespace Sdl.Community.BackupService
 
 							if (existingChangeSettingsModelItem == null)
 							{
-								request.ChangeSettingsModelList.Add(existingChangeSettingsModelItem);
+								request.ChangeSettingsModelList.Add(changeSettingModelItem);
 								WriteJsonRequestModel(request);
 							}
 							else
@@ -227,7 +228,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.PeriodicBackupModelList != null && request.PeriodicBackupModelList.Count>0 && request.PeriodicBackupModelList[0] != null) 
+					if (request.PeriodicBackupModelList != null && request.PeriodicBackupModelList.Count > 0 && request.PeriodicBackupModelList[0] != null) 
 					{
 						foreach (var periodicBackupModelItem in periodicBackupModelList)
 						{
@@ -236,7 +237,7 @@ namespace Sdl.Community.BackupService
 
 							if (existingperiodicBackupModelItem == null)
 							{
-								request.PeriodicBackupModelList.Add(existingperiodicBackupModelItem);
+								request.PeriodicBackupModelList.Add(periodicBackupModelItem);
 								WriteJsonRequestModel(request);
 							}
 							else
