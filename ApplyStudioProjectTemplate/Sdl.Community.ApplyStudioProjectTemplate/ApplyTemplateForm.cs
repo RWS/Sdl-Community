@@ -93,8 +93,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             // Add in the project templates defined in Studio
             foreach (ProjectTemplateInfo templateInfo in controller.GetProjectTemplates())
             {
-	            var newTemplate = new ApplyTemplate(templateInfo);
-                SelectedTemplate.Items.Add(newTemplate);
+	            if (File.Exists(templateInfo.Uri.LocalPath))
+	            {
+					var newTemplate = new ApplyTemplate(templateInfo);
+		            SelectedTemplate.Items.Add(newTemplate);
+				}
             }
 
 			// Add in any extra templates manually defined
@@ -159,7 +162,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         }
                         else
                         {
-                            SelectedTemplate.Items.Add(newTemplate);
+	                        if (File.Exists(newTemplate.FileLocation))
+	                        {
+								SelectedTemplate.Items.Add(newTemplate);
+							}
+                            
                         }
                     }
                 }
