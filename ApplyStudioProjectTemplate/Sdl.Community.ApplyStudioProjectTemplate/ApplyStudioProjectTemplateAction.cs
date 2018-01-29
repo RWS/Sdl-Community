@@ -414,8 +414,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
-                        }
-                        catch (Exception e)
+
+							//set fuzzy bands from template using reflection
+	                        SetFuzzyBands(sourceProject, targetProject);
+						}
+						catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.BTAL_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
@@ -479,11 +482,40 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             applyTemplateForm.SaveProjectTemplates();
         }
 
-        /// <summary>
-        /// Validates the translation provider configuration.
-        /// </summary>
-        /// <param name="providerConfig">The provider configuration.</param>
-        private void ValidateTranslationProviderConfiguration(TranslationProviderConfiguration providerConfig)
+	    private void SetFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
+	    {
+		    //Get fuzzy values from template
+		    var internalProject = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+		    if (internalProject != null)
+		    {
+			    var internalSourceProject = internalProject.GetValue(sourceProject);
+			    var propertyInfo = internalSourceProject.GetType().GetProperty("AnalysisBands");
+			    var fuzzies = new List<int>();
+			    if (propertyInfo != null)
+			    {
+				    var fuzzyBands = propertyInfo.GetValue(internalSourceProject);
+				    foreach (dynamic fuzzyValue in (Array)fuzzyBands)
+				    {
+					    var minFuzzyValue = fuzzyValue.GetType().GetProperty("MinimumMatchValue").GetValue(fuzzyValue,null);
+					    fuzzies.Add(minFuzzyValue);
+				    }
+			    }
+
+				//set fuzzy to project
+			    var internalTargetProject = internalProject.GetValue(targetProject);
+			    var setBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
+			    if (setBandsMethod != null)
+			    {
+				    setBandsMethod.Invoke(internalTargetProject, new object[] {fuzzies.ToArray()});
+			    }
+		    }
+	    }
+
+		/// <summary>
+		/// Validates the translation provider configuration.
+		/// </summary>
+		/// <param name="providerConfig">The provider configuration.</param>
+		private void ValidateTranslationProviderConfiguration(TranslationProviderConfiguration providerConfig)
         {
             foreach (TranslationProviderCascadeEntry entry in providerConfig.Entries)
             {
