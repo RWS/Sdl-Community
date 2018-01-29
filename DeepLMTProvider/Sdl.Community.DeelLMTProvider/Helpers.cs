@@ -10,8 +10,8 @@ namespace Sdl.Community.DeelLMTProvider
 {
 	public static class Helpers
 	{
-		private static List<string> _sourceSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL" };
-		private static List<string> _targetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL" };
+		private static List<string> _sourceSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
+		private static List<string> _targetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
 
 		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)
 		{
