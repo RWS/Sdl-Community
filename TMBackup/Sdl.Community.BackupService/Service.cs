@@ -10,7 +10,7 @@ using System.Linq;
 namespace Sdl.Community.BackupService
 {
 	public class Service
-	{
+	{ 
 		public JsonRequestModel GetJsonInformation()
 		{
 			Persistence persistence = new Persistence();
@@ -55,10 +55,10 @@ namespace Sdl.Community.BackupService
 			SetupRealDateTime(tr);
 
 			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
-			tr.EndBoundary = DateTime.Now.AddMinutes(10); ;
+			tr.EndBoundary = DateTime.Now.AddMinutes(10);
 			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
-
+			
 		// Add trigger which executes the backup files console application.
 		private void AddTrigger(Trigger trigger, TaskDefinition td, string backupName, string trimmedBackupName)
 		{

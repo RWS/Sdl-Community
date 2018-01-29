@@ -26,8 +26,8 @@ namespace Sdl.Community.TMBackup
 		public TMBackupDetailsForm(string taskName)
 		{
 			InitializeComponent();
-			InitializeBackupDetails();
 			_taskName = taskName;
+			InitializeBackupDetails();
 		}
 				
 		#endregion
@@ -146,9 +146,10 @@ namespace Sdl.Community.TMBackup
 
 		private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
-			if (e.RowIndex > -1)
+			var dataGrid = (DataGridView)sender;
+
+			if (dataGrid.Rows.Count > 0 && e.RowIndex > -1)
 			{
-				var dataGrid = (DataGridView)sender;
 				var row = dataGrid.Rows[e.RowIndex];
 				var backupDetailsModel = new BackupDetailsModel();
 
@@ -247,11 +248,14 @@ namespace Sdl.Community.TMBackup
 		// Disable rows from the actions grid which already have values(user can only add/delete actions)
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			dataGridView1.Rows[e.RowIndex].ReadOnly = true;
-
-			if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+			if (dataGridView1.Rows.Count > 0)
 			{
-				dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+				{
+					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+				}
 			}
 		}
 		#endregion

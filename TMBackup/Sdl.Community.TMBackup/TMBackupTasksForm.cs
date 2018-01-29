@@ -11,6 +11,9 @@ namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupTasksForm : Form
 	{
+		private JsonRequestModel _jsonRquestModel = new JsonRequestModel();
+		private List<string> _backupNames = new List<string>();
+
 		public TMBackupTasksForm()
 		{
 			InitializeComponent();
@@ -107,7 +110,7 @@ namespace Sdl.Community.TMBackup
 		// Display the context menu with the 'Delete' option for the tasks
 		private void dataGridView1_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
 		{
-			if(e.Button == MouseButtons.Right)
+			if (e.Button == MouseButtons.Right)
 			{
 				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
 				{
@@ -126,18 +129,52 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_RunTasks_Click(object sender, EventArgs e)
 		{
-			var tasks = GetBackupTasks();
-			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
+			var persistence = new Persistence();
+			var service = new Service();
 
-			foreach (var task in tasks)
+			_jsonRquestModel = persistence.ReadFormInformation();
+
+			if (dataGridView1.SelectedRows.Count > 0)
 			{
-				int index = task.Name.IndexOf(" ") + 1;
-				string backupName = task.Name.Substring(index);
+				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+				{
+					var backupName = row.Cells[0].Value.ToString();
+					var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
+					_backupNames.Add(backupModel.BackupName);
+					persistence.RemoveDataFromJson(backupModel.BackupName);
+				}
+				AddInfoIntoJson(persistence, service);
+			}
+			else
+			{
+				if (_jsonRquestModel != null && _jsonRquestModel.BackupModelList != null && _jsonRquestModel.BackupModelList.Count > 0)
+				{
+					foreach (var backupModel in _jsonRquestModel.BackupModelList)
+					{
+						_backupNames.Add(backupModel.BackupName);
+						persistence.RemoveDataFromJson(backupModel.BackupName);
+					}
+				}
+				AddInfoIntoJson(persistence, service);
+			}
+			GetBackupTasks();
+		}
 
-				var trimmedTaskName = string.Concat(task.Name.Where(c => !char.IsWhiteSpace(c)));
-				var service = new Service();
+		/// <summary>
+		/// Add new information to the Json when running all/specific tasks
+		/// </summary>
+		/// <param name="persistence"></param>
+		/// <param name="service"></param>
+		private void AddInfoIntoJson(Persistence persistence, Service service)
+		{
+			foreach (var name in _backupNames)
+			{
+				persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
 
-				service.AddManuallyTimeScheduler(task.Definition, tr, backupName, trimmedTaskName);
+				service.CreateTaskScheduler(name);
 			}
 		}
 	}

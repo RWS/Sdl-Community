@@ -175,8 +175,7 @@ namespace Sdl.Community.TMLifting
 
 		void bw_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-			labelMessage.Text = "In progress, please wait... "/* + e.ProgressPercentage.ToString() + "%"*/;
-			progressBarFileBased.Value = e.ProgressPercentage;
+			rtbStatus.Text = e.UserState.ToString();
 		}
 
         void bw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -235,6 +234,7 @@ namespace Sdl.Community.TMLifting
 				if (tms.Capacity > 0)
 				{
 					groupBoxProgress.Visible = true;
+					labelMessage.Text = "In progress, please wait... ";
 					progressBarFileBased.Style = ProgressBarStyle.Marquee;
 					btnReindex.Enabled = false;
 					_bw.RunWorkerAsync(tms);
@@ -388,12 +388,9 @@ namespace Sdl.Community.TMLifting
             _bw.CancelAsync();
 			rtbStatus.Clear();
 			rtbStatus.AppendText(@"Process will be canceled.");
+			labelMessage.Text = "Process will be canceled, please wait... ";
 			cancelBtn.Enabled = false;
-			if (groupBoxProgress.Visible == true)
-			{
-				groupBoxProgress.Visible = false;
-			}
-        }
+		}
 
 		private void connectToServer_Click(object sender, EventArgs e)
 		{
