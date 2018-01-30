@@ -77,6 +77,7 @@
             this.txtBox_TimeInterval.Name = "txtBox_TimeInterval";
             this.txtBox_TimeInterval.Size = new System.Drawing.Size(49, 20);
             this.txtBox_TimeInterval.TabIndex = 4;
+            this.txtBox_TimeInterval.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBox_TimeInterval_KeyPress);
             // 
             // cmbBox_Interval
             // 

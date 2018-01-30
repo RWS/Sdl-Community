@@ -41,25 +41,33 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Set_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(txtBox_TimeInterval.Text))
+			var isNotNumeric = CheckIfNotNumeric();
+			if (isNotNumeric)
 			{
-				MessageBox.Show(Constants.IntervalErrorMessage, Constants.InformativeMessage);
+				MessageBox.Show(Constants.BackupIntervalErrorMessage, Constants.InformativeMessage, MessageBoxButtons.OK);
 			}
 			else
 			{
-				PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
-				periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
-				periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
-				periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
-				periodicBackupModel.BackupAt = timePicker_At.Text;
-				periodicBackupModel.BackupName = _taskName;
-				periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
-				_periodicBackupModelList.Add(periodicBackupModel);
+				if (string.IsNullOrEmpty(txtBox_TimeInterval.Text))
+				{
+					MessageBox.Show(Constants.IntervalErrorMessage, Constants.InformativeMessage);
+				}
+				else
+				{
+					PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
+					periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
+					periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
+					periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
+					periodicBackupModel.BackupAt = timePicker_At.Text;
+					periodicBackupModel.BackupName = _taskName;
+					periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+					_periodicBackupModelList.Add(periodicBackupModel);
 
-				Persistence persistence = new Persistence();				
-				persistence.SavePeriodicBackupInfo(_periodicBackupModelList, _taskName);
+					Persistence persistence = new Persistence();
+					persistence.SavePeriodicBackupInfo(_periodicBackupModelList, _taskName);
 
-				Close();
+					Close();
+				}
 			}
 		}
 
@@ -97,6 +105,36 @@ namespace Sdl.Community.TMBackup
 
 			var currentDate = DateTime.Now;
 			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
+		}
+
+		private void txtBox_TimeInterval_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			for (int h = 58; h <= 127; h++)
+			{
+				if (e.KeyChar == h)             //58 to 127 are alphabets which will be blocked
+				{
+					e.Handled = true;
+				}
+			}
+			for (int k = 32; k <= 47; k++)
+			{
+				if (e.KeyChar == k)              //32 to 47 are special characters that will be blocked
+				{
+
+
+					e.Handled = true;
+				}
+			}
+		}
+
+		private bool CheckIfNotNumeric()
+		{
+			int i;
+			if (!int.TryParse(txtBox_TimeInterval.Text, out i))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }
