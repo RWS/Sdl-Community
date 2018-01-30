@@ -19,20 +19,7 @@ namespace Sdl.Community.BackupService
 				@"SDL Community\TMBackup\TMBackup.json");
 		}
 
-		private void CheckIfJsonFileExist()
-		{
-			if (!File.Exists(_persistancePath))
-			{
-				var directory = Path.GetDirectoryName(_persistancePath);
-				if (directory != null && !Directory.Exists(directory))
-				{
-					Directory.CreateDirectory(directory);
-				}
-				File.WriteAllText(_persistancePath, string.Empty);
-			}
-		}
-
-		public void SaveBackupFormInfo(List<BackupModel> backupModelList)
+		public void SaveBackupFormInfo(List<BackupModel> backupModelList, bool isNewTask)
 		{
 			if (backupModelList.Any())
 			{
@@ -52,8 +39,7 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupModelItem in backupModelList)
 						{
-							var existingBackupModelItem = request.BackupModelList.Where(b => b.BackupName == backupModelItem.BackupName
-																						&& b.Description == backupModelItem.Description)
+							var existingBackupModelItem = request.BackupModelList.Where(b => b.BackupName == backupModelItem.BackupName)
 																				 .FirstOrDefault();
 
 							if (existingBackupModelItem == null)
@@ -63,7 +49,18 @@ namespace Sdl.Community.BackupService
 							}
 							else
 							{
-								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+								if (!isNewTask)
+								{
+									// update model with the updated values
+									request.BackupModelList.Remove(existingBackupModelItem);
+									request.BackupModelList.Add(backupModelItem);
+									WriteJsonRequestModel(request);
+								}
+								else
+								{
+									// task is new and informative message is displayed
+									MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+								}
 							}
 						}
 					}
@@ -102,11 +99,8 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupItem in backupDetailsModelList)
 						{
-							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)
-																						 && b.BackupAction == backupItem.BackupAction
-																						 && b.BackupType == backupItem.BackupType
-																						 && b.BackupPattern == backupItem.BackupPattern)
-																				 .FirstOrDefault();
+							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName))
+																				   .FirstOrDefault();
 							if (existingBackupItem == null)
 							{
 								request.BackupDetailsModelList.Add(backupItem);
@@ -186,10 +180,8 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var changeSettingModelItem in changeSettingsModelList)
 						{
-							var existingChangeSettingsModelItem = request.ChangeSettingsModelList.Where(b => b.BackupName == changeSettingModelItem.BackupName
-																						&& b.IsManuallyOptionChecked == changeSettingModelItem.IsManuallyOptionChecked
-																						&& b.IsPeriodicOptionChecked == changeSettingModelItem.IsPeriodicOptionChecked)
-																				 .FirstOrDefault();
+							var existingChangeSettingsModelItem = request.ChangeSettingsModelList.Where(b => b.BackupName == changeSettingModelItem.BackupName)
+																								.FirstOrDefault();
 
 							if (existingChangeSettingsModelItem == null)
 							{
@@ -198,8 +190,10 @@ namespace Sdl.Community.BackupService
 							}
 							else
 							{
-								// replace the model in the request by updating it with the new values
-								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+								// Update json request model with the updated values
+								request.ChangeSettingsModelList.Remove(existingChangeSettingsModelItem);
+								request.ChangeSettingsModelList.Add(changeSettingModelItem);
+								WriteJsonRequestModel(request);
 							}
 						}
 					}
@@ -242,8 +236,9 @@ namespace Sdl.Community.BackupService
 							}
 							else
 							{
-								// replace the model in the request by updating it with the new values
-								MessageBox.Show(Constants.TaskSchedulerAlreadyExist, Constants.InformativeMessage, MessageBoxButtons.OK);
+								// Update json request model with the updated values
+								request.PeriodicBackupModelList.Remove(existingperiodicBackupModelItem);
+								request.PeriodicBackupModelList.Add(periodicBackupModelItem);
 							}
 						}
 					}
@@ -370,6 +365,24 @@ namespace Sdl.Community.BackupService
 			}
 			request.ChangeSettingsModelList.Add(changeModel);
 			WriteJsonRequestModel(request);
+		}
+
+		public void UpdateJsonRequest()
+		{
+
+		}
+
+		private void CheckIfJsonFileExist()
+		{
+			if (!File.Exists(_persistancePath))
+			{
+				var directory = Path.GetDirectoryName(_persistancePath);
+				if (directory != null && !Directory.Exists(directory))
+				{
+					Directory.CreateDirectory(directory);
+				}
+				File.WriteAllText(_persistancePath, string.Empty);
+			}
 		}
 	}
 }

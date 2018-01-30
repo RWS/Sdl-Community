@@ -25,13 +25,11 @@ namespace Sdl.Community.BackupService
 			var jsonRequestModel = GetJsonInformation();
 			var changeSettingsModelItem = jsonRequestModel != null ? jsonRequestModel.ChangeSettingsModelList != null ? jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
 																   : null : null;
-			var periodicBackupModelItem = jsonRequestModel != null ? jsonRequestModel.PeriodicBackupModelList != null ? jsonRequestModel.PeriodicBackupModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
-															       : null : null;
 
 			DateTime startDate = DateTime.Now;
 			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
 
-			if (jsonRequestModel != null && changeSettingsModelItem != null && periodicBackupModelItem != null)
+			if (jsonRequestModel != null && changeSettingsModelItem != null)
 			{
 				// Create a new task definition for the local machine and assign properties
 				TaskDefinition td = TaskService.Instance.NewTask();
