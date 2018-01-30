@@ -24,6 +24,7 @@ namespace Sdl.Community.TMBackup
 
 			if (!isNewTask)
 			{
+				txt_BackupName.Enabled = false;
 				GetBackupFormInfo(taskName);
 			}
 		}
@@ -80,38 +81,44 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_SaveSettings_Click(object sender, EventArgs e)
 		{
-			txt_TaskNameError.Visible = CheckTask(txt_BackupName.Text);
-			txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
-			txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
-			txt_BackupNameError.Visible = string.IsNullOrEmpty(txt_BackupName.Text) ? true: false;
+			var persistence = new Persistence();
+			var service = new Service();
 
-			if (!txt_TaskNameError.Visible
-				&& !txt_BackupFromError.Visible
-				&& !txt_BackupToError.Visible
-				&& !txt_BackupNameError.Visible)
+			if (_isNewTask)
 			{
-				var backupModel = new BackupModel();
-				backupModel.BackupName = (txt_BackupName.Text);
-				backupModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
-				backupModel.BackupFrom = txt_BackupFrom.Text;
-				backupModel.BackupTo = txt_BackupTo.Text;
-				backupModel.Description = txt_Description.Text;
-				backupModel.BackupDetails = txt_BackupDetails.Text;
-				backupModel.BackupTime = txt_BackupTime.Text;
+				txt_TaskNameError.Visible = CheckTask(txt_BackupName.Text);
+				txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
+				txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
+				txt_BackupNameError.Visible = string.IsNullOrEmpty(txt_BackupName.Text) ? true : false;
 
-				_backupModelList.Add(backupModel);
+				if (!txt_TaskNameError.Visible
+					&& !txt_BackupFromError.Visible
+					&& !txt_BackupToError.Visible
+					&& !txt_BackupNameError.Visible)
+				{
+					var backupModel = new BackupModel();
+					backupModel.BackupName = (txt_BackupName.Text);
+					backupModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
 
-				var persistence = new Persistence();
-				persistence.SaveBackupFormInfo(_backupModelList);
+					SetBackupModelInfo(backupModel, persistence, service);
+				}
+			}
+			else
+			{
+				//update settings
+				var jsonRequestModel = persistence.ReadFormInformation();
+				if(jsonRequestModel!=null)
+				{
+					var backupModel = jsonRequestModel.BackupModelList != null 
+						? jsonRequestModel.BackupModelList.Where(b => b.BackupName.Equals(txt_BackupName.Text)).FirstOrDefault()
+						: null;
 
-				Hide();
-
-				var service = new Service();
-				service.CreateTaskScheduler(backupModel.BackupName);
-
-				var tmBackupTasksForm = new TMBackupTasksForm();
-				tmBackupTasksForm.ShowDialog();
-			}			
+					if (backupModel != null)
+					{
+						SetBackupModelInfo(backupModel, persistence, service);
+					}
+				}
+			}
 		}
 
 		private void GetBackupFormInfo(string taskName)
@@ -143,10 +150,7 @@ namespace Sdl.Community.TMBackup
 					res = res + backupDetail.BackupAction + ", " + backupDetail.BackupType + ", " + backupDetail.BackupPattern + ";  ";
 				}
 				txt_BackupDetails.Text = res;
-			}
-
-			//var tmBackupChangeForm = new TMBackupChangeForm(_isNewTask, taskName);
-			//txt_BackupTime.Text = tmBackupChangeForm.GetBackupTimeInfo();
+			}			
 		}
 
 		private bool CheckTask(string taskName)
@@ -165,6 +169,25 @@ namespace Sdl.Community.TMBackup
 				return true;
 			}
 			return false;
+		}
+		
+		private void SetBackupModelInfo(BackupModel backupModel, Persistence persistence, Service service)
+		{
+			backupModel.BackupFrom = txt_BackupFrom.Text;
+			backupModel.BackupTo = txt_BackupTo.Text;
+			backupModel.Description = txt_Description.Text;
+			backupModel.BackupDetails = txt_BackupDetails.Text;
+			backupModel.BackupTime = txt_BackupTime.Text;
+			_backupModelList.Add(backupModel);
+
+			persistence.SaveBackupFormInfo(_backupModelList, _isNewTask);
+
+			Hide();
+
+			service.CreateTaskScheduler(backupModel.BackupName);
+
+			var tmBackupTasksForm = new TMBackupTasksForm();
+			tmBackupTasksForm.ShowDialog();
 		}
 	}
 }
