@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Forms;
 using Sdl.Community.AdaptiveMT.Service;
 using Sdl.Community.AdaptiveMT.Service.Clients;
 using Sdl.Community.AdaptiveMT.Service.Helpers;
@@ -110,6 +111,7 @@ namespace Sdl.Community.AdaptiveMT
 									}
 								}
 							}
+							MessageBox.Show( "File " +file.Name +" succesful processed", "Process successful", MessageBoxButtons.OK);
 							project.Save();
 						}
 				
