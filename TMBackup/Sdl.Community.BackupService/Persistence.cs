@@ -367,11 +367,6 @@ namespace Sdl.Community.BackupService
 			WriteJsonRequestModel(request);
 		}
 
-		public void UpdateJsonRequest()
-		{
-
-		}
-
 		private void CheckIfJsonFileExist()
 		{
 			if (!File.Exists(_persistancePath))

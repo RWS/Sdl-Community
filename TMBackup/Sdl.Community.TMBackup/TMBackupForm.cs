@@ -170,8 +170,7 @@ namespace Sdl.Community.TMBackup
 			}
 			return false;
 		}
-
-
+		
 		private void SetBackupModelInfo(BackupModel backupModel, Persistence persistence, Service service)
 		{
 			backupModel.BackupFrom = txt_BackupFrom.Text;
