@@ -154,7 +154,11 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 			}
-			segment = RemoveTrailingClosingTags(segment);
+			if (segment.Elements.Any())
+			{
+				segment = RemoveTrailingClosingTags(segment);
+			}
+			
 
 			return segment; //this will return a tagged segment
 		}

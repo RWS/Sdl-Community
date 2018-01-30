@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.DeepLMTProvider</PlugInName>
-  <Version>1.7</Version>
+  <Version>1.8</Version>
   <Description>Plugin description</Description>
-  <Author></Author>
+  <Author>Sdl Community</Author>
   <Include>
     <File>Newtonsoft.Json.dll</File>
     <File>Sdl.Community.DeepLMTProvider.Telemetry.dll</File>

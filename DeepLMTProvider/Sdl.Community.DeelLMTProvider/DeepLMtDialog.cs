@@ -76,8 +76,11 @@ namespace Sdl.Community.DeepLMTProvider
 
 		private void okButton_Click(object sender, EventArgs e)
 		{
-			if (!ValidateForm()) return;
-			Options.ApiKey = apiKey.Text;
+			if (!ValidateForm())
+			{
+				return;
+			}
+			Options.ApiKey = apiKey.Text.Trim();
 		
 		}
 
