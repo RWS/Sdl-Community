@@ -20,5 +20,6 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool MergedAcross { get; set; }
 		public bool SourceEqualsTarget { get; set; }
 		public bool IsEqualsCaseSensitive { get; set; }
+		public bool ContainsTags { get; set; }
 	}
 }

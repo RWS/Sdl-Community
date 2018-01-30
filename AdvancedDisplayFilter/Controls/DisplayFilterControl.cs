@@ -64,7 +64,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					SourceEqualsTarget = sourceSameBox.Checked,
 					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
 					Unique = _uniqueSegments,
-					MergedAcross = mergedAcross.Checked
+					MergedAcross = mergedAcross.Checked,
+					ContainsTags = containsTagsCheckBox.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -104,6 +105,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				commentRegexBox.Checked = value.UseRegexCommentSearch;
 				_customSettings.Colors = value.Colors;
 				mergedAcross.Checked = value.MergedAcross;
+				containsTagsCheckBox.Checked = value.ContainsTags;
 				foreach (var color in value.Colors)
 				{
 					foreach (ListViewItem colorItem in colorsListView.Items)

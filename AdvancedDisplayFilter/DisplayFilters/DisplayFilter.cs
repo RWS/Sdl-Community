@@ -170,6 +170,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 					success = FuzzyHelper.IsInFuzzyRange(rowInfo, CustomSettings.FuzzyMin, CustomSettings.FuzzyMax);
 
 				}
+				if (success && CustomSettings.ContainsTags)
+				{
+					var containsTagVisitor = new TagVisitor();
+					success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
+				}
 				//unique 
 				if (success && CustomSettings.Unique)
 				{
@@ -305,6 +310,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				success = FuzzyHelper.IsInFuzzyRange(rowInfo, CustomSettings.FuzzyMin, CustomSettings.FuzzyMax);
 
 			}
+			
 			return !success;
 		}
 	}
