@@ -10,7 +10,7 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 {
 	public static class Api
 	{
-		public static FeedbackRequest CreateFeedbackRequest(ISegmentPair segmentPair, EngineMappingDetails engine)
+		public static FeedbackRequest CreateFeedbackRequest(string translatedText,ISegmentPair segmentPair, EngineMappingDetails engine)
 		{
 			var feedbackRequest = new FeedbackRequest
 			{
@@ -20,7 +20,7 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 					Target = engine.TargetLang
 				},
 				Source = segmentPair.Source.ToString(),
-				OriginalOutput = string.Empty,
+				OriginalOutput = translatedText,
 				PostEdited = segmentPair.Target.ToString(),
 				Definition = new Definition
 				{
@@ -36,5 +36,35 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 
 			return feedbackRequest;
 		}
+
+		public static TranslateRequest CreateTranslateRequest(ISegmentPair segmentPair, EngineMappingDetails engine)
+		{
+			var translateRequest = new TranslateRequest
+			{
+				Content = new Content
+				{
+					InputFormat = "plain",
+					Text = new[] { segmentPair.Source.ToString() }
+					
+				},
+				Definition = new Definition
+				{
+					Resources = new List<Resource>()
+				},
+				LanguagePair = new LanguagePair
+				{
+					Source = engine.SourceLang,
+					Target = engine.TargetLang
+				}
+			};
+			var resource = new Resource
+			{
+				Type = "MT",
+				ResourceId = engine.Id
+			};
+			translateRequest.Definition.Resources.Add(resource);
+			return translateRequest;
+		}
+		
 	}
 }

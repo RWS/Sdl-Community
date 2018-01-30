@@ -97,19 +97,17 @@ namespace Sdl.Community.AdaptiveMT
 								{
 									if (segmentPair.Target.ToString() != string.Empty)
 									{
+										var translateRequest = Helpers.Api.CreateTranslateRequest(segmentPair, providerDetails);
+										var translateResponse = await ApiClient.Translate(userDetails.Sid, translateRequest);
 
-										var feedbackRequest = Helpers.Api.CreateFeedbackRequest(segmentPair, providerDetails);
-
+										var feedbackRequest = Helpers.Api.CreateFeedbackRequest(translateResponse.Translation,segmentPair, providerDetails);
 										var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
 										if (feedbackReaponse.Success)
 										{
-											segmentPair.Properties.ConfirmationLevel = ConfirmationLevel.Translated;
 											editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
 										}
 
 									}
-
-									Thread.Sleep(4000);
 								}
 							}
 							project.Save();

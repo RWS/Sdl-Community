@@ -19,5 +19,9 @@ namespace Sdl.Community.AdaptiveMT.Service.Helpers
 		{
 			return "{0}/studio/session/oos-account/{1}".FormatUri(BaseUri,oosAccountId);
 		}
+		public static Uri Translate()
+		{
+			return "{0}/translations/v1/translate".FormatUri(BaseUri);
+		}
 	}
 }

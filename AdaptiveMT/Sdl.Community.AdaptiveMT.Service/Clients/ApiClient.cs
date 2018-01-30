@@ -29,32 +29,10 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 		public static async Task OosSession(UserRequest user,string sid)
 		{
 			var response = await SendRequest(null, sid, HttpMethod.Put, ApiUrls.Session(user.SelectedAccountId));
-			var session = JsonConvert.DeserializeObject<Session>(response);
+			JsonConvert.DeserializeObject<Session>(response);
 		}
 		public static async Task<FeedbackResponse> Feedback(string sid,FeedbackRequest feedback)
 		{
-			//var feedback = new FeedbackRequest
-			//{
-			//	LanguagePair = new LanguagePair
-			//	{
-			//		Source = "en-US",
-			//		Target = "de-DE"
-			//	},
-			//	OriginalOutput = string.Empty,
-			//	PostEdited = "Das ist ein Katzensprung.",
-			//	Definition = new Definition
-			//	{
-			//		Resources = new List<Resource>
-			//		{
-			//			new Resource
-			//			{
-			//				ResourceId = "5a3b9b630cf26707d2cf1863",
-			//				Type = "MT"
-			//			}
-			//		}
-			//	},
-			//	Source = "This is a test."
-			//};
 			var response = await SendRequest(feedback, sid, HttpMethod.Post, ApiUrls.Feedback());
 			var feedbackMessage = JsonConvert.DeserializeObject<FeedbackResponse>(response);
 			return feedbackMessage;
@@ -84,6 +62,12 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 			}
 		}
 
-	
+
+		public static async Task<TranslateResponse> Translate(string sid, TranslateRequest translateRequest)
+		{
+			var response = await SendRequest(translateRequest, sid, HttpMethod.Post, ApiUrls.Translate());
+			var translateResponse = JsonConvert.DeserializeObject<TranslateResponse>(response);
+			return translateResponse;
+		}
 	}
 }
