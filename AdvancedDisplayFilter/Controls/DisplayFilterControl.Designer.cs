@@ -81,13 +81,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
-			this.mergedAcross = new System.Windows.Forms.CheckBox();
+			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.fuzzyMin = new System.Windows.Forms.TextBox();
 			this.fuzzyMax = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.fuzzyMin = new System.Windows.Forms.TextBox();
-			this.equalsCaseSensitive = new System.Windows.Forms.CheckBox();
-			this.sourceSameBox = new System.Windows.Forms.CheckBox();
 			this.segmentsGroupBox = new System.Windows.Forms.GroupBox();
+			this.mergedAcross = new System.Windows.Forms.CheckBox();
+			this.mergedCheckbox = new System.Windows.Forms.CheckBox();
+			this.splitCheckBox = new System.Windows.Forms.CheckBox();
+			this.sourceSameBox = new System.Windows.Forms.CheckBox();
+			this.equalsCaseSensitive = new System.Windows.Forms.CheckBox();
 			this.label1 = new System.Windows.Forms.Label();
 			this.segmentsBox = new System.Windows.Forms.TextBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -120,9 +123,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.splitCheckBox = new System.Windows.Forms.CheckBox();
-			this.mergedCheckbox = new System.Windows.Forms.CheckBox();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.containsTagsCheckBox = new System.Windows.Forms.CheckBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -140,6 +141,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_contextInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabPage_segmentNumbers.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.segmentsGroupBox.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.tabPage_Colors.SuspendLayout();
@@ -151,7 +153,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.groupBox2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -517,12 +518,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
 			// 
-			// mergedAcross
+			// groupBox2
 			// 
-			resources.ApplyResources(this.mergedAcross, "mergedAcross");
-			this.mergedAcross.Name = "mergedAcross";
-			this.mergedAcross.UseVisualStyleBackColor = true;
-			this.mergedAcross.CheckedChanged += new System.EventHandler(this.mergedAcross_CheckedChanged);
+			this.groupBox2.Controls.Add(this.fuzzyMin);
+			this.groupBox2.Controls.Add(this.fuzzyMax);
+			this.groupBox2.Controls.Add(this.label5);
+			resources.ApplyResources(this.groupBox2, "groupBox2");
+			this.groupBox2.Name = "groupBox2";
+			this.groupBox2.TabStop = false;
+			// 
+			// fuzzyMin
+			// 
+			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
+			this.fuzzyMin.Name = "fuzzyMin";
+			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
 			// 
 			// fuzzyMax
 			// 
@@ -535,28 +544,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.label5, "label5");
 			this.label5.Name = "label5";
 			// 
-			// fuzzyMin
-			// 
-			resources.ApplyResources(this.fuzzyMin, "fuzzyMin");
-			this.fuzzyMin.Name = "fuzzyMin";
-			this.fuzzyMin.TextChanged += new System.EventHandler(this.fuzzyMin_TextChanged);
-			// 
-			// equalsCaseSensitive
-			// 
-			resources.ApplyResources(this.equalsCaseSensitive, "equalsCaseSensitive");
-			this.equalsCaseSensitive.Name = "equalsCaseSensitive";
-			this.equalsCaseSensitive.UseVisualStyleBackColor = true;
-			this.equalsCaseSensitive.CheckedChanged += new System.EventHandler(this.equalsCaseSensitive_CheckedChanged);
-			// 
-			// sourceSameBox
-			// 
-			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
-			this.sourceSameBox.Name = "sourceSameBox";
-			this.sourceSameBox.UseVisualStyleBackColor = true;
-			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
-			// 
 			// segmentsGroupBox
 			// 
+			this.segmentsGroupBox.Controls.Add(this.containsTagsCheckBox);
 			this.segmentsGroupBox.Controls.Add(this.mergedAcross);
 			this.segmentsGroupBox.Controls.Add(this.mergedCheckbox);
 			this.segmentsGroupBox.Controls.Add(this.splitCheckBox);
@@ -565,6 +555,41 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.segmentsGroupBox, "segmentsGroupBox");
 			this.segmentsGroupBox.Name = "segmentsGroupBox";
 			this.segmentsGroupBox.TabStop = false;
+			// 
+			// mergedAcross
+			// 
+			resources.ApplyResources(this.mergedAcross, "mergedAcross");
+			this.mergedAcross.Name = "mergedAcross";
+			this.mergedAcross.UseVisualStyleBackColor = true;
+			this.mergedAcross.CheckedChanged += new System.EventHandler(this.mergedAcross_CheckedChanged);
+			// 
+			// mergedCheckbox
+			// 
+			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
+			this.mergedCheckbox.Name = "mergedCheckbox";
+			this.mergedCheckbox.UseVisualStyleBackColor = true;
+			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
+			// 
+			// splitCheckBox
+			// 
+			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
+			this.splitCheckBox.Name = "splitCheckBox";
+			this.splitCheckBox.UseVisualStyleBackColor = true;
+			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
+			// 
+			// sourceSameBox
+			// 
+			resources.ApplyResources(this.sourceSameBox, "sourceSameBox");
+			this.sourceSameBox.Name = "sourceSameBox";
+			this.sourceSameBox.UseVisualStyleBackColor = true;
+			this.sourceSameBox.CheckedChanged += new System.EventHandler(this.sourceSameBox_CheckedChanged);
+			// 
+			// equalsCaseSensitive
+			// 
+			resources.ApplyResources(this.equalsCaseSensitive, "equalsCaseSensitive");
+			this.equalsCaseSensitive.Name = "equalsCaseSensitive";
+			this.equalsCaseSensitive.UseVisualStyleBackColor = true;
+			this.equalsCaseSensitive.CheckedChanged += new System.EventHandler(this.equalsCaseSensitive_CheckedChanged);
 			// 
 			// label1
 			// 
@@ -771,28 +796,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// splitCheckBox
+			// containsTagsCheckBox
 			// 
-			resources.ApplyResources(this.splitCheckBox, "splitCheckBox");
-			this.splitCheckBox.Name = "splitCheckBox";
-			this.splitCheckBox.UseVisualStyleBackColor = true;
-			this.splitCheckBox.CheckedChanged += new System.EventHandler(this.splitCheckBox_CheckedChanged);
-			// 
-			// mergedCheckbox
-			// 
-			resources.ApplyResources(this.mergedCheckbox, "mergedCheckbox");
-			this.mergedCheckbox.Name = "mergedCheckbox";
-			this.mergedCheckbox.UseVisualStyleBackColor = true;
-			this.mergedCheckbox.CheckedChanged += new System.EventHandler(this.mergedCheckbox_CheckedChanged);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Controls.Add(this.fuzzyMin);
-			this.groupBox2.Controls.Add(this.fuzzyMax);
-			this.groupBox2.Controls.Add(this.label5);
-			resources.ApplyResources(this.groupBox2, "groupBox2");
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.TabStop = false;
+			resources.ApplyResources(this.containsTagsCheckBox, "containsTagsCheckBox");
+			this.containsTagsCheckBox.Name = "containsTagsCheckBox";
+			this.containsTagsCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// DisplayFilterControl
 			// 
@@ -824,6 +832,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel4.PerformLayout();
 			this.tabPage_segmentNumbers.ResumeLayout(false);
 			this.tabPage_segmentNumbers.PerformLayout();
+			this.groupBox2.ResumeLayout(false);
+			this.groupBox2.PerformLayout();
 			this.segmentsGroupBox.ResumeLayout(false);
 			this.segmentsGroupBox.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
@@ -839,8 +849,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
 			this.ResumeLayout(false);
 
         }
@@ -938,5 +946,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private CheckBox splitCheckBox;
 		private CheckBox mergedCheckbox;
 		private GroupBox groupBox2;
+		private CheckBox containsTagsCheckBox;
 	}
 }
