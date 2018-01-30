@@ -63,7 +63,6 @@ namespace Sdl.Community.DeepLMTProvider
 			return cred;
 		}
 
-		//TO DO
 		public bool Edit(IWin32Window owner, ITranslationProvider translationProvider, LanguagePair[] languagePairs, ITranslationProviderCredentialStore credentialStore)
 		{
 			var editProvider = translationProvider as DeepLMtTranslationProvider;

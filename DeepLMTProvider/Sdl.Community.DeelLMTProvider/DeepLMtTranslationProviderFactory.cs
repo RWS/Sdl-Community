@@ -1,9 +1,5 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.DeelLMTProvider;
 
 namespace Sdl.Community.DeepLMTProvider
@@ -20,7 +16,6 @@ namespace Sdl.Community.DeepLMTProvider
 
 			if (credentialStore.GetCredential(uri) != null)
 			{
-				var credPersist = credentialStore.GetCredential(uri).Persist;
 				var credentials = credentialStore.GetCredential(uri);
 				options.ApiKey = credentials.Credential;
 			}
@@ -29,7 +24,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public TranslationProviderInfo GetTranslationProviderInfo(Uri translationProviderUri, string translationProviderState)
         {
-			var info = new TranslationProviderInfo()
+			var info = new TranslationProviderInfo
 			{
 				TranslationMethod = TranslationMethod.MachineTranslation,
 				Name = PluginResources.Plugin_NiceName

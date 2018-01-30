@@ -142,8 +142,10 @@ namespace Sdl.Community.DeepLMTProvider
 						segment.Add(_tagsDictionary[text].SdlTag); //add the actual tag element after casting it back to a Tag
 						if (padright.Length > 0) segment.Add(padright); //add trailing space if applicable in the source text
 					}
-					catch
-					{ }
+					catch (Exception e)
+					{
+						
+					}
 				}
 				else
 				{   //if it is not in the list of tagtexts then the element is just the text
@@ -174,7 +176,6 @@ namespace Sdl.Community.DeepLMTProvider
 			var element = segment.Elements[segment.Elements.Count - 1]; //get last element
 			var str = element.ToString();
 
-			var tagsCount = segment.GetTagCount();
 			var pattern = @"\</tg[0-9]*\>"; //we want to find "</tg" + {any number} + ">"
 			var rgx = new Regex(pattern);
 			var elType = element.GetType();

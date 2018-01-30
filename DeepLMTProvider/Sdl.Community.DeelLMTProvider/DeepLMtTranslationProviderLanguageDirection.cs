@@ -15,9 +15,9 @@ namespace Sdl.Community.DeepLMTProvider
 {
     public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
-		private DeepLMtTranslationProvider _deepLMtTranslationProvider;
-		private DeepLTranslationOptions _options;
-		private LanguagePair _languageDirection;
+		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
+		private readonly DeepLTranslationOptions _options;
+		private readonly LanguagePair _languageDirection;
 		private TranslationUnit _inputTu;
 		private DeepLTranslationProviderConnecter _deeplConnect;
 
@@ -84,21 +84,12 @@ namespace Sdl.Community.DeepLMTProvider
 		        var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
 		        var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
 		         translation = tagPlacer.GetTaggedSegment(translatedText);
-		        //translation.Add(translatedText);
 
 		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
 		        return results;
 			}
 	        else
 	        {
-		        // TO BE IMPLEMENTED:
-		        // If there are tags in segment. We need to wait for information regarding how DeepL handels tags
-
-		        //for simple text
-		        var sourceLang = SourceLanguage.ToString();
-		        var targetLang = TargetLanguage.ToString();
-		        //a new seg avoids modifying the current segment object
-
 
 		        var sourcetext = newseg.ToPlain();
 
@@ -139,9 +130,13 @@ namespace Sdl.Community.DeepLMTProvider
 
 			var score = 0; //score to 0...change if needed to support scoring
 			tu.Origin = TranslationUnitOrigin.MachineTranslation;
-			var searchResult = new SearchResult(tu);
-			searchResult.ScoringResult = new ScoringResult();
-			searchResult.ScoringResult.BaseScore = score;
+			var searchResult = new SearchResult(tu)
+			{
+				ScoringResult = new ScoringResult
+				{
+					BaseScore = score
+				}
+			};
 			tu.ConfirmationLevel = ConfirmationLevel.Draft;
 
 			return searchResult;
@@ -198,7 +193,9 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				var messages = "";
 				foreach (var pair in errors)
+				{
 					messages += pair.Key + ":  " + pair.Value + "\n";
+				}
 				MessageBox.Show(messages);
 			}
 

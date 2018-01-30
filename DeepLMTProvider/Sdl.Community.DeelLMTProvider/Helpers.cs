@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Sdl.Community.DeelLMTProvider
+namespace Sdl.Community.DeepLMTProvider
 {
 	public static class Helpers
 	{
-		private static List<string> _sourceSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
-		private static List<string> _targetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
+		private static readonly List<string> SourceSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
+		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
 
 		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)
 		{
-			if(_sourceSupportedLanguages.Contains(sourceLang)&& _targetSupportedLanguages.Contains(targetLang))
+			if(SourceSupportedLanguages.Contains(sourceLang)&& TargetSupportedLanguages.Contains(targetLang))
 			{
 				return true;
 			}
