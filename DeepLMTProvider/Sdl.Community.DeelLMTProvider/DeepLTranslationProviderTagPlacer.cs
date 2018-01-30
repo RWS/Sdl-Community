@@ -68,13 +68,10 @@ namespace Sdl.Community.DeepLMTProvider
 						tagInfo.IsClosed = true;
 						tagText = "</tg" + tagInfo.TagId + ">";
 					}
-					//if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
-					//{
-					//	if (tag != null)
-					//	{
-					//		tagText = "</tg" + tag.TagId + ">";
-					//	}
-					//}
+					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
+					{
+						tagText = "</tg" + tagInfo.TagId + ">";
+					}
 
 					_preparedSourceText += tagText;
 					//now we have to figure out whether this tag is preceded and/or followed by whitespace
