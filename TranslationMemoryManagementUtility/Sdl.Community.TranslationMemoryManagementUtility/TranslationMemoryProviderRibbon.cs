@@ -1,7 +1,6 @@
 ﻿using Sdl.Community.Utilities.TMTool.Task;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 using System;
 using System.Collections.Generic;
@@ -12,11 +11,11 @@ using System.Windows.Forms;
 
 namespace Sdl.Community.TranslationMemoryManagementUtility
 {
-	[RibbonGroup("TM Provider", Name = "TM Provider", Description = "TM Provider", ContextByType = typeof(ProjectsController))]
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	[RibbonGroup("SDL TM Management", Name = "SDL TM Management")]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TranslationMemoryProviderRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "TM Provider", Icon = "TranslationMemory", Description = "TM Provider")]
+		[Action("Sdl.Community.TranslationMemoryManagementUtility", Name = "SDL TM Management", Icon = "TranslationMemory", Description = "SDL TM Management")]
 		[ActionLayout(typeof(TranslationMemoryProviderRibbon), 20, DisplayType.Large)]
 		public class TMProviderAction : AbstractAction
 		{

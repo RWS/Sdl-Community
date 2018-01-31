@@ -46,7 +46,6 @@
             this.radioBtn_TimeChange.TabStop = true;
             this.radioBtn_TimeChange.Text = "Every";
             this.radioBtn_TimeChange.UseVisualStyleBackColor = true;
-            this.radioBtn_TimeChange.CheckedChanged += new System.EventHandler(this.radioBtn_TimeChange_CheckedChanged);
             // 
             // radioBtn_Manually
             // 
@@ -58,7 +57,6 @@
             this.radioBtn_Manually.TabStop = true;
             this.radioBtn_Manually.Text = "When manually started";
             this.radioBtn_Manually.UseVisualStyleBackColor = true;
-            this.radioBtn_Manually.CheckedChanged += new System.EventHandler(this.radioBtn_Manually_CheckedChanged);
             // 
             // btn_TimeDetails
             // 

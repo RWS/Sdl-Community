@@ -26,28 +26,31 @@ namespace Sdl.Community.TMBackup
 			{
 				List<Task> backupTasks = new List<Task>();
 				var tasks = new List<TaskDefinitionModel>();
-				foreach (var task in ts.AllTasks)
+				if (ts.AllTasks != null)
 				{
-					if (task.Name.Contains(Constants.TaskDetailValue))
+					foreach (var task in ts.AllTasks)
 					{
-						var triggerInfo = string.Empty;
-						foreach (var trigger in task.Definition.Triggers)
+						if (task.Name.Contains(Constants.TaskDetailValue))
 						{
-							triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
+							var triggerInfo = string.Empty;
+							foreach (var trigger in task.Definition.Triggers)
+							{
+								triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
+							}
+
+							var index = task.Name.IndexOf(" ") + 1;
+							var taskName = task.Name.Substring(index);
+
+							tasks.Add(new TaskDefinitionModel
+							{
+								TaskName = taskName,
+								LastRun = task.LastRunTime,
+								NextRun = task.NextRunTime,
+								Interval = triggerInfo,
+								Status = task.State.ToString()
+							});
+							backupTasks.Add(task);
 						}
-
-						var index = task.Name.IndexOf(" ") + 1;
-						var taskName = task.Name.Substring(index);
-
-						tasks.Add(new TaskDefinitionModel
-						{
-							TaskName = taskName,
-							LastRun = task.LastRunTime,
-							NextRun = task.NextRunTime,
-							Interval = triggerInfo,
-							Status = task.State.ToString()
-						});
-						backupTasks.Add(task);
 					}
 				}
 				dataGridView1.DataSource = tasks;
@@ -169,11 +172,22 @@ namespace Sdl.Community.TMBackup
 		{
 			foreach (var name in _backupNames)
 			{
-				persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
-				persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
-				persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
-				persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
-
+				if (_jsonRquestModel.BackupModelList != null)
+				{
+					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.ChangeSettingsModelList != null)
+				{
+					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.BackupDetailsModelList != null)
+				{
+					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.PeriodicBackupModelList != null)
+				{
+					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+				}
 				service.CreateTaskScheduler(name);
 			}
 		}
