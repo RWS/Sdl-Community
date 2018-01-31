@@ -69,7 +69,7 @@ namespace Sdl.Community.BackupService
 						request.BackupModelList = backupModelList;
 						WriteJsonRequestModel(request);
 					}
-				}			
+				}
 			}
 		}
 
@@ -77,7 +77,7 @@ namespace Sdl.Community.BackupService
 		{
 			if (backupDetailsModelList != null)
 			{
-				foreach(var item in backupDetailsModelList)
+				foreach (var item in backupDetailsModelList)
 				{
 					item.BackupName = taskName;
 					item.TrimmedBackupName = string.Concat(taskName.Where(c => !char.IsWhiteSpace(c)));
@@ -128,7 +128,7 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if(request != null && request.BackupDetailsModelList.Where(b=>b.BackupName.Equals(taskName)) != null)
+			if (request != null && request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)) != null)
 			{
 				request.BackupDetailsModelList.Clear();
 				request.BackupDetailsModelList = backupDetailsModelList;
@@ -222,7 +222,7 @@ namespace Sdl.Community.BackupService
 				}
 				else
 				{
-					if (request.PeriodicBackupModelList != null && request.PeriodicBackupModelList.Count > 0 && request.PeriodicBackupModelList[0] != null) 
+					if (request.PeriodicBackupModelList != null && request.PeriodicBackupModelList.Count > 0 && request.PeriodicBackupModelList[0] != null)
 					{
 						foreach (var periodicBackupModelItem in periodicBackupModelList)
 						{
@@ -275,36 +275,43 @@ namespace Sdl.Community.BackupService
 			{
 				var jsonText = File.ReadAllText(_persistancePath);
 				var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-
-				if (request != null
-				&& request.BackupDetailsModelList != null
-				&& request.BackupModelList != null
-				&& request.ChangeSettingsModelList != null
-				&& request.PeriodicBackupModelList != null)
+				
+				if (request != null)
 				{
-					var backupDetailsModelItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
-					var backupModelItem = request.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
-					var changeSettingsModelItem = request.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault();
-					var periodicBackupModelItem = request.PeriodicBackupModelList.Where(p => p.BackupName.Equals(backupName)).FirstOrDefault();
-
-					if (backupDetailsModelItem != null)
+					foreach(var backupDetailsModel in request.BackupDetailsModelList)
 					{
-						request.BackupDetailsModelList.Remove(backupDetailsModelItem);
+						if(backupDetailsModel.BackupName.Equals(backupName))
+						{
+							request.BackupDetailsModelList.Remove(backupDetailsModel);
+							break;
+						}
 					}
-					if (backupModelItem != null)
+					foreach (var backupModel in request.BackupModelList)
 					{
-						request.BackupModelList.Remove(backupModelItem);
+						if (backupModel.BackupName.Equals(backupName))
+						{
+							request.BackupModelList.Remove(backupModel);
+							break;
+						}
 					}
-					if (changeSettingsModelItem != null)
+					foreach (var changeSettingModel in request.ChangeSettingsModelList)
 					{
-						request.ChangeSettingsModelList.Remove(changeSettingsModelItem);
+						if (changeSettingModel.BackupName.Equals(backupName))
+						{
+							request.ChangeSettingsModelList.Remove(changeSettingModel);
+							break;
+						}
 					}
-					if (periodicBackupModelItem != null)
+					foreach (var periodicModel in request.PeriodicBackupModelList)
 					{
-						request.PeriodicBackupModelList.Remove(periodicBackupModelItem);
+						if (periodicModel.BackupName.Equals(backupName))
+						{
+							request.PeriodicBackupModelList.Remove(periodicModel);
+							break;
+						}
 					}
 					WriteJsonRequestModel(request);
-				}
+				}				
 			}
 		}
 
@@ -313,29 +320,38 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			var item = request.BackupModelList.Where(p => p.BackupName.Equals(backupModel.BackupName)).FirstOrDefault();
-			if (item != null)
+			if (backupModel != null)
 			{
-				request.BackupModelList.Remove(item);
+				foreach (var item in request.BackupModelList)
+				{
+					if (item.BackupName.Equals(backupModel.BackupName))
+					{
+						request.BackupModelList.Remove(item);
+						break;
+					}
+				}
+				request.BackupModelList.Add(backupModel);
+				WriteJsonRequestModel(request);
 			}
-
-			request.BackupModelList.Add(backupModel);
-			WriteJsonRequestModel(request);
 		}
 
 		public void SaveDetailModel(BackupDetailsModel detailsModel)
 		{
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-
-			var item = request.BackupDetailsModelList.Where(p => p.BackupName.Equals(detailsModel.BackupName)).FirstOrDefault();
-			if (item != null)
+			if (detailsModel != null)
 			{
-				request.BackupDetailsModelList.Remove(item);
+				foreach (var item in request.BackupDetailsModelList)
+				{
+					if (item.BackupName.Equals(detailsModel.BackupName))
+					{
+						request.BackupDetailsModelList.Remove(item);
+						break;
+					}
+				}
+				request.BackupDetailsModelList.Add(detailsModel);
+				WriteJsonRequestModel(request);
 			}
-
-			request.BackupDetailsModelList.Add(detailsModel);
-			WriteJsonRequestModel(request);
 		}
 
 		public void SavePeriodicModel(PeriodicBackupModel periodicModel)
@@ -343,14 +359,20 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			var item = request.PeriodicBackupModelList.Where(p => p.BackupName.Equals(periodicModel.BackupName)).FirstOrDefault();
-			if (item != null)
+			if (periodicModel != null)
 			{
-				request.PeriodicBackupModelList.Remove(item);
-			}
+				foreach (var item in request.PeriodicBackupModelList)
+				{
+					if (item.BackupName.Equals(periodicModel.BackupName))
+					{
+						request.PeriodicBackupModelList.Remove(item);
+						break;
+					}
+				}
 
-			request.PeriodicBackupModelList.Add(periodicModel);
-			WriteJsonRequestModel(request);
+				request.PeriodicBackupModelList.Add(periodicModel);
+				WriteJsonRequestModel(request);
+			}
 		}
 
 		public void SaveChangeModel(ChangeSettingsModel changeModel)
@@ -358,13 +380,19 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			var item = request.ChangeSettingsModelList.Where(b=>b.BackupName.Equals(changeModel.BackupName)).FirstOrDefault();
-			if(item != null)
+			if (changeModel != null)
 			{
-				request.ChangeSettingsModelList.Remove(item);
+				foreach (var item in request.ChangeSettingsModelList)
+				{
+					if (item.BackupName.Equals(changeModel.BackupName))
+					{
+						request.ChangeSettingsModelList.Remove(item);
+						break;
+					}
+				}
+				request.ChangeSettingsModelList.Add(changeModel);
+				WriteJsonRequestModel(request);
 			}
-			request.ChangeSettingsModelList.Add(changeModel);
-			WriteJsonRequestModel(request);
 		}
 
 		private void CheckIfJsonFileExist()

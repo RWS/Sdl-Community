@@ -17,6 +17,7 @@ namespace Sdl.Community.BackupService.Helpers
 
 		public const string InformativeErrorMessage = "Files were not copied correctly. Please check the backup settings and try again!";
 		public const string IntervalErrorMessage = "Settings cannot be saved. Please set up a backup time value!";
+		public const string BackupIntervalErrorMessage = "Backup interval field accepts only numbers!";
 
 		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
 		public static readonly string SdlCommunityPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
