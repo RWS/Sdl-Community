@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Sdl.Community.BackupService.Helpers;
+﻿using Sdl.Community.BackupService.Helpers;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -12,7 +11,7 @@ using System.Reflection;
 namespace Sdl.Community.TMBackup
 {
 	[RibbonGroup("TM Backup", Name = "TM Backup", Description = "TM Backup", ContextByType = typeof(ProjectsController))]
-	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TMBackupRibbon : AbstractRibbonGroup
 	{
 		[Action("Sdl.Community.TMBackup", Name = "TM Backup", Icon = "TMBackup_Icon", Description = "TM Backup")]
