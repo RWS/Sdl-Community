@@ -10,12 +10,13 @@ using System.Reflection;
 
 namespace Sdl.Community.TMBackup
 {
-	[RibbonGroup("TM Backup", Name = "TM Backup", Description = "TM Backup", ContextByType = typeof(ProjectsController))]
+	[RibbonGroup("TM Backup", Name = "TM Backup")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class TMBackupRibbon : AbstractRibbonGroup
 	{
 		[Action("Sdl.Community.TMBackup", Name = "TM Backup", Icon = "TMBackup_Icon", Description = "TM Backup")]
 		[ActionLayout(typeof(TMBackupRibbon), 20, DisplayType.Large)]
+		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class TMBackupAction : AbstractAction
 		{
 			protected override void Execute()
