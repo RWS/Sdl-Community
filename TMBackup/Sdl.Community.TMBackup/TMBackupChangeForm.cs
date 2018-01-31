@@ -44,34 +44,6 @@ namespace Sdl.Community.TMBackup
 			periodicBackupForm.ShowDialog();
 		}
 		
-		private void radioBtn_TimeChange_CheckedChanged(object sender, EventArgs e)
-		{
-		//	btn_TimeDetails.Enabled = true;
-
-			//var changeSettingModel = new ChangeSettingsModel();
-			//changeSettingModel.IsPeriodicOptionChecked = radioBtn_TimeChange.Checked;
-			//changeSettingModel.BackupName = _taskName;
-			//changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
-			//_changeSettingsModelList.Add(changeSettingModel);
-
-			//var persistence = new Persistence();
-			//persistence.SaveChangeSettings(_changeSettingsModelList, _taskName);
-		}
-
-		private void radioBtn_Manually_CheckedChanged(object sender, EventArgs e)
-		{
-		//	btn_TimeDetails.Enabled = false;
-
-			//var changeSettingModel = new ChangeSettingsModel();
-			//changeSettingModel.IsManuallyOptionChecked = radioBtn_Manually.Checked;
-			//changeSettingModel.BackupName = _taskName;
-			//changeSettingModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
-			//_changeSettingsModelList.Add(changeSettingModel);
-
-			//var persistence = new Persistence();
-			//persistence.SaveChangeSettings(_changeSettingsModelList, _taskName);
-		}
-
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
 			var changeSettingModel = new ChangeSettingsModel();

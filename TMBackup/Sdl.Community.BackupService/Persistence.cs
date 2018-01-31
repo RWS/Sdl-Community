@@ -278,36 +278,48 @@ namespace Sdl.Community.BackupService
 				
 				if (request != null)
 				{
-					foreach(var backupDetailsModel in request.BackupDetailsModelList)
+					if (request.BackupDetailsModelList != null)
 					{
-						if(backupDetailsModel.BackupName.Equals(backupName))
+						foreach (var backupDetailsModel in request.BackupDetailsModelList)
 						{
-							request.BackupDetailsModelList.Remove(backupDetailsModel);
-							break;
+							if (backupDetailsModel.BackupName.Equals(backupName))
+							{
+								request.BackupDetailsModelList.Remove(backupDetailsModel);
+								break;
+							}
 						}
 					}
-					foreach (var backupModel in request.BackupModelList)
+					if (request.BackupModelList != null)
 					{
-						if (backupModel.BackupName.Equals(backupName))
+						foreach (var backupModel in request.BackupModelList)
 						{
-							request.BackupModelList.Remove(backupModel);
-							break;
+							if (backupModel.BackupName.Equals(backupName))
+							{
+								request.BackupModelList.Remove(backupModel);
+								break;
+							}
 						}
 					}
-					foreach (var changeSettingModel in request.ChangeSettingsModelList)
+					if (request.ChangeSettingsModelList != null)
 					{
-						if (changeSettingModel.BackupName.Equals(backupName))
+						foreach (var changeSettingModel in request.ChangeSettingsModelList)
 						{
-							request.ChangeSettingsModelList.Remove(changeSettingModel);
-							break;
+							if (changeSettingModel.BackupName.Equals(backupName))
+							{
+								request.ChangeSettingsModelList.Remove(changeSettingModel);
+								break;
+							}
 						}
 					}
-					foreach (var periodicModel in request.PeriodicBackupModelList)
+					if (request.PeriodicBackupModelList != null)
 					{
-						if (periodicModel.BackupName.Equals(backupName))
+						foreach (var periodicModel in request.PeriodicBackupModelList)
 						{
-							request.PeriodicBackupModelList.Remove(periodicModel);
-							break;
+							if (periodicModel.BackupName.Equals(backupName))
+							{
+								request.PeriodicBackupModelList.Remove(periodicModel);
+								break;
+							}
 						}
 					}
 					WriteJsonRequestModel(request);
@@ -320,7 +332,7 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if (backupModel != null)
+			if (backupModel != null && request.BackupModelList != null)
 			{
 				foreach (var item in request.BackupModelList)
 				{
@@ -329,7 +341,7 @@ namespace Sdl.Community.BackupService
 						request.BackupModelList.Remove(item);
 						break;
 					}
-				}
+				}			
 				request.BackupModelList.Add(backupModel);
 				WriteJsonRequestModel(request);
 			}
@@ -339,7 +351,7 @@ namespace Sdl.Community.BackupService
 		{
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (detailsModel != null)
+			if (detailsModel != null && request.BackupDetailsModelList != null)
 			{
 				foreach (var item in request.BackupDetailsModelList)
 				{
@@ -359,7 +371,7 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if (periodicModel != null)
+			if (periodicModel != null && request.PeriodicBackupModelList != null)
 			{
 				foreach (var item in request.PeriodicBackupModelList)
 				{
@@ -368,8 +380,7 @@ namespace Sdl.Community.BackupService
 						request.PeriodicBackupModelList.Remove(item);
 						break;
 					}
-				}
-
+				}				
 				request.PeriodicBackupModelList.Add(periodicModel);
 				WriteJsonRequestModel(request);
 			}
@@ -380,7 +391,7 @@ namespace Sdl.Community.BackupService
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
 
-			if (changeModel != null)
+			if (changeModel != null && request.ChangeSettingsModelList != null)
 			{
 				foreach (var item in request.ChangeSettingsModelList)
 				{

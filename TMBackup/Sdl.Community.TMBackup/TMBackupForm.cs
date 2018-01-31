@@ -12,6 +12,7 @@ namespace Sdl.Community.TMBackup
 	{
 		private string _taskName;
 		private bool _isNewTask;
+		private string _oldTaskName;
 
 		private List<BackupModel> _backupModelList = new List<BackupModel>();
 
@@ -83,9 +84,42 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var service = new Service();
+			var jsonRequestModel = persistence.ReadFormInformation();
 
 			if (_isNewTask)
 			{
+				var changeSettingsList = new List<ChangeSettingsModel>();
+				var backupDetailsList = new List<BackupDetailsModel>();
+
+				if (!string.IsNullOrEmpty(_oldTaskName) && !_oldTaskName.Equals(txt_BackupName.Text) && jsonRequestModel != null && jsonRequestModel.ChangeSettingsModelList != null)
+				{
+					foreach (var changeSettingModel in jsonRequestModel.ChangeSettingsModelList)
+					{
+						if (changeSettingModel.BackupName.Equals(_oldTaskName))
+						{
+							changeSettingModel.BackupName = txt_BackupName.Text;
+							changeSettingModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
+
+							changeSettingsList.Add(changeSettingModel);
+						}
+					}
+					persistence.SaveChangeSettings(changeSettingsList, txt_BackupName.Text);
+
+					foreach (var backupDetail in jsonRequestModel.BackupDetailsModelList)
+					{
+						if (backupDetail.BackupName.Equals(_oldTaskName))
+						{
+							backupDetail.BackupName = txt_BackupName.Text;
+							backupDetail.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
+
+							backupDetailsList.Add(backupDetail);
+						}
+					}
+					persistence.SaveDetailsFormInfo(backupDetailsList, txt_BackupName.Text);
+				}
+
+				_oldTaskName = txt_BackupName.Text;
+
 				txt_TaskNameError.Visible = CheckTask(txt_BackupName.Text);
 				txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
 				txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
@@ -106,10 +140,10 @@ namespace Sdl.Community.TMBackup
 			else
 			{
 				//update settings
-				var jsonRequestModel = persistence.ReadFormInformation();
-				if(jsonRequestModel!=null)
+
+				if (jsonRequestModel != null)
 				{
-					var backupModel = jsonRequestModel.BackupModelList != null 
+					var backupModel = jsonRequestModel.BackupModelList != null
 						? jsonRequestModel.BackupModelList.Where(b => b.BackupName.Equals(txt_BackupName.Text)).FirstOrDefault()
 						: null;
 
