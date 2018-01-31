@@ -65,7 +65,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
 					Unique = _uniqueSegments,
 					MergedAcross = mergedAcross.Checked,
-					ContainsTags = containsTagsCheckBox.Checked
+					ContainsTags = containsTagsCheckBox.Checked,
+					ModifiedBy = modifiedByBox.Text,
+					ModifiedByChecked = modifiedByCheck.Checked,
+					CreatedBy = createdByBox.Text,
+					CreatedByChecked = createdByCheck.Checked
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -106,6 +110,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 				_customSettings.Colors = value.Colors;
 				mergedAcross.Checked = value.MergedAcross;
 				containsTagsCheckBox.Checked = value.ContainsTags;
+				modifiedByBox.Text = value.ModifiedBy;
+				modifiedByCheck.Checked = value.ModifiedByChecked;
+				createdByBox.Text = value.CreatedBy;
+				createdByCheck.Checked = value.CreatedByChecked;
 				foreach (var color in value.Colors)
 				{
 					foreach (ListViewItem colorItem in colorsListView.Items)
@@ -412,6 +420,10 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			colorsListView.SelectedItems.Clear();
 	        _reverseFilter = false;
 			containsTagsCheckBox.Checked=false;
+	        modifiedByBox.Text = string.Empty;
+	        modifiedByCheck.Checked = false;
+	        createdByBox.Text = string.Empty;
+	        createdByCheck.Checked = false;
 #endregion
 
 			#region  |  content panel  |

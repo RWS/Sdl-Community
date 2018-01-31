@@ -178,19 +178,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				//unique 
 				if (success && CustomSettings.Unique)
 				{
-					
-					var settings =new DisplayFilterSettings
+
+					var settings = new DisplayFilterSettings
 					{
 						RepetitionTypes = new List<string>
 						{
 							"FirstOccurrences"
 						}
-				};
-					
+					};
+
 					var isFirst = rowInfo.IsRepetitionsFirstOccurrences(settings);
 					if (isFirst)
 					{
-					return true;
+						return true;
 					}
 
 					var isRepeted = rowInfo.SegmentPair.Properties.TranslationOrigin.IsRepeated;
@@ -202,9 +202,19 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 
 					return false;
 				}
+				//created by
+				if (success && CustomSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(CustomSettings.CreatedBy))
+				{
+					var userVisitor = new UserVisitor();
+					success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, CustomSettings.CreatedBy);
+				}
+				
 			}
 			return success;
 		}
+
+
+
 
 		private bool Reverse(bool success, DisplayFilterRowInfo rowInfo)
 		{

@@ -21,5 +21,9 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public bool SourceEqualsTarget { get; set; }
 		public bool IsEqualsCaseSensitive { get; set; }
 		public bool ContainsTags { get; set; }
+		public bool ModifiedByChecked { get; set; }
+		public string ModifiedBy { get; set; }
+		public bool CreatedByChecked { get; set; }
+		public string CreatedBy { get; set; }
 	}
 }
