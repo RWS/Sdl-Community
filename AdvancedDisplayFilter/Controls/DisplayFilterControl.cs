@@ -1054,7 +1054,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget ||
 		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) &&
 		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax)
-		        || customFilterSettings.MergedAcross)
+		        || customFilterSettings.MergedAcross||customFilterSettings.ContainsTags)
 		    {
 			    tabPage_segmentNumbers.ImageIndex = 0;
 		    }
