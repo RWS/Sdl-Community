@@ -411,6 +411,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        _uniqueSegments = false;
 			colorsListView.SelectedItems.Clear();
 	        _reverseFilter = false;
+			containsTagsCheckBox.Checked=false;
 #endregion
 
 			#region  |  content panel  |
@@ -884,6 +885,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        {
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin +
 			                                        " and " + CustomFilter.FuzzyMax + "\"");
+		        }
+
+		        if (CustomFilter.ContainsTags)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segments_With_tags + ":\"" +
+			                                        CustomFilter.ContainsTags + "\"");
+
 		        }
 	        }
 
@@ -1668,6 +1676,11 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void mergedAcross_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void containsTagsCheckBox_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}

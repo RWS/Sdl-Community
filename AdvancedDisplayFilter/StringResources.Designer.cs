@@ -448,6 +448,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Segments with tags.
+        /// </summary>
+        internal static string DisplayFilterControl_Segments_With_tags {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Segments_With_tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected: {0}.
         /// </summary>
         internal static string DisplayFilterControl_Selected {

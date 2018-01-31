@@ -801,6 +801,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			resources.ApplyResources(this.containsTagsCheckBox, "containsTagsCheckBox");
 			this.containsTagsCheckBox.Name = "containsTagsCheckBox";
 			this.containsTagsCheckBox.UseVisualStyleBackColor = true;
+			this.containsTagsCheckBox.CheckedChanged += new System.EventHandler(this.containsTagsCheckBox_CheckedChanged);
 			// 
 			// DisplayFilterControl
 			// 

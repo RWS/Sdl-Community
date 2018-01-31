@@ -368,6 +368,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         SubsetItems = 0x10000
     }
 
+    [Flags]
     public enum ListViewGroupState
     {
         /// <summary>
