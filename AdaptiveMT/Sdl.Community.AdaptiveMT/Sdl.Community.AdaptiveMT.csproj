@@ -120,6 +120,8 @@
     <Compile Include="Properties\PluginProperties.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\icon.ico" />
+    <None Include="Resources\icon_oos.png" />
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
   </ItemGroup>

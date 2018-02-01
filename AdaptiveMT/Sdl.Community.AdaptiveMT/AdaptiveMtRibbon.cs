@@ -29,7 +29,8 @@ namespace Sdl.Community.AdaptiveMT
 {
 	[Action("AdaptiveMt",
 		Name = "Adaptive MT Training",
-		Description = "Adaptive MT Training"
+		Description = "Adaptive MT Training",
+		Icon = "icon"
 	)]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "",
 		true)]

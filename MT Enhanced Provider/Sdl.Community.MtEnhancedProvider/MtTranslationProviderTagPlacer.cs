@@ -80,7 +80,7 @@ namespace Sdl.Community.MtEnhancedProvider
 						if (tag != null)
 						{
 							tag.IsClosed = true;
-							tagText = "</tg" + tag.Index + ">";
+							tagText = "</tg" + tag.TagId + ">";
 						}
 					}
 					if(theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)

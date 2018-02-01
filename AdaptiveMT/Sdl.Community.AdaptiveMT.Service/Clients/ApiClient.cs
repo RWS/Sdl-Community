@@ -44,12 +44,16 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 			using (var client = new HttpClient())
 			{
 				client.DefaultRequestHeaders.Add("Connection", "Keep-Alive");
+				var traking = string.Format("applicationKey={0}", @"CZqvCdx8JnoKV7JiAuvGOQ%3D%3D");
 				var request = new HttpRequestMessage(method, url);
+
 				//for Login call we don't have sid
 				if (sid != string.Empty)
 				{
 					var authHeader = $"SID={sid}";
 					request.Headers.Authorization = new AuthenticationHeaderValue("LC", authHeader);
+					
+					request.Headers.Add("Tracking", traking);
 				}
 				if (contentBody != null)
 				{
