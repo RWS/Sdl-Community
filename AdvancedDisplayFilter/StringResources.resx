@@ -316,6 +316,12 @@
   <data name="DisplayFilterControl_MergedAcross" xml:space="preserve">
     <value>Merged segments across paragraphs</value>
   </data>
+  <data name="DisplayFilterControl_CreatedBy" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="DisplayFilterControl_MidifiedBy" xml:space="preserve">
+    <value>Modified by </value>
+  </data>
   <data name="DisplayFilterControl_Segments_With_tags" xml:space="preserve">
     <value>Segments with tags</value>
   </data>

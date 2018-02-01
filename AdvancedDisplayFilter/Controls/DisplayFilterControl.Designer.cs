@@ -81,6 +81,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.linkLabel_contextInfoClearSelection = new System.Windows.Forms.LinkLabel();
 			this.label_contextInfoSelected = new System.Windows.Forms.Label();
 			this.tabPage_segmentNumbers = new System.Windows.Forms.TabPage();
+			this.userBox = new System.Windows.Forms.GroupBox();
+			this.createdByBox = new System.Windows.Forms.TextBox();
+			this.createdByCheck = new System.Windows.Forms.CheckBox();
+			this.modifiedByBox = new System.Windows.Forms.TextBox();
+			this.modifiedByCheck = new System.Windows.Forms.CheckBox();
+			this.userLabel = new System.Windows.Forms.Label();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
 			this.fuzzyMin = new System.Windows.Forms.TextBox();
 			this.fuzzyMax = new System.Windows.Forms.TextBox();
@@ -124,12 +130,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.userBox = new System.Windows.Forms.GroupBox();
-			this.userLabel = new System.Windows.Forms.Label();
-			this.modifiedByCheck = new System.Windows.Forms.CheckBox();
-			this.modifiedByBox = new System.Windows.Forms.TextBox();
-			this.createdByCheck = new System.Windows.Forms.CheckBox();
-			this.createdByBox = new System.Windows.Forms.TextBox();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -147,6 +147,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_contextInfo.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			this.tabPage_segmentNumbers.SuspendLayout();
+			this.userBox.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.segmentsGroupBox.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -159,7 +160,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.SuspendLayout();
 			this.panel_filterStatusBarImage.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).BeginInit();
-			this.userBox.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel_body
@@ -526,6 +526,46 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tabPage_segmentNumbers.Name = "tabPage_segmentNumbers";
 			this.tabPage_segmentNumbers.UseVisualStyleBackColor = true;
 			// 
+			// userBox
+			// 
+			this.userBox.Controls.Add(this.createdByBox);
+			this.userBox.Controls.Add(this.createdByCheck);
+			this.userBox.Controls.Add(this.modifiedByBox);
+			this.userBox.Controls.Add(this.modifiedByCheck);
+			this.userBox.Controls.Add(this.userLabel);
+			resources.ApplyResources(this.userBox, "userBox");
+			this.userBox.Name = "userBox";
+			this.userBox.TabStop = false;
+			// 
+			// createdByBox
+			// 
+			resources.ApplyResources(this.createdByBox, "createdByBox");
+			this.createdByBox.Name = "createdByBox";
+			// 
+			// createdByCheck
+			// 
+			resources.ApplyResources(this.createdByCheck, "createdByCheck");
+			this.createdByCheck.Name = "createdByCheck";
+			this.createdByCheck.UseVisualStyleBackColor = true;
+			this.createdByCheck.CheckedChanged += new System.EventHandler(this.createdByCheck_CheckedChanged);
+			// 
+			// modifiedByBox
+			// 
+			resources.ApplyResources(this.modifiedByBox, "modifiedByBox");
+			this.modifiedByBox.Name = "modifiedByBox";
+			// 
+			// modifiedByCheck
+			// 
+			resources.ApplyResources(this.modifiedByCheck, "modifiedByCheck");
+			this.modifiedByCheck.Name = "modifiedByCheck";
+			this.modifiedByCheck.UseVisualStyleBackColor = true;
+			this.modifiedByCheck.CheckedChanged += new System.EventHandler(this.modifiedByCheck_CheckedChanged);
+			// 
+			// userLabel
+			// 
+			resources.ApplyResources(this.userLabel, "userLabel");
+			this.userLabel.Name = "userLabel";
+			// 
 			// groupBox2
 			// 
 			this.groupBox2.Controls.Add(this.fuzzyMin);
@@ -811,44 +851,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
 			// 
-			// userBox
-			// 
-			this.userBox.Controls.Add(this.createdByBox);
-			this.userBox.Controls.Add(this.createdByCheck);
-			this.userBox.Controls.Add(this.modifiedByBox);
-			this.userBox.Controls.Add(this.modifiedByCheck);
-			this.userBox.Controls.Add(this.userLabel);
-			resources.ApplyResources(this.userBox, "userBox");
-			this.userBox.Name = "userBox";
-			this.userBox.TabStop = false;
-			// 
-			// userLabel
-			// 
-			resources.ApplyResources(this.userLabel, "userLabel");
-			this.userLabel.Name = "userLabel";
-			// 
-			// modifiedByCheck
-			// 
-			resources.ApplyResources(this.modifiedByCheck, "modifiedByCheck");
-			this.modifiedByCheck.Name = "modifiedByCheck";
-			this.modifiedByCheck.UseVisualStyleBackColor = true;
-			// 
-			// modifiedByBox
-			// 
-			resources.ApplyResources(this.modifiedByBox, "modifiedByBox");
-			this.modifiedByBox.Name = "modifiedByBox";
-			// 
-			// createdByCheck
-			// 
-			resources.ApplyResources(this.createdByCheck, "createdByCheck");
-			this.createdByCheck.Name = "createdByCheck";
-			this.createdByCheck.UseVisualStyleBackColor = true;
-			// 
-			// createdByBox
-			// 
-			resources.ApplyResources(this.createdByBox, "createdByBox");
-			this.createdByBox.Name = "createdByBox";
-			// 
 			// DisplayFilterControl
 			// 
 			resources.ApplyResources(this, "$this");
@@ -879,6 +881,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.tableLayoutPanel4.PerformLayout();
 			this.tabPage_segmentNumbers.ResumeLayout(false);
 			this.tabPage_segmentNumbers.PerformLayout();
+			this.userBox.ResumeLayout(false);
+			this.userBox.PerformLayout();
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			this.segmentsGroupBox.ResumeLayout(false);
@@ -896,8 +900,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.panel_filterStatusBarMessage.ResumeLayout(false);
 			this.panel_filterStatusBarImage.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox_filterStatusBarImage)).EndInit();
-			this.userBox.ResumeLayout(false);
-			this.userBox.PerformLayout();
 			this.ResumeLayout(false);
 
         }

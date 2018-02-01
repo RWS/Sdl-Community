@@ -27,7 +27,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		private bool CheckCreatedBy(string userName)
 		{
-			var usersNameList = userName.Split('|').ToList();
+			var usersNameList = userName.Replace(" ","").Split('|').ToList();
 			foreach (var name in usersNameList)
 			{
 				if (_createdBy.Contains(name))
@@ -40,7 +40,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		private bool CheckModifiedBy(string userName)
 		{
-			var usersNameList = userName.Split('|').ToList();
+			var usersNameList = userName.Replace(" ", "").Split('|').ToList();
 			foreach (var name in usersNameList)
 			{
 				if (_modifiedBy.Contains(name))

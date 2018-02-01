@@ -905,7 +905,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			                                        CustomFilter.ContainsTags + "\"");
 
 		        }
-	        }
+		        if (CustomFilter.CreatedByChecked)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_CreatedBy+ ":\"" +
+					                                CustomFilter.CreatedBy + "\"");
+				}
+		        if (CustomFilter.ModifiedByChecked)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MidifiedBy + ":\"" +
+			                                        CustomFilter.ModifiedBy + "\"");
+		        }
+			}
 
         }
 
@@ -1066,7 +1076,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget ||
 		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) &&
 		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax)
-		        || customFilterSettings.MergedAcross||customFilterSettings.ContainsTags)
+		        || customFilterSettings.MergedAcross||customFilterSettings.ContainsTags||customFilterSettings.CreatedByChecked
+				||customFilterSettings.ModifiedByChecked)
 		    {
 			    tabPage_segmentNumbers.ImageIndex = 0;
 		    }
@@ -1693,6 +1704,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		}
 
 		private void containsTagsCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void modifiedByCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void createdByCheck_CheckedChanged(object sender, EventArgs e)
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}

@@ -160,6 +160,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created by.
+        /// </summary>
+        internal static string DisplayFilterControl_CreatedBy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_CreatedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Document Structure.
         /// </summary>
         internal static string DisplayFilterControl_Document_structure {
@@ -300,6 +309,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_MergedSegments {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_MergedSegments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified by .
+        /// </summary>
+        internal static string DisplayFilterControl_MidifiedBy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MidifiedBy", resourceCulture);
             }
         }
         

@@ -332,6 +332,17 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				var containsTagVisitor = new TagVisitor();
 				success = containsTagVisitor.ContainsTag(rowInfo.SegmentPair.Source);
 			}
+			if (!success && CustomSettings.CreatedByChecked && !string.IsNullOrWhiteSpace(CustomSettings.CreatedBy))
+			{
+				var userVisitor = new UserVisitor();
+				success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, CustomSettings.CreatedBy);
+			}
+			//modify by
+			if (!success && CustomSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(CustomSettings.ModifiedBy))
+			{
+				var userVisitor = new UserVisitor();
+				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, CustomSettings.ModifiedBy);
+			}
 			return !success;
 		}
 	}
