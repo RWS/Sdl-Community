@@ -208,6 +208,12 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 					var userVisitor = new UserVisitor();
 					success = userVisitor.CreatedBy(rowInfo.SegmentPair.Source, CustomSettings.CreatedBy);
 				}
+				//modify by
+				if (success && CustomSettings.ModifiedByChecked && !string.IsNullOrWhiteSpace(CustomSettings.ModifiedBy))
+				{
+					var userVisitor = new UserVisitor();
+					success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, CustomSettings.ModifiedBy);
+				}
 				
 			}
 			return success;

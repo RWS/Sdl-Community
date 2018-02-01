@@ -15,6 +15,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		public bool ModifiedBy(ISegment segment, string modifiedBy)
 		{
+			VisitSegment(segment);
 			return CheckModifiedBy(modifiedBy);
 		}
 		public bool CreatedBy(ISegment segment, string createdBy)
