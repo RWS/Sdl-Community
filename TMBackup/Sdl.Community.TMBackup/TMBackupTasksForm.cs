@@ -71,6 +71,17 @@ namespace Sdl.Community.TMBackup
 						}
 					}
 				}
+				// if any tasks does not exist and json is still populated it means that user has removed the tasks from the Windows Task Scheduler interface
+				// in this way, json needs to be cleaned up 
+				if(tasks == null || tasks.Count == 0)
+				{
+					if (jsonRequestModel.BackupModelList != null) { jsonRequestModel.BackupModelList.Clear(); }
+					if (jsonRequestModel.BackupDetailsModelList != null) { jsonRequestModel.BackupDetailsModelList.Clear(); }
+					if (jsonRequestModel.PeriodicBackupModelList != null) { jsonRequestModel.PeriodicBackupModelList.Clear(); }
+					if (jsonRequestModel.ChangeSettingsModelList != null) { jsonRequestModel.ChangeSettingsModelList.Clear(); }
+
+					persistence.WriteJsonRequestModel(jsonRequestModel);
+				}
 				dataGridView1.DataSource = tasks;
 				return backupTasks;
 			}

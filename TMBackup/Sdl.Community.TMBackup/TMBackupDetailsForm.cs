@@ -3,9 +3,8 @@ using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace Sdl.Community.TMBackup
 {
@@ -52,10 +51,6 @@ namespace Sdl.Community.TMBackup
 					GetBackupDetailsInfo();
 					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
 				}
-				//else
-				//{
-				//	MessageBox.Show(Constants.ActionErrorMessage, Constants.InformativeMessage);
-				//}
 			}
 		}
 
@@ -99,28 +94,7 @@ namespace Sdl.Community.TMBackup
 		{
 			Close();
 		}
-
-		private void dataGridView1_RowValidating(object sender, DataGridViewCellCancelEventArgs e)
-		{
-			if (dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryActionColumnIndex].FormattedValue.ToString() == string.Empty &&
-				!string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryTypeColumnIndex].FormattedValue.ToString()) &&
-				!string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryPatternColumnIndex].FormattedValue.ToString()))
-			{
-				e.Cancel = true;
-				dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryTypeColumnIndex].ErrorText = Constants.MandatoryValue;
-			}
-			else if (dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryTypeColumnIndex].FormattedValue.ToString() == string.Empty)
-			{
-				e.Cancel = true;
-				dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryActionColumnIndex].ErrorText = Constants.MandatoryValue;
-			}
-			else if (dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryPatternColumnIndex].FormattedValue.ToString() == string.Empty)
-			{
-				e.Cancel = true;
-				dataGridView1.Rows[e.RowIndex].Cells[Constants.MandatoryPatternColumnIndex].ErrorText = Constants.MandatoryValue;
-			}
-		}
-
+				
 		// Disable rows from the actions grid which already have values(user can only add/delete actions)
 		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
@@ -206,7 +180,11 @@ namespace Sdl.Community.TMBackup
 								{
 									_backupDetailsModelList.Add(backupDetail);
 								}
-							}							
+							}
+							else if(backupDetail != null && row.Cells[2].Selected)
+							{
+								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage);
+							}
 						}
 					}
 				}
