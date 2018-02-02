@@ -53,6 +53,7 @@
             this.txt_BackupFromError = new System.Windows.Forms.TextBox();
             this.txt_BackupToError = new System.Windows.Forms.TextBox();
             this.txt_TaskNameError = new System.Windows.Forms.TextBox();
+            this.txt_WhenToBackupError = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // txt_BackupFrom
@@ -237,7 +238,7 @@
             this.lbl_Line2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lbl_Line2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lbl_Line2.Location = new System.Drawing.Point(-11, 329);
+            this.lbl_Line2.Location = new System.Drawing.Point(-11, 335);
             this.lbl_Line2.Name = "lbl_Line2";
             this.lbl_Line2.Size = new System.Drawing.Size(683, 2);
             this.lbl_Line2.TabIndex = 26;
@@ -325,11 +326,25 @@
             this.txt_TaskNameError.Text = "Task already exist with this  name!";
             this.txt_TaskNameError.Visible = false;
             // 
+            // txt_WhenToBackupError
+            // 
+            this.txt_WhenToBackupError.BackColor = System.Drawing.SystemColors.Control;
+            this.txt_WhenToBackupError.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txt_WhenToBackupError.ForeColor = System.Drawing.Color.Red;
+            this.txt_WhenToBackupError.Location = new System.Drawing.Point(21, 302);
+            this.txt_WhenToBackupError.Multiline = true;
+            this.txt_WhenToBackupError.Name = "txt_WhenToBackupError";
+            this.txt_WhenToBackupError.Size = new System.Drawing.Size(100, 30);
+            this.txt_WhenToBackupError.TabIndex = 34;
+            this.txt_WhenToBackupError.Text = "\'When to backup\' cannot be empty. Please select the period to backup files!";
+            this.txt_WhenToBackupError.Visible = false;
+            // 
             // TMBackupForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(657, 384);
+            this.Controls.Add(this.txt_WhenToBackupError);
             this.Controls.Add(this.txt_TaskNameError);
             this.Controls.Add(this.txt_BackupToError);
             this.Controls.Add(this.txt_BackupFromError);
@@ -389,5 +404,6 @@
 		private System.Windows.Forms.TextBox txt_BackupFromError;
 		private System.Windows.Forms.TextBox txt_BackupToError;
 		private System.Windows.Forms.TextBox txt_TaskNameError;
+		private System.Windows.Forms.TextBox txt_WhenToBackupError;
 	}
 }

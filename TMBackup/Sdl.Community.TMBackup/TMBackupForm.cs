@@ -124,23 +124,24 @@ namespace Sdl.Community.TMBackup
 				txt_BackupFromError.Visible = string.IsNullOrEmpty(txt_BackupFrom.Text) ? true : false;
 				txt_BackupToError.Visible = string.IsNullOrEmpty(txt_BackupTo.Text) ? true : false;
 				txt_BackupNameError.Visible = string.IsNullOrEmpty(txt_BackupName.Text) ? true : false;
+				txt_WhenToBackupError.Visible = string.IsNullOrEmpty(txt_BackupTime.Text) ? true : false;
 
 				if (!txt_TaskNameError.Visible
 					&& !txt_BackupFromError.Visible
 					&& !txt_BackupToError.Visible
-					&& !txt_BackupNameError.Visible)
+					&& !txt_BackupNameError.Visible
+					&& !txt_WhenToBackupError.Visible)
 				{
 					var backupModel = new BackupModel();
 					backupModel.BackupName = (txt_BackupName.Text);
 					backupModel.TrimmedBackupName = string.Concat(txt_BackupName.Text.Where(c => !char.IsWhiteSpace(c)));
-
+										
 					SetBackupModelInfo(backupModel, persistence, service);
 				}
 			}
 			else
 			{
 				//update settings
-
 				if (jsonRequestModel != null)
 				{
 					var backupModel = jsonRequestModel.BackupModelList != null
@@ -218,7 +219,7 @@ namespace Sdl.Community.TMBackup
 
 			Hide();
 
-			service.CreateTaskScheduler(backupModel.BackupName);
+			service.CreateTaskScheduler(backupModel.BackupName, false);
 
 			var tmBackupTasksForm = new TMBackupTasksForm();
 			tmBackupTasksForm.ShowDialog();

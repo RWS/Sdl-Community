@@ -18,6 +18,14 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string InformativeErrorMessage = "Files were not copied correctly. Please check the backup settings and try again!";
 		public const string IntervalErrorMessage = "Settings cannot be saved. Please set up a backup time value!";
 		public const string BackupIntervalErrorMessage = "Backup interval field accepts only numbers!";
+		public const string ActionErrorMessage = "Actions cannot be saved! Please ensure that Action name, Type of file and Pattern are filled!";
+
+		public const string TaskNameErrorMessage = "Actions cannot be saved because Backup name is empty! Please fill first the Backup name and after that try to add actions!";
+
+		public const string ActionNameErrorMessage = "Actions cannot be saved! Please ensure that Action name is filled!";
+		public const string FileTypeErrorMessage = "Actions cannot be saved! Please ensure that Type of file is filled!";
+		public const string PatternErrorMessage = "Actions cannot be saved! Please ensure that Patern is filled!";
+
 
 		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
 		public static readonly string SdlCommunityPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);

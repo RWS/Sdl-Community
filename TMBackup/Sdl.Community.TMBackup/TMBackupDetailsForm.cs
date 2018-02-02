@@ -29,19 +29,34 @@ namespace Sdl.Community.TMBackup
 			_taskName = taskName;
 			InitializeBackupDetails();
 		}
-				
+
 		#endregion
 
 		#region Actions
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
-			var persistence = new Persistence();
-			persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
+			if (string.IsNullOrEmpty(_taskName))
+			{
+				MessageBox.Show(Constants.TaskNameErrorMessage, Constants.InformativeMessage);
+			}
+			else
+			{
+				AddValuesFromRows();
+				if (_backupDetailsModelList.Any() && _backupDetailsModelList != null)
+				{
+					var persistence = new Persistence();
+					persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
 
-			_backupDetailsModelList.Clear();
+					_backupDetailsModelList.Clear();
 
-			GetBackupDetailsInfo();
-			dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
+					GetBackupDetailsInfo();
+					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
+				}
+				//else
+				//{
+				//	MessageBox.Show(Constants.ActionErrorMessage, Constants.InformativeMessage);
+				//}
+			}
 		}
 
 		private void btn_Delete_Click(object sender, EventArgs e)
@@ -67,11 +82,17 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Ok_Click(object sender, EventArgs e)
 		{
-			foreach (var backupDetailModel in _backupDetailsModelList)
+			var persistence = new Persistence();
+			var jsonModel = persistence.ReadFormInformation();
+		
+			if (jsonModel!= null && jsonModel.BackupDetailsModelList!= null && jsonModel.BackupDetailsModelList.Count > 0)
 			{
-				BackupDetailsInfo = BackupDetailsInfo + backupDetailModel.BackupAction + ", " + backupDetailModel.BackupType + ", " + backupDetailModel.BackupPattern + "; ";
-			}
-			Close();
+				foreach (var backupDetailModel in jsonModel.BackupDetailsModelList)
+				{
+					BackupDetailsInfo = BackupDetailsInfo + backupDetailModel.BackupAction + ", " + backupDetailModel.BackupType + ", " + backupDetailModel.BackupPattern + "; ";
+				}
+				Close();
+			}		
 		}
 
 		private void btn_Cancel_Click(object sender, EventArgs e)
@@ -100,29 +121,16 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		private void dataGridView1_CellValidating_1(object sender, DataGridViewCellValidatingEventArgs e)
+		// Disable rows from the actions grid which already have values(user can only add/delete actions)
+		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
 		{
-			var dataGrid = (DataGridView)sender;
-			var isEmptyRow = false;
-
-			foreach (DataGridViewCell cell in dataGrid.Rows[dataGrid.Rows.Count - 1].Cells)
+			if (dataGridView1.Rows.Count > 0)
 			{
-				if (cell.Value == null)
-				{
-					isEmptyRow = true;
-				}
-			}
+				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
 
-			if (!isEmptyRow && e.ColumnIndex == Constants.MandatoryActionColumnIndex || e.ColumnIndex == Constants.MandatoryTypeColumnIndex || e.ColumnIndex == Constants.MandatoryPatternColumnIndex)
-			{
-				if (e.FormattedValue.ToString() == string.Empty)
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
 				{
-					dataGridView1[e.ColumnIndex, e.RowIndex].ErrorText = Constants.MandatoryValue;
-					e.Cancel = true;
-				}
-				else
-				{
-					dataGridView1[e.ColumnIndex, e.RowIndex].ErrorText = string.Empty;
+					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 				}
 			}
 		}
@@ -143,86 +151,7 @@ namespace Sdl.Community.TMBackup
 				dataGridView1.DataSource = request.BackupDetailsModelList;
 			}
 		}
-
-		private void dataGridView1_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		{
-			var dataGrid = (DataGridView)sender;
-
-			if (dataGrid.Rows.Count > 0 && e.RowIndex > -1)
-			{
-				var row = dataGrid.Rows[e.RowIndex];
-				var backupDetailsModel = new BackupDetailsModel();
-
-				if (row != null)
-				{
-					if (row.Cells[0].Value != null)
-					{
-						backupDetailsModel.BackupAction = row.Cells[0].Value.ToString();
-					}
-					if (row.Cells[1].Value != null)
-					{
-						backupDetailsModel.BackupType = row.Cells[1].Value.ToString();
-					}
-					if (row.Cells[2].Value != null)
-					{
-						backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
-					}
-
-					// add all values to the model which will be used to persist data into Json file
-					if (!string.IsNullOrEmpty(backupDetailsModel.BackupAction)
-						&& !string.IsNullOrEmpty(backupDetailsModel.BackupType)
-						&& !string.IsNullOrEmpty(backupDetailsModel.BackupPattern))
-					{
-						_backupDetailsModelList.Add(backupDetailsModel);
-					}
-				}
-			}
-		}
-
-		// Add rows to a BindingList which can be used when moving up/down the selected row on the grid
-		private BindingList<DataGridViewRow> AddRowsToList()
-		{
-			_backupDetailsModelList.Clear();
-			var rowList = new BindingList<DataGridViewRow>();
-
-			foreach (DataGridViewRow row in dataGridView1.Rows)
-			{
-				if (!string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && !string.IsNullOrEmpty(row.Cells[2].Value.ToString()))
-				{
-					rowList.Add(row);
-				}
-			}
-			if (dataGridView1.RowCount <= 0 || dataGridView1.SelectedRows.Count <= 0)
-			{
-				return null;
-			}
-			return rowList;
-		}
-
-		// Add rows information from grid to a BindingList which will be used as data source when moving row up/down
-		private void AddRowsInformation(BindingList<DataGridViewRow> rowList)
-		{
-			var bindingSource = new BindingSource();
-			bindingSource.DataSource = rowList;
-
-			foreach (DataGridViewRow item in bindingSource)
-			{
-				var bdm = new BackupDetailsModel();
-				bdm.BackupAction = item.Cells[0].Value != null ? item.Cells[0].Value.ToString() : null;
-				bdm.BackupType = item.Cells[1].Value != null ? item.Cells[1].Value.ToString() : null;
-				bdm.BackupPattern = item.Cells[2].Value != null ? item.Cells[2].Value.ToString() : null;
-
-				_backupDetailsModelList.Add(bdm);
-			}
-			dataGridView1.DataSource = _backupDetailsModelList;
-
-			var persistence = new Persistence();
-			persistence.UpdateBackupDetailsForm(_backupDetailsModelList, _taskName);
-
-			GetBackupDetailsInfo();
-			dataGridView1.ClearSelection();
-		}
-
+		
 		// Initizialize the Backup Details grid when opening with exiting data from json
 		private void InitializeBackupDetails()
 		{
@@ -245,18 +174,99 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		// Disable rows from the actions grid which already have values(user can only add/delete actions)
-		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		/// <summary>
+		/// Add values from rows
+		/// </summary>
+		private void AddValuesFromRows()
 		{
 			if (dataGridView1.Rows.Count > 0)
 			{
-				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+				var persistence = new Persistence();
+				var jsonRequestModel = persistence.ReadFormInformation();
 
-				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+				if (jsonRequestModel != null && jsonRequestModel.BackupDetailsModelList != null && jsonRequestModel.BackupDetailsModelList.Count > 0)
 				{
-					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+					var backupDetailsList = jsonRequestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList();
+					if (backupDetailsList != null)
+					{
+						foreach (DataGridViewRow row in dataGridView1.Rows)
+						{
+							var backupDetail = backupDetailsList.Where(b => b.BackupAction.Equals(row.Cells[0].Value.ToString())
+													&& b.BackupType.Equals(row.Cells[1].Value.ToString())
+													&& b.BackupPattern.Equals(row.Cells[2].Value.ToString())).FirstOrDefault();
+
+							if (backupDetail == null)
+							{
+								backupDetail = SetBackupDetailsFromGrid(row);
+
+								// add all values to the model which will be used to persist data into Json file
+								if (!string.IsNullOrEmpty(backupDetail.BackupAction)
+									&& !string.IsNullOrEmpty(backupDetail.BackupType)
+									&& !string.IsNullOrEmpty(backupDetail.BackupPattern))
+								{
+									_backupDetailsModelList.Add(backupDetail);
+								}
+							}							
+						}
+					}
+				}
+				else
+				{
+					foreach (DataGridViewRow row in dataGridView1.Rows)
+					{
+						var backupDetailsModel = SetBackupDetailsFromGrid(row);
+
+						// add all values to the model which will be used to persist data into Json file
+						if (!string.IsNullOrEmpty(backupDetailsModel.BackupAction)
+							&& !string.IsNullOrEmpty(backupDetailsModel.BackupType)
+							&& !string.IsNullOrEmpty(backupDetailsModel.BackupPattern))
+						{
+							_backupDetailsModelList.Add(backupDetailsModel);
+						}
+					}
 				}
 			}
+		}
+
+		private BackupDetailsModel SetBackupDetailsFromGrid(DataGridViewRow row)
+		{
+			var backupDetailsModel = new BackupDetailsModel();
+			backupDetailsModel.BackupName = _taskName;
+			backupDetailsModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+
+			if ((row.Cells[0].Value == null && row.Cells[1].Value == null && row.Cells[2].Value == null)
+				|| (string.IsNullOrEmpty(row.Cells[0].Value.ToString()) && string.IsNullOrEmpty(row.Cells[1].Value.ToString()) && string.IsNullOrEmpty(row.Cells[2].Value.ToString())))
+			{
+				//do nothing in this case because it is about the last empty row added by datagridview
+			}
+			else
+			{
+				if (row.Cells[0].Value != null)
+				{
+					backupDetailsModel.BackupAction = row.Cells[0].Value.ToString();
+				}
+				else
+				{
+					MessageBox.Show(Constants.ActionNameErrorMessage, Constants.InformativeMessage);
+				}
+				if (row.Cells[1].Value != null)
+				{
+					backupDetailsModel.BackupType = row.Cells[1].Value.ToString();
+				}
+				else
+				{
+					MessageBox.Show(Constants.FileTypeErrorMessage, Constants.InformativeMessage);
+				}
+				if (row.Cells[2].Value != null)
+				{
+					backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
+				}
+				else
+				{
+					MessageBox.Show(Constants.PatternErrorMessage, Constants.InformativeMessage);
+				}
+			}
+			return backupDetailsModel;
 		}
 		#endregion
 	}

@@ -20,7 +20,7 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Create task scheduler for the backup files process.
-		public void CreateTaskScheduler(string backupName)
+		public void CreateTaskScheduler(string backupName, bool isStartedManually)
 		{
 			var jsonRequestModel = GetJsonInformation();
 			var changeSettingsModelItem = jsonRequestModel != null ? jsonRequestModel.ChangeSettingsModelList != null ? jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
@@ -41,12 +41,12 @@ namespace Sdl.Community.BackupService
 				}
 				if (changeSettingsModelItem.IsManuallyOptionChecked)
 				{
-					AddManuallyTimeScheduler(td, tr, backupName, changeSettingsModelItem.TrimmedBackupName);
+					AddManuallyTimeScheduler(td, tr, backupName, changeSettingsModelItem.TrimmedBackupName, isStartedManually);
 				}
 			}
 		}
-		
-		public void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName)
+
+		public void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName, bool isStartedManually)
 		{
 			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
 
@@ -54,6 +54,10 @@ namespace Sdl.Community.BackupService
 
 			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
 			tr.EndBoundary = DateTime.Now.AddMinutes(10);
+			if (!isStartedManually)
+			{
+				tr.Enabled = false;
+			}
 			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 			
@@ -63,7 +67,7 @@ namespace Sdl.Community.BackupService
 			using (TaskService ts = new TaskService())
 			{
 				td.Triggers.Add(trigger);
-
+				
 				td.Actions.Add(new ExecAction(Path.Combine(Constants.DeployPath, "Sdl.Community.BackupFiles.exe"), trimmedBackupName));
 
 				try
