@@ -22,6 +22,7 @@ using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
@@ -41,7 +42,6 @@ namespace Sdl.Community.AdaptiveMT
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
 
-		private Document ActiveDocument { get; set; }
 
 		private static EditorController GetEditorController()
 		{
@@ -50,16 +50,13 @@ namespace Sdl.Community.AdaptiveMT
 
 		protected override async void Execute()
 		{
-			var editorController = GetEditorController();
 			var projects = GetProjectsController().SelectedProjects;
 
 			var userCredentials = Helpers.Credentials.GetCredentials();
 			if (userCredentials != null)
 			{
 				var userDetails = await ApiClient.Login(userCredentials.Email, userCredentials.Password);
-
 				await ApiClient.OosSession(userCredentials, userDetails.Sid);
-
 				var providerUrl = string.Empty;
 
 				foreach (var project in projects)
@@ -74,52 +71,59 @@ namespace Sdl.Community.AdaptiveMT
 						{
 							providerExist = true;
 							providerUrl = HttpUtility.UrlDecode(HttpUtility.UrlDecode(entry.MainTranslationProvider.Uri.AbsoluteUri));
-							break; //for the moment we take only the first cloud provider
-
+							break; 
 						}
 					}
-
 					if (providerExist)
 					{
 						var files = project.GetTargetLanguageFiles();
 						var providersDetails = EngineDetails.GetDetailsFromEngineUrl(providerUrl);
-
-						foreach (var file in files)
+						using (var waitForm = new WaitForm())
 						{
-							var targetLanguage = file.Language.IsoAbbreviation;
-							var document = editorController.Open(file, EditingMode.Translation);
-							var segmentPairs = document.SegmentPairs.ToList();
-							var providerDetails = providersDetails.FirstOrDefault(t => t.TargetLang.Equals(targetLanguage));
-							if (providerDetails != null)
-							{
-								providerDetails.SourceLang = file.SourceFile.Language.IsoAbbreviation;
-
-								//Confirm each segment
-								foreach (var segmentPair in segmentPairs)
-								{
-									if (segmentPair.Target.ToString() != string.Empty)
-									{
-										var translateRequest = Helpers.Api.CreateTranslateRequest(segmentPair, providerDetails);
-										var translateResponse = await ApiClient.Translate(userDetails.Sid, translateRequest);
-
-										var feedbackRequest = Helpers.Api.CreateFeedbackRequest(translateResponse.Translation,segmentPair, providerDetails);
-										var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
-										if (feedbackReaponse.Success)
-										{
-											editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
-										}
-
-									}
-								}
-							}
-							MessageBox.Show( "File " +file.Name +" succesful processed", "Process successful", MessageBoxButtons.OK);
-							project.Save();
+							waitForm.Show();
+							await ProcessFiles(files, providersDetails, userDetails, project);
+							waitForm.Close();
 						}
-				
 					}
-
 				}
+			}
+		}
+
+		private async System.Threading.Tasks.Task ProcessFiles(ProjectFile[]files, List<EngineMappingDetails>
+			providersDetails, UserResponse userDetails, FileBasedProject project)
+		{
+			var editorController = GetEditorController();
+			foreach (var file in files)
+			{
+				var targetLanguage = file.Language.IsoAbbreviation;
+				var document = editorController.Open(file, EditingMode.Translation);
+				var segmentPairs = document.SegmentPairs.ToList();
+				var providerDetails = providersDetails.FirstOrDefault(t => t.TargetLang.Equals(targetLanguage));
+				if (providerDetails != null)
+				{
+					providerDetails.SourceLang = file.SourceFile.Language.IsoAbbreviation;
+
+					//Confirm each segment
+					foreach (var segmentPair in segmentPairs)
+					{
+						if (segmentPair.Target.ToString() != string.Empty)
+						{
+							var translateRequest = Helpers.Api.CreateTranslateRequest(segmentPair, providerDetails);
+							var translateResponse = await ApiClient.Translate(userDetails.Sid, translateRequest);
+
+							var feedbackRequest =
+								Helpers.Api.CreateFeedbackRequest(translateResponse.Translation, segmentPair, providerDetails);
+							var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
+							if (feedbackReaponse.Success)
+							{
+								editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+							}
+						}
+					}
+				}
+				project.Save();
 			}
 		}
 	}
 }
+
