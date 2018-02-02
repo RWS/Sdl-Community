@@ -1717,5 +1717,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		{
 			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
 		}
+
+		private void helpButton_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
+		}
+
+		private void listView_available_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			var isSelected = IsUniqueSelected();
+			if (isSelected)
+			{
+				_uniqueSegments = true;
+			}
+			MoveSelectedListViewItem(listView_available, listView_selected);
+			InvalidateIconsFilterEdited(tabPage_filters);
+		}
 	}
 }

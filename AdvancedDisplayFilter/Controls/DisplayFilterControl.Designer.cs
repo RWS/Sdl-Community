@@ -130,6 +130,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -364,6 +365,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_available.UseCompatibleStateImageBehavior = false;
 			this.listView_available.View = System.Windows.Forms.View.Details;
 			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.listView_available_SelectedIndexChanged);
+			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView_available_MouseDoubleClick);
 			this.listView_available.Resize += new System.EventHandler(this.listView_available_Resize);
 			// 
 			// columnHeader_filtersAvailable_name
@@ -746,7 +748,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             this.toolStripSeparator1,
             this.toolStripButton_saveFilter,
             this.toolStripButton_loadFilter,
-            this.reverseBtn});
+            this.reverseBtn,
+            this.helpButton});
 			resources.ApplyResources(this.toolStrip_filter, "toolStrip_filter");
 			this.toolStrip_filter.Name = "toolStrip_filter";
 			// 
@@ -850,6 +853,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+			// 
+			// helpButton
+			// 
+			resources.ApplyResources(this.helpButton, "helpButton");
+			this.helpButton.Name = "helpButton";
+			this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
 			// 
 			// DisplayFilterControl
 			// 
@@ -1004,5 +1013,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 		private CheckBox modifiedByCheck;
 		private TextBox createdByBox;
 		private CheckBox createdByCheck;
+		private ToolStripButton helpButton;
 	}
 }
