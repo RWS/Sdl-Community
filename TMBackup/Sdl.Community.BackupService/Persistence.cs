@@ -99,8 +99,11 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupItem in backupDetailsModelList)
 						{
-							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName))
-																				   .FirstOrDefault();
+							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)
+																						  && b.BackupAction.Equals(backupItem.BackupAction)
+																						  && b.BackupPattern.Equals(backupItem.BackupPattern)
+																						  && b.BackupType.Equals(backupItem.BackupType))
+																					.FirstOrDefault();															
 							if (existingBackupItem == null)
 							{
 								request.BackupDetailsModelList.Add(backupItem);
