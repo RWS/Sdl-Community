@@ -365,6 +365,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.listView_available.UseCompatibleStateImageBehavior = false;
 			this.listView_available.View = System.Windows.Forms.View.Details;
 			this.listView_available.SelectedIndexChanged += new System.EventHandler(this.listView_available_SelectedIndexChanged);
+			this.listView_available.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listView_available_MouseDoubleClick);
 			this.listView_available.Resize += new System.EventHandler(this.listView_available_Resize);
 			// 
 			// columnHeader_filtersAvailable_name
