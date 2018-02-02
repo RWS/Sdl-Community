@@ -300,144 +300,6 @@
   <data name="tabPage_segmentNumbers.AutoScroll" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
-  <data name="createdByBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 122</value>
-  </data>
-  <data name="createdByBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>235, 20</value>
-  </data>
-  <data name="createdByBox.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;createdByBox.Name" xml:space="preserve">
-    <value>createdByBox</value>
-  </data>
-  <data name="&gt;&gt;createdByBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;createdByBox.Parent" xml:space="preserve">
-    <value>userBox</value>
-  </data>
-  <data name="&gt;&gt;createdByBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="createdByCheck.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="createdByCheck.Location" type="System.Drawing.Point, System.Drawing">
-    <value>5, 98</value>
-  </data>
-  <data name="createdByCheck.Size" type="System.Drawing.Size, System.Drawing">
-    <value>77, 17</value>
-  </data>
-  <data name="createdByCheck.TabIndex" type="System.Int32, mscorlib">
-    <value>3</value>
-  </data>
-  <data name="createdByCheck.Text" xml:space="preserve">
-    <value>Created by</value>
-  </data>
-  <data name="&gt;&gt;createdByCheck.Name" xml:space="preserve">
-    <value>createdByCheck</value>
-  </data>
-  <data name="&gt;&gt;createdByCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;createdByCheck.Parent" xml:space="preserve">
-    <value>userBox</value>
-  </data>
-  <data name="&gt;&gt;createdByCheck.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="modifiedByBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
-    <value>Top, Left, Right</value>
-  </data>
-  <data name="modifiedByBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 71</value>
-  </data>
-  <data name="modifiedByBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 20</value>
-  </data>
-  <data name="modifiedByBox.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;modifiedByBox.Name" xml:space="preserve">
-    <value>modifiedByBox</value>
-  </data>
-  <data name="&gt;&gt;modifiedByBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;modifiedByBox.Parent" xml:space="preserve">
-    <value>userBox</value>
-  </data>
-  <data name="&gt;&gt;modifiedByBox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="modifiedByCheck.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="modifiedByCheck.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 47</value>
-  </data>
-  <data name="modifiedByCheck.Size" type="System.Drawing.Size, System.Drawing">
-    <value>80, 17</value>
-  </data>
-  <data name="modifiedByCheck.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="modifiedByCheck.Text" xml:space="preserve">
-    <value>Modified by</value>
-  </data>
-  <data name="&gt;&gt;modifiedByCheck.Name" xml:space="preserve">
-    <value>modifiedByCheck</value>
-  </data>
-  <data name="&gt;&gt;modifiedByCheck.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;modifiedByCheck.Parent" xml:space="preserve">
-    <value>userBox</value>
-  </data>
-  <data name="&gt;&gt;modifiedByCheck.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="userLabel.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="userLabel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>2, 20</value>
-  </data>
-  <data name="userLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>199, 13</value>
-  </data>
-  <data name="userLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="userLabel.Text" xml:space="preserve">
-    <value>Multiple users should be separated by "|"</value>
-  </data>
-  <data name="&gt;&gt;userLabel.Name" xml:space="preserve">
-    <value>userLabel</value>
-  </data>
-  <data name="&gt;&gt;userLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;userLabel.Parent" xml:space="preserve">
-    <value>userBox</value>
-  </data>
-  <data name="&gt;&gt;userLabel.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="userBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 325</value>
-  </data>
-  <data name="userBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 158</value>
-  </data>
-  <data name="userBox.TabIndex" type="System.Int32, mscorlib">
-    <value>14</value>
-  </data>
-  <data name="userBox.Text" xml:space="preserve">
-    <value>User options</value>
-  </data>
   <data name="&gt;&gt;userBox.Name" xml:space="preserve">
     <value>userBox</value>
   </data>
@@ -449,54 +311,6 @@
   </data>
   <data name="&gt;&gt;userBox.ZOrder" xml:space="preserve">
     <value>0</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Name" xml:space="preserve">
-    <value>fuzzyMin</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMin.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Name" xml:space="preserve">
-    <value>fuzzyMax</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;fuzzyMax.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;label5.Name" xml:space="preserve">
-    <value>label5</value>
-  </data>
-  <data name="&gt;&gt;label5.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
-    <value>groupBox2</value>
-  </data>
-  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 489</value>
-  </data>
-  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 65</value>
-  </data>
-  <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
-    <value>13</value>
-  </data>
-  <data name="groupBox2.Text" xml:space="preserve">
-    <value>Fuzzy values between</value>
   </data>
   <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
     <value>groupBox2</value>
@@ -510,93 +324,6 @@
   <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="&gt;&gt;containsTagsCheckBox.Name" xml:space="preserve">
-    <value>containsTagsCheckBox</value>
-  </data>
-  <data name="&gt;&gt;containsTagsCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;containsTagsCheckBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;containsTagsCheckBox.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
-    <value>mergedAcross</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
-    <value>mergedCheckbox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
-    <value>splitCheckBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Name" xml:space="preserve">
-    <value>sourceSameBox</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
-    <value>equalsCaseSensitive</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
-    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
-    <value>segmentsGroupBox</value>
-  </data>
-  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="segmentsGroupBox.Font" type="System.Drawing.Font, System.Drawing">
-    <value>Microsoft Sans Serif, 8.25pt</value>
-  </data>
-  <data name="segmentsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 165</value>
-  </data>
-  <data name="segmentsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 153</value>
-  </data>
-  <data name="segmentsGroupBox.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
-  </data>
-  <data name="segmentsGroupBox.Text" xml:space="preserve">
-    <value>Segments options</value>
-  </data>
   <data name="&gt;&gt;segmentsGroupBox.Name" xml:space="preserve">
     <value>segmentsGroupBox</value>
   </data>
@@ -608,21 +335,6 @@
   </data>
   <data name="&gt;&gt;segmentsGroupBox.ZOrder" xml:space="preserve">
     <value>2</value>
-  </data>
-  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>6, 104</value>
-  </data>
-  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>233, 13</value>
-  </data>
-  <data name="label1.TabIndex" type="System.Int32, mscorlib">
-    <value>2</value>
-  </data>
-  <data name="label1.Text" xml:space="preserve">
-    <value>Example of grouped list: 1-2, 17-45, 56, 100-150</value>
   </data>
   <data name="&gt;&gt;label1.Name" xml:space="preserve">
     <value>label1</value>
@@ -636,18 +348,6 @@
   <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 120</value>
-  </data>
-  <data name="segmentsBox.Multiline" type="System.Boolean, mscorlib">
-    <value>True</value>
-  </data>
-  <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>245, 39</value>
-  </data>
-  <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
   <data name="&gt;&gt;segmentsBox.Name" xml:space="preserve">
     <value>segmentsBox</value>
   </data>
@@ -659,54 +359,6 @@
   </data>
   <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
     <value>4</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Name" xml:space="preserve">
-    <value>groupedBtn</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;groupedBtn.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Name" xml:space="preserve">
-    <value>oddBtn</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;oddBtn.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Name" xml:space="preserve">
-    <value>evenBtn</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Type" xml:space="preserve">
-    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.Parent" xml:space="preserve">
-    <value>groupBox1</value>
-  </data>
-  <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 7</value>
-  </data>
-  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>246, 94</value>
-  </data>
-  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
-  <data name="groupBox1.Text" xml:space="preserve">
-    <value>Number options</value>
   </data>
   <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
     <value>groupBox1</value>
@@ -935,6 +587,164 @@
   <metadata name="toolStrip_filter.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <data name="toolStripButton_applyFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIxSURBVEhLvZTPa9NwGMajCA6cGygMBEH8D/wPKngQcV7c
+        QcOSromhWDc8bbYNZRkEWgubRZNVaT2NFtRKF0QUD9txVgvdGN3GDu4gQ/Tgehge7dbHvpG0+3brj20P
+        PNB83+f5vOQLKXdcOqFp2tVHo6O6z+fLKspQXhLFZckzVHS73SssY4YMsuigCwZYVSQJA35g4GcgEMin
+        0+k3hULB+LO9rZfLZa0ZI4sOumCABSbhOc7lcv2VJeF7sViMsQCtGAywwCR8dcGt/ps7MH/3zu+RkeFV
+        bXx8ITY5+SmRSMymUqnX2ezblGVZMzB+4wwzZJBFB12bU7PAIwhr9uCwDCbhOU7X9cs8z2+ygu0YLDAJ
+        X5WqqhdEcfAbq9CKwQCLsLUKh8PnO7kudMEgHFvRaPSsLMuLLMB+RgddwuyvysfSpSj3FlgglpFFh+rN
+        qVI45fV651hAp5FBlmqtqVI8Ofzg/jsWGMYMGYrXqNsUQj2muNxlypfoqLEUxfOlHo4zGu9RjylovdPu
+        HfiMKW7QcWP5x8ZC9QtwRuMaOeHNL/D7A4CqavBrLpebfplMWvrEhI/G/8WCN3VFWBA3jPf4M3uct14V
+        fm1MlUqlKzT+p7bhUCQSUQAXPhjzKPclpS1j6eN1GncGhzKZzI3PP9ZjTkjfC2kTkI7hUP0b2D79RNxy
+        PrcFh0LBoPA8Hp+tLHl4LaPNOKEdw1k6lGs5SPaSI4Hb6n3muX3uqXKRHhuI43YBrJSlnPo9eL4AAAAA
+        SUVORK5CYII=
+</value>
+  </data>
+  <data name="toolStripButton_applyFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="toolStripButton_applyFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 24</value>
+  </data>
+  <data name="toolStripButton_applyFilter.Text" xml:space="preserve">
+    <value>Apply Filter</value>
+  </data>
+  <data name="toolStripButton_applyFilter.ToolTipText" xml:space="preserve">
+    <value>Apply filter</value>
+  </data>
+  <data name="toolStripButton_clearFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIDSURBVEhLvZS9SwJxHMavCGppamoMGusPKArbMqvFhjry
+        5bRD0oqWyhfibjgUhMChzTF0KESlQYgICiWIwCCsppaICKJJGhrS7smvoNfvwjd64IHj9/0+n+fuxOP+
+        S12yLE/tbG0pbrc7KYr2a4fVeusQ7AWbzXbHMmbYwS4yyIIBVgVJwoBfWHj1+XzX8Xj8KJ/P738Ui0qp
+        VJIbMXaRQRYMsMAkPMcZDIYvp8PyVCgUIixAMwYDLDAJXymYn5stw/zS4vv6+tq9LEmXkb29k2g0morF
+        YofJZCKWTqcPYFzjDDPsYBcZZKucugLBYnmoDjplMAnPcYqiDPE8/8xabMVggUn4igKBwKDVuvzICjRj
+        MMAibL1CodBAO68LWTAIx1Y4HO53Op03LMBfRgZZwvwt9c/SJ4orlywQy9hFhuKNSQ30uFyuMxaw1tjB
+        LsWakxrsXvOsHrPAMGbYofXWJYrClRbu8XhOady+vNvbu9qCbDY7lTEae8+nx1Mwrmmd0zvXldfr9dXC
+        BcH2on53RgG4mJko/3h6LAMYjOvqOXYIo6+GCqikFg63VADncrlJ7d3+Mj0VYfTFKpAkaRMz3ZJG4ZC2
+        wGQyFYPB4AhmHSnY9fst6vf902w2v21suBMhWR7GuS686mZKWOrYj6ynugK6W+1TtVUAGABw7auoPzf2
+        fgPRE+H5g/q3NAAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="toolStripButton_clearFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="toolStripButton_clearFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 24</value>
+  </data>
+  <data name="toolStripButton_clearFilter.Text" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="toolStripButton_clearFilter.ToolTipText" xml:space="preserve">
+    <value>Clear filter</value>
+  </data>
+  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>6, 27</value>
+  </data>
+  <data name="toolStripButton_saveFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJLSURBVEhLzZTBa9NQHMfj5sGLJ087+pfUu6uXITPYdmkN
+        xW5jp812ZSytgWJhtIIg2DmH0goJo4sKxYkjQmWgoV3tqqHMouiGwhiI04MH+8y3fRndmo7UueEXvhDe
+        +/0+38d7eY85Lp0QBOHctfFxMRAIZHl+SPO63WUvN1TxeDxvrYw51KAWPegFA6wmkgoT7MDA11AopGUy
+        GblYLN76ubMj1ut1wY5Rix70ggEWmBTPMA6H47fP6/pUqVSSVoBuDAZYYFJ8M8DZf57A7KXB7dHRkXfC
+        9PRKcmZmKZVKLabTaSmbXUgrivIAxjfGMIca1KIHvSZnTwDncunmxL8ymBTPMKIonmVZdsOq8G8MFpgU
+        31Q4HO5zuy/XrBq6MRhgUexexWKxM4fZLvSCQXHWisfjp30+36oVwMoXnP0NcxxXRC/FHCzjspzi+Ssr
+        VsBoNJqvVquJqq4ncrncPfyahJCLhntouz0ZISf9fv/yfjiAcr5WkF/WCrqurxq/7ZokSWqrNU2bv/mo
+        PJtQ3tyVZbmXIttlhPSMDF99bAZg5YA7rz8l4fuviaqqJBKJtBnjmEcdQiius3iee4V9xurvPFn7YAYc
+        JDPghlRQKaazghMTU0cbEAyGjj3Ak1BJ4f0WKX/cbjPGMX+oALv+/wOWS5t01wmpffne2KLPWz/I8O28
+        /YCpyUmX8b7/MgLGkkqp1BoAoCnzYB++WO/ukFuFhiMNwM3sFDC7pDfAz0sbuwG2bnKr8LagCSuD1ze/
+        zeFs9nvumb7YfIvk3j9VFACz3+TiJQAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="toolStripButton_saveFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="toolStripButton_saveFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 24</value>
+  </data>
+  <data name="toolStripButton_saveFilter.Text" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="toolStripButton_saveFilter.ToolTipText" xml:space="preserve">
+    <value>Save filter settings</value>
+  </data>
+  <data name="toolStripButton_loadFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI4SURBVEhLvZTPS5NxHMefokMXT52kDvUPCJ06zouH3FY6
+        D+vBPXNbD6Olt3SbQ/bd40ODgbCht0EQsglGzFG6ZxESXYQYLIhVB1FRFGRrgkhFh2bP230Hjw/fDZ89
+        0hve8PD9fN6vNzy/uP+lK4SQ/uDkpBwIBHKiOFbyCsIXr2es4na7v7KMGXawiwyyYIDVRFJhwI+MHIbD
+        4VI2m31VLpcXfp6cyI1Gg1zE2EUGWTDAApPiOc5isfz1eV17lUolyQIYMRhggUnxzQK7zXoK84+c9YmJ
+        8W8kGt1Izs29S6fTK5lMZjmXe53J5/OLMK5xhhl2sIsMsi3OuQKPy/W9Nbgsg0nxHCfL8h2e5/dZi90Y
+        LDApvqlIJNIrCKNbrIARgwEWxZ5XPB6/YeZ2IQsGxbGVSCR6fD7fZxagk5FBlmI6S/1Yrovi4w0WiGXs
+        IkPjF5MauOb3+9dZQK2xg10aMyY1eHX86ZM3LDCMGXboevcSRc8nPRxndGxeoampGX0BzujYvEKhUFhf
+        IMdiAcyskbc3rVJxySYV31slZd1NXvadhYxIXyAIwkG1Wr07TAq3BqXVTfts8RRWS6I0YkzaAqfT+aNe
+        rz9fK+0OaOH3ydq2LVYgej+QVu9RTHtpC+aTSaV6/Ds+JBd2W/BORgnFtJe2IJVKFQ6PfkXts5dYMDM9
+        7VL/738cDkctGHz2olar9Twkym314e60QKZuUTvpS7p+yJ2EkkFJWbFJyke7VPzQ1WtqThz3D8+GvIYb
+        niVWAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="toolStripButton_loadFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="toolStripButton_loadFilter.Size" type="System.Drawing.Size, System.Drawing">
+    <value>57, 24</value>
+  </data>
+  <data name="toolStripButton_loadFilter.Text" xml:space="preserve">
+    <value>Load</value>
+  </data>
+  <data name="toolStripButton_loadFilter.ToolTipText" xml:space="preserve">
+    <value>Load filter settings</value>
+  </data>
+  <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMdfRXCgbqCgCIL4H/gnDHQbol7c
+        YQsmXRNDsW542mwbyjIItCtsK5qsSutptOCsdEFE8aDHWS1UGVXx4A4yRA+uh+Fxnf26J5J2b2d/TD/w
+        heZ9nu/npYGW/S/26bree2t83PD7/TlVHSnIkrQie0dKHo/nPS+YYQe76KALB1zbSgIDYXDwWzAYLGQy
+        mYfFYtH8ubFhVCoVvZlgFx104YALTtIz1t93flORxS+lUinOE7QSOOCCk/SMDfT3bV6+dHELEYaHfoyN
+        jX7QJyeX4zMzz5PJ5FI6nV7M5R6lbdteQPAZZ5hhB7vooOt44CQ9Y15R/OgM9ipwkp4xwzDOCIKwxlts
+        J3DBSfptNE07KUlXP/MKrQQOuEhbSyQSOdbJ60IXDtLxicViRxRFecsT7BZ00CXN7lR/LF2qem2ZJ+IF
+        u+hQvTmqhQM+n+8FT+gOdrBLtdaoFveP3rj+mCdGMMMOrddw2BLD3Za00mUpp+moMarqfV0vxxmNd9Bt
+        iXrPvGcLOWRJq3TcmMDERLj+ApzRuAa3vPkLAoEgpJoWepPP5+fvp1K2MTXlp/EfePKmXhEuSJjmE/yZ
+        TRfsB8Xvq7PlcvksjX/TthxEo1EVcvGp+RLlEyl53Xz3bIDGnclBNpu98Orrp7hbcvyevAZJx3JQ/w2c
+        HJyT1t3PbclBOBQS7yYSS9VLbp7L6gtuacdyHnvyWv6Gc8k/kTv03PFeOXpbPUWPDWDsF/6Epes0jK6d
+        AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="reverseBtn.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="reverseBtn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 24</value>
+  </data>
+  <data name="reverseBtn.Text" xml:space="preserve">
+    <value>Reverse Filter</value>
+  </data>
+  <data name="helpButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADpSURBVDhPpZGxCkVQGMfvMylls3oBs8UDGIgyk9FskUgG
+        ZVNegFdQymA0GZn+N6evdC+HW/e3fKdf5/zK54U/uQ1s20YnPqfAOI4QBAGKokDXdWiaBkmSsCwL3fjk
+        FKjrGrIsw/M8hGEIx3GYF0WRzW9+2oHv+yjLEn3fkzl4DOx7SJIEQRBgXVeyB48B0zTZQ9u2yXxyG4jj
+        GNM0wXVdMme4gf1vDMOAKIrIXMMN5HnOZlEUbPLgBtI0RdM0aNuWzDWPS3yCG6iqCoZhoOs6MtdwA5Zl
+        QVVVZFlG5prbT5jnmU58/twB8AYpk8yRJaZgPgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="helpButton.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+    <value>Magenta</value>
+  </data>
+  <data name="helpButton.Size" type="System.Drawing.Size, System.Drawing">
+    <value>76, 24</value>
+  </data>
+  <data name="helpButton.Text" xml:space="preserve">
+    <value>Help me</value>
+  </data>
   <data name="toolStrip_filter.Location" type="System.Drawing.Point, System.Drawing">
     <value>1, 0</value>
   </data>
@@ -2630,6 +2440,276 @@
   <data name="&gt;&gt;label_contextInfoSelected.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
+  <data name="&gt;&gt;createdByBox.Name" xml:space="preserve">
+    <value>createdByBox</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Name" xml:space="preserve">
+    <value>createdByCheck</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Name" xml:space="preserve">
+    <value>modifiedByBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Name" xml:space="preserve">
+    <value>modifiedByCheck</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Name" xml:space="preserve">
+    <value>userLabel</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;userLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="userBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 325</value>
+  </data>
+  <data name="userBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 158</value>
+  </data>
+  <data name="userBox.TabIndex" type="System.Int32, mscorlib">
+    <value>14</value>
+  </data>
+  <data name="userBox.Text" xml:space="preserve">
+    <value>User options</value>
+  </data>
+  <data name="&gt;&gt;userBox.Name" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;userBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;userBox.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;userBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="createdByBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 122</value>
+  </data>
+  <data name="createdByBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>235, 20</value>
+  </data>
+  <data name="createdByBox.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.Name" xml:space="preserve">
+    <value>createdByBox</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;createdByBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="createdByCheck.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="createdByCheck.Location" type="System.Drawing.Point, System.Drawing">
+    <value>5, 98</value>
+  </data>
+  <data name="createdByCheck.Size" type="System.Drawing.Size, System.Drawing">
+    <value>77, 17</value>
+  </data>
+  <data name="createdByCheck.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="createdByCheck.Text" xml:space="preserve">
+    <value>Created by</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Name" xml:space="preserve">
+    <value>createdByCheck</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;createdByCheck.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="modifiedByBox.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="modifiedByBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 71</value>
+  </data>
+  <data name="modifiedByBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>233, 20</value>
+  </data>
+  <data name="modifiedByBox.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Name" xml:space="preserve">
+    <value>modifiedByBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByBox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="modifiedByCheck.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="modifiedByCheck.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 47</value>
+  </data>
+  <data name="modifiedByCheck.Size" type="System.Drawing.Size, System.Drawing">
+    <value>80, 17</value>
+  </data>
+  <data name="modifiedByCheck.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="modifiedByCheck.Text" xml:space="preserve">
+    <value>Modified by</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Name" xml:space="preserve">
+    <value>modifiedByCheck</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;modifiedByCheck.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="userLabel.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="userLabel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>2, 20</value>
+  </data>
+  <data name="userLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>199, 13</value>
+  </data>
+  <data name="userLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="userLabel.Text" xml:space="preserve">
+    <value>Multiple users should be separated by "|"</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Name" xml:space="preserve">
+    <value>userLabel</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;userLabel.Parent" xml:space="preserve">
+    <value>userBox</value>
+  </data>
+  <data name="&gt;&gt;userLabel.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMin.Name" xml:space="preserve">
+    <value>fuzzyMin</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMin.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMin.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMin.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMax.Name" xml:space="preserve">
+    <value>fuzzyMax</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMax.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMax.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;fuzzyMax.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;label5.Name" xml:space="preserve">
+    <value>label5</value>
+  </data>
+  <data name="&gt;&gt;label5.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label5.Parent" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="groupBox2.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 489</value>
+  </data>
+  <data name="groupBox2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 65</value>
+  </data>
+  <data name="groupBox2.TabIndex" type="System.Int32, mscorlib">
+    <value>13</value>
+  </data>
+  <data name="groupBox2.Text" xml:space="preserve">
+    <value>Fuzzy values between</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Name" xml:space="preserve">
+    <value>groupBox2</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;groupBox2.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="fuzzyMin.Location" type="System.Drawing.Point, System.Drawing">
     <value>5, 20</value>
   </data>
@@ -2700,6 +2780,105 @@
     <value>groupBox2</value>
   </data>
   <data name="&gt;&gt;label5.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;containsTagsCheckBox.Name" xml:space="preserve">
+    <value>containsTagsCheckBox</value>
+  </data>
+  <data name="&gt;&gt;containsTagsCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;containsTagsCheckBox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;containsTagsCheckBox.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;mergedAcross.Name" xml:space="preserve">
+    <value>mergedAcross</value>
+  </data>
+  <data name="&gt;&gt;mergedAcross.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mergedAcross.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;mergedAcross.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Name" xml:space="preserve">
+    <value>mergedCheckbox</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;mergedCheckbox.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Name" xml:space="preserve">
+    <value>splitCheckBox</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;splitCheckBox.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;sourceSameBox.Name" xml:space="preserve">
+    <value>sourceSameBox</value>
+  </data>
+  <data name="&gt;&gt;sourceSameBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;sourceSameBox.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;sourceSameBox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Name" xml:space="preserve">
+    <value>equalsCaseSensitive</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.Parent" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="segmentsGroupBox.Font" type="System.Drawing.Font, System.Drawing">
+    <value>Microsoft Sans Serif, 8.25pt</value>
+  </data>
+  <data name="segmentsGroupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 165</value>
+  </data>
+  <data name="segmentsGroupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 153</value>
+  </data>
+  <data name="segmentsGroupBox.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="segmentsGroupBox.Text" xml:space="preserve">
+    <value>Segments options</value>
+  </data>
+  <data name="&gt;&gt;segmentsGroupBox.Name" xml:space="preserve">
+    <value>segmentsGroupBox</value>
+  </data>
+  <data name="&gt;&gt;segmentsGroupBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;segmentsGroupBox.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;segmentsGroupBox.ZOrder" xml:space="preserve">
     <value>2</value>
   </data>
   <data name="containsTagsCheckBox.AutoSize" type="System.Boolean, mscorlib">
@@ -2862,6 +3041,117 @@
     <value>segmentsGroupBox</value>
   </data>
   <data name="&gt;&gt;equalsCaseSensitive.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="label1.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="label1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 104</value>
+  </data>
+  <data name="label1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>233, 13</value>
+  </data>
+  <data name="label1.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="label1.Text" xml:space="preserve">
+    <value>Example of grouped list: 1-2, 17-45, 56, 100-150</value>
+  </data>
+  <data name="&gt;&gt;label1.Name" xml:space="preserve">
+    <value>label1</value>
+  </data>
+  <data name="&gt;&gt;label1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;label1.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;label1.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="segmentsBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 120</value>
+  </data>
+  <data name="segmentsBox.Multiline" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="segmentsBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>245, 39</value>
+  </data>
+  <data name="segmentsBox.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;segmentsBox.Name" xml:space="preserve">
+    <value>segmentsBox</value>
+  </data>
+  <data name="&gt;&gt;segmentsBox.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;segmentsBox.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;segmentsBox.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Name" xml:space="preserve">
+    <value>groupedBtn</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupedBtn.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Name" xml:space="preserve">
+    <value>oddBtn</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;oddBtn.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Name" xml:space="preserve">
+    <value>evenBtn</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Type" xml:space="preserve">
+    <value>System.Windows.Forms.RadioButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.Parent" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;evenBtn.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="groupBox1.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 7</value>
+  </data>
+  <data name="groupBox1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>246, 94</value>
+  </data>
+  <data name="groupBox1.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="groupBox1.Text" xml:space="preserve">
+    <value>Number options</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Name" xml:space="preserve">
+    <value>groupBox1</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.Parent" xml:space="preserve">
+    <value>tabPage_segmentNumbers</value>
+  </data>
+  <data name="&gt;&gt;groupBox1.ZOrder" xml:space="preserve">
     <value>5</value>
   </data>
   <data name="groupedBtn.AutoSize" type="System.Boolean, mscorlib">
@@ -3052,145 +3342,6 @@
   </data>
   <data name="&gt;&gt;colorsListView.ZOrder" xml:space="preserve">
     <value>1</value>
-  </data>
-  <data name="toolStripButton_applyFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIxSURBVEhLvZTPa9NwGMajCA6cGygMBEH8D/wPKngQcV7c
-        QcOSromhWDc8bbYNZRkEWgubRZNVaT2NFtRKF0QUD9txVgvdGN3GDu4gQ/Tgehge7dbHvpG0+3brj20P
-        PNB83+f5vOQLKXdcOqFp2tVHo6O6z+fLKspQXhLFZckzVHS73SssY4YMsuigCwZYVSQJA35g4GcgEMin
-        0+k3hULB+LO9rZfLZa0ZI4sOumCABSbhOc7lcv2VJeF7sViMsQCtGAywwCR8dcGt/ps7MH/3zu+RkeFV
-        bXx8ITY5+SmRSMymUqnX2ezblGVZMzB+4wwzZJBFB12bU7PAIwhr9uCwDCbhOU7X9cs8z2+ygu0YLDAJ
-        X5WqqhdEcfAbq9CKwQCLsLUKh8PnO7kudMEgHFvRaPSsLMuLLMB+RgddwuyvysfSpSj3FlgglpFFh+rN
-        qVI45fV651hAp5FBlmqtqVI8Ofzg/jsWGMYMGYrXqNsUQj2muNxlypfoqLEUxfOlHo4zGu9RjylovdPu
-        HfiMKW7QcWP5x8ZC9QtwRuMaOeHNL/D7A4CqavBrLpebfplMWvrEhI/G/8WCN3VFWBA3jPf4M3uct14V
-        fm1MlUqlKzT+p7bhUCQSUQAXPhjzKPclpS1j6eN1GncGhzKZzI3PP9ZjTkjfC2kTkI7hUP0b2D79RNxy
-        PrcFh0LBoPA8Hp+tLHl4LaPNOKEdw1k6lGs5SPaSI4Hb6n3muX3uqXKRHhuI43YBrJSlnPo9eL4AAAAA
-        SUVORK5CYII=
-</value>
-  </data>
-  <data name="toolStripButton_applyFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripButton_applyFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>91, 24</value>
-  </data>
-  <data name="toolStripButton_applyFilter.Text" xml:space="preserve">
-    <value>Apply Filter</value>
-  </data>
-  <data name="toolStripButton_applyFilter.ToolTipText" xml:space="preserve">
-    <value>Apply filter</value>
-  </data>
-  <data name="toolStripButton_clearFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIDSURBVEhLvZS9SwJxHMavCGppamoMGusPKArbMqvFhjry
-        5bRD0oqWyhfibjgUhMChzTF0KESlQYgICiWIwCCsppaICKJJGhrS7smvoNfvwjd64IHj9/0+n+fuxOP+
-        S12yLE/tbG0pbrc7KYr2a4fVeusQ7AWbzXbHMmbYwS4yyIIBVgVJwoBfWHj1+XzX8Xj8KJ/P738Ui0qp
-        VJIbMXaRQRYMsMAkPMcZDIYvp8PyVCgUIixAMwYDLDAJXymYn5stw/zS4vv6+tq9LEmXkb29k2g0morF
-        YofJZCKWTqcPYFzjDDPsYBcZZKucugLBYnmoDjplMAnPcYqiDPE8/8xabMVggUn4igKBwKDVuvzICjRj
-        MMAibL1CodBAO68LWTAIx1Y4HO53Op03LMBfRgZZwvwt9c/SJ4orlywQy9hFhuKNSQ30uFyuMxaw1tjB
-        LsWakxrsXvOsHrPAMGbYofXWJYrClRbu8XhOady+vNvbu9qCbDY7lTEae8+nx1Mwrmmd0zvXldfr9dXC
-        BcH2on53RgG4mJko/3h6LAMYjOvqOXYIo6+GCqikFg63VADncrlJ7d3+Mj0VYfTFKpAkaRMz3ZJG4ZC2
-        wGQyFYPB4AhmHSnY9fst6vf902w2v21suBMhWR7GuS686mZKWOrYj6ynugK6W+1TtVUAGABw7auoPzf2
-        fgPRE+H5g/q3NAAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="toolStripButton_clearFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripButton_clearFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 24</value>
-  </data>
-  <data name="toolStripButton_clearFilter.Text" xml:space="preserve">
-    <value>Clear</value>
-  </data>
-  <data name="toolStripButton_clearFilter.ToolTipText" xml:space="preserve">
-    <value>Clear filter</value>
-  </data>
-  <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>6, 27</value>
-  </data>
-  <data name="toolStripButton_saveFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAJLSURBVEhLzZTBa9NQHMfj5sGLJ087+pfUu6uXITPYdmkN
-        xW5jp812ZSytgWJhtIIg2DmH0goJo4sKxYkjQmWgoV3tqqHMouiGwhiI04MH+8y3fRndmo7UueEXvhDe
-        +/0+38d7eY85Lp0QBOHctfFxMRAIZHl+SPO63WUvN1TxeDxvrYw51KAWPegFA6wmkgoT7MDA11AopGUy
-        GblYLN76ubMj1ut1wY5Rix70ggEWmBTPMA6H47fP6/pUqVSSVoBuDAZYYFJ8M8DZf57A7KXB7dHRkXfC
-        9PRKcmZmKZVKLabTaSmbXUgrivIAxjfGMIca1KIHvSZnTwDncunmxL8ymBTPMKIonmVZdsOq8G8MFpgU
-        31Q4HO5zuy/XrBq6MRhgUexexWKxM4fZLvSCQXHWisfjp30+36oVwMoXnP0NcxxXRC/FHCzjspzi+Ssr
-        VsBoNJqvVquJqq4ncrncPfyahJCLhntouz0ZISf9fv/yfjiAcr5WkF/WCrqurxq/7ZokSWqrNU2bv/mo
-        PJtQ3tyVZbmXIttlhPSMDF99bAZg5YA7rz8l4fuviaqqJBKJtBnjmEcdQiius3iee4V9xurvPFn7YAYc
-        JDPghlRQKaazghMTU0cbEAyGjj3Ak1BJ4f0WKX/cbjPGMX+oALv+/wOWS5t01wmpffne2KLPWz/I8O28
-        /YCpyUmX8b7/MgLGkkqp1BoAoCnzYB++WO/ukFuFhiMNwM3sFDC7pDfAz0sbuwG2bnKr8LagCSuD1ze/
-        zeFs9nvumb7YfIvk3j9VFACz3+TiJQAAAABJRU5ErkJggg==
-</value>
-  </data>
-  <data name="toolStripButton_saveFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripButton_saveFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>55, 24</value>
-  </data>
-  <data name="toolStripButton_saveFilter.Text" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="toolStripButton_saveFilter.ToolTipText" xml:space="preserve">
-    <value>Save filter settings</value>
-  </data>
-  <data name="toolStripButton_loadFilter.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI4SURBVEhLvZTPS5NxHMefokMXT52kDvUPCJ06zouH3FY6
-        D+vBPXNbD6Olt3SbQ/bd40ODgbCht0EQsglGzFG6ZxESXYQYLIhVB1FRFGRrgkhFh2bP230Hjw/fDZ89
-        0hve8PD9fN6vNzy/uP+lK4SQ/uDkpBwIBHKiOFbyCsIXr2es4na7v7KMGXawiwyyYIDVRFJhwI+MHIbD
-        4VI2m31VLpcXfp6cyI1Gg1zE2EUGWTDAApPiOc5isfz1eV17lUolyQIYMRhggUnxzQK7zXoK84+c9YmJ
-        8W8kGt1Izs29S6fTK5lMZjmXe53J5/OLMK5xhhl2sIsMsi3OuQKPy/W9Nbgsg0nxHCfL8h2e5/dZi90Y
-        LDApvqlIJNIrCKNbrIARgwEWxZ5XPB6/YeZ2IQsGxbGVSCR6fD7fZxagk5FBlmI6S/1Yrovi4w0WiGXs
-        IkPjF5MauOb3+9dZQK2xg10aMyY1eHX86ZM3LDCMGXboevcSRc8nPRxndGxeoampGX0BzujYvEKhUFhf
-        IMdiAcyskbc3rVJxySYV31slZd1NXvadhYxIXyAIwkG1Wr07TAq3BqXVTfts8RRWS6I0YkzaAqfT+aNe
-        rz9fK+0OaOH3ydq2LVYgej+QVu9RTHtpC+aTSaV6/Ds+JBd2W/BORgnFtJe2IJVKFQ6PfkXts5dYMDM9
-        7VL/738cDkctGHz2olar9Twkym314e60QKZuUTvpS7p+yJ2EkkFJWbFJyke7VPzQ1WtqThz3D8+GvIYb
-        niVWAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="toolStripButton_loadFilter.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="toolStripButton_loadFilter.Size" type="System.Drawing.Size, System.Drawing">
-    <value>57, 24</value>
-  </data>
-  <data name="toolStripButton_loadFilter.Text" xml:space="preserve">
-    <value>Load</value>
-  </data>
-  <data name="toolStripButton_loadFilter.ToolTipText" xml:space="preserve">
-    <value>Load filter settings</value>
-  </data>
-  <data name="reverseBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAI1SURBVEhLvZTPa9NgGMdfRXCgbqCgCIL4H/gnDHQbol7c
-        YQsmXRNDsW542mwbyjIItCtsK5qsSutptOCsdEFE8aDHWS1UGVXx4A4yRA+uh+Fxnf26J5J2b2d/TD/w
-        heZ9nu/npYGW/S/26bree2t83PD7/TlVHSnIkrQie0dKHo/nPS+YYQe76KALB1zbSgIDYXDwWzAYLGQy
-        mYfFYtH8ubFhVCoVvZlgFx104YALTtIz1t93flORxS+lUinOE7QSOOCCk/SMDfT3bV6+dHELEYaHfoyN
-        jX7QJyeX4zMzz5PJ5FI6nV7M5R6lbdteQPAZZ5hhB7vooOt44CQ9Y15R/OgM9ipwkp4xwzDOCIKwxlts
-        J3DBSfptNE07KUlXP/MKrQQOuEhbSyQSOdbJ60IXDtLxicViRxRFecsT7BZ00CXN7lR/LF2qem2ZJ+IF
-        u+hQvTmqhQM+n+8FT+gOdrBLtdaoFveP3rj+mCdGMMMOrddw2BLD3Za00mUpp+moMarqfV0vxxmNd9Bt
-        iXrPvGcLOWRJq3TcmMDERLj+ApzRuAa3vPkLAoEgpJoWepPP5+fvp1K2MTXlp/EfePKmXhEuSJjmE/yZ
-        TRfsB8Xvq7PlcvksjX/TthxEo1EVcvGp+RLlEyl53Xz3bIDGnclBNpu98Orrp7hbcvyevAZJx3JQ/w2c
-        HJyT1t3PbclBOBQS7yYSS9VLbp7L6gtuacdyHnvyWv6Gc8k/kTv03PFeOXpbPUWPDWDsF/6Epes0jK6d
-        AAAAAElFTkSuQmCC
-</value>
-  </data>
-  <data name="reverseBtn.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
-    <value>Magenta</value>
-  </data>
-  <data name="reverseBtn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>100, 24</value>
-  </data>
-  <data name="reverseBtn.Text" xml:space="preserve">
-    <value>Reverse Filter</value>
   </data>
   <data name="filterExpressionControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
@@ -3567,6 +3718,12 @@
   </data>
   <data name="&gt;&gt;backgroundWorker1.Type" xml:space="preserve">
     <value>System.ComponentModel.BackgroundWorker, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;helpButton.Name" xml:space="preserve">
+    <value>helpButton</value>
+  </data>
+  <data name="&gt;&gt;helpButton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>DisplayFilterControl</value>
