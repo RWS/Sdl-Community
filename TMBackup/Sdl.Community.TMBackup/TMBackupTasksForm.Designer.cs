@@ -35,15 +35,18 @@
             this.createNewBackupAction = new System.Windows.Forms.ToolStripMenuItem();
             this.readMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.TaskNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.LastRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.NextRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IntervalCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_Refresh = new System.Windows.Forms.Button();
             this.btn_RunTasks = new System.Windows.Forms.Button();
+            this.toolTip_RunDisableTasks = new System.Windows.Forms.ToolTip(this.components);
+            this.btn_RunManuallyTasks = new System.Windows.Forms.Button();
+            this.TaskNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TaskRunType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.LastRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.NextRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IntervalCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -90,6 +93,7 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.TaskNameCol,
+            this.TaskRunType,
             this.Status,
             this.LastRunCol,
             this.NextRunCol,
@@ -100,48 +104,6 @@
             this.dataGridView1.TabIndex = 1;
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseUp);
-            // 
-            // TaskNameCol
-            // 
-            this.TaskNameCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.TaskNameCol.DataPropertyName = "TaskName";
-            this.TaskNameCol.HeaderText = "Task name";
-            this.TaskNameCol.Name = "TaskNameCol";
-            this.TaskNameCol.ReadOnly = true;
-            this.TaskNameCol.Width = 85;
-            // 
-            // Status
-            // 
-            this.Status.DataPropertyName = "Status";
-            this.Status.HeaderText = "Status";
-            this.Status.Name = "Status";
-            this.Status.ReadOnly = true;
-            // 
-            // LastRunCol
-            // 
-            this.LastRunCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.LastRunCol.DataPropertyName = "LastRun";
-            this.LastRunCol.HeaderText = "Last run";
-            this.LastRunCol.Name = "LastRunCol";
-            this.LastRunCol.ReadOnly = true;
-            this.LastRunCol.Width = 70;
-            // 
-            // NextRunCol
-            // 
-            this.NextRunCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
-            this.NextRunCol.DataPropertyName = "NextRun";
-            this.NextRunCol.HeaderText = "Next run";
-            this.NextRunCol.Name = "NextRunCol";
-            this.NextRunCol.ReadOnly = true;
-            this.NextRunCol.Width = 72;
-            // 
-            // IntervalCol
-            // 
-            this.IntervalCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.IntervalCol.DataPropertyName = "Interval";
-            this.IntervalCol.HeaderText = "Interval";
-            this.IntervalCol.Name = "IntervalCol";
-            this.IntervalCol.ReadOnly = true;
             // 
             // contextMenuStrip1
             // 
@@ -176,14 +138,79 @@
             this.btn_RunTasks.Name = "btn_RunTasks";
             this.btn_RunTasks.Size = new System.Drawing.Size(33, 27);
             this.btn_RunTasks.TabIndex = 3;
+            this.toolTip_RunDisableTasks.SetToolTip(this.btn_RunTasks, "Run all tasks");
             this.btn_RunTasks.UseVisualStyleBackColor = false;
             this.btn_RunTasks.Click += new System.EventHandler(this.btn_RunTasks_Click);
+            // 
+            // btn_RunManuallyTasks
+            // 
+            this.btn_RunManuallyTasks.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.btn_RunManuallyTasks.Image = ((System.Drawing.Image)(resources.GetObject("btn_RunManuallyTasks.Image")));
+            this.btn_RunManuallyTasks.Location = new System.Drawing.Point(678, 0);
+            this.btn_RunManuallyTasks.Name = "btn_RunManuallyTasks";
+            this.btn_RunManuallyTasks.Size = new System.Drawing.Size(33, 27);
+            this.btn_RunManuallyTasks.TabIndex = 4;
+            this.toolTip_RunDisableTasks.SetToolTip(this.btn_RunManuallyTasks, "Start tasks manually");
+            this.btn_RunManuallyTasks.UseVisualStyleBackColor = false;
+            this.btn_RunManuallyTasks.Click += new System.EventHandler(this.btn_RunManuallyTasks_Click);
+            // 
+            // TaskNameCol
+            // 
+            this.TaskNameCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.TaskNameCol.DataPropertyName = "TaskName";
+            this.TaskNameCol.HeaderText = "Task name";
+            this.TaskNameCol.Name = "TaskNameCol";
+            this.TaskNameCol.ReadOnly = true;
+            this.TaskNameCol.Width = 85;
+            // 
+            // TaskRunType
+            // 
+            this.TaskRunType.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.TaskRunType.DataPropertyName = "TaskRunType";
+            this.TaskRunType.HeaderText = "Task run type";
+            this.TaskRunType.Name = "TaskRunType";
+            this.TaskRunType.ReadOnly = true;
+            this.TaskRunType.Width = 97;
+            // 
+            // Status
+            // 
+            this.Status.DataPropertyName = "Status";
+            this.Status.HeaderText = "Status";
+            this.Status.Name = "Status";
+            this.Status.ReadOnly = true;
+            // 
+            // LastRunCol
+            // 
+            this.LastRunCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.LastRunCol.DataPropertyName = "LastRun";
+            this.LastRunCol.HeaderText = "Last run";
+            this.LastRunCol.Name = "LastRunCol";
+            this.LastRunCol.ReadOnly = true;
+            this.LastRunCol.Width = 70;
+            // 
+            // NextRunCol
+            // 
+            this.NextRunCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCells;
+            this.NextRunCol.DataPropertyName = "NextRun";
+            this.NextRunCol.HeaderText = "Next run";
+            this.NextRunCol.Name = "NextRunCol";
+            this.NextRunCol.ReadOnly = true;
+            this.NextRunCol.Width = 72;
+            // 
+            // IntervalCol
+            // 
+            this.IntervalCol.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.IntervalCol.DataPropertyName = "Interval";
+            this.IntervalCol.HeaderText = "Interval";
+            this.IntervalCol.Name = "IntervalCol";
+            this.IntervalCol.ReadOnly = true;
             // 
             // TMBackupTasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(819, 377);
+            this.Controls.Add(this.btn_RunManuallyTasks);
             this.Controls.Add(this.btn_RunTasks);
             this.Controls.Add(this.btn_Refresh);
             this.Controls.Add(this.dataGridView1);
@@ -211,12 +238,15 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+		private System.Windows.Forms.Button btn_Refresh;
+		private System.Windows.Forms.Button btn_RunTasks;
+		private System.Windows.Forms.ToolTip toolTip_RunDisableTasks;
+		private System.Windows.Forms.Button btn_RunManuallyTasks;
 		private System.Windows.Forms.DataGridViewTextBoxColumn TaskNameCol;
+		private System.Windows.Forms.DataGridViewTextBoxColumn TaskRunType;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Status;
 		private System.Windows.Forms.DataGridViewTextBoxColumn LastRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NextRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn IntervalCol;
-		private System.Windows.Forms.Button btn_Refresh;
-		private System.Windows.Forms.Button btn_RunTasks;
 	}
 }

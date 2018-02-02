@@ -121,9 +121,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(409, 97);
             this.dataGridView1.TabIndex = 17;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
-            this.dataGridView1.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.dataGridView1_CellValidating_1);
-            this.dataGridView1.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellValueChanged);
-            this.dataGridView1.RowValidating += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridView1_RowValidating);
             // 
             // backupActionDataGridViewTextBoxColumn
             // 
@@ -131,7 +128,7 @@
             this.backupActionDataGridViewTextBoxColumn.DataPropertyName = "BackupAction";
             this.backupActionDataGridViewTextBoxColumn.HeaderText = "Action name";
             this.backupActionDataGridViewTextBoxColumn.Name = "backupActionDataGridViewTextBoxColumn";
-            this.backupActionDataGridViewTextBoxColumn.Width = 91;
+            this.backupActionDataGridViewTextBoxColumn.Width = 84;
             // 
             // backupTypeDataGridViewTextBoxColumn
             // 
@@ -139,7 +136,7 @@
             this.backupTypeDataGridViewTextBoxColumn.DataPropertyName = "BackupType";
             this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type of file";
             this.backupTypeDataGridViewTextBoxColumn.Name = "backupTypeDataGridViewTextBoxColumn";
-            this.backupTypeDataGridViewTextBoxColumn.Width = 84;
+            this.backupTypeDataGridViewTextBoxColumn.Width = 66;
             // 
             // backupPatternDataGridViewTextBoxColumn
             // 

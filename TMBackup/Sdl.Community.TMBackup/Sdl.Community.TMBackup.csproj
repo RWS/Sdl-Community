@@ -150,6 +150,7 @@
   <ItemGroup>
     <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
     <Content Include="Resources\Run.png" />
+    <Content Include="Resources\runManually.png" />
     <Content Include="Resources\TMBackup_icon.ico" />
     <EmbeddedResource Include="TMBackupTasksForm.resx">
       <DependentUpon>TMBackupTasksForm.cs</DependentUpon>
