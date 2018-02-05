@@ -37,6 +37,7 @@ namespace Sdl.Community.AdaptiveMT
 		true)]
 	public class AdaptiveMtRibbon : AbstractAction
 	{
+		private bool _shouldExit;
 		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -50,8 +51,10 @@ namespace Sdl.Community.AdaptiveMT
 
 		protected override async void Execute()
 		{
+			_shouldExit = false;
 			var projects = GetProjectsController().SelectedProjects;
-
+			var editorController = GetEditorController();
+			editorController.Closing += EditorController_Closing;
 			var userCredentials = Helpers.Credentials.GetCredentials();
 			if (userCredentials != null)
 			{
@@ -89,6 +92,20 @@ namespace Sdl.Community.AdaptiveMT
 			}
 		}
 
+		private void EditorController_Closing(object sender, CancelDocumentEventArgs e)
+		{
+			var messageBox =  MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
+			if (messageBox == DialogResult.Cancel)
+			{
+				e.Cancel = true;
+			}
+			else
+			{
+				_shouldExit = true;
+			}
+			
+		}
+
 		private async System.Threading.Tasks.Task ProcessFiles(ProjectFile[]files, List<EngineMappingDetails>
 			providersDetails, UserResponse userDetails, FileBasedProject project)
 		{
@@ -108,6 +125,10 @@ namespace Sdl.Community.AdaptiveMT
 					{
 						if (segmentPair.Target.ToString() != string.Empty)
 						{
+							if (_shouldExit)
+							{
+								break;
+							}
 							var translateRequest = Helpers.Api.CreateTranslateRequest(segmentPair, providerDetails);
 							var translateResponse = await ApiClient.Translate(userDetails.Sid, translateRequest);
 
@@ -116,7 +137,7 @@ namespace Sdl.Community.AdaptiveMT
 							var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
 							if (feedbackReaponse.Success)
 							{
-								editorController.ActiveDocument.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+								editorController.ActiveDocument?.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
 							}
 						}
 					}
