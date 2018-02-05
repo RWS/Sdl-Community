@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -38,11 +39,12 @@ namespace Sdl.Community.AdaptiveMT
 	public class AdaptiveMtRibbon : AbstractAction
 	{
 		private bool _shouldExit;
+		private List<ProcessedFileDetails>_processedFilesList = new List<ProcessedFileDetails>();
+
 		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
 		}
-
 
 		private static EditorController GetEditorController()
 		{
@@ -51,10 +53,11 @@ namespace Sdl.Community.AdaptiveMT
 
 		protected override async void Execute()
 		{
-			_shouldExit = false;
+			_shouldExit = false;	
 			var projects = GetProjectsController().SelectedProjects;
 			var editorController = GetEditorController();
 			editorController.Closing += EditorController_Closing;
+			
 			var userCredentials = Helpers.Credentials.GetCredentials();
 			if (userCredentials != null)
 			{
@@ -64,6 +67,7 @@ namespace Sdl.Community.AdaptiveMT
 
 				foreach (var project in projects)
 				{
+					_processedFilesList.Clear();
 					var providerExist = false;
 					var provider = project.GetTranslationProviderConfiguration();
 
@@ -91,58 +95,85 @@ namespace Sdl.Community.AdaptiveMT
 				}
 			}
 		}
-
+		
 		private void EditorController_Closing(object sender, CancelDocumentEventArgs e)
 		{
-			var messageBox =  MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
-			if (messageBox == DialogResult.Cancel)
+			if (e.Document != null)
 			{
-				e.Cancel = true;
-			}
-			else
-			{
-				_shouldExit = true;
+				var currentDocumentId = e.Document.ActiveFile.Id.ToString();
+				var currentFileNotFinished = _processedFilesList.Where(p => p.ProcessCompleted==false).FirstOrDefault(f => f.FileId.Equals(currentDocumentId));
+				if (currentFileNotFinished != null)
+				{
+					var messageBox = MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
+					if (messageBox == DialogResult.Cancel)
+					{
+						e.Cancel = true;
+						_shouldExit = false;
+						
+					}
+					else
+					{
+						_processedFilesList.Clear();
+						_shouldExit = true;
+					}
+				}
 			}
 			
+
 		}
 
 		private async System.Threading.Tasks.Task ProcessFiles(ProjectFile[]files, List<EngineMappingDetails>
 			providersDetails, UserResponse userDetails, FileBasedProject project)
 		{
 			var editorController = GetEditorController();
+			
 			foreach (var file in files)
 			{
+				
+				if (_shouldExit)
+				{
+					break;
+				}
 				var targetLanguage = file.Language.IsoAbbreviation;
 				var document = editorController.Open(file, EditingMode.Translation);
 				var segmentPairs = document.SegmentPairs.ToList();
+				var segmentsNumber = segmentPairs.Count;
+				var currentSegmentIndex = 0;
 				var providerDetails = providersDetails.FirstOrDefault(t => t.TargetLang.Equals(targetLanguage));
 				if (providerDetails != null)
 				{
 					providerDetails.SourceLang = file.SourceFile.Language.IsoAbbreviation;
-
+					var processedFile = new ProcessedFileDetails
+					{
+						FileId = editorController.ActiveDocument.ActiveFile.Id.ToString(),
+						ProcessCompleted = false
+					};
+					_processedFilesList.Add(processedFile);
 					//Confirm each segment
 					foreach (var segmentPair in segmentPairs)
 					{
+						if (_shouldExit)
+						{
+							break;
+						}
 						if (segmentPair.Target.ToString() != string.Empty)
 						{
-							if (_shouldExit)
-							{
-								break;
-							}
 							var translateRequest = Helpers.Api.CreateTranslateRequest(segmentPair, providerDetails);
 							var translateResponse = await ApiClient.Translate(userDetails.Sid, translateRequest);
 
 							var feedbackRequest =
 								Helpers.Api.CreateFeedbackRequest(translateResponse.Translation, segmentPair, providerDetails);
-							var feedbackReaponse = await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
-							if (feedbackReaponse.Success)
+							 await ApiClient.Feedback(userDetails.Sid, feedbackRequest);
+							if (currentSegmentIndex== segmentsNumber-1)
 							{
-								editorController.ActiveDocument?.UpdateSegmentPairProperties(segmentPair, segmentPair.Properties);
+								processedFile.ProcessCompleted = true;
 							}
+
 						}
+						currentSegmentIndex++;
 					}
 				}
-				project.Save();
+				//project.Save();
 			}
 		}
 	}
