@@ -20,7 +20,7 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string BackupIntervalErrorMessage = "Backup interval field accepts only numbers!";
 		public const string ActionErrorMessage = "Actions cannot be saved! Please ensure that Action name, Type of file and Pattern are filled!";
 
-		public const string TaskNameErrorMessage = "Actions cannot be saved because Backup name is empty! Please fill first the Backup name and after that try to add actions!";
+		public const string TaskNameErrorMessage = "Actions cannot be added because Backup name is empty! Please fill first the Backup name and after that add actions!";
 
 		public const string ActionNameErrorMessage = "Actions cannot be saved! Please ensure that Action name is filled!";
 		public const string FileTypeErrorMessage = "Actions cannot be saved! Please ensure that Type of file is filled!";
