@@ -52,8 +52,6 @@ namespace Sdl.Community.BackupService
 
 			SetupRealDateTime(tr);
 
-			tr.Repetition.Interval = TimeSpan.FromMinutes(2);
-			tr.EndBoundary = DateTime.Now.AddMinutes(10);
 			if (!isStartedManually)
 			{
 				tr.Enabled = false;

@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Sdl.Community.SDLXLIFFSplitMerge</PlugInName>
-  <Version>1.0</Version>
-  <Description>Split file into multiple SDLIXLIFF files prepared for translation. When files are translated, the app merges back all files into single one</Description>
-  <Author></Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
-</PluginPackage>

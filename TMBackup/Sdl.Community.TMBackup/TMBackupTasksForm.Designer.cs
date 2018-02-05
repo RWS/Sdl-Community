@@ -189,7 +189,7 @@
             this.btn_RunTasks.Name = "btn_RunTasks";
             this.btn_RunTasks.Size = new System.Drawing.Size(30, 27);
             this.btn_RunTasks.TabIndex = 3;
-            this.toolTip_RunDisableTasks.SetToolTip(this.btn_RunTasks, "Run all tasks");
+            this.toolTip_RunDisableTasks.SetToolTip(this.btn_RunTasks, "Run disabled tasks");
             this.btn_RunTasks.UseVisualStyleBackColor = false;
             this.btn_RunTasks.Click += new System.EventHandler(this.btn_RunTasks_Click);
             // 
