@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Sdl.Community.AdaptiveMT.Service.Model;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
@@ -20,7 +21,7 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 					Target = engine.TargetLang
 				},
 				Source = segmentPair.Source.ToString(),
-				OriginalOutput = translatedText,
+				OriginalOutput = HttpUtility.HtmlDecode(translatedText),
 				PostEdited = segmentPair.Target.ToString(),
 				Definition = new Definition
 				{
@@ -44,8 +45,7 @@ namespace Sdl.Community.AdaptiveMT.Helpers
 				Content = new Content
 				{
 					InputFormat = "plain",
-					Text = new[] { segmentPair.Source.ToString() }
-					
+					Text = new[] { HttpUtility.UrlEncode(segmentPair.Source.ToString()) }
 				},
 				Definition = new Definition
 				{

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -61,6 +62,14 @@ namespace Sdl.Community.AdaptiveMT.Service.Clients
 					request.Content = new StringContent(content, new UTF8Encoding(), "application/json");
 				}
 				var responseMessage = await client.SendAsync(request);
+				if (responseMessage.StatusCode == HttpStatusCode.Forbidden)
+				{
+					throw new Exception("You reached your characters limit");
+				}
+				if (responseMessage.StatusCode == HttpStatusCode.InternalServerError)
+				{
+					throw  new Exception("Internal server error");
+				}
 				var response = await responseMessage.Content.ReadAsStringAsync();
 				return response;
 			}
