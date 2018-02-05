@@ -54,8 +54,17 @@ namespace Sdl.Community.TMBackup
 								var triggerInfo = string.Empty;
 								foreach (var trigger in task.Definition.Triggers)
 								{
-									triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
-								}							
+									if (trigger.Repetition.Interval.Hours == 0 && trigger.Repetition.Interval.Minutes == 0 && trigger.Repetition.Interval.Seconds == 0)
+									{
+										// Display interval for manually task
+										triggerInfo = string.Format("Started at: '{0}'", trigger.StartBoundary);
+									}
+									else
+									{                
+										// Display interval for automatically task
+										triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
+									}
+								}					
 
 								tasks.Add(new TaskDefinitionModel
 								{
