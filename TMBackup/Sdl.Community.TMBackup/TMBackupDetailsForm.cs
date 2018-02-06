@@ -48,7 +48,7 @@ namespace Sdl.Community.TMBackup
 
 					_backupDetailsModelList.Clear();
 
-					GetBackupDetailsInfo();
+					InitializeBackupDetails();
 					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
 				}
 			}
@@ -71,7 +71,7 @@ namespace Sdl.Community.TMBackup
 				var persistence = new Persistence();
 				persistence.DeleteDetailsFromInfo(removedActionsList, _taskName);
 
-				GetBackupDetailsInfo();
+				InitializeBackupDetails();
 			}
 		}
 
@@ -111,22 +111,8 @@ namespace Sdl.Community.TMBackup
 		#endregion
 
 		#region Private methods
-		private void GetBackupDetailsInfo()
-		{
-			var persistence = new Persistence();
-			var request = persistence.ReadFormInformation();
 
-			if (request != null && request.BackupDetailsModelList != null)
-			{
-				// create backupModel which is used as a new row where user can add another Action
-				BackupDetailsModel emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
-				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
-
-				dataGridView1.DataSource = request.BackupDetailsModelList;
-			}
-		}
-		
-		// Initizialize the Backup Details grid when opening with exiting data from json
+		// Initizialize the Backup Details grid with data saved in the json
 		private void InitializeBackupDetails()
 		{
 			var persistence = new Persistence();
@@ -142,9 +128,12 @@ namespace Sdl.Community.TMBackup
 			{
 				// create backupModel which is used as a new row where user can add another Action
 				var emtpyModel = new BackupDetailsModel { BackupAction = string.Empty, BackupType = string.Empty, BackupPattern = string.Empty };
-				request.BackupDetailsModelList.Insert(request.BackupDetailsModelList.Count, emtpyModel);
-
-				dataGridView1.DataSource = request.BackupDetailsModelList;
+				backupDetails.Insert(backupDetails.Count, emtpyModel);
+				dataGridView1.DataSource = backupDetails;
+			}
+			else
+			{
+				dataGridView1.DataSource = null;
 			}
 		}
 
@@ -165,9 +154,7 @@ namespace Sdl.Community.TMBackup
 					{
 						foreach (DataGridViewRow row in dataGridView1.Rows)
 						{
-							var backupDetail = backupDetailsList.Where(b => b.BackupAction.Equals(row.Cells[0].Value.ToString())
-													&& b.BackupType.Equals(row.Cells[1].Value.ToString())
-													&& b.BackupPattern.Equals(row.Cells[2].Value.ToString())).FirstOrDefault();
+							var backupDetail = backupDetailsList.Where(b => b.BackupPattern.Equals(row.Cells[2].Value.ToString())).FirstOrDefault();
 
 							if (backupDetail == null)
 							{
@@ -184,6 +171,7 @@ namespace Sdl.Community.TMBackup
 							else if(backupDetail != null && row.Cells[2].Selected)
 							{
 								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage);
+								InitializeBackupDetails();
 							}
 						}
 					}

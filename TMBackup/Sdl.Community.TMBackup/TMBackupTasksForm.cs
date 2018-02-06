@@ -12,7 +12,6 @@ namespace Sdl.Community.TMBackup
 	public partial class TMBackupTasksForm : Form
 	{
 		private JsonRequestModel _jsonRquestModel = new JsonRequestModel();
-		private List<string> _backupNames = new List<string>();
 		private string _taskRunType = string.Empty;
 
 		public TMBackupTasksForm()
@@ -175,6 +174,7 @@ namespace Sdl.Community.TMBackup
 		/// <param name="e"></param>
 		private void btn_RunTasks_Click(object sender, EventArgs e)
 		{
+			var backupInfo = new Dictionary<string, bool>();
 			var persistence = new Persistence();
 			var service = new Service();
 			var taskNames = new List<string>();
@@ -203,7 +203,7 @@ namespace Sdl.Community.TMBackup
 						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
 						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
 
-						_backupNames.Add(backupModel.BackupName);
+						backupInfo.Add(backupModel.BackupName, false);
 						persistence.RemoveDataFromJson(backupModel.BackupName);
 					}
 				}
@@ -219,11 +219,11 @@ namespace Sdl.Community.TMBackup
 
 							var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault();
 
-							_backupNames.Add(backupModel.BackupName);
+							backupInfo.Add(backupModel.BackupName, false);
 							persistence.RemoveDataFromJson(backupModel.BackupName);
 						}
 					}
-					AddInfoIntoJson(persistence, service, false);
+					AddInfoIntoJson(persistence, service, backupInfo);
 				}
 				GetBackupTasks();
 			}
@@ -238,6 +238,8 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var service = new Service();
+			var backupInfo = new Dictionary<string, bool>();
+			var dictionaryBackup = new Dictionary<string, bool>();
 
 			_jsonRquestModel = persistence.ReadFormInformation();
 
@@ -245,19 +247,27 @@ namespace Sdl.Community.TMBackup
 			{
 				// Run selected backup tasks
 				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-				{	
-					SetManuallyTasksInfo(persistence, service, row);
+				{
+					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
+					foreach (var entry in dictionaryBackup)
+					{
+						backupInfo.Add(entry.Key, entry.Value);
+					}
 				}
-				AddInfoIntoJson(persistence, service, true);
+				AddInfoIntoJson(persistence, service, backupInfo);
 			}
 			else
 			{
 				// Run all manually backup tasks
 				foreach (DataGridViewRow row in dataGridView1.Rows)
-				{	
-					SetManuallyTasksInfo(persistence, service, row);
+				{
+					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
+					foreach (var entry in dictionaryBackup)
+					{
+						backupInfo.Add(entry.Key, entry.Value);
+					}
 				}
-				AddInfoIntoJson(persistence, service, true);
+				AddInfoIntoJson(persistence, service, backupInfo);
 			}
 			GetBackupTasks();
 		}
@@ -268,17 +278,19 @@ namespace Sdl.Community.TMBackup
 		/// <param name="persistence"></param>
 		/// <param name="service"></param>
 		/// <param name="row"></param>
-		private void SetManuallyTasksInfo(Persistence persistence, Service service, DataGridViewRow row)
+		private Dictionary<string, bool> SetManuallyTasksInfo(Persistence persistence, Service service, DataGridViewRow row)
 		{
+			var backupInfo = new Dictionary<string, bool>();
 			_taskRunType = row.Cells[1].Value.ToString();
 			if (_taskRunType.Equals("Manually"))
 			{
 				var backupName = row.Cells[0].Value.ToString();
 
 				var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
-				_backupNames.Add(backupModel.BackupName);
+				backupInfo.Add(backupModel.BackupName, true);
 				persistence.RemoveDataFromJson(backupModel.BackupName);
 			}
+			return backupInfo;
 		}
 
 		/// <summary>
@@ -286,27 +298,27 @@ namespace Sdl.Community.TMBackup
 		/// </summary>
 		/// <param name="persistence"></param>
 		/// <param name="service"></param>
-		private void AddInfoIntoJson(Persistence persistence, Service service, bool isStartedManually)
+		private void AddInfoIntoJson(Persistence persistence, Service service, Dictionary<string, bool> backupInfo)
 		{
-			foreach (var name in _backupNames)
+			foreach (KeyValuePair<string, bool> entry in backupInfo)
 			{
 				if (_jsonRquestModel.BackupModelList != null)
 				{
-					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
 				}
 				if (_jsonRquestModel.ChangeSettingsModelList != null)
 				{
-					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
 				}
 				if (_jsonRquestModel.BackupDetailsModelList != null)
 				{
-					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
 				}
 				if (_jsonRquestModel.PeriodicBackupModelList != null)
 				{
-					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(name)).FirstOrDefault());
+					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
 				}
-				service.CreateTaskScheduler(name, isStartedManually);
+				service.CreateTaskScheduler(entry.Key, entry.Value);
 			}
 		}		
 	}
