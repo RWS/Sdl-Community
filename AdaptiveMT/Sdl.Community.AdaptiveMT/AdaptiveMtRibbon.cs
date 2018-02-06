@@ -1,27 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
-using Sdl.Community.AdaptiveMT.Service;
 using Sdl.Community.AdaptiveMT.Service.Clients;
 using Sdl.Community.AdaptiveMT.Service.Helpers;
 using Sdl.Community.AdaptiveMT.Service.Model;
-using Sdl.Core.Globalization;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
-using Sdl.FileTypeSupport.Framework.Bilingual;
-using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
-using Sdl.LanguagePlatform.Core.Tokenization;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -40,7 +25,7 @@ namespace Sdl.Community.AdaptiveMT
 	{
 		private bool _shouldExit;
 		private List<ProcessedFileDetails>_processedFilesList = new List<ProcessedFileDetails>();
-
+		private bool _cancelAlreadyDisplayed;
 		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -53,7 +38,8 @@ namespace Sdl.Community.AdaptiveMT
 
 		protected override async void Execute()
 		{
-			_shouldExit = false;	
+			_shouldExit = false;
+			_cancelAlreadyDisplayed = false;
 			var projects = GetProjectsController().SelectedProjects;
 			var editorController = GetEditorController();
 			editorController.Closing += EditorController_Closing;
@@ -88,7 +74,7 @@ namespace Sdl.Community.AdaptiveMT
 						using (var waitForm = new WaitForm())
 						{
 							waitForm.Show();
-							await ProcessFiles(files, providersDetails, userDetails, project);
+							await ProcessFiles(files, providersDetails, userDetails);
 							waitForm.Close();
 						}
 					}
@@ -98,32 +84,41 @@ namespace Sdl.Community.AdaptiveMT
 		
 		private void EditorController_Closing(object sender, CancelDocumentEventArgs e)
 		{
-			if (e.Document != null)
+			if (_cancelAlreadyDisplayed)
 			{
-				var currentDocumentId = e.Document.ActiveFile.Id.ToString();
-				var currentFileNotFinished = _processedFilesList.Where(p => p.ProcessCompleted==false).FirstOrDefault(f => f.FileId.Equals(currentDocumentId));
-				if (currentFileNotFinished != null)
+				_shouldExit = true;
+				e.Cancel = false;
+				_processedFilesList.Clear();
+			}
+			else
+			{
+				if (e.Document != null)
 				{
-					var messageBox = MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
-					if (messageBox == DialogResult.Cancel)
+					var currentDocumentId = e.Document.ActiveFile.Id.ToString();
+					var currentFileNotFinished = _processedFilesList.Where(p => p.ProcessCompleted == false).FirstOrDefault(f => f.FileId.Equals(currentDocumentId));
+					if (currentFileNotFinished != null)
 					{
-						e.Cancel = true;
-						_shouldExit = false;
-						
-					}
-					else
-					{
-						_processedFilesList.Clear();
-						_shouldExit = true;
+						var messageBox = MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
+						if (messageBox == DialogResult.Cancel)
+						{
+							e.Cancel = true;
+							_shouldExit = false;
+							_cancelAlreadyDisplayed = true;
+
+						}
+						else
+						{
+							_processedFilesList.Clear();
+							_shouldExit = true;
+							_cancelAlreadyDisplayed = false;
+						}
 					}
 				}
 			}
-			
-
 		}
 
 		private async System.Threading.Tasks.Task ProcessFiles(ProjectFile[]files, List<EngineMappingDetails>
-			providersDetails, UserResponse userDetails, FileBasedProject project)
+			providersDetails, UserResponse userDetails)
 		{
 			var editorController = GetEditorController();
 			
@@ -173,7 +168,6 @@ namespace Sdl.Community.AdaptiveMT
 						currentSegmentIndex++;
 					}
 				}
-				//project.Save();
 			}
 		}
 	}
