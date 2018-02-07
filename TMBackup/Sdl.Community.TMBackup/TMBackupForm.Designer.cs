@@ -191,7 +191,7 @@
             this.btn_Details.Size = new System.Drawing.Size(104, 27);
             this.btn_Details.TabIndex = 24;
             this.btn_Details.Text = "Details";
-            this.browseBtn_ToolTip.SetToolTip(this.btn_Details, "Select what kind of files should be backed up");
+            this.browseBtn_ToolTip.SetToolTip(this.btn_Details, "Add types of files which should be backed up");
             this.btn_Details.UseVisualStyleBackColor = true;
             this.btn_Details.Click += new System.EventHandler(this.btn_Details_Click);
             // 
