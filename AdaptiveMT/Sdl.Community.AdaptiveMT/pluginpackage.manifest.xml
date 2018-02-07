@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.AdaptiveMT</PlugInName>
-  <Version>1.5</Version>
+  <Version>1.6</Version>
   <Description>Plugin description</Description>
   <Author></Author>
 	<Include>

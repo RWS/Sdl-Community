@@ -25,7 +25,7 @@ namespace Sdl.Community.AdaptiveMT
 	{
 		private bool _shouldExit;
 		private List<ProcessedFileDetails>_processedFilesList = new List<ProcessedFileDetails>();
-		private bool _cancelAlreadyDisplayed;
+
 		public ProjectsController GetProjectsController()
 		{
 			return SdlTradosStudio.Application.GetController<ProjectsController>();
@@ -39,7 +39,6 @@ namespace Sdl.Community.AdaptiveMT
 		protected override async void Execute()
 		{
 			_shouldExit = false;
-			_cancelAlreadyDisplayed = false;
 			var projects = GetProjectsController().SelectedProjects;
 			var editorController = GetEditorController();
 			editorController.Closing += EditorController_Closing;
@@ -84,37 +83,8 @@ namespace Sdl.Community.AdaptiveMT
 		
 		private void EditorController_Closing(object sender, CancelDocumentEventArgs e)
 		{
-			if (_cancelAlreadyDisplayed)
-			{
-				_shouldExit = true;
-				e.Cancel = false;
-				_processedFilesList.Clear();
-			}
-			else
-			{
-				if (e.Document != null)
-				{
-					var currentDocumentId = e.Document.ActiveFile.Id.ToString();
-					var currentFileNotFinished = _processedFilesList.Where(p => p.ProcessCompleted == false).FirstOrDefault(f => f.FileId.Equals(currentDocumentId));
-					if (currentFileNotFinished != null)
-					{
-						var messageBox = MessageBox.Show(@"Are you sure you wish to cancel?", @"The training has not been completed", MessageBoxButtons.OKCancel);
-						if (messageBox == DialogResult.Cancel)
-						{
-							e.Cancel = true;
-							_shouldExit = false;
-							_cancelAlreadyDisplayed = true;
-
-						}
-						else
-						{
-							_processedFilesList.Clear();
-							_shouldExit = true;
-							_cancelAlreadyDisplayed = false;
-						}
-					}
-				}
-			}
+			_processedFilesList.Clear();
+			_shouldExit = true;
 		}
 
 		private async System.Threading.Tasks.Task ProcessFiles(ProjectFile[]files, List<EngineMappingDetails>
