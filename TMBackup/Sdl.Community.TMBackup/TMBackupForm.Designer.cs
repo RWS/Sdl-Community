@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupForm));
             this.txt_BackupFrom = new System.Windows.Forms.TextBox();
             this.btn_BackupFrom = new System.Windows.Forms.Button();
@@ -54,6 +55,7 @@
             this.txt_BackupToError = new System.Windows.Forms.TextBox();
             this.txt_TaskNameError = new System.Windows.Forms.TextBox();
             this.txt_WhenToBackupError = new System.Windows.Forms.TextBox();
+            this.browseBtn_ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
             // txt_BackupFrom
@@ -76,6 +78,7 @@
             this.btn_BackupFrom.Size = new System.Drawing.Size(104, 28);
             this.btn_BackupFrom.TabIndex = 3;
             this.btn_BackupFrom.Text = "Browse";
+            this.browseBtn_ToolTip.SetToolTip(this.btn_BackupFrom, "Browse location from where to backup files");
             this.btn_BackupFrom.UseVisualStyleBackColor = true;
             this.btn_BackupFrom.Click += new System.EventHandler(this.btn_BackupFrom_Click);
             // 
@@ -87,6 +90,7 @@
             this.btn_BackupTo.Size = new System.Drawing.Size(104, 27);
             this.btn_BackupTo.TabIndex = 4;
             this.btn_BackupTo.Text = "Browse";
+            this.browseBtn_ToolTip.SetToolTip(this.btn_BackupTo, "Browse destination location for the backed up files");
             this.btn_BackupTo.UseVisualStyleBackColor = true;
             this.btn_BackupTo.Click += new System.EventHandler(this.btn_BackupTo_Click);
             // 
@@ -175,6 +179,7 @@
             this.btn_Change.Size = new System.Drawing.Size(104, 27);
             this.btn_Change.TabIndex = 25;
             this.btn_Change.Text = "Change ↓";
+            this.browseBtn_ToolTip.SetToolTip(this.btn_Change, "Select period of backing up");
             this.btn_Change.UseVisualStyleBackColor = true;
             this.btn_Change.Click += new System.EventHandler(this.btn_Change_Click);
             // 
@@ -186,6 +191,7 @@
             this.btn_Details.Size = new System.Drawing.Size(104, 27);
             this.btn_Details.TabIndex = 24;
             this.btn_Details.Text = "Details";
+            this.browseBtn_ToolTip.SetToolTip(this.btn_Details, "Select what kind of files should be backed up");
             this.btn_Details.UseVisualStyleBackColor = true;
             this.btn_Details.Click += new System.EventHandler(this.btn_Details_Click);
             // 
@@ -297,7 +303,7 @@
             this.txt_BackupFromError.Name = "txt_BackupFromError";
             this.txt_BackupFromError.Size = new System.Drawing.Size(100, 30);
             this.txt_BackupFromError.TabIndex = 31;
-            this.txt_BackupFromError.Text = "\'Backup from\' cannot be empty. Please select folder from where to backup files!";
+            this.txt_BackupFromError.Text = "\'Backup from\' cannot be empty!";
             this.txt_BackupFromError.Visible = false;
             // 
             // txt_BackupToError
@@ -310,7 +316,7 @@
             this.txt_BackupToError.Name = "txt_BackupToError";
             this.txt_BackupToError.Size = new System.Drawing.Size(100, 30);
             this.txt_BackupToError.TabIndex = 32;
-            this.txt_BackupToError.Text = "\'Backup to\' cannot be empty. Please select folder where to backup files!";
+            this.txt_BackupToError.Text = "\'Backup to\' cannot be empty!";
             this.txt_BackupToError.Visible = false;
             // 
             // txt_TaskNameError
@@ -336,7 +342,7 @@
             this.txt_WhenToBackupError.Name = "txt_WhenToBackupError";
             this.txt_WhenToBackupError.Size = new System.Drawing.Size(100, 30);
             this.txt_WhenToBackupError.TabIndex = 34;
-            this.txt_WhenToBackupError.Text = "\'When to backup\' cannot be empty. Please select the period to backup files!";
+            this.txt_WhenToBackupError.Text = "\'When to backup\' cannot be empty!";
             this.txt_WhenToBackupError.Visible = false;
             // 
             // TMBackupForm
@@ -405,5 +411,6 @@
 		private System.Windows.Forms.TextBox txt_BackupToError;
 		private System.Windows.Forms.TextBox txt_TaskNameError;
 		private System.Windows.Forms.TextBox txt_WhenToBackupError;
+		private System.Windows.Forms.ToolTip browseBtn_ToolTip;
 	}
 }

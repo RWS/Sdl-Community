@@ -206,6 +206,7 @@ namespace Sdl.Community.TMBackup
 						backupInfo.Add(backupModel.BackupName, false);
 						persistence.RemoveDataFromJson(backupModel.BackupName);
 					}
+					AddInfoIntoJson(persistence, service, backupInfo);
 				}
 				else
 				{
@@ -320,6 +321,11 @@ namespace Sdl.Community.TMBackup
 				}
 				service.CreateTaskScheduler(entry.Key, entry.Value);
 			}
-		}		
+		}
+
+		private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+		}
 	}
 }

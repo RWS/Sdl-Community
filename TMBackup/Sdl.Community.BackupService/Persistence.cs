@@ -146,7 +146,7 @@ namespace Sdl.Community.BackupService
 
 			var jsonText = File.ReadAllText(_persistancePath);
 			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-			if (request != null)
+			if (request.BackupDetailsModelList != null)
 			{
 				foreach (var item in removedBackupDetailsList)
 				{

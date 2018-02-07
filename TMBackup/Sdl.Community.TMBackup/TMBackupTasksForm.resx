@@ -162,7 +162,7 @@
         XIC0ri7Y/2lm4Bf6EarAs0lq/gAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="toolTip_RunDisableTasks.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="toolTip_RunTasks.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>287, 17</value>
   </metadata>
   <data name="btn_RunManuallyTasks.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
