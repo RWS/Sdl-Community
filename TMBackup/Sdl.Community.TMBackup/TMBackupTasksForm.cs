@@ -202,9 +202,11 @@ namespace Sdl.Community.TMBackup
 					{
 						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
 						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
-
-						backupInfo.Add(backupModel.BackupName, false);
-						persistence.RemoveDataFromJson(backupModel.BackupName);
+						if (backupModel != null)
+						{
+							backupInfo.Add(backupModel.BackupName, false);
+							persistence.RemoveDataFromJson(backupModel.BackupName);
+						}
 					}
 					AddInfoIntoJson(persistence, service, backupInfo);
 				}
