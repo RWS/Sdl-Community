@@ -49,13 +49,12 @@ namespace Sdl.Community.BackupService
 		public void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName, bool isStartedManually)
 		{
 			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-
 			SetupRealDateTime(tr);
 
 			if (!isStartedManually)
 			{
-				tr.Enabled = false;
-			}
+				tr.Enabled = false;				
+			}			
 			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 			
