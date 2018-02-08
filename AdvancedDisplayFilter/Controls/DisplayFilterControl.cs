@@ -780,18 +780,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.ConfirmationLevel)Enum.Parse(
                         typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
 
-	        if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
-	        {
-		        if (DisplayFilterSettings.OriginTypes.Any())
-			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
-			                                        + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
-				                                        (current, item) => current
-				                                                           + Helper.GetTypeName((OriginType) Enum.Parse(
-					                                                           typeof(OriginType), item, true))) + ")");
-	        }
+			if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
+			{
+				if (DisplayFilterSettings.OriginTypes.Any())
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
+													+ "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
+														(current, item) => current
+																		   + Helper.GetTypeName((OriginType)Enum.Parse(
+																			   typeof(OriginType), item, true))) + ")");
+			}
 
 
-	        if (DisplayFilterSettings.PreviousOriginTypes.Any())
+			if (DisplayFilterSettings.PreviousOriginTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
                     + "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
@@ -1536,10 +1536,17 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	    }
         private void button_remove_Click(object sender, EventArgs e)
         {
-	        var isSelected = IsUniqueSelected();
-	        if (isSelected)
+	        if (IsUniqueSelected())
 	        {
 		        _uniqueSegments = false;
+	        }
+	        if (IsEditedFuzzySelected())
+	        {
+		        _editedFuzzy = false;
+	        }
+	        if (IsUnEditedFuzzySelected())
+	        {
+		        _unEditedFuzzy = false;
 	        }
 			MoveSelectedListViewItem(listView_selected, listView_available);
             InvalidateIconsFilterEdited(tabPage_filters);
@@ -1772,11 +1779,18 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
 		private void listView_available_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			var isSelected = IsUniqueSelected();
-			if (isSelected)
+			if (IsUniqueSelected())
 			{
 				_uniqueSegments = true;
 			}
+			if (IsEditedFuzzySelected())
+			{
+				_editedFuzzy = true;
+			}
+			if (IsUnEditedFuzzySelected())
+			{
+				_unEditedFuzzy = true;
+				}
 			MoveSelectedListViewItem(listView_available, listView_selected);
 			InvalidateIconsFilterEdited(tabPage_filters);
 		}

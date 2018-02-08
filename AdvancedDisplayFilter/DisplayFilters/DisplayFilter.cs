@@ -220,8 +220,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.EditedFuzzy)
 				{
-					var editedFuzzyVisitor = new EditedFuzzyVisitor();
-					success = editedFuzzyVisitor.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+					success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
 				}
 			}
 			return success;
