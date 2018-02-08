@@ -134,7 +134,6 @@
     <Compile Include="Helpers\ColorPickerHelper.cs" />
     <Compile Include="Helpers\CommentsHelper.cs" />
     <Compile Include="Helpers\ContentHelper.cs" />
-    <Compile Include="Helpers\EditedFuzzyVisitor.cs" />
     <Compile Include="Helpers\FuzzyHelper.cs" />
     <Compile Include="Helpers\SegmentTextVisitor.cs" />
     <Compile Include="Helpers\TagDataVisitor.cs" />

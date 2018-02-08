@@ -350,6 +350,10 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				var userVisitor = new UserVisitor();
 				success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, CustomSettings.ModifiedBy);
 			}
+			if (!success && CustomSettings.EditedFuzzy)
+			{
+				success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+			}
 			return !success;
 		}
 	}

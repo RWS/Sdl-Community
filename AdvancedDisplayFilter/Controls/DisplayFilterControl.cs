@@ -926,6 +926,16 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MidifiedBy + ":\"" +
 			                                        CustomFilter.ModifiedBy + "\"");
 		        }
+		        if (CustomFilter.EditedFuzzy)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EditedFuzzy + ":\"" +
+					                                CustomFilter.EditedFuzzy + "\"");
+				}
+		        if (CustomFilter.UnEditedFuzzy)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
+			                                        CustomFilter.UnEditedFuzzy + "\"");
+		        }
 			}
 
         }

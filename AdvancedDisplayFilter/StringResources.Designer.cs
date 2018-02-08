@@ -187,6 +187,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edited fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_EditedFuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_EditedFuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Even segments number.
         /// </summary>
         internal static string DisplayFilterControl_EvenSegments {
@@ -607,6 +616,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Translation_Rejected {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Translation_Rejected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unedited fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_UnEdited {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UnEdited", resourceCulture);
             }
         }
         

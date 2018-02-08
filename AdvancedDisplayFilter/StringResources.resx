@@ -325,4 +325,10 @@
   <data name="DisplayFilterControl_Segments_With_tags" xml:space="preserve">
     <value>Segments with tags</value>
   </data>
+  <data name="DisplayFilterControl_EditedFuzzy" xml:space="preserve">
+    <value>Edited fuzzy</value>
+  </data>
+  <data name="DisplayFilterControl_UnEdited" xml:space="preserve">
+    <value>Unedited fuzzy</value>
+  </data>
 </root>
