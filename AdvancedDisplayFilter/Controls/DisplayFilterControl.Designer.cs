@@ -118,6 +118,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.toolStripButton_saveFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton_loadFilter = new System.Windows.Forms.ToolStripButton();
 			this.reverseBtn = new System.Windows.Forms.ToolStripButton();
+			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_filterExpression = new System.Windows.Forms.Panel();
 			this.filterExpressionControl = new Sdl.Community.AdvancedDisplayFilter.Controls.FilterExpression();
 			this.panel_filterStatus = new System.Windows.Forms.Panel();
@@ -130,7 +131,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-			this.helpButton = new System.Windows.Forms.ToolStripButton();
 			this.panel_body.SuspendLayout();
 			this.tabControl_filter.SuspendLayout();
 			this.tabPage_content.SuspendLayout();
@@ -788,6 +788,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			this.reverseBtn.Name = "reverseBtn";
 			this.reverseBtn.Click += new System.EventHandler(this.reverseBtn_Click);
 			// 
+			// helpButton
+			// 
+			resources.ApplyResources(this.helpButton, "helpButton");
+			this.helpButton.Name = "helpButton";
+			this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
+			// 
 			// panel_filterExpression
 			// 
 			this.panel_filterExpression.Controls.Add(this.filterExpressionControl);
@@ -853,12 +859,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 			// 
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
 			resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
-			// 
-			// helpButton
-			// 
-			resources.ApplyResources(this.helpButton, "helpButton");
-			this.helpButton.Name = "helpButton";
-			this.helpButton.Click += new System.EventHandler(this.helpButton_Click);
 			// 
 			// DisplayFilterControl
 			// 

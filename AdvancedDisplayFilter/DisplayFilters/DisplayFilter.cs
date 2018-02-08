@@ -63,10 +63,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				if (success && Settings.ConfirmationLevels != null && Settings.ConfirmationLevels.Any())
 					success = rowInfo.IsConfirmationLevelFound(Settings);
 
-
+				
 				if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
-					success = rowInfo.IsOriginTypeFound(Settings);
-
+				{
+					if (!Settings.OriginTypes.Contains("EditedF") && !Settings.OriginTypes.Contains("UneditedF"))
+					{
+						success = rowInfo.IsOriginTypeFound(Settings);
+					}
+				}
 
 				if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
 					success = rowInfo.IsPreviousOriginTypeFound(Settings);
@@ -214,7 +218,11 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 					var userVisitor = new UserVisitor();
 					success = userVisitor.ModifiedBy(rowInfo.SegmentPair.Source, CustomSettings.ModifiedBy);
 				}
-				
+				if (success && CustomSettings.EditedFuzzy)
+				{
+					var editedFuzzyVisitor = new EditedFuzzyVisitor();
+					success = editedFuzzyVisitor.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+				}
 			}
 			return success;
 		}

@@ -25,5 +25,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 		public string ModifiedBy { get; set; }
 		public bool CreatedByChecked { get; set; }
 		public string CreatedBy { get; set; }
+		public bool EditedFuzzy { get; set; }
+		public bool UnEditedFuzzy { get; set; }
 	}
 }

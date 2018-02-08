@@ -24,7 +24,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         public event OnApplyFilterHandler OnApplyDisplayFilter;
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
 
-	    private bool _uniqueSegments ;
+	    private bool _uniqueSegments;
+	    private bool _editedFuzzy;
+	    private bool _unEditedFuzzy;
 	    private bool _reverseFilter;
         #endregion
 
@@ -69,7 +71,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					ModifiedBy = modifiedByBox.Text,
 					ModifiedByChecked = modifiedByCheck.Checked,
 					CreatedBy = createdByBox.Text,
-					CreatedByChecked = createdByCheck.Checked
+					CreatedByChecked = createdByCheck.Checked,
+					EditedFuzzy = _editedFuzzy,
+					UnEditedFuzzy = _unEditedFuzzy
 				};
 				foreach (ListViewItem color in colorsListView.SelectedItems)
 				{
@@ -424,6 +428,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        modifiedByCheck.Checked = false;
 	        createdByBox.Text = string.Empty;
 	        createdByCheck.Checked = false;
+	        _unEditedFuzzy = false;
+	        _editedFuzzy = false;
 #endregion
 
 			#region  |  content panel  |
@@ -512,7 +518,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     item.Tag = type;
                 }
-                foreach (var type in Enum.GetValues(typeof(OriginType)))
+	            //edited fuzzy
+	            var editedFuzzy = listView_available.Items.Add("Edited Fuzzy");
+	            editedFuzzy.Group = GroupOriginAvailable;
+	            editedFuzzy.Tag = "EditedF";
+	            //unedited fuzzy
+	            var uneditedFuzzy = listView_available.Items.Add("Unedited Fuzzy");
+	            uneditedFuzzy.Group = GroupOriginAvailable;
+	            uneditedFuzzy.Tag = "UneditedF";
+				foreach (var type in Enum.GetValues(typeof(OriginType)))
                 {
                     if (type.ToString() == "None")
                         continue;
@@ -766,26 +780,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.ConfirmationLevel)Enum.Parse(
                         typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
 
-            if (DisplayFilterSettings.OriginTypes.Any())
-                filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
-                    + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty, (current, item) => current
-                    + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((OriginType)Enum.Parse(
-                        typeof(OriginType), item, true))) + ")");
+	        if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
+	        {
+		        if (DisplayFilterSettings.OriginTypes.Any())
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
+			                                        + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
+				                                        (current, item) => current
+				                                                           + Helper.GetTypeName((OriginType) Enum.Parse(
+					                                                           typeof(OriginType), item, true))) + ")");
+	        }
 
-            if (DisplayFilterSettings.PreviousOriginTypes.Any())
+
+	        if (DisplayFilterSettings.PreviousOriginTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
                     + "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
                     + Helper.GetTypeName((OriginType)Enum.Parse(
                         typeof(OriginType), item, true))) + ")");
-
-			//if (DisplayFilterSettings.RepetitionTypes.Any())
-			//    filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
-			//        + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
-			//        + (current != string.Empty ? " " + "|" + " " : string.Empty)
-			//        + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
-			//            typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
 
 	        if (_reverseFilter)
 	        {
@@ -1471,11 +1482,47 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 	        {
 		        _uniqueSegments = true;
 	        }
+	        var isEditedSelected = IsEditedFuzzySelected();
+	        if (isEditedSelected)
+	        {
+		        _editedFuzzy = true;
+	        }
+	        var isUnEditedSelected = IsUnEditedFuzzySelected();
+	        if (isUnEditedSelected)
+	        {
+		        _unEditedFuzzy = true;
+	        }
 			MoveSelectedListViewItem(listView_available, listView_selected);
             InvalidateIconsFilterEdited(tabPage_filters);
         }
 
-	    private bool IsUniqueSelected()
+	    private bool IsEditedFuzzySelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("EditedF"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
+
+	    private bool IsUnEditedFuzzySelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("UneditedF"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
+
+		private bool IsUniqueSelected()
 	    {
 		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
 		    {
