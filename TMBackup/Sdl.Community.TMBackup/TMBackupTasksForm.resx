@@ -138,6 +138,24 @@
   <metadata name="IntervalCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="TaskNameCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TaskRunType.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="Status.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LastRunCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="NextRunCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="IntervalCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
   </metadata>
@@ -162,7 +180,7 @@
         XIC0ri7Y/2lm4Bf6EarAs0lq/gAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="toolTip_RunDisableTasks.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="toolTip_RunTasks.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>287, 17</value>
   </metadata>
   <data name="btn_RunManuallyTasks.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -187,6 +205,30 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
+  <data name="btn_WinTaskScheduler.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAA5FJREFUOE9Vk/lym1YUxv1+fYBOnybT9p80baNYljTJTKdNm6bTNpN6t2xFK0I7
+        l0UsWhBiFSCMhIxkS7Is04Nxpu4398K58P04cLhn5+6JgiBYLZfmyBA4AbVQvU4RiGfafXvswi1QZNts
+        NpH5Ed5ut+v1WlNUmmLTpdYpTmdptXj63aD6slN/Wyue5fIN0xpH/P9gIJeghV9q8e/OypLl6O7EvVm/
+        +/nZlEuZVFxrvuDLL4u5HMv2Hvgn8O16vVkvD4ukoJhH+bI9m0kjS3Xn5x9jDpMcoST96dth7Qet8Rwv
+        XvCCGOUPYZiSKObrrKBY9sQbTSbKyJYMU3Fmmf3dSzphEHs6uae2Xsn1mN54kcnkplMPqBD2r66aBJP6
+        K215nmY5muko5lg2bNWZFU4SLpMwUUJrxZXWK6UZRxfPOnjyIlt9hPu9XhqnzKlH9URj7EJaGLJhaZdX
+        1fM3LpO0yCTwKrGrozhffG6i789Pj6bTWQjXq02MEXXH1axxRMJQTdu49LGzlEHEhrWYVI1JtV25Htda
+        CQPtUuU/EMmFMF5psENDHTtD04KEUVpBkklR//u3b8zWj3ozNkLxMb3nMCmb3ptyCan5U77YCOESVvuQ
+        waBeQ9NWDIuThqjT+/048/Yg88WXX50dvTn4mDreT50cvj45eD1kPhwc/yJzx+cXWAhjpVpPNwcjs68Z
+        8NkE1y2RVJEgcUb4OvEe9XWyr7JDq6M5ojFRx/NNEGjWJJvNP8AYzopKR9bIrkh0uiVEYyRda3fYofb+
+        JKe6k9HEu5wv/OXtcnMf/twgEPuDSiUs+A4iSEGUuIFcZXmcahcQVWX4VqfPyYpk2cZk5vrX89Xm9u4+
+        uL+/uVkCk80WdF0PYc/zsHL116N0vokKBIVTdIPrMoNhTzdUZ+L419e327t70BbcpSZt2+P9fw4hDmGY
+        ZaxCsXyFZosISAF1RV7RZcuxvbm/2tw9YEA/+INSqSwIQhTvQFfARr9IfyoTqNrm/kznO6oujizd9Rar
+        u9U2ZLqSCt0DAUMzUamACmHY4vDU68Uim8lVmuioXO2NLNm+9Jdrgu+DA7S4vhnIGs8J2WwOloA8Ngac
+        oD+hGnCkSbqM4YjhFHs8X93yfQleazabTafTbrdDkiQAkPO/foYoUrQGX7vdzucKhVwRx2uFQpGiKJ7n
+        fd+Pcj4174SFfCK4FAnKC6bHxYMeHZ8VBMG/CkgSG0C3ga4AAAAASUVORK5CYII=
+</value>
+  </data>
+  <metadata name="toolTip_WinowsTaskScheduler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>433, 17</value>
+  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAQAEBAAAAEAIABoBAAARgAAABgYAAABACAAiAkAAK4EAAAgIAAAAQAgAKgQAAA2DgAAMDAAAAEA

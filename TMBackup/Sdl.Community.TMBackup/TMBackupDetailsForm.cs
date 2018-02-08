@@ -34,24 +34,7 @@ namespace Sdl.Community.TMBackup
 		#region Actions
 		private void btn_Add_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(_taskName))
-			{
-				MessageBox.Show(Constants.TaskNameErrorMessage, Constants.InformativeMessage);
-			}
-			else
-			{
-				AddValuesFromRows();
-				if (_backupDetailsModelList.Any() && _backupDetailsModelList != null)
-				{
-					var persistence = new Persistence();
-					persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
-
-					_backupDetailsModelList.Clear();
-
-					InitializeBackupDetails();
-					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
-				}
-			}
+			AddActions();
 		}
 
 		private void btn_Delete_Click(object sender, EventArgs e)
@@ -61,16 +44,18 @@ namespace Sdl.Community.TMBackup
 			{
 				foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
 				{
-					removedActionsList.Add(new BackupDetailsModel
+					if ((selectedRow.Cells[0].Value != null && selectedRow.Cells[1].Value != null && selectedRow.Cells[2].Value != null))
 					{
-						BackupAction = selectedRow.Cells[0].Value.ToString(),
-						BackupType = selectedRow.Cells[1].Value.ToString(),
-						BackupPattern = selectedRow.Cells[2].Value.ToString()
-					});
+						removedActionsList.Add(new BackupDetailsModel
+						{
+							BackupAction = selectedRow.Cells[0].Value.ToString(),
+							BackupType = selectedRow.Cells[1].Value.ToString(),
+							BackupPattern = selectedRow.Cells[2].Value.ToString()
+						});
+						var persistence = new Persistence();
+						persistence.DeleteDetailsFromInfo(removedActionsList, _taskName);
+					}					
 				}
-				var persistence = new Persistence();
-				persistence.DeleteDetailsFromInfo(removedActionsList, _taskName);
-
 				InitializeBackupDetails();
 			}
 		}
@@ -108,6 +93,14 @@ namespace Sdl.Community.TMBackup
 				}
 			}
 		}
+
+		private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode == Keys.Enter)
+			{
+				AddActions();
+			}
+		}
 		#endregion
 
 		#region Private methods
@@ -134,6 +127,8 @@ namespace Sdl.Community.TMBackup
 			else
 			{
 				dataGridView1.DataSource = null;
+				dataGridView1.Rows.Clear();
+				dataGridView1.Refresh();
 			}
 		}
 
@@ -214,6 +209,7 @@ namespace Sdl.Community.TMBackup
 				else
 				{
 					MessageBox.Show(Constants.ActionNameErrorMessage, Constants.InformativeMessage);
+					InitializeBackupDetails();
 				}
 				if (row.Cells[1].Value != null)
 				{
@@ -222,18 +218,43 @@ namespace Sdl.Community.TMBackup
 				else
 				{
 					MessageBox.Show(Constants.FileTypeErrorMessage, Constants.InformativeMessage);
+					InitializeBackupDetails();
 				}
 				if (row.Cells[2].Value != null)
 				{
 					backupDetailsModel.BackupPattern = row.Cells[2].Value.ToString();
+					InitializeBackupDetails();
 				}
 				else
 				{
 					MessageBox.Show(Constants.PatternErrorMessage, Constants.InformativeMessage);
+					InitializeBackupDetails();
 				}
 			}
 			return backupDetailsModel;
 		}
 		#endregion
+
+		private void AddActions()
+		{
+			if (string.IsNullOrEmpty(_taskName))
+			{
+				MessageBox.Show(Constants.TaskNameErrorMessage, Constants.InformativeMessage);
+			}
+			else
+			{
+				AddValuesFromRows();
+				if (_backupDetailsModelList.Any() && _backupDetailsModelList != null)
+				{
+					var persistence = new Persistence();
+					persistence.SaveDetailsFormInfo(_backupDetailsModelList, _taskName);
+
+					_backupDetailsModelList.Clear();
+
+					InitializeBackupDetails();
+					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
+				}
+			}
+		}
 	}
 }

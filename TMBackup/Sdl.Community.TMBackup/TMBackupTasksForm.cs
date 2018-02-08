@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using Sdl.Community.BackupService;
+using System.Diagnostics;
 
 namespace Sdl.Community.TMBackup
 {
@@ -202,10 +203,13 @@ namespace Sdl.Community.TMBackup
 					{
 						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
 						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
-
-						backupInfo.Add(backupModel.BackupName, false);
-						persistence.RemoveDataFromJson(backupModel.BackupName);
+						if (backupModel != null)
+						{
+							backupInfo.Add(backupModel.BackupName, false);
+							persistence.RemoveDataFromJson(backupModel.BackupName);
+						}
 					}
+					AddInfoIntoJson(persistence, service, backupInfo);
 				}
 				else
 				{
@@ -320,6 +324,16 @@ namespace Sdl.Community.TMBackup
 				}
 				service.CreateTaskScheduler(entry.Key, entry.Value);
 			}
-		}		
+		}
+
+		private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+		}
+
+		private void btn_WinTaskScheduler_Click(object sender, EventArgs e)
+		{
+			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
+		}
 	}
 }
