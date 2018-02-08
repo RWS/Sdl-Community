@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
 using Sdl.Community.BackupService;
+using System.Diagnostics;
 
 namespace Sdl.Community.TMBackup
 {
@@ -327,7 +328,12 @@ namespace Sdl.Community.TMBackup
 
 		private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+		}
+
+		private void btn_WinTaskScheduler_Click(object sender, EventArgs e)
+		{
+			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
 		}
 	}
 }

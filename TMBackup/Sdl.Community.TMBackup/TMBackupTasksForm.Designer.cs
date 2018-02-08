@@ -47,6 +47,8 @@
             this.btn_RunTasks = new System.Windows.Forms.Button();
             this.toolTip_RunTasks = new System.Windows.Forms.ToolTip(this.components);
             this.btn_RunManuallyTasks = new System.Windows.Forms.Button();
+            this.btn_WinTaskScheduler = new System.Windows.Forms.Button();
+            this.toolTip_WinowsTaskScheduler = new System.Windows.Forms.ToolTip(this.components);
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.contextMenuStrip1.SuspendLayout();
@@ -206,11 +208,23 @@
             this.btn_RunManuallyTasks.UseVisualStyleBackColor = false;
             this.btn_RunManuallyTasks.Click += new System.EventHandler(this.btn_RunManuallyTasks_Click);
             // 
+            // btn_WinTaskScheduler
+            // 
+            this.btn_WinTaskScheduler.Image = ((System.Drawing.Image)(resources.GetObject("btn_WinTaskScheduler.Image")));
+            this.btn_WinTaskScheduler.Location = new System.Drawing.Point(692, 0);
+            this.btn_WinTaskScheduler.Name = "btn_WinTaskScheduler";
+            this.btn_WinTaskScheduler.Size = new System.Drawing.Size(28, 27);
+            this.btn_WinTaskScheduler.TabIndex = 5;
+            this.toolTip_WinowsTaskScheduler.SetToolTip(this.btn_WinTaskScheduler, "Open Windows Task Scheduler");
+            this.btn_WinTaskScheduler.UseVisualStyleBackColor = true;
+            this.btn_WinTaskScheduler.Click += new System.EventHandler(this.btn_WinTaskScheduler_Click);
+            // 
             // TMBackupTasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(887, 400);
+            this.Controls.Add(this.btn_WinTaskScheduler);
             this.Controls.Add(this.btn_RunManuallyTasks);
             this.Controls.Add(this.btn_RunTasks);
             this.Controls.Add(this.btn_Refresh);
@@ -249,5 +263,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn LastRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn NextRunCol;
 		private System.Windows.Forms.DataGridViewTextBoxColumn IntervalCol;
+		private System.Windows.Forms.Button btn_WinTaskScheduler;
+		private System.Windows.Forms.ToolTip toolTip_WinowsTaskScheduler;
 	}
 }
