@@ -34,10 +34,14 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return false;
 		}
 
-		public static bool IsEditedFuzzy(ISegment segment)
+		public static bool IsEditedFuzzy(ISegment segment,bool reverse)
 		{
 			if (!ContainsFuzzy(segment))
 			{
+				if (reverse)
+				{
+					return true;
+				}
 				return false;
 			}
 			//for 100% edited

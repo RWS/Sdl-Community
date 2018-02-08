@@ -220,7 +220,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 				}
 				if (success && CustomSettings.EditedFuzzy)
 				{
-					success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+					success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target,false);
 				}
 			}
 			return success;
@@ -352,7 +352,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 			}
 			if (!success && CustomSettings.EditedFuzzy)
 			{
-				success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target);
+				success = FuzzyHelper.IsEditedFuzzy(rowInfo.SegmentPair.Target,true);
 			}
 			return !success;
 		}
