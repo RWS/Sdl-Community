@@ -49,9 +49,8 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 				"\n - UserProfiles: this folder holds the default profiles for your chosen user profile (Default, SDL Trados, SDLX).  These are used to recreate the default keyboard shortcuts in your profiles you use if you delete the UserSettings.xml.  None of your customisations are held in these files and they are replaced by the defaults in the Studio program folder if you delete them." +
 				"\n - BaseSettings.xml: this file just points to where the default profile is coming from.  If you changed the location of this file then removing this file is going to reset to the location in the default UserProfiles." +
 				"\n - UserSettings.xml : This file contains most of the personalisation you may have carried out in Studio.  So things like customised keyboard shortcuts, window locations, choice of colour scheme, whether or not you agreed to share data (error information for example), Translation Memory lists, your preferences in File -> Options, units used for your confirmation statistics, recently used folders for Projects, Translation memories, Files, Termbases etc.  This isn't a comprehensive list but hopefully illustrates how much of your personalised settings are held in this one file.  So deleting it is going to mean you spending time setting them all up again.  Most of the things in this file cannot be exported through the User Interface in Studio so starting again will be a manual process." +
-				"\n - Settings.xml: if you have added any server connections, Translation Memories or Termbases for example, then the URL is held in here.  Credentials for logging in are not held here as they are encrypted elsewhere in the software. Deleting this file means you are going to lose all the connections you had and they need to be added again. " +
-				"\n - plugincache.xml: ...";
-			
+				"\n - Settings.xml: if you have added any server connections, Translation Memories or Termbases for example, then the URL is held in here.  Credentials for logging in are not held here as they are encrypted elsewhere in the software. Deleting this file means you are going to lose all the connections you had and they need to be added again. ";
+
 		}
 
 		public static string AppDataLocalMajor()
@@ -97,12 +96,12 @@ namespace Sdl.Community.StudioCleanupTool.Helpers
 		{
 			return
 				"This folder contains several files and a folder supporting settings in Multiterm and MultiTermExtract if you use it." +
-				"\n - UserProfiles.xml:" +
-				"\n - BaseSettings.xml:" +
-				"\n - MultiTermExtract_Connections.xml:" +
-				"\n - MultiTermExtract_Settings.xml" +
-				"\n - plugincache.xml:" +
-				"\n - Settings.xml:" +
+				"\n - UserProfiles.xml: this folder holds the MultiTerm profiles for your custom created profiles if you created any." +
+				"\n - BaseSettings.xml: this file just points to where the default profile is coming from.  If you changed the location of this file then removing this file is going to reset to the location in the default UserProfiles." +
+				"\n - MultiTermExtract_Connections.xml: Stores MultiTerm Server connections used in MT Extract." +
+				"\n - MultiTermExtract_Settings.xml: Stores MultiTerm Extract settings." +
+				"\n - plugincache.xml: can be used to deactivate plug-ins by default. If certain plug-ins you expect to be working are not, then one reason might be that the plugin cache has been configured to disable them by default." +
+				"\n - Settings.xml: Last used MultiTerm Server connection." +
 				"\n - UserSettings.xml: This file contains most of the personalisation you may have carried out in MultiTerm.  So things like customised keyboard shortcuts, window locations, choice of colour scheme, Termbase lists, your preferences in File -> Options, recently used locations for Termbases etc.  This isn't a comprehensive list but hopefully illustrates how much of your personalised settings are held in this one file.  So deleting it is going to mean you spending time setting them all up again.  Most of the things in this file cannot be exported through the User Interface in MultiTerm so starting again will be a manual process.";
 		}
 

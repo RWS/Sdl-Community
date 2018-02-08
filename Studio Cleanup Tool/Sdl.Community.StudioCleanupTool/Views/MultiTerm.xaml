@@ -93,7 +93,7 @@
 			    </DataTemplate>
 		    </ListBox.ItemTemplate>
 	    </ListBox>
-		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="300">
+		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="400">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="450" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
