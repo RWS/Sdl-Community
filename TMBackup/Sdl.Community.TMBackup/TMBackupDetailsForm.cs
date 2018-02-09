@@ -79,9 +79,9 @@ namespace Sdl.Community.TMBackup
 		{
 			Close();
 		}
-				
+
 		// Disable rows from the actions grid which already have values(user can only add/delete actions)
-		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+		private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dataGridView1.Rows.Count > 0)
 			{
@@ -140,8 +140,8 @@ namespace Sdl.Community.TMBackup
 			if (dataGridView1.Rows.Count > 0)
 			{
 				var persistence = new Persistence();
-				var jsonRequestModel = persistence.ReadFormInformation();
-
+				var jsonRequestModel = persistence.ReadFormInformation();						
+				
 				if (jsonRequestModel != null && jsonRequestModel.BackupDetailsModelList != null && jsonRequestModel.BackupDetailsModelList.Count > 0)
 				{
 					var backupDetailsList = jsonRequestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList();
@@ -163,7 +163,7 @@ namespace Sdl.Community.TMBackup
 									_backupDetailsModelList.Add(backupDetail);
 								}
 							}
-							else if(backupDetail != null && row.Cells[2].Selected)
+							else if (backupDetail != null && row.Cells[2].Selected)
 							{
 								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage);
 								InitializeBackupDetails();

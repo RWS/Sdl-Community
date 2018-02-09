@@ -26,6 +26,7 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string FileTypeErrorMessage = "Actions cannot be saved! Please ensure that Type of file is filled!";
 		public const string PatternErrorMessage = "Actions cannot be saved! Please ensure that Patern is filled!";
 
+		public const string UpdateActionMessage = "Please ensure that all fields are filled in order to update the action!";
 
 		public static readonly string DeployPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community\TMBackup", Environment.UserName);
 		public static readonly string SdlCommunityPath = string.Format(@"C:\Users\{0}\AppData\Roaming\SDL Community", Environment.UserName);
