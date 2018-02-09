@@ -34,16 +34,18 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return false;
 		}
 
-		public static bool IsEditedFuzzy(ISegment segment,bool reverse)
+		
+
+		public static bool IsEditedFuzzy(ISegment segment)
 		{
-			if (!ContainsFuzzy(segment))
-			{
-				if (reverse)
-				{
-					return true;
-				}
-				return false;
-			}
+			//if (!ContainsFuzzy(segment))
+			//{
+			//	if (reverse)
+			//	{
+			//		return true;
+			//	}
+			//	return false;
+			//}
 			//for 100% edited
 			if ((bool)segment.Properties?.TranslationOrigin?.OriginType.Equals("auto-propagated"))
 			{
@@ -66,7 +68,7 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 			return false;
 		}
 
-		private static bool ContainsFuzzy(ISegment segment)
+		public static bool ContainsFuzzy(ISegment segment)
 		{
 			if (segment.Properties?.TranslationOrigin?.OriginBeforeAdaptation == null)
 			{
