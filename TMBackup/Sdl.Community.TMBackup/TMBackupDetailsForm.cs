@@ -80,14 +80,45 @@ namespace Sdl.Community.TMBackup
 			Close();
 		}
 
-		// Disable rows from the actions grid which already have values(user can only add/delete actions)
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on cel content click
 		private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dataGridView1.Rows.Count > 0)
 			{
 				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
 
-				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+					|| string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+				{
+					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+				}
+			}
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on cell content double click
+		private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (dataGridView1.Rows.Count > 0)
+			{
+				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+					|| string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+				{
+					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+				}
+			}
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on double click
+		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			if (dataGridView1.Rows.Count > 0)
+			{
+				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+					|| string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
 				{
 					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 				}
