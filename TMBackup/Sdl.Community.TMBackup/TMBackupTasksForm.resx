@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="TaskNameCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -155,29 +152,25 @@
   </metadata>
   <metadata name="IntervalCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
-  </metadata>
-  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>132, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="btn_RunTasks.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        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
+        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
 </value>
   </data>
   <metadata name="toolTip_RunTasks.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -205,6 +198,9 @@
         AAAAAElFTkSuQmCC
 </value>
   </data>
+  <metadata name="toolTip_WinowsTaskScheduler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>433, 17</value>
+  </metadata>
   <data name="btn_WinTaskScheduler.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAIAAAAC64paAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
@@ -228,6 +224,9 @@
   </data>
   <metadata name="toolTip_WinowsTaskScheduler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>433, 17</value>
+  </metadata>
+  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>123, 17</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

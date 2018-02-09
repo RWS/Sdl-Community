@@ -117,6 +117,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(409, 97);
             this.dataGridView1.TabIndex = 17;
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
             this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
@@ -128,9 +129,9 @@
             this.lbl_InformativeMessage.ForeColor = System.Drawing.Color.Firebrick;
             this.lbl_InformativeMessage.Location = new System.Drawing.Point(7, 135);
             this.lbl_InformativeMessage.Name = "lbl_InformativeMessage";
-            this.lbl_InformativeMessage.Size = new System.Drawing.Size(304, 13);
+            this.lbl_InformativeMessage.Size = new System.Drawing.Size(287, 13);
             this.lbl_InformativeMessage.TabIndex = 18;
-            this.lbl_InformativeMessage.Text = "Note: To backup all types of files, no action needs to be added";
+            this.lbl_InformativeMessage.Text = "Note: To backup all file types, no action needs to be added";
             // 
             // backupActionDataGridViewTextBoxColumn
             // 

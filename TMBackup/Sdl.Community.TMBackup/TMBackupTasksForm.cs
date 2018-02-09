@@ -95,15 +95,7 @@ namespace Sdl.Community.TMBackup
 				return backupTasks;
 			}
 		}
-
-		private void createNewBackupAction_Click(object sender, EventArgs e)
-		{
-			Hide();
-
-			var tmBackupForm = new TMBackupForm(true, string.Empty);
-			tmBackupForm.ShowDialog();
-		}
-
+		
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dataGridView1.Rows.Count > 0)
@@ -326,14 +318,22 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
+		private void btn_WinTaskScheduler_Click(object sender, EventArgs e)
+		{
+			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
+		}
+
+		private void btn_ReadMe_Click(object sender, EventArgs e)
 		{
 			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
 		}
 
-		private void btn_WinTaskScheduler_Click(object sender, EventArgs e)
+		private void btn_CreateBackup_Click(object sender, EventArgs e)
 		{
-			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
+			Hide();
+
+			var tmBackupForm = new TMBackupForm(true, string.Empty);
+			tmBackupForm.ShowDialog();
 		}
 	}
 }

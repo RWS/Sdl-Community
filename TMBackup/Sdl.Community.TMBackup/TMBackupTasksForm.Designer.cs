@@ -30,10 +30,6 @@
 		{
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TMBackupTasksForm));
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.createNewBackupAction = new System.Windows.Forms.ToolStripMenuItem();
-            this.readMeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.TaskNameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TaskRunType = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,51 +37,17 @@
             this.LastRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NextRunCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.IntervalCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.btn_Refresh = new System.Windows.Forms.Button();
             this.btn_RunTasks = new System.Windows.Forms.Button();
             this.toolTip_RunTasks = new System.Windows.Forms.ToolTip(this.components);
             this.btn_RunManuallyTasks = new System.Windows.Forms.Button();
             this.btn_WinTaskScheduler = new System.Windows.Forms.Button();
             this.toolTip_WinowsTaskScheduler = new System.Windows.Forms.ToolTip(this.components);
-            this.menuStrip1.SuspendLayout();
+            this.btn_CreateBackup = new System.Windows.Forms.Button();
+            this.btn_ReadMe = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem,
-            this.readMeToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(887, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // fileToolStripMenuItem
-            // 
-            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.createNewBackupAction});
-            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
-            this.fileToolStripMenuItem.Text = "File";
-            // 
-            // createNewBackupAction
-            // 
-            this.createNewBackupAction.Name = "createNewBackupAction";
-            this.createNewBackupAction.Size = new System.Drawing.Size(175, 22);
-            this.createNewBackupAction.Text = "Create new backup";
-            this.createNewBackupAction.Click += new System.EventHandler(this.createNewBackupAction_Click);
-            // 
-            // readMeToolStripMenuItem
-            // 
-            this.readMeToolStripMenuItem.Name = "readMeToolStripMenuItem";
-            this.readMeToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
-            this.readMeToolStripMenuItem.Text = "Read me";
-            this.readMeToolStripMenuItem.Click += new System.EventHandler(this.readMeToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
@@ -159,24 +121,10 @@
             this.IntervalCol.Name = "IntervalCol";
             this.IntervalCol.ReadOnly = true;
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.deleteToolStripMenuItem});
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(108, 26);
-            // 
-            // deleteToolStripMenuItem
-            // 
-            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
-            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
-            this.deleteToolStripMenuItem.Text = "Delete";
-            this.deleteToolStripMenuItem.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
-            // 
             // btn_Refresh
             // 
-            this.btn_Refresh.BackColor = System.Drawing.SystemColors.Control;
-            this.btn_Refresh.Location = new System.Drawing.Point(815, 1);
+            this.btn_Refresh.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_Refresh.Location = new System.Drawing.Point(825, 1);
             this.btn_Refresh.Name = "btn_Refresh";
             this.btn_Refresh.Size = new System.Drawing.Size(60, 25);
             this.btn_Refresh.TabIndex = 2;
@@ -188,7 +136,7 @@
             // 
             this.btn_RunTasks.BackColor = System.Drawing.SystemColors.Control;
             this.btn_RunTasks.Image = ((System.Drawing.Image)(resources.GetObject("btn_RunTasks.Image")));
-            this.btn_RunTasks.Location = new System.Drawing.Point(772, 0);
+            this.btn_RunTasks.Location = new System.Drawing.Point(789, 0);
             this.btn_RunTasks.Name = "btn_RunTasks";
             this.btn_RunTasks.Size = new System.Drawing.Size(30, 27);
             this.btn_RunTasks.TabIndex = 3;
@@ -200,7 +148,7 @@
             // 
             this.btn_RunManuallyTasks.BackColor = System.Drawing.SystemColors.ButtonFace;
             this.btn_RunManuallyTasks.Image = ((System.Drawing.Image)(resources.GetObject("btn_RunManuallyTasks.Image")));
-            this.btn_RunManuallyTasks.Location = new System.Drawing.Point(732, 0);
+            this.btn_RunManuallyTasks.Location = new System.Drawing.Point(749, 0);
             this.btn_RunManuallyTasks.Name = "btn_RunManuallyTasks";
             this.btn_RunManuallyTasks.Size = new System.Drawing.Size(30, 27);
             this.btn_RunManuallyTasks.TabIndex = 4;
@@ -211,7 +159,7 @@
             // btn_WinTaskScheduler
             // 
             this.btn_WinTaskScheduler.Image = ((System.Drawing.Image)(resources.GetObject("btn_WinTaskScheduler.Image")));
-            this.btn_WinTaskScheduler.Location = new System.Drawing.Point(692, 0);
+            this.btn_WinTaskScheduler.Location = new System.Drawing.Point(709, 0);
             this.btn_WinTaskScheduler.Name = "btn_WinTaskScheduler";
             this.btn_WinTaskScheduler.Size = new System.Drawing.Size(28, 27);
             this.btn_WinTaskScheduler.TabIndex = 5;
@@ -219,40 +167,56 @@
             this.btn_WinTaskScheduler.UseVisualStyleBackColor = true;
             this.btn_WinTaskScheduler.Click += new System.EventHandler(this.btn_WinTaskScheduler_Click);
             // 
+            // btn_CreateBackup
+            // 
+            this.btn_CreateBackup.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_CreateBackup.Location = new System.Drawing.Point(2, 2);
+            this.btn_CreateBackup.Name = "btn_CreateBackup";
+            this.btn_CreateBackup.Size = new System.Drawing.Size(110, 23);
+            this.btn_CreateBackup.TabIndex = 6;
+            this.btn_CreateBackup.Text = "Create new backup";
+            this.btn_CreateBackup.UseVisualStyleBackColor = false;
+            this.btn_CreateBackup.Click += new System.EventHandler(this.btn_CreateBackup_Click);
+            // 
+            // btn_ReadMe
+            // 
+            this.btn_ReadMe.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.btn_ReadMe.Location = new System.Drawing.Point(118, 2);
+            this.btn_ReadMe.Name = "btn_ReadMe";
+            this.btn_ReadMe.Size = new System.Drawing.Size(83, 23);
+            this.btn_ReadMe.TabIndex = 7;
+            this.btn_ReadMe.Text = "Read me";
+            this.btn_ReadMe.UseVisualStyleBackColor = false;
+            this.btn_ReadMe.Click += new System.EventHandler(this.btn_ReadMe_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 26);
+            // 
             // TMBackupTasksForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(887, 400);
+            this.Controls.Add(this.btn_ReadMe);
+            this.Controls.Add(this.btn_CreateBackup);
             this.Controls.Add(this.btn_WinTaskScheduler);
             this.Controls.Add(this.btn_RunManuallyTasks);
             this.Controls.Add(this.btn_RunTasks);
             this.Controls.Add(this.btn_Refresh);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "TMBackupTasksForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TM Backup Tasks";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
 
 		#endregion
-
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem createNewBackupAction;
-		private System.Windows.Forms.ToolStripMenuItem readMeToolStripMenuItem;
 		private System.Windows.Forms.DataGridView dataGridView1;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 		private System.Windows.Forms.Button btn_Refresh;
 		private System.Windows.Forms.Button btn_RunTasks;
 		private System.Windows.Forms.ToolTip toolTip_RunTasks;
@@ -265,5 +229,8 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn IntervalCol;
 		private System.Windows.Forms.Button btn_WinTaskScheduler;
 		private System.Windows.Forms.ToolTip toolTip_WinowsTaskScheduler;
+		private System.Windows.Forms.Button btn_CreateBackup;
+		private System.Windows.Forms.Button btn_ReadMe;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 	}
 }
