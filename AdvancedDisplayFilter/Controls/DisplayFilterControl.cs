@@ -780,18 +780,24 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.ConfirmationLevel)Enum.Parse(
                         typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
 
-			if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
-			{
-				if (DisplayFilterSettings.OriginTypes.Any())
-					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
-													+ "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
-														(current, item) => current
-																		   + Helper.GetTypeName((OriginType)Enum.Parse(
-																			   typeof(OriginType), item, true))) + ")");
-			}
+	        try
+	        {
+		        if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
+		        {
+			        if (DisplayFilterSettings.OriginTypes.Any())
+				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
+				                                        + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
+					                                        (current, item) => current
+					                                                           + Helper.GetTypeName((OriginType) Enum.Parse(
+						                                                           typeof(OriginType), item, true))) + ")");
+		        }
+	        }
+	        catch (Exception e)
+	        {
+		        
+	        }
 
-
-			if (DisplayFilterSettings.PreviousOriginTypes.Any())
+	        if (DisplayFilterSettings.PreviousOriginTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
                     + "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
