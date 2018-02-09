@@ -35,13 +35,14 @@
             this.btn_Add = new System.Windows.Forms.Button();
             this.btn_Delete = new System.Windows.Forms.Button();
             this.lbl_Line = new System.Windows.Forms.Label();
-            this.backupDetailsModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.backupActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupTypeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupPatternDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).BeginInit();
+            this.backupDetailsModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.lbl_InformativeMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // btn_Ok
@@ -98,10 +99,6 @@
             this.lbl_Line.Size = new System.Drawing.Size(535, 2);
             this.lbl_Line.TabIndex = 16;
             // 
-            // backupDetailsModelBindingSource
-            // 
-            this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.BackupService.Models.BackupDetailsModel);
-            // 
             // dataGridView1
             // 
             this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -129,7 +126,7 @@
             this.backupActionDataGridViewTextBoxColumn.DataPropertyName = "BackupAction";
             this.backupActionDataGridViewTextBoxColumn.HeaderText = "Action name";
             this.backupActionDataGridViewTextBoxColumn.Name = "backupActionDataGridViewTextBoxColumn";
-            this.backupActionDataGridViewTextBoxColumn.Width = 84;
+            this.backupActionDataGridViewTextBoxColumn.Width = 91;
             // 
             // backupTypeDataGridViewTextBoxColumn
             // 
@@ -137,7 +134,7 @@
             this.backupTypeDataGridViewTextBoxColumn.DataPropertyName = "BackupType";
             this.backupTypeDataGridViewTextBoxColumn.HeaderText = "Type of file";
             this.backupTypeDataGridViewTextBoxColumn.Name = "backupTypeDataGridViewTextBoxColumn";
-            this.backupTypeDataGridViewTextBoxColumn.Width = 66;
+            this.backupTypeDataGridViewTextBoxColumn.Width = 84;
             // 
             // backupPatternDataGridViewTextBoxColumn
             // 
@@ -146,11 +143,26 @@
             this.backupPatternDataGridViewTextBoxColumn.HeaderText = "Pattern (.sdltm or .sdltb)";
             this.backupPatternDataGridViewTextBoxColumn.Name = "backupPatternDataGridViewTextBoxColumn";
             // 
+            // backupDetailsModelBindingSource
+            // 
+            this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.BackupService.Models.BackupDetailsModel);
+            // 
+            // lbl_InformativeMessage
+            // 
+            this.lbl_InformativeMessage.AutoSize = true;
+            this.lbl_InformativeMessage.ForeColor = System.Drawing.Color.Firebrick;
+            this.lbl_InformativeMessage.Location = new System.Drawing.Point(7, 135);
+            this.lbl_InformativeMessage.Name = "lbl_InformativeMessage";
+            this.lbl_InformativeMessage.Size = new System.Drawing.Size(304, 13);
+            this.lbl_InformativeMessage.TabIndex = 18;
+            this.lbl_InformativeMessage.Text = "Note: To backup all types of files, no action needs to be added";
+            // 
             // TMBackupDetailsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(512, 160);
+            this.Controls.Add(this.lbl_InformativeMessage);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.lbl_Line);
             this.Controls.Add(this.btn_Add);
@@ -162,9 +174,10 @@
             this.Name = "TMBackupDetailsForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "What to backup";
-            ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
@@ -179,5 +192,6 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn backupActionDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn backupTypeDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn backupPatternDataGridViewTextBoxColumn;
+		private System.Windows.Forms.Label lbl_InformativeMessage;
 	}
 }
