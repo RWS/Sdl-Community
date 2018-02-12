@@ -53,8 +53,10 @@
             this.btn_OpenWindowsTaskScheduler = new System.Windows.Forms.ToolStripButton();
             this.btn_Help = new System.Windows.Forms.ToolStripButton();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // dataGridView1
@@ -278,8 +280,17 @@
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 48);
+            this.contextMenuStrip1.Click += new System.EventHandler(this.deleteToolStripMenuItem_Click);
+            // 
+            // deleteToolStripMenuItem
+            // 
+            this.deleteToolStripMenuItem.Name = "deleteToolStripMenuItem";
+            this.deleteToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.deleteToolStripMenuItem.Text = "Delete";
             // 
             // TMBackupTasksForm
             // 
@@ -295,6 +306,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -316,7 +328,6 @@
 		private System.Windows.Forms.ToolStripButton btn_RefreshView;
 		private System.Windows.Forms.ToolStripButton btn_OpenWindowsTaskScheduler;
 		private System.Windows.Forms.ToolStripButton btn_Help;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 		private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton_File;
 		private System.Windows.Forms.ToolStripMenuItem createNewBackupToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem startManualTasksToolStripMenuItem;
@@ -324,5 +335,7 @@
 		private System.Windows.Forms.ToolStripMenuItem refreshViewToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem windowsTaskSchedulerToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+		private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
 	}
 }
