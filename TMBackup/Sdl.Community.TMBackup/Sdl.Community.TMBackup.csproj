@@ -148,9 +148,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\windows_scheduler.png" />
     <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
-    <Content Include="Resources\runManually.png" />
-    <Content Include="Resources\TaskScheduler.png" />
+    <Content Include="Resources\createbackup.png" />
+    <Content Include="Resources\enable.png" />
+    <Content Include="Resources\readme.png" />
+    <Content Include="Resources\refresh.png" />
+    <Content Include="Resources\start_manually.png" />
     <Content Include="Resources\TMBackup_icon.ico" />
     <EmbeddedResource Include="TMBackupTasksForm.resx">
       <DependentUpon>TMBackupTasksForm.cs</DependentUpon>
