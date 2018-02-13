@@ -36,11 +36,11 @@
             this.btn_Delete = new System.Windows.Forms.Button();
             this.lbl_Line = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.lbl_InformativeMessage = new System.Windows.Forms.Label();
             this.backupActionDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupTypeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupPatternDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupDetailsModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.lbl_InformativeMessage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.backupDetailsModelBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -117,8 +117,21 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(409, 97);
             this.dataGridView1.TabIndex = 17;
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
+            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
+            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentDoubleClick);
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             this.dataGridView1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridView1_KeyUp);
+            // 
+            // lbl_InformativeMessage
+            // 
+            this.lbl_InformativeMessage.AutoSize = true;
+            this.lbl_InformativeMessage.ForeColor = System.Drawing.Color.Firebrick;
+            this.lbl_InformativeMessage.Location = new System.Drawing.Point(7, 135);
+            this.lbl_InformativeMessage.Name = "lbl_InformativeMessage";
+            this.lbl_InformativeMessage.Size = new System.Drawing.Size(287, 13);
+            this.lbl_InformativeMessage.TabIndex = 18;
+            this.lbl_InformativeMessage.Text = "Note: To backup all file types, no action needs to be added";
             // 
             // backupActionDataGridViewTextBoxColumn
             // 
@@ -146,16 +159,6 @@
             // backupDetailsModelBindingSource
             // 
             this.backupDetailsModelBindingSource.DataSource = typeof(Sdl.Community.BackupService.Models.BackupDetailsModel);
-            // 
-            // lbl_InformativeMessage
-            // 
-            this.lbl_InformativeMessage.AutoSize = true;
-            this.lbl_InformativeMessage.ForeColor = System.Drawing.Color.Firebrick;
-            this.lbl_InformativeMessage.Location = new System.Drawing.Point(7, 135);
-            this.lbl_InformativeMessage.Name = "lbl_InformativeMessage";
-            this.lbl_InformativeMessage.Size = new System.Drawing.Size(304, 13);
-            this.lbl_InformativeMessage.TabIndex = 18;
-            this.lbl_InformativeMessage.Text = "Note: To backup all types of files, no action needs to be added";
             // 
             // TMBackupDetailsForm
             // 

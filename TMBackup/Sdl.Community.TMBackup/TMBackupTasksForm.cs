@@ -1,26 +1,31 @@
-﻿using Microsoft.Win32.TaskScheduler;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Windows.Forms;
+using Microsoft.Win32.TaskScheduler;
+using Sdl.Community.BackupService;
 using Sdl.Community.BackupService.Helpers;
 using Sdl.Community.BackupService.Models;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using System.Linq;
-using Sdl.Community.BackupService;
-using System.Diagnostics;
 
 namespace Sdl.Community.TMBackup
 {
 	public partial class TMBackupTasksForm : Form
 	{
+		#region Private fields
 		private JsonRequestModel _jsonRquestModel = new JsonRequestModel();
 		private string _taskRunType = string.Empty;
+		#endregion
 
+		#region Constructors
 		public TMBackupTasksForm()
 		{
 			InitializeComponent();
 			GetBackupTasks();
 		}
+		#endregion
 
+		#region Public methods
 		/// <summary>
 		/// Get all backup tasks from Windows Task Scheduler and display in the TMBackup interface
 		/// </summary>
@@ -29,7 +34,7 @@ namespace Sdl.Community.TMBackup
 		{
 			Persistence persistence = new Persistence();
 			var jsonRequestModel = persistence.ReadFormInformation();
-			
+
 			using (var ts = new TaskService())
 			{
 				List<Task> backupTasks = new List<Task>();
@@ -46,7 +51,7 @@ namespace Sdl.Community.TMBackup
 							if (task.Name.Contains(Constants.TaskDetailValue))
 							{
 								var changeSettingModel = jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(taskName)).FirstOrDefault();
-								if(changeSettingModel != null)
+								if (changeSettingModel != null)
 								{
 									_taskRunType = changeSettingModel.IsManuallyOptionChecked ? "Manually" : "Automatically";
 								}
@@ -54,17 +59,20 @@ namespace Sdl.Community.TMBackup
 								var triggerInfo = string.Empty;
 								foreach (var trigger in task.Definition.Triggers)
 								{
-									if (trigger.Repetition.Interval.Hours == 0 && trigger.Repetition.Interval.Minutes == 0 && trigger.Repetition.Interval.Seconds == 0)
+									if (trigger.Repetition.Interval.Hours == 0 
+										&& trigger.Repetition.Interval.Minutes == 0
+										&& trigger.Repetition.Interval.Seconds == 0
+										&& trigger.Repetition.Interval.Days == 0)
 									{
 										// Display interval for manually task
 										triggerInfo = string.Format("Started at: '{0}'", trigger.StartBoundary);
 									}
 									else
-									{                
+									{
 										// Display interval for automatically task
 										triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
 									}
-								}					
+								}
 
 								tasks.Add(new TaskDefinitionModel
 								{
@@ -82,7 +90,7 @@ namespace Sdl.Community.TMBackup
 				}
 				// if any tasks does not exist and json is still populated it means that user has removed the tasks from the Windows Task Scheduler interface
 				// in this way, json needs to be cleaned up 
-				if(tasks == null || tasks.Count == 0)
+				if (tasks == null || tasks.Count == 0)
 				{
 					if (jsonRequestModel.BackupModelList != null) { jsonRequestModel.BackupModelList.Clear(); }
 					if (jsonRequestModel.BackupDetailsModelList != null) { jsonRequestModel.BackupDetailsModelList.Clear(); }
@@ -95,15 +103,197 @@ namespace Sdl.Community.TMBackup
 				return backupTasks;
 			}
 		}
+		#endregion
 
-		private void createNewBackupAction_Click(object sender, EventArgs e)
+		#region Private methods
+		/// <summary>
+		/// Set info for the manually tasks when trying to start running the backup of one or more tasks 
+		/// </summary>
+		/// <param name="persistence"></param>
+		/// <param name="service"></param>
+		/// <param name="row"></param>
+		private Dictionary<string, bool> SetManuallyTasksInfo(Persistence persistence, Service service, DataGridViewRow row)
+		{
+			var backupInfo = new Dictionary<string, bool>();
+			_taskRunType = row.Cells[1].Value.ToString();
+			if (_taskRunType.Equals("Manually"))
+			{
+				var backupName = row.Cells[0].Value.ToString();
+
+				var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
+				backupInfo.Add(backupModel.BackupName, true);
+				persistence.RemoveDataFromJson(backupModel.BackupName);
+			}
+			return backupInfo;
+		}
+
+		/// <summary>
+		/// Add new information to the Json when running all/specific tasks
+		/// </summary>
+		/// <param name="persistence"></param>
+		/// <param name="service"></param>
+		private void AddInfoIntoJson(Persistence persistence, Service service, Dictionary<string, bool> backupInfo)
+		{
+			foreach (KeyValuePair<string, bool> entry in backupInfo)
+			{
+				if (_jsonRquestModel.BackupModelList != null)
+				{
+					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.ChangeSettingsModelList != null)
+				{
+					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.BackupDetailsModelList != null)
+				{
+					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+				}
+				if (_jsonRquestModel.PeriodicBackupModelList != null)
+				{
+					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+				}
+				service.CreateTaskScheduler(entry.Key, entry.Value);
+			}
+		}
+
+		/// <summary>
+		/// Run manually task/tasks
+		/// </summary>
+		private void RunManuallyTasks()
+		{
+			var persistence = new Persistence();
+			var service = new Service();
+			var backupInfo = new Dictionary<string, bool>();
+			var dictionaryBackup = new Dictionary<string, bool>();
+
+			_jsonRquestModel = persistence.ReadFormInformation();
+
+			if (dataGridView1.SelectedRows.Count > 0)
+			{
+				// Run selected backup tasks
+				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+				{
+					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
+					foreach (var entry in dictionaryBackup)
+					{
+						backupInfo.Add(entry.Key, entry.Value);
+					}
+				}
+				AddInfoIntoJson(persistence, service, backupInfo);
+			}
+			else
+			{
+				// Run all manually backup tasks
+				foreach (DataGridViewRow row in dataGridView1.Rows)
+				{
+					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
+					foreach (var entry in dictionaryBackup)
+					{
+						backupInfo.Add(entry.Key, entry.Value);
+					}
+				}
+				AddInfoIntoJson(persistence, service, backupInfo);
+			}
+			GetBackupTasks();
+		}
+
+		/// <summary>
+		/// Run disabled task/tasks
+		/// </summary>
+		private void RunDisabledTasks()
+		{
+			var backupInfo = new Dictionary<string, bool>();
+			var persistence = new Persistence();
+			var service = new Service();
+			var taskNames = new List<string>();
+			_jsonRquestModel = persistence.ReadFormInformation();
+
+			using (var ts = new TaskService())
+			{
+				var tasks = ts.AllTasks.Where(t => t.State.Equals(TaskState.Disabled)).ToList();
+
+				if (dataGridView1.SelectedRows.Count > 0)
+				{
+					// Run selected disabled tasks
+					foreach (var task in tasks)
+					{
+						if (task.Name.Contains(Constants.TaskDetailValue))
+						{
+							var index = task.Name.IndexOf(" ") + 1;
+							var taskName = task.Name.Substring(index);
+
+							taskNames.Add(taskName);
+						}
+					}
+
+					foreach (DataGridViewRow row in dataGridView1.SelectedRows)
+					{
+						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
+						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
+						if (backupModel != null)
+						{
+							backupInfo.Add(backupModel.BackupName, false);
+							persistence.RemoveDataFromJson(backupModel.BackupName);
+						}
+					}
+					AddInfoIntoJson(persistence, service, backupInfo);
+				}
+				else
+				{
+					// Run all disabled tasks
+					foreach (var task in tasks)
+					{
+						if (task.Name.Contains(Constants.TaskDetailValue))
+						{
+							var index = task.Name.IndexOf(" ") + 1;
+							var taskName = task.Name.Substring(index);
+
+							var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault();
+
+							backupInfo.Add(backupModel.BackupName, false);
+							persistence.RemoveDataFromJson(backupModel.BackupName);
+						}
+					}
+					AddInfoIntoJson(persistence, service, backupInfo);
+				}
+				GetBackupTasks();
+			}
+		}
+
+		/// <summary>
+		/// Open Task Scheduler application from Windows
+		/// </summary>
+		private void OpenWindowsTaskScheduler()
+		{
+			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
+		}
+
+		/// <summary>
+		/// Open Help file from SDL Community site
+		/// </summary>
+		private void OpenReadMe()
+		{
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
+		}
+
+		/// <summary>
+		/// Create new task
+		/// </summary>
+		private void CreateNewTask()
 		{
 			Hide();
 
 			var tmBackupForm = new TMBackupForm(true, string.Empty);
 			tmBackupForm.ShowDialog();
 		}
+		#endregion
 
+		#region Events	
+		/// <summary>
+		/// Open TMBackup form for the selected task on cell double click
+		/// </summary>
+		/// <param name="sender">sender</param>
+		/// <param name="e">e</param>
 		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
 		{
 			if (dataGridView1.Rows.Count > 0)
@@ -163,177 +353,101 @@ namespace Sdl.Community.TMBackup
 			}
 		}
 
-		private void btn_Refresh_Click(object sender, EventArgs e)
+		/// <summary>
+		/// Run disabled task/tasks from the menu button
+		/// </summary>
+		private void btn_RunDisabledTasks_Click(object sender, EventArgs e)
 		{
-			GetBackupTasks();
+			RunDisabledTasks();
 		}
 
 		/// <summary>
-		///  Run selected/all disabled backup tasks
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void btn_RunTasks_Click(object sender, EventArgs e)
+		/// Create new tasks from the menu button
+		/// </summary>		
+		private void btn_CreateTask_Click(object sender, EventArgs e)
 		{
-			var backupInfo = new Dictionary<string, bool>();
-			var persistence = new Persistence();
-			var service = new Service();
-			var taskNames = new List<string>();
-			_jsonRquestModel = persistence.ReadFormInformation();
-
-			using (var ts = new TaskService())
-			{
-				var tasks = ts.AllTasks.Where(t => t.State.Equals(TaskState.Disabled)).ToList();
-				
-				if (dataGridView1.SelectedRows.Count > 0)
-				{
-					// Run selected disabled tasks
-					foreach (var task in tasks)
-					{
-						if (task.Name.Contains(Constants.TaskDetailValue))
-						{
-							var index = task.Name.IndexOf(" ") + 1;
-							var taskName = task.Name.Substring(index);
-
-							taskNames.Add(taskName);
-						}
-					}
-
-					foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-					{
-						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
-						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
-						if (backupModel != null)
-						{
-							backupInfo.Add(backupModel.BackupName, false);
-							persistence.RemoveDataFromJson(backupModel.BackupName);
-						}
-					}
-					AddInfoIntoJson(persistence, service, backupInfo);
-				}
-				else
-				{
-					// Run all disabled tasks
-					foreach (var task in tasks)
-					{
-						if (task.Name.Contains(Constants.TaskDetailValue))
-						{
-							var index = task.Name.IndexOf(" ") + 1;
-							var taskName = task.Name.Substring(index);
-
-							var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault();
-
-							backupInfo.Add(backupModel.BackupName, false);
-							persistence.RemoveDataFromJson(backupModel.BackupName);
-						}
-					}
-					AddInfoIntoJson(persistence, service, backupInfo);
-				}
-				GetBackupTasks();
-			}
+			CreateNewTask();
 		}
 
 		/// <summary>
-		/// Run selected/all tasks which are having manually option checked
+		/// Run manually task/tasks from the menu button
 		/// </summary>
-		/// <param name="sender">sender</param>
-		/// <param name="e">e</param>
 		private void btn_RunManuallyTasks_Click(object sender, EventArgs e)
 		{
-			var persistence = new Persistence();
-			var service = new Service();
-			var backupInfo = new Dictionary<string, bool>();
-			var dictionaryBackup = new Dictionary<string, bool>();
+			RunManuallyTasks();
+		}
 
-			_jsonRquestModel = persistence.ReadFormInformation();
-
-			if (dataGridView1.SelectedRows.Count > 0)
-			{
-				// Run selected backup tasks
-				foreach (DataGridViewRow row in dataGridView1.SelectedRows)
-				{
-					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
-					foreach (var entry in dictionaryBackup)
-					{
-						backupInfo.Add(entry.Key, entry.Value);
-					}
-				}
-				AddInfoIntoJson(persistence, service, backupInfo);
-			}
-			else
-			{
-				// Run all manually backup tasks
-				foreach (DataGridViewRow row in dataGridView1.Rows)
-				{
-					dictionaryBackup = SetManuallyTasksInfo(persistence, service, row);
-					foreach (var entry in dictionaryBackup)
-					{
-						backupInfo.Add(entry.Key, entry.Value);
-					}
-				}
-				AddInfoIntoJson(persistence, service, backupInfo);
-			}
+		/// <summary>
+		/// Refresh the current view from the menu button
+		/// </summary>
+		private void btn_RefreshView_Click(object sender, EventArgs e)
+		{
 			GetBackupTasks();
 		}
 
 		/// <summary>
-		/// Set info for the manually tasks when trying to start running the backup of one or more tasks 
+		/// Open Windows Tasks Scheduler from the menu button
 		/// </summary>
-		/// <param name="persistence"></param>
-		/// <param name="service"></param>
-		/// <param name="row"></param>
-		private Dictionary<string, bool> SetManuallyTasksInfo(Persistence persistence, Service service, DataGridViewRow row)
+		private void btn_OpenWindowsTaskScheduler_Click(object sender, EventArgs e)
 		{
-			var backupInfo = new Dictionary<string, bool>();
-			_taskRunType = row.Cells[1].Value.ToString();
-			if (_taskRunType.Equals("Manually"))
-			{
-				var backupName = row.Cells[0].Value.ToString();
-
-				var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
-				backupInfo.Add(backupModel.BackupName, true);
-				persistence.RemoveDataFromJson(backupModel.BackupName);
-			}
-			return backupInfo;
+			OpenWindowsTaskScheduler();
 		}
 
 		/// <summary>
-		/// Add new information to the Json when running all/specific tasks
+		/// Open Help page from community.sdl.com web site from the menu button
 		/// </summary>
-		/// <param name="persistence"></param>
-		/// <param name="service"></param>
-		private void AddInfoIntoJson(Persistence persistence, Service service, Dictionary<string, bool> backupInfo)
+		private void btn_Help_Click(object sender, EventArgs e)
 		{
-			foreach (KeyValuePair<string, bool> entry in backupInfo)
-			{
-				if (_jsonRquestModel.BackupModelList != null)
-				{
-					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
-				}
-				if (_jsonRquestModel.ChangeSettingsModelList != null)
-				{
-					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
-				}
-				if (_jsonRquestModel.BackupDetailsModelList != null)
-				{
-					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
-				}
-				if (_jsonRquestModel.PeriodicBackupModelList != null)
-				{
-					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
-				}
-				service.CreateTaskScheduler(entry.Key, entry.Value);
-			}
+			OpenReadMe();
 		}
 
-		private void readMeToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3134.sdl-tmbackup");
-		}
+		///// <summary>
+		///// Create new backup from the File -> Create New Backup option
+		///// </summary>
+		//private void createNewBackupToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	CreateNewTask();
+		//}
 
-		private void btn_WinTaskScheduler_Click(object sender, EventArgs e)
-		{
-			Process.Start(@"C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Administrative Tools\Task Scheduler");
-		}
+		///// <summary>
+		///// Start manually tasks from File -> Start Manual Tasks option
+		///// </summary>
+		//private void startManualTasksToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	RunManuallyTasks();
+		//}
+
+		///// <summary>
+		///// Run disabled task/tasks from File->Run Disabled Tasks option
+		///// </summary>
+		//private void startDisabledTasksToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	RunDisabledTasks();
+		//}
+
+		///// <summary>
+		///// Refresh view from File->Refresh View option
+		///// </summary>
+		//private void refreshViewToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	GetBackupTasks();
+		//}
+
+		///// <summary>
+		///// Open Windows Task Scheduler interface from File -> Windows Task Scheduler option
+		///// </summary>
+		//private void windowsTaskSchedulerToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	OpenWindowsTaskScheduler();
+		//}
+
+		///// <summary>
+		///// Open Help page from community.sdl.com web site from File -> Help option
+		///// </summary>
+		//private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+		//{
+		//	OpenReadMe();
+		//}
+		#endregion
 	}
 }

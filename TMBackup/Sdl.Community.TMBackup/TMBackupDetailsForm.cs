@@ -79,19 +79,29 @@ namespace Sdl.Community.TMBackup
 		{
 			Close();
 		}
-				
-		// Disable rows from the actions grid which already have values(user can only add/delete actions)
-		private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-		{
-			if (dataGridView1.Rows.Count > 0)
-			{
-				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
 
-				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null)
-				{
-					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
-				}
-			}
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on cel content click
+		private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+		{
+			DisableFilledCell(e);
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on cell content double click
+		private void dataGridView1_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DisableFilledCell(e);
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on double click
+		private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DisableFilledCell(e);
+		}
+
+		// Disable rows from the actions grid which already have values(user can only add/delete actions) on single click
+		private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+		{
+			DisableFilledCell(e);
 		}
 
 		private void dataGridView1_KeyUp(object sender, KeyEventArgs e)
@@ -140,8 +150,8 @@ namespace Sdl.Community.TMBackup
 			if (dataGridView1.Rows.Count > 0)
 			{
 				var persistence = new Persistence();
-				var jsonRequestModel = persistence.ReadFormInformation();
-
+				var jsonRequestModel = persistence.ReadFormInformation();						
+				
 				if (jsonRequestModel != null && jsonRequestModel.BackupDetailsModelList != null && jsonRequestModel.BackupDetailsModelList.Count > 0)
 				{
 					var backupDetailsList = jsonRequestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(_taskName)).ToList();
@@ -163,7 +173,7 @@ namespace Sdl.Community.TMBackup
 									_backupDetailsModelList.Add(backupDetail);
 								}
 							}
-							else if(backupDetail != null && row.Cells[2].Selected)
+							else if (backupDetail != null && row.Cells[2].Selected)
 							{
 								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage);
 								InitializeBackupDetails();
@@ -253,6 +263,20 @@ namespace Sdl.Community.TMBackup
 
 					InitializeBackupDetails();
 					dataGridView1.CurrentCell = dataGridView1.Rows[dataGridView1.Rows.Count - 1].Cells[0];
+				}
+			}
+		}
+
+		private void DisableFilledCell(DataGridViewCellEventArgs e)
+		{
+			if (dataGridView1.Rows.Count > 0)
+			{
+				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+					|| string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+				{
+					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 				}
 			}
 		}

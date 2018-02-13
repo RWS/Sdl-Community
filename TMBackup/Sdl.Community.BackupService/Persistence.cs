@@ -124,22 +124,6 @@ namespace Sdl.Community.BackupService
 			}
 		}
 
-		public void UpdateBackupDetailsForm(List<BackupDetailsModel> backupDetailsModelList, string taskName)
-		{
-			CheckIfJsonFileExist();
-
-			var jsonText = File.ReadAllText(_persistancePath);
-			var request = JsonConvert.DeserializeObject<JsonRequestModel>(jsonText);
-
-			if (request != null && request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)) != null)
-			{
-				request.BackupDetailsModelList.Clear();
-				request.BackupDetailsModelList = backupDetailsModelList;
-
-				WriteJsonRequestModel(request);
-			}
-		}
-
 		public void DeleteDetailsFromInfo(List<BackupDetailsModel> removedBackupDetailsList, string taskName)
 		{
 			CheckIfJsonFileExist();
