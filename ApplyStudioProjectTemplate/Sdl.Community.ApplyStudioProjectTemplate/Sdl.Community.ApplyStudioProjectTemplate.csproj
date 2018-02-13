@@ -168,6 +168,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Resources\question.ico" />
     <None Include="packages.config" />
     <None Include="Resources\ASPT.ico" />
     <None Include="SdlCommunity.snk" />
@@ -182,6 +183,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplyTemplateForm.resx">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>

@@ -188,6 +188,16 @@ namespace Sdl.Community.ApplyStudioProjectTemplate {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon question {
+            get {
+                object obj = ResourceManager.GetObject("question", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The selected settings have been applied to these projects:.
         /// </summary>
         internal static string Settings_Applied {
