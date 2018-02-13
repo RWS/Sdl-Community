@@ -59,7 +59,10 @@ namespace Sdl.Community.TMBackup
 								var triggerInfo = string.Empty;
 								foreach (var trigger in task.Definition.Triggers)
 								{
-									if (trigger.Repetition.Interval.Hours == 0 && trigger.Repetition.Interval.Minutes == 0 && trigger.Repetition.Interval.Seconds == 0)
+									if (trigger.Repetition.Interval.Hours == 0 
+										&& trigger.Repetition.Interval.Minutes == 0
+										&& trigger.Repetition.Interval.Seconds == 0
+										&& trigger.Repetition.Interval.Days == 0)
 									{
 										// Display interval for manually task
 										triggerInfo = string.Format("Started at: '{0}'", trigger.StartBoundary);
