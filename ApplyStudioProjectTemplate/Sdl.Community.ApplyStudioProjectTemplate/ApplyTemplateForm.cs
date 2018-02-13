@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using Sdl.ProjectAutomation.Core;
@@ -23,12 +24,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// Determines whether to show the warning about terminology
         /// </summary>
         private bool _showWarning = true;
+	    private bool _languageMatches = true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplyTemplateForm"/> class.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        public ApplyTemplateForm(ProjectsController controller)
+		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ApplyTemplateForm"/> class.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		public ApplyTemplateForm(ProjectsController controller)
         {
             InitializeComponent();
             LoadProjectTemplates(controller);
@@ -60,11 +63,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 	        {
 		        Indent = true
 	        };
-	        using (XmlWriter writer = XmlWriter.Create(projectTemplatesPath, settings))
+	        using (var writer = XmlWriter.Create(projectTemplatesPath, settings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("templates");
-                writer.WriteAttributeString("default", (SelectedTemplate.SelectedItem as ApplyTemplate).Id.ToString("D"));
+	            if (SelectedTemplate?.SelectedItem != null)
+	            {
+					writer.WriteAttributeString("default", (SelectedTemplate.SelectedItem as ApplyTemplate).Id.ToString("D"));
+				}
                 writer.WriteAttributeString("apply", (string)ApplyTo.SelectedItem);
                 writer.WriteAttributeString("tooltips", ShowToolTips.Checked ? "1" : "0");
                 writer.WriteAttributeString("warning", _showWarning ? "1" : "0");
@@ -76,7 +82,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         comboTemplate.WriteXml(writer);
                     }
                 }
-
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
                 writer.Flush();
@@ -91,7 +96,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         private void LoadProjectTemplates(ProjectsController controller)
         {
             // Add in the project templates defined in Studio
-            foreach (ProjectTemplateInfo templateInfo in controller.GetProjectTemplates())
+            foreach (var templateInfo in controller.GetProjectTemplates())
             {
 	            if (File.Exists(templateInfo.Uri.LocalPath))
 	            {
@@ -108,7 +113,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             {
                 try
                 {
-                    XmlDocument templatesXml = new XmlDocument();
+                    var templatesXml = new XmlDocument();
                     templatesXml.Load(projectTemplatesPath);
 
                     if (templatesXml.DocumentElement.HasAttribute("default"))
@@ -181,7 +186,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             {
                 SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
             }
-
             // Select the first one in the list if we haven't selected one yet
             SelectTemplate(selectedId);
         }
@@ -198,7 +202,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                 if ((SelectedTemplate.Items[index] as ApplyTemplate).Id == selectedId)
                 {
                     SelectedTemplate.SelectedIndex = index;
-                    break;
+					break;
                 }
             }
         }
@@ -210,8 +214,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SelectedTemplate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ApplyTemplate selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
-            TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
+			ApplyTemplate selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
+	        if (SelectedTemplate.SelectedIndex >0)
+	        {
+				_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
+			}
+	        if (!_languageMatches)
+	        {
+		        MessageBox.Show(@"Selected template has language directions different from selected project.", @"Wanning",
+			        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+	        }
+			TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
             TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
             TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
             TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
@@ -228,7 +241,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
 	        matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
             CheckChanged();
-        }
+	        
+		}
 
         /// <summary>
         /// Checks whether to enable the OK button.
@@ -443,7 +457,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     editTemplates.ProjectTemplatesItems.Add(comboTemplate);
                 }
             }
-
             // Show the dialog and check the result
             if (editTemplates.ShowDialog() == DialogResult.OK)
             {
@@ -464,19 +477,16 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         itemCount++;
                     }
                 }
-
                 // Add in each template from the dialog
                 foreach (object o in editTemplates.ProjectTemplatesItems)
                 {
                     SelectedTemplate.Items.Add(o);
                 }
-
                 // Add a default template if necessary
                 if (SelectedTemplate.Items.Count == 0)
                 {
                     SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
                 }
-
                 // Select the previously selected template
                 SelectTemplate(selectedId);
             }
@@ -522,7 +532,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         TerminologyTermbases.SelectedIndex = 0;
                         TerminologySearchSettings.SelectedIndex = 0;
                     }
-
                     _showWarning = warningForm.ShowAgain;
                 }
             }
@@ -556,7 +565,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 					(ApplyTemplateOptions) Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
 				CheckChanged();
 			}
-			
 		}
 	}
 }

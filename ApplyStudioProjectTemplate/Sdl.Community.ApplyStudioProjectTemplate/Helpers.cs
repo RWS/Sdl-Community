@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Xml;
 using Sdl.Core.Globalization;
+using Sdl.ProjectAutomation.FileBased;
 
 namespace Sdl.Community.ApplyStudioProjectTemplate
 {
 	public static class Helpers
 	{
-		public static TemplateLanguageDetails GetTemplateLanguageDirection(string templatePath)
+		private static TemplateLanguageDetails GetTemplateLanguageDirection(string templatePath)
 		{
 			var document = new XmlDocument();
 			document.Load(templatePath);
@@ -21,7 +23,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			};
 			if (node != null)
 			{
-				var sourceLanguageCode = node.ChildNodes[0].Attributes?["TargetLanguageCode"].InnerText;
+				var sourceLanguageCode = node.ChildNodes[0].Attributes?["SourceLanguageCode"].InnerText;
 				if (!string.IsNullOrEmpty(sourceLanguageCode))
 				{
 					templateLanguage.SourceLanguageCode = sourceLanguageCode;
@@ -34,18 +36,34 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						templateLanguage.TagrgetLanguagesCodeList.Add(targetLanguageCode);
 					}
 				}
-
-
 			}
 			return templateLanguage;
 		}
 
-		public  static bool ProjectLanguageMatchesTemplate(TemplateLanguageDetails projectTemplateLanguages, string sourceLanguage, List<Language> targetLanguages)
+		public static bool Matches(List<FileBasedProject> selectedProjects, ApplyTemplate selectedTemplate)
+		{
+			foreach (var selectedProject in selectedProjects)
+			{
+				var projectInfo = selectedProject.GetProjectInfo();
+				var projectTemplateLanguages = GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
+				var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
+				var targetLanguages = projectInfo.TargetLanguages.ToList();
+				var matchesLanguages =
+					ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
+				if (!matchesLanguages)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private  static bool ProjectLanguageMatchesTemplate(TemplateLanguageDetails projectTemplateLanguages, string sourceLanguage, List<Language> targetLanguages)
 		{
 			var targetLanguagesCode = new List<string>();
 			foreach (var language in targetLanguages)
 			{
-				targetLanguagesCode.Add(language.DisplayName);
+				targetLanguagesCode.Add(language.CultureInfo.Name);
 			}
 			if (!projectTemplateLanguages.SourceLanguageCode.Equals(sourceLanguage))
 			{

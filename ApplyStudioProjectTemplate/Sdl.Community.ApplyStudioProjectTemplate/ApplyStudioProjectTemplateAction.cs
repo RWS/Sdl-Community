@@ -91,21 +91,21 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     // This is the source project - check if it's a loaded one
                     FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
 
-	                var projectTemplateLanguages = Helpers.GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
-	                var sourceLanguage = targetProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
-	                var targetLanguages = targetProject.GetProjectInfo().TargetLanguages.ToList();
-	                var matchesLanguages =
-		                Helpers.ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
-	                if (!matchesLanguages)
-	                {
-		                var dialog = MessageBox.Show(@"Selected template has language directions different from selected project. Are you sure you want to apply this template?",@"Wanning",
-			                MessageBoxButtons.OKCancel);
-		                if (dialog == DialogResult.OK)
-		                {
-			                shouldApplyTemplate = true;
-		                }
+	                //var projectTemplateLanguages = Helpers.GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
+	                //var sourceLanguage = targetProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
+	                //var targetLanguages = targetProject.GetProjectInfo().TargetLanguages.ToList();
+	                //var matchesLanguages =
+		               // Helpers.ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
+	                //if (!matchesLanguages)
+	                //{
+		               // var dialog = MessageBox.Show(@"Selected template has language directions different from selected project. Are you sure you want to apply this template?",@"Wanning",
+			              //  MessageBoxButtons.OKCancel);
+		               // if (dialog == DialogResult.OK)
+		               // {
+			              //  shouldApplyTemplate = true;
+		               // }
 
-	                }
+	                //}
 					// Not found so load it from the filing system
 					if (sourceProject == null)
                     {
