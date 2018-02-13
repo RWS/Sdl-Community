@@ -50,7 +50,7 @@ namespace Sdl.Community.TMBackup
 
 							if (task.Name.Contains(Constants.TaskDetailValue))
 							{
-								var changeSettingModel = jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(taskName)).FirstOrDefault();
+								var changeSettingModel = jsonRequestModel.ChangeSettingsModelList.FirstOrDefault(c => c.BackupName.Equals(taskName));
 								if (changeSettingModel != null)
 								{
 									_taskRunType = changeSettingModel.IsManuallyOptionChecked ? "Manually" : "Automatically";
@@ -65,12 +65,12 @@ namespace Sdl.Community.TMBackup
 										&& trigger.Repetition.Interval.Days == 0)
 									{
 										// Display interval for manually task
-										triggerInfo = string.Format("Started at: '{0}'", trigger.StartBoundary);
+										triggerInfo = $"Started at: '{trigger.StartBoundary}'";
 									}
 									else
 									{
 										// Display interval for automatically task
-										triggerInfo = string.Format("Started at: '{0}'. After triggered, repeat every '{1}'", trigger.StartBoundary, trigger.Repetition.Interval);
+										triggerInfo = $"Started at: '{trigger.StartBoundary}'. After triggered, repeat every '{trigger.Repetition.Interval}'";
 									}
 								}
 
@@ -120,9 +120,12 @@ namespace Sdl.Community.TMBackup
 			{
 				var backupName = row.Cells[0].Value.ToString();
 
-				var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(backupName)).FirstOrDefault();
-				backupInfo.Add(backupModel.BackupName, true);
-				persistence.RemoveDataFromJson(backupModel.BackupName);
+				var backupModel = _jsonRquestModel.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(backupName));
+				if (backupModel != null)
+				{
+					backupInfo.Add(backupModel.BackupName, true);
+					persistence.RemoveDataFromJson(backupModel.BackupName);
+				}
 			}
 			return backupInfo;
 		}
@@ -138,19 +141,19 @@ namespace Sdl.Community.TMBackup
 			{
 				if (_jsonRquestModel.BackupModelList != null)
 				{
-					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+					persistence.SaveBackupModel(_jsonRquestModel.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(entry.Key)));
 				}
 				if (_jsonRquestModel.ChangeSettingsModelList != null)
 				{
-					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+					persistence.SaveChangeModel(_jsonRquestModel.ChangeSettingsModelList.FirstOrDefault(b => b.BackupName.Equals(entry.Key)));
 				}
 				if (_jsonRquestModel.BackupDetailsModelList != null)
 				{
-					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+					persistence.SaveDetailModel(_jsonRquestModel.BackupDetailsModelList.FirstOrDefault(b => b.BackupName.Equals(entry.Key)));
 				}
 				if (_jsonRquestModel.PeriodicBackupModelList != null)
 				{
-					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.Where(b => b.BackupName.Equals(entry.Key)).FirstOrDefault());
+					persistence.SavePeriodicModel(_jsonRquestModel.PeriodicBackupModelList.FirstOrDefault(b => b.BackupName.Equals(entry.Key)));
 				}
 				service.CreateTaskScheduler(entry.Key, entry.Value);
 			}
@@ -228,8 +231,8 @@ namespace Sdl.Community.TMBackup
 
 					foreach (DataGridViewRow row in dataGridView1.SelectedRows)
 					{
-						var selectedTaskName = taskNames.Where(t => t.Equals(row.Cells[0].Value.ToString())).FirstOrDefault();
-						var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(selectedTaskName)).FirstOrDefault();
+						var selectedTaskName = taskNames.FirstOrDefault(t => t.Equals(row.Cells[0].Value.ToString()));
+						var backupModel = _jsonRquestModel.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(selectedTaskName));
 						if (backupModel != null)
 						{
 							backupInfo.Add(backupModel.BackupName, false);
@@ -248,10 +251,13 @@ namespace Sdl.Community.TMBackup
 							var index = task.Name.IndexOf(" ") + 1;
 							var taskName = task.Name.Substring(index);
 
-							var backupModel = _jsonRquestModel.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault();
-
-							backupInfo.Add(backupModel.BackupName, false);
+							var backupModel = _jsonRquestModel.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(taskName));
+							if (backupModel != null)
+							{
+								backupInfo.Add(backupModel.BackupName, false);
+							
 							persistence.RemoveDataFromJson(backupModel.BackupName);
+							}
 						}
 					}
 					AddInfoIntoJson(persistence, service, backupInfo);
@@ -321,16 +327,20 @@ namespace Sdl.Community.TMBackup
 				{
 					foreach (DataGridViewRow selectedRow in dataGridView1.SelectedRows)
 					{
-						var task = ts.AllTasks.Where(t => t.Name.Contains(selectedRow.Cells[0].Value.ToString())).FirstOrDefault();
+						var task = ts.AllTasks.FirstOrDefault(t => t.Name.Contains(selectedRow.Cells[0].Value.ToString()));
 						if (task != null)
 						{
-							ts.RootFolder.DeleteTask(task.Name);
+							DialogResult dialogResult = MessageBox.Show(Constants.DeleteInformativeMessage, string.Empty, MessageBoxButtons.YesNo);
+							if (dialogResult == DialogResult.Yes)
+							{
+								ts.RootFolder.DeleteTask(task.Name);
 
-							var index = task.Name.IndexOf(" ") + 1;
-							var jsonTaskName = task.Name.Substring(index);
+								var index = task.Name.IndexOf(" ") + 1;
+								var jsonTaskName = task.Name.Substring(index);
 
-							Persistence persistence = new Persistence();
-							persistence.RemoveDataFromJson(jsonTaskName);
+								Persistence persistence = new Persistence();
+								persistence.RemoveDataFromJson(jsonTaskName);
+							}
 						}
 					}
 					GetBackupTasks();
@@ -400,54 +410,6 @@ namespace Sdl.Community.TMBackup
 		{
 			OpenReadMe();
 		}
-
-		///// <summary>
-		///// Create new backup from the File -> Create New Backup option
-		///// </summary>
-		//private void createNewBackupToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	CreateNewTask();
-		//}
-
-		///// <summary>
-		///// Start manually tasks from File -> Start Manual Tasks option
-		///// </summary>
-		//private void startManualTasksToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	RunManuallyTasks();
-		//}
-
-		///// <summary>
-		///// Run disabled task/tasks from File->Run Disabled Tasks option
-		///// </summary>
-		//private void startDisabledTasksToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	RunDisabledTasks();
-		//}
-
-		///// <summary>
-		///// Refresh view from File->Refresh View option
-		///// </summary>
-		//private void refreshViewToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	GetBackupTasks();
-		//}
-
-		///// <summary>
-		///// Open Windows Task Scheduler interface from File -> Windows Task Scheduler option
-		///// </summary>
-		//private void windowsTaskSchedulerToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	OpenWindowsTaskScheduler();
-		//}
-
-		///// <summary>
-		///// Open Help page from community.sdl.com web site from File -> Help option
-		///// </summary>
-		//private void helpToolStripMenuItem_Click(object sender, EventArgs e)
-		//{
-		//	OpenReadMe();
-		//}
 		#endregion
 	}
 }

@@ -30,7 +30,7 @@ namespace Sdl.Community.TMBackup
 		private void SetDateTimeFormat()
 		{
 			timePicker_At.Format = DateTimePickerFormat.Custom;
-			timePicker_At.CustomFormat = "HH:mm:ss tt";
+			timePicker_At.CustomFormat = Constants.TimeFormat;
 			timePicker_At.ShowUpDown = true;
 		}
 
@@ -85,16 +85,14 @@ namespace Sdl.Community.TMBackup
 
 			if (result.PeriodicBackupModelList != null)
 			{
-				var periodicBackupModelItem = result != null
-					? result.PeriodicBackupModelList != null
-					? result.PeriodicBackupModelList.Count > 0
+				var periodicBackupModelItem = result.PeriodicBackupModelList?.Count > 0
 					? result.PeriodicBackupModelList[0] != null
-					? result.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
-					: null : null : null : null;
+						? result.PeriodicBackupModelList.FirstOrDefault(p => p.BackupName.Equals(_taskName))
+						: null : null;
 
 				cmbBox_Interval.SelectedItem = periodicBackupModelItem != null ? periodicBackupModelItem.TimeType : string.Empty;
-				txtBox_TimeInterval.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupInterval.ToString() : string.Empty;
-				dateTimePicker_FirstBackup.Value = periodicBackupModelItem != null ? periodicBackupModelItem.FirstBackup : DateTime.Now;
+				txtBox_TimeInterval.Text = periodicBackupModelItem?.BackupInterval.ToString() ?? string.Empty;
+				dateTimePicker_FirstBackup.Value = periodicBackupModelItem?.FirstBackup ?? DateTime.Now;
 				timePicker_At.Text = periodicBackupModelItem != null ? periodicBackupModelItem.BackupAt : string.Empty;
 			}
 		}

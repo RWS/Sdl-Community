@@ -25,10 +25,8 @@ namespace Sdl.Community.BackupFiles
 			{
 				var service = new Service();
 				var jsonResult = service.GetJsonInformation();
-				var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).FirstOrDefault()
-													 : null : null;
-				var backupModelList = jsonResult != null ? jsonResult.BackupDetailsModelList != null ? jsonResult.BackupDetailsModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).ToList()
-														 : null : null;
+				var backupModel = jsonResult?.BackupModelList?.FirstOrDefault(b => b.TrimmedBackupName.Equals(trimmedBackupName));
+				var backupModelList = jsonResult?.BackupDetailsModelList?.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).ToList();
 				if (backupModel != null)
 				{
 					var fileExtensions = new List<string>();
@@ -101,7 +99,7 @@ namespace Sdl.Community.BackupFiles
 		{
 			var service = new Service();
 			var jsonResult = service.GetJsonInformation();
-			var backupModel = jsonResult != null ? jsonResult.BackupModelList != null ? jsonResult.BackupModelList.Where(b => b.TrimmedBackupName.Equals(trimmedBackupName)).FirstOrDefault() : null : null;
+			var backupModel = jsonResult?.BackupModelList?.FirstOrDefault(b => b.TrimmedBackupName.Equals(trimmedBackupName));
 			if (backupModel != null)
 			{
 				var sourcePath = backupModel.BackupFrom;

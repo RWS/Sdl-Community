@@ -12,7 +12,7 @@ namespace Sdl.Community.BackupFiles
 		{
 			LoadAssemblies();
 					
-			if (args.Count() > 0)
+			if (args.Any())
 			{
 				BackupService service = new BackupService();
 				service.BackupFilesRecursive(args[0]);

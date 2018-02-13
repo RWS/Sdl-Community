@@ -23,8 +23,7 @@ namespace Sdl.Community.BackupService
 		public void CreateTaskScheduler(string backupName, bool isStartedManually)
 		{
 			var jsonRequestModel = GetJsonInformation();
-			var changeSettingsModelItem = jsonRequestModel != null ? jsonRequestModel.ChangeSettingsModelList != null ? jsonRequestModel.ChangeSettingsModelList.Where(c => c.BackupName.Equals(backupName)).FirstOrDefault() 
-																   : null : null;
+			var changeSettingsModelItem = jsonRequestModel?.ChangeSettingsModelList?.FirstOrDefault(c => c.BackupName.Equals(backupName));
 
 			DateTime startDate = DateTime.Now;
 			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
@@ -81,8 +80,7 @@ namespace Sdl.Community.BackupService
 		// Add periodic time scheduler depending on user setup.
 		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr, string backupName)
 		{
-			var periodicBackupModel = jsonRequestModel != null ? jsonRequestModel.PeriodicBackupModelList != null ? jsonRequestModel.PeriodicBackupModelList.Where(p => p.BackupName.Equals(backupName)).FirstOrDefault()
-															   : null : null;
+			var periodicBackupModel = jsonRequestModel?.PeriodicBackupModelList?.FirstOrDefault(p => p.BackupName.Equals(backupName));
 			if (periodicBackupModel != null)
 			{
 				DateTime atScheduleTime = DateTime.Parse(periodicBackupModel.BackupAt, CultureInfo.InvariantCulture);

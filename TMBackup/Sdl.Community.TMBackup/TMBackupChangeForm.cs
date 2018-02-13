@@ -70,7 +70,7 @@ namespace Sdl.Community.TMBackup
 			if (jsonResult != null && jsonResult.ChangeSettingsModelList != null 
 				&& jsonResult.ChangeSettingsModelList.Count > 0 && jsonResult.ChangeSettingsModelList[0] != null)
 			{
-				var changeSettingsModel = jsonResult.ChangeSettingsModelList.Where(c => c.BackupName.Equals(_taskName)).FirstOrDefault();
+				var changeSettingsModel = jsonResult.ChangeSettingsModelList.FirstOrDefault(c => c.BackupName.Equals(_taskName));
 
 				radioBtn_TimeChange.Checked = changeSettingsModel != null ? changeSettingsModel.IsPeriodicOptionChecked : false;
 				radioBtn_Manually.Checked = changeSettingsModel != null ? changeSettingsModel.IsManuallyOptionChecked : false;
@@ -83,12 +83,10 @@ namespace Sdl.Community.TMBackup
 
 			var persistence = new Persistence();
 			var jsonResult = persistence.ReadFormInformation();
-			var periodicBackupModel = jsonResult != null
-				? jsonResult.PeriodicBackupModelList != null
-				? jsonResult.PeriodicBackupModelList.Count > 0
+			var periodicBackupModel = jsonResult?.PeriodicBackupModelList?.Count > 0
 				? jsonResult.PeriodicBackupModelList[0] != null
-				? jsonResult.PeriodicBackupModelList.Where(p => p.BackupName.Equals(_taskName)).FirstOrDefault()
-			    : null : null : null : null;
+					? jsonResult.PeriodicBackupModelList.FirstOrDefault(p => p.BackupName.Equals(_taskName))
+					: null : null;
 
 			if (periodicBackupModel != null && radioBtn_TimeChange.Checked)
 			{			

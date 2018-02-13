@@ -159,7 +159,7 @@ namespace Sdl.Community.TMBackup
 					{
 						foreach (DataGridViewRow row in dataGridView1.Rows)
 						{
-							var backupDetail = backupDetailsList.Where(b => b.BackupPattern.Equals(row.Cells[2].Value.ToString())).FirstOrDefault();
+							var backupDetail = backupDetailsList.FirstOrDefault(b => b.BackupPattern.Equals(row.Cells[2].Value.ToString()));
 
 							if (backupDetail == null)
 							{
@@ -173,7 +173,7 @@ namespace Sdl.Community.TMBackup
 									_backupDetailsModelList.Add(backupDetail);
 								}
 							}
-							else if (backupDetail != null && row.Cells[2].Selected)
+							else if (row.Cells[2].Selected)
 							{
 								MessageBox.Show(Constants.ActionAlreadyExist, Constants.InformativeMessage);
 								InitializeBackupDetails();
@@ -273,8 +273,9 @@ namespace Sdl.Community.TMBackup
 			{
 				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
 
-				if (dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
-					|| string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+				if (e.ColumnIndex != -1 && dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+				    || e.ColumnIndex != -1 &&
+				    string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
 				{
 					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 				}
