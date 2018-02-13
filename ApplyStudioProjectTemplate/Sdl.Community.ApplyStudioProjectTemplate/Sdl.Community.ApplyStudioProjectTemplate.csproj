@@ -142,6 +142,7 @@
     <Compile Include="EditApplyTemplates.Designer.cs">
       <DependentUpon>EditApplyTemplates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -155,6 +156,7 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TemplateLanguageDetails.cs" />
     <Compile Include="TermbaseWarningForm.cs">
       <SubType>Form</SubType>
     </Compile>

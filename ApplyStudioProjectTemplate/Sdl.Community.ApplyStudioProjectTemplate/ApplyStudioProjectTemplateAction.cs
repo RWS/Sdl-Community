@@ -50,6 +50,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             ApplyTemplateForm applyTemplateForm = new ApplyTemplateForm(Controller);
             if (applyTemplateForm.ShowDialog() == DialogResult.OK)
             {
+	            var shouldApplyTemplate = false;
                 // This is the template that the user selected
                 ApplyTemplate selectedTemplate = applyTemplateForm.ActiveTemplate;
 
@@ -88,10 +89,25 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     ISettingsBundle targetSettingsBundle = targetProject.GetSettings();
 
                     // This is the source project - check if it's a loaded one
-                    FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => String.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
+                    FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
 
-                    // Not found so load it from the filing system
-                    if (sourceProject == null)
+	                var projectTemplateLanguages = Helpers.GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
+	                var sourceLanguage = targetProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
+	                var targetLanguages = targetProject.GetProjectInfo().TargetLanguages.ToList();
+	                var matchesLanguages =
+		                Helpers.ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
+	                if (!matchesLanguages)
+	                {
+		                var dialog = MessageBox.Show(@"Selected template has language directions different from selected project. Are you sure you want to apply this template?",@"Wanning",
+			                MessageBoxButtons.OKCancel);
+		                if (dialog == DialogResult.OK)
+		                {
+			                shouldApplyTemplate = true;
+		                }
+
+	                }
+					// Not found so load it from the filing system
+					if (sourceProject == null)
                     {
                         if (string.IsNullOrEmpty(selectedTemplate.FileLocation))
                         {
