@@ -13,7 +13,7 @@
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
 		Icon="icon.ico"
-        Title="SDL Freshstart" Height="800" Width="1000" >
+        Title="SDL Freshstart" Height="900" Width="1000" >
     <Grid Height="auto">
 	    <Grid.Resources>
 		    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />

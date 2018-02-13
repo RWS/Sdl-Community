@@ -92,14 +92,14 @@
 		    </ListBox.ItemTemplate>
 	    </ListBox>
 
-	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="540">
+	    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="600">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
 			<TextBlock Margin="5,0,50,0"  TextWrapping="WrapWithOverflow" Width="500" Text="{Binding SelectedLocation.Description}" TextAlignment="Justify"></TextBlock>
 	    </StackPanel>
 
 	    <StackPanel Grid.Column="1" Grid.Row="5" Width="450" Margin="10,0,0,0" Orientation="Vertical">
 		    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,10,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="0,40,0,0" Foreground="{Binding RemoveForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" IsEnabled="{Binding IsRemoveEnabled}" Command="{Binding RemoveCommand}">
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="{Binding RemoveBtnColor}" CornerRadius="3" >
@@ -121,7 +121,7 @@
 				    Remove folders
 			    </Button>
 
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Command="{Binding RepairCommand}" IsEnabled="{Binding IsRepairEnabled}" Foreground="{Binding RepairForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,40,0,0" Command="{Binding RepairCommand}" IsEnabled="{Binding IsRepairEnabled}" Foreground="{Binding RepairForeground}"  VerticalAlignment="Center" HorizontalAlignment="Right" >
 				    <Button.Template>
 					    <ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="{Binding RepairBtnColor}" CornerRadius="3">
@@ -142,7 +142,7 @@
 
 				    Repair Studio
 			    </Button>
-				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,10,0,0" Foreground="WhiteSmoke" Command="{Binding RestoreCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" >
+				<Button   FontSize="13" FontWeight="Normal" Width="120" Margin="10,40,0,0" Foreground="WhiteSmoke" Command="{Binding RestoreCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" >
 					<Button.Template>
 						<ControlTemplate TargetType="{x:Type Button}">
 							<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3" >
