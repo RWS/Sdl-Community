@@ -148,8 +148,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\windows_scheduler.png" />
     <EmbeddedResource Include="BackupFilesExe\Sdl.Community.BackupFiles.exe" />
+    <Content Include="Resources\windows_scheduler.png" />
     <Content Include="Resources\createbackup.png" />
     <Content Include="Resources\enable.png" />
     <Content Include="Resources\readme.png" />

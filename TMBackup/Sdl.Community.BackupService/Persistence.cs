@@ -39,8 +39,7 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupModelItem in backupModelList)
 						{
-							var existingBackupModelItem = request.BackupModelList.Where(b => b.BackupName == backupModelItem.BackupName)
-																				 .FirstOrDefault();
+							var existingBackupModelItem = request.BackupModelList.FirstOrDefault(b => b.BackupName == backupModelItem.BackupName);
 
 							if (existingBackupModelItem == null)
 							{
@@ -99,11 +98,10 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var backupItem in backupDetailsModelList)
 						{
-							var existingBackupItem = request.BackupDetailsModelList.Where(b => b.BackupName.Equals(taskName)
+							var existingBackupItem = request.BackupDetailsModelList.FirstOrDefault(b => b.BackupName.Equals(taskName)
 																						  && b.BackupAction.Equals(backupItem.BackupAction)
 																						  && b.BackupPattern.Equals(backupItem.BackupPattern)
-																						  && b.BackupType.Equals(backupItem.BackupType))
-																					.FirstOrDefault();															
+																						  && b.BackupType.Equals(backupItem.BackupType));															
 							if (existingBackupItem == null)
 							{
 								request.BackupDetailsModelList.Add(backupItem);
@@ -134,9 +132,10 @@ namespace Sdl.Community.BackupService
 			{
 				foreach (var item in removedBackupDetailsList)
 				{
-					var requestItem = request.BackupDetailsModelList
-						.Where(r => r.BackupAction == item.BackupAction && r.BackupType == item.BackupType && r.BackupPattern == item.BackupPattern && r.BackupName.Equals(taskName))
-						.FirstOrDefault();
+					var requestItem = request.BackupDetailsModelList.FirstOrDefault(r => r.BackupAction == item.BackupAction
+					                                                                     && r.BackupType == item.BackupType 
+					                                                                     && r.BackupPattern == item.BackupPattern
+					                                                                     && r.BackupName.Equals(taskName));
 
 					if (requestItem != null)
 					{
@@ -167,8 +166,7 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var changeSettingModelItem in changeSettingsModelList)
 						{
-							var existingChangeSettingsModelItem = request.ChangeSettingsModelList.Where(b => b.BackupName == changeSettingModelItem.BackupName)
-																								.FirstOrDefault();
+							var existingChangeSettingsModelItem = request.ChangeSettingsModelList.FirstOrDefault(b => b.BackupName == changeSettingModelItem.BackupName);
 
 							if (existingChangeSettingsModelItem == null)
 							{
@@ -213,8 +211,7 @@ namespace Sdl.Community.BackupService
 					{
 						foreach (var periodicBackupModelItem in periodicBackupModelList)
 						{
-							var existingperiodicBackupModelItem = request.PeriodicBackupModelList.Where(b => b.BackupName == periodicBackupModelItem.BackupName)
-																								 .FirstOrDefault();
+							var existingperiodicBackupModelItem = request.PeriodicBackupModelList.FirstOrDefault(b => b.BackupName == periodicBackupModelItem.BackupName);
 
 							if (existingperiodicBackupModelItem == null)
 							{

@@ -145,7 +145,7 @@ namespace Sdl.Community.TMBackup
 				if (jsonRequestModel != null)
 				{
 					var backupModel = jsonRequestModel.BackupModelList != null
-						? jsonRequestModel.BackupModelList.Where(b => b.BackupName.Equals(txt_BackupName.Text)).FirstOrDefault()
+						? jsonRequestModel.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(txt_BackupName.Text))
 						: null;
 
 					if (backupModel != null)
@@ -160,12 +160,10 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var backupModel = result != null
-				? result.BackupModelList !=null
-				? result.BackupModelList.Count > 0
+			var backupModel = result?.BackupModelList?.Count > 0
 				? result.BackupModelList[0] != null
-				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
-				: null : null : null : null;
+					? result.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(taskName))
+					: null : null;
 
 			if (backupModel != null && !_isNewTask)
 			{
@@ -192,12 +190,10 @@ namespace Sdl.Community.TMBackup
 		{
 			var persistence = new Persistence();
 			var result = persistence.ReadFormInformation();
-			var backupModel = result != null
-				? result.BackupModelList != null 
-				? result.BackupModelList.Count > 0 
+			var backupModel = result?.BackupModelList?.Count > 0 
 				? result.BackupModelList[0] != null
-				? result.BackupModelList.Where(b => b.BackupName.Equals(taskName)).FirstOrDefault()
-				: null :null :null : null;
+					? result.BackupModelList.FirstOrDefault(b => b.BackupName.Equals(taskName))
+					: null :null;
 
 			if (backupModel != null && backupModel.BackupName.Contains(taskName))
 			{

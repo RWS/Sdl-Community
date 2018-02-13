@@ -12,6 +12,7 @@ namespace Sdl.Community.BackupService.Helpers
 		public const string ActionAlreadyExist = "Action with that specific pattern already exist!";
 		public const string TaskSchedulerAlreadyExist = "Task already exist! If you want to add a new task please select a different name and scheduler settings.";
 		public const string InformativeMessage = "Informative Message";
+		public const string DeleteInformativeMessage = "Are you sure you want to delete selected task(s)?";
 
 		public const string ManuallyOption = "Backup process started manually.";
 
@@ -33,5 +34,7 @@ namespace Sdl.Community.BackupService.Helpers
 		public static readonly string TaskDetailValue = "TMBackupTask ";
 
 		public static readonly string RegistryParam = " / WindowsInitialize";
+
+		public static readonly string TimeFormat = "HH:mm:ss tt";
 	}
 }
