@@ -19,24 +19,23 @@ namespace TQA
 {
     public partial class MainWindow : Form
     {
-        ProjectsController Controller;
-        public MainWindow(ProjectsController Controller)
+        private readonly ProjectsController _controller;
+
+        public MainWindow(ProjectsController controller)
         {
             InitializeComponent();
-            this.Controller = Controller;
-
-            var test = Controller.CurrentProject.GetProjectInfo().TargetLanguages;
-            this.ProjectNameLabel.Text = String.Format( "Currently working on: {0}", Controller.CurrentProject.GetProjectInfo().Name );
-            LanguageSelector.Items.AddRange( Controller.CurrentProject.GetProjectInfo().TargetLanguages.Select( l => l.DisplayName ).ToArray() );
+            _controller = controller;
+            ProjectNameLabel.Text = string.Format( "Currently working on: {0}", _controller.CurrentProject.GetProjectInfo().Name );
+            LanguageSelector.Items.AddRange(_controller.CurrentProject.GetProjectInfo().TargetLanguages.Select( l => l.DisplayName ).ToArray() );
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
             string tempPath = Path.Combine( Path.GetTempPath(), Path.GetTempFileName() );
 
-            var TqaTask = Controller.CurrentProject.RunAutomaticTask( Controller.CurrentProject.GetTargetLanguageFiles( Controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
+            var TqaTask = _controller.CurrentProject.RunAutomaticTask( _controller.CurrentProject.GetTargetLanguageFiles( _controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
 
-            Controller.CurrentProject.SaveTaskReportAs( TqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
+            _controller.CurrentProject.SaveTaskReportAs( TqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
 
             var extractedData = DataConverter.ExtractFromXml( tempPath ).ToArray();
 
@@ -48,20 +47,20 @@ namespace TQA
                 }
                 catch(IOException  ex )
                 {
-                    MessageBox.Show( "Unable to open file:\n" + outputSaveDialog.FileName+"\n\nPlease check if it not opened in another application and try again." );
+                    MessageBox.Show( @"Unable to open file:\n" + outputSaveDialog.FileName+@"\n\nPlease check if it not opened in another application and try again." );
                     return;
                 }
                 catch( Exception ex )
                 {
-                    MessageBox.Show( "Something went terribly wrong. Please send screenshot of this window to kpeka@sdl.com\n\n\n" + ex.ToString() );
+                    MessageBox.Show( @"Something went terribly wrong. Please send screenshot of this window to kpeka@sdl.com\n\n\n" + ex);
                     return;
                 }
-                MessageBox.Show( "TQA completed. Please find your report here:\n"+outputSaveDialog.FileName, "Done", MessageBoxButtons.OK, MessageBoxIcon.Information );
+                MessageBox.Show( @"TQA completed. Please find your report here:\n"+outputSaveDialog.FileName, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information );
 
             }
             else
             {
-                MessageBox.Show( "Operation terminated by user!", "Aborted", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
+                MessageBox.Show( @"Operation terminated by user!", @"Aborted", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
             }
 
             this.Close();

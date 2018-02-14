@@ -17,21 +17,21 @@ namespace TQA
     [ActionLayout( typeof( TqaRibbonGroup ), 10, DisplayType.Large )]
     public class StartButton : AbstractViewControllerAction<ProjectsController>
     {
-        MainWindow mw;
+        private MainWindow _mw;
         protected override void Execute()
         {
-            if( mw != null )
+            if( _mw != null )
             {
-                if( !mw.Visible )
+                if( !_mw.Visible )
                 {
-                    mw = new MainWindow( Controller );
-                    mw.Show();
+                    _mw = new MainWindow( Controller );
+                    _mw.Show();
                 }
             }
             else
             {
-                mw = new MainWindow( Controller );
-                mw.Show();
+                _mw = new MainWindow( Controller );
+                _mw.Show();
             }
 
         }
@@ -40,21 +40,21 @@ namespace TQA
     [ActionLayout( typeof( TqaRibbonGroup ), 11, DisplayType.Large )]
     public class HelpButton : AbstractAction
     {
-        HelpForm hf;
+        private HelpForm _hf;
         protected override void Execute()
         {
-            if( hf != null )
+            if( _hf != null )
             {
-                if( !hf.Visible )
+                if( !_hf.Visible )
                 {
-                    hf = new HelpForm();
-                    hf.Show();
+                    _hf = new HelpForm();
+                    _hf.Show();
                 }
             }
             else
             {
-                hf = new HelpForm();
-                hf.Show();
+                _hf = new HelpForm();
+                _hf.Show();
             }
         }
     }
