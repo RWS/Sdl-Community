@@ -9,8 +9,8 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 {
 	public class UserVisitor: IMarkupDataVisitor
 	{
-		private string _createdBy;
-		private string _modifiedBy;
+		private string _createdBy=string.Empty;
+		private string _modifiedBy = string.Empty;
 
 
 		public bool ModifiedBy(ISegment segment, string modifiedBy)
