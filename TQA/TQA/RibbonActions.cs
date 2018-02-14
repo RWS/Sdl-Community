@@ -1,21 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.IO;
-using System.Diagnostics;
-using System.Windows.Forms;
-
-using Sdl.Desktop.IntegrationApi;
+﻿using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace TQA
 {
     [Action( "TqaRibbonGroupRun", Name = "Run TQA", Icon = "tqa3" )]
     [ActionLayout( typeof( TqaRibbonGroup ), 10, DisplayType.Large )]
-    public class StartButton : AbstractViewControllerAction<ProjectsController>
+    [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
+	public class StartButton : AbstractViewControllerAction<ProjectsController>
     {
         private MainWindow _mw;
         protected override void Execute()
