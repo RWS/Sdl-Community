@@ -1,17 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using Sdl.Core.Globalization;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
@@ -32,7 +22,6 @@ namespace TQA
         private void StartButton_Click(object sender, EventArgs e)
         {
             var tempPath = Path.Combine( Path.GetTempPath(), Path.GetTempFileName() );
-
             var tqaTask = _controller.CurrentProject.RunAutomaticTask( _controller.CurrentProject.GetTargetLanguageFiles( _controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
 
             _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
@@ -56,13 +45,11 @@ namespace TQA
                     return;
                 }
                 MessageBox.Show( @"TQA completed. Please find your report here:\n"+outputSaveDialog.FileName, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information );
-
             }
             else
             {
                 MessageBox.Show( @"Operation terminated by user!", @"Aborted", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
             }
-
             Close();
         }
     }

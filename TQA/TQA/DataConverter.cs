@@ -13,31 +13,24 @@ namespace TQA
     {
         public static IEnumerable<Entry> ExtractFromXml(string path)
         {
-            XDocument report = XDocument.Load( path );
-
+            var report = XDocument.Load( path );
             var languages = report.Descendants( "language" );
-
-            foreach( XElement language in languages )
+            foreach(var language in languages )
             {
-                string languageString = language.Attribute( "name" ).Value;
-
+                var languageString = language.Attribute( "name" ).Value;
                 var files = language.Descendants( "file" );
 
-                foreach( XElement file in files )
+                foreach(var file in files )
                 {
-                    string fileString = file.Attribute( "name" ).Value;
-
+                    var fileString = file.Attribute( "name" ).Value;
                     var segments = file.Descendants( "segment" );
 
-                    foreach( XElement segment in segments )
+                    foreach(var segment in segments )
                     {
-                        string segmentID = segment.Attribute( "id" ).Value;
-
-                        var TQAs = segment.Elements( "tqa" );
+                        var segmentId = segment.Attribute( "id" ).Value;
                         var sourceContent =  segment.Element( "sourceContent" );
-
-                        List<Tuple<string, TextType>> sourceContentText = new List<Tuple<string, TextType>>();
-                        foreach( XElement group in sourceContent.Descendants("item") )
+                        var sourceContentText = new List<Tuple<string, TextType>>();
+                        foreach(var group in sourceContent.Descendants("item") )
                         {
                             switch( group.Attribute( "type" ).Value )
                             {
@@ -62,16 +55,8 @@ namespace TQA
                             }
                         }
 
-
-
-
                         var originalTranslation = segment.Attribute( "originalTranslation" ).Value;
-
                         var revisedTranslations = segment.Element( "revisedTranslation" ).Elements().Where( e => e.Name == "group" && ( e.Attribute( "category" ) != null || e.Attribute( "severity" ) != null ) );
-
-
-
-
 
                         foreach( XElement revisedTranslation in revisedTranslations )
                         {
@@ -80,7 +65,7 @@ namespace TQA
                             var severity = revisedTranslation.Attribute( "severity" ).Value;
                             var comment = revisedTranslation.Attribute( "comment" ).Value;
 
-                            List<Tuple<string, TextType>> revisedTranslationText = new List<Tuple<string, TextType>>();
+                            var revisedTranslationText = new List<Tuple<string, TextType>>();
                             foreach( XElement rTrans in segment.Element( "revisedTranslation" ).Descendants().Where( e => e.Name == "item" ) )
                             {
                                 switch( rTrans.Attribute( "type" ).Value )
@@ -105,8 +90,7 @@ namespace TQA
                                         break;
                                 }
                             }
-
-                            yield return new Entry( languageString, fileString, segmentID, originalTranslation, revisedTranslationText, sourceContentText, category, severity, comment, translation );
+                            yield return new Entry( languageString, fileString, segmentId, originalTranslation, revisedTranslationText, sourceContentText, category, severity, comment, translation );
                         }
                     }
                 }
@@ -115,20 +99,19 @@ namespace TQA
 
         public static void WriteExcel(string path, IEnumerable<Entry> rows)
         {
-            using( FileStream fs = new FileStream( path, FileMode.Create ) )
+            using( var fs = new FileStream( path, FileMode.Create ) )
             {
                 fs.Write( PluginResources.template, 0, PluginResources.template.Count() );
             }
-
             var rowsArray = rows.ToArray();
             var rowsCollection = rows.Select( r => r.GetArray() ).ToArray();
-            using( XLWorkbook wb = new XLWorkbook( path ) )
+            using( var wb = new XLWorkbook( path ) )
             {
-                using( IXLWorksheet ws = wb.Worksheet( "Evaluation details_input" ) )
+                using( var ws = wb.Worksheet( "Evaluation details_input" ) )
                 {
-                    for( int i = 0; i < rows.Count(); i++ )
+                    for( var i = 0; i < rows.Count(); i++ )
                     {
-                        for( int j = 0; j < rowsCollection[i].Count(); j++ )
+                        for(var j = 0; j < rowsCollection[i].Count(); j++ )
                         {
                             ws.Row( i + 4 ).Cell( j + 1 ).Value = rowsCollection[i][j];
                         }
@@ -136,7 +119,7 @@ namespace TQA
 
                         var entry = rowsArray[i].RevisedTranslation;
 
-                        for( int k = 0; k < entry.Count; k++ )
+                        for(var k = 0; k < entry.Count; k++ )
                         {
                             cell.RichText.AddText( entry[k].Item1 );
                             switch( entry[k].Item2 )
@@ -155,15 +138,13 @@ namespace TQA
                                     cell.RichText.ToArray()[k].SetFontColor( XLColor.Blue);
                                     cell.RichText.ToArray()[k].SetBold();
                                     break;
-
-
                             }
                         }
 
                         cell = ws.Cell( i + 4, 3 );
 
                         entry = rowsArray[i].SourceContent;
-                        for( int k = 0; k < entry.Count; k++ )
+                        for(var k = 0; k < entry.Count; k++ )
                         {
                             cell.RichText.AddText( entry[k].Item1 );
                             switch( entry[k].Item2 )
@@ -182,27 +163,18 @@ namespace TQA
                                     cell.RichText.ToArray()[k].SetFontColor( XLColor.Blue );
                                     cell.RichText.ToArray()[k].SetBold();
                                     break;
-
-
                             }
                         }
-
                     }
-
                 }
 
-                using( IXLWorksheet ws = wb.Worksheet( "Evaluation Report_Initial" ) )
+                using(var ws = wb.Worksheet( "Evaluation Report_Initial" ) )
                 {
                     ws.Cell( "B8" ).Value = DateTime.Now.ToString( "dd-MMM-yyyy" );
                 }
-
                 wb.CalculateMode = XLCalculateMode.Auto;
-
                 wb.Save();
             }
         }
-
-
-
     }
 }
