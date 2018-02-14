@@ -148,12 +148,12 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\template.xlsm" />
     <None Include="Resources\tqa3.ico" />
     <None Include="Resources\Help.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Resources\template.xlsm" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainWindow.resx">
