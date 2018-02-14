@@ -121,7 +121,7 @@ namespace TQA
             }
 
             var rowsArray = rows.ToArray();
-            var rowsCollection = rows.Select( r => r.getArray() ).ToArray();
+            var rowsCollection = rows.Select( r => r.GetArray() ).ToArray();
             using( XLWorkbook wb = new XLWorkbook( path ) )
             {
                 using( IXLWorksheet ws = wb.Worksheet( "Evaluation details_input" ) )
@@ -134,7 +134,7 @@ namespace TQA
                         }
                         var cell = ws.Cell( i + 4, 5 );
 
-                        var entry = rowsArray[i].revisedTranslation;
+                        var entry = rowsArray[i].RevisedTranslation;
 
                         for( int k = 0; k < entry.Count; k++ )
                         {
@@ -162,7 +162,7 @@ namespace TQA
 
                         cell = ws.Cell( i + 4, 3 );
 
-                        entry = rowsArray[i].sourceContent;
+                        entry = rowsArray[i].SourceContent;
                         for( int k = 0; k < entry.Count; k++ )
                         {
                             cell.RichText.AddText( entry[k].Item1 );

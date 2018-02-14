@@ -1,54 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TQA
 {
     public class Entry
     {
-        public string language { get; set; }
-        public string file { get; set; }
-        public string segment { get; set; }
-        public string originalTranslation { get; set; }
-        public List<Tuple<string, TextType>> revisedTranslation { get; set; }
-        public string highlightedText { get; set; }
-        public List<Tuple<string, TextType>> sourceContent { get; set; }
-        public string category { get; set; }
-        public string severity { get; set; }
-        public string comment { get; set; }
+        public string Language { get; set; }
+        public string File { get; set; }
+        public string Segment { get; set; }
+        public string OriginalTranslation { get; set; }
+        public List<Tuple<string, TextType>> RevisedTranslation { get; set; }
+        public string HighlightedText { get; set; }
+        public List<Tuple<string, TextType>> SourceContent { get; set; }
+        public string Category { get; set; }
+        public string Severity { get; set; }
+        public string Comment { get; set; }
 
         public Entry(string language, string file, string segment, string originalTranslation, List<Tuple<string, TextType>> revisedTranslation, List<Tuple<string, TextType>> sourceContent, string category, string severity, string comment, string highlightedText)
         {
-            this.language = language;
-            this.file = file;
-            this.segment = segment;
-            this.originalTranslation = originalTranslation;
-            this.revisedTranslation = revisedTranslation;
-            this.sourceContent = sourceContent;
-            this.category = category;
+            Language = language;
+            File = file;
+            Segment = segment;
+            OriginalTranslation = originalTranslation;
+            RevisedTranslation = revisedTranslation;
+            SourceContent = sourceContent;
+            Category = category;
 
             switch( severity )
             {
                 case "Minor weight":
-                    this.severity = "Minor Error";
+                    Severity = "Minor Error";
                     break;
                 case "Serious weight":
-                    this.severity = "Serious Error";
+                    Severity = "Serious Error";
                     break;
                 default:
-                    this.severity = severity;
+                    Severity = severity;
                     break;
             }
 
-            this.comment = comment;
-            this.highlightedText = highlightedText;
+            Comment = comment;
+            HighlightedText = highlightedText;
         }
 
-        public string[] getArray()
+        public string[] GetArray()
         {
-            return new string[] { this.file, this.segment, "", this.originalTranslation, "", this.category, this.severity, this.comment };
+            return new [] { File, Segment, "", OriginalTranslation, "", Category, Severity, Comment };
         }
     }
 

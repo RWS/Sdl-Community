@@ -31,11 +31,11 @@ namespace TQA
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            string tempPath = Path.Combine( Path.GetTempPath(), Path.GetTempFileName() );
+            var tempPath = Path.Combine( Path.GetTempPath(), Path.GetTempFileName() );
 
-            var TqaTask = _controller.CurrentProject.RunAutomaticTask( _controller.CurrentProject.GetTargetLanguageFiles( _controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
+            var tqaTask = _controller.CurrentProject.RunAutomaticTask( _controller.CurrentProject.GetTargetLanguageFiles( _controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
 
-            _controller.CurrentProject.SaveTaskReportAs( TqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
+            _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
 
             var extractedData = DataConverter.ExtractFromXml( tempPath ).ToArray();
 
@@ -63,7 +63,7 @@ namespace TQA
                 MessageBox.Show( @"Operation terminated by user!", @"Aborted", MessageBoxButtons.OK, MessageBoxIcon.Asterisk );
             }
 
-            this.Close();
+            Close();
         }
     }
 }
