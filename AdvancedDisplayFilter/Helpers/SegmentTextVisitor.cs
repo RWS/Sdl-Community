@@ -67,16 +67,20 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 
 		private  void AppendText(dynamic tag)
 		{
-			var property = tag.Properties;
-			if (property != null)
+			if (PropertyExist(tag, "Properties"))
 			{
-				if (PropertyExist(property, "Text"))
+				var property = tag.Properties;
+				if (property != null)
 				{
-					var text = property.Text;
-					_textBuilder.Append(text);
+					if (PropertyExist(property, "Text"))
+					{
+						var text = property.Text;
+						_textBuilder.Append(text);
+					}
+
 				}
-				
 			}
+			
 		}
 		/// <summary>
 		/// Check if tag pair contains specified property
