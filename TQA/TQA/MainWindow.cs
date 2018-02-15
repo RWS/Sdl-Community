@@ -36,15 +36,15 @@ namespace TQA
                 }
                 catch(IOException  ex )
                 {
-                    MessageBox.Show( @"Unable to open file:\n" + outputSaveDialog.FileName+@"\n\nPlease check if it not opened in another application and try again." );
+                    MessageBox.Show( "Unable to open file:\n" + outputSaveDialog.FileName+"\n\n Please check if it not opened in another application and try again." );
                     return;
                 }
                 catch( Exception ex )
                 {
-                    MessageBox.Show( @"Something went terribly wrong. Please send screenshot of this window to kpeka@sdl.com\n\n\n" + ex);
+                    MessageBox.Show( "Something went terribly wrong. Please send screenshot of this window to kpeka@sdl.com\n\n\n" + ex);
                     return;
                 }
-                MessageBox.Show( @"TQA completed. Please find your report here:\n"+outputSaveDialog.FileName, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information );
+                MessageBox.Show( "TQA completed. Please find your report here: \n "+outputSaveDialog.FileName, @"Done", MessageBoxButtons.OK, MessageBoxIcon.Information );
             }
             else
             {
