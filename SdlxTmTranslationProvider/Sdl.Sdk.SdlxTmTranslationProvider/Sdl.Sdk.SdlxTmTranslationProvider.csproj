@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\..\..\..\Bin\Mixed Platforms\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\..\..\..\..\Bin\Mixed Platforms\Debug\Sdl.Sdk.SdlxTmTranslationProvider.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>..\..\..\..\..\..\Bin\Mixed Platforms\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
+    <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\..\..\..\..\Bin\Mixed Platforms\Release\Sdl.Sdk.SdlxTmTranslationProvider.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F4E078AE-D4BB-45D0-9B28-FBADDE88B87F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.Sdk.SdlxTmTranslationProvider</RootNamespace>
+    <AssemblyName>Sdl.Sdk.SdlxTmTranslationProvider</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Sdl.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>SDLX.ico</ApplicationIcon>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sdl.Core.PluginFramework">	
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>..\..\..\..\..\..\bin\Mixed Platforms\$(Configuration)\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>..\..\..\..\..\..\bin\Mixed Platforms\$(Configuration)\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>..\..\..\..\..\..\bin\Mixed Platforms\$(Configuration)\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Sdlx.S42tmc">
+      <HintPath>..\..\..\..\..\..\bin\Mixed Platforms\$(Configuration)\Sdl.Sdlx.S42tmc.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Lingua\AlignedSubstring.cs" />
+    <Compile Include="Lingua\Alignment\SequenceAlignmentComputer.cs" />
+    <Compile Include="Lingua\EditDistance\EditDistanceComputer.cs" />
+    <Compile Include="Lingua\SegmentEditDistanceComputer.cs" />
+    <Compile Include="Lingua\SimilarityComputer.cs" />
+    <Compile Include="Lingua\SimilarityComputers.cs" />
+    <Compile Include="Lingua\SimilarityMatrix.cs" />
+    <Compile Include="Lingua\Substring.cs" />
+    <Compile Include="Lingua\TagAligner.cs" />
+    <Compile Include="Lingua\TagAssociation.cs" />
+    <Compile Include="Lingua\TagAssociations.cs" />
+    <Compile Include="Lingua\TagPairs.cs" />
+    <Compile Include="Lingua\TokenIndexLCSScoreProvider.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SdlxTmLanguageMap.cs" />
+    <Compile Include="SdlxTmTranslationProvider.cs" />
+    <Compile Include="SdlxTmTranslationProviderPlugin.cs" />
+    <Compile Include="SdlxTmTranslationProviderFactory.cs" />
+    <Compile Include="SdlxTmTranslationProviderUiForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SdlxTmTranslationProviderUiForm.designer.cs">
+      <DependentUpon>SdlxTmTranslationProviderUiForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SdlxTmTranslationProviderWinFormsUI.cs" />
+    <Compile Include="SdlxTmTranslationProviderLanguageDirection.cs" />
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SdlxTmLanguagePair.cs" />
+    <Compile Include="SdlxTm\TmField.cs" />
+    <Compile Include="SdlxTm\TmFieldType.cs" />
+    <Compile Include="SdlxTm\TmMatch.cs" />
+    <Compile Include="SdlxTm\TmPenalties.cs" />
+    <Compile Include="SdlxTm\TmTranslationVariant.cs" />
+    <Compile Include="Tokenizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="LanguageInfo.xml" />
+    <Content Include="pluginpackage.manifest.xml" />
+    <None Include="SDLX.png" />
+    <None Include="SDLX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Sdl.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SdlxTmTranslationProviderUiForm.resx">
+      <DependentUpon>SdlxTmTranslationProviderUiForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\SDL\PluginFramework\v11.0\Sdl.Core.PluginFramework.Build.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>-->
+</Project>

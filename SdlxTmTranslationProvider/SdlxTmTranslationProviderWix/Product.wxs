@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- !!! IMPORTANT NOTES !!! 
+		Search for "TODO" placeholders and fill in/remove as appropriate. GUIDs must be uppercase.
+		You must pass a sourceRoot variable containing the path to the directory containing the "Keys" subdirectory.
+		You must pass a buildNumber variable which will come from the build.
+		This is a 32-bit installer only but it will install on 64-bit windows under WOW64. It is per-machine and requires admin privileges to install.
+		You must reference wixutilextension and wixuiextension.
+-->
+
+<?ifndef sourceRoot ?>
+<?error sourceRoot is not defined. See notes in the .wxs file. ?>
+<?endif?>
+
+
+<?ifndef buildNumber ?>
+<?define buildNumber = 0 ?>
+<?endif?>
+
+<?if $(var.buildNumber) = "" ?>
+<?define buildNumber = 0 ?>
+<?endif?>
+
+
+<!-- Change or pass compression = none for faster builds or high for smaller ones. -->
+<?ifndef compression ?>
+<?define compression = "high" ?>
+<?endif?>
+
+<?ifndef oxversion ?>
+<?define oxversion = "12" ?>
+<?endif?>
+
+
+
+<!-- This is the minor version independent product name that must be common amongst all minor versions because it is used for directory and registry names.
+		 It should be changed for major versions. There shouldn't usually be a MajorVersionIndependentProductName: changing the current version shouldnt be able to break old ones.
+		 If a major version wants to use the previous versions registry/file entries, it would import them. This allows the old version to keep working in parallel.
+		 Do not use minor version or service pack info in this name as upgrades will 
+		 go into the same directory and registry keys. It looks wrong to have vN.5 in vN.0 directory. 
+		 Example: versionedName = "Studio1"
+-->
+<?define versionedName = "SDLXTMPlugin2" ?>
+
+<!-- Product display (marketing) name. Unversioned. Example: "SDL Trados Studio 2009" -->
+<?define displayName = "SDLX TM Translation Provider Plug-in for Studio 2018" ?>
+
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension" >
+
+	<!-- Future versions may add "SP1" etc to the name. The second field of version may be the SP number. -->
+	<Product Id="*"
+			 Language="0"
+			 Manufacturer="SDL"
+			 Name="$(var.displayName)"
+			 Version="2.0.$(var.buildNumber)"
+			 UpgradeCode="FF574514-52C1-49D7-B56E-E80E3FBA418E">
+
+		<Package Comments="This installer database contains the logic and data required to install $(var.displayName)."
+				 Compressed="yes"
+				 Description="$(var.displayName) installation database"
+				 InstallerVersion="301"
+				 InstallPrivileges="limited"
+				 InstallScope="perUser"
+				 Keywords="Installer,MSI,$(var.displayName),SDL,translation"
+				 Languages="0"
+				 Manufacturer="SDL"
+				 Platform="x86"
+				 SummaryCodepage="1252" />
+
+		<!-- Ignore warning about invalid attribute. -->
+		<Media Id="1" EmbedCab="yes" Cabinet="Product.cab" CompressionLevel="$(var.compression)" />
+
+		<MajorUpgrade DowngradeErrorMessage="A later version of [ProductName] is already installed. Set-up will now exit." MigrateFeatures="yes" />
+
+		<!-- Ignore ICE81 warning about unreferenced digital certificates. The ICE is incorrect. -->
+		<PatchCertificates>
+			<DigitalCertificate Id="SDLCodeSigningCertificate" SourceFile="$(var.sourceRoot)\Keys\SDLPLCCurrent.cer" />
+		</PatchCertificates>
+
+		<!-- Properties and AppSearches -->
+		<Property Id="MSIENFORCEUPGRADECOMPONENTRULES" Value="1" />
+		<Property Id="LIMITUI" Value="1" />
+
+		<!--<Property Id="ARPNOMODIFY" Value="1" />-->
+		<Property Id="ARPCOMMENTS" Value="$(var.displayName)" />
+		<Property Id="ARPCONTACT" Value="SDL Customer Support" />
+		<Property Id="ARPHELPLINK" Value="http://support.sdl.com" />
+		<Property Id="ARPHELPTELEPHONE" Value="Check your maintenance agreement." />
+		<Property Id="ARPURLINFOABOUT" Value="http://www.sdl.com" />
+		<Property Id="ARPINSTALLLOCATION">
+			<RegistrySearch Id="GetARPInstallLocationFromRegistry" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode]" Name="InstallLocation" Type="raw" />
+		</Property>
+
+		<!-- Get the INSTALLDIR of Studio if it has been installed (which it should have been). -->
+		<Property Id="STUDIO15INSTALLDIR" Secure="yes">
+			<RegistrySearch Id="GetStudio15InstallLocationFromRegistry" Root="HKLM" Key="Software\SDL\Studio15" Name="InstallLocation" Type="raw" />
+		</Property>
+		<Condition Message="This plugin can only be installed with SDL Trados Studio 2018."><![CDATA[ Installed or STUDIO15INSTALLDIR ]]></Condition>
+
+		<!-- Features -->
+		<Feature Id="ProductFeature" Title="Trados2007Wix" Level="1">
+			<ComponentRef Id="AD_SDL"/>
+			<ComponentRef Id="AD_Studio"/>
+			<ComponentRef Id="AD_PluginVersionNumber"/>
+			<ComponentRef Id="AD_Plugins"/>
+			<ComponentRef Id="AD_Packages"/>
+			<ComponentRef Id="Sdl.Sdk.SdlxTmTranslationProvider.sdlplugin"/>
+			<ComponentRef Id="AD_Unpacked" />
+			<ComponentRef Id="AD_UnpackedPlugin" />
+		</Feature>
+
+		<!-- Launch conditions -->
+		<Condition Message="This product only runs on Windows XP or later."><![CDATA[ Installed or VersionNT >= 501 ]]></Condition>
+
+		<!-- Directory layout has changed for Studio 2018 -->
+		<!--C:\Users\[username]\AppData\Local\SDL\SDL Trados Studio\[major version number]\Plugins\Packages-->
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="AppDataFolder">
+				<Directory Id="AD_SDL" Name="SDL">
+					<Component Id="AD_SDL">
+						<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_SDL" Value="keypath" KeyPath="yes" Type="string" />
+						<RemoveFolder Id="AD_SDL" On="uninstall" />
+					</Component>
+
+					<Directory Id="AD_Studio" Name="SDL Trados Studio">
+						<Component Id="AD_Studio">
+							<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_Studio" Value="keypath" KeyPath="yes" Type="string" />
+							<RemoveFolder Id="AD_Studio" On="uninstall" />
+						</Component>
+
+						<Directory Id="AD_PluginVersionNumber" Name="$(var.oxversion)">
+							<Component Id="AD_PluginVersionNumber">
+								<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_PluginVersionNumber " Value="keypath" KeyPath="yes" Type="string" />
+								<RemoveFolder Id="AD_PluginVersionNumber" On="uninstall" />
+							</Component>
+
+							<Directory Id="AD_Plugins" Name="Plugins">
+								<Component Id="AD_Plugins">
+									<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_Plugins" Value="keypath" KeyPath="yes" Type="string" />
+									<RemoveFolder Id="AD_Plugins" On="uninstall" />
+								</Component>
+
+								<Directory Id="AD_Packages" Name="Packages" FileSource="$(var.buildOutputDir)">
+									<Component Id="AD_Packages">
+										<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_Packages" Value="keypath" KeyPath="yes" Type="string" />
+										<RemoveFolder Id="AD_Packages" On="uninstall" />
+									</Component>
+
+									<Component Id="Sdl.Sdk.SdlxTmTranslationProvider.sdlplugin" Guid="98332864-70A5-4DF2-8739-39783C5A148B">
+										<File Name="Sdl.Sdk.SdlxTmTranslationProvider.sdlplugin" />
+										<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="Sdl.Sdk.SdlxTmTranslationProvider.sdlplugin" Value="keypath" KeyPath="yes" Type="string" />
+									</Component>
+								</Directory>
+
+								<Directory Id="AD_Unpacked" Name="Unpacked">
+									<Component Id="AD_Unpacked">
+										<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_Unpacked" Value="keypath" KeyPath="yes" Type="string" />
+										<RemoveFolder Id="AD_Unpacked" On="uninstall" />
+									</Component>
+
+									<Directory Id="AD_UnpackedPlugin" Name="Sdl.Sdk.SdlxTmTranslationProvider">
+										<Component Id="AD_UnpackedPlugin">
+											<RegistryValue Root="HKCU" Key="Software\SDL\OpenExchangeApps\$(var.versionedName)\Installer" Name="AD_UnpackedPlugin" Value="keypath" KeyPath="yes" Type="string" />
+											<RemoveFile Id="DeletePluginFiles" Name="Sdl.Sdk.SdlxTmTranslationProvider.*" On="both"/>
+											<RemoveFile Id="DeletePluginManifest" Name="pluginpackage.manifest.xml" On="both"/>
+											<RemoveFolder Id="AD_UnpackedPlugin" On="both"/>
+										</Component>
+									</Directory>
+
+								</Directory>
+							</Directory>
+						</Directory>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+
+		<!-- Custom actions -->
+		<!-- Set INSTALLDIR to registry version else default if not found. -->
+		<SetProperty Id="INSTALLDIR" Value="[ARPINSTALLLOCATION]" After="AppSearch">ARPINSTALLLOCATION</SetProperty>
+		<!-- Write install dir to ARP. -->
+		<SetProperty Id="ARPINSTALLLOCATION" Value="[INSTALLDIR]" After="CostFinalize" Sequence="execute" />
+		<!-- Prevent any chainer aborting if we already have the same (or later) version installed. -->
+		<CustomActionRef Id="WixExitEarlyWithSuccess" />
+
+		<!-- Sequences -->
+		<InstallUISequence>
+			<Custom Action="WixExitEarlyWithSuccess" After="FindRelatedProducts">WIX_DOWNGRADE_DETECTED</Custom>
+		</InstallUISequence>
+
+		<InstallExecuteSequence>
+			<Custom Action="WixExitEarlyWithSuccess" After="FindRelatedProducts">WIX_DOWNGRADE_DETECTED</Custom>
+		</InstallExecuteSequence>
+
+		<!-- Binaries -->		
+		<Icon Id="ProductIcon" SourceFile="SDLX.ico" />
+		<Property Id="ARPPRODUCTICON" Value="ProductIcon"/>
+
+		<!-- User Interface -->
+		<UIRef Id="WixUI_ErrorProgressText" />
+
+	</Product>
+</Wix>
+
+
+
