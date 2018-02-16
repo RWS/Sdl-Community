@@ -1,0 +1,2222 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Sdl.Core.Globalization</name>
+    </assembly>
+    <members>
+        <member name="T:Sdl.Core.Globalization.LanguageRegistry.AlternativeLanguageCode">
+            <summary>
+            Alternative language code class for a language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageRegistry.AlternativeLanguageCode.Code">
+            <summary>
+            Language code string
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageRegistry.MappingType">
+            <summary>
+            Enum of possible Mapping types returned by GetProductSpecificCodeWithFallback
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageRegistry.MappingType.None">
+            <summary>
+            No mapping was found
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageRegistry.MappingType.ExactMapping">
+            <summary>
+            The mapping was found on the language corresponding to the parameter code
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageRegistry.MappingType.BestMapping">
+            <summary>
+            The mapping was found on one of the ancestors or their default specific languages
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi">
+            <summary>
+            Api providing all the LanguageRegistry operations
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.Instance">
+            <summary>
+            Returns an instance of the LanguageRegistryApi singleton
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.Initialize">
+            <summary>
+            Initializer of the Registry
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetAllLanguages">
+            <summary>
+            Gets all the languages registered
+            </summary>
+            <returns>List with all available languages</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetAllNeutralLanguages">
+            <summary>
+            Gets all the neutral languages registered
+            </summary>
+            <returns>List with all the neutral languages</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetAllSpecificLanguages">
+            <summary>
+            Gets all the specific languages registered
+            </summary>
+            <returns>List with all specific languages</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetLanguage(System.String)">
+            <summary>
+            Gets a language based on a code
+            </summary>
+            <param name="languageCode">Searched code</param>
+            <returns>Language having the languageCode Code/null if such language is not found</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetLanguage(System.String,System.String)">
+            <summary>
+            Gets a language based on an alternative code and product ID
+            </summary>
+            <param name="alternativeLanguageCode">Searched alternative code</param>
+            <param name="productId">Searched product ID</param>
+            <returns>Language that has the given alternative code for the given product</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetSupportedLanguages(System.String)">
+            <summary>
+            Gets all supported languages for a given product
+            </summary>
+            <param name="productId">Id of the searched product</param>
+            <returns>Array of all supported languages for a product</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetAllRegisteredProducts">
+            <summary>
+            Presents a list of all the products supported by the model
+            </summary>
+            <returns>list of Product objects</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetAlternativeLanguageCodes(System.String,System.String)">
+            <summary>
+            Gets an alternative language code for the language represented by languageCode and for product represented by productId
+            </summary>
+            <param name="productId"></param>
+            <param name="languageCode"></param>
+            <returns>string that represents the alternative language code for the language and the product given</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.GetProductSpecificCodeWithFallback(System.String,System.String,System.String,Sdl.Core.Globalization.LanguageRegistry.MappingType@)">
+            <summary>
+            Returns the best available mapping from sourceProduct to targetProduct for sourceLanguageCode.
+            If sourceLanguage doesn't have a mapping, it falls back to its parent and the parent's defaultSpecificLanguage
+            </summary>
+            <param name="sourceProductId"></param>
+            <param name="sourceLanguageCode"></param>
+            <param name="targetProductId"></param>
+            <param name="mappingType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.SerializeObject">
+            <summary>
+            Serialization of the object to JSON
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistryApi.DeserializeObject(System.String)">
+            <summary>
+            Deserialize object from JSON
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageRegistry.Product">
+            <summary>
+            Product class that presents SDL products (e.g. Studio)
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageRegistry.Product.ProductId">
+            <summary>
+            Product ID string
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistry">
+            <summary>
+            Language Registry model
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistry.Version">
+            <summary>
+            Current version of the Language Registry, in order to be serialized
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageRegistry.LanguageRegistry.AllLanguages">
+            <summary>
+            All Languages are stored here
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.Codepage">
+            <summary>
+            <para>Represents a code page in the sense of a <see cref="T:System.Text.Encoding"/>
+            object, using a mechanism that allows basic manipulations on a system where 
+            support for the code page may not be installed.</para>
+            
+            <para>Normally the Codepage object is constructed from an Encoding object,
+            but for persistence it can be constructed from a string.</para>
+            
+            <para>If the code page is supported by the local machine you can use the
+            <see cref="P:Sdl.Core.Globalization.Codepage.Encoding"/> property to retrieve the corresponding 
+            .NET encoding object. If you access this property for a code page
+            that is not supported on this machine this will result in a 
+            <see cref="T:Sdl.Core.Globalization.UnsupportedCodepageException"/>.</para>
+            
+            <para>Using this mechanism as opposed to directly using the Encoding class
+            means that we can still work with files for which a code page is not
+            supported on a certain machine (at least as long as no code page conversion
+            operations are needed). This may be a common use case when a file
+            is converted on one system and then edited on another.</para>
+            
+            <para>Use the <see cref="P:Sdl.Core.Globalization.Codepage.IsValid"/> and <see cref="P:Sdl.Core.Globalization.Codepage.IsSupported"/> properties
+            to determine if the codepage has been set and if it is supported
+            on this system.</para>
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.#ctor(System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the Codepage class from an existing .NET Encoding.
+            </summary>
+            <param name="encoding">An existing .NET Encoding.</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.#ctor(System.String)">
+            <summary>
+            Construction from a code page name.
+            
+            See the <see cref="P:Sdl.Core.Globalization.Codepage.Name"/> property for information about what is considered
+            to be a valid code page name.
+            </summary>
+            <param name="codepageName">A valid codepage name.</param>
+            <remarks>
+            <para>
+            This constructor is typically used only in (de-)serialization. If possible a 
+            new code page object should be created from an existing encoding object instead.
+            </para></remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.#ctor">
+            <summary>
+            Constructs an invalid code page object (does not set a code page name).
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.#ctor(Sdl.Core.Globalization.Codepage)">
+            <summary>
+            Create a deep clone of the other object.
+            </summary>
+            <param name="other">Codepage to clone.</param>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Codepage.IsValid">
+            <summary>
+            True if a code page name has been set.
+            </summary>
+            <remarks>This does not mean that the actual code page string is valid.
+            Since the code page name could represent a code page that is not supported
+            on this particular system there is no safe way we can determine if the name
+            is a valid encoding name or not. Thus anything else than null or an empty
+            string for a name must be considered a "valid" code page name.
+            To test if a codepage is supported on this system, use the <see cref="P:Sdl.Core.Globalization.Codepage.IsSupported"/> property.
+            </remarks>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Codepage.IsSupported">
+            <summary>
+            True if the code page is supported on this system.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Codepage.Name">
+            <summary>
+            The IANA preferred name of the code page, e.g. windows-1252 or iso-8859-1.
+            </summary>
+            <remarks>This corresponds to the <c>Encoding.WebName</c> property
+            for code pages supported by the machine.
+            </remarks>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Codepage.Encoding">
+            <summary>
+            Returns the .NET Encoding that corresponds to this code page.
+            
+            If the code page is null this property returns null.
+            
+            If the encoding is not supported on this system 
+            an <see cref="T:Sdl.Core.Globalization.UnsupportedCodepageException"/> is thrown.
+            </summary>
+            <exception cref="T:Sdl.Core.Globalization.UnsupportedCodepageException"/>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.Equals(System.Object)">
+            <summary>
+            Case-sensitive comparison on whether the code page names are the same.
+            </summary>
+            <param name="obj">Object to test equality against.</param>
+            <returns><c>true</c> if the code page names are the same.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.GetHashCode">
+            <summary>
+            Hash code based on the code page name, or 0 if none.
+            </summary>
+            <returns>Hash code based on the code page name, or 0 if none.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.ToString">
+            <summary>
+            The code page name.
+            </summary>
+            <returns>The code page name.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Codepage.Clone">
+            <summary>
+            Return a deep clone of this object.
+            </summary>
+            <returns>A deep clone of this object.</returns>
+        </member>
+        <member name="T:Sdl.Core.Globalization.ConfirmationLevel">
+            <summary>
+            The approval level of the translation of a segment
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.Unspecified">
+            <summary>
+            The confirmation level is unknown or not relevant (e.g. if the segment is not translated).
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.Draft">
+            <summary>
+            The target segment may have been changed, but is not yet considered fully translated.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.Translated">
+            <summary>
+            The segment has been fully translated, but not yet reviewed.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.RejectedTranslation">
+            <summary>
+            The translation has been reviewed but was rejected.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.ApprovedTranslation">
+            <summary>
+            The translation has been reviewed and approved, but has not been signed-off.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.RejectedSignOff">
+            <summary>
+            The translation was rejected in the sign-off process.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.ConfirmationLevel.ApprovedSignOff">
+            <summary>
+            The translation has been approved and signed-off.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.Language">
+            <summary>
+            <para>Represents a language in the sense of a <see cref="T:System.Globalization.CultureInfo"/>
+            object, using a mechanism that allows basic manipulations on a system where the language
+            is not fully supported.</para>
+            
+            <para>The reason we use this type as opposed to the <c>CultureInfo</c> class
+            in the .NET Framework is that when working with files we may convert
+            the file on a system that supports a particular language (i.e. the <c>CultureInfo</c>
+            for this language abbreviation is known), but the file may subsequently
+            be opened on a system that does not yet have support for this language.</para>
+            
+            <para>Depending on what processing is to be done this may be a perfectly
+            valid use case, and it would be too harsh a restriction to require support
+            for the language to be installed on all systems that may ever look at the file.</para>
+            
+            <para>Under normal circumstances the language should be created from a <c>CultureInfo</c> object.</para>
+            
+            <para>In addition this wrapper allows a language to be represented by a plain string
+            when no <c>CultureInfo</c> for this language is supported on the system, and thus
+            allows the language to be represented until some truly language specific 
+            processing is needed (i.e. when the corresponding <c>CultureInfo</c> is required).</para>
+            
+            <para>When supported by the operating system the corresponding <c>CultureInfo</c> can be obtained 
+            directly from the <see cref="P:Sdl.Core.Globalization.Language.CultureInfo"/> property. If not supported this will throw an
+            <see cref="T:Sdl.Core.Globalization.UnsupportedLanguageException"/>.</para>
+            
+            <para>Use the <see cref="P:Sdl.Core.Globalization.Language.IsValid"/> and <see cref="P:Sdl.Core.Globalization.Language.IsSupported"/> properties to determine
+            if the language has been set and whether it is supported by the operating system.</para>
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DefaultDisplaySettings">
+            <summary>
+            Default settings for how languages should be shown to users.
+            </summary>
+            <remarks>
+            <para>
+            Since this is a static property, changing its values means changing 
+            the language display for the entire process.
+            </para>
+            <para>
+            If you are interested to know when these properties change,
+            attach a handler to the <see cref="E:Sdl.Core.Globalization.LanguageDisplaySettings.SettingsChanged"/> event of this object.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.IsNullOrInvalid(Sdl.Core.Globalization.Language)">
+            <summary>
+            <c>true</c> if the language object is <c>null</c> or not initialized.
+            </summary>
+            <param name="language">the Language to test</param>
+            <returns><c>true</c> if the language object is <c>null</c> or not initialized.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetAllLanguages">
+            <summary>
+            Returns all languages supported by the system.
+            </summary>
+            <returns>All languages supported by the system.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.Equals(System.String,System.String)">
+            <summary>
+            <c>true</c> if the two strings are the same, ignoring case.
+            </summary>
+            <param name="isoAbbreviation1">the string of the first isoAbbreviation to compare</param>
+            <param name="isoAbbreviation2">the string of the second isoAbbreviation to compare</param>
+            <returns><c>true</c> if the two strings are the same, ignoring case.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.Equals(Sdl.Core.Globalization.Language,Sdl.Core.Globalization.Language)">
+            <summary>
+            <c>true</c> if both objects are null or if they represent the same language.
+            </summary>
+            <param name="language1">the first Language to compare</param>
+            <param name="language2">the second Language to compare</param>
+            <returns><c>true</c> if both objects are null or if they represent the same language.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.#ctor(System.Globalization.CultureInfo)">
+            <summary>
+            Construction from an existing CultureInfo instance.
+            </summary>
+            <param name="cultureInfo"></param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.#ctor(System.String)">
+            <summary>
+            Construction from an ISO abbreviation string.
+            
+            See <see cref="P:Sdl.Core.Globalization.Language.IsoAbbreviation"/> for information about the expected format
+            of the string.
+            </summary>
+            <param name="isoAbbreviation">see <see cref="P:Sdl.Core.Globalization.Language.IsoAbbreviation"/></param>
+            <remarks>
+            This constructor is intended mainly for serialization purposes. 
+            Under normal circumstances language objects should be created from <c>CultureInfo</c> objects.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.#ctor">
+            <summary>
+            Default constructor, creates an invalid language object.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.#ctor(Sdl.Core.Globalization.Language)">
+            <summary>
+            Protected constructor used in cloning.
+            </summary>
+            <param name="other"></param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.Clone">
+            <summary>
+            Create an identical clone of this object.
+            </summary>
+            <returns>the cloned object</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.IsoAbbreviation">
+            <summary>
+            Follows the RFC 1766 standard in the format "[languagecode2]-[country/regioncode2]", 
+            where [languagecode2] is a lowercase two-letter code derived from ISO 639-1 and [country/regioncode2] 
+            is an uppercase two-letter code derived from ISO 3166. 
+            
+            For example, U.S. English is "en-US". 
+            
+            In cases where a two-letter language code is not available, 
+            the three-letter code derived from ISO 639-2 is used; for example, 
+            the three-letter code "div" is used for cultures that use the Dhivehi language.
+            </summary>
+            <remarks>This corresponds to the value of the <c>Name</c> property
+            of a <c>CultureInfo</c> object.</remarks>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.CultureInfo">
+            <summary>
+            The CultureInfo for this language.
+            
+            If this language is not supported on this machine an 
+            <see cref="T:Sdl.Core.Globalization.UnsupportedLanguageException"/> is thrown.
+            
+            If the ISO abbreviation is null this property returns null.
+            </summary>
+            <exception cref="T:Sdl.Core.Globalization.UnsupportedLanguageException"/>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.EvaluateCultureInfo">
+            <summary>
+            Helper function to attempt to construct a culture info object
+            from the ISO abbreviation, if this has not already been attempted.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.IsValid">
+            <summary>
+            <c>true</c> if an ISO abbreviation has been set for the language.
+            </summary>
+            <remarks>This does not mean that the language code is actual a valid code.
+            Since the ISO code could be unsupported on this system there is no easy
+            way to ensure that the code actually is valid.
+            To check if the code is supported on this system test the <see cref="P:Sdl.Core.Globalization.Language.IsSupported"/> property.</remarks>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.IsSupported">
+            <summary>
+            <c>true</c> if the language is valid and supported on this system.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.UsesCharacterCounts">
+            <summary>
+            <c>true</c> if the language uses character counts rather than word counts.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.LanguageCode">
+            <summary>
+            The ISO formatted code corresponding to the Language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.SupportedProducts">
+            <summary>
+            Dictionary of supported products and their respective alternative language codes
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.IsNeutral">
+            <summary>
+            Marks a neutral language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.LdmlData">
+            <summary>
+            Ldml Data for the language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.EnglishName">
+            <summary>
+            English name of the language; is set automatically from <c>CultureInfo</c>; can't set it programatically
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.Direction">
+            <summary>
+            Marks the direction of the language, can be "ltr"-left-to-right or "rtl"-right-to-left
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.RegionalVariants">
+            <summary>
+            List of the regional variants of the language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.ParentLanguage">
+            <summary>
+            Parent language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.ParentLanguageCode">
+            <summary>
+            ISO code of the parent language, used mostly in serialization/deserialization
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DefaultSpecificLanguageCode">
+            <summary>
+            ISO code of the default specific culture, used mostly in serialization/deserialization
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DefaultSpecificLanguage">
+            <summary>
+            Default specific language language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DefaultSpecificCultureCode">
+            <summary>
+            ISO code of the default specific culture, used mostly in serialization/deserialization
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DefaultSpecificCulture">
+            <summary>
+            Default specific language
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.ParentIsoCode">
+            <summary>
+            OBSOLETE,use ParentLanguageCode 
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetAlternativeLanguageCodes(System.String)">
+            <summary>
+            Gets an alternative language code for the language, based on the product ID
+            </summary>
+            <param name="productId"></param>
+            <returns>string that represents the alternative language code for the language and the product given</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.DisplayName">
+            <summary>
+            Returns the name of the language as it should be displayed to users.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetDisplayName(Sdl.Core.Globalization.LanguageFormat,System.Boolean)">
+            <summary>
+            Returns a name of the language that may be displayed to users.
+            </summary>
+            <param name="languageFormat">the TeamWorks LanguageFormat</param>
+            <param name="includeCountry">whether to include the country in the returned name</param>
+            <returns>A name of the language that may be displayed to users.</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Language.Image">
+            <summary>
+            The flag image used for showing this language in the user interface.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetImage(System.Boolean)">
+            <summary>
+            Get an image associated with the language for use in user interfaces.
+            </summary>
+            <param name="useFlag">if <c>false</c> country flags will not be returned</param>
+            <returns>An image associated with the language for use in user interfaces.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetFlagImage(System.Boolean,System.Single,System.Int32)">
+            <summary>
+            Get an image associated with the language for use in user interfaces.
+            </summary>
+            <param name="useFlag">if <c>false</c> country flags will not be returned</param>
+            <param name="scaleFactor">Default value of 1 means 96 DPI (100%). For example, 240 DPI (250%) means a scale factor of 2.5.</param>
+            <param name="baseSize">The size of the image to be returned is calculated by applying the scale factor to the base size.</param>
+            <returns>An image associated with the language for use in user interfaces.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.Equals(System.Object)">
+            <summary>
+            <c>true</c> if the ISO abbreviation for the two languages correspond.
+            </summary>
+            <remarks>The comparison is case sensitive.</remarks>
+            <param name="obj">the object to compare this language to </param>
+            <returns><c>true</c> if the ISO abbreviation for the two languages correspond.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.ToString">
+            <summary>
+            The ISO abbreviation for the language.
+            </summary>
+            <returns>The ISO abbreviation for the language.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.Language.GetHashCode">
+            <summary>
+            Hash code based on the ISO abbreviation for the language.
+            </summary>
+            <returns>Hash code based on the ISO abbreviation for the language.</returns>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageFormat">
+            <summary>
+            Exposes the various acceptable values language format can take in TeamWorks.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageFormat.EnglishName">
+            <summary>
+            International English name of the language (and region)
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageFormat.NativeName">
+            <summary>
+            Native name of the language (and region)
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LanguageFormat.ISOCode">
+            <summary>
+            A combination of:
+            - ISO 639-1 language code (2-3 letters)
+            - ISO 3166-1 region/country code
+            - (optionally) script code, when both the above match, to denote different alphabet systems e.g.  Uzbek Uzbekistan Cyrillic Vs. Uzbek Uzbekistan Latin.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageDisplaySettings">
+            <summary>
+            Used in <see cref="P:Sdl.Core.Globalization.Language.DefaultDisplaySettings"/> to control how languages
+            are displayed to the users for the entire process.
+            </summary>
+            <remarks>
+            <para>
+            Attach to the <see cref="E:Sdl.Core.Globalization.LanguageDisplaySettings.SettingsChanged"/> event to get notification when these settings change.
+            </para>
+            </remarks>
+        </member>
+        <member name="E:Sdl.Core.Globalization.LanguageDisplaySettings.SettingsChanged">
+            <summary>
+            Raised when any of the settings change.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageDisplaySettings.Format">
+            <summary>
+            Controls textual representation of languages in the user interface.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageDisplaySettings.IncludeCountry">
+            <summary>
+            Controls whether the country should be included in the language description.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageDisplaySettings.UseFlags">
+            <summary>
+            Controls whether country flags may be used when reprenting languages in the user interface.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageEventArgs">
+            <summary>
+            Event args class for language-related events
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageEventArgs.#ctor(Sdl.Core.Globalization.Language)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sdl.Core.Globalization.LanguageEventArgs"/> class.
+            </summary>
+            <param name="language">The language.</param>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageEventArgs.Language">
+            <summary>
+            Gets the language.
+            </summary>
+            <value>The language.</value>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguageCancelEventArgs">
+            <summary>
+            Cancel event args class for language-related events
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LanguageCancelEventArgs.#ctor(Sdl.Core.Globalization.Language)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sdl.Core.Globalization.LanguageEventArgs"/> class.
+            </summary>
+            <param name="language">The language.</param>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguageCancelEventArgs.Language">
+            <summary>
+            Gets the language.
+            </summary>
+            <value>The language.</value>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LanguagesResource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.af_ZA">
+            <summary>
+              Looks up a localized string similar to Afrikaans (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.am_ET">
+            <summary>
+              Looks up a localized string similar to Amharic (Ethiopia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_AE">
+            <summary>
+              Looks up a localized string similar to Arabic (U.A.E.).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_BH">
+            <summary>
+              Looks up a localized string similar to Arabic (Bahrain).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_DZ">
+            <summary>
+              Looks up a localized string similar to Arabic (Algeria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_EG">
+            <summary>
+              Looks up a localized string similar to Arabic (Egypt).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_IQ">
+            <summary>
+              Looks up a localized string similar to Arabic (Iraq).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_JO">
+            <summary>
+              Looks up a localized string similar to Arabic (Jordan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_KW">
+            <summary>
+              Looks up a localized string similar to Arabic (Kuwait).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_LB">
+            <summary>
+              Looks up a localized string similar to Arabic (Lebanon).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_LY">
+            <summary>
+              Looks up a localized string similar to Arabic (Libya).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_MA">
+            <summary>
+              Looks up a localized string similar to Arabic (Morocco).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_OM">
+            <summary>
+              Looks up a localized string similar to Arabic (Oman).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_QA">
+            <summary>
+              Looks up a localized string similar to Arabic (Qatar).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_SA">
+            <summary>
+              Looks up a localized string similar to Arabic (Saudi Arabia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_SY">
+            <summary>
+              Looks up a localized string similar to Arabic (Syria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_TN">
+            <summary>
+              Looks up a localized string similar to Arabic (Tunisia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ar_YE">
+            <summary>
+              Looks up a localized string similar to Arabic (Yemen).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.arn_CL">
+            <summary>
+              Looks up a localized string similar to Mapudungun (Chile).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.as_IN">
+            <summary>
+              Looks up a localized string similar to Assamese (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.az_Cyrl_AZ">
+            <summary>
+              Looks up a localized string similar to Azeri (Cyrillic, Azerbaijan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.az_Latn_AZ">
+            <summary>
+              Looks up a localized string similar to Azeri (Latin, Azerbaijan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ba_RU">
+            <summary>
+              Looks up a localized string similar to Bashkir (Russia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.be_BY">
+            <summary>
+              Looks up a localized string similar to Belarusian (Belarus).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bg_BG">
+            <summary>
+              Looks up a localized string similar to Bulgarian (Bulgaria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bn_BD">
+            <summary>
+              Looks up a localized string similar to Bengali (Bangladesh).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bn_IN">
+            <summary>
+              Looks up a localized string similar to Bengali (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bo_CN">
+            <summary>
+              Looks up a localized string similar to Tibetan (PRC).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.br_FR">
+            <summary>
+              Looks up a localized string similar to Breton (France).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bs_Cyrl_BA">
+            <summary>
+              Looks up a localized string similar to Bosnian (Cyrillic, Bosnia and Herzegovina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.bs_Latn_BA">
+            <summary>
+              Looks up a localized string similar to Bosnian (Latin, Bosnia and Herzegovina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ca_ES">
+            <summary>
+              Looks up a localized string similar to Catalan (Catalan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.co_FR">
+            <summary>
+              Looks up a localized string similar to Corsican (France).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.cs_CZ">
+            <summary>
+              Looks up a localized string similar to Czech (Czech Republic).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.cy_GB">
+            <summary>
+              Looks up a localized string similar to Welsh (United Kingdom).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.da_DK">
+            <summary>
+              Looks up a localized string similar to Danish (Denmark).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.de_AT">
+            <summary>
+              Looks up a localized string similar to German (Austria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.de_CH">
+            <summary>
+              Looks up a localized string similar to German (Switzerland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.de_DE">
+            <summary>
+              Looks up a localized string similar to German (Germany).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.de_LI">
+            <summary>
+              Looks up a localized string similar to German (Liechtenstein).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.de_LU">
+            <summary>
+              Looks up a localized string similar to German (Luxembourg).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.dsb_DE">
+            <summary>
+              Looks up a localized string similar to Lower Sorbian (Germany).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.dv_MV">
+            <summary>
+              Looks up a localized string similar to Divehi (Maldives).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.el_GR">
+            <summary>
+              Looks up a localized string similar to Greek (Greece).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_029">
+            <summary>
+              Looks up a localized string similar to English (Caribbean).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_AU">
+            <summary>
+              Looks up a localized string similar to English (Australia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_BZ">
+            <summary>
+              Looks up a localized string similar to English (Belize).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_CA">
+            <summary>
+              Looks up a localized string similar to English (Canada).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_GB">
+            <summary>
+              Looks up a localized string similar to English (United Kingdom).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_IE">
+            <summary>
+              Looks up a localized string similar to English (Ireland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_IN">
+            <summary>
+              Looks up a localized string similar to English (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_JM">
+            <summary>
+              Looks up a localized string similar to English (Jamaica).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_MY">
+            <summary>
+              Looks up a localized string similar to English (Malaysia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_NZ">
+            <summary>
+              Looks up a localized string similar to English (New Zealand).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_PH">
+            <summary>
+              Looks up a localized string similar to English (Republic of the Philippines).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_SG">
+            <summary>
+              Looks up a localized string similar to English (Singapore).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_TT">
+            <summary>
+              Looks up a localized string similar to English (Trinidad and Tobago).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_US">
+            <summary>
+              Looks up a localized string similar to English (United States).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_ZA">
+            <summary>
+              Looks up a localized string similar to English (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.en_ZW">
+            <summary>
+              Looks up a localized string similar to English (Zimbabwe).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_AR">
+            <summary>
+              Looks up a localized string similar to Spanish (Argentina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_BO">
+            <summary>
+              Looks up a localized string similar to Spanish (Bolivia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_CL">
+            <summary>
+              Looks up a localized string similar to Spanish (Chile).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_CO">
+            <summary>
+              Looks up a localized string similar to Spanish (Colombia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_CR">
+            <summary>
+              Looks up a localized string similar to Spanish (Costa Rica).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_DO">
+            <summary>
+              Looks up a localized string similar to Spanish (Dominican Republic).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_EC">
+            <summary>
+              Looks up a localized string similar to Spanish (Ecuador).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_ES">
+            <summary>
+              Looks up a localized string similar to Spanish (Spain).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_GT">
+            <summary>
+              Looks up a localized string similar to Spanish (Guatemala).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_HN">
+            <summary>
+              Looks up a localized string similar to Spanish (Honduras).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_MX">
+            <summary>
+              Looks up a localized string similar to Spanish (Mexico).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_NI">
+            <summary>
+              Looks up a localized string similar to Spanish (Nicaragua).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_PA">
+            <summary>
+              Looks up a localized string similar to Spanish (Panama).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_PE">
+            <summary>
+              Looks up a localized string similar to Spanish (Peru).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_PR">
+            <summary>
+              Looks up a localized string similar to Spanish (Puerto Rico).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_PY">
+            <summary>
+              Looks up a localized string similar to Spanish (Paraguay).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_SV">
+            <summary>
+              Looks up a localized string similar to Spanish (El Salvador).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_US">
+            <summary>
+              Looks up a localized string similar to Spanish (United States).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_UY">
+            <summary>
+              Looks up a localized string similar to Spanish (Uruguay).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.es_VE">
+            <summary>
+              Looks up a localized string similar to Spanish (Venezuela).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.et_EE">
+            <summary>
+              Looks up a localized string similar to Estonian (Estonia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.eu_ES">
+            <summary>
+              Looks up a localized string similar to Basque (Basque).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fa_IR">
+            <summary>
+              Looks up a localized string similar to Persian (Iran).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fi_FI">
+            <summary>
+              Looks up a localized string similar to Finnish (Finland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fil_PH">
+            <summary>
+              Looks up a localized string similar to Filipino (Philippines).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fo_FO">
+            <summary>
+              Looks up a localized string similar to Faroese (Faroe Islands).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_BE">
+            <summary>
+              Looks up a localized string similar to French (Belgium).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_CA">
+            <summary>
+              Looks up a localized string similar to French (Canada).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_CH">
+            <summary>
+              Looks up a localized string similar to French (Switzerland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_FR">
+            <summary>
+              Looks up a localized string similar to French (France).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_LU">
+            <summary>
+              Looks up a localized string similar to French (Luxembourg).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fr_MC">
+            <summary>
+              Looks up a localized string similar to French (Principality of Monaco).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.fy_NL">
+            <summary>
+              Looks up a localized string similar to Frisian (Netherlands).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ga_IE">
+            <summary>
+              Looks up a localized string similar to Irish (Ireland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.gd_GB">
+            <summary>
+              Looks up a localized string similar to Scottish Gaelic (United Kingdom).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.gl_ES">
+            <summary>
+              Looks up a localized string similar to Galician (Galician).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.gsw_FR">
+            <summary>
+              Looks up a localized string similar to Alsatian (France).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.gu_IN">
+            <summary>
+              Looks up a localized string similar to Gujarati (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ha_Latn_NG">
+            <summary>
+              Looks up a localized string similar to Hausa (Latin, Nigeria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.he_IL">
+            <summary>
+              Looks up a localized string similar to Hebrew (Israel).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hi_IN">
+            <summary>
+              Looks up a localized string similar to Hindi (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hr_BA">
+            <summary>
+              Looks up a localized string similar to Croatian (Latin, Bosnia and Herzegovina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hr_HR">
+            <summary>
+              Looks up a localized string similar to Croatian (Croatia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hsb_DE">
+            <summary>
+              Looks up a localized string similar to Upper Sorbian (Germany).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hu_HU">
+            <summary>
+              Looks up a localized string similar to Hungarian (Hungary).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.hy_AM">
+            <summary>
+              Looks up a localized string similar to Armenian (Armenia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.id_ID">
+            <summary>
+              Looks up a localized string similar to Indonesian (Indonesia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ig_NG">
+            <summary>
+              Looks up a localized string similar to Igbo (Nigeria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ii_CN">
+            <summary>
+              Looks up a localized string similar to Yi (PRC).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.is_IS">
+            <summary>
+              Looks up a localized string similar to Icelandic (Iceland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.it_CH">
+            <summary>
+              Looks up a localized string similar to Italian (Switzerland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.it_IT">
+            <summary>
+              Looks up a localized string similar to Italian (Italy).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.iu_Cans_CA">
+            <summary>
+              Looks up a localized string similar to Inuktitut (Syllabics, Canada).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.iu_Latn_CA">
+            <summary>
+              Looks up a localized string similar to Inuktitut (Latin, Canada).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ja_JP">
+            <summary>
+              Looks up a localized string similar to Japanese (Japan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ka_GE">
+            <summary>
+              Looks up a localized string similar to Georgian (Georgia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.kk_KZ">
+            <summary>
+              Looks up a localized string similar to Kazakh (Kazakhstan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.kl_GL">
+            <summary>
+              Looks up a localized string similar to Greenlandic (Greenland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.km_KH">
+            <summary>
+              Looks up a localized string similar to Khmer (Cambodia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.kn_IN">
+            <summary>
+              Looks up a localized string similar to Kannada (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ko_KR">
+            <summary>
+              Looks up a localized string similar to Korean (Korea).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.kok_IN">
+            <summary>
+              Looks up a localized string similar to Konkani (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ky_KG">
+            <summary>
+              Looks up a localized string similar to Kyrgyz (Kyrgyzstan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.lb_LU">
+            <summary>
+              Looks up a localized string similar to Luxembourgish (Luxembourg).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.lo_LA">
+            <summary>
+              Looks up a localized string similar to Lao (Lao P.D.R.).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.lt_LT">
+            <summary>
+              Looks up a localized string similar to Lithuanian (Lithuania).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.lv_LV">
+            <summary>
+              Looks up a localized string similar to Latvian (Latvia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mi_NZ">
+            <summary>
+              Looks up a localized string similar to Maori (New Zealand).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mk_MK">
+            <summary>
+              Looks up a localized string similar to Macedonian (Former Yugoslav Republic of Macedonia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ml_IN">
+            <summary>
+              Looks up a localized string similar to Malayalam (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mn_MN">
+            <summary>
+              Looks up a localized string similar to Mongolian (Cyrillic, Mongolia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mn_Mong_CN">
+            <summary>
+              Looks up a localized string similar to Mongolian (Traditional Mongolian, PRC).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.moh_CA">
+            <summary>
+              Looks up a localized string similar to Mohawk (Mohawk).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mr_IN">
+            <summary>
+              Looks up a localized string similar to Marathi (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ms_BN">
+            <summary>
+              Looks up a localized string similar to Malay (Brunei Darussalam).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ms_MY">
+            <summary>
+              Looks up a localized string similar to Malay (Malaysia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.mt_MT">
+            <summary>
+              Looks up a localized string similar to Maltese (Malta).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.nb_NO">
+            <summary>
+              Looks up a localized string similar to Norwegian, Bokmål (Norway).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ne_NP">
+            <summary>
+              Looks up a localized string similar to Nepali (Nepal).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.nl_BE">
+            <summary>
+              Looks up a localized string similar to Dutch (Belgium).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.nl_NL">
+            <summary>
+              Looks up a localized string similar to Dutch (Netherlands).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.nn_NO">
+            <summary>
+              Looks up a localized string similar to Norwegian, Nynorsk (Norway).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ns_ZA">
+            <summary>
+              Looks up a localized string similar to Northern Sotho (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.nso_ZA">
+            <summary>
+              Looks up a localized string similar to Sesotho sa Leboa (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.oc_FR">
+            <summary>
+              Looks up a localized string similar to Occitan (France).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.or_IN">
+            <summary>
+              Looks up a localized string similar to Oriya (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.pa_IN">
+            <summary>
+              Looks up a localized string similar to Punjabi (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.pl_PL">
+            <summary>
+              Looks up a localized string similar to Polish (Poland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.prs_AF">
+            <summary>
+              Looks up a localized string similar to Dari (Afghanistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ps_AF">
+            <summary>
+              Looks up a localized string similar to Pashto (Afghanistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.pt_BR">
+            <summary>
+              Looks up a localized string similar to Portuguese (Brazil).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.pt_PT">
+            <summary>
+              Looks up a localized string similar to Portuguese (Portugal).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.qut_GT">
+            <summary>
+              Looks up a localized string similar to K&apos;iche (Guatemala).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.quz_BO">
+            <summary>
+              Looks up a localized string similar to Quechua (Bolivia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.quz_EC">
+            <summary>
+              Looks up a localized string similar to Quechua (Ecuador).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.quz_PE">
+            <summary>
+              Looks up a localized string similar to Quechua (Peru).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.rm_CH">
+            <summary>
+              Looks up a localized string similar to Romansh (Switzerland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ro_RO">
+            <summary>
+              Looks up a localized string similar to Romanian (Romania).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ru_RU">
+            <summary>
+              Looks up a localized string similar to Russian (Russia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.rw_RW">
+            <summary>
+              Looks up a localized string similar to Kinyarwanda (Rwanda).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sa_IN">
+            <summary>
+              Looks up a localized string similar to Sanskrit (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sah_RU">
+            <summary>
+              Looks up a localized string similar to Yakut (Russia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.se_FI">
+            <summary>
+              Looks up a localized string similar to Sami, Northern (Finland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.se_NO">
+            <summary>
+              Looks up a localized string similar to Sami, Northern (Norway).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.se_SE">
+            <summary>
+              Looks up a localized string similar to Sami, Northern (Sweden).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.si_LK">
+            <summary>
+              Looks up a localized string similar to Sinhala (Sri Lanka).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sk_SK">
+            <summary>
+              Looks up a localized string similar to Slovak (Slovakia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sl_SI">
+            <summary>
+              Looks up a localized string similar to Slovenian (Slovenia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sma_NO">
+            <summary>
+              Looks up a localized string similar to Sami, Southern (Norway).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sma_SE">
+            <summary>
+              Looks up a localized string similar to Sami, Southern (Sweden).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.smj_NO">
+            <summary>
+              Looks up a localized string similar to Sami, Lule (Norway).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.smj_SE">
+            <summary>
+              Looks up a localized string similar to Sami, Lule (Sweden).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.smn_FI">
+            <summary>
+              Looks up a localized string similar to Sami, Inari (Finland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sms_FI">
+            <summary>
+              Looks up a localized string similar to Sami, Skolt (Finland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sq_AL">
+            <summary>
+              Looks up a localized string similar to Albanian (Albania).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Cyrl_BA">
+            <summary>
+              Looks up a localized string similar to Serbian (Cyrillic, Bosnia and Herzegovina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Cyrl_CS">
+            <summary>
+              Looks up a localized string similar to Serbian (Cyrillic, Serbia and Montenegro (Former)).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Cyrl_ME">
+            <summary>
+              Looks up a localized string similar to Serbian (Cyrillic, Montenegro).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Cyrl_RS">
+            <summary>
+              Looks up a localized string similar to Serbian (Cyrillic, Serbia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Latn_BA">
+            <summary>
+              Looks up a localized string similar to Serbian (Latin, Bosnia and Herzegovina).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Latn_CS">
+            <summary>
+              Looks up a localized string similar to Serbian (Latin, Serbia and Montenegro (Former)).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Latn_ME">
+            <summary>
+              Looks up a localized string similar to Serbian (Latin, Montenegro).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sr_Latn_RS">
+            <summary>
+              Looks up a localized string similar to Serbian (Latin, Serbia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sv_FI">
+            <summary>
+              Looks up a localized string similar to Swedish (Finland).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sv_SE">
+            <summary>
+              Looks up a localized string similar to Swedish (Sweden).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.sw_KE">
+            <summary>
+              Looks up a localized string similar to Kiswahili (Kenya).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.syr_SY">
+            <summary>
+              Looks up a localized string similar to Syriac (Syria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ta_IN">
+            <summary>
+              Looks up a localized string similar to Tamil (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.te_IN">
+            <summary>
+              Looks up a localized string similar to Telugu (India).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tg_Cyrl_TJ">
+            <summary>
+              Looks up a localized string similar to Tajik (Cyrillic, Tajikistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.th_TH">
+            <summary>
+              Looks up a localized string similar to Thai (Thailand).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tk_TM">
+            <summary>
+              Looks up a localized string similar to Turkmen (Turkmenistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tn_ZA">
+            <summary>
+              Looks up a localized string similar to Setswana (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tr_TR">
+            <summary>
+              Looks up a localized string similar to Turkish (Turkey).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tt_RU">
+            <summary>
+              Looks up a localized string similar to Tatar (Russia).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.tzm_Latn_DZ">
+            <summary>
+              Looks up a localized string similar to Tamazight (Latin, Algeria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ug_CN">
+            <summary>
+              Looks up a localized string similar to Uyghur (PRC).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.uk_UA">
+            <summary>
+              Looks up a localized string similar to Ukrainian (Ukraine).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.ur_PK">
+            <summary>
+              Looks up a localized string similar to Urdu (Islamic Republic of Pakistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.uz_Cyrl_UZ">
+            <summary>
+              Looks up a localized string similar to Uzbek (Cyrillic, Uzbekistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.uz_Latn_UZ">
+            <summary>
+              Looks up a localized string similar to Uzbek (Latin, Uzbekistan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.vi_VN">
+            <summary>
+              Looks up a localized string similar to Vietnamese (Vietnam).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.wo_SN">
+            <summary>
+              Looks up a localized string similar to Wolof (Senegal).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.xh_ZA">
+            <summary>
+              Looks up a localized string similar to isiXhosa (South Africa).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.yo_NG">
+            <summary>
+              Looks up a localized string similar to Yoruba (Nigeria).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zh_CN">
+            <summary>
+              Looks up a localized string similar to Chinese (People&apos;s Republic of China).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zh_HK">
+            <summary>
+              Looks up a localized string similar to Chinese (Hong Kong S.A.R.).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zh_MO">
+            <summary>
+              Looks up a localized string similar to Chinese (Macao S.A.R.).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zh_SG">
+            <summary>
+              Looks up a localized string similar to Chinese (Singapore).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zh_TW">
+            <summary>
+              Looks up a localized string similar to Chinese (Taiwan).
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LanguagesResource.zu_ZA">
+            <summary>
+              Looks up a localized string similar to isiZulu (South Africa).
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LegacySdlxLanguage">
+            <summary>
+            Used to find CultureInfo and LCID values from a given SDLX 'iso' code.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LegacySdlxLanguage.SdlxCultureMap">
+            <summary>
+            Maps predefined SDLX to CultureInfo codes and those that are added when found to be the same as the TRADOS ISO codes.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LegacySdlxLanguage.SdlxIsoToTradosIso">
+            <summary>
+            Maps SDLX to TRADOS codes where they are different.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LegacySdlxLanguage.SdlxIsoToTradosIsoValues">
+            <summary>
+            List of SDLX to TRADOS in pairs.
+            </summary>
+        </member>
+        <member name="F:Sdl.Core.Globalization.LegacySdlxLanguage.SdlxCultureMapValues">
+            <summary>
+            List of initial SDLX ISO codes to .NET CultureInfo names
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacySdlxLanguage.GetLcidFromIsoCode(System.String)">
+            <summary>
+            Gets a LCID from the given SDLX 'iso' code.
+            </summary>
+            <param name="isoCode">The SDLX 'iso' code which may be specific to SDLX for some languages.</param>
+            <returns>An LCID for the SDLX language code if supported.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacySdlxLanguage.GetCultureInfoFromIsoCode(System.String)">
+            <summary>
+            Gets a CultureInfo from the given SDLX 'iso' code.
+            </summary>
+            <param name="isoCode">The SDLX 'iso' code which may be specific to SDLX for some languages.</param>
+            <returns>An CultureInfo for the SDLX language code if supported.</returns>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LegacyTradosLanguage">
+            <summary>
+            Represents a project language in the client object model
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.IsInstalledLcid(System.Int32)">
+            <summary>
+            <c>true</c> if the specified LCID is supported by this operating system installation.
+            </summary>
+            <remarks>
+            <para>
+            The implementation calls <c>IsValidLocale</c> on the Win32 API.
+            </para>
+            <para>
+            Note that this returns <c>false</c> for proprietary TRADOS "LCID" values.
+            </para>
+            </remarks>
+            <param name="lcid">Locale identifier of the locale to validate</param>
+            <returns><c>true</c> if the specified LCID is supported by this operating system installation.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.IsProprietaryLcid(System.Int32)">
+            <summary>
+            <c>true</c> if the LCID is one of the TRADOS proprietary "LCID" values.
+            </summary>
+            <param name="lcid">Locale identifier of the locale to validate</param>
+            <returns><c>true</c> if the LCID is one of the TRADOS proprietary "LCID" values.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.#ctor(System.String)">
+            <summary>
+            Construction from a 2 or 5 letter ISO code (i.e. with or without sublanguage/region).
+            The 2 letter language code should be separated from the 2 letter country code with a dash.
+            Examples:
+            EN-US, DE-DE, SW-SE, JP
+            </summary>
+            <param name="isoCode">the isoCode (e.g. en-us, de-de etc)</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.#ctor(System.Int32)">
+            <summary>
+            Construction from an LCID value. The LCID can be a valid
+            Windows/.NET supported LCID, or a TRADOS defined "LCID", such as 2108 for Gaelic (Scotland).
+            </summary>
+            <param name="lcid">Locale identifier of the locale to validate</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.Equals(System.Object)">
+            <summary>
+            Compares two Language objects.
+            If they are both valid and have the same LCID they are considered equal.
+            If they are not valid they are considered equal if they have the same "ISO code".
+            </summary>
+            <param name="obj">the object to compare to</param>
+            <returns>true if they are both of type LegacyTradosLanguage with the same Lcid and IsoCode</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetHashCode">
+            <summary>
+            Returns a hash code value for the Language object.
+            </summary>
+            <returns>A hash code value for the Language object.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> representing the Language object.
+            </summary>
+            <returns>A <see cref="T:System.String"/> representing the Language object.</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LegacyTradosLanguage.IsValid">
+            <summary>
+            <c>true</c> if the language is a valid LCID and ISO language code.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LegacyTradosLanguage.IsInstalled">
+            <summary>
+            <c>true</c> if the language with this LCID is supported directly by the operating system.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LegacyTradosLanguage.IsProprietary">
+            <summary>
+            <c>true</c> if this LCID is a proprietary TRADOS "LCID".
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LegacyTradosLanguage.IsoCode">
+            <summary>
+            The 5 letter ISO code corresponding to this language, in this format:
+            EN-US, JP-JP, etc.
+            
+            May be empty if IsValid is false.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetLocaleInfo(Sdl.Core.Globalization.LanguageFormat,System.Boolean)">
+            <summary>
+            Retrieves the locale info.
+            </summary>
+            <param name="languageFormat">An enum specifying whether to return the language info as English, Native or ISO form.</param>
+            <param name="includeCountry">A boolean specifying whether to mention the region in the return string.</param>
+            <returns>A string describing the Locale id.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetLocaleInfo(System.Int32,Sdl.Core.Globalization.LanguageFormat,System.Boolean)">
+            <summary>
+            Retrieves the locale info.
+            </summary>
+            <param name="lcid">A Windows locale ID.</param>
+            <param name="languageFormat">An enum specifying whether to return the language info as English, Native or ISO form.</param>
+            <param name="includeCountry">A boolean specifying whether to mention the region in the return string.</param>
+            <returns>A string describing the Locale id.</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LegacyTradosLanguage.Lcid">
+            <summary>
+            The Windows/.NET LCID for the language.
+            
+            May be 0 if <see cref="P:Sdl.Core.Globalization.LegacyTradosLanguage.IsValid"/> is <c>false</c>.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetAllLcids">
+            <summary>
+            Get all the possible Trados LCIDs from languages/locations known to TRADOS.
+            </summary>
+            <returns>An array of LCIDs</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetLcidFromIsoCode(System.String)">
+            <summary>
+            Converts an ISO code to an LCID, taking TRADOS specific values into account.
+            </summary>
+            <param name="isoCode">The ISO code</param>
+            <returns>The LCID corresponding to <paramref name="isoCode"/></returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetIsoCodeFromLcid(System.Int32,System.Boolean)">
+            <summary>
+            Converts between LCID and ISO language codes.
+            </summary>
+            <param name="lcid">An LCID identifier</param>
+            <param name="includeCountry">if <c>true</c> the returned ISO language code includes the ISO country code separated
+            from the language code with a dash (e.g. en-US).
+            If false only the 2 character ISO language code will be returned.</param>
+            <returns>The ISO code corresponding to <paramref name="lcid"/></returns>
+            <remarks>
+            This method also supports the TRADOS specific locales that are not otherwise supported by Windows and .NET.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.IsDefaultForCountry(System.Int32)">
+            <summary>
+            Determines whether this is the default LCID for the country
+            </summary>
+            <param name="lcid">An LCID identifier</param>
+            <returns>Whether this is the default LCID for the country</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetEnglishLanguageNameFromLcid">
+            <summary>
+            Returns the English language name of the locale.
+            </summary>
+            <returns>The English language name of the locale specified by <see cref="P:Sdl.Core.Globalization.LegacyTradosLanguage.Lcid"/></returns>
+            <remarks>
+            This method also supports the TRADOS specific locales that are not otherwise supported by Windows and .NET.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetEnglishLanguageNameFromLcid(System.Int32)">
+            <summary>
+            Returns the English language name of the locale specified by <paramref name="lcid"/>.
+            </summary>
+            <param name="lcid">An LCID</param>
+            <returns>The English language name of the locale specified by <paramref name="lcid"/></returns>
+            <remarks>
+            This method also supports the TRADOS specific locales that are not otherwise supported by Windows and .NET.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetEnglishNameFromLcid(System.Int32)">
+            <summary>
+            Returns the English language and region name of the locale specified by <paramref name="lcid"/>.
+            </summary>
+            <param name="lcid">An LCID</param>
+            <returns>The English language and region name of the locale specified by <paramref name="lcid"/></returns>
+            <remarks>
+            This method also supports the TRADOS specific locales that are not otherwise supported by Windows and .NET.
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetNativeLanguageNameFromLcid">
+            <summary>
+            Returns the language name in native format (script, spelling and form)
+            </summary>
+            <returns>The language name in native format (script, spelling and form).</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetNativeLanguageNameFromLcid(System.Int32)">
+            <summary>
+            Returns the language name in native format (script, spelling and form)
+            </summary>
+            <param name="lcid">An LCID.</param>
+            <returns>The native language name of the locale specified by <paramref name="lcid"/>.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetNativeNameFromLcid(System.Int32)">
+            <summary>
+            Returns the language name and region name in native format (script, spelling and form)
+            </summary>
+            <param name="lcid">An LCID.</param>
+            <returns>The native language and region name of the locale specified by <paramref name="lcid"/>.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetLanguageCode(System.Int32)">
+            <summary>
+            Convert a TRADOS primary language code to a TRADOS language code string.
+            </summary>
+            <param name="primaryLanguageCode">the primary language code</param>
+            <returns>the converted string</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetLcids(System.Int32)">
+            <summary>
+            Returns all possible LCID values for the specified TRADOS primary language code.
+            </summary>
+            <param name="primaryLanguageCode">the primary language code</param>
+            <returns>All possible LCID values for the specified TRADOS primary language code.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.UsesCharacterCounts">
+            <summary>
+            Returns <c>true</c> if the language uses character counts.
+            </summary>
+            <returns><c>true</c> if the language uses character counts.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.UsesCharacterCounts(System.Int32)">
+            <summary>
+            Returns <c>true</c> if the language (LCID) uses character counts.
+            </summary>
+            <param name="lcid">The LCID of the language.</param>
+            <returns><c>true</c> if the language (LCID) uses character counts.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.GetSchema">
+            <summary>
+            Always returns <c>null</c>.
+            </summary>
+            <returns>Always returns <c>null</c>.</returns>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.ReadXml(System.Xml.XmlReader)">
+            <summary>
+            Reads the 5-letter (TRADOS) ISO code from a &lt;Language&gt; element.
+            </summary>
+            <param name="reader">the XmlReader to use</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LegacyTradosLanguage.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Writes the 5-letter (TRADOS) ISO code to a &lt;Language&gt; element.
+            </summary>
+            <param name="writer">the XmlWriter to use</param>
+        </member>
+        <member name="T:Sdl.Core.Globalization.LocalizableString">
+            <summary>
+            Data type used for strings in Spring configuration files that may need to be localized.
+            </summary>
+            <remarks>
+            <para>
+            If this object is constructed from a plain text string it works like a normal <c>System.String</c>.
+            </para>
+            <para>
+            To reference a resource ID, create this object from a resource identifier string, in the following format:
+            <c>resource://[AssemblyPath\AssemblyName]/[resource ID]</c>, where <c>[AssemblyPath\AssemblyName]</c>
+            is the name of the base assembly (with optional path) that the string resource is located in and
+            <c>[resource ID]</c> is the ID of the string resource from which the localized string should be loaded.
+            </para>
+            <para>
+            The <c>ResourceManager</c> is used to load the string from the assembly, so a localized
+            version of the string (depending on the current thread locale) should be returned if available.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LocalizableString.#ctor(System.String)">
+            <summary>
+            Create from a literal string or resource identifier. 
+            </summary>
+            <remarks>
+            <para>
+            If the content starts with "assembly://" it is deemed to be a resource identifier.
+            </para>
+            <para>
+            Resource identifiers use the following format:
+            <c>assembly://[AssemblyPath\AssemblyName]/[resource ID]</c>, where <c>[AssemblyPath\AssemblyName]</c>
+            is the name of the base assembly that the string resource is located in (with an optional path, 
+            specify this only for assemblies not located in the default application folder) and 
+            <c>[resource ID]</c> is the ID of the string resource from which the localized string should be loaded.
+            </para>
+            </remarks>
+            <param name="content">the literal string to use in the construction</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.LocalizableString.ToString">
+            <summary>
+            Returns the localized text this string represents.
+            </summary>
+            <returns>The localized text this string represents.</returns>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LocalizableString.Content">
+            <summary>
+            Returns the localized text this string represents.
+            </summary>
+            <remarks>Throws exceptions if using a resource ID and the assembly or string cannot be loaded.</remarks>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LocalizableString.RawContent">
+            <summary>
+            Returns the string or resource ID this localizable string uses to get the localized text.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.LocalizableString.IsResource">
+            <summary>
+            <c>true</c> if the localizable text is retrieved from an assembly.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.NamespaceDoc">
+            <summary>
+            This namespace contains functionality to manage <see cref="T:System.Text.Encoding"/> 
+            and <see cref="T:System.Globalization.CultureInfo"/>.
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.ResourceHasNoAssembly">
+            <summary>
+              Looks up a localized string similar to Bug! Resource identifier does not start with &apos;assembly://&apos;.
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.ResourceHasNoSlash">
+            <summary>
+              Looks up a localized string similar to Resource identifier does not contain a &apos;/&apos; to separate the assembly name from the resource ID..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.ResourceIdHasNoNamespace">
+            <summary>
+              Looks up a localized string similar to Resource identifier must contain a resource namespace separated from the resource ID by a &apos;/&apos;..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.ResourceIdStartsWithSlash">
+            <summary>
+              Looks up a localized string similar to Resource identifier must not start with a &apos;/&apos;..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.UnsupportedCodepageExceptionMessage">
+            <summary>
+              Looks up a localized string similar to The code page &apos;{0}&apos; is not supported on this system..
+            </summary>
+        </member>
+        <member name="P:Sdl.Core.Globalization.Resources.UnsupportedIsoAbbreviationMessage">
+            <summary>
+              Looks up a localized string similar to The language code &apos;{0}&apos; is not supported on this system..
+            </summary>
+        </member>
+        <member name="T:Sdl.Core.Globalization.TradosLanguage.et_Primary">
+            primary languages as defined in winnls.h and NLSAPI5.4 specs
+        </member>
+        <member name="T:Sdl.Core.Globalization.TradosLanguage.et_Sub">
+            sub language IDs as defined in winnls.h and NLSAPI5.4 specs
+        </member>
+        <member name="T:Sdl.Core.Globalization.UnsupportedCodepageException">
+            <summary>
+            Thrown by the <see cref="T:Sdl.Core.Globalization.Codepage"/> class if attempting to access the Encoding property
+            on a system that does not support this encoding.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedCodepageException.#ctor">
+            <summary>
+            Create an empty exception.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedCodepageException.#ctor(System.String)">
+            <summary>
+            Create an exception with a message.
+            </summary>
+            <param name="message">the message to include in the exception</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedCodepageException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an exception that wraps another exception.
+            </summary>
+            <param name="message">the message to include</param>
+            <param name="inner">the inner exception</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedCodepageException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Protected constructor used for serialization.
+            </summary>
+            <param name="info">the serialization info</param>
+            <param name="context">the streaming context</param>
+        </member>
+        <member name="T:Sdl.Core.Globalization.UnsupportedLanguageException">
+            <summary>
+            Thrown by the <see cref="T:Sdl.Core.Globalization.Language"/> class if attempting to access the CultureInfo property
+            on a system where the language is not supported.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedLanguageException.#ctor">
+            <summary>
+            Default constructor, create an empty exception.
+            </summary>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedLanguageException.#ctor(System.String)">
+            <summary>
+            Create an exception with a message text.
+            </summary>
+            <param name="message">the message to include</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedLanguageException.#ctor(System.String,System.Exception)">
+            <summary>
+            Create an exception with a message text, wrapping an inner exception.
+            </summary>
+            <param name="message">the message to include</param>
+            <param name="inner">the inner exception</param>
+        </member>
+        <member name="M:Sdl.Core.Globalization.UnsupportedLanguageException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Protected constructor used in serialization.
+            </summary>
+            <param name="info">the serialization info</param>
+            <param name="context">the streaming context</param>
+        </member>
+    </members>
+</doc>
