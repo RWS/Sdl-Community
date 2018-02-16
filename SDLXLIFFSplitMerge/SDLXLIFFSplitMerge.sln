@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF", "..\TFS_SDLSolutions\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj", "{7C927446-0461-4FCC-8C1D-A309430E064C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF", "..\SDLXLIFFSplitMerge\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj", "{7C927446-0461-4FCC-8C1D-A309430E064C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF.Lib", "..\TFS_SDLSolutions\SplitSDLXLIFF\Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj", "{B4F2FDEE-3167-4295-A831-36B5BBBC9557}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF.Lib", "..\SDLXLIFFSplitMerge\SplitSDLXLIFF\Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj", "{B4F2FDEE-3167-4295-A831-36B5BBBC9557}"
 	ProjectSection(ProjectDependencies) = postProject
 		{80614F74-563D-418E-9BF6-1294F73521C0} = {80614F74-563D-418E-9BF6-1294F73521C0}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF.Wizard", "..\TFS_SDLSolutions\SplitSDLXLIFF\Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj", "{80614F74-563D-418E-9BF6-1294F73521C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Utilities.SplitSDLXLIFF.Wizard", "..\SDLXLIFFSplitMerge\SplitSDLXLIFF\Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj", "{80614F74-563D-418E-9BF6-1294F73521C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SDLXLIFFSplitMerge", "..\TFS_SDLSolutions\Sdl.Community.SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.csproj", "{A1C821CC-0519-4542-85D6-5D3354F185D2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SDLXLIFFSplitMerge", "..\SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge\Sdl.Community.SDLXLIFFSplitMerge.csproj", "{A1C821CC-0519-4542-85D6-5D3354F185D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
