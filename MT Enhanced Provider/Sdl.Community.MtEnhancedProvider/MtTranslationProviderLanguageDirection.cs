@@ -1,17 +1,3 @@
-/* Copyright 2015 Patrick Porter
-
-   Licensed under the Apache License, Version 2.0 (the "License");
-   you may not use this file except in compliance with the License.
-   You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.*/
-
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -26,15 +12,14 @@ namespace Sdl.Community.MtEnhancedProvider
     public class MtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
     {
         #region "PrivateMembers"
-        private MtTranslationProvider _provider;
-        private LanguagePair _languageDirection;
-        private MtTranslationOptions _options;
-        private MtTranslationProviderElementVisitor _visitor;
-        private TranslationUnit inputTu;
-        private MtTranslationProviderGTApiConnecter gtConnect;
-        private ApiConnecter mstConnect;
-        private SegmentEditor postLookupSegmentEditor;
-        private SegmentEditor preLookupSegmentEditor;
+        private readonly MtTranslationProvider _provider;
+        private readonly LanguagePair _languageDirection;
+        private readonly MtTranslationOptions _options;
+        private  TranslationUnit _inputTu;
+        private MtTranslationProviderGTApiConnecter _gtConnect;
+        private ApiConnecter _mstConnect;
+        private SegmentEditor _postLookupSegmentEditor;
+        private SegmentEditor _preLookupSegmentEditor;
         #endregion
 
         #region "ITranslationProviderLanguageDirection Members"
@@ -52,7 +37,6 @@ namespace Sdl.Community.MtEnhancedProvider
             _provider = provider;
             _languageDirection = languages;
             _options = _provider.Options;
-            _visitor = new MtTranslationProviderElementVisitor(_options);
             #endregion
         }
         #endregion
@@ -66,17 +50,16 @@ namespace Sdl.Community.MtEnhancedProvider
         private string LookupGt(string sourcetext, MtTranslationOptions options, string format)
         {
             //instantiate GtApiConnecter if necessary
-            if (gtConnect == null)
+            if (_gtConnect == null)
             {
                 // need to get and insert key
-                gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
+                _gtConnect = new MtTranslationProviderGTApiConnecter(options.ApiKey); //needs key
             }
             else
             {
-                gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+                _gtConnect.ApiKey = options.ApiKey; //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
             }
-            
-            var translatedText = gtConnect.Translate(_languageDirection, sourcetext, format);
+            var translatedText = _gtConnect.Translate(_languageDirection, sourcetext, format);
 
             return translatedText;
         }
@@ -90,20 +73,19 @@ namespace Sdl.Community.MtEnhancedProvider
             var targetlang = _languageDirection.TargetCulture.ToString();
 
             //instantiate ApiConnecter if necessary
-            if (mstConnect == null)
+            if (_mstConnect == null)
             {
-                mstConnect = new ApiConnecter(_options);
+                _mstConnect = new ApiConnecter(_options);
             }
             else
             {
-                mstConnect.resetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
+                _mstConnect.resetCrd(options.ClientId, options.ClientSecret); //reset key in case it has been changed in dialog since GtApiConnecter was instantiated
             }
 
-            var translatedText = mstConnect.Translate(sourcelang, targetlang, sourcetext, catId, format);
+            var translatedText = _mstConnect.Translate(sourcelang, targetlang, sourcetext, catId, format);
             return translatedText;
         }
-
-
+		
         /// <summary>
         /// Performs the actual search by looping through the
         /// delimited segment pairs contained in the text file.
@@ -116,18 +98,15 @@ namespace Sdl.Community.MtEnhancedProvider
         #region "SearchSegment"
         public SearchResults SearchSegment(SearchSettings settings, Segment segment)
         {
-            //FUTURE: consider making GT and MT lookup classes static utility classes
-
             var translation = new Segment(_languageDirection.TargetCulture);//this will be the target segment
 
             #region "SearchResultsObject"
             var results = new SearchResults();
             results.SourceSegment = segment.Duplicate();
-
             #endregion
 
             #region "Confirmation Level"
-            if (!_options.ResendDrafts && inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
+            if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) //i.e. if it's status is other than untranslated
             { //don't do the lookup, b/c we don't need to pay google to translate text already translated if we edit a segment
                 translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
                 //later get these strings from resource file
@@ -135,12 +114,8 @@ namespace Sdl.Community.MtEnhancedProvider
                 return results;
             }
             #endregion
-
-            
             // Look up the currently selected segment in the collection (normal segment lookup).
             #region "SegmentLookup"
-            var sourceLang = SourceLanguage.ToString();
-            var targetLang = TargetLanguage.ToString();
             var translatedText = "";
             //a new seg avoids modifying the current segment object
             var newseg = segment.Duplicate(); 
@@ -152,8 +127,8 @@ namespace Sdl.Community.MtEnhancedProvider
                 //do preedit with tagged segment
                 if (_options.UsePreEdit)
                 {
-                    if (preLookupSegmentEditor == null) preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
-                    newseg = GetEditedSegment(preLookupSegmentEditor, newseg);
+                    if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
+                    newseg = GetEditedSegment(_preLookupSegmentEditor, newseg);
                 }
                 //return our tagged target segment
                 var tagplacer = new MtTranslationProviderTagPlacer(newseg);
@@ -172,8 +147,8 @@ namespace Sdl.Community.MtEnhancedProvider
                 //now do post-edit if that option is checked
                 if (_options.UsePostEdit)
                 {
-                    if (postLookupSegmentEditor == null) postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
-                    translation = GetEditedSegment(postLookupSegmentEditor, translation);
+                    if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
+                    translation = GetEditedSegment(_postLookupSegmentEditor, translation);
                 }
             }
             else //only send plain text
@@ -182,8 +157,8 @@ namespace Sdl.Community.MtEnhancedProvider
                 //do preedit with string
                 if (_options.UsePreEdit)
                 {
-                    if (preLookupSegmentEditor == null) preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
-                    sourcetext = GetEditedString(preLookupSegmentEditor, sourcetext);
+                    if (_preLookupSegmentEditor == null) _preLookupSegmentEditor = new SegmentEditor(_options.PreLookupFilename);
+                    sourcetext = GetEditedString(_preLookupSegmentEditor, sourcetext);
                     //change our source segment so it gets sent back with modified text to show in translation results window that it was changed before sending
                     newseg.Clear();
                     newseg.Add(sourcetext);
@@ -198,12 +173,11 @@ namespace Sdl.Community.MtEnhancedProvider
                 {
                     translatedText = LookupMst(sourcetext, _options, "text/plain");
                 }
-
                 //now do post-edit if that option is checked
                 if (_options.UsePostEdit)
                 {
-                    if (postLookupSegmentEditor == null) postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
-                    translatedText = GetEditedString(postLookupSegmentEditor, translatedText);
+                    if (_postLookupSegmentEditor == null) _postLookupSegmentEditor = new SegmentEditor(_options.PostLookupFilename);
+                    translatedText = GetEditedString(_postLookupSegmentEditor, translatedText);
                 }
                 translation.Add(translatedText);
             }
@@ -257,8 +231,6 @@ namespace Sdl.Community.MtEnhancedProvider
             var result = editor.EditText(sourcetext);
             return result;
         }
-
-        
         /// <summary>
         /// Creates the translation unit as it is later shown in the Translation Results
         /// window of SDL Trados Studio. This member also determines the match score
@@ -291,7 +263,6 @@ namespace Sdl.Community.MtEnhancedProvider
             return searchResult;
         }
         #endregion
-
 
         public bool CanReverseLanguageDirection { get; } = false;
 
@@ -328,7 +299,6 @@ namespace Sdl.Community.MtEnhancedProvider
                     results[p] = null;
                 }
             }
-
             return results;
         }
 
@@ -341,21 +311,18 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
         {
-
-
             //need to use the tu confirmation level in searchsegment method
-            inputTu = translationUnit;
+            _inputTu = translationUnit;
             return SearchSegment(settings, translationUnit.SourceSegment);
         }
 
         public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
         {
-
             var results = new SearchResults[translationUnits.Length];
             for (var p = 0; p < translationUnits.Length; ++p)
             {
                 //need to use the tu confirmation level in searchsegment method
-                inputTu = translationUnits[p];
+                _inputTu = translationUnits[p];
                 results[p] = SearchSegment(settings, translationUnits[p].SourceSegment); //changed this to send whole tu
             }
             return results;
@@ -363,13 +330,8 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
-
             var results = new List<SearchResults>();
-
             var errors = new List<KeyValuePair<string, string>>();
-
-
-
             var i = 0;
             foreach (var tu in translationUnits)
             {
@@ -395,8 +357,6 @@ namespace Sdl.Community.MtEnhancedProvider
 
             return results.ToArray();
         }
-
-
 
         #region "NotForThisImplementation"
         /// <summary>

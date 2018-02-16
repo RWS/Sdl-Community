@@ -28,15 +28,12 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <param name="_options"></param>
         internal ApiConnecter(MtTranslationOptions options)
         {
-            this._options = options;
-            this._subscriptionKey = this._options.ClientId;
+            _options = options;
+            _subscriptionKey = _options.ClientId;
             if (_authToken == null) _authToken = GetAuthToken(); //if the class variable has not been set
             if (_supportedLangs == null) _supportedLangs = getSupportedLangs(); //if the class variable has not been set
 
         }
-
-
-
         /// <summary>
         /// Allows static credentials to be updated by the calling program
         /// </summary>
@@ -59,13 +56,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <returns></returns>
         internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId, string format)
         {
-            
             //convert our language codes
-            string sourceLc = convertLangCode(sourceLang);
-            string targetLc = convertLangCode(targetLang);
-
-            //url encode input
-            string formattedSourceText = HttpUtility.UrlEncode(textToTranslate);
+            var sourceLc = convertLangCode(sourceLang);
+            var targetLc = convertLangCode(targetLang);
 
             //check to see if token is null
             if (_authToken == null) _authToken = GetAuthToken();
@@ -76,14 +69,10 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             var binding = new BasicHttpBinding();
             var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
 
-            string translatedText = string.Empty;
+            var translatedText = string.Empty;
             if (categoryId != string.Empty)
             {
-
 				//send full language source code in case of custom engine
-
-				// translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
-				//categoryId, string.Empty);
 				translatedText = client.Translate(_authToken, textToTranslate, sourceLang, targetLc, "text/plain",
 				categoryId, string.Empty);
 			}
@@ -105,12 +94,11 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         internal bool isSupportedLangPair(string sourceLang, string targetLang)
         {
             //convert our language codes
-            string source = convertLangCode(sourceLang);
-            string target = convertLangCode(targetLang);
+            var source = convertLangCode(sourceLang);
+            var target = convertLangCode(targetLang);
             
-            
-            bool sourceSupported = false;
-            bool targetSupported = false;
+            var sourceSupported = false;
+            var targetSupported = false;
 
             //check to see if both the source and target languages are supported
             foreach (string lang in _supportedLangs)
@@ -135,8 +123,8 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             //check to see if token expired and if so, get a new one
             if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
-            string uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
-            HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+            var uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
             httpWebRequest.Headers.Add("Authorization", _authToken); //add token to request headers
 
             WebResponse response = null;
@@ -148,13 +136,13 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
                     System.Runtime.Serialization.DataContractSerializer dcs = new System.Runtime.Serialization.DataContractSerializer(typeof(List<string>));
 
-                    List<string> results = (List<string>)dcs.ReadObject(stream);
+                    var results = (List<string>)dcs.ReadObject(stream);
                     return results;
                 }
             }
             catch (WebException e)
             {
-                string mesg = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
+                var mesg = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
                 throw new Exception(mesg); //throw error up to calling program
             }
             finally
@@ -169,21 +157,21 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
         private string ProcessWebException(WebException e, string message)
         {
-            Console.WriteLine("{0}: {1}", message, e.ToString());
+            Console.WriteLine("{0}: {1}", message, e);
 
-            // Obtain detailed error information
-            string strResponse = string.Empty;
-            using (HttpWebResponse response = (HttpWebResponse)e.Response)
+			// Obtain detailed error information
+	        var strResponse = string.Empty;
+            using (var response = (HttpWebResponse)e.Response)
             {
-                using (Stream responseStream = response.GetResponseStream())
+                using (var responseStream = response.GetResponseStream())
                 {
-                    using (StreamReader sr = new StreamReader(responseStream, System.Text.Encoding.ASCII))
+                    using (var sr = new StreamReader(responseStream, System.Text.Encoding.ASCII))
                     {
                         strResponse = sr.ReadToEnd();
                     }
                 }
             }
-            return String.Format("Http status code={0}, error message={1}", e.Status, strResponse);
+            return string.Format("Http status code={0}, error message={1}", e.Status, strResponse);
         }
 
         private string GetAuthToken()
@@ -236,7 +224,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             if (languageCode.Contains("sr-Cyrl")) return "sr-Cyrl";
             if (languageCode.Contains("sr-Latn")) return "sr-Latn";
 
-            CultureInfo ci = new CultureInfo(languageCode); //construct a CultureInfo object with the language code
+	        var ci = new CultureInfo(languageCode); //construct a CultureInfo object with the language code
             
             //deal with chinese..MS Translator has different ones
             if (ci.Name == "zh-TW") return "zh-CHT";
@@ -260,9 +248,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <param name="rating">The rating to associate with the update (see MS Translator documentation).</param>
         internal void AddTranslationMethod(string originalText, string translatedText, string sourceLang, string targetLang, string user, string rating)
         {
-            //convert our language codes
-            string from = convertLangCode(sourceLang);
-            string to = convertLangCode(targetLang);
+			//convert our language codes
+	        var from = convertLangCode(sourceLang);
+	        var to = convertLangCode(targetLang);
 
             //check to see if token is null
             if (_authToken == null) _authToken = GetAuthToken();
@@ -283,16 +271,14 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             httpWebRequest = (HttpWebRequest)WebRequest.Create(addTranslationuri);
             httpWebRequest.Headers.Add("Authorization", _authToken);
 
-            try
-            {
-                response = httpWebRequest.GetResponse();
-                using (Stream strm = response.GetResponseStream())
-                {
-                    //Console.WriteLine(String.Format("Translation for {0} has been added successfully.", originaltext));
-                }
-            }
-            catch
-            { }
+	        try
+	        {
+		        response = httpWebRequest.GetResponse();
+	        }
+	        catch (Exception e)
+	        {
+		        
+	        }
             finally
             {
                 if (response != null)
@@ -302,22 +288,5 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
                 }
             }
         }
-
-        
-        private string GenerateTranslateOptionsRequestBody(string category, string contentType, string ReservedFlags, string State, string Uri, string user)
-        {
-            string body = "<TranslateOptions xmlns=\"http://schemas.datacontract.org/2004/07/Microsoft.MT.Web.Service.V2\">" +
-                "  <Category>{0}</Category>" +
-                "  <ContentType>{1}</ContentType>" +
-                "  <ReservedFlags>{2}</ReservedFlags>" +
-                "  <State>{3}</State>" +
-                "  <Uri>{4}</Uri>" +
-                "  <User>{5}</User>" +
-                "</TranslateOptions>";
-            return string.Format(body, category, contentType, ReservedFlags, State, Uri, user);
-        }
-
-        
-
     }
 }
