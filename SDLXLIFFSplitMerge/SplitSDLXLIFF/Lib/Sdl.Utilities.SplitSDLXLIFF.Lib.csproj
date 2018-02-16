@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\FileHelper.cs" />
+    <Compile Include="Common\Text.cs" />
     <Compile Include="FileMerger.cs" />
     <Compile Include="FileParser.cs" />
     <Compile Include="Warning.cs" />

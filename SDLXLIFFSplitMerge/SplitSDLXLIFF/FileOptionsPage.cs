@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Sdl.Utilities.SplitSDLXLIFF.Wizard;
 using System.IO;
 using System.Xml;
+using Sdl.Utilities.SplitSDLXLIFF.Helpers;
 
 namespace Sdl.Utilities.SplitSDLXLIFF
 {
@@ -138,21 +139,6 @@ namespace Sdl.Utilities.SplitSDLXLIFF
                 else MessageBox.Show(Properties.Resources.filesNoTargetLanguage,
                     Properties.Resources.Title);
             }
-
-            // end
-
-            //FileInfo projectFileInfo = new FileInfo(projectFilePath);
-            //XmlDocument doc = new XmlDocument();
-            //doc.Load(projectFilePath);
-            //string sourcelang = doc.SelectSingleNode("//SourceLanguageCode").InnerText;
-            //foreach (XmlNode node in doc.SelectNodes("//LanguageFiles/LanguageFile"))
-            //{
-            //    if (node.Attributes["LanguageCode"].Value != sourcelang)
-            //    {
-            //        AddFile(projectFileInfo.DirectoryName +
-            //            "\\" + node.SelectSingleNode("./FileVersions/FileVersion[last()]").Attributes["PhysicalPath"].Value, false);
-            //    }
-            //}
         }
 
         private void AddFile(string file, bool isSeparateFile)
@@ -248,7 +234,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         {
             OpenFileDialog a = new OpenFileDialog();
             a.Title = Properties.Resources.OrigFileDialogTitle;
-            a.Filter = "SDL XLIFF Files (*.sdlxliff)|*.sdlxliff";
+            a.Filter = Constants.MergeOrigText;
             if (a.ShowDialog() == DialogResult.OK)
             {
                 tbMergeOrigFile.Text = a.FileName;
@@ -271,7 +257,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         {
             OpenFileDialog a = new OpenFileDialog();
             a.Title = Properties.Resources.InfoFileDialogTitle;
-            a.Filter = "SDL Split Info Files (*.splitinfo)|*.splitinfo";
+            a.Filter = Constants.MergeInfoText;
             if (a.ShowDialog() == DialogResult.OK)
             {
                 tbMergeInfoFile.Text = a.FileName;
@@ -293,7 +279,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             OpenFileDialog a = new OpenFileDialog();
             a.Title = Properties.Resources.FileDialogTitle;
             a.Multiselect = true;
-            a.Filter = "SDL XLIFF Files (*.sdlxliff)|*.sdlxliff";
+            a.Filter = Constants.SplitInFilterText;
             if (a.ShowDialog() == DialogResult.OK)
             {
                 string inFile = "";
@@ -326,7 +312,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             OpenFileDialog a = new OpenFileDialog();
             a.Title = Properties.Resources.ProjectFileDialogTitle;
             a.Multiselect = true;
-            a.Filter = "SDL Trados Studio Project Files (*.sdlproj)|*.sdlproj";
+            a.Filter = Constants.SplitAddFilterText;
             a.FileName = "";
             if (a.ShowDialog() == DialogResult.OK)
             {
@@ -384,7 +370,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             string[] pathList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             if (pathList.Length > 0)
             {
-                string path = (File.Exists(pathList[0]) ? Path.GetDirectoryName(pathList[0]) : pathList[0]).Replace("/", @"\");
+                string path = (File.Exists(pathList[0]) ? Path.GetDirectoryName(pathList[0]) : pathList[0])?.Replace("/", @"\");
                 if (Directory.Exists(path))
                     tbSplitOut.Text = path;
             }
@@ -419,7 +405,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             string[] pathList = (string[])e.Data.GetData(DataFormats.FileDrop, false);
             if (pathList.Length > 0)
             {
-                string path = (File.Exists(pathList[0]) ? Path.GetDirectoryName(pathList[0]) : pathList[0]).Replace("/", @"\");
+                string path = (File.Exists(pathList[0]) ? Path.GetDirectoryName(pathList[0]) : pathList[0])?.Replace("/", @"\");
                 if (Directory.Exists(path))
                 {
                     tbMergeSplitFiles.Text = path;

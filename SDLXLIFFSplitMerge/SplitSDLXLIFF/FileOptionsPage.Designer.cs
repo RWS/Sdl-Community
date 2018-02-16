@@ -96,7 +96,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             // 
             // chFiles
             // 
-            this.chFiles.Text = "SDL XLIFF Files";
+            this.chFiles.Text = "SDLXLIFF Files";
             this.chFiles.Width = 575;
             // 
             // btnSplitAddFromProject

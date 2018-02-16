@@ -81,6 +81,7 @@
       <Link>UtilitiesVersionInfo.cs</Link>
     </Compile>-->
     <Compile Include="AppOptions.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="OptionsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

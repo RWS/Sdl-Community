@@ -64,7 +64,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             this.rbMerge.Size = new System.Drawing.Size(131, 17);
             this.rbMerge.TabIndex = 1;
             this.rbMerge.TabStop = true;
-            this.rbMerge.Text = "&Merge SDL XLIFF files";
+            this.rbMerge.Text = "&Merge SDLXLIFF files";
             this.rbMerge.UseVisualStyleBackColor = true;
             // 
             // rbSplit
@@ -75,7 +75,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             this.rbSplit.Size = new System.Drawing.Size(121, 17);
             this.rbSplit.TabIndex = 0;
             this.rbSplit.TabStop = true;
-            this.rbSplit.Text = "&Split SDL XLIFF files";
+            this.rbSplit.Text = "&Split SDLXLIFF files";
             this.rbSplit.UseVisualStyleBackColor = true;
             // 
             // WelcomePage

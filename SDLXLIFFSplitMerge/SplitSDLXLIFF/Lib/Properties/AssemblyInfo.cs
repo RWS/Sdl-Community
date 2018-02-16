@@ -1,14 +1,13 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SDL XLIFF Split/Merge 2018")]
+[assembly: AssemblyTitle("SDLXLIFF Split / Merge")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("SDL XLIFF Split/Merge 2018")]
+[assembly: AssemblyProduct("SDLXLIFF Split / Merge")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -52,63 +52,63 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Wizard
 		/// </summary>
 		private void InitializeComponent()
 		{
-            this.titleLabel = new System.Windows.Forms.Label();
-            this.subtitleLabel = new System.Windows.Forms.Label();
-            this.etchedLine1 = new Sdl.Utilities.SplitSDLXLIFF.Wizard.EtchedLine();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.SuspendLayout();
-            // 
-            // titleLabel
-            // 
-            this.titleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.titleLabel.Location = new System.Drawing.Point(16, 8);
-            this.titleLabel.Name = "titleLabel";
-            this.titleLabel.Size = new System.Drawing.Size(432, 16);
-            this.titleLabel.TabIndex = 0;
-            this.titleLabel.Text = "Title";
-            // 
-            // subtitleLabel
-            // 
-            this.subtitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.subtitleLabel.Location = new System.Drawing.Point(40, 24);
-            this.subtitleLabel.Name = "subtitleLabel";
-            this.subtitleLabel.Size = new System.Drawing.Size(285, 32);
-            this.subtitleLabel.TabIndex = 1;
-            this.subtitleLabel.Text = "Subtitle";
-            // 
-            // etchedLine1
-            // 
-            this.etchedLine1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.etchedLine1.Edge = Sdl.Utilities.SplitSDLXLIFF.Wizard.EtchEdge.Bottom;
-            this.etchedLine1.Location = new System.Drawing.Point(0, 56);
-            this.etchedLine1.Name = "etchedLine1";
-            this.etchedLine1.Size = new System.Drawing.Size(456, 8);
-            this.etchedLine1.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.BackgroundImage = global::Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties.Resources.SDL_logo_color;
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panel1.Location = new System.Drawing.Point(331, 10);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(113, 46);
-            this.panel1.TabIndex = 2;
-            // 
-            // WizardBanner
-            // 
-            this.BackColor = System.Drawing.SystemColors.Window;
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.etchedLine1);
-            this.Controls.Add(this.subtitleLabel);
-            this.Controls.Add(this.titleLabel);
-            this.Name = "WizardBanner";
-            this.Size = new System.Drawing.Size(456, 64);
-            this.ResumeLayout(false);
+			this.titleLabel = new System.Windows.Forms.Label();
+			this.subtitleLabel = new System.Windows.Forms.Label();
+			this.etchedLine1 = new Sdl.Utilities.SplitSDLXLIFF.Wizard.EtchedLine();
+			this.panel1 = new System.Windows.Forms.Panel();
+			this.SuspendLayout();
+			// 
+			// titleLabel
+			// 
+			this.titleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.titleLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.titleLabel.Location = new System.Drawing.Point(16, 8);
+			this.titleLabel.Name = "titleLabel";
+			this.titleLabel.Size = new System.Drawing.Size(432, 16);
+			this.titleLabel.TabIndex = 0;
+			this.titleLabel.Text = "Title";
+			// 
+			// subtitleLabel
+			// 
+			this.subtitleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.subtitleLabel.Location = new System.Drawing.Point(40, 24);
+			this.subtitleLabel.Name = "subtitleLabel";
+			this.subtitleLabel.Size = new System.Drawing.Size(285, 32);
+			this.subtitleLabel.TabIndex = 1;
+			this.subtitleLabel.Text = "Subtitle";
+			// 
+			// etchedLine1
+			// 
+			this.etchedLine1.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.etchedLine1.Edge = Sdl.Utilities.SplitSDLXLIFF.Wizard.EtchEdge.Bottom;
+			this.etchedLine1.Location = new System.Drawing.Point(0, 56);
+			this.etchedLine1.Name = "etchedLine1";
+			this.etchedLine1.Size = new System.Drawing.Size(456, 8);
+			this.etchedLine1.TabIndex = 0;
+			// 
+			// panel1
+			// 
+			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.panel1.BackgroundImage = global::Sdl.Utilities.SplitSDLXLIFF.Wizard.Properties.Resources.SDL_logo;
+			this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+			this.panel1.Location = new System.Drawing.Point(331, 10);
+			this.panel1.Name = "panel1";
+			this.panel1.Size = new System.Drawing.Size(99, 46);
+			this.panel1.TabIndex = 2;
+			// 
+			// WizardBanner
+			// 
+			this.BackColor = System.Drawing.SystemColors.Window;
+			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.etchedLine1);
+			this.Controls.Add(this.subtitleLabel);
+			this.Controls.Add(this.titleLabel);
+			this.Name = "WizardBanner";
+			this.Size = new System.Drawing.Size(456, 64);
+			this.ResumeLayout(false);
 
 		}
 		#endregion
