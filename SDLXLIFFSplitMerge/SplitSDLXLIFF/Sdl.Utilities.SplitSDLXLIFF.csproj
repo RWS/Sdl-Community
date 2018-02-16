@@ -82,6 +82,8 @@
     </Compile>-->
     <Compile Include="AppOptions.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="OptionsPage.cs">
       <SubType>UserControl</SubType>
     </Compile>

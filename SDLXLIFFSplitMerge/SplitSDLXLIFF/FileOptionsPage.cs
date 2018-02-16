@@ -1,19 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using Sdl.Utilities.SplitSDLXLIFF.Wizard;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml;
 using Sdl.Utilities.SplitSDLXLIFF.Helpers;
+using Sdl.Utilities.SplitSDLXLIFF.Wizard;
 
 namespace Sdl.Utilities.SplitSDLXLIFF
 {
-    public partial class FileOptionsPage : InternalWizardPage
+	public partial class FileOptionsPage : InternalWizardPage
     {
         public FileOptionsPage()
         {
@@ -29,12 +25,14 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         }
         private void findSplitInfoFile(string fileDir)
         {
-            if (Directory.Exists(fileDir))
-            {
-                string[] files = Directory.GetFiles(fileDir, "*.splitinfo");
-                if (files.Length == 1)
-                    tbMergeInfoFile.Text = files[0];
-            }
+	        if (Directory.Exists(fileDir))
+	        {
+		        string[] files = Directory.GetFiles(fileDir, "*.splitinfo");
+		        if (files.Length == 1)
+		        {
+			        tbMergeInfoFile.Text = files[0];
+		        }
+	        }
         }
         
         private void bindInFiles()
@@ -232,9 +230,13 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         // buttons functionality
         private void btnMergeOrigFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog a = new OpenFileDialog();
-            a.Title = Properties.Resources.OrigFileDialogTitle;
-            a.Filter = Constants.MergeOrigText;
+	        var a = new FolderSelectDialog
+	        {
+		        Title = Properties.Resources.OrigFileDialogTitle,
+				Filter = Constants.MergeOrigText,
+		        Multiselect = true
+	        };
+			
             if (a.ShowDialog() == DialogResult.OK)
             {
                 tbMergeOrigFile.Text = a.FileName;
@@ -255,9 +257,13 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         }
         private void btnMergeInfoFile_Click(object sender, EventArgs e)
         {
-            OpenFileDialog a = new OpenFileDialog();
-            a.Title = Properties.Resources.InfoFileDialogTitle;
-            a.Filter = Constants.MergeInfoText;
+	        var a = new FolderSelectDialog
+	        {
+		        Title = Properties.Resources.InfoFileDialogTitle,
+		        Filter = Constants.MergeInfoText,
+		        Multiselect = true
+	        };
+
             if (a.ShowDialog() == DialogResult.OK)
             {
                 tbMergeInfoFile.Text = a.FileName;
@@ -276,19 +282,20 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         }
         private void btnSplitInFileAdd_Click(object sender, EventArgs e)
         {
-            OpenFileDialog a = new OpenFileDialog();
-            a.Title = Properties.Resources.FileDialogTitle;
-            a.Multiselect = true;
-            a.Filter = Constants.SplitInFilterText;
-            if (a.ShowDialog() == DialogResult.OK)
+			var a = new FolderSelectDialog
+			{
+				Title = Properties.Resources.FileDialogTitle,
+				Filter = Constants.SplitInFilterText,
+				Multiselect = true
+			};
+			if (a.ShowDialog() == DialogResult.OK)
             {
-                string inFile = "";
-                foreach (string file in a.FileNames)
+                string inFile = string.Empty;
+                foreach (string file in a.Files)
                 {
                     inFile = file.Trim().Replace("/", @"\");
                     AddFile(inFile, true);
                 }
-
                 bindInFiles();
             }
         }
@@ -309,14 +316,16 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         }
         private void btnSplitAddFromProject_Click(object sender, EventArgs e)
         {
-            OpenFileDialog a = new OpenFileDialog();
-            a.Title = Properties.Resources.ProjectFileDialogTitle;
-            a.Multiselect = true;
-            a.Filter = Constants.SplitAddFilterText;
-            a.FileName = "";
+	        var a = new FolderSelectDialog
+	        {
+		        Title = Properties.Resources.FileDialogTitle,
+		        Filter = Constants.SplitAddFilterText,
+		        Multiselect = true
+	        };
+
             if (a.ShowDialog() == DialogResult.OK)
             {
-                foreach (string file in a.FileNames)
+                foreach (string file in a.Files)
                 {
                     ParseProjectFile(file);
                 }
