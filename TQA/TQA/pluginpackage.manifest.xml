@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>TQA</PlugInName>
-  <Version>1.2.2</Version>
+  <Version>1.2.3</Version>
   <Description>TQA</Description>
-  <Author>kpeka@sdl.com</Author>
+  <Author>Sdl Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>ClosedXML.dll</File>

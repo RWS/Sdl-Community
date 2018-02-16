@@ -26,7 +26,7 @@ namespace TQA
 
             _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
 
-            var extractedData = DataConverter.ExtractFromXml( tempPath ).ToArray();
+	        var extractedData = DataConverter.ExtractFromXml(tempPath);//.ToArray();
 
             if( outputSaveDialog.ShowDialog() == DialogResult.OK )
             {
