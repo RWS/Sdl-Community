@@ -46,8 +46,9 @@ namespace Sdl.Sdk.SdlxTmTranslationProvider
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void cancelButton_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.Cancel;
-            this.Hide();
+            //this.DialogResult = DialogResult;
+            //this.Hide();
+			Close();
         }
 
         /// <summary>
