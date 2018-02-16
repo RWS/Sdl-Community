@@ -1,18 +1,17 @@
 ﻿using System.IO;
 using System.Reflection;
 using Sdl.LanguagePlatform.Core;
-using Sdl.LanguagePlatform.Lingua;
 
 namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
 
-    /// <summary>
-    /// Class contains extentsion methods to simplify work with strings
-    /// </summary>
-    public static class TextHelper
+	/// <summary>
+	/// Class contains extentsion methods to simplify work with strings
+	/// </summary>
+	public static class TextHelper
     {
         /// <summary>
         /// Cutting substring from the string
@@ -54,25 +53,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
             {
                 indexStart = indexStart + attributeName.Length + 2;
                 int indexForSearch = indexStart;
-                int indexOfEnd;
 
-                ////int qouteCnt = 0;
-                ////do
-                ////{
-                indexOfEnd = tagContent.IndexOf('"', indexForSearch);
-
-                ////    if (tagContent[indexOfEnd - 1] == '=')
-                ////    {
-                ////        qouteCnt++;
-                ////    }
-                ////    else
-                ////    {
-                ////        qouteCnt--;
-                ////    }
-
-                ////    indexForSearch = indexOfEnd + 1;
-                ////}
-                ////while (qouteCnt > -1);
+	            int indexOfEnd = tagContent.IndexOf('"', indexForSearch);
 
                 attributeValue = tagContent.Cut(indexStart, indexOfEnd - 1);
             }
@@ -565,9 +547,14 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 	        int wordsNum = 0;
 			var _Culture = new CultureInfo(culture);
 			var _LinguaSegment = new Segment(_Culture);
-			var _textSDL = new Text(text);
 
-			//FileTypeSupport.Framework.BilingualApi.IText _iTxt = (FileTypeSupport.Framework.BilingualApi.IText)_textSDL;
+			// set values to the IText (used when calling builder.VisitText() method) 
+			var _textSDL = new Text(text);
+	        var txt = new Common.Text(text);
+	        FileTypeSupport.Framework.BilingualApi.IText _iTxt = txt;
+			var txtProperties = new Common.TextProperties(text);
+	        _iTxt.Properties = txtProperties;
+
 
 			// make setups from Sdl.LanguagePlatform.TranslationMemoryTools.dll
 			//get assembly
@@ -584,17 +571,15 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 			//get constructor
 			ConstructorInfo linguaSegmentConstrutor = linguaSegmentBuilderType.GetConstructor(constructorArgumentTypes);
 
-			// invoke constructor with its arguments
+			// invoke constructor with its arguments and call method/set values from builder object
 			dynamic builder = linguaSegmentConstrutor.Invoke(new object[] { _LinguaSegment, false, false });
-
-			//set values to builder
-			//builder.VisitText(_textSDL);
+			builder.VisitText(_iTxt);
 			builder.Result.Elements.Add(_textSDL);
-
-
+			
 			// make setups from Sdl.Core.LanguageProcessing.dll
 			var languageProcessingAssembly = Assembly.LoadFrom(Path.Combine(ExecutingStudioLocation(), "Sdl.Core.LanguageProcessing.dll"));
-			//get object type
+			
+	        //get object type
 			var tokenizationFactoryType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.TokenizerSetupFactory");
 			dynamic tokenizerFactory = tokenizationFactoryType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static);
 
@@ -622,7 +607,6 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 				        wordsNum++;
 			        }
 		        }
-
 	        }
 	        return wordsNum;
 		}
