@@ -205,7 +205,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select SDL XLIFF file to split..
+        ///   Looks up a localized string similar to Select SDLXLIFF file to split..
         /// </summary>
         internal static string FileDialogTitle {
             get {
@@ -232,7 +232,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL Trados Studio 2018 is not licensed on this computer. Activate it first before using this add-on..
+        ///   Looks up a localized string similar to SDL Trados Studio  is not licensed on this computer. Activate it first before using this add-on..
         /// </summary>
         internal static string LicenseErrorMessage {
             get {
@@ -295,7 +295,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify the path to the original SDL XLIFF file, the folder with split files as well as the path to the split info file..
+        ///   Looks up a localized string similar to Specify the path to the original SDLXLIFF file, the folder with split files as well as the path to the split info file..
         /// </summary>
         internal static string msgMergeFOptsSubtitle {
             get {
@@ -358,7 +358,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed.\r\nCannot process the file. The file is corrupt or contains more than one merged in Trados Studio SDL XLIFF files.\r\n.
+        ///   Looks up a localized string similar to Failed.\r\nCannot process the file. The file is corrupt or contains more than one merged in Trados Studio SDLXLIFF files.\r\n.
         /// </summary>
         internal static string msgSplitCorruptFile {
             get {
@@ -475,7 +475,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL XLIFF Split/Merge allows you to split large SDL XLIFF files and re-merge them back into one file after translation or review. Indicate the task you would like to perform..
+        ///   Looks up a localized string similar to SDLXLIFF Split/Merge allows you to split large SDLXLIFF files and re-merge them back into one file after translation or review. Indicate the task you would like to perform..
         /// </summary>
         internal static string msgWelcomeSubtitle {
             get {
@@ -484,7 +484,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Welcome to SDL XLIFF Split/Merge 2018.
+        ///   Looks up a localized string similar to Welcome to SDLXLIFF Split/Merge.
         /// </summary>
         internal static string msgWelcomeTitle {
             get {
@@ -493,7 +493,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select original SDL XLIFF file..
+        ///   Looks up a localized string similar to Select original SDLXLIFF file..
         /// </summary>
         internal static string OrigFileDialogTitle {
             get {
@@ -556,7 +556,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SDL XLIFF Split and Merge.
+        ///   Looks up a localized string similar to SDLXLIFF Split and Merge.
         /// </summary>
         internal static string Title {
             get {

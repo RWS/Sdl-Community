@@ -4,15 +4,15 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SDL XLIFF Split/Merge 2018")]
+[assembly: AssemblyTitle("SDLXLIFF Split/Merge")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("SDL XLIFF Split/Merge 2018")]
+[assembly: AssemblyProduct("SDLXLIFF Split/Merge")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyCompany("SDL")]
-[assembly: AssemblyFileVersion("15.0.250.0")] // 15.0 - Studio 2018
-[assembly: AssemblyCopyright("Copyright © 2018 SDL. All rights reserved.")]
+[assembly: AssemblyFileVersion("15.0.250.0")] // 15.0 - Studio
+[assembly: AssemblyCopyright("Copyright © SDL. All rights reserved.")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 
