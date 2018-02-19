@@ -79,7 +79,7 @@ namespace Sdl.Community.TMBackup
 									TaskName = taskName,
 									TaskRunType = _taskRunType,
 									Status = task.State.ToString(),
-									LastRun = task.LastRunTime,
+									LastRun = task.LastRunTime.Year.Equals(1999) ? DateTime.MinValue : task.LastRunTime,
 									NextRun = task.NextRunTime,
 									Interval = _taskRunType.Equals("Manually") ? "Never" : triggerInfo
 								});
