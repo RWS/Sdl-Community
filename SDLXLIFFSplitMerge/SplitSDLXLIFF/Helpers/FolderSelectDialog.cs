@@ -9,10 +9,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Helpers
 
 		public string FileName
 		{
-			get
-			{
-				return ofd.FileName;
-			}
+			get => ofd.FileName;
+			set => value = ofd.FileName;
 		}
 
 		public string InitialDirectory
@@ -87,59 +85,58 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Helpers
 			ofd.CheckFileExists = false;
 			ofd.DereferenceLinks = true;
 			ofd.FileName = string.Empty;
-			
+		
 			ofd.Multiselect = true;
 		}
 
 		// Used to display dialog for file(s) selection
-		public DialogResult ShowDialog()
+		public DialogResult ShowDialog(string message)
 		{
 			return ofd.ShowDialog();
 		}
 
-		// Used to display dialog for folder(s) selection
-		//public bool ShowDialog()
-		//{
-		//	return ShowDialog(IntPtr.Zero);
-		//}
+		//Used to display dialog for folder(s) selection
+		public bool ShowDialog()
+		{
+			return ShowDialog(IntPtr.Zero);
+		}
 
-		// Used to display dialog for folder(s) selection
-		//public bool ShowDialog(IntPtr hWndOwner)
-		//{
-		//	bool flag = false;
+		//Used to display dialog for folder(s) selection
+		public bool ShowDialog(IntPtr hWndOwner)
+		{
+			bool flag = false;
+ 
+		    var reflector = new Reflector("System.Windows.Forms");
+  		    uint num = 0;
+			Type type = reflector.GetType("FileDialogNative.IFileDialog");
+			object obj = reflector.Call(this.ofd, "CreateVistaDialog", new object[0]);
+			object[] objArray = new object[] { obj };
+			reflector.Call(this.ofd, "OnBeforeVistaDialog", objArray);
+			uint @enum = (uint)reflector.CallAs(typeof(FileDialog), this.ofd, "GetOptions", new object[0]);
+			@enum = @enum | (uint)reflector.GetEnum("FileDialogNative.FOS", "FOS_PICKFOLDERS");
+			object[] objArray1 = new object[] { @enum };
+			reflector.CallAs(type, obj, "SetOptions", objArray1);
+			object[] objArray2 = new object[] { this.ofd };
+			object obj1 = reflector.New("FileDialog.VistaDialogEvents", objArray2);
+			object[] objArray3 = new object[] { obj1, num };
+			object[] objArray4 = objArray3;
+			reflector.CallAs2(type, obj, "Advise", objArray4);
+			num = (uint)objArray4[1];
+			try
+			{
+				object[] objArray5 = new object[] { hWndOwner };
+				int num1 = (int)reflector.CallAs(type, obj, "Show", objArray5);
+				flag = 0 == num1;
+			}
+			finally
+			{
+				object[] objArray6 = new object[] { num };
+				reflector.CallAs(type, obj, "Unadvise", objArray6);
+				GC.KeepAlive(obj1);
+			}
 
-		// Used to display dialog for folder(s) selection
-		//	var reflector = new Reflector("System.Windows.Forms");
-		//	uint num = 0;
-		//	Type type = reflector.GetType("FileDialogNative.IFileDialog");
-		//	object obj = reflector.Call(this.ofd, "CreateVistaDialog", new object[0]);
-		//	object[] objArray = new object[] { obj };
-		//	reflector.Call(this.ofd, "OnBeforeVistaDialog", objArray);
-		//	uint @enum = (uint)reflector.CallAs(typeof(FileDialog), this.ofd, "GetOptions", new object[0]);
-		//	@enum = @enum | (uint)reflector.GetEnum("FileDialogNative.FOS", "FOS_PICKFOLDERS");
-		//	object[] objArray1 = new object[] { @enum };
-		//	reflector.CallAs(type, obj, "SetOptions", objArray1);
-		//	object[] objArray2 = new object[] { this.ofd };
-		//	object obj1 = reflector.New("FileDialog.VistaDialogEvents", objArray2);
-		//	object[] objArray3 = new object[] { obj1, num };
-		//	object[] objArray4 = objArray3;
-		//	reflector.CallAs2(type, obj, "Advise", objArray4);
-		//	num = (uint)objArray4[1];
-		//	try
-		//	{
-		//		object[] objArray5 = new object[] { hWndOwner };
-		//		int num1 = (int)reflector.CallAs(type, obj, "Show", objArray5);
-		//		flag = 0 == num1;
-		//	}
-		//	finally
-		//	{
-		//		object[] objArray6 = new object[] { num };
-		//		reflector.CallAs(type, obj, "Unadvise", objArray6);
-		//		GC.KeepAlive(obj1);
-		//	}
-
-		//	return flag;
-		//}
+			return flag;
+		}
 		public void Dispose()
 		{
 

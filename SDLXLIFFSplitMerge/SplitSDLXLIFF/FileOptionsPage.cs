@@ -237,24 +237,24 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		        Multiselect = true
 	        };
 			
-            if (a.ShowDialog() == DialogResult.OK)
+            if (a.ShowDialog(string.Empty) == DialogResult.OK)
             {
                 tbMergeOrigFile.Text = a.FileName;
             }
         }
         private void btnMergeSplitFiles_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
-            folderBrowserDialog1.ShowNewFolderButton = true;
-            folderBrowserDialog1.Description = Properties.Resources.SplitFilesDialogDesc;
-            if (Directory.Exists(tbMergeSplitFiles.Text))
-                folderBrowserDialog1.SelectedPath = tbMergeSplitFiles.Text;
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-            {
-                tbMergeSplitFiles.Text = folderBrowserDialog1.SelectedPath;
-                findSplitInfoFile(folderBrowserDialog1.SelectedPath);
-            }
-        }
+	        var folderDialog = new FolderSelectDialog();
+			if (Directory.Exists(tbMergeSplitFiles.Text))
+			{
+				folderDialog.FileName = tbMergeSplitFiles.Text;
+			}
+			if (folderDialog.ShowDialog())
+	        {
+				tbMergeSplitFiles.Text = folderDialog.FileName;
+		        findSplitInfoFile(folderDialog.FileName);
+			}
+		}
         private void btnMergeInfoFile_Click(object sender, EventArgs e)
         {
 	        var a = new FolderSelectDialog
@@ -264,7 +264,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		        Multiselect = true
 	        };
 
-            if (a.ShowDialog() == DialogResult.OK)
+            if (a.ShowDialog(string.Empty) == DialogResult.OK)
             {
                 tbMergeInfoFile.Text = a.FileName;
             }
@@ -272,13 +272,15 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
         private void btnSplitOutBrowse_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog1 = new FolderBrowserDialog();
-            folderBrowserDialog1.ShowNewFolderButton = true;
-            folderBrowserDialog1.Description = Properties.Resources.TargetPathDialogDesc;
-            if (Directory.Exists(tbSplitOut.Text))
-                folderBrowserDialog1.SelectedPath = tbSplitOut.Text;
-            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
-                tbSplitOut.Text = folderBrowserDialog1.SelectedPath;
+	        var folderDialog = new FolderSelectDialog();
+	        if (Directory.Exists(tbSplitOut.Text))
+	        {
+		        folderDialog.FileName = tbSplitOut.Text;
+	        }
+	        if (folderDialog.ShowDialog())
+	        {
+		        tbSplitOut.Text = folderDialog.FileName;
+	        }
         }
         private void btnSplitInFileAdd_Click(object sender, EventArgs e)
         {
@@ -288,7 +290,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 				Filter = Constants.SplitInFilterText,
 				Multiselect = true
 			};
-			if (a.ShowDialog() == DialogResult.OK)
+			if (a.ShowDialog(string.Empty) == DialogResult.OK)
             {
                 string inFile = string.Empty;
                 foreach (string file in a.Files)
@@ -323,7 +325,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		        Multiselect = true
 	        };
 
-            if (a.ShowDialog() == DialogResult.OK)
+            if (a.ShowDialog(string.Empty) == DialogResult.OK)
             {
                 foreach (string file in a.Files)
                 {
