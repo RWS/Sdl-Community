@@ -89,10 +89,11 @@ namespace Sdl.Community.TMBackup
 					: null : null;
 
 			if (periodicBackupModel != null && radioBtn_TimeChange.Checked)
-			{			
+			{
+				var firstBackupDate = string.Concat(periodicBackupModel.FirstBackup.Year, "/", periodicBackupModel.FirstBackup.Month,"/",periodicBackupModel.FirstBackup.Day);
 				backupTimeInfo = backupTimeInfo + "Backup interval: " + periodicBackupModel.BackupInterval + " " +
 					periodicBackupModel.TimeType + ", " + "First backup on: " +
-					periodicBackupModel.FirstBackup + ", " + "at " +
+				    firstBackupDate + ", " + "at " +
 					periodicBackupModel.BackupAt + ", ";
 			}
 			else if (radioBtn_Manually.Checked)

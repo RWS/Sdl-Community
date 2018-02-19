@@ -73,7 +73,9 @@ namespace Sdl.Community.TMBackup
 					PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
 					periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
 					periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
-					periodicBackupModel.FirstBackup = dateTimePicker_FirstBackup.Value;
+					periodicBackupModel.FirstBackup = new DateTime(dateTimePicker_FirstBackup.Value.Year,
+						                                  dateTimePicker_FirstBackup.Value.Month,
+						                                  dateTimePicker_FirstBackup.Value.Day) + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 					periodicBackupModel.BackupAt = timePicker_At.Text;
 					periodicBackupModel.BackupName = _taskName;
 					periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
