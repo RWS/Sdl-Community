@@ -94,7 +94,7 @@ namespace Sdl.Community.TMBackup
 				backupTimeInfo = backupTimeInfo + "Backup interval: " + periodicBackupModel.BackupInterval + " " +
 					periodicBackupModel.TimeType + ", " + "First backup on: " +
 				    firstBackupDate + ", " + "at " +
-					periodicBackupModel.BackupAt + ", ";
+					periodicBackupModel.BackupAt + ". ";
 			}
 			else if (radioBtn_Manually.Checked)
 			{
