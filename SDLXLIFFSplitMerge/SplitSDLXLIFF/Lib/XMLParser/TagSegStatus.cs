@@ -40,8 +40,13 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
         /// <summary>
         /// Represents Seg-Source Segment status
         /// </summary>
-        ApprovedSignOff
-    }
+        ApprovedSignOff,
+
+	    /// <summary>
+	    /// Represents Unlocked Segment status
+	    /// </summary>
+		Unlocked
+	}
 
     // not needed
     public static class TagSegStatus
@@ -62,6 +67,8 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
                     return SegStatus.RejectedSignOff;
                 case "Signed Off":
                     return SegStatus.ApprovedSignOff;
+				case "Unlocked":
+					return SegStatus.Unlocked;
                 default:
                     return SegStatus.Unspecified;
             }
@@ -83,7 +90,9 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
                     return "Sign-off Rejected";
                 case SegStatus.ApprovedSignOff:
                     return "Signed Off";
-                default:
+				case SegStatus.Unlocked:
+					return "Unlocked";
+				default:
                     return "Not Translated";
             }
         }

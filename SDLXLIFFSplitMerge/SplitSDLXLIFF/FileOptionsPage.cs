@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
 using System.Xml;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Utilities.SplitSDLXLIFF.Helpers;
 using Sdl.Utilities.SplitSDLXLIFF.Wizard;
 
@@ -23,7 +24,13 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             pMergeOptions.Visible = isMrg;
             pSplitOptions.Visible = !isMrg;
         }
-        private void findSplitInfoFile(string fileDir)
+
+	    private static ProjectsController GetProjectController()
+	    {
+		    return SdlTradosStudio.Application.GetController<ProjectsController>();
+	    }
+
+		private void findSplitInfoFile(string fileDir)
         {
 	        if (Directory.Exists(fileDir))
 	        {
@@ -441,5 +448,34 @@ namespace Sdl.Utilities.SplitSDLXLIFF
                     tbMergeInfoFile.Text = path;
             }
         }
-    }
+
+		private void btnLoadFilesActiveProject_Click(object sender, EventArgs e)
+		{
+			var projectController = GetProjectController();
+			var currentProjectLocalPath = string.Empty;
+
+			if (projectController.CurrentProject != null)
+			{
+				currentProjectLocalPath = projectController.CurrentProject.GetProjectInfo() != null ? projectController.CurrentProject.GetProjectInfo().LocalProjectFolder : string.Empty;
+			}
+
+			var a = new FolderSelectDialog
+			{
+				Title = Properties.Resources.FileDialogTitle,
+				Filter = Constants.SplitAddFilterText,
+				InitialDirectory = currentProjectLocalPath,
+			    Multiselect = true
+			};
+
+			if (a.ShowDialog(string.Empty) == DialogResult.OK)
+			{
+				foreach (string file in a.Files)
+				{
+					ParseProjectFile(file);
+				}
+
+				bindInFiles();
+			}
+		}
+	}
 }
