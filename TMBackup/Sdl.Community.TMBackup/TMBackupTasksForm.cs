@@ -65,12 +65,12 @@ namespace Sdl.Community.TMBackup
 										&& trigger.Repetition.Interval.Days == 0)
 									{
 										// Display interval for manually task
-										triggerInfo = $"Started at: '{trigger.StartBoundary}'";
+										triggerInfo = $"At: '{trigger.StartBoundary}'";
 									}
 									else
 									{
 										// Display interval for automatically task
-										triggerInfo = $"Started at: '{trigger.StartBoundary}'. After triggered, repeat every '{trigger.Repetition.Interval}'";
+										triggerInfo = $"At: '{trigger.StartBoundary}'. After triggered, repeat every '{trigger.Repetition.Interval}'";
 									}
 								}
 
@@ -81,7 +81,7 @@ namespace Sdl.Community.TMBackup
 									Status = task.State.ToString(),
 									LastRun = task.LastRunTime,
 									NextRun = task.NextRunTime,
-									Interval = triggerInfo
+									Interval = _taskRunType.Equals("Manually") ? "Never" : triggerInfo
 								});
 								backupTasks.Add(task);
 							}

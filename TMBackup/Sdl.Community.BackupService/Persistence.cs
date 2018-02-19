@@ -223,6 +223,7 @@ namespace Sdl.Community.BackupService
 								// Update json request model with the updated values
 								request.PeriodicBackupModelList.Remove(existingperiodicBackupModelItem);
 								request.PeriodicBackupModelList.Add(periodicBackupModelItem);
+								WriteJsonRequestModel(request);
 							}
 						}
 					}

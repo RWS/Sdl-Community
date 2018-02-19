@@ -13,6 +13,7 @@ namespace Sdl.Community.TMBackup
 	{
 		private string _taskName { get; set; }
 		private List<PeriodicBackupModel> _periodicBackupModelList = new List<PeriodicBackupModel>();
+		private bool _isNowPressed = false;
 
 		public PeriodicBackupForm(string taskName)
 		{
@@ -54,6 +55,21 @@ namespace Sdl.Community.TMBackup
 				}
 				else
 				{
+					DateTime atScheduleTime = DateTime.Parse(timePicker_At.Text, CultureInfo.InvariantCulture);
+					//set isNowPressed to false in case user pressed Now button and after that he has changed the 'At' time manually
+					if (dateTimePicker_FirstBackup.Value.Day.Equals(DateTime.Now.Day) && dateTimePicker_FirstBackup.Value.Month.Equals(DateTime.Now.Month) && dateTimePicker_FirstBackup.Value.Year.Equals(DateTime.Now.Year) 
+						&& (atScheduleTime.Hour != DateTime.Now.Hour || atScheduleTime.Minute != DateTime.Now.Minute && _isNowPressed))
+					{
+						_isNowPressed = false;
+					}
+
+					if (!dateTimePicker_FirstBackup.Value.Day.Equals(DateTime.Now.Day) && _isNowPressed
+						|| !dateTimePicker_FirstBackup.Value.Month.Equals(DateTime.Now.Month) && _isNowPressed
+						|| !dateTimePicker_FirstBackup.Value.Year.Equals(DateTime.Now.Year) && _isNowPressed)
+					{
+						_isNowPressed = false;
+					}
+
 					PeriodicBackupModel periodicBackupModel = new PeriodicBackupModel();
 					periodicBackupModel.BackupInterval = int.Parse(txtBox_TimeInterval.Text);
 					periodicBackupModel.TimeType = cmbBox_Interval.SelectedItem.ToString();
@@ -61,6 +77,7 @@ namespace Sdl.Community.TMBackup
 					periodicBackupModel.BackupAt = timePicker_At.Text;
 					periodicBackupModel.BackupName = _taskName;
 					periodicBackupModel.TrimmedBackupName = string.Concat(_taskName.Where(c => !char.IsWhiteSpace(c)));
+					periodicBackupModel.IsNowPressed = _isNowPressed;
 					_periodicBackupModelList.Add(periodicBackupModel);
 
 					Persistence persistence = new Persistence();
@@ -73,6 +90,7 @@ namespace Sdl.Community.TMBackup
 
 		private void btn_Now_Click(object sender, EventArgs e)
 		{
+			_isNowPressed = true;
 			SetDateTimeValue();
 		}
 
