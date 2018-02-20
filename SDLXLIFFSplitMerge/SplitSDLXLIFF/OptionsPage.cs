@@ -28,7 +28,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
             clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.Draft));
             clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.Translated));
-	        clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.Unlocked));
+	        clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.Locked));
 			clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.RejectedTranslation));
             clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.RejectedSignOff));
             clbSegments.Items.Add(TagSegStatus.getTagSegStatus(SegStatus.ApprovedTranslation));
