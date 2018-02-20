@@ -6,11 +6,11 @@ using Sdl.Utilities.SplitSDLXLIFF;
 
 namespace Sdl.Community.SDLXLIFFSplitMerge
 {
-	[RibbonGroup("SDLXLIFFSplitMerge", Name = "SDLXLIFF Split & Merge")]
+	[RibbonGroup("SDLXLIFFSplitMerge", Name = "SDLXLIFF Split / Merge")]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class SDLXLIFFSplitMergeRibbon : AbstractRibbonGroup
 	{
-		[Action("Sdl.Community.SDLXLIFFSplitMerge", Name = "SDLXLIFF Split & Merge", Icon = "SplitMerge_Icon", Description = "SDLXLIFF Split & Merge")]
+		[Action("Sdl.Community.SDLXLIFFSplitMerge", Name = "SDLXLIFF Split / Merge", Icon = "FilterDefinition_C77668_", Description = "SDLXLIFF Split / Merge")]
 		[ActionLayout(typeof(SDLXLIFFSplitMergeRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class SDLXLIFFSplitMergeAction : AbstractAction
