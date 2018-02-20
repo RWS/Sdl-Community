@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -20,18 +19,6 @@ namespace Sdl.Community.SDLXLIFFSplitMerge
 			{
 				WizardPage wizardPage = new WizardPage();
 				wizardPage.ShowDialog();
-			}
-
-			/// <summary>
-			/// Get Studio location
-			/// </summary>
-			/// <returns></returns>
-			private static string ExecutingStudioLocation()
-			{
-				var entryAssembly = Assembly.GetEntryAssembly().Location;
-				var location = entryAssembly.Substring(0, entryAssembly.LastIndexOf(@"\", StringComparison.Ordinal));
-
-				return location;
 			}
 		}
 	}
