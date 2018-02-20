@@ -45,14 +45,21 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			foreach (var selectedProject in selectedProjects)
 			{
 				var projectInfo = selectedProject.GetProjectInfo();
+				if (projectInfo == null) continue;
 				var projectTemplateLanguages = GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
-				var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
-				var targetLanguages = projectInfo.TargetLanguages.ToList();
-				var matchesLanguages =
-					ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
-				if (!matchesLanguages)
+				if (projectInfo.SourceLanguage != null)
 				{
-					return false;
+					var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
+					if (projectInfo.TargetLanguages != null)
+					{
+						var targetLanguages = projectInfo.TargetLanguages.ToList();
+						var matchesLanguages =
+							ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
+						if (!matchesLanguages)
+						{
+							return false;
+						}
+					}
 				}
 			}
 			return true;
