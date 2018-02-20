@@ -25,7 +25,6 @@ namespace Sdl.Community.BackupService
 			var jsonRequestModel = GetJsonInformation();
 			var changeSettingsModelItem = jsonRequestModel?.ChangeSettingsModelList?.FirstOrDefault(c => c.BackupName.Equals(backupName));
 
-			DateTime startDate = DateTime.Now;
 			var tr = Trigger.CreateTrigger(TaskTriggerType.Time);
 
 			if (jsonRequestModel != null && changeSettingsModelItem != null)
@@ -36,7 +35,7 @@ namespace Sdl.Community.BackupService
 
 				if (changeSettingsModelItem.IsPeriodicOptionChecked)
 				{
-					AddPeriodicTimeScheduler(jsonRequestModel, startDate, td, tr, backupName);
+					AddPeriodicTimeScheduler(jsonRequestModel, td, tr, backupName);
 				}
 				if (changeSettingsModelItem.IsManuallyOptionChecked)
 				{
@@ -47,13 +46,14 @@ namespace Sdl.Community.BackupService
 
 		public void AddManuallyTimeScheduler(TaskDefinition td, Trigger tr, string backupName, string trimmedBackupName, bool isStartedManually)
 		{
-			tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-			SetupRealDateTime(tr);
-
 			if (!isStartedManually)
 			{
-				tr.Enabled = false;				
-			}			
+				tr.Enabled = false;
+			}
+			else
+			{
+				tr.StartBoundary = DateTime.Now.Date + new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second + 10);
+			}
 			AddTrigger(tr, td, backupName, trimmedBackupName);
 		}
 			
@@ -78,7 +78,7 @@ namespace Sdl.Community.BackupService
 		}
 
 		// Add periodic time scheduler depending on user setup.
-		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, DateTime startDate, TaskDefinition td, Trigger tr, string backupName)
+		private void AddPeriodicTimeScheduler(JsonRequestModel jsonRequestModel, TaskDefinition td, Trigger tr, string backupName)
 		{
 			var periodicBackupModel = jsonRequestModel?.PeriodicBackupModelList?.FirstOrDefault(p => p.BackupName.Equals(backupName));
 			if (periodicBackupModel != null)
@@ -86,7 +86,7 @@ namespace Sdl.Community.BackupService
 				DateTime atScheduleTime = DateTime.Parse(periodicBackupModel.BackupAt, CultureInfo.InvariantCulture);
 				tr.StartBoundary = periodicBackupModel.FirstBackup.Date + new TimeSpan(atScheduleTime.Hour, atScheduleTime.Minute, atScheduleTime.Second);
 
-				SetupRealDateTime(tr);
+				SetupRealDateTime(tr, periodicBackupModel.IsNowPressed);
 
 				if (periodicBackupModel.TimeType.Equals(Enums.GetDescription(TimeTypes.Hours)))
 				{
@@ -104,11 +104,9 @@ namespace Sdl.Community.BackupService
 
 		// Method used in order to start trigger at the current date time when Now button is pressed in the Periodic window.
 		// The 10 seconds are added as a short delay to ensure that the backup is done at the current date time after the Main window is closed.
-		private void SetupRealDateTime(Trigger tr)
+		private void SetupRealDateTime(Trigger tr, bool isNowPressed)
 		{
-			var dateTimeResult = DateTime.Compare(tr.StartBoundary, DateTime.UtcNow);
-
-			if (dateTimeResult > 0)
+			if (isNowPressed)
 			{
 				tr.StartBoundary = DateTime.UtcNow.AddSeconds(10);
 			}
