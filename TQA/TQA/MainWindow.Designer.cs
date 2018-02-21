@@ -80,7 +80,6 @@
 			// outputSaveDialog
 			// 
 			this.outputSaveDialog.DefaultExt = "*.xlsm";
-			this.outputSaveDialog.FileName = "output";
 			this.outputSaveDialog.Filter = "Excel Macro-Enabled Workbook|*.xlsm";
 			// 
 			// MainWindow

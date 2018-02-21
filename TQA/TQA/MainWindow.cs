@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
@@ -11,14 +12,18 @@ namespace TQA
     {
         private readonly ProjectsController _controller;
 
-        public MainWindow(ProjectsController controller)
+	    public MainWindow(ProjectsController controller)
         {
-            InitializeComponent();
+	        InitializeComponent();
             _controller = controller;
-	        if (_controller.CurrentProject != null)
+
+			if (_controller.CurrentProject != null)
 	        {
-		        ProjectNameLabel.Text = string.Format( "Currently working on: {0}", _controller.CurrentProject.GetProjectInfo().Name );
-		        LanguageSelector.Items.AddRange(_controller.CurrentProject.GetProjectInfo().TargetLanguages.Select( l => l.DisplayName ).ToArray() );
+		        var selectedProjectInfo = _controller.CurrentProject.GetProjectInfo();
+				var currentProjectName = selectedProjectInfo.Name;
+				ProjectNameLabel.Text = string.Format( "Currently working on: {0}",currentProjectName );
+		        outputSaveDialog.FileName = "QRF-121_" + currentProjectName;
+				LanguageSelector.Items.AddRange(selectedProjectInfo.TargetLanguages.Select( l => l.DisplayName ).ToArray() );
 	        }
         }
 
@@ -27,13 +32,13 @@ namespace TQA
             var tempPath = Path.Combine( Path.GetTempPath(), Path.GetTempFileName() );
             var tqaTask = _controller.CurrentProject.RunAutomaticTask( _controller.CurrentProject.GetTargetLanguageFiles( _controller.CurrentProject.GetProjectInfo().TargetLanguages.Single( l => l.DisplayName == LanguageSelector.SelectedItem.ToString() ) ).Select( f => f.Id ).ToArray(), "Sdl.ProjectApi.AutomaticTasks.Feedback" );
 
-            _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
+            _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, ReportFormat.Xml );
 
 	        var extractedData = DataConverter.ExtractFromXml(tempPath);
 
             if( outputSaveDialog.ShowDialog() == DialogResult.OK )
             {
-                try
+				try
                 {
                     DataConverter.WriteExcel( outputSaveDialog.FileName, extractedData );
                 }
