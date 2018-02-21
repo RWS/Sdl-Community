@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -47,5 +48,9 @@ namespace Sdl.Utilities.SplitSDLXLIFF
             }
         }
 
-    }
+		private void linkLbl_Help_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start(new ProcessStartInfo("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3166.sdlxliff-split-merge"));
+		}
+	}
 }
