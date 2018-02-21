@@ -109,7 +109,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Resources\Help_Icon.ico" />
+    <None Include="Resources\Informative_Icon.ico" />
     <None Include="Resources\FilterDefinition%28C77668%29.ico" />
     <None Include="Resources\SplitMerge_Icon.ico" />
   </ItemGroup>

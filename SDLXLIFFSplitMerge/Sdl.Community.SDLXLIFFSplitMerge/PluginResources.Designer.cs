@@ -73,9 +73,9 @@ namespace Sdl.Community.SDLXLIFFSplitMerge {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
-        internal static System.Drawing.Icon Help_Icon {
+        internal static System.Drawing.Icon Informative_Icon {
             get {
-                object obj = ResourceManager.GetObject("Help_Icon", resourceCulture);
+                object obj = ResourceManager.GetObject("Informative_Icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
