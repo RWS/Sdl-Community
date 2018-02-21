@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace TQA.Model
+namespace Sdl.Community.TQA.Model
 {
     public class Entry
     {
@@ -49,13 +49,5 @@ namespace TQA.Model
         {
             return new [] { File, Segment, "", OriginalTranslation, "", Category, Severity, Comment };
         }
-    }
-
-    public enum TextType
-    {
-        Added,
-        Deleted,
-        Regular,
-        Comment
     }
 }

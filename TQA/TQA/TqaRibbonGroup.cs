@@ -2,8 +2,7 @@
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
 
-
-namespace TQA
+namespace Sdl.Community.TQA
 {
     [RibbonGroup( "TqaRibbonGroup", Name = "TQA Automation" )]
     [RibbonGroupLayout( LocationByType = typeof( StudioDefaultRibbonTabs.AddinsRibbonTabLocation ) )]

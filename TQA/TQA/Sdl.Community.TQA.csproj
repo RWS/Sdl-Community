@@ -8,8 +8,8 @@
     <ProjectGuid>{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TQA</RootNamespace>
-    <AssemblyName>TQA</AssemblyName>
+    <RootNamespace>Sdl.Community.TQA</RootNamespace>
+    <AssemblyName>Sdl.Community.TQA</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataConverter.cs" />
+    <Compile Include="HelpButton.cs" />
     <Compile Include="Model\Entry.cs" />
     <Compile Include="HelpForm.cs">
       <SubType>Form</SubType>
@@ -122,6 +123,7 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\ReportResults.cs" />
+    <Compile Include="Model\TextType.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -129,7 +131,7 @@
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RibbonActions.cs" />
+    <Compile Include="StartButton.cs" />
     <Compile Include="TqaRibbonGroup.cs" />
   </ItemGroup>
   <ItemGroup>

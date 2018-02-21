@@ -5,8 +5,7 @@ using System.Windows.Forms;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
-
-namespace TQA
+namespace Sdl.Community.TQA
 {
     public partial class MainWindow : Form
     {

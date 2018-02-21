@@ -1,4 +1,4 @@
-﻿namespace TQA
+﻿namespace Sdl.Community.TQA
 {
     partial class MainWindow
     {

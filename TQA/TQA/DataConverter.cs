@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Linq;
 using System.Xml.Linq;
 using ClosedXML.Excel;
-using TQA.Model;
+using Sdl.Community.TQA.Model;
 
-namespace TQA
+namespace Sdl.Community.TQA
 {
     public static class DataConverter
     {
