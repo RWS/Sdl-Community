@@ -108,8 +108,6 @@ namespace TQA
 									    break;
 							    }
 						    }
-						    //yield return new Entry(languageString, fileString, segmentId, originalTranslation, revisedTranslationText,
-							   // sourceContentText, category, severity, comment, translation);
 							   var entry = new Entry(languageString, fileString, segmentId, originalTranslation, revisedTranslationText,
 						     sourceContentText, category, severity, comment, translation);
 							reportResults.Entries.Add(entry);
@@ -194,8 +192,8 @@ namespace TQA
 
                 using(var ws = wb.Worksheet( "Evaluation Report_Initial" ) )
                 {
-                    ws.Cell( "B8" ).Value = DateTime.Now.ToString( "dd-MMM-yyyy" );
-	                
+                    ws.Cell( "B9" ).Value = DateTime.Now.ToString( "dd-MMM-yyyy" );
+	                ws.Cell("L8").Value = "TQA";
 	                for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
 	                {
 		                ws.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];

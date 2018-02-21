@@ -15,8 +15,11 @@ namespace TQA
         {
             InitializeComponent();
             _controller = controller;
-            ProjectNameLabel.Text = string.Format( "Currently working on: {0}", _controller.CurrentProject.GetProjectInfo().Name );
-            LanguageSelector.Items.AddRange(_controller.CurrentProject.GetProjectInfo().TargetLanguages.Select( l => l.DisplayName ).ToArray() );
+	        if (_controller.CurrentProject != null)
+	        {
+		        ProjectNameLabel.Text = string.Format( "Currently working on: {0}", _controller.CurrentProject.GetProjectInfo().Name );
+		        LanguageSelector.Items.AddRange(_controller.CurrentProject.GetProjectInfo().TargetLanguages.Select( l => l.DisplayName ).ToArray() );
+	        }
         }
 
         private void StartButton_Click(object sender, EventArgs e)
@@ -26,7 +29,7 @@ namespace TQA
 
             _controller.CurrentProject.SaveTaskReportAs( tqaTask.Reports[0].Id, tempPath, Sdl.ProjectAutomation.Core.ReportFormat.Xml );
 
-	        var extractedData = DataConverter.ExtractFromXml(tempPath);//.ToArray();
+	        var extractedData = DataConverter.ExtractFromXml(tempPath);
 
             if( outputSaveDialog.ShowDialog() == DialogResult.OK )
             {
