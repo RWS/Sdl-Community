@@ -46,7 +46,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				var projectInfo = selectedProject.GetProjectInfo();
 				if (projectInfo == null) continue;
-				var projectTemplateLanguages = GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
+				var templatePath = selectedTemplate.Uri != null ? selectedTemplate.Uri.LocalPath : selectedTemplate.FileLocation;
+				var projectTemplateLanguages = GetTemplateLanguageDirection(templatePath);
 				if (projectInfo.SourceLanguage != null)
 				{
 					var sourceLanguage = projectInfo.SourceLanguage.CultureInfo.Name;
