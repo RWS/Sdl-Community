@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+	<PlugInName>Sdl.Community.AhkPlugin</PlugInName>
+	<Version>1.1</Version>
+	<Description>AhkPlugin</Description>
+	<Author>SDL Community</Author>
+	<RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+	<Include>
+		<!--<File>Sdl.Community.XmlReader.WPF.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>-->
+	</Include>
+</PluginPackage>
