@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
 namespace Sdl.Community.StyleSheetVerifier
 {
@@ -15,7 +17,7 @@ namespace Sdl.Community.StyleSheetVerifier
 	{
 	}
 
-	[Action("StyleSheetVerifier", Name = "StyleSheet Verifier", Icon = "icon")]
+	[Action("StyleSheetVerifier", Name = "StyleSheet Verifier", Icon = "icon",Description = "Launches a preview tool for XML/XSLT")]
 	[ActionLayout(typeof(StyleSheetVerifierRibonGroup), 11, DisplayType.Large)]
 	public class StyleSheetVerifierAction : AbstractAction
 	{
@@ -23,6 +25,15 @@ namespace Sdl.Community.StyleSheetVerifier
 		{
 			var verifier = new Form1();
 			verifier.ShowDialog();
+		}
+	}
+	[Action("StyleSheetVerifierHelpAction", Icon = "question", Name = "StyleSheet Verifier Help", Description = "An wikie page will be opened in browser uith documentation")]
+	[ActionLayout(typeof(StyleSheetVerifierRibonGroup), 10, DisplayType.Large)]
+	public class StyleSheetVerifierActionHelp : AbstractAction
+	{
+		protected override void Execute()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3170.stylesheet-preview");
 		}
 	}
 }
