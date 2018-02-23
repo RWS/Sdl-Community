@@ -135,8 +135,8 @@
       <Project>{839dfe71-5952-482a-9e34-fbb434b30fe7}</Project>
       <Name>Sdl.Community.AhkPlugin.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="Sdl.Community.AhkPlugin.Repository\Sdl.Community.AhkPlugin.Repository.csproj">
-      <Project>{7c8da726-b576-4bb8-929f-e7dc4625f0ee}</Project>
+    <ProjectReference Include="..\Sdl.Community.AhkPlugin.Repository\Sdl.Community.AhkPlugin.Repository.csproj">
+      <Project>{e3827883-98f9-4b09-8790-ef4e3e49c08d}</Project>
       <Name>Sdl.Community.AhkPlugin.Repository</Name>
     </ProjectReference>
   </ItemGroup>

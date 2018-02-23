@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin.Model", "..\Sdl.Community.AhkPlugin.Model\Sdl.Community.AhkPlugin.Model.csproj", "{839DFE71-5952-482A-9E34-FBB434B30FE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin.Repository", "Sdl.Community.AhkPlugin.Repository\Sdl.Community.AhkPlugin.Repository.csproj", "{7C8DA726-B576-4BB8-929F-E7DC4625F0EE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.AhkPlugin.Repository", "..\Sdl.Community.AhkPlugin.Repository\Sdl.Community.AhkPlugin.Repository.csproj", "{E3827883-98F9-4B09-8790-EF4E3E49C08D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{839DFE71-5952-482A-9E34-FBB434B30FE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{839DFE71-5952-482A-9E34-FBB434B30FE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{839DFE71-5952-482A-9E34-FBB434B30FE7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7C8DA726-B576-4BB8-929F-E7DC4625F0EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C8DA726-B576-4BB8-929F-E7DC4625F0EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C8DA726-B576-4BB8-929F-E7DC4625F0EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C8DA726-B576-4BB8-929F-E7DC4625F0EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3827883-98F9-4B09-8790-EF4E3E49C08D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3827883-98F9-4B09-8790-EF4E3E49C08D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3827883-98F9-4B09-8790-EF4E3E49C08D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3827883-98F9-4B09-8790-EF4E3E49C08D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
