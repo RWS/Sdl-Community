@@ -24,7 +24,7 @@ namespace Sdl.Community.AhkPlugin
 	{
 		protected override void Execute()
 		{
-			var window = new ScriptsWindow();
+			var window = new Ui.ScriptsWindow();
 			window.ShowDialog();
 		}
 	}

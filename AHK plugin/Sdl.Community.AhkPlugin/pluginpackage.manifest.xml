@@ -6,7 +6,7 @@
 	<Author>SDL Community</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 	<Include>
-		<!--<File>Sdl.Community.XmlReader.WPF.dll</File>
-		<File>Sdl.Community.Toolkit.Core.dll</File>-->
+		<File>Sdl.Community.AhkPlugin.Model.dll</File>
+		<File>Sdl.Community.AhkPlugin.Repository.dll</File>
 	</Include>
 </PluginPackage>
