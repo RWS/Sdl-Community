@@ -693,7 +693,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         }
     }
 
-	[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wikie page will be opened in browser uith user documentation")]
+	[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wiki page will be opened in browser uith user documentation")]
 	[ActionLayout(typeof(ApplyStudioProjectTemplateRibbonGroup), 10, DisplayType.Large)]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 	public class ApplyStudioProjectTemplateHelpAction: AbstractViewControllerAction<ProjectsController>
