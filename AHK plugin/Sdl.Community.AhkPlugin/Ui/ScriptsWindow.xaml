@@ -15,7 +15,18 @@
 		</ResourceDictionary>
 	</Window.Resources>
 	<Grid>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Andrea"></Button>
+		<!--<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Andrea"></Button>-->
+		<DataGrid Name="testGrid" AutoGenerateColumns="False" ItemsSource="{Binding Scripts}">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+			</DataGrid.Columns>
+			<DataGrid.RowDetailsTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Details}" Margin="10" />
+				</DataTemplate>
+			</DataGrid.RowDetailsTemplate>
+		</DataGrid>
 		
 	</Grid>
 </Window>

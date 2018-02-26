@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using Sdl.Community.AhkPlugin.ViewModels;
 
 namespace Sdl.Community.AhkPlugin.Ui
 {
@@ -10,6 +11,7 @@ namespace Sdl.Community.AhkPlugin.Ui
 		public ScriptsWindow()
 		{
 			InitializeComponent();
+			DataContext = new ScriptsWindowViewModel();
 		}
 	}
 }

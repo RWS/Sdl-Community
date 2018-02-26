@@ -21,7 +21,7 @@ namespace Sdl.Community.TQA
 		        var selectedProjectInfo = _controller.CurrentProject.GetProjectInfo();
 				var currentProjectName = selectedProjectInfo.Name;
 				ProjectNameLabel.Text = string.Format( "Currently working on: {0}",currentProjectName );
-		        outputSaveDialog.FileName = "QRF-121_" + currentProjectName;
+		        outputSaveDialog.FileName = "QRF-121_XXX_XXXXXX_XXX_XX";
 				LanguageSelector.Items.AddRange(selectedProjectInfo.TargetLanguages.Select( l => l.DisplayName ).ToArray() );
 	        }
         }
