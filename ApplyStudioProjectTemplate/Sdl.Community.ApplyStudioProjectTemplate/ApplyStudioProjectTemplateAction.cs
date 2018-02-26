@@ -91,21 +91,6 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     // This is the source project - check if it's a loaded one
                     FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
 
-	                //var projectTemplateLanguages = Helpers.GetTemplateLanguageDirection(selectedTemplate.Uri.LocalPath);
-	                //var sourceLanguage = targetProject.GetProjectInfo().SourceLanguage.CultureInfo.Name;
-	                //var targetLanguages = targetProject.GetProjectInfo().TargetLanguages.ToList();
-	                //var matchesLanguages =
-		               // Helpers.ProjectLanguageMatchesTemplate(projectTemplateLanguages, sourceLanguage, targetLanguages);
-	                //if (!matchesLanguages)
-	                //{
-		               // var dialog = MessageBox.Show(@"Selected template has language directions different from selected project. Are you sure you want to apply this template?",@"Wanning",
-			              //  MessageBoxButtons.OKCancel);
-		               // if (dialog == DialogResult.OK)
-		               // {
-			              //  shouldApplyTemplate = true;
-		               // }
-
-	                //}
 					// Not found so load it from the filing system
 					if (sourceProject == null)
                     {
@@ -432,7 +417,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
 
 							//set fuzzy bands from template using reflection
-	                        SetFuzzyBands(sourceProject, targetProject);
+	                       
 						}
 						catch (Exception e)
                         {
@@ -498,34 +483,36 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             applyTemplateForm.SaveProjectTemplates();
         }
 
-	    private void SetFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
-	    {
-		    //Get fuzzy values from template
-		    var internalProject = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-		    if (internalProject != null)
-		    {
-			    var internalSourceProject = internalProject.GetValue(sourceProject);
-			    var propertyInfo = internalSourceProject.GetType().GetProperty("AnalysisBands");
-			    var fuzzies = new List<int>();
-			    if (propertyInfo != null)
-			    {
-				    var fuzzyBands = propertyInfo.GetValue(internalSourceProject);
-				    foreach (dynamic fuzzyValue in (Array)fuzzyBands)
-				    {
-					    var minFuzzyValue = fuzzyValue.GetType().GetProperty("MinimumMatchValue").GetValue(fuzzyValue,null);
-					    fuzzies.Add(minFuzzyValue);
-				    }
-			    }
+		////
+		/// We don't delete this code yet we are not sure that fuzzy bands couses that strange behaviour
+	   // private void SetFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
+	   // {
+		  //  //Get fuzzy values from template
+		  //  var internalProject = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+		  //  if (internalProject != null)
+		  //  {
+			 //   var internalSourceProject = internalProject.GetValue(sourceProject);
+			 //   var propertyInfo = internalSourceProject.GetType().GetProperty("AnalysisBands");
+			 //   var fuzzies = new List<int>();
+			 //   if (propertyInfo != null)
+			 //   {
+				//    var fuzzyBands = propertyInfo.GetValue(internalSourceProject);
+				//    foreach (dynamic fuzzyValue in (Array)fuzzyBands)
+				//    {
+				//	    var minFuzzyValue = fuzzyValue.GetType().GetProperty("MinimumMatchValue").GetValue(fuzzyValue,null);
+				//	    fuzzies.Add(minFuzzyValue);
+				//    }
+			 //   }
 
-				//set fuzzy to project
-			    var internalTargetProject = internalProject.GetValue(targetProject);
-			    var setBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
-			    if (setBandsMethod != null)
-			    {
-				    setBandsMethod.Invoke(internalTargetProject, new object[] {fuzzies.ToArray()});
-			    }
-		    }
-	    }
+				////set fuzzy to project
+			 //   var internalTargetProject = internalProject.GetValue(targetProject);
+			 //   var setBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
+			 //   if (setBandsMethod != null)
+			 //   {
+				//    setBandsMethod.Invoke(internalTargetProject, new object[] {fuzzies.ToArray()});
+			 //   }
+		  //  }
+	   // }
 
 		/// <summary>
 		/// Validates the translation provider configuration.
