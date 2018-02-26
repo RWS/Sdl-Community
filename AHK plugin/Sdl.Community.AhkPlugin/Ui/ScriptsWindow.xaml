@@ -7,7 +7,15 @@
         mc:Ignorable="d"
 		Icon="..\Resources/icon.png"
         Title="AutoHotKey Plugin" Height="600" Width="600" WindowStartupLocation="CenterScreen">
-    <Grid>
-        
-    </Grid>
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Andrea"></Button>
+		
+	</Grid>
 </Window>
