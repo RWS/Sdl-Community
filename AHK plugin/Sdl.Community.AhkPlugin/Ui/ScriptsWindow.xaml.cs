@@ -10,8 +10,13 @@ namespace Sdl.Community.AhkPlugin.Ui
 	{
 		public ScriptsWindow()
 		{
+			
+
 			InitializeComponent();
-			DataContext = new ScriptsWindowViewModel();
+			var model= new ScriptsWindowViewModel();
+			DataContext = model;
+			//testGrid.ItemsSource = model.model;
+
 		}
 	}
 }

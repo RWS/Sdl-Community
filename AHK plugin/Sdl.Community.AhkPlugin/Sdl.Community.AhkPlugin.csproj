@@ -78,8 +78,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ItemTemplates\ScriptsDataGridItemTemplate.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModels\ScriptsWindowViewModel.cs" />
     <Page Include="UiHelpers\ButtonsStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UiHelpers\DataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
