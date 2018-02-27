@@ -15,7 +15,7 @@ using Sdl.Community.AhkPlugin.Ui;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
-	public class ScriptsWindowViewModel: ViewModelBase,INotifyPropertyChanged
+	public class ScriptsWindowViewModel: ViewModelBase
 	{
 		private readonly MainWindowViewModel _mainWindow;
 		private ObservableCollection<ScriptsDataGridItemTemplate> _scriptsCollection = new ObservableCollection<ScriptsDataGridItemTemplate>();
@@ -83,14 +83,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				_scriptsCollection = value;
 				OnPropertyChanged(nameof(ScriptsCollection));
 			}
-		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }

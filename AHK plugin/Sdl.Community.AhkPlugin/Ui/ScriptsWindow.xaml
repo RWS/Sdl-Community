@@ -33,7 +33,7 @@
 			</StackPanel>
 		</StackPanel>
 
-		<DataGrid Style="{DynamicResource DGHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
+		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
 				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection}"  Margin="0,25,0,0"  Background="#F5F5F5"

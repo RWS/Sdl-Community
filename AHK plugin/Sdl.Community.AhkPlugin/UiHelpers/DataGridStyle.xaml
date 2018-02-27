@@ -1,9 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-	<Style x:Key="DGHeaderStyle" TargetType="{x:Type DataGrid}">
-		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DGCHeaderStyle}"/>
+	<Style x:Key="DgHeaderStyle" TargetType="{x:Type DataGrid}">
+		<Setter Property="ColumnHeaderStyle" Value="{DynamicResource DgcHeaderStyle}"/>
 	</Style>
-	<Style x:Key="DGCHeaderStyle" TargetType="DataGridColumnHeader">
+	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
 		<Setter Property="Height" Value="30"/>
 		<Setter Property="Background" Value="#3EA691" />
 		<Setter Property="Foreground" Value="WhiteSmoke"/>

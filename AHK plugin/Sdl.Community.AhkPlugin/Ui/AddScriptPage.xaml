@@ -34,7 +34,7 @@
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Width="100" Height="30" Content="Back" Margin="10,0,0,25"></Button>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Insert script" Margin="0,0,1,0"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Insert script" Margin="0,0,10,0"></Button>
 			</StackPanel>
 		</StackPanel>
 		<!--text block area-->

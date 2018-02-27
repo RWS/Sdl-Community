@@ -12,16 +12,8 @@ using Sdl.Community.AhkPlugin.Ui;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
-   public  class MainWindowViewModel : ViewModelBase,INotifyPropertyChanged
-	{
-		public event PropertyChangedEventHandler PropertyChanged;
-		private ScriptsWindowViewModel _scriptsListViewModel;
-		public ICommand LoadAddPageCommand { get; }
-		public ScriptsWindowViewModel ScriptsWindowViewModel { get; set; }
-		public AddScriptViewModel AddScriptViewModel { get; set; }
-
-		public ICommand LoadScriptsPageCommand { get; }
-
+   public  class MainWindowViewModel : ViewModelBase
+	{ 
 		private ViewModelBase _currentViewModel;
 
 		public ViewModelBase CurrentViewModel
@@ -36,8 +28,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public MainWindowViewModel()
 		{
 			LoadScriptsPage();
-			LoadAddPageCommand = new CommandHandler(LoadAddScriptPage,true);
-			LoadScriptsPageCommand = new CommandHandler(LoadScriptsPage,true);
 		}
 
 		public void LoadAddScriptPage()
@@ -47,12 +37,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public void LoadScriptsPage()
 		{
 			CurrentViewModel = new ScriptsWindowViewModel(this);
-		}
-
-		[NotifyPropertyChangedInvocator]
-		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
 	}
 }
