@@ -40,13 +40,13 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			LoadScriptsPageCommand = new CommandHandler(LoadScriptsPage,true);
 		}
 
-		private void LoadAddScriptPage()
+		public void LoadAddScriptPage()
 		{
-			CurrentViewModel = new AddScriptViewModel();
+			CurrentViewModel = new AddScriptViewModel(this);
 		}
-		private void LoadScriptsPage()
+		public void LoadScriptsPage()
 		{
-			CurrentViewModel = new ScriptsWindowViewModel();
+			CurrentViewModel = new ScriptsWindowViewModel(this);
 		}
 
 		[NotifyPropertyChangedInvocator]

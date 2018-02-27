@@ -29,7 +29,7 @@
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="100" Height="30" Content="Export" Margin="0,0,10,0"></Button>
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Remove" Margin="0,0,10,0"></Button>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Add" Margin="0,0,10,0"></Button>
+				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Add" Command="{Binding AddCommand}" Margin="0,0,10,0"></Button>
 			</StackPanel>
 		</StackPanel>
 

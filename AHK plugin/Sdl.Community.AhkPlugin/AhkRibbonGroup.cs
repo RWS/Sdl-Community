@@ -27,7 +27,7 @@ namespace Sdl.Community.AhkPlugin
 		protected override void Execute()
 		{
 			var mainVindowViewModel = new MainWindowViewModel();
-			var mainWindow = new MainWindow()
+			var mainWindow = new MainWindow
 			{
 				DataContext = mainVindowViewModel
 			};
