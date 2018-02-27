@@ -5,8 +5,44 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-		<Label Name="TestLabel" Content="test"></Label>
-    </Grid>
+             d:DesignHeight="500" d:DesignWidth="300">
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="1*" />
+		</Grid.ColumnDefinitions>
+		<TextBox Grid.Column="0" BorderThickness="0" TextWrapping="WrapWithOverflow" Grid.Row="0" Margin="10,10,10,25" Grid.ColumnSpan="2" FontWeight="DemiBold">To add a new script paste the content of the script  
+			in text box area. All fields are required</TextBox>
+		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Width="100" Height="30" Content="Back" Margin="10,0,0,25"></Button>
+		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Insert script" Margin="0,0,1,0"></Button>
+			</StackPanel>
+		</StackPanel>
+		<!--text block area-->
+		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
+		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Grid.Column="1" Grid.Row="2" Height="40"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="3" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
+		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Grid.Column="1" Grid.Row="3" Height="70" ></TextBox>
+		<TextBlock   Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
+		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}"  Grid.Column="1" Grid.Row="4" Height="150"></TextBox>
+	</Grid>
 </UserControl>
