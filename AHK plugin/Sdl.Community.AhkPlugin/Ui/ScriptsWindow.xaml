@@ -26,20 +26,21 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.Column="0" BorderThickness="0" TextWrapping="WrapWithOverflow" Grid.Row="0" Margin="0,10,0,0" Grid.ColumnSpan="2" FontWeight="DemiBold">Bellow you can see a list of all available scripts. 
+		<TextBox Grid.Column="0" BorderThickness="0" TextWrapping="WrapWithOverflow" Grid.Row="0" Margin="0,10,0,10" Grid.ColumnSpan="2" FontWeight="DemiBold">Bellow you can see a list of all available scripts. 
 			All sort of actions ar possible with the scripts: remove, disable/ enable and add a new one. </TextBox>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="120" Height="30" Content="Remove scripts" Margin="0,0,10,0"></Button>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="120" Height="30" Content="Add script" Margin="0,0,10,0"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="100" Height="30" Content="Export" Margin="0,0,10,0"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Remove" Margin="0,0,10,0"></Button>
+				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Add" Margin="0,0,10,0"></Button>
 			</StackPanel>
 		</StackPanel>
 
 		<DataGrid Style="{DynamicResource DGHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Visible"
-				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="testGrid"  
+				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection}"  Margin="0,25,0,0"  Background="#F5F5F5"
-				  AutoGenerateColumns="True" GridLinesVisibility="None" CanUserAddRows="False"  IsReadOnly="True">
+				  AutoGenerateColumns="True" GridLinesVisibility="None" CanUserAddRows="False"  >
 			<!--<DataGrid.Columns>
 				<DataGridCheckBoxColumn Header = "Select" Binding = "{Binding IsSelected}"/>
 				<DataGridTextColumn Header="Name" Binding="{Binding Name}" />
