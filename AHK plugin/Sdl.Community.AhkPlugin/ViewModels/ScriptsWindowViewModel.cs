@@ -9,15 +9,19 @@ using System.Threading.Tasks;
 using Sdl.Community.AhkPlugin.Annotations;
 using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
+using Sdl.Community.AhkPlugin.Ui;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
-	public class ScriptsWindowViewModel:INotifyPropertyChanged
+	public class ScriptsWindowViewModel: ViewModelBase,INotifyPropertyChanged
 	{
+		private readonly MainWindow _mainWindow;
 		private ObservableCollection<ScriptsDataGridItemTemplate> _scriptsCollection = new ObservableCollection<ScriptsDataGridItemTemplate>();
 
+	
 		public ScriptsWindowViewModel()
 		{
+		
 			var scripts = new List<Script>
 			{
 				new Script

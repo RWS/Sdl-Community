@@ -78,14 +78,32 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="ItemTemplates\ScriptsDataGridItemTemplate.cs" />
     <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Ui\AddScriptPage.xaml.cs">
+      <DependentUpon>AddScriptPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\AddScriptViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ScriptsWindowViewModel.cs" />
+    <Compile Include="ViewModels\ViewModelBase.cs" />
     <Page Include="UiHelpers\ButtonsStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UiHelpers\DataGridStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\AddScriptPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\MainWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

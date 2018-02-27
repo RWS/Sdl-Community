@@ -1,21 +1,18 @@
-﻿<Window x:Class="Sdl.Community.AhkPlugin.Ui.ScriptsWindow"
+﻿<UserControl x:Class="Sdl.Community.AhkPlugin.Ui.ScriptsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
-        mc:Ignorable="d"
-		Icon="..\Resources/icon.png"
-        Title="AutoHotKey Plugin" Height="600" Width="600" WindowStartupLocation="CenterScreen">
-	<Window.Resources>
-		<ResourceDictionary>
-			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
-				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
-			</ResourceDictionary.MergedDictionaries>
-		</ResourceDictionary>
-		
-	</Window.Resources>
+        mc:Ignorable="d">
+<UserControl.Resources>
+	<ResourceDictionary>
+		<ResourceDictionary.MergedDictionaries>
+			<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+			<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+		</ResourceDictionary.MergedDictionaries>
+	</ResourceDictionary>
+	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
@@ -54,4 +51,4 @@
 		</DataGrid>
 		
 	</Grid>
-</Window>
+</UserControl>

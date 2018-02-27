@@ -10,17 +10,17 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Sdl.Community.AhkPlugin.ViewModels;
 
 namespace Sdl.Community.AhkPlugin.Ui
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for AddScriptPage.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AddScriptPage : UserControl
     {
-        public MainWindow()
+        public AddScriptPage()
         {
             InitializeComponent();
         }

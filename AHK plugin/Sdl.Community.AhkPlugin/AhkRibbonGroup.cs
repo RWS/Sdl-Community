@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sdl.Community.AhkPlugin.Ui;
+using Sdl.Community.AhkPlugin.ViewModels;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.DefaultLocations;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -24,8 +26,12 @@ namespace Sdl.Community.AhkPlugin
 	{
 		protected override void Execute()
 		{
-			var window = new Ui.ScriptsWindow();
-			window.ShowDialog();
+			var mainVindowViewModel = new MainWindowViewModel();
+			var mainWindow = new MainWindow()
+			{
+				DataContext = mainVindowViewModel
+			};
+			mainWindow.ShowDialog();
 		}
 	}
 	[Action("Sdl.Community.HelpAhkAction", Name = "AutoHotKey scripts help", Icon = "question", Description = "An wiki page will be opened in browser uith user documentation")]
