@@ -29,7 +29,7 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.Column="0" BorderThickness="0" TextWrapping="WrapWithOverflow" Grid.Row="0" Margin="10,10,10,25" Grid.ColumnSpan="2" FontWeight="DemiBold">To add a new script paste the content of the script  
+		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Margin="10,10,10,25" Grid.ColumnSpan="2" >To add a new script paste the content of the script  
 			in text box area. All fields are required</TextBox>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Width="100" Height="30" Content="Back" Margin="10,0,0,25"></Button>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">

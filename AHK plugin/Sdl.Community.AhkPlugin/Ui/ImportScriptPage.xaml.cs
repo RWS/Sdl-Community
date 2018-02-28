@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Sdl.Community.AhkPlugin.Ui
 {
     /// <summary>
-    /// Interaction logic for AddScriptPage.xaml
+    /// Interaction logic for ImportScriptPage.xaml
     /// </summary>
-    public partial class AddScriptPage 
+    public partial class ImportScriptPage 
     {
-        public AddScriptPage()
+        public ImportScriptPage()
         {
             InitializeComponent();
         }

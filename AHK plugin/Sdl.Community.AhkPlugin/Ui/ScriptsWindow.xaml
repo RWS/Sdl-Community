@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
+             d:DesignHeight="500" d:DesignWidth="600"
         mc:Ignorable="d">
 <UserControl.Resources>
 	<ResourceDictionary>
 		<ResourceDictionary.MergedDictionaries>
 			<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 			<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
-		</ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
 	</ResourceDictionary>
 	</UserControl.Resources>
 	<Grid>
@@ -23,13 +25,18 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.Column="0" BorderThickness="0" TextWrapping="WrapWithOverflow" Grid.Row="0" Margin="0,10,0,10" Grid.ColumnSpan="2" FontWeight="DemiBold">Bellow you can see a list of all available scripts. 
+		<TextBox Style="{DynamicResource DescriptionBox}"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" >Bellow you can see a list of all available scripts. 
 			All sort of actions ar possible with the scripts: remove, disable/ enable and add a new one. </TextBox>
+		<StackPanel Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Export"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Import" Command="{Binding ImportCommand}"></Button>
+			</StackPanel>
+		</StackPanel>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="100" Height="30" Content="Export" Margin="0,0,10,0"></Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Remove" Margin="0,0,10,0"></Button>
-				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Add" Command="{Binding AddCommand}" Margin="0,0,10,0"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Remove" ></Button>
+				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Add" Command="{Binding AddCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
 

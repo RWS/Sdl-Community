@@ -15,6 +15,9 @@
 		<DataTemplate DataType="{x:Type viewModels:AddScriptViewModel}">
 			<local:AddScriptPage />
 		</DataTemplate>
+		<DataTemplate DataType="{x:Type viewModels:ImportScriptPageViewModel}">
+			<local:ImportScriptPage />
+		</DataTemplate>
 	</Window.Resources>
 	<Grid>
         <DockPanel>

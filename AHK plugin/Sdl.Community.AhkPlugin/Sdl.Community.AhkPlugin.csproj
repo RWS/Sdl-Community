@@ -84,10 +84,14 @@
     <Compile Include="Ui\AddScriptPage.xaml.cs">
       <DependentUpon>AddScriptPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\ImportScriptPage.xaml.cs">
+      <DependentUpon>ImportScriptPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AddScriptViewModel.cs" />
+    <Compile Include="ViewModels\ImportScriptPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ScriptsWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
@@ -108,6 +112,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\AddScriptPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\ImportScriptPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

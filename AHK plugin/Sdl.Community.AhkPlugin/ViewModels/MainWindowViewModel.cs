@@ -38,5 +38,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			CurrentViewModel = new ScriptsWindowViewModel(this);
 		}
+
+		public void LoadImportPage()
+		{
+			CurrentViewModel = new ImportScriptPageViewModel(this);
+		}
 	}
 }

@@ -20,6 +20,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private readonly MainWindowViewModel _mainWindow;
 		private ObservableCollection<ScriptsDataGridItemTemplate> _scriptsCollection = new ObservableCollection<ScriptsDataGridItemTemplate>();
 		private ICommand _addCommand;
+		private ICommand _importCommand;
 	
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
@@ -65,10 +66,15 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		}
 
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
-
+		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(ImportAction, true));
 		private void AddScriptAction()
 		{
 			_mainWindow.LoadAddScriptPage();
+		}
+
+		private void ImportAction()
+		{
+			_mainWindow.LoadImportPage();
 		}
 		public ObservableCollection<ScriptsDataGridItemTemplate> ScriptsCollection
 		{
