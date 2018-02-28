@@ -29,12 +29,12 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Margin="10,10,10,25" Grid.ColumnSpan="2" >To add a new script paste the content of the script  
+		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Grid.ColumnSpan="2" >To add a new script paste the content of the script  
 			in text box area. All fields are required</TextBox>
-		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Width="100" Height="30" Content="Back" Margin="10,0,0,25"></Button>
+		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Back" Margin="10,0,0,25"></Button>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Width="100" Height="30" Content="Insert script" Margin="0,0,10,0"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Insert script"></Button>
 			</StackPanel>
 		</StackPanel>
 		<!--text block area-->

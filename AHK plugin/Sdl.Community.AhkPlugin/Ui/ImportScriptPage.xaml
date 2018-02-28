@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:helpers="clr-namespace:Sdl.Community.AhkPlugin.Helpers"
       xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
       mc:Ignorable="d" 
       d:DesignHeight="300" d:DesignWidth="300"
@@ -28,5 +29,9 @@
 		</Grid.ColumnDefinitions>
 		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2">In this step you can import AutoHotKey scripts  
 			by draging and drop them into bellow area. Only scripts exported with AHK Plugin are alowed to pe imported into main script.</TextBox>
+		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Scripts list" Margin="10,0,0,25"></Button>
+		<Grid  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="90" Margin="10,10,10,25" Background="WhiteSmoke" AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
+			
+		</Grid>
 	</Grid>
 </UserControl>

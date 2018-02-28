@@ -13,11 +13,19 @@ namespace Sdl.Community.AhkPlugin.Helpers
     public class CommandHandler : ICommand, INotifyPropertyChanged
 	{
 		private Action _action;
+		private Action<object> _actionWithParams;
 		private bool _canExecute;
 		public CommandHandler(Action action, bool canExecute)
 		{
 			_action = action;
 			_canExecute = canExecute;
+		}
+
+		public CommandHandler(Action<object> actionWithParams,bool canExecute)
+		{
+			_actionWithParams = actionWithParams;
+			_canExecute = canExecute;
+			
 		}
 
 		public bool CanExecute(object parameter)

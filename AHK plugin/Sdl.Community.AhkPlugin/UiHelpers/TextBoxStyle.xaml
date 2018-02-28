@@ -11,7 +11,7 @@
 	<Style x:Key="DescriptionBox" TargetType="{x:Type TextBox}">
 		<Setter Property="BorderThickness" Value="0"></Setter>
 		<Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
-		<Setter Property="Margin" Value="0,10,0,10"></Setter>
+		<Setter Property="Margin" Value="10,10,10,25"></Setter>
 		<Setter Property="FontWeight" Value="DemiBold"></Setter>
 		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
 	</Style>
