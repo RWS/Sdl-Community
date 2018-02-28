@@ -151,7 +151,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="Resources\template.xlsm" />
+    <None Include="Resources\template.XLSM" />
     <None Include="Resources\tqa3.ico" />
     <None Include="Resources\Help.ico" />
   </ItemGroup>
