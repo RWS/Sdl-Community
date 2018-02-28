@@ -41,7 +41,7 @@
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
 					<StackPanel Orientation="Vertical">
-						<Button Content="{Binding Content}" Width="50" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding FilePath}"/>
+						<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding Content}" Width="auto" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding FilePath}"/>
 					</StackPanel>
 					
 				</DataTemplate>
