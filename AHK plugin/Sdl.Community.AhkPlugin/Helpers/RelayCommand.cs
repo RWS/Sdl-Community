@@ -12,7 +12,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 	{
 		private readonly Action<object> _execute;
 		private readonly Predicate<object> _canExecute;
-
+	
 		public RelayCommand(Action<object> execute)
 			: this(execute, null)
 		{
@@ -27,7 +27,6 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			_execute = execute ?? throw new ArgumentNullException("execute");
 			_canExecute = canExecute;
 		}
-		
 		[DebuggerStepThrough]
 		public bool CanExecute(object parameter)
 		{
