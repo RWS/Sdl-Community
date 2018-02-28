@@ -11,6 +11,9 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Width" Value="100"></Setter>
+		<Setter Property="Height" Value="30"></Setter>
+		<Setter Property="Margin" Value="0,0,10,0"></Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
@@ -56,6 +59,9 @@
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
 		<Setter Property="VerticalContentAlignment" Value="Center"/>
 		<Setter Property="Padding" Value="16,3,16,3"/>
+		<Setter Property="Width" Value="100"></Setter>
+		<Setter Property="Height" Value="30"></Setter>
+		<Setter Property="Margin" Value="0,0,10,0"></Setter>
 		<Setter Property="Template">
 			<Setter.Value>
 				<ControlTemplate TargetType="{x:Type Button}">
