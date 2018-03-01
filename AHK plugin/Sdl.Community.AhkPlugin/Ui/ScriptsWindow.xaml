@@ -43,7 +43,7 @@
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
 				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 				  FontFamily="Segoe UI"
-				  ItemsSource="{Binding ScriptsCollection}"  Margin="0,25,0,0"  Background="#F5F5F5"
+				  ItemsSource="{Binding ScriptsCollection}"  Margin="10,25,10,0"  Background="#F5F5F5"
 				  AutoGenerateColumns="True" GridLinesVisibility="None" CanUserAddRows="False"  >
 			<!--<DataGrid.Columns>
 				<DataGridCheckBoxColumn Header = "Select" Binding = "{Binding IsSelected}"/>

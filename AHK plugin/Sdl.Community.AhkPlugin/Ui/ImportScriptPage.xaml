@@ -6,7 +6,7 @@
       xmlns:helpers="clr-namespace:Sdl.Community.AhkPlugin.Helpers"
       xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
       mc:Ignorable="d" 
-      d:DesignHeight="300" d:DesignWidth="300"
+      d:DesignHeight="600" d:DesignWidth="300"
       >
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -32,21 +32,23 @@
 			by draging and drop them into bellow area. Only scripts exported with AHK Plugin are alowed to pe imported into main script. To remove a dropped file click on file name
 		dispalyed bellow.</TextBox>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Scripts list" Margin="10,0,0,25"></Button>
-		<ItemsControl  Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" Height="30" ItemsSource="{Binding FilesNameCollection}">
-			<ItemsControl.ItemsPanel>
-				<ItemsPanelTemplate>
-					<StackPanel Orientation="Horizontal"/>
-				</ItemsPanelTemplate>
-			</ItemsControl.ItemsPanel>
-			<ItemsControl.ItemTemplate>
-				<DataTemplate>
-					<StackPanel Orientation="Vertical">
-						<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding Content}" Width="auto" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding FilePath}"/>
-					</StackPanel>
-					
-				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+		<ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Hidden">
+			<ItemsControl   ItemsSource="{Binding FilesNameCollection}">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Horizontal"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+							<StackPanel Orientation="Vertical">
+								<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding Content}" Width="auto" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding FilePath}"/>
+							</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+		</ScrollViewer>
 		
 		<Grid  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="90" Margin="10,10,10,25" Background="WhiteSmoke" AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
 			

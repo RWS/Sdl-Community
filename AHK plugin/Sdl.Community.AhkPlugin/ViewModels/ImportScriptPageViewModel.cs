@@ -34,7 +34,15 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    private void RemoveFile(object file)
 	    {
-		    
+		    if (file != null)
+		    {
+			    var filePath = (string) file;
+			    var fileToRemove = FilesNameCollection.FirstOrDefault(f => f.FilePath.Equals(filePath));
+			    if (fileToRemove != null)
+			    {
+				    FilesNameCollection.Remove(fileToRemove);
+			    }
+		    }
 	    }
 
 		private void HandlePreviewDrop(object dropedFile)
