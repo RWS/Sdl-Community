@@ -28,9 +28,8 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2">In this step you can import AutoHotKey scripts  
-			by draging and drop them into bellow area. Only scripts exported with AHK Plugin are alowed to pe imported into main script. To remove a dropped file click on file name
-		dispalyed bellow.</TextBox>
+		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2">In this step you can import AutoHotkey scripts using drag and drop into this interface.  Only scripts that have been exported using this plugin can be imported in this way.  
+			If you have files from other users that were created without using this plugin you should use the Add function in the previous window.</TextBox>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Scripts list" Margin="10,0,0,25"></Button>
 		<ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Hidden">
 			<ItemsControl   ItemsSource="{Binding FilesNameCollection}">
