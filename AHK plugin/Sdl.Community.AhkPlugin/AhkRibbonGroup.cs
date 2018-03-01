@@ -29,29 +29,6 @@ namespace Sdl.Community.AhkPlugin
 	{
 		protected override void Execute()
 		{
-			//var scripts = new List<Script>();
-			//var script1 = new Script
-			//{
-			//	ScriptId = Guid.NewGuid(),
-			//	Name = "Script1",
-			//	Text = "script test",
-			//	Description = "description1"
-			//};
-			//scripts.Add(script1);
-			//var script2 = new Script
-			//{
-			//	ScriptId = Guid.NewGuid(),
-			//	Name = "Script2",
-			//	Text = "script test2",
-			//	Description = "description2"
-			//};
-			//scripts.Add(script2);
-			//using (var session = RavenContext.Current.CreateSession())
-			//{
-			//	//session.Store(script2);
-			//	//session.SaveChanges();
-			//	var test = session.Query<Script>().ToArray();
-			//}
 			var scriptDb = new ScriptDb();
 			var list = scriptDb.GetAllScripts().Result;
 			var mainVindowViewModel = new MainWindowViewModel();

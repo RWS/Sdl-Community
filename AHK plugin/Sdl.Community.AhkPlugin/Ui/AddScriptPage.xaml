@@ -24,6 +24,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -36,12 +37,13 @@
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Insert script" Command="{Binding InsertCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
+		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"></TextBlock>
 		<!--text block area-->
-		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
-		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Grid.Column="1" Grid.Row="2" Height="40"></TextBox>
-		<TextBlock Grid.Column="0" Grid.Row="3" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
-		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Grid.Column="1" Grid.Row="3" Height="70" ></TextBox>
-		<TextBlock   Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
-		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}"  Grid.Column="1" Grid.Row="4" Height="150"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="3" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
+		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="3" Height="40"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
+		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="4" Height="70" ></TextBox>
+		<TextBlock   Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
+		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="5" Height="150"></TextBox>
 	</Grid>
 </UserControl>

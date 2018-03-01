@@ -22,10 +22,21 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			}
 		}
 
+		public Task AddNewScript(Script script)
+		{
+			ThrowIfDisposed();
+			using (var session = RavenContext.Current.CreateSession())
+			{
+				session.Store(script);
+				session.SaveChanges();
+			}
+			return Task.FromResult(true);
+		}
+
 		private void ThrowIfDisposed()
 		{
 			if (_disposed)
-				throw new ObjectDisposedException(this.GetType().Name);
+				throw new ObjectDisposedException(GetType().Name);
 		}
 	}
 }
