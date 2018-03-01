@@ -8,5 +8,8 @@
 	<Include>
 		<File>Sdl.Community.AhkPlugin.Model.dll</File>
 		<File>Sdl.Community.AhkPlugin.Repository.dll</File>
+		<File>Raven.Abstractions.dll</File>
+		<File>Raven.Client.Lightweight.dll</File>
+		<File>Raven.Database.dll</File>
 	</Include>
 </PluginPackage>

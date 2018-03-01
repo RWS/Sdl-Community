@@ -13,12 +13,19 @@ namespace Sdl.Community.AhkPlugin.ViewModels
     {
 	    private readonly MainWindowViewModel _mainWindowViewModel;
 	    private ICommand _backCommand;
+	    private ICommand _insertCommand;
 		public AddScriptViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
 		}
 
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
+	    public ICommand InsertCommand => _insertCommand ?? (_insertCommand = new CommandHandler(InsertScript, true));
+
+	    private void InsertScript()
+	    {
+		    
+	    }
 
 	    private void BackToScriptsList()
 	    {

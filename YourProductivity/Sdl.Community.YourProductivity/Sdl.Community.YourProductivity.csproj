@@ -260,12 +260,10 @@
     <ProjectReference Include="..\Sdl.Community.YourProductivity.Controls\Sdl.Community.YourProductivity.Persistance.csproj">
       <Project>{cf61c1e5-3b3c-4546-8070-4bab41b49f4a}</Project>
       <Name>Sdl.Community.YourProductivity.Persistance</Name>
-      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.YourProductivity.Model\Sdl.Community.YourProductivity.Model.csproj">
       <Project>{bdb19e0b-99e4-463c-bbe3-2a4b9809013c}</Project>
       <Name>Sdl.Community.YourProductivity.Model</Name>
-      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
