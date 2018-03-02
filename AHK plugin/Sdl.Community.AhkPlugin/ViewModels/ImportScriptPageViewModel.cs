@@ -15,7 +15,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 {
     public class ImportScriptPageViewModel:ViewModelBase
     {
-	    private readonly MainWindowViewModel _mainWindowViewModel;
+	    private static  MainWindowViewModel _mainWindowViewModel;
 	    private ICommand _backCommand;
 	    private ICommand _dragEnterCommand;
 	    private ICommand _removeFileCommand;
@@ -25,6 +25,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			_mainWindowViewModel = mainWindowViewModel;
 		}
+
+	    public ImportScriptPageViewModel()
+	    {
+		    
+	    }
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ??

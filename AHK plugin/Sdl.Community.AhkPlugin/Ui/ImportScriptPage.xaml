@@ -4,7 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:helpers="clr-namespace:Sdl.Community.AhkPlugin.Helpers"
-      xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
+  xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
       mc:Ignorable="d" 
       d:DesignHeight="600" d:DesignWidth="300"
       >
@@ -17,6 +17,9 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
+	<UserControl.DataContext>
+		<viewModels:ImportScriptPageViewModel ></viewModels:ImportScriptPageViewModel>
+	</UserControl.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />

@@ -3,9 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
-             d:DesignHeight="500" d:DesignWidth="600"
+        xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
+        d:DesignHeight="500" d:DesignWidth="600"
         mc:Ignorable="d">
+	<UserControl.DataContext>
+		<viewModels:ScriptsWindowViewModel ></viewModels:ScriptsWindowViewModel>
+	</UserControl.DataContext>
 <UserControl.Resources>
 	<ResourceDictionary>
 		<ResourceDictionary.MergedDictionaries>
@@ -44,17 +47,19 @@
 				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection}"  Margin="10,25,10,0"  Background="#F5F5F5"
-				  AutoGenerateColumns="True" GridLinesVisibility="None" CanUserAddRows="False"  >
-			<!--<DataGrid.Columns>
-				<DataGridCheckBoxColumn Header = "Select" Binding = "{Binding IsSelected}"/>
-				<DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"  >
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Header = "Select scripts" Binding = "{Binding IsSelected}"/>
+				<DataGridTextColumn Header="Script Name" Binding="{Binding Name}" />
 				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-			</DataGrid.Columns>-->
-			<!--<DataGrid.RowDetailsTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Details}" Margin="10" />
-				</DataTemplate>
-			</DataGrid.RowDetailsTemplate>-->
+				<DataGridTemplateColumn>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Content="Button" Margin="3" Command="{Binding Path=DataContext.ChangeScriptState, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
 		</DataGrid>
 		
 	</Grid>
