@@ -16,6 +16,20 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.AhkPlugin
 {
+	[ApplicationInitializer]
+	public class InitializePlugin : IApplicationInitializer
+	{
+		/// <summary>
+		/// Create raven context when Studio starts, in this way when we click on rebbon AHK window appears immediately
+		/// </summary>
+		public void Execute()
+		{
+			RavenContext.Current.CreateSession();
+			var masterScript = new MasterScriptDb();
+			var script = masterScript.GetMasterScript().Result;
+		}
+	}
+
 	[RibbonGroup("Sdl.Community.AhkRibbonGroup", Name = "Ahk", ContextByType = typeof(ProjectsController))]
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 	[RibbonGroupLayout(LocationByType = typeof(StudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
@@ -49,4 +63,5 @@ namespace Sdl.Community.AhkPlugin
 
 		}
 	}
+
 }
