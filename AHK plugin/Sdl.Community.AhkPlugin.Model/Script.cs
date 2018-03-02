@@ -11,7 +11,7 @@ namespace Sdl.Community.AhkPlugin.Model
 		private bool _isSelected;
 		private bool _isActiveScript;
 
-		public Guid ScriptId { get; set; }
+		public string ScriptId { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Text { get; set; }

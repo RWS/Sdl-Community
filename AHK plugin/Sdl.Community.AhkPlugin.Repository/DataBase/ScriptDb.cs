@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Raven.Client.Indexes;
 using Sdl.Community.AhkPlugin.Model;
 using Sdl.Community.AhkPlugin.Repository.Raven;
 
@@ -33,10 +34,33 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			return Task.FromResult(true);
 		}
 
+		public Task RemoveScripts(List<Script> scripts)
+		{
+			ThrowIfDisposed();
+			using (var session = RavenContext.Current.CreateSession())
+			{
+				foreach (var script in scripts)
+				{
+					var result = session.Query<Script, ScriptById>().FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
+					session.Delete(result);
+				}
+				session.SaveChanges();
+			}
+			return Task.FromResult(true);
+		}
+
 		private void ThrowIfDisposed()
 		{
 			if (_disposed)
 				throw new ObjectDisposedException(GetType().Name);
+		}
+		public class ScriptById: AbstractIndexCreationTask<Script>
+		{
+			public ScriptById()
+			{
+				Map = scripts => from script in scripts
+					select new { script.ScriptId };
+			}
 		}
 	}
 }

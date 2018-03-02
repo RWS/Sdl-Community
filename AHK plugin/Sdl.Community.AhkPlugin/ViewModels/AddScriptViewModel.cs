@@ -48,7 +48,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		    {
 			    var script = new Script
 			    {
-				    ScriptId = Guid.NewGuid(),
+				    ScriptId = Guid.NewGuid().ToString(),
 				    Active = true,
 				    Description = ScriptDescription,
 				    Name = ScriptName,
