@@ -45,17 +45,18 @@
 
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
 				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
+				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection}"  Margin="10,25,10,0"  Background="#F5F5F5"
 				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"  >
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Header = "Select scripts" Binding = "{Binding IsSelected}"/>
+				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected}" />
 				<DataGridTextColumn Header="Script Name" Binding="{Binding Name}" />
 				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-				<DataGridTemplateColumn>
+				<DataGridTemplateColumn Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<Button Content="Button" Margin="3" Command="{Binding Path=DataContext.ChangeScriptState, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+							<Button Style="{DynamicResource BaseButtonStyle}" Content="Button"  Command="{Binding Path=DataContext.ChangeScriptState, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

@@ -58,20 +58,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			_mainWindow.LoadImportPage();
 		}
-		//public ObservableCollection<ScriptsDataGridItemTemplate> ScriptsCollection
-		//{
-		//	get => _scriptsCollection;
 
-		//	set
-		//	{
-		//		if (Equals(value, _scriptsCollection))
-		//		{
-		//			return;
-		//		}
-		//		_scriptsCollection = value;
-		//		OnPropertyChanged(nameof(ScriptsCollection));
-		//	}
-		//}
 		public ObservableCollection<Script> ScriptsCollection
 		{
 			get => _scriptsCollection;
