@@ -8,8 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Raven.Abstractions.Extensions;
 using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.AhkPlugin.ItemTemplates;
+using Sdl.Community.AhkPlugin.Model;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -19,8 +21,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _backCommand;
 	    private ICommand _dragEnterCommand;
 	    private ICommand _removeFileCommand;
-
+	    private ObservableCollection<Script> _scriptsCollection = new ObservableCollection<Script>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
+
 		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
@@ -28,7 +31,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ImportScriptPageViewModel()
 	    {
-		    
+		 //   var scripts = new Script
+		 //   {
+			//    Name = "test",
+			//    Description = "dfasdasda"
+		 //   };
+			//ScriptsCollection.Add(scripts);
 	    }
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
@@ -64,6 +72,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
 					if (!pathAlreadyAdded)
 					{
+						var scripts = ProcessScript.ReadImportedScript(path);
+						ScriptsCollection.AddRange(scripts);
 						var newFile = new ImportScriptItemTemplate
 						{
 							Content =Path.GetFileNameWithoutExtension(path),
@@ -92,6 +102,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    }
 			    _filesNameCollection = value;
 			    OnPropertyChanged(nameof(FilesNameCollection));
+		    }
+	    }
+	    public ObservableCollection<Script> ScriptsCollection
+	    {
+		    get => _scriptsCollection;
+
+		    set
+		    {
+			    if (Equals(value, _scriptsCollection))
+			    {
+				    return;
+			    }
+			    _scriptsCollection = value;
+			    OnPropertyChanged(nameof(ScriptsCollection));
 		    }
 	    }
 	}

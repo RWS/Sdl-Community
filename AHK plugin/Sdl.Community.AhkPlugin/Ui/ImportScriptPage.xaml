@@ -26,6 +26,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -52,8 +53,36 @@
 
 		</ScrollViewer>
 		
-		<Grid  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="90" Margin="10,10,10,25" Background="WhiteSmoke" AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
+		<Grid  Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2" Height="90" Margin="10,10,10,5" Background="WhiteSmoke" AllowDrop="True" helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}">
 			
 		</Grid>
+		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
+		          Grid.Row="4" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
+		          ColumnWidth="*"
+		          FontFamily="Segoe UI"
+		          ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,15,10,0"  Background="#F5F5F5"
+		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"  >
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow">
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<TextBlock  TextWrapping="Wrap" Text="{Binding Description}"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Header="Script name" Binding="{Binding Name}" />
+				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+				<DataGridTemplateColumn Width="100">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<Button Style="{DynamicResource BaseButtonStyle}" Content="Disable"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+			</DataGrid.Columns>
+		</DataGrid>
 	</Grid>
 </UserControl>

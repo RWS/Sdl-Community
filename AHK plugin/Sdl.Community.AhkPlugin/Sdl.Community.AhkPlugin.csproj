@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />
+    <Compile Include="Helpers\ProcessScript.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="ItemTemplates\ImportScriptItemTemplate.cs" />
     <Compile Include="ItemTemplates\ScriptsDataGridItemTemplate.cs" />
