@@ -178,6 +178,7 @@
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="packages.config" />
+    <Content Include="3rd party\dsofile.dll" />
     <Content Include="pluginpackage.manifest.xml" />
     <None Include="packages\RavenDB.Database.3.5.5\tools\Raven.Studio.Html5.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -206,7 +207,17 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="DSOFile">
+      <Guid>{58968145-CF00-4341-995F-2EE093F6ABA3}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

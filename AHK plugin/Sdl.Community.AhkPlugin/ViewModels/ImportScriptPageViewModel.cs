@@ -13,6 +13,7 @@ using Sdl.Community.AhkPlugin.Helpers;
 using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
 
+
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
     public class ImportScriptPageViewModel:ViewModelBase
@@ -49,7 +50,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void ImportScriptsToMaster()
 	    {
-		    var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected);
+		    var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected).Select(s =>s.Value).ToList();
+		    ProcessScript.ExportScript(@"C:\Users\aghisa\Desktop\test.ahk", scriptsToBeImported);
+		    // ProcessScript.ExportScript();
+
 	    }
 
 	    private void ChangeState(object row)
@@ -90,19 +94,42 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		    {
 				foreach (var path in documentsPath)
 				{
-					var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
-					if (!pathAlreadyAdded)
-					{
-						var scripts = ProcessScript.ReadImportedScript(path);
-						ScriptsCollection.AddRange(scripts);
-						var newFile = new ImportScriptItemTemplate
+					var isGenerated = ProcessScript.IsGeneratedByAhkPlugin(path);
+					//if (ProcessScript.IsGeneratedByAhkPlugin(path))
+					//{
+					//	var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
+					//	if (!pathAlreadyAdded)
+					//	{
+					//		var scripts = ProcessScript.ReadImportedScript(path);
+					//		ScriptsCollection.AddRange(scripts);
+					//		var newFile = new ImportScriptItemTemplate
+					//		{
+					//			Content = Path.GetFileNameWithoutExtension(path),
+					//			RemoveFileCommand = new RelayCommand(RemoveFile),
+					//			FilePath = path
+					//		};
+					//		FilesNameCollection.Add(newFile);
+					//	}
+					//}
+					//else
+					//{
+					//	var isNotAhk = false;
+					//}
+					
+						var pathAlreadyAdded = FilesNameCollection.Any(p => p.FilePath.Equals(path));
+						if (!pathAlreadyAdded)
 						{
-							Content =Path.GetFileNameWithoutExtension(path),
-							RemoveFileCommand = new RelayCommand(RemoveFile),
-							FilePath = path
-						};
-						FilesNameCollection.Add(newFile);
-					}
+							var scripts = ProcessScript.ReadImportedScript(path);
+							ScriptsCollection.AddRange(scripts);
+							var newFile = new ImportScriptItemTemplate
+							{
+								Content = Path.GetFileNameWithoutExtension(path),
+								RemoveFileCommand = new RelayCommand(RemoveFile),
+								FilePath = path
+							};
+							FilesNameCollection.Add(newFile);
+						}
+
 				}
 			}
 		    SetGridVisibility();

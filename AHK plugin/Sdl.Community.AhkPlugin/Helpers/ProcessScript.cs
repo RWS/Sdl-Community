@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DSOFile;
 using Sdl.Community.AhkPlugin.Model;
 
 namespace Sdl.Community.AhkPlugin.Helpers
@@ -27,7 +29,15 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				if (firstEndScriptPosition < lines.Count-1)
 				{
 					//remove index +2 to remove the empty line between scripts
-					lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
+					if (firstEndScriptPosition > -1 && startScriptPosition > -1)
+					{
+						lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
+					}
+					else
+					{
+						lines.Clear();
+					}
+					
 				}
 				else
 				{
@@ -68,7 +78,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				{
 					var contentLinesCounter = 1;
 					var contentBuilder = new StringBuilder();
-					while (!scriptLines[counter + contentLinesCounter].Contains(";endScript"))
+					while (!scriptLines[counter + contentLinesCounter].Contains(";=="))
 					{
 						contentBuilder.AppendLine(scriptLines[counter + contentLinesCounter]);
 						contentLinesCounter++;
@@ -86,6 +96,82 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				counter++;
 			}
 			return script;
+		}
+
+		public static void ExportScript(string filePath, List<Script>scripts)
+		{
+			var scriptLines = new List<string>();
+			var file = File.Create(filePath);
+			file.Close();
+
+			foreach (var script in scripts)
+			{
+				var scriptLinesContent = CreateScriptLinesContent(script);
+				scriptLines.AddRange(scriptLinesContent);
+			}
+
+			File.WriteAllLines(filePath, scriptLines);
+			//set custom property
+			var fileProperties = new OleDocumentProperties();
+			fileProperties.Open(filePath);
+			object customProperty = "GeneratedByAhkPlugin";
+			fileProperties.CustomProperties.Add("SdlCommunity", ref customProperty);
+			fileProperties.Close(true);
+		}
+
+		private static List<string> CreateScriptLinesContent(Script script)
+		{
+			var separator = ";===";
+			var scriptLines = new List<string>();
+			scriptLines.Add(";Name");
+			scriptLines.Add(";"+script.Name);
+			scriptLines.Add(separator);
+			scriptLines.Add(";Description");
+			var descriptionLines = script.Description.Split(Environment.NewLine.ToCharArray());
+			foreach (var description in descriptionLines)
+			{
+				if (!string.IsNullOrWhiteSpace(description))
+				{
+					scriptLines.Add("; "+description);
+				}
+			}
+			scriptLines.Add(separator);
+			scriptLines.Add(";Content");
+			var contentLines = script.Text.Split(Environment.NewLine.ToCharArray());
+			foreach (var content in contentLines)
+			{
+				if (!string.IsNullOrWhiteSpace(content))
+				{
+					if (script.Active)
+					{
+						scriptLines.Add(content);
+					}
+					else
+					{
+						scriptLines.Add("; " + content);
+					}
+					
+				}
+			}
+			scriptLines.Add(separator);
+			scriptLines.Add(script.Active ? ";Active" : ";Disabled");
+			scriptLines.Add(";endScript");
+			scriptLines.Add(Environment.NewLine);
+			return scriptLines;
+		}
+
+		public static bool IsGeneratedByAhkPlugin(string filePath)
+		{
+			var fileProperties = new OleDocumentProperties();
+			fileProperties.Open(filePath);
+			foreach (CustomProperty property in fileProperties.CustomProperties)
+			{
+				if (property.Name == "SdlCommunity")
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	
 	}
