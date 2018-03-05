@@ -19,7 +19,7 @@ namespace Sdl.Community.SDLXLIFFSplitMerge
 		{
 			protected override void Execute()
 			{
-				WizardPage wizardPage = new WizardPage();
+				var wizardPage = new WizardPage();
 				wizardPage.ShowDialog();
 			}
 		}

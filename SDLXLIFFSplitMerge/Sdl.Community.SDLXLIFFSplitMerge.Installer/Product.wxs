@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+	<Product Id="*" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" Language="1033" Version="1.0.0.0" Manufacturer="" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<Icon Id="FilterDefinition(C77668).ico" SourceFile="$(var.ProjectDir)FilterDefinition(C77668).ico" />
+		<Property Id="ARPPRODUCTICON" Value="FilterDefinition(C77668).ico" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate />
+
+		<Feature Id="ProductFeature" Title="Sdl.Community.SDLXLIFFSplitMerge.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="247952a2-ba7b-48a7-9ed8-6e38c5535897">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="SDLXLIFFSplitMerge" Icon="FilterDefinition(C77668).ico" Description="SDLXLIFF Split/Merge" Target="[INSTALLFOLDER]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="Sdl.Community.SplitMergeUIWix">
+				<File Id="Sdl.Community.SplitMergeUIWix.exe" Name="Sdl.Community.SplitMergeUIWix.exe" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetPath)" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.Community.SplitMergeUIWix.exe.config" Guid="93c5703b-c489-4ce2-af26-4d0a73536d02">
+				<File Id="Sdl.Community.SplitMergeUIWix.exe.config" Name="Sdl.Community.SplitMergeUIWix.exe.config" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.SplitMergeUIWix.exe.config" />
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Lib.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Wizard.dll"></File>
+			</Component>
+
+		</ComponentGroup>
+	</Fragment>
+</Wix>
