@@ -35,6 +35,12 @@
 		<TextBox Style="{DynamicResource DescriptionBox}" Grid.Column="0"  Grid.Row="0" Grid.ColumnSpan="2">In this step you can import AutoHotkey scripts using drag and drop into this interface.  Only scripts that have been exported using this plugin can be imported in this way.  
 			If you have files from other users that were created without using this plugin you should use the Add function in the previous window.</TextBox>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Scripts list" Margin="10,0,0,25"></Button>
+	
+		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding AddToMasterCommand}" Content="Save scripts" Margin="0,0,10,25"></Button>
+			</StackPanel>
+		</StackPanel>
 		<ScrollViewer Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="2" VerticalScrollBarVisibility="Hidden">
 			<ItemsControl   ItemsSource="{Binding FilesNameCollection}">
 				<ItemsControl.ItemsPanel>
@@ -66,15 +72,15 @@
 				<Style TargetType="DataGridRow">
 					<Setter Property="ToolTip">
 						<Setter.Value>
-							<TextBlock  TextWrapping="Wrap" Text="{Binding Description}"/>
+							<TextBlock  TextWrapping="Wrap" Text="{Binding Value.Description}"/>
 						</Setter.Value>
 					</Setter>
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Header="Script name" Binding="{Binding Name}" />
-				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
+				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding Value.IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Header="Script name" Binding="{Binding Value.Name}" />
+				<DataGridTextColumn Header="Description" Binding="{Binding Value.Description}" />
 				<DataGridTemplateColumn Width="100">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>

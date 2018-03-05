@@ -21,7 +21,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _backCommand;
 	    private ICommand _dragEnterCommand;
 	    private ICommand _removeFileCommand;
-	    private ObservableCollection<Script> _scriptsCollection = new ObservableCollection<Script>();
+	    private ICommand _addToMasterCommand;
+	    private ICommand _changeScriptStateCommand;
+		private ObservableCollection<KeyValuePair<string,Script>> _scriptsCollection = new ObservableCollection<KeyValuePair<string, Script>>();
+
+		//private ObservableCollection<Script> _scriptsCollection = new ObservableCollection<Script>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
 
 		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
@@ -31,12 +35,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ImportScriptPageViewModel()
 	    {
-		 //   var scripts = new Script
-		 //   {
-			//    Name = "test",
-			//    Description = "dfasdasda"
-		 //   };
-			//ScriptsCollection.Add(scripts);
 	    }
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
@@ -45,15 +43,37 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ICommand RemoveFileCommand => _removeFileCommand ?? (_removeFileCommand = new RelayCommand(RemoveFile));
 
-	    private void RemoveFile(object file)
+	    public ICommand AddToMasterCommand => _addToMasterCommand ??
+	                                          (_addToMasterCommand = new CommandHandler(ImportScriptsToMaster, true));
+	    public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
+
+		private void ImportScriptsToMaster()
+	    {
+		    var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected);
+	    }
+
+	    private void ChangeState(object row)
+	    {
+
+	    }
+
+		private void RemoveFile(object file)
 	    {
 		    if (file != null)
 		    {
 			    var filePath = (string) file;
+			    var fileName = Path.GetFileNameWithoutExtension(filePath);
 			    var fileToRemove = FilesNameCollection.FirstOrDefault(f => f.FilePath.Equals(filePath));
 			    if (fileToRemove != null)
 			    {
 				    FilesNameCollection.Remove(fileToRemove);
+					//remove the scripts which coresponds with the removed file from the grid
+				    var scriptsToBeRemoved = ScriptsCollection.Where(s => s.Key.Equals(fileName)).ToList();
+				    foreach (var script in scriptsToBeRemoved)
+				    {
+					    ScriptsCollection.Remove(script);
+				    }
+					
 			    }
 		    }
 	    }
@@ -104,7 +124,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    OnPropertyChanged(nameof(FilesNameCollection));
 		    }
 	    }
-	    public ObservableCollection<Script> ScriptsCollection
+	    public ObservableCollection<KeyValuePair<string, Script>> ScriptsCollection
 	    {
 		    get => _scriptsCollection;
 

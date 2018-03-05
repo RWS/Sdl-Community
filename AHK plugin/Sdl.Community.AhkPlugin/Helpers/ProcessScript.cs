@@ -10,19 +10,20 @@ namespace Sdl.Community.AhkPlugin.Helpers
 {
 	public static class ProcessScript
 	{
-		public static List<Script> ReadImportedScript(string path)
+		public static List<KeyValuePair<string, Script>> ReadImportedScript(string path)
 		{
-			var scripts = new List<Script>();
-			var counter = 0;
+			var scripts = new List<KeyValuePair<string, Script>>();
 			var lines =
 				File.ReadAllLines(path).ToList();
-			
+			var fileName = Path.GetFileNameWithoutExtension(path);
 			while (lines.Count>0)
 			{
 				var firstEndScriptPosition = lines.IndexOf(";endScript");
 				var startScriptPosition = lines.IndexOf(";Name");
+				
 				var script = GetScript(lines);
-				scripts.Add(script);
+				var pair = new KeyValuePair<string, Script>(fileName, script);
+				scripts.Add(pair);
 				if (firstEndScriptPosition < lines.Count-1)
 				{
 					//remove index +2 to remove the empty line between scripts
@@ -30,7 +31,6 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				}
 				else
 				{
-					//lines.RemoveRange(startScriptPosition,firstEndScriptPosition+1);
 					lines.Clear();
 				}
 				
