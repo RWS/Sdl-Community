@@ -23,9 +23,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _removeFileCommand;
 	    private ICommand _addToMasterCommand;
 	    private ICommand _changeScriptStateCommand;
+	    private string _gridVisibility;
 		private ObservableCollection<KeyValuePair<string,Script>> _scriptsCollection = new ObservableCollection<KeyValuePair<string, Script>>();
-
-		//private ObservableCollection<Script> _scriptsCollection = new ObservableCollection<Script>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
 
 		public ImportScriptPageViewModel(MainWindowViewModel mainWindowViewModel)
@@ -35,6 +34,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    public ImportScriptPageViewModel()
 	    {
+		    _gridVisibility = "Hidden";
 	    }
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 
@@ -76,6 +76,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					
 			    }
 		    }
+		    SetGridVisibility();
 	    }
 
 		private void HandlePreviewDrop(object dropedFile)
@@ -104,7 +105,13 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					}
 				}
 			}
+		    SetGridVisibility();
 		    // var test = File.ReadAllText(docPath[0]);
+	    }
+
+	    private void SetGridVisibility()
+	    {
+			GridVisibility = ScriptsCollection.Count > 0 ? "Visible" : "Hidden";
 		}
 		private void BackToScriptsList()
 	    {
@@ -136,6 +143,21 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    }
 			    _scriptsCollection = value;
 			    OnPropertyChanged(nameof(ScriptsCollection));
+			
+		    }
+	    }
+	    public string GridVisibility
+	    {
+		    get => _gridVisibility;
+
+		    set
+		    {
+			    if (Equals(value, _gridVisibility))
+			    {
+				    return;
+			    }
+			    _gridVisibility = value;
+			    OnPropertyChanged(nameof(GridVisibility));
 		    }
 	    }
 	}

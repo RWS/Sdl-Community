@@ -48,7 +48,7 @@
 				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="#F5F5F5"
-				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"  >
+				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False" RowHeight="22" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
 					<Setter Property="ToolTip">

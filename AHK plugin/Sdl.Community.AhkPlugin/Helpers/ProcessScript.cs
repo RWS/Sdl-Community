@@ -48,7 +48,8 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				if (scriptLines[counter].Equals(";Name"))
 				{
 					//increase with 2 because after name we have ===
-					script.Name = scriptLines[counter + 1];
+					//read the name without ";" character which is used for comment
+					script.Name = scriptLines[counter + 1].Substring(1);
 					counter = counter + 2;
 				}
 				if (scriptLines[counter].Equals(";Description"))
@@ -58,7 +59,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 
 					while (!scriptLines[counter + descriptionLinesCounter].Contains(";=="))
 					{
-						descriptionBuilder.AppendLine(scriptLines[counter + descriptionLinesCounter]);
+						descriptionBuilder.AppendLine(scriptLines[counter + descriptionLinesCounter].Substring(1));
 						descriptionLinesCounter++;
 					}
 					script.Description = descriptionBuilder.ToString();
