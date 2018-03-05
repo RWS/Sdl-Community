@@ -22,28 +22,25 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			{
 				var firstEndScriptPosition = lines.IndexOf(";endScript");
 				var startScriptPosition = lines.IndexOf(";Name");
-				
-				var script = GetScript(lines);
-				var pair = new KeyValuePair<string, Script>(fileName, script);
-				scripts.Add(pair);
-				if (firstEndScriptPosition < lines.Count-1)
+				if (firstEndScriptPosition > -1 && startScriptPosition > -1)
 				{
-					//remove index +2 to remove the empty line between scripts
-					if (firstEndScriptPosition > -1 && startScriptPosition > -1)
+					var script = GetScript(lines);
+					var pair = new KeyValuePair<string, Script>(fileName, script);
+					scripts.Add(pair);
+					if (firstEndScriptPosition < lines.Count - 1)
 					{
+						//remove index +2 to remove the empty line between scripts
 						lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
 					}
 					else
 					{
 						lines.Clear();
 					}
-					
 				}
 				else
 				{
 					lines.Clear();
 				}
-				
 			}
 			return scripts;
 		}
