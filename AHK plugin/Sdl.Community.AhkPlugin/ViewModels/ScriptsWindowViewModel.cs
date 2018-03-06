@@ -26,6 +26,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _changeScriptStateCommand;
 		private ICommand _removeScriptCommand;
 		private ICommand _exportCommand;
+		private ICommand _changeScriptPathCommand;
 		private readonly ScriptDb _scriptsDb;
 
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
@@ -48,6 +49,22 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(ImportAction, true));
 		public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(ExportScripts, true));
+
+		public ICommand ChangeScriptPath => _changeScriptPathCommand ??
+		                                    (_changeScriptPathCommand = new CommandHandler(ChangePath, true));
+
+		private void ChangePath()
+		{
+			var folderDialog = new FolderSelectDialog
+			{
+				Title = "Select a folder where the master script should be saved"
+			};
+			var folderPath = string.Empty;
+			if (folderDialog.ShowDialog())
+			{
+				folderPath = folderDialog.FileName;
+			}
+		}
 
 		private void ExportScripts()
 		{

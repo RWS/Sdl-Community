@@ -23,20 +23,25 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
-		<TextBox Style="{DynamicResource DescriptionBox}"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" >The scripts available to you are listed below. You can add/remove or disable/enable scripts as well as export selected scripts to share with others.  To add new scripts either click on add to copy paste or type it in; 
-			or use the import feature to import scripts that have been exported by others using this plugin. </TextBox>
-		<StackPanel Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+		<TextBox Style="{DynamicResource DescriptionBox}"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10,10,5" >The scripts available to you are listed below. You can add/remove or disable/enable scripts as well as export selected scripts to share with others.  To add new scripts either click on add to copy paste or type it in; 
+			or use the import feature to import scripts that have been exported by others using this plugin.</TextBox>
+		<TextBlock  TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,25" >
+				Master script is saved by default to C:\Users\[username]\AppData\Roaming\SDL Community\Ahk . To change the default path please click <Hyperlink Command="{Binding ChangeScriptPath}">here</Hyperlink> .
+		</TextBlock>
+
+		<StackPanel Grid.Column="0" Grid.Row="2" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Export" Command="{Binding ExportCommand}"></Button>
 				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Import" Command="{Binding ImportCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
-		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+		<StackPanel Grid.Column="1" Grid.Row="2" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Remove" Command="{Binding RemoveScriptCommand}"></Button>
 				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Add" Command="{Binding AddCommand}"></Button>
@@ -44,7 +49,7 @@
 		</StackPanel>
 
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
-				  Grid.Row="2" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
+				  Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
 				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
 				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="#F5F5F5"
