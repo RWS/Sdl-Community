@@ -454,27 +454,36 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 			var projectController = GetProjectController();
 			var currentProjectLocalPath = string.Empty;
 
-			if (projectController.CurrentProject != null)
+			if (projectController != null)
 			{
-				currentProjectLocalPath = projectController.CurrentProject.GetProjectInfo() != null ? projectController.CurrentProject.GetProjectInfo().LocalProjectFolder : string.Empty;
-			}
-
-			var a = new FolderSelectDialog
-			{
-				Title = Properties.Resources.FileDialogTitle,
-				Filter = Constants.SplitAddFilterText,
-				InitialDirectory = currentProjectLocalPath,
-			    Multiselect = true
-			};
-
-			if (a.ShowDialog(string.Empty) == DialogResult.OK)
-			{
-				foreach (string file in a.Files)
+				if (projectController.CurrentProject != null)
 				{
-					ParseProjectFile(file);
+					currentProjectLocalPath = projectController.CurrentProject.GetProjectInfo() != null
+						? projectController.CurrentProject.GetProjectInfo().LocalProjectFolder
+						: string.Empty;
 				}
 
-				bindInFiles();
+				var a = new FolderSelectDialog
+				{
+					Title = Properties.Resources.FileDialogTitle,
+					Filter = Constants.SplitAddFilterText,
+					InitialDirectory = currentProjectLocalPath,
+					Multiselect = true
+				};
+
+				if (a.ShowDialog(string.Empty) == DialogResult.OK)
+				{
+					foreach (string file in a.Files)
+					{
+						ParseProjectFile(file);
+					}
+
+					bindInFiles();
+				}
+			}
+			else
+			{
+				btnLoadFilesActiveProject.Enabled = false;
 			}
 		}
 	}
