@@ -113,6 +113,10 @@
 			<Component Id="Sdl.LanguagePlatform.Lingua.dll" Guid="*">
 				<File Id="Sdl.LanguagePlatform.Lingua.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.Lingua.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.Core.Settings.dll" Guid="*">
+				<File Id="Sdl.Core.Settings.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.Settings.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>
