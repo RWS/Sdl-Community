@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -82,10 +83,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				{
 					Title = "Select a folder where the script should be exported"
 				};
-				var folderPath = string.Empty;
 				if (folderDialog.ShowDialog())
 				{
-					folderPath = folderDialog.FileName;
+					var folderPath = folderDialog.FileName;
+					var selectedScripts = ScriptsCollection.Where(s => s.IsSelected).ToList();
+					ProcessScript.ExportScript(Path.Combine(folderPath,"exportedScript.ahk"), selectedScripts);
 				}
 			}
 			else
