@@ -25,6 +25,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _importCommand;
 		private ICommand _changeScriptStateCommand;
 		private ICommand _removeScriptCommand;
+		private ICommand _exportCommand;
 		private readonly ScriptDb _scriptsDb;
 
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
@@ -46,23 +47,56 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(ImportAction, true));
 		public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
+		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(ExportScripts, true));
+
+		private void ExportScripts()
+		{
+			if (ScriptsCollection.Any(s => s.IsSelected))
+			{
+				var folderDialog = new FolderSelectDialog
+				{
+					Title = "Select a folder where the script should be exported"
+				};
+				var folderPath = string.Empty;
+				if (folderDialog.ShowDialog())
+				{
+					folderPath = folderDialog.FileName;
+				}
+			}
+			else
+			{
+				var messageResult = MessageBox.Show("Please select at least one script from the grid to export", "Warning",
+					MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+			
+
+		}
 
 		public ICommand RemoveScriptCommand => _removeScriptCommand ??
 		                                       (_removeScriptCommand = new CommandHandler(RemoveScripts, true));
 
 		private void RemoveScripts()
 		{
-			var messageResult = MessageBox.Show("Are you sure you want to delete selected scripts?", "Confirmation",
-				MessageBoxButton.OKCancel, MessageBoxImage.Question);
-			if (messageResult != MessageBoxResult.OK) return;
-			var scriptsToBeRemoved = ScriptsCollection.Where(s => s.IsSelected).ToList();
-			//remove from UI
-			foreach (var script in scriptsToBeRemoved)
+			if (ScriptsCollection.Any(s => s.IsSelected))
 			{
-				ScriptsCollection.Remove(script);
+				var messageResult = MessageBox.Show("Are you sure you want to delete selected scripts?", "Confirmation",
+					MessageBoxButton.OKCancel, MessageBoxImage.Question);
+				if (messageResult != MessageBoxResult.OK) return;
+				var scriptsToBeRemoved = ScriptsCollection.Where(s => s.IsSelected).ToList();
+				//remove from UI
+				foreach (var script in scriptsToBeRemoved)
+				{
+					ScriptsCollection.Remove(script);
+				}
+				//Remove from db
+				_scriptsDb.RemoveScripts(scriptsToBeRemoved);
 			}
-			//Remove from db
-			_scriptsDb.RemoveScripts(scriptsToBeRemoved);
+			else
+			{
+				var messageResult = MessageBox.Show("Please select at least one script from the grid to be removed", "Warning",
+					MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+			
 		}
 
 		private void AddScriptAction()

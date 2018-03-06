@@ -32,7 +32,7 @@
 			or use the import feature to import scripts that have been exported by others using this plugin. </TextBox>
 		<StackPanel Grid.Column="0" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Export"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Export" Command="{Binding ExportCommand}"></Button>
 				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Content="Import" Command="{Binding ImportCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
