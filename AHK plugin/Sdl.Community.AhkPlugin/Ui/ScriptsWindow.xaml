@@ -32,7 +32,7 @@
 		<TextBox Style="{DynamicResource DescriptionBox}"  Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10,10,5" >The scripts available to you are listed below. You can add/remove or disable/enable scripts as well as export selected scripts to share with others.  To add new scripts either click on add to copy paste or type it in; 
 			or use the import feature to import scripts that have been exported by others using this plugin.</TextBox>
 		<TextBlock  TextWrapping="Wrap" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,10,10,25" >
-				Master script is saved by default to C:\Users\[username]\AppData\Roaming\SDL Community\Ahk . To change the default path please click <Hyperlink Command="{Binding ChangeScriptPath}">here</Hyperlink> .
+				Master script is saved by default to C:\Users\[username]\AppData\Roaming\SDL Community\AhkMasterScript. To change the default path please click <Hyperlink Command="{Binding ChangeScriptPath}">here</Hyperlink> .
 		</TextBlock>
 
 		<StackPanel Grid.Column="0" Grid.Row="2" Margin="10,0,0,0" Orientation="Vertical">

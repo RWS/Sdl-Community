@@ -28,6 +28,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _exportCommand;
 		private ICommand _changeScriptPathCommand;
 		private readonly ScriptDb _scriptsDb;
+		private readonly MasterScriptDb _masterScriptDb;
 
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
@@ -37,6 +38,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ScriptsWindowViewModel()
 		{
 			 _scriptsDb = new ScriptDb();
+			_masterScriptDb = new MasterScriptDb();
 			var savedScripts = _scriptsDb.GetAllScripts().Result;
 
 			foreach (var script in savedScripts)
@@ -53,7 +55,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ICommand ChangeScriptPath => _changeScriptPathCommand ??
 		                                    (_changeScriptPathCommand = new CommandHandler(ChangePath, true));
 
-		private void ChangePath()
+		private async void ChangePath()
 		{
 			var folderDialog = new FolderSelectDialog
 			{
@@ -63,6 +65,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			if (folderDialog.ShowDialog())
 			{
 				folderPath = folderDialog.FileName;
+			}
+			if (!string.IsNullOrEmpty(folderPath))
+			{
+				var masterScript = await _masterScriptDb.GetMasterScript();
+				masterScript.Location = folderPath;
+				await _masterScriptDb.UpdateScript(masterScript);
 			}
 		}
 

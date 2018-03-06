@@ -10,5 +10,7 @@ namespace Sdl.Community.AhkPlugin.Model
 	{
 		public string Location { get; set; }
 		public string Text { get; set; }
+		public string ScriptId { get; set; }
+		public string Name { get; set; }
 	}
 }
