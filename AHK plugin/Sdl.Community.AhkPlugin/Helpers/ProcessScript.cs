@@ -49,7 +49,10 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		{
 			var counter = 0;
 			var endScriptPosition = scriptLines.IndexOf(";endScript");
-			var script = new Script();
+			var script = new Script
+			{
+				ScriptId =  Guid.NewGuid().ToString()
+			};
 			while (counter < endScriptPosition)
 			{
 				if (scriptLines[counter].Equals(";Name"))
