@@ -109,6 +109,10 @@
 			<Component Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" Guid="*">
 				<File Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.TranslationMemoryTools.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.Lingua.dll" Guid="*">
+				<File Id="Sdl.LanguagePlatform.Lingua.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.Lingua.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>
