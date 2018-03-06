@@ -30,18 +30,6 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			return Task.FromResult(true);
 		}
 
-		//public Task AddScriptsToMaster(List<Script> scripts)
-		//{
-		//	var masterScript = GetMasterScript().Result;
-		//	masterScript.Scripts.AddRange(scripts);
-		//	using (var session = RavenContext.Current.CreateSession())
-		//	{
-		//		session.Store(masterScript);
-		//		session.SaveChanges();
-		//	}
-		//	 Process
-		//}
-
 		public Task UpdateScript(MasterScript script)
 		{
 			using (var session = RavenContext.Current.CreateSession())
