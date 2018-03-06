@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
+             xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="300">
-	
+	<UserControl.DataContext>
+		<viewModels:AddScriptViewModel ></viewModels:AddScriptViewModel>
+	</UserControl.DataContext>
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -31,6 +34,7 @@
 			<ColumnDefinition Width="Auto" />
 			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
+		
 		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Grid.ColumnSpan="2" >To add a new script enter a name, a description of what the script does and then type or copy/paste the script itself into the script content field.  All fields are required.</TextBox>
 		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Back" Margin="10,0,0,25"></Button>
 		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
@@ -38,13 +42,15 @@
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Insert script" Command="{Binding InsertCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
+	
 		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"></TextBlock>
+		<CheckBox Grid.Column="0" Grid.Row="3"  IsChecked= "{Binding IsDisabled,UpdateSourceTrigger=PropertyChanged}" Foreground="#3D9DAA" Margin="10,0,0,10">Is disabled script</CheckBox>
 		<!--text block area-->
-		<TextBlock Grid.Column="0" Grid.Row="3" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
-		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="3" Height="40"></TextBox>
-		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
-		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="4" Height="70" ></TextBox>
-		<TextBlock   Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
-		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="5" Height="150"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
+		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="4" Height="40"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
+		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="5" Height="70" ></TextBox>
+		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
+		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="6" Height="150"></TextBox>
 	</Grid>
 </UserControl>

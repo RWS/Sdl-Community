@@ -14,7 +14,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 {
     public class AddScriptViewModel: ViewModelBase
     {
-	    private readonly MainWindowViewModel _mainWindowViewModel;
+	    private static  MainWindowViewModel _mainWindowViewModel;
 	    private ICommand _backCommand;
 	    private ICommand _insertCommand;
 	    private  string _scriptName;
@@ -25,17 +25,23 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private bool _formIsValid;
 	    private readonly ScriptDb _scriptDb;
 	    private string _messageColor;
+	    private bool _isDisabled;
 		public AddScriptViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindowViewModel = mainWindowViewModel;
-			_scriptName = string.Empty;
-			_scriptDescription = string.Empty;
-			_scriptContent = string.Empty;
-			_message = string.Empty;
-			_messageVisibility = "Hidden";
-			_messageColor = string.Empty;
-			_scriptDb = new ScriptDb();
 		}
+
+	    public AddScriptViewModel()
+	    {
+			_scriptName = string.Empty;
+		    _scriptDescription = string.Empty;
+		    _scriptContent = string.Empty;
+		    _message = string.Empty;
+		    _messageVisibility = "Hidden";
+		    _messageColor = string.Empty;
+		    _scriptDb = new ScriptDb();
+		    _isDisabled = false;
+	    }
 
 	    public ICommand BackCommand => _backCommand ?? (_backCommand = new CommandHandler(BackToScriptsList, true));
 	    public ICommand InsertCommand => _insertCommand ?? (_insertCommand = new CommandHandler(InsertScript, true));
@@ -49,7 +55,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    var script = new Script
 			    {
 				    ScriptId = Guid.NewGuid().ToString(),
-				    Active = true,
+				    Active = !IsDisabled,
 				    Description = ScriptDescription,
 				    Name = ScriptName,
 				    Text = ScriptContent
@@ -172,6 +178,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    }
 			    _messageVisibility = value;
 			    OnPropertyChanged(nameof(MessageVisibility));
+		    }
+	    }
+	    public bool IsDisabled
+		{
+		    get => _isDisabled;
+
+		    set
+		    {
+			    if (Equals(value, _isDisabled))
+			    {
+				    return;
+			    }
+			    _isDisabled = value;
+			    OnPropertyChanged(nameof(IsDisabled));
 		    }
 	    }
 
