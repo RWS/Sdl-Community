@@ -35,7 +35,8 @@ namespace Sdl.Community.AhkPlugin
 				{
 					ScriptId = Guid.NewGuid().ToString(),
 					Name = "AhkMasterScript.ahk",
-					Location = GetDefaultPath()
+					Location = GetDefaultPath(),
+					Scripts = new List<Script>()
 				};
 				//write empty ahk script on disk
 				ProcessScript.ExportScript(Path.Combine(master.Location,master.Name),new List<Script>());

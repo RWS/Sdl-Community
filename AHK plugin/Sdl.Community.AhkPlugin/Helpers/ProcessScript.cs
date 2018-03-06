@@ -139,15 +139,15 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			{
 				if (!string.IsNullOrWhiteSpace(content))
 				{
-					if (script.Active)
-					{
-						scriptLines.Add(content);
-					}
-					else
-					{
-						scriptLines.Add("; " + content);
-					}
-					
+					//if (script.Active)
+					//{
+					//	scriptLines.Add(content);
+					//}
+					//else
+					//{
+					//	scriptLines.Add("; " + content);
+					//}
+					scriptLines.Add(content);
 				}
 			}
 			scriptLines.Add(separator);
