@@ -12,13 +12,15 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 {
 	public partial class FileOptionsPage : InternalWizardPage
     {
-        public FileOptionsPage()
+	    private Dictionary<string, bool> _splitInFiles = new Dictionary<string, bool>();
+	    private bool _isStudioPlugin;
+
+		public FileOptionsPage(bool isStudioPlugin)
         {
             InitializeComponent();
+	        _isStudioPlugin = isStudioPlugin;
         }
-
-        private Dictionary<string, bool> _splitInFiles = new Dictionary<string, bool>();
-
+		
         private void switchPanels(bool isMrg)
         {
             pMergeOptions.Visible = isMrg;
@@ -451,34 +453,41 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
 		private void btnLoadFilesActiveProject_Click(object sender, EventArgs e)
 		{
-			var projectController = GetProjectController();
-			var currentProjectLocalPath = string.Empty;
-
-			if (projectController != null)
+			if (_isStudioPlugin)
 			{
-				if (projectController.CurrentProject != null)
-				{
-					currentProjectLocalPath = projectController.CurrentProject.GetProjectInfo() != null
-						? projectController.CurrentProject.GetProjectInfo().LocalProjectFolder
-						: string.Empty;
-				}
+				var projectController = GetProjectController();
+				var currentProjectLocalPath = string.Empty;
 
-				var a = new FolderSelectDialog
+				if (projectController != null)
 				{
-					Title = Properties.Resources.FileDialogTitle,
-					Filter = Constants.SplitAddFilterText,
-					InitialDirectory = currentProjectLocalPath,
-					Multiselect = true
-				};
-
-				if (a.ShowDialog(string.Empty) == DialogResult.OK)
-				{
-					foreach (string file in a.Files)
+					if (projectController.CurrentProject != null)
 					{
-						ParseProjectFile(file);
+						currentProjectLocalPath = projectController.CurrentProject.GetProjectInfo() != null
+							? projectController.CurrentProject.GetProjectInfo().LocalProjectFolder
+							: string.Empty;
 					}
 
-					bindInFiles();
+					var a = new FolderSelectDialog
+					{
+						Title = Properties.Resources.FileDialogTitle,
+						Filter = Constants.SplitAddFilterText,
+						InitialDirectory = currentProjectLocalPath,
+						Multiselect = true
+					};
+
+					if (a.ShowDialog(string.Empty) == DialogResult.OK)
+					{
+						foreach (string file in a.Files)
+						{
+							ParseProjectFile(file);
+						}
+
+						bindInFiles();
+					}
+				}
+				else
+				{
+					btnLoadFilesActiveProject.Enabled = false;
 				}
 			}
 			else

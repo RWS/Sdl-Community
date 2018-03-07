@@ -117,6 +117,18 @@
 			<Component Id="Sdl.Core.Settings.dll" Guid="*">
 				<File Id="Sdl.Core.Settings.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.Settings.dll"></File>
 			</Component>
+			
+			<Component Id="Sdl.Core.Globalization.dll" Guid="*">
+				<File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.Globalization.dll"></File>
+			</Component>
+			
+			<Component Id="Sdl.Core.PluginFramework.dll" Guid="*">
+				<File Id="Sdl.Core.PluginFramework.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.PluginFramework.dll"></File>
+			</Component>
+			
+			<Component Id="Sdl.Core.PluginFramework.PackageSupport.dll" Guid="*">
+				<File Id="Sdl.Core.PluginFramework.PackageSupport.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.PluginFramework.PackageSupport.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>

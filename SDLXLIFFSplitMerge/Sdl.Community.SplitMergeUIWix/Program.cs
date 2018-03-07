@@ -11,7 +11,7 @@ namespace Sdl.Community.SplitMergeUIWix
 		[STAThread]
 		static void Main()
 		{
-			var wizardPage = new WizardPage();
+			var wizardPage = new WizardPage(false);
 			wizardPage.ShowDialog();
 		}
 	}

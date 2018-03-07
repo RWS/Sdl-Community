@@ -7,12 +7,12 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 {
     public partial class WizardPage : WizardSheet
     {
-        public WizardPage()
+        public WizardPage(bool isStudioPlugin)
         {
             InitializeComponent();
 
             this.Pages.Add(new WelcomePage());
-            this.Pages.Add(new FileOptionsPage());
+            this.Pages.Add(new FileOptionsPage(isStudioPlugin));
             this.Text = Constants.SDLXLIFFName;
 
 			AppOptions.splitOpts.SplitNonCountStatus = new List<SegStatus>();
