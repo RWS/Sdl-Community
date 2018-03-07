@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +15,38 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 	{
 		public  Task<MasterScript> GetMasterScript()
 		{
-			using (var session =  RavenContext.Current.CreateSession())
+			using (var session = RavenContext.Current.CreateSession())
 			{
 				var masterScript = session.Query<MasterScript>().FirstOrDefault();
-				return Task.FromResult(masterScript);
+				if (masterScript == null)
+				{
+					var master = new MasterScript
+					{
+
+						ScriptId = Guid.NewGuid().ToString(),
+						Name = "AhkMasterScript.ahk",
+						Location = GetDefaultPath(),
+						Scripts = new List<Script>()
+					};
+					CreateMasterScript(master);
+				}
+				if (masterScript != null)
+				{
+					return Task.FromResult(masterScript);
+				}
+				var masterScriptNew = session.Query<MasterScript>().FirstOrDefault();
+				return Task.FromResult(masterScriptNew);
 			}
+		}
+		private string GetDefaultPath()
+		{
+			var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+				"SDL Community", "AhkMasterScript");
+			if (!Directory.Exists(defaultPath))
+			{
+				Directory.CreateDirectory(defaultPath);
+			}
+			return defaultPath;
 		}
 		public Task CreateMasterScript(MasterScript script)
 		{
