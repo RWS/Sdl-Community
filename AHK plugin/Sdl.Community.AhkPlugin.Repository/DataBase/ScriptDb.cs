@@ -15,7 +15,7 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public  Task<List<Script>> GetAllScripts()
 		{
-			ThrowIfDisposed();
+			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				var allScripts =  session.Query<Script>().ToList();
@@ -25,7 +25,7 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public Task AddNewScript(Script script)
 		{
-			ThrowIfDisposed();
+			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				session.Store(script);
@@ -36,7 +36,7 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public Task RemoveScripts(List<Script> scripts)
 		{
-			ThrowIfDisposed();
+			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				foreach (var script in scripts)
