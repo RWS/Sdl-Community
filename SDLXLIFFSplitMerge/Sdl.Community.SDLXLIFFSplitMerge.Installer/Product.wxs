@@ -13,7 +13,7 @@
 		<UIRef Id="WixUI_InstallDir" />
 
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
-		<MediaTemplate />
+		<MediaTemplate EmbedCab="yes"/>
 
 		<Feature Id="ProductFeature" Title="Sdl.Community.SDLXLIFFSplitMerge.Installer" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />

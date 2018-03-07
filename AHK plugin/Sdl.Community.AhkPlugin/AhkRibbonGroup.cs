@@ -29,6 +29,7 @@ namespace Sdl.Community.AhkPlugin
 			RavenContext.Current.CreateSession();
 			var masterScriptDb = new MasterScriptDb();
 			var masterScript = masterScriptDb.GetMasterScript().Result;
+
 			ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), new List<Script>());
 			//if (masterScript == null)
 			//{

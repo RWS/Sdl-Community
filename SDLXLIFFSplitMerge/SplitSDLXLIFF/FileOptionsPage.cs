@@ -327,22 +327,29 @@ namespace Sdl.Utilities.SplitSDLXLIFF
         }
         private void btnSplitAddFromProject_Click(object sender, EventArgs e)
         {
-	        var a = new FolderSelectDialog
+	        if (_isStudioPlugin)
 	        {
-		        Title = Properties.Resources.FileDialogTitle,
-		        Filter = Constants.SplitAddFilterText,
-		        Multiselect = true
-	        };
+		        var a = new FolderSelectDialog
+		        {
+			        Title = Properties.Resources.FileDialogTitle,
+			        Filter = Constants.SplitAddFilterText,
+			        Multiselect = true
+		        };
 
-            if (a.ShowDialog(string.Empty) == DialogResult.OK)
-            {
-                foreach (string file in a.Files)
-                {
-                    ParseProjectFile(file);
-                }
+		        if (a.ShowDialog(string.Empty) == DialogResult.OK)
+		        {
+			        foreach (string file in a.Files)
+			        {
+				        ParseProjectFile(file);
+			        }
 
-                bindInFiles();
-            }
+			        bindInFiles();
+		        }
+	        }
+	        else
+	        {
+		        btnSplitAddFromProject.Enabled = false;
+	        }
         }
         private void lvSplitInFiles_KeyDown(object sender, KeyEventArgs e)
         {
