@@ -31,7 +31,6 @@ namespace Sdl.Community.AhkPlugin.Helpers
 					{
 						var countToBeRemoved = (firstEndScriptPosition + 2) - startScriptPosition;
 						//remove index +2 to remove the empty line between scripts
-						//lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
 						lines.RemoveRange(startScriptPosition, countToBeRemoved);
 					}
 					else
@@ -165,15 +164,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			scriptLines.Add(Environment.NewLine);
 			return scriptLines;
 		}
-
-		public  static List<string> GetReloadScript()
-		{
-			var test = PluginResources.reload;
-			var test1 = Path.GetFullPath(PluginResources.ResourceManager.BaseName);
-			//var lines = File.ReadAllLines(test);
-			return null;
-		}
-
+		
 		public static bool IsGeneratedByAhkPlugin(string filePath)
 		{
 			var fileProperties = new OleDocumentProperties();
