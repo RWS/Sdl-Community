@@ -42,6 +42,10 @@
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.DSOFile">
+      <HintPath>3rd party\Interop.DSOFile.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Raven.Abstractions, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <HintPath>packages\RavenDB.Database.3.5.5\lib\net45\Raven.Abstractions.dll</HintPath>
     </Reference>

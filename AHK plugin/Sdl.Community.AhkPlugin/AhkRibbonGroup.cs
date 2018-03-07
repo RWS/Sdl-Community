@@ -39,7 +39,7 @@ namespace Sdl.Community.AhkPlugin
 					Scripts = new List<Script>()
 				};
 				//write empty ahk script on disk
-				ProcessScript.ExportScript(Path.Combine(master.Location,master.Name),new List<Script>());
+				//ProcessScript.ExportScript(Path.Combine(master.Location,master.Name),new List<Script>());
 				//add master to db
 				masterScriptDb.CreateMasterScript(master);
 			}
