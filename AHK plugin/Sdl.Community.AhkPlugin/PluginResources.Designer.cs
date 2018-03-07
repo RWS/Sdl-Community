@@ -88,5 +88,29 @@ namespace Sdl.Community.AhkPlugin {
                 return ((System.Drawing.Icon)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to #SingleInstance force
+        ///FileGetTime ScriptStartModTime, %A_ScriptFullPath%
+        ///SetTimer CheckScriptUpdate, 100, 0x7FFFFFFF ; 100 ms, highest priority
+        ///
+        ///CheckScriptUpdate() {
+        ///    global ScriptStartModTime
+        ///    FileGetTime curModTime, %A_ScriptFullPath%
+        ///    If (curModTime &lt;&gt; ScriptStartModTime) {
+        ///        Loop
+        ///        {
+        ///            reload
+        ///            Sleep 300 ; ms
+        ///            MsgBox 0x2, %A_ScriptName%, Reload failed. ; 0x2 = Abort/Retry/Ignore
+        ///            IfMsgBox Abort
+        ///                ExitApp
+        ///        [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string reload {
+            get {
+                return ResourceManager.GetString("reload", resourceCulture);
+            }
+        }
     }
 }

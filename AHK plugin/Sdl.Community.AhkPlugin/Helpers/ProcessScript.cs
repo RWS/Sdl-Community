@@ -29,8 +29,10 @@ namespace Sdl.Community.AhkPlugin.Helpers
 					scripts.Add(pair);
 					if (firstEndScriptPosition < lines.Count - 1)
 					{
+						var countToBeRemoved = (firstEndScriptPosition + 2) - startScriptPosition;
 						//remove index +2 to remove the empty line between scripts
-						lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
+						//lines.RemoveRange(startScriptPosition, firstEndScriptPosition + 2);
+						lines.RemoveRange(startScriptPosition, countToBeRemoved);
 					}
 					else
 					{
@@ -102,8 +104,12 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		{
 			var scriptLines = new List<string>();
 			var file = File.Create(filePath);
+			
 			file.Close();
-
+			//write reload script
+			File.WriteAllText(filePath,PluginResources.reload);
+			var reloadScriptLines = File.ReadAllLines(filePath).ToList();
+			scriptLines.AddRange(reloadScriptLines);
 			foreach (var script in scripts)
 			{
 				var scriptLinesContent = CreateScriptLinesContent(script);
@@ -158,6 +164,14 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			scriptLines.Add(";endScript");
 			scriptLines.Add(Environment.NewLine);
 			return scriptLines;
+		}
+
+		public  static List<string> GetReloadScript()
+		{
+			var test = PluginResources.reload;
+			var test1 = Path.GetFullPath(PluginResources.ResourceManager.BaseName);
+			//var lines = File.ReadAllLines(test);
+			return null;
 		}
 
 		public static bool IsGeneratedByAhkPlugin(string filePath)

@@ -30,21 +30,7 @@ namespace Sdl.Community.AhkPlugin
 			var masterScriptDb = new MasterScriptDb();
 			var masterScript = masterScriptDb.GetMasterScript().Result;
 
-			ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), new List<Script>());
-			//if (masterScript == null)
-			//{
-			//	var master = new MasterScript
-			//	{
-			//		ScriptId = Guid.NewGuid().ToString(),
-			//		Name = "AhkMasterScript.ahk",
-			//		Location = GetDefaultPath(),
-			//		Scripts = new List<Script>()
-			//	};
-			//	//write empty ahk script on disk
-			//	ProcessScript.ExportScript(Path.Combine(master.Location,master.Name),new List<Script>());
-			//	//add master to db
-			//	masterScriptDb.CreateMasterScript(master);
-			//}
+			//ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), new List<Script>());
 		}
 
 		private string GetDefaultPath()
