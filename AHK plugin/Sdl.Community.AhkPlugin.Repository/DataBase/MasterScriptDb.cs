@@ -75,6 +75,30 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			return Task.FromResult(true);
 		}
 
+		public Task RemoveScripts(List<Script> scriptsToBeRemoved)
+		{
+			using (var session = RavenContext.Current.CreateSession())
+			{
+				var script = GetMasterScript().Result;
+				var masterScript = session.Query<MasterScript, MasterScriptById>()
+					.FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
+				if (masterScript != null)
+				{
+					foreach (var toBeRemoved in scriptsToBeRemoved)
+					{
+						var corespondingScript = masterScript.Scripts.FirstOrDefault(s => s.ScriptId.Equals(toBeRemoved.ScriptId));
+						if (corespondingScript != null)
+						{
+							masterScript.Scripts.Remove(corespondingScript);
+						}
+						
+					}
+					session.Store(masterScript);
+					session.SaveChanges();
+				}
+			}
+			return Task.FromResult(true);
+		}
 	}
 
 	public class MasterScriptById : AbstractIndexCreationTask<MasterScript>

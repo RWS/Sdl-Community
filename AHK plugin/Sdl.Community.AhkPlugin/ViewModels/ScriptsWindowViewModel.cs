@@ -117,6 +117,10 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				}
 				//Remove from db
 				_scriptsDb.RemoveScripts(scriptsToBeRemoved);
+				_masterScriptDb.RemoveScripts(scriptsToBeRemoved);
+				//write masterscript on the disk
+				var masterScript = _masterScriptDb.GetMasterScript().Result;
+				ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}
 			else
 			{
