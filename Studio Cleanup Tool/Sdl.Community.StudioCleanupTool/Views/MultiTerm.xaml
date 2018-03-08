@@ -16,8 +16,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="500" />
-		    <ColumnDefinition Width="1*" />
+		    <ColumnDefinition Width="Auto" />
+		    <ColumnDefinition Width="Auto" />
 	    </Grid.ColumnDefinitions>
 	    <Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold">Please select MultiTerm versions</Label>
 	   
@@ -49,6 +49,7 @@
 		    ItemsSource ="{Binding MultiTermLocationCollection,Mode=TwoWay,NotifyOnSourceUpdated=True}" 
 		    SelectionMode="Multiple"
 		    Grid.Column="0"
+			Width="auto"
 			SelectedItem="{Binding SelectedLocation}"
 		    Grid.Row="4">
 			<ListBox.Resources>
@@ -95,10 +96,10 @@
 	    </ListBox>
 		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="400">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="450" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
+			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="770" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
 
-		<StackPanel Grid.Column="1" Grid.Row="5" Margin="10,200,0,0" VerticalAlignment="Top" Height="270" >
+		<StackPanel Grid.Column="1" Grid.Row="5"  Width="auto" VerticalAlignment="Top" Height="270" >
 			<StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right" >
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="0,20,10,0" Foreground="{Binding RemoveForeground}" IsEnabled="{Binding IsRemoveEnabled}"  VerticalAlignment="Center" HorizontalAlignment="Right" Command="{Binding RemoveCommand}">
 					<Button.Template>

@@ -13,7 +13,7 @@
         GlowBrush="MediumSeaGreen"
 		FontFamily="Calibri"
 		Icon="icon.ico"
-        Title="SDL Freshstart" Height="900" Width="1000" >
+        Title="SDL Freshstart" Height="700" Width="1300" >
     <Grid Height="auto">
 	    <Grid.Resources>
 		    <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
@@ -30,13 +30,13 @@
 		            controls:TabControlHelper.Underlined="{Binding ElementName=AnimatedTabControlUnderlinedComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 			<controls:MetroTabItem Header="Read Me"  Foreground="#3C92C0">
-				<views:ReadMe HorizontalAlignment="Right" Height="Auto"></views:ReadMe>
+				<views:ReadMe HorizontalAlignment="Right" Height="Auto" Width="auto"></views:ReadMe>
 			</controls:MetroTabItem>
 			<TabItem Header="Studio">
-				<views:Studio DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto"  />
+				<views:Studio DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</TabItem>
 			<controls:MetroTabItem Header="MultiTerm">
-				<views:MultiTerm DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto"></views:MultiTerm>
+				<views:MultiTerm DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></views:MultiTerm>
 			</controls:MetroTabItem>
 			
 		</TabControl>
