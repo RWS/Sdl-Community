@@ -35,9 +35,9 @@
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.helpLinkLabel = new System.Windows.Forms.LinkLabel();
 			this.roundedStatusPanel = new Sdl.TranslationStudio.Plugins.Trados2007.UI.GradientPanel();
-			this.label1 = new System.Windows.Forms.Label();
-			this.fileBasedButton = new System.Windows.Forms.Button();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+			this.fileBasedButton = new System.Windows.Forms.Button();
+			this.label1 = new System.Windows.Forms.Label();
 			this.roundedStatusPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -56,9 +56,10 @@
 			// helpLinkLabel
 			// 
 			this.helpLinkLabel.AutoSize = true;
-			this.helpLinkLabel.Location = new System.Drawing.Point(315, 169);
+			this.helpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.helpLinkLabel.Location = new System.Drawing.Point(397, 167);
 			this.helpLinkLabel.Name = "helpLinkLabel";
-			this.helpLinkLabel.Size = new System.Drawing.Size(29, 13);
+			this.helpLinkLabel.Size = new System.Drawing.Size(33, 15);
 			this.helpLinkLabel.TabIndex = 7;
 			this.helpLinkLabel.TabStop = true;
 			this.helpLinkLabel.Text = "Help";
@@ -77,35 +78,6 @@
 			this.roundedStatusPanel.RoundCornerRadius = 20;
 			this.roundedStatusPanel.Size = new System.Drawing.Size(514, 125);
 			this.roundedStatusPanel.TabIndex = 6;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(283, 33);
-			this.label1.Margin = new System.Windows.Forms.Padding(33, 25, 0, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(164, 13);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "Select a local translation memory.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// fileBasedButton
-			// 
-			this.fileBasedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.fileBasedButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.Trados2007_FileBased_Image;
-			this.fileBasedButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.fileBasedButton.Location = new System.Drawing.Point(24, 18);
-			this.fileBasedButton.Margin = new System.Windows.Forms.Padding(4, 10, 4, 10);
-			this.fileBasedButton.Name = "fileBasedButton";
-			this.fileBasedButton.Size = new System.Drawing.Size(222, 47);
-			this.fileBasedButton.TabIndex = 0;
-			this.fileBasedButton.Text = "&File-based Translation Memory...";
-			this.fileBasedButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.fileBasedButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.fileBasedButton.UseVisualStyleBackColor = true;
-			this.fileBasedButton.Click += new System.EventHandler(this.OnFileBasedButtonClick);
 			// 
 			// tableLayoutPanel1
 			// 
@@ -126,6 +98,35 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(480, 83);
 			this.tableLayoutPanel1.TabIndex = 3;
+			// 
+			// fileBasedButton
+			// 
+			this.fileBasedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.fileBasedButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.Trados2007_FileBased_Image;
+			this.fileBasedButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.fileBasedButton.Location = new System.Drawing.Point(24, 18);
+			this.fileBasedButton.Margin = new System.Windows.Forms.Padding(4, 10, 4, 10);
+			this.fileBasedButton.Name = "fileBasedButton";
+			this.fileBasedButton.Size = new System.Drawing.Size(222, 47);
+			this.fileBasedButton.TabIndex = 0;
+			this.fileBasedButton.Text = "&File-based Translation Memory...";
+			this.fileBasedButton.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.fileBasedButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.fileBasedButton.UseVisualStyleBackColor = true;
+			this.fileBasedButton.Click += new System.EventHandler(this.OnFileBasedButtonClick);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Location = new System.Drawing.Point(283, 33);
+			this.label1.Margin = new System.Windows.Forms.Padding(33, 25, 0, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(164, 13);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "Select a local translation memory.";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// MainForm
 			// 
