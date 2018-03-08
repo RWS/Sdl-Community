@@ -58,10 +58,10 @@
 			this.helpLinkLabel.AutoSize = true;
 			this.helpLinkLabel.Location = new System.Drawing.Point(315, 169);
 			this.helpLinkLabel.Name = "helpLinkLabel";
-			this.helpLinkLabel.Size = new System.Drawing.Size(121, 13);
+			this.helpLinkLabel.Size = new System.Drawing.Size(29, 13);
 			this.helpLinkLabel.TabIndex = 7;
 			this.helpLinkLabel.TabStop = true;
-			this.helpLinkLabel.Text = "Help on OpenExchange";
+			this.helpLinkLabel.Text = "Help";
 			this.helpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.OnHelpLinkLabelLinkClicked);
 			// 
 			// roundedStatusPanel
