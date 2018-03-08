@@ -84,9 +84,9 @@
     <Compile Include="Trados2007UIControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Trados2007\Trados2007.csproj">
+    <ProjectReference Include="..\Trados2007\Sdl.Community.Trados2007.csproj">
       <Project>{98F533A7-1C66-4B0B-86BA-6AFE4F4FC262}</Project>
-      <Name>Trados2007</Name>
+      <Name>Sdl.Community.Trados2007</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
