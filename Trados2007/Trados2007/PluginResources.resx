@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="server_add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\server_add.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_StatusMessage" xml:space="preserve">
+    <value>SDL Trados 2007 Translation Memory</value>
+  </data>
+  <data name="Exception_TradosLocaleNotMapped" xml:space="preserve">
+    <value>Could not parse SDL Trados 2007 locale ({0}) number.</value>
+  </data>
+  <data name="Trados2007_TypeName" xml:space="preserve">
+    <value>SDL &amp;Trados 2007 Translation Memory...</value>
+  </data>
+  <data name="Exception_FileNotFound" xml:space="preserve">
+    <value>Requested translation provider could not be found.</value>
+  </data>
+  <data name="Trados2007_BrowseDialogTitle" xml:space="preserve">
+    <value>Select SDL Trados 2007 Translation Memory</value>
+  </data>
+  <data name="Exception_TMPartMissing" xml:space="preserve">
+    <value>A {0} file is missing.</value>
+  </data>
+  <data name="server_connect" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\server_connect.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_DialogFilterExtension" xml:space="preserve">
+    <value>SDL Trados 2007 Translation Memory (*.tmw) | *.tmw</value>
+  </data>
+  <data name="Trados2007_AddEditServerDialog_Add" xml:space="preserve">
+    <value>Add SDL Trados 2007 Server</value>
+  </data>
+  <data name="server_delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\server_delete.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_ServersDialog_Delete" xml:space="preserve">
+    <value>Do you really want to delete this server?</value>
+  </data>
+  <data name="loader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\loader.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_ToolTip" xml:space="preserve">
+    <value>SDL Trados 2007 Translation Memory</value>
+  </data>
+  <data name="Trados2007_TypeDescription" xml:space="preserve">
+    <value>A plug-in provider to use SDL Trados 2007 translation memories.</value>
+  </data>
+  <data name="Sdl_trados2007_png" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>resources\sdl_trados2007.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_AddEditServerDialog_Edit" xml:space="preserve">
+    <value>Edit SDL Trados 2007 Server</value>
+  </data>
+  <data name="Exception_UriNotSupported" xml:space="preserve">
+    <value>The given URI ({0}) is not supported.</value>
+  </data>
+  <data name="server_edit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\server_edit.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_AddEditServerDialog_WrongCredentials" xml:space="preserve">
+    <value>Please check that you have entered the correct server connection settings and that server is available.</value>
+  </data>
+  <data name="Exception_FileBasedDisposed" xml:space="preserve">
+    <value>File-based SDL Tradso 2007 Translation Memory is closed.</value>
+  </data>
+  <data name="Trados2007_AddEditServerDialog_Login" xml:space="preserve">
+    <value>Login to SDL Trados 2007 Server</value>
+  </data>
+  <data name="Information_ServerIsDown" xml:space="preserve">
+    <value>Selected SDL Trados 2007 translation server ({0}) is not responding. Please, check your network settings or try again later.</value>
+  </data>
+  <data name="Exception_CouldNotOpen" xml:space="preserve">
+    <value>Requested translation provider could not be opened.</value>
+  </data>
+  <data name="Trados2007_FileBased_Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TWB.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_ServerBased_Image" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TmServer_b.ico;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_FileBased_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TWB_icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_HelpArticleLink" xml:space="preserve">
+    <value>http://talisma.sdl.com/article.aspx?article=4079&amp;p=1</value>
+  </data>
+  <data name="Trados2007_ServerBased_Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TmServer_b_icon.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_FileBased_Image_little" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TWB_little.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_ServerBased_Image_little" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\TmServer_b_little.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Trados2007_ServerManager2007NotInstalledMessage" xml:space="preserve">
+    <value>SDL Trados 2007 server-based translation memories cannot be supported because SDL Trados Server Manager 2007 is not installed on this machine.</value>
+  </data>
+  <data name="MessageBox_ErrorTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="MessageBox_InformationTitle" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="MessageBox_QuestionTitle" xml:space="preserve">
+    <value>Question</value>
+  </data>
+  <data name="MessageBox_WarningTitle" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+</root>

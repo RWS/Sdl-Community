@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{98F533A7-1C66-4B0B-86BA-6AFE4F4FC262}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Sdl.TranslationStudio.Plugins.Trados2007</RootNamespace>
+    <AssemblyName>Sdl.TranslationStudio.Plugins.Trados2007</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Lingua, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Lingua.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Trados.Interop.TMAccess, Version=2.1.0.0, Culture=neutral, PublicKeyToken=4316ebe69d6f1d49, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Trados.Interop.TMAccess.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AbstractTrados2007LanguageDirection.cs" />
+    <Compile Include="AbstractTrados2007TranslationProvider.cs" />
+    <Compile Include="LanguagePlatform.Lingua\AlignedSubstring.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\AlignmentOperation.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\CostBasedAlignmentComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\IAlignmentCostComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\LengthAlignmentCostComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\LongestCommonSubsequenceComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\SequenceAlignmentComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Alignment\StringLengthAlignmentCostComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\CharacterSetParser.cs" />
+    <Compile Include="LanguagePlatform.Lingua\EditDistance\EditDistanceComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\DisjunctionNode.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\FSATransition.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\FST.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\FSTTransition.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\Label.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\Matcher.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\MatchState.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\Node.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\Parser.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\RepetitiveNode.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\SequenceNode.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\State.cs" />
+    <Compile Include="LanguagePlatform.Lingua\FST\TransitionNode.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Resources\CompositeResourceDataAccessor.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Resources\Configuration.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Resources\LanguageResources.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Resources\ResourceFileResourceAccessor.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Resources\ResourceStorage.cs" />
+    <Compile Include="LanguagePlatform.Lingua\SegmentEditDistanceComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\SimilarityComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\SimilarityComputers.cs" />
+    <Compile Include="LanguagePlatform.Lingua\SimilarityMatrix.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\CachingStemmer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\DumbStemmer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\IStemmer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\RuleBasedStemmer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\StemmingRule.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\StemmingRuleParser.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\StemmingRuleSet.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\StemmingRuleSetIterator.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Stemming\StemmingRuleSetReader.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Substring.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TagAligner.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TagAssociation.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TagAssociations.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TagPairs.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TermRecognition\FeatureToRangeMapping.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TermRecognition\ScoredItem.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TermRecognition\SubstringAlignmentDisambiguator.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TermRecognition\TermFinder.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TermRecognition\TermFinderResult.cs" />
+    <Compile Include="LanguagePlatform.Lingua\TokenIndexLCSScoreProvider.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\CalendarDateTimePatterns.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\CurrencyRegexRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DateTimePattern.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DateTimePatternComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DateTimeRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DefaultChineseFallbackRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DefaultFallbackRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DefaultJapaneseFallbackRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DefaultJAZHFallbackRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\DefaultThaiFallbackRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\FSTGenerator.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\FSTMatch.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\FSTRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\GenericRecognizerConfiguration.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\MeasureFSTRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\MeasureRegexRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\NumberFSTRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\NumberPatternComputer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\NumberRegexRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\Recognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\RegexRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\Tokenizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\TokenizerParameters.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\TokenizerSetup.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\TokenizerSetupFactory.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Tokenization\WordlistRecognizer.cs" />
+    <Compile Include="LanguagePlatform.Lingua\Trie.cs" />
+    <Compile Include="MessagingHelpers.cs" />
+    <Compile Include="TranslationMemoryMigration.UI\TradosServerManagerProduct.cs" />
+    <Compile Include="TranslationMemoryMigration.UI\TradosTranslationMemoryProduct.cs" />
+    <Compile Include="TranslationMemoryMigration.UI\TranslationMemoryTypeProduct.cs" />
+    <Compile Include="Utils\CredentialsUtility.cs" />
+    <Compile Include="ServerBasedTrados2007LanguageDirection.cs" />
+    <Compile Include="ServerBasedTrados2007TranslationMemory.cs" />
+    <Compile Include="TP2007ProviderSerializationHelper.cs" />
+    <Compile Include="Trados2007ServerAccount.cs" />
+    <Compile Include="Trados2007TranslationProviderSerializationHelper.cs" />
+    <Compile Include="UI\AddEditServerDialog\AddEditServerDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\AddEditServerDialog\AddEditServerDialog.Designer.cs">
+      <DependentUpon>AddEditServerDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainDialog\MainDialog.cs" />
+    <Compile Include="UI\MainDialog\MainModel.cs" />
+    <Compile Include="UI\ServerBasedTMDialog\ServerBasedDialog.cs" />
+    <Compile Include="UI\ServerBasedTMDialog\ServerBasedModel.cs" />
+    <Compile Include="UI\ServersDialog\ServersFormModel.cs" />
+    <Compile Include="UI\ServersDialog\ServersFormPresenter.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="ITrados2007TranslationProvider.cs" />
+    <Compile Include="Utils\LanguageMapper.cs" />
+    <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FileBasedTrados2007TranslationMemory.cs" />
+    <Compile Include="FileBasedTrados2007LanguageDirection.cs" />
+    <Compile Include="TranslationMemoryAccessMode.cs" />
+    <Compile Include="TranslationProviderSettings.cs" />
+    <Compile Include="UI\Components\GradientPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\Components\GradientPanel.Designer.cs">
+      <DependentUpon>GradientPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainDialog\IMainView.cs" />
+    <Compile Include="UI\Components\LanguagePairListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\MainDialog\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainDialog\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainDialog\MainPresenter.cs" />
+    <Compile Include="UI\ServerBasedTMDialog\ServerBasedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ServerBasedTMDialog\ServerBasedForm.Designer.cs">
+      <DependentUpon>ServerBasedForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ServerBasedTMDialog\ServerBasedPresenter.cs" />
+    <Compile Include="UI\ServersDialog\ServersForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ServersDialog\ServersForm.Designer.cs">
+      <DependentUpon>ServersForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\Prerequisites.cs" />
+    <Compile Include="Utils\SegmentParser.cs" />
+    <Compile Include="Utils\TP2007Pull.cs" />
+    <Compile Include="WinFormsUI.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TranslationProviderFactory.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\AddEditServerDialog\AddEditServerDialog.resx">
+      <DependentUpon>AddEditServerDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainDialog\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ServerBasedTMDialog\ServerBasedForm.resx">
+      <DependentUpon>ServerBasedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ServersDialog\ServersForm.resx">
+      <DependentUpon>ServersForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="pluginpackage.manifest.xml" />
+    <Content Include="Resources\loader.gif" />
+    <Content Include="Resources\Sdl_trados2007.png" />
+    <None Include="packages.config" />
+    <None Include="Resources\TWB_little.png" />
+    <None Include="Resources\TmServer_b_little.png" />
+    <None Include="Resources\TmServer_b_icon.ico" />
+    <None Include="Resources\TWB_icon.ico" />
+    <None Include="Resources\TmServer_b.ico" />
+    <None Include="Resources\TWB.ico" />
+    <None Include="Resources\server_edit.png" />
+    <None Include="Resources\server_delete.png" />
+    <None Include="Resources\server_connect.png" />
+    <None Include="Resources\server_add.png" />
+    <None Include="SdlCommunity.snk" />
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <CreatePluginPackage>true</CreatePluginPackage>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
