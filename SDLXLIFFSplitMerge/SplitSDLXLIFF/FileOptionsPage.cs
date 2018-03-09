@@ -14,12 +14,15 @@ namespace Sdl.Utilities.SplitSDLXLIFF
     {
 	    private Dictionary<string, bool> _splitInFiles = new Dictionary<string, bool>();
 	    private bool _isStudioPlugin;
+	    private Dictionary<string, bool> _splitInItems = new Dictionary<string, bool>();
+
 
 		public FileOptionsPage(bool isStudioPlugin)
         {
             InitializeComponent();
 
-	        _isStudioPlugin = isStudioPlugin;
+	        SetSelectedFiles();
+			_isStudioPlugin = isStudioPlugin;
         }
 		
         private void switchPanels(bool isMrg)
@@ -53,16 +56,18 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 	    private void bindInFiles()
 	    {
 		    lvSplitInFiles.Items.Clear();
-			SetSelectedFiles();
-		    foreach (KeyValuePair<string, bool> _file in _splitInFiles)
+		    _splitInFiles = _splitInItems;
+
+			foreach (KeyValuePair<string, bool> splitInfile in _splitInFiles)
 		    {
-			    lvSplitInFiles.Items.Add(_file.Key);
+			    lvSplitInFiles.Items.Add(splitInfile.Key);
 		    }
 	    }
 
 	    private void bindSplitData()
-        {
-            _splitInFiles = AppOptions.splitInFiles;
+	    {
+			//To do: check what appoptions.splitfiles do and see issue when population with same key(soemhow AppOptions.splitInFiles is saving the selected items even if the selection is changed
+			_splitInFiles = AppOptions.splitInFiles;
             tbSplitOut.Text = AppOptions.splitOutPath;
 
             bindInFiles();
@@ -524,7 +529,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
 		    foreach(var selectedFile in selectedFiles)
 		    {
-			    _splitInFiles.Add(selectedFile.LocalFilePath, true);
+			    _splitInItems.Add(selectedFile.LocalFilePath, true);
 			}
 	    }
 	}
