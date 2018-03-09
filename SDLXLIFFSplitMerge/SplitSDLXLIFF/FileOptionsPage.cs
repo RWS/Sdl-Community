@@ -66,7 +66,6 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
 	    private void bindSplitData()
 	    {
-			//To do: check what appoptions.splitfiles do and see issue when population with same key(soemhow AppOptions.splitInFiles is saving the selected items even if the selection is changed
 			_splitInFiles = AppOptions.splitInFiles;
             tbSplitOut.Text = AppOptions.splitOutPath;
 
