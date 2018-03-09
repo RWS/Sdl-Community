@@ -77,7 +77,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		    }
 		    else
 		    {
-				var messageResult = MessageBox.Show("Please select at least one script from the grid to import", "Warning",
+				 MessageBox.Show("Please select at least one script from the grid to import", "Warning",
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 

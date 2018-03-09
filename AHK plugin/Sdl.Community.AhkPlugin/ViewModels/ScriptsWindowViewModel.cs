@@ -92,7 +92,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			}
 			else
 			{
-				var messageResult = MessageBox.Show("Please select at least one script from the grid to export", "Warning",
+				MessageBox.Show("Please select at least one script from the grid to export", "Warning",
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 			
@@ -124,7 +124,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			}
 			else
 			{
-				var messageResult = MessageBox.Show("Please select at least one script from the grid to be removed", "Warning",
+				 MessageBox.Show("Please select at least one script from the grid to be removed", "Warning",
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 			

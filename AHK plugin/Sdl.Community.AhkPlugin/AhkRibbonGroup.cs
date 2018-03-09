@@ -32,17 +32,6 @@ namespace Sdl.Community.AhkPlugin
 
 			//ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), new List<Script>());
 		}
-
-		private string GetDefaultPath()
-		{
-			var defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-				"SDL Community", "AhkMasterScript");
-			if (!Directory.Exists(defaultPath))
-			{
-				Directory.CreateDirectory(defaultPath);
-			}
-			return defaultPath;
-		}
 	}
 
 	[RibbonGroup("Sdl.Community.AhkRibbonGroup", Name = "Ahk", ContextByType = typeof(ProjectsController))]
@@ -58,8 +47,6 @@ namespace Sdl.Community.AhkPlugin
 	{
 		protected override void Execute()
 		{
-			var scriptDb = new ScriptDb();
-			var list = scriptDb.GetAllScripts().Result;
 			var mainVindowViewModel = new MainWindowViewModel();
 			var mainWindow = new MainWindow
 			{
