@@ -106,16 +106,16 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			
 			file.Close();
 			//write reload script
-			File.WriteAllText(filePath,PluginResources.reload);
-			var reloadScriptLines = File.ReadAllLines(filePath).ToList();
-			scriptLines.AddRange(reloadScriptLines);
+			//File.WriteAllText(filePath,PluginResources.reload);
+			//var reloadScriptLines = File.ReadAllLines(filePath).ToList();
+			//scriptLines.AddRange(reloadScriptLines);
 			foreach (var script in scripts)
 			{
 				var scriptLinesContent = CreateScriptLinesContent(script);
 				scriptLines.AddRange(scriptLinesContent);
 			}
 
-			File.WriteAllLines(filePath, scriptLines);
+			File.WriteAllLines(filePath, scriptLines,Encoding.UTF8);
 			//set custom property
 			var fileProperties = new OleDocumentProperties();
 			fileProperties.Open(filePath);
