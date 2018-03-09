@@ -18,6 +18,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		public FileOptionsPage(bool isStudioPlugin)
         {
             InitializeComponent();
+
 	        _isStudioPlugin = isStudioPlugin;
         }
 		
@@ -32,6 +33,11 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		    return SdlTradosStudio.Application.GetController<ProjectsController>();
 	    }
 
+	    private static FilesController GetFileController()
+	    {
+		    return SdlTradosStudio.Application.GetController<FilesController>();
+	    }
+
 		private void findSplitInfoFile(string fileDir)
         {
 	        if (Directory.Exists(fileDir))
@@ -43,16 +49,18 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 		        }
 	        }
         }
-        
-        private void bindInFiles()
-        {
-            lvSplitInFiles.Items.Clear();
 
-            foreach (KeyValuePair<string, bool> _file in _splitInFiles)
-                lvSplitInFiles.Items.Add(_file.Key);
-        }
+	    private void bindInFiles()
+	    {
+		    lvSplitInFiles.Items.Clear();
+			SetSelectedFiles();
+		    foreach (KeyValuePair<string, bool> _file in _splitInFiles)
+		    {
+			    lvSplitInFiles.Items.Add(_file.Key);
+		    }
+	    }
 
-        private void bindSplitData()
+	    private void bindSplitData()
         {
             _splitInFiles = AppOptions.splitInFiles;
             tbSplitOut.Text = AppOptions.splitOutPath;
@@ -150,9 +158,14 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
         private void AddFile(string file, bool isSeparateFile)
         {
-            if (!_splitInFiles.ContainsKey(file))
-                _splitInFiles.Add(file, isSeparateFile);
-            else _splitInFiles[file] = isSeparateFile;
+	        if (!_splitInFiles.ContainsKey(file))
+	        {
+		        _splitInFiles.Add(file, isSeparateFile);
+	        }
+	        else
+	        {
+		        _splitInFiles[file] = isSeparateFile;
+	        }
         }
 
         private string validateInput(bool isMrg)
@@ -502,5 +515,17 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 				btnLoadFilesActiveProject.Enabled = false;
 			}
 		}
+
+	    private void SetSelectedFiles()
+	    {
+			var fileControler = GetFileController();
+
+		    var selectedFiles = fileControler.SelectedFiles;
+
+		    foreach(var selectedFile in selectedFiles)
+		    {
+			    _splitInFiles.Add(selectedFile.LocalFilePath, true);
+			}
+	    }
 	}
 }

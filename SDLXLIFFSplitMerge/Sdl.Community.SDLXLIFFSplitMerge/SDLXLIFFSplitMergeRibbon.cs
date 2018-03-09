@@ -14,7 +14,7 @@ namespace Sdl.Community.SDLXLIFFSplitMerge
 	{
 		[Action("Sdl.Community.SDLXLIFFSplitMerge", Name = "SDLXLIFF Split / Merge", Icon = "FilterDefinition_C77668_", Description = "SDLXLIFF Split / Merge")]
 		[ActionLayout(typeof(SDLXLIFFSplitMergeRibbon), 20, DisplayType.Large)]
-		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
+		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 10, DisplayType.Large)]
 		public class SDLXLIFFSplitMergeAction : AbstractAction
 		{
 			protected override void Execute()
@@ -26,8 +26,8 @@ namespace Sdl.Community.SDLXLIFFSplitMerge
 
 		[Action("SDLXLIFFSplitMergeHelpAction", Icon = "Informative_Icon", Name = "Help", Description = "An wikie page will be opened in browser uith user documentation")]
 		[ActionLayout(typeof(SDLXLIFFSplitMergeRibbon), 10, DisplayType.Large)]
-		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
-		public class SDLXLIFFSplitMergeHelpAction : AbstractViewControllerAction<ProjectsController>
+		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.FilesContextMenuLocation), 10, DisplayType.Large)]
+		public class SDLXLIFFSplitMergeHelpAction : AbstractViewControllerAction<FilesController>
 		{
 			protected override void Execute()
 			{
