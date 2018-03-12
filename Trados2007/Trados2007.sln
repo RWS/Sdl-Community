@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{41060554-8
 		Docs\Trados2007TP.vsd = Docs\Trados2007TP.vsd
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community,Trados2007.UnitTests", "Trados2007.UnitTests\Sdl.Community,Trados2007.UnitTests.csproj", "{DFFFF84A-67E1-472C-8C9C-9A143DEDF02B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Trados2007.UnitTests", "Trados2007.UnitTests\Sdl.Community.Trados2007.UnitTests.csproj", "{DFFFF84A-67E1-472C-8C9C-9A143DEDF02B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A37122DD-5A16-492F-A346-0CA0A20038A1}"
 	ProjectSection(SolutionItems) = preProject
