@@ -1,4 +1,4 @@
-﻿namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+﻿namespace Sdl.Community.Trados2007.UI
 {
     partial class ServersForm
     {
@@ -61,7 +61,7 @@
             // 
             // toolStripAddButton
             // 
-            this.toolStripAddButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.server_add;
+            this.toolStripAddButton.Image = global::Sdl.Community.Trados2007.PluginResources.server_add;
             this.toolStripAddButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripAddButton.Name = "toolStripAddButton";
             this.toolStripAddButton.Size = new System.Drawing.Size(58, 22);
@@ -70,7 +70,7 @@
             // 
             // toolStripEditButton
             // 
-            this.toolStripEditButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.server_edit;
+            this.toolStripEditButton.Image = global::Sdl.Community.Trados2007.PluginResources.server_edit;
             this.toolStripEditButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripEditButton.Name = "toolStripEditButton";
             this.toolStripEditButton.Size = new System.Drawing.Size(56, 22);
@@ -79,7 +79,7 @@
             // 
             // toolStripDeleteButton
             // 
-            this.toolStripDeleteButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.server_delete;
+            this.toolStripDeleteButton.Image = global::Sdl.Community.Trados2007.PluginResources.server_delete;
             this.toolStripDeleteButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDeleteButton.Name = "toolStripDeleteButton";
             this.toolStripDeleteButton.Size = new System.Drawing.Size(60, 22);
@@ -93,7 +93,7 @@
             // 
             // toolStripCheckServerButton
             // 
-            this.toolStripCheckServerButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.server_connect;
+            this.toolStripCheckServerButton.Image = global::Sdl.Community.Trados2007.PluginResources.server_connect;
             this.toolStripCheckServerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripCheckServerButton.Name = "toolStripCheckServerButton";
             this.toolStripCheckServerButton.Size = new System.Drawing.Size(156, 22);

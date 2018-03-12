@@ -8,8 +8,8 @@
     <ProjectGuid>{98F533A7-1C66-4B0B-86BA-6AFE4F4FC262}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.TranslationStudio.Plugins.Trados2007</RootNamespace>
-    <AssemblyName>Sdl.TranslationStudio.Plugins.Trados2007</AssemblyName>
+    <RootNamespace>Sdl.Community.Trados2007</RootNamespace>
+    <AssemblyName>Sdl.Community.Trados2007</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

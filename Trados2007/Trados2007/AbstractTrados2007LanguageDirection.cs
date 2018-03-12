@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Sdl.TranslationStudio.Plugins.Trados2007
+namespace Sdl.Community.Trados2007
 {
     using System;
     using System.Diagnostics.CodeAnalysis;

@@ -1,4 +1,4 @@
-﻿namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+﻿namespace Sdl.Community.Trados2007.UI
 {
     partial class AddEditServerDialog
     {

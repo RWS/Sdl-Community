@@ -1,4 +1,4 @@
-﻿namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+﻿namespace Sdl.Community.Trados2007.UI
 {
     partial class MainForm
     {
@@ -34,7 +34,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.helpLinkLabel = new System.Windows.Forms.LinkLabel();
-			this.roundedStatusPanel = new Sdl.TranslationStudio.Plugins.Trados2007.UI.GradientPanel();
+			this.roundedStatusPanel = new Sdl.Community.Trados2007.UI.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.fileBasedButton = new System.Windows.Forms.Button();
 			this.label1 = new System.Windows.Forms.Label();
@@ -104,7 +104,7 @@
 			this.fileBasedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.fileBasedButton.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.Trados2007_FileBased_Image;
+			this.fileBasedButton.Image = global::Sdl.Community.Trados2007.PluginResources.Trados2007_FileBased_Image;
 			this.fileBasedButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.fileBasedButton.Location = new System.Drawing.Point(24, 18);
 			this.fileBasedButton.Margin = new System.Windows.Forms.Padding(4, 10, 4, 10);

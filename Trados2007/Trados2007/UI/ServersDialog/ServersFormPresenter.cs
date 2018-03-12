@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Sdl.TranslationStudio.Plugins.Trados2007.UI.ServersDialog
+namespace Sdl.Community.Trados2007.UI.ServersDialog
 {
     class ServersFormPresenter
     {

@@ -2,7 +2,7 @@
 {
     using Sdl.LanguagePlatform.Core;
     using Sdl.LanguagePlatform.TranslationMemoryApi;
-    using Sdl.TranslationStudio.Plugins.Trados2007;
+    using Sdl.Community.Trados2007;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
 

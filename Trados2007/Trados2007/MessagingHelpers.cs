@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using Sdl.Community.Trados2007;
 
-namespace Sdl.TranslationStudio.Plugins.Trados2007
+namespace Sdl.Community.Trados2007
 {
-    public static class MessagingHelpers
+	public static class MessagingHelpers
     {
         public static void ShowError(string text)
         {

@@ -1,12 +1,12 @@
 ﻿namespace Trados2007.UnitTests
 {
-    using Sdl.TranslationStudio.Plugins.Trados2007.UI;
+    using Sdl.Community.Trados2007.UI;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using System;
     using Sdl.LanguagePlatform.Core;
     using Sdl.LanguagePlatform.TranslationMemoryApi;
     using System.Windows.Forms;
-    using Sdl.TranslationStudio.Plugins.Trados2007;
+    using Sdl.Community.Trados2007;
 
     [TestClass()]
     public class Trados2007UIControllerTest

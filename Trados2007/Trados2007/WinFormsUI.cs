@@ -6,13 +6,13 @@
 // <email>klukianets@sdl.com</email>
 // <date>2011-10-14</date>
 // ---------------------------------
-namespace Sdl.TranslationStudio.Plugins.Trados2007
+namespace Sdl.Community.Trados2007
 {
     using System;
     using System.Windows.Forms;
     using Sdl.LanguagePlatform.Core;
     using Sdl.LanguagePlatform.TranslationMemoryApi;
-    using Sdl.TranslationStudio.Plugins.Trados2007.UI;
+    using Sdl.Community.Trados2007.UI;
 
     /// <summary>
     /// Encapsulates WinForms UI logic for managing Trados 2007 translation providers.

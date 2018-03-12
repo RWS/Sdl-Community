@@ -1,4 +1,5 @@
-﻿using Sdl.TranslationStudio.Plugins.Trados2007.UI.ServersDialog;
+﻿using Sdl.Community.Trados2007.UI.ServersDialog;
+
 // ---------------------------------
 // <copyright file="ServersDialog.cs" company="SDL International">
 // Copyright  2011 All Right Reserved
@@ -7,16 +8,16 @@
 // <email>klukianets@sdl.com</email>
 // <date>2011-11-01</date>
 // ---------------------------------
-namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+namespace Sdl.Community.Trados2007.UI
 {
-    using System.Windows.Forms;
-    using System;
-    using Sdl.LanguagePlatform.TranslationMemoryApi;
+	using System;
+	using System.Windows.Forms;
+	using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-    /// <summary>
-    /// Server Dialog view
-    /// </summary>
-    public partial class ServersForm : Form
+	/// <summary>
+	/// Server Dialog view
+	/// </summary>
+	public partial class ServersForm : Form
     {
         private ServersFormPresenter presenter;
         private ServersFormModel model;

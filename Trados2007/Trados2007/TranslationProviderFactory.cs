@@ -6,7 +6,7 @@
 // <email>klukianets@sdl.com</email>
 // <date>2011-10-14</date>
 // ---------------------------------
-namespace Sdl.TranslationStudio.Plugins.Trados2007
+namespace Sdl.Community.Trados2007
 {
     using System;
 

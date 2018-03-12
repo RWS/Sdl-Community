@@ -1,7 +1,7 @@
 ﻿namespace Trados2007.UnitTests
 {
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using Sdl.TranslationStudio.Plugins.Trados2007;
+    using Sdl.Community.Trados2007;
     using System;
 
     [TestClass()]

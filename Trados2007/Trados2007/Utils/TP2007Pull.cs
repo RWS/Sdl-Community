@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Trados.Interop.TMAccess;
 
-namespace Sdl.TranslationStudio.Plugins.Trados2007
+namespace Sdl.Community.Trados2007
 {
     public class TP2007Pull: IDisposable
     {

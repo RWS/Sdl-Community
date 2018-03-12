@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+namespace Sdl.Community.Trados2007.UI
 {
     public partial class AddEditServerDialog : Form
     {

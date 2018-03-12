@@ -1,4 +1,4 @@
-﻿namespace Sdl.TranslationStudio.Plugins.Trados2007.UI
+﻿namespace Sdl.Community.Trados2007.UI
 {
     partial class ServerBasedForm
     {
@@ -34,7 +34,7 @@
             this.serversComboBox = new System.Windows.Forms.ComboBox();
             this.browseButton = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.languagePairListBox = new Sdl.TranslationStudio.Plugins.Trados2007.UI.LanguagePairListBox();
+            this.languagePairListBox = new Sdl.Community.Trados2007.UI.LanguagePairListBox();
             this.languageFilterCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.loadingPictureBox = new System.Windows.Forms.PictureBox();
@@ -140,7 +140,7 @@
             // 
             this.loadingPictureBox.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.loadingPictureBox.BackColor = System.Drawing.SystemColors.Window;
-            this.loadingPictureBox.Image = global::Sdl.TranslationStudio.Plugins.Trados2007.PluginResources.loader;
+            this.loadingPictureBox.Image = global::Sdl.Community.Trados2007.PluginResources.loader;
             this.loadingPictureBox.Location = new System.Drawing.Point(215, 136);
             this.loadingPictureBox.Name = "loadingPictureBox";
             this.loadingPictureBox.Size = new System.Drawing.Size(17, 17);

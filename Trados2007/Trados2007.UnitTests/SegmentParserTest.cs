@@ -4,7 +4,7 @@
     using Microsoft.VisualStudio.TestTools.UnitTesting;
     using Sdl.LanguagePlatform.Core;
     using Sdl.LanguagePlatform.TranslationMemory;
-    using Sdl.TranslationStudio.Plugins.Trados2007;
+    using Sdl.Community.Trados2007;
 
     [TestClass()]
     public class SegmentParserTest
