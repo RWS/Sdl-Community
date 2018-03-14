@@ -511,7 +511,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select SDL Trados Studio 2009 project file.
+        ///   Looks up a localized string similar to Select SDL Trados Studio project file.
         /// </summary>
         internal static string ProjectFileDialogTitle {
             get {

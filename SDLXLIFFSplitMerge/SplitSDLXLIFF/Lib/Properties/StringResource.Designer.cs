@@ -124,7 +124,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unexpected file structure. Please, try to resave the file in SDL Trados Studio 2009 and try again..
+        ///   Looks up a localized string similar to Unexpected file structure. Please, try to resave the file in SDL Trados Studio and try again..
         /// </summary>
         internal static string errFileUnexpectedStructure {
             get {

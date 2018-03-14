@@ -256,7 +256,7 @@
     <value>Select original SDLXLIFF file.</value>
   </data>
   <data name="ProjectFileDialogTitle" xml:space="preserve">
-    <value>Select SDL Trados Studio 2009 project file</value>
+    <value>Select SDL Trados Studio project file</value>
   </data>
   <data name="SplitFilesDialogDesc" xml:space="preserve">
     <value>Select a path for split files.</value>
