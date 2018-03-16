@@ -522,13 +522,18 @@ namespace Sdl.Utilities.SplitSDLXLIFF
 
 	    private void SetSelectedFiles()
 	    {
-			var fileControler = GetFileController();
+			if (_isStudioPlugin)
+			{
+				var fileControler = GetFileController();
+				if (fileControler != null)
+				{
+					var selectedFiles = fileControler.SelectedFiles;
 
-		    var selectedFiles = fileControler.SelectedFiles;
-
-		    foreach(var selectedFile in selectedFiles)
-		    {
-			    _splitInItems.Add(selectedFile.LocalFilePath, true);
+					foreach (var selectedFile in selectedFiles)
+					{
+						_splitInItems.Add(selectedFile.LocalFilePath, true);
+					}
+				}
 			}
 	    }
 	}
