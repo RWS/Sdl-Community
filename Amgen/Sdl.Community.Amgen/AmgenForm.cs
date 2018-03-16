@@ -27,5 +27,15 @@ namespace Sdl.Community.Amgen
 				txt_SdlxliffFiles.Text.Remove(txt_SdlxliffFiles.Text.Length - 1);
 			}
 		}
+		
+		private void btn_ConvertFiles_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void btn_SaveFiles_Click(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
