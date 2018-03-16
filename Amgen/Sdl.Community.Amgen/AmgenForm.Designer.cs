@@ -38,7 +38,7 @@
 			// 
 			// btn_BrowseFiles
 			// 
-			this.btn_BrowseFiles.Anchor = System.Windows.Forms.AnchorStyles.Right;
+			this.btn_BrowseFiles.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.btn_BrowseFiles.Location = new System.Drawing.Point(11, 90);
 			this.btn_BrowseFiles.Margin = new System.Windows.Forms.Padding(4);
 			this.btn_BrowseFiles.Name = "btn_BrowseFiles";
@@ -108,7 +108,10 @@
 			this.Controls.Add(this.txt_SdlxliffFiles);
 			this.Controls.Add(this.btn_BrowseFiles);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximumSize = new System.Drawing.Size(2000, 350);
+			this.MinimumSize = new System.Drawing.Size(822, 350);
 			this.Name = "AmgenForm";
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Amgen";
 			this.ResumeLayout(false);
 			this.PerformLayout();
