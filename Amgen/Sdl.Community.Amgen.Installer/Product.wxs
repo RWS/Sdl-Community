@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+	<Product Id="*" Name="Sdl.Community.Amgen.Installer" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="Amgen_Icon.ico" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="Sdl.Community.Amgen.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="b29c0bae-886a-4598-8a9e-9bc35b72b6ca">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="Amgen" Icon="icon.ico" Description="Amgen" Target="[INSTALLFOLDER]Sdl.Community.Amgen.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.Amgen" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Sdl.Community.Amgen.Installer" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="Sdl.Community.Amgen">
+				<File Id="Sdl.Community.Amgen.exe" Name="Sdl.Community.Amgen.exe" Source="$(var.Sdl.Community.Amgen.TargetPath)" KeyPath="yes" />
+			</Component>
+			
+			<Component Id="Sdl.Community.Amgen.exe.config" Guid="28e7a35b-cf12-408a-9295-2be99f5ca5ea">
+				<File Id="Sdl.Community.Amgen.exe.config" Name="Sdl.Community.Amgen.exe.config" Source="$(var.Sdl.Community.Amgen.TargetDir)\Sdl.Community.Amgen.exe.config" />
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>
