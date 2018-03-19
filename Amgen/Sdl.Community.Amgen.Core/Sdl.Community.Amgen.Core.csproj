@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Amgen", "Sdl.
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.Amgen.Installer", "Sdl.Community.Amgen.Installer\Sdl.Community.Amgen.Installer.wixproj", "{2DDA4EC0-D60D-433B-8824-1FF4C9A34133}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Amgen.Core", "Sdl.Community.Amgen.Core\Sdl.Community.Amgen.Core.csproj", "{9922F5A0-1171-45A4-BAEA-F00A8766C131}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,14 @@ Global
 		{2DDA4EC0-D60D-433B-8824-1FF4C9A34133}.Release|Any CPU.ActiveCfg = Release|x86
 		{2DDA4EC0-D60D-433B-8824-1FF4C9A34133}.Release|x86.ActiveCfg = Release|x86
 		{2DDA4EC0-D60D-433B-8824-1FF4C9A34133}.Release|x86.Build.0 = Release|x86
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Debug|x86.Build.0 = Debug|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Release|x86.ActiveCfg = Release|Any CPU
+		{9922F5A0-1171-45A4-BAEA-F00A8766C131}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

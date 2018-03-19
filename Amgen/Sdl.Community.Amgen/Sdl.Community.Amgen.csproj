@@ -84,5 +84,11 @@
   <ItemGroup>
     <Content Include="Resources\Amgen_Icon.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.Amgen.Core\Sdl.Community.Amgen.Core.csproj">
+      <Project>{9922f5a0-1171-45a4-baea-f00a8766c131}</Project>
+      <Name>Sdl.Community.Amgen.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
