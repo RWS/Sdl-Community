@@ -25,6 +25,14 @@
     <Content Include="Amgen_Icon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sdl.Community.Amgen.Core\Sdl.Community.Amgen.Core.csproj">
+      <Name>Sdl.Community.Amgen.Core</Name>
+      <Project>{9922f5a0-1171-45a4-baea-f00a8766c131}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.Amgen\Sdl.Community.Amgen.csproj">
       <Name>Sdl.Community.Amgen</Name>
       <Project>{661ee504-f4e4-454c-a92e-9652996f3a01}</Project>

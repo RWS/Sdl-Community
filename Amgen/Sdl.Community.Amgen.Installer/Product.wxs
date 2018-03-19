@@ -49,6 +49,10 @@
 			<Component Id="Sdl.Community.Amgen.exe.config" Guid="28e7a35b-cf12-408a-9295-2be99f5ca5ea">
 				<File Id="Sdl.Community.Amgen.exe.config" Name="Sdl.Community.Amgen.exe.config" Source="$(var.Sdl.Community.Amgen.TargetDir)\Sdl.Community.Amgen.exe.config" />
 			</Component>
+
+			<Component Id="Sdl.Community.Amgen.Core.dll">
+				<File Id="Sdl.Community.Amgen.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.Amgen.TargetDir)\Sdl.Community.Amgen.Core.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>
