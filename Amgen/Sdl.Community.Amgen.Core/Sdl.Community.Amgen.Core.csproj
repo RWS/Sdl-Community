@@ -5,6 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Sdl.Core.Globalization.dll" />
+    <None Remove="Resources\Sdl.FileTypeSupport.Framework.Core.dll" />
+    <None Remove="Resources\Sdl.FileTypeSupport.Framework.Core.Utilities.dll" />
+    <None Remove="Resources\Sdl.LanguagePlatform.Core.dll" />
+    <None Remove="Resources\Sdl.LanguagePlatform.TranslationMemory.dll" />
+    <None Remove="Resources\Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Sdl.Core.Globalization.dll" />
+    <EmbeddedResource Include="Resources\Sdl.FileTypeSupport.Framework.Core.dll" />
+    <EmbeddedResource Include="Resources\Sdl.FileTypeSupport.Framework.Core.Utilities.dll" />
+    <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.Core.dll" />
+    <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.TranslationMemory.dll" />
+    <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
