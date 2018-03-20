@@ -5,11 +5,11 @@ using Sdl.Community.Amgen.Core;
 
 namespace Sdl.Community.Amgen
 {
-	public partial class AmgenForm : Form
+	public partial class AlignToSDLXLIFFForm : Form
 	{
 		private List<string> _filePaths = new List<string>();
 	
-		public AmgenForm()
+		public AlignToSDLXLIFFForm()
 		{
 			InitializeComponent();
 		}

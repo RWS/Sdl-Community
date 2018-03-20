@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.Amgen
 {
-	partial class AmgenForm
+	partial class AlignToSDLXLIFFForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AmgenForm));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AlignToSDLXLIFFForm));
 			this.btn_BrowseFiles = new System.Windows.Forms.Button();
 			this.txt_SdlxliffFiles = new System.Windows.Forms.TextBox();
 			this.label1 = new System.Windows.Forms.Label();

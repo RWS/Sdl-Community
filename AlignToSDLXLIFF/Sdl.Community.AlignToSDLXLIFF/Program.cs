@@ -19,7 +19,7 @@ namespace Sdl.Community.Amgen
 			LoadAssemblies();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new AmgenForm());
+			Application.Run(new AlignToSDLXLIFFForm());
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

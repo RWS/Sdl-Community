@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{661EE504-F4E4-454C-A92E-9652996F3A01}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Sdl.Community.Amgen</RootNamespace>
-    <AssemblyName>Sdl.Community.Amgen</AssemblyName>
+    <RootNamespace>Sdl.Community.AlignToSDLXLIFF</RootNamespace>
+    <AssemblyName>Sdl.Community.AlignToSDLXLIFF</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -49,16 +49,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AmgenForm.cs">
+    <Compile Include="AlignToSDLXLIFFForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AmgenForm.Designer.cs">
-      <DependentUpon>AmgenForm.cs</DependentUpon>
+    <Compile Include="AlignToSDLXLIFFForm.Designer.cs">
+      <DependentUpon>AlignToSDLXLIFFForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="AmgenForm.resx">
-      <DependentUpon>AmgenForm.cs</DependentUpon>
+    <EmbeddedResource Include="AlignToSDLXLIFFForm.resx">
+      <DependentUpon>AlignToSDLXLIFFForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -68,6 +68,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -95,9 +96,9 @@
     <EmbeddedResource Include="Resources\Lib\Sdl.Core.Globalization.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.Amgen.Core\Sdl.Community.Amgen.Core.csproj">
+    <ProjectReference Include="..\Sdl.Community.AlignToSDLXLIFF.Core\Sdl.Community.AlignToSDLXLIFF.Core.csproj">
       <Project>{9922f5a0-1171-45a4-baea-f00a8766c131}</Project>
-      <Name>Sdl.Community.Amgen.Core</Name>
+      <Name>Sdl.Community.AlignToSDLXLIFF.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
