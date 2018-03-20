@@ -6,17 +6,28 @@
 
   <ItemGroup>
     <None Remove="Resources\Sdl.Core.Globalization.dll" />
+    <None Remove="Resources\Sdl.Core.PluginFramework.dll" />
+    <None Remove="Resources\Sdl.Core.PluginFramework.PackageSupport.dll" />
+    <None Remove="Resources\Sdl.Core.Settings.dll" />
     <None Remove="Resources\Sdl.FileTypeSupport.Framework.Core.dll" />
     <None Remove="Resources\Sdl.FileTypeSupport.Framework.Core.Utilities.dll" />
+    <None Remove="Resources\Sdl.FileTypeSupport.Framework.Implementation.dll" />
     <None Remove="Resources\Sdl.LanguagePlatform.Core.dll" />
     <None Remove="Resources\Sdl.LanguagePlatform.TranslationMemory.dll" />
     <None Remove="Resources\Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\Sdl.Core.PluginFramework.dll" />
+    <EmbeddedResource Include="Resources\Sdl.Core.PluginFramework.PackageSupport.dll" />
+    <EmbeddedResource Include="Resources\Sdl.Core.Settings.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Include="Resources\Sdl.Core.Globalization.dll" />
     <EmbeddedResource Include="Resources\Sdl.FileTypeSupport.Framework.Core.dll" />
     <EmbeddedResource Include="Resources\Sdl.FileTypeSupport.Framework.Core.Utilities.dll" />
+    <EmbeddedResource Include="Resources\Sdl.FileTypeSupport.Framework.Implementation.dll" />
     <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.Core.dll" />
     <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.TranslationMemory.dll" />
     <EmbeddedResource Include="Resources\Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
@@ -25,21 +36,41 @@
   <ItemGroup>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.PluginFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.PluginFramework.PackageSupport">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
 

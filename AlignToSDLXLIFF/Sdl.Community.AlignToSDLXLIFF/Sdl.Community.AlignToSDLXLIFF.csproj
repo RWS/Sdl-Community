@@ -32,9 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -88,6 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Amgen_Icon.ico" />
+    <EmbeddedResource Include="Resources\Lib\Sdl.Core.PluginFramework.dll" />
+    <EmbeddedResource Include="Resources\Lib\Sdl.Core.PluginFramework.PackageSupport.dll" />
+    <EmbeddedResource Include="Resources\Lib\Sdl.Core.Settings.dll" />
+    <EmbeddedResource Include="Resources\Lib\Sdl.FileTypeSupport.Framework.Implementation.dll" />
     <EmbeddedResource Include="Resources\Lib\Sdl.LanguagePlatform.TranslationMemory.dll" />
     <EmbeddedResource Include="Resources\Lib\Sdl.LanguagePlatform.TranslationMemoryApi.dll" />
     <EmbeddedResource Include="Resources\Lib\Sdl.LanguagePlatform.Core.dll" />

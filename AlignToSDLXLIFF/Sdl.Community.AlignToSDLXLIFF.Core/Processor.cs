@@ -4,36 +4,30 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Sdl.Community.Amgen.Core.EventArgs;
 using Sdl.Community.Amgen.Core.SDLXLIFF;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+using Sdl.FileTypeSupport.Framework.Integration;
 
 namespace Sdl.Community.Amgen.Core
 {
 	public class Processor
     {
-		private readonly IFileTypeManager _fileTypeManager;
-
 		public event EventHandler<ProgressEventArgs> ProgressEvent;
 
-		//public Processor() : this(DefaultFileTypeManager.CreateInstance(true))
-		//{
-		////	LoadAssemblies();
-		//}
+		private readonly PocoFilterManager _pocoFilterManager;
 
 		public Processor()
 		{
-			DefaultFileTypeManager.CreateInstance();
 			LoadAssemblies();
+			_pocoFilterManager = new PocoFilterManager(true);
 		}
 
-		public Processor(IFileTypeManager fileTypeManager)
+		public Processor(PocoFilterManager pocoFilterManager)
 		{
-			_fileTypeManager = fileTypeManager;
+			_pocoFilterManager = pocoFilterManager;
 		}
 
 		public List<SegmentInfo> ReadFile(string filePath, ProcessorOptions options)
 		{
-			var parser = new Parser(_fileTypeManager);
+			var parser = new Parser(_pocoFilterManager);
 
 			try
 			{

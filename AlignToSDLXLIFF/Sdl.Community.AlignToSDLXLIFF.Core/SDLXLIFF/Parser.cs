@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using Sdl.Community.Amgen.Core.EventArgs;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
+using Sdl.FileTypeSupport.Framework.Integration;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 
 namespace Sdl.Community.Amgen.Core.SDLXLIFF
 {
 	public class Parser
 	{
-		private readonly IFileTypeManager _fileTypeManager;
+
+		private readonly PocoFilterManager _pocoFilterManager;
 
 		internal event EventHandler<ProgressEventArgs> ProgressEvent;
 
-		internal Parser(IFileTypeManager fileTypeManager)
+		internal Parser(PocoFilterManager pocoFilterManager)
 		{
-			_fileTypeManager = fileTypeManager;
+			_pocoFilterManager = pocoFilterManager;
 		}
 
 		internal List<SegmentInfo> ReadFile(string filePath, ProcessorOptions options)
 		{
-			var converter = _fileTypeManager.GetConverterToDefaultBilingual(filePath, filePath + ".out", null);
+			var converter = _pocoFilterManager.GetConverterToDefaultBilingual(filePath, filePath + ".out", null);
 
 			var contentProcessor = new ParagraphProcessor
 			{
