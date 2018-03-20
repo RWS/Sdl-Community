@@ -50,6 +50,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             ApplyTemplateForm applyTemplateForm = new ApplyTemplateForm(Controller);
             if (applyTemplateForm.ShowDialog() == DialogResult.OK)
             {
+	            var shouldApplyTemplate = false;
                 // This is the template that the user selected
                 ApplyTemplate selectedTemplate = applyTemplateForm.ActiveTemplate;
 
@@ -88,10 +89,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     ISettingsBundle targetSettingsBundle = targetProject.GetSettings();
 
                     // This is the source project - check if it's a loaded one
-                    FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => String.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
+                    FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
 
-                    // Not found so load it from the filing system
-                    if (sourceProject == null)
+					// Not found so load it from the filing system
+					if (sourceProject == null)
                     {
                         if (string.IsNullOrEmpty(selectedTemplate.FileLocation))
                         {
@@ -199,7 +200,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         {
                             // Update the translation memory filter settings
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemorySettings", targetProject, null);
-                        }
+	                        
+						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.TMAL_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -347,12 +349,25 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         try
                         {
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, numberVerifierSettingsId, targetProject, null);
-                        }
+						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.QANV_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
                     }
+
+	                if (selectedTemplate.MatchRepairSettings.Equals(ApplyTemplateOptions.Overwrite))
+	                {
+		                try
+		                {
+			                CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings",
+				                targetProject, null);
+		                }
+		                catch (Exception e)
+		                {
+							MessageBox.Show(e.Message, PluginResources.MRS_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+						}
+	                }
 
                     // Copy grammar checking settings where applicable
                     if (selectedTemplate.VerificationGrammarChecker == ApplyTemplateOptions.Overwrite)
@@ -397,10 +412,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "PseudoTranslateSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "AnalysisTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "VerificationSettings", targetProject, null);
-                            CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
+							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
+							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
-                        }
-                        catch (Exception e)
+
+							//set fuzzy bands from template using reflection
+	                       
+						}
+						catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.BTAL_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         }
@@ -426,7 +445,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "AnalysisTaskSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "VerificationSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslateTaskSettings", targetProject, targetTargetLanguage);
-                                            CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslationMemoryUpdateTaskSettings", targetProject, targetTargetLanguage);
+	                                        CopySettingsGroup(sourceTmSettings, targetTmSettings, "FuzzyMatchRepairSettings", targetProject, targetTargetLanguage);
+											CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslationMemoryUpdateTaskSettings", targetProject, targetTargetLanguage);
                                         }
                                         catch (Exception e)
                                         {
@@ -447,10 +467,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     // Use reflection to synch the project to the server
                     try
                     {
-                        var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);
-                        project.GetType().GetMethod("UpdateServerProjectSettings").Invoke(project, null);
+                        var project = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(targetProject);					
+						project.GetType().GetMethod("UpdateServerProjectSettings").Invoke(project, new object[]{false});
                     }
-                    catch
+                    catch(Exception e)
                     {
                     }
                 }
@@ -463,11 +483,42 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             applyTemplateForm.SaveProjectTemplates();
         }
 
-        /// <summary>
-        /// Validates the translation provider configuration.
-        /// </summary>
-        /// <param name="providerConfig">The provider configuration.</param>
-        private void ValidateTranslationProviderConfiguration(TranslationProviderConfiguration providerConfig)
+		////
+		/// We don't delete this code yet we are not sure that fuzzy bands couses that strange behaviour
+	   // private void SetFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
+	   // {
+		  //  //Get fuzzy values from template
+		  //  var internalProject = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
+		  //  if (internalProject != null)
+		  //  {
+			 //   var internalSourceProject = internalProject.GetValue(sourceProject);
+			 //   var propertyInfo = internalSourceProject.GetType().GetProperty("AnalysisBands");
+			 //   var fuzzies = new List<int>();
+			 //   if (propertyInfo != null)
+			 //   {
+				//    var fuzzyBands = propertyInfo.GetValue(internalSourceProject);
+				//    foreach (dynamic fuzzyValue in (Array)fuzzyBands)
+				//    {
+				//	    var minFuzzyValue = fuzzyValue.GetType().GetProperty("MinimumMatchValue").GetValue(fuzzyValue,null);
+				//	    fuzzies.Add(minFuzzyValue);
+				//    }
+			 //   }
+
+				////set fuzzy to project
+			 //   var internalTargetProject = internalProject.GetValue(targetProject);
+			 //   var setBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
+			 //   if (setBandsMethod != null)
+			 //   {
+				//    setBandsMethod.Invoke(internalTargetProject, new object[] {fuzzies.ToArray()});
+			 //   }
+		  //  }
+	   // }
+
+		/// <summary>
+		/// Validates the translation provider configuration.
+		/// </summary>
+		/// <param name="providerConfig">The provider configuration.</param>
+		private void ValidateTranslationProviderConfiguration(TranslationProviderConfiguration providerConfig)
         {
             foreach (TranslationProviderCascadeEntry entry in providerConfig.Entries)
             {
@@ -628,4 +679,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             }
         }
     }
+
+	[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wiki page will be opened in browser uith user documentation")]
+	[ActionLayout(typeof(ApplyStudioProjectTemplateRibbonGroup), 10, DisplayType.Large)]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
+	public class ApplyStudioProjectTemplateHelpAction: AbstractViewControllerAction<ProjectsController>
+	{
+		protected override void Execute()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3157.apply-studio-project-template");
+		}
+	}
 }

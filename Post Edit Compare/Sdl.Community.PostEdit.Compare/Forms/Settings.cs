@@ -265,9 +265,9 @@ namespace PostEdit.Compare.Forms
 
         }
 
-        private System.Drawing.FontStyle getFontStyle(bool Bold, bool Italic, bool Strikethrough, bool Underline)
+        private FontStyle getFontStyle(bool Bold, bool Italic, bool Strikethrough, bool Underline)
         {
-            System.Drawing.FontStyle FontStyle = FontStyle.Regular;
+            FontStyle FontStyle = FontStyle.Regular;
             if (Bold)
             {
                 FontStyle = FontStyle.Bold;

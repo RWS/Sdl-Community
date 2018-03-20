@@ -1,31 +1,33 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.FileTypeSupport.Framework.NativeApi;
-using Sdl.Community.AdvancedDisplayFilter.Models;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.Plugins.AdvancedDisplayFilter;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Models;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    public partial class DisplayFilterControl : UserControl
+	public partial class DisplayFilterControl : UserControl
     {
         #region  |  Delegates  |
 
-        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result);
+        public delegate void OnApplyFilterHandler(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customSettings,bool reverse,FilteredCountsCallback result);
         public event OnApplyFilterHandler OnApplyDisplayFilter;
-
         public delegate void FilteredCountsCallback(int filteredSegments, int totalSegments);
+
+	    private bool _uniqueSegments;
+	    private bool _editedFuzzy;
+	    private bool _unEditedFuzzy;
+	    private bool _reverseFilter;
         #endregion
 
         #region  |  Properties  |
@@ -37,14 +39,103 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private EditorController EditorController { get; set; }
         private Document ActiveDocument { get; set; }
 
-        public DisplayFilters.DisplayFilter DisplayFilter { get; set; }
+        public DisplayFilter DisplayFilter { get; set; }
 
         public IList<IContextInfo> ContextInfoList { get; set; }
 
         private int TotalSegmentPairsCount { get; set; }
         private int FilteredSegmentPairsCount { get; set; }
+	    public List<string> AvailableColorsList { get; set; }
 
-        private DisplayFilterSettings DisplayFilterSettings
+	    private CustomFilterSettings _customSettings;
+		private CustomFilterSettings CustomFilter
+	    {
+			get
+			{
+				_customSettings = new CustomFilterSettings
+				{
+					OddsNo = oddBtn.Checked,
+					EvenNo = evenBtn.Checked,
+					Grouped = groupedBtn.Checked,
+					UseRegexCommentSearch = commentRegexBox.Checked,
+					Colors = new List<string>(),
+					FuzzyMin = fuzzyMin.Text,
+					FuzzyMax = fuzzyMax.Text,
+					SplitSegments = splitCheckBox.Checked,
+					MergedSegments = mergedCheckbox.Checked,
+					SourceEqualsTarget = sourceSameBox.Checked,
+					IsEqualsCaseSensitive = equalsCaseSensitive.Checked,
+					Unique = _uniqueSegments,
+					MergedAcross = mergedAcross.Checked,
+					ContainsTags = containsTagsCheckBox.Checked,
+					ModifiedBy = modifiedByBox.Text,
+					ModifiedByChecked = modifiedByCheck.Checked,
+					CreatedBy = createdByBox.Text,
+					CreatedByChecked = createdByCheck.Checked,
+					EditedFuzzy = _editedFuzzy,
+					UnEditedFuzzy = _unEditedFuzzy
+				};
+				foreach (ListViewItem color in colorsListView.SelectedItems)
+				{
+					var colorCode = color.Text;
+
+					if (!_customSettings.Colors.Contains(colorCode))
+					{
+						_customSettings.Colors.Add(colorCode);
+					}
+				}
+				if (groupedBtn.Checked)
+				{
+					_customSettings.GroupedList = segmentsBox.Text;
+				}
+				if (commentRegexBox.Checked)
+				{
+					_customSettings.CommentRegex = textBox_commentText.Text;
+
+				}
+				return _customSettings;
+			}
+			set
+			{
+				if (value == null) return;
+				//segments settings 
+				
+				oddBtn.Checked = value.OddsNo;
+				evenBtn.Checked = value.EvenNo;
+				groupedBtn.Checked = value.Grouped;
+				splitCheckBox.Checked = value.SplitSegments;
+				mergedCheckbox.Checked = value.MergedSegments;
+				fuzzyMin.Text = value.FuzzyMin;
+				fuzzyMax.Text = value.FuzzyMax;
+				sourceSameBox.Checked = value.SourceEqualsTarget;
+				equalsCaseSensitive.Checked = value.IsEqualsCaseSensitive;
+				_uniqueSegments = value.Unique;
+				commentRegexBox.Checked = value.UseRegexCommentSearch;
+				_customSettings.Colors = value.Colors;
+				mergedAcross.Checked = value.MergedAcross;
+				containsTagsCheckBox.Checked = value.ContainsTags;
+				modifiedByBox.Text = value.ModifiedBy;
+				modifiedByCheck.Checked = value.ModifiedByChecked;
+				createdByBox.Text = value.CreatedBy;
+				createdByCheck.Checked = value.CreatedByChecked;
+				foreach (var color in value.Colors)
+				{
+					foreach (ListViewItem colorItem in colorsListView.Items)
+					{
+						if (colorItem.Text.Equals(color))
+						{
+							colorItem.Selected = true;
+						}
+					}
+				}
+				if (groupedBtn.Checked)
+				{
+				 segmentsBox.Text = value.GroupedList;
+				}
+			}
+		}
+
+	    private DisplayFilterSettings DisplayFilterSettings
         {
             get
             {
@@ -60,8 +151,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     CommentSeverity = comboBox_commentSeverity.SelectedIndex,
                     ShowAllContent = false
                 };
-
-
+				
                 foreach (var contextInfo in listView_contextInfo.SelectedItems
                     .Cast<ListViewItem>().Select(selectedItem => selectedItem.Tag as IContextInfo)
                     .Where(contextInfo => contextInfo != null
@@ -70,7 +160,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     settings.ContextInfoTypes.Add(contextInfo.ContextType);
                 }
 
-                foreach (ListViewItem item in this.listView_selected.Items)
+                foreach (ListViewItem item in listView_selected.Items)
                 {
                     if (item.Group == GroupGeneralSelected
                         && item.Tag.ToString() == StringResources.DisplayFilterControl_ShowAllContent)
@@ -165,7 +255,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupLockingTypesAvailable &&
                                     value.SegmentLockingTypes.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -178,7 +267,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupContentTypesAvailable &&
                                     value.SegmentContentTypes.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -192,7 +280,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                                     item.Group == GroupStatusAvailable &&
                                     value.ConfirmationLevels.Contains(item.Tag.ToString())))
                         {
-
                             MoveListViewItem(listView_available, item, listView_selected);
                         }
                     }
@@ -200,7 +287,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     if (value.OriginTypes.Any())
                     {
-
                         foreach (var item in listView_available.Items.Cast<ListViewItem>()
                             .Where(
                                 item =>
@@ -213,7 +299,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     if (value.PreviousOriginTypes.Any())
                     {
-
                         foreach (var item in listView_available.Items.Cast<ListViewItem>()
                             .Where(
                                 item =>
@@ -271,7 +356,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         internal static ListViewGroup GroupLockingTypesAvailable { get; set; }
         internal static ListViewGroup GroupContentTypesAvailable { get; set; }
 
-
         private static ListViewGroup GroupStatusSelected { get; set; }
         private static ListViewGroup GroupOriginSelected { get; set; }
         private static ListViewGroup GroupPreviousOriginSelected { get; set; }
@@ -294,11 +378,13 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             AddGroupsToOriginTypeListview();
 
             InitializeSettings();
+			// colorsListView.View = View.List;
+	        colorsListView.CheckBoxes = false;
+			colorsListView.View = View.Tile;
+	        colorsListView.TileSize = new Size(70, 20);
 
-
-            listView_available.ListViewItemSorter = new ListViewItemComparer();
+			listView_available.ListViewItemSorter = new ListViewItemComparer();
             listView_selected.ListViewItemSorter = new ListViewItemComparer();
-
 
             EditorController = GetEditorController();
             EditorController.ActiveDocumentChanged += EditorController_ActiveDocumentChanged;
@@ -307,39 +393,59 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
             OnApplyDisplayFilter += ApplyDisplayFilter;
 
-
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Collapsed);
             listView_selected.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal);
 
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[1]);
             listView_available.SetGroupState(ListViewGroupState.Collapsible | ListViewGroupState.Normal, listView_available.Groups[2]);
 
-        }
-
-
-
+	        segmentsBox.Enabled = false;
+		}
         #endregion
-
 
         private void InitializeSettings()
         {
-            #region  |  content panel  |
+			#region segments number
 
-            textBox_source.Text = string.Empty;
+	        evenBtn.Checked = false;
+	        oddBtn.Checked = false;
+	        groupedBtn.Checked = false;
+	        segmentsBox.Text = string.Empty;
+	        segmentsBox.Enabled = false;
+	        fuzzyMin.Text = string.Empty;
+	        fuzzyMax.Text = string.Empty;
+	        splitCheckBox.Checked = false;
+	        mergedCheckbox.Checked = false;
+	        mergedAcross.Checked = false;
+	        commentRegexBox.Checked = false;
+	        sourceSameBox.Checked = false;
+	        equalsCaseSensitive.Checked = false;
+	        _uniqueSegments = false;
+			colorsListView.SelectedItems.Clear();
+	        _reverseFilter = false;
+			containsTagsCheckBox.Checked=false;
+	        modifiedByBox.Text = string.Empty;
+	        modifiedByCheck.Checked = false;
+	        createdByBox.Text = string.Empty;
+	        createdByCheck.Checked = false;
+	        _unEditedFuzzy = false;
+	        _editedFuzzy = false;
+#endregion
+
+			#region  |  content panel  |
+
+			textBox_source.Text = string.Empty;
             textBox_target.Text = string.Empty;
 
             checkBox_regularExpression.Checked = false;
             checkBox_caseSensitive.Checked = false;
-
             #endregion
 
             #region  |  filters panel  |
-
             try
             {
                 listView_available.BeginUpdate();
                 listView_selected.BeginUpdate();
-
 
                 listView_available.Items.Clear();
                 listView_selected.Items.Clear();
@@ -350,7 +456,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 _item.Group = GroupGeneralAvailable;
                 _item.Tag = StringResources.DisplayFilterControl_ShowAllContent;
 
-
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.RepetitionType)))
                 {
                     var item =
@@ -360,8 +465,12 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Tag = type;
                 }
 
+				//unique 
+	            var unique = listView_available.Items.Add("Unique Occurrences");
+				unique.Group = GroupRepetitionTypesAvailable;
+	            unique.Tag = "Unique";
 
-                foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
+				foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentReviewType)))
                 {
                     var item =
                         listView_available.Items.Add(Helper.GetTypeName((DisplayFilterSettings.SegmentReviewType)type));
@@ -369,8 +478,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupReviewTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentLockingType)))
                 {
                     var item =
@@ -379,8 +487,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupLockingTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.SegmentContentType)))
                 {
                     var item =
@@ -389,8 +496,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     item.Group = GroupContentTypesAvailable;
                     item.Tag = type;
                 }
-
-
+				
                 foreach (var type in Enum.GetValues(typeof(DisplayFilterSettings.ConfirmationLevel)))
                 {
                     var item =
@@ -412,7 +518,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     item.Tag = type;
                 }
-                foreach (var type in Enum.GetValues(typeof(OriginType)))
+	            //edited fuzzy
+	            var editedFuzzy = listView_available.Items.Add("Edited Fuzzy");
+	            editedFuzzy.Group = GroupOriginAvailable;
+	            editedFuzzy.Tag = "EditedF";
+	            //unedited fuzzy
+	            var uneditedFuzzy = listView_available.Items.Add("Unedited Fuzzy");
+	            uneditedFuzzy.Group = GroupOriginAvailable;
+	            uneditedFuzzy.Tag = "UneditedF";
+				foreach (var type in Enum.GetValues(typeof(OriginType)))
                 {
                     if (type.ToString() == "None")
                         continue;
@@ -444,7 +558,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 comboBox_commentSeverity.Items.Add(severity.ToString());
 
             comboBox_commentSeverity.SelectedIndex = 0;
-
             #endregion
 
             #region  |  context info panel  |
@@ -461,23 +574,74 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             #endregion
 
             InitializeTabPageIcons();
+			AvailableColorsList = new List<string>();
         }
 
-        public void ApplyFilter()
-        {
-            if (OnApplyDisplayFilter != null)
-            {
-                var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
-                OnApplyDisplayFilter(DisplayFilterSettings, result);
-            }
-        }
+	    private void AddColor(string color)
+	    {
+		    if (!string.IsNullOrEmpty(color))
+		    {
+				if (!AvailableColorsList.Contains(color))
+				{
+					AvailableColorsList.Add(color);
+				}
+			}
+		   
+	    }
+	    private void PopulateColorList()
+	    {
+		    try
+		    {
+			    AvailableColorsList.Clear();
+			    foreach (var segmentPair in ActiveDocument.SegmentPairs)
+			    {
+				    var colorCodesList = ColorPickerHelper.GetColorsList(segmentPair.Source);
+				    foreach (var color in colorCodesList)
+				    {
+					    AddColor(color);
+				    }
+				    if (colorCodesList.Count > 0) continue;
+				    //  var formattingGroup = segmentPair.Source.ParentParagraphUnit.Properties.Contexts.EffectiveDefaultFormatting;
+					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
+				    var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
+				    AddColor(colorCode);
+			    }
+			    SetAddColorsToListView();
+		    }catch(Exception e) { }
 
-        public void ClearFilter()
-        {
+	    }
 
+	    private void SetAddColorsToListView()
+	    {
+		   colorsListView.Items.Clear();
+			if (AvailableColorsList != null)
+		    {
+			    foreach (var color in AvailableColorsList)
+			    {
+				    var hexaCode = string.Concat("#", color);
+				    var colorItem = new ListViewItem(hexaCode)
+				    {
+					    BackColor = ColorTranslator.FromHtml(hexaCode),
+						ForeColor = Color.White
+				    };
+				    colorsListView.Items.Add(colorItem);
+			    }
+		    }
+	    }
+
+	    public void ApplyFilter(bool reverseSearch)
+	    {
+		    if (OnApplyDisplayFilter != null)
+		    {
+			    var result = new FilteredCountsCallback(UpdateFilteredCountDisplay);
+			    OnApplyDisplayFilter(DisplayFilterSettings, CustomFilter, reverseSearch,result);
+		    }
+	    }
+
+	    public void ClearFilter()
+        {
             InitializeSettings();
-
-            ApplyFilter();
+            ApplyFilter(false);
         }
 
         public void SaveFilter()
@@ -489,14 +653,19 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             };
             if (saveSettingsDialog.ShowDialog() != DialogResult.OK) return;
 
-            var settingsXml = DisplayFilterSerializer.SerializeSettings(DisplayFilterSettings);
-            using (var sw = new StreamWriter(saveSettingsDialog.FileName, false, Encoding.UTF8))
+	        var setting = new SavedSettings
+	        {
+		        CustomFilterSettings = CustomFilter,
+		        DisplayFilterSettings = DisplayFilterSettings
+	        };
+
+	        var settingsXml = DisplayFilterSerializer.SerializeSettings(setting);
+			using (var sw = new StreamWriter(saveSettingsDialog.FileName, false, Encoding.UTF8))
             {
                 sw.Write(settingsXml);
                 sw.Flush();
             }
         }
-
         public void LoadFilter()
         {
             var loadSettingsDialog = new OpenFileDialog
@@ -504,7 +673,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 Title = StringResources.DisplayFilterControl_LoadFilter_Load_Filter_Settings,
                 Filter = StringResources.DisplayFilterControl_Settings_XML_File_sdladfsettings
             };
-
 
             if (loadSettingsDialog.ShowDialog() != DialogResult.OK) return;
             try
@@ -514,32 +682,31 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 using (var sr = new StreamReader(loadSettingsDialog.FileName, Encoding.UTF8))
                     settingsXml = sr.ReadToEnd();
 
-                // deserialize the to the settings xml
-                DisplayFilterSettings = DisplayFilterSerializer.DeserializeSettings<DisplayFilterSettings>(settingsXml);
+				var savedSettings = DisplayFilterSerializer.DeserializeSettings<SavedSettings>(settingsXml);
+				// deserialize the to the settings xml
+	            DisplayFilterSettings = savedSettings.DisplayFilterSettings;
+	            CustomFilter = savedSettings.CustomFilterSettings;
 
-                ApplyFilter();
+                ApplyFilter(false);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-
-
         private void ActiveDocument_DocumentFilterChanged(object sender, DocumentFilterEventArgs e)
         {
             if (e.DisplayFilter == null
-                || e.DisplayFilter.GetType() != typeof(DisplayFilters.DisplayFilter))
+                || e.DisplayFilter.GetType() != typeof(DisplayFilter))
                 InitializeSettings();
-
-
+			
             UpdateFilteredCountDisplay(e.FilteredSegmentPairsCount, e.TotalSegmentPairsCount);
         }
         private void EditorController_ActiveDocumentChanged(object sender, DocumentEventArgs e)
         {
             InitializeSettings();
 
-            if (ActiveDocument != null)
+			if (ActiveDocument != null)
                 ActiveDocument.DocumentFilterChanged -= ActiveDocument_DocumentFilterChanged;
 
             // get a reference to the active document            
@@ -553,23 +720,23 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 PopulateContextInfoList();
 
                 if (ActiveDocument.DisplayFilter != null &&
-                    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                    ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
                     //invalidate UI with display settings recovered from the active document
-                    DisplayFilterSettings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings as DisplayFilterSettings;
+                    DisplayFilterSettings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
                 }
+				PopulateColorList();
 
-                UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
+				UpdateFilteredCountDisplay(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
             }
         }
-        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, FilteredCountsCallback result)
+        private void ApplyDisplayFilter(DisplayFilterSettings displayFilterSettings, CustomFilterSettings customFilterSettings,bool reverse,FilteredCountsCallback result)
         {
             if (ActiveDocument == null)
                 return;
 
-            DisplayFilter = new DisplayFilters.DisplayFilter(displayFilterSettings, ActiveDocument);
-
-            ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
+            DisplayFilter = new DisplayFilter(displayFilterSettings,customFilterSettings, reverse,ActiveDocument);
+			ActiveDocument.ApplyFilterOnSegments(DisplayFilter);
 
             result.Invoke(ActiveDocument.FilteredSegmentPairsCount, ActiveDocument.TotalSegmentPairsCount);
         }
@@ -614,27 +781,35 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.ConfirmationLevel)Enum.Parse(
                         typeof(DisplayFilterSettings.ConfirmationLevel), item, true))) + ")");
 
-            if (DisplayFilterSettings.OriginTypes.Any())
-                filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
-                    + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty, (current, item) => current
-                    + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((OriginType)Enum.Parse(
-                        typeof(OriginType), item, true))) + ")");
+	        try
+	        {
+		        if (!CustomFilter.EditedFuzzy && !CustomFilter.UnEditedFuzzy)
+		        {
+			        if (DisplayFilterSettings.OriginTypes.Any())
+				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Origin + ":"
+				                                        + "(" + DisplayFilterSettings.OriginTypes.Aggregate(string.Empty,
+					                                        (current, item) => current
+					                                                           + Helper.GetTypeName((OriginType) Enum.Parse(
+						                                                           typeof(OriginType), item, true))) + ")");
+		        }
+	        }
+	        catch (Exception e)
+	        {
+		        
+	        }
 
-            if (DisplayFilterSettings.PreviousOriginTypes.Any())
+	        if (DisplayFilterSettings.PreviousOriginTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Previous_Origin + ":"
                     + "(" + DisplayFilterSettings.PreviousOriginTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
                     + Helper.GetTypeName((OriginType)Enum.Parse(
                         typeof(OriginType), item, true))) + ")");
 
-            if (DisplayFilterSettings.RepetitionTypes.Any())
-                filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Repetitions + ":"
-                    + "(" + DisplayFilterSettings.RepetitionTypes.Aggregate(string.Empty, (current, item) => current
-                    + (current != string.Empty ? " " + "|" + " " : string.Empty)
-                    + Helper.GetTypeName((DisplayFilterSettings.RepetitionType)Enum.Parse(
-                        typeof(DisplayFilterSettings.RepetitionType), item, true))) + ")");
-
+	        if (_reverseFilter)
+	        {
+				filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Reverse + ":\"" +
+				                                _reverseFilter + "\"");
+			}
             if (DisplayFilterSettings.SegmentReviewTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segment_Review + ":"
                     + "(" + DisplayFilterSettings.SegmentReviewTypes.Aggregate(string.Empty, (current, item) => current
@@ -656,26 +831,125 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     + Helper.GetTypeName((DisplayFilterSettings.SegmentContentType)Enum.Parse(
                         typeof(DisplayFilterSettings.SegmentContentType), item, true))) + ")");
 
-
             if (DisplayFilterSettings.CommentText != string.Empty)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_text + ":\"" + DisplayFilterSettings.CommentText + "\"");
             if (DisplayFilterSettings.CommentAuthor != string.Empty)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_author + ":\"" + DisplayFilterSettings.CommentAuthor + "\"");
             if (DisplayFilterSettings.CommentSeverity > 0)
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Comment_severity + ":\"" + (DisplayFilterSettings.CommentSeverityType)DisplayFilterSettings.CommentSeverity + "\"");
-
-
+			
             if (DisplayFilterSettings.ContextInfoTypes.Any())
                 filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Document_structure + ":"
                     + "(" + DisplayFilterSettings.ContextInfoTypes.Aggregate(string.Empty, (current, item) => current
                     + (current != string.Empty ? " " + "|" + " " : string.Empty)
                     + ContextInfoList.FirstOrDefault(a => a.ContextType == item).DisplayCode) + ")");
+
+	        if (CustomFilter != null)
+	        {
+		        //filter color
+		        if (CustomFilter.Colors != null)
+		        {
+			        if (CustomFilter.Colors.Count > 0)
+			        {
+				        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Colors + ":"
+				                                        + "(" + CustomFilter.Colors.Aggregate(string.Empty,
+					                                        (current, item) => current
+					                                                           + (current != string.Empty
+						                                                           ? " " + "|" + " "
+						                                                           : string.Empty)
+					                                                           + CustomFilter.Colors.FirstOrDefault(a => a == item)) +
+				                                        ")");
+			        }
+		        }
+
+		        if (CustomFilter.SplitSegments)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SplitSegments + ":\"" +
+			                                        CustomFilter.SplitSegments + "\"");
+		        }
+		        if (CustomFilter.MergedSegments)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedSegments + ":\"" + CustomFilter.MergedSegments + "\"");
+		        }
+		        if (CustomFilter.MergedAcross)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MergedAcross + ":\"" + CustomFilter.MergedAcross + "\"");
+				}
+				if (CustomFilter.EvenNo)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EvenSegments + ":\"" +
+			                                        CustomFilter.EvenNo + "\"");
+		        }
+
+		        if (CustomFilter.OddsNo)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_OddSegments + ":\"" +
+			                                        CustomFilter.OddsNo + "\"");
+		        }
+
+		        if (CustomFilter.Grouped)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_GroupedList + ":\"" +
+			                                        CustomFilter.Grouped + "\"");
+		        }
+
+		        if (CustomFilter.UseRegexCommentSearch)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UseRegexComments + ":\"" +
+			                                        CustomFilter.UseRegexCommentSearch + "\"");
+		        }
+
+		        if (CustomFilter.SourceEqualsTarget)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SourceEqualsTarget + ":\"" +
+			                                        CustomFilter.SourceEqualsTarget + "\"");
+		        }
+
+		        if (CustomFilter.IsEqualsCaseSensitive)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCase+ ":\"" +
+			                                        CustomFilter.IsEqualsCaseSensitive + "\"");
+		        }
+
+				if (CustomFilter.FuzzyMax != string.Empty && CustomFilter.FuzzyMin != string.Empty)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Fuzzy + ":\"" + CustomFilter.FuzzyMin +
+			                                        " and " + CustomFilter.FuzzyMax + "\"");
+		        }
+
+		        if (CustomFilter.ContainsTags)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_Segments_With_tags + ":\"" +
+			                                        CustomFilter.ContainsTags + "\"");
+
+		        }
+		        if (CustomFilter.CreatedByChecked)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_CreatedBy+ ":\"" +
+					                                CustomFilter.CreatedBy + "\"");
+				}
+		        if (CustomFilter.ModifiedByChecked)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_MidifiedBy + ":\"" +
+			                                        CustomFilter.ModifiedBy + "\"");
+		        }
+		        if (CustomFilter.EditedFuzzy)
+		        {
+					filterExpressionControl.AddItem(StringResources.DisplayFilterControl_EditedFuzzy + ":\"" +
+					                                CustomFilter.EditedFuzzy + "\"");
+				}
+		        if (CustomFilter.UnEditedFuzzy)
+		        {
+			        filterExpressionControl.AddItem(StringResources.DisplayFilterControl_UnEdited + ":\"" +
+			                                        CustomFilter.UnEditedFuzzy + "\"");
+		        }
+			}
+
         }
 
 
 
         #region  |  Helpers  |
-
 
         #region  |  Tab icons  |
 
@@ -688,19 +962,21 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         }
         private void CheckEnabledFilterIcons()
         {
-            if (ActiveDocument != null)
+			if (ActiveDocument != null)
             {
                 if (ActiveDocument.DisplayFilter != null
-                    && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                    && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
                 {
-                    var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                    var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                     InvalidateIconsFilterApplied_contentTab(settings);
                     InvalidateIconsFilterApplied_filtersTab(settings);
                     InvalidateIconsFilterApplied_commentsTab(settings);
                     InvalidateIconsFilterApplied_contextInfoTab(settings);
-
-                    SetStatusBackgroundColorCode(IsFilterApplied(settings));
+	                InvalidateIconsFilterApplied_segmentNumbers(CustomFilter);
+	                InvalidateIconsFilterApplied_colorPicker(CustomFilter);
+					
+					SetStatusBackgroundColorCode(IsFilterApplied(settings));
                 }
                 else
                 {
@@ -710,18 +986,36 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     InvalidateIconsFilterApplied(tabPage_filters);
                     InvalidateIconsFilterApplied(tabPage_comments);
                     InvalidateIconsFilterApplied(tabPage_contextInfo);
-                }
+	                InvalidateIconsFilterApplied(tabPage_segmentNumbers);
+	               InvalidateIconsFilterApplied(tabPage_Colors);
+
+				}
             }
         }
 
-        private void SetStatusBackgroundColorCode(bool visible)
+	  
+
+	    private void InvalidateIconsFilterApplied_colorPicker(CustomFilterSettings customFilter)
+	    {
+		    if (customFilter.Colors.Count > 0)
+		    {
+			    tabPage_Colors.ImageIndex = 0;
+		    }
+		    else
+		    {
+				  tabPage_Colors.ImageIndex = -1;
+			}
+		}
+
+	    private void SetStatusBackgroundColorCode(bool visible)
         {
             panel_filterStatusBarImage.Visible = visible;
             panel_filterStatusBar.BackColor = visible ? SystemColors.GradientInactiveCaption : Color.Transparent;
         }
+
         private bool IsFilterApplied(DisplayFilterSettings settings)
         {
-            if (!string.IsNullOrEmpty(settings.SourceText)
+	        if (!string.IsNullOrEmpty(settings.SourceText)
                 || !string.IsNullOrEmpty(settings.TargetText)
                 || settings.ContextInfoTypes.Any()
                 || settings.SegmentReviewTypes.Any()
@@ -739,11 +1033,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 return true;
             }
-            else
-            {
-                return false;
-            }
+	        return false;
         }
+
         private void InvalidateIconsFilterApplied(TabPage tabPage)
         {
             tabPage.ImageIndex = -1;
@@ -759,11 +1051,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_content.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_filtersTab(DisplayFilterSettings settings)
         {
-
             if (settings.SegmentReviewTypes.Any()
                 || settings.ConfirmationLevels.Any()
                 || settings.OriginTypes.Any()
@@ -780,11 +1070,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_filters.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_commentsTab(DisplayFilterSettings settings)
         {
-
             if (!string.IsNullOrEmpty(settings.CommentText)
                 || !string.IsNullOrEmpty(settings.CommentAuthor)
                 || settings.CommentSeverity > 0)
@@ -795,7 +1083,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             {
                 tabPage_comments.ImageIndex = -1;
             }
-
         }
         private void InvalidateIconsFilterApplied_contextInfoTab(DisplayFilterSettings settings)
         {
@@ -809,25 +1096,44 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             }
 
         }
-        private void InvalidateIconsFilterEdited(TabPage tabPage)
-        {
 
+	    private void InvalidateIconsFilterApplied_segmentNumbers(CustomFilterSettings customFilterSettings)
+	    {
+		    if (customFilterSettings.EvenNo || customFilterSettings.Grouped ||
+		        customFilterSettings.OddsNo || customFilterSettings.SplitSegments ||
+		        customFilterSettings.MergedSegments || customFilterSettings.SourceEqualsTarget ||
+		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMin) &&
+		        !string.IsNullOrWhiteSpace(customFilterSettings.FuzzyMax)
+		        || customFilterSettings.MergedAcross||customFilterSettings.ContainsTags||customFilterSettings.CreatedByChecked
+				||customFilterSettings.ModifiedByChecked)
+		    {
+			    tabPage_segmentNumbers.ImageIndex = 0;
+		    }
+		    else
+		    {
+			    tabPage_segmentNumbers.ImageIndex = -1;
+		    }
+	    }
+
+	    private void InvalidateIconsFilterEdited(TabPage tabPage)
+        {
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
-                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
             {
-                var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                 if (tabPage == tabPage_content
                     && (!string.IsNullOrEmpty(settings.SourceText)
                     || !string.IsNullOrEmpty(settings.TargetText)))
                 {
-                    var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
-                                checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
+					
+					var item1 = textBox_source.Text + ", " + textBox_target.Text + ", " +
+								checkBox_regularExpression.Checked + ", " + checkBox_caseSensitive.Checked;
 
-                    var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
-                                settings.IsRegularExpression + ", " + settings.IsCaseSensitive;
+					var item2 = settings.SourceText + ", " + settings.TargetText + ", " +
+								settings.IsRegularExpression + ", " + settings.IsCaseSensitive;
 
-                    tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
+					tabPage.ImageIndex = string.CompareOrdinal(item1, item2) == 0 ? 0 : 1;
                 }
                 else if (tabPage == tabPage_filters
                     && (settings.SegmentReviewTypes.Any()
@@ -840,7 +1146,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     || settings.SegmentReviewTypes.Any()
                     || settings.ShowAllContent))
                 {
-
                     var list1 = new List<string> { DisplayFilterSettings.ShowAllContent.ToString() };
                     list1.AddRange(DisplayFilterSettings.OriginTypes);
                     list1.AddRange(DisplayFilterSettings.PreviousOriginTypes);
@@ -849,7 +1154,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     list1.AddRange(DisplayFilterSettings.SegmentReviewTypes);
                     list1.AddRange(DisplayFilterSettings.SegmentLockingTypes);
                     list1.AddRange(DisplayFilterSettings.SegmentContentTypes);
-
 
                     var list2 = new List<string> { settings.ShowAllContent.ToString() };
                     list2.AddRange(settings.OriginTypes);
@@ -891,7 +1195,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                     tabPage.ImageIndex = string.Join(", ", list) == string.Join(", ", settings.ContextInfoTypes)
                         ? 0
                         : 1;
-
                 }
                 else
                     tabPage.ImageIndex = 1;
@@ -901,8 +1204,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
                 tabPage.ImageIndex = 1;
             }
         }
-
-
+		
         #endregion
 
         #region  |  Filter Attributes group  |
@@ -942,7 +1244,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
                     itemFrom.Remove();
                 }
-
                 SelectDefaultItem(from, itemIndex);
 
                 listView_available.Sort();
@@ -1044,7 +1345,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         }
         private void AddGroupsToOriginTypeListview()
         {
-
             listView_available.ShowGroups = true;
             listView_selected.ShowGroups = true;
 
@@ -1134,10 +1434,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         #endregion
 
         #region  |  ToolbarStrip events  |
-
         private void toolStripButton_applyFilter_Click(object sender, EventArgs e)
         {
-            ApplyFilter();
+            ApplyFilter(false);
         }
 
         private void toolStripButton_clearFilter_Click(object sender, EventArgs e)
@@ -1154,23 +1453,20 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             LoadFilter();
         }
-
         #endregion
 
         #region  |  Content tab events  |
-
         private void textBox_source_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 
         private void textBox_target_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
-
 
         private void textBox_source_TextChanged(object sender, EventArgs e)
         {
@@ -1196,16 +1492,80 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 
         #region  |  Filter Attributes tab events  |
 
-
         private void button_add_Click(object sender, EventArgs e)
         {
-            MoveSelectedListViewItem(listView_available, listView_selected);
+	        var isSelected =IsUniqueSelected();
+	        if (isSelected)
+	        {
+		        _uniqueSegments = true;
+	        }
+	        var isEditedSelected = IsEditedFuzzySelected();
+	        if (isEditedSelected)
+	        {
+		        _editedFuzzy = true;
+	        }
+	        var isUnEditedSelected = IsUnEditedFuzzySelected();
+	        if (isUnEditedSelected)
+	        {
+		        _unEditedFuzzy = true;
+	        }
+			MoveSelectedListViewItem(listView_available, listView_selected);
             InvalidateIconsFilterEdited(tabPage_filters);
         }
 
+	    private bool IsEditedFuzzySelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("EditedF"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
+
+	    private bool IsUnEditedFuzzySelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("UneditedF"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
+
+		private bool IsUniqueSelected()
+	    {
+		    foreach (ListViewItem selectedItem in listView_available.SelectedItems)
+		    {
+
+			    if (selectedItem.Tag.Equals("Unique"))
+			    {
+				    return true;
+			    }
+		    }
+		    return false;
+	    }
         private void button_remove_Click(object sender, EventArgs e)
         {
-            MoveSelectedListViewItem(listView_selected, listView_available);
+	        if (IsUniqueSelected())
+	        {
+		        _uniqueSegments = false;
+	        }
+	        if (IsEditedFuzzySelected())
+	        {
+		        _editedFuzzy = false;
+	        }
+	        if (IsUnEditedFuzzySelected())
+	        {
+		        _unEditedFuzzy = false;
+	        }
+			MoveSelectedListViewItem(listView_selected, listView_available);
             InvalidateIconsFilterEdited(tabPage_filters);
         }
 
@@ -1224,8 +1584,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             CheckEnabledActionButtons();
         }
-
-
         #endregion
 
         #region  |  Comments tab events  |
@@ -1233,17 +1591,15 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         private void textBox_commentText_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
 
         private void textBox_commentAuthor_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Return)
-                ApplyFilter();
+                ApplyFilter(false);
         }
-
-
-
+		
         private void textBox_commentText_TextChanged(object sender, EventArgs e)
         {
             InvalidateIconsFilterEdited(tabPage_comments);
@@ -1258,7 +1614,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             InvalidateIconsFilterEdited(tabPage_comments);
         }
-
         #endregion
 
         #region  |  Contextinfo tab events  |
@@ -1270,9 +1625,9 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             listView_contextInfo.EndUpdate();
 
             if (ActiveDocument != null && ActiveDocument.DisplayFilter != null
-                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilters.DisplayFilter))
+                && ActiveDocument.DisplayFilter.GetType() == typeof(DisplayFilter))
             {
-                var settings = ((DisplayFilters.DisplayFilter)ActiveDocument.DisplayFilter).Settings;
+                var settings = ((DisplayFilter)ActiveDocument.DisplayFilter).Settings;
 
                 if (settings.ContextInfoTypes.Any())
                 {
@@ -1301,11 +1656,8 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
         {
             label_contextInfoSelected.Text = string.Format("Selected: {0}", listView_contextInfo.SelectedItems.Count);
         }
-
         #endregion
-
-       
-
+		
         private void listView_contextInfo_Resize(object sender, EventArgs e)
         {
             var width = ((ListView)sender).Width - 20 - SystemInformation.VerticalScrollBarWidth;
@@ -1327,10 +1679,137 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
             columnHeader_filtersSelected_name.Width = width;
         }
 
+		private void evenBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (evenBtn.Checked)
+			{
+				segmentsBox.Enabled = false;
+			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
 
-    }
+		private void oddBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (oddBtn.Checked)
+			{
+				segmentsBox.Enabled = false;
+			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+		
+		private void groupedBtn_CheckedChanged(object sender, EventArgs e)
+		{
+			if (groupedBtn.Checked)
+			{
+				segmentsBox.Enabled = true;
+			}
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+		
+	    private void colorsListView_SelectedIndexChanged(object sender, EventArgs e)
+	    {
+		    var selectedColors = colorsListView.SelectedItems;
+		  
+			if (AvailableColorsList != null)
+		    {
+			    AvailableColorsList.Clear();
+				foreach (ListViewItem color in selectedColors)
+			    {
+				    var colorCode = color.Text;
 
+				    if (!AvailableColorsList.Contains(colorCode))
+				    {
+					    AvailableColorsList.Add(colorCode);
+				    }
+			    }
+			}
+		    InvalidateIconsFilterEdited(tabPage_Colors);
+		}
 
+		private void commentRegexBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_comments);
+		}
 
+		private void splitCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
 
+		private void mergedCheckbox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		
+
+		private void sourceSameBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void equalsCaseSensitive_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void fuzzyMin_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void fuzzyMax_TextChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void reverseBtn_Click(object sender, EventArgs e)
+		{
+			_reverseFilter = true;
+			ApplyFilter(true);
+		}
+
+		private void mergedAcross_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void containsTagsCheckBox_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void modifiedByCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void createdByCheck_CheckedChanged(object sender, EventArgs e)
+		{
+			InvalidateIconsFilterEdited(tabPage_segmentNumbers);
+		}
+
+		private void helpButton_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3130.community-advanced-display-filter");
+		}
+
+		private void listView_available_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+			if (IsUniqueSelected())
+			{
+				_uniqueSegments = true;
+			}
+			if (IsEditedFuzzySelected())
+			{
+				_editedFuzzy = true;
+			}
+			if (IsUnEditedFuzzySelected())
+			{
+				_unEditedFuzzy = true;
+				}
+			MoveSelectedListViewItem(listView_available, listView_selected);
+			InvalidateIconsFilterEdited(tabPage_filters);
+		}
+	}
 }

@@ -24,6 +24,7 @@ using Comparer = Sdl.Community.PostEdit.Compare.Core.Comparison.Comparer;
 using Settings = Sdl.Community.PostEdit.Compare.Core.Settings;
 using Timer = System.Timers.Timer;
 using Sdl.Community.PostEdit.Compare.Properties;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 
 namespace PostEdit.Compare
 {
@@ -36,8 +37,9 @@ namespace PostEdit.Compare
         private PanelEventsLog _panelEventsLog;
 
         private DeserializeDockContent _deserializeDockContentCompare;
-
-        private bool IsInitializingPanel { get; set; }
+		private static string _excelReportPathAutoSave;
+		private static string _sheetName;
+		private bool IsInitializingPanel { get; set; }
 
         private void InitializePanelCompare()
         {
@@ -5218,8 +5220,56 @@ namespace PostEdit.Compare
         #endregion
         #region  |  report  |
 
-        //create report
-        private void CreateReport()
+		public Processor CreateProcessor()
+		{
+			var processor = new Processor();
+			#region  |  initialze Processor settings  |
+			Processor.Settings.comparisonType = Application.Settings.ReportViewerSettings.comparisonType;
+			Processor.Settings.ComparisonIncludeTags = Application.Settings.ReportViewerSettings.ComparisonIncludeTags;
+			Processor.Settings.IncludeIndividualFileInformation = true;
+
+
+			Processor.Settings.UseCustomStyleSheet = false;
+			Processor.Settings.FilePathCustomStyleSheet = string.Empty;
+
+			Processor.Settings.StyleNewText = Application.Settings.ReportViewerSettings.StyleNewText;
+			Processor.Settings.StyleRemovedText = Application.Settings.ReportViewerSettings.StyleRemovedText;
+			Processor.Settings.StyleNewTag = Application.Settings.ReportViewerSettings.StyleNewTag;
+			Processor.Settings.StyleRemovedTag = Application.Settings.ReportViewerSettings.StyleRemovedTag;
+
+
+			Processor.Settings.SearchSubFolders = false;
+
+
+			Processor.Settings.ReportDirectory = Application.Settings.ApplicationSettingsPath;
+			Processor.Settings.ReportFileName = Path.Combine(Application.Settings.ApplicationSettingsPath, "PostEdit.Compare.Report" + ".xml");
+			Processor.Settings.ViewReportWhenFinishedProcessing = false;
+
+
+			Processor.Settings.reportFormat = Settings.ReportFormat.Html;
+
+			Processor.Settings.ReportFilterSegmentsWithNoChanges = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
+			Processor.Settings.ReportFilterChangedTargetContent = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
+			Processor.Settings.ReportFilterSegmentStatusChanged = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
+			Processor.Settings.ReportFilterSegmentsContainingComments = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
+			Processor.Settings.ReportFilterLockedSegments = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
+
+			Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
+
+			Processor.Settings.ShowOriginalSourceSegment = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
+			Processor.Settings.ShowOriginalTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
+			Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
+			Processor.Settings.ShowUpdatedTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
+			Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
+			Processor.Settings.ShowTargetComparison = Application.Settings.ReportViewerSettings.ShowTargetComparison;
+			Processor.Settings.ShowSegmentComments = Application.Settings.ReportViewerSettings.ShowSegmentComments;
+			Processor.Settings.ShowSegmentLocked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
+
+			#endregion
+			return processor;
+		}
+		//create report
+		public  void CreateReport()
         {
             var lv = _panelCompare.listView_main;
 
@@ -5236,62 +5286,15 @@ namespace PostEdit.Compare
                 _timer.Start();
 
 
-                var comparer = new Processor();
-
-                #region  |  initialze Processor settings  |
-                Processor.Settings.comparisonType = Application.Settings.ReportViewerSettings.comparisonType;
-                Processor.Settings.ComparisonIncludeTags = Application.Settings.ReportViewerSettings.ComparisonIncludeTags;
-                Processor.Settings.IncludeIndividualFileInformation = true;
-
-
-                Processor.Settings.UseCustomStyleSheet = false;
-                Processor.Settings.FilePathCustomStyleSheet = string.Empty;
-
-                Processor.Settings.StyleNewText = Application.Settings.ReportViewerSettings.StyleNewText;
-                Processor.Settings.StyleRemovedText = Application.Settings.ReportViewerSettings.StyleRemovedText;
-                Processor.Settings.StyleNewTag = Application.Settings.ReportViewerSettings.StyleNewTag;
-                Processor.Settings.StyleRemovedTag = Application.Settings.ReportViewerSettings.StyleRemovedTag;
-
-
-                Processor.Settings.SearchSubFolders = false;
-
-
-                Processor.Settings.ReportDirectory = Application.Settings.ApplicationSettingsPath;
-                Processor.Settings.ReportFileName = Path.Combine(Application.Settings.ApplicationSettingsPath, "PostEdit.Compare.Report" + ".xml");
-                Processor.Settings.ViewReportWhenFinishedProcessing = false;
-
-
-                Processor.Settings.reportFormat = Settings.ReportFormat.Html;
-
-                Processor.Settings.ReportFilterSegmentsWithNoChanges = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
-                Processor.Settings.ReportFilterChangedTargetContent = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
-                Processor.Settings.ReportFilterSegmentStatusChanged = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
-                Processor.Settings.ReportFilterSegmentsContainingComments = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
-                Processor.Settings.ReportFilterLockedSegments = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
-
-                Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
-
-                Processor.Settings.ShowOriginalSourceSegment = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
-                Processor.Settings.ShowOriginalTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
-                Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
-                Processor.Settings.ShowUpdatedTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
-                Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
-                Processor.Settings.ShowTargetComparison = Application.Settings.ReportViewerSettings.ShowTargetComparison;
-                Processor.Settings.ShowSegmentComments = Application.Settings.ReportViewerSettings.ShowSegmentComments;
-                Processor.Settings.ShowSegmentLocked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
-
-                #endregion
+				var comparer = CreateProcessor();
+				         
 
 
                 var f = new ReportWizard();
 
+				InitializeReportWizard(f);
 
-                f.comboBox_priceGroup.Items.Clear();
-                foreach (var p in Application.Settings.PriceGroups)
-                    f.comboBox_priceGroup.Items.Add(p.Name);
-
-                if (f.comboBox_priceGroup.Items.Count > 0)
-                    f.comboBox_priceGroup.SelectedIndex = 0;
+            
 
                 if (lv.SelectedIndices.Count > 0)
                     f.radioButton_compareSelectedFiles.Checked = true;
@@ -5300,37 +5303,7 @@ namespace PostEdit.Compare
 
 
 
-                f.checkBox_viewFilesWithNoTranslationDifferences.Checked = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
-                f.checkBox_showGoogleChartsInReport.Checked = Application.Settings.ReportViewerSettings.ShowGoogleChartsInReport;
-                f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked = Application.Settings.ReportViewerSettings.CalculateSummaryAnalysisBasedOnFilteredRows;
-
-                f.checkBox_viewSegmentsWithNoChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
-                f.checkBox_viewSegmentsWithTranslationChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
-                f.checkBox_viewSegmentsWithStatusChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
-                f.checkBox_viewSegmentsWithComments.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
-                f.checkBox_viewLockedSegments.Checked = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
-
-                f.checkBox_includeAllSubfolders.Checked = true;
-
-                f.checkBox_showOriginalSourceSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
-                f.checkBox_showOriginalTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
-                f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
-                f.checkBox_showUpdatedTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
-                f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
-                f.checkBox_showTargetSegmentComparison.Checked = Application.Settings.ReportViewerSettings.ShowTargetComparison;
-                f.checkBox_showSegmentComments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentComments;
-                f.checkBox_showLockedSegments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
-
-                f.checkBox_showSegmentStatus.Checked = Application.Settings.ReportViewerSettings.ShowSegmentStatus;
-                f.checkBox_showSegmentMatch.Checked = Application.Settings.ReportViewerSettings.ShowSegmentMatch;
-                f.checkBox_showSegmentTERPAnalysis.Checked = Application.Settings.ReportViewerSettings.ShowSegmentTerp;
-                f.textBox_javaExecutablePath.Text = Application.Settings.ReportViewerSettings.JavaExecutablePath;
-                f.checkBox_showSegmentPEM.Checked = Application.Settings.ReportViewerSettings.ShowSegmentPem;
-
-
-                f.comboBox_segments_match_value_original.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesOriginal;
-                f.comboBox_segments_match_value_updated.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesUpdated;
-                f.tagVisualizationComboBox.SelectedItem = Application.Settings.ReportViewerSettings.TagVisualStyle.ToString();
+                
 
                 var iFiles = 0;
                 if (_panelCompare.listView_main.SelectedIndices.Count > 0)
@@ -5423,52 +5396,10 @@ namespace PostEdit.Compare
 
                 if (!f.Saved) return;
                 {
-                    if (f.comboBox_priceGroup.Items.Count > 0)
-                    {
-                        foreach (var p in Application.Settings.PriceGroups)
-                        {
-                            if (string.Compare(p.Name, f.comboBox_priceGroup.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase) != 0)
-                                continue;
-                            RateGroup = p;
-                            break;
-                        }
-                    }
-
-                    Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = f.checkBox_viewFilesWithNoTranslationDifferences.Checked;
-                    Processor.Settings.ShowGoogleChartsInReport = f.checkBox_showGoogleChartsInReport.Checked;
-                    Processor.Settings.CalculateSummaryAnalysisBasedOnFilteredRows = f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked;
-
-                    Processor.Settings.ReportFilterSegmentsWithNoChanges = f.checkBox_viewSegmentsWithNoChanges.Checked;
-                    Processor.Settings.ReportFilterChangedTargetContent = f.checkBox_viewSegmentsWithTranslationChanges.Checked;
-                    Processor.Settings.ReportFilterSegmentStatusChanged = f.checkBox_viewSegmentsWithStatusChanges.Checked;
-                    Processor.Settings.ReportFilterSegmentsContainingComments = f.checkBox_viewSegmentsWithComments.Checked;
-                    Processor.Settings.ReportFilterLockedSegments = f.checkBox_viewLockedSegments.Checked;
-
-                    Processor.Settings.ReportFilterTranslationMatchValuesOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
-                    Processor.Settings.ReportFilterTranslationMatchValuesUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
-                    Processor.Settings.TagVisualStyle = (Settings.TagVisual)Enum.Parse(typeof(Settings.TagVisual), f.tagVisualizationComboBox.SelectedItem.ToString(), true);
-
-                    Processor.Settings.ShowOriginalSourceSegment = f.checkBox_showOriginalSourceSegment.Checked;
-                    Processor.Settings.ShowOriginalTargetSegment = f.checkBox_showOriginalTargetSegment.Checked;
-                    Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked;
-                    Processor.Settings.ShowUpdatedTargetSegment = f.checkBox_showUpdatedTargetSegment.Checked;
-                    Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked;
-                    Processor.Settings.ShowTargetComparison = f.checkBox_showTargetSegmentComparison.Checked;
-                    Processor.Settings.ShowSegmentComments = f.checkBox_showSegmentComments.Checked;
-                    Processor.Settings.ShowSegmentLocked = f.checkBox_showLockedSegments.Checked;
-
-                    Processor.Settings.ShowSegmentStatus = f.checkBox_showSegmentStatus.Checked;
-                    Processor.Settings.ShowSegmentMatch = f.checkBox_showSegmentMatch.Checked;
-                    Processor.Settings.ShowSegmentTerp = f.checkBox_showSegmentTERPAnalysis.Checked;
-                    Processor.Settings.JavaExecutablePath = f.textBox_javaExecutablePath.Text;
-                    Processor.Settings.ShowSegmentPem = f.checkBox_showSegmentPEM.Checked;
-
-
-
+					SetPriceGroup(f);
+                  
                     var pairedFiles = GetPairedFiles(f, lv);
-
-
-
+					
                     if (pairedFiles.Count == 0)
                     {
                         MessageBox.Show(this, Resources.FormMain_CreateReport_Empty_file_comparison_list, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -5496,10 +5427,100 @@ namespace PostEdit.Compare
 
         }
 
-        private void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
+		public void SetPriceGroup(ReportWizard f)
+		{
+			if (f.comboBox_priceGroup.Items.Count > 0)
+			{
+				foreach (var p in Application.Settings.PriceGroups)
+				{
+					if (string.Compare(p.Name, f.comboBox_priceGroup.SelectedItem.ToString(), StringComparison.OrdinalIgnoreCase) != 0)
+						continue;
+					RateGroup = p;
+					break;
+				}
+			}
+
+			Processor.Settings.ReportFilterFilesWithNoRecordsFiltered = f.checkBox_viewFilesWithNoTranslationDifferences.Checked;
+			Processor.Settings.ShowGoogleChartsInReport = f.checkBox_showGoogleChartsInReport.Checked;
+			Processor.Settings.CalculateSummaryAnalysisBasedOnFilteredRows = f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked;
+
+			Processor.Settings.ReportFilterSegmentsWithNoChanges = f.checkBox_viewSegmentsWithNoChanges.Checked;
+			Processor.Settings.ReportFilterChangedTargetContent = f.checkBox_viewSegmentsWithTranslationChanges.Checked;
+			Processor.Settings.ReportFilterSegmentStatusChanged = f.checkBox_viewSegmentsWithStatusChanges.Checked;
+			Processor.Settings.ReportFilterSegmentsContainingComments = f.checkBox_viewSegmentsWithComments.Checked;
+			Processor.Settings.ReportFilterLockedSegments = f.checkBox_viewLockedSegments.Checked;
+
+			Processor.Settings.ReportFilterTranslationMatchValuesOriginal = f.comboBox_segments_match_value_original.SelectedItem.ToString();
+			Processor.Settings.ReportFilterTranslationMatchValuesUpdated = f.comboBox_segments_match_value_updated.SelectedItem.ToString();
+			Processor.Settings.TagVisualStyle = (Settings.TagVisual)Enum.Parse(typeof(Settings.TagVisual), f.tagVisualizationComboBox.SelectedItem.ToString(), true);
+
+			Processor.Settings.ShowOriginalSourceSegment = f.checkBox_showOriginalSourceSegment.Checked;
+			Processor.Settings.ShowOriginalTargetSegment = f.checkBox_showOriginalTargetSegment.Checked;
+			Processor.Settings.ShowOriginalRevisionMarkerTargetSegment = f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked;
+			Processor.Settings.ShowUpdatedTargetSegment = f.checkBox_showUpdatedTargetSegment.Checked;
+			Processor.Settings.ShowUpdatedRevisionMarkerTargetSegment = f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked;
+			Processor.Settings.ShowTargetComparison = f.checkBox_showTargetSegmentComparison.Checked;
+			Processor.Settings.ShowSegmentComments = f.checkBox_showSegmentComments.Checked;
+			Processor.Settings.ShowSegmentLocked = f.checkBox_showLockedSegments.Checked;
+
+			Processor.Settings.ShowSegmentStatus = f.checkBox_showSegmentStatus.Checked;
+			Processor.Settings.ShowSegmentMatch = f.checkBox_showSegmentMatch.Checked;
+			Processor.Settings.ShowSegmentTerp = f.checkBox_showSegmentTERPAnalysis.Checked;
+			Processor.Settings.JavaExecutablePath = f.textBox_javaExecutablePath.Text;
+			Processor.Settings.ShowSegmentPem = f.checkBox_showSegmentPEM.Checked;
+		}
+
+		public void InitializeReportWizard(ReportWizard f)
+		{
+			f.comboBox_priceGroup.Items.Clear();
+			foreach (var p in Application.Settings.PriceGroups)
+				f.comboBox_priceGroup.Items.Add(p.Name);
+
+			if (f.comboBox_priceGroup.Items.Count > 0)
+				f.comboBox_priceGroup.SelectedIndex = 0;
+
+			f.checkBox_viewFilesWithNoTranslationDifferences.Checked = Application.Settings.ReportViewerSettings.ReportFilterFilesWithNoRecordsFiltered;
+			f.checkBox_showGoogleChartsInReport.Checked = Application.Settings.ReportViewerSettings.ShowGoogleChartsInReport;
+			f.checkBox_calculateSummaryAnalysisBasedOnFilteredRows.Checked = Application.Settings.ReportViewerSettings.CalculateSummaryAnalysisBasedOnFilteredRows;
+
+			f.checkBox_viewSegmentsWithNoChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsWithNoChanges;
+			f.checkBox_viewSegmentsWithTranslationChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterChangedTargetContent;
+			f.checkBox_viewSegmentsWithStatusChanges.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentStatusChanged;
+			f.checkBox_viewSegmentsWithComments.Checked = Application.Settings.ReportViewerSettings.ReportFilterSegmentsContainingComments;
+			f.checkBox_viewLockedSegments.Checked = Application.Settings.ReportViewerSettings.ReportFilterLockedSegments;
+
+			f.checkBox_includeAllSubfolders.Checked = true;
+
+			f.checkBox_showOriginalSourceSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalSourceSegment;
+			f.checkBox_showOriginalTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalTargetSegment;
+			f.checkBox_showOriginalRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowOriginalRevisionMarkerTargetSegment;
+			f.checkBox_showUpdatedTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedTargetSegment;
+			f.checkBox_showUpdatedRevisionMarkerTargetSegment.Checked = Application.Settings.ReportViewerSettings.ShowUpdatedRevisionMarkerTargetSegment;
+			f.checkBox_showTargetSegmentComparison.Checked = Application.Settings.ReportViewerSettings.ShowTargetComparison;
+			f.checkBox_showSegmentComments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentComments;
+			f.checkBox_showLockedSegments.Checked = Application.Settings.ReportViewerSettings.ShowSegmentLocked;
+
+			f.checkBox_showSegmentStatus.Checked = Application.Settings.ReportViewerSettings.ShowSegmentStatus;
+			f.checkBox_showSegmentMatch.Checked = Application.Settings.ReportViewerSettings.ShowSegmentMatch;
+			f.checkBox_showSegmentTERPAnalysis.Checked = Application.Settings.ReportViewerSettings.ShowSegmentTerp;
+			f.textBox_javaExecutablePath.Text = Application.Settings.ReportViewerSettings.JavaExecutablePath;
+			f.checkBox_showSegmentPEM.Checked = Application.Settings.ReportViewerSettings.ShowSegmentPem;
+
+
+			f.comboBox_segments_match_value_original.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesOriginal;
+			f.comboBox_segments_match_value_updated.SelectedItem = Application.Settings.ReportViewerSettings.ReportFilterTranslationMatchValuesUpdated;
+			f.tagVisualizationComboBox.SelectedItem = Application.Settings.ReportViewerSettings.TagVisualStyle.ToString();
+		}
+
+
+		public void ParseContentFromFiles(Processor comparer, List<PairedFiles.PairedFile> pairedFiles, ref bool hitCancel)
         {
             try
             {
+				if (RateGroup == null)
+				{
+					RateGroup=new Settings.PriceGroup();
+				}
                 comparer.ProgressComparer += ComparerProgress;
                 comparer.ProgressParser += ParserProgress;
                 comparer.ProgressFiles += FilesProgress;
@@ -5557,7 +5578,7 @@ namespace PostEdit.Compare
             }
         }
 
-        private void CreateComparisonReport(bool hitCancel, Processor comparer)
+        public void CreateComparisonReport(bool hitCancel, Processor comparer)
         {
             var reportFileName = Processor.Settings.ReportFileName + "_" + Guid.NewGuid() + "";
 
@@ -5601,7 +5622,9 @@ namespace PostEdit.Compare
                             includeHeaderTitle,
                             RateGroup,
                             terpResults,
-                            exParsing
+                            exParsing,
+							_excelReportPathAutoSave,
+							_sheetName
                         };
 
                         ProgressWindow.ProgressDialogWorker.DoWork +=
@@ -5639,11 +5662,10 @@ namespace PostEdit.Compare
 
                     if (!cancel)
                     {
-                        ReportDialog.PanelReportViewer.webBrowserReport.Navigate(
-                            new Uri(Path.Combine("file://", reportFileName + ".html")));
+						ReportDialog.PanelReportViewer.webBrowserReport.Navigate(
+							new Uri(Path.Combine("file://", reportFileName + ".html")));
 
-
-                        try
+						try
                         {
                             ReportDialog.ViewSegmentsWithNoChanges = Processor.Settings.ReportFilterSegmentsWithNoChanges;
                             ReportDialog.ViewSegmentsWithTranslationChanges = Processor.Settings.ReportFilterChangedTargetContent;
@@ -5756,19 +5778,12 @@ namespace PostEdit.Compare
                     {
                         try
                         {
-                            var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
-                            var reportNameAutoSave = Path.GetFileName(Processor.Settings.ReportFileName);
-                            if (reportNameAutoSave != null)
-                                reportNameAutoSave = reportNameAutoSave.Substring(0, reportNameAutoSave.Length - 4);
+							var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
 
-                            reportNameAutoSave += "." + DateTime.Now.Year
-                                                  + "" + DateTime.Now.Month.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Day.ToString().PadLeft(2, '0')
-                                                  + "T" + DateTime.Now.Hour.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Minute.ToString().PadLeft(2, '0')
-                                                  + "" + DateTime.Now.Second.ToString().PadLeft(2, '0');
+							var reportNameAutoSave = SetAutoSavePath();
+							reportNameAutoSave = GetAutoSaveFileName(reportNameAutoSave);
 
-                            if (Application.Settings.ReportsCreateMonthlySubFolders)
+							if (Application.Settings.ReportsCreateMonthlySubFolders)
                             {
                                 reportPathAutoSave = Path.Combine(reportPathAutoSave,
                                     DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'));
@@ -5776,13 +5791,15 @@ namespace PostEdit.Compare
                                     Directory.CreateDirectory(reportPathAutoSave);
                             }
 
-                            var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave);
+                            var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave.Substring(reportNameAutoSave.LastIndexOf(@"\") + 1));
 
                             File.Copy(reportFileName + ".html", reportFullPathAutoSave + ".html", true);
                             File.Copy(reportFileName, reportFullPathAutoSave + ".xml", true);
                             File.Delete(reportFileName);
 
-                            if (terpResults != null)
+						
+
+							if (terpResults != null)
                             {
                                 foreach (var documentResult in terpResults)
                                 {
@@ -5809,9 +5826,11 @@ namespace PostEdit.Compare
                             };
 
                             update_comparison_log(comparisonLogEntry);
-
-                            #endregion
-                        }
+							//clear autosave path
+							reportPathAutoSave = string.Empty;
+							_excelReportPathAutoSave = string.Empty;
+							#endregion
+						}
                         catch (Exception ex)
                         {
                             Cursor = Cursors.Default;
@@ -5821,10 +5840,14 @@ namespace PostEdit.Compare
                         finally
                         {
                             Cursor = Cursors.Default;
-                        }
+							
+
+						}
                     }
                 }
-            }
+				//clear excel report path
+				_excelReportPathAutoSave = string.Empty;
+			}
 
             try
             {
@@ -5837,7 +5860,38 @@ namespace PostEdit.Compare
             }
         }
 
-        private void toolStripButton_viewSegmentsWithNoChanges_Click(object sender, EventArgs e)
+		public void SetExcelSheetName(string sheetName)
+		{
+			_sheetName = sheetName;
+		}
+
+		public void SetExcelReportPath(string excelReportPath)
+		{
+			_excelReportPathAutoSave = excelReportPath;
+		}
+
+		public string SetAutoSavePath()
+		{
+			var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
+			var reportNameAutoSave = Path.GetFileName(Processor.Settings.ReportFileName);
+			if (reportNameAutoSave != null)
+				reportNameAutoSave = reportNameAutoSave.Substring(0, reportNameAutoSave.Length - 4);
+
+			return reportPathAutoSave;
+		}
+		public  string GetAutoSaveFileName(string reportNameAutoSave)
+		{
+			reportNameAutoSave += "." + DateTime.Now.Year
+												 + "" + DateTime.Now.Month.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Day.ToString().PadLeft(2, '0')
+												 + "T" + DateTime.Now.Hour.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Minute.ToString().PadLeft(2, '0')
+												 + "" + DateTime.Now.Second.ToString().PadLeft(2, '0');
+
+			return reportNameAutoSave;
+		}
+
+		private void toolStripButton_viewSegmentsWithNoChanges_Click(object sender, EventArgs e)
         {
             ReportDialog.ViewSegmentsWithNoChanges = !ReportDialog.ViewSegmentsWithNoChanges;
             ReportDialog.toolStripButton_viewSegmentsWithNoChanges.CheckState = ReportDialog.ViewSegmentsWithNoChanges ? CheckState.Checked : CheckState.Unchecked;
@@ -6174,30 +6228,49 @@ namespace PostEdit.Compare
 
             return objects;
         }
-        private static List<object> worker_CreateReport2_DoWork(object sender, DoWorkEventArgs e)
-        {
-            var objects = (List<object>)e.Argument;
-            var comparer = (Processor)objects[0];
-            var reportFilePath = objects[1].ToString();
-            var fileComparisonParagraphUnits = (Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>>)objects[2];
-            var includeHeaderTitle = (bool)objects[3];
-            var priceGroup = (Settings.PriceGroup)objects[4];
-            var terpResults = (List<TERp.DocumentResult>)objects[5];
-            var exParsing = (Exception)objects[6];
+		private static List<object> worker_CreateReport2_DoWork(object sender, DoWorkEventArgs e)
+		{
+			var objects = (List<object>)e.Argument;
+			var comparer = (Processor)objects[0];
+			var reportFilePath = objects[1].ToString();
+			var fileComparisonParagraphUnits = (Dictionary<Comparer.FileUnitProperties, Dictionary<string, Dictionary<string, Comparer.ComparisonParagraphUnit>>>)objects[2];
+			var includeHeaderTitle = (bool)objects[3];
+			var priceGroup = (Settings.PriceGroup)objects[4];
+			var terpResults = (List<TERp.DocumentResult>)objects[5];
+			var exParsing = (Exception)objects[6];
+			var excelReportFilePath = (string)objects[7];
+			var sheetName = (string)objects[8];
 
-            try
-            {
-                comparer.CreateReport(reportFilePath, fileComparisonParagraphUnits, priceGroup, out terpResults);
-                objects[5] = terpResults;
-            }
-            catch (Exception ex)
-            {
-                exParsing = ex;
-                objects[6] = exParsing;
-            }
+			try
+			{
+				//that means the report is generaded from the pec application not from ribbon action
+				//create the excel report
+				if (string.IsNullOrEmpty(excelReportFilePath))
+				{
+					var projectSettingsPath = Application.Settings.ApplicationSettingsPath;
+					var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
+					var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
+					_excelReportPathAutoSave = excelReportFullPath;
+					excelReportFilePath = excelReportFullPath;
+					sheetName = "Sheet1";
+					// create excel report
+					ExcelReportHelper.CreateExcelReport(excelReportFilePath, sheetName);
+					
+				}
+				
+					comparer.CreateReport(reportFilePath, excelReportFilePath, sheetName, fileComparisonParagraphUnits, priceGroup, out terpResults);
+				
+				
+				objects[5] = terpResults;
+			}
+			catch (Exception ex)
+			{
+				exParsing = ex;
+				objects[6] = exParsing;
+			}
 
-            return objects;
-        }
+			return objects;
+		}
 
 
 
@@ -6221,7 +6294,7 @@ namespace PostEdit.Compare
                 }
 
                 List<TERp.DocumentResult> terpResults;
-                comparer.CreateReport(ReportDialog.ReportFileFullPath, fileComparisonParagraphUnits, RateGroup, out terpResults);
+                comparer.CreateReport(ReportDialog.ReportFileFullPath,string.Empty, string.Empty,fileComparisonParagraphUnits, RateGroup, out terpResults);
 
                 ReportDialog.PanelReportViewer.webBrowserReport.Url = new Uri(Path.Combine("file://", ReportDialog.ReportFileFullPath + ".html"));
                 System.Windows.Forms.Application.DoEvents();

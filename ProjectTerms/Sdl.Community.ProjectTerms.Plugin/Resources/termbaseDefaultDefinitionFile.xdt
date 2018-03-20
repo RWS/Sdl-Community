@@ -1,35 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Output>
   <Object>
     <Tree>
       <Node ID="0">
-        <TextChild>Entry level</TextChild>
+        <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Entry level</TextChild>
         <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">0</NodeType>
         <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
         <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-        <labels />
-        <description />
+        <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+        <labels>
+        </labels>
+        <description>
+        </description>
         <Node ID="0">
-          <TextChild>Index level</TextChild>
+          <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Index level</TextChild>
           <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</NodeType>
           <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
           <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-          <labels />
-          <description />
+          <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+          <labels>
+          </labels>
+          <description>
+          </description>
           <Node ID="0">
-            <TextChild>Term level</TextChild>
+            <TextChild xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="string">Term level</TextChild>
             <NodeType xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">3</NodeType>
             <Mandatory xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Mandatory>
             <Multiply xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">1</Multiply>
-            <labels />
-            <description />
+            <Readonly xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</Readonly>
+            <labels>
+            </labels>
+            <description>
+            </description>
           </Node>
         </Node>
       </Node>
     </Tree>
     <Languages>
     </Languages>
-    <TerminologyFields>
-    </TerminologyFields>
+    <TerminologyFields />
+    <Option xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="i4">2</Option>
+    <CaseSensitive xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</CaseSensitive>
+    <IgnoreNonAlpha xmlns:dt="urn:schemas-microsoft-com:datatypes" dt:dt="boolean">0</IgnoreNonAlpha>
+    <TermbaseDescription>
+    </TermbaseDescription>
+    <CopyrightText>
+    </CopyrightText>
+    <SplashImage>
+    </SplashImage>
+    <IconFile>
+    </IconFile>
+    <RefInfo>
+    </RefInfo>
   </Object>
-  <Schema />
+  <Schema>
+    <Schema name="Termbase Definition">
+      <ElementType ID="1" name="mtf" content="eltOnly" order="many">
+        <description>
+        </description>
+        <ElementType ID="2" name="conceptGrp" content="eltOnly" order="many">
+          <description>
+          </description>
+          <Occurences>
+            <Level minOccurs="1" maxOccurs="*" />
+          </Occurences>
+          <ElementType ID="3" name="concept" content="textOnly" order="many" type="ui4">
+            <description>
+            </description>
+            <Occurences>
+              <Level minOccurs="1" maxOccurs="1" />
+            </Occurences>
+          </ElementType>
+          <ElementType ID="4" name="system" content="textOnly" order="many" type="ui4">
+            <description>
+            </description>
+            <Occurences>
+              <Level minOccurs="0" maxOccurs="1" />
+            </Occurences>
+          </ElementType>
+          <ElementType ID="5" name="transacGrp" content="eltOnly" order="many">
+            <description>
+            </description>
+            <Occurences>
+              <Level minOccurs="0" maxOccurs="*" />
+            </Occurences>
+            <ElementType ID="6" name="transac" content="textOnly" order="many" type="string">
+              <description>
+              </description>
+              <Occurences>
+                <Level minOccurs="1" maxOccurs="1" />
+                <Level minOccurs="0" maxOccurs="*" />
+              </Occurences>
+              <AttributeType name="type" type="enumeration" values="origination|modification">
+                <description>
+                </description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1" />
+                </Occurences>
+              </AttributeType>
+            </ElementType>
+            <ElementType ID="7" name="date" content="textOnly" order="many" type="date">
+              <description>
+              </description>
+              <Occurences>
+                <Level minOccurs="1" maxOccurs="1" />
+                <Level minOccurs="0" maxOccurs="*" />
+              </Occurences>
+            </ElementType>
+          </ElementType>
+          <ElementType ID="8" name="languageGrp" content="eltOnly" order="many">
+            <description>
+            </description>
+            <Occurences>
+              <Level minOccurs="0" maxOccurs="*" />
+            </Occurences>
+            <ElementType ID="9" name="language" content="empty" order="many">
+              <description>
+              </description>
+              <Occurences>
+                <Level minOccurs="1" maxOccurs="1" />
+              </Occurences>
+              <AttributeType name="type" type="languages" values="">
+                <description>
+                </description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1" />
+                  <Level minOccurs="0" maxOccurs="*" />
+                </Occurences>
+              </AttributeType>
+              <AttributeType name="lang" type="locales" values="">
+                <description>
+                </description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1" />
+                  <Level minOccurs="0" maxOccurs="*" />
+                </Occurences>
+              </AttributeType>
+            </ElementType>
+            <ElementType ID="10" name="termGrp" content="eltOnly" order="many" readOnly="no">
+              <description>
+              </description>
+              <Occurences>
+                <Level minOccurs="1" maxOccurs="*" />
+              </Occurences>
+              <ElementType ID="11" name="term" content="textOnly" order="many" type="string">
+                <description>
+                </description>
+                <Occurences>
+                  <Level minOccurs="1" maxOccurs="1" />
+                </Occurences>
+              </ElementType>
+              <ElementType ID="12" name="transacGrp" content="eltOnly" order="many">
+                <description>
+                </description>
+                <Occurences>
+                  <Level minOccurs="0" maxOccurs="*" />
+                </Occurences>
+                <ElementType ID="13" name="transac" content="textOnly" order="many" type="string">
+                  <description>
+                  </description>
+                  <Occurences>
+                    <Level minOccurs="1" maxOccurs="1" />
+                    <Level minOccurs="0" maxOccurs="*" />
+                  </Occurences>
+                  <AttributeType name="type" type="enumeration" values="origination|modification">
+                    <description>
+                    </description>
+                    <Occurences>
+                      <Level minOccurs="1" maxOccurs="1" />
+                    </Occurences>
+                  </AttributeType>
+                </ElementType>
+                <ElementType ID="14" name="date" content="textOnly" order="many" type="date">
+                  <description>
+                  </description>
+                  <Occurences>
+                    <Level minOccurs="1" maxOccurs="1" />
+                    <Level minOccurs="0" maxOccurs="*" />
+                  </Occurences>
+                </ElementType>
+              </ElementType>
+            </ElementType>
+          </ElementType>
+        </ElementType>
+      </ElementType>
+    </Schema>
+  </Schema>
+  <EmptyEntry>
+    <conceptGrp>
+      <system type="entryClass">1</system>
+    </conceptGrp>
+  </EmptyEntry>
+  <DummyEntry>
+    <conceptGrp>
+      <concept>1</concept>
+      <system type="entryClass">1</system>
+      <transacGrp>
+        <transac type="origination">John Kelly</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+      <transacGrp>
+        <transac type="modification">Carol Blake</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+    </conceptGrp>
+  </DummyEntry>
+  <FullEntry>
+    <conceptGrp>
+      <concept>1</concept>
+      <system type="entryClass">1</system>
+      <transacGrp>
+        <transac type="origination">John Kelly</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+      <transacGrp>
+        <transac type="modification">Carol Blake</transac>
+        <date>2000-02-15T03:18:29</date>
+      </transacGrp>
+    </conceptGrp>
+  </FullEntry>
 </Output>

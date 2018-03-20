@@ -58,6 +58,9 @@
     <AssemblyOriginatorKeyFile>..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Api, Version=1.7.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Api.dll</HintPath>
@@ -120,10 +123,17 @@
     <Compile Include="Comparison\Text\ComparisionTextUnit.cs" />
     <Compile Include="Comparison\Text\TextComparer.cs" />
     <Compile Include="Comparison\PairedFiles.cs" />
+    <Compile Include="Helper\Capitalization.cs" />
+    <Compile Include="Helper\ExcelReportHelper.cs" />
+    <Compile Include="Helper\PemExcelReportHelper.cs" />
+    <Compile Include="Helper\TerpExcelReportHelper.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports\FileInformationExcelReport.cs" />
+    <Compile Include="Reports\PemExcelReport.cs" />
     <Compile Include="Reports\Report.cs" />
     <Compile Include="Reports\ReportUtils.cs" />
+    <Compile Include="Reports\TerpExcelReport.cs" />
     <Compile Include="SDLXLIFF\ContentGenerator.cs" />
     <Compile Include="SDLXLIFF\ContentProcessor.cs" />
     <Compile Include="SDLXLIFF\ContentWriter.cs" />
@@ -185,6 +195,13 @@
     <None Include="..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj">
+      <Project>{d772940c-6ddd-4468-ad06-9cd07b9e1f05}</Project>
+      <Name>Sdl.Community.PostEdit.Compare.DAL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

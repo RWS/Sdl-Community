@@ -197,16 +197,16 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 
             while (languageDirection.ReindexTranslationUnits(ref iterator))
             {
-                if (!bw.CancellationPending)
-                {
-                    bw.ReportProgress(0, _reindexStatus.ToString());
+				if (!bw.CancellationPending)
+				{
+					bw.ReportProgress(0, _reindexStatus.ToString());
 
-                }
-                else
-                {
-                    bw.ReportProgress(100, "");
-                }
-            }
+				}
+				else
+				{
+					bw.ReportProgress(100, "");
+				}
+			}
 
             fileBasedTm.RecomputeFuzzyIndexStatistics();
             fileBasedTm.Save();

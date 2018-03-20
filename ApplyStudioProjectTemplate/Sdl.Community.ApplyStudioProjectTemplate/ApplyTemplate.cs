@@ -28,25 +28,26 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="sourceXml">The source XML.</param>
         public ApplyTemplate(XmlNode sourceXml)
         {
-            this.Name = sourceXml.SelectSingleNode("@name").Value;
-            this.FileLocation = sourceXml.SelectSingleNode("@location").Value;
-            this.Uri = null;
-            this.Id = new Guid(sourceXml.SelectSingleNode("@id").Value);
-            this.TranslationProvidersAllLanguages = this.GetApplyTemplateOptions(sourceXml, "tpal");
-            this.TranslationProvidersSpecificLanguages = this.GetApplyTemplateOptions(sourceXml, "tpsl");
-            this.TranslationMemoriesAllLanguages = this.GetApplyTemplateOptions(sourceXml, "tmal");
-            this.TranslationMemoriesSpecificLanguages = this.GetApplyTemplateOptions(sourceXml, "tmsl");
-            this.TerminologyTermbases = this.GetApplyTemplateOptions(sourceXml, "tbtb");
-            this.TerminologySearchSettings = this.GetApplyTemplateOptions(sourceXml, "tbss");
-            this.TranslationQualityAssessment = this.GetApplyTemplateOptions(sourceXml, "tqa");
-            this.VerificationQaChecker30 = this.GetApplyTemplateOptions(sourceXml, "qaqa");
-            this.VerificationTagVerifier = this.GetApplyTemplateOptions(sourceXml, "qatg");
-            this.VerificationTerminologyVerifier = this.GetApplyTemplateOptions(sourceXml, "qatv");
-            this.VerificationNumberVerifier = this.GetApplyTemplateOptions(sourceXml, "qanv");
-            this.VerificationGrammarChecker = this.GetApplyTemplateOptions(sourceXml, "qagc");
-            this.BatchTasksAllLanguages = this.GetApplyTemplateOptions(sourceXml, "btal");
-            this.BatchTasksSpecificLanguages = this.GetApplyTemplateOptions(sourceXml, "btsl");
-            this.FileTypes = this.GetApplyTemplateOptions(sourceXml, "ftts");
+            Name = sourceXml.SelectSingleNode("@name").Value;
+            FileLocation = sourceXml.SelectSingleNode("@location").Value;
+            Uri = null;
+            Id = new Guid(sourceXml.SelectSingleNode("@id").Value);
+            TranslationProvidersAllLanguages = GetApplyTemplateOptions(sourceXml, "tpal");
+            TranslationProvidersSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tpsl");
+            TranslationMemoriesAllLanguages = GetApplyTemplateOptions(sourceXml, "tmal");
+            TranslationMemoriesSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tmsl");
+            TerminologyTermbases = GetApplyTemplateOptions(sourceXml, "tbtb");
+            TerminologySearchSettings = GetApplyTemplateOptions(sourceXml, "tbss");
+            TranslationQualityAssessment = GetApplyTemplateOptions(sourceXml, "tqa");
+            VerificationQaChecker30 = GetApplyTemplateOptions(sourceXml, "qaqa");
+            VerificationTagVerifier = GetApplyTemplateOptions(sourceXml, "qatg");
+            VerificationTerminologyVerifier = GetApplyTemplateOptions(sourceXml, "qatv");
+            VerificationNumberVerifier = GetApplyTemplateOptions(sourceXml, "qanv");
+            VerificationGrammarChecker = GetApplyTemplateOptions(sourceXml, "qagc");
+            BatchTasksAllLanguages = GetApplyTemplateOptions(sourceXml, "btal");
+            BatchTasksSpecificLanguages = GetApplyTemplateOptions(sourceXml, "btsl");
+            FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
+	        MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
         }
 
         /// <summary>
@@ -55,25 +56,26 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="name">The template name.</param>
         public ApplyTemplate(string name)
         {
-            this.Name = name;
-            this.FileLocation = string.Empty;
-            this.Uri = null;
-            this.Id = Guid.Empty;
-            this.TranslationProvidersAllLanguages = ApplyTemplateOptions.Keep;
-            this.TranslationProvidersSpecificLanguages = ApplyTemplateOptions.Keep;
-            this.TranslationMemoriesAllLanguages = ApplyTemplateOptions.Keep;
-            this.TranslationMemoriesSpecificLanguages = ApplyTemplateOptions.Keep;
-            this.TerminologyTermbases = ApplyTemplateOptions.Keep;
-            this.TerminologySearchSettings = ApplyTemplateOptions.Keep;
-            this.TranslationQualityAssessment = ApplyTemplateOptions.Keep;
-            this.VerificationQaChecker30 = ApplyTemplateOptions.Keep;
-            this.VerificationTagVerifier = ApplyTemplateOptions.Keep;
-            this.VerificationTerminologyVerifier = ApplyTemplateOptions.Keep;
-            this.VerificationGrammarChecker = ApplyTemplateOptions.Keep;
-            this.VerificationNumberVerifier = ApplyTemplateOptions.Keep;
-            this.BatchTasksAllLanguages = ApplyTemplateOptions.Keep;
-            this.BatchTasksSpecificLanguages = ApplyTemplateOptions.Keep;
-            this.FileTypes = ApplyTemplateOptions.Keep;
+            Name = name;
+            FileLocation = string.Empty;
+            Uri = null;
+            Id = Guid.Empty;
+            TranslationProvidersAllLanguages = ApplyTemplateOptions.Keep;
+            TranslationProvidersSpecificLanguages = ApplyTemplateOptions.Keep;
+            TranslationMemoriesAllLanguages = ApplyTemplateOptions.Keep;
+            TranslationMemoriesSpecificLanguages = ApplyTemplateOptions.Keep;
+            TerminologyTermbases = ApplyTemplateOptions.Keep;
+            TerminologySearchSettings = ApplyTemplateOptions.Keep;
+            TranslationQualityAssessment = ApplyTemplateOptions.Keep;
+            VerificationQaChecker30 = ApplyTemplateOptions.Keep;
+            VerificationTagVerifier = ApplyTemplateOptions.Keep;
+            VerificationTerminologyVerifier = ApplyTemplateOptions.Keep;
+            VerificationGrammarChecker = ApplyTemplateOptions.Keep;
+            VerificationNumberVerifier = ApplyTemplateOptions.Keep;
+            BatchTasksAllLanguages = ApplyTemplateOptions.Keep;
+            BatchTasksSpecificLanguages = ApplyTemplateOptions.Keep;
+            FileTypes = ApplyTemplateOptions.Keep;
+			MatchRepairSettings = ApplyTemplateOptions.Keep;
         }
 
         /// <summary>
@@ -82,9 +84,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="templateInfo">The template information.</param>
         public ApplyTemplate(ProjectTemplateInfo templateInfo) : this("*" + templateInfo.Name)
         {
-            this.Name = "*" + templateInfo.Name;
-            this.Uri = templateInfo.Uri;
-            this.Id = templateInfo.Id;
+            Name = "*" + templateInfo.Name;
+            Uri = templateInfo.Uri;
+            Id = templateInfo.Id;
         }
 
         /// <summary>
@@ -138,17 +140,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             get
             {
-                return this._templateName;
+                return _templateName;
             }
 
             set
             {
-                if (this._templateName != value)
+                if (_templateName != value)
                 {
-                    this._templateName = value;
-                    if (this.PropertyChanged != null)
+                    _templateName = value;
+                    if (PropertyChanged != null)
                     {
-                        this.PropertyChanged(this, new PropertyChangedEventArgs("Name"));
+                        PropertyChanged(this, new PropertyChangedEventArgs("Name"));
                     }
                 }
             }
@@ -334,6 +336,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             set;
         }
 
+	    public ApplyTemplateOptions MatchRepairSettings { get; set; }
+
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
         /// </summary>
@@ -342,7 +346,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// </returns>
         public override string ToString()
         {
-            return this.Name;
+            return Name;
         }
 
         /// <summary>
@@ -352,24 +356,25 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteStartElement("template");
-            writer.WriteAttributeString("name", this.Name);
-            writer.WriteAttributeString("location", this.FileLocation);
-            writer.WriteAttributeString("id", this.Id.ToString("D"));
-            writer.WriteAttributeString("tpal", this.TranslationProvidersAllLanguages.ToString());
-            writer.WriteAttributeString("tpsl", this.TranslationProvidersSpecificLanguages.ToString());
-            writer.WriteAttributeString("tmal", this.TranslationMemoriesAllLanguages.ToString());
-            writer.WriteAttributeString("tmsl", this.TranslationMemoriesSpecificLanguages.ToString());
-            writer.WriteAttributeString("tbtb", this.TerminologyTermbases.ToString());
-            writer.WriteAttributeString("tqa", this.TranslationQualityAssessment.ToString());
-            writer.WriteAttributeString("tbss", this.TerminologySearchSettings.ToString());
-            writer.WriteAttributeString("qaqa", this.VerificationQaChecker30.ToString());
-            writer.WriteAttributeString("qatg", this.VerificationTagVerifier.ToString());
-            writer.WriteAttributeString("qatv", this.VerificationTerminologyVerifier.ToString());
-            writer.WriteAttributeString("qanv", this.VerificationNumberVerifier.ToString());
-            writer.WriteAttributeString("qagc", this.VerificationGrammarChecker.ToString());
-            writer.WriteAttributeString("btal", this.BatchTasksAllLanguages.ToString());
-            writer.WriteAttributeString("btsl", this.BatchTasksSpecificLanguages.ToString());
-            writer.WriteAttributeString("ftts", this.FileTypes.ToString());
+            writer.WriteAttributeString("name", Name);
+            writer.WriteAttributeString("location", FileLocation);
+            writer.WriteAttributeString("id", Id.ToString("D"));
+            writer.WriteAttributeString("tpal", TranslationProvidersAllLanguages.ToString());
+            writer.WriteAttributeString("tpsl", TranslationProvidersSpecificLanguages.ToString());
+            writer.WriteAttributeString("tmal", TranslationMemoriesAllLanguages.ToString());
+            writer.WriteAttributeString("tmsl", TranslationMemoriesSpecificLanguages.ToString());
+            writer.WriteAttributeString("tbtb", TerminologyTermbases.ToString());
+            writer.WriteAttributeString("tqa", TranslationQualityAssessment.ToString());
+            writer.WriteAttributeString("tbss", TerminologySearchSettings.ToString());
+            writer.WriteAttributeString("qaqa", VerificationQaChecker30.ToString());
+            writer.WriteAttributeString("qatg", VerificationTagVerifier.ToString());
+            writer.WriteAttributeString("qatv", VerificationTerminologyVerifier.ToString());
+            writer.WriteAttributeString("qanv", VerificationNumberVerifier.ToString());
+            writer.WriteAttributeString("qagc", VerificationGrammarChecker.ToString());
+            writer.WriteAttributeString("btal", BatchTasksAllLanguages.ToString());
+            writer.WriteAttributeString("btsl", BatchTasksSpecificLanguages.ToString());
+            writer.WriteAttributeString("ftts", FileTypes.ToString());
+			writer.WriteAttributeString("mrs",MatchRepairSettings.ToString());
             writer.WriteEndElement();
         }
 

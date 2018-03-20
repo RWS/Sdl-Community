@@ -7,11 +7,13 @@ using Sdl.Community.ProjectTerms.Plugin.ExtractTerms;
 using System.Linq;
 using System;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
+using Sdl.Community.ProjectTerms.Telemetry;
 
 namespace Sdl.Community.ProjectTerms.Plugin
 {
     public class ProjectTermsExtractor
     {
+        private ITelemetryTracker telemetryTracker;
         private List<string> sourceTerms;
         private Dictionary<string, List<KeyValuePair<string, string>>> bilingualContentPair;
         public IFileTypeManager FileTypeManager { get; set; }
@@ -25,6 +27,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
 
         public void Initialize()
         {
+            telemetryTracker = new TelemetryTracker();
+
             sourceTerms = new List<string>();
             bilingualContentPair = new Dictionary<string, List<KeyValuePair<string, string>>>();
             FileTypeManager = DefaultFileTypeManager.CreateInstance(true);
@@ -63,6 +67,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Extracting content from bilingual files");
+                telemetryTracker.TrackEvent("Extracting content from bilingual files", null);
+
                 foreach (var file in targetFiles)
                 {
                     var converter = FileTypeManager.GetConverter(file.LocalFilePath, (sender, e) => { });
@@ -73,12 +80,14 @@ namespace Sdl.Community.ProjectTerms.Plugin
                     for (int i = 0; i < extractor.SourceText.Count; i++)
                     {
                         if (string.IsNullOrWhiteSpace(extractor.SourceText[i]) || string.IsNullOrWhiteSpace(extractor.TargetText[i])) continue;
-                        AddItemToBilingualContentPair(extractor.SourceText[i].ToLower(), extractor.TargetText[i].ToLower(), file.Language.DisplayName);
+                        AddItemToBilingualContentPair(extractor.SourceText[i], extractor.TargetText[i], file.Language.DisplayName);
                     }
                 }
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message);
             }
         }
@@ -87,6 +96,9 @@ namespace Sdl.Community.ProjectTerms.Plugin
         {
             try
             {
+                telemetryTracker.StartTrackRequest("Extracting project terms");
+                telemetryTracker.TrackEvent("Extracting project terms", null);
+
                 sourceTerms.Clear();
                 var count = 0;
                 foreach (ProjectFile file in projectFiles)
@@ -105,7 +117,10 @@ namespace Sdl.Community.ProjectTerms.Plugin
                     {
                         foreach (var term in GetTerms(text))
                         {
-                            sourceTerms.Add(term.ToLower());
+                            if (term != "")
+                            {
+                                sourceTerms.Add(term);
+                            }
                         }
                     }
 
@@ -115,6 +130,8 @@ namespace Sdl.Community.ProjectTerms.Plugin
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message));
+                telemetryTracker.TrackTrace((new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new ProjectTermsException(PluginResources.Error_ExtractContent + e.Message);
             }
         }
@@ -122,7 +139,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
         protected virtual IEnumerable<string> GetTerms(string text)
         {
             var term = new StringBuilder();
-            var containsLetter = false;
             var terms = new List<string>();
 
             foreach (char ch in text)
@@ -130,7 +146,6 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 if (char.IsLetter(ch))
                 {
                     term.Append(ch);
-                    containsLetter = true;
                 }
                 else if (char.IsDigit(ch))
                 {
@@ -138,12 +153,11 @@ namespace Sdl.Community.ProjectTerms.Plugin
                 }
                 else
                 {
-                    if (!term.Equals("") && containsLetter)
+                    if (!term.Equals(""))
                     {
                         terms.Add(term.ToString());
                     }
                     term.Clear();
-                    containsLetter = false;
                 }
             }
 

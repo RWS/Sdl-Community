@@ -1,97 +1,135 @@
-﻿using System.Linq;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers;
+using Sdl.Community.Toolkit.FileType;
 using Sdl.Community.Toolkit.Integration;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
 
-namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
+namespace Sdl.Community.Plugins.AdvancedDisplayFilter.DisplayFilters
 {
-    public class DisplayFilter : IDisplayFilter
-    {
-        #region  |  Public  |
+	public class DisplayFilter : IDisplayFilter
+	{
+		#region  |  Public  |
 
-        /// <summary>
-        /// Display filter settings
-        /// </summary>
-        public DisplayFilterSettings Settings { get; private set; }
+		/// <summary>
+		/// Display filter settings
+		/// </summary>
+		public DisplayFilterSettings Settings { get; }
 
+		public CustomFilterSettings CustomSettings { get; }
 
-        #endregion
-        #region  |  Private  |
+		#endregion
 
-        private Document ActiveDocument { get; set; }
+		#region  |  Private  |
 
-        #endregion
-        #region  |  Constructor  |
-        public DisplayFilter(DisplayFilterSettings settings, Document document)
-        {
-            ActiveDocument = document;
-            Settings = settings;
-        }
+		private Document ActiveDocument { get; }
+		private bool ReverseSearch { get; }
 
-        #endregion
+		#endregion
 
-        
-        public bool EvaluateRow(DisplayFilterRowInfo rowInfo)
-        {
-            var success = !(!Settings.ShowAllContent && !rowInfo.IsSegment);
-                        
-            if (rowInfo.IsSegment)
-            {
-                if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
-                    success = rowInfo.IsSegmentReviewTypes(Settings);
+		#region  |  Constructor  |
 
+		public DisplayFilter(DisplayFilterSettings settings, CustomFilterSettings customSettings, bool reverseSearch,
+			Document document)
+		{
+			ActiveDocument = document;
 
-                if (success && Settings.ConfirmationLevels != null && Settings.ConfirmationLevels.Any())
-                    success = rowInfo.IsConfirmationLevelFound(Settings);
+			Settings = settings;
+			CustomSettings = customSettings;
+			ReverseSearch = reverseSearch;
 
+		}
 
-                if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
-                    success = rowInfo.IsOriginTypeFound(Settings);
+		#endregion
 
+		public bool EvaluateRow(DisplayFilterRowInfo rowInfo)
+		{
+			var success = !(!Settings.ShowAllContent && !rowInfo.IsSegment);
 
-                if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
-                    success = rowInfo.IsPreviousOriginTypeFound(Settings);
+			if (rowInfo.IsSegment)
+			{
+				if (ReverseSearch)
+				{
+					return CustomFilterHelper.Reverse(Settings,success, rowInfo,CustomSettings,ActiveDocument);
+				}
 
-
-                if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
-                    success = rowInfo.IsRepetitionTypes(Settings);
+				if (success && Settings.SegmentReviewTypes != null && Settings.SegmentReviewTypes.Any())
+					success = rowInfo.IsSegmentReviewTypes(Settings);
 
 
-                if (success && Settings.SegmentLockingTypes != null && Settings.SegmentLockingTypes.Any())
-                    success = rowInfo.IsSegmentLockingTypes(Settings);
+				if (success && Settings.ConfirmationLevels != null && Settings.ConfirmationLevels.Any())
+					success = rowInfo.IsConfirmationLevelFound(Settings);
+
+				
+				if (success && Settings.OriginTypes != null && Settings.OriginTypes.Any())
+				{
+					if (!Settings.OriginTypes.Contains("EditedF") && !Settings.OriginTypes.Contains("UneditedF"))
+					{
+						success = rowInfo.IsOriginTypeFound(Settings);
+					}
+				}
+
+				if (success && Settings.PreviousOriginTypes != null && Settings.PreviousOriginTypes.Any())
+					success = rowInfo.IsPreviousOriginTypeFound(Settings);
+
+				if (success && Settings.RepetitionTypes != null && Settings.RepetitionTypes.Any())
+				{
+					if (!Settings.RepetitionTypes.Contains("Unique"))
+					{
+						success = rowInfo.IsRepetitionTypes(Settings);
+					}
+				}
+
+				if (success && Settings.SegmentLockingTypes != null && Settings.SegmentLockingTypes.Any())
+					success = rowInfo.IsSegmentLockingTypes(Settings);
 
 
-                if (success && Settings.SegmentContentTypes != null && Settings.SegmentContentTypes.Any())
-                    success = rowInfo.IsSegmentContentTypes(Settings);
+				if (success && Settings.SegmentContentTypes != null && Settings.SegmentContentTypes.Any())
+					success = rowInfo.IsSegmentContentTypes(Settings);
 
 
-                if (success && Settings.SourceText.Trim() != string.Empty)
-                    success = rowInfo.IsTextFoundInSource(Settings);
+				if (success && Settings.SourceText.Trim() != string.Empty)
+				{
+					success = rowInfo.IsTextFoundInSource(Settings);
+				
+					if (Settings.IsRegularExpression)
+					{
+						var textVisitor = new SegmentTextVisitor();
+						var text = textVisitor.GetText(rowInfo.SegmentPair.Source);
+						success = ContentHelper.SearchContentRegularExpression(text,
+							Settings.SourceText);
+					}
+				}
+
+				if (success && Settings.TargetText.Trim() != string.Empty)
+					success = rowInfo.IsTextFoundInTarget(Settings);
 
 
-                if (success && Settings.TargetText.Trim() != string.Empty)
-                    success = rowInfo.IsTextFoundInTarget(Settings);
+				if (success && !CustomSettings.UseRegexCommentSearch && Settings.CommentText.Trim() != string.Empty)
+					success = rowInfo.IsTextFoundInComment(Settings);
 
 
-                if (success && Settings.CommentText.Trim() != string.Empty)
-                    success = rowInfo.IsTextFoundInComment(Settings);
+				if (success && Settings.CommentAuthor.Trim() != string.Empty)
+					success = rowInfo.IsAuthorFoundInComment(Settings);
 
 
-                if (success && Settings.CommentAuthor.Trim() != string.Empty)
-                    success = rowInfo. IsAuthorFoundInComment(Settings);
+				if (success && Settings.CommentSeverity > 0)
+					success = rowInfo.IsSeverityFoundInComment(Settings);
 
 
-                if (success && Settings.CommentSeverity > 0)
-                    success = rowInfo.IsSeverityFoundInComment(Settings);
+				if (success && Settings.ContextInfoTypes.Any())
+					success = rowInfo.IsContextInfoTypes(Settings);
 
-                
-                if (success && Settings.ContextInfoTypes.Any())
-                    success = rowInfo.IsContextInfoTypes(Settings);
-            }
-
-            return success;
-        }
-
-    }
+				// check custom settings
+				if (success)
+				{
+					success = CustomFilterHelper.Filter(CustomSettings,rowInfo,success, ActiveDocument);
+				}
+			}
+			return success;
+		}
+	}
 }

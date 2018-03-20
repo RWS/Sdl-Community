@@ -46,6 +46,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
@@ -141,6 +142,7 @@
     <Compile Include="EditApplyTemplates.Designer.cs">
       <DependentUpon>EditApplyTemplates.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PluginResources.Designer.cs">
@@ -154,6 +156,7 @@
     <Compile Include="ApplyTemplateForm.Designer.cs">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="TemplateLanguageDetails.cs" />
     <Compile Include="TermbaseWarningForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -165,6 +168,7 @@
     <Content Include="pluginpackage.manifest.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Resources\question.ico" />
     <None Include="packages.config" />
     <None Include="Resources\ASPT.ico" />
     <None Include="SdlCommunity.snk" />
@@ -179,6 +183,7 @@
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ApplyTemplateForm.resx">
       <DependentUpon>ApplyTemplateForm.cs</DependentUpon>

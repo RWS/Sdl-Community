@@ -77,7 +77,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ThirdParty\ObjectListView\Qualitivity.ObjectListView.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Core.Globalization" />
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
       <Private>True</Private>
@@ -86,17 +88,39 @@
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sdl.Core.Settings" />
-    <Reference Include="Sdl.Desktop.IntegrationApi" />
-    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions" />
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core" />
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation" />
-    <Reference Include="Sdl.LanguagePlatform.Core" />
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory" />
-    <Reference Include="Sdl.ProjectAutomation.Core" />
-    <Reference Include="Sdl.ProjectAutomation.FileBased" />
-    <Reference Include="Sdl.ProjectAutomation.Settings" />
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi" />
+    <Reference Include="Sdl.Core.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -107,7 +131,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Packaging" />
+    <Reference Include="System.IO.Packaging">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\System.IO.Packaging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -162,30 +188,6 @@
     </Compile>
     <Compile Include="Progress\ProgressDialog.Designer.cs">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFAddTasks.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFAddTasks.Designer.cs">
-      <DependentUpon>DQFAddTasks.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectTaskInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectTaskInfo.designer.cs">
-      <DependentUpon>DQFProjectTaskInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectInfo.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectInfo.designer.cs">
-      <DependentUpon>DQFProjectInfo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectCreate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\DQF\DQFProjectCreate.Designer.cs">
-      <DependentUpon>DQFProjectCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\QualityMetrics\QualityMetricGroup.cs">
       <SubType>Form</SubType>
@@ -282,13 +284,6 @@
     <Compile Include="Helper.cs" />
     <Compile Include="Custom\ListViewSortManager.cs" />
     <Compile Include="Custom\OpenXmlExcel.cs" />
-    <Compile Include="Panels\DQF\QualitivityViewDQFControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Panels\DQF\QualitivityViewDQFControl.Designer.cs">
-      <DependentUpon>QualitivityViewDQFControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Panels\DQF\QualitivityViewDQFController.cs" />
     <Compile Include="Panels\QualityMetrics\QualitivityRevisionControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -407,9 +402,11 @@
     <Content Include="Resources\Users-simple.ico" />
     <EmbeddedResource Include="Dialogs\About.resx">
       <DependentUpon>About.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ActivityReportWizard.resx">
       <DependentUpon>ActivityReportWizard.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\Activity Records\QualitivityViewActivityRecordsControl.resx">
       <DependentUpon>QualitivityViewActivityRecordsControl.cs</DependentUpon>
@@ -418,17 +415,8 @@
     <EmbeddedResource Include="Progress\ProgressDialog.resx">
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\DQF\DQFAddTasks.resx">
-      <DependentUpon>DQFAddTasks.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\AddressDetails.resx">
       <DependentUpon>AddressDetails.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\DQF\DQFProjectTaskInfo.resx">
-      <DependentUpon>DQFProjectTaskInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\DQF\DQFProjectInfo.resx">
-      <DependentUpon>DQFProjectInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LanguageRate\AppendAnlaysisBand.resx">
       <DependentUpon>AppendAnlaysisBand.cs</DependentUpon>
@@ -439,17 +427,16 @@
     <EmbeddedResource Include="Dialogs\DifferenceFormatting.resx">
       <DependentUpon>DifferenceFormatting.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\DQF\DQFProjectCreate.resx">
-      <DependentUpon>DQFProjectCreate.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\Export\ExportActivities.resx">
       <DependentUpon>ExportActivities.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LanguageRate\LanguageRate.resx">
       <DependentUpon>LanguageRate.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\LanguageRate\LanguageRateGroup.resx">
       <DependentUpon>LanguageRateGroup.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\QualityMetrics\QualityMetric.resx">
       <DependentUpon>QualityMetric.cs</DependentUpon>
@@ -469,13 +456,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\QualitivityProject.resx">
       <DependentUpon>QualitivityProject.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\TrackProjectActivity.resx">
       <DependentUpon>TrackProjectActivity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panels\DQF\QualitivityViewDQFControl.resx">
-      <DependentUpon>QualitivityViewDQFControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Panels\QualityMetrics\QualitivityRevisionControl.resx">
       <DependentUpon>QualitivityRevisionControl.cs</DependentUpon>
@@ -539,10 +523,6 @@
     <ProjectReference Include="..\Sdl.Community.Qualitivity.Comparison\Sdl.Community.Comparison.csproj">
       <Project>{455ea006-c9e9-46f9-87ba-4482ecbec69f}</Project>
       <Name>Sdl.Community.Comparison</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Qualitivity.DQF\Sdl.Community.DQF.csproj">
-      <Project>{72fcbdd2-8f58-4d66-b9c7-ffc48025af27}</Project>
-      <Name>Sdl.Community.DQF</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.Qualitivity.Hooks\Sdl.Community.Hooks.csproj">
       <Project>{82679af5-c839-4f26-b84e-9970a0c5665b}</Project>

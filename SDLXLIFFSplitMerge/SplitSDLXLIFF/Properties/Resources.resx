@@ -1,0 +1,288 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="errMerge" xml:space="preserve">
+    <value>Files merge failed!</value>
+  </data>
+  <data name="errMergeFolderNotExist" xml:space="preserve">
+    <value>Specified split files folder does not exist.</value>
+  </data>
+  <data name="errMergeInfoFileNotExist" xml:space="preserve">
+    <value>Specified Splitinfo file does not exist.</value>
+  </data>
+  <data name="errMergeNoFiles" xml:space="preserve">
+    <value>Failed.\r\nNo files were merged.</value>
+  </data>
+  <data name="errMergeNoFolder" xml:space="preserve">
+    <value>Please specify split files folder.</value>
+  </data>
+  <data name="errMergeNoInfoFile" xml:space="preserve">
+    <value>Please specify split info file.</value>
+  </data>
+  <data name="errMergeNoOrigFile" xml:space="preserve">
+    <value>Please specify original file.</value>
+  </data>
+  <data name="errMergeOrigFileNotExist" xml:space="preserve">
+    <value>Specified original file does not exist.</value>
+  </data>
+  <data name="errMergeUnexp" xml:space="preserve">
+    <value>Failed.\r\nERROR: {0}</value>
+  </data>
+  <data name="errSplit" xml:space="preserve">
+    <value>Files split failed!</value>
+  </data>
+  <data name="errSplitFolderNotExist" xml:space="preserve">
+    <value>Specified target folder does not exist.</value>
+  </data>
+  <data name="errSplitNoFile" xml:space="preserve">
+    <value>Please specify file to split.</value>
+  </data>
+  <data name="errSplitNoFiles" xml:space="preserve">
+    <value>Failed.\r\nNo files were created.\r\n</value>
+  </data>
+  <data name="errSplitNoFolder" xml:space="preserve">
+    <value>Please specify target folder.</value>
+  </data>
+  <data name="errSplitUnexp" xml:space="preserve">
+    <value>Failed.\r\nERROR: {0}</value>
+  </data>
+  <data name="LicenseErrorMessage" xml:space="preserve">
+    <value>SDL Trados Studio  is not licensed on this computer. Activate it first before using this add-on.</value>
+  </data>
+  <data name="MergeTitle" xml:space="preserve">
+    <value>Merge Task.</value>
+  </data>
+  <data name="msbMergeFinished" xml:space="preserve">
+    <value>Finished merging files.</value>
+  </data>
+  <data name="msbSplitFinished" xml:space="preserve">
+    <value>Finished splitting files.</value>
+  </data>
+  <data name="msgMergeFOptsSubtitle" xml:space="preserve">
+    <value>Specify the path to the original SDLXLIFF file, the folder with split files as well as the path to the split info file.</value>
+  </data>
+  <data name="msgMergeFOptsTitle" xml:space="preserve">
+    <value>Settings for Merge Task</value>
+  </data>
+  <data name="msgMergeScc" xml:space="preserve">
+    <value>Task finished successfully.\r\nNumber of files merged: {0}.\r\n</value>
+  </data>
+  <data name="msgMergeStart" xml:space="preserve">
+    <value>Files merge started...\r\n</value>
+  </data>
+  <data name="msgMergeSubtitle" xml:space="preserve">
+    <value>Please wait while the files are being merged.</value>
+  </data>
+  <data name="msgMergeTitle" xml:space="preserve">
+    <value>Merging Files...</value>
+  </data>
+  <data name="msgMerging" xml:space="preserve">
+    <value>\r\nMerging files to '{0}'...\r\n</value>
+  </data>
+  <data name="msgSplitFinished" xml:space="preserve">
+    <value>Finished splitting files. Number of files processed: {0}.</value>
+  </data>
+  <data name="msgSplitFOptsSubtitle" xml:space="preserve">
+    <value>Specify the files to split and indicate where the split files should be copied.</value>
+  </data>
+  <data name="msgSplitFOptsTitle" xml:space="preserve">
+    <value>File Management Settings for Split Task</value>
+  </data>
+  <data name="msgSplitOptsSubtitle" xml:space="preserve">
+    <value>Specify the rules governing how the files should be split.</value>
+  </data>
+  <data name="msgSplitOptsTitle" xml:space="preserve">
+    <value>Options for Split Task</value>
+  </data>
+  <data name="msgSplitScc" xml:space="preserve">
+    <value>Task finished successfully.\r\nNumber of split files created: {0}.\r\n</value>
+  </data>
+  <data name="msgSplitStart" xml:space="preserve">
+    <value>File split started...\r\n</value>
+  </data>
+  <data name="msgSplitSubtitle" xml:space="preserve">
+    <value>Please wait while the files are being split.</value>
+  </data>
+  <data name="msgSplitting" xml:space="preserve">
+    <value>\r\nSplitting '{0}'...\r\n</value>
+  </data>
+  <data name="msgSplittingFiles" xml:space="preserve">
+    <value>Splitting files ({0} of {1}):</value>
+  </data>
+  <data name="msgSplitTitle" xml:space="preserve">
+    <value>Splitting Files...</value>
+  </data>
+  <data name="msgWelcomeSubtitle" xml:space="preserve">
+    <value>SDLXLIFF Split/Merge allows you to split large SDLXLIFF files and re-merge them back into one file after translation or review. Indicate the task you would like to perform.</value>
+  </data>
+  <data name="msgWelcomeTitle" xml:space="preserve">
+    <value>Welcome to SDLXLIFF Split/Merge</value>
+  </data>
+  <data name="PrerequisitesProblemTitle" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="SplitTitle" xml:space="preserve">
+    <value>Split Task.</value>
+  </data>
+  <data name="FileDialogTitle" xml:space="preserve">
+    <value>Select SDLXLIFF file to split.</value>
+  </data>
+  <data name="InfoFileDialogTitle" xml:space="preserve">
+    <value>Select Split Info file.</value>
+  </data>
+  <data name="MergeSettingsTitle" xml:space="preserve">
+    <value>Merge Settings.</value>
+  </data>
+  <data name="msgEmptyList" xml:space="preserve">
+    <value>The list of files is empty.</value>
+  </data>
+  <data name="OrigFileDialogTitle" xml:space="preserve">
+    <value>Select original SDLXLIFF file.</value>
+  </data>
+  <data name="ProjectFileDialogTitle" xml:space="preserve">
+    <value>Select SDL Trados Studio project file</value>
+  </data>
+  <data name="SplitFilesDialogDesc" xml:space="preserve">
+    <value>Select a path for split files.</value>
+  </data>
+  <data name="SplitSettingsTitle" xml:space="preserve">
+    <value>Split Settings.</value>
+  </data>
+  <data name="TargetPathDialogDesc" xml:space="preserve">
+    <value>Select a target path.</value>
+  </data>
+  <data name="msgSplitWarning" xml:space="preserve">
+    <value>ATTENTION: The number of files created is different from the number of split parts you requested.\r\nThe Application does split of text within a segment, so in some cases, when the input file is too small, or the number of split parts too high, the number of files created may be less than indicated.\r\n</value>
+  </data>
+  <data name="errSplitSegNumbers" xml:space="preserve">
+    <value>Please indicate valid segment numbers to split the file by.</value>
+  </data>
+  <data name="msbSplitFinishedWithErr" xml:space="preserve">
+    <value>Finished with errors.</value>
+  </data>
+  <data name="msgSplitCorruptFile" xml:space="preserve">
+    <value>Failed.\r\nCannot process the file. The file is corrupt or contains more than one merged in Trados Studio SDLXLIFF files.\r\n</value>
+  </data>
+  <data name="filesNoTargetLanguage" xml:space="preserve">
+    <value>No target languages selected.</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>SDLXLIFF Split and Merge</value>
+  </data>
+</root>

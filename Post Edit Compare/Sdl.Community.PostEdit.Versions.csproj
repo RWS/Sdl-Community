@@ -62,6 +62,9 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="PostEdit.Compare.WinFormsUI.Docking">
       <HintPath>Sdl.Community.PostEdit.Compare\3rd party\PostEdit.Compare.WinFormsUI.Docking.dll</HintPath>
     </Reference>
@@ -198,6 +201,7 @@
     <Compile Include="Structures\Project.cs" />
     <Compile Include="Structures\ProjectVersion.cs" />
     <Compile Include="Structures\Settings.cs" />
+    <Compile Include="Structures\VersionDetails.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\Add.ico" />
@@ -285,6 +289,9 @@
       <Project>{b9aa109e-e936-4e92-a0af-7297902270cd}</Project>
       <Name>Sdl.Community.PostEdit.Compare</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>

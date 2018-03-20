@@ -97,6 +97,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Colors.
+        /// </summary>
+        internal static string DisplayFilterControl_Colors {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Colors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment Author.
         /// </summary>
         internal static string DisplayFilterControl_Comment_author {
@@ -151,6 +160,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Created by.
+        /// </summary>
+        internal static string DisplayFilterControl_CreatedBy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_CreatedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Document Structure.
         /// </summary>
         internal static string DisplayFilterControl_Document_structure {
@@ -165,6 +183,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Draft {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Draft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edited fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_EditedFuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_EditedFuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Even segments number.
+        /// </summary>
+        internal static string DisplayFilterControl_EvenSegments {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_EvenSegments", resourceCulture);
             }
         }
         
@@ -214,6 +250,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fuzzy values between.
+        /// </summary>
+        internal static string DisplayFilterControl_Fuzzy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Fuzzy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fuzzy matches.
         /// </summary>
         internal static string DisplayFilterControl_Fuzzy_matches {
@@ -232,6 +277,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Grouped list.
+        /// </summary>
+        internal static string DisplayFilterControl_GroupedList {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_GroupedList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load Filter Settings.
         /// </summary>
         internal static string DisplayFilterControl_LoadFilter_Load_Filter_Settings {
@@ -246,6 +300,33 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Locked {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Locked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merged segments across paragraphs.
+        /// </summary>
+        internal static string DisplayFilterControl_MergedAcross {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MergedAcross", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Merged segments.
+        /// </summary>
+        internal static string DisplayFilterControl_MergedSegments {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MergedSegments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified by .
+        /// </summary>
+        internal static string DisplayFilterControl_MidifiedBy {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_MidifiedBy", resourceCulture);
             }
         }
         
@@ -273,6 +354,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Number_Only {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Number_Only", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odd segments number.
+        /// </summary>
+        internal static string DisplayFilterControl_OddSegments {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_OddSegments", resourceCulture);
             }
         }
         
@@ -331,6 +421,24 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reverse filter.
+        /// </summary>
+        internal static string DisplayFilterControl_Reverse {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Reverse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reverse the  search.
+        /// </summary>
+        internal static string DisplayFilterControl_ReverseSearch {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_ReverseSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save Filter Settings.
         /// </summary>
         internal static string DisplayFilterControl_SaveFilter_Save_Filter_Settings {
@@ -363,6 +471,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Segment_Review {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Segment_Review", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Segments with tags.
+        /// </summary>
+        internal static string DisplayFilterControl_Segments_With_tags {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_Segments_With_tags", resourceCulture);
             }
         }
         
@@ -430,6 +547,34 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source text equals target text.
+        /// </summary>
+        internal static string DisplayFilterControl_SourceEqualsTarget {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_SourceEqualsTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Source text equals target text case sensitive.
+        /// </summary>
+        internal static string DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCase {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_SourceEqualsTargetCDisplayFilterControl_SourceEqualsTargetCa" +
+                        "se", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Split segments.
+        /// </summary>
+        internal static string DisplayFilterControl_SplitSegments {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_SplitSegments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         internal static string DisplayFilterControl_Status {
@@ -475,6 +620,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unedited fuzzy.
+        /// </summary>
+        internal static string DisplayFilterControl_UnEdited {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UnEdited", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unknown.
         /// </summary>
         internal static string DisplayFilterControl_Unknown {
@@ -489,6 +643,15 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter {
         internal static string DisplayFilterControl_Unlocked {
             get {
                 return ResourceManager.GetString("DisplayFilterControl_Unlocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use regex for comment text.
+        /// </summary>
+        internal static string DisplayFilterControl_UseRegexComments {
+            get {
+                return ResourceManager.GetString("DisplayFilterControl_UseRegexComments", resourceCulture);
             }
         }
         

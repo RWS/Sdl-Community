@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
 using Sdl.ProjectAutomation.Core;
@@ -22,16 +23,18 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <summary>
         /// Determines whether to show the warning about terminology
         /// </summary>
-        private bool showWarning = true;
+        private bool _showWarning = true;
+	    private bool _languageMatches = true;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ApplyTemplateForm"/> class.
-        /// </summary>
-        /// <param name="controller">The controller.</param>
-        public ApplyTemplateForm(ProjectsController controller)
+		private readonly ProjectsController _projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ApplyTemplateForm"/> class.
+		/// </summary>
+		/// <param name="controller">The controller.</param>
+		public ApplyTemplateForm(ProjectsController controller)
         {
-            this.InitializeComponent();
-            this.LoadProjectTemplates(controller);
+            InitializeComponent();
+            LoadProjectTemplates(controller);
         }
 
         /// <summary>
@@ -40,53 +43,45 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <value>
         /// The active template.
         /// </value>
-        public ApplyTemplate ActiveTemplate
-        {
-            get
-            {
-                return this.SelectedTemplate.SelectedItem as ApplyTemplate;
-            }
-        }
+        public ApplyTemplate ActiveTemplate => SelectedTemplate.SelectedItem as ApplyTemplate;
 
-        /// <summary>
+	    /// <summary>
         /// Gets a value indicating whether to apply to selected projects.
         /// </summary>
         /// <value>
         ///   <c>true</c> if apply to selected projects; otherwise, <c>false</c>.
         /// </value>
-        public bool ApplyToSelected
-        {
-            get
-            {
-                return this.ApplyTo.SelectedIndex == 1;
-            }
-        }
+        public bool ApplyToSelected => ApplyTo.SelectedIndex == 1;
 
-        /// <summary>
+	    /// <summary>
         /// Saves the project templates.
         /// </summary>
         public void SaveProjectTemplates()
         {
-            string projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            using (XmlWriter writer = XmlWriter.Create(projectTemplatesPath, settings))
+	        var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+	        var settings = new XmlWriterSettings
+	        {
+		        Indent = true
+	        };
+	        using (var writer = XmlWriter.Create(projectTemplatesPath, settings))
             {
                 writer.WriteStartDocument();
                 writer.WriteStartElement("templates");
-                writer.WriteAttributeString("default", (this.SelectedTemplate.SelectedItem as ApplyTemplate).Id.ToString("D"));
-                writer.WriteAttributeString("apply", (string)this.ApplyTo.SelectedItem);
-                writer.WriteAttributeString("tooltips", this.ShowToolTips.Checked ? "1" : "0");
-                writer.WriteAttributeString("warning", this.showWarning ? "1" : "0");
-                foreach (object comboObject in this.SelectedTemplate.Items)
+	            if (SelectedTemplate?.SelectedItem != null)
+	            {
+					writer.WriteAttributeString("default", (SelectedTemplate.SelectedItem as ApplyTemplate).Id.ToString("D"));
+				}
+                writer.WriteAttributeString("apply", (string)ApplyTo.SelectedItem);
+                writer.WriteAttributeString("tooltips", ShowToolTips.Checked ? "1" : "0");
+                writer.WriteAttributeString("warning", _showWarning ? "1" : "0");
+                foreach (object comboObject in SelectedTemplate.Items)
                 {
-                    ApplyTemplate comboTemplate = comboObject as ApplyTemplate;
-                    if (comboTemplate.Id != Guid.Empty)
+	                var comboTemplate = comboObject as ApplyTemplate;
+                    if (comboTemplate != null && comboTemplate.Id != Guid.Empty)
                     {
                         comboTemplate.WriteXml(writer);
                     }
                 }
-
                 writer.WriteEndElement();
                 writer.WriteEndDocument();
                 writer.Flush();
@@ -101,21 +96,24 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         private void LoadProjectTemplates(ProjectsController controller)
         {
             // Add in the project templates defined in Studio
-            foreach (ProjectTemplateInfo templateInfo in controller.GetProjectTemplates())
+            foreach (var templateInfo in controller.GetProjectTemplates())
             {
-                ApplyTemplate newTemplate = new ApplyTemplate(templateInfo);
-                this.SelectedTemplate.Items.Add(newTemplate);
+	            if (File.Exists(templateInfo.Uri.LocalPath))
+	            {
+					var newTemplate = new ApplyTemplate(templateInfo);
+		            SelectedTemplate.Items.Add(newTemplate);
+				}
             }
 
-            // Add in any extra templates manually defined
-            Guid selectedId = Guid.Empty;
-            this.ApplyTo.SelectedIndex = 0;
-            string projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
+			// Add in any extra templates manually defined
+	        var selectedId = Guid.Empty;
+            ApplyTo.SelectedIndex = 0;
+	        var projectTemplatesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"SDL\ASPT.xml");
             if (File.Exists(projectTemplatesPath))
             {
                 try
                 {
-                    XmlDocument templatesXml = new XmlDocument();
+                    var templatesXml = new XmlDocument();
                     templatesXml.Load(projectTemplatesPath);
 
                     if (templatesXml.DocumentElement.HasAttribute("default"))
@@ -125,17 +123,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
                     if (templatesXml.DocumentElement.HasAttribute("apply"))
                     {
-                        this.ApplyTo.SelectedItem = templatesXml.DocumentElement.Attributes["apply"].Value;
+                        ApplyTo.SelectedItem = templatesXml.DocumentElement.Attributes["apply"].Value;
                     }
 
                     if (templatesXml.DocumentElement.HasAttribute("tooltips"))
                     {
-                        this.ShowToolTips.Checked = templatesXml.DocumentElement.Attributes["tooltips"].Value == "1";
+                        ShowToolTips.Checked = templatesXml.DocumentElement.Attributes["tooltips"].Value == "1";
                     }
 
                     if (templatesXml.DocumentElement.HasAttribute("warning"))
                     {
-                        this.showWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
+                        _showWarning = templatesXml.DocumentElement.Attributes["warning"].Value == "1";
                     }
 
                     foreach (XmlNode templateXml in templatesXml.SelectNodes("//template"))
@@ -143,7 +141,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         ApplyTemplate newTemplate = new ApplyTemplate(templateXml);
                         if (string.IsNullOrEmpty(newTemplate.FileLocation))
                         {
-                            foreach (object o in this.SelectedTemplate.Items)
+                            foreach (object o in SelectedTemplate.Items)
                             {
                                 ApplyTemplate thisTemplate = o as ApplyTemplate;
                                 if (thisTemplate.Id == newTemplate.Id)
@@ -163,12 +161,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     thisTemplate.BatchTasksAllLanguages = newTemplate.BatchTasksAllLanguages;
                                     thisTemplate.BatchTasksSpecificLanguages = newTemplate.BatchTasksSpecificLanguages;
                                     thisTemplate.FileTypes = newTemplate.FileTypes;
+	                                thisTemplate.MatchRepairSettings = newTemplate.MatchRepairSettings;
                                 }
                             }
                         }
                         else
                         {
-                            this.SelectedTemplate.Items.Add(newTemplate);
+	                        if (File.Exists(newTemplate.FileLocation))
+	                        {
+								SelectedTemplate.Items.Add(newTemplate);
+							}
+                            
                         }
                     }
                 }
@@ -179,13 +182,12 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             }
 
             // Add in a default template if we don't have any defined
-            if (this.SelectedTemplate.Items.Count == 0)
+            if (SelectedTemplate.Items.Count == 0)
             {
-                this.SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
+                SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
             }
-
             // Select the first one in the list if we haven't selected one yet
-            this.SelectTemplate(selectedId);
+            SelectTemplate(selectedId);
         }
 
         /// <summary>
@@ -194,13 +196,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="selectedId">The selected identifier.</param>
         private void SelectTemplate(Guid selectedId)
         {
-            this.SelectedTemplate.SelectedIndex = 0;
-            for (int index = 0; index < this.SelectedTemplate.Items.Count; index++)
+            SelectedTemplate.SelectedIndex = 0;
+            for (int index = 0; index < SelectedTemplate.Items.Count; index++)
             {
-                if ((this.SelectedTemplate.Items[index] as ApplyTemplate).Id == selectedId)
+                if ((SelectedTemplate.Items[index] as ApplyTemplate).Id == selectedId)
                 {
-                    this.SelectedTemplate.SelectedIndex = index;
-                    break;
+                    SelectedTemplate.SelectedIndex = index;
+					break;
                 }
             }
         }
@@ -212,51 +214,63 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void SelectedTemplate_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ApplyTemplate selectedTemplate = this.SelectedTemplate.SelectedItem as ApplyTemplate;
-            this.TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
-            this.TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
-            this.TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
-            this.TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
-            this.TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
-            this.TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
-            this.TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
-            this.BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
-            this.BatchTasksSpecificLanguages.SelectedItem = selectedTemplate.BatchTasksSpecificLanguages.ToString();
-            this.VerificationQaChecker30.SelectedItem = selectedTemplate.VerificationQaChecker30.ToString();
-            this.VerificationTagVerifier.SelectedItem = selectedTemplate.VerificationTagVerifier.ToString();
-            this.VerificationTerminologyVerifier.SelectedItem = selectedTemplate.VerificationTerminologyVerifier.ToString();
-            this.VerificationNumberVerifier.SelectedItem = selectedTemplate.VerificationNumberVerifier.ToString();
-            this.VerificationGrammarChecker.SelectedItem = selectedTemplate.VerificationGrammarChecker.ToString();
-            this.FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
-            this.CheckChanged();
-        }
+			ApplyTemplate selectedTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
+	        if (SelectedTemplate.SelectedIndex >0)
+	        {
+				_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
+			}
+	        if (!_languageMatches)
+	        {
+		        MessageBox.Show(@"Selected template has language directions different from selected project.", @"Wanning",
+			        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+	        }
+			TranslationProvidersAllLanguages.SelectedItem = selectedTemplate.TranslationProvidersAllLanguages.ToString();
+            TranslationProvidersSpecificLanguages.SelectedItem = selectedTemplate.TranslationProvidersSpecificLanguages.ToString();
+            TranslationMemoriesAllLanguages.SelectedItem = selectedTemplate.TranslationMemoriesAllLanguages.ToString();
+            TranslationMemoriesSpecificLanguages.SelectedItem = selectedTemplate.TranslationMemoriesSpecificLanguages.ToString();
+            TerminologyTermbases.SelectedItem = selectedTemplate.TerminologyTermbases.ToString();
+            TerminologySearchSettings.SelectedItem = selectedTemplate.TerminologySearchSettings.ToString();
+            TranslationQualityAssessment.SelectedItem = selectedTemplate.TranslationQualityAssessment.ToString();
+            BatchTasksAllLanguages.SelectedItem = selectedTemplate.BatchTasksAllLanguages.ToString();
+            BatchTasksSpecificLanguages.SelectedItem = selectedTemplate.BatchTasksSpecificLanguages.ToString();
+            VerificationQaChecker30.SelectedItem = selectedTemplate.VerificationQaChecker30.ToString();
+            VerificationTagVerifier.SelectedItem = selectedTemplate.VerificationTagVerifier.ToString();
+            VerificationTerminologyVerifier.SelectedItem = selectedTemplate.VerificationTerminologyVerifier.ToString();
+            VerificationNumberVerifier.SelectedItem = selectedTemplate.VerificationNumberVerifier.ToString();
+            VerificationGrammarChecker.SelectedItem = selectedTemplate.VerificationGrammarChecker.ToString();
+            FileTypes.SelectedItem = selectedTemplate.FileTypes.ToString();
+	        matchRepairBox.SelectedItem = selectedTemplate.MatchRepairSettings.ToString();
+            CheckChanged();
+	        
+		}
 
         /// <summary>
         /// Checks whether to enable the OK button.
         /// </summary>
         private void CheckChanged()
         {
-            if ((this.SelectedTemplate.SelectedItem as ApplyTemplate).Id == Guid.Empty)
+            if ((SelectedTemplate.SelectedItem as ApplyTemplate).Id == Guid.Empty)
             {
-                this.OkButton.Enabled = false;
+                OkButton.Enabled = false;
             }
             else
             {
-                int sumOfSelected = this.TranslationProvidersAllLanguages.SelectedIndex +
-                                    this.TranslationProvidersSpecificLanguages.SelectedIndex +
-                                    this.TranslationMemoriesAllLanguages.SelectedIndex +
-                                    this.TranslationMemoriesSpecificLanguages.SelectedIndex +
-                                    this.TerminologyTermbases.SelectedIndex +
-                                    this.TerminologySearchSettings.SelectedIndex +
-                                    this.TranslationQualityAssessment.SelectedIndex +
-                                    this.BatchTasksAllLanguages.SelectedIndex +
-                                    this.BatchTasksSpecificLanguages.SelectedIndex +
-                                    this.VerificationQaChecker30.SelectedIndex +
-                                    this.VerificationTagVerifier.SelectedIndex +
-                                    this.VerificationTerminologyVerifier.SelectedIndex +
-                                    this.VerificationNumberVerifier.SelectedIndex +
-                                    this.FileTypes.SelectedIndex;
-                this.OkButton.Enabled = sumOfSelected > 0;
+                int sumOfSelected = TranslationProvidersAllLanguages.SelectedIndex +
+                                    TranslationProvidersSpecificLanguages.SelectedIndex +
+                                    TranslationMemoriesAllLanguages.SelectedIndex +
+                                    TranslationMemoriesSpecificLanguages.SelectedIndex +
+                                    TerminologyTermbases.SelectedIndex +
+                                    TerminologySearchSettings.SelectedIndex +
+                                    TranslationQualityAssessment.SelectedIndex +
+                                    BatchTasksAllLanguages.SelectedIndex +
+                                    BatchTasksSpecificLanguages.SelectedIndex +
+                                    VerificationQaChecker30.SelectedIndex +
+                                    VerificationTagVerifier.SelectedIndex +
+                                    VerificationTerminologyVerifier.SelectedIndex +
+                                    VerificationNumberVerifier.SelectedIndex +
+									matchRepairBox.SelectedIndex+
+                                    FileTypes.SelectedIndex;
+                OkButton.Enabled = sumOfSelected > 0;
             }
         }
 
@@ -267,8 +281,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TranslationProvidersAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationProvidersAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationProvidersAllLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TranslationProvidersAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TranslationProvidersAllLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -278,8 +292,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TranslationProvidersSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationProvidersSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationProvidersSpecificLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TranslationProvidersSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TranslationProvidersSpecificLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -289,8 +303,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TranslationMemoriesAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationMemoriesAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationMemoriesAllLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TranslationMemoriesAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TranslationMemoriesAllLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -300,8 +314,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TranslationMemoriesSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationMemoriesSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationMemoriesSpecificLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TranslationMemoriesSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TranslationMemoriesSpecificLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -311,8 +325,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TerminologyTermbases_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TerminologyTermbases = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TerminologyTermbases.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TerminologyTermbases = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TerminologyTermbases.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -322,8 +336,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TerminologySearchSettings_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TerminologySearchSettings = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TerminologySearchSettings.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TerminologySearchSettings = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TerminologySearchSettings.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -333,8 +347,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void BatchTasksAllLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).BatchTasksAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.BatchTasksAllLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).BatchTasksAllLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), BatchTasksAllLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -344,8 +358,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void BatchTasksSpecificLanguages_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).BatchTasksSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.BatchTasksSpecificLanguages.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).BatchTasksSpecificLanguages = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), BatchTasksSpecificLanguages.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -355,8 +369,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void VerificationQaChecker30_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).VerificationQaChecker30 = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.VerificationQaChecker30.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).VerificationQaChecker30 = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationQaChecker30.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -366,8 +380,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void VerificationTagVerifier_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).VerificationTagVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.VerificationTagVerifier.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).VerificationTagVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationTagVerifier.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -377,8 +391,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void VerificationTerminologyVerifier_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).VerificationTerminologyVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.VerificationTerminologyVerifier.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).VerificationTerminologyVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationTerminologyVerifier.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -388,8 +402,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void VerificationNumberVerifier_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).VerificationNumberVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.VerificationNumberVerifier.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).VerificationNumberVerifier = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationNumberVerifier.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -399,8 +413,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void VerificationGrammarChecker_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).VerificationGrammarChecker = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.VerificationGrammarChecker.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).VerificationGrammarChecker = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), VerificationGrammarChecker.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -410,8 +424,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void FileTypes_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).FileTypes = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.FileTypes.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).FileTypes = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), FileTypes.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -421,8 +435,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TranslationQualityAssessment_SelectedIndexChanged(object sender, EventArgs e)
         {
-            (this.SelectedTemplate.SelectedItem as ApplyTemplate).TranslationQualityAssessment = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), this.TranslationQualityAssessment.SelectedItem.ToString());
-            this.CheckChanged();
+            (SelectedTemplate.SelectedItem as ApplyTemplate).TranslationQualityAssessment = (ApplyTemplateOptions)Enum.Parse(typeof(ApplyTemplateOptions), TranslationQualityAssessment.SelectedItem.ToString());
+            CheckChanged();
         }
 
         /// <summary>
@@ -435,7 +449,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             // Prepare the edit templates dialog
             EditApplyTemplates editTemplates = new EditApplyTemplates();
             ApplyTemplate comboTemplate = null;
-            foreach (object comboObject in this.SelectedTemplate.Items)
+            foreach (object comboObject in SelectedTemplate.Items)
             {
                 comboTemplate = comboObject as ApplyTemplate;
                 if (!string.IsNullOrEmpty(comboTemplate.FileLocation))
@@ -443,42 +457,38 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     editTemplates.ProjectTemplatesItems.Add(comboTemplate);
                 }
             }
-
             // Show the dialog and check the result
             if (editTemplates.ShowDialog() == DialogResult.OK)
             {
                 // Remember which item is selected
-                Guid selectedId = (this.SelectedTemplate.SelectedItem as ApplyTemplate).Id;
+                Guid selectedId = (SelectedTemplate.SelectedItem as ApplyTemplate).Id;
 
                 // Remove any templates which are not part of the Studio default list
                 int itemCount = 0;
-                while (itemCount < this.SelectedTemplate.Items.Count)
+                while (itemCount < SelectedTemplate.Items.Count)
                 {
-                    comboTemplate = this.SelectedTemplate.Items[itemCount] as ApplyTemplate;
+                    comboTemplate = SelectedTemplate.Items[itemCount] as ApplyTemplate;
                     if (comboTemplate.Uri == null)
                     {
-                        this.SelectedTemplate.Items.RemoveAt(itemCount);
+                        SelectedTemplate.Items.RemoveAt(itemCount);
                     }
                     else
                     {
                         itemCount++;
                     }
                 }
-
                 // Add in each template from the dialog
                 foreach (object o in editTemplates.ProjectTemplatesItems)
                 {
-                    this.SelectedTemplate.Items.Add(o);
+                    SelectedTemplate.Items.Add(o);
                 }
-
                 // Add a default template if necessary
-                if (this.SelectedTemplate.Items.Count == 0)
+                if (SelectedTemplate.Items.Count == 0)
                 {
-                    this.SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
+                    SelectedTemplate.Items.Add(new ApplyTemplate("<none>"));
                 }
-
                 // Select the previously selected template
-                this.SelectTemplate(selectedId);
+                SelectTemplate(selectedId);
             }
         }
 
@@ -491,7 +501,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             if (sender is Control)
             {
-                this.FormToolTip.ToolTipTitle = (string)(sender as Control).Tag;
+                FormToolTip.ToolTipTitle = (string)(sender as Control).Tag;
             }
         }
 
@@ -502,7 +512,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void ShowToolTips_CheckedChanged(object sender, EventArgs e)
         {
-            this.FormToolTip.Active = this.ShowToolTips.Checked;
+            FormToolTip.Active = ShowToolTips.Checked;
         }
 
         /// <summary>
@@ -512,18 +522,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void OkButton_Click(object sender, EventArgs e)
         {
-            if (this.showWarning)
+            if (_showWarning)
             {
-                if (this.TerminologyTermbases.SelectedIndex > 0 || this.TerminologySearchSettings.SelectedIndex > 0)
+                if (TerminologyTermbases.SelectedIndex > 0 || TerminologySearchSettings.SelectedIndex > 0)
                 {
                     TermbaseWarningForm warningForm = new TermbaseWarningForm();
                     if (warningForm.ShowDialog(this) == DialogResult.Cancel)
                     {
-                        this.TerminologyTermbases.SelectedIndex = 0;
-                        this.TerminologySearchSettings.SelectedIndex = 0;
+                        TerminologyTermbases.SelectedIndex = 0;
+                        TerminologySearchSettings.SelectedIndex = 0;
                     }
-
-                    this.showWarning = warningForm.ShowAgain;
+                    _showWarning = warningForm.ShowAgain;
                 }
             }
         }
@@ -537,5 +546,25 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         {
             new AboutBox().ShowDialog(this);
         }
-    }
+
+		private void matchRepairBox_MouseEnter(object sender, EventArgs e)
+		{
+			var control = sender as Control;
+			if (control != null)
+			{
+				FormToolTip.ToolTipTitle = (string)control.Tag;
+			}
+		}
+
+		private void matchRepairBox_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var applyTemplate = SelectedTemplate.SelectedItem as ApplyTemplate;
+			if (applyTemplate != null)
+			{
+				applyTemplate.MatchRepairSettings =
+					(ApplyTemplateOptions) Enum.Parse(typeof(ApplyTemplateOptions), matchRepairBox.SelectedItem.ToString());
+				CheckChanged();
+			}
+		}
+	}
 }

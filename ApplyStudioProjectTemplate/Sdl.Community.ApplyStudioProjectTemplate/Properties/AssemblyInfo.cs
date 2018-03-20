@@ -12,11 +12,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Apply Studio Project Template")]
-[assembly: AssemblyDescription("This plug-in allows you to apply settings from a template (.sdltpl) or project (.sdlproj) to one or more projects in SDL Trados Studio 2014.")]
+[assembly: AssemblyDescription("This plug-in allows you to apply settings from a template (.sdltpl) or project (.sdlproj) to one or more projects in SDL Trados Studio 2017.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDL plc")]
 [assembly: AssemblyProduct("Apply Studio Project Template")]
-[assembly: AssemblyCopyright("Copyright © 2015")]
+[assembly: AssemblyCopyright("Copyright © 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -38,5 +38,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.9.0.0")]
-[assembly: AssemblyFileVersion("3.9.0.0")]
+[assembly: AssemblyVersion("4.4.0.0")]
+[assembly: AssemblyFileVersion("4.4.0.0")]

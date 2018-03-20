@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.ProjectTerms.Plugin</RootNamespace>
-    <AssemblyName>Sdl.Community.ProjectTerms</AssemblyName>
+    <AssemblyName>Sdl.Community.projectTermExtract</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -37,6 +37,10 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Sdl.Community.Toolkit.Core, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.6.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
@@ -119,7 +123,13 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net45\System.Diagnostics.DiagnosticSource.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -173,7 +183,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\wordcloud.ico" />
+    <None Include="app.config" />
+    <None Include="Resources\applogo.ico" />
     <EmbeddedResource Include="PluginResources.resx">
       <SubType>Designer</SubType>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -221,6 +232,10 @@
     <ProjectReference Include="..\Sdl.Community.ProjectTerms.Controls\Sdl.Community.ProjectTerms.Controls.csproj">
       <Project>{154a450e-3d19-42d3-ae88-e059729f647d}</Project>
       <Name>Sdl.Community.ProjectTerms.Controls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.ProjectTerms.Telemetry\Sdl.Community.ProjectTerms.Telemetry.csproj">
+      <Project>{51e1b5ae-eb8d-4507-bcf1-cb3a2b7f1c41}</Project>
+      <Name>Sdl.Community.ProjectTerms.Telemetry</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

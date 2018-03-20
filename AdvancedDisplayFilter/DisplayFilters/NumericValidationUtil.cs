@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
 {
@@ -40,8 +37,7 @@ namespace Sdl.Community.AdvancedDisplayFilter.DisplayFilters
             if (tokens[0].type != NumberToken.TokenType.Number 
                 || tokens[tokens.Count - 1].type != NumberToken.TokenType.Number)
                 return false;
-
-
+			
             SetNumberValueTypes(tokens);
 
             // check for invalid tokens            

@@ -61,6 +61,16 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon applogo {
+            get {
+                object obj = ResourceManager.GetObject("applogo", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to blackListTerms.txt.
         /// </summary>
         public static string BlacklistFileName {
@@ -268,6 +278,24 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to update the existed file!.
+        /// </summary>
+        public static string Error_UpdateExitedFile {
+            get {
+                return ResourceManager.GetString("Error_UpdateExitedFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No matches found!.
+        /// </summary>
+        public static string Info_NotMatch {
+            get {
+                return ResourceManager.GetString("Info_NotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your termbase was successfully added to the project!.
         /// </summary>
         public static string Info_SuccessfullyAdded {
@@ -277,7 +305,13 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You already have a termbase for this file! Please remove it and generate it again!.
+        ///   Looks up a localized string similar to   You already have a termbase for this file so you are going to have to remove it to be able to create a new one.  This will require three manual actions due to limitations in the API:
+        ///
+        ///  1. Go to Project Settings -&gt; All Language Pairs -&gt; Termbases and remove the termbase from your Project and then close Studio
+        ///  2. Go to your Projects folder in Windows Explorer and delete the Tb folder
+        ///  3. Go to c:\Users\[username]\AppData\Local\Temp\ and delete the Tb folder
+        ///
+        ///Restart Studio and now you should be ab [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Info_TermbaseExists {
             get {
@@ -331,6 +365,24 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only generate the termbase from the extracted project terms XML file..
+        /// </summary>
+        public static string MessageContent_GenerateTermbaseAction {
+            get {
+                return ResourceManager.GetString("MessageContent_GenerateTermbaseAction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action cannot be run for multiples files!.
+        /// </summary>
+        public static string MessageContent_multipleFilesTermbase {
+            get {
+                return ResourceManager.GetString("MessageContent_multipleFilesTermbase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please open the settings window!.
         /// </summary>
         public static string MessageContent_SkipSettings {
@@ -372,16 +424,6 @@ namespace Sdl.Community.ProjectTerms.Plugin {
         public static string Plugin_Name {
             get {
                 return ResourceManager.GetString("Plugin_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon wordcloud {
-            get {
-                object obj = ResourceManager.GetObject("wordcloud", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
             }
         }
         

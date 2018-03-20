@@ -27,7 +27,7 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             InitializeComponent();
             progressBarExtractTerms.Visible = false;
 
-            viewModel = ProjectTermsViewModel.Instance;
+            viewModel = new ProjectTermsViewModel();
             viewModel.Filters = ExtractFilters();
         }
 
@@ -150,9 +150,28 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
             ButtonsEnabled(true);
         }
 
+        private void PopulateBlacklist(Regex regex)
+        {
+            viewModel.ReadProjectTermsFromFile();
+            var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
+            if (blacklistRegex.Count == 0)
+            {
+                MessageBox.Show(PluginResources.Info_NotMatch, PluginResources.MessageType_Info);
+                textBoxTerm.Text = "";
+                return;
+            }
+            foreach (var item in blacklistRegex)
+            {
+                if (CheckExactMatch(item.Text)) continue;
+                AddTerm(item.Text);
+            }
+
+            textBoxTerm.Text = "";
+        }
+
         private void buttonAdd_Click(object sender, EventArgs e)
         {
-            string term = textBoxTerm.Text.ToLower();
+            string term = textBoxTerm.Text;
 
             if (checkboxEnabled)
             {
@@ -164,24 +183,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
                 else
                 {
                     var regex = new Regex(term);
-                    viewModel.ReadProjectTermsFromFile();
-                    var blacklistRegex = viewModel.Terms.Where(x => regex.IsMatch(x.Text)).ToList();
-                    foreach (var item in blacklistRegex)
-                    {
-                        if (listViewBlackList.FindItemWithText(item.Text) != null)
-                        {
-                            textBoxTerm.Text = "";
-                            MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
-                            return;
-                        }
-
-                        AddTerm(item.Text);
-                    }
+                    PopulateBlacklist(regex);
                 }
+            } else if (checkBoxCaseSensitive.Checked)
+            {
+                var regex = new Regex(@"(?<!\S)" + term + @"(?!\S)", RegexOptions.IgnoreCase);
+                PopulateBlacklist(regex);
             }
             else
             {
-                if (listViewBlackList.FindItemWithText(term) != null)
+                if (CheckExactMatch(term))
                 {
                     textBoxTerm.Text = "";
                     MessageBox.Show(PluginResources.MessageContent_buttonAdd, PluginResources.MessageType_Info);
@@ -190,6 +201,16 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
                 AddTerm(term);
             }
+        }
+
+        private bool CheckExactMatch(string term)
+        {
+            foreach (ListViewItem item in listViewBlackList.Items)
+            {
+                if (Regex.IsMatch(item.Text.ToString(), @"(^|\s)" + term + @"(\s|$)")) return true;
+            }
+
+            return false;
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -224,43 +245,45 @@ namespace Sdl.Community.ProjectTerms.Plugin.Views
 
         private void buttonLoad_Click(object sender, EventArgs e)
         {
-            string blackListFilePath = Utils.Utils.GenerateBlackListPath();
-            if (!File.Exists(blackListFilePath))
+            openFileDialogLoadFile.Filter ="TXT|*.txt";
+            if (openFileDialogLoadFile.ShowDialog() == DialogResult.OK)
             {
-                MessageBox.Show(PluginResources.MessageContent_buttonLoad, PluginResources.MessageType_Info);
-                return;
-            }
-
-            using (StreamReader rw = new StreamReader(blackListFilePath))
-            {
-                listViewBlackList.Items.Clear();
-
-                string term = string.Empty;
-                while ((term = rw.ReadLine()) != null)
+                if (!File.Exists(openFileDialogLoadFile.FileName))
                 {
-                    listViewBlackList.Items.Add(new ListViewItem(term));
-                    viewModel.Filters.Blacklist.Add(term);
+                    MessageBox.Show(PluginResources.MessageContent_buttonLoad, PluginResources.MessageType_Info);
+                    return;
+                }
+
+                using (StreamReader rw = new StreamReader(openFileDialogLoadFile.FileName))
+                {
+                    listViewBlackList.Items.Clear();
+
+                    string term = string.Empty;
+                    while ((term = rw.ReadLine()) != null)
+                    {
+                        listViewBlackList.Items.Add(new ListViewItem(term));
+                        viewModel.Filters.Blacklist.Add(term);
+                    }
                 }
             }
-
-            ButtonsEnabled(false);
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            string blackListFilePath = Utils.Utils.GenerateBlackListPath();
-
-            if (File.Exists(blackListFilePath)) File.Delete(blackListFilePath);
-
-            using (StreamWriter sw = new StreamWriter(blackListFilePath))
+            saveFileDialogBlacklist.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (saveFileDialogBlacklist.ShowDialog() == DialogResult.OK)
             {
-                foreach (ListViewItem item in listViewBlackList.Items)
-                {
-                    sw.WriteLine(item.Text);
-                }
-            }
+                openFileDialogLoadFile.FileName = "";
 
-            ButtonsEnabled(false);
+                using (Stream s = File.Create(saveFileDialogBlacklist.FileName))
+                using (StreamWriter sw = new StreamWriter(s))
+                {
+                    foreach (ListViewItem item in listViewBlackList.Items)
+                    {
+                        sw.WriteLine(item.Text);
+                    }
+                }
+            } 
         }
 
         private void checkBoxRegex_CheckedChanged(object sender, EventArgs e)

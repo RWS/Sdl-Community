@@ -8,31 +8,38 @@ namespace PostEdit.Compare.Forms
     public partial class ReportWizard : Form
     {
         private int _indexCurrentPanel;
-        public bool Saved { get; set; }
+		public bool IsFromProjectsViewCall { get; set; }
+		public bool Saved { get; set; }
 
         public ReportWizard()
         {
             InitializeComponent();
             Saved = false;
-        }
+			IsFromProjectsViewCall = false;
+
+		}
 
         private void ReportWizard_Load(object sender, EventArgs e)
-        {
-            
-
+        {          
+		
             panel_action.Dock = DockStyle.Fill;
             panel_options.Dock = DockStyle.Fill;
-
-            switch_Panel(panel_action);
+			if (IsFromProjectsViewCall)
+			{
+				switch_Panel(panel_options);
+			}
+			else
+			{
+				switch_Panel(panel_action);
+			}
+            
 
             radioButton_compareSelectedFiles_CheckedChanged(null, null);
 
             textBox_javaExecutablePath_TextChanged(null, null);
         }
 
-        
-
-        private void switch_Panel(Control panel)
+        public void switch_Panel(Control panel)
         {          
             switch (panel.Name)
             {
@@ -55,19 +62,29 @@ namespace PostEdit.Compare.Forms
                     }
                 case "panel_options":
                     {
-                        label_titleBar_title.Text = "Report Options - Step 2 of 2";
+						if (IsFromProjectsViewCall)
+						{
+							label_titleBar_title.Text = "Report Options - Step 1 of 1";
+							button_wizard_back.Enabled = false;
+						}
+						else
+						{
+							label_titleBar_title.Text = "Report Options - Step 2 of 2";
+							button_wizard_back.Enabled = true;
+						}
+                        
                         label_titlebar_description.Text = "Choose the report options";
                         label_titlebar_note.Text = "Note: changing the settings here will override the general report settings that are saved with the application";
 
                         panel_options.BringToFront();
 
                         button_wizard_help.Enabled = false;
-
-                        button_wizard_back.Enabled = true;
+						                       
                         button_wizard_next.Enabled = false;
 
                         button_wizard_finish.Enabled = true;
                         button_wizard_cancel.Enabled = true;
+
                         break;
                     }
             }

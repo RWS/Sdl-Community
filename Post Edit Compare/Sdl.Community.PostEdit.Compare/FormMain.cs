@@ -33,9 +33,7 @@ namespace PostEdit.Compare
             LoadPropertiesComparisonProjects(null);
 
         }
-
-
-        private void CheckAutomation()
+       private void CheckAutomation()
         {
             var settings = new Automation.AutomationComunicationSettings();
             try

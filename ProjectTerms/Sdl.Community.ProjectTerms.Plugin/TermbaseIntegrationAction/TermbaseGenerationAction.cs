@@ -12,7 +12,9 @@ using System.Globalization;
 using Sdl.Community.ProjectTerms.Plugin.Exceptions;
 using Sdl.Community.ProjectTerms.Plugin;
 using System.IO;
+using System.Linq;
 using Sdl.Community.ProjectTerms.Plugin.Utils;
+using Sdl.Community.ProjectTerms.Telemetry;
 
 namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 {
@@ -24,13 +26,31 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
         {
             try
             {
+                if (SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.Count() > 1)
+                {
+                    MessageBox.Show(PluginResources.MessageContent_multipleFilesTermbase, PluginResources.MessageType_Info);
+                    return;
+                }
+                var selectedFileName = Path.GetFileNameWithoutExtension(SdlTradosStudio.Application.GetController<FilesController>().SelectedFiles.FirstOrDefault().Name);
+                var extractedXmlFileName = Utils.GetXmlFileName(Utils.GetProjecPath());
+                if (selectedFileName != extractedXmlFileName)
+                {
+                    MessageBox.Show(PluginResources.MessageContent_GenerateTermbaseAction, PluginResources.MessageType_Info);
+                    return;
+                }
+
                 var termbaseCreator = new TermbaseGeneration();
 
                 var termbaseDefaultContent = TermbaseDefinitionFile.GetResourceTextFile("termbaseDefaultDefinitionFile.xdt");
                 var termbaseDefinitionPath = TermbaseDefinitionFile.SaveTermbaseDefinitionToTempLocation(termbaseDefaultContent);
-                TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
 
-                var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
+				TermbaseDefinitionFile.AddLanguages(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "EmptyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "DummyEntry");
+				TermbaseDefinitionFile.AddLanguageGroups(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages(), "FullEntry");
+				TermbaseDefinitionFile.AddSchemaElements(termbaseDefinitionPath, termbaseCreator.GetProjectLanguages());
+
+				var termbase = termbaseCreator.CreateTermbase(termbaseDefinitionPath);
                 if (termbase == null)
                 {
                     DisplayMessage(PluginResources.Info_TermbaseExists, PluginResources.MessageTitle);
@@ -41,8 +61,12 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 
                 string termbaseDirectoryPath = Path.Combine(Path.GetDirectoryName(SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject.FilePath), "Tb");
 
-                if (!Directory.Exists(termbaseDirectoryPath)) Directory.CreateDirectory(termbaseDirectoryPath);
-                string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
+				if (!Directory.Exists(termbaseDirectoryPath))
+				{
+					Directory.CreateDirectory(termbaseDirectoryPath);
+				}
+
+				string termbasePath = Path.Combine(termbaseDirectoryPath, Path.GetFileName(termbase._Path));
                 File.Copy(termbase._Path, termbasePath);
 
                 IncludeTermbaseInStudio(termbase, termbaseCreator, termbasePath);
@@ -74,8 +98,13 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
 
         private void IncludeTermbaseInStudio(ITermbase termbase, TermbaseGeneration termbaseCreator, string termbasePath)
         {
+            ITelemetryTracker telemetryTracker = new TelemetryTracker();
+
             try
             {
+                telemetryTracker.StartTrackRequest("Including the termbase into Trados Studio");
+                telemetryTracker.TrackEvent("Including the termbase into Trados Studio", null);
+
                 #region TbConfig
                 var project = SdlTradosStudio.Application.GetController<ProjectsController>().CurrentProject;
                 TermbaseConfiguration termbaseConfig = project.GetTermbaseConfiguration();
@@ -109,6 +138,8 @@ namespace Sdl.Community.ProjectTerms.TermbaseIntegrationAction
             }
             catch (Exception e)
             {
+                telemetryTracker.TrackException(new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message));
+                telemetryTracker.TrackTrace((new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message)).StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
                 throw new UploadTermbaseException(PluginResources.Error_IncludeTermbaseInStudio + e.Message);
             }
         }

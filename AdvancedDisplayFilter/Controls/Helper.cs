@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Sdl.Community.Plugins.AdvancedDisplayFilter;
+﻿using Sdl.Community.Plugins.AdvancedDisplayFilter;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;
 
 namespace Sdl.Community.AdvancedDisplayFilter.Controls
 {
-    public class Helper
+	public class Helper
     {
         public static string GetTypeName(DisplayFilterSettings.ConfirmationLevel type)
         {

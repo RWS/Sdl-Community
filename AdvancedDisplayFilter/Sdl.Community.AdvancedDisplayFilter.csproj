@@ -47,17 +47,16 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.FileType, Version=0.5.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>packages\Sdl.Community.Toolkit.FileType.0.5.0\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sdl.Community.Toolkit.FileType, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>packages\Sdl.Community.Toolkit.FileType.0.6.1\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Integration, Version=0.5.0.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>packages\Sdl.Community.Toolkit.Integration.0.5.0\lib\net45\Sdl.Community.Toolkit.Integration.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sdl.Community.Toolkit.Integration, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>packages\Sdl.Community.Toolkit.Integration.0.6.1\lib\net45\Sdl.Community.Toolkit.Integration.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -86,6 +85,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <SpecificVersion>False</SpecificVersion>
@@ -126,10 +128,23 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Controls\ListViewItemComparer.cs" />
+    <Compile Include="DisplayFilters\CustomFilterSettings.cs" />
     <Compile Include="DisplayFilters\DisplayFilter.cs" />
     <Compile Include="DisplayFilters\NumericValidationUtil.cs" />
+    <Compile Include="Helpers\ColorPickerHelper.cs" />
+    <Compile Include="Helpers\CommentsHelper.cs" />
+    <Compile Include="Helpers\ContentHelper.cs" />
+    <Compile Include="Helpers\CustomFilterHelper.cs" />
+    <Compile Include="Helpers\FuzzyHelper.cs" />
+    <Compile Include="Helpers\SegmentTextVisitor.cs" />
+    <Compile Include="Helpers\TagDataVisitor.cs" />
+    <Compile Include="Helpers\SegmentNumbersHelper.cs" />
+    <Compile Include="Helpers\TagVisitor.cs" />
+    <Compile Include="Helpers\UserVisitor.cs" />
     <Compile Include="Models\DisplayFilterSerializer.cs" />
     <Compile Include="Controls\Helper.cs" />
+    <Compile Include="Models\SavedSettings.cs" />
+    <Compile Include="Models\SegmentRange.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -144,7 +159,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="3rd party\Cyotek.Windows.Forms.ColorPicker.dll" />
     <Content Include="Images\filter.ico" />
+    <EmbeddedResource Include="Resources\eyedropper.png" />
     <None Include="..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>

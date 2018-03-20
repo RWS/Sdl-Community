@@ -190,7 +190,13 @@
     <value>Your termbase was successfully added to the project!</value>
   </data>
   <data name="Info_TermbaseExists" xml:space="preserve">
-    <value>You already have a termbase for this file! Please remove it and generate it again!</value>
+    <value>  You already have a termbase for this file so you are going to have to remove it to be able to create a new one.  This will require three manual actions due to limitations in the API:
+
+  1. Go to Project Settings -&gt; All Language Pairs -&gt; Termbases and remove the termbase from your Project and then close Studio
+  2. Go to your Projects folder in Windows Explorer and delete the Tb folder
+  3. Go to c:\Users\[username]\AppData\Local\Temp\ and delete the Tb folder
+
+Restart Studio and now you should be able to generate the new termbase.</value>
   </data>
   <data name="MessageContent_buttonAdd" xml:space="preserve">
     <value>The term exists in the list!</value>
@@ -237,10 +243,6 @@
   <data name="BlacklistFileName" xml:space="preserve">
     <value>blackListTerms.txt</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="wordcloud" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>Resources\wordcloud.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Message_ExtractedTerms" xml:space="preserve">
     <value>The terms were extracted successfully.</value>
     <comment>Terms was extracted with success!</comment>
@@ -250,5 +252,21 @@
   </data>
   <data name="Button_ExtractTermsProject" xml:space="preserve">
     <value>Extract Terms From Project</value>
+  </data>
+  <data name="Info_NotMatch" xml:space="preserve">
+    <value>No matches found!</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="applogo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\applogo.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="MessageContent_multipleFilesTermbase" xml:space="preserve">
+    <value>This action cannot be run for multiples files!</value>
+  </data>
+  <data name="MessageContent_GenerateTermbaseAction" xml:space="preserve">
+    <value>You can only generate the termbase from the extracted project terms XML file.</value>
+  </data>
+  <data name="Error_UpdateExitedFile" xml:space="preserve">
+    <value>Unable to update the existed file!</value>
   </data>
 </root>

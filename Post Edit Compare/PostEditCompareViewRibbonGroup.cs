@@ -6,7 +6,14 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
-
+using System.Linq;
+using System.Collections.Generic;
+using PostEdit.Compare.Forms;
+using Sdl.Community.PostEdit.Compare;
+using static Sdl.Community.PostEdit.Compare.Core.Comparison.PairedFiles;
+using Application = PostEdit.Compare.Cache.Application;
+using System.IO;
+using Sdl.Community.PostEdit.Compare.Core.Helper;
 //using PostEdit.Compare;
 //using PostEdit.Compare.Model;
 
@@ -47,9 +54,7 @@ namespace Sdl.Community.PostEdit.Versions
 
 
 
-
-
-    [Action("ContextCreateProjectVersionAction", typeof(PostEditCompareViewController), Name = "CreateProjectVersion_Name", Description = "CreateProjectVersion_Description", Icon = "CreateProjectVersion_Icon")]
+	[Action("ContextCreateProjectVersionAction", typeof(PostEditCompareViewController), Name = "CreateProjectVersion_Name", Description = "CreateProjectVersion_Description", Icon = "CreateProjectVersion_Icon")]
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 3, DisplayType.Default, "", true)]
     [Shortcut(Keys.Control | Keys.Alt | Keys.V)]
     public class ContextCreateProjectVersionAction : AbstractViewControllerAction<PostEditCompareViewController>
@@ -70,8 +75,117 @@ namespace Sdl.Community.PostEdit.Versions
         }
     }
 
+	[Action("CreateReport",
+  typeof(PostEditCompareViewController),
+  Name = "Create Comparison Report",
+  Description = "Create Comparison Report",
+  Icon = "CompareProjects_Icon")]
+	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "", true)]
+	public class CreateProjectReport : AbstractViewControllerAction<PostEditCompareViewController>
+	{
+		protected override void Execute()
+		{
+			IModel mModel = new Model();
+			var postEditCompare = new FormMain(mModel);
 
-    [RibbonGroup("PostEditCompareRibbonGroup", "PostEditCompareRibbonGroup_Name")]
+			var skipWindow = new SkipSettingsWindow();
+			skipWindow.ShowDialog();
+
+			var reportWizard = new ReportWizard();
+			postEditCompare.InitializeReportWizard(reportWizard);
+
+			if (skipWindow.CustomizeSettings)
+			{
+				reportWizard.IsFromProjectsViewCall = true;
+				reportWizard.ShowDialog();
+				postEditCompare.SetPriceGroup(reportWizard);
+				
+				CreateReport(postEditCompare);
+			}
+			if (skipWindow.SkipSettings)
+			{
+				postEditCompare.SetPriceGroup(reportWizard);
+
+				CreateReport(postEditCompare);
+			}
+		}
+
+		private void CreateReport(FormMain postEditCompare)
+		{
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+			var selectedProjectsId = new List<string>();
+			var comparer = postEditCompare.CreateProcessor();
+			var cancel = false;
+			foreach (var studioProject in projectController.SelectedProjects)
+			{
+				var id = studioProject.GetProjectInfo().Id.ToString();
+				selectedProjectsId.Add(id);
+			}
+
+			var projectsFromSettings = Controller.Settings.projects;
+			var selectedVersionProjects = projectsFromSettings
+				.Where(proj => selectedProjectsId.Any(p => p.Equals(proj.id))).ToList();
+
+			var projectSettingsPath = Application.Settings.ApplicationSettingsPath;
+			var excelReportName = Guid.NewGuid().ToString() + ".xlsx";
+			var excelReportFullPath = Path.Combine(projectSettingsPath, excelReportName);
+
+			// create excel report
+			ExcelReportHelper.CreateExcelReport(excelReportFullPath, selectedVersionProjects[0].name);
+
+			foreach (var project in selectedVersionProjects)
+			{
+				// excel report path is cleared after each autosave, set the path again
+				postEditCompare.SetExcelReportPath(excelReportFullPath);
+				var package = ExcelReportHelper.GetExcelPackage(excelReportFullPath);
+				var normalizedName = ExcelReportHelper.NormalizeWorksheetName(project.name);
+				var worksheetExists = Helper.WorksheetExists(package, project.name);
+				if (!worksheetExists)
+				{
+					Helper.AddNewWorksheetToReport(package, normalizedName);
+				}
+
+				postEditCompare.SetExcelSheetName(normalizedName);
+				var versionDetails = Helper.CreateVersionDetails(project);
+
+				var filesPairs = Helper.GetPairedFiles(versionDetails,project);
+
+				postEditCompare.ParseContentFromFiles(comparer, filesPairs, ref cancel);
+				postEditCompare.CreateComparisonReport(cancel, comparer);
+			}
+
+			//Auto save the report only after the report was generated for selected projects
+			if (Application.Settings.ReportsAutoSave)
+			{
+				if (Application.Settings.ReportsAutoSaveFullPath.Trim() != string.Empty && Directory.Exists(Application.Settings.ReportsAutoSaveFullPath))
+				{
+					// autosave excel report file
+					var reportPathAutoSave = Application.Settings.ReportsAutoSaveFullPath;
+
+					var reportNameAutoSavePath = postEditCompare.SetAutoSavePath();
+					reportNameAutoSavePath = postEditCompare.GetAutoSaveFileName(reportNameAutoSavePath);
+
+					if (Application.Settings.ReportsCreateMonthlySubFolders)
+					{
+						reportPathAutoSave = Path.Combine(reportPathAutoSave,
+							DateTime.Now.Year + "-" + DateTime.Now.Month.ToString().PadLeft(2, '0'));
+						if (!Directory.Exists(reportPathAutoSave))
+							Directory.CreateDirectory(reportPathAutoSave);
+					}
+
+					var reportNameAutoSave = reportNameAutoSavePath.Substring(reportNameAutoSavePath.LastIndexOf(@"\")+1);
+					var reportFullPathAutoSave = Path.Combine(reportPathAutoSave, reportNameAutoSave);
+					File.Copy(excelReportFullPath, reportFullPathAutoSave + ".xlsx", true);
+				}
+			}
+			postEditCompare.SetExcelReportPath(string.Empty);
+			
+		}
+	}
+
+
+
+	[RibbonGroup("PostEditCompareRibbonGroup", "PostEditCompareRibbonGroup_Name")]
     [RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation), ZIndex = 0)]
     class PostEditCompareRibbonGroup : AbstractRibbonGroup
     {

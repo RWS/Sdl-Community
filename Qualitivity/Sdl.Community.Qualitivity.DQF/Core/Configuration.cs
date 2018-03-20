@@ -6,17 +6,7 @@ namespace Sdl.Community.DQF.Core
     {
         public static string DqfServerRoot = @"https://dqf.taus.net";
         public static string DqfApiVersion = @"/api/v1/";
-
-        public static string DqfPmanagerName = @"Patrick Hartnett";
-        public static string DqfPmanagerEmail = @"Patrick.Hartnett@Live.com";
-        public static string DqfPmanagerKey = @"8ifnjqg6spirphfn0atc3bbn5icgnnprv2g8r061qhcgo5ipik8c";
-
-        public static string DqfTranslatorName = @"Patrick Hartnett";
-        public static string DqfTranslatorEmail = @"Patrick.Hartnett@Live.com";
-        public static string DqfTranslatorKey = @"njnrl7jfm3t7ab13b9j5uikv4gi21o0i5rt3fonvg4n2cdmg61ho";
-      
-
-
+		
         public static List<QualityLevel> QualityLevel = new List<QualityLevel>
         {
             new QualityLevel { Id=1, Name="Good Enough", DisplayName="Good Enough"},

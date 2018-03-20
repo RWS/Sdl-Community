@@ -6,16 +6,8 @@ namespace Sdl.Community.ProjectTerms.Plugin.Utils
 {
     public class ProjectTermsCloudResult
     {
-        public IEnumerable<ITerm> WeightedTerms
-        {
-            get;
-            set;
-        }
+        public IEnumerable<ITerm> WeightedTerms { get; set; }
 
-        public Exception Exception
-        {
-            get;
-            set;
-        }
+        public Exception Exception { get; set; }
     }
 }

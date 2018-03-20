@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.Toolkit.Integration.DisplayFilter;
 using Sdl.Community.Toolkit.FileType;

@@ -44,7 +44,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.newProjectActivityToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.newDQFProjectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_bottom = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -153,8 +152,7 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             this.removeTimeTrackerProjectToolStripMenuItem,
             this.toolStripSeparator1,
             this.newProjectActivityToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.newDQFProjectToolStripMenuItem});
+            this.toolStripSeparator2});
             this.contextMenuStrip_navigation_control.Name = "contextMenuStrip1";
             this.contextMenuStrip_navigation_control.Size = new System.Drawing.Size(215, 126);
             // 
@@ -198,14 +196,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(211, 6);
-            // 
-            // newDQFProjectToolStripMenuItem
-            // 
-            this.newDQFProjectToolStripMenuItem.Enabled = false;
-            this.newDQFProjectToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newDQFProjectToolStripMenuItem.Image")));
-            this.newDQFProjectToolStripMenuItem.Name = "newDQFProjectToolStripMenuItem";
-            this.newDQFProjectToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
-            this.newDQFProjectToolStripMenuItem.Text = "New DQF Project";
             // 
             // panel_bottom
             // 
@@ -583,9 +573,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
         private Label label4;
         internal ComboBox comboBox_filter_name;
         private ToolStripSeparator toolStripSeparator2;
-        internal ToolStripMenuItem newDQFProjectToolStripMenuItem;
         public CheckBox checkBox_include_unlisted_projects;
-
-
     }
 }

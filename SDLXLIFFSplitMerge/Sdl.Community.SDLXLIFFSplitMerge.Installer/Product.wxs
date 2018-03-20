@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
+	<Product Id="*" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
+		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+		<UIRef Id="WixUI_InstallDir" />
+
+		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+		<MediaTemplate EmbedCab="yes"/>
+
+		<Feature Id="ProductFeature" Title="Sdl.Community.SDLXLIFFSplitMerge.Installer" Level="1">
+			<ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id="ApplicationShortcutDesktop" />
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<DirectoryRef Id="DesktopFolder">
+			<Component Id="ApplicationShortcutDesktop" Guid="247952a2-ba7b-48a7-9ed8-6e38c5535897">
+				<Shortcut Id="ApplicationDesktopShortcut" Name="SDLXLIFFSplitMerge" Icon="icon.ico" Description="SDLXLIFF Split/Merge" Target="[INSTALLFOLDER]Sdl.Community.SplitMergeUIWix.exe" WorkingDirectory="INSTALLFOLDER" />
+				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.SplitMergeUIWix" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLFOLDER" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" />
+			</Directory>
+			<Directory Id="DesktopFolder" Name="Desktop" />
+		</Directory>
+	</Fragment>
+
+	<Fragment>
+		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
+			<Component Id="Sdl.Community.SplitMergeUIWix">
+				<File Id="Sdl.Community.SplitMergeUIWix.exe" Name="Sdl.Community.SplitMergeUIWix.exe" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetPath)" KeyPath="yes" />
+			</Component>
+
+			<Component Id="Sdl.Community.SplitMergeUIWix.exe.config" Guid="93c5703b-c489-4ce2-af26-4d0a73536d02">
+				<File Id="Sdl.Community.SplitMergeUIWix.exe.config" Name="Sdl.Community.SplitMergeUIWix.exe.config" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.SplitMergeUIWix.exe.config" />
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Lib.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Lib.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" Guid="*">
+				<File Id="Sdl.Utilities.SplitSDLXLIFF.Wizard.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Utilities.SplitSDLXLIFF.Wizard.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.Core.dll" Guid="*">
+				<File Id="Sdl.LanguagePlatform.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.Core.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Core.LanguageProcessing.dll" Guid="*">
+				<File Id="Sdl.Core.LanguageProcessing.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.LanguageProcessing.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Desktop.IntegrationApi.dll" Guid="*">
+				<File Id="Sdl.Desktop.IntegrationApi.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Desktop.IntegrationApi.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Desktop.IntegrationApi.Extensions.dll" Guid="*">
+				<File Id="Sdl.Desktop.IntegrationApi.Extensions.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Desktop.IntegrationApi.Extensions.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.FileTypeSupport.Framework.Core.dll" Guid="*">
+				<File Id="Sdl.FileTypeSupport.Framework.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.FileTypeSupport.Framework.Core.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.FileTypeSupport.Framework.Implementation.dll" Guid="*">
+				<File Id="Sdl.FileTypeSupport.Framework.Implementation.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.FileTypeSupport.Framework.Implementation.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.ProjectAutomation.Core.dll" Guid="*">
+				<File Id="Sdl.ProjectAutomation.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.ProjectAutomation.Core.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.ProjectAutomation.FileBased.dll" Guid="*">
+				<File Id="Sdl.ProjectAutomation.FileBased.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.ProjectAutomation.FileBased.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.ProjectAutomation.Settings.dll" Guid="*">
+				<File Id="Sdl.ProjectAutomation.Settings.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.ProjectAutomation.Settings.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.TranslationStudioAutomation.IntegrationApi.dll" Guid="*">
+				<File Id="Sdl.TranslationStudioAutomation.IntegrationApi.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.TranslationStudioAutomation.IntegrationApi.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" Guid="*">
+				<File Id="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" Guid="*">
+				<File Id="Sdl.LanguagePlatform.TranslationMemoryTools.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.TranslationMemoryTools.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.LanguagePlatform.Lingua.dll" Guid="*">
+				<File Id="Sdl.LanguagePlatform.Lingua.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.LanguagePlatform.Lingua.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Core.Settings.dll" Guid="*">
+				<File Id="Sdl.Core.Settings.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.Settings.dll"></File>
+			</Component>
+			
+			<Component Id="Sdl.Core.Globalization.dll" Guid="*">
+				<File Id="Sdl.Core.Globalization.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.Globalization.dll"></File>
+			</Component>
+			
+			<Component Id="Sdl.Core.PluginFramework.dll" Guid="*">
+				<File Id="Sdl.Core.PluginFramework.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.PluginFramework.dll"></File>
+			</Component>
+			
+			<Component Id="Sdl.Core.PluginFramework.PackageSupport.dll" Guid="*">
+				<File Id="Sdl.Core.PluginFramework.PackageSupport.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.PluginFramework.PackageSupport.dll"></File>
+			</Component>
+		</ComponentGroup>
+	</Fragment>
+</Wix>

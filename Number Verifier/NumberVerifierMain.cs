@@ -762,6 +762,36 @@ namespace Sdl.Community.NumberVerifier
 			ICollection<string> normalizedNumberCollection, string thousandSeparators, string decimalSeparators,
 			bool noSeparator, bool omitLeadingZero)
 		{
+			string[] shortFormats = {"d/M/yy", "dd/MM/yy", "d.M.yy", "dd.MM.yy", "dd/M/yy", "dd.M.yy"};
+
+			string[] longFormats = {"M/d/yyyy h:mm:ss tt", "M/d/yyyy h:mm tt",
+				   "MM/dd/yyyy hh:mm:ss", "M/d/yyyy h:mm:ss",
+				   "M/d/yyyy hh:mm tt", "M/d/yyyy hh tt",
+				   "M/d/yyyy h:mm", "M/d/yyyy h:mm",
+				   "MM/dd/yyyy hh:mm", "M/dd/yyyy hh:mm",
+				   
+				   "d/M/yyyy h:mm:ss tt", "d/M/yyyy h:mm tt",
+				   "dd/MM/yyyy hh:mm:ss", "d/M/yyyy h:mm:ss",
+				   "d/M/yyyy hh:mm tt", "d/M/yyyy hh tt",
+				   "d/M/yyyy h:mm", "d/M/yyyy h:mm",
+
+				   "dd/M/yyyy", "dd/MM/yyyy", "d/M/yyyy",
+				   "dd.M.yyyy", "dd.MM.yyyy", "d.M.yyyy",
+
+				   "d.M.yyyy h:mm:ss tt", "d.M.yyyy h:mm tt",
+				   "dd.MM.yyyy hh:mm:ss", "d.M.yyyy h:mm:ss",
+				   "d.M.yyyy hh:mm tt", "d.M.yyyy hh tt",
+				   "d.M.yyyy h:mm", "d.M.yyyy h:mm"};
+
+			DateTime dateValue;			
+			if (DateTime.TryParseExact(text, shortFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
+			{
+				text = dateValue.ToString("dd/MM/yy");
+			}
+			if (DateTime.TryParseExact(text, longFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out dateValue))
+			{
+				text = dateValue.ToShortDateString();
+			}
 
 			var separators = string.Concat(thousandSeparators, decimalSeparators);
 			//skip the "-" in case of: - 23 (dash, space, number)
@@ -1077,6 +1107,41 @@ namespace Sdl.Community.NumberVerifier
 			var alphaList = new List<string>();
 			var words = Regex.Split(text, @"\s");
 
+			// The below foreach is used when checking those tags like Source: "<color=70236>Word" and Target:<color=70236>OtherWord
+			// and no empty space is between the '>' and 'Word' or between the '>' and 'OtherWord'.
+			// Because of the missing of empty space, the functionality recognize as beeing alphanumeric and when source and target were not that same('Word' different than 'OtherWord'
+			// error message regarding Alphanumeric modification appeard.
+			List<string> wordsRes = new List<string>();
+			foreach (var w in words)
+			{
+				if (w.Contains('<') || w.Contains('>'))
+				{
+					string[] wRes = new string[] { };
+					if (w.Contains('<'))
+					{
+						var charIndex = w.IndexOf('<');
+						var wordReplace = w.Insert(charIndex, " ");
+						wRes = Regex.Split(wordReplace, @"\s");
+						
+					}
+					if (w.Contains('>'))
+					{
+						var charIndex = w.IndexOf('>');
+						var wordReplace = w.Insert(charIndex + 1, " ");
+						wRes = Regex.Split(wordReplace, @"\s");
+						
+					}
+					foreach (var r in wRes)
+					{
+						wordsRes.Add(r);
+					}
+				}
+				else
+				{
+					wordsRes.Add(w);
+				}
+			}
+
 			if (_verificationSettings.CustomsSeparatorsAlphanumerics)
 			{
 				string[] customsSeparators = !string.IsNullOrEmpty(_verificationSettings.GetAlphanumericsCustomSeparator)
@@ -1093,14 +1158,14 @@ namespace Sdl.Community.NumberVerifier
 				var regex = string.Format(@"^-?\u2212?(^(?=.*[a-zA-Z{0}])(?=.*[0-9]).+$)", res);
 
 				alphaList.AddRange(
-					from word in words
+					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), regex)
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
 			else
 			{
 				alphaList.AddRange(
-					from word in words
+					from word in wordsRes
 					from Match match in Regex.Matches(word.Normalize(NormalizationForm.FormKC), @"^-?\u2212?(^(?=.*[a-zA-Z-])(?=.*[0-9]).+$)")
 					select Regex.Replace(match.Value, "\u2212|-", "m"));
 			}
