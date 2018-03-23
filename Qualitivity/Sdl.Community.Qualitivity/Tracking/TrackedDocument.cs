@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
+using Sdl.Community.Tokenization;
 
 namespace Sdl.Community.Qualitivity.Tracking
 {
@@ -38,8 +40,30 @@ namespace Sdl.Community.Qualitivity.Tracking
         public DateTime? DatetimeOpened { get; set; }
         public DateTime? DatetimeClosed { get; set; }
 
+	    private Tokenizer _tokenizer { get; set; }
 
-        public TrackedDocument()
+	    public Tokenizer Tokenizer
+	    {
+		    get
+		    {
+			    if (_tokenizer != null)
+			    {
+				    return _tokenizer;
+			    }
+
+			    if (SourceLanguage == null || TargetLanguage == null)
+			    {
+				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
+			    }
+
+			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage));
+			    _tokenizer.CreateTranslationMemory();
+
+			    return _tokenizer;
+		    }
+	    }
+
+		public TrackedDocument()
         {
             Id = string.Empty;
             Name = string.Empty;

@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TM", "..\Sdl.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.WPFListView", "..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj", "{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Tokenization", "..\Sdl.Community.Qualitivity.Tokenization\Sdl.Community.Tokenization.csproj", "{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,8 +79,19 @@ Global
 		{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FBACB9DD-95D2-457A-BE82-0F81BBE32C98}.Release|x64.ActiveCfg = Release|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|x64.Build.0 = Debug|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|x64.ActiveCfg = Release|Any CPU
+		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B13437FE-3D75-4D18-87E1-0B2CD92E5121}
 	EndGlobalSection
 EndGlobal
