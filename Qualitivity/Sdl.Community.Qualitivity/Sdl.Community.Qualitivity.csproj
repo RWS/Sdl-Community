@@ -88,52 +88,25 @@
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Sdl.Core.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
-    </Reference>
+    <Reference Include="Sdl.Core.Settings" />
+    <Reference Include="Sdl.Desktop.IntegrationApi" />
+    <Reference Include="Sdl.Desktop.IntegrationApi.Extensions" />
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core" />
+    <Reference Include="Sdl.FileTypeSupport.Framework.Implementation" />
+    <Reference Include="Sdl.LanguagePlatform.Core" />
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory" />
+    <Reference Include="Sdl.ProjectAutomation.Core" />
+    <Reference Include="Sdl.ProjectAutomation.FileBased" />
+    <Reference Include="Sdl.ProjectAutomation.Settings" />
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>..\ThirdParty\SQLite\System.Data.SQLite.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Data.SQLite" />
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.IO.Packaging">
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\System.IO.Packaging.dll</HintPath>
-    </Reference>
     <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -543,6 +516,10 @@
     <ProjectReference Include="..\Sdl.Community.Qualitivity.TM\Sdl.Community.TM.csproj">
       <Project>{65c5f510-7b16-4201-a238-668d14ed0801}</Project>
       <Name>Sdl.Community.TM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Sdl.Community.Qualitivity.Tokenization\Sdl.Community.Tokenization.csproj">
+      <Project>{ee7ab560-7b93-4388-a46d-0d771d0d8aec}</Project>
+      <Name>Sdl.Community.Tokenization</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sdl.Community.Qualitivity.WPFListView\Sdl.Community.WPFListView.csproj">
       <Project>{fbacb9dd-95d2-457a-be82-0f81bbe32c98}</Project>
