@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using Sdl.Community.Tokenization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
@@ -14,9 +16,28 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
         internal bool IncludeTagText = true;
         internal Dictionary<string, Dictionary<string, ParagraphUnit>> FileParagraphUnits { get; set; }
 
+	    private Tokenizer _tokenizer { get; set; }
 
-        public CultureInfo SourceLanguageCultureInfo { get; set; }
-        public CultureInfo TargetLanguageCultureInfo { get; set; }
+	    public Tokenizer Tokenizer
+	    {
+		    get
+		    {
+			    if (_tokenizer != null)
+			    {
+				    return _tokenizer;
+			    }
+
+			    if (SourceLanguageId == null || TargetLanguageId == null)
+			    {
+				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguageId == null ? "Source" : "Target"));
+			    }
+
+			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId));
+			    _tokenizer.CreateTranslationMemory();
+
+			    return _tokenizer;
+		    }
+	    }
 
         public string SourceLanguageId { get; set; }
         public string TargetLanguageId { get; set; }
@@ -93,11 +114,9 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             SourceLanguageId = string.Empty;
             TargetLanguageId = string.Empty;
 
-            if (documentInfo.SourceLanguage != null
-                && documentInfo.SourceLanguage.CultureInfo != null)
+            if (documentInfo.SourceLanguage != null && documentInfo.SourceLanguage.CultureInfo != null)
                 SourceLanguageId = documentInfo.SourceLanguage.CultureInfo.Name;
-            if (documentInfo.TargetLanguage != null
-                && documentInfo.TargetLanguage.CultureInfo != null)
+            if (documentInfo.TargetLanguage != null && documentInfo.TargetLanguage.CultureInfo != null)
                 TargetLanguageId = documentInfo.TargetLanguage.CultureInfo.Name;
 
 
@@ -138,33 +157,28 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             {
                 index++;
 
-                #region  |  initialize and assign values to xSegmentPair  |
-
+                
                 var pair = new SegmentPair();
 
                 ContentGeneratorProcessor.ProcessSegment(segmentPair.Source, IncludeTagText);
-
                 ContentGeneratorProcessor.Segment.Culture = new CultureInfo(SourceLanguageId);
-                
-                var words = 0;
-                var chars = 0;
-                var tags = 0;
-                var placeholders = 0;
-                //var results = TM.Tm.GetSearchResults(ContentGeneratorProcessor.Segment);
-                //if (results != null)
-                //{
-                //    words = results.SourceWordCounts.Words;
-                //    chars = results.SourceWordCounts.Characters;
-                //    tags = results.SourceWordCounts.Tags;
-                //    placeholders = results.SourceWordCounts.Placeables;
-                //}
-                Comparison.Comparer.GetStatisticalContentCounts(ContentGeneratorProcessor.SegmentSections, ref words, ref chars, ref tags, ref placeholders);
-
-                pair.SourceWords = words;
-                pair.SourceChars = chars;
-                pair.SourceTags = tags;
-                pair.SourcePlaceables = placeholders;
-
+                              
+	            try
+	            {
+		            var results = Tokenizer.TokenizeSegment(segmentPair);
+		            if (results != null)
+		            {
+			            pair.SourceWords = results.SourceWordCounts.Words;
+			            pair.SourceChars = results.SourceWordCounts.Characters;
+						pair.SourcePlaceables = results.SourceWordCounts.Placeables;
+			            pair.SourceTags = results.SourceWordCounts.Tags;
+		            }
+	            }
+	            catch
+	            {
+		            // catch all
+	            }
+				
                 pair.Source = ContentGeneratorProcessor.PlainText.ToString();
                 pair.SourceSections = ContentGeneratorProcessor.SegmentSections;
 
@@ -214,8 +228,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                     pair.TranslationOrigin.RepetitionTableId = segmentPair.Properties.TranslationOrigin.RepetitionTableId.Id;
                     pair.TranslationOrigin.TextContextMatchLevel = segmentPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
                 }
-
-                #endregion
+                
 
                 #region  |  add the SegmentPair to the xParagraphs dictionary  |
 
