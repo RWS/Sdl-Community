@@ -15,6 +15,7 @@ using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
+using Sdl.Community.Tokenization;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -203,7 +204,6 @@ namespace Sdl.Community.Qualitivity.Tracking
 			//add the new item to the container
 			Tracked.DictCacheDocumentItems.Add(trackedDocuments.DocumentIdFirstOrDefault, trackedDocuments);
 		}
-
 
 		public static void NewProjectActivity(TrackedDocuments trackedDocuments)
 		{
@@ -472,6 +472,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			return newProject;
 		}
+
 		public static List<StateCountItem> InitializeDocumentStatisticalState(Document doc, string fileId)
 		{
 			var stateCountItems = new List<StateCountItem>();
@@ -526,15 +527,13 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var fuzzy74Tags = 0;
 			var newTags = 0;
 
-			var projectFile = doc.Files.First(a => a.Id.ToString() == fileId);
+			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
+			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
 
-			//var sourceLanguageId = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo.Name;
-			//var tmName = "TM_" + sourceLanguageId + ".sdltm";
-			//var tmFullPath = System.IO.Path.Combine(Tracked.Settings.ApplicationPaths.ApplicationTrackChangesPath, tmName);
-			//TM.Statistics.SetTm(tmFullPath, sourceLanguageId, "it-IT");
+			var tokenizer = new Tokenizer(sourceLanguage, targetLanguage);
+			tokenizer.CreateTranslationMemory();
 
 			var parser = new ContentGenerator();
-
 
 			foreach (var segPair in doc.SegmentPairs)
 			{
@@ -543,15 +542,27 @@ namespace Sdl.Community.Qualitivity.Tracking
 				var match = Helper.GetTranslationStatus(segPair.Properties.TranslationOrigin);
 
 				parser.ProcessSegment(segPair.Source, true, null);
-				//parser.Segment.Culture = new CultureInfo(sourceLanguageId);
-				//var results = TM.Statistics.GetSearchResults(parser.Segment);
 
 				var words = 0;
 				var chars = 0;
 				var tags = 0;
 				var placeholders = 0;
-				Helper.GetStatisticalContentCounts(parser.SegmentSections, ref words, ref chars, ref tags, ref placeholders);
-
+				try
+				{
+					var results = tokenizer.TokenizeSegment(segPair);
+					if (results != null)
+					{
+						words = results.SourceWordCounts.Words;
+						chars = results.SourceWordCounts.Characters;
+						placeholders = results.SourceWordCounts.Placeables;
+						tags = results.SourceWordCounts.Tags;
+					}
+				}
+				catch
+				{
+					// catch all
+				}
+								
 				switch (match.ToUpper())
 				{
 					case "PM":
@@ -1372,25 +1383,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 					catch
 					{
 						// catch all
-					}
-
-					#region  |  fallback word counter  |
-
-					if (record.WordCount == 0)
-					{
-						var words = 0;
-						var chars = 0;
-						var tags = 0;
-						var placeholders = 0;
-						Helper.GetStatisticalContentCounts(ContentProcessor.SegmentSections, ref words, ref chars, ref tags, ref placeholders);
-
-						record.WordCount = words;
-						record.CharsCount = chars;
-						record.TagsCount = tags;
-						record.PlaceablesCount = placeholders;
-					}
-
-					#endregion
+					}				
 
 					#region  |  translationOrigins  |
 

@@ -38,23 +38,22 @@ namespace Sdl.Community.PostEdit.Compare.Core
 		}
 
 
-		private static string WriteObjFile(string workingDir)
+		private static string WriteTerpProcessorFile(string workingDir)
 		{
-
-			const string terpJar = "Sdl.Community.PostEdit.Compare.Core.Files.objout.jar";
-			var terpJarOut = Path.Combine(workingDir, terpJar);
+			const string terpProcessorJar = "Sdl.Community.PostEdit.Compare.Core.Files.TerpProcessor.jar";
+			var terpProcessorPath = Path.Combine(workingDir, terpProcessorJar);
 
 			var asb = Assembly.GetExecutingAssembly();
 
-			if (File.Exists(terpJarOut))
-				File.Delete(terpJarOut);
+			if (File.Exists(terpProcessorPath))
+				File.Delete(terpProcessorPath);
 
-			using (var inputStream = asb.GetManifestResourceStream(terpJar))
+			using (var inputStream = asb.GetManifestResourceStream(terpProcessorJar))
 			{
 				if (inputStream == null)
-					return terpJarOut;
+					return terpProcessorPath;
 
-				Stream outputStream = File.Open(terpJarOut, FileMode.Create);
+				Stream outputStream = File.Open(terpProcessorPath, FileMode.Create);
 
 				var bsInput = new BufferedStream(inputStream);
 				var bsOutput = new BufferedStream(outputStream);
@@ -73,7 +72,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 				bsOutput.Close();
 			}
 
-			return terpJarOut;
+			return terpProcessorPath;
 
 		}
 
@@ -88,7 +87,7 @@ namespace Sdl.Community.PostEdit.Compare.Core
 
 			var workingDir = Path.GetDirectoryName(reportFilePath);
 
-			TerpPath = WriteObjFile(workingDir);
+			TerpPath = WriteTerpProcessorFile(workingDir);
 
 			var results = new List<DocumentResult>();
 

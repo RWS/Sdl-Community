@@ -58,7 +58,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -366,9 +366,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Cache\Application.Cache.cs" />
-    <None Include="..\..\..\..\..\..\..\..\Repository\Sdl-Community\SdlCommunity.snk">
-      <Link>SdlCommunity.snk</Link>
-    </None>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -383,6 +380,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
