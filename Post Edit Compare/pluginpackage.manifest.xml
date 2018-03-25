@@ -8,8 +8,7 @@
 	<Include>
 		<File>Sdl.Community.PostEdit.Compare.dll</File>
 		<File>Sdl.Community.PostEdit.Compare.DAL.dll</File>
-		<File>Sdl.Community.PostEdit.Compare.Core.dll</File>
-		<File>Sdl.Community.PostEdit.Compare.Tokenization.dll</File>
+		<File>Sdl.Community.PostEdit.Compare.Core.dll</File>		
 		<File>PostEdit.Compare.WinFormsUI.Docking.dll</File>
 		<File>EPPlus.dll</File>
 	</Include>

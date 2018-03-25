@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Sdl.Community.Tokenization;
+using Sdl.Community.Toolkit.Tokenization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 {
     public class ContentProcessor : IBilingualContentProcessor
     {
-
-
-
         internal bool IncludeTagText = true;
         internal Dictionary<string, Dictionary<string, ParagraphUnit>> FileParagraphUnits { get; set; }
 
