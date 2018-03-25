@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Comp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Compare.DAL", "..\Sdl.Community.PostEdit.Compare.DAL\Sdl.Community.PostEdit.Compare.DAL.csproj", "{D772940C-6DDD-4468-AD06-9CD07B9E1F05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.PostEdit.Compare.Tokenization", "Sdl.Community.PostEdit.Compare.Tokenization\Sdl.Community.PostEdit.Compare.Tokenization.csproj", "{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,14 +49,6 @@ Global
 		{D772940C-6DDD-4468-AD06-9CD07B9E1F05}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D772940C-6DDD-4468-AD06-9CD07B9E1F05}.Release|x86.ActiveCfg = Release|Any CPU
 		{D772940C-6DDD-4468-AD06-9CD07B9E1F05}.Release|x86.Build.0 = Release|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Debug|x86.Build.0 = Debug|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|x86.ActiveCfg = Release|Any CPU
-		{EE7AB560-7B93-4388-A46D-0D771D0D8AEC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

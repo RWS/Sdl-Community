@@ -15,7 +15,7 @@ using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
-using Sdl.Community.Tokenization;
+using Sdl.Community.Toolkit.Tokenization;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;

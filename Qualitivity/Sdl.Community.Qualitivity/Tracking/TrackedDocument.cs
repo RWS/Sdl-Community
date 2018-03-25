@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
-using Sdl.Community.Tokenization;
+using Sdl.Community.Toolkit.Tokenization;
 
 namespace Sdl.Community.Qualitivity.Tracking
 {
