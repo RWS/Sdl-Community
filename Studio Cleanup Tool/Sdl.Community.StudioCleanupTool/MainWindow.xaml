@@ -28,7 +28,7 @@
 
 		<TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding TabList}" 
 		            controls:TabControlHelper.Underlined="{Binding ElementName=AnimatedTabControlUnderlinedComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
 			<controls:MetroTabItem Header="Read Me"  Foreground="#3C92C0">
 				<views:ReadMe HorizontalAlignment="Right" Height="Auto" Width="auto"></views:ReadMe>
 			</controls:MetroTabItem>
