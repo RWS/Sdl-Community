@@ -30,7 +30,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _changeScriptPathCommand;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
-
+		private string _scriptStateContent;
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindow = mainWindowViewModel;
@@ -44,6 +44,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 			foreach (var script in savedScripts)
 			{
+				script.ScriptStateAction = script.Active ? "Disable" : "Enable";
 				ScriptsCollection.Add(script);
 			}
 		}
@@ -157,6 +158,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				}
 				_scriptsCollection = value;
 				OnPropertyChanged(nameof(ScriptsCollection));
+			}
+		}
+		public string ScriptStateContent
+		{
+			get => _scriptStateContent;
+
+			set
+			{
+				if (Equals(value, _scriptStateContent))
+				{
+					return;
+				}
+				_scriptStateContent = value;
+				OnPropertyChanged(nameof(ScriptStateContent));
 			}
 		}
 	}

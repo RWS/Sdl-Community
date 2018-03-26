@@ -10,11 +10,22 @@ namespace Sdl.Community.AhkPlugin.Model
 	{
 		private bool _isSelected;
 		private bool _isActiveScript;
+		private string _scriptStateAction;
 
 		public string ScriptId { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Text { get; set; }
+
+		public string ScriptStateAction
+		{
+			get => _scriptStateAction;
+			set
+			{
+				_scriptStateAction = value;
+				OnPropertyChanged(nameof(ScriptStateAction));
+			}
+		}
 
 		public bool IsSelected
 		{
