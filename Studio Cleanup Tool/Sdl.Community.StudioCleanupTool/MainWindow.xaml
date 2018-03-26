@@ -28,14 +28,14 @@
 
 		<TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding TabList}" 
 		            controls:TabControlHelper.Underlined="{Binding ElementName=AnimatedTabControlUnderlinedComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Cursor="Hand">
-			<controls:MetroTabItem Header="Read Me"  Foreground="#3C92C0">
+		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+			<controls:MetroTabItem Header="Read Me"  Foreground="#3C92C0" Cursor="Hand">
 				<views:ReadMe HorizontalAlignment="Right" Height="Auto" Width="auto"></views:ReadMe>
 			</controls:MetroTabItem>
-			<TabItem Header="Studio">
+			<TabItem  Header ="Studio" Cursor="Hand" >
 				<views:Studio DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</TabItem>
-			<controls:MetroTabItem Header="MultiTerm">
+			<controls:MetroTabItem Header="MultiTerm" Cursor="Hand">
 				<views:MultiTerm DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></views:MultiTerm>
 			</controls:MetroTabItem>
 			
