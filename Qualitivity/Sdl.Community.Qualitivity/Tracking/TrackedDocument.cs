@@ -56,8 +56,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
 			    }
 
-			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage));
-			    _tokenizer.CreateTranslationMemory();
+			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage), new EnvironmentPaths(EnvironmentConstants.ProductName));			    
 
 			    return _tokenizer;
 		    }

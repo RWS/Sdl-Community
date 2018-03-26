@@ -29,8 +29,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguageId == null ? "Source" : "Target"));
 			    }
 
-			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId));
-			    _tokenizer.CreateTranslationMemory();
+			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId), new EnvironmentPaths(EnvironmentConstants.ProductName));			    
 
 			    return _tokenizer;
 		    }
