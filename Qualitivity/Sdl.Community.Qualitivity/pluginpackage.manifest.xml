@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>Qualitivity</PlugInName>
-  <Version>2.6.4.2</Version>
-  <Description>Qualitivity </Description>
-  <Author>Sdl Community</Author>
-  <Include>
-    <File>Sdl.Community.Qualitivity.Comparison.dll</File>
-    <File>Sdl.Community.Qualitivity.Hooks.dll</File>
-    <File>Sdl.Community.Qualitivity.Models.dll</File>
-    <File>Sdl.Community.Qualitivity.Parser.dll</File>
-    <File>Sdl.Community.Qualitivity.Report.dll</File>
-    <File>Sdl.Community.Qualitivity.TM.dll</File>
-    <File>Sdl.Community.Qualitivity.WPFListView.dll</File>
-    <File>Qualitivity.ObjectListView.dll</File>
-    <File>System.Data.SQLite.dll</File>
-  </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+	<PlugInName>Qualitivity</PlugInName>
+	<Version>2.6.4.2</Version>
+	<Description>Qualitivity </Description>
+	<Author>Sdl Community</Author>
+	<Include>
+		<File>Sdl.Community.Qualitivity.Comparison.dll</File>
+		<File>Sdl.Community.Qualitivity.Hooks.dll</File>
+		<File>Sdl.Community.Qualitivity.Models.dll</File>
+		<File>Sdl.Community.Qualitivity.Parser.dll</File>
+		<File>Sdl.Community.Qualitivity.Report.dll</File>
+		<File>Sdl.Community.Qualitivity.TM.dll</File>
+		<File>Sdl.Community.Qualitivity.WPFListView.dll</File>
+		<File>Qualitivity.ObjectListView.dll</File>
+		<File>System.Data.SQLite.dll</File>
+	</Include>
+	<RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 </PluginPackage>
