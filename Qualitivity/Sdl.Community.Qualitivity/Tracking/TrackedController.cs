@@ -530,9 +530,8 @@ namespace Sdl.Community.Qualitivity.Tracking
 			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
 
-			var tokenizer = new Tokenizer(sourceLanguage, targetLanguage);
-			tokenizer.CreateTranslationMemory();
-
+			var tokenizer = new Tokenizer(sourceLanguage, targetLanguage, new EnvironmentPaths(EnvironmentConstants.ProductName));
+			
 			var parser = new ContentGenerator();
 
 			foreach (var segPair in doc.SegmentPairs)
