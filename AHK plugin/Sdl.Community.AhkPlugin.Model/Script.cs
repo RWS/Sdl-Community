@@ -11,6 +11,7 @@ namespace Sdl.Community.AhkPlugin.Model
 		private bool _isSelected;
 		private bool _isActiveScript;
 		private string _scriptStateAction;
+		private string _rowColor;
 
 		public string ScriptId { get; set; }
 		public string Name { get; set; }
@@ -24,6 +25,15 @@ namespace Sdl.Community.AhkPlugin.Model
 			{
 				_scriptStateAction = value;
 				OnPropertyChanged(nameof(ScriptStateAction));
+			}
+		}
+		public string RowColor
+		{
+			get => _rowColor;
+			set
+			{
+				_rowColor = value;
+				OnPropertyChanged(nameof(RowColor));
 			}
 		}
 

@@ -45,6 +45,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			foreach (var script in savedScripts)
 			{
 				script.ScriptStateAction = script.Active ? "Disable" : "Enable";
+				script.RowColor = script.Active ? "Black" : "DarkGray";
 				ScriptsCollection.Add(script);
 			}
 		}

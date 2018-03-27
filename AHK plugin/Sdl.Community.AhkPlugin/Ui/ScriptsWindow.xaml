@@ -61,6 +61,7 @@
 							<TextBlock  TextWrapping="Wrap" Text="{Binding Description}"/>
 						</Setter.Value>
 					</Setter>
+					<Setter Property="TextElement.Foreground" Value="{Binding RowColor}"/>
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
@@ -69,7 +70,7 @@
 				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
 				<DataGridTemplateColumn Width="100">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
+						<DataTemplate >
 							<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding ScriptStateAction}"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
