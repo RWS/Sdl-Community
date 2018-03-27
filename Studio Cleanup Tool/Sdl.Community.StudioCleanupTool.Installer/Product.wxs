@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="Sdl.Community.StudioCleanupTool.Installer" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
+	<Product Id="*" Name="SDL Freshstart" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="bcee5a2b-8710-4d13-8ba8-2f7faa5d9407">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)Icon.ico" />
@@ -15,7 +15,7 @@
 		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes"/>
 
-		<Feature Id="ProductFeature" Title="Sdl.Community.StudioCleanupTool.Installer" Level="1">
+		<Feature Id="ProductFeature" Title="SDL Freshstart" Level="1">
 			<ComponentGroupRef Id="ProductComponents" />
 			<ComponentRef Id="ApplicationShortcutDesktop" />
 		</Feature>
@@ -24,9 +24,9 @@
 	<Fragment>
 		<DirectoryRef Id="DesktopFolder">
 			<Component Id="ApplicationShortcutDesktop" Guid="cde1e030-eb64-49a5-b7b8-400b379c2d1a">
-				<Shortcut Id="ApplicationDesktopShortcut" Name="StudioCleanupTool" Icon="icon.ico" Description="Cleanup Tool" Target="[INSTALLFOLDER]Sdl.Community.StudioCleanupTool.exe" WorkingDirectory="INSTALLFOLDER" />
+				<Shortcut Id="ApplicationDesktopShortcut" Name="SDL Freshstart" Icon="icon.ico" Description="SDL Freshstart" Target="[INSTALLFOLDER]Sdl.Community.StudioCleanupTool.exe" WorkingDirectory="INSTALLFOLDER" />
 				<RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
-				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.StudioCleanupTool" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\SDL Freshstart" Name="installed" Type="integer" Value="1" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
@@ -34,7 +34,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Sdl.Community.StudioCleanupTool.Installer" />
+				<Directory Id="INSTALLFOLDER" Name="SDL Freshstart" />
 			</Directory>
 			<Directory Id="DesktopFolder" Name="Desktop" />
 		</Directory>
