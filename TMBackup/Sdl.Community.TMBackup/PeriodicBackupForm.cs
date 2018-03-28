@@ -122,7 +122,7 @@ namespace Sdl.Community.TMBackup
 			dateTimePicker_FirstBackup.Value = DateTime.Now;
 
 			var currentDate = DateTime.Now;
-			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second + " " + CultureInfo.InvariantCulture);
+			timePicker_At.Text = string.Concat(currentDate.Hour + ":" + currentDate.Minute + ":" + currentDate.Second);
 		}
 
 		private void txtBox_TimeInterval_KeyPress(object sender, KeyPressEventArgs e)
