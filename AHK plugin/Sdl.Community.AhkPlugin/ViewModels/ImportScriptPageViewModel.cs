@@ -130,6 +130,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 						if (!pathAlreadyAdded)
 						{
 							var scripts = ProcessScript.ReadImportedScript(path);
+							foreach (var script in scripts)
+							{
+								script.Value.ScriptStateAction = script.Value.Active ? "Disable" : "Enable";
+								script.Value.RowColor = script.Value.Active ? "Black" : "DarkGray";
+							}
+
 							ScriptsCollection.AddRange(scripts);
 							var newFile = new ImportScriptItemTemplate
 							{
