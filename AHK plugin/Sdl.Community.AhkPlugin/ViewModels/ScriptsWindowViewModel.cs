@@ -30,7 +30,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _changeScriptPathCommand;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
-		//private string _scriptStateContent;
+
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindow = mainWindowViewModel;
@@ -98,8 +98,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				MessageBox.Show("Please select at least one script from the grid to export", "Warning",
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
-			
-
 		}
 
 		public ICommand RemoveScriptCommand => _removeScriptCommand ??
@@ -143,21 +141,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			var script = (Script) row;
 			if (script != null)
 			{
-				if (script.ScriptStateAction.Equals("Disable"))
-				{
-					script.Active = false;
-					script.ScriptStateAction = "Enable";
-					script.RowColor = "DarkGray";
-				}
-				else
-				{
-					script.Active = true;
-					script.ScriptStateAction = "Disable";
-					script.RowColor = "Black";
-				}
-
-				//script.Active = !script.ScriptStateAction.Equals("Disable");
+				ProcessScript.SetStateColors(script);
 				ProcessScript.ChangeScriptState(script);
+				ProcessScript.SaveScriptToMaster(script);
 			}
 		}
 
@@ -180,19 +166,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				OnPropertyChanged(nameof(ScriptsCollection));
 			}
 		}
-		//public string ScriptStateContent
-		//{
-		//	get => _scriptStateContent;
 
-		//	set
-		//	{
-		//		if (Equals(value, _scriptStateContent))
-		//		{
-		//			return;
-		//		}
-		//		_scriptStateContent = value;
-		//		OnPropertyChanged(nameof(ScriptStateContent));
-		//	}
-		//}
 	}
 }

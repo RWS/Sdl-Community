@@ -87,7 +87,16 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 	    private void ChangeState(object row)
 	    {
+		    var script = ((KeyValuePair<string, Script>)row).Value;
+		    if (script == null) return;
+		    ProcessScript.SetStateColors(script);
+		    ProcessScript.ChangeScriptState(script);
 
+		    var scriptToBeUpdated = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId)).Value;
+		    scriptToBeUpdated.Active = script.Active;
+		    scriptToBeUpdated.Text = script.Text;
+		    scriptToBeUpdated.RowColor = script.RowColor;
+		    scriptToBeUpdated.ScriptStateAction = script.ScriptStateAction;
 	    }
 
 		private void RemoveFile(object file)

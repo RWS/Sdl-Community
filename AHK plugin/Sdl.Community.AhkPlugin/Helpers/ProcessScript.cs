@@ -182,7 +182,7 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			return false;
 		}
 
-		public static async void ChangeScriptState(Script script)
+		public static void ChangeScriptState(Script script)
 		{
 			var contentLines = script.Text.Split(Environment.NewLine.ToCharArray());
 			var scriptTextBuilder = new StringBuilder();
@@ -202,7 +202,10 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				scriptTextBuilder.AppendLine(editedScript);
 			}
 			script.Text = scriptTextBuilder.ToString();
+		}
 
+		public static async void SaveScriptToMaster(Script script)
+		{
 			var masterScript = await MasterScriptDb.GetMasterScript();
 			var scriptToBeUpdated = masterScript.Scripts.FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
 			if (scriptToBeUpdated != null)
@@ -215,6 +218,23 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				//write masterscript on the disk
 				ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}
+		}
+
+		public static Script SetStateColors(Script script)
+		{
+			if (script.ScriptStateAction.Equals("Disable"))
+			{
+				script.Active = false;
+				script.ScriptStateAction = "Enable";
+				script.RowColor = "DarkGray";
+			}
+			else
+			{
+				script.Active = true;
+				script.ScriptStateAction = "Disable";
+				script.RowColor = "Black";
+			}
+			return script;
 		}
 	}
 }
