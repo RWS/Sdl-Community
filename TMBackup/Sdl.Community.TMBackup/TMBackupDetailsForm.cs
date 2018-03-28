@@ -281,7 +281,6 @@ namespace Sdl.Community.TMBackup
 					{
 						dataGridView1.Rows[e.RowIndex].ReadOnly = false;
 					}
-
 				}
 			}
 		}
