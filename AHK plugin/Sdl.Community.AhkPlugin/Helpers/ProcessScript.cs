@@ -4,14 +4,17 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DSOFile;
 using Sdl.Community.AhkPlugin.Model;
+using Sdl.Community.AhkPlugin.Repository.DataBase;
 
 namespace Sdl.Community.AhkPlugin.Helpers
 {
 	public static class ProcessScript
 	{
+		private static readonly MasterScriptDb MasterScriptDb = new MasterScriptDb();
 		public static List<KeyValuePair<string, Script>> ReadImportedScript(string path)
 		{
 			var scripts = new List<KeyValuePair<string, Script>>();
@@ -178,6 +181,40 @@ namespace Sdl.Community.AhkPlugin.Helpers
 			}
 			return false;
 		}
-	
+
+		public static async void ChangeScriptState(Script script)
+		{
+			var contentLines = script.Text.Split(Environment.NewLine.ToCharArray());
+			var scriptTextBuilder = new StringBuilder();
+			foreach (var content in contentLines)
+			{
+				if (string.IsNullOrEmpty(content) || string.IsNullOrWhiteSpace(content)) continue;
+				string editedScript;
+				if (!script.Active)
+				{
+					editedScript = ";" + content;
+				}
+				else
+				{
+					editedScript = content.Substring(content.IndexOf(";", StringComparison.Ordinal)+1);
+						
+				}
+				scriptTextBuilder.AppendLine(editedScript);
+			}
+			script.Text = scriptTextBuilder.ToString();
+
+			var masterScript = await MasterScriptDb.GetMasterScript();
+			var scriptToBeUpdated = masterScript.Scripts.FirstOrDefault(s => s.ScriptId.Equals(script.ScriptId));
+			if (scriptToBeUpdated != null)
+			{
+				scriptToBeUpdated.Active = script.Active;
+				scriptToBeUpdated.Text = script.Text;
+				scriptToBeUpdated.RowColor = script.RowColor;
+				scriptToBeUpdated.ScriptStateAction = script.ScriptStateAction;
+				await MasterScriptDb.UpdateScript(masterScript);
+				//write masterscript on the disk
+				ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+			}
+		}
 	}
 }

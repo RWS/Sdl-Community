@@ -40,14 +40,15 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			 _scriptsDb = new ScriptDb();
 			_masterScriptDb = new MasterScriptDb();
-			var savedScripts = _scriptsDb.GetAllScripts().Result;
+			var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;//_scriptsDb.GetAllScripts().Result;
 
-			foreach (var script in savedScripts)
-			{
-				script.ScriptStateAction = script.Active ? "Disable" : "Enable";
-				script.RowColor = script.Active ? "Black" : "DarkGray";
-				ScriptsCollection.Add(script);
-			}
+			ScriptsCollection = new ObservableCollection<Script>(savedScripts);
+			//foreach (var script in savedScripts)
+			//{
+			//	script.ScriptStateAction = script.Active ? "Disable" : "Enable";
+			//	script.RowColor = script.Active ? "Black" : "DarkGray";
+			//	ScriptsCollection.Add(script);
+			//}
 		}
 
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
@@ -139,7 +140,25 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void ChangeState(object row)
 		{
-			
+			var script = (Script) row;
+			if (script != null)
+			{
+				if (script.ScriptStateAction.Equals("Disable"))
+				{
+					script.Active = false;
+					script.ScriptStateAction = "Enable";
+					script.RowColor = "DarkGray";
+				}
+				else
+				{
+					script.Active = true;
+					script.ScriptStateAction = "Disable";
+					script.RowColor = "Black";
+				}
+
+				//script.Active = !script.ScriptStateAction.Equals("Disable");
+				ProcessScript.ChangeScriptState(script);
+			}
 		}
 
 		private void ImportAction()
