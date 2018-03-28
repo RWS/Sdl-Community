@@ -5,6 +5,7 @@
 		<Setter Property="Margin" Value="5,5,10,5"/>
 		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
 		<Setter Property="VerticalScrollBarVisibility" Value="Auto"></Setter>
+		<Setter Property="TextWrapping" Value="WrapWithOverflow"></Setter>
 		<Setter Property="AcceptsReturn" Value="True"></Setter>
 	</Style>
 	
