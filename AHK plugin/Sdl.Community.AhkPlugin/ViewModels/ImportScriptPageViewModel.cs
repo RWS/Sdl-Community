@@ -64,7 +64,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    foreach (var script in scriptsToBeImported)
 			    {
 				    script.IsSelected = false;
-				    await _scriptDb.AddNewScript(script);
+				    script.ScriptStateAction = script.Active ? "Disable" : "Enable";
+				    script.RowColor = script.Active ? "Black" : "DarkGray";
+					await _scriptDb.AddNewScript(script);
 			    }
 
 			    var masterScript = await _masterScriptDb.GetMasterScript();
