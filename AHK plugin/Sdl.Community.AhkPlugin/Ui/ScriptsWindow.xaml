@@ -18,12 +18,12 @@
 			</ResourceDictionary.MergedDictionaries>
 	</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid >
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="1*" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -49,10 +49,10 @@
 		</StackPanel>
 
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
-				  Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
+				  Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
 				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
-				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="#F5F5F5"
+				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="White"
 				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False" RowHeight="22" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
