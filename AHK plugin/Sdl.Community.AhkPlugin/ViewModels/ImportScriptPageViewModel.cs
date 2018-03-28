@@ -67,6 +67,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				    script.ScriptStateAction = script.Active ? "Disable" : "Enable";
 				    script.RowColor = script.Active ? "Black" : "DarkGray";
 					await _scriptDb.AddNewScript(script);
+				    RemoveScriptFromGrid(script);
 			    }
 
 			    var masterScript = await _masterScriptDb.GetMasterScript();
@@ -74,6 +75,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    await _masterScriptDb.UpdateScript(masterScript);
 			    //write masterscript on the disk
 			    ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
+				
 			    Message = "Scripts imported successfully";
 				MessageVisibility = "Visible";
 		    }
@@ -83,6 +85,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
 
+	    }
+
+	    private void RemoveScriptFromGrid(Script script)
+	    {
+		    var scriptToBeRemoved = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId));
+		    ScriptsCollection.Remove(scriptToBeRemoved);
 	    }
 
 	    private void ChangeState(object row)
