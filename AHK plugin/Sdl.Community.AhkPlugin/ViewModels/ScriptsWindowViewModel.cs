@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Annotations;
 using Sdl.Community.AhkPlugin.Helpers;
@@ -15,6 +16,7 @@ using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
 using Sdl.Community.AhkPlugin.Repository.DataBase;
 using Sdl.Community.AhkPlugin.Ui;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -82,15 +84,18 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			if (ScriptsCollection.Any(s => s.IsSelected))
 			{
-				var folderDialog = new FolderSelectDialog
+				var folderDialog = new SaveFileDialog
 				{
-					Title = "Select a folder where the script should be exported"
+					Title = @"Select a location where the script should be exported",
+					DefaultExt = "ahk"
 				};
-				if (folderDialog.ShowDialog())
+				if (folderDialog.ShowDialog() == DialogResult.OK)
 				{
 					var folderPath = folderDialog.FileName;
 					var selectedScripts = ScriptsCollection.Where(s => s.IsSelected).ToList();
-					ProcessScript.ExportScript(Path.Combine(folderPath,"exportedScript.ahk"), selectedScripts);
+					ProcessScript.ExportScript(Path.Combine(folderPath, folderDialog.FileName), selectedScripts);
+					MessageBox.Show("Script was exported successfully to selected location", "",
+						MessageBoxButton.OK, MessageBoxImage.Information);
 				}
 			}
 			else

@@ -134,7 +134,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			var file = dropedFile as IDataObject;
 		    if (null == file) return;
 		    var documentsPath = (string[])file.GetData(DataFormats.FileDrop);
-		    var defaultFormat = DataFormats.Text;
 
 		    if (documentsPath != null)
 		    {
