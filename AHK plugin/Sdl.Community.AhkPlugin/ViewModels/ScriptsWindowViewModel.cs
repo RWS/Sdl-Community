@@ -31,6 +31,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _exportCommand;
 		private ICommand _changeScriptPathCommand;
 		private ICommand _selectAllCommand;
+		private ICommand _editScriptCommand;
 		private bool _selectAll;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
@@ -52,6 +53,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(ImportAction, true));
 		public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
+		public ICommand EditScriptCommand => _editScriptCommand ?? (_editScriptCommand = new RelayCommand(EditScript));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(ExportScripts, true));
 
 		public ICommand ChangeScriptPath => _changeScriptPathCommand ??
@@ -154,6 +156,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				ProcessScript.ChangeScriptState(script);
 				ProcessScript.SaveScriptToMaster(script);
 			}
+		}
+
+		private void EditScript(object row)
+		{
+			
 		}
 
 		private void ImportAction()

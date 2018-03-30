@@ -67,12 +67,18 @@
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Header="Script name" Binding="{Binding Name}" />
-				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-				<DataGridTemplateColumn Width="100">
+				<DataGridTextColumn Width="100" Header="Script name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="230" Header="Description" Binding="{Binding Description}" />
+				<DataGridTemplateColumn Width="auto">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate >
-							<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding ScriptStateAction}"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+							<StackPanel Orientation="Vertical" >
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+									<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding ScriptStateAction}"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+									<Button Style="{DynamicResource BaseButtonStyle}" Content="Edit"  Command="{Binding Path=DataContext.EditScriptCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+								</StackPanel>
+							</StackPanel>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

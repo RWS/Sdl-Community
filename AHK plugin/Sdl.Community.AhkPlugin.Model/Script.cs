@@ -43,6 +43,7 @@ namespace Sdl.Community.AhkPlugin.Model
 				OnPropertyChanged(nameof(ScriptStateAction));
 			}
 		}
+	
 		public string RowColor
 		{
 			get => _rowColor;
