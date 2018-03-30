@@ -23,6 +23,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="1*" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -47,12 +48,12 @@
 				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Add" Command="{Binding AddCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
-
+		<CheckBox  Grid.Row="3" Grid.Column="0" FontFamily="Segoe UI" Margin="10,20,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}"> Select all</CheckBox>
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
-				  Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
+				  Grid.Row="4" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
 				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
-				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="White"
+				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,10,10,0"  Background="White"
 				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False" RowHeight="22" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">

@@ -219,22 +219,5 @@ namespace Sdl.Community.AhkPlugin.Helpers
 				ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}
 		}
-
-		public static Script SetStateColors(Script script)
-		{
-			if (script.ScriptStateAction.Equals("Disable"))
-			{
-				script.Active = false;
-				script.ScriptStateAction = "Enable";
-				script.RowColor = "DarkGray";
-			}
-			else
-			{
-				script.Active = true;
-				script.ScriptStateAction = "Disable";
-				script.RowColor = "Black";
-			}
-			return script;
-		}
 	}
 }

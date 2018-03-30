@@ -30,9 +30,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _removeScriptCommand;
 		private ICommand _exportCommand;
 		private ICommand _changeScriptPathCommand;
+		private ICommand _selectAllCommand;
+		private bool _selectAll;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
-
+		
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindow = mainWindowViewModel;
@@ -42,15 +44,9 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			 _scriptsDb = new ScriptDb();
 			_masterScriptDb = new MasterScriptDb();
-			var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;//_scriptsDb.GetAllScripts().Result;
+			var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;
 
 			ScriptsCollection = new ObservableCollection<Script>(savedScripts);
-			//foreach (var script in savedScripts)
-			//{
-			//	script.ScriptStateAction = script.Active ? "Disable" : "Enable";
-			//	script.RowColor = script.Active ? "Black" : "DarkGray";
-			//	ScriptsCollection.Add(script);
-			//}
 		}
 
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
@@ -61,6 +57,13 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public ICommand ChangeScriptPath => _changeScriptPathCommand ??
 		                                    (_changeScriptPathCommand = new CommandHandler(ChangePath, true));
 
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
+
+
+		private void SelectAllScripts()
+		{
+			Helpers.Ui.Select(ScriptsCollection,SelectAll);
+		}
 		private async void ChangePath()
 		{
 			var folderDialog = new FolderSelectDialog
@@ -96,6 +99,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 					ProcessScript.ExportScript(Path.Combine(folderPath, folderDialog.FileName), selectedScripts);
 					MessageBox.Show("Script was exported successfully to selected location", "",
 						MessageBoxButton.OK, MessageBoxImage.Information);
+					Helpers.Ui.Select(ScriptsCollection, false);
 				}
 			}
 			else
@@ -146,7 +150,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			var script = (Script) row;
 			if (script != null)
 			{
-				ProcessScript.SetStateColors(script);
+				Helpers.Ui.SetStateColors(script);
 				ProcessScript.ChangeScriptState(script);
 				ProcessScript.SaveScriptToMaster(script);
 			}
@@ -171,6 +175,19 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				OnPropertyChanged(nameof(ScriptsCollection));
 			}
 		}
+		public bool SelectAll
+		{
+			get => _selectAll;
 
+			set
+			{
+				if (Equals(value, _selectAll))
+				{
+					return;
+				}
+				_selectAll = value;
+				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
 	}
 }

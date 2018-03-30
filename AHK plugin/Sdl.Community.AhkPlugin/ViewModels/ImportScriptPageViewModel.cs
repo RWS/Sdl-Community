@@ -25,11 +25,13 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    private ICommand _removeFileCommand;
 	    private ICommand _addToMasterCommand;
 	    private ICommand _changeScriptStateCommand;
-	    private readonly ScriptDb _scriptDb;
+	    private ICommand _selectAllCommand;
+		private readonly ScriptDb _scriptDb;
 	    private readonly MasterScriptDb _masterScriptDb;
 		private string _gridVisibility;
 	    private string _message;
 	    private string _messageVisibility;
+	    private bool _selectAll;
 		private ObservableCollection<KeyValuePair<string,Script>> _scriptsCollection = new ObservableCollection<KeyValuePair<string, Script>>();
 		private ObservableCollection<ImportScriptItemTemplate> _filesNameCollection = new ObservableCollection<ImportScriptItemTemplate>();
 
@@ -55,7 +57,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    public ICommand AddToMasterCommand => _addToMasterCommand ??
 	                                          (_addToMasterCommand = new CommandHandler(ImportScriptsToMaster, true));
 	    public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
+	    public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
 
+
+	    private void SelectAllScripts()
+	    {
+		    
+		    Helpers.Ui.Select(GetObservableCollectionOfScripts(), SelectAll);
+	    }
+
+	    private ObservableCollection<Script> GetObservableCollectionOfScripts()
+	    {
+			var scripts = ScriptsCollection.Select(s => s.Value).ToList();
+		    return new ObservableCollection<Script>(scripts);
+	    }
 		private async void ImportScriptsToMaster()
 	    {
 		    var scriptsToBeImported = ScriptsCollection.Where(s => s.Value.IsSelected).Select(s =>s.Value).ToList();
@@ -78,6 +93,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				
 			    Message = "Scripts imported successfully";
 				MessageVisibility = "Visible";
+				Helpers.Ui.Select(GetObservableCollectionOfScripts(), false);
 		    }
 		    else
 		    {
@@ -97,7 +113,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 	    {
 		    var script = ((KeyValuePair<string, Script>)row).Value;
 		    if (script == null) return;
-		    ProcessScript.SetStateColors(script);
+		    Helpers.Ui.SetStateColors(script);
 		    ProcessScript.ChangeScriptState(script);
 
 		    var scriptToBeUpdated = ScriptsCollection.FirstOrDefault(s => s.Value.ScriptId.Equals(script.ScriptId)).Value;
@@ -249,6 +265,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			    }
 			    _message = value;
 			    OnPropertyChanged(nameof(Message));
+		    }
+	    }
+	    public bool SelectAll
+	    {
+		    get => _selectAll;
+
+		    set
+		    {
+			    if (Equals(value, _selectAll))
+			    {
+				    return;
+			    }
+			    _selectAll = value;
+			    OnPropertyChanged(nameof(SelectAll));
 		    }
 	    }
 	}
