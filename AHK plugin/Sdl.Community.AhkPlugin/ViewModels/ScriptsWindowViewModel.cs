@@ -160,7 +160,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void EditScript(object row)
 		{
-			
+			var script = (Script)row;
+			if (script != null)
+			{
+				_mainWindow.LoadEditPage(script);
+			}
 		}
 
 		private void ImportAction()

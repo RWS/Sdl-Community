@@ -1,0 +1,56 @@
+﻿<UserControl x:Class="Sdl.Community.AhkPlugin.Ui.EditScriptPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewModels="clr-namespace:Sdl.Community.AhkPlugin.ViewModels"
+ xmlns:local="clr-namespace:Sdl.Community.AhkPlugin.Ui"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.DataContext>
+	 <viewModels:EditScriptPageViewModel></viewModels:EditScriptPageViewModel>
+ </UserControl.DataContext>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="1*" />
+		</Grid.ColumnDefinitions>
+
+		<TextBox Grid.Column="0" Style="{DynamicResource DescriptionBox}" Grid.Row="0" Grid.ColumnSpan="2" >From this page you can edit the script selected on previous page. </TextBox>
+		<Button Grid.Column="0" Grid.Row="1" Style="{DynamicResource LightGreenButtonsStyle}" Command="{Binding BackCommand}" Content="Back" Margin="10,0,0,25"></Button>
+		<StackPanel Grid.Column="1" Grid.Row="1" Margin="10,0,0,0" Orientation="Vertical">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle}" Content="Save script" Command="{Binding SaveCommand}"></Button>
+			</StackPanel>
+		</StackPanel>
+
+		<TextBlock Grid.Column="0" Grid.Row="2" Style="{DynamicResource TextBlockColor}" Text="{Binding Message}" Foreground="{Binding MessageColor}" Visibility="{Binding MessageVisibility }" Margin="10,0,0,10"></TextBlock>
+		<CheckBox Grid.Column="0" Grid.Row="3"  IsChecked= "{Binding IsDisabled,UpdateSourceTrigger=PropertyChanged}" Foreground="#3D9DAA" Margin="10,0,0,10">Is disabled script</CheckBox>
+		<!--text block area-->
+		<TextBlock Grid.Column="0" Grid.Row="4" Style="{DynamicResource TextBlockColor}" Text="Script name*"></TextBlock>
+		<TextBox Name="ScriptNameTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptName}" Grid.Column="1" Grid.Row="4" Height="40"></TextBox>
+		<TextBlock Grid.Column="0" Grid.Row="5" Style="{DynamicResource TextBlockColor}" Text="Description*" Grid.RowSpan="2"></TextBlock>
+		<TextBox Name="DescriptionTextBlock" Style="{DynamicResource TextBoxStyle}"  Text="{Binding ScriptDescription}" Grid.Column="1" Grid.Row="5" Height="70" ></TextBox>
+		<TextBlock   Grid.Column="0" Grid.Row="6" Style="{DynamicResource TextBlockColor}" Text="Script content*"></TextBlock>
+		<TextBox Name="SctiptContentTextBlock" Style="{DynamicResource TextBoxStyle}" Text="{Binding ScriptContent}" Grid.Column="1" Grid.Row="6" Height="150"></TextBox>
+	</Grid>
+</UserControl>

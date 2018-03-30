@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Annotations;
 using Sdl.Community.AhkPlugin.Helpers;
+using Sdl.Community.AhkPlugin.Model;
 using Sdl.Community.AhkPlugin.Ui;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
@@ -42,6 +43,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		public void LoadImportPage()
 		{
 			CurrentViewModel = new ImportScriptPageViewModel(this);
+		}
+
+		public void LoadEditPage(Script script)
+		{
+			CurrentViewModel = new EditScriptPageViewModel(script,this);
 		}
 	}
 }
