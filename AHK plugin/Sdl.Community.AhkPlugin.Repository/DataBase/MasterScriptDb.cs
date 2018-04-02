@@ -99,6 +99,7 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			}
 			return Task.FromResult(true);
 		}
+
 	}
 
 	public class MasterScriptById : AbstractIndexCreationTask<MasterScript>
