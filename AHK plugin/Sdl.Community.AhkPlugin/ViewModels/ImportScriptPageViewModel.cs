@@ -102,6 +102,7 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 			}
 
 	    }
+		
 
 	    private void RemoveScriptFromGrid(Script script)
 	    {
@@ -141,11 +142,16 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				    }
 					
 			    }
+			    if (ScriptsCollection.Count.Equals(0))
+			    {
+				    MessageVisibility = "Hidden";
+
+				}
 		    }
 		    SetGridVisibility();
 	    }
 
-		private void HandlePreviewDrop(object dropedFile)
+		private async void HandlePreviewDrop(object dropedFile)
 	    {
 			var file = dropedFile as IDataObject;
 		    if (null == file) return;
@@ -164,11 +170,14 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 							var scripts = ProcessScript.ReadImportedScript(path);
 							foreach (var script in scripts)
 							{
-								script.Value.ScriptStateAction = script.Value.Active ? "Disable" : "Enable";
-								script.Value.RowColor = script.Value.Active ? "Black" : "DarkGray";
+								var exist =await ProcessScript.ScriptContentAlreadyExist(script.Value);
+								if (!exist)
+								{
+									script.Value.ScriptStateAction = script.Value.Active ? "Disable" : "Enable";
+									script.Value.RowColor = script.Value.Active ? "Black" : "DarkGray";
+									ScriptsCollection.Add(script);
+								}
 							}
-
-							ScriptsCollection.AddRange(scripts);
 							var newFile = new ImportScriptItemTemplate
 							{
 								Content = Path.GetFileNameWithoutExtension(path),
@@ -176,6 +185,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 								FilePath = path
 							};
 							FilesNameCollection.Add(newFile);
+							if (ScriptsCollection.Count.Equals(0))
+							{
+								MessageVisibility = "Visible";
+								Message = "Imported scripts are already in the master script.";
+							}
 						}
 					}
 					else

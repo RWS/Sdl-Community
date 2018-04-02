@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
 	<PlugInName>Sdl.Community.AhkPlugin</PlugInName>
-	<Version>1.8</Version>
+	<Version>1.9</Version>
 	<Description>AhkPlugin</Description>
 	<Author>SDL Community</Author>
 	<RequiredProduct name="SDLTradosStudio" minversion="12.0" />
