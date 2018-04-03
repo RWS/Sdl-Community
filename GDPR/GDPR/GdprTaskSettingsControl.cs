@@ -4,9 +4,9 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.GDPR
 {
-	class MyCustomBatchTaskSettingsControl : UserControl, ISettingsAware<MyCustomBatchTaskSettings>
+	public class GdprTaskSettingsControl : UserControl, ISettingsAware<GdprSettings>
 	{
-		public MyCustomBatchTaskSettings Settings
+		public GdprSettings Settings
 		{
 			get
 			{

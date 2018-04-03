@@ -79,12 +79,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyCustomBatchTask.cs" />
-    <Compile Include="MyCustomBatchTaskSettings.cs" />
-    <Compile Include="MyCustomBatchTaskSettingsControl.cs">
+    <Compile Include="GdprTask.cs" />
+    <Compile Include="GdprSettings.cs" />
+    <Compile Include="GdprTaskSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MyCustomBatchTaskSettingsPage.cs" />
+    <Compile Include="GdprSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
   </ItemGroup>

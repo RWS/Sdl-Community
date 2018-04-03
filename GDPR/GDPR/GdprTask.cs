@@ -5,15 +5,13 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.GDPR
 {
-	[AutomaticTask("My_Custom_Batch_Task_ID",
-				   "My_Custom_Batch_Task_Name",
-				   "My_Custom_Batch_Task_Description",
-				   //[TODO] You can change the file type according to your needs
+	[AutomaticTask("GDPR Task",
+				   "Anonymize data",
+				   "Anonymize personal data batch task",
 				   GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
-	//[TODO] You can change the file type according to your needs
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(MyCustomBatchTaskSettings), typeof(MyCustomBatchTaskSettingsPage))]
-	class MyCustomBatchTask : AbstractFileContentProcessingAutomaticTask
+	[RequiresSettings(typeof(GdprSettings), typeof(GdprSettingsPage))]
+	public class GdprTask : AbstractFileContentProcessingAutomaticTask
 	{
 		protected override void OnInitializeTask()
 		{
@@ -22,7 +20,6 @@ namespace Sdl.Community.GDPR
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			//In here you should add your custom bilingual processor to the file converter
-			throw new NotImplementedException();
 		}
 	}
 }

@@ -2,7 +2,7 @@
 
 namespace Sdl.Community.GDPR
 {
-	class MyCustomBatchTaskSettings : SettingsGroup
+	public class GdprSettings : SettingsGroup
 	{
 	}
 }
