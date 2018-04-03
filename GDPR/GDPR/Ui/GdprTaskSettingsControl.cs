@@ -1,0 +1,73 @@
+﻿using System;
+using System.Windows.Forms;
+using Sdl.Desktop.IntegrationApi;
+
+namespace Sdl.Community.GDPR.Ui
+{
+	public class GdprTaskSettingsControl : UserControl, ISettingsAware<GdprSettings>
+	{
+		private ExpressionsControl expressionsControl1;
+		private NewExpressionControl newExpressionControl1;
+		private TableLayoutPanel mainTable;
+
+		public GdprSettings Settings
+		{
+			get;
+			set;
+		}
+
+		public GdprTaskSettingsControl()
+		{
+			InitializeComponent();
+		}
+		private void InitializeComponent()
+		{
+			this.mainTable = new System.Windows.Forms.TableLayoutPanel();
+			this.expressionsControl1 = new Sdl.Community.GDPR.Ui.ExpressionsControl();
+			this.newExpressionControl1 = new Sdl.Community.GDPR.Ui.NewExpressionControl();
+			this.mainTable.SuspendLayout();
+			this.SuspendLayout();
+			// 
+			// mainTable
+			// 
+			this.mainTable.ColumnCount = 1;
+			this.mainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.mainTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.mainTable.Controls.Add(this.expressionsControl1, 0, 0);
+			this.mainTable.Controls.Add(this.newExpressionControl1, 0, 1);
+			this.mainTable.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.mainTable.Location = new System.Drawing.Point(0, 0);
+			this.mainTable.Name = "mainTable";
+			this.mainTable.RowCount = 2;
+			this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.mainTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+			this.mainTable.Size = new System.Drawing.Size(753, 473);
+			this.mainTable.TabIndex = 0;
+			// 
+			// expressionsControl1
+			// 
+			this.expressionsControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.expressionsControl1.Location = new System.Drawing.Point(3, 3);
+			this.expressionsControl1.Name = "expressionsControl1";
+			this.expressionsControl1.Size = new System.Drawing.Size(747, 230);
+			this.expressionsControl1.TabIndex = 0;
+			// 
+			// newExpressionControl1
+			// 
+			this.newExpressionControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.newExpressionControl1.Location = new System.Drawing.Point(3, 239);
+			this.newExpressionControl1.Name = "newExpressionControl1";
+			this.newExpressionControl1.Size = new System.Drawing.Size(747, 231);
+			this.newExpressionControl1.TabIndex = 1;
+			// 
+			// GdprTaskSettingsControl
+			// 
+			this.Controls.Add(this.mainTable);
+			this.Name = "GdprTaskSettingsControl";
+			this.Size = new System.Drawing.Size(753, 473);
+			this.mainTable.ResumeLayout(false);
+			this.ResumeLayout(false);
+
+		}
+	}
+}
