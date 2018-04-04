@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
-  <PlugInName>GDPR</PlugInName>
+  <PlugInName>Anonymizer</PlugInName>
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author></Author>

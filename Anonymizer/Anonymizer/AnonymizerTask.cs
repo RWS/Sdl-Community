@@ -8,7 +8,7 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.Anonymizer
 {
-	[AutomaticTask("GDPR Task",
+	[AutomaticTask("Anonymizer Task",
 				   "Anonymize data",
 				   "Anonymize personal data batch task",
 				   GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
@@ -33,28 +33,28 @@ namespace Sdl.Community.Anonymizer
 		}
 	}
 
-	[Action("GDPR Action",
+	[Action("Anonymizer Action",
 		Name = "Decrypt data",
 		Description = "Deanonymize data which was previously anonymize by the batch task",
 		Icon = "unlock"
 	)]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "",
 		true)]
-	public class GdprDeanonymizeAction : AbstractAction
+	public class AnonymizerDeanonymizeAction : AbstractAction
 	{
 		protected override void Execute()
 		{
 			
 		}
 	}
-	[Action("Help GDPR Action",
+	[Action("Help Anonymizer Action",
 		Name = "Help",
 		Description = "Help",
 		Icon = "question"
 	)]
 	[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "",
 		true)]
-	public class GdprHelpAction : AbstractAction
+	public class AnonymizerHelpAction : AbstractAction
 	{
 		protected override void Execute()
 		{
