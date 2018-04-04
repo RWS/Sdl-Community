@@ -7,8 +7,8 @@
     <ProjectGuid>{5B746367-A5AE-493B-945F-4CFEE54EC7D9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Service</RootNamespace>
-    <AssemblyName>Sdl.Community.Service</AssemblyName>
+    <RootNamespace>Sdl.Community.Anonymizer.Service</RootNamespace>
+    <AssemblyName>Sdl.Community.Anonymizer.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -54,9 +54,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.DAL.csproj">
+    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.Anonymizer.Dal.csproj">
       <Project>{25c78e7e-0a95-4f93-8757-d7b6a2da5293}</Project>
-      <Name>Sdl.Community.DAL</Name>
+      <Name>Sdl.Community.Anonymizer.Dal</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

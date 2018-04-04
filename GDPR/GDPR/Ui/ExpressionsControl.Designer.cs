@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.GDPR.Ui
+﻿namespace Sdl.Community.Anonymizer.Ui
 {
 	partial class ExpressionsControl
 	{

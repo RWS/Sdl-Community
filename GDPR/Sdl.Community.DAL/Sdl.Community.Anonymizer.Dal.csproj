@@ -7,8 +7,8 @@
     <ProjectGuid>{25C78E7E-0A95-4F93-8757-D7B6A2DA5293}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.DAL</RootNamespace>
-    <AssemblyName>Sdl.Community.DAL</AssemblyName>
+    <RootNamespace>Sdl.Community.Anonymizer.Dal</RootNamespace>
+    <AssemblyName>Sdl.Community.Anonymizer.Dal</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

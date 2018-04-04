@@ -8,8 +8,8 @@
     <ProjectGuid>{934DCCE3-7D7E-4C0A-A1E2-E94D1D6E61CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.GDPR</RootNamespace>
-    <AssemblyName>Sdl.Community.GDPR</AssemblyName>
+    <RootNamespace>Sdl.Community.Anonymizer</RootNamespace>
+    <AssemblyName>Sdl.Community.Anonymizer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.6.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Community.Toolkit.FileType, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.FileType.0.6.1\lib\net45\Sdl.Community.Toolkit.FileType.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -50,6 +56,10 @@
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
       <Private>True</Private>
@@ -89,7 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GdprTask.cs" />
-    <Compile Include="GdprSettings.cs" />
+    <Compile Include="AnonymizerSettings.cs" />
+    <Compile Include="Process Xliff\DataAnonymizer.cs" />
+    <Compile Include="Process Xliff\FileReader.cs" />
+    <Compile Include="Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="Process Xliff\Worker.cs" />
     <Compile Include="Ui\ExpressionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -131,15 +145,16 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.DAL.csproj">
+    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.Anonymizer.Dal.csproj">
       <Project>{25c78e7e-0a95-4f93-8757-d7b6a2da5293}</Project>
-      <Name>Sdl.Community.DAL</Name>
+      <Name>Sdl.Community.Anonymizer.Dal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Service\Sdl.Community.Service.csproj">
+    <ProjectReference Include="..\Sdl.Community.Service\Sdl.Community.Anonymizer.Service.csproj">
       <Project>{5b746367-a5ae-493b-945f-4cfee54ec7d9}</Project>
-      <Name>Sdl.Community.Service</Name>
+      <Name>Sdl.Community.Anonymizer.Service</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
   </PropertyGroup>

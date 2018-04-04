@@ -1,16 +1,15 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.GDPR.Ui
+namespace Sdl.Community.Anonymizer.Ui
 {
-	public class GdprTaskSettingsControl : UserControl, ISettingsAware<GdprSettings>
+	public class GdprTaskSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
 		private ExpressionsControl expressionsControl1;
 		private NewExpressionControl newExpressionControl1;
 		private TableLayoutPanel mainTable;
 
-		public GdprSettings Settings
+		public AnonymizerSettings Settings
 		{
 			get;
 			set;
@@ -23,8 +22,8 @@ namespace Sdl.Community.GDPR.Ui
 		private void InitializeComponent()
 		{
 			this.mainTable = new System.Windows.Forms.TableLayoutPanel();
-			this.expressionsControl1 = new Sdl.Community.GDPR.Ui.ExpressionsControl();
-			this.newExpressionControl1 = new Sdl.Community.GDPR.Ui.NewExpressionControl();
+			this.expressionsControl1 = new ExpressionsControl();
+			this.newExpressionControl1 = new NewExpressionControl();
 			this.mainTable.SuspendLayout();
 			this.SuspendLayout();
 			// 
