@@ -3,7 +3,7 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.Anonymizer
 {
-	public class GdprSettingsPage : DefaultSettingsPage<GdprTaskSettingsControl, AnonymizerSettings>
+	public class AnonymizerSettingsPage : DefaultSettingsPage<AnonymizerTaskSettingsControl, AnonymizerSettings>
 	{
 	}
 }

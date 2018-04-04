@@ -3,7 +3,7 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.Anonymizer.Ui
 {
-	public class GdprTaskSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
+	public class AnonymizerTaskSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
 		private ExpressionsControl expressionsControl1;
 		private NewExpressionControl newExpressionControl1;
@@ -15,7 +15,7 @@ namespace Sdl.Community.Anonymizer.Ui
 			set;
 		}
 
-		public GdprTaskSettingsControl()
+		public AnonymizerTaskSettingsControl()
 		{
 			InitializeComponent();
 		}

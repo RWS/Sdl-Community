@@ -13,8 +13,8 @@ namespace Sdl.Community.Anonymizer
 				   "Anonymize personal data batch task",
 				   GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(AnonymizerSettings), typeof(GdprSettingsPage))]
-	public class GdprTask : AbstractFileContentProcessingAutomaticTask
+	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
+	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private AnonymizerSettings _settings;
 		protected override void OnInitializeTask()
