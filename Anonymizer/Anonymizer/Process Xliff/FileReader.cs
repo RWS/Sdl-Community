@@ -2,6 +2,7 @@
 
 namespace Sdl.Community.Anonymizer.Process_Xliff
 {
+	public delegate bool ValidateSegmentOverwriteDelegate(ISegment targetSegment);
 	public class FileReader : AbstractBilingualContentProcessor
 	{
 		private readonly DataAnonymizer _dataAnonymizer;
@@ -21,8 +22,14 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			{
 				//_dataAnonymizer.Process(segmentPair);
 				var segmentVisitor = new SegmentVisitor();
-				segmentVisitor.ReplaceText(segmentPair.Target);
+				//segmentVisitor.ReplaceText(segmentPair.Target);
+				//segmentPair.Target.Add(ItemFactory.CreateText(
+				//	PropertiesFactory.CreateTextProperties("Andrea")));
+
+				segmentPair.Target.Insert(0, ItemFactory.CreateText(
+					PropertiesFactory.CreateTextProperties("Andrea")));
 			}
+			base.ProcessParagraphUnit(paragraphUnit);
 		}
 
 	}
