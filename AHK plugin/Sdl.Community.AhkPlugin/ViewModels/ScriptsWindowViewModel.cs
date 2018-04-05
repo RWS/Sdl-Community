@@ -82,6 +82,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				var masterScript = await _masterScriptDb.GetMasterScript();
 				masterScript.Location = folderPath;
 				await _masterScriptDb.UpdateScript(masterScript);
+
+				ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}
 		}
 
