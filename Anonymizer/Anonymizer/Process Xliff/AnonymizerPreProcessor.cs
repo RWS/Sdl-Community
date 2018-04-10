@@ -13,10 +13,15 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
+			
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				segmentPair.Source.Add(ItemFactory.CreateText(PropertiesFactory.CreateTextProperties("Andrea1")));
+				var segmentVisitor = new SegmentVisitor();
+				segmentVisitor.ReplaceText(segmentPair.Source,ItemFactory);
+				//segmentPair.Source.Add(ItemFactory.CreateText(PropertiesFactory.CreateTextProperties("Andrea1")));
 			}
 		}
+
+		
 	}
 }
