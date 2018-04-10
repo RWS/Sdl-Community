@@ -1,10 +1,13 @@
 ﻿using Sdl.Community.Anonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+
+
 
 namespace Sdl.Community.Anonymizer
 {
@@ -22,14 +25,17 @@ namespace Sdl.Community.Anonymizer
 			_settings = GetSetting<AnonymizerSettings>();
 		}
 
-		//metoda asta se apeleaza pentru fiecare fisier selectat la pasul anterior anterior
+
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			//In here you should add your custom bilingual processor to the file converter
 
-			var worker = new Worker(_settings);
-			worker.GeneratePreviewFiles(projectFile.LocalFilePath, multiFileConverter);
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor()));
+		
+		}
 
+		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
+		{
+			return true;
 		}
 	}
 
@@ -44,7 +50,7 @@ namespace Sdl.Community.Anonymizer
 	{
 		protected override void Execute()
 		{
-			
+
 		}
 	}
 	[Action("Help Anonymizer Action",

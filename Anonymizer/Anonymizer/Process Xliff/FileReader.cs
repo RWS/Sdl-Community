@@ -18,14 +18,10 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
+			if (paragraphUnit.IsStructure) { return; }
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				//_dataAnonymizer.Process(segmentPair);
 				var segmentVisitor = new SegmentVisitor();
-				//segmentVisitor.ReplaceText(segmentPair.Target);
-				//segmentPair.Target.Add(ItemFactory.CreateText(
-				//	PropertiesFactory.CreateTextProperties("Andrea")));
-
 				segmentPair.Target.Insert(0, ItemFactory.CreateText(
 					PropertiesFactory.CreateTextProperties("Andrea")));
 			}

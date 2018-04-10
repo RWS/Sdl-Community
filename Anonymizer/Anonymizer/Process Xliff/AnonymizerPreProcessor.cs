@@ -7,16 +7,15 @@ using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Anonymizer.Process_Xliff
 {
-	public class AnonymizerPreProcessor: AbstractBilingualContentHandler
+	public class AnonymizerPreProcessor: AbstractBilingualContentProcessor
 	{
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
+			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
 			foreach (var segmentPair in paragraphUnit.SegmentPairs)
 			{
-				var source = segmentPair.Source;
-				var cleanUp = new CleanUpHandler();
-				var text =cleanUp.GetText(segmentPair.Source);
+				segmentPair.Source.Add(ItemFactory.CreateText(PropertiesFactory.CreateTextProperties("Andrea1")));
 			}
 		}
 	}
