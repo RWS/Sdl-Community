@@ -28,10 +28,15 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			}
 			return string.Empty;
 		}
-		private string Anonymize(Match m)
+		private string Anonymize(Match match)
 		{
-			var x = AnonymizeData.EncryptData(m.ToString(), "Andrea");
-			return x;
+			if (match.Success)
+			{
+				var encryptedText = AnonymizeData.EncryptData(match.ToString(), "Andrea");
+				return string.Concat("{", encryptedText, "}");
+			}
+			
+			return match.ToString();
 		}
 		public void VisitTagPair(ITagPair tagPair)
 		{
