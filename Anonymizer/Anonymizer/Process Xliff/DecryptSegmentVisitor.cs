@@ -1,62 +1,61 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.Anonymizer.Process_Xliff
 {
-	public class SegmentVisitor: IMarkupDataVisitor
+	public class DecryptSegmentVisitor : IMarkupDataVisitor
 	{
-		private IDocumentItemFactory _factory;
-		//	private List<string> _patterns = new List<string>{ @"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)", @"\b(?:\d[ -]*?){13,16}\b" };
-		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", @"\b(?:\d[ -]*?){13,16}\b" };
-		public void ReplaceText(ISegment segment, IDocumentItemFactory factory)
+		public void DecryptText(ISegment segment)
 		{
-			_factory = factory;
 			VisitChildren(segment);
 		}
 
-		private string Anonymizer(string text)
+		private string Decrypt(string text)
 		{
-			foreach (var pattern in _patterns)
-			{
-				var regex = new Regex(pattern,RegexOptions.IgnoreCase);
-				var result = regex.Replace(text, new MatchEvaluator(Process));
-				if (!string.IsNullOrWhiteSpace(result))
-				{
-					return result;
-				}
-			}
-			return string.Empty;
+			var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
+			var result = regex.Replace(text, new MatchEvaluator(Process));
+
+			return result;
 		}
+
 		private string Process(Match match)
 		{
 			if (match.Success)
 			{
-				var encryptedText = AnonymizeData.EncryptData(match.ToString(), "Andrea");
-				return string.Concat("{", encryptedText, "}");
+				if (match.ToString().Contains("{") && match.ToString().Contains("}"))
+				{
+					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
+					var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
+					return decryptedText;
+				}
 			}
-			
 			return match.ToString();
 		}
+
 		public void VisitTagPair(ITagPair tagPair)
 		{
 			if (tagPair.StartTagProperties != null)
 			{
-				var anonymizedText=Anonymizer(tagPair.StartTagProperties.TagContent);
-				tagPair.StartTagProperties.TagContent = anonymizedText;
+				var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
+				tagPair.StartTagProperties.TagContent = decryptedText;
 			}
 			VisitChildren(tagPair);
 		}
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			
+		
 		}
 
 		public void VisitText(IText text)
 		{
-			var anonymizedText =Anonymizer(text.Properties.Text);
-			text.Properties.Text = anonymizedText;
+			var decryptedText = Decrypt(text.Properties.Text);
+			text.Properties.Text =  decryptedText;
 		}
 
 		public void VisitSegment(ISegment segment)
