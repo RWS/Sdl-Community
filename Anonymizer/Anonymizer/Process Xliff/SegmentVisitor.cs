@@ -1,17 +1,29 @@
 ﻿using System.Collections.Generic;
+using System.Drawing.Design;
+using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
+using Sdl.Community.Anonymizer.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.Anonymizer.Process_Xliff
 {
 	public class SegmentVisitor: IMarkupDataVisitor
 	{
 		private IDocumentItemFactory _factory;
+		private ISegment _segment;
+		private IPropertiesFactory _propertiesFactory;
 		//	private List<string> _patterns = new List<string>{ @"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)", @"\b(?:\d[ -]*?){13,16}\b" };
 		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", @"\b(?:\d[ -]*?){13,16}\b" };
-		public void ReplaceText(ISegment segment, IDocumentItemFactory factory)
+		private StringBuilder _textBuilder = new StringBuilder();
+		
+		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
 			_factory = factory;
+			_segment = segment;
+			_propertiesFactory = propertiesFactory;
+			_textBuilder.Clear();
 			VisitChildren(segment);
 		}
 
@@ -19,7 +31,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		{
 			foreach (var pattern in _patterns)
 			{
-				var regex = new Regex(pattern,RegexOptions.IgnoreCase);
+				var regex = new Regex(pattern, RegexOptions.IgnoreCase);
 				var result = regex.Replace(text, new MatchEvaluator(Process));
 				if (!string.IsNullOrWhiteSpace(result))
 				{
@@ -28,15 +40,26 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			}
 			return string.Empty;
 		}
-		private string Process(Match match)
+
+		private static string Process(Match match)
 		{
-			if (match.Success)
+			var encryptedText = AnonymizeData.EncryptData(match.ToString(), "Andrea");
+			return string.Concat("{", encryptedText, "}");
+
+		}
+
+		private bool ShouldAnonymize(string text)
+		{
+			foreach (var pattern in _patterns)
 			{
-				var encryptedText = AnonymizeData.EncryptData(match.ToString(), "Andrea");
-				return string.Concat("{", encryptedText, "}");
+				var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+				var match = regex.Match(text);
+				if (match.Success)
+				{
+					return true;
+				}
 			}
-			
-			return match.ToString();
+			return false;
 		}
 		public void VisitTagPair(ITagPair tagPair)
 		{
@@ -55,9 +78,16 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 		public void VisitText(IText text)
 		{
-			var anonymizedText =Anonymizer(text.Properties.Text);
-			text.Properties.Text = anonymizedText;
+			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
+			if (shouldAnonymize)
+			{
+				var anonymizedText = Anonymizer(text.Properties.Text);
+
+				_segment.Add(_factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(anonymizedText)));
+			}
 		}
+
+
 
 		public void VisitSegment(ISegment segment)
 		{
@@ -92,7 +122,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		{
 			if (container == null)
 				return;
-			foreach (var item in container)
+			foreach (var item in container.ToList())
 			{
 				item.AcceptVisitor(this);
 			}

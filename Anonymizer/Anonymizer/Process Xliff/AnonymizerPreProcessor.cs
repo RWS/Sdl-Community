@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
+using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.Anonymizer.Process_Xliff
 {
@@ -14,11 +15,11 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
 			
-			foreach (var segmentPair in paragraphUnit.SegmentPairs)
+			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
 				var segmentVisitor = new SegmentVisitor();
-				segmentVisitor.ReplaceText(segmentPair.Source,ItemFactory);
-				//segmentPair.Source.Add(ItemFactory.CreateText(PropertiesFactory.CreateTextProperties("Andrea1")));
+				segmentVisitor.ReplaceText(segmentPair.Source,ItemFactory,PropertiesFactory);
+				//segmentPair.Source.Add(ItemFactory.CreatePlaceholderTag(PropertiesFactory.CreatePlaceholderTagProperties("asda")));
 			}
 		}
 

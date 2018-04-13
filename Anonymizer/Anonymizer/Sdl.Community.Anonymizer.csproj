@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="AnonymizerTask.cs" />
     <Compile Include="AnonymizerSettings.cs" />
+    <Compile Include="Models\AnonymizedData.cs" />
     <Compile Include="Process Xliff\AnonymizeData.cs" />
     <Compile Include="Process Xliff\AnonymizerPreProcessor.cs" />
     <Compile Include="Process Xliff\DecryptDataProcessor.cs" />
