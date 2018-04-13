@@ -99,76 +99,100 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 		public void VisitText(IText text)
 		{
-			var markUp = new List<IAbstractMarkupData>();
-			var segmentText = new List<IText>();
-			//var test = text.Split(1);
+			var markUpCollection = new List<IAbstractMarkupData>();
+			var subSegmentText = new List<IText>();
 			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
 			var indexInParent = text.IndexInParent;
+			var originalSegmentClone = text.Clone();
 			if (shouldAnonymize)
 			{
-				//var anonymizedData = GetAnonymizedData(text.Properties.Text);
+				var anonymizedData = GetAnonymizedData(text.Properties.Text);
 
-				//for (var i = 0; i < anonymizedData.Count; i++)
+				//Trebuie facuta o metoda recurenta
+				//if (anonymizedData.Count > 1)
 				//{
-				//	//that means is first time we split the original text
-				//	if (segmentText.Count.Equals(0))
-				//	{
-				//		if (anonymizedData[i].PositionInOriginalText.Equals(0))
-				//		{
-				//			var subText = text;
-				//			//var subText = text.Split(anonymizedData[i].MatchText.Length);
-				//			var shouldAnonymizeFirstPosition = ShouldAnonymize(text.Properties.Text);
-				//			if (shouldAnonymizeFirstPosition)
-				//			{
-				//				subText.Properties.Text = Anonymizer(text.Properties.Text);
-				//				//text.Properties.Text = Anonymizer(text.Properties.Text);
-				//			}
-				//			segmentText.Add(subText);
-				//			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(subText.Properties.Text));
-				//			markUp.Add(tag);
-				//		}
-				//		else
-				//		{
-				//			var subText = text.Split(anonymizedData[i].PositionInOriginalText);
-				//			segmentText.Add(subText);
-				//			var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(subText.Properties.Text));
-				//			markUp.Add(tag);
-				//		}
-						
-				//	}
-				//	else
-				//	{
-				//		var subText = segmentText[i-1].Split(anonymizedData[i-1].PositionInOriginalText);
-				//		subText.Properties.Text = anonymizedData[i - 1].EncryptedText;
-				//		segmentText.Add(subText);
-				//		var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(subText.Properties.Text));
-				//		markUp.Add(tag);
-				//	}
+					
 				//}
-				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
+
+				for (var i = 0; i < anonymizedData.Count; i++)
+				{
+					//that means is first time we split the original text
+					if (subSegmentText.Count.Equals(0))
+					{
+						if (anonymizedData[i].PositionInOriginalText.Equals(0))
+						{
+							var subSegment = text.Split(anonymizedData[i].MatchText.Length);
+							var tag = _factory.CreatePlaceholderTag(
+								_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(text.Properties.Text)));
+							//Add encrypted tag to collection
+							markUpCollection.Add(tag);
+
+							subSegmentText.Add(subSegment);
+						}
+						else
+						{
+							var subSegment = text.Split(anonymizedData[i].PositionInOriginalText);
+							//da eroare daca il adaugam la colectie se pare ca in container deja e cuvantul
+							if (!ShouldAnonymize(text.Properties.Text))
+							{
+								markUpCollection.Add(text);
+							}
+							if (ShouldAnonymize(subSegment.Properties.Text))
+							{
+								var remainingData = GetAnonymizedData(subSegment.Properties.Text);
+								//Trebuie facut cu for
+								var tag = _factory.CreatePlaceholderTag(
+									_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(remainingData[0].EncryptedText)));
+								//Add encrypted tag to collection
+								markUpCollection.Add(tag);
+								//for (int j = 0; j < remainingData.Count; j++)
+								//{
+								//	//trebuie vazut
+								//}
+							}
+							else
+							{
+								//Add encrypted tag to collection
+								markUpCollection.Add(subSegment);
+							}
+							
+
+						}//else need to be implemented
+					}
+					else
+					{
+						var remainingData = GetAnonymizedData(subSegmentText[i - 1].Properties.Text);
+						for (int j = 0; j < remainingData.Count; j++)
+						{
+							var subSegment = subSegmentText[i - 1].Split(remainingData[j].PositionInOriginalText);
+							if (!ShouldAnonymize(subSegmentText[i - 1].Properties.Text))
+							{
+								markUpCollection.Add(subSegmentText[i - 1]);
+							}//else need to me implemented
+							var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(subSegment.Properties.Text)));
+							//Add encrypted tag to collection
+							markUpCollection.Add(tag);
+
+						}
+					}
+				}
+
+				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
 				if (abstractMarkupData != null)
 				{
-					//creed un tag de proba
-					var tag = _factory.CreatePlaceholderTag(
-						_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(text.Properties.Text)));
 					var elementContainer = abstractMarkupData.Parent;
-					elementContainer.Add(tag);
+					//aici ar trebui facut cu for, daca elementul deja exista ordinea in care pune datele e gresita
+					foreach (var markupData in markUpCollection)
+					{
+						if (!elementContainer.Contains(markupData))
+						{
+							elementContainer.Add(markupData);
+						}
+						
+					}
 					elementContainer.RemoveAt(indexInParent);
-					//foreach (var mark in markUp)
-					//{
-					//	elementContainer.Add(mark);
-					//}
 				}
-				//	element = markUp;
-				
-				//var anonymizedText = Anonymizer(text.Properties.Text);
-
-				//_segment.Add(_factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(anonymizedText)));
 			}
-			//foreach (var subSegment in segmentText)
-			//{
-			//	text.Properties.Text = text.Properties.Text + subSegment.Properties.Text;
-			//}
 		}
 
 
