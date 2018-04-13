@@ -8,8 +8,8 @@ namespace Sdl.Community.Anonymizer.Models
 {
 	public class AnonymizedData
 	{
-		public string OriginalText { get; set; }
+		public int PositionInOriginalText { get; set; }
+		public string MatchText { get; set; }
 		public string EncryptedText { get; set; }
-		public bool IsEncrypted { get; set; }
 	}
 }
