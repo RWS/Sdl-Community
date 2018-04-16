@@ -16,7 +16,17 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		private ISegment _segment;
 		private IPropertiesFactory _propertiesFactory;
 		//	private List<string> _patterns = new List<string>{ @"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)", @"\b(?:\d[ -]*?){13,16}\b" };
-		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", @"\b(?:\d[ -]*?){13,16}\b" };
+		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", //email
+			@"\b(?:\d[ -]*?){13,16}\b",//pci
+			@"(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])",//IP6 Address
+			@"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b", //Social Security Numbers
+			@"\b\d{4}\s\d+-\d+\b", //\b\d{4}\s\d+-\d+\b
+			@"\b\p{Lu}+\s\p{Lu}+\s\d+\b|\b\p{Lu}+\s\d+\s\p{Lu}+\b|\b\p{Lu}+\d+\s\p{Lu}+\b|\b\p{Lu}+\s\d+\p{Lu}+\b", //Car Registrations
+			@"\b\d{9}\b", //Passport Numbers
+			@"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b", //National Insurance Number
+			@"\b\d{2}/\d{2}/\d{4}\b", //Date of Birth
+			@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"//\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b
+		};
 
 		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
@@ -151,7 +161,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 					{
 						var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 						var tag = _factory.CreatePlaceholderTag(
-							_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
+							_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(segmentText.Properties.Text,"Andrea")));
 						//Add encrypted tag to collection
 						segmentContent.Add(tag);
 
@@ -185,7 +195,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 						else
 						{
 							var tag = _factory.CreatePlaceholderTag(
-								_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(remainingSegmentText.Properties.Text)));
+								_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(remainingSegmentText.Properties.Text,"Andrea")));
 							segmentContent.Add(tag);
 						}
 					}
@@ -193,7 +203,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				else
 				{
 					var tag = _factory.CreatePlaceholderTag(
-						_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
+						_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(segmentText.Properties.Text,"Andrea")));
 					segmentContent.Add(tag);
 				}
 			
