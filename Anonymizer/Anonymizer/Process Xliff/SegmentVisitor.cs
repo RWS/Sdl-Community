@@ -99,19 +99,17 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 		public void VisitText(IText text)
 		{
-			//var markUpCollection = new List<IAbstractMarkupData>();
-			//var subSegmentText = new List<IText>();
+			var markUpCollection = new List<IAbstractMarkupData>();
 			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
 			var indexInParent = text.IndexInParent;
 			var originalSegmentClone = text.Clone();
+			var wasRemovedFromParent = false;
+
 			if (shouldAnonymize)
 			{
 				var anonymizedData = GetAnonymizedData(text.Properties.Text);
-				var segmentContent = new SegmentContent
-				{
-					AbstractMarkup = new List<IAbstractMarkupData>()
-				};
-				ReplacePersonalData(text,segmentContent,anonymizedData);
+
+				GetSubsegmentPi(text, markUpCollection, anonymizedData);
 
 				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
 				if (abstractMarkupData == null)
@@ -121,50 +119,55 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				if (abstractMarkupData != null)
 				{
 					var elementContainer = abstractMarkupData.Parent;
-					//aici ar trebui facut cu for, daca elementul deja exista ordinea in care pune datele e gresita
-					foreach (var markupData in segmentContent.AbstractMarkup)
+					foreach (var markupData in markUpCollection)
 					{
 						if (!elementContainer.Contains(markupData))
 						{
 							elementContainer.Add(markupData);
 						}
-
+						else
+						{
+							//remove existing item from parent
+							wasRemovedFromParent = elementContainer.Remove(markupData);
+							//add element from collection
+							elementContainer.Add(markupData);
+						}
 					}
-					elementContainer.RemoveAt(indexInParent);
+					if (!wasRemovedFromParent)
+					{
+						elementContainer.RemoveAt(indexInParent);
+					}
 				}
 			}
 		}
 
-		private void ReplacePersonalData(IText segmentText,SegmentContent segmentContent,List<AnonymizedData> anonymizedDataList)
+		private void GetSubsegmentPi(IText segmentText,List<IAbstractMarkupData> segmentContent, List<AnonymizedData> anonymizedDataList)
 		{
-			GetSubsegmentPi(segmentText,segmentContent,anonymizedDataList);
-		}
-
-		private void GetSubsegmentPi(IText segmentText,SegmentContent segmentContent, List<AnonymizedData> anonymizedDataList)
-		{
-			for (var i = 0; i < anonymizedDataList.Count; i++)
-			{
 				//this means we have PI data + text
-				if (segmentText.Properties.Text.Length > anonymizedDataList[i].MatchText.Length)
+				if (segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
 				{
 					//check if PI data is on first position split the segment after the PI
-					if (anonymizedDataList[i].PositionInOriginalText.Equals(0))
+					if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
 					{
-						var remainingSegmentText = segmentText.Split(anonymizedDataList[i].MatchText.Length);
+						var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
 						var tag = _factory.CreatePlaceholderTag(
 							_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
 						//Add encrypted tag to collection
-						segmentContent.AbstractMarkup.Add(tag);
+						segmentContent.Add(tag);
 
 						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
 						{
 							var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
 							GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
 						}
+						else
+						{
+							segmentContent.Add(remainingSegmentText);
+						}
 					}
 					else
 					{
-						var remainingSegmentText = segmentText.Split(anonymizedDataList[i].PositionInOriginalText);
+						var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
 						if (ShouldAnonymize(segmentText.Properties.Text))
 						{
 							var remainingData = GetAnonymizedData(segmentText.Properties.Text);
@@ -172,7 +175,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 						}
 						else
 						{
-							segmentContent.AbstractMarkup.Add(segmentText);
+							segmentContent.Add(segmentText);
 						}
 						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
 						{
@@ -183,8 +186,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 						{
 							var tag = _factory.CreatePlaceholderTag(
 								_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(remainingSegmentText.Properties.Text)));
-							//Add encrypted tag to collection
-							segmentContent.AbstractMarkup.Add(tag);
+							segmentContent.Add(tag);
 						}
 					}
 				}//segment contains only PI data
@@ -192,10 +194,9 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				{
 					var tag = _factory.CreatePlaceholderTag(
 						_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
-					//Add encrypted tag to collection
-					segmentContent.AbstractMarkup.Add(tag);
+					segmentContent.Add(tag);
 				}
-			}
+			
 		}
 
 		public void VisitSegment(ISegment segment)
