@@ -99,102 +99,104 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 		public void VisitText(IText text)
 		{
-			var markUpCollection = new List<IAbstractMarkupData>();
-			var subSegmentText = new List<IText>();
+			//var markUpCollection = new List<IAbstractMarkupData>();
+			//var subSegmentText = new List<IText>();
 			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
 			var indexInParent = text.IndexInParent;
 			var originalSegmentClone = text.Clone();
 			if (shouldAnonymize)
 			{
 				var anonymizedData = GetAnonymizedData(text.Properties.Text);
-
-				//Trebuie facuta o metoda recurenta
-				//if (anonymizedData.Count > 1)
-				//{
-					
-				//}
-
-				for (var i = 0; i < anonymizedData.Count; i++)
+				var segmentContent = new SegmentContent
 				{
-					//that means is first time we split the original text
-					if (subSegmentText.Count.Equals(0))
-					{
-						if (anonymizedData[i].PositionInOriginalText.Equals(0))
-						{
-							var subSegment = text.Split(anonymizedData[i].MatchText.Length);
-							var tag = _factory.CreatePlaceholderTag(
-								_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(text.Properties.Text)));
-							//Add encrypted tag to collection
-							markUpCollection.Add(tag);
-
-							subSegmentText.Add(subSegment);
-						}
-						else
-						{
-							var subSegment = text.Split(anonymizedData[i].PositionInOriginalText);
-							//da eroare daca il adaugam la colectie se pare ca in container deja e cuvantul
-							if (!ShouldAnonymize(text.Properties.Text))
-							{
-								markUpCollection.Add(text);
-							}
-							if (ShouldAnonymize(subSegment.Properties.Text))
-							{
-								var remainingData = GetAnonymizedData(subSegment.Properties.Text);
-								//Trebuie facut cu for
-								var tag = _factory.CreatePlaceholderTag(
-									_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(remainingData[0].EncryptedText)));
-								//Add encrypted tag to collection
-								markUpCollection.Add(tag);
-								//for (int j = 0; j < remainingData.Count; j++)
-								//{
-								//	//trebuie vazut
-								//}
-							}
-							else
-							{
-								//Add encrypted tag to collection
-								markUpCollection.Add(subSegment);
-							}
-							
-
-						}//else need to be implemented
-					}
-					else
-					{
-						var remainingData = GetAnonymizedData(subSegmentText[i - 1].Properties.Text);
-						for (int j = 0; j < remainingData.Count; j++)
-						{
-							var subSegment = subSegmentText[i - 1].Split(remainingData[j].PositionInOriginalText);
-							if (!ShouldAnonymize(subSegmentText[i - 1].Properties.Text))
-							{
-								markUpCollection.Add(subSegmentText[i - 1]);
-							}//else need to me implemented
-							var tag = _factory.CreatePlaceholderTag(_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(subSegment.Properties.Text)));
-							//Add encrypted tag to collection
-							markUpCollection.Add(tag);
-
-						}
-					}
-				}
+					AbstractMarkup = new List<IAbstractMarkupData>()
+				};
+				ReplacePersonalData(text,segmentContent,anonymizedData);
 
 				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
+				if (abstractMarkupData == null)
+				{
+					abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
+				}
 				if (abstractMarkupData != null)
 				{
 					var elementContainer = abstractMarkupData.Parent;
 					//aici ar trebui facut cu for, daca elementul deja exista ordinea in care pune datele e gresita
-					foreach (var markupData in markUpCollection)
+					foreach (var markupData in segmentContent.AbstractMarkup)
 					{
 						if (!elementContainer.Contains(markupData))
 						{
 							elementContainer.Add(markupData);
 						}
-						
+
 					}
 					elementContainer.RemoveAt(indexInParent);
 				}
 			}
 		}
 
+		private void ReplacePersonalData(IText segmentText,SegmentContent segmentContent,List<AnonymizedData> anonymizedDataList)
+		{
+			GetSubsegmentPi(segmentText,segmentContent,anonymizedDataList);
+		}
+
+		private void GetSubsegmentPi(IText segmentText,SegmentContent segmentContent, List<AnonymizedData> anonymizedDataList)
+		{
+			for (var i = 0; i < anonymizedDataList.Count; i++)
+			{
+				//this means we have PI data + text
+				if (segmentText.Properties.Text.Length > anonymizedDataList[i].MatchText.Length)
+				{
+					//check if PI data is on first position split the segment after the PI
+					if (anonymizedDataList[i].PositionInOriginalText.Equals(0))
+					{
+						var remainingSegmentText = segmentText.Split(anonymizedDataList[i].MatchText.Length);
+						var tag = _factory.CreatePlaceholderTag(
+							_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
+						//Add encrypted tag to collection
+						segmentContent.AbstractMarkup.Add(tag);
+
+						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
+						{
+							var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+							GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
+						}
+					}
+					else
+					{
+						var remainingSegmentText = segmentText.Split(anonymizedDataList[i].PositionInOriginalText);
+						if (ShouldAnonymize(segmentText.Properties.Text))
+						{
+							var remainingData = GetAnonymizedData(segmentText.Properties.Text);
+							GetSubsegmentPi(segmentText, segmentContent, remainingData);
+						}
+						else
+						{
+							segmentContent.AbstractMarkup.Add(segmentText);
+						}
+						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
+						{
+							var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+							GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
+						}
+						else
+						{
+							var tag = _factory.CreatePlaceholderTag(
+								_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(remainingSegmentText.Properties.Text)));
+							//Add encrypted tag to collection
+							segmentContent.AbstractMarkup.Add(tag);
+						}
+					}
+				}//segment contains only PI data
+				else
+				{
+					var tag = _factory.CreatePlaceholderTag(
+						_propertiesFactory.CreatePlaceholderTagProperties(Anonymizer(segmentText.Properties.Text)));
+					//Add encrypted tag to collection
+					segmentContent.AbstractMarkup.Add(tag);
+				}
+			}
+		}
 
 		public void VisitSegment(ISegment segment)
 		{
