@@ -92,7 +92,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			if (tagPair.StartTagProperties != null)
 			{
 				//var anonymizedText = ;//Anonymizer(tagPair.StartTagProperties.TagContent);
-				tagPair.StartTagProperties.TagContent = AnonymizeData.EncryptData(tagPair.StartTagProperties.TagContent, "Andrea");
+				tagPair.StartTagProperties.TagContent = Anonymizer(tagPair.StartTagProperties.TagContent);//AnonymizeData.EncryptData(tagPair.StartTagProperties.TagContent, "Andrea");
 				tagPair.TagProperties.SetMetaData("Anonymizer", "Anonymizer");
 			}
 			VisitChildren(tagPair);

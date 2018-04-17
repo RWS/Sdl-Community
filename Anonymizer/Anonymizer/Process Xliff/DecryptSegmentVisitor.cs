@@ -21,35 +21,36 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			VisitChildren(segment);
 		}
 
-		//private string Decrypt(string text)
-		//{
-		//	var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
-		//	var result = regex.Replace(text, new MatchEvaluator(Process));
+		private string Decrypt(string text)
+		{
+			var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
+			var result = regex.Replace(text, new MatchEvaluator(Process));
 
-		//	return result;
-		//}
+			return result;
+		}
 
-		//private string Process(Match match)
-		//{
-		//	if (match.Success)
-		//	{
-		//		if (match.ToString().Contains("{") && match.ToString().Contains("}"))
-		//		{
-		//			var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
-		//			var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
-		//			return decryptedText;
-		//		}
-		//	}
-		//	return match.ToString();
-		//}
+		private string Process(Match match)
+		{
+			if (match.Success)
+			{
+				if (match.ToString().Contains("{") && match.ToString().Contains("}"))
+				{
+					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
+					var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
+					return decryptedText;
+				}
+			}
+			return match.ToString();
+		}
 
+		//tag pair comes as text with '{ }' symbol we need to match the text and remove the symbols
 		public void VisitTagPair(ITagPair tagPair)
 		{
 			if (tagPair.StartTagProperties != null)
 			{
 				if (tagPair.StartTagProperties.MetaDataContainsKey("Anonymizer"))
 				{
-					var decryptedText = AnonymizeData.DecryptData(tagPair.StartTagProperties.TagContent, "Andrea");
+					var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
 					tagPair.StartTagProperties.TagContent = decryptedText;
 				}
 				
@@ -64,23 +65,20 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				var abstractMarkupData = tag.Parent.AllSubItems.FirstOrDefault(i => i.IndexInParent.Equals(tag.IndexInParent));
 				if (abstractMarkupData != null)
 				{
-					var text = _factory.CreateText(
+					var decryptedText = _factory.CreateText(
 						_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, "Andrea")));
 					var elementContainer = abstractMarkupData.Parent;
-					elementContainer.Add(text);
+
+					elementContainer.Insert(tag.IndexInParent, decryptedText);
+
 					elementContainer.RemoveAt(tag.IndexInParent);
 				}
-				//decryptedData.IndexInParent = tag.IndexInParent;
-
-				//tag.Properties.TagContent = AnonymizeData.DecryptData(tag.Properties.TagContent,"Andrea");
-
 			}
 		}
 
 		public void VisitText(IText text)
 		{
-			//var decryptedText = Decrypt(text.Properties.Text);
-			//text.Properties.Text =  decryptedText;
+
 		}
 
 		public void VisitSegment(ISegment segment)
