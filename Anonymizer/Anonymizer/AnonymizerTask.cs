@@ -60,7 +60,7 @@ namespace Sdl.Community.Anonymizer
 			foreach (var project in selectedProjects)
 			{
 				var targetFiles = project.GetTargetLanguageFiles();
-				foreach (var targetFile in targetFiles)
+				foreach (var targetFile in targetFiles.ToList())
 				{
 					var converter =
 						fileTypeManager.GetConverterToDefaultBilingual(targetFile.LocalFilePath, targetFile.LocalFilePath, null);

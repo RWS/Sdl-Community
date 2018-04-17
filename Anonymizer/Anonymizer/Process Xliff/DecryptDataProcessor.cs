@@ -14,10 +14,10 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
 
-			foreach (var segmentPair in paragraphUnit.SegmentPairs)
+			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
 				var decryptVisitor = new DecryptSegmentVisitor();
-				decryptVisitor.DecryptText(segmentPair.Source);
+				decryptVisitor.DecryptText(segmentPair.Source, ItemFactory, PropertiesFactory);
 
 			}
 		}

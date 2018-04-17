@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Drawing.Design;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.Community.Anonymizer.Models;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -13,7 +10,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 	public class SegmentVisitor: IMarkupDataVisitor
 	{
 		private IDocumentItemFactory _factory;
-		private ISegment _segment;
 		private IPropertiesFactory _propertiesFactory;
 		//	private List<string> _patterns = new List<string>{ @"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)", @"\b(?:\d[ -]*?){13,16}\b" };
 		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", //email
@@ -31,7 +27,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
 			_factory = factory;
-			_segment = segment;
 			_propertiesFactory = propertiesFactory;
 			VisitChildren(segment);
 		}
@@ -96,8 +91,9 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		{
 			if (tagPair.StartTagProperties != null)
 			{
-				var anonymizedText = Anonymizer(tagPair.StartTagProperties.TagContent);
-				tagPair.StartTagProperties.TagContent = anonymizedText;
+				//var anonymizedText = ;//Anonymizer(tagPair.StartTagProperties.TagContent);
+				tagPair.StartTagProperties.TagContent = AnonymizeData.EncryptData(tagPair.StartTagProperties.TagContent, "Andrea");
+				tagPair.TagProperties.SetMetaData("Anonymizer", "Anonymizer");
 			}
 			VisitChildren(tagPair);
 		}
@@ -154,59 +150,65 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		private void GetSubsegmentPi(IText segmentText,List<IAbstractMarkupData> segmentContent, List<AnonymizedData> anonymizedDataList)
 		{
 				//this means we have PI data + text
-				if (segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
+			if (segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
+			{
+				//check if PI data is on first position split the segment after the PI
+				if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
 				{
-					//check if PI data is on first position split the segment after the PI
-					if (anonymizedDataList[0].PositionInOriginalText.Equals(0))
-					{
-						var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
-						var tag = _factory.CreatePlaceholderTag(
-							_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(segmentText.Properties.Text,"Andrea")));
-						//Add encrypted tag to collection
-						segmentContent.Add(tag);
+					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].MatchText.Length);
+					var tag = _factory.CreatePlaceholderTag(
+						_propertiesFactory.CreatePlaceholderTagProperties(
+							AnonymizeData.EncryptData(segmentText.Properties.Text, "Andrea")));
+					tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+					//Add encrypted tag to collection
+					segmentContent.Add(tag);
 
-						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-						{
-							var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
-							GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-						}
-						else
-						{
-							segmentContent.Add(remainingSegmentText);
-						}
+					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
+					{
+						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+						GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
 					}
 					else
 					{
-						var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
-						if (ShouldAnonymize(segmentText.Properties.Text))
-						{
-							var remainingData = GetAnonymizedData(segmentText.Properties.Text);
-							GetSubsegmentPi(segmentText, segmentContent, remainingData);
-						}
-						else
-						{
-							segmentContent.Add(segmentText);
-						}
-						if (ShouldAnonymize(remainingSegmentText.Properties.Text))
-						{
-							var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
-							GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
-						}
-						else
-						{
-							var tag = _factory.CreatePlaceholderTag(
-								_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(remainingSegmentText.Properties.Text,"Andrea")));
-							segmentContent.Add(tag);
-						}
+						segmentContent.Add(remainingSegmentText);
 					}
-				}//segment contains only PI data
+				}
 				else
 				{
-					var tag = _factory.CreatePlaceholderTag(
-						_propertiesFactory.CreatePlaceholderTagProperties(AnonymizeData.EncryptData(segmentText.Properties.Text,"Andrea")));
-					segmentContent.Add(tag);
+					var remainingSegmentText = segmentText.Split(anonymizedDataList[0].PositionInOriginalText);
+					if (ShouldAnonymize(segmentText.Properties.Text))
+					{
+						var remainingData = GetAnonymizedData(segmentText.Properties.Text);
+						GetSubsegmentPi(segmentText, segmentContent, remainingData);
+					}
+					else
+					{
+						segmentContent.Add(segmentText);
+					}
+					if (ShouldAnonymize(remainingSegmentText.Properties.Text))
+					{
+						var remainingData = GetAnonymizedData(remainingSegmentText.Properties.Text);
+						GetSubsegmentPi(remainingSegmentText, segmentContent, remainingData);
+					}
+					else
+					{
+						var tag = _factory.CreatePlaceholderTag(
+							_propertiesFactory.CreatePlaceholderTagProperties(
+								AnonymizeData.EncryptData(remainingSegmentText.Properties.Text, "Andrea")));
+						tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+						segmentContent.Add(tag);
+					}
 				}
-			
+			} //segment contains only PI data
+			else
+			{
+				var tag = _factory.CreatePlaceholderTag(
+					_propertiesFactory.CreatePlaceholderTagProperties(
+						AnonymizeData.EncryptData(segmentText.Properties.Text, "Andrea")));
+				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
+				segmentContent.Add(tag);
+			}
+
 		}
 
 		public void VisitSegment(ISegment segment)
