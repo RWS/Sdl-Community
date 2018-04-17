@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
+using Sdl.Community.Anonymizer.Helpers;
 using Sdl.Community.Anonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
@@ -32,7 +35,9 @@ namespace Sdl.Community.Anonymizer
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
+			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
+			ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor()));
 		
 		}
