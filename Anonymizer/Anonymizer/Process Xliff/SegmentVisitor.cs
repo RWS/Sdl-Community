@@ -11,7 +11,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 	{
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		//	private List<string> _patterns = new List<string>{ @"([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)", @"\b(?:\d[ -]*?){13,16}\b" };
 		private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", //email
 			@"\b(?:\d[ -]*?){13,16}\b",//pci
 			@"(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])",//IP6 Address
@@ -23,7 +22,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			@"\b\d{2}/\d{2}/\d{4}\b", //Date of Birth
 			@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"//\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b
 		};
-
+		
 		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
 			_factory = factory;
@@ -107,16 +106,14 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 		{
 			var markUpCollection = new List<IAbstractMarkupData>();
 			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
-			var indexInParent = text.IndexInParent;
 			var originalSegmentClone = text.Clone();
-			var wasRemovedFromParent = false;
-
+			var count = 0;
 			if (shouldAnonymize)
 			{
 				var anonymizedData = GetAnonymizedData(text.Properties.Text);
 
 				GetSubsegmentPi(text, markUpCollection, anonymizedData);
-
+				
 				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
 				if (abstractMarkupData == null)
 				{
@@ -125,23 +122,30 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				if (abstractMarkupData != null)
 				{
 					var elementContainer = abstractMarkupData.Parent;
+					
 					foreach (var markupData in markUpCollection)
 					{
-						if (!elementContainer.Contains(markupData))
+						//that means is a text we don't need to add it
+						if (elementContainer.Contains(markupData))
 						{
-							elementContainer.Add(markupData);
+							count++;
 						}
 						else
 						{
-							//remove existing item from parent
-							wasRemovedFromParent = elementContainer.Remove(markupData);
-							//add element from collection
-							elementContainer.Add(markupData);
+							//in the case we have only aghisa@sdl.com in the segment
+							//remove the text -> add the anonymized data in the same position
+							if (elementContainer.AllSubItems.Count().Equals(1) &&
+							    ShouldAnonymize(elementContainer.AllSubItems.ToList()[0].ToString()))
+							{
+								elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+								elementContainer.Insert(count, markupData);
+							}
+							else
+							{
+								elementContainer.Insert(count, markupData);
+							}
+							count++;
 						}
-					}
-					if (!wasRemovedFromParent)
-					{
-						elementContainer.RemoveAt(indexInParent);
 					}
 				}
 			}
