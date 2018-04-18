@@ -39,7 +39,7 @@
 			this.newExpressionGb.Size = new System.Drawing.Size(629, 405);
 			this.newExpressionGb.TabIndex = 0;
 			this.newExpressionGb.TabStop = false;
-			this.newExpressionGb.Text = "New Expression";
+			this.newExpressionGb.Text = "New Expression and Encryption Key";
 			// 
 			// NewExpressionControl
 			// 
