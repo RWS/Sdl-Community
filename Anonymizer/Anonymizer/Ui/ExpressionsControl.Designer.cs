@@ -88,6 +88,7 @@
 			this.expressionsDataGrid.Name = "expressionsDataGrid";
 			this.expressionsDataGrid.Size = new System.Drawing.Size(650, 270);
 			this.expressionsDataGrid.TabIndex = 1;
+			this.expressionsDataGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.expressionsDataGrid_CellContentClick);
 			// 
 			// buttonsLayoutPanel
 			// 

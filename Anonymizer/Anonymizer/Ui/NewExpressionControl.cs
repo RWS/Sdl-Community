@@ -8,5 +8,10 @@ namespace Sdl.Community.Anonymizer.Ui
 		{
 			InitializeComponent();
 		}
+
+		public void SetSettings(AnonymizerSettings settings)
+		{
+			
+		}
 	}
 }

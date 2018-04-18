@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.Anonymizer.Ui
@@ -19,6 +20,13 @@ namespace Sdl.Community.Anonymizer.Ui
 		{
 			InitializeComponent();
 		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			newExpressionControl1.SetSettings(Settings);
+			expressionsControl1.SetSettings(Settings);
+		}
+
 		private void InitializeComponent()
 		{
 			this.mainTable = new System.Windows.Forms.TableLayoutPanel();
