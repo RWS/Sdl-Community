@@ -97,6 +97,7 @@
     <Compile Include="AnonymizerTask.cs" />
     <Compile Include="AnonymizerSettings.cs" />
     <Compile Include="Helpers\ProjectBackup.cs" />
+    <Compile Include="Interfaces\IAnonymizerSettings.cs" />
     <Compile Include="Models\AnonymizedData.cs" />
     <Compile Include="Models\RegexPattern.cs" />
     <Compile Include="Process Xliff\AnonymizeData.cs" />
@@ -104,6 +105,12 @@
     <Compile Include="Process Xliff\DecryptDataProcessor.cs" />
     <Compile Include="Process Xliff\DecryptSegmentVisitor.cs" />
     <Compile Include="Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="Ui\AnonymizerSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\AnonymizerSettingsControl.Designer.cs">
+      <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\ExpressionsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -124,6 +131,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Ui\AnonymizerSettingsControl.resx">
+      <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\ExpressionsControl.resx">
       <DependentUpon>ExpressionsControl.cs</DependentUpon>
     </EmbeddedResource>

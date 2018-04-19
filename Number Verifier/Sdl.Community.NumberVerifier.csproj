@@ -77,11 +77,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4Sdl.Desktop.IntegrationApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.DesktopEditor.BasicControls">
@@ -107,11 +107,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <HintPath>..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio4\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Sdl.Verification.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">

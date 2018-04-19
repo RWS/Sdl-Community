@@ -6,7 +6,7 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.Anonymizer.Ui
 {
-	public partial class ExpressionsControl : UserControl
+	public partial class ExpressionsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
 		private AnonymizerSettings _settings;
 	//	private BindingList<RegexPattern> _expressions;
@@ -16,31 +16,6 @@ namespace Sdl.Community.Anonymizer.Ui
 			InitializeComponent();
 			expressionsDataGrid.AutoGenerateColumns = false;
 
-			//TO DO
-		//	//read information from JSON 
-		//	_expressions = new BindingList<RegexPattern>
-		//{
-		//	new RegexPattern
-		//	{
-		//		Description = "bla bla",
-		//		Pattern = "daasda"
-		//	},
-
-		//	new RegexPattern
-		//	{
-		//		Description = "bla bla",
-		//		Pattern = "daasda"
-		//	},
-		//	new RegexPattern
-		//	{
-		//		Description = "bla bla",
-		//		Pattern = "daasda"
-		//	}
-		//};
-		//	expressionsDataGrid.DataSource = _expressions;
-
-			//genteate columns
-		
 			
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
@@ -101,6 +76,11 @@ namespace Sdl.Community.Anonymizer.Ui
 				{
 					Description = "bla bla",
 					Pattern = "daasda"
+				},
+				new RegexPattern
+				{
+					Pattern = "",
+					Description = ""
 				}
 			};
 			expressionsDataGrid.DataSource = _expressions;
@@ -127,5 +107,7 @@ namespace Sdl.Community.Anonymizer.Ui
 			}
 				
 		}
+
+		public AnonymizerSettings Settings { get; set; }
 	}
 }

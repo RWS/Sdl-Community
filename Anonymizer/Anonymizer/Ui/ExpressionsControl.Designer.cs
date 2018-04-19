@@ -62,10 +62,11 @@
 			this.expressionListLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.expressionListLayoutPanel.Location = new System.Drawing.Point(3, 16);
 			this.expressionListLayoutPanel.Name = "expressionListLayoutPanel";
-			this.expressionListLayoutPanel.RowCount = 3;
-			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.expressionListLayoutPanel.RowCount = 4;
+			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+			this.expressionListLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
 			this.expressionListLayoutPanel.Size = new System.Drawing.Size(656, 395);
 			this.expressionListLayoutPanel.TabIndex = 0;
 			// 
@@ -95,6 +96,7 @@
 			this.buttonsLayoutPanel.ColumnCount = 2;
 			this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 20F));
 			this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 80F));
+			this.buttonsLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.buttonsLayoutPanel.Controls.Add(this.importBtn, 0, 0);
 			this.buttonsLayoutPanel.Controls.Add(this.exporBtn, 1, 0);
 			this.buttonsLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;

@@ -35,7 +35,6 @@ namespace Sdl.Community.Anonymizer
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			var test = _settings;
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 
 			ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
