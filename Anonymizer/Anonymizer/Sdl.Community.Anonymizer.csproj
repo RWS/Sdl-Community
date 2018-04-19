@@ -111,37 +111,13 @@
     <Compile Include="Ui\AnonymizerSettingsControl.Designer.cs">
       <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\ExpressionsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ui\ExpressionsControl.Designer.cs">
-      <DependentUpon>ExpressionsControl.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Ui\AnonymizerTaskSettingsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="AnonymizerSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Ui\NewExpressionControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ui\NewExpressionControl.Designer.cs">
-      <DependentUpon>NewExpressionControl.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ui\AnonymizerSettingsControl.resx">
       <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ui\ExpressionsControl.resx">
-      <DependentUpon>ExpressionsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ui\AnonymizerTaskSettingsControl.resx">
-      <DependentUpon>AnonymizerTaskSettingsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Ui\NewExpressionControl.resx">
-      <DependentUpon>NewExpressionControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Resources\unlock.ico" />
     <None Include="Resources\question.ico" />
