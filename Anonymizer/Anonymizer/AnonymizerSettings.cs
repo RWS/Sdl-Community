@@ -35,13 +35,6 @@ namespace Sdl.Community.Anonymizer
 		//Initialize settings with default regex list
 		public void AddPattern(RegexPattern pattern)
 		{
-			//we add have an empty pattern last one to display an empty row in grid
-			//var patterns = _regexPatterns.Where(p => p.Id!=null).ToList();
-			//var patternAlreadyExists = patterns.Exists(i => i.Id.Equals(pattern.Id));
-			//if (!patternAlreadyExists)
-			//{
-			//	_regexPatterns.Add(pattern);
-			//}
 			_regexPatterns.Add(pattern);
 		}
 

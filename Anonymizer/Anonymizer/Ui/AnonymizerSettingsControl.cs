@@ -131,5 +131,24 @@ namespace Sdl.Community.Anonymizer.Ui
 				}
 			}
 		}
+
+		//private void expressionsGrid_KeyDown(object sender, KeyEventArgs e)
+		//{
+		//	if (e.KeyCode.Equals(Keys.Delete))
+		//	{
+		//		var result = MessageBox.Show(@"Are you sure you want to delete the expressions?",@"Please confirm",
+		//			MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
+
+		//		if (result == DialogResult.OK)
+		//		{
+		//			for (var i = 0; i < expressionsGrid.SelectedRows.Count; i++)
+		//			{
+		//				var row = expressionsGrid.SelectedRows[i];
+		//				var regexPattern = row.DataBoundItem as RegexPattern;
+		//				RegexPatterns.Remove(regexPattern);
+		//			}
+		//		}
+		//	}
+		//}
 	}
 }

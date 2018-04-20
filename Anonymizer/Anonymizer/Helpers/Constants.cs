@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using Sdl.Community.Anonymizer.Models;
 
 namespace Sdl.Community.Anonymizer.Helpers
@@ -74,8 +69,8 @@ namespace Sdl.Community.Anonymizer.Helpers
 				new RegexPattern
 				{
 					Id = "9",
-					Pattern = "Date of Birth",
-					Description = @"\b\d{2}/\d{2}/\d{4}\b",
+					Description= "Date of Birth",
+					Pattern = @"\b\d{2}/\d{2}/\d{4}\b",
 					IsDefaultPath = true
 				}
 			};
