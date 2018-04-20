@@ -32,30 +32,17 @@ namespace Sdl.Community.Anonymizer
 			set => GetSetting<bool>(nameof(DefaultListAlreadyAdded)).Value = value;
 		}
 
+		//Initialize settings with default regex list
 		public void AddPattern(RegexPattern pattern)
 		{
 			//we add have an empty pattern last one to display an empty row in grid
-			var patterns = _regexPatterns.Where(p => p.Id!=null).ToList();
-			var patternAlreadyExists = patterns.Exists(i => i.Id.Equals(pattern.Id));
-			if (!patternAlreadyExists)
-			{
-				_regexPatterns.Add(pattern);
-			}
-		}
-
-		public void EditPattern(RegexPattern pattern)
-		{
-			var patternToEdit = _regexPatterns.FirstOrDefault(p => p.Id.Equals(pattern.Id));
-			if (patternToEdit != null)
-			{
-				patternToEdit.Description = pattern.Description;
-				patternToEdit.Pattern = pattern.Pattern;
-				patternToEdit.ShouldEncrypt = pattern.ShouldEncrypt;
-			}
-			else
-			{
-				_regexPatterns.Insert(_regexPatterns.Count-1,pattern);
-			}
+			//var patterns = _regexPatterns.Where(p => p.Id!=null).ToList();
+			//var patternAlreadyExists = patterns.Exists(i => i.Id.Equals(pattern.Id));
+			//if (!patternAlreadyExists)
+			//{
+			//	_regexPatterns.Add(pattern);
+			//}
+			_regexPatterns.Add(pattern);
 		}
 
 		public BindingList<RegexPattern> GetRegexPatterns()

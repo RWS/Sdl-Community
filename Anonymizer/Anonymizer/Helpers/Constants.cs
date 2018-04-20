@@ -77,11 +77,6 @@ namespace Sdl.Community.Anonymizer.Helpers
 					Pattern = "Date of Birth",
 					Description = @"\b\d{2}/\d{2}/\d{4}\b",
 					IsDefaultPath = true
-				},
-				new RegexPattern
-				{
-					Pattern = "",
-					Description = ""
 				}
 			};
 		}

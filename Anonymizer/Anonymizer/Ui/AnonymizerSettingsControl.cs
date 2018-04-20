@@ -18,8 +18,6 @@ namespace Sdl.Community.Anonymizer.Ui
 {
 	public partial class AnonymizerSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
-		private List<RegexPattern> _expressions;
-
 		public AnonymizerSettingsControl()
 		{
 			InitializeComponent();
@@ -67,6 +65,7 @@ namespace Sdl.Community.Anonymizer.Ui
 		}
 
 		public BindingList<RegexPattern> RegexPatterns { get; set; }
+		public AnonymizerSettings Settings { get; set; }
 
 		private void ReadExistingExpressions()
 		{
@@ -96,16 +95,11 @@ namespace Sdl.Community.Anonymizer.Ui
 			Settings = settings;
 		}
 
-
 		private void UpdateUi(AnonymizerSettings settings)
 		{
 			Settings = settings;
 			UpdateSettings(settings);
 		}
-
-		public AnonymizerSettings Settings { get; set; }
-
-
 		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			var selectedPattern = RegexPatterns[e.RowIndex];
@@ -135,22 +129,6 @@ namespace Sdl.Community.Anonymizer.Ui
 				{
 					selectedPattern.Id = Guid.NewGuid().ToString();
 				}
-
-				//check if last element is empty if not create a new one
-				//in grid will appear a new empty row
-				var lastElement = RegexPatterns[RegexPatterns.Count - 1];
-				if (!string.IsNullOrEmpty(lastElement.Id))
-				{
-					// create an empty row
-					var emptyRow = new RegexPattern
-					{
-						Description = string.Empty,
-						Id = string.Empty,
-						Pattern = string.Empty
-					};
-					RegexPatterns.Add(emptyRow);
-				}
-				expressionsGrid.Refresh();
 			}
 		}
 	}
