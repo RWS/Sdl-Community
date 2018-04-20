@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,10 @@ namespace Sdl.Community.Anonymizer.Interfaces
 {
 	public interface IAnonymizerSettings
 	{
-		 List<RegexPattern> RegexPatterns { get; set; }
+		BindingList<RegexPattern> RegexPatterns { get; set; }
 		string EncryptionKey { get; set; }
 		bool DefaultListAlreadyAdded { get; set; }
-		List<RegexPattern> GetRegexPatterns();
+		BindingList<RegexPattern> GetRegexPatterns();
 		string GetEncryptionKey();
 	}
 }

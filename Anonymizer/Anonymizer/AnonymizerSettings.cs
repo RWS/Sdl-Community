@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Sdl.Community.Anonymizer.Interfaces;
 using Sdl.Community.Anonymizer.Models;
@@ -9,14 +10,14 @@ namespace Sdl.Community.Anonymizer
 {
 	public class AnonymizerSettings : SettingsGroup,IAnonymizerSettings
 	{
-		private List<RegexPattern> _regexPatterns = new List<RegexPattern>();
+		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
 		private bool _defaultListAlreadyAdded = false;
 
-		public List<RegexPattern> RegexPatterns
+		public BindingList<RegexPattern> RegexPatterns
 		{
-			get => GetSetting<List<RegexPattern>>(nameof(RegexPatterns));
+			get => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns));
 			
-			set => GetSetting<List<RegexPattern>>(nameof(RegexPatterns)).Value = value;
+			set => GetSetting<BindingList<RegexPattern>>(nameof(RegexPatterns)).Value = value;
 		}
 
 		public string EncryptionKey
@@ -57,7 +58,7 @@ namespace Sdl.Community.Anonymizer
 			}
 		}
 
-		public List<RegexPattern> GetRegexPatterns()
+		public BindingList<RegexPattern> GetRegexPatterns()
 		{
 			return RegexPatterns;
 		}

@@ -66,7 +66,7 @@ namespace Sdl.Community.Anonymizer.Ui
 			set => encryptionBox.Text = value;
 		}
 
-		public List<RegexPattern> RegexPatterns { get; set; }
+		public BindingList<RegexPattern> RegexPatterns { get; set; }
 
 		private void ReadExistingExpressions()
 		{
@@ -86,8 +86,9 @@ namespace Sdl.Community.Anonymizer.Ui
 			Settings = settings;
 			RegexPatterns = Settings.RegexPatterns;
 			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
-			SettingsBinder.DataBindSetting<List<RegexPattern>>(expressionsGrid, "DataSource", Settings,
-				nameof(Settings.RegexPatterns));
+			//SettingsBinder.DataBindSetting<List<RegexPattern>>(expressionsGrid, "DataSource", Settings,
+			//	nameof(Settings.RegexPatterns));
+			expressionsGrid.DataSource = RegexPatterns;
 			UpdateUi(settings);
 		}
 		public void UpdateSettings(AnonymizerSettings settings)
@@ -126,7 +127,6 @@ namespace Sdl.Community.Anonymizer.Ui
 					selectedPattern.Description = currentCellValue.ToString();
 				}
 			}
-			//Export column
 
 			if (!string.IsNullOrEmpty(selectedPattern.Description) && !string.IsNullOrEmpty(selectedPattern.Pattern))
 			{
@@ -138,7 +138,7 @@ namespace Sdl.Community.Anonymizer.Ui
 
 				//check if last element is empty if not create a new one
 				//in grid will appear a new empty row
-				var lastElement = RegexPatterns[RegexPatterns.Count-1];
+				var lastElement = RegexPatterns[RegexPatterns.Count - 1];
 				if (!string.IsNullOrEmpty(lastElement.Id))
 				{
 					// create an empty row
@@ -150,10 +150,8 @@ namespace Sdl.Community.Anonymizer.Ui
 					};
 					RegexPatterns.Add(emptyRow);
 				}
-				//Settings.EditPattern(selectedPattern);
+				expressionsGrid.Refresh();
 			}
-			
-			
 		}
 	}
 }

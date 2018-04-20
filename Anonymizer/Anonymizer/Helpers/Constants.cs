@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +10,9 @@ namespace Sdl.Community.Anonymizer.Helpers
 {
 	public static class Constants
 	{
-		public static List<RegexPattern> GetDefaultRegexPatterns()
+		public static BindingList<RegexPattern> GetDefaultRegexPatterns()
 		{
-			return new List<RegexPattern>
+			return new BindingList<RegexPattern>
 			{
 				new RegexPattern
 				{
