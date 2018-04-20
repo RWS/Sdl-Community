@@ -84,9 +84,7 @@ namespace Sdl.Community.Anonymizer.Ui
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-
-			
-
+			RegexPatterns = Settings.RegexPatterns;
 			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
 			SettingsBinder.DataBindSetting<List<RegexPattern>>(expressionsGrid, "DataSource", Settings,
 				nameof(Settings.RegexPatterns));
