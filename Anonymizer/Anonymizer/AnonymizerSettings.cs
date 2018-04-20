@@ -10,6 +10,7 @@ namespace Sdl.Community.Anonymizer
 	public class AnonymizerSettings : SettingsGroup,IAnonymizerSettings
 	{
 		private List<RegexPattern> _regexPatterns = new List<RegexPattern>();
+		private bool _defaultListAlreadyAdded = false;
 
 		public List<RegexPattern> RegexPatterns
 		{
@@ -22,6 +23,12 @@ namespace Sdl.Community.Anonymizer
 		{
 			get => GetSetting<string>(nameof(EncryptionKey));
 			set => GetSetting<string>(nameof(EncryptionKey)).Value = value;
+		}
+
+		public bool DefaultListAlreadyAdded
+		{
+			get => GetSetting<bool>(nameof(DefaultListAlreadyAdded));
+			set => GetSetting<bool>(nameof(DefaultListAlreadyAdded)).Value = value;
 		}
 
 		public void AddPattern(RegexPattern pattern)

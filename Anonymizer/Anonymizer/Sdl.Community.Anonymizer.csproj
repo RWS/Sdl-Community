@@ -96,6 +96,7 @@
   <ItemGroup>
     <Compile Include="AnonymizerTask.cs" />
     <Compile Include="AnonymizerSettings.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\ProjectBackup.cs" />
     <Compile Include="Interfaces\IAnonymizerSettings.cs" />
     <Compile Include="Models\AnonymizedData.cs" />

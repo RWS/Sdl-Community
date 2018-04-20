@@ -11,7 +11,7 @@ namespace Sdl.Community.Anonymizer.Interfaces
 	{
 		 List<RegexPattern> RegexPatterns { get; set; }
 		string EncryptionKey { get; set; }
-
+		bool DefaultListAlreadyAdded { get; set; }
 		List<RegexPattern> GetRegexPatterns();
 		string GetEncryptionKey();
 	}

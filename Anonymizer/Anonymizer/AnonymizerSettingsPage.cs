@@ -6,40 +6,27 @@ namespace Sdl.Community.Anonymizer
 {
 	public class AnonymizerSettingsPage : DefaultSettingsPage<AnonymizerSettingsControl, AnonymizerSettings>
 	{
-		private AnonymizerSettings Settings;
-		private AnonymizerSettingsControl Control;
-
+		private AnonymizerSettings _settings;
+		private AnonymizerSettingsControl _control;
 
 		public override object GetControl()
 		{
-			Settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
-			Control = base.GetControl() as AnonymizerSettingsControl;
-			return Control;
+			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
+			_control = base.GetControl() as AnonymizerSettingsControl;
+			return _control;
 		}
-		
-	
 
 		public override void Save()
 		{
-			//base.Save();
-			Settings.EncryptionKey = Control.EncryptionKey;
-			Settings.RegexPatterns = Control.RegexPatterns;
+			_settings.EncryptionKey = _control.EncryptionKey;
+			_settings.RegexPatterns = _control.RegexPatterns;
 		}
 
 		public override void OnActivate()
 		{
-			Control.EncryptionKey = Settings.EncryptionKey;
-			Control.RegexPatterns = Settings.RegexPatterns;
+			_control.EncryptionKey = _settings.EncryptionKey;
+			_control.RegexPatterns = _settings.RegexPatterns;
 		}
-		//public override void OnDeactivate()
-		//{
-		//	Settings.EncryptionKey = Control.EncryptionKey;
-		//	Settings.RegexPatterns = Control.RegexPatterns;
-		//}
 
-		//public override void Dispose()
-		//{
-		//	Control.Dispose();
-		//}
 	}
 }

@@ -13,7 +13,7 @@ namespace Sdl.Community.Anonymizer.Models
 		public bool ShouldEncrypt { get; set; }
 		public bool ShouldExport { get; set; }
 		public bool IsDefaultPath { get; set; }
-		public bool ShouldBeReadAgain { get; set; }
+		public bool WasDeactivated { get; set; }
 		public string Id { get; set; }
 	}
 }
