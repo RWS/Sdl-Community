@@ -81,7 +81,7 @@
 			this.expressionsGrid.Name = "expressionsGrid";
 			this.expressionsGrid.Size = new System.Drawing.Size(550, 208);
 			this.expressionsGrid.TabIndex = 1;
-			this.expressionsGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.expressionsGrid_CellContentClick);
+			this.expressionsGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.expressionsGrid_CellValueChanged);
 			// 
 			// importBtn
 			// 

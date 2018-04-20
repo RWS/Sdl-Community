@@ -25,6 +25,21 @@ namespace Sdl.Community.Anonymizer
 			Settings.EncryptionKey = Control.EncryptionKey;
 			Settings.RegexPatterns = Control.RegexPatterns;
 		}
-	
+
+		public override void OnActivate()
+		{
+			Control.EncryptionKey = Settings.EncryptionKey;
+			Control.RegexPatterns = Settings.RegexPatterns;
+		}
+		//public override void OnDeactivate()
+		//{
+		//	Settings.EncryptionKey = Control.EncryptionKey;
+		//	Settings.RegexPatterns = Control.RegexPatterns;
+		//}
+
+		//public override void Dispose()
+		//{
+		//	Control.Dispose();
+		//}
 	}
 }

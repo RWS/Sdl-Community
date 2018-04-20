@@ -35,6 +35,21 @@ namespace Sdl.Community.Anonymizer
 			}
 		}
 
+		public void EditPattern(RegexPattern pattern)
+		{
+			var patternToEdit = _regexPatterns.FirstOrDefault(p => p.Id.Equals(pattern.Id));
+			if (patternToEdit != null)
+			{
+				patternToEdit.Description = pattern.Description;
+				patternToEdit.Pattern = pattern.Pattern;
+				patternToEdit.ShouldEncrypt = pattern.ShouldEncrypt;
+			}
+			else
+			{
+				_regexPatterns.Insert(_regexPatterns.Count-1,pattern);
+			}
+		}
+
 		public List<RegexPattern> GetRegexPatterns()
 		{
 			return RegexPatterns;
