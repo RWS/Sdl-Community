@@ -36,9 +36,9 @@ namespace Sdl.Community.Anonymizer
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-
+			var selectedPatternsFromGrid = _settings.RegexPatterns.Where(e => e.ShouldEnable).ToList();
 			ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor()));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid)));
 		
 		}
 

@@ -11,9 +11,8 @@ namespace Sdl.Community.Anonymizer.Models
 		public string Pattern { get; set; }
 		public string Description { get; set; }
 		public bool ShouldEncrypt { get; set; }
-		public bool ShouldExport { get; set; }
+		public bool ShouldEnable { get; set; }
 		public bool IsDefaultPath { get; set; }
-		public bool WasDeactivated { get; set; }
 		public string Id { get; set; }
 	}
 }

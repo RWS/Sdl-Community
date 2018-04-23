@@ -13,7 +13,7 @@ namespace Sdl.Community.Anonymizer.Helpers
 				{
 					Id = "1",
 					Description = "email",
-					Pattern = @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A - Z]{ 2,}\b",
+					Pattern = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",
 					IsDefaultPath = true
 				},
 

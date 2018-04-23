@@ -105,6 +105,11 @@ namespace Sdl.Community.Anonymizer.Ui
 			var selectedPattern = RegexPatterns[e.RowIndex];
 			var currentCellValue = expressionsGrid.CurrentCell.Value;
 
+			//Enable column
+			if (e.ColumnIndex.Equals(0))
+			{
+				selectedPattern.ShouldEnable = (bool) currentCellValue;
+			}
 			//Regex pattern column
 			if (e.ColumnIndex.Equals(1))
 			{
@@ -121,7 +126,11 @@ namespace Sdl.Community.Anonymizer.Ui
 					selectedPattern.Description = currentCellValue.ToString();
 				}
 			}
-
+			//Encrypt column
+			if (e.ColumnIndex.Equals(3))
+			{
+				selectedPattern.ShouldEncrypt = (bool)currentCellValue;
+			}
 			if (!string.IsNullOrEmpty(selectedPattern.Description) && !string.IsNullOrEmpty(selectedPattern.Pattern))
 			{
 				//that means is a new added expression and the id is empty
