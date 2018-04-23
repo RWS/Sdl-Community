@@ -54,10 +54,10 @@
 			this.mainPanel.Location = new System.Drawing.Point(0, 0);
 			this.mainPanel.Name = "mainPanel";
 			this.mainPanel.RowCount = 4;
+			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
+			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 55F));
 			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
+			this.mainPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
 			this.mainPanel.Size = new System.Drawing.Size(556, 428);
 			this.mainPanel.TabIndex = 0;
 			// 
@@ -68,9 +68,8 @@
 			this.mainPanel.SetColumnSpan(this.descriptionLbl, 2);
 			this.descriptionLbl.Location = new System.Drawing.Point(3, 14);
 			this.descriptionLbl.Name = "descriptionLbl";
-			this.descriptionLbl.Size = new System.Drawing.Size(234, 13);
+			this.descriptionLbl.Size = new System.Drawing.Size(0, 13);
 			this.descriptionLbl.TabIndex = 0;
-			this.descriptionLbl.Text = "Available regular expressions are shown bellow. ";
 			// 
 			// expressionsGrid
 			// 
@@ -119,6 +118,7 @@
 			this.encryptionBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.encryptionBox.Location = new System.Drawing.Point(151, 374);
 			this.encryptionBox.Name = "encryptionBox";
+			this.encryptionBox.PasswordChar = '*';
 			this.encryptionBox.Size = new System.Drawing.Size(214, 20);
 			this.encryptionBox.TabIndex = 5;
 			// 

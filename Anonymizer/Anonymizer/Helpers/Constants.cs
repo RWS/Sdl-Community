@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Text;
 using Sdl.Community.Anonymizer.Models;
 
 namespace Sdl.Community.Anonymizer.Helpers
@@ -74,6 +76,16 @@ namespace Sdl.Community.Anonymizer.Helpers
 					IsDefaultPath = true
 				}
 			};
+		}
+
+		public static string GetGridDescription()
+		{
+			return
+				@"Select from the grid bellow which rules should be applied. To use a rule enable the checkbox  in the column 'Enable'.
+				If the data matching the expression should be encrypted check 'Encrypt' box. By default the batch task tag  matching data." +
+				Environment.NewLine + @"New expressions can be added by filling the empty row at the end of the grid." +
+				Environment.NewLine + @"To edit an expression double click on the cell." +
+				Environment.NewLine + @"To remove a rule, select the rows and hit 'Delete' button";
 		}
 	}
 }

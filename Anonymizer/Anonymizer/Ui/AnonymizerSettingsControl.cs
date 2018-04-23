@@ -23,7 +23,10 @@ namespace Sdl.Community.Anonymizer.Ui
 			InitializeComponent();
 
 			expressionsGrid.AutoGenerateColumns = false;
-		
+			descriptionLbl.Text = Constants.GetGridDescription();
+
+
+
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Enable?",
