@@ -36,8 +36,16 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				if (match.ToString().Contains("{") && match.ToString().Contains("}"))
 				{
 					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
-					var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
-					return decryptedText;
+					try
+					{
+						var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
+						return decryptedText;
+					}
+					catch (Exception e)
+					{
+						return encryptedText;
+					}
+					
 				}
 			}
 			return match.ToString();
@@ -65,13 +73,28 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				var abstractMarkupData = tag.Parent.AllSubItems.FirstOrDefault(i => i.IndexInParent.Equals(tag.IndexInParent));
 				if (abstractMarkupData != null)
 				{
-					var decryptedText = _factory.CreateText(
-						_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, "Andrea")));
-					var elementContainer = abstractMarkupData.Parent;
+					//if we catch an exception that means is only a taged text is not encrypted
+					try
+					{
+						var decryptedText = _factory.CreateText(
+							_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, "Andrea")));
 
-					elementContainer.Insert(tag.IndexInParent, decryptedText);
+						var elementContainer = abstractMarkupData.Parent;
 
-					elementContainer.RemoveAt(tag.IndexInParent);
+						elementContainer.Insert(tag.IndexInParent, decryptedText);
+
+						elementContainer.RemoveAt(tag.IndexInParent);
+					}
+					catch (Exception e)
+					{
+						// take the text from tag and insert it back as IText
+						var elementContainer = abstractMarkupData.Parent;
+						var untagedText = _factory.CreateText(
+							_propertiesFactory.CreateTextProperties(tag.Properties.TagContent));
+						elementContainer.Insert(tag.IndexInParent, untagedText);
+
+						elementContainer.RemoveAt(tag.IndexInParent);
+					}
 				}
 			}
 		}

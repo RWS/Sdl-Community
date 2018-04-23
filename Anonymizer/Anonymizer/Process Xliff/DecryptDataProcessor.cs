@@ -18,6 +18,10 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			{
 				var decryptVisitor = new DecryptSegmentVisitor();
 				decryptVisitor.DecryptText(segmentPair.Source, ItemFactory, PropertiesFactory);
+				if (segmentPair.Target != null)
+				{
+					decryptVisitor.DecryptText(segmentPair.Target, ItemFactory, PropertiesFactory);
+				}
 				//we need to decrypt the target segment also
 			}
 		}
