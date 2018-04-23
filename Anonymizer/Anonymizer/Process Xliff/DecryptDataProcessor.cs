@@ -22,7 +22,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				{
 					decryptVisitor.DecryptText(segmentPair.Target, ItemFactory, PropertiesFactory);
 				}
-				//we need to decrypt the target segment also
 			}
 		}
 	}
