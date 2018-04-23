@@ -27,12 +27,14 @@ namespace Sdl.Community.Anonymizer.Ui
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Enable?",
-				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+				DataPropertyName = "ShouldEnable"
 			};
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Encrypt?",
-				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+				DataPropertyName = "ShouldEncrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
 			var pattern = new DataGridViewTextBoxColumn
