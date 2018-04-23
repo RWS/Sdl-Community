@@ -23,26 +23,30 @@ namespace Sdl.Community.Anonymizer.Ui
 			InitializeComponent();
 
 			expressionsGrid.AutoGenerateColumns = false;
+		
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
-				HeaderText = @"Enable?"
+				HeaderText = @"Enable?",
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
 			};
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
-				HeaderText = @"Encrypt?"
-				//Width = 60
+				HeaderText = @"Encrypt?",
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells
 			};
 			expressionsGrid.Columns.Add(exportColumn);
 			var pattern = new DataGridViewTextBoxColumn
 			{
 				HeaderText = @"Regex Pattern",
-				DataPropertyName = "Pattern"
+				DataPropertyName = "Pattern",
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 			};
 			expressionsGrid.Columns.Add(pattern);
 			var description = new DataGridViewTextBoxColumn
 			{
 				HeaderText = @"Description",
-				DataPropertyName = "Description"
+				DataPropertyName = "Description",
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 			};
 			expressionsGrid.Columns.Add(description);
 

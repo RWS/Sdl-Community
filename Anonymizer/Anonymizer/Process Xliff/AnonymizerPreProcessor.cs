@@ -29,7 +29,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 				{
 					segmentVisitor.ReplaceText(segmentPair.Target, ItemFactory, PropertiesFactory);
 				}
-				//segmentPair.Source.Add(ItemFactory.CreatePlaceholderTag(PropertiesFactory.CreatePlaceholderTagProperties("asda")));
 			}
 		}
 

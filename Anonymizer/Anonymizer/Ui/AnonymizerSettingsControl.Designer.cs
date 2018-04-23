@@ -76,6 +76,7 @@
 			// 
 			this.expressionsGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.mainPanel.SetColumnSpan(this.expressionsGrid, 2);
+			this.expressionsGrid.Cursor = System.Windows.Forms.Cursors.Hand;
 			this.expressionsGrid.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.expressionsGrid.Location = new System.Drawing.Point(3, 45);
 			this.expressionsGrid.Name = "expressionsGrid";
