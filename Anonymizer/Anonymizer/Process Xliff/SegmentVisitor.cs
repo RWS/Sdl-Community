@@ -151,8 +151,12 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 							if (elementContainer.AllSubItems.Count().Equals(1) &&
 							    ShouldAnonymize(elementContainer.AllSubItems.ToList()[0].ToString()))
 							{
-								elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
-								elementContainer.Insert(count, markupData);
+								if (elementContainer.AllSubItems.Any())
+								{
+									elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+									elementContainer.Insert(count, markupData);
+								}
+								
 							}
 							else
 							{

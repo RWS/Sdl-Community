@@ -96,9 +96,12 @@
   <ItemGroup>
     <Compile Include="AnonymizerTask.cs" />
     <Compile Include="AnonymizerSettings.cs" />
+    <Compile Include="Batch Task\DecryptSettings.cs" />
+    <Compile Include="Batch Task\DecryptSettingsPage.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\ProjectBackup.cs" />
     <Compile Include="Interfaces\IAnonymizerSettings.cs" />
+    <Compile Include="Interfaces\IDecryptSettings.cs" />
     <Compile Include="Models\AnonymizedData.cs" />
     <Compile Include="Models\RegexPattern.cs" />
     <Compile Include="Process Xliff\AnonymizeData.cs" />
@@ -115,10 +118,19 @@
     <Compile Include="AnonymizerSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Ui\DecryptSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\DecryptSettingsControl.Designer.cs">
+      <DependentUpon>DecryptSettingsControl.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Ui\AnonymizerSettingsControl.resx">
       <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ui\DecryptSettingsControl.resx">
+      <DependentUpon>DecryptSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Resources\unlock.ico" />
     <None Include="Resources\question.ico" />
