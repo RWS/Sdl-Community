@@ -129,6 +129,10 @@
 			<Component Id="Sdl.Core.PluginFramework.PackageSupport.dll" Guid="*">
 				<File Id="Sdl.Core.PluginFramework.PackageSupport.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Core.PluginFramework.PackageSupport.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>

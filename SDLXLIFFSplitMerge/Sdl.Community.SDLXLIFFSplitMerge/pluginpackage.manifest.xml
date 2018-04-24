@@ -8,6 +8,10 @@
 		<File>Sdl.Utilities.SplitSDLXLIFF.dll</File>
 		<File>Sdl.Utilities.SplitSDLXLIFF.Wizard.dll</File>
 		<File>Sdl.Utilities.SplitSDLXLIFF.Lib.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
+		<File>Sdl.Community.Toolkit.FileType.dll</File>
+		<File>Sdl.Community.Toolkit.ProjectAutomation.dll</File>
+		<File>Sdl.Community.Toolkit.Integration.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
 </PluginPackage>
