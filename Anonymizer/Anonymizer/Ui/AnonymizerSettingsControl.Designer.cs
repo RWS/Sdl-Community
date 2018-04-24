@@ -135,7 +135,7 @@
 			// 
 			this.descriptionLbl.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.descriptionLbl.AutoSize = true;
-			this.descriptionLbl.Location = new System.Drawing.Point(3, 18);
+			this.descriptionLbl.Location = new System.Drawing.Point(3, 42);
 			this.descriptionLbl.Name = "descriptionLbl";
 			this.descriptionLbl.Size = new System.Drawing.Size(35, 13);
 			this.descriptionLbl.TabIndex = 0;
@@ -145,12 +145,13 @@
 			// 
 			this.selectAll.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.selectAll.AutoSize = true;
-			this.selectAll.Location = new System.Drawing.Point(3, 67);
+			this.selectAll.Location = new System.Drawing.Point(3, 101);
 			this.selectAll.Name = "selectAll";
 			this.selectAll.Size = new System.Drawing.Size(69, 17);
 			this.selectAll.TabIndex = 1;
 			this.selectAll.Text = "Select all";
 			this.selectAll.UseVisualStyleBackColor = true;
+			this.selectAll.CheckedChanged += new System.EventHandler(this.selectAll_CheckedChanged);
 			// 
 			// AnonymizerSettingsControl
 			// 

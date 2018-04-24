@@ -20,6 +20,7 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 		{
 			_settings.EncryptionKey = _control.EncryptionKey;
 			_settings.RegexPatterns = _control.RegexPatterns;
+			_settings.SelectAll = _control.SelectAll;
 		}
 
 		public override void OnActivate()

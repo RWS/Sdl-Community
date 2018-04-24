@@ -45,6 +45,11 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 			return EncryptionKey;
 		}
 
+		public bool SelectAll {
+			get => GetSetting<bool>(nameof(SelectAll));
+			set => GetSetting<bool>(nameof(SelectAll)).Value = value;
+		}
+
 
 		protected override object GetDefaultValue(string settingId)
 		{

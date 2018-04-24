@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -30,13 +31,15 @@ namespace Sdl.Community.Anonymizer.Ui
 			{
 				HeaderText = @"Enable?",
 				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-				DataPropertyName = "ShouldEnable"
+				DataPropertyName = "ShouldEnable",
+				Name = "Enable"
 			};
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Encrypt?",
 				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
-				DataPropertyName = "ShouldEncrypt"
+				DataPropertyName = "ShouldEncrypt",
+				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
 			var pattern = new DataGridViewTextBoxColumn
@@ -55,10 +58,11 @@ namespace Sdl.Community.Anonymizer.Ui
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
 		}
-
+		
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
 			ReadExistingExpressions();
 			SetSettings(Settings);
 		}
@@ -67,6 +71,12 @@ namespace Sdl.Community.Anonymizer.Ui
 		{
 			get => encryptionBox.Text;
 			set => encryptionBox.Text = value;
+		}
+
+		public bool SelectAll
+		{
+			get => selectAll.Checked;
+			set => selectAll.Checked = value;
 		}
 
 		public BindingList<RegexPattern> RegexPatterns { get; set; }
@@ -84,15 +94,21 @@ namespace Sdl.Community.Anonymizer.Ui
 				Settings.DefaultListAlreadyAdded = true;
 			}
 		}
-
+	
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			RegexPatterns = Settings.RegexPatterns;
+			RegexPatterns= Settings.RegexPatterns;
 			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
-			//SettingsBinder.DataBindSetting<List<RegexPattern>>(expressionsGrid, "DataSource", Settings,
-			//	nameof(Settings.RegexPatterns));
+			SettingsBinder.DataBindSetting<bool>(selectAll, "Checked", Settings, nameof(Settings.SelectAll));
+			SettingsBinder.DataBindSetting<BindingList<RegexPattern>>(expressionsGrid, "DataSource", Settings,
+				nameof(Settings.RegexPatterns));
 			expressionsGrid.DataSource = RegexPatterns;
+		}
+
+		private void UpdateUi(AnonymizerSettings settings)
+		{
+			Settings = settings;
 		}
 
 		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -134,6 +150,31 @@ namespace Sdl.Community.Anonymizer.Ui
 					selectedPattern.Id = Guid.NewGuid().ToString();
 				}
 			}
+		}
+
+		private void selectAll_CheckedChanged(object sender, EventArgs e)
+		{
+			//expressionsGrid.SuspendLayout();
+			var shouldSelect = ((CheckBox)sender).Checked;
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEnable = shouldSelect;
+				pattern.ShouldEncrypt = shouldSelect;
+			}
+			Settings.RegexPatterns = RegexPatterns;
+
+			//foreach (DataGridViewRow row in expressionsGrid.Rows)
+			//{
+			//	var isNewRow = row.IsNewRow;
+			//	if (!isNewRow)
+			//	{
+			//		var item = (RegexPattern)row.DataBoundItem;
+			//		item.ShouldEnable = shouldSelect;
+			//		item.ShouldEncrypt = shouldSelect;
+			//	}
+			//}
+			//expressionsGrid.ResumeLayout();
+			//expressionsGrid.ResetBindings();
 		}
 
 		//private void expressionsGrid_KeyDown(object sender, KeyEventArgs e)

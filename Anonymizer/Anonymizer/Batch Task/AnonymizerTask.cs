@@ -31,7 +31,10 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 		{
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedPatternsFromGrid = _settings.RegexPatterns.Where(e => e.ShouldEnable).ToList();
-			ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
+			if (projectController.CurrentProject != null)
+			{
+				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
+			}
 			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,_settings.EncryptionKey)));
 		
 		}
