@@ -11,21 +11,13 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 	{
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		private List<RegexPattern> _patterns = new List<RegexPattern>();
-		//private List<string> _patterns = new List<string> { @"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", //email
-		//	@"\b(?:\d[ -]*?){13,16}\b",//pci
-		//	@"(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])",//IP6 Address
-		//	@"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b", //Social Security Numbers
-		//	@"\b\d{4}\s\d+-\d+\b", //\b\d{4}\s\d+-\d+\b
-		//	@"\b\p{Lu}+\s\p{Lu}+\s\d+\b|\b\p{Lu}+\s\d+\s\p{Lu}+\b|\b\p{Lu}+\d+\s\p{Lu}+\b|\b\p{Lu}+\s\d+\p{Lu}+\b", //Car Registrations
-		//	@"\b\d{9}\b", //Passport Numbers
-		//	@"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b", //National Insurance Number
-		//	@"\b\d{2}/\d{2}/\d{4}\b", //Date of Birth
-		//	@"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b"//\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b
-		//};
-		public SegmentVisitor(List<RegexPattern> patterns)
+		private readonly List<RegexPattern> _patterns;
+		private readonly string _encryptionKey;
+
+		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey)
 		{
 			_patterns = patterns;
+			_encryptionKey = encryptionKey;
 		}
 		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
@@ -46,23 +38,20 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 					var result = regex.Replace(text, matchText => ProcessMatchData(matchText, pattern, isTagContent));
 					return result;
 				}
-
-				
 			}
 			return text;
 		}
 
 		private string ProcessMatchData(Match match, RegexPattern pattern, bool isTagContent)
 		{
-			var encryptedText = string.Empty;
+			string encryptedText;
 			//Check if the match should be encrypted
-			encryptedText = pattern.ShouldEncrypt ? AnonymizeData.EncryptData(match.ToString(), "Andrea") : match.ToString();
+			encryptedText = pattern.ShouldEncrypt ? AnonymizeData.EncryptData(match.ToString(), _encryptionKey) : match.ToString();
 			//For tag content we need to add {} for decrypting the data
 			if (isTagContent)
 			{
 				return string.Concat("{", encryptedText, "}");
 			}
-
 			return encryptedText;
 		}
 
@@ -93,7 +82,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 					{
 						MatchText = match.Value,
 						PositionInOriginalText = match.Index,
-						EncryptedText = AnonymizeData.EncryptData(match.ToString(), "Andrea")
+						EncryptedText = AnonymizeData.EncryptData(match.ToString(), _encryptionKey)
 					};
 					anonymizedData.Add(data);
 				}
@@ -156,7 +145,6 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 									elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
 									elementContainer.Insert(count, markupData);
 								}
-								
 							}
 							else
 							{

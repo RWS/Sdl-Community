@@ -9,6 +9,11 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 {
 	public class DecryptDataProcessor : AbstractBilingualContentProcessor
 	{
+		private readonly string _encryptionKey;
+		public DecryptDataProcessor(string encryptionKey)
+		{
+			_encryptionKey = encryptionKey;
+		}
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
@@ -16,7 +21,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
-				var decryptVisitor = new DecryptSegmentVisitor();
+				var decryptVisitor = new DecryptSegmentVisitor(_encryptionKey);
 				decryptVisitor.DecryptText(segmentPair.Source, ItemFactory, PropertiesFactory);
 				if (segmentPair.Target != null)
 				{

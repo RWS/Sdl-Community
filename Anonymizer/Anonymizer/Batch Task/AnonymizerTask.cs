@@ -32,7 +32,7 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 			var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
 			var selectedPatternsFromGrid = _settings.RegexPatterns.Where(e => e.ShouldEnable).ToList();
 			ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,_settings.EncryptionKey)));
 		
 		}
 
@@ -57,10 +57,9 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 			_settings = GetSetting<DecryptSettings>();
 		}
 
-
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor()));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings.EncryptionKey)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -68,9 +67,6 @@ namespace Sdl.Community.Anonymizer.Batch_Task
 			return true;
 		}
 	}
-
-
-
 	//[Action("Anonymizer Action",
 	//	Name = "Decrypt data",
 	//	Description = "Deanonymize data which was previously anonymize by the batch task",

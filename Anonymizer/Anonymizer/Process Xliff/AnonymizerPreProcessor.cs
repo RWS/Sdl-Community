@@ -11,11 +11,14 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 {
 	public class AnonymizerPreProcessor: AbstractBilingualContentProcessor
 	{
-		private List<RegexPattern> _patterns= new List<RegexPattern>();
-		public AnonymizerPreProcessor(List<RegexPattern> patterns)
+		private readonly List<RegexPattern> _patterns;
+		private readonly string _encryptionKey;
+		public AnonymizerPreProcessor(List<RegexPattern> patterns,string encryptionKey)
 		{
 			_patterns = patterns;
+			_encryptionKey = encryptionKey;
 		}
+
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
@@ -23,7 +26,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 			
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
-				var segmentVisitor = new SegmentVisitor(_patterns);
+				var segmentVisitor = new SegmentVisitor(_patterns,_encryptionKey);
 				segmentVisitor.ReplaceText(segmentPair.Source,ItemFactory,PropertiesFactory);
 				if (segmentPair.Target != null)
 				{

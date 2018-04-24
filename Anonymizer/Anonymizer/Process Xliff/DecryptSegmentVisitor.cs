@@ -14,6 +14,12 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 	{
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
+		private readonly string _encryptionKey;
+
+		public DecryptSegmentVisitor(string encryptionKey)
+		{
+			_encryptionKey = encryptionKey;
+		}
 		public void DecryptText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
 			_factory = factory;
@@ -38,7 +44,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
 					try
 					{
-						var decryptedText = AnonymizeData.DecryptData(encryptedText, "Andrea");
+						var decryptedText = AnonymizeData.DecryptData(encryptedText, _encryptionKey);
 						return decryptedText;
 					}
 					catch (Exception e)
@@ -77,7 +83,7 @@ namespace Sdl.Community.Anonymizer.Process_Xliff
 					try
 					{
 						var decryptedText = _factory.CreateText(
-							_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, "Andrea")));
+							_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, _encryptionKey)));
 
 						var elementContainer = abstractMarkupData.Parent;
 
