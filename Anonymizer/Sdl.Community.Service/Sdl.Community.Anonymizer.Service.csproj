@@ -53,11 +53,5 @@
       <Link>SdlCommunity.snk</Link>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.Anonymizer.Dal.csproj">
-      <Project>{25c78e7e-0a95-4f93-8757-d7b6a2da5293}</Project>
-      <Name>Sdl.Community.Anonymizer.Dal</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

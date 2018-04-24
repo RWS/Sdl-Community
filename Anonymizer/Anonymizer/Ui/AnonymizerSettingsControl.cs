@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sdl.Community.Anonymizer.Batch_Task;
 using Sdl.Community.Anonymizer.Helpers;
 using Sdl.Community.Anonymizer.Interfaces;
 using Sdl.Community.Anonymizer.Models;
@@ -24,8 +25,6 @@ namespace Sdl.Community.Anonymizer.Ui
 
 			expressionsGrid.AutoGenerateColumns = false;
 			descriptionLbl.Text = Constants.GetGridDescription();
-
-
 
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
@@ -54,11 +53,8 @@ namespace Sdl.Community.Anonymizer.Ui
 				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
 			};
 			expressionsGrid.Columns.Add(description);
-
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
-
 		}
-
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -97,18 +93,8 @@ namespace Sdl.Community.Anonymizer.Ui
 			//SettingsBinder.DataBindSetting<List<RegexPattern>>(expressionsGrid, "DataSource", Settings,
 			//	nameof(Settings.RegexPatterns));
 			expressionsGrid.DataSource = RegexPatterns;
-			UpdateUi(settings);
-		}
-		public void UpdateSettings(AnonymizerSettings settings)
-		{
-			Settings = settings;
 		}
 
-		private void UpdateUi(AnonymizerSettings settings)
-		{
-			Settings = settings;
-			UpdateSettings(settings);
-		}
 		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
 			var selectedPattern = RegexPatterns[e.RowIndex];

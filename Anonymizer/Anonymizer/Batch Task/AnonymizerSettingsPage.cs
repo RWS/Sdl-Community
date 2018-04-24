@@ -2,7 +2,7 @@
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.Anonymizer
+namespace Sdl.Community.Anonymizer.Batch_Task
 {
 	public class AnonymizerSettingsPage : DefaultSettingsPage<AnonymizerSettingsControl, AnonymizerSettings>
 	{

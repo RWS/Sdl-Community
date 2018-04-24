@@ -94,8 +94,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AnonymizerTask.cs" />
-    <Compile Include="AnonymizerSettings.cs" />
+    <Compile Include="Batch Task\AnonymizerTask.cs" />
+    <Compile Include="Batch Task\AnonymizerSettings.cs" />
     <Compile Include="Batch Task\DecryptSettings.cs" />
     <Compile Include="Batch Task\DecryptSettingsPage.cs" />
     <Compile Include="Helpers\Constants.cs" />
@@ -115,7 +115,7 @@
     <Compile Include="Ui\AnonymizerSettingsControl.Designer.cs">
       <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="AnonymizerSettingsPage.cs" />
+    <Compile Include="Batch Task\AnonymizerSettingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Ui\DecryptSettingsControl.cs">
@@ -142,16 +142,6 @@
       <Link>SdlCommunity.snk</Link>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Sdl.Community.DAL\Sdl.Community.Anonymizer.Dal.csproj">
-      <Project>{25c78e7e-0a95-4f93-8757-d7b6a2da5293}</Project>
-      <Name>Sdl.Community.Anonymizer.Dal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sdl.Community.Service\Sdl.Community.Anonymizer.Service.csproj">
-      <Project>{5b746367-a5ae-493b-945f-4cfee54ec7d9}</Project>
-      <Name>Sdl.Community.Anonymizer.Service</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
