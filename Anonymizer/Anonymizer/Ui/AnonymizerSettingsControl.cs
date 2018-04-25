@@ -112,48 +112,55 @@ namespace Sdl.Community.Anonymizer.Ui
 			expressionsGrid.DataSource = RegexPatterns;
 		}
 
-		private void UpdateUi(AnonymizerSettings settings)
-		{
-			Settings = settings;
-		}
-
 		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
 		{
-			var selectedPattern = RegexPatterns[e.RowIndex];
-			var currentCellValue = expressionsGrid.CurrentCell.Value;
-
-			//Enable column
-			if (e.ColumnIndex.Equals(0))
+			if (e.RowIndex.Equals(RegexPatterns.Count))
 			{
-				selectedPattern.ShouldEnable = (bool) currentCellValue;
-			}
-			//Regex pattern column
-			if (e.ColumnIndex.Equals(1))
-			{
-				if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+				var row = expressionsGrid.Rows[e.RowIndex];
+				if (row.Cells[1].Value != null && row.Cells[2].Value != null)
 				{
-					selectedPattern.Pattern = currentCellValue.ToString();
+					var pattern = (string)row.Cells[1].Value;
+					var description = (string)row.Cells[2].Value;
+					var newExpression = new RegexPattern
+					{
+						Id = Guid.NewGuid().ToString(),
+						Pattern = pattern,
+						Description = description,
+						ShouldEncrypt = (bool)row.Cells[3].Value,
+						ShouldEnable = (bool)row.Cells[0].Value
+					};
+					RegexPatterns.Add(newExpression);
 				}
 			}
-			//Description column
-			if (e.ColumnIndex.Equals(2))
+			else
 			{
-				if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+				var selectedPattern = RegexPatterns[e.RowIndex];
+				var currentCellValue = expressionsGrid.CurrentCell.Value;
+				//Enable column
+				if (e.ColumnIndex.Equals(0))
 				{
-					selectedPattern.Description = currentCellValue.ToString();
+					selectedPattern.ShouldEnable = (bool)currentCellValue;
 				}
-			}
-			//Encrypt column
-			if (e.ColumnIndex.Equals(3))
-			{
-				selectedPattern.ShouldEncrypt = (bool)currentCellValue;
-			}
-			if (!string.IsNullOrEmpty(selectedPattern.Description) && !string.IsNullOrEmpty(selectedPattern.Pattern))
-			{
-				//that means is a new added expression and the id is empty
-				if (string.IsNullOrEmpty(selectedPattern.Id))
+				//Regex pattern column
+				if (e.ColumnIndex.Equals(1))
 				{
-					selectedPattern.Id = Guid.NewGuid().ToString();
+					if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+					{
+						selectedPattern.Pattern = currentCellValue.ToString();
+					}
+				}
+				//Description column
+				if (e.ColumnIndex.Equals(2))
+				{
+					if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+					{
+						selectedPattern.Description = currentCellValue.ToString();
+					}
+				}
+				//Encrypt column
+				if (e.ColumnIndex.Equals(3))
+				{
+					selectedPattern.ShouldEncrypt = (bool)currentCellValue;
 				}
 			}
 		}
@@ -197,23 +204,59 @@ namespace Sdl.Community.Anonymizer.Ui
 			}
 		}
 
-		//private void expressionsGrid_KeyDown(object sender, KeyEventArgs e)
-		//{
-		//	if (e.KeyCode.Equals(Keys.Delete))
-		//	{
-		//		var result = MessageBox.Show(@"Are you sure you want to delete the expressions?",@"Please confirm",
-		//			MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
+		private void importBtn_Click(object sender, EventArgs e)
+		{
+			var fileDialog = new OpenFileDialog
+			{
+				Title = @"Please select the files you want to import",
+				Filter = @"Json files(*.json) | *.json",
+				CheckFileExists = true,
+				CheckPathExists = true,
+				DefaultExt = "json",
+				Multiselect = true
+				
+			};
+			var result = fileDialog.ShowDialog();
+			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
+			{
+				var importedExpressions =Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
+				ImportExpressionsInSettings(importedExpressions);
+			}
 
-		//		if (result == DialogResult.OK)
-		//		{
-		//			for (var i = 0; i < expressionsGrid.SelectedRows.Count; i++)
-		//			{
-		//				var row = expressionsGrid.SelectedRows[i];
-		//				var regexPattern = row.DataBoundItem as RegexPattern;
-		//				RegexPatterns.Remove(regexPattern);
-		//			}
-		//		}
-		//	}
-		//}
+		}
+
+		private void ImportExpressionsInSettings(List<RegexPattern> expressions)
+		{
+			foreach (var expression in expressions)
+			{
+				var existScript = RegexPatterns.FirstOrDefault(s => s.Pattern.Equals(expression.Pattern));
+				//add script to list
+				if (existScript == null)
+				{
+					expression.ShouldEncrypt = true;
+					expression.ShouldEnable = true;
+					RegexPatterns.Add(expression);
+				}
+			}
+			Settings.RegexPatterns = RegexPatterns;
+		}
+
+		private void expressionsGrid_KeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.KeyCode.Equals(Keys.Delete))
+			{
+				var result = MessageBox.Show(@"Are you sure you want to delete the expressions?", @"Please confirm",
+					MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
+				if (result == DialogResult.OK)
+				{
+					for (var i = 0; i < expressionsGrid.SelectedRows.Count; i++)
+					{
+						RegexPatterns.RemoveAt(i);
+					}
+				}
+				Settings.RegexPatterns = RegexPatterns;
+			}
+		}
 	}
 }

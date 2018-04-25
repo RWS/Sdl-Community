@@ -75,6 +75,7 @@
 			this.expressionsGrid.Size = new System.Drawing.Size(550, 208);
 			this.expressionsGrid.TabIndex = 1;
 			this.expressionsGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.expressionsGrid_CellValueChanged);
+			this.expressionsGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.expressionsGrid_KeyDown);
 			// 
 			// importBtn
 			// 
@@ -85,6 +86,7 @@
 			this.importBtn.TabIndex = 2;
 			this.importBtn.Text = "Import pattern(s)";
 			this.importBtn.UseVisualStyleBackColor = true;
+			this.importBtn.Click += new System.EventHandler(this.importBtn_Click);
 			// 
 			// exportBtn
 			// 

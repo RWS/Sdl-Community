@@ -19,5 +19,17 @@ namespace Sdl.Community.Anonymizer.Helpers
 				serializer.Serialize(file, patterns);
 			}
 		}
+
+		public static List<RegexPattern> GetImportedExpressions(List<string> files)
+		{
+			var patterns = new List<RegexPattern>();
+			foreach (var file in files)
+			{
+				var expressions = JsonConvert.DeserializeObject<List<RegexPattern>>(File.ReadAllText(file));
+				patterns.AddRange(expressions);
+			}
+
+			return patterns;
+		}
 	}
 }
