@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
-namespace Sdl.Community.Anonymizer.Process_Xliff
+namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
 	public class DecryptDataProcessor : AbstractBilingualContentProcessor
 	{

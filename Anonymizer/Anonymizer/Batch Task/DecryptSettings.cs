@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.Anonymizer.Interfaces;
+﻿using Sdl.Community.projectAnonymizer.Interfaces;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.Anonymizer.Batch_Task
+namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
 	public class DecryptSettings:SettingsGroup,IDecryptSettings
 	{

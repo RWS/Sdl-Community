@@ -1,9 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Text;
-using Sdl.Community.Anonymizer.Models;
+using Sdl.Community.projectAnonymizer.Models;
 
-namespace Sdl.Community.Anonymizer.Helpers
+namespace Sdl.Community.projectAnonymizer.Helpers
 {
 	public static class Constants
 	{

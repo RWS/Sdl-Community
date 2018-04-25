@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.Anonymizer.Ui
+﻿namespace Sdl.Community.projectAnonymizer.Ui
 {
 	partial class DecryptSettingsControl
 	{

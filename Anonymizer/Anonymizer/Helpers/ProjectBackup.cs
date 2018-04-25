@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Sdl.Community.Anonymizer.Helpers
+namespace Sdl.Community.projectAnonymizer.Helpers
 {
 	public static class ProjectBackup
 	{

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Sdl.Community.Anonymizer.Process_Xliff
+namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
 	public static class AnonymizeData
 	{

@@ -8,8 +8,8 @@
     <ProjectGuid>{934DCCE3-7D7E-4C0A-A1E2-E94D1D6E61CC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.Anonymizer</RootNamespace>
-    <AssemblyName>Sdl.Community.Anonymizer</AssemblyName>
+    <RootNamespace>Sdl.Community.projectAnonymizer</RootNamespace>
+    <AssemblyName>Sdl.Community.projectAnonymizer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
-using Sdl.Community.Anonymizer.Interfaces;
-using Sdl.Community.Anonymizer.Models;
+using Sdl.Community.projectAnonymizer.Interfaces;
+using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Core.Settings;
 
-namespace Sdl.Community.Anonymizer.Batch_Task
+namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
 	public class AnonymizerSettings : SettingsGroup,IAnonymizerSettings
 	{

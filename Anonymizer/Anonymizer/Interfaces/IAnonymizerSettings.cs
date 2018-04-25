@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.Anonymizer.Models;
+﻿using System.ComponentModel;
+using Sdl.Community.projectAnonymizer.Models;
 
-namespace Sdl.Community.Anonymizer.Interfaces
+namespace Sdl.Community.projectAnonymizer.Interfaces
 {
 	public interface IAnonymizerSettings
 	{

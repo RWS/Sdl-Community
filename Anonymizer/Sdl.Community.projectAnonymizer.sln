@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Anonymizer", "Anonymizer\Sdl.Community.Anonymizer.csproj", "{934DCCE3-7D7E-4C0A-A1E2-E94D1D6E61CC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.projectAnonymizer", "Anonymizer\Sdl.Community.projectAnonymizer.csproj", "{934DCCE3-7D7E-4C0A-A1E2-E94D1D6E61CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

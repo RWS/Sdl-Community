@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.Anonymizer.Batch_Task;
-using Sdl.Community.Anonymizer.Helpers;
-using Sdl.Community.Anonymizer.Interfaces;
-using Sdl.Community.Anonymizer.Models;
-using Sdl.Core.Settings;
+using Sdl.Community.projectAnonymizer.Batch_Task;
+using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 
-namespace Sdl.Community.Anonymizer.Ui
+namespace Sdl.Community.projectAnonymizer.Ui
 {
 	public partial class AnonymizerSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{

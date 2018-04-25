@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Sdl.Community.Anonymizer.Helpers;
-using Sdl.Community.Anonymizer.Process_Xliff;
+using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -10,7 +10,7 @@ using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.Anonymizer.Batch_Task
+namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
 	[AutomaticTask("Anonymizer Task",
 				   "Anonymize data",

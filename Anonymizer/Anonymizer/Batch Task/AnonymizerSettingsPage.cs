@@ -1,8 +1,8 @@
-﻿using Sdl.Community.Anonymizer.Ui;
+﻿using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
-namespace Sdl.Community.Anonymizer.Batch_Task
+namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
 	public class AnonymizerSettingsPage : DefaultSettingsPage<AnonymizerSettingsControl, AnonymizerSettings>
 	{
