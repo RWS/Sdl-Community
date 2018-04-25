@@ -25,6 +25,12 @@ namespace Sdl.Community.Anonymizer.Ui
 			InitializeComponent();
 
 			expressionsGrid.AutoGenerateColumns = false;
+			var exportTooltip = new ToolTip();
+			exportTooltip.SetToolTip(exportBtn,"Export selected expressions to disk");
+
+			var importTooltip = new ToolTip();
+			importTooltip.SetToolTip(importBtn, "Import regular expressions in to current project");
+
 			descriptionLbl.Text = Constants.GetGridDescription();
 
 			var exportColumn = new DataGridViewCheckBoxColumn
@@ -154,7 +160,6 @@ namespace Sdl.Community.Anonymizer.Ui
 
 		private void selectAll_CheckedChanged(object sender, EventArgs e)
 		{
-			//expressionsGrid.SuspendLayout();
 			var shouldSelect = ((CheckBox)sender).Checked;
 			foreach (var pattern in RegexPatterns)
 			{
@@ -162,19 +167,34 @@ namespace Sdl.Community.Anonymizer.Ui
 				pattern.ShouldEncrypt = shouldSelect;
 			}
 			Settings.RegexPatterns = RegexPatterns;
+		}
 
-			//foreach (DataGridViewRow row in expressionsGrid.Rows)
-			//{
-			//	var isNewRow = row.IsNewRow;
-			//	if (!isNewRow)
-			//	{
-			//		var item = (RegexPattern)row.DataBoundItem;
-			//		item.ShouldEnable = shouldSelect;
-			//		item.ShouldEncrypt = shouldSelect;
-			//	}
-			//}
-			//expressionsGrid.ResumeLayout();
-			//expressionsGrid.ResetBindings();
+		private void exportBtn_Click(object sender, EventArgs e)
+		{
+			if (expressionsGrid.SelectedRows.Count > 0)
+			{
+				var fileDialog = new SaveFileDialog
+				{
+					Title = @"Export selected expressions"
+				};
+				var result = fileDialog.ShowDialog();
+				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
+				{
+					var selectedExpressions = new List<RegexPattern>();
+					foreach (DataGridViewRow row in expressionsGrid.SelectedRows)
+					{
+						var regexPattern = row.DataBoundItem as RegexPattern;
+						selectedExpressions.Add(regexPattern);
+					}
+					Expressions.ExportExporessions(string.Concat(fileDialog.FileName,".json"), selectedExpressions);
+					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+				}
+			}
+			else
+			{
+				 MessageBox.Show(@"Please select at least one row to export","",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+			}
 		}
 
 		//private void expressionsGrid_KeyDown(object sender, KeyEventArgs e)

@@ -95,6 +95,7 @@
 			this.exportBtn.TabIndex = 3;
 			this.exportBtn.Text = "Export pattern(s)";
 			this.exportBtn.UseVisualStyleBackColor = true;
+			this.exportBtn.Click += new System.EventHandler(this.exportBtn_Click);
 			// 
 			// encryptionLbl
 			// 

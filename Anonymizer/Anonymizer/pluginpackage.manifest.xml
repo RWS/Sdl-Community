@@ -10,5 +10,6 @@
 		<File>Sdl.Community.Service.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Sdl.Community.Toolkit.FileType.dll</File>
+		<File>Newtonsoft.Json.dll</File>
 	</Include>
 </PluginPackage>
