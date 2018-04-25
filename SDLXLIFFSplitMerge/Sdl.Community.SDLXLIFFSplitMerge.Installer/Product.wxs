@@ -133,6 +133,18 @@
 			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
 				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
 			</Component>
+
+			<Component Id="Sdl.Community.Toolkit.FileType.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.FileType.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.FileType.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Community.Toolkit.Integration.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Integration.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.Integration.dll"></File>
+			</Component>
+
+			<Component Id="Sdl.Community.Toolkit.ProjectAutomation.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.ProjectAutomation.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.ProjectAutomation.dll"></File>
+			</Component>
 		</ComponentGroup>
 	</Fragment>
 </Wix>
