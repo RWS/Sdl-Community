@@ -24,15 +24,18 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			const string tagOption = @"xml";
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
+			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
 			try
 			{
 				var client = new RestClient(@"https://api.deepl.com/v1");
 				var request = new RestRequest("translate", Method.POST);
 				request.AddParameter("text", sourcetext);
+				request.AddParameter("source_lang", sourceLanguage);
 				request.AddParameter("target_lang", targetLanguage);
 				request.AddParameter("tag_handling", tagOption);
 				request.AddParameter("split_sentences", 0);
+				
 				request.AddParameter("auth_key", ApiKey);
 
 
