@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.projectAnonymizer.Models;
@@ -113,47 +114,48 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			var count = 0;
 			if (shouldAnonymize)
 			{
-				var anonymizedData = GetAnonymizedData(text.Properties.Text);
+				try
+				{
+					var anonymizedData = GetAnonymizedData(text.Properties.Text);
 
-				GetSubsegmentPi(text, markUpCollection, anonymizedData);
-				
-				var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
-				if (abstractMarkupData == null)
-				{
-					abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
-				}
-				if (abstractMarkupData != null)
-				{
-					var elementContainer = abstractMarkupData.Parent;
-					
-					foreach (var markupData in markUpCollection)
+					GetSubsegmentPi(text, markUpCollection, anonymizedData);
+
+					var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
+					if (abstractMarkupData == null)
 					{
-						//that means is a text we don't need to add it
-						if (elementContainer.Contains(markupData))
+						abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
+					}
+					if (abstractMarkupData != null)
+					{
+						var elementContainer = abstractMarkupData.Parent;
+
+						foreach (var markupData in markUpCollection)
 						{
-							count++;
-						}
-						else
-						{
-							//in the case we have only aghisa@sdl.com in the segment
-							//remove the text -> add the anonymized data in the same position
-							if (elementContainer.AllSubItems.Count().Equals(1) &&
-							    ShouldAnonymize(elementContainer.AllSubItems.ToList()[0].ToString()))
+							//that means is a text we don't need to add it
+							if (elementContainer.Contains(markupData))
 							{
-								if (elementContainer.AllSubItems.Any())
+								count++;
+							}
+							else
+							{
+								//in the case we have only PI in the segment
+								//remove the text -> add the anonymized data in the same position
+								if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) != null)
 								{
 									elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
 									elementContainer.Insert(count, markupData);
 								}
+								else
+								{
+									elementContainer.Insert(count, markupData);
+								}
+								count++;
 							}
-							else
-							{
-								elementContainer.Insert(count, markupData);
-							}
-							count++;
 						}
 					}
 				}
+				catch(Exception e) { }
+				
 			}
 		}
 
