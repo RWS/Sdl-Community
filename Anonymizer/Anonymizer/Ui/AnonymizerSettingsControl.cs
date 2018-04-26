@@ -15,17 +15,47 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		public AnonymizerSettingsControl()
 		{
 			InitializeComponent();
+		}
 
-			expressionsGrid.AutoGenerateColumns = false;
+		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEncrypt = e.IsChecked;
+			}
+			Settings.EncryptAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
+		}
+
+		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEnable = e.IsChecked;
+			}
+			Settings.EnableAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
+		}
+
+		protected override void OnLoad(EventArgs e)
+		{
+			base.OnLoad(e);
+
+			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
-			exportTooltip.SetToolTip(exportBtn,"Export selected expressions to disk");
-
+			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");
 			var importTooltip = new ToolTip();
 			importTooltip.SetToolTip(importBtn, "Import regular expressions in to current project");
 
+			//labels text
 			descriptionLbl.Text = Constants.GetGridDescription();
 			encryptionLbl.Text = Constants.GetKeyDescription();
-			var exportHeaderCell = new CustomColumnHeader();
+
+			expressionsGrid.AutoGenerateColumns = false;
+			var exportHeaderCell = new CustomColumnHeader
+			{
+				IsChecked = Settings.EnableAll
+			};
 			exportHeaderCell.OnCheckBoxHeaderClick += ExportHeaderCell_OnCheckBoxHeaderClick;
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
@@ -36,7 +66,10 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				HeaderCell = exportHeaderCell
 			};
 
-			var encryptHeaderCell = new CustomColumnHeader();
+			var encryptHeaderCell = new CustomColumnHeader
+			{
+				IsChecked = Settings.EncryptAll
+			};
 			encryptHeaderCell.OnCheckBoxHeaderClick += EncryptHeaderCell_OnCheckBoxHeaderClick;
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
@@ -58,35 +91,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				HeaderText = @"Description",
 				DataPropertyName = "Description",
-			AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-				
+				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
-		}
-
-		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
-		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEncrypt = e.IsChecked;
-			}
-			Settings.RegexPatterns = RegexPatterns;
-		}
-
-		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
-		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEnable = e.IsChecked;
-			}
-			Settings.RegexPatterns = RegexPatterns;
-		}
-
-		protected override void OnLoad(EventArgs e)
-		{
-			base.OnLoad(e);
-			SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+			
 			ReadExistingExpressions();
 			SetSettings(Settings);
 		}
@@ -282,10 +292,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				Settings.RegexPatterns = RegexPatterns;
 			}
 		}
-
-		private void expressionsGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-		{
-
-		}
+		
 	}
 }

@@ -28,7 +28,21 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			get => GetSetting<bool>(nameof(DefaultListAlreadyAdded));
 			set => GetSetting<bool>(nameof(DefaultListAlreadyAdded)).Value = value;
 		}
-
+		public bool SelectAll
+		{
+			get => GetSetting<bool>(nameof(SelectAll));
+			set => GetSetting<bool>(nameof(SelectAll)).Value = value;
+		}
+		public bool EnableAll
+		{
+			get => GetSetting<bool>(nameof(EnableAll));
+			set => GetSetting<bool>(nameof(EnableAll)).Value = value;
+		}
+		public bool EncryptAll
+		{
+			get => GetSetting<bool>(nameof(EncryptAll));
+			set => GetSetting<bool>(nameof(EncryptAll)).Value = value;
+		}
 		//Initialize settings with default regex list
 		public void AddPattern(RegexPattern pattern)
 		{
@@ -44,12 +58,6 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			return EncryptionKey;
 		}
-
-		public bool SelectAll {
-			get => GetSetting<bool>(nameof(SelectAll));
-			set => GetSetting<bool>(nameof(SelectAll)).Value = value;
-		}
-
 
 		protected override object GetDefaultValue(string settingId)
 		{

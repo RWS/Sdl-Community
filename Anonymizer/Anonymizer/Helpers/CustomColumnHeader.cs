@@ -13,10 +13,10 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 	public class CustomColumnHeader : DataGridViewColumnHeaderCell
 	{
 		Size checkboxsize;
-		bool ischecked;
-		Point location;
+		public bool IsChecked;
+		 Point location;
 		Point cellboundsLocation;
-		CheckBoxState state = CheckBoxState.UncheckedNormal;
+		public CheckBoxState state = CheckBoxState.UncheckedNormal;
 
 		public event CheckBoxHeaderClickHandler OnCheckBoxHeaderClick;
 
@@ -24,7 +24,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 		{
 			location = new Point();
 			cellboundsLocation = new Point();
-			ischecked = false;
+			IsChecked = false;
 		}
 
 		protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
@@ -34,10 +34,10 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 
 			if ((clickpoint.X > location.X && clickpoint.X < (location.X + checkboxsize.Width)) && (clickpoint.Y > location.Y && clickpoint.Y < (location.Y + checkboxsize.Height)))
 			{
-				ischecked = !ischecked;
+				IsChecked = !IsChecked;
 				if (OnCheckBoxHeaderClick != null)
 				{
-					OnCheckBoxHeaderClick(new CheckBoxHeaderCellEventArgs(ischecked));
+					OnCheckBoxHeaderClick(new CheckBoxHeaderCellEventArgs(IsChecked));
 					this.DataGridView.InvalidateCell(this);
 				}
 			}
@@ -58,7 +58,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			location.Y = cellBounds.Y + (cellBounds.Height / 2 - checkboxsize.Height / 2);
 			cellboundsLocation = cellBounds.Location;
 
-			if (ischecked)
+			if (IsChecked)
 				state = CheckBoxState.CheckedNormal;
 			else
 				state = CheckBoxState.UncheckedNormal;

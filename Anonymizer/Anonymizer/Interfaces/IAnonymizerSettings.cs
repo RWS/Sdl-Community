@@ -11,5 +11,7 @@ namespace Sdl.Community.projectAnonymizer.Interfaces
 		BindingList<RegexPattern> GetRegexPatterns();
 		string GetEncryptionKey();
 		bool SelectAll { get; set; }
+		bool EnableAll { get; set; }
+		bool EncryptAll { get; set; }
 	}
 }
