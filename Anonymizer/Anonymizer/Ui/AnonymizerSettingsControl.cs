@@ -25,18 +25,25 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 			descriptionLbl.Text = Constants.GetGridDescription();
 			encryptionLbl.Text = Constants.GetKeyDescription();
+			var exportHeaderCell = new CustomColumnHeader();
+			exportHeaderCell.OnCheckBoxHeaderClick += ExportHeaderCell_OnCheckBoxHeaderClick;
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
+				Width = 100,
 				HeaderText = @"Enable?",
-				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
 				DataPropertyName = "ShouldEnable",
-				Name = "Enable"
+				Name = "Enable",
+				HeaderCell = exportHeaderCell
 			};
+
+			var encryptHeaderCell = new CustomColumnHeader();
+			encryptHeaderCell.OnCheckBoxHeaderClick += EncryptHeaderCell_OnCheckBoxHeaderClick;
 			var shouldEncryptColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Encrypt?",
-				AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+				Width = 110,
 				DataPropertyName = "ShouldEncrypt",
+				HeaderCell = encryptHeaderCell,
 				Name = "Encrypt"
 			};
 			expressionsGrid.Columns.Add(exportColumn);
@@ -51,12 +58,31 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				HeaderText = @"Description",
 				DataPropertyName = "Description",
-				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
+			AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+				
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
 		}
-		
+
+		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEncrypt = e.IsChecked;
+			}
+			Settings.RegexPatterns = RegexPatterns;
+		}
+
+		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEnable = e.IsChecked;
+			}
+			Settings.RegexPatterns = RegexPatterns;
+		}
+
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
@@ -255,6 +281,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				}
 				Settings.RegexPatterns = RegexPatterns;
 			}
+		}
+
+		private void expressionsGrid_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+		{
+
 		}
 	}
 }

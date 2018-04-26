@@ -102,7 +102,9 @@
     <Compile Include="Batch Task\AnonymizerSettings.cs" />
     <Compile Include="Batch Task\DecryptSettings.cs" />
     <Compile Include="Batch Task\DecryptSettingsPage.cs" />
+    <Compile Include="Helpers\CheckBoxHeaderCellEventArgs.cs" />
     <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Helpers\CustomColumnHeader.cs" />
     <Compile Include="Helpers\Expressions.cs" />
     <Compile Include="Helpers\ProjectBackup.cs" />
     <Compile Include="Interfaces\IAnonymizerSettings.cs" />
