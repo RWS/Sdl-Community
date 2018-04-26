@@ -242,9 +242,15 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 				if (result == DialogResult.OK)
 				{
-					for (var i = 0; i < expressionsGrid.SelectedRows.Count; i++)
+					RegexPatterns.AllowRemove = true;
+					foreach (DataGridViewRow row in expressionsGrid.SelectedRows)
 					{
-						RegexPatterns.RemoveAt(i);
+						var regexPattern = row.DataBoundItem as RegexPattern;
+						if (regexPattern != null)
+						{
+							var itemToRemove = RegexPatterns.FirstOrDefault(p => p.Id.Equals(regexPattern.Id));
+							RegexPatterns.Remove(itemToRemove);
+						}
 					}
 				}
 				Settings.RegexPatterns = RegexPatterns;
