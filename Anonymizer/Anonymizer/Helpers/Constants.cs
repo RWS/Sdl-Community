@@ -80,11 +80,17 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 		public static string GetGridDescription()
 		{
 			return
-				@"Select from the grid bellow which rules should be applied. To use a rule enable the checkbox  in the column 'Enable'.
-				If the data matching the expression should be encrypted check 'Encrypt' box. By default the batch task tag  matching data." +
-				Environment.NewLine + @"New expressions can be added by filling the empty row at the end of the grid." +
-				Environment.NewLine + @"To edit an expression double click on the cell." +
-				Environment.NewLine + @"To remove a rule, select the rows and hit 'Delete' button";
+				@"Activate the “Enable” checkbox for all rules that should be applied to this project." +
+				Environment.NewLine + @"Activate the “Encrypt” checkbox for all data that should be encrypted using an encryption key." +
+				Environment.NewLine + @"New regular expressions, or plain text, can be added either by typing them into the empty row at the end of the grid, or by importing an Excel file containing the rules or lists of names, addresses etc. " +
+				Environment.NewLine + @"To edit a rule double click on the cell."+
+				Environment.NewLine + @"To remove a rule select the rows and hit the ‘Delete’ key.  Select all rules with Ctrl+A.";
+		}
+
+		public static string GetKeyDescription()
+		{
+			return @"Add an encryption key" +
+			       Environment.NewLine + @"(Do not forget this or you won’t be able to decrypt the data later)";
 		}
 	}
 }

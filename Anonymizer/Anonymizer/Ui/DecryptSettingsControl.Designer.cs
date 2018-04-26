@@ -56,9 +56,9 @@
 			this.descriptionLbl.AutoSize = true;
 			this.descriptionLbl.Location = new System.Drawing.Point(3, 15);
 			this.descriptionLbl.Name = "descriptionLbl";
-			this.descriptionLbl.Size = new System.Drawing.Size(224, 13);
+			this.descriptionLbl.Size = new System.Drawing.Size(205, 13);
 			this.descriptionLbl.TabIndex = 0;
-			this.descriptionLbl.Text = "Please fill the key you used to encrypt the files";
+			this.descriptionLbl.Text = "Enter the key you used to encrypt the files";
 			// 
 			// encryptionBox
 			// 

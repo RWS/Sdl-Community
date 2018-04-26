@@ -13,8 +13,8 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
 	[AutomaticTask("Anonymizer Task",
-				   "Anonymize data",
-				   "Anonymize personal data batch task",
+				   "Protect Data",
+				   "Protect data during the project, with or without encryption",
 				   GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(AnonymizerSettings), typeof(AnonymizerSettingsPage))]
@@ -47,8 +47,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 	//Decrypt  task
 	[AutomaticTask("Decrypt Task",
-		"Decrypt data",
-		"Decrypt personal data batch task",
+		"Unprotect Data",
+		"Unprotect data in preparation for saving the target files",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
 	[RequiresSettings(typeof(DecryptSettings), typeof(DecryptSettingsPage))]

@@ -24,7 +24,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			importTooltip.SetToolTip(importBtn, "Import regular expressions in to current project");
 
 			descriptionLbl.Text = Constants.GetGridDescription();
-
+			encryptionLbl.Text = Constants.GetKeyDescription();
 			var exportColumn = new DataGridViewCheckBoxColumn
 			{
 				HeaderText = @"Enable?",
