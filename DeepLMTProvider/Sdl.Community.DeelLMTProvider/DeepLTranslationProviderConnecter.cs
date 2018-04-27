@@ -30,11 +30,21 @@ namespace Sdl.Community.DeepLMTProvider
 			{
 				var client = new RestClient(@"https://api.deepl.com/v1");
 				var request = new RestRequest("translate", Method.POST);
+
+				//request.AddParameter("auth_key", ApiKey);
+				//request.AddParameter("source_lang", sourceLanguage);
+				//request.AddParameter("target_lang", targetLanguage);
+				//request.AddParameter("text", sourcetext);
+
 				request.AddParameter("text", sourcetext);
-				request.AddParameter("source_lang", sourceLanguage);
+				//request.AddParameter("source_lang", sourceLanguage);
 				request.AddParameter("target_lang", targetLanguage);
-				request.AddParameter("tag_handling", tagOption);
-				request.AddParameter("split_sentences", 0);
+				//adding this resolve line breaks issue and missing ##login##
+				request.AddParameter("preserve_formatting", 1);
+				//tag handling cause issues on uppercase words
+				//request.AddParameter("tag_handling", tagOption);
+				//if we add this the formattiong is not right
+				//request.AddParameter("split_sentences", 0);
 				
 				request.AddParameter("auth_key", ApiKey);
 
