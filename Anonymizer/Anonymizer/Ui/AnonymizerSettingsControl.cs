@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -40,7 +41,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
-
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
 			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");

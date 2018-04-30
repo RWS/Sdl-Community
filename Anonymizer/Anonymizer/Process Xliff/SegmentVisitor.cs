@@ -140,10 +140,25 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 							{
 								//in the case we have only PI in the segment
 								//remove the text -> add the anonymized data in the same position
-								if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) != null)
+								//if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) != null)
+								//{
+								//	//elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+								//	elementContainer.AllSubItems.ToList()[count].RemoveFromParent();
+								//	elementContainer.Insert(count, markupData);
+								//}
+								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
 								{
-									elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
-									elementContainer.Insert(count, markupData);
+									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
+									{
+										//elementContainer.AllSubItems.ToList()[count].RemoveFromParent();
+										elementContainer.Insert(count, markupData);
+									}
+									else {
+										elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+										elementContainer.Insert(0, markupData);
+									}
+
+									
 								}
 								else
 								{
