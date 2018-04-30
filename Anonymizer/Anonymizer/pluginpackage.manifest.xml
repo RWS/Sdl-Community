@@ -11,5 +11,6 @@
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Sdl.Community.Toolkit.FileType.dll</File>
 		<File>Newtonsoft.Json.dll</File>
+		<File>DocumentFormat.OpenXml.dll</File>
 	</Include>
 </PluginPackage>
