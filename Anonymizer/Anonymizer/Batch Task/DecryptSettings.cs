@@ -10,5 +10,10 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			get => GetSetting<string>(nameof(EncryptionKey));
 			set => GetSetting<string>(nameof(EncryptionKey)).Value = value;
 		}
+		public bool IgnoreEncrypted
+		{
+			get => GetSetting<bool>(nameof(IgnoreEncrypted));
+			set => GetSetting<bool>(nameof(IgnoreEncrypted)).Value = value;
+		}
 	}
 }

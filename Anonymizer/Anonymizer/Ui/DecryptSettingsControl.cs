@@ -18,6 +18,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			set => encryptionBox.Text = value;
 		}
 
+		public bool IgnoreEncrypted
+		{
+			get => ignoreEncrypted.Checked;
+			set => ignoreEncrypted.Checked = value;
+		}
+
 		protected override void OnLoad(EventArgs e)
 		{
 			SetSettings(Settings);
@@ -26,6 +32,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		{
 			Settings = settings;
 			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
+			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
 
 		public DecryptSettings Settings { get ; set ; }

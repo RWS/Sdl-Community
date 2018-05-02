@@ -18,6 +18,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		public override void Save()
 		{
 			_settings.EncryptionKey = _control.EncryptionKey;
+			_settings.IgnoreEncrypted = _control.IgnoreEncrypted;
 		}
 	}
 
