@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
@@ -210,7 +211,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected expressions"
+					Title = @"Export selected expressions",
+					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
@@ -221,7 +223,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 						var regexPattern = row.DataBoundItem as RegexPattern;
 						selectedExpressions.Add(regexPattern);
 					}
-					Expressions.ExportExporessions(string.Concat(fileDialog.FileName,".json"), selectedExpressions);
+					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
 					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
 				}
@@ -237,12 +239,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			var fileDialog = new OpenFileDialog
 			{
 				Title = @"Please select the files you want to import",
-				Filter = @"Json files(*.json) | *.json",
+				Filter = @"Excel |*.xlsx",
 				CheckFileExists = true,
 				CheckPathExists = true,
-				DefaultExt = "json",
+				DefaultExt = "xlsx",
 				Multiselect = true
-				
 			};
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)

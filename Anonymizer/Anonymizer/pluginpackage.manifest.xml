@@ -12,5 +12,6 @@
 		<File>Sdl.Community.Toolkit.FileType.dll</File>
 		<File>Newtonsoft.Json.dll</File>
 		<File>DocumentFormat.OpenXml.dll</File>
+		<File>EPPlus.dll</File>
 	</Include>
 </PluginPackage>

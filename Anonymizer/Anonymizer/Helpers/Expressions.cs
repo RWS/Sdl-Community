@@ -2,22 +2,39 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
+using OfficeOpenXml;
 using Sdl.Community.projectAnonymizer.Models;
 
 namespace Sdl.Community.projectAnonymizer.Helpers
 {
-	public static class Expressions
+	public static  class Expressions
 	{
-		public static void ExportExporessions(string  filePath,List<RegexPattern> patterns)
+		public  static void ExportExporessions(string  filePath,List<RegexPattern> patterns)
 		{
-			using (var file = File.CreateText(filePath))
+			var package = GetExcelPackage(filePath);
+			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+			var lineNumber = 1;
+			foreach (var pattern in patterns)
 			{
-				var serializer = new JsonSerializer();
-				serializer.Serialize(file, patterns);
+				if (pattern != null)
+				{
+					worksheet.Cells["A" + lineNumber].Value = pattern.Pattern;
+					worksheet.Cells["B" + lineNumber].Value = pattern.Description;
+					lineNumber++;
+				}
 			}
+			package.Save();
+		}
+
+		private static ExcelPackage GetExcelPackage(string filePath)
+		{
+			var fileInfo = new FileInfo(filePath);
+			var excelPackage = new ExcelPackage(fileInfo);
+			return excelPackage;
 		}
 
 		public static List<RegexPattern> GetImportedExpressions(List<string> files)
