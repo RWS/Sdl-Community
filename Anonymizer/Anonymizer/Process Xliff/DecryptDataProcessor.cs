@@ -1,14 +1,15 @@
 ﻿using System.Linq;
+using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
 	public class DecryptDataProcessor : AbstractBilingualContentProcessor
 	{
-		private readonly string _encryptionKey;
-		public DecryptDataProcessor(string encryptionKey)
+		private readonly DecryptSettings _decryptSettings;
+		public DecryptDataProcessor(DecryptSettings decryptSettings)
 		{
-			_encryptionKey = encryptionKey;
+			_decryptSettings = decryptSettings;
 		}
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
@@ -17,7 +18,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
-				var decryptVisitor = new DecryptSegmentVisitor(_encryptionKey);
+				var decryptVisitor = new DecryptSegmentVisitor(_decryptSettings);
 				decryptVisitor.DecryptText(segmentPair.Source, ItemFactory, PropertiesFactory);
 				if (segmentPair.Target != null)
 				{

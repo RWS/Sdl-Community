@@ -62,7 +62,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings.EncryptionKey)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

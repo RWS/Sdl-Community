@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
@@ -10,14 +11,15 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 	{
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		private readonly string _encryptionKey;
+		private readonly DecryptSettings _decryptSettings;
 
-		public DecryptSegmentVisitor(string encryptionKey)
+		public DecryptSegmentVisitor(DecryptSettings decryptSettings)
 		{
-			_encryptionKey = encryptionKey;
+			_decryptSettings = decryptSettings;
 		}
 		public void DecryptText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
+
 			_factory = factory;
 			_propertiesFactory = propertiesFactory;
 			VisitChildren(segment);
@@ -26,8 +28,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		private string Decrypt(string text)
 		{
 			var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
-			var result = regex.Replace(text, new MatchEvaluator(Process));
-
+			var result = regex.Replace(text, Process);
 			return result;
 		}
 
@@ -40,14 +41,16 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
 					try
 					{
-						var decryptedText = AnonymizeData.DecryptData(encryptedText, _encryptionKey);
-						return decryptedText;
+						var decryptedText = AnonymizeData.DecryptData(encryptedText, _decryptSettings.EncryptionKey);
+						if (!_decryptSettings.IgnoreEncrypted)
+						{
+							return decryptedText;
+						}
 					}
 					catch (Exception e)
 					{
 						return encryptedText;
 					}
-					
 				}
 			}
 			return match.ToString();
@@ -60,10 +63,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			{
 				if (tagPair.StartTagProperties.MetaDataContainsKey("Anonymizer"))
 				{
-					var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
-					tagPair.StartTagProperties.TagContent = decryptedText;
+						var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
+						tagPair.StartTagProperties.TagContent = decryptedText;
 				}
-				
 			}
 			VisitChildren(tagPair);
 		}
@@ -78,27 +80,35 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					//if we catch an exception that means is only a taged text is not encrypted
 					try
 					{
+
 						var decryptedText = _factory.CreateText(
-							_propertiesFactory.CreateTextProperties(AnonymizeData.DecryptData(tag.Properties.TagContent, _encryptionKey)));
+							_propertiesFactory.CreateTextProperties(
+								AnonymizeData.DecryptData(tag.Properties.TagContent, _decryptSettings.EncryptionKey)));
 
-						var elementContainer = abstractMarkupData.Parent;
-
-						elementContainer.Insert(tag.IndexInParent, decryptedText);
-
-						elementContainer.RemoveAt(tag.IndexInParent);
+						if (!_decryptSettings.IgnoreEncrypted)
+						{
+							var elementContainer = abstractMarkupData.Parent;
+							elementContainer.Insert(tag.IndexInParent, decryptedText);
+							elementContainer.RemoveAt(tag.IndexInParent);
+						}
 					}
 					catch (Exception e)
 					{
 						// take the text from tag and insert it back as IText
-						var elementContainer = abstractMarkupData.Parent;
-						var untagedText = _factory.CreateText(
-							_propertiesFactory.CreateTextProperties(tag.Properties.TagContent));
-						elementContainer.Insert(tag.IndexInParent, untagedText);
-
-						elementContainer.RemoveAt(tag.IndexInParent);
+						InsertTextBack(abstractMarkupData, tag);
 					}
 				}
 			}
+		}
+
+		private void InsertTextBack(IAbstractMarkupData abstractMarkupData, IPlaceholderTag tag)
+		{
+			var elementContainer = abstractMarkupData.Parent;
+			var untagedText = _factory.CreateText(
+				_propertiesFactory.CreateTextProperties(tag.Properties.TagContent));
+			elementContainer.Insert(tag.IndexInParent, untagedText);
+
+			elementContainer.RemoveAt(tag.IndexInParent);
 		}
 
 		public void VisitText(IText text)
