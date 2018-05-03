@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
 	xmlns:ui="http://schemas.microsoft.com/wix/UIExtension">
-	<Product Id="*" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
+	<Product Id="*" Name="Sdl.Community.SDLXLIFFSplitMerge.Installer" Language="1033" Version="1.0.0.1" Manufacturer="Sdl Community" UpgradeCode="9242c6b1-3ff5-45cb-a7d5-7cbc02b170a0">
 		<Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
 		<Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -132,18 +132,6 @@
 
 			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
 				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
-			</Component>
-
-			<Component Id="Sdl.Community.Toolkit.FileType.dll" Guid="*">
-				<File Id="Sdl.Community.Toolkit.FileType.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.FileType.dll"></File>
-			</Component>
-
-			<Component Id="Sdl.Community.Toolkit.Integration.dll" Guid="*">
-				<File Id="Sdl.Community.Toolkit.Integration.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.Integration.dll"></File>
-			</Component>
-
-			<Component Id="Sdl.Community.Toolkit.ProjectAutomation.dll" Guid="*">
-				<File Id="Sdl.Community.Toolkit.ProjectAutomation.dll" KeyPath="yes" Source="$(var.Sdl.Community.SplitMergeUIWix.TargetDir)\Sdl.Community.Toolkit.ProjectAutomation.dll"></File>
 			</Component>
 		</ComponentGroup>
 	</Fragment>
