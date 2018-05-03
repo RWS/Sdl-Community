@@ -203,6 +203,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				pattern.ShouldEncrypt = shouldSelect;
 			}
 			Settings.RegexPatterns = RegexPatterns;
+			Settings.EnableAll = shouldSelect;
+			Settings.EncryptAll = shouldSelect;
 		}
 
 		private void exportBtn_Click(object sender, EventArgs e)
