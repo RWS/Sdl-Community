@@ -7,6 +7,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using Sdl.Community.Toolkit.Core;
 
 	/// <summary>
@@ -631,11 +632,19 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 	        }
 	        return wordsNum;
 		}
-		
+
+		/// <summary>
+		/// Get installed version for Studio5(Studio 2017). Always use Studio5 because the loaded dll's contains needed logic.
+		/// The call studio.GetStudioVersion() is not working when using the installer, because the app is running outside the Studio context,
+		/// so the workaround is to get all the installed studio versions and use the needed one (Studio5)
+		/// </summary>
+		/// <returns></returns>
 		private static StudioVersion GetInstalledStudioVersion()
 		{
 			var studio = new Studio();
-			return studio.GetStudioVersion();
+			var allStudioVersions = studio.GetInstalledStudioVersion();
+			
+			return allStudioVersions.Where(v=>v.Version.Equals("Studio5")).FirstOrDefault();
 		}
 	}
 }
