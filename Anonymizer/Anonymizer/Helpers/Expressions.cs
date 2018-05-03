@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using Newtonsoft.Json;
 using OfficeOpenXml;
 using Sdl.Community.projectAnonymizer.Models;
 
@@ -42,46 +37,36 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			var patterns = new List<RegexPattern>();
 			foreach (var file in files)
 			{
-				using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+				var package = GetExcelPackage(file);
+				var workSheet = package.Workbook.Worksheets[1];
+				for (var i = workSheet.Dimension.Start.Row;
+					i <= workSheet.Dimension.End.Row;
+					i++)
 				{
-					using (var document = SpreadsheetDocument.Open(fileStream, false))
+					var pattern = new RegexPattern
 					{
-						var workbookPart = document.WorkbookPart;
-						var tablePart = workbookPart.GetPartsOfType<SharedStringTablePart>().First();
-						var stringTable = tablePart.SharedStringTable;
-						//need to loop maybe we'll have more sheets
-						var worksheetPart = workbookPart.WorksheetParts.First();
-						var sheet = worksheetPart.Worksheet;
+						Id = Guid.NewGuid().ToString(),
+						ShouldEnable = true,
+						Description = string.Empty,
+						Pattern =  string.Empty
+					};
+					for (var j = workSheet.Dimension.Start.Column;
+						j <= workSheet.Dimension.End.Column;
+						j++)
+					{
+						var address = workSheet.Cells[i, j].Address;
 
-						var cells = sheet.Descendants<Cell>().ToList();
-
-						for (var i = 0; i < cells.Count; i = i + 2)
+						var cellValue = workSheet.Cells[i, j].Value;
+						if (address.Contains("A"))
 						{
-							var pattern = new RegexPattern
-							{
-								Id = Guid.NewGuid().ToString(),
-								ShouldEnable = true
-							};
-							var items = cells.Skip(i).Take(2);
-							foreach (var cell in items)
-							{
-								if (cell.DataType != null && cell.DataType == CellValues.SharedString)
-								{
-									var celId = int.Parse(cell.CellValue.Text);
-									var cellValue = stringTable.ChildElements[celId].InnerText;
-									if (celId % 2 == 0)
-									{
-										pattern.Pattern = cellValue;
-									}
-									else
-									{
-										pattern.Description = cellValue;
-									}
-								}
-							}
-							patterns.Add(pattern);
+							pattern.Pattern = cellValue.ToString();
+						}
+						else
+						{
+							pattern.Description = cellValue.ToString();
 						}
 					}
+					patterns.Add(pattern);
 				}
 			}
 			return patterns;
