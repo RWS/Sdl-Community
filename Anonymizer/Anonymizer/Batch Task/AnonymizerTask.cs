@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Process_Xliff;
+using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.BilingualApi;
@@ -12,6 +13,16 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 
 namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
+	[ApplicationInitializer]
+	public class ApplicationInitializer : IApplicationInitializer
+	{
+		public void Execute()
+		{
+			var acceptWindow = new AcceptWindow();
+			acceptWindow.ShowDialog();
+
+		}
+	}
 	[AutomaticTask("Anonymizer Task",
 				   "Protect Data",
 				   "Protect data during the project, with or without encryption",

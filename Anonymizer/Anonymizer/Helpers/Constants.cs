@@ -92,5 +92,13 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			return @"Add an encryption key" +
 			       Environment.NewLine + @"(Do not forget this or you won’t be able to decrypt the data later)";
 		}
+
+		public static string AcceptDescription()
+		{
+			return
+				@"The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information." +
+				Environment.NewLine +
+				@"SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.";
+		}
 	}
 }

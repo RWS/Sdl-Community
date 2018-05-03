@@ -1,4 +1,5 @@
-﻿using Sdl.Community.projectAnonymizer.Ui;
+﻿using System.Windows.Forms;
+using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
@@ -23,11 +24,15 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			_settings.SelectAll = _control.SelectAll;
 		}
 
+		//public override bool ValidateInput()
+		//{
+		//	return false;
+		//}
+
 		public override void OnActivate()
 		{
 			_control.EncryptionKey = _settings.EncryptionKey;
 			_control.RegexPatterns = _settings.RegexPatterns;
 		}
-
 	}
 }

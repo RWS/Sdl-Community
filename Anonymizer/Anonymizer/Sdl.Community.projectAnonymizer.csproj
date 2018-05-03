@@ -75,6 +75,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
+    <Reference Include="Sdl.ProjectApi.AutomaticTasks, Version=14.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectApi.AutomaticTasks.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.ProjectAutomation.AutomaticTasks">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.AutomaticTasks.dll</HintPath>
@@ -90,6 +94,10 @@
     <Reference Include="Sdl.ProjectAutomation.Settings">
       <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.TranslationStudio.Common, Version=14.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudio.Common.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
       <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
@@ -128,6 +136,12 @@
     <Compile Include="Process Xliff\DecryptDataProcessor.cs" />
     <Compile Include="Process Xliff\DecryptSegmentVisitor.cs" />
     <Compile Include="Process Xliff\SegmentVisitor.cs" />
+    <Compile Include="Ui\AcceptWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ui\AcceptWindow.Designer.cs">
+      <DependentUpon>AcceptWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\AnonymizerSettingsControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -145,6 +159,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\icon.ico" />
+    <EmbeddedResource Include="Ui\AcceptWindow.resx">
+      <DependentUpon>AcceptWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\AnonymizerSettingsControl.resx">
       <DependentUpon>AnonymizerSettingsControl.cs</DependentUpon>
     </EmbeddedResource>
