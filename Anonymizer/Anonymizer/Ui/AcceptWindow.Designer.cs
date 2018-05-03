@@ -76,6 +76,7 @@
 			this.acceptBox.TabIndex = 1;
 			this.acceptBox.Text = "I agree";
 			this.acceptBox.UseVisualStyleBackColor = true;
+			this.acceptBox.CheckedChanged += new System.EventHandler(this.acceptBox_CheckedChanged);
 			// 
 			// acceptBtn
 			// 
@@ -87,6 +88,7 @@
 			this.acceptBtn.TabIndex = 2;
 			this.acceptBtn.Text = "Ok";
 			this.acceptBtn.UseVisualStyleBackColor = true;
+			this.acceptBtn.Click += new System.EventHandler(this.acceptBtn_Click);
 			// 
 			// AcceptWindow
 			// 

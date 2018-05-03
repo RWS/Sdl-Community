@@ -1,5 +1,8 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
+using Newtonsoft.Json;
 using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Community.projectAnonymizer.Process_Xliff;
 using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Desktop.IntegrationApi;
@@ -10,6 +13,7 @@ using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
+using Constants = Sdl.Community.projectAnonymizer.Helpers.Constants;
 
 namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
@@ -18,10 +22,30 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 	{
 		public void Execute()
 		{
+			CreateAcceptFile();
 			var acceptWindow = new AcceptWindow();
-			acceptWindow.ShowDialog();
-
+			if (!AgreementMethods.UserAgreed())
+			{
+				acceptWindow.ShowDialog();
+			}
 		}
+		private void CreateAcceptFile()
+		{
+			if (!Directory.Exists(Constants.AcceptFolderPath))
+			{
+				Directory.CreateDirectory(Constants.AcceptFolderPath);
+			}
+
+			if (File.Exists(Constants.AcceptFilePath)) return;
+			var file =File.Create(Constants.AcceptFilePath);
+			file.Close();
+			var accept = new Agreement
+			{
+				Accept = false
+			};
+			File.WriteAllText(Constants.AcceptFilePath, JsonConvert.SerializeObject(accept));
+		}
+
 	}
 	[AutomaticTask("Anonymizer Task",
 				   "Protect Data",

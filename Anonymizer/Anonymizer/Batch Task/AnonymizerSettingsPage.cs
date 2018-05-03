@@ -1,4 +1,6 @@
 ﻿using System.Windows.Forms;
+using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Models;
 using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
@@ -24,10 +26,10 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			_settings.SelectAll = _control.SelectAll;
 		}
 
-		//public override bool ValidateInput()
-		//{
-		//	return false;
-		//}
+		public override bool ValidateInput()
+		{
+			return AgreementMethods.UserAgreed();
+		}
 
 		public override void OnActivate()
 		{

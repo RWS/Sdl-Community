@@ -1,11 +1,17 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using Sdl.Community.projectAnonymizer.Models;
 
 namespace Sdl.Community.projectAnonymizer.Helpers
 {
 	public static class Constants
 	{
+		public static string AcceptFolderPath = Path.Combine(
+			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			@"SDL Community\Anonymizer Projects Accept");
+
+		public static string AcceptFilePath = Path.Combine(AcceptFolderPath, "accept.json");
 		public static BindingList<RegexPattern> GetDefaultRegexPatterns()
 		{
 			return new BindingList<RegexPattern>
@@ -100,5 +106,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 				Environment.NewLine +
 				@"SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.";
 		}
+
+		
 	}
 }

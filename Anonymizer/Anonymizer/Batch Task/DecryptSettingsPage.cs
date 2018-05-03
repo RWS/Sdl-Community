@@ -1,4 +1,5 @@
-﻿using Sdl.Community.projectAnonymizer.Ui;
+﻿using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Ui;
 using Sdl.Core.Settings;
 using Sdl.Desktop.IntegrationApi;
 
@@ -14,13 +15,14 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			_control = base.GetControl() as DecryptSettingsControl;
 			return _control;
 		}
-
+		public override bool ValidateInput()
+		{
+			return AgreementMethods.UserAgreed();
+		}
 		public override void Save()
 		{
 			_settings.EncryptionKey = _control.EncryptionKey;
 			_settings.IgnoreEncrypted = _control.IgnoreEncrypted;
 		}
 	}
-
-	
 }
