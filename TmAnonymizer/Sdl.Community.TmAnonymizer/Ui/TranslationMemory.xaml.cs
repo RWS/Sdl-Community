@@ -12,17 +12,20 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Sdl.Community.TmAnonymizer.ViewModel;
 
 namespace Sdl.Community.TmAnonymizer.Ui
 {
 	/// <summary>
-	/// Interaction logic for MainViewControl.xaml
+	/// Interaction logic for TranslationMemory.xaml
 	/// </summary>
-	public partial class MainViewControl 
+	public partial class TranslationMemory
 	{
-		public MainViewControl()
+		public TranslationMemory()
 		{
 			InitializeComponent();
+			DataContext = new TranslationMemoryViewModel();
+
 		}
 	}
 }

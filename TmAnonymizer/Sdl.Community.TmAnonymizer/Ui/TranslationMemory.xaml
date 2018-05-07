@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.TmAnonymizer.Ui.MainViewControl"
+﻿<UserControl x:Class="Sdl.Community.TmAnonymizer.Ui.TranslationMemory"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,7 +10,13 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<local:TranslationMemory Grid.Row="0"></local:TranslationMemory>
-    </Grid>
+		<TextBlock Grid.Row="0">Please select tm(s)</TextBlock>
+	    <ToolBar Grid.Row="1">
+			<Button Command="{Binding SelectFoldersCommand}">Select folders</Button>
+		    <Button>Select TM files</Button>
+			<Button>Remove selected tms</Button>
+	    </ToolBar>
+	</Grid>
 </UserControl>

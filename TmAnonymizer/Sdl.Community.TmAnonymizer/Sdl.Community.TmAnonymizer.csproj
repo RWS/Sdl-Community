@@ -103,6 +103,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
@@ -118,6 +119,11 @@
     <Compile Include="Ui\TmAnonymizerUserControl.Designer.cs">
       <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Ui\TranslationMemory.xaml.cs">
+      <DependentUpon>TranslationMemory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="PluginResources.resx" />
@@ -137,10 +143,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Ui\TranslationMemory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
-    <Folder Include="ViewModel\" />
   </ItemGroup>
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
