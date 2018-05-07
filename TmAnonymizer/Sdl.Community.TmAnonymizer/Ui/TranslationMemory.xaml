@@ -15,8 +15,8 @@
 		<TextBlock Grid.Row="0">Please select tm(s)</TextBlock>
 	    <ToolBar Grid.Row="1">
 			<Button Command="{Binding SelectFoldersCommand}">Select folders</Button>
-		    <Button>Select TM files</Button>
-			<Button>Remove selected tms</Button>
+			<Button Command="{Binding SelectTmCommand}">Select TM files</Button>
+			<Button Command="{Binding RemoveCommand}">Remove selected tms</Button>
 	    </ToolBar>
 	</Grid>
 </UserControl>
