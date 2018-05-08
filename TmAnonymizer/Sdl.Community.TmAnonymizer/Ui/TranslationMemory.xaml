@@ -6,8 +6,18 @@
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -16,9 +26,9 @@
 		    <ColumnDefinition Width="Auto" />
 		    <ColumnDefinition Width="1*" />
 	    </Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">Please select tm(s)</TextBlock>
-		<DockPanel Grid.Row="1" Grid.Column="0" Background="LightGray">
-			<ToolBarTray DockPanel.Dock="Top" Background="LightGray">
+		<TextBlock Grid.Row="0" Grid.Column="0" Margin="0,5,0,5">Please select tm(s)</TextBlock>
+		<DockPanel Grid.Row="1" Grid.Column="0">
+			<ToolBarTray DockPanel.Dock="Top">
 				<ToolBar>
 					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
 						<Image Source="../Resources/TranslationMemoriesFolder_Open.ico"/>
@@ -34,5 +44,27 @@
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>
+		<CheckBox  Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI" Margin="0,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="3" Grid.Column="0" Style="{DynamicResource DgHeaderStyle}" 
+		          FontFamily="Segoe UI"
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
+		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
+				  Margin="0,10" >
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow">
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<TextBlock  TextWrapping="Wrap" Text="{Binding Path}"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="100" Header="Name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="230" Header="Path" Binding="{Binding Path}" />
+			</DataGrid.Columns>
+		</DataGrid>
 	</Grid>
 </UserControl>
