@@ -104,6 +104,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandHandler.cs" />
+    <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
@@ -126,6 +128,9 @@
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Remove.ico" />
+    <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
+    <Resource Include="Resources\TranslationMemory.ico" />
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="Ui\TmAnonymizerUserControl.resx">

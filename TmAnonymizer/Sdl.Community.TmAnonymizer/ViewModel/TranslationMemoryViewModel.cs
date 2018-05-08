@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 
@@ -23,6 +24,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void SelectTm()
 		{
+			var fileDialog = new OpenFileDialog();
+			if (fileDialog.ShowDialog() == DialogResult.OK)
+			{
+				var path = fileDialog.FileName;
+			}
 		}
 
 		private void Remove()
@@ -31,6 +37,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void SelectFolder()
 		{
+			var folderDialog = new FolderSelectDialog();
+			if (folderDialog.ShowDialog())
+			{
+				var path = folderDialog.FileName;
+			}
 		}
 	}
 }

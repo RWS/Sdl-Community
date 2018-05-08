@@ -12,11 +12,27 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<TextBlock Grid.Row="0">Please select tm(s)</TextBlock>
-	    <ToolBar Grid.Row="1">
-			<Button Command="{Binding SelectFoldersCommand}">Select folders</Button>
-			<Button Command="{Binding SelectTmCommand}">Select TM files</Button>
-			<Button Command="{Binding RemoveCommand}">Remove selected tms</Button>
-	    </ToolBar>
+	    <Grid.ColumnDefinitions>
+		    <ColumnDefinition Width="Auto" />
+		    <ColumnDefinition Width="1*" />
+	    </Grid.ColumnDefinitions>
+		<TextBlock Grid.Row="0" Grid.Column="0" Margin="0,0,0,5">Please select tm(s)</TextBlock>
+		<DockPanel Grid.Row="1" Grid.Column="0" Background="LightGray">
+			<ToolBarTray DockPanel.Dock="Top" Background="LightGray">
+				<ToolBar>
+					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
+						<Image Source="../Resources/TranslationMemoriesFolder_Open.ico"/>
+					</Button>
+					<Button Command="{Binding SelectTmCommand}" ToolTip="Select tm" Margin="5,0,0,0">
+						<Image Source="../Resources/TranslationMemory.ico"  />
+					</Button>
+					<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected tms">
+						<StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+							<Image Source="../Resources/Remove.ico"/>
+						</StackPanel>
+					</Button>
+				</ToolBar>
+			</ToolBarTray>
+		</DockPanel>
 	</Grid>
 </UserControl>
