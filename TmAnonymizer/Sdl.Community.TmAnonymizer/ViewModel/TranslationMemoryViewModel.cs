@@ -19,6 +19,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _removeCommand;
 		private ICommand _selectTmCommand;
 		private ICommand _selectAllCommand;
+		private ICommand _dragEnterCommand;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
 
 		public ICommand SelectFoldersCommand => _selectFoldersCommand ??
@@ -28,6 +29,28 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand SelectTmCommand => _selectTmCommand ??
 		                                 (_selectTmCommand = new CommandHandler(SelectTm, true));
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllTms, true));
+		public ICommand DragEnterCommand => _dragEnterCommand ??
+		                                    (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
+
+		private void HandlePreviewDrop(object dropedFile)
+		{
+			var file = dropedFile as System.Windows.DataObject;
+			if (null == file) return;
+			var tmsPath = (string[]) file.GetData(DataFormats.FileDrop);
+			if (tmsPath != null)
+			{
+				foreach (var tm in tmsPath)
+				{
+					var tmFileInfo = new FileInfo(tm);
+					var tmFile = new TmFile
+					{
+						Name = tmFileInfo.Name,
+						Path = tmFileInfo.FullName
+					};
+					TmsCollection.Add(tmFile);
+				}
+			}
+		}
 
 		private void SelectAllTms()
 		{
