@@ -12,12 +12,14 @@
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
 
 	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
@@ -46,8 +48,14 @@
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="100" Header="Name" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="100" Header="Description" Binding="{Binding Description}" />
+				<DataGridTextColumn Width="200" Header="Description" Binding="{Binding Description}" />
 			</DataGrid.Columns>
 		</DataGrid>
+		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="125" Margin="5,0,10,0" Content="Apply changes" Command="{Binding ExportCommand}"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding ImportCommand}"></Button>
+			</StackPanel>
+		</StackPanel>
 	</Grid>
 </UserControl>

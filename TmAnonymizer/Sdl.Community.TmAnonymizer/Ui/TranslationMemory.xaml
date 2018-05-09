@@ -52,6 +52,7 @@
 		<DataGrid Grid.Row="3" Grid.Column="0" Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
+		          RowHeight="15"
 		          helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 

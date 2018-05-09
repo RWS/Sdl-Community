@@ -15,12 +15,12 @@
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="200" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		
 		<ContentControl Grid.Row="0" Content="{Binding TmViewModel}"></ContentControl>
 
-		<TabControl Grid.Row="1" ItemsSource="{Binding TabItems}" SelectedIndex="{Binding Selected}" Margin="5,30,0,5" >
+		<TabControl Grid.Row="1" ItemsSource="{Binding TabItems}" SelectedIndex="{Binding Selected}" Margin="5,20,0,5" >
 			<TabControl.Resources>
 				<DataTemplate DataType="{x:Type viewModels:TranslationViewModel}">
 					<local:Translations></local:Translations>
