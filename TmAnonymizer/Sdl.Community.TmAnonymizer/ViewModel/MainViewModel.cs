@@ -11,26 +11,29 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	public class MainViewModel : ViewModelBase
 	{
 		private ObservableCollection<TabItem> _tabItems;
-		private ViewModelBase _currentViewModel;
+		private TranslationMemoryViewModel _tmViewModel;
 		private int _selectedIndex;
-		public ViewModelBase CurrentViewModel
+
+		public TranslationMemoryViewModel TmViewModel
 		{
-			get => _currentViewModel;
+			get => _tmViewModel;
 			set
 			{
-				_currentViewModel = value;
-				OnPropertyChanged(nameof(CurrentViewModel));
+				_tmViewModel = value;
+				OnPropertyChanged(nameof(TmViewModel));
 			}
 		}
 		public MainViewModel()
 		{
+			_tmViewModel = new TranslationMemoryViewModel();
+			
 			_tabItems = new ObservableCollection<TabItem>
 			{
 				new TabItem
 				{
 					Name = "Translations",
 					Header = "Translations",
-					ViewModel =  new TranslationViewModel()
+					ViewModel =  new TranslationViewModel(_tmViewModel.TmsCollection)
 				},
 				new TabItem
 				{
@@ -45,7 +48,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					ViewModel = new CustomFieldsViewModel()
 				}
 			};
-			//LoadTranslationPage();
 		}
 
 		public int Selected
@@ -59,24 +61,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_selectedIndex = value;
 				OnPropertyChanged(nameof(Selected));
-				if (value.Equals(0))
-				{
-					LoadTranslationPage();
-				}
-				if (value.Equals(1))
-				{
-					SystemFieldsPage();
-				}
+				//if (value.Equals(0))
+				//{
+				////	LoadTranslationPage();
+				//}
+				//if (value.Equals(1))
+				//{
+				//	SystemFieldsPage();
+				//}
 			}
 		}	
-		private void LoadTranslationPage()
-		{
-			CurrentViewModel = new TranslationViewModel();
-		}
-		private void SystemFieldsPage()
-		{
-			CurrentViewModel = new SystemFieldsViewModel();
-		}
+
 
 		public ObservableCollection<TabItem> TabItems
 		{

@@ -24,7 +24,7 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		public TranslationMemory()
 		{
 			InitializeComponent();
-			DataContext = new TranslationMemoryViewModel();
+		//	DataContext = new TranslationMemoryViewModel();
 		}
 	}
 }

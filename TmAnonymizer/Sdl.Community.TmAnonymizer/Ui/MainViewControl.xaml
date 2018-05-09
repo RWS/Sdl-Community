@@ -7,12 +7,19 @@
              xmlns:viewModels="clr-namespace:Sdl.Community.TmAnonymizer.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+	<UserControl.Resources>
+		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
+			<local:TranslationMemory></local:TranslationMemory>
+		</DataTemplate>
+	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="200" />
 		</Grid.RowDefinitions>
-		<local:TranslationMemory Grid.Row="0"></local:TranslationMemory>
+		
+		<ContentControl Grid.Row="0" Content="{Binding TmViewModel}"></ContentControl>
+		
 		<TabControl Grid.Row="1" ItemsSource="{Binding TabItems}" SelectedIndex="{Binding Selected}" >
 			<TabControl.Resources>
 				<DataTemplate DataType="{x:Type viewModels:TranslationViewModel}">
