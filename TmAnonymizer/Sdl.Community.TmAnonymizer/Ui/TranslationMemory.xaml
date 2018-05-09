@@ -24,8 +24,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="Auto" />
-		    <ColumnDefinition Width="1*" />
+		    <ColumnDefinition Width="*" MinWidth="100" />
+		    <ColumnDefinition Width="*" />
 	    </Grid.ColumnDefinitions>
 		<TextBlock Grid.Row="0" Grid.Column="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
 		<DockPanel Grid.Row="1" Grid.Column="0" Margin="5,10,0,5" >
@@ -53,6 +53,7 @@
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
 		          RowHeight="15"
+				  MinWidth="100"
 		          helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
@@ -69,8 +70,8 @@
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="100" Header="Name" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="230" Header="Path" Binding="{Binding Path}" />
+				<DataGridTextColumn Width="Auto" MinWidth="80" Header="Name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="Auto" Header="Path" Binding="{Binding Path}" />
 			</DataGrid.Columns>
 		</DataGrid>
 	</Grid>
