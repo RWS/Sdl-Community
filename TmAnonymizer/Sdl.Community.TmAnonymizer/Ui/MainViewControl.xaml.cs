@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Sdl.Community.TmAnonymizer.ViewModel;
 
 namespace Sdl.Community.TmAnonymizer.Ui
 {
@@ -23,6 +24,7 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		public MainViewControl()
 		{
 			InitializeComponent();
+			DataContext = new MainViewModel();
 		}
 	}
 }

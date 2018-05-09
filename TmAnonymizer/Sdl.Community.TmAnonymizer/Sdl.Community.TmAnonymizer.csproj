@@ -121,13 +121,20 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\ModelBase.cs" />
+    <Compile Include="Model\TabItem.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Ui\CustomFields.xaml.cs">
+      <DependentUpon>CustomFields.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\MainViewControl.xaml.cs">
       <DependentUpon>MainViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\SystemFields.xaml.cs">
+      <DependentUpon>SystemFields.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ui\TmAnonymizerUserControl.cs">
       <SubType>UserControl</SubType>
@@ -138,8 +145,14 @@
     <Compile Include="Ui\TranslationMemory.xaml.cs">
       <DependentUpon>TranslationMemory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\Translations.xaml.cs">
+      <DependentUpon>Translations.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
+    <Compile Include="ViewModel\TranslationViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -163,11 +176,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Ui\CustomFields.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Ui\MainViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Ui\SystemFields.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Ui\TranslationMemory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\Translations.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
