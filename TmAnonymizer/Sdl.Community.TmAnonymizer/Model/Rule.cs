@@ -10,7 +10,8 @@ namespace Sdl.Community.TmAnonymizer.Model
     {
 	    private bool _isSelected;
 	    private string _name;
-
+	    private string _description;
+	    public string Id { get; set; }
 		public bool IsSelected
 	    {
 
@@ -28,6 +29,15 @@ namespace Sdl.Community.TmAnonymizer.Model
 		    {
 			    _name = value;
 			    OnPropertyChanged(nameof(Name));
+		    }
+	    }
+	    public string Description
+	    {
+		    get => _description;
+		    set
+		    {
+			    _description = value;
+			    OnPropertyChanged(nameof(Description));
 		    }
 	    }
 	}

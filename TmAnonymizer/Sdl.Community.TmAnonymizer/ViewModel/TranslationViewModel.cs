@@ -24,11 +24,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			{
 				new Rule
 				{
-					Name = "dma"
+					Name = "dma",
+					Description = "dddd"
 				},
 				new Rule
 				{
-					Name = "daaama"
+					Name = "daaama",
+					Description = "bbbbbb"
 				}
 			};
 		}
