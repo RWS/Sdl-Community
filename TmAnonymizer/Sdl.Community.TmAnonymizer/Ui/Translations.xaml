@@ -63,6 +63,8 @@
 		          FontFamily="Segoe UI"
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
 		          Background="White" 
+		          CanUserAddRows="False"
+				  IsReadOnly="True"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
@@ -72,13 +74,7 @@
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<RichTextBox IsReadOnly="True" Width="Auto" BorderThickness="0">
-								<FlowDocument>
-									<Paragraph TextAlignment="Left">
-										<Run Text="{Binding SourceText}"></Run>
-									</Paragraph>
-								</FlowDocument>
-							</RichTextBox>
+							<helpers:BindableRichTextBox IsReadOnly="True" BorderThickness="0" Background="White" Document="{Binding Document}"></helpers:BindableRichTextBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

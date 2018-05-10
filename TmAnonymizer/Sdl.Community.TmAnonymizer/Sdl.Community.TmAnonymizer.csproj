@@ -113,6 +113,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\BindableRichTextBox.cs" />
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />

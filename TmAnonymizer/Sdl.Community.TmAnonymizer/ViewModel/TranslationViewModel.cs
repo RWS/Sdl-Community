@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 
@@ -17,6 +21,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private Rule _selectedItem;
 		private bool _selectAll;
 		private ICommand _selectAllCommand;
+		private FlowDocument _document;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 
 		public TranslationViewModel(ObservableCollection<TmFile> tmsCollection)
@@ -29,24 +34,62 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					SegmentNumber = "2",
 					SourceText = "source from tm",
-					TmFilePath = "dasdasdasdasdasdasdasd"
-					
+					TmFilePath = "dasdasdasdasdasdasdasd",
+					Document =  Convert("source from tm")
+
 				},
 				new SourceSearchResult
 				{
 					SegmentNumber = "3",
 					SourceText = "source from ",
-					TmFilePath = "dasdasdasdasdasdasdasd"
+					TmFilePath = "dasdasdasdasdasdasdasd",
+					Document = Convert("source from ")
 
 				},
 				new SourceSearchResult
 				{
 					SegmentNumber = "21",
 					SourceText = "source",
-					TmFilePath = "dasdasdasdasdasdasdasd"
-
+					TmFilePath = "dasdasdasdasdasdasdasd",
+					Document = Convert("source")
 				}
 			};
+		}
+
+		public object Convert(object value)
+		{
+			FlowDocument doc = new FlowDocument();
+
+			string s = value as string;
+			if (s != null)
+			{
+				using (StringReader reader = new StringReader(s))
+				{
+					string newLine;
+					while ((newLine = reader.ReadLine()) != null)
+					{
+						Paragraph paragraph = new Paragraph(new Run(newLine));
+						paragraph.Foreground = new SolidColorBrush(Colors.Blue);
+						paragraph.FontWeight = FontWeights.Bold;
+
+						//if (newLine.EndsWith(":."))
+						//{
+						//	paragraph = new Paragraph
+						//		(new Run(newLine.Replace(":.", string.Empty)));
+						//	paragraph.Foreground = new SolidColorBrush(Colors.Blue);
+						//	paragraph.FontWeight = FontWeights.Bold;
+						//}
+						//else
+						//{
+						//	paragraph = new Paragraph(new Run(newLine));
+						//}
+
+						doc.Blocks.Add(paragraph);
+					}
+				}
+			}
+
+			return doc;
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
@@ -83,6 +126,16 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SourceSearchResults));
 			}
 		}
+
+		//public FlowDocument Document
+		//{
+		//	get => _document;
+		//	set
+		//	{
+		//		_document = value;
+		//		OnPropertyChanged(nameof(Document));
+		//	}
+		//}
 		public ObservableCollection<Rule> RulesCollection
 		{
 			get => _rules;
