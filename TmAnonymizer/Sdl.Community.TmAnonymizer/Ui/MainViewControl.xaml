@@ -36,7 +36,7 @@
 				<!-- this is the header template-->
 				<DataTemplate>
 					<TextBlock
-						Text="{Binding Header}" />
+						Text="{Binding Header}"/>
 				</DataTemplate>
 			</TabControl.ItemTemplate>
 			<TabControl.ContentTemplate>

@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CommandHandler.cs" />
+    <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />

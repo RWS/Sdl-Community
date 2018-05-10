@@ -14,25 +14,14 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	{
 		private ObservableCollection<TmFile> _tmsCollection;
 		private ObservableCollection<Rule> _rules;
+		private Rule _selectedItem;
 		private bool _selectAll;
 		private ICommand _selectAllCommand;
 
 		public TranslationViewModel(ObservableCollection<TmFile> tmsCollection)
 		{
 			_tmsCollection = tmsCollection;
-			_rules = new ObservableCollection<Rule>
-			{
-				new Rule
-				{
-					Name = "dma",
-					Description = "dddd"
-				},
-				new Rule
-				{
-					Name = "daaama",
-					Description = "bbbbbb"
-				}
-			};
+			_rules = Constants.GetDefaultRules();
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
@@ -67,6 +56,29 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_rules = value;
 				OnPropertyChanged(nameof(RulesCollection));
+			}
+		}
+
+		public Rule SelectedItem
+		{
+			get => _selectedItem;
+			set
+			{
+				_selectedItem = value;
+				OnPropertyChanged(nameof(SelectedItem));
+				if (RulesCollection.Any(r => r.Id == null))
+				{
+					SetIdForNewRules();
+				}
+			}
+		}
+
+		private void SetIdForNewRules()
+		{
+			var newRules = RulesCollection.Where(r => r.Id == null).ToList();
+			foreach (var rule in newRules)
+			{
+				rule.Id = Guid.NewGuid().ToString();
 			}
 		}
 	}
