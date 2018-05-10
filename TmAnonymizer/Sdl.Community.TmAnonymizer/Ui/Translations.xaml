@@ -25,8 +25,8 @@
 			<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto" />
-			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="*" />
+			<ColumnDefinition Width="2*" />
 		</Grid.ColumnDefinitions>
 		<TextBlock Grid.Row="0" Grid.Column="0" Margin="15,5,0,5">Please rules you want to apply</TextBlock>
 		<CheckBox  Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
@@ -47,9 +47,9 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="100" Header="Name" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="200" Header="Description" Binding="{Binding Description}" />
+				<DataGridCheckBoxColumn Width="*" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" />
 			</DataGrid.Columns>
 		</DataGrid>
 		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical">

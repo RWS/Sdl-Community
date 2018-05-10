@@ -24,8 +24,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="*" MinWidth="100" />
 		    <ColumnDefinition Width="*" />
+		    <ColumnDefinition Width="2*" />
 	    </Grid.ColumnDefinitions>
 		<TextBlock Grid.Row="0" Grid.Column="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
 		<DockPanel Grid.Row="1" Grid.Column="0" Margin="5,10,0,5" >
@@ -69,9 +69,9 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="Auto" MinWidth="80" Header="Name" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="Auto" Header="Path" Binding="{Binding Path}" />
+				<DataGridCheckBoxColumn Width="*" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="2*" Header="Path" Binding="{Binding Path}" />
 			</DataGrid.Columns>
 		</DataGrid>
 	</Grid>
