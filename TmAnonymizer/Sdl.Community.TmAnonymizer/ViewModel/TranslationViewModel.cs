@@ -69,21 +69,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					while ((newLine = reader.ReadLine()) != null)
 					{
 						Paragraph paragraph = new Paragraph(new Run(newLine));
-						paragraph.Foreground = new SolidColorBrush(Colors.Blue);
-						paragraph.FontWeight = FontWeights.Bold;
-
-						//if (newLine.EndsWith(":."))
-						//{
-						//	paragraph = new Paragraph
-						//		(new Run(newLine.Replace(":.", string.Empty)));
-						//	paragraph.Foreground = new SolidColorBrush(Colors.Blue);
-						//	paragraph.FontWeight = FontWeights.Bold;
-						//}
-						//else
-						//{
-						//	paragraph = new Paragraph(new Run(newLine));
-						//}
-
 						doc.Blocks.Add(paragraph);
 					}
 				}
