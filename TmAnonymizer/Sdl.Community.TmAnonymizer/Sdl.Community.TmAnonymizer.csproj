@@ -123,6 +123,7 @@
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Rule.cs" />
+    <Compile Include="Model\SourceSearchResult.cs" />
     <Compile Include="Model\TabItem.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />

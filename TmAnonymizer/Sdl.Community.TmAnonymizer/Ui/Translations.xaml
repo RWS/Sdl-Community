@@ -58,5 +58,33 @@
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
+
+		<DataGrid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Style="{DynamicResource DgHeaderStyle}"
+		          FontFamily="Segoe UI"
+				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
+		          Background="White" 
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          Margin="5,10"
+		          AutoGenerateColumns="False" GridLinesVisibility="None">
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="*" Header="Select"></DataGridCheckBoxColumn>
+				<DataGridTextColumn Header="Segment number" Width="*" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
+				<DataGridTemplateColumn Header="Source" Width="3*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<RichTextBox IsReadOnly="True" Width="Auto" BorderThickness="0">
+								<FlowDocument>
+									<Paragraph TextAlignment="Left">
+										<Run Text="{Binding SourceText}"></Run>
+									</Paragraph>
+								</FlowDocument>
+							</RichTextBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" ></DataGridTextColumn>
+			</DataGrid.Columns>
+			
+		</DataGrid>
 	</Grid>
 </UserControl>

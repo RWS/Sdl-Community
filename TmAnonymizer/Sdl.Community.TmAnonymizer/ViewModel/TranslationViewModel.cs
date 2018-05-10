@@ -17,11 +17,36 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private Rule _selectedItem;
 		private bool _selectAll;
 		private ICommand _selectAllCommand;
+		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 
 		public TranslationViewModel(ObservableCollection<TmFile> tmsCollection)
 		{
 			_tmsCollection = tmsCollection;
 			_rules = Constants.GetDefaultRules();
+			_sourceSearchResults = new ObservableCollection<SourceSearchResult>
+			{
+				new SourceSearchResult
+				{
+					SegmentNumber = "2",
+					SourceText = "source from tm",
+					TmFilePath = "dasdasdasdasdasdasdasd"
+					
+				},
+				new SourceSearchResult
+				{
+					SegmentNumber = "3",
+					SourceText = "source from ",
+					TmFilePath = "dasdasdasdasdasdasdasd"
+
+				},
+				new SourceSearchResult
+				{
+					SegmentNumber = "21",
+					SourceText = "source",
+					TmFilePath = "dasdasdasdasdasdasdasd"
+
+				}
+			};
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
@@ -42,6 +67,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_selectAll = value;
 				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+		public ObservableCollection<SourceSearchResult> SourceSearchResults
+		{
+			get => _sourceSearchResults;
+
+			set
+			{
+				if (Equals(value, _sourceSearchResults))
+				{
+					return;
+				}
+				_sourceSearchResults = value;
+				OnPropertyChanged(nameof(SourceSearchResults));
 			}
 		}
 		public ObservableCollection<Rule> RulesCollection
