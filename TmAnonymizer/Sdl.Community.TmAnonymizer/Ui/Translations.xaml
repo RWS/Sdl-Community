@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	
@@ -74,7 +75,14 @@
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<helpers:BindableRichTextBox IsReadOnly="True" BorderThickness="0" Background="White" Document="{Binding Document}"></helpers:BindableRichTextBox>
+							<!--<helpers:BindableRichTextBox IsReadOnly="True" BorderThickness="0" Background="White" Document="{Binding Document}"></helpers:BindableRichTextBox>-->
+
+							<xctk:RichTextBox x:Name="_richTextBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White">
+								<xctk:RichTextBox.TextFormatter>
+									<helpers:RichTextBoxFormatter />
+								</xctk:RichTextBox.TextFormatter>
+							</xctk:RichTextBox>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
@@ -84,3 +92,6 @@
 		</DataGrid>
 	</Grid>
 </UserControl>
+
+
+

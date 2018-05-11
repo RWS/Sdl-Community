@@ -4,5 +4,8 @@
   <Version>1.0</Version>
   <Description>Plugin description</Description>
   <Author></Author>
+	<Include>
+		<File>Xceed.Wpf.Toolkit.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>

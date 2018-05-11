@@ -111,6 +111,9 @@
     <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.6.17613.9190, Culture=neutral, PublicKeyToken=ba83ff368b7563c6, processorArchitecture=MSIL">
+      <HintPath>..\packages\Xceed.Wpf.Toolkit.3.6.17613.09190\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\BindableRichTextBox.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\ModelBase.cs" />

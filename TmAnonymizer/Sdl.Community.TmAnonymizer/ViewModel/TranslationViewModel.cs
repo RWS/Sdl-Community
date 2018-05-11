@@ -35,7 +35,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					SegmentNumber = "2",
 					SourceText = "source from tm",
 					TmFilePath = "dasdasdasdasdasdasdasd",
-					Document =  Convert("source from tm")
+				//	Document =  Convert("source from tm")
 
 				},
 				new SourceSearchResult
@@ -43,7 +43,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					SegmentNumber = "3",
 					SourceText = "source from ",
 					TmFilePath = "dasdasdasdasdasdasdasd",
-					Document = Convert("source from ")
+					//Document = Convert("source from ")
 
 				},
 				new SourceSearchResult
@@ -51,7 +51,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					SegmentNumber = "21",
 					SourceText = "source",
 					TmFilePath = "dasdasdasdasdasdasdasd",
-					Document = Convert("source")
+				//	Document = Convert("source")
 				}
 			};
 		}
@@ -81,7 +81,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void SelectAllRules()
 		{
-			
+			var source = new SourceSearchResult
+			{
+				SegmentNumber = "5",
+				SourceText = "source added",
+				TmFilePath = "dasdasdasdasdasdasdasd",
+			};
+			SourceSearchResults.Add(source);
 		}
 		public bool SelectAll
 		{
