@@ -28,9 +28,13 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		    if (dataContex == null) return;
 		    foreach (var matchPosition in dataContex.MatchResult.Positions)
 		    {
-			    var start = document.ContentStart.GetPositionAtOffset(matchPosition.Index);
-			    var endPos = document.ContentStart.GetPositionAtOffset(matchPosition.Index+matchPosition.Length);
-			    if (start == null || endPos == null) continue;
+			    var initialPointer = document.ContentStart;
+			    var start = GetPoint(initialPointer, matchPosition.Index);
+				var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
+
+				//var start = document.ContentStart.GetPositionAtOffset(matchPosition.Index);
+				//var endPos = document.ContentStart.GetPositionAtOffset(matchPosition.Index+matchPosition.Length);
+				if (start == null || endPos == null) continue;
 			    textRange.Select(start, endPos);
 			    var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
 			    if (color != null)
@@ -47,5 +51,24 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		    //new TextRange(document.ContentStart, document.ContentEnd).Text = text;
 		   
 	    }
-    }
+	    private static TextPointer GetPoint(TextPointer start, int x)
+	    {
+		    var ret = start;
+		    var i = 0;
+		    while (i < x && ret != null)
+		    {
+			    if (ret.GetPointerContext(LogicalDirection.Backward) ==
+			        TextPointerContext.Text ||
+			        ret.GetPointerContext(LogicalDirection.Backward) ==
+			        TextPointerContext.None)
+				    i++;
+			    if (ret.GetPositionAtOffset(1,
+				        LogicalDirection.Forward) == null)
+				    return ret;
+			    ret = ret.GetPositionAtOffset(1,
+				    LogicalDirection.Forward);
+		    }
+		    return ret;
+	    }
+	}
 }
