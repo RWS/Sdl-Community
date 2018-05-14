@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Sdl.Community.TmAnonymizer.Model;
 using Xceed.Wpf.Toolkit;
 
 namespace Sdl.Community.TmAnonymizer.Helpers
@@ -18,16 +19,32 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 	    public void SetText(FlowDocument document, string text)
 	    {
+		    if (string.IsNullOrEmpty(text)) return;
 		    var textRange = new TextRange(document.ContentStart, document.ContentEnd)
 		    {
 			    Text = text
 		    };
-		    var start = document.ContentStart.GetPositionAtOffset(0, LogicalDirection.Forward);
-		   var endPos = document.ContentStart.GetPositionAtOffset(6 + 2, LogicalDirection.Forward);
-			textRange.Select(start, endPos);
-		    textRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Red));
+		    var dataContex = (SourceSearchResult) document.DataContext;
+		    if (dataContex == null) return;
+		    foreach (var matchPosition in dataContex.MatchResult.Positions)
+		    {
+			    var start = document.ContentStart.GetPositionAtOffset(matchPosition.Index);
+			    var endPos = document.ContentStart.GetPositionAtOffset(matchPosition.Index+matchPosition.Length);
+			    if (start == null || endPos == null) continue;
+			    textRange.Select(start, endPos);
+			    var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
+			    if (color != null)
+			    {
+				    textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+			    }
+		    }
+		    //var start = document.ContentStart.GetPositionAtOffset(0, LogicalDirection.Forward);
+		    //var endPos = document.ContentStart.GetPositionAtOffset(6 + 2, LogicalDirection.Forward);
+		    //textRange.Select(start, endPos);
+		    //textRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Red));
 
-			//new TextRange(document.ContentStart, document.ContentEnd).Text = text;
+
+		    //new TextRange(document.ContentStart, document.ContentEnd).Text = text;
 		   
 	    }
     }

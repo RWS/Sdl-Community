@@ -21,6 +21,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private Rule _selectedItem;
 		private bool _selectAll;
 		private ICommand _selectAllCommand;
+		private ICommand _previewCommand;
 		private FlowDocument _document;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 
@@ -28,32 +29,32 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		{
 			_tmsCollection = tmsCollection;
 			_rules = Constants.GetDefaultRules();
-			_sourceSearchResults = new ObservableCollection<SourceSearchResult>
-			{
-				new SourceSearchResult
-				{
-					SegmentNumber = "2",
-					SourceText = "source from tm",
-					TmFilePath = "dasdasdasdasdasdasdasd",
-				//	Document =  Convert("source from tm")
+			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
+			//{
+			//	new SourceSearchResult
+			//	{
+			//		SegmentNumber = "2",
+			//		SourceText = "source from tm",
+			//		TmFilePath = "dasdasdasdasdasdasdasd",
+			//	//	Document =  Convert("source from tm")
 
-				},
-				new SourceSearchResult
-				{
-					SegmentNumber = "3",
-					SourceText = "source from ",
-					TmFilePath = "dasdasdasdasdasdasdasd",
-					//Document = Convert("source from ")
+			//	},
+			//	new SourceSearchResult
+			//	{
+			//		SegmentNumber = "3",
+			//		SourceText = "source from ",
+			//		TmFilePath = "dasdasdasdasdasdasdasd",
+			//		//Document = Convert("source from ")
 
-				},
-				new SourceSearchResult
-				{
-					SegmentNumber = "21",
-					SourceText = "source",
-					TmFilePath = "dasdasdasdasdasdasdasd",
-				//	Document = Convert("source")
-				}
-			};
+			//	},
+			//	new SourceSearchResult
+			//	{
+			//		SegmentNumber = "21",
+			//		SourceText = "source",
+			//		TmFilePath = "dasdasdasdasdasdasdasd",
+			//	//	Document = Convert("source")
+			//	}
+			//};
 		}
 
 		public object Convert(object value)
@@ -78,6 +79,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
+		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
+
+		private void PreviewChanges()
+		{
+			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
+			Tm.OpenTm(selectedTms,SourceSearchResults);
+		}
 
 		private void SelectAllRules()
 		{

@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Sdl.Community.TmAnonymizer.Helpers;
+using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
@@ -20,13 +21,23 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			@"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b", //"Social Security Numbers"
 		};
 		public List<object> SegmentColection { get; set; }
-
+		//public List<MatchResult> MatchResults { get; set; }
+		public MatchResult MatchResult { get; set; }
+		private string _currentText = string.Empty;
 		public void VisitText(Text text)
 		{
 			var segmentCollection = new List<object>();
+			//MatchResults = new List<MatchResult>();
+			
 			var containsPi = ContainsPi(text.Value);
 			if (containsPi)
 			{
+				var matchResult = new MatchResult
+				{
+					Text = text.Value,
+					Positions = new List<Position>()
+				};
+				MatchResult = matchResult;
 				var personalData = GetPersonalData(text.Value);
 				GetSubsegmentPi(text.Value, personalData, segmentCollection);
 			}
@@ -63,8 +74,15 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			{
 				var regex = new Regex(pattern, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
+				
 				foreach (System.Text.RegularExpressions.Match match in matches)
 				{
+					var position = new Position
+					{
+						Length = match.Length,
+						Index = match.Index
+					};
+					MatchResult.Positions.Add(position);
 					if (match.Index.Equals(0))
 					{
 						var spaceIndex = text.IndexOf(" ", StringComparison.Ordinal);

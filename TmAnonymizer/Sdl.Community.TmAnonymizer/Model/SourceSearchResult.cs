@@ -15,6 +15,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public string SourceText { get; set; }
 		public string TmFilePath { get; set; }
 		public object Document { get; set; }
+		public MatchResult MatchResult { get; set; }
 		
 	}
 }
