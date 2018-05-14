@@ -121,6 +121,7 @@
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
+    <Compile Include="Helpers\PersonalInformation.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />

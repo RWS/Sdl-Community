@@ -30,31 +30,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_tmsCollection = tmsCollection;
 			_rules = Constants.GetDefaultRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
-			//{
-			//	new SourceSearchResult
-			//	{
-			//		SegmentNumber = "2",
-			//		SourceText = "source from tm",
-			//		TmFilePath = "dasdasdasdasdasdasdasd",
-			//	//	Document =  Convert("source from tm")
-
-			//	},
-			//	new SourceSearchResult
-			//	{
-			//		SegmentNumber = "3",
-			//		SourceText = "source from ",
-			//		TmFilePath = "dasdasdasdasdasdasdasd",
-			//		//Document = Convert("source from ")
-
-			//	},
-			//	new SourceSearchResult
-			//	{
-			//		SegmentNumber = "21",
-			//		SourceText = "source",
-			//		TmFilePath = "dasdasdasdasdasdasdasd",
-			//	//	Document = Convert("source")
-			//	}
-			//};
 		}
 
 		public object Convert(object value)
@@ -84,7 +59,12 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
-			Tm.OpenTm(selectedTms,SourceSearchResults);
+			//Tm.OpenTm(selectedTms,SourceSearchResults);
+			foreach (var tm in selectedTms)
+			{
+				var tus = Tm.GetTranslationUnits(tm.Path, SourceSearchResults);
+			}
+			
 		}
 
 		private void SelectAllRules()

@@ -14,13 +14,46 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
 	public static class Tm
 	{
+
+		public static TranslationUnit[] GetTranslationUnits(string tmPath,
+			ObservableCollection<SourceSearchResult> sourceSearchResult)
+		{
+			var tm =
+				new FileBasedTranslationMemory(tmPath);
+			var tmIterator = new RegularIterator();
+
+			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			foreach (var translationUnit in tus)
+			{
+				var sourceText = translationUnit.SourceSegment.ToPlain();
+				if (PersonalInformation.ContainsPi(sourceText))
+				{
+					var searchResult = new SourceSearchResult
+					{
+						Id = translationUnit.ResourceId.Guid.ToString(),
+						SourceText = sourceText,
+						MatchResult = new MatchResult
+						{
+							Positions = PersonalInformation.GetPersonalDataPositions(sourceText)
+						},
+						TmFilePath = tmPath,
+						SegmentNumber = translationUnit.ResourceId.Id.ToString()
+					};
+					 sourceSearchResult.Add(searchResult);
+				}
+
+			}
+
+			return tus;
+		}
+
 		public static void OpenTm(List<TmFile> selectedTms, ObservableCollection<SourceSearchResult> sourceSearchResult)
 		{
 			foreach (var selectedTm in selectedTms)
 			{
 				var tm =
 					new FileBasedTranslationMemory(selectedTm.Path);
-				var tmIterator = new RegularIterator(10);
+				var tmIterator = new RegularIterator();
 
 				var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
 
@@ -60,36 +93,6 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							//}
 						}
 					}
-
-
-
-					//foreach (var translationUnit in tus)
-					//{
-					//	foreach (var element in translationUnit.SourceSegment.Elements.ToList())
-					//	{
-					//		var visitor = new SegmentElementVisitor();
-					//		element.AcceptSegmentElementVisitor(visitor);
-					//		var segmentColection = visitor.SegmentColection;
-					//		if (segmentColection.Count > 0)
-					//		{
-					//			translationUnit.SourceSegment.Elements.Clear();
-					//			foreach (var segment in segmentColection)
-					//			{
-					//				var text = segment as Text;
-					//				var tag = segment as Tag;
-					//				if (text != null)
-					//				{
-					//					translationUnit.SourceSegment.Elements.Add(text);
-					//				}
-					//				if (tag != null)
-					//				{
-					//					translationUnit.SourceSegment.Elements.Add(tag);
-					//				}
-					//				//translationUnit.SourceSegment.Elements.Add(element);
-					//			}
-
-					//		}
-					//	}
 					//	//translationUnit.SystemFields.CreationUser =
 					//	//	AnonymizeData.EncryptData(translationUnit.SystemFields.CreationUser, "andrea");
 					//	//translationUnit.SystemFields.UseUser =

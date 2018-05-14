@@ -85,8 +85,8 @@ namespace Sdl.Community.TmAnonymizer.Studio
 					MatchResult.Positions.Add(position);
 					if (match.Index.Equals(0))
 					{
-						var spaceIndex = text.IndexOf(" ", StringComparison.Ordinal);
-						personalDataIndex.Add(spaceIndex);
+						//var spaceIndex = text.IndexOf(" ", StringComparison.Ordinal);
+						personalDataIndex.Add(match.Length);
 					}
 					personalDataIndex.Add(match.Index);
 				}

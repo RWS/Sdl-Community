@@ -65,7 +65,6 @@
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
 		          Background="White" 
 		          CanUserAddRows="False"
-				  IsReadOnly="True"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
