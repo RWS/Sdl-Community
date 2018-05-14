@@ -13,9 +13,11 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public string TmSegmentId { get; set; }
 		public string SegmentNumber { get; set; }
 		public string SourceText { get; set; }
+		public string TargetText { get; set; }
 		public string TmFilePath { get; set; }
 		public object Document { get; set; }
 		public MatchResult MatchResult { get; set; }
-		
+		public MatchResult TargetMatchResult { get; set; }
+
 	}
 }

@@ -26,31 +26,48 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		    };
 		    var dataContex = (SourceSearchResult) document.DataContext;
 		    if (dataContex == null) return;
-		    foreach (var matchPosition in dataContex.MatchResult.Positions)
+		    var parent = (RichTextBox)document.Parent;
+		    var tag = string.Empty;
+		    if (parent != null)
 		    {
-			    var initialPointer = document.ContentStart;
-			    var start = GetPoint(initialPointer, matchPosition.Index);
-				var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
-
-				//var start = document.ContentStart.GetPositionAtOffset(matchPosition.Index);
-				//var endPos = document.ContentStart.GetPositionAtOffset(matchPosition.Index+matchPosition.Length);
-				if (start == null || endPos == null) continue;
-			    textRange.Select(start, endPos);
-			    var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
-			    if (color != null)
-			    {
-				    textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
-			    }
+			     tag = (string) parent.Tag;
 		    }
-		    //var start = document.ContentStart.GetPositionAtOffset(0, LogicalDirection.Forward);
-		    //var endPos = document.ContentStart.GetPositionAtOffset(6 + 2, LogicalDirection.Forward);
-		    //textRange.Select(start, endPos);
-		    //textRange.ApplyPropertyValue(TextElement.BackgroundProperty, new SolidColorBrush(Colors.Red));
+		    if (tag.Equals("SourceBox"))
+		    {
+				foreach (var matchPosition in dataContex.MatchResult.Positions)
+				{
+					var initialPointer = document.ContentStart;
+					var start = GetPoint(initialPointer, matchPosition.Index);
+					var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
 
+					if (start == null || endPos == null) continue;
+					textRange.Select(start, endPos);
+					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
+					if (color != null)
+					{
+						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+					}
+				}
+			}
+		    if (tag.Equals("TargetBox"))
+		    {
+				foreach (var matchPosition in dataContex.TargetMatchResult.Positions)
+				{
+					var initialPointer = document.ContentStart;
+					var start = GetPoint(initialPointer, matchPosition.Index);
+					var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
 
-		    //new TextRange(document.ContentStart, document.ContentEnd).Text = text;
-		   
-	    }
+					if (start == null || endPos == null) continue;
+					textRange.Select(start, endPos);
+					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
+					if (color != null)
+					{
+						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+					}
+				}
+			}
+		 
+		}
 	    private static TextPointer GetPoint(TextPointer start, int x)
 	    {
 		    var ret = start;

@@ -39,11 +39,18 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 						TmFilePath = tmPath,
 						SegmentNumber = translationUnit.ResourceId.Id.ToString()
 					};
-					 sourceSearchResult.Add(searchResult);
+					var targetText = translationUnit.TargetSegment.ToPlain();
+					if (PersonalInformation.ContainsPi(targetText))
+					{
+						searchResult.TargetText = targetText;
+						searchResult.TargetMatchResult = new MatchResult
+						{
+							Positions = PersonalInformation.GetPersonalDataPositions(targetText)
+						};
+					}
+					sourceSearchResult.Add(searchResult);
 				}
-
 			}
-
 			return tus;
 		}
 

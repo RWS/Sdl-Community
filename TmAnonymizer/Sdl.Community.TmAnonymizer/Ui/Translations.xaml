@@ -76,12 +76,23 @@
 						<DataTemplate>
 							<!--<helpers:BindableRichTextBox IsReadOnly="True" BorderThickness="0" Background="White" Document="{Binding Document}"></helpers:BindableRichTextBox>-->
 
-							<xctk:RichTextBox x:Name="_richTextBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White">
+							<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
 							</xctk:RichTextBox>
 
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Target" Width="3*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" IsReadOnly="True" BorderThickness="0" Background="White">
+								<xctk:RichTextBox.TextFormatter>
+									<helpers:RichTextBoxFormatter />
+								</xctk:RichTextBox.TextFormatter>
+							</xctk:RichTextBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
