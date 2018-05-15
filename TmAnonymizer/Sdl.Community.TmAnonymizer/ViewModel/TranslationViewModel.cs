@@ -73,8 +73,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 			}
 			Tm.AnonymizeTu(tusToAnonymize);
+			RemoveSelectedTusToAnonymize();
 		}
 
+		private void RemoveSelectedTusToAnonymize()
+		{
+			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
+			{
+				SourceSearchResults.Remove(searchResult);
+			}
+
+		}
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
