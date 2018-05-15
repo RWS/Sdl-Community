@@ -69,7 +69,7 @@
 		          Margin="5,10"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50"></DataGridCheckBoxColumn>
+				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50" Binding = "{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
 				<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>

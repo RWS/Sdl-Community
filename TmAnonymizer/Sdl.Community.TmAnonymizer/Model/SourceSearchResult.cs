@@ -9,6 +9,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 {
     public class SourceSearchResult : ModelBase
 	{
+		private bool _tuSelected;
 		public string Id { get; set; }
 		public string TmSegmentId { get; set; }
 		public string SegmentNumber { get; set; }
@@ -18,6 +19,16 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public object Document { get; set; }
 		public MatchResult MatchResult { get; set; }
 		public MatchResult TargetMatchResult { get; set; }
+		public bool TuSelected
+		{
+
+			get => _tuSelected;
+			set
+			{
+				_tuSelected = value;
+				OnPropertyChanged(nameof(TuSelected));
+			}
+		}
 
 	}
 }
