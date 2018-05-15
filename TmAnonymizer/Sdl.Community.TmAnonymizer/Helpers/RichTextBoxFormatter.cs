@@ -42,7 +42,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 					if (start == null || endPos == null) continue;
 					textRange.Select(start, endPos);
-					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
+					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#EAC684");
 					if (color != null)
 					{
 						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
@@ -59,7 +59,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 					if (start == null || endPos == null) continue;
 					textRange.Select(start, endPos);
-					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#3D9DAA");
+					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#EAC684");
 					if (color != null)
 					{
 						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);

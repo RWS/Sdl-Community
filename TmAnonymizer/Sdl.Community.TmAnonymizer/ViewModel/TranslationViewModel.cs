@@ -59,23 +59,25 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
+
 			//Tm.OpenTm(selectedTms,SourceSearchResults);
 			foreach (var tm in selectedTms)
 			{
-				var tus = Tm.GetTranslationUnits(tm.Path, SourceSearchResults);
+				var tus = Tm.GetTranslationUnits(tm.Path, SourceSearchResults,GetSelectedRules());
 			}
 			
 		}
 
+		private List<Rule> GetSelectedRules()
+		{
+			return RulesCollection.Where(r => r.IsSelected).ToList();
+		}
 		private void SelectAllRules()
 		{
-			var source = new SourceSearchResult
+			foreach (var rule in RulesCollection)
 			{
-				SegmentNumber = "5",
-				SourceText = "source added",
-				TmFilePath = "dasdasdasdasdasdasdasd",
-			};
-			SourceSearchResults.Add(source);
+				rule.IsSelected = SelectAll;
+			}
 		}
 		public bool SelectAll
 		{

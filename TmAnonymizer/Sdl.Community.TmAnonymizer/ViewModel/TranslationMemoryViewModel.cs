@@ -145,7 +145,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				var tmFile = new TmFile
 				{
 					Name = tmFileInfo.Name,
-					Path = tmFileInfo.FullName
+					Path = tmFileInfo.FullName,
+					IsSelected = true
 				};
 				TmsCollection.Add(tmFile);
 			}

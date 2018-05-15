@@ -48,7 +48,7 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="*" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" />
 				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" />
 			</DataGrid.Columns>
@@ -69,8 +69,8 @@
 		          Margin="5,10"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="*" Header="Select"></DataGridCheckBoxColumn>
-				<DataGridTextColumn Header="Segment number" Width="*" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
+				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50"></DataGridCheckBoxColumn>
+				<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>

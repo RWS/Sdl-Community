@@ -16,17 +16,18 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 	{
 
 		public static TranslationUnit[] GetTranslationUnits(string tmPath,
-			ObservableCollection<SourceSearchResult> sourceSearchResult)
+			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
 		{
 			var tm =
 				new FileBasedTranslationMemory(tmPath);
 			var tmIterator = new RegularIterator();
 
 			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			var pi = new PersonalInformation(selectedRules);
 			foreach (var translationUnit in tus)
 			{
 				var sourceText = translationUnit.SourceSegment.ToPlain();
-				if (PersonalInformation.ContainsPi(sourceText))
+				if (pi.ContainsPi(sourceText))
 				{
 					var searchResult = new SourceSearchResult
 					{
@@ -34,18 +35,18 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 						SourceText = sourceText,
 						MatchResult = new MatchResult
 						{
-							Positions = PersonalInformation.GetPersonalDataPositions(sourceText)
+							Positions = pi.GetPersonalDataPositions(sourceText)
 						},
 						TmFilePath = tmPath,
 						SegmentNumber = translationUnit.ResourceId.Id.ToString()
 					};
 					var targetText = translationUnit.TargetSegment.ToPlain();
-					if (PersonalInformation.ContainsPi(targetText))
+					if (pi.ContainsPi(targetText))
 					{
 						searchResult.TargetText = targetText;
 						searchResult.TargetMatchResult = new MatchResult
 						{
-							Positions = PersonalInformation.GetPersonalDataPositions(targetText)
+							Positions = pi.GetPersonalDataPositions(targetText)
 						};
 					}
 					sourceSearchResult.Add(searchResult);
