@@ -49,8 +49,28 @@
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" />
-				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" />
+				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Name}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Description}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
 		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical">
