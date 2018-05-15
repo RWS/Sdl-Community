@@ -104,7 +104,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation",MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
 			if (result == DialogResult.OK)
 			{
-				var selectedTms = TmsCollection.Where(t => t.IsSelected).ToList();
+				var selectedTms = TmsCollection.Where(t => t.ShouldRemove).ToList();
 				foreach (var tm in selectedTms)
 				{
 					TmsCollection.Remove(tm);
