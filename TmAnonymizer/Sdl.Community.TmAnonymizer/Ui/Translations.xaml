@@ -116,7 +116,17 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" ></DataGridTextColumn>
+				<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding TmFilePath}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
 			</DataGrid.Columns>
 			
 		</DataGrid>
