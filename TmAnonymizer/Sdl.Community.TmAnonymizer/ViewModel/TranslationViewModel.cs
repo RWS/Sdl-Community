@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 			_rules = Constants.GetDefaultRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
+			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
@@ -76,6 +78,21 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			RemoveSelectedTusToAnonymize();
 		}
 
+		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Remove)
+			{
+				if (e.OldItems == null) return;
+				foreach (TmFile removedTm in e.OldItems)
+				{
+					var tusForRemovedTm = SourceSearchResults.Where(t => t.TmFilePath.Equals(removedTm.Path)).ToList();
+					foreach (var tu in tusForRemovedTm)
+					{
+						SourceSearchResults.Remove(tu);
+					}
+				}
+			}
+		}
 		private void RemoveSelectedTusToAnonymize()
 		{
 			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
