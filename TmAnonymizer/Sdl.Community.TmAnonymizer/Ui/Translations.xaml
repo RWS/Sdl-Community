@@ -80,7 +80,8 @@
 			</StackPanel>
 		</StackPanel>
 
-		<DataGrid Grid.Row="2" Grid.RowSpan="2" Grid.Column="1" Style="{DynamicResource DgHeaderStyle}"
+		<CheckBox  Grid.Row="1" Grid.Column="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAllResults}" Command="{Binding SelectAllResultsCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="2" Grid.Column="1" Style="{DynamicResource DgHeaderStyle}"
 		          FontFamily="Segoe UI"
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
 		          Background="White" 

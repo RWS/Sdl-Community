@@ -22,9 +22,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ObservableCollection<Rule> _rules;
 		private Rule _selectedItem;
 		private bool _selectAll;
+		private bool _selectAllResults;
 		private ICommand _selectAllCommand;
 		private ICommand _previewCommand;
 		private ICommand _applyCommand;
+		private ICommand _selectAllResultsCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 
@@ -40,6 +42,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+
+		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
+		                                    (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+
+		private void SelectResults()
+		{
+			foreach (var result in SourceSearchResults)
+			{
+				result.TuSelected = SelectAllResults;
+			}
+		}
 
 		private void ApplyChanges()
 		{
@@ -139,6 +152,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_selectAll = value;
 				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+		public bool SelectAllResults
+		{
+			get => _selectAllResults;
+
+			set
+			{
+				if (Equals(value, _selectAllResults))
+				{
+					return;
+				}
+				_selectAllResults = value;
+				OnPropertyChanged(nameof(SelectAllResults));
 			}
 		}
 		public ObservableCollection<SourceSearchResult> SourceSearchResults
