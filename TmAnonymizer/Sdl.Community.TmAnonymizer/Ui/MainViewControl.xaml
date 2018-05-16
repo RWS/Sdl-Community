@@ -17,7 +17,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		
+
 		<ContentControl Grid.Row="0" Content="{Binding TmViewModel}"></ContentControl>
 
 		<TabControl Grid.Row="1" ItemsSource="{Binding TabItems}" MaxHeight="500" SelectedIndex="{Binding Selected}" Margin="5,20,0,5" >
@@ -25,12 +25,10 @@
 				<DataTemplate DataType="{x:Type viewModels:TranslationViewModel}">
 					<local:Translations></local:Translations>
 				</DataTemplate>
-				<DataTemplate DataType="{x:Type viewModels:SystemFieldsViewModel}">
-			<local:SystemFields></local:SystemFields>
-		</DataTemplate>
-		<DataTemplate DataType="{x:Type viewModels:CustomFieldsViewModel}">
-			<local:CustomFields></local:CustomFields>
-		</DataTemplate>
+
+				<DataTemplate DataType="{x:Type viewModels:CustomFieldsViewModel}">
+					<local:CustomFields></local:CustomFields>
+				</DataTemplate>
 			</TabControl.Resources>
 			<TabControl.ItemTemplate>
 				<!-- this is the header template-->
@@ -45,6 +43,6 @@
 				</DataTemplate>
 			</TabControl.ContentTemplate>
 		</TabControl>
-    </Grid>
+	</Grid>
 </UserControl>
 

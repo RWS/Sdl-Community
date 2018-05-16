@@ -79,16 +79,10 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
 					}
 
+					translationUnit.SystemFields.CreationUser = "N/A";
+					translationUnit.SystemFields.UseUser = "N/A";
 					tm.LanguageDirection.UpdateTranslationUnit(translationUnit);
 				}
-
-
-				//	//translationUnit.SystemFields.CreationUser =
-				//	//	AnonymizeData.EncryptData(translationUnit.SystemFields.CreationUser, "andrea");
-				//	//translationUnit.SystemFields.UseUser =
-				//	//	AnonymizeData.EncryptData(translationUnit.SystemFields.UseUser, "andrea");
-
-
 				//	//foreach (FieldValue item in translationUnit.FieldValues)
 				//	//{
 				//	//	var anonymized = AnonymizeData.EncryptData(item.GetValueString(), "Andrea");
@@ -96,7 +90,6 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				//	//	item.Add(anonymized);
 				//	//}
 				//	//var test = translationUnit.DocumentSegmentPair
-				//tm.LanguageDirection.UpdateTranslationUnit(translationUnit);
 				//}
 			}
 
