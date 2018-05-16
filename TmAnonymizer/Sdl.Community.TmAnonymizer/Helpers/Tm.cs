@@ -67,30 +67,18 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 				foreach (var translationUnit in translationUnitPair.TranslationUnits)
 				{
-					foreach (var element in translationUnit.SourceSegment.Elements.ToList())
-					{
-						var visitor = new SegmentElementVisitor();
-						element.AcceptSegmentElementVisitor(visitor);
-						var segmentColection = visitor.SegmentColection;
+					var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+					var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 
-						if (segmentColection?.Count > 0)
-						{
-							translationUnit.SourceSegment.Elements.Clear();
-							foreach (var segment in segmentColection)
-							{
-								var text = segment as Text;
-								var tag = segment as Tag;
-								if (text != null)
-								{
-									translationUnit.SourceSegment.Elements.Add(text);
-								}
-								if (tag != null)
-								{
-									translationUnit.SourceSegment.Elements.Add(tag);
-								}
-							}
-						}
+					if (elementsContainsTag)
+					{
+						AnunymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
 					}
+					else
+					{
+						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+					}
+
 					tm.LanguageDirection.UpdateTranslationUnit(translationUnit);
 				}
 
@@ -114,6 +102,69 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 		}
 
+		private static void AnonymizeSegmentsWithoutTags(TranslationUnit translationUnit,
+			List<SegmentElement> sourceTranslationElements, bool isSource)
+		{
+			foreach (var element in sourceTranslationElements)
+			{
+				var visitor = new SegmentElementVisitor();
+				element.AcceptSegmentElementVisitor(visitor);
+				var segmentColection = visitor.SegmentColection;
+
+				if (segmentColection?.Count > 0)
+				{
+					translationUnit.SourceSegment.Elements.Clear();
+					foreach (var segment in segmentColection)
+					{
+						var text = segment as Text;
+						var tag = segment as Tag;
+						if (text != null)
+						{
+							translationUnit.SourceSegment.Elements.Add(text);
+						}
+						if (tag != null)
+						{
+							translationUnit.SourceSegment.Elements.Add(tag);
+						}
+					}
+				}
+			}
+		}
+
+		private static void AnunymizeSegmentsWithTags(TranslationUnit translationUnit,
+			List<SegmentElement> translationElements, bool isSource)
+		{
+			for (var i = 0; i < translationElements.Count; i++)
+			{
+				if (!translationElements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
+				var visitor = new SegmentElementVisitor();
+				translationElements[i].AcceptSegmentElementVisitor(visitor);
+				var segmentColection = visitor.SegmentColection;
+
+				if (segmentColection?.Count > 0)
+				{
+					if (isSource)
+					{
+						var segmentElements = new List<SegmentElement>();
+						foreach (var segment in segmentColection)
+						{
+							var text = segment as Text;
+							var tag = segment as Tag;
+							if (text != null)
+							{
+								segmentElements.Add(text);
+							}
+							if (tag != null)
+							{
+								segmentElements.Add(tag);
+							}
+						}
+						translationUnit.SourceSegment.Elements.RemoveAt(i);
+						translationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
+					}
+				}
+			}
+		}
 	}
-	}
+}
 

@@ -71,7 +71,23 @@ namespace Sdl.Community.TmAnonymizer.Studio
 					{
 						personalDataIndex.Add(match.Length);
 					}
-					personalDataIndex.Add(match.Index);
+					else
+					{
+						//check if there is any text after PI
+						var remainingText = text.Substring(match.Index + match.Length);
+						if (!string.IsNullOrEmpty(remainingText))
+						{
+							//get the position where PI starts to split before
+							personalDataIndex.Add(match.Index);
+							//split after PI
+							personalDataIndex.Add(match.Index + match.Length);
+						}
+						else
+						{
+							personalDataIndex.Add(match.Index);
+						}
+					}
+					
 				}
 			}
 			return personalDataIndex;
