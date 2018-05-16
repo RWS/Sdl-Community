@@ -22,7 +22,7 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" MaxHeight="300" />
 			<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
@@ -37,6 +37,7 @@
 		          ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
+				  MaxHeight="300"
 		          Margin="5,10" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
@@ -73,8 +74,8 @@
 				</DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,10,10,10">
+		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
 				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="125" Margin="5,0,10,0" Content="Apply changes" Command="{Binding ApplyCommand}"></Button>
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
 			</StackPanel>
@@ -88,6 +89,7 @@
 		          CanUserAddRows="False"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
+		          MaxHeight="400"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50" Binding = "{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
