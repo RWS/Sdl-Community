@@ -42,7 +42,7 @@ namespace Sdl.Community.DeepLMTProvider
 				//adding this resolve line breaks issue and missing ##login##
 				request.AddParameter("preserve_formatting", 1);
 				//tag handling cause issues on uppercase words
-				//request.AddParameter("tag_handling", tagOption);
+				request.AddParameter("tag_handling", tagOption);
 				//if we add this the formattiong is not right
 				//request.AddParameter("split_sentences", 0);
 				
