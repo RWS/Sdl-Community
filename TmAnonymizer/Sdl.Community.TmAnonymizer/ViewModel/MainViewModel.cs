@@ -37,10 +37,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				},
 				new TabItem
 				{
+					Name = "System",
+					Header = "System fields",
+					ViewModel = new SystemFieldsViewModel()
+				},
+				new TabItem
+				{
 					Name = "Custom",
 					Header = "Custom fields",
 					ViewModel = new CustomFieldsViewModel()
 				}
+				
 			};
 		}
 

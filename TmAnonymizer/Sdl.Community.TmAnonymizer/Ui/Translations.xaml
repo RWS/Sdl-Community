@@ -89,7 +89,7 @@
 		          CanUserAddRows="False"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
-		          MaxHeight="400"
+		         Height="450"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50" Binding = "{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>

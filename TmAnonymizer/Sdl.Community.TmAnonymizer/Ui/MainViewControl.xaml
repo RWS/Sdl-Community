@@ -29,6 +29,9 @@
 				<DataTemplate DataType="{x:Type viewModels:CustomFieldsViewModel}">
 					<local:CustomFields></local:CustomFields>
 				</DataTemplate>
+				<DataTemplate DataType="{x:Type viewModels:SystemFieldsViewModel}">
+					<local:SystemFields></local:SystemFields>
+				</DataTemplate>
 			</TabControl.Resources>
 			<TabControl.ItemTemplate>
 				<!-- this is the header template-->
