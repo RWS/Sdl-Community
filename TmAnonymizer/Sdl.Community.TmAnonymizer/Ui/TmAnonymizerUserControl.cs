@@ -17,6 +17,9 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			InitializeComponent();
 			var wpfMainWindow = new MainViewControl();
 			wpfMainWindow.InitializeComponent();
+			var acceptWindow = new AcceptWindow();
+			acceptWindow.InitializeComponent();
+			acceptWindow.Show();
 			elementHost.Child =wpfMainWindow;
 		}
 	}
