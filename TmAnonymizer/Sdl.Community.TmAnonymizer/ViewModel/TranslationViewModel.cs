@@ -56,6 +56,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void ApplyChanges()
 		{
+			BackupTm();
 			var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			
@@ -103,6 +104,24 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					{
 						SourceSearchResults.Remove(tu);
 					}
+				}
+			}
+		}
+
+		private void BackupTm()
+		{
+			var backupFolderPath = Constants.TmBackupPath;
+			if (!Directory.Exists(backupFolderPath))
+			{
+				Directory.CreateDirectory(backupFolderPath);
+			}
+			foreach (var tm in _tmsCollection.Where(t=>t.IsSelected))
+			{
+				var tmInfo = new FileInfo(tm.Path);
+				var backupFilePath = Path.Combine(backupFolderPath, tm.Name);
+				if (!File.Exists(backupFilePath))
+				{
+					tmInfo.CopyTo(backupFilePath, false);
 				}
 			}
 		}

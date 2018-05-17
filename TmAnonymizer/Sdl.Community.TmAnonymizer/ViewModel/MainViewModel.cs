@@ -55,14 +55,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_selectedIndex = value;
 				OnPropertyChanged(nameof(Selected));
-				//if (value.Equals(0))
-				//{
-				////	LoadTranslationPage();
-				//}
-				//if (value.Equals(1))
-				//{
-				//	SystemFieldsPage();
-				//}
 			}
 		}	
 

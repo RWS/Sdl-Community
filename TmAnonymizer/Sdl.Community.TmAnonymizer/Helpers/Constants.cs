@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -54,6 +55,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			
 		}
 
+		public static string TmBackupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			@"SDL Community\TmAnonymizer Backup");
 	}
 }
 
