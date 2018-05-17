@@ -57,6 +57,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 		public static string TmBackupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			@"SDL Community\TmAnonymizer Backup");
+		public static string SettingsFolderPath = Path.Combine(
+			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			@"SDL Community\TmAnonymizerSettings");
+
+		public static string SettingsFilePath = Path.Combine(SettingsFolderPath, "settings.json");
 		public static string AcceptDescription()
 		{
 			return

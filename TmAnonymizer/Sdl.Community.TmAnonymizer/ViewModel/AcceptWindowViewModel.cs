@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using Sdl.Community.TmAnonymizer.Helpers;
+using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.TmAnonymizer.Ui;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
@@ -17,13 +21,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public AcceptWindowViewModel()
 		{
 			Description = Constants.AcceptDescription();
+			
 		}
 		public ICommand OkCommand => _okCommand ??
-		                                        (_okCommand = new CommandHandler(Ok, true));
+		                                        (_okCommand = new RelayCommand(Ok));
 
-		private void Ok()
+		private void Ok(object window)
 		{
-			
+			var settings = new Settings
+			{
+				Accepted = Accepted
+			};
+			File.WriteAllText(Constants.SettingsFilePath, JsonConvert.SerializeObject(settings));
+			var accept = (AcceptWindow) window;
+			accept.Close();
 		}
 		public string Description
 		{
