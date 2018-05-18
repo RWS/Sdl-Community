@@ -37,6 +37,9 @@
 					<Button Command="{Binding SelectTmCommand}" ToolTip="Select tm" Margin="5,0,0,0">
 						<Image Source="../Resources/TranslationMemory.ico"  />
 					</Button>
+					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Load Server Based tms" Margin="5,0,0,0">
+						<Image Source="../Resources/ServerBasedTranslationMemory.ico"  />
+					</Button>
 					<Button Command="{Binding RemoveCommand}"  ToolTip="Remove selected tms" Margin="5,0,0,0">
 						<Image Source="../Resources/Remove.ico"/>
 					</Button>

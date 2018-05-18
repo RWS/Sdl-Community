@@ -12,6 +12,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		private string _name;
 		private string _path;
 		private bool _shouldRemove;
+		private bool _isServerTm;
 
 		public string Name
 		{
@@ -50,6 +51,16 @@ namespace Sdl.Community.TmAnonymizer.Model
 			{
 				_shouldRemove = value;
 				OnPropertyChanged(nameof(ShouldRemove));
+			}
+		}
+		public bool IsServerTm
+		{
+
+			get => _isServerTm;
+			set
+			{
+				_isServerTm = value;
+				OnPropertyChanged(nameof(IsServerTm));
 			}
 		}
 	}

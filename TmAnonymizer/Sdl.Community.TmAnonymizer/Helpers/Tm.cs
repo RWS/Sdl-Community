@@ -19,6 +19,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		{
 			var tm =
 				new FileBasedTranslationMemory(tmPath);
+			
 			var tmIterator = new RegularIterator();
 
 			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);

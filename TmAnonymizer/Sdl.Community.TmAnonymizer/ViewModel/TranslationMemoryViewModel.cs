@@ -10,6 +10,10 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.TmAnonymizer.Studio;
+using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 using DataFormats = System.Windows.Forms.DataFormats;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -23,6 +27,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _selectTmCommand;
 		private ICommand _selectAllCommand;
 		private ICommand _dragEnterCommand;
+		private ICommand _loadServerTmCommand;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
 
 		public ObservableCollection<TmFile> TmsCollection
@@ -63,6 +68,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand DragEnterCommand => _dragEnterCommand ??
 		                                    (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
+		public ICommand LoadServerTmCommand => _loadServerTmCommand ??
+		                                       (_loadServerTmCommand = new CommandHandler(ShowLogInWindow, true));
+
+		private void ShowLogInWindow()
+		{
+			var loginWindow = new LoginWindow();
+			loginWindow.Show();
+		}
+
 		private void HandlePreviewDrop(object dropedFile)
 		{
 			var file = dropedFile as System.Windows.DataObject;
@@ -85,21 +99,70 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		
 		private void SelectTm()
 		{
-			var fileDialog = new OpenFileDialog();
-			if (fileDialog.ShowDialog() == DialogResult.OK)
-			{
-				var tmFilePath = fileDialog.FileName;
-				if (!string.IsNullOrEmpty(tmFilePath))
-				{
-					if (Path.GetExtension(tmFilePath).Equals(".sdltm"))
-					{
-						AddTm(tmFilePath);
-					}
-				}
-			}
-		}
+			
+			//var fileDialog = new OpenFileDialog();
+			//if (fileDialog.ShowDialog() == DialogResult.OK)
+			//{
+			//	var tmFilePath = fileDialog.FileName;
+			//	if (!string.IsNullOrEmpty(tmFilePath))
+			//	{
+			//		if (Path.GetExtension(tmFilePath).Equals(".sdltm"))
+			//		{
+			//			AddTm(tmFilePath);
+			//		}
+			//	}
+		
+			var uri = new Uri("http://gs2017dev.sdl.com");
 
-		private void Remove()
+			var translationProviderServer = new TranslationProviderServer(uri, false, "SDLCommunity", "Commun1tyRocks");
+			var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
+
+			//merge
+			//var tm = translationMemories[1];
+			//var languageDirections = tm.LanguageDirections;
+			//foreach (var languageDirection in languageDirections)
+			//{
+			//	var tmIterator = new RegularIterator();
+			//	var tus = languageDirection.GetTranslationUnits(ref tmIterator);
+
+			//	foreach (var tu in tus)
+			//	{
+			//		var sourceTranslationUnits = tu.SourceSegment.Elements.ToList();
+			//		foreach (var sourceTu in sourceTranslationUnits)
+			//		{
+			//			var visitor = new SegmentElementVisitor();
+			//			sourceTu.AcceptSegmentElementVisitor(visitor);
+			//			var segmentColection = visitor.SegmentColection;
+			//		}
+
+			//	}
+			//}
+
+			foreach (var tm in translationMemories)
+			{
+				var serverTm = new TmFile
+				{
+					Path = tm.Uri.AbsoluteUri,
+					Name = tm.Name,
+					IsServerTm = true
+				};
+				TmsCollection.Add(serverTm);
+			}
+			//var languageDirections = tm.LanguageDirections;
+				//foreach (var languageDirection in languageDirections)
+				//{
+				//	var tmIterator = new RegularIterator();
+				//	var tu = languageDirection.GetTranslationUnits(ref tmIterator);
+				//}
+				//asa se seteaza pathul tmului
+				//	var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
+				//	var path = tmPath + "/" + tm.Name;
+				//	var test = translationProviderServer.GetTranslationMemory(path, TranslationMemoryProperties.All);
+
+				//}
+			}
+
+			private void Remove()
 		{
 			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation",MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
 			if (result == DialogResult.OK)
@@ -146,7 +209,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					Name = tmFileInfo.Name,
 					Path = tmFileInfo.FullName,
-					IsSelected = true
+					IsSelected = true,
+					IsServerTm = false
 				};
 				TmsCollection.Add(tmFile);
 			}

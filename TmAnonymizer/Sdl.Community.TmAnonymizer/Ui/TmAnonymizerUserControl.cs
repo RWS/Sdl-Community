@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.TmAnonymizer.Helpers;
+using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.Ui
 {
@@ -17,6 +19,8 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		public TmAnonymizerUserControl()
 		{
 			InitializeComponent();
+			//var tm = new ServerBasedTranslationMemory(translationProviderServer);
+
 			if (!Directory.Exists(Constants.SettingsFolderPath))
 			{
 				Directory.CreateDirectory(Constants.SettingsFolderPath);

@@ -150,6 +150,9 @@
     <Compile Include="Ui\CustomFields.xaml.cs">
       <DependentUpon>CustomFields.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\MainViewControl.xaml.cs">
       <DependentUpon>MainViewControl.xaml</DependentUpon>
     </Compile>
@@ -170,6 +173,7 @@
     </Compile>
     <Compile Include="ViewModel\AcceptWindowViewModel.cs" />
     <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
+    <Compile Include="ViewModel\LoginWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
@@ -177,6 +181,7 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
     <Resource Include="Resources\TranslationMemory.ico" />
@@ -206,6 +211,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\CustomFields.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
