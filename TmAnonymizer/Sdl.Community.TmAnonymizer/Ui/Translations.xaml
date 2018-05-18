@@ -25,19 +25,15 @@
 			<RowDefinition Height="Auto" MaxHeight="300" />
 			<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="2*" />
-		</Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" Grid.Column="0" Margin="15,5,0,5">Please rules you want to apply</TextBlock>
-		<CheckBox  Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<DataGrid Grid.Row="2" Grid.Column="0" Style="{DynamicResource DgHeaderStyle}" 
+
+		<TextBlock Grid.Row="0" Margin="15,5,0,5">Please rules you want to apply</TextBlock>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
-				  MaxHeight="300"
 		          Margin="5,10" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
@@ -74,8 +70,10 @@
 				</DataGridTextColumn>
 			</DataGrid.Columns>
 		</DataGrid>
-		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">
+		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import rules" Command="{Binding ImportCommand}"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export rules" Command="{Binding ExportCommand}"></Button>
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
