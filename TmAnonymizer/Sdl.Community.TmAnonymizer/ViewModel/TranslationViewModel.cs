@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.TmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
@@ -22,11 +23,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ObservableCollection<Rule> _rules;
 		private Rule _selectedItem;
 		private bool _selectAll;
-		private bool _selectAllResults;
+		//private bool _selectAllResults;
 		private ICommand _selectAllCommand;
 		private ICommand _previewCommand;
-		private ICommand _applyCommand;
-		private ICommand _selectAllResultsCommand;
+		//private ICommand _applyCommand;
+		//private ICommand _selectAllResultsCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 
@@ -41,56 +42,56 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
-		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+		//public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 
-		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
-		                                    (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+		//public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
+		//                                    (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 
-		private void SelectResults()
-		{
-			foreach (var result in SourceSearchResults)
-			{
-				result.TuSelected = SelectAllResults;
-			}
-		}
+		//private void SelectResults()
+		//{
+		//	foreach (var result in SourceSearchResults)
+		//	{
+		//		result.TuSelected = SelectAllResults;
+		//	}
+		//}
 
-		private void ApplyChanges()
-		{
-			BackupTm();
-			var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
-			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+		//private void ApplyChanges()
+		//{
+		//	BackupTm();
+		//	var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
+		//	var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			
-			foreach (var selectedResult in selectedSearchResult)
-			{
-				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
-				{
-					var tuToAnonymize =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText));
-					if (tuToAnonymize != null)
-					{
-						// if there is an tm with the same path add translation units to that tm
-						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
-						if (anonymizeTu != null)
-						{
-							anonymizeTu.TranslationUnits.Add(tuToAnonymize);
-						}
-						else
-						{
-							var anonymizeTm = new AnonymizeTranslationMemory
-							{
-								TranslationUnits = new List<TranslationUnit>(),
-								TmPath = anonymizeUnits.TmPath
-							};
-							anonymizeTm.TranslationUnits.Add(tuToAnonymize);
-							tusToAnonymize.Add(anonymizeTm);
-						}
-					}
+		//	foreach (var selectedResult in selectedSearchResult)
+		//	{
+		//		foreach (var anonymizeUnits in _anonymizeTranslationMemories)
+		//		{
+		//			var tuToAnonymize =
+		//				anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText));
+		//			if (tuToAnonymize != null)
+		//			{
+		//				// if there is an tm with the same path add translation units to that tm
+		//				var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
+		//				if (anonymizeTu != null)
+		//				{
+		//					anonymizeTu.TranslationUnits.Add(tuToAnonymize);
+		//				}
+		//				else
+		//				{
+		//					var anonymizeTm = new AnonymizeTranslationMemory
+		//					{
+		//						TranslationUnits = new List<TranslationUnit>(),
+		//						TmPath = anonymizeUnits.TmPath
+		//					};
+		//					anonymizeTm.TranslationUnits.Add(tuToAnonymize);
+		//					tusToAnonymize.Add(anonymizeTm);
+		//				}
+		//			}
 					
-				}
-			}
-			Tm.AnonymizeTu(tusToAnonymize);
-			RemoveSelectedTusToAnonymize();
-		}
+		//		}
+		//	}
+		//	Tm.AnonymizeTu(tusToAnonymize);
+		//	RemoveSelectedTusToAnonymize();
+		//}
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
@@ -108,31 +109,31 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
-		private void BackupTm()
-		{
-			var backupFolderPath = Constants.TmBackupPath;
-			if (!Directory.Exists(backupFolderPath))
-			{
-				Directory.CreateDirectory(backupFolderPath);
-			}
-			foreach (var tm in _tmsCollection.Where(t=>t.IsSelected))
-			{
-				var tmInfo = new FileInfo(tm.Path);
-				var backupFilePath = Path.Combine(backupFolderPath, tm.Name);
-				if (!File.Exists(backupFilePath))
-				{
-					tmInfo.CopyTo(backupFilePath, false);
-				}
-			}
-		}
-		private void RemoveSelectedTusToAnonymize()
-		{
-			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
-			{
-				SourceSearchResults.Remove(searchResult);
-			}
+		//private void BackupTm()
+		//{
+		//	var backupFolderPath = Constants.TmBackupPath;
+		//	if (!Directory.Exists(backupFolderPath))
+		//	{
+		//		Directory.CreateDirectory(backupFolderPath);
+		//	}
+		//	foreach (var tm in _tmsCollection.Where(t=>t.IsSelected))
+		//	{
+		//		var tmInfo = new FileInfo(tm.Path);
+		//		var backupFilePath = Path.Combine(backupFolderPath, tm.Name);
+		//		if (!File.Exists(backupFilePath))
+		//		{
+		//			tmInfo.CopyTo(backupFilePath, false);
+		//		}
+		//	}
+		//}
+		//private void RemoveSelectedTusToAnonymize()
+		//{
+		//	foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
+		//	{
+		//		SourceSearchResults.Remove(searchResult);
+		//	}
 
-		}
+		//}
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
@@ -146,6 +147,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					_anonymizeTranslationMemories.Add(tus);
 				}
 			}
+			var previewWindow = new PreviewWindow();
+			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults,_anonymizeTranslationMemories,_tmsCollection);
+			previewWindow.DataContext = previewViewModel;
+			previewWindow.Show();
 		}
 
 		private List<Rule> GetSelectedRules()
@@ -173,20 +178,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
-		public bool SelectAllResults
-		{
-			get => _selectAllResults;
+		//public bool SelectAllResults
+		//{
+		//	get => _selectAllResults;
 
-			set
-			{
-				if (Equals(value, _selectAllResults))
-				{
-					return;
-				}
-				_selectAllResults = value;
-				OnPropertyChanged(nameof(SelectAllResults));
-			}
-		}
+		//	set
+		//	{
+		//		if (Equals(value, _selectAllResults))
+		//		{
+		//			return;
+		//		}
+		//		_selectAllResults = value;
+		//		OnPropertyChanged(nameof(SelectAllResults));
+		//	}
+		//}
 		public ObservableCollection<SourceSearchResult> SourceSearchResults
 		{
 			get => _sourceSearchResults;

@@ -24,9 +24,8 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="*" />
-		    <ColumnDefinition Width="2*" />
-	    </Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />
+		</Grid.ColumnDefinitions>
 		<TextBlock Grid.Row="0" Grid.Column="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
 		<DockPanel Grid.Row="1" Grid.Column="0" Margin="5,10,0,5" >
 			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">

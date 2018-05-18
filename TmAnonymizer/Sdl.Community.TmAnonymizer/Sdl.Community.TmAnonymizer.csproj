@@ -156,6 +156,9 @@
     <Compile Include="Ui\MainViewControl.xaml.cs">
       <DependentUpon>MainViewControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\PreviewWindow.xaml.cs">
+      <DependentUpon>PreviewWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\SystemFields.xaml.cs">
       <DependentUpon>SystemFields.xaml</DependentUpon>
     </Compile>
@@ -175,6 +178,7 @@
     <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
     <Compile Include="ViewModel\LoginWindowViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\PreviewWindowViewModel.cs" />
     <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
     <Compile Include="ViewModel\TranslationViewModel.cs" />
@@ -219,6 +223,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\MainViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\PreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
