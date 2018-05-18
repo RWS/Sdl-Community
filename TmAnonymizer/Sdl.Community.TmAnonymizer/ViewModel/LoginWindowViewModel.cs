@@ -8,5 +8,21 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 {
 	public class LoginWindowViewModel:ViewModelBase
 	{
+		private string _url;
+
+		public string Url
+		{
+			get => _url;
+
+			set
+			{
+				if (Equals(value, _url))
+				{
+					return;
+				}
+				_url = value;
+				OnPropertyChanged(nameof(Url));
+			}
+		}
 	}
 }

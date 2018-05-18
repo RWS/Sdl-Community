@@ -7,12 +7,14 @@
              mc:Ignorable="d" 
 			 Title="Login"
         Width="400"
-        Height="400"
+        Height="300"
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -28,16 +30,15 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" FontFamily="Segoe UI">Please fill following information:</TextBlock>
-		<TextBlock Grid.Row="1" Grid.Column="0" FontFamily="Segoe UI"> Url:</TextBlock>
-		<TextBox Grid.Row="1" Grid.Column="1" FontFamily="Segoe UI"> </TextBox>
-		<TextBlock Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI"> User name:</TextBlock>
-		<TextBox Grid.Row="2" Grid.Column="1" FontFamily="Segoe UI"></TextBox>
-		<TextBlock Grid.Row="3" Grid.Column="0" FontFamily="Segoe UI"> Password:</TextBlock>
-		<TextBox Grid.Row="3" Grid.Column="1" FontFamily="Segoe UI"></TextBox>
+		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}">Please fill following information:</TextBlock>
+		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url:</TextBlock>
+		<TextBox Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}"> </TextBox>
+		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name:</TextBlock>
+		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}"></TextBox>
+		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password:</TextBlock>
+		<TextBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource TextBoxStyle}"></TextBox>
 		<Button  Grid.Row="4" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 				 Margin="102,41,10,41" Content="Ok" Command="{Binding OkCommand}" 
 				 CommandParameter="{Binding ElementName=Accept}" Width="Auto" FontFamily="Segoe UI"></Button>
-
 	</Grid>
 </Window>

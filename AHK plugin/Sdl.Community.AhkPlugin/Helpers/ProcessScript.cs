@@ -207,12 +207,14 @@ namespace Sdl.Community.AhkPlugin.Helpers
 		public static async Task<bool> ScriptContentAlreadyExist(Script script)
 		{
 			//remove spaces from content
-			script.Text = Regex.Replace(script.Text, @"\s+", " ");
+			var scriptText = script.Text;
+			scriptText = Regex.Replace(scriptText, @"\s+", " ");
 			var savedScripts = await MasterScriptDb.GetScriptsFromMaster();
 			foreach (var loadedScript in savedScripts)
 			{
-				loadedScript.Text = Regex.Replace(loadedScript.Text, @"\s+", " ");
-				var isEquals = string.Equals(script.Text, loadedScript.Text);
+				var loadedScriptText = loadedScript.Text;
+				loadedScriptText = Regex.Replace(loadedScriptText, @"\s+", " ");
+				var isEquals = string.Equals(scriptText, loadedScriptText);
 				if (isEquals)
 				{
 					return true;

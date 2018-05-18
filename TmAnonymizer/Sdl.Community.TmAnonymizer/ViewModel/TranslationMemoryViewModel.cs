@@ -7,7 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Studio;
@@ -74,7 +76,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void ShowLogInWindow()
 		{
 			var loginWindow = new LoginWindow();
+			//if we don't set element host we are not able to type in text box
+			ElementHost.EnableModelessKeyboardInterop(loginWindow);
 			loginWindow.Show();
+			Dispatcher.Run();
 		}
 
 		private void HandlePreviewDrop(object dropedFile)
