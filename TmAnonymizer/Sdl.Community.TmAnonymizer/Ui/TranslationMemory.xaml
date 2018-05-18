@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
 			 xmlns:helpers ="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" >
 	
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -15,19 +15,17 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	
-	<Grid>
+
+	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-	    <Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" Grid.Column="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
-		<DockPanel Grid.Row="1" Grid.Column="0" Margin="5,10,0,5" >
+
+		<TextBlock Grid.Row="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
+		<DockPanel Grid.Row="1" Margin="5,10,0,5" >
 			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">
 				<ToolBar Style="{StaticResource Toolbar}" Background="WhiteSmoke" OverflowMode="Never" DockPanel.Dock="Top" >
 					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
@@ -50,8 +48,8 @@
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>
-		<CheckBox  Grid.Row="2" Grid.Column="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<DataGrid Grid.Row="3" Grid.Column="0" Style="{DynamicResource DgHeaderStyle}" 
+		<CheckBox  Grid.Row="2" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
 				  MinWidth="100"

@@ -18,7 +18,7 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid>
+	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto"  MaxHeight="300"/>

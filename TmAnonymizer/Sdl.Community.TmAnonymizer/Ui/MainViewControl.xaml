@@ -6,23 +6,25 @@
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              xmlns:viewModels="clr-namespace:Sdl.Community.TmAnonymizer.ViewModel"
              mc:Ignorable="d" 
+			
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
 			<local:TranslationMemory></local:TranslationMemory>
 		</DataTemplate>
 	</UserControl.Resources>
-	<Grid>
+	<Grid  Name="ParentGrid">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="2*" />
+			<ColumnDefinition Width="*" />
 		</Grid.ColumnDefinitions>
-		<ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding TmViewModel}"></ContentControl>
+		<ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" ></ContentControl>
 
-		<TabControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TabItems}" MaxHeight="500" SelectedIndex="{Binding Selected}" Margin="5,20,0,5" >
+		<TabControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TabItems}"
+		            Height="{Binding ParentGrid}" SelectedIndex="{Binding Selected}" Margin="10,10" >
 			<TabControl.Resources>
 				<DataTemplate DataType="{x:Type viewModels:TranslationViewModel}">
 					<local:Translations></local:Translations>
