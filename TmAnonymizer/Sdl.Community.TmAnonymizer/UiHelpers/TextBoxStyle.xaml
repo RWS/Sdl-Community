@@ -9,4 +9,9 @@
 		<Setter Property="AcceptsReturn" Value="True"></Setter>
 		<Setter Property="Foreground" Value="Black"></Setter>
 	</Style>
+	<Style x:Key="PasswordBoxStyle" TargetType="{x:Type PasswordBox}">
+		<Setter Property="Margin" Value="5,5,10,5"/>
+		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
+		<Setter Property="Foreground" Value="Black"></Setter>
+	</Style>
 </ResourceDictionary>

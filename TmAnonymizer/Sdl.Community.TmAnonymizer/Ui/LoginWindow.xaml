@@ -30,13 +30,13 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}">Please fill following information:</TextBlock>
+		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url:</TextBlock>
 		<TextBox Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}"> </TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name:</TextBlock>
 		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password:</TextBlock>
-		<TextBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource TextBoxStyle}"></TextBox>
+		<PasswordBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
 		<Button  Grid.Row="4" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 				 Margin="102,41,10,41" Content="Ok" Command="{Binding OkCommand}" 
 				 CommandParameter="{Binding ElementName=Accept}" Width="Auto" FontFamily="Segoe UI"></Button>
