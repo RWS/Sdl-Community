@@ -34,11 +34,13 @@
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url:</TextBlock>
 		<TextBox Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}"> </TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name:</TextBlock>
-		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}"></TextBox>
+		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}" Text="{Binding UserName}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password:</TextBlock>
-		<PasswordBox Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
+		<PasswordBox Name="Password" Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
 		<Button  Grid.Row="4" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 				 Margin="102,41,10,41" Content="Ok" Command="{Binding OkCommand}" 
-				 CommandParameter="{Binding ElementName=Accept}" Width="Auto" FontFamily="Segoe UI"></Button>
+				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI">
+			
+		</Button>
 	</Grid>
 </Window>

@@ -24,7 +24,6 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		public LoginWindow()
 		{
 			InitializeComponent();
-			DataContext = new LoginWindowViewModel();
 		}
 	}
 }

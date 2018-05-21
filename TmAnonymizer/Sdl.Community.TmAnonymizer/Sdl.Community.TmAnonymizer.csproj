@@ -132,6 +132,7 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
+    <Compile Include="Model\Login.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Position.cs" />

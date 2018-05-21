@@ -76,6 +76,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void ShowLogInWindow()
 		{
 			var loginWindow = new LoginWindow();
+			var viewModel = new LoginWindowViewModel(loginWindow,TmsCollection);
+			loginWindow.DataContext = viewModel;
 			//if we don't set element host we are not able to type in text box
 			ElementHost.EnableModelessKeyboardInterop(loginWindow);
 			loginWindow.Show();
@@ -104,56 +106,43 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		
 		private void SelectTm()
 		{
-			
-			//var fileDialog = new OpenFileDialog();
-			//if (fileDialog.ShowDialog() == DialogResult.OK)
-			//{
-			//	var tmFilePath = fileDialog.FileName;
-			//	if (!string.IsNullOrEmpty(tmFilePath))
-			//	{
-			//		if (Path.GetExtension(tmFilePath).Equals(".sdltm"))
-			//		{
-			//			AddTm(tmFilePath);
-			//		}
-			//	}
-		
-			var uri = new Uri("http://gs2017dev.sdl.com");
 
-			var translationProviderServer = new TranslationProviderServer(uri, false, "SDLCommunity", "Commun1tyRocks");
-			var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
+			var fileDialog = new OpenFileDialog();
+			if (fileDialog.ShowDialog() == DialogResult.OK)
+			{
+				var tmFilePath = fileDialog.FileName;
+				if (!string.IsNullOrEmpty(tmFilePath))
+				{
+					if (Path.GetExtension(tmFilePath).Equals(".sdltm"))
+					{
+						AddTm(tmFilePath);
+					}
+				}
+			}
 
 			//merge
-			//var tm = translationMemories[1];
-			//var languageDirections = tm.LanguageDirections;
-			//foreach (var languageDirection in languageDirections)
-			//{
-			//	var tmIterator = new RegularIterator();
-			//	var tus = languageDirection.GetTranslationUnits(ref tmIterator);
+				//var tm = translationMemories[1];
+				//var languageDirections = tm.LanguageDirections;
+				//foreach (var languageDirection in languageDirections)
+				//{
+				//	var tmIterator = new RegularIterator();
+				//	var tus = languageDirection.GetTranslationUnits(ref tmIterator);
 
-			//	foreach (var tu in tus)
-			//	{
-			//		var sourceTranslationUnits = tu.SourceSegment.Elements.ToList();
-			//		foreach (var sourceTu in sourceTranslationUnits)
-			//		{
-			//			var visitor = new SegmentElementVisitor();
-			//			sourceTu.AcceptSegmentElementVisitor(visitor);
-			//			var segmentColection = visitor.SegmentColection;
-			//		}
+				//	foreach (var tu in tus)
+				//	{
+				//		var sourceTranslationUnits = tu.SourceSegment.Elements.ToList();
+				//		foreach (var sourceTu in sourceTranslationUnits)
+				//		{
+				//			var visitor = new SegmentElementVisitor();
+				//			sourceTu.AcceptSegmentElementVisitor(visitor);
+				//			var segmentColection = visitor.SegmentColection;
+				//		}
 
-			//	}
-			//}
+				//	}
+				//}
 
-			foreach (var tm in translationMemories)
-			{
-				var serverTm = new TmFile
-				{
-					Path = tm.Uri.AbsoluteUri,
-					Name = tm.Name,
-					IsServerTm = true
-				};
-				TmsCollection.Add(serverTm);
-			}
-			//var languageDirections = tm.LanguageDirections;
+
+				//var languageDirections = tm.LanguageDirections;
 				//foreach (var languageDirection in languageDirections)
 				//{
 				//	var tmIterator = new RegularIterator();
