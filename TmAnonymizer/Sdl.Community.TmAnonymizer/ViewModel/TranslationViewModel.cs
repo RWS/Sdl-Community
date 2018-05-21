@@ -86,7 +86,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 			}
 			var previewWindow = new PreviewWindow();
-			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults,_anonymizeTranslationMemories,_tmsCollection);
+			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults,_anonymizeTranslationMemories,
+				_tmsCollection,_translationMemoryViewModel);
 			previewWindow.DataContext = previewViewModel;
 			previewWindow.Show();
 		}

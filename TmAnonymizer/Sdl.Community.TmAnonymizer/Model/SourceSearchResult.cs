@@ -19,6 +19,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public object Document { get; set; }
 		public MatchResult MatchResult { get; set; }
 		public MatchResult TargetMatchResult { get; set; }
+		public bool IsServer { get; set; }
 		public bool TuSelected
 		{
 

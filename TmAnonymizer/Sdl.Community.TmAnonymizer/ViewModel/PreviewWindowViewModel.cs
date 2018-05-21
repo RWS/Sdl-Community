@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
@@ -18,13 +19,16 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
+		private TranslationMemoryViewModel _tmViewModel;
 		private ICommand _selectAllResultsCommand;
 		private ICommand _applyCommand;
 
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
-			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection)
+			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
+			TranslationMemoryViewModel tmViewModel)
 		{
 			_sourceSearchResults = searchResults;
+			_tmViewModel = tmViewModel;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
 		}
@@ -34,10 +38,32 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		private void ApplyChanges()
 		{
-			BackupTm();
 			var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+			//file base tms
+			var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
+			if (fileBasedSearchResult.Count > 0)
+			{
+				BackupTm();
+				tusToAnonymize =GetTranslationUnitsToAnonymize(fileBasedSearchResult);
+				Tm.AnonymizeFileBasedTu(tusToAnonymize);
+			}
+			//server based tms
+			var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
+			if (serverBasedSearchResult.Count > 0)
+			{
+				tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
+				var uri = new Uri(_tmViewModel.Credentials.Url);
+				var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
+					_tmViewModel.Credentials.Password);
+				Tm.AnonymizeServerBasedTu(translationProvider,tusToAnonymize);
+			}
+			RemoveSelectedTusToAnonymize();
+		}
 
+		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(List<SourceSearchResult> selectedSearchResult)
+		{
+			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			foreach (var selectedResult in selectedSearchResult)
 			{
 				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
@@ -66,8 +92,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 				}
 			}
-			Tm.AnonymizeTu(tusToAnonymize);
-			RemoveSelectedTusToAnonymize();
+			return tusToAnonymize;
 		}
 		private void RemoveSelectedTusToAnonymize()
 		{

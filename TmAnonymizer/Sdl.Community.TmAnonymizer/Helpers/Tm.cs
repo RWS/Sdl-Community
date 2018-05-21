@@ -39,6 +39,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							Positions = pi.GetPersonalDataPositions(sourceText)
 						},
 						TmFilePath = tmPath,
+						IsServer = false,
 						SegmentNumber = translationUnit.ResourceId.Id.ToString()
 					};
 					var targetText = translationUnit.TargetSegment.ToPlain();
@@ -87,6 +88,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 								Positions = pi.GetPersonalDataPositions(sourceText)
 							},
 							TmFilePath = tmPath,
+							IsServer = true,
 							SegmentNumber = translationUnit.ResourceId.Id.ToString()
 						};
 						var targetText = translationUnit.TargetSegment.ToPlain();
@@ -110,32 +112,36 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 		}
 
-		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, string tmPath,
+		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider,
 			List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
-			var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
-			var languageDirections = translationMemory.LanguageDirections;
-			foreach (var languageDirection in languageDirections)
+			foreach (var tuToAonymize in tusToAnonymize)
 			{
-				var tmIterator = new RegularIterator();
-				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-				foreach (var translationUnit in translationUnits)
+				var translationMemory = translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+				var languageDirections = translationMemory.LanguageDirections;
+				foreach (var languageDirection in languageDirections)
 				{
-					var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
-					var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-					if (elementsContainsTag)
+					foreach (var translationUnit in tuToAonymize.TranslationUnits)
 					{
-						AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
-					}
-					else
-					{
-						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+						var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+						var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+						if (elementsContainsTag)
+						{
+							AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+						}
+						else
+						{
+							AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+						}
+						languageDirection.UpdateTranslationUnit(translationUnit);
 					}
 				}
+
 			}
+			
 		}
 
-		public static void AnonymizeTu(List<AnonymizeTranslationMemory> tusToAnonymize)
+		public static void AnonymizeFileBasedTu(List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			foreach (var translationUnitPair in tusToAnonymize)
 			{
