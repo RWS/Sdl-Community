@@ -14,6 +14,7 @@ using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
@@ -27,10 +28,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _previewCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
-
-		public TranslationViewModel(ObservableCollection<TmFile> tmsCollection)
+		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
+		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
-			_tmsCollection = tmsCollection;
+			_translationMemoryViewModel = translationMemoryViewModel;
+			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 			_rules = Constants.GetDefaultRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
@@ -59,10 +61,25 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
-			foreach (var tm in selectedTms)
+			var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
+			var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+			var translationProvider = new TranslationProviderServer(uri, false, _translationMemoryViewModel.Credentials.UserName,
+				_translationMemoryViewModel.Credentials.Password);
+			
+			//get all tus for selected translation memories
+			foreach (var serverTm in serverTms)
 			{
-				//get all tus for selected translation memories
-				var tus= Tm.GetTranslationUnits(tm.Path, SourceSearchResults,GetSelectedRules());
+				var tus = Tm.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
+					SourceSearchResults, GetSelectedRules());
+				if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+				{
+					_anonymizeTranslationMemories.Add(tus);
+				}
+			}
+			//file based tms
+			foreach (var tm in selectedTms.Where(s=>!s.IsServerTm))
+			{
+				var tus= Tm.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults,GetSelectedRules());
 				if(!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
 				{
 					_anonymizeTranslationMemories.Add(tus);

@@ -31,6 +31,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
+		private Login _credentials;
 
 		public ObservableCollection<TmFile> TmsCollection
 		{
@@ -60,6 +61,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
+		public Login Credentials
+		{
+			get => _credentials;
+
+			set
+			{
+				if (Equals(value, _credentials))
+				{
+					return;
+				}
+				_credentials = value;
+				OnPropertyChanged(nameof(Credentials));
+			}
+		}
 		public ICommand SelectFoldersCommand => _selectFoldersCommand ??
 		                                        (_selectFoldersCommand = new CommandHandler(SelectFolder, true));
 		public ICommand RemoveCommand => _removeCommand ??
@@ -78,11 +93,27 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			var loginWindow = new LoginWindow();
 			var viewModel = new LoginWindowViewModel(loginWindow,TmsCollection);
 			loginWindow.DataContext = viewModel;
+			viewModel.PropertyChanged += ViewModel_PropertyChanged;
 			//if we don't set element host we are not able to type in text box
 			ElementHost.EnableModelessKeyboardInterop(loginWindow);
 			loginWindow.Show();
 			Dispatcher.Run();
+			
 		}
+
+		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			var viewModel = (LoginWindowViewModel) sender;
+			
+			if(!string.IsNullOrEmpty(viewModel?.Credentials.Password)&&
+			   !string.IsNullOrEmpty(viewModel.Credentials.Url)&&
+			   !string.IsNullOrEmpty(viewModel.Credentials.UserName))
+			{
+				Credentials = viewModel.Credentials;
+			}
+		}
+
+
 
 		private void HandlePreviewDrop(object dropedFile)
 		{

@@ -17,18 +17,31 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	{
 		private string _url;
 		private string _userName;
+		private string _password;
 		private ICommand _okCommand;
 		private readonly LoginWindow _window;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
+		private Login _credentials;
+	
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
+			_credentials = new Login();
 			_window = window;
 			_tmsCollection = tmsCollection;
 		}
 	
 		public ICommand OkCommand => _okCommand ??
 		                             (_okCommand = new RelayCommand(Ok));
+		public Login Credentials
+		{
+			get => _credentials;
+			set
+			{
+				_credentials = value;
+				OnPropertyChanged(nameof(Credentials));
+			}
+		}
 
 		private void Ok(object parameter)
 		{
@@ -41,7 +54,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					Url = Url,
 					UserName = UserName
 				};
-
+				Credentials = login;
 				GetServerTms(login);
 			}
 		}
@@ -54,9 +67,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 			foreach (var tm in translationMemories)
 			{
+				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
+				var path = tmPath + "/" + tm.Name;
 				var serverTm = new TmFile
 				{
-					Path = tm.Uri.AbsoluteUri,
+					Path = path,
 					Name = tm.Name,
 					IsServerTm = true
 				};
@@ -93,5 +108,19 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(UserName));
 			}
 		}
+		//public string Password
+		//{
+		//	get => _password;
+
+		//	set
+		//	{
+		//		if (Equals(value, _password))
+		//		{
+		//			return;
+		//		}
+		//		_password = value;
+		//		OnPropertyChanged(nameof(Password));
+		//	}
+		//}
 	}
 }

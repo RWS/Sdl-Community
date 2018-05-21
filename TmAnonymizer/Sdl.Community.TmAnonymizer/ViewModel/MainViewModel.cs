@@ -33,7 +33,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					Name = "Translations",
 					Header = "Translations",
-					ViewModel =  new TranslationViewModel(_tmViewModel.TmsCollection)
+					ViewModel =  new TranslationViewModel(_tmViewModel)
 				},
 				new TabItem
 				{

@@ -14,7 +14,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
 	public static class Tm
 	{
-		public static AnonymizeTranslationMemory GetTranslationUnits(string tmPath,
+		public static AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(string tmPath,
 			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
 		{
 			var tm =
@@ -60,6 +60,81 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			};
 		}
 
+		public static AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TranslationProviderServer translationProvider,string tmPath,
+			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
+		{
+			var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
+			var languageDirections = translationMemory.LanguageDirections;
+			var pi = new PersonalInformation(selectedRules);
+			var allTusForLanguageDirections = new List<TranslationUnit>();
+
+			foreach (var languageDirection in languageDirections)
+			{
+				var tmIterator = new RegularIterator();
+				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
+				allTusForLanguageDirections.AddRange(translationUnits);
+				foreach (var translationUnit in translationUnits)
+				{
+					var sourceText = translationUnit.SourceSegment.ToPlain();
+					if (pi.ContainsPi(sourceText))
+					{
+						var searchResult = new SourceSearchResult
+						{
+							Id = translationUnit.ResourceId.Guid.ToString(),
+							SourceText = sourceText,
+							MatchResult = new MatchResult
+							{
+								Positions = pi.GetPersonalDataPositions(sourceText)
+							},
+							TmFilePath = tmPath,
+							SegmentNumber = translationUnit.ResourceId.Id.ToString()
+						};
+						var targetText = translationUnit.TargetSegment.ToPlain();
+						if (pi.ContainsPi(targetText))
+						{
+							searchResult.TargetText = targetText;
+							searchResult.TargetMatchResult = new MatchResult
+							{
+								Positions = pi.GetPersonalDataPositions(targetText)
+							};
+						}
+						sourceSearchResult.Add(searchResult);
+					}
+				}
+			}
+			return new AnonymizeTranslationMemory
+			{
+				TmPath = tmPath,
+				TranslationUnits = allTusForLanguageDirections
+			};
+
+		}
+
+		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, string tmPath,
+			List<AnonymizeTranslationMemory> tusToAnonymize)
+		{
+			var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
+			var languageDirections = translationMemory.LanguageDirections;
+			foreach (var languageDirection in languageDirections)
+			{
+				var tmIterator = new RegularIterator();
+				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
+				foreach (var translationUnit in translationUnits)
+				{
+					var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+					var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+					if (elementsContainsTag)
+					{
+						AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+					}
+					else
+					{
+						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+					}
+				}
+			}
+		}
+
 		public static void AnonymizeTu(List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			foreach (var translationUnitPair in tusToAnonymize)
@@ -73,7 +148,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 					if (elementsContainsTag)
 					{
-						AnunymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+						AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
 					}
 					else
 					{
@@ -125,7 +200,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		}
 
-		private static void AnunymizeSegmentsWithTags(TranslationUnit translationUnit,
+		private static void AnonymizeSegmentsWithTags(TranslationUnit translationUnit,
 			List<SegmentElement> translationElements, bool isSource)
 		{
 			for (var i = 0; i < translationElements.Count; i++)
