@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Newtonsoft.Json;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Models;
@@ -97,7 +98,13 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
+			var encryptSettings = GetSetting<AnonymizerSettings>();
+			//process only if the decryption key matches encryption key
+			if (encryptSettings.EncryptionKey.Equals(_settings.EncryptionKey))
+			{
+				multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
+			}
+			
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)

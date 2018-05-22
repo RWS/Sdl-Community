@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
@@ -12,6 +13,13 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		public DecryptSettingsControl()
 		{
 			InitializeComponent();
+			encryptionBox.LostFocus += EncryptionBox_LostFocus;
+		}
+
+		private void EncryptionBox_LostFocus(object sender, EventArgs e)
+		{
+			messageLbl.Visible = false;
+			CheckIfKeysMatch();
 		}
 
 		public string EncryptionKey
@@ -38,10 +46,20 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
 			}
-			//SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
+			CheckIfKeysMatch();
 			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
 
+		private void CheckIfKeysMatch()
+		{
+			var anonymizerKey = Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").EncryptionKey;
+			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(encryptionBox.Text, Constants.Key)))
+			{
+				messageLbl.Visible = true;
+				messageLbl.Text = @"Decryption key doesn't match with the encryption key.";
+				messageLbl.ForeColor = Color.Crimson;
+			}
+		}
 		public DecryptSettings Settings { get ; set ; }
 	}
 }

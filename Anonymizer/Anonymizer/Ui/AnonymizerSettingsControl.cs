@@ -135,23 +135,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		{
 			Settings = settings;
 			RegexPatterns= Settings.RegexPatterns;
-			//if (!string.IsNullOrWhiteSpace(Settings.EncryptionKey))
-			//{
-			//	;//AnonymizeData.DecryptData(Settings.EncryptionKey, Constants.Key);
-			//																					 //SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, AnonymizeData.DecryptData(Settings.EncryptionKey, Constants.Key));
-			//}
-			//else
-			//{
-			//	SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
-			//}
 			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
 			if (!string.IsNullOrEmpty(key))
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
 			}
-			
-
-
 			SettingsBinder.DataBindSetting<bool>(selectAll, "Checked", Settings, nameof(Settings.SelectAll));
 			SettingsBinder.DataBindSetting<BindingList<RegexPattern>>(expressionsGrid, "DataSource", Settings,
 				nameof(Settings.RegexPatterns));

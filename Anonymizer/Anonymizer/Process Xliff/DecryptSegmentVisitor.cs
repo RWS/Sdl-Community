@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using DocumentFormat.OpenXml.Wordprocessing;
 using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
