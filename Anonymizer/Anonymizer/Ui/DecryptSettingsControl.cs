@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
+using Sdl.Community.projectAnonymizer.Helpers;
+using Sdl.Community.projectAnonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
@@ -31,7 +33,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		private void SetSettings(DecryptSettings settings)
 		{
 			Settings = settings;
-			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
+			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
+			if (!string.IsNullOrEmpty(key))
+			{
+				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
+			}
+			//SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
 			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
 

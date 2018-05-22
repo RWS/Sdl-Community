@@ -11,6 +11,8 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			@"SDL Community\Anonymizer Projects Accept");
 
+		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
+
 		public static string AcceptFilePath = Path.Combine(AcceptFolderPath, "accept.json");
 		public static BindingList<RegexPattern> GetDefaultRegexPatterns()
 		{

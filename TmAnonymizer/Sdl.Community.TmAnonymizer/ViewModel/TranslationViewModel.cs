@@ -2,19 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Ui;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -31,6 +24,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
+
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_translationMemoryViewModel = translationMemoryViewModel;

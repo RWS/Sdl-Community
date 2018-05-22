@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.Community.projectAnonymizer.Models;
+using Sdl.Community.projectAnonymizer.Process_Xliff;
 using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
@@ -134,7 +135,23 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		{
 			Settings = settings;
 			RegexPatterns= Settings.RegexPatterns;
-			SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
+			//if (!string.IsNullOrWhiteSpace(Settings.EncryptionKey))
+			//{
+			//	;//AnonymizeData.DecryptData(Settings.EncryptionKey, Constants.Key);
+			//																					 //SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, AnonymizeData.DecryptData(Settings.EncryptionKey, Constants.Key));
+			//}
+			//else
+			//{
+			//	SettingsBinder.DataBindSetting<string>(encryptionBox, "Text", Settings, nameof(Settings.EncryptionKey));
+			//}
+			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
+			if (!string.IsNullOrEmpty(key))
+			{
+				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
+			}
+			
+
+
 			SettingsBinder.DataBindSetting<bool>(selectAll, "Checked", Settings, nameof(Settings.SelectAll));
 			SettingsBinder.DataBindSetting<BindingList<RegexPattern>>(expressionsGrid, "DataSource", Settings,
 				nameof(Settings.RegexPatterns));

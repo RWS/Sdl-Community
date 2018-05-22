@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.projectAnonymizer.Batch_Task;
+using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 
@@ -41,6 +42,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
 					try
 					{
+						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
 						var decryptedText = AnonymizeData.DecryptData(encryptedText, _decryptSettings.EncryptionKey);
 						if (!_decryptSettings.IgnoreEncrypted)
 						{
@@ -80,7 +82,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					//if we catch an exception that means is only a taged text is not encrypted
 					try
 					{
-
+						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
 						var decryptedText = _factory.CreateText(
 							_propertiesFactory.CreateTextProperties(
 								AnonymizeData.DecryptData(tag.Properties.TagContent, _decryptSettings.EncryptionKey)));
