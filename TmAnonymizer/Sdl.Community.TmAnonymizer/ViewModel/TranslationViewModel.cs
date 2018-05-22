@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.TmAnonymizer.Helpers;
@@ -15,6 +16,7 @@ using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
@@ -61,35 +63,49 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private void PreviewChanges()
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
-			var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
-			var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-			var translationProvider = new TranslationProviderServer(uri, false, _translationMemoryViewModel.Credentials.UserName,
-				_translationMemoryViewModel.Credentials.Password);
+			var selectedRulesCount = RulesCollection.Count(r => r.IsSelected);
+			if (selectedTms.Count > 0 && selectedRulesCount > 0)
+			{
+				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					//get all tus for selected translation memories
+					foreach (var serverTm in serverTms)
+					{
+						var tus = Tm.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
+							SourceSearchResults, GetSelectedRules());
+						if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+						{
+							_anonymizeTranslationMemories.Add(tus);
+						}
+					}
+				}
 			
-			//get all tus for selected translation memories
-			foreach (var serverTm in serverTms)
-			{
-				var tus = Tm.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
-					SourceSearchResults, GetSelectedRules());
-				if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+				//file based tms
+				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					_anonymizeTranslationMemories.Add(tus);
+					var tus = Tm.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
+					if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+					{
+						_anonymizeTranslationMemories.Add(tus);
+					}
 				}
+				var previewWindow = new PreviewWindow();
+				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
+					_tmsCollection, _translationMemoryViewModel);
+				previewWindow.DataContext = previewViewModel;
+				previewWindow.Show();
 			}
-			//file based tms
-			foreach (var tm in selectedTms.Where(s=>!s.IsServerTm))
+			else
 			{
-				var tus= Tm.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults,GetSelectedRules());
-				if(!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
-				{
-					_anonymizeTranslationMemories.Add(tus);
-				}
+				MessageBox.Show(@"Please select at least one translation memory and a rule to preview the changes",
+					"", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
-			var previewWindow = new PreviewWindow();
-			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults,_anonymizeTranslationMemories,
-				_tmsCollection,_translationMemoryViewModel);
-			previewWindow.DataContext = previewViewModel;
-			previewWindow.Show();
+
 		}
 
 		private List<Rule> GetSelectedRules()
