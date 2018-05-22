@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
@@ -22,11 +23,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private readonly LoginWindow _window;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private Login _credentials;
+		private string _message;
 	
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
 			_credentials = new Login();
+			_message = string.Empty;
 			_window = window;
 			_tmsCollection = tmsCollection;
 		}
@@ -42,44 +45,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(Credentials));
 			}
 		}
-
-		private void Ok(object parameter)
+		public string Message
 		{
-			var passwordBox = parameter as PasswordBox;
-			if (passwordBox != null)
+			get => _message;
+			set
 			{
-				var login = new Login
-				{
-					Password = passwordBox.Password,
-					Url = Url,
-					UserName = UserName
-				};
-				Credentials = login;
-				GetServerTms(login);
+				_message = value;
+				OnPropertyChanged(nameof(Message));
 			}
 		}
-
-		private void GetServerTms(Login login)
-		{
-			var uri = new Uri(login.Url);
-			var translationProviderServer = new TranslationProviderServer(uri, false, login.UserName, login.Password);
-			var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
-
-			foreach (var tm in translationMemories)
-			{
-				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
-				var path = tmPath + "/" + tm.Name;
-				var serverTm = new TmFile
-				{
-					Path = path,
-					Name = tm.Name,
-					IsServerTm = true
-				};
-				_tmsCollection.Add(serverTm);
-			}
-			_window.Close();
-		}
-
 		public string Url
 		{
 			get => _url;
@@ -108,19 +82,76 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(UserName));
 			}
 		}
-		//public string Password
-		//{
-		//	get => _password;
 
-		//	set
-		//	{
-		//		if (Equals(value, _password))
-		//		{
-		//			return;
-		//		}
-		//		_password = value;
-		//		OnPropertyChanged(nameof(Password));
-		//	}
-		//}
+		private void Ok(object parameter)
+		{
+			var passwordBox = parameter as PasswordBox;
+			if (passwordBox != null)
+			{
+				var login = new Login
+				{
+					Password = passwordBox.Password,
+					Url = Url,
+					UserName = UserName
+				};
+				Credentials = login;
+				if (IsValid())
+				{
+					Message = "Please wait";
+					GetServerTms(login);
+				}
+				else
+				{
+					Message = "All fields are required!";
+				}
+				
+			}
+		}
+
+		private void GetServerTms(Login login)
+		{
+			try
+			{
+				var uri = new Uri(login.Url);
+				var translationProviderServer = new TranslationProviderServer(uri, false, login.UserName, login.Password);
+				var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
+
+				foreach (var tm in translationMemories)
+				{
+					var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
+					var path = tmPath + "/" + tm.Name;
+					var serverTm = new TmFile
+					{
+						Path = path,
+						Name = tm.Name,
+						IsServerTm = true
+					};
+					_tmsCollection.Add(serverTm);
+				}
+				_window.Close();
+			}
+			catch (Exception exception)
+			{
+				if (exception.Message.Equals("One or more errors occurred."))
+				{
+					if (exception.InnerException != null)
+					{
+						Message = exception.InnerException.Message;
+					}
+				}
+				else
+				{
+					Message = exception.Message;
+				}
+			}
+		}
+
+		private bool IsValid()
+		{
+			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
+			       !string.IsNullOrEmpty(Credentials.UserName);
+		}
+	
+	
 	}
 }
