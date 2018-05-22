@@ -18,7 +18,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	{
 		private string _url;
 		private string _userName;
-		private string _password;
 		private ICommand _okCommand;
 		private readonly LoginWindow _window;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
@@ -104,7 +103,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					Message = "All fields are required!";
 				}
-				
 			}
 		}
 
@@ -120,13 +118,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
 					var path = tmPath + "/" + tm.Name;
-					var serverTm = new TmFile
+					var tmAlreadyExist = _tmsCollection.Any(t => t.Path.Equals(path));
+					if (!tmAlreadyExist)
 					{
-						Path = path,
-						Name = tm.Name,
-						IsServerTm = true
-					};
-					_tmsCollection.Add(serverTm);
+						var serverTm = new TmFile
+						{
+							Path = path,
+							Name = tm.Name,
+							IsServerTm = true
+						};
+						_tmsCollection.Add(serverTm);
+					}
 				}
 				_window.Close();
 			}
@@ -151,7 +153,5 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
 			       !string.IsNullOrEmpty(Credentials.UserName);
 		}
-	
-	
 	}
 }

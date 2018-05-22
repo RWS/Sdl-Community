@@ -113,8 +113,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
-
-
 		private void HandlePreviewDrop(object dropedFile)
 		{
 			var file = dropedFile as System.Windows.DataObject;
@@ -134,10 +132,9 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 			}
 		}
-		
+
 		private void SelectTm()
 		{
-
 			var fileDialog = new OpenFileDialog();
 			if (fileDialog.ShowDialog() == DialogResult.OK)
 			{
@@ -150,44 +147,9 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					}
 				}
 			}
+		}
 
-			//merge
-				//var tm = translationMemories[1];
-				//var languageDirections = tm.LanguageDirections;
-				//foreach (var languageDirection in languageDirections)
-				//{
-				//	var tmIterator = new RegularIterator();
-				//	var tus = languageDirection.GetTranslationUnits(ref tmIterator);
-
-				//	foreach (var tu in tus)
-				//	{
-				//		var sourceTranslationUnits = tu.SourceSegment.Elements.ToList();
-				//		foreach (var sourceTu in sourceTranslationUnits)
-				//		{
-				//			var visitor = new SegmentElementVisitor();
-				//			sourceTu.AcceptSegmentElementVisitor(visitor);
-				//			var segmentColection = visitor.SegmentColection;
-				//		}
-
-				//	}
-				//}
-
-
-				//var languageDirections = tm.LanguageDirections;
-				//foreach (var languageDirection in languageDirections)
-				//{
-				//	var tmIterator = new RegularIterator();
-				//	var tu = languageDirection.GetTranslationUnits(ref tmIterator);
-				//}
-				//asa se seteaza pathul tmului
-				//	var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
-				//	var path = tmPath + "/" + tm.Name;
-				//	var test = translationProviderServer.GetTranslationMemory(path, TranslationMemoryProperties.All);
-
-				//}
-			}
-
-			private void Remove()
+		private void Remove()
 		{
 			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation",MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
 			if (result == DialogResult.OK)
