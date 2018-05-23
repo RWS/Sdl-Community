@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
@@ -22,17 +25,35 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private TranslationMemoryViewModel _tmViewModel;
 		private ICommand _selectAllResultsCommand;
 		private ICommand _applyCommand;
-
+		private readonly BackgroundWorker _backgroundWorker;
+		private ScheduledServerTranslationMemoryExport tmExporter;
+		private string filePath;
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel tmViewModel)
 		{
+			_backgroundWorker = new BackgroundWorker();
+			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
+			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
 			_sourceSearchResults = searchResults;
 			_tmViewModel = tmViewModel;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
 		}
-		
+
+		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			
+		}
+
+		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			using (Stream outputStream = new FileStream(filePath, FileMode.Create))
+			{
+				var export  =tmExporter.DownloadExport(outputStream);
+			}
+		}
+
 		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
 		                                           (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
@@ -44,7 +65,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 			if (fileBasedSearchResult.Count > 0)
 			{
-				BackupTm();
+				BackupFileBasedTm();
 				tusToAnonymize =GetTranslationUnitsToAnonymize(fileBasedSearchResult);
 				Tm.AnonymizeFileBasedTu(tusToAnonymize);
 			}
@@ -56,9 +77,107 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				var uri = new Uri(_tmViewModel.Credentials.Url);
 				var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
 					_tmViewModel.Credentials.Password);
+
+				BackupServerBasedTm(translationProvider, tusToAnonymize);
 				Tm.AnonymizeServerBasedTu(translationProvider,tusToAnonymize);
 			}
 			RemoveSelectedTusToAnonymize();
+		}
+
+		private void BackupServerBasedTm(TranslationProviderServer translationProvider, List<AnonymizeTranslationMemory> tusToAnonymize)
+		{
+			if (!Directory.Exists(Constants.ServerTmBackupPath))
+			{
+				 Directory.CreateDirectory(Constants.ServerTmBackupPath);
+			}
+			try
+			{
+				foreach (var tuToAonymize in tusToAnonymize)
+				{
+					var translationMemory =
+						translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+					var languageDirections = translationMemory.LanguageDirections;
+					foreach (var languageDirection in languageDirections)
+					{
+						tmExporter = new ScheduledServerTranslationMemoryExport(languageDirection)
+						{
+							ContinueOnError = true
+						};
+						tmExporter.Queue();
+						tmExporter.Refresh();
+
+						var continueWaiting = true;
+						while (continueWaiting)
+						{
+							switch (tmExporter.Status)
+							{
+								case ScheduledOperationStatus.Abort:
+								case ScheduledOperationStatus.Aborted:
+								case ScheduledOperationStatus.Cancel:
+								case ScheduledOperationStatus.Cancelled:
+								case ScheduledOperationStatus.Completed:
+								case ScheduledOperationStatus.Error:
+									continueWaiting = false;
+									break;
+								case ScheduledOperationStatus.Aborting:
+								case ScheduledOperationStatus.Allocated:
+								case ScheduledOperationStatus.Cancelling:
+								case ScheduledOperationStatus.NotSet:
+								case ScheduledOperationStatus.Queued:
+								case ScheduledOperationStatus.Recovered:
+								case ScheduledOperationStatus.Recovering:
+								case ScheduledOperationStatus.Recovery:
+									continueWaiting = true;
+									tmExporter.Refresh();
+									break;
+								default:
+									continueWaiting = false;
+									break;
+							}
+						}
+						if (tmExporter.Status == ScheduledOperationStatus.Completed)
+						{
+							var folderPath = Path.Combine(Constants.ServerTmBackupPath, translationMemory.Name,
+								languageDirection.TargetLanguageCode);
+							if (!Directory.Exists(folderPath))
+							{
+								Directory.CreateDirectory(folderPath);
+							}
+							var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + ".tmx.gz";
+							filePath = Path.Combine(folderPath, fileName);
+							if (!File.Exists(filePath))
+							{
+								var file = File.Create(filePath);
+								file.Close();
+							}
+							_backgroundWorker.RunWorkerAsync();
+						}
+						else if (tmExporter.Status == ScheduledOperationStatus.Error)
+						{
+							MessageBox.Show(tmExporter.ErrorMessage,
+								"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						}
+
+					}
+				}
+			}
+			catch (Exception exception)
+			{
+				if (exception.Message.Equals("One or more errors occurred."))
+				{
+					if (exception.InnerException != null)
+					{
+						MessageBox.Show(exception.InnerException.Message,
+							"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+				}
+				else
+				{
+					MessageBox.Show(exception.Message,
+						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
+			}
+
 		}
 
 		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(List<SourceSearchResult> selectedSearchResult)
@@ -102,7 +221,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 
 		}
-		private void BackupTm()
+		private void BackupFileBasedTm()
 		{
 			var backupFolderPath = Constants.TmBackupPath;
 			if (!Directory.Exists(backupFolderPath))

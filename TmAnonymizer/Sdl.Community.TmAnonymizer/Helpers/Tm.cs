@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
@@ -115,30 +116,51 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider,
 			List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
-			foreach (var tuToAonymize in tusToAnonymize)
+			try
 			{
-				var translationMemory = translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
-				var languageDirections = translationMemory.LanguageDirections;
-				foreach (var languageDirection in languageDirections)
+				foreach (var tuToAonymize in tusToAnonymize)
 				{
-					foreach (var translationUnit in tuToAonymize.TranslationUnits)
+					var translationMemory =
+						translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+					var languageDirections = translationMemory.LanguageDirections;
+					foreach (var languageDirection in languageDirections)
 					{
-						var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
-						var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-						if (elementsContainsTag)
+						foreach (var translationUnit in tuToAonymize.TranslationUnits)
 						{
-							AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+							var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+							var elementsContainsTag =
+								sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+							if (elementsContainsTag)
+							{
+								AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+							}
+							else
+							{
+								AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+							}
+							languageDirection.UpdateTranslationUnit(translationUnit);
 						}
-						else
-						{
-							AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
-						}
-						languageDirection.UpdateTranslationUnit(translationUnit);
+					}
+
+				}
+			}
+			catch (Exception exception)
+			{
+				if (exception.Message.Equals("One or more errors occurred."))
+				{
+					if (exception.InnerException != null)
+					{
+						MessageBox.Show(exception.InnerException.Message,
+							"", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
-
+				else
+				{
+					MessageBox.Show(exception.Message,
+						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				}
 			}
-			
+
 		}
 
 		public static void AnonymizeFileBasedTu(List<AnonymizeTranslationMemory> tusToAnonymize)

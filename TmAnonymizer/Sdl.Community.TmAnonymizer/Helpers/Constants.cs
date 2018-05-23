@@ -57,6 +57,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 		public static string TmBackupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			@"SDL Community\TmAnonymizer Backup");
+		public static string ServerTmBackupPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+			@"SDL Community\TmAnonymizer ServerBackup");
 		public static string SettingsFolderPath = Path.Combine(
 			Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
 			@"SDL Community\TmAnonymizerSettings");
