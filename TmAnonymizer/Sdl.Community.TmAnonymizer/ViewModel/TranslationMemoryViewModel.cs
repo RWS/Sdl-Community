@@ -30,9 +30,26 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _selectAllCommand;
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
+		private ICommand _selectCommand;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
 		private Login _credentials;
 
+		public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new CommandHandler(Select, true));
+
+		//public TranslationMemoryViewModel()
+		//{
+		////	PropertyChanged += TranslationMemoryViewModel_PropertyChanged;
+		//}
+
+		//private void TranslationMemoryViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		//{
+			
+		//}
+
+		private void Select()
+		{
+
+		}
 		public ObservableCollection<TmFile> TmsCollection
 		{
 			get => _tmsCollection;
@@ -199,9 +216,14 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					IsSelected = true,
 					IsServerTm = false
 				};
+				tmFile.PropertyChanged += TmFile_PropertyChanged;
 				TmsCollection.Add(tmFile);
 			}
 		}
-		
+
+		private void TmFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			OnPropertyChanged(nameof(TmsCollection));
+		}
 	}
 }

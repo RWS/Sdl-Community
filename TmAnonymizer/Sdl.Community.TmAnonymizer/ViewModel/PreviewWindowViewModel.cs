@@ -28,7 +28,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _applyCommand;
 		private readonly BackgroundWorker _backgroundWorker;
 		private ScheduledServerTranslationMemoryExport tmExporter;
-		private List<ServerTmBackUp> _backupTms;
+		private readonly List<ServerTmBackUp> _backupTms;
 		private string filePath;
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
@@ -152,19 +152,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 								}
 								var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + ".tmx.gz";
 								filePath = Path.Combine(folderPath, fileName);
-							if (!File.Exists(filePath))
-							{
-								//var file = File.Create(filePath);
-								//file.Close();
-								var backup = new ServerTmBackUp
+								if (!File.Exists(filePath))
 								{
-									ScheduledExport = tmExporter,
-									FilePath = filePath
-								};
-								_backupTms.Add(backup);
-							}
-							//_backgroundWorker.RunWorkerAsync();
-							
+									var backup = new ServerTmBackUp
+									{
+										ScheduledExport = tmExporter,
+										FilePath = filePath
+									};
+									_backupTms.Add(backup);
+								}
 							}
 							else if (tmExporter.Status == ScheduledOperationStatus.Error)
 							{
@@ -191,7 +187,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
-
 		}
 
 		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(List<SourceSearchResult> selectedSearchResult)

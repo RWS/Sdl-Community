@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Sdl.Community.TmAnonymizer.Helpers;
 
 namespace Sdl.Community.TmAnonymizer.Model
 {
@@ -13,7 +15,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		private string _path;
 		private bool _shouldRemove;
 		private bool _isServerTm;
-
+	
 		public string Name
 		{
 			get => _name;

@@ -127,6 +127,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							Name = tm.Name,
 							IsServerTm = true
 						};
+						serverTm.PropertyChanged += ServerTm_PropertyChanged;
 						_tmsCollection.Add(serverTm);
 					}
 				}
@@ -146,6 +147,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					Message = exception.Message;
 				}
 			}
+		}
+
+		private void ServerTm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			//OnPropertyChanged(nameof(tmsCollection));
 		}
 
 		private bool IsValid()
