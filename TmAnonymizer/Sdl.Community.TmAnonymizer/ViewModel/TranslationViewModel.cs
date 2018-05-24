@@ -33,8 +33,9 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_rules = Constants.GetDefaultRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
+			
 		}
-
+		
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 
@@ -99,7 +100,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				MessageBox.Show(@"Please select at least one translation memory and a rule to preview the changes",
 					"", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
-
 		}
 
 		private List<Rule> GetSelectedRules()

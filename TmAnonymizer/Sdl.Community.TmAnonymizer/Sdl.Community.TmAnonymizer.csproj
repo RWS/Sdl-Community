@@ -139,6 +139,7 @@
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Position.cs" />
     <Compile Include="Model\Rule.cs" />
+    <Compile Include="Model\ServerTmBackUp.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\SourceSearchResult.cs" />
     <Compile Include="Model\TabItem.cs" />
