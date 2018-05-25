@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using Sdl.Community.Structures.Documents;
 using Sdl.Community.Structures.Documents.Records;
-using Sdl.Community.Toolkit.Tokenization;
+using Sdl.Community.Toolkit.LanguagePlatform;
 
 namespace Sdl.Community.Qualitivity.Tracking
 {
@@ -40,15 +40,15 @@ namespace Sdl.Community.Qualitivity.Tracking
         public DateTime? DatetimeOpened { get; set; }
         public DateTime? DatetimeClosed { get; set; }
 
-	    private Tokenizer _tokenizer { get; set; }
+	    private SegmentPairProcessor _segmentPairProcessor { get; set; }
 
-	    public Tokenizer Tokenizer
+	    public SegmentPairProcessor SegmentPairProcessor
 	    {
 		    get
 		    {
-			    if (_tokenizer != null)
+			    if (_segmentPairProcessor != null)
 			    {
-				    return _tokenizer;
+				    return _segmentPairProcessor;
 			    }
 
 			    if (SourceLanguage == null || TargetLanguage == null)
@@ -56,9 +56,11 @@ namespace Sdl.Community.Qualitivity.Tracking
 				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguage == null ? "Source" : "Target"));
 			    }
 
-			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage), new EnvironmentPaths(EnvironmentConstants.ProductName));			    
+			    _segmentPairProcessor = new SegmentPairProcessor(
+				    new Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguage), new CultureInfo(TargetLanguage)),
+				    new Toolkit.LanguagePlatform.Models.PathInfo());
 
-			    return _tokenizer;
+			    return _segmentPairProcessor;
 		    }
 	    }
 
