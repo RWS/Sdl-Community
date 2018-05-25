@@ -63,9 +63,11 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				    Name = ScriptName,
 				    Text = ScriptContent
 			    };
+			    script.ScriptStateAction = script.Active ? "Disable" : "Enable";
+			    script.RowColor = script.Active ? "Black" : "DarkGray";
 
 				//add new script in data base
-			    await _scriptDb.AddNewScript(script);
+				await _scriptDb.AddNewScript(script);
 
 				//add the script in master script too
 			    var masterScript = await _masterScriptDb.GetMasterScript();

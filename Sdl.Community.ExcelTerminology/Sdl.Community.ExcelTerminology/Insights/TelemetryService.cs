@@ -19,7 +19,6 @@ namespace Sdl.Community.ExcelTerminology.Insights
         private TelemetryService()
         {
             _telemetryClient = new TelemetryClient ();
-            TelemetryConfiguration.Active.ContextInitializers.Add(new UserSessionInitializer());
 
             HandleExcetion();
         }

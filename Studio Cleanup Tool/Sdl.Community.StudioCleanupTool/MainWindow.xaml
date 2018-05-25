@@ -26,16 +26,17 @@
 			<ColumnDefinition Width="Auto" />
 		</Grid.ColumnDefinitions>
 
-		<TabControl Grid.Column="0" Grid.Row="0" ItemsSource="{Binding TabList}" 
-		            controls:TabControlHelper.Underlined="{Binding ElementName=AnimatedTabControlUnderlinedComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-		            TabStripPlacement="{Binding ElementName=AnimatedTabControlTabStripPlacementComboBox, Path=SelectedItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+		<TabControl Grid.Column="0" Grid.Row="0" 
+		            controls:TabControlHelper.Underlined="SelectedTabItem"
+		            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0"
+		           >
 			<controls:MetroTabItem Header="Read Me"  Foreground="#3C92C0">
 				<views:ReadMe HorizontalAlignment="Right" Height="Auto" Width="auto"></views:ReadMe>
 			</controls:MetroTabItem>
-			<TabItem Header="Studio">
+			<TabItem  Header ="Studio">
 				<views:Studio DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</TabItem>
-			<controls:MetroTabItem Header="MultiTerm">
+			<controls:MetroTabItem Header="MultiTerm" >
 				<views:MultiTerm DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></views:MultiTerm>
 			</controls:MetroTabItem>
 			

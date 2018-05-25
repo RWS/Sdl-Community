@@ -1,0 +1,105 @@
+﻿<UserControl x:Class="Sdl.Community.TmAnonymizer.Ui.TranslationMemory"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+			 xmlns:helpers ="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" >
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid Height="{Binding ElementName=ParentControl}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
+		<DockPanel Grid.Row="1" Margin="5,10,0,5" >
+			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">
+				<ToolBar Style="{StaticResource Toolbar}" Background="WhiteSmoke" OverflowMode="Never" DockPanel.Dock="Top" >
+					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
+						<Image Source="../Resources/TranslationMemoriesFolder_Open.ico"/>
+					</Button>
+					<Button Command="{Binding SelectTmCommand}" ToolTip="Select tm" Margin="5,0,0,0">
+						<Image Source="../Resources/TranslationMemory.ico"  />
+					</Button>
+					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Load Server Based tms" Margin="5,0,0,0">
+						<Image Source="../Resources/ServerBasedTranslationMemory.ico"  />
+					</Button>
+					<Button Command="{Binding RemoveCommand}"  ToolTip="Remove selected tms" Margin="5,0,0,0">
+						<Image Source="../Resources/Remove.ico"/>
+					</Button>
+					<!--<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected tms">
+						<StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+							<Image Source="../Resources/Remove.ico"/>
+						</StackPanel>
+					</Button>-->
+				</ToolBar>
+			</ToolBarTray>
+		</DockPanel>
+		<CheckBox  Grid.Row="2" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
+		          FontFamily="Segoe UI"
+				  AllowDrop="True"
+				  MinWidth="100"
+		          helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
+				  SelectedItem="{Binding SelectedTm,UpdateSourceTrigger=PropertyChanged}"
+		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
+				  Margin="5,10" >
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<!--<DataGridTemplateColumn>
+					<DataGridTemplateColumn.HeaderTemplate>
+						<DataTemplate> 
+							<TextBlock Text="Select"></TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.HeaderTemplate>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox 
+								IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}"
+								Command="{Binding SelectCommand}"
+								/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>-->
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="60" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Remove?" Binding = "{Binding ShouldRemove,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}">
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Name}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Width="2*" Header="Path" Binding="{Binding Path}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text="{Binding Path}" />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+	</Grid>
+</UserControl>

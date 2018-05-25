@@ -1,0 +1,83 @@
+﻿<Window x:Class="Sdl.Community.TmAnonymizer.Ui.PreviewWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+		Title="Translations preview changes"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	<Window.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+    <Grid>
+		<Grid.RowDefinitions>
+		    <RowDefinition Height="Auto" />
+		    <RowDefinition Height="Auto" />
+		    <RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+	    <CheckBox  Grid.Row="1"  FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAllResults}" Command="{Binding SelectAllResultsCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}"
+		          FontFamily="Segoe UI"
+				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
+		          Background="White" 
+		          CanUserAddRows="False"
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          Margin="5,10"
+		         Height="450"
+		          AutoGenerateColumns="False" GridLinesVisibility="None">
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50" Binding = "{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
+				<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
+				<DataGridTemplateColumn Header="Source" Width="3*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White">
+								<xctk:RichTextBox.TextFormatter>
+									<helpers:RichTextBoxFormatter />
+								</xctk:RichTextBox.TextFormatter>
+							</xctk:RichTextBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Header="Target" Width="3*">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" IsReadOnly="True" BorderThickness="0" Background="White">
+								<xctk:RichTextBox.TextFormatter>
+									<helpers:RichTextBoxFormatter />
+								</xctk:RichTextBox.TextFormatter>
+							</xctk:RichTextBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding TmFilePath}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+			
+		</DataGrid>
+	  
+	    <StackPanel  Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">
+		    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+				<Button  Style="{DynamicResource LightGreenButtonsStyle}" Width="125" Margin="5,0,10,0" Content="Apply changes" Command="{Binding ApplyCommand}"></Button>
+			</StackPanel>
+	    </StackPanel>
+	</Grid>
+</Window>

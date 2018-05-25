@@ -8,6 +8,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.AhkPlugin.Annotations;
 using Sdl.Community.AhkPlugin.Helpers;
@@ -15,6 +16,7 @@ using Sdl.Community.AhkPlugin.ItemTemplates;
 using Sdl.Community.AhkPlugin.Model;
 using Sdl.Community.AhkPlugin.Repository.DataBase;
 using Sdl.Community.AhkPlugin.Ui;
+using MessageBox = System.Windows.MessageBox;
 
 namespace Sdl.Community.AhkPlugin.ViewModels
 {
@@ -28,9 +30,12 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		private ICommand _removeScriptCommand;
 		private ICommand _exportCommand;
 		private ICommand _changeScriptPathCommand;
+		private ICommand _selectAllCommand;
+		private ICommand _editScriptCommand;
+		private bool _selectAll;
 		private readonly ScriptDb _scriptsDb;
 		private readonly MasterScriptDb _masterScriptDb;
-
+		
 		public ScriptsWindowViewModel(MainWindowViewModel mainWindowViewModel)
 		{
 			_mainWindow = mainWindowViewModel;
@@ -40,22 +45,27 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			 _scriptsDb = new ScriptDb();
 			_masterScriptDb = new MasterScriptDb();
-			var savedScripts = _scriptsDb.GetAllScripts().Result;
+			var savedScripts = _masterScriptDb.GetMasterScript().Result.Scripts;
 
-			foreach (var script in savedScripts)
-			{
-				ScriptsCollection.Add(script);
-			}
+			ScriptsCollection = new ObservableCollection<Script>(savedScripts);
 		}
 
 		public ICommand AddCommand => _addCommand ?? (_addCommand = new CommandHandler(AddScriptAction, true));
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(ImportAction, true));
 		public ICommand ChangeScriptStateCommand => _changeScriptStateCommand ?? (_changeScriptStateCommand = new RelayCommand(ChangeState));
+		public ICommand EditScriptCommand => _editScriptCommand ?? (_editScriptCommand = new RelayCommand(EditScript));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(ExportScripts, true));
 
 		public ICommand ChangeScriptPath => _changeScriptPathCommand ??
 		                                    (_changeScriptPathCommand = new CommandHandler(ChangePath, true));
 
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllScripts, true));
+
+
+		private void SelectAllScripts()
+		{
+			Helpers.Ui.Select(ScriptsCollection,SelectAll);
+		}
 		private async void ChangePath()
 		{
 			var folderDialog = new FolderSelectDialog
@@ -72,6 +82,8 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				var masterScript = await _masterScriptDb.GetMasterScript();
 				masterScript.Location = folderPath;
 				await _masterScriptDb.UpdateScript(masterScript);
+
+				ProcessScript.ExportScript(Path.Combine(masterScript.Location, masterScript.Name), masterScript.Scripts);
 			}
 		}
 
@@ -79,15 +91,19 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 		{
 			if (ScriptsCollection.Any(s => s.IsSelected))
 			{
-				var folderDialog = new FolderSelectDialog
+				var folderDialog = new SaveFileDialog
 				{
-					Title = "Select a folder where the script should be exported"
+					Title = @"Select a location where the script should be exported",
+					DefaultExt = "ahk"
 				};
-				if (folderDialog.ShowDialog())
+				if (folderDialog.ShowDialog() == DialogResult.OK)
 				{
 					var folderPath = folderDialog.FileName;
 					var selectedScripts = ScriptsCollection.Where(s => s.IsSelected).ToList();
-					ProcessScript.ExportScript(Path.Combine(folderPath,"exportedScript.ahk"), selectedScripts);
+					ProcessScript.ExportScript(Path.Combine(folderPath, folderDialog.FileName), selectedScripts);
+					MessageBox.Show("Script was exported successfully to selected location", "",
+						MessageBoxButton.OK, MessageBoxImage.Information);
+					Helpers.Ui.Select(ScriptsCollection, false);
 				}
 			}
 			else
@@ -95,8 +111,6 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				MessageBox.Show("Please select at least one script from the grid to export", "Warning",
 					MessageBoxButton.OK, MessageBoxImage.Warning);
 			}
-			
-
 		}
 
 		public ICommand RemoveScriptCommand => _removeScriptCommand ??
@@ -137,7 +151,22 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 
 		private void ChangeState(object row)
 		{
-			
+			var script = (Script) row;
+			if (script != null)
+			{
+				Helpers.Ui.SetStateColors(script);
+				ProcessScript.ChangeScriptState(script);
+				ProcessScript.SaveScriptToMaster(script);
+			}
+		}
+
+		private void EditScript(object row)
+		{
+			var script = (Script)row;
+			if (script != null)
+			{
+				_mainWindow.LoadEditPage(script);
+			}
 		}
 
 		private void ImportAction()
@@ -157,6 +186,20 @@ namespace Sdl.Community.AhkPlugin.ViewModels
 				}
 				_scriptsCollection = value;
 				OnPropertyChanged(nameof(ScriptsCollection));
+			}
+		}
+		public bool SelectAll
+		{
+			get => _selectAll;
+
+			set
+			{
+				if (Equals(value, _selectAll))
+				{
+					return;
+				}
+				_selectAll = value;
+				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
 	}

@@ -15,7 +15,6 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public  Task<List<Script>> GetAllScripts()
 		{
-			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				var allScripts =  session.Query<Script>().ToList();
@@ -25,7 +24,6 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public Task AddNewScript(Script script)
 		{
-			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				session.Store(script);
@@ -36,7 +34,6 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 
 		public Task RemoveScripts(List<Script> scripts)
 		{
-			//ThrowIfDisposed();
 			using (var session = RavenContext.Current.CreateSession())
 			{
 				foreach (var script in scripts)
@@ -49,11 +46,6 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			return Task.FromResult(true);
 		}
 
-		private void ThrowIfDisposed()
-		{
-			if (_disposed)
-				throw new ObjectDisposedException(GetType().Name);
-		}
 		public class ScriptById: AbstractIndexCreationTask<Script>
 		{
 			public ScriptById()

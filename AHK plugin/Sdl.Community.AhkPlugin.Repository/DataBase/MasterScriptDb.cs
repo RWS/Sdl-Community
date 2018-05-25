@@ -99,6 +99,13 @@ namespace Sdl.Community.AhkPlugin.Repository.DataBase
 			}
 			return Task.FromResult(true);
 		}
+
+		public async Task<List<Script>> GetScriptsFromMaster()
+		{
+			var masterScript = await GetMasterScript();
+			return masterScript.Scripts;
+		}
+
 	}
 
 	public class MasterScriptById : AbstractIndexCreationTask<MasterScript>

@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="Sdl.Community.TmAnonymizer.Ui.Translations"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+             xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid Height="{Binding ElementName=ParentControl}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"  MaxHeight="300"/>
+			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto" />
+			</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0" Margin="15,5,0,5">Please rules you want to apply</TextBlock>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
+		          FontFamily="Segoe UI"
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  Background="White" 
+		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
+				  SelectedItem="{Binding SelectedItem}"
+		          Margin="5,10" >
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow">
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<TextBlock  TextWrapping="Wrap" Text="{Binding Description}"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Name}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Description}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+		</DataGrid>
+		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import rules" Command="{Binding ImportCommand}"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export rules" Command="{Binding ExportCommand}"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
+			</StackPanel>
+		</StackPanel>
+
+		
+	</Grid>
+</UserControl>
+
+
+

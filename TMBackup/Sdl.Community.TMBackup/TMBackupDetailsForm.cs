@@ -269,15 +269,18 @@ namespace Sdl.Community.TMBackup
 
 		private void DisableFilledCell(DataGridViewCellEventArgs e)
 		{
-			if (dataGridView1.Rows.Count > 0)
+			if (e.RowIndex != -1)
 			{
-				dataGridView1.Rows[e.RowIndex].ReadOnly = true;
-
-				if (e.ColumnIndex != -1 && dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
-				    || e.ColumnIndex != -1 &&
-				    string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+				if (dataGridView1.Rows.Count > 0)
 				{
-					dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+					dataGridView1.Rows[e.RowIndex].ReadOnly = true;
+
+					if (e.ColumnIndex != -1 && dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value == null
+					    || e.ColumnIndex != -1 &&
+					    string.IsNullOrEmpty(dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString()))
+					{
+						dataGridView1.Rows[e.RowIndex].ReadOnly = false;
+					}
 				}
 			}
 		}

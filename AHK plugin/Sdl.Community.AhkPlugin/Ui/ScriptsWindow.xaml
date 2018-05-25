@@ -18,12 +18,13 @@
 			</ResourceDictionary.MergedDictionaries>
 	</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid>
+	<Grid >
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="1*" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="Auto" />
@@ -47,12 +48,12 @@
 				<Button Style="{DynamicResource StudioGreenButtonsStyle}" Content="Add" Command="{Binding AddCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
-
+		<CheckBox  Grid.Row="3" Grid.Column="0" FontFamily="Segoe UI" Margin="10,20,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}"> Select all</CheckBox>
 		<DataGrid Style="{DynamicResource DgHeaderStyle}" Grid.Column="0" Visibility="Visible" VerticalScrollBarVisibility="Auto"
-				  Grid.Row="3" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"  
+				  Grid.Row="4" BorderThickness="0" Grid.ColumnSpan="2" Name="ScriptsDataGrid"
 				  ColumnWidth="*"
 				  FontFamily="Segoe UI"
-				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,25,10,0"  Background="#F5F5F5"
+				  ItemsSource="{Binding ScriptsCollection, Mode=TwoWay}"  Margin="10,10,10,0"  Background="White"
 				  AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False" RowHeight="22" >
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
@@ -61,16 +62,23 @@
 							<TextBlock  TextWrapping="Wrap" Text="{Binding Description}"/>
 						</Setter.Value>
 					</Setter>
+					<Setter Property="TextElement.Foreground" Value="{Binding RowColor}"/>
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="80" CellStyle="{DynamicResource DataGridContentCellCentering}"	Header = "Select scripts" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Header="Script name" Binding="{Binding Name}" />
-				<DataGridTextColumn Header="Description" Binding="{Binding Description}" />
-				<DataGridTemplateColumn Width="100">
+				<DataGridTextColumn Width="100" Header="Script name" Binding="{Binding Name}" />
+				<DataGridTextColumn Width="230" Header="Description" Binding="{Binding Description}" />
+				<DataGridTemplateColumn Width="auto">
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<Button Style="{DynamicResource BaseButtonStyle}" Content="Disable"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+						<DataTemplate >
+							<StackPanel Orientation="Vertical" >
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+									<Button Style="{DynamicResource BaseButtonStyle}" Content="{Binding ScriptStateAction}"  Command="{Binding Path=DataContext.ChangeScriptStateCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+									<Button Style="{DynamicResource BaseButtonStyle}" Content="Edit"  Command="{Binding Path=DataContext.EditScriptCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" CommandParameter="{Binding }" />
+								</StackPanel>
+							</StackPanel>
+
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

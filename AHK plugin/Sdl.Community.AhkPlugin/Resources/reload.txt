@@ -1,22 +1,15 @@
-#SingleInstance force
-FileGetTime ScriptStartModTime, %A_ScriptFullPath%
-SetTimer CheckScriptUpdate, 100, 0x7FFFFFFF ; 100 ms, highest priority
+SetTimer,UPDATEDSCRIPT,1000
 
-CheckScriptUpdate() {
-    global ScriptStartModTime
-    FileGetTime curModTime, %A_ScriptFullPath%
-    If (curModTime <> ScriptStartModTime) {
-        Loop
-        {
-            reload
-            Sleep 300 ; ms
-            MsgBox 0x2, %A_ScriptName%, Reload failed. ; 0x2 = Abort/Retry/Ignore
-            IfMsgBox Abort
-                ExitApp
-            IfMsgBox Ignore
-                break
-        } ; loops reload on "Retry"
-    }
+UPDATEDSCRIPT:
+FileGetAttrib,attribs,%A_ScriptFullPath%
+IfInString,attribs,A
+{
+FileSetAttrib,-A,%A_ScriptFullPath%
+SplashTextOn,,,Updated script,
+Sleep,500
+Reload
 }
+Return
+
 
 

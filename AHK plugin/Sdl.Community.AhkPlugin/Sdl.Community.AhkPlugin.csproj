@@ -107,10 +107,14 @@
     <Compile Include="Helpers\ProcessScript.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Helpers\Ui.cs" />
     <Compile Include="ItemTemplates\ImportScriptItemTemplate.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Ui\AddScriptPage.xaml.cs">
       <DependentUpon>AddScriptPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\EditScriptPage.xaml.cs">
+      <DependentUpon>EditScriptPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Ui\ImportScriptPage.xaml.cs">
       <DependentUpon>ImportScriptPage.xaml</DependentUpon>
@@ -119,6 +123,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\AddScriptViewModel.cs" />
+    <Compile Include="ViewModels\EditScriptPageViewModel.cs" />
     <Compile Include="ViewModels\ImportScriptPageViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ScriptsWindowViewModel.cs" />
@@ -140,6 +145,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\AddScriptPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\EditScriptPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
