@@ -153,48 +153,54 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				var row = expressionsGrid.Rows[e.RowIndex];
 				if (row.Cells[1].Value != null && row.Cells[2].Value != null)
 				{
-					var pattern = (string)row.Cells[1].Value;
-					var description = (string)row.Cells[2].Value;
+					var pattern = (string) row.Cells[1].Value;
+					var description = (string) row.Cells[2].Value;
 					var newExpression = new RegexPattern
 					{
 						Id = Guid.NewGuid().ToString(),
 						Pattern = pattern,
 						Description = description,
-						ShouldEncrypt = (bool)row.Cells[3].Value,
-						ShouldEnable = (bool)row.Cells[0].Value
+						ShouldEncrypt = (bool) row.Cells[3].Value,
+						ShouldEnable = (bool) row.Cells[0].Value
 					};
 					RegexPatterns.Add(newExpression);
 				}
 			}
 			else
 			{
-				var selectedPattern = RegexPatterns[e.RowIndex];
-				var currentCellValue = expressionsGrid.CurrentCell.Value;
-				//Enable column
-				if (e.ColumnIndex.Equals(0))
+				if (e.RowIndex < RegexPatterns.Count)
 				{
-					selectedPattern.ShouldEnable = (bool)currentCellValue;
-				}
-				//Regex pattern column
-				if (e.ColumnIndex.Equals(1))
-				{
-					if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+					var selectedPattern = RegexPatterns[e.RowIndex];
+					if (expressionsGrid?.CurrentCell.Value != null)
 					{
-						selectedPattern.Pattern = currentCellValue.ToString();
+						var currentCellValue = expressionsGrid.CurrentCell.Value;
+						//Enable column
+						if (e.ColumnIndex.Equals(0))
+						{
+							selectedPattern.ShouldEnable = (bool) currentCellValue;
+						}
+						//Regex pattern column
+						if (e.ColumnIndex.Equals(1))
+						{
+							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+							{
+								selectedPattern.Pattern = currentCellValue.ToString();
+							}
+						}
+						//Description column
+						if (e.ColumnIndex.Equals(2))
+						{
+							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
+							{
+								selectedPattern.Description = currentCellValue.ToString();
+							}
+						}
+						//Encrypt column
+						if (e.ColumnIndex.Equals(3))
+						{
+							selectedPattern.ShouldEncrypt = (bool) currentCellValue;
+						}
 					}
-				}
-				//Description column
-				if (e.ColumnIndex.Equals(2))
-				{
-					if (!string.IsNullOrEmpty(currentCellValue.ToString()))
-					{
-						selectedPattern.Description = currentCellValue.ToString();
-					}
-				}
-				//Encrypt column
-				if (e.ColumnIndex.Equals(3))
-				{
-					selectedPattern.ShouldEncrypt = (bool)currentCellValue;
 				}
 			}
 		}
