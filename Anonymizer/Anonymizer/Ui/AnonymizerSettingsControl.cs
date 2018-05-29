@@ -151,18 +151,24 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			if (e.RowIndex.Equals(RegexPatterns.Count))
 			{
 				var row = expressionsGrid.Rows[e.RowIndex];
-				if (row.Cells[1].Value != null && row.Cells[2].Value != null)
+				var newExpression = new RegexPattern
+				{
+					Id = Guid.NewGuid().ToString(),
+					ShouldEncrypt = (bool)row.Cells[3].Value,
+					ShouldEnable = (bool)row.Cells[0].Value
+				};
+				if (row.Cells[1].Value != null)
 				{
 					var pattern = (string) row.Cells[1].Value;
-					var description = (string) row.Cells[2].Value;
-					var newExpression = new RegexPattern
-					{
-						Id = Guid.NewGuid().ToString(),
-						Pattern = pattern,
-						Description = description,
-						ShouldEncrypt = (bool) row.Cells[3].Value,
-						ShouldEnable = (bool) row.Cells[0].Value
-					};
+					newExpression.Pattern = pattern;
+				}
+				if (row.Cells[2].Value != null)
+				{
+					var description = (string)row.Cells[2].Value;
+					newExpression.Description = description;
+				}
+				if (newExpression.Pattern != null)
+				{
 					RegexPatterns.Add(newExpression);
 				}
 			}
