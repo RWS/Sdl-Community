@@ -74,34 +74,37 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			{
 				var tmIterator = new RegularIterator();
 				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-				allTusForLanguageDirections.AddRange(translationUnits);
-				foreach (var translationUnit in translationUnits)
+				if (translationUnits != null)
 				{
-					var sourceText = translationUnit.SourceSegment.ToPlain();
-					if (pi.ContainsPi(sourceText))
+					allTusForLanguageDirections.AddRange(translationUnits);
+					foreach (var translationUnit in translationUnits)
 					{
-						var searchResult = new SourceSearchResult
+						var sourceText = translationUnit.SourceSegment.ToPlain();
+						if (pi.ContainsPi(sourceText))
 						{
-							Id = translationUnit.ResourceId.Guid.ToString(),
-							SourceText = sourceText,
-							MatchResult = new MatchResult
+							var searchResult = new SourceSearchResult
 							{
-								Positions = pi.GetPersonalDataPositions(sourceText)
-							},
-							TmFilePath = tmPath,
-							IsServer = true,
-							SegmentNumber = translationUnit.ResourceId.Id.ToString()
-						};
-						var targetText = translationUnit.TargetSegment.ToPlain();
-						if (pi.ContainsPi(targetText))
-						{
-							searchResult.TargetText = targetText;
-							searchResult.TargetMatchResult = new MatchResult
-							{
-								Positions = pi.GetPersonalDataPositions(targetText)
+								Id = translationUnit.ResourceId.Guid.ToString(),
+								SourceText = sourceText,
+								MatchResult = new MatchResult
+								{
+									Positions = pi.GetPersonalDataPositions(sourceText)
+								},
+								TmFilePath = tmPath,
+								IsServer = true,
+								SegmentNumber = translationUnit.ResourceId.Id.ToString()
 							};
+							var targetText = translationUnit.TargetSegment.ToPlain();
+							if (pi.ContainsPi(targetText))
+							{
+								searchResult.TargetText = targetText;
+								searchResult.TargetMatchResult = new MatchResult
+								{
+									Positions = pi.GetPersonalDataPositions(targetText)
+								};
+							}
+							sourceSearchResult.Add(searchResult);
 						}
-						sourceSearchResult.Add(searchResult);
 					}
 				}
 			}
