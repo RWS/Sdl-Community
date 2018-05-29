@@ -36,16 +36,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new CommandHandler(Select, true));
 
-		//public TranslationMemoryViewModel()
-		//{
-		////	PropertyChanged += TranslationMemoryViewModel_PropertyChanged;
-		//}
-
-		//private void TranslationMemoryViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		//{
-			
-		//}
-
 		private void Select()
 		{
 

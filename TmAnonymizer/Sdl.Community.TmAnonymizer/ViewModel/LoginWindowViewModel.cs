@@ -44,6 +44,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(Credentials));
 			}
 		}
+
 		public string Message
 		{
 			get => _message;
@@ -127,7 +128,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							Name = tm.Name,
 							IsServerTm = true
 						};
-						serverTm.PropertyChanged += ServerTm_PropertyChanged;
 						_tmsCollection.Add(serverTm);
 					}
 				}
@@ -148,12 +148,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 			}
 		}
-
-		private void ServerTm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			//OnPropertyChanged(nameof(tmsCollection));
-		}
-
+		
 		private bool IsValid()
 		{
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&

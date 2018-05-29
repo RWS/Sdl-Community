@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -20,7 +21,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ObservableCollection<Rule> _rules;
 		private Rule _selectedItem;
 		private bool _selectAll;
-		//private bool _isChecked;
 		private ICommand _selectAllCommand;
 		private ICommand _previewCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
@@ -38,29 +38,12 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_translationMemoryViewModel.PropertyChanged += _translationMemoryViewModel_PropertyChanged;
 		}
 
-		private void _translationMemoryViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void _translationMemoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName.Equals("TmsCollection"))
 			{
 				//removed from tm collection
-				var unselectedTms = _tmsCollection.Where(t=>!t.IsSelected).ToList();
-				foreach (var tm in unselectedTms)
-				{
-					var anonymizedTmToRemove = _anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
-					if (anonymizedTmToRemove != null)
-					{
-						_anonymizeTranslationMemories.Remove(anonymizedTmToRemove);
-					}
-
-					//remove search results for that tm
-					var searchResultsForTm = SourceSearchResults.Where(r => r.TmFilePath.Equals(tm.Path)).ToList();
-					foreach (var result in searchResultsForTm)
-					{
-						SourceSearchResults.Remove(result);
-					}
-				}
-
-
+				RefreshPreviewWindow();
 			}
 		}
 
@@ -82,7 +65,38 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					}
 				}
 			}
-			
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				foreach (TmFile newTm in e.NewItems)
+				{
+					newTm.PropertyChanged += NewTm_PropertyChanged;	
+				}
+			}
+		}
+
+		private void NewTm_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			RefreshPreviewWindow();
+		}
+
+		private void RefreshPreviewWindow()
+		{
+			var unselectedTms = _tmsCollection.Where(t => !t.IsSelected).ToList();
+			foreach (var tm in unselectedTms)
+			{
+				var anonymizedTmToRemove = _anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
+				if (anonymizedTmToRemove != null)
+				{
+					_anonymizeTranslationMemories.Remove(anonymizedTmToRemove);
+				}
+
+				//remove search results for that tm
+				var searchResultsForTm = SourceSearchResults.Where(r => r.TmFilePath.Equals(tm.Path)).ToList();
+				foreach (var result in searchResultsForTm)
+				{
+					SourceSearchResults.Remove(result);
+				}
+			}
 		}
 
 		private void PreviewChanges()
@@ -157,20 +171,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
-		//public bool IsChecked
-		//{
-		//	get => _isChecked;
 
-		//	set
-		//	{
-		//		if (Equals(value, _isChecked))
-		//		{
-		//			return;
-		//		}
-		//		_isChecked = value;
-		//		OnPropertyChanged(nameof(IsChecked));
-		//	}
-		//}
 		public ObservableCollection<SourceSearchResult> SourceSearchResults
 		{
 			get => _sourceSearchResults;
