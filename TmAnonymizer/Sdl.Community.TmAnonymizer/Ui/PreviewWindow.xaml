@@ -17,7 +17,9 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-    <Grid>
+
+	<ScrollViewer >
+		<Grid Name="Grid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto">
 		<Grid.RowDefinitions>
 		    <RowDefinition Height="Auto" />
 		    <RowDefinition Height="Auto" />
@@ -32,7 +34,7 @@
 		          CanUserAddRows="False"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
-		         Height="450"
+		          Width="{Binding ElementName=Grid, Path=ActualWidth}"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto"  Header="Select"  MinWidth="50" Binding = "{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}"></DataGridCheckBoxColumn>
@@ -71,7 +73,6 @@
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
 			</DataGrid.Columns>
-			
 		</DataGrid>
 	  
 	    <StackPanel  Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">
@@ -80,4 +81,5 @@
 			</StackPanel>
 	    </StackPanel>
 	</Grid>
+		</ScrollViewer>
 </Window>
