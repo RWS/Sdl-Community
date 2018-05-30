@@ -38,11 +38,10 @@
 		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}" Text="{Binding UserName}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
 		<PasswordBox Name="Password" Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
-		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
+		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
 		<Button  Grid.Row="5" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 				 Margin="102,28,10,54" Content="Ok" Command="{Binding OkCommand}" 
 				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI">
-			
 		</Button>
 	</Grid>
 </Window>

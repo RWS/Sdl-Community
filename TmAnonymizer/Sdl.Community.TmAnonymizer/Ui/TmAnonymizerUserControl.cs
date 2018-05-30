@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Sdl.Community.TmAnonymizer.Helpers;
@@ -20,7 +21,7 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		public TmAnonymizerUserControl()
 		{
 			InitializeComponent();
-			//var tm = new ServerBasedTranslationMemory(translationProviderServer);
+			InitializeWpfApplicationSettings();
 
 			if (!Directory.Exists(Constants.SettingsFolderPath))
 			{
@@ -42,6 +43,16 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			{
 				LoadTmView();
 			}
+		}
+
+		private void InitializeWpfApplicationSettings()
+		{
+			if (System.Windows.Application.Current == null)
+			{
+				new System.Windows.Application();
+			}
+			if (System.Windows.Application.Current != null)
+				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 		}
 
 		private void LoadTmView()

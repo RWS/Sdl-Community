@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
@@ -27,22 +21,18 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private Login _credentials;
 		private string _message;
 		private readonly BackgroundWorker _backgroundWorker;
+		private string _messageColor;
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
 			_credentials = new Login();
+			_messageColor = "#DF4762";
 			_message = string.Empty;
 			_window = window;
 			_tmsCollection = tmsCollection;
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
-			if (System.Windows.Application.Current == null)
-			{
-				new System.Windows.Application();
-			}
-			if (System.Windows.Application.Current != null)
-				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 		}
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -104,6 +94,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(UserName));
 			}
 		}
+		public string MessageColor
+		{
+			get => _message;
+
+			set
+			{
+				if (Equals(value, _message))
+				{
+					return;
+				}
+				_message = value;
+				OnPropertyChanged(nameof(MessageColor));
+			}
+		}
 
 		private void Ok(object parameter)
 		{
@@ -120,11 +124,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				if (IsValid())
 				{
 					_backgroundWorker.RunWorkerAsync();
+					MessageColor = "#3EA691";
 					Message = "Please wait until we connect to GroupShare";
 				}
 				else
 				{
 					Message = "All fields are required!";
+					MessageColor = "#DF4762";
 				}
 			}
 		}
@@ -165,11 +171,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					if (exception.InnerException != null)
 					{
 						Message = exception.InnerException.Message;
+						MessageColor = "#DF4762";
 					}
 				}
 				else
 				{
 					Message = exception.Message;
+					MessageColor = "#DF4762";
 				}
 			}
 		}
