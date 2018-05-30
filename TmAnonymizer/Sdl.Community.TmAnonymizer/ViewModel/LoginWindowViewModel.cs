@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
@@ -23,7 +26,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private Login _credentials;
 		private string _message;
-	
+		private readonly BackgroundWorker _backgroundWorker;
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
@@ -31,8 +34,27 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_message = string.Empty;
 			_window = window;
 			_tmsCollection = tmsCollection;
+			_backgroundWorker = new BackgroundWorker();
+			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
+			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
+			if (System.Windows.Application.Current == null)
+			{
+				new System.Windows.Application();
+			}
+			if (System.Windows.Application.Current != null)
+				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 		}
-	
+
+		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			_window.Close();
+		}
+
+		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		{
+			GetServerTms(Credentials);
+		}
+
 		public ICommand OkCommand => _okCommand ??
 		                             (_okCommand = new RelayCommand(Ok));
 		public Login Credentials
@@ -97,8 +119,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				Credentials = login;
 				if (IsValid())
 				{
-					Message = "Please wait";
-					GetServerTms(login);
+					_backgroundWorker.RunWorkerAsync();
+					Message = "Please wait until we connect to GroupShare";
 				}
 				else
 				{
@@ -128,10 +150,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							Name = tm.Name,
 							IsServerTm = true
 						};
-						_tmsCollection.Add(serverTm);
+
+						System.Windows.Application.Current.Dispatcher.Invoke(delegate
+						{
+							_tmsCollection.Add(serverTm);
+						});
 					}
 				}
-				_window.Close();
 			}
 			catch (Exception exception)
 			{
