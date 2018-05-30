@@ -178,6 +178,9 @@
     <Compile Include="Ui\Translations.xaml.cs">
       <DependentUpon>Translations.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\WaitWindow.xaml.cs">
+      <DependentUpon>WaitWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AcceptWindowViewModel.cs" />
     <Compile Include="ViewModel\CustomFieldsViewModel.cs" />
     <Compile Include="ViewModel\LoginWindowViewModel.cs" />
@@ -251,6 +254,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Ui\Translations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\WaitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

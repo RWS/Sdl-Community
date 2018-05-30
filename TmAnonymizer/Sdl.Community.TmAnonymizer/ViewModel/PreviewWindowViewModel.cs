@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.TmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -84,7 +85,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
 					_tmViewModel.Credentials.Password);
 
-				BackupServerBasedTm(translationProvider, tusToAnonymize);
+				//BackupServerBasedTm(translationProvider, tusToAnonymize);
 				Tm.AnonymizeServerBasedTu(translationProvider,tusToAnonymize);
 			}
 			RemoveSelectedTusToAnonymize();
@@ -105,7 +106,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
 						var languageDirections = translationMemory.LanguageDirections;
 						foreach (var languageDirection in languageDirections)
-						{
+						{//aici ar trebui sa verifica daca nu deja e downloadat pe disk exportul
 							tmExporter = new ScheduledServerTranslationMemoryExport(languageDirection)
 							{
 								ContinueOnError = true
