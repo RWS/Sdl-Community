@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
+using Newtonsoft.Json;
 using Sdl.Community.TmAnonymizer.Helpers;
+using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -22,17 +24,8 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		{
 			InitializeComponent();
 			InitializeWpfApplicationSettings();
-
-			if (!Directory.Exists(Constants.SettingsFolderPath))
-			{
-				Directory.CreateDirectory(Constants.SettingsFolderPath);
-			}
-			if (!File.Exists(Constants.SettingsFilePath))
-			{
-				var settingsFile = File.Create(Constants.SettingsFilePath);
-				settingsFile.Close();
-			}
-			if (!AgreementMethods.UserAgreed())
+			
+			if (!SettingsMethods.UserAgreed())
 			{
 				var acceptWindow = new AcceptWindow();
 				acceptWindow.InitializeComponent();
@@ -53,6 +46,25 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			}
 			if (System.Windows.Application.Current != null)
 				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+
+			//create settings folder
+			if (!Directory.Exists(Constants.SettingsFolderPath))
+			{
+				Directory.CreateDirectory(Constants.SettingsFolderPath);
+			}
+		
+			var settings = SettingsMethods.GetSettings();
+			if (!settings.AlreadyAddedDefaultRules)
+			{
+				AddDefaultRules(settings);
+			}
+		}
+
+		private void AddDefaultRules(Settings settings)
+		{
+			settings.AlreadyAddedDefaultRules = true;
+			settings.Rules = Constants.GetDefaultRules();
+			File.WriteAllText(Constants.SettingsFilePath, JsonConvert.SerializeObject(settings));
 		}
 
 		private void LoadTmView()
@@ -64,11 +76,10 @@ namespace Sdl.Community.TmAnonymizer.Ui
 
 		private void AcceptWindow_Closing(object sender, CancelEventArgs e)
 		{
-			if (AgreementMethods.UserAgreed())
+			if (SettingsMethods.UserAgreed())
 			{
 				LoadTmView();
 			}
-			
 		}
 	}
 }

@@ -28,12 +28,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
+
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_translationMemoryViewModel = translationMemoryViewModel;
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
-			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();	
-			_rules = Constants.GetDefaultRules();
+			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
+			_rules = SettingsMethods.GetRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;

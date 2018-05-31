@@ -28,10 +28,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void Ok(object window)
 		{
-			var settings = new Settings
-			{
-				Accepted = Accepted
-			};
+			var settings = SettingsMethods.GetSettings();
+			settings.Accepted = Accepted;
 			File.WriteAllText(Constants.SettingsFilePath, JsonConvert.SerializeObject(settings));
 			var accept = (AcceptWindow) window;
 			accept.Close();
