@@ -6,8 +6,9 @@
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              mc:Ignorable="d" 
 			 Title="Login"
-        Width="400"
-        Height="300"
+			 Width="400"
+			 Height="300"
+			 WindowStartupLocation="CenterScreen"
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
 		<ResourceDictionary>

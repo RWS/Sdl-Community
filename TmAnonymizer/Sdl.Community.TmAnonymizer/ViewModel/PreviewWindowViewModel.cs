@@ -85,28 +85,41 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
 					_tmViewModel.Credentials.Password);
 
-				//BackupServerBasedTm(translationProvider, tusToAnonymize);
+				BackupServerBasedTm(translationProvider, tusToAnonymize);
 				Tm.AnonymizeServerBasedTu(translationProvider,tusToAnonymize);
 			}
 			RemoveSelectedTusToAnonymize();
 		}
 
-		private void BackupServerBasedTm(TranslationProviderServer translationProvider, List<AnonymizeTranslationMemory> tusToAnonymize)
+		private void BackupServerBasedTm(TranslationProviderServer translationProvider,
+			List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			_backupTms.Clear();
 			if (!Directory.Exists(Constants.ServerTmBackupPath))
 			{
-				 Directory.CreateDirectory(Constants.ServerTmBackupPath);
+				Directory.CreateDirectory(Constants.ServerTmBackupPath);
 			}
 			try
 			{
 				foreach (var tuToAonymize in tusToAnonymize)
+				{
+					var translationMemory =
+						translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+					var languageDirections = translationMemory.LanguageDirections;
+					foreach (var languageDirection in languageDirections)
 					{
-						var translationMemory =
-							translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
-						var languageDirections = translationMemory.LanguageDirections;
-						foreach (var languageDirection in languageDirections)
-						{//aici ar trebui sa verifica daca nu deja e downloadat pe disk exportul
+						var folderPath = Path.Combine(Constants.ServerTmBackupPath, translationMemory.Name,
+							languageDirection.TargetLanguageCode);
+						if (!Directory.Exists(folderPath))
+						{
+							Directory.CreateDirectory(folderPath);
+						}
+						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + ".tmx.gz";
+						filePath = Path.Combine(folderPath, fileName);
+
+						//if tm does not exist download it
+						if (!File.Exists(filePath))
+						{
 							tmExporter = new ScheduledServerTranslationMemoryExport(languageDirection)
 							{
 								ContinueOnError = true
@@ -145,23 +158,12 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							}
 							if (tmExporter.Status == ScheduledOperationStatus.Completed)
 							{
-								var folderPath = Path.Combine(Constants.ServerTmBackupPath, translationMemory.Name,
-									languageDirection.TargetLanguageCode);
-								if (!Directory.Exists(folderPath))
+								var backup = new ServerTmBackUp
 								{
-									Directory.CreateDirectory(folderPath);
-								}
-								var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + ".tmx.gz";
-								filePath = Path.Combine(folderPath, fileName);
-								if (!File.Exists(filePath))
-								{
-									var backup = new ServerTmBackUp
-									{
-										ScheduledExport = tmExporter,
-										FilePath = filePath
-									};
-									_backupTms.Add(backup);
-								}
+									ScheduledExport = tmExporter,
+									FilePath = filePath
+								};
+								_backupTms.Add(backup);
 							}
 							else if (tmExporter.Status == ScheduledOperationStatus.Error)
 							{
@@ -169,7 +171,12 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 									"", MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
+					}
+					if (!_backgroundWorker.IsBusy)
+					{
 						_backgroundWorker.RunWorkerAsync();
+					}
+
 				}
 			}
 			catch (Exception exception)
