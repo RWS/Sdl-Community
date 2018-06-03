@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using Sdl.Community.Toolkit.Tokenization;
+using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 
 namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
@@ -13,15 +13,15 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
         internal bool IncludeTagText = true;
         internal Dictionary<string, Dictionary<string, ParagraphUnit>> FileParagraphUnits { get; set; }
 
-	    private Tokenizer _tokenizer { get; set; }
+	    private SegmentPairProcessor _segmentPairProcessor { get; set; }
 
-	    public Tokenizer Tokenizer
+	    public SegmentPairProcessor SegmentPairProcessor
 	    {
 		    get
 		    {
-			    if (_tokenizer != null)
+			    if (_segmentPairProcessor != null)
 			    {
-				    return _tokenizer;
+				    return _segmentPairProcessor;
 			    }
 
 			    if (SourceLanguageId == null || TargetLanguageId == null)
@@ -29,9 +29,11 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
 				    throw new Exception(string.Format("Unable to parse the file; {0} langauge cannot be null!", SourceLanguageId == null ? "Source" : "Target"));
 			    }
 
-			    _tokenizer = new Tokenizer(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId), new EnvironmentPaths(EnvironmentConstants.ProductName));			    
+			    _segmentPairProcessor = new SegmentPairProcessor(
+					new Toolkit.LanguagePlatform.Models.Settings(new CultureInfo(SourceLanguageId), new CultureInfo(TargetLanguageId)),
+					new Toolkit.LanguagePlatform.Models.PathInfo());
 
-			    return _tokenizer;
+				return _segmentPairProcessor;
 		    }
 	    }
 
@@ -146,13 +148,10 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
             }
             #endregion
 
-
-
             var index = -1;
             foreach (var segmentPair in paragraphUnit.SegmentPairs)
             {
                 index++;
-
                 
                 var pair = new SegmentPair();
 
@@ -161,7 +160,7 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                               
 	            try
 	            {
-		            var results = Tokenizer.TokenizeSegment(segmentPair);
+		            var results = SegmentPairProcessor.GetSegmentPairInfo(segmentPair);
 		            if (results != null)
 		            {
 			            pair.SourceWords = results.SourceWordCounts.Words;
@@ -213,7 +212,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                 }
                 #endregion
 
-
                 if (segmentPair.Properties.TranslationOrigin != null)
                 {
                     pair.TranslationOrigin.IsRepeated = segmentPair.Properties.TranslationOrigin.IsRepeated;
@@ -224,7 +222,6 @@ namespace Sdl.Community.PostEdit.Compare.Core.SDLXLIFF
                     pair.TranslationOrigin.RepetitionTableId = segmentPair.Properties.TranslationOrigin.RepetitionTableId.Id;
                     pair.TranslationOrigin.TextContextMatchLevel = segmentPair.Properties.TranslationOrigin.TextContextMatchLevel.ToString();
                 }
-                
 
                 #region  |  add the SegmentPair to the xParagraphs dictionary  |
 

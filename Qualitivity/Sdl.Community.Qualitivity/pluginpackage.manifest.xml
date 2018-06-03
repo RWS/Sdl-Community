@@ -12,6 +12,8 @@
 		<File>Sdl.Community.Qualitivity.Report.dll</File>
 		<File>Sdl.Community.Qualitivity.TM.dll</File>
 		<File>Sdl.Community.Qualitivity.WPFListView.dll</File>
+		<File>Sdl.Community.Toolkit.LanguagePlatform.dll</File>
+		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Qualitivity.ObjectListView.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>

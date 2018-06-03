@@ -77,7 +77,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\ThirdParty\ObjectListView\Qualitivity.ObjectListView.dll</HintPath>
     </Reference>
-   
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">  
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
@@ -89,47 +91,44 @@
       <HintPath>packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
-	  <Reference Include="Sdl.Community.Toolkit.Tokenization">
-		  <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Community.Toolkit.Tokenization.dll</HintPath>
-	  </Reference>
     <Reference Include="Sdl.Core.Settings">
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Desktop.IntegrationApi" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
+    <Reference Include="Sdl.Desktop.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Settings" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
+    <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.SQLite" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\System.Data.SQLite.dll</HintPath>
+    <Reference Include="System.Data.SQLite">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />

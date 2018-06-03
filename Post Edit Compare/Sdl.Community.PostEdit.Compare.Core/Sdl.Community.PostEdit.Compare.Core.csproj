@@ -61,9 +61,9 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Tokenization">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Community.Toolkit.Tokenization.dll</HintPath>
-    </Reference>
+	  <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">
+		  <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+	  </Reference>
     <Reference Include="Sdl.Core.Api" >
 	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Api.dll</HintPath>
     </Reference>

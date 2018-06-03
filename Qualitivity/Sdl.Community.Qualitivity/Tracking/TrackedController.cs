@@ -15,7 +15,7 @@ using Sdl.Community.Structures.Documents.Records;
 using Sdl.Community.Structures.Projects;
 using Sdl.Community.Structures.Projects.Activities;
 using Sdl.Community.TM.Database;
-using Sdl.Community.Toolkit.Tokenization;
+using Sdl.Community.Toolkit.LanguagePlatform;
 using Sdl.Core.Globalization;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
@@ -529,8 +529,9 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 			var sourceLanguage = doc.ActiveFileProperties.FileConversionProperties.SourceLanguage.CultureInfo;
 			var targetLanguage = doc.ActiveFileProperties.FileConversionProperties.TargetLanguage.CultureInfo;
-
-			var tokenizer = new Tokenizer(sourceLanguage, targetLanguage, new EnvironmentPaths(EnvironmentConstants.ProductName));
+			
+			var segmentPairProcessor = new SegmentPairProcessor(
+				new Toolkit.LanguagePlatform.Models.Settings(sourceLanguage, targetLanguage), new Toolkit.LanguagePlatform.Models.PathInfo());
 			
 			var parser = new ContentGenerator();
 
@@ -548,7 +549,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 				var placeholders = 0;
 				try
 				{
-					var results = tokenizer.TokenizeSegment(segPair);
+					var results = segmentPairProcessor.GetSegmentPairInfo(segPair);
 					if (results != null)
 					{
 						words = results.SourceWordCounts.Words;
@@ -1370,7 +1371,7 @@ namespace Sdl.Community.Qualitivity.Tracking
 
 					try
 					{						
-						var results = trackedDocuments.ActiveDocument.Tokenizer.TokenizeSegment(trackedDocuments.ActiveSegment.CurrentSegmentSelected);
+						var results = trackedDocuments.ActiveDocument.SegmentPairProcessor.GetSegmentPairInfo(trackedDocuments.ActiveSegment.CurrentSegmentSelected);
 						if (results != null)
 						{
 							record.WordCount = results.SourceWordCounts.Words;
