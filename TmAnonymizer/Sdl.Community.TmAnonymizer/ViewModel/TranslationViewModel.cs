@@ -34,6 +34,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_translationMemoryViewModel = translationMemoryViewModel;
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 			_rules = SettingsMethods.GetRules();
+			foreach (var rule in _rules)
+			{
+				rule.PropertyChanged += Rule_PropertyChanged;
+			}
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
