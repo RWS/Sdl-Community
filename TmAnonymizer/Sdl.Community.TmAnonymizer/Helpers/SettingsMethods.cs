@@ -66,5 +66,10 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				return settings;
 			}
 		}
+
+		public static void  SaveSettings(Settings settings)
+		{
+			File.WriteAllText(Constants.SettingsFilePath, JsonConvert.SerializeObject(settings));
+		}
 	}
 }

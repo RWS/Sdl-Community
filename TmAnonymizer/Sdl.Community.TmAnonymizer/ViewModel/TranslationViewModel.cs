@@ -25,22 +25,23 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _previewCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
-		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
+		private static TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
 
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_translationMemoryViewModel = translationMemoryViewModel;
-			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 			_rules = SettingsMethods.GetRules();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
+			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
 			_translationMemoryViewModel.PropertyChanged += _translationMemoryViewModel_PropertyChanged;
+			RulesCollection.CollectionChanged += RulesCollection_CollectionChanged;
 		}
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -111,7 +112,25 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				RefreshPreviewWindow();
 			}
 		}
+		private void RulesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.Action == NotifyCollectionChangedAction.Add)
+			{
+				foreach (var item in e.NewItems)
+				{
+					var rule = (Rule)item;
+					rule.PropertyChanged += Rule_PropertyChanged;
+				}
+			}
+		}
 
+		private void Rule_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			var settings = SettingsMethods.GetSettings();
+			settings.Rules = RulesCollection;
+
+			SettingsMethods.SaveSettings(settings);
+		}
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 	

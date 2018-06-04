@@ -26,7 +26,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public MainViewModel()
 		{
 			_tmViewModel = new TranslationMemoryViewModel();
-			
 			_tabItems = new ObservableCollection<TabItem>
 			{
 				new TabItem

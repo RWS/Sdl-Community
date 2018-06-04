@@ -33,6 +33,7 @@
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
+				  Name="RulesGrid"
 				  SelectedItem="{Binding SelectedItem}"
 		          Margin="5,10" >
 			<DataGrid.RowStyle>
