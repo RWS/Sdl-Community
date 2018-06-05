@@ -27,6 +27,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _previewCommand;
 		private ICommand _removeRuleCommand;
 		private ICommand _importCommand;
+		private ICommand _exportCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
@@ -155,6 +156,34 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public ICommand RemoveRuleCommand => _removeRuleCommand ??(_removeRuleCommand = new CommandHandler(RemoveRule, true));
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
+		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
+
+		private void Export()
+		{
+			if (SelectedItems.Count > 0)
+			{
+				var selectedRules = new List<Rule>();
+				var fileDialog = new SaveFileDialog
+				{
+					Title = @"Export selected expressions",
+					Filter = @"Excel |*.xlsx"
+				};
+				var result = fileDialog.ShowDialog();
+				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
+				{
+					foreach (Rule rule in SelectedItems)
+					{
+						selectedRules.Add(rule);
+					}
+					Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
+					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+			else
+			{
+				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
 
 
 		private void Import()

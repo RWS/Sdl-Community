@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -49,6 +50,22 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				}
 			}
 			return patterns;
+		}
+		public static void ExportExporessions(string filePath, List<Rule> patterns)
+		{
+			var package = GetExcelPackage(filePath);
+			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+			var lineNumber = 1;
+			foreach (var pattern in patterns)
+			{
+				if (pattern != null)
+				{
+					worksheet.Cells["A" + lineNumber].Value = pattern.Name;
+					worksheet.Cells["B" + lineNumber].Value = pattern.Description;
+					lineNumber++;
+				}
+			}
+			package.Save();
 		}
 		private static ExcelPackage GetExcelPackage(string filePath)
 		{
