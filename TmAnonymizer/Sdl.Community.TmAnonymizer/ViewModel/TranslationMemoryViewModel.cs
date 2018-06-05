@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -30,16 +31,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _selectAllCommand;
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
-		private ICommand _selectCommand;
+		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
 		private Login _credentials;
 
-		public ICommand SelectCommand => _selectCommand ?? (_selectCommand = new CommandHandler(Select, true));
-
-		private void Select()
-		{
-
-		}
 		public ObservableCollection<TmFile> TmsCollection
 		{
 			get => _tmsCollection;
@@ -52,6 +47,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 				_tmsCollection = value;
 				OnPropertyChanged(nameof(TmsCollection));
+			}
+		}
+		public IList SelectedItems
+		{
+			get => _selectedItems;
+			set
+			{
+				_selectedItems = value;
+				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
 		public bool SelectAll
@@ -161,10 +165,27 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation",MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
 			if (result == DialogResult.OK)
 			{
-				var selectedTms = TmsCollection.Where(t => t.ShouldRemove).ToList();
-				foreach (var tm in selectedTms)
+				if (SelectedItems != null)
 				{
-					TmsCollection.Remove(tm);
+					var selectedTms = new List<TmFile>();
+
+					foreach (TmFile selectedItem in SelectedItems)
+					{
+						var rule = new TmFile
+						{
+							Path = selectedItem.Path
+						};
+						selectedTms.Add(rule);
+					}
+					SelectedItems.Clear();
+					foreach (var tm in selectedTms)
+					{
+						var tmToRemove = TmsCollection.FirstOrDefault(r => r.Path.Equals(tm.Path));
+						if (tmToRemove != null)
+						{
+							TmsCollection.Remove(tmToRemove);
+						}
+					}
 				}
 			}
 		}

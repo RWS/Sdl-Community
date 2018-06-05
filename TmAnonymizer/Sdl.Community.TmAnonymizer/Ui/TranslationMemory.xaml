@@ -49,7 +49,7 @@
 			</ToolBarTray>
 		</DockPanel>
 		<CheckBox  Grid.Row="2" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<DataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
+		<helpers:CustomDataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
 				  MinWidth="100"
@@ -58,10 +58,13 @@
 		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
 				  SelectedItem="{Binding SelectedTm,UpdateSourceTrigger=PropertyChanged}"
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
+		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				  Margin="5,10" >
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+			</DataGrid.InputBindings>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Preview" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="60" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Remove?" Binding = "{Binding ShouldRemove,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}">
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
@@ -85,6 +88,6 @@
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
 			</DataGrid.Columns>
-		</DataGrid>
+		</helpers:CustomDataGrid>
 	</Grid>
 </UserControl>
