@@ -14,17 +14,6 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 	{
 		public static bool UserAgreed()
 		{
-			//if (File.Exists(Constants.SettingsFilePath))
-			//{
-			//	var json = File.ReadAllText(Constants.SettingsFilePath);
-			//	var settings = JsonConvert.DeserializeObject<Settings>(json);
-			//	if (settings != null)
-			//	{
-			//		return settings.Accepted;
-			//	}
-				
-			//}
-			//return false;
 			var settings = GetSettings();
 			return settings.Accepted;
 		}

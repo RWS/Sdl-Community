@@ -26,6 +26,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _selectAllCommand;
 		private ICommand _previewCommand;
 		private ICommand _removeRuleCommand;
+		private ICommand _importCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
@@ -152,9 +153,39 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 
-		public ICommand RemoveRuleCommand => _removeRuleCommand ??
-		                                     (_removeRuleCommand = new CommandHandler(RemoveRule, true));
+		public ICommand RemoveRuleCommand => _removeRuleCommand ??(_removeRuleCommand = new CommandHandler(RemoveRule, true));
+		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 
+
+		private void Import()
+		{
+			var fileDialog = new OpenFileDialog
+			{
+				Title = @"Please select the files you want to import",
+				Filter = @"Excel |*.xlsx",
+				CheckFileExists = true,
+				CheckPathExists = true,
+				DefaultExt = "xlsx",
+				Multiselect = true
+			};
+			var result = fileDialog.ShowDialog();
+			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
+			{
+				var importedExpressions = Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
+
+				foreach (var expression in importedExpressions)
+				{
+					var ruleExist = RulesCollection.FirstOrDefault(s => s.Name.Equals(expression.Name));
+					if (ruleExist == null)
+					{
+						RulesCollection.Add(expression);
+					}
+				}
+				var settings = SettingsMethods.GetSettings();
+				settings.Rules = RulesCollection;
+				SettingsMethods.SaveSettings(settings);
+			}
+		}
 		private void RemoveRule()
 		{
 			var message =MessageBox.Show(@"Are you sure you want to remove selected rules?",
