@@ -66,16 +66,18 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		}
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_waitWindow.Close();
+			if (_waitWindow != null)
+			{
+				_waitWindow.Close();
 
-			//open preview window
-			var previewWindow = new PreviewWindow();
-			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
-				_tmsCollection, _translationMemoryViewModel);
-			previewWindow.DataContext = previewViewModel;
-			previewWindow.Closing += PreviewWindow_Closing;
-			previewWindow.Show();
-			
+				//open preview window
+				var previewWindow = new PreviewWindow();
+				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
+					_tmsCollection, _translationMemoryViewModel);
+				previewWindow.DataContext = previewViewModel;
+				previewWindow.Closing += PreviewWindow_Closing;
+				previewWindow.Show();
+			}
 		}
 
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
@@ -85,15 +87,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate
-			{
-				_waitWindow = new WaitWindow();
-				_waitWindow.Show();
-			});
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
 			var selectedRulesCount = RulesCollection.Count(r => r.IsSelected);
 			if (selectedTms.Count > 0 && selectedRulesCount > 0)
 			{
+				System.Windows.Application.Current.Dispatcher.Invoke(delegate
+				{
+					_waitWindow = new WaitWindow();
+					_waitWindow.Show();
+				});
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())
 				{
