@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
@@ -23,14 +25,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private bool _selectAll;
 		private ICommand _selectAllCommand;
 		private ICommand _previewCommand;
+		private ICommand _removeRuleCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
+		private IList _selectedItems;
 
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
+			_selectedItems = new List<Rule>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 			_rules = SettingsMethods.GetRules();
@@ -48,6 +53,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			RulesCollection.CollectionChanged += RulesCollection_CollectionChanged;
 		}
 
+		public IList SelectedItems
+		{
+			get { return _selectedItems; }
+			set
+			{
+				_selectedItems = value;
+				OnPropertyChanged(nameof(SelectedItems));
+			}
+		}
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_waitWindow.Close();
@@ -137,7 +151,46 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		}
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
-	
+
+		public ICommand RemoveRuleCommand => _removeRuleCommand ??
+		                                     (_removeRuleCommand = new CommandHandler(RemoveRule, true));
+
+		private void RemoveRule()
+		{
+			var message =MessageBox.Show(@"Are you sure you want to remove selected rules?",
+				"", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+			if (message == DialogResult.OK)
+			{
+				if (SelectedItems != null)
+				{
+					var selectedRules = new List<Rule>();
+
+					foreach (Rule selectedItem in SelectedItems)
+					{
+						
+						var rule = new Rule
+						{
+							Id = selectedItem.Id
+						};
+						selectedRules.Add(rule);
+					}
+					SelectedItems.Clear();
+					foreach (var rule in selectedRules)
+					{
+						var ruleRoRemove = RulesCollection.FirstOrDefault(r => r.Id.Equals(rule.Id));
+						if (ruleRoRemove != null)
+						{
+							RulesCollection.Remove(ruleRoRemove);
+						}
+					}
+				}
+
+				var settings = SettingsMethods.GetSettings();
+				settings.Rules = RulesCollection;
+				SettingsMethods.SaveSettings(settings);
+			}
+			
+		}
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{

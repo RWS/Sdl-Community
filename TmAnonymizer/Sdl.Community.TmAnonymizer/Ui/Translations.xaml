@@ -28,14 +28,18 @@
 
 		<TextBlock Grid.Row="0" Margin="15,5,0,5">Please rules you want to apply</TextBlock>
 		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
+		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
-				  Name="RulesGrid"
 				  SelectedItem="{Binding SelectedItem}"
+		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 		          Margin="5,10" >
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding RemoveRuleCommand}"/>
+			</DataGrid.InputBindings>
+			
 			<DataGrid.RowStyle>
 				<Style TargetType="DataGridRow">
 					<Setter Property="ToolTip">
@@ -46,7 +50,7 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Select" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Use" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
@@ -70,7 +74,7 @@
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
 			</DataGrid.Columns>
-		</DataGrid>
+		</helpers:CustomDataGrid>
 		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
 				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import rules" Command="{Binding ImportCommand}"></Button>
@@ -78,8 +82,6 @@
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
-
-		
 	</Grid>
 </UserControl>
 

@@ -122,6 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\CustomDataGrid.cs" />
     <Compile Include="Helpers\SettingsMethods.cs" />
     <Compile Include="Helpers\BindableRichTextBox.cs" />
     <Compile Include="Helpers\CommandHandler.cs" />
