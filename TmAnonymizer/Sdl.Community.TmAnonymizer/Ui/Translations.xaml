@@ -50,7 +50,7 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Use" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Preview" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">

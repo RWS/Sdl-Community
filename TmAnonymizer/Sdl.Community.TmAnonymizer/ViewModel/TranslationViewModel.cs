@@ -57,7 +57,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public IList SelectedItems
 		{
-			get { return _selectedItems; }
+			get => _selectedItems;
 			set
 			{
 				_selectedItems = value;
@@ -73,7 +73,14 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
 				_tmsCollection, _translationMemoryViewModel);
 			previewWindow.DataContext = previewViewModel;
+			previewWindow.Closing += PreviewWindow_Closing;
 			previewWindow.Show();
+			
+		}
+
+		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
+		{
+			SourceSearchResults.Clear();
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)

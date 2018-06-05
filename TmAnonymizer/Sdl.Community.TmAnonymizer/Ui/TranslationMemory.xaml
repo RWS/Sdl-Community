@@ -60,7 +60,7 @@
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
 				  Margin="5,10" >
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Use " Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Preview" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridCheckBoxColumn Width="Auto" MinWidth="60" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Remove?" Binding = "{Binding ShouldRemove,UpdateSourceTrigger=PropertyChanged}" />
 				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}">
 					<DataGridTextColumn.CellStyle>

@@ -20,41 +20,44 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		{
 			var tm =
 				new FileBasedTranslationMemory(tmPath);
-			
 			var tmIterator = new RegularIterator();
-
 			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			var pi = new PersonalInformation(selectedRules);
 
-			foreach (var translationUnit in tus)
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate
 			{
-				var sourceText = translationUnit.SourceSegment.ToPlain();
-				if (pi.ContainsPi(sourceText))
+			
+				var pi = new PersonalInformation(selectedRules);
+
+				foreach (var translationUnit in tus)
 				{
-					var searchResult = new SourceSearchResult
+					var sourceText = translationUnit.SourceSegment.ToPlain();
+					if (pi.ContainsPi(sourceText))
 					{
-						Id = translationUnit.ResourceId.Guid.ToString(),
-						SourceText = sourceText,
-						MatchResult = new MatchResult
+						var searchResult = new SourceSearchResult
 						{
-							Positions = pi.GetPersonalDataPositions(sourceText)
-						},
-						TmFilePath = tmPath,
-						IsServer = false,
-						SegmentNumber = translationUnit.ResourceId.Id.ToString()
-					};
-					var targetText = translationUnit.TargetSegment.ToPlain();
-					if (pi.ContainsPi(targetText))
-					{
-						searchResult.TargetText = targetText;
-						searchResult.TargetMatchResult = new MatchResult
-						{
-							Positions = pi.GetPersonalDataPositions(targetText)
+							Id = translationUnit.ResourceId.Guid.ToString(),
+							SourceText = sourceText,
+							MatchResult = new MatchResult
+							{
+								Positions = pi.GetPersonalDataPositions(sourceText)
+							},
+							TmFilePath = tmPath,
+							IsServer = false,
+							SegmentNumber = translationUnit.ResourceId.Id.ToString()
 						};
+						var targetText = translationUnit.TargetSegment.ToPlain();
+						if (pi.ContainsPi(targetText))
+						{
+							searchResult.TargetText = targetText;
+							searchResult.TargetMatchResult = new MatchResult
+							{
+								Positions = pi.GetPersonalDataPositions(targetText)
+							};
+						}
+						sourceSearchResult.Add(searchResult);
 					}
-					sourceSearchResult.Add(searchResult);
 				}
-			}
+			});
 			return new AnonymizeTranslationMemory
 			{
 				TmPath = tmPath,
@@ -65,55 +68,58 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		public static AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TranslationProviderServer translationProvider,string tmPath,
 			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
 		{
-			var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
-			var languageDirections = translationMemory.LanguageDirections;
-			var pi = new PersonalInformation(selectedRules);
 			var allTusForLanguageDirections = new List<TranslationUnit>();
-
-			foreach (var languageDirection in languageDirections)
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate
 			{
-				var tmIterator = new RegularIterator();
-				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-				if (translationUnits != null)
+				var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
+				var languageDirections = translationMemory.LanguageDirections;
+				var pi = new PersonalInformation(selectedRules);
+
+				foreach (var languageDirection in languageDirections)
 				{
-					allTusForLanguageDirections.AddRange(translationUnits);
-					foreach (var translationUnit in translationUnits)
+					var tmIterator = new RegularIterator();
+					var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
+					if (translationUnits != null)
 					{
-						var sourceText = translationUnit.SourceSegment.ToPlain();
-						if (pi.ContainsPi(sourceText))
+						allTusForLanguageDirections.AddRange(translationUnits);
+						foreach (var translationUnit in translationUnits)
 						{
-							var searchResult = new SourceSearchResult
+							var sourceText = translationUnit.SourceSegment.ToPlain();
+							if (pi.ContainsPi(sourceText))
 							{
-								Id = translationUnit.ResourceId.Guid.ToString(),
-								SourceText = sourceText,
-								MatchResult = new MatchResult
+								var searchResult = new SourceSearchResult
 								{
-									Positions = pi.GetPersonalDataPositions(sourceText)
-								},
-								TmFilePath = tmPath,
-								IsServer = true,
-								SegmentNumber = translationUnit.ResourceId.Id.ToString()
-							};
-							var targetText = translationUnit.TargetSegment.ToPlain();
-							if (pi.ContainsPi(targetText))
-							{
-								searchResult.TargetText = targetText;
-								searchResult.TargetMatchResult = new MatchResult
-								{
-									Positions = pi.GetPersonalDataPositions(targetText)
+									Id = translationUnit.ResourceId.Guid.ToString(),
+									SourceText = sourceText,
+									MatchResult = new MatchResult
+									{
+										Positions = pi.GetPersonalDataPositions(sourceText)
+									},
+									TmFilePath = tmPath,
+									IsServer = true,
+									SegmentNumber = translationUnit.ResourceId.Id.ToString()
 								};
+								var targetText = translationUnit.TargetSegment.ToPlain();
+								if (pi.ContainsPi(targetText))
+								{
+									searchResult.TargetText = targetText;
+									searchResult.TargetMatchResult = new MatchResult
+									{
+										Positions = pi.GetPersonalDataPositions(targetText)
+									};
+								}
+								sourceSearchResult.Add(searchResult);
 							}
-							sourceSearchResult.Add(searchResult);
 						}
 					}
 				}
-			}
+				
+			});
 			return new AnonymizeTranslationMemory
 			{
 				TmPath = tmPath,
 				TranslationUnits = allTusForLanguageDirections
 			};
-
 		}
 
 		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider,
