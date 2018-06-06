@@ -74,6 +74,9 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 
 					_preparedSourceText += tagText;
+
+					//_preparedSourceText += HttpUtility.HtmlEncode(tagText);
+
 					//now we have to figure out whether this tag is preceded and/or followed by whitespace
 					if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
 					{
