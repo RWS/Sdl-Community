@@ -55,7 +55,6 @@ namespace Sdl.Community.DeepLMTProvider
 				if (translatedObject != null)
 				{
 					translatedText = translatedObject.Translations[0].Text;
-					translatedText = HttpUtility.HtmlDecode(translatedText);
 				}
 			}
 			catch (WebException e) 

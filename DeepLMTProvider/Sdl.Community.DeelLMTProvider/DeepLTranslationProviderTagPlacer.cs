@@ -70,12 +70,10 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 					if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
 					{
-						tagText = "</tg" + tagInfo.TagId + ">";
+						tagText = "<tg" + tagInfo.TagId + "/>";
 					}
 
 					_preparedSourceText += tagText;
-
-					//_preparedSourceText += HttpUtility.HtmlEncode(tagText);
 
 					//now we have to figure out whether this tag is preceded and/or followed by whitespace
 					if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
@@ -103,7 +101,8 @@ namespace Sdl.Community.DeepLMTProvider
 				else
 				{//if not a tag
 					var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-					_preparedSourceText += str;
+					//_preparedSourceText += str;
+					_preparedSourceText += _sourceSegment.Elements[i].ToString();
 				}
 			}
 			TagsInfo.Clear();
@@ -156,11 +155,11 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 			}
-			if (segment.Elements.Any())
-			{
-				segment = RemoveTrailingClosingTags(segment);
-			}
-			
+			//if (segment.Elements.Any())
+			//{
+			//	segment = RemoveTrailingClosingTags(segment);
+			//}
+
 
 			return segment; //this will return a tagged segment
 		}
@@ -176,6 +175,7 @@ namespace Sdl.Community.DeepLMTProvider
 			var element = segment.Elements[segment.Elements.Count - 1]; //get last element
 			var str = element.ToString();
 
+			//check for normal tags
 			var pattern = @"\</tg[0-9]*\>"; //we want to find "</tg" + {any number} + ">"
 			var rgx = new Regex(pattern);
 			var elType = element.GetType();
@@ -190,6 +190,22 @@ namespace Sdl.Community.DeepLMTProvider
 				segment.Elements.Remove(element);
 				segment.Add(str.TrimStart());
 			}
+			else
+			{
+				var placeholderPattern = @"\<tg[0-9]*/\>";
+				var placeRgx = new Regex(placeholderPattern);
+				var placeholderMatches = placeRgx.Matches(str);
+				if (elType.ToString().Equals("Sdl.LanguagePlatform.Core.Text") && placeholderMatches.Count > 0)
+				{
+					foreach (Match myMatch in placeholderMatches)
+					{
+						str = str.Replace(myMatch.Value, ""); //puts our separator around tagtexts
+					}
+
+					segment.Elements.Remove(element);
+					segment.Add(str.TrimStart());
+				}
+			}
 			#endregion
 
 			return segment;
@@ -203,7 +219,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			//first create a regex to put our array separators around the tags
 			var str = _returnedText;
-			var pattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)";
+			var pattern = @"(<tg[0-9]*\>)|(<\/tg[0-9]*\>)|(\<tg[0-9]*/\>)";
 
 			var rgx = new Regex(pattern);
 			var matches = rgx.Matches(_returnedText);
