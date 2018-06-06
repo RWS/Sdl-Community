@@ -37,7 +37,7 @@ namespace Sdl.Community.DeepLMTProvider
 				//request.AddParameter("text", sourcetext);
 
 				request.AddParameter("text", sourcetext);
-				//request.AddParameter("source_lang", sourceLanguage);
+				request.AddParameter("source_lang", sourceLanguage);
 				request.AddParameter("target_lang", targetLanguage);
 				//adding this resolve line breaks issue and missing ##login##
 				request.AddParameter("preserve_formatting", 1);
