@@ -234,14 +234,18 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					var selectedRules = new List<Rule>();
 
-					foreach (Rule selectedItem in SelectedItems)
+					foreach (var selectedItem in SelectedItems)
 					{
-						
-						var rule = new Rule
+						if (!selectedItem.GetType().Name.Equals("NamedObject"))
 						{
-							Id = selectedItem.Id
-						};
-						selectedRules.Add(rule);
+							var item = (Rule) selectedItem;
+							var rule = new Rule
+							{
+								Id = item.Id
+							};
+							selectedRules.Add(rule);
+						}
+						
 					}
 					SelectedItems.Clear();
 					foreach (var rule in selectedRules)
