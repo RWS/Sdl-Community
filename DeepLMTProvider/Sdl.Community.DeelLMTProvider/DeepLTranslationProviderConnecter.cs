@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using Newtonsoft.Json;
 using RestSharp;
@@ -32,6 +35,14 @@ namespace Sdl.Community.DeepLMTProvider
 				var client = new RestClient(@"https://api.deepl.com/v1");
 				var request = new RestRequest("translate", Method.POST);
 
+				//search for words like this <word> 
+				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
+				var words = rgx.Matches(sourcetext);
+
+				if (words.Count>0)
+				{
+					sourcetext =ReplaceCharacters(sourcetext,words);
+				}
 				//request.AddParameter("auth_key", ApiKey);
 				//request.AddParameter("source_lang", sourceLanguage);
 				//request.AddParameter("target_lang", targetLanguage);
@@ -55,6 +66,7 @@ namespace Sdl.Community.DeepLMTProvider
 				if (translatedObject != null)
 				{
 					translatedText = translatedObject.Translations[0].Text;
+					translatedText = HttpUtility.HtmlDecode(translatedText);
 				}
 			}
 			catch (WebException e) 
@@ -66,6 +78,58 @@ namespace Sdl.Community.DeepLMTProvider
 			}
 
 			return translatedText;
+		}
+
+		private string ReplaceCharacters(string sourcetext,MatchCollection matches)
+		{
+			var indexes = new List<int>();
+			foreach (Match match in matches)
+			{
+				if (match.Index.Equals(0))
+				{
+					indexes.Add(match.Length);
+				}
+				else
+				{
+					//check if there is any text after PI
+					var remainingText = sourcetext.Substring(match.Index + match.Length);
+					if (!string.IsNullOrEmpty(remainingText))
+					{
+						//get the position where PI starts to split before
+						indexes.Add(match.Index);
+						//split after PI
+						indexes.Add(match.Index + match.Length);
+					}
+					else
+					{
+						indexes.Add(match.Index);
+					}
+				}
+			}
+			var splitedText = sourcetext.SplitAt(indexes.ToArray()).ToList();
+			var positions = new List<int>();
+			for (var i=0;i<splitedText.Count;i++)
+			{
+				if (!splitedText[i].Contains("tg"))
+				{
+					positions.Add(i);
+				}
+			}
+
+			foreach (var position in positions)
+			{
+				var originalString = splitedText[position];
+				var start = Regex.Replace(originalString, "<", "&lt;");
+				var finalString = Regex.Replace(start, ">", "&gt;");
+				splitedText[position] = finalString;
+			}
+			var finalText = string.Empty;
+			foreach (var text in splitedText)
+			{
+				finalText += text;
+			}
+
+			return finalText;
 		}
 	}
 }

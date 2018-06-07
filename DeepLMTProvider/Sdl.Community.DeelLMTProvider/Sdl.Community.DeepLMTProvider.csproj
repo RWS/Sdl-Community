@@ -113,6 +113,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="StringExtensions.cs" />
     <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="SdlCommunity.snk" />
