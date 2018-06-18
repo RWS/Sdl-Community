@@ -8,6 +8,7 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Windows.Forms;
 	using Sdl.Community.Toolkit.Core;
 
 	/// <summary>
@@ -543,72 +544,85 @@ namespace Sdl.Utilities.SplitSDLXLIFF.Lib
             return text.Split(new char[] { ' ', '.', ',', '?', '!' }, StringSplitOptions.RemoveEmptyEntries).Length;
         }
 
-        // SDL libraries reuse
-        public static int GetWordsCount(this string text, string culture)
-        {
-			var studioInstalledLocation = Path.GetDirectoryName(GetInstalledStudioVersion().InstallPath);
-			int wordsNum = 0;
-			var _Culture = new CultureInfo(culture);
-			var _LinguaSegment = new Segment(_Culture);
-	        Assembly languageProcessingAssembly;
-	        Assembly translationMemoryToolsAssembly;
+		// SDL libraries reuse
+		public static int GetWordsCount(this string text, string culture)
+		{
+			var studioInstalledLocation = GetInstalledStudioVersion();
+			var studioInstalledLocationPath = studioInstalledLocation != null ? Path.GetDirectoryName(GetInstalledStudioVersion().InstallPath)
+				: string.Empty;
+			if (string.IsNullOrEmpty(studioInstalledLocationPath))
+			{
+				MessageBox.Show("Studio location could not be found. Please ensure Trados Studio is installed in order to split files!", 
+					"Informative message", 
+					MessageBoxButtons.OK, 
+					MessageBoxIcon.Information);
+				return 0;
+			}
+			else
+			{
+				int wordsNum = 0;
+				var _Culture = new CultureInfo(culture);
+				var _LinguaSegment = new Segment(_Culture);
+				Assembly languageProcessingAssembly;
+				Assembly translationMemoryToolsAssembly;
 
-			// set values to the IText (used when calling builder.VisitText() method) 
-			var _textSDL = new Text(text);
-	        var txt = new Common.Text(text);
-	        FileTypeSupport.Framework.BilingualApi.IText _iTxt = txt;
-			var txtProperties = new Common.TextProperties(text);
-	        _iTxt.Properties = txtProperties;
+				// set values to the IText (used when calling builder.VisitText() method) 
+				var _textSDL = new Text(text);
+				var txt = new Common.Text(text);
+				FileTypeSupport.Framework.BilingualApi.IText _iTxt = txt;
+				var txtProperties = new Common.TextProperties(text);
+				_iTxt.Properties = txtProperties;
 
-			translationMemoryToolsAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocation, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));			
+				translationMemoryToolsAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.LanguagePlatform.TranslationMemoryTools.dll"));
 
-			//get object type 
-			var linguaSegmentBuilderType =
-		        translationMemoryToolsAssembly.GetType("Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder");
+				//get object type 
+				var linguaSegmentBuilderType =
+					translationMemoryToolsAssembly.GetType("Sdl.LanguagePlatform.TranslationMemoryTools.LinguaSegmentBuilder");
 
-			//create constructor type
-			Type[] constructorArgumentTypes = { typeof(Segment), typeof(bool), typeof(bool) };
+				//create constructor type
+				Type[] constructorArgumentTypes = { typeof(Segment), typeof(bool), typeof(bool) };
 
-			//get constructor
-			ConstructorInfo linguaSegmentConstrutor = linguaSegmentBuilderType.GetConstructor(constructorArgumentTypes);
+				//get constructor
+				ConstructorInfo linguaSegmentConstrutor = linguaSegmentBuilderType.GetConstructor(constructorArgumentTypes);
 
-			// invoke constructor with its arguments and call method/set values from builder object
-			dynamic builder = linguaSegmentConstrutor.Invoke(new object[] { _LinguaSegment, false, false });
-			builder.VisitText(_iTxt);
-			builder.Result.Elements.Add(_textSDL);
+				// invoke constructor with its arguments and call method/set values from builder object
+				dynamic builder = linguaSegmentConstrutor.Invoke(new object[] { _LinguaSegment, false, false });
+				builder.VisitText(_iTxt);
+				builder.Result.Elements.Add(_textSDL);
 
-		    languageProcessingAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocation, "Sdl.Core.LanguageProcessing.dll"));
-			
-			//get object type
-			var tokenizationFactoryType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.TokenizerSetupFactory");
-			dynamic tokenizerFactory = tokenizationFactoryType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static);
+				languageProcessingAssembly = Assembly.LoadFrom(Path.Combine(studioInstalledLocationPath, "Sdl.Core.LanguageProcessing.dll"));
 
-			var createMethod = tokenizerFactory[0];
-	        if (createMethod != null)
-	        {
-		        dynamic setup = createMethod.Invoke(null, new object[] {_Culture});
+				//get object type
+				var tokenizationFactoryType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.TokenizerSetupFactory");
+				dynamic tokenizerFactory = tokenizationFactoryType.GetMethods(BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Static);
 
-		        setup.CreateWhitespaceTokens = true;
-		        setup.BuiltinRecognizers =
-			        LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeNumbers |
-			        LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeDates |
-			        LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeTimes;
+				var createMethod = tokenizerFactory[0];
+				if (createMethod != null)
+				{
+					dynamic setup = createMethod.Invoke(null, new object[] { _Culture });
 
-		        var tokenizerType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.Tokenizer");
-		        Type[] constructorTokenizerArgumentTypes = {setup.GetType()};
-		        ConstructorInfo tokenizerConstructor = tokenizerType.GetConstructor(constructorTokenizerArgumentTypes);
-		        dynamic tokenizer = tokenizerConstructor.Invoke(new object[] {setup});
+					setup.CreateWhitespaceTokens = true;
+					setup.BuiltinRecognizers =
+						LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeNumbers |
+						LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeDates |
+						LanguagePlatform.Core.Tokenization.BuiltinRecognizers.RecognizeTimes;
 
-		        IList<LanguagePlatform.Core.Tokenization.Token> _tokens = tokenizer.Tokenize(_LinguaSegment);
-		        foreach (LanguagePlatform.Core.Tokenization.Token _token in _tokens)
-		        {
-			        if (_token.IsWord)
-			        {
-				        wordsNum++;
-			        }
-		        }
-	        }
-	        return wordsNum;
+					var tokenizerType = languageProcessingAssembly.GetType("Sdl.Core.LanguageProcessing.Tokenization.Tokenizer");
+					Type[] constructorTokenizerArgumentTypes = { setup.GetType() };
+					ConstructorInfo tokenizerConstructor = tokenizerType.GetConstructor(constructorTokenizerArgumentTypes);
+					dynamic tokenizer = tokenizerConstructor.Invoke(new object[] { setup });
+
+					IList<LanguagePlatform.Core.Tokenization.Token> _tokens = tokenizer.Tokenize(_LinguaSegment);
+					foreach (LanguagePlatform.Core.Tokenization.Token _token in _tokens)
+					{
+						if (_token.IsWord)
+						{
+							wordsNum++;
+						}
+					}
+				}
+				return wordsNum;
+			}
 		}
 
 		/// <summary>
