@@ -13,13 +13,6 @@ namespace Sdl.Community.TmAnonymizer.Studio
 {
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
-		private List<string> _patterns = new List<string>
-		{
-			@"\b(?:\d[ -]*?){13,16}\b",//PCI (Payment Card Industry)
-			@"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b",//Email addresses
-			@"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b",//UK National Insurance Number
-			@"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b", //"Social Security Numbers"
-		};
 		public List<object> SegmentColection { get; set; }
 
 		public void VisitText(Text text)
@@ -60,9 +53,9 @@ namespace Sdl.Community.TmAnonymizer.Studio
 		private List<int> GetPersonalData(string text)
 		{
 			var personalDataIndex = new List<int>();
-			foreach (var pattern in _patterns)
+			foreach (var rule in SettingsMethods.GetRules())
 			{
-				var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
 				
 				foreach (System.Text.RegularExpressions.Match match in matches)
@@ -94,9 +87,9 @@ namespace Sdl.Community.TmAnonymizer.Studio
 		}
 		private bool ContainsPi(string text)
 		{
-			foreach (var pattern in _patterns)
+			foreach (var rule in SettingsMethods.GetRules())
 			{
-				var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var match = regex.Match(text);
 				if (match.Success)
 				{
