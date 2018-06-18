@@ -20,7 +20,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		{
 			var tm =
 				new FileBasedTranslationMemory(tmPath);
-			var tmIterator = new RegularIterator();
+			var unitsCount = tm.LanguageDirection.GetTranslationUnitCount();
+			var tmIterator = new RegularIterator(unitsCount);
 			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
 
 			System.Windows.Application.Current.Dispatcher.Invoke(delegate
@@ -77,7 +78,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 				foreach (var languageDirection in languageDirections)
 				{
-					var tmIterator = new RegularIterator();
+					var unitsCount = languageDirection.GetTranslationUnitCount();
+					var tmIterator = new RegularIterator(unitsCount);
 					var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
 					if (translationUnits != null)
 					{
