@@ -54,5 +54,15 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			};
 			dataContext?.SelectedWordsIndex.Add(position.Index);
 		}
+
+		private void UnselectWord(object sender, RoutedEventArgs e)
+		{
+			var docStart = _textBox.Document.ContentStart;
+			var start = _textBox.Selection.Start;
+			var end = _textBox.Selection.End;
+
+			var tr = new TextRange(start, end);
+			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+		}
 	}
 }

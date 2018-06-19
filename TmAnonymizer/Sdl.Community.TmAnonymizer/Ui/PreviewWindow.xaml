@@ -55,7 +55,8 @@
 								</xctk:RichTextBox.TextFormatter>
 								<xctk:RichTextBox.ContextMenu>
 									<ContextMenu >
-											<MenuItem Header="Select word for anonymization" Command="{Binding SelectSourceText}" CommandParameter="{Binding}" Click="MenuItem_OnClick"></MenuItem>
+											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"></MenuItem>
+											<MenuItem Header="Unselect word" Click="UnselectWord"></MenuItem>
 										</ContextMenu>
 								</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
