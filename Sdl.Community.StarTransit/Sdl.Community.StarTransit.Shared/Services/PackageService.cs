@@ -270,7 +270,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
             {
                 extension = "WEL";
             }
-            var filesAndTms =
+			//StarTransit for the language code 1104 uses "MNG" as three letter code
+			if (string.Equals(extension, "MNN"))
+			{
+				extension = "MNG";
+			}
+			var filesAndTms =
                 Directory.GetFiles(pathToTempFolder, "*." + extension, SearchOption.AllDirectories).ToList();
 
             return filesAndTms;
