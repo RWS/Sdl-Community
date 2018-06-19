@@ -217,19 +217,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 					{
 						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
 					}
-
-					translationUnit.SystemFields.CreationUser = "N/A";
-					translationUnit.SystemFields.UseUser = "N/A";
-					tm.LanguageDirection.UpdateTranslationUnit(translationUnit);
 				}
-				//	//foreach (FieldValue item in translationUnit.FieldValues)
-				//	//{
-				//	//	var anonymized = AnonymizeData.EncryptData(item.GetValueString(), "Andrea");
-				//	//	item.Clear();
-				//	//	item.Add(anonymized);
-				//	//}
-				//	//var test = translationUnit.DocumentSegmentPair
-				//}
 			}
 
 		}
