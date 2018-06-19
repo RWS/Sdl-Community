@@ -15,6 +15,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
+using System.Windows.Forms;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
@@ -55,50 +56,72 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
             List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
-            foreach (var pair in package.LanguagePairs)
-            {
-                targetProjectFiles.Clear();
-                //import language pair TM if any
-                if (pair.HasTm)
-                {
-                    var importer = new TransitTmImporter(pair.SourceLanguage,
-                           pair.TargetLanguage,
-                           pair.CreateNewTm,
-                           fileTypeManager,
-                           pair.TmPath);
-                    foreach (var tm in pair.StarTranslationMemoryMetadatas)
-                    {
+			foreach (var pair in package.LanguagePairs)
+			{
+				targetProjectFiles.Clear();
+				//import language pair TM if any
+				if (pair.HasTm)
+				{
+					var importer = new TransitTmImporter(pair.SourceLanguage,
+						   pair.TargetLanguage,
+						   pair.CreateNewTm,
+						   fileTypeManager,
+						   pair.TmPath);
+					foreach (var tm in pair.StarTranslationMemoryMetadatas)
+					{
 
-                        importer.ImportStarTransitTm(tm.TargetFile);
-
-
-                    }
-                    tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GeTranslationProviderReference(),
-                           true,
-                           true,
-                           true));
-                }
-                targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-                newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-                var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
-                {
-                    AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
-                    AutomaticTaskTemplateIds.CopyToTargetLanguages,
-                    AutomaticTaskTemplateIds.PerfectMatch,
-                    AutomaticTaskTemplateIds.PreTranslateFiles,
-                    AutomaticTaskTemplateIds.AnalyzeFiles,
-
-                });
+						importer.ImportStarTransitTm(tm.TargetFile);
 
 
-                newProject.UpdateTranslationProviderConfiguration(tmConfig);
-                newProject.Save();
-            }
+					}
+					tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GeTranslationProviderReference(),
+						   true,
+						   true,
+						   true));
+				}
 
-            CreateMetadataFolder(package.Location, package.PathToPrjFile);
+				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
+				{
+					MessageBox.Show("Project was not created correctly because no target files were found in the package!",
+						"Informative message",
+						MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+				}
+				else
+				{
+					targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
+					newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+					var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
+					{
+					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
+					AutomaticTaskTemplateIds.CopyToTargetLanguages,
+					AutomaticTaskTemplateIds.PerfectMatch,
+					AutomaticTaskTemplateIds.PreTranslateFiles,
+					AutomaticTaskTemplateIds.AnalyzeFiles,
 
-            Controller.RefreshProjects();
+					});
 
+					if (taskSequence.Status.Equals(ProjectAutomation.Core.TaskStatus.Failed))
+					{
+						MessageBox.Show(
+							"Project could not be created. Error occured while running automatic tasks!", "Informative message",
+							MessageBoxButtons.OK,
+							MessageBoxIcon.Information);
+					}
+					else
+					{
+						newProject.UpdateTranslationProviderConfiguration(tmConfig);
+						newProject.Save();
+					}
+				}
+			}
+
+			if(Directory.Exists(newProject.FilePath))
+			{
+				CreateMetadataFolder(package.Location, package.PathToPrjFile);
+
+				Controller.RefreshProjects();
+			}         
         }
 
         private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
