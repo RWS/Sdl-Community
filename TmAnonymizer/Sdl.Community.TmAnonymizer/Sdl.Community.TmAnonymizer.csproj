@@ -130,7 +130,6 @@
     <Compile Include="Helpers\CustomDataGrid.cs" />
     <Compile Include="Helpers\Expressions.cs" />
     <Compile Include="Helpers\SettingsMethods.cs" />
-    <Compile Include="Helpers\BindableRichTextBox.cs" />
     <Compile Include="Helpers\CommandHandler.cs" />
     <Compile Include="Helpers\Constants.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />

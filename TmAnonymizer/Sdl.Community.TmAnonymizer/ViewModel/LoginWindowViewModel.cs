@@ -135,6 +135,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Connects to GS and set the list of TMS
+		/// </summary>
+		/// <param name="login"></param>
 		private void GetServerTms(Login login)
 		{
 			try
@@ -182,6 +186,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 		
+		/// <summary>
+		/// Validation for the form
+		/// All fields are required
+		/// </summary>
+		/// <returns></returns>
 		private bool IsValid()
 		{
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&

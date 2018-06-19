@@ -10,7 +10,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
     public  class PersonalInformation
     {
-	    private List<Rule> _patterns;
+	    private readonly List<Rule> _patterns;
 		public PersonalInformation(List<Rule> patterns)
 		{
 			_patterns = patterns;
@@ -30,6 +30,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		    return false;
 	    }
 
+		/// <summary>
+		/// Gets a list with the positions and lenghts of PI in text 
+		/// </summary>
+		/// <param name="text">Segment plain text</param>
+		/// <returns>List of PI positions</returns>
 	    public  List<Position> GetPersonalDataPositions(string text)
 	    {
 		    var personalDataIndex = new List<Position>();

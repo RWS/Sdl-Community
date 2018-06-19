@@ -15,6 +15,13 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
 	public static class Tm
 	{
+		/// <summary>
+		/// Gets TUs which contains PI
+		/// </summary>
+		/// <param name="tmPath"></param>
+		/// <param name="sourceSearchResult">Regex search result</param>
+		/// <param name="selectedRules">Selected rules from the grid</param>
+		/// <returns>An object which has Tm path and a list of trasnlation units which contains PI</returns>
 		public static AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(string tmPath,
 			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
 		{
@@ -66,7 +73,14 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				TranslationUnits = tus.ToList()
 			};
 		}
-
+		/// <summary>
+		/// Gets server based TUs which contains PI
+		/// </summary>
+		/// <param name="translationProvider">Translation provider</param>
+		/// <param name="tmPath">Translation memory path</param>
+		/// <param name="sourceSearchResult">Regex search result</param>
+		/// <param name="selectedRules">Selected rules from the grid</param>
+		/// <returns>An object which has Tm path and a list of trasnlation units which contains PI</returns>
 		public static AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TranslationProviderServer translationProvider,string tmPath,
 			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
 		{
@@ -125,7 +139,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				TranslationUnits = allTusForLanguageDirections
 			};
 		}
-
+		/// <summary>
+		/// Anonymize Server Based TU
+		/// </summary>
+		/// <param name="translationProvider"></param>
+		/// <param name="tusToAnonymize">TUs which contains PI</param>
 		public static void AnonymizeServerBasedTu(TranslationProviderServer translationProvider,
 			List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
@@ -176,7 +194,10 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 
 		}
-
+		/// <summary>
+		/// Anonymize File Based TU
+		/// </summary>
+		/// <param name="tusToAnonymize">TUs which contains PI</param>
 		public static void AnonymizeFileBasedTu(List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			foreach (var translationUnitPair in tusToAnonymize)

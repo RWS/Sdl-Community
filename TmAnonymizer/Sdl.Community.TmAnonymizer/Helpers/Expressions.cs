@@ -12,6 +12,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
 	public static class Expressions
 	{
+		/// <summary>
+		/// Read expressions from excel file
+		/// </summary>
+		/// <param name="files"></param>
+		/// <returns>List of rules</returns>
 		public static List<Rule> GetImportedExpressions(List<string> files)
 		{
 			var patterns = new List<Rule>();
@@ -51,6 +56,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 			return patterns;
 		}
+		/// <summary>
+		/// Save selected expressions from grid in excel file
+		/// </summary>
+		/// <param name="filePath">File path of excel</param>
+		/// <param name="patterns">Selected patterns from grid</param>
 		public static void ExportExporessions(string filePath, List<Rule> patterns)
 		{
 			var package = GetExcelPackage(filePath);

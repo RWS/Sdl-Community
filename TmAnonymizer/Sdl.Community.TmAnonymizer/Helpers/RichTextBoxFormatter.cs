@@ -17,6 +17,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			return new TextRange(document.ContentStart, document.ContentEnd).Text;
 		}
 
+		/// <summary>
+		/// Set background color for matching expressions in preview grid
+		/// </summary>
+		/// <param name="document"></param>
+		/// <param name="text"></param>
 	    public void SetText(FlowDocument document, string text)
 	    {
 		    if (string.IsNullOrEmpty(text)) return;
@@ -68,6 +73,12 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		 
 		}
+		/// <summary>
+		/// Gets the exact position of text pointer
+		/// </summary>
+		/// <param name="start"></param>
+		/// <param name="x"></param>
+		/// <returns></returns>
 	    private static TextPointer GetPoint(TextPointer start, int x)
 	    {
 		    var ret = start;

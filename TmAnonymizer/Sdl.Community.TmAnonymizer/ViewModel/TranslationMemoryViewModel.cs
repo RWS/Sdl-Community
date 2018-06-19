@@ -124,6 +124,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Handle drop file event
+		/// </summary>
+		/// <param name="dropedFile"></param>
 		private void HandlePreviewDrop(object dropedFile)
 		{
 			var file = dropedFile as System.Windows.DataObject;
@@ -232,6 +236,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
+		/// <summary>
+		/// Raise property change event for TM Collection
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void TmFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			OnPropertyChanged(nameof(TmsCollection));

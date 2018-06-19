@@ -13,6 +13,9 @@ namespace Sdl.Community.TmAnonymizer.Studio
 {
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
+		/// <summary>
+		/// All subsegments in current translation unit
+		/// </summary>
 		public List<object> SegmentColection { get; set; }
 
 		public void VisitText(Text text)
@@ -50,6 +53,11 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			}
 		}
 
+		/// <summary>
+		/// Gets a list with the index of PI in segment
+		/// </summary>
+		/// <param name="text"></param>
+		/// <returns></returns>
 		private List<int> GetPersonalData(string text)
 		{
 			var personalDataIndex = new List<int>();
