@@ -20,6 +20,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public MatchResult MatchResult { get; set; }
 		public MatchResult TargetMatchResult { get; set; }
 		public bool IsServer { get; set; }
+		public List<int> SelectedWordsIndex { get; set; }
 		public bool TuSelected
 		{
 

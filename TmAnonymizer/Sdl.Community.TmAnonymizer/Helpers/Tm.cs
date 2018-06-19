@@ -44,7 +44,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							},
 							TmFilePath = tmPath,
 							IsServer = false,
-							SegmentNumber = translationUnit.ResourceId.Id.ToString()
+							SegmentNumber = translationUnit.ResourceId.Id.ToString(),
+							SelectedWordsIndex = new List<int>()
 						};
 						var targetText = translationUnit.TargetSegment.ToPlain();
 						if (pi.ContainsPi(targetText))
@@ -99,7 +100,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 									},
 									TmFilePath = tmPath,
 									IsServer = true,
-									SegmentNumber = translationUnit.ResourceId.Id.ToString()
+									SegmentNumber = translationUnit.ResourceId.Id.ToString(),
+									SelectedWordsIndex =  new List<int>(),
 								};
 								var targetText = translationUnit.TargetSegment.ToPlain();
 								if (pi.ContainsPi(targetText))
@@ -149,6 +151,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							{
 								AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
 							}
+							//needs to be uncommented
 							languageDirection.UpdateTranslationUnit(translationUnit);
 						}
 					}

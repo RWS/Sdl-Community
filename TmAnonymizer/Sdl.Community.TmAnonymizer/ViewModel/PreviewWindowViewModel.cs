@@ -21,6 +21,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	public class PreviewWindowViewModel:ViewModelBase
 	{
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
+		private ObservableCollection<SourceSearchResult> _customSelectedText;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
@@ -64,6 +65,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
 		                                           (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+	
 		private void ApplyChanges()
 		{
 			var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
@@ -205,7 +207,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
 				{
 					var tuToAnonymize =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText));
+						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
 					if (tuToAnonymize != null)
 					{
 						// if there is an tm with the same path add translation units to that tm
