@@ -226,8 +226,18 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 							var anonymizeTm = new AnonymizeTranslationMemory
 							{
 								TranslationUnits = new List<TranslationUnit>(),
-								TmPath = anonymizeUnits.TmPath
+								TmPath = anonymizeUnits.TmPath,
+								TranslationUnitDetails = new List<TranslationUnitDetails>()
 							};
+							//added for select custom words functionality
+							var tranlationUnitDetails = new TranslationUnitDetails
+							{
+								TranslationUnit = tuToAnonymize,
+								SelectedWordsDetails = selectedResult.SelectedWordsDetails,
+								RemovedWordsFromMatches = selectedResult.UnselectedWordsDetails
+							};
+							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
+
 							anonymizeTm.TranslationUnits.Add(tuToAnonymize);
 							tusToAnonymize.Add(anonymizeTm);
 						}

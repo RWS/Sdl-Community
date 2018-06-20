@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.ViewModel;
 
@@ -47,14 +48,28 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
 
 			var dataContext = _textBox.DataContext as SourceSearchResult;
-			var position = new Position
+			//var position = CustomTextBox.GetPoint(docStart, docStart.GetOffsetToPosition(start));
+			var startRange = new TextRange(docStart, start);
+			var indexStartAbs = startRange.Text.Length;
+			var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
+			var wordDetails = new WordDetails
 			{
-				Index = docStart.GetOffsetToPosition(start),
-				Length = docStart.GetOffsetToPosition(end)
+				Position = indexStartAbs,//docStart.GetOffsetToPosition(start),
+				Length = indexStartAbs+_textBox.Selection.Text.TrimEnd().Length, //docStart.GetOffsetToPosition(end),
+				Text = _textBox.Selection.Text.TrimEnd()
+				
 			};
-			dataContext?.SelectedWordsIndex.Add(position.Index);
+			var nextWord = GetNextWord(wordDetails, text);
+			wordDetails.NextWord = nextWord;
+			dataContext?.SelectedWordsDetails.Add(wordDetails);
 		}
-
+			
+		private string GetNextWord(WordDetails wordDetails,string text)
+		{
+			var splitedWord = text.Substring(wordDetails.Length+1);
+			var nextWord = splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));
+			return nextWord;
+		}
 		private void UnselectWord(object sender, RoutedEventArgs e)
 		{
 			var docStart = _textBox.Document.ContentStart;
@@ -63,6 +78,14 @@ namespace Sdl.Community.TmAnonymizer.Ui
 
 			var tr = new TextRange(start, end);
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
+			var dataContext = _textBox.DataContext as SourceSearchResult;
+			var wordDetails = new WordDetails
+			{
+				Position = docStart.GetOffsetToPosition(start),
+				Length = docStart.GetOffsetToPosition(end),
+				Text = _textBox.Selection.Text.TrimEnd()
+			};
+			dataContext?.UnselectedWordsDetails.Add(wordDetails);
 		}
 	}
 }

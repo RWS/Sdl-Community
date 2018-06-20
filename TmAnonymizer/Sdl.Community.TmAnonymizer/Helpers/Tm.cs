@@ -52,7 +52,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							TmFilePath = tmPath,
 							IsServer = false,
 							SegmentNumber = translationUnit.ResourceId.Id.ToString(),
-							SelectedWordsIndex = new List<int>()
+							SelectedWordsDetails = new List<WordDetails>(),
+							UnselectedWordsDetails = new List<WordDetails>()
 						};
 						var targetText = translationUnit.TargetSegment.ToPlain();
 						if (pi.ContainsPi(targetText))
@@ -70,7 +71,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			return new AnonymizeTranslationMemory
 			{
 				TmPath = tmPath,
-				TranslationUnits = tus.ToList()
+				TranslationUnits = tus.ToList(),
+				TranslationUnitDetails = new List<TranslationUnitDetails>()
 			};
 		}
 		/// <summary>
@@ -115,7 +117,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 									TmFilePath = tmPath,
 									IsServer = true,
 									SegmentNumber = translationUnit.ResourceId.Id.ToString(),
-									SelectedWordsIndex =  new List<int>(),
+									SelectedWordsDetails =  new List<WordDetails>(),
+									UnselectedWordsDetails = new List<WordDetails>()
 								};
 								var targetText = translationUnit.TargetSegment.ToPlain();
 								if (pi.ContainsPi(targetText))
@@ -163,11 +166,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 								sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 							if (elementsContainsTag)
 							{
-								AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+								//AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
 							}
 							else
 							{
-								AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+								//AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
 							}
 							//needs to be uncommented
 							languageDirection.UpdateTranslationUnit(translationUnit);
@@ -204,28 +207,101 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			{
 				var tm = new FileBasedTranslationMemory(translationUnitPair.TmPath);
 
-				foreach (var translationUnit in translationUnitPair.TranslationUnits)
+				foreach (var tuDetails in translationUnitPair.TranslationUnitDetails)
 				{
-					var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+					var sourceTranslationElements = tuDetails.TranslationUnit.SourceSegment.Elements.ToList();
 					var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 
 					if (elementsContainsTag)
 					{
-						AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+						//check if there are selected words from the ui
+						if (tuDetails.SelectedWordsDetails.Any())
+						{
+							AnonymizeSelectedWordsFromPreview(tuDetails,sourceTranslationElements);
+						}
+						AnonymizeSegmentsWithTags(tuDetails, sourceTranslationElements, true);
 					}
 					else
 					{
-						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+						if (tuDetails.SelectedWordsDetails.Any())
+						{
+							AnonymizeSelectedWordsFromPreview(tuDetails, sourceTranslationElements);
+						}
+						AnonymizeSegmentsWithoutTags(tuDetails, sourceTranslationElements, true);
 					}
+					//needs to be uncommented
+					tm.LanguageDirection.UpdateTranslationUnit(tuDetails.TranslationUnit);
 				}
+				
+				//foreach (var translationUnit in translationUnitPair.TranslationUnits)
+				//{
+				//	var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+				//	var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+
+				//	if (elementsContainsTag)
+				//	{
+				//		AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+				//	}
+				//	else
+				//	{
+				//		AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+				//	}
+				//}
 			}
 
 		}
 
-		private static void AnonymizeSegmentsWithoutTags(TranslationUnit translationUnit,
+		private static void AnonymizeSelectedWordsFromPreview(TranslationUnitDetails translationUnitDetails, List<SegmentElement> sourceTranslationElements)
+		{
+			translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
+			foreach (var element in sourceTranslationElements.ToList())
+			{
+				var visitor = new SelectedWordsFromUiElementVisitor(translationUnitDetails.SelectedWordsDetails);
+				element.AcceptSegmentElementVisitor(visitor);
+
+				var newElements = visitor.SegmentColection;
+				if (newElements?.Count > 0)
+				{
+					//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
+					//sourceTranslationElements.Clear();
+					foreach (var segment in newElements)
+					{
+						var text = segment as Text;
+						var tag = segment as Tag;
+						if (text != null)
+						{
+							translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
+							//sourceTranslationElements.Add(text);
+						}
+						if (tag != null)
+						{
+							translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
+							//sourceTranslationElements.Add(tag);
+						}
+					}
+				}
+				else
+				{
+					//add remaining words
+					var text = element as Text;
+					var tag = element as Tag;
+					if(text!=null)
+					{
+						translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
+					}
+					if (tag != null)
+					{
+						translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
+					}
+				}
+			}
+		}
+
+		private static void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails,
 			List<SegmentElement> sourceTranslationElements, bool isSource)
 		{
-			foreach (var element in sourceTranslationElements)
+			var finalList = new List<SegmentElement>();
+			foreach (var element in translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList())
 			{
 				var visitor = new SegmentElementVisitor();
 				element.AcceptSegmentElementVisitor(visitor);
@@ -233,32 +309,77 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 				if (segmentColection?.Count > 0)
 				{
-					translationUnit.SourceSegment.Elements.Clear();
+					//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
 					foreach (var segment in segmentColection)
 					{
 						var text = segment as Text;
 						var tag = segment as Tag;
 						if (text != null)
 						{
-							translationUnit.SourceSegment.Elements.Add(text);
+							//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
+							finalList.Add(text);
 						}
 						if (tag != null)
 						{
-							translationUnit.SourceSegment.Elements.Add(tag);
+							//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
+							finalList.Add(tag);
 						}
 					}
 				}
+				else
+				{
+					//add remaining words
+					var text = element as Text;
+					var tag = element as Tag;
+					if(text!=null)
+					{
+						//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
+						finalList.Add(text);
+					}
+					if (tag != null)
+					{
+						//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
+						finalList.Add(tag);
+					}
+				}
 			}
+			translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
+			translationUnitDetails.TranslationUnit.SourceSegment.Elements = finalList;
+			//foreach (var element in sourceTranslationElements)
+			//{
+			//	var visitor = new SegmentElementVisitor();
+			//	element.AcceptSegmentElementVisitor(visitor);
+			//	var segmentColection = visitor.SegmentColection;
+
+			//	if (segmentColection?.Count > 0)
+			//	{
+			//		translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
+			//		foreach (var segment in segmentColection)
+			//		{
+			//			var text = segment as Text;
+			//			var tag = segment as Tag;
+			//			if (text != null)
+			//			{
+			//				translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
+			//			}
+			//			if (tag != null)
+			//			{
+			//				translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
+			//			}
+			//		}
+			//	}
+			//}
 		}
 
-		private static void AnonymizeSegmentsWithTags(TranslationUnit translationUnit,
+		private static void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails,
 			List<SegmentElement> translationElements, bool isSource)
 		{
-			for (var i = 0; i < translationElements.Count; i++)
+			var finalList = new List<SegmentElement>();
+			for (var i = 0; i < translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList().Count; i++)
 			{
-				if (!translationElements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
+				if (!translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
 				var visitor = new SegmentElementVisitor();
-				translationElements[i].AcceptSegmentElementVisitor(visitor);
+				translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
 
 				if (segmentColection?.Count > 0)
@@ -279,11 +400,41 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 								segmentElements.Add(tag);
 							}
 						}
-						translationUnit.SourceSegment.Elements.RemoveAt(i);
-						translationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
+						translationUnitDetails.TranslationUnit.SourceSegment.Elements.RemoveAt(i);
+						translationUnitDetails.TranslationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
 					}
 				}
 			}
+			//for (var i = 0; i < translationElements.Count; i++)
+			//{
+			//	if (!translationElements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
+			//	var visitor = new SegmentElementVisitor();
+			//	translationElements[i].AcceptSegmentElementVisitor(visitor);
+			//	var segmentColection = visitor.SegmentColection;
+
+			//	if (segmentColection?.Count > 0)
+			//	{
+			//		if (isSource)
+			//		{
+			//			var segmentElements = new List<SegmentElement>();
+			//			foreach (var segment in segmentColection)
+			//			{
+			//				var text = segment as Text;
+			//				var tag = segment as Tag;
+			//				if (text != null)
+			//				{
+			//					segmentElements.Add(text);
+			//				}
+			//				if (tag != null)
+			//				{
+			//					segmentElements.Add(tag);
+			//				}
+			//			}
+			//			translationUnitDetails.TranslationUnit.SourceSegment.Elements.RemoveAt(i);
+			//			translationUnitDetails.TranslationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
+			//		}
+			//	}
+			//}
 		}
 	}
 }

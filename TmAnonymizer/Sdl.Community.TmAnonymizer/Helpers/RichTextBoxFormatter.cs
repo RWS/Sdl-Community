@@ -42,8 +42,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				foreach (var matchPosition in dataContex.MatchResult.Positions)
 				{
 					var initialPointer = document.ContentStart;
-					var start = GetPoint(initialPointer, matchPosition.Index);
-					var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
+					var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
+					var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
 
 					if (start == null || endPos == null) continue;
 					textRange.Select(start, endPos);
@@ -59,8 +59,8 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				foreach (var matchPosition in dataContex.TargetMatchResult.Positions)
 				{
 					var initialPointer = document.ContentStart;
-					var start = GetPoint(initialPointer, matchPosition.Index);
-					var endPos = GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
+					var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
+					var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
 
 					if (start == null || endPos == null) continue;
 					textRange.Select(start, endPos);
@@ -73,30 +73,30 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		 
 		}
-		/// <summary>
-		/// Gets the exact position of text pointer
-		/// </summary>
-		/// <param name="start"></param>
-		/// <param name="x"></param>
-		/// <returns></returns>
-	    private static TextPointer GetPoint(TextPointer start, int x)
-	    {
-		    var ret = start;
-		    var i = 0;
-		    while (i < x && ret != null)
-		    {
-			    if (ret.GetPointerContext(LogicalDirection.Backward) ==
-			        TextPointerContext.Text ||
-			        ret.GetPointerContext(LogicalDirection.Backward) ==
-			        TextPointerContext.None)
-				    i++;
-			    if (ret.GetPositionAtOffset(1,
-				        LogicalDirection.Forward) == null)
-				    return ret;
-			    ret = ret.GetPositionAtOffset(1,
-				    LogicalDirection.Forward);
-		    }
-		    return ret;
-	    }
+		///// <summary>
+		///// Gets the exact position of text pointer
+		///// </summary>
+		///// <param name="start"></param>
+		///// <param name="x"></param>
+		///// <returns></returns>
+	 //   private static TextPointer GetPoint(TextPointer start, int x)
+	 //   {
+		//    var ret = start;
+		//    var i = 0;
+		//    while (i < x && ret != null)
+		//    {
+		//	    if (ret.GetPointerContext(LogicalDirection.Backward) ==
+		//	        TextPointerContext.Text ||
+		//	        ret.GetPointerContext(LogicalDirection.Backward) ==
+		//	        TextPointerContext.None)
+		//		    i++;
+		//	    if (ret.GetPositionAtOffset(1,
+		//		        LogicalDirection.Forward) == null)
+		//		    return ret;
+		//	    ret = ret.GetPositionAtOffset(1,
+		//		    LogicalDirection.Forward);
+		//    }
+		//    return ret;
+	 //   }
 	}
 }
