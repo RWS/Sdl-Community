@@ -4,9 +4,81 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
-             mc:Ignorable="d" 
+			 xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+			 mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-		<TextBlock Text="system"></TextBlock>
-    </Grid>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid Height="{Binding ElementName=ParentControl}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"  MaxHeight="300"/>
+			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<TextBlock Grid.Row="0" Margin="15,5,0,5">Please select which username you want to anonymize</TextBlock>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
+		          FontFamily="Segoe UI"
+		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		          ItemsSource="{Binding UniqueUsernames, Mode=TwoWay}"  Background="Black" 
+		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
+				  SelectedItem="{Binding SelectedItem}"
+		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		          Margin="5,10" >
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>
+			</DataGrid.InputBindings>
+
+			<DataGrid.RowStyle>
+				<Style TargetType="DataGridRow">
+					<Setter Property="ToolTip">
+						<Setter.Value>
+							<TextBlock  TextWrapping="Wrap" Text="{Binding Alias}"/>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</DataGrid.RowStyle>
+			<DataGrid.Columns>
+				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Use" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTextColumn Width="2*" Header="Username" Binding="{Binding Username}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Username}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Width="3*" Header="Alias" Binding="{Binding Alias}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Alias}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+			</DataGrid.Columns>
+		</helpers:CustomDataGrid>
+		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import" Command="{Binding ImportCommand}"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export" Command="{Binding ExportCommand}"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Apply changes" Command="{Binding ApplyCommand}"></Button>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
 </UserControl>

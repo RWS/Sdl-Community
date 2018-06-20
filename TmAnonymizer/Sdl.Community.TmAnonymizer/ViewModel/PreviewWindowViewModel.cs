@@ -77,6 +77,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				BackupFileBasedTm();
 				tusToAnonymize =GetTranslationUnitsToAnonymize(fileBasedSearchResult);
 				Tm.AnonymizeFileBasedTu(tusToAnonymize);
+				//Tm.GetListOfUniqueSystemFields(tusToAnonymize);
 			}
 			//server based tms
 			var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();

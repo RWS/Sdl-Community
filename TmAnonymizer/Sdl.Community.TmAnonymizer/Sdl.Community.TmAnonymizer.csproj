@@ -151,6 +151,7 @@
     <Compile Include="Model\SourceSearchResult.cs" />
     <Compile Include="Model\TabItem.cs" />
     <Compile Include="Model\TmFile.cs" />
+    <Compile Include="Model\UniqueUsername.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

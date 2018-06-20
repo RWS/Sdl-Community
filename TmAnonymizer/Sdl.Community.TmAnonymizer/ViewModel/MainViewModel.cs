@@ -38,7 +38,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					Name = "System",
 					Header = "System fields",
-					ViewModel = new SystemFieldsViewModel()
+					ViewModel = new SystemFieldsViewModel(_tmViewModel)
 				},
 				new TabItem
 				{
