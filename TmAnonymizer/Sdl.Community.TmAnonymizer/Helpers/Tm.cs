@@ -219,7 +219,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 						{
 							AnonymizeSelectedWordsFromPreview(tuDetails,sourceTranslationElements);
 						}
-						AnonymizeSegmentsWithTags(tuDetails, sourceTranslationElements, true);
+						AnonymizeSegmentsWithTags(tuDetails,true);
 					}
 					else
 					{
@@ -227,30 +227,20 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 						{
 							AnonymizeSelectedWordsFromPreview(tuDetails, sourceTranslationElements);
 						}
-						AnonymizeSegmentsWithoutTags(tuDetails, sourceTranslationElements, true);
+						AnonymizeSegmentsWithoutTags(tuDetails,true);
 					}
 					//needs to be uncommented
 					tm.LanguageDirection.UpdateTranslationUnit(tuDetails.TranslationUnit);
 				}
-				
-				//foreach (var translationUnit in translationUnitPair.TranslationUnits)
-				//{
-				//	var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
-				//	var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-
-				//	if (elementsContainsTag)
-				//	{
-				//		AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
-				//	}
-				//	else
-				//	{
-				//		AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
-				//	}
-				//}
 			}
 
 		}
 
+		/// <summary>
+		/// Replace selected words from UI with tags
+		/// </summary>
+		/// <param name="translationUnitDetails">Translation unit details</param>
+		/// <param name="sourceTranslationElements">A List with the elements of segment</param>
 		private static void AnonymizeSelectedWordsFromPreview(TranslationUnitDetails translationUnitDetails, List<SegmentElement> sourceTranslationElements)
 		{
 			translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
@@ -259,24 +249,22 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				var visitor = new SelectedWordsFromUiElementVisitor(translationUnitDetails.SelectedWordsDetails);
 				element.AcceptSegmentElementVisitor(visitor);
 
+				//new elements after splited the text for selected words
 				var newElements = visitor.SegmentColection;
 				if (newElements?.Count > 0)
 				{
-					//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
-					//sourceTranslationElements.Clear();
 					foreach (var segment in newElements)
 					{
 						var text = segment as Text;
 						var tag = segment as Tag;
+						//add segments back Source Segment
 						if (text != null)
 						{
 							translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
-							//sourceTranslationElements.Add(text);
 						}
 						if (tag != null)
 						{
 							translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
-							//sourceTranslationElements.Add(tag);
 						}
 					}
 				}
@@ -297,8 +285,12 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		}
 
-		private static void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails,
-			List<SegmentElement> sourceTranslationElements, bool isSource)
+		/// <summary>
+		/// Anonymize segments without tags
+		/// </summary>
+		/// <param name="translationUnitDetails">Translation unit details</param>
+		/// <param name="isSource"> Is source parameter</param>
+		private static void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails,bool isSource)
 		{
 			var finalList = new List<SegmentElement>();
 			foreach (var element in translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList())
@@ -309,19 +301,16 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 
 				if (segmentColection?.Count > 0)
 				{
-					//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
 					foreach (var segment in segmentColection)
 					{
 						var text = segment as Text;
 						var tag = segment as Tag;
 						if (text != null)
 						{
-							//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
 							finalList.Add(text);
 						}
 						if (tag != null)
 						{
-							//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
 							finalList.Add(tag);
 						}
 					}
@@ -333,52 +322,32 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 					var tag = element as Tag;
 					if(text!=null)
 					{
-						//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
 						finalList.Add(text);
 					}
 					if (tag != null)
 					{
-						//translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
 						finalList.Add(tag);
 					}
 				}
 			}
+			//clear initial list
 			translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
-			translationUnitDetails.TranslationUnit.SourceSegment.Elements = finalList;
-			//foreach (var element in sourceTranslationElements)
-			//{
-			//	var visitor = new SegmentElementVisitor();
-			//	element.AcceptSegmentElementVisitor(visitor);
-			//	var segmentColection = visitor.SegmentColection;
-
-			//	if (segmentColection?.Count > 0)
-			//	{
-			//		translationUnitDetails.TranslationUnit.SourceSegment.Elements.Clear();
-			//		foreach (var segment in segmentColection)
-			//		{
-			//			var text = segment as Text;
-			//			var tag = segment as Tag;
-			//			if (text != null)
-			//			{
-			//				translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(text);
-			//			}
-			//			if (tag != null)
-			//			{
-			//				translationUnitDetails.TranslationUnit.SourceSegment.Elements.Add(tag);
-			//			}
-			//		}
-			//	}
-			//}
+			//add new elements list to Translation Unit
+			translationUnitDetails.TranslationUnit.SourceSegment.Elements = finalList;  
 		}
 
-		private static void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails,
-			List<SegmentElement> translationElements, bool isSource)
+		/// <summary>
+		/// Anonymize segments with tags
+		/// </summary>
+		/// <param name="translationUnitDetails"></param>
+		/// <param name="isSource"></param>
+		private static void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails,bool isSource)
 		{
-			var finalList = new List<SegmentElement>();
 			for (var i = 0; i < translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList().Count; i++)
 			{
 				if (!translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
 				var visitor = new SegmentElementVisitor();
+				//check for PI in each element from the list
 				translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
 
@@ -387,6 +356,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 					if (isSource)
 					{
 						var segmentElements = new List<SegmentElement>();
+						//if element contains PI add it to a list of Segment Elements
 						foreach (var segment in segmentColection)
 						{
 							var text = segment as Text;
@@ -400,41 +370,13 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 								segmentElements.Add(tag);
 							}
 						}
+						//remove from the list original element at position
 						translationUnitDetails.TranslationUnit.SourceSegment.Elements.RemoveAt(i);
+						//to the same position add the new list with elements (Text + Tag)
 						translationUnitDetails.TranslationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
 					}
 				}
 			}
-			//for (var i = 0; i < translationElements.Count; i++)
-			//{
-			//	if (!translationElements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
-			//	var visitor = new SegmentElementVisitor();
-			//	translationElements[i].AcceptSegmentElementVisitor(visitor);
-			//	var segmentColection = visitor.SegmentColection;
-
-			//	if (segmentColection?.Count > 0)
-			//	{
-			//		if (isSource)
-			//		{
-			//			var segmentElements = new List<SegmentElement>();
-			//			foreach (var segment in segmentColection)
-			//			{
-			//				var text = segment as Text;
-			//				var tag = segment as Tag;
-			//				if (text != null)
-			//				{
-			//					segmentElements.Add(text);
-			//				}
-			//				if (tag != null)
-			//				{
-			//					segmentElements.Add(tag);
-			//				}
-			//			}
-			//			translationUnitDetails.TranslationUnit.SourceSegment.Elements.RemoveAt(i);
-			//			translationUnitDetails.TranslationUnit.SourceSegment.Elements.InsertRange(i, segmentElements);
-			//		}
-			//	}
-			//}
 		}
 	}
 }
