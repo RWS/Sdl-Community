@@ -159,21 +159,29 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 					var languageDirections = translationMemory.LanguageDirections;
 					foreach (var languageDirection in languageDirections)
 					{
-						foreach (var translationUnit in tuToAonymize.TranslationUnits)
+						foreach (var translationUnitDetails in tuToAonymize.TranslationUnitDetails)
 						{
-							var sourceTranslationElements = translationUnit.SourceSegment.Elements.ToList();
+							var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
 							var elementsContainsTag =
 								sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 							if (elementsContainsTag)
 							{
-								//AnonymizeSegmentsWithTags(translationUnit, sourceTranslationElements, true);
+								if (translationUnitDetails.SelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements);
+								}
+								AnonymizeSegmentsWithTags(translationUnitDetails, true);
 							}
 							else
 							{
-								//AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
+								if (translationUnitDetails.SelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements);
+								}
+								AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
 							}
 							//needs to be uncommented
-							languageDirection.UpdateTranslationUnit(translationUnit);
+							languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
 						}
 					}
 

@@ -3,10 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-        xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+			 xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+			 xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
-		Title="Translations preview changes"
+			 Title="Translations preview changes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
@@ -56,7 +56,7 @@
 								<xctk:RichTextBox.ContextMenu>
 									<ContextMenu >
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"></MenuItem>
-											<MenuItem Header="Unselect word" Click="UnselectWord"></MenuItem>
+											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
 										</ContextMenu>
 								</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
