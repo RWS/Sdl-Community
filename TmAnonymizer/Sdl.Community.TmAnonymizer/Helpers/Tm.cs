@@ -303,7 +303,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			var finalList = new List<SegmentElement>();
 			foreach (var element in translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList())
 			{
-				var visitor = new SegmentElementVisitor();
+				var visitor = new SegmentElementVisitor(translationUnitDetails.RemovedWordsFromMatches);
 				element.AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
 
@@ -354,7 +354,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			for (var i = 0; i < translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList().Count; i++)
 			{
 				if (!translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text")) continue;
-				var visitor = new SegmentElementVisitor();
+				var visitor = new SegmentElementVisitor(translationUnitDetails.RemovedWordsFromMatches);
 				//check for PI in each element from the list
 				translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
