@@ -217,8 +217,16 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					{
 						// if there is an tm with the same path add translation units to that tm
 						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
+						//added for select custom words functionality
+						var tranlationUnitDetails = new TranslationUnitDetails
+						{
+							TranslationUnit = tuToAnonymize,
+							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
+							RemovedWordsFromMatches = selectedResult.UnselectedWordsDetails
+						};
 						if (anonymizeTu != null)
 						{
+							anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
 							anonymizeTu.TranslationUnits.Add(tuToAnonymize);
 						}
 						else
@@ -228,13 +236,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 								TranslationUnits = new List<TranslationUnit>(),
 								TmPath = anonymizeUnits.TmPath,
 								TranslationUnitDetails = new List<TranslationUnitDetails>()
-							};
-							//added for select custom words functionality
-							var tranlationUnitDetails = new TranslationUnitDetails
-							{
-								TranslationUnit = tuToAnonymize,
-								SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-								RemovedWordsFromMatches = selectedResult.UnselectedWordsDetails
 							};
 							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
 
