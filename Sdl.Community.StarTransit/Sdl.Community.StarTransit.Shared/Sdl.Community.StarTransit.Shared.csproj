@@ -111,6 +111,7 @@
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Import\TransitExtension.cs" />
     <Compile Include="Import\TransitTmImporter.cs" />
     <Compile Include="Import\TransitParser.cs" />
     <Compile Include="Import\TransitSniffer.cs" />

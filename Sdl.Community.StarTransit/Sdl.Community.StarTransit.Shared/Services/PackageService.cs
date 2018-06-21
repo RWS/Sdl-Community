@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Core.Globalization;
@@ -263,22 +264,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         private List<string> GetFilesAndTmsFromTempFolder(string pathToTempFolder, CultureInfo language)
         {
-            var extension = language.ThreeLetterWindowsLanguageName;
-            //see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
-            //StarTransit for the language code 1106 uses "Wel" as three letter code
-            if (string.Equals(extension, "CYM"))
-            {
-                extension = "WEL";
-            }
-			//StarTransit for the language code 1104 uses "MNG" as three letter code
-			if (string.Equals(extension, "MNN"))
-			{
-				extension = "MNG";
-			}
-			var filesAndTms =
-                Directory.GetFiles(pathToTempFolder, "*." + extension, SearchOption.AllDirectories).ToList();
+			var filesAndTms = new List<string>();
+			var extension = language.ThreeLetterWindowsLanguageName;
+			extension = TransitExtension.MapStarTransitLanguage(extension);
 
-            return filesAndTms;
+			// used for following scenario: for one Windows language (Ex: Nigeria), Star Transit might use different extensions (eg: EDO,EFI)
+			var multiLanguageExtensions = extension.Split(',');
+			foreach(var multiLangExtension in multiLanguageExtensions)
+			{
+				filesAndTms = Directory.GetFiles(pathToTempFolder, "*." + multiLangExtension, SearchOption.AllDirectories).ToList();
+			}
+		    return filesAndTms;
         }
 
         private Tuple<List<string>,List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(List<string> filesAndTmsList )
@@ -307,8 +303,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
             return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames,translationMemoryMetadataList);
         }
-        
-   
+           
         /// <summary>
         /// Helper method which to get language from language code
         /// </summary>
@@ -318,7 +313,5 @@ namespace Sdl.Community.StarTransit.Shared.Services
         {
             return new CultureInfo(languageCode);
         }
-
-
     }
 }
