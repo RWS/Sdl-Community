@@ -222,7 +222,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 						{
 							TranslationUnit = tuToAnonymize,
 							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-							RemovedWordsFromMatches = selectedResult.UnselectedWordsDetails
+							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails
 						};
 						if (anonymizeTu != null)
 						{

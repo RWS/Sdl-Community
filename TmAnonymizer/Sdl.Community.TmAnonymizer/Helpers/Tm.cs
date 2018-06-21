@@ -53,7 +53,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 							IsServer = false,
 							SegmentNumber = translationUnit.ResourceId.Id.ToString(),
 							SelectedWordsDetails = new List<WordDetails>(),
-							UnselectedWordsDetails = new List<WordDetails>()
+							DeSelectedWordsDetails = new List<WordDetails>()
 						};
 						var targetText = translationUnit.TargetSegment.ToPlain();
 						if (pi.ContainsPi(targetText))
@@ -118,7 +118,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 									IsServer = true,
 									SegmentNumber = translationUnit.ResourceId.Id.ToString(),
 									SelectedWordsDetails =  new List<WordDetails>(),
-									UnselectedWordsDetails = new List<WordDetails>()
+									DeSelectedWordsDetails = new List<WordDetails>()
 								};
 								var targetText = translationUnit.TargetSegment.ToPlain();
 								if (pi.ContainsPi(targetText))

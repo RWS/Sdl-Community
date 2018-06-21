@@ -21,7 +21,7 @@ namespace Sdl.Community.TmAnonymizer.Model
 		public MatchResult TargetMatchResult { get; set; }
 		public bool IsServer { get; set; }
 		public List<WordDetails> SelectedWordsDetails { get; set; }	
-		public List<WordDetails> UnselectedWordsDetails { get; set; }
+		public List<WordDetails> DeSelectedWordsDetails { get; set; }
 		public bool TuSelected
 		{
 

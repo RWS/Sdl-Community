@@ -82,13 +82,31 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			var tr = new TextRange(start, end);
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 			var dataContext = _textBox.DataContext as SourceSearchResult;
+
+			var startRange = new TextRange(docStart, start);
+			var indexStartAbs = startRange.Text.Length;
+			var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
+
 			var wordDetails = new WordDetails
 			{
-				Position = docStart.GetOffsetToPosition(start),
-				Length = docStart.GetOffsetToPosition(end),
+				Position = indexStartAbs,
+				Length = indexStartAbs + _textBox.Selection.Text.TrimEnd().Length,
 				Text = _textBox.Selection.Text.TrimEnd()
 			};
-			dataContext?.UnselectedWordsDetails.Add(wordDetails);
+			var prevWord = GetPreviosWord(wordDetails, text);
+			wordDetails.PreviousWord = prevWord;
+			dataContext?.DeSelectedWordsDetails.Add(wordDetails);
+		}
+
+		private string GetPreviosWord(WordDetails wordDetails, string text)
+		{
+			//if is first word we don't have prev word
+			if (wordDetails.Position.Equals(0))
+			{
+				return string.Empty;
+			}
+			var firstPartOfString = text.Substring(0, wordDetails.Position).TrimEnd();
+			return firstPartOfString.Substring(firstPartOfString.LastIndexOf(" ", StringComparison.Ordinal));
 		}
 	}
 }
