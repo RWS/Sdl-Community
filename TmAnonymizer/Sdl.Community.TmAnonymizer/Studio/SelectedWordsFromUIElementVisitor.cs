@@ -25,7 +25,13 @@ namespace Sdl.Community.TmAnonymizer.Studio
 		public void VisitText(Text text)
 		{
 			var segmentCollection = new List<object>();
-			SubsegmentSelectedData(text.Value,segmentCollection);
+			foreach (var selectedWord in _selectedWordsDetails.ToList())
+			{
+				if (text.Value.Contains(selectedWord.Text))
+				{
+					SubsegmentSelectedData(text.Value, segmentCollection);
+				}
+			}
 			SegmentColection = segmentCollection;
 		}
 
@@ -43,28 +49,51 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			{
 				wordsIndexes.Add(selectedWord.Position);
 				wordsIndexes.Add(selectedWord.Length);
-				wordsIndexes.Add(selectedWord.Length+selectedWord.NextWord.Length+1);
-			}
-			//split text to indexes
-			var elementsCollection = segmentText.SplitAt(wordsIndexes.ToArray());
-			foreach (var selectedWord in _selectedWordsDetails)
-			{
-				for (var i = 0; i < elementsCollection.Length; i++)
+				if (selectedWord.NextWord.Length > 0)
 				{
-					//Check if is selected word
-					if (selectedWord.Text.Equals(elementsCollection[i]))
-					{
-						//Check next word, trim at start because the word contains space at the begining
-						if (elementsCollection[i + 1].TrimStart().Equals(selectedWord.NextWord))
-						{
-							positionOfSelectedText.Add(i);
-						}
-						break;
-					}
+					wordsIndexes.Add(selectedWord.Length + selectedWord.NextWord.Length + 1);
 				}
 			}
+			var segmentTextTrimed = segmentText.TrimStart();
+			var indexesBiggerThanTextLenght = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
+			//that means selected text is the last word
+			if (indexesBiggerThanTextLenght.Equals(wordsIndexes.Count))
+			{
+				var startIndex = segmentText.IndexOf(segmentTextTrimed, StringComparison.Ordinal);
+				positionOfSelectedText.Add(startIndex);
+				var elements = segmentText.SplitAt(positionOfSelectedText.ToArray());
+			
+				CreateSegmentCollection(elements, positionOfSelectedText, segmentCollection);
+			}
+			else
+			{
+				//split text to indexes
+				var elementsCollection = segmentText.SplitAt(wordsIndexes.ToArray());
+				foreach (var selectedWord in _selectedWordsDetails)
+				{
+					for (var i = 0; i < elementsCollection.Length; i++)
+					{
+						//Check if is selected word
+						if (selectedWord.Text.Equals(elementsCollection[i]))
+						{
+							//Check next word, trim at start because the word contains space at the begining
+							if (!string.IsNullOrEmpty(selectedWord.NextWord))
+							{
+								if (elementsCollection[i + 1].TrimStart().Equals(selectedWord.NextWord))
+								{
+									positionOfSelectedText.Add(i);
+								}
+							}
+							positionOfSelectedText.Add(i);
+							break;
+						}
+					}
+				}
+				CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
+			}
+		
 			_selectedWordsDetails.Clear();
-			CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
+			//CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
 		}
 
 		/// <summary>

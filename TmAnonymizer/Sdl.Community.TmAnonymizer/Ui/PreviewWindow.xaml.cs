@@ -48,14 +48,13 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
 
 			var dataContext = _textBox.DataContext as SourceSearchResult;
-			//var position = CustomTextBox.GetPoint(docStart, docStart.GetOffsetToPosition(start));
 			var startRange = new TextRange(docStart, start);
 			var indexStartAbs = startRange.Text.Length;
 			var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
 			var wordDetails = new WordDetails
 			{
-				Position = indexStartAbs,//docStart.GetOffsetToPosition(start),
-				Length = indexStartAbs+_textBox.Selection.Text.TrimEnd().Length, //docStart.GetOffsetToPosition(end),
+				Position = indexStartAbs,
+				Length = indexStartAbs+_textBox.Selection.Text.TrimEnd().Length, 
 				Text = _textBox.Selection.Text.TrimEnd()
 				
 			};
@@ -67,8 +66,12 @@ namespace Sdl.Community.TmAnonymizer.Ui
 		private string GetNextWord(WordDetails wordDetails,string text)
 		{
 			var splitedWord = text.Substring(wordDetails.Length+1);
-			var nextWord = splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));
-			return nextWord;
+			if (!string.IsNullOrEmpty(splitedWord))
+			{
+				return splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));
+			}
+			//that means selected word is the last one
+			return string.Empty;
 		}
 		private void UnselectWord(object sender, RoutedEventArgs e)
 		{
