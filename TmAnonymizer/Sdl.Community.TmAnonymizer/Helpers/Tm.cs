@@ -64,6 +64,10 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 								Positions = pi.GetPersonalDataPositions(targetText)
 							};
 						}
+						else
+						{
+							searchResult.TargetText = targetText;
+						}
 						sourceSearchResult.Add(searchResult);
 					}
 				}

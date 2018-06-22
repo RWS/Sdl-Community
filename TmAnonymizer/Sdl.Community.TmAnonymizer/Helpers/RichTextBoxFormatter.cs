@@ -56,20 +56,24 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		    if (tag.Equals("TargetBox"))
 		    {
-				foreach (var matchPosition in dataContex.TargetMatchResult.Positions)
-				{
-					var initialPointer = document.ContentStart;
-					var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
-					var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
-
-					if (start == null || endPos == null) continue;
-					textRange.Select(start, endPos);
-					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#EAC684");
-					if (color != null)
+			    if (dataContex.TargetMatchResult != null)
+			    {
+					foreach (var matchPosition in dataContex.TargetMatchResult.Positions)
 					{
-						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+						var initialPointer = document.ContentStart;
+						var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
+						var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
+
+						if (start == null || endPos == null) continue;
+						textRange.Select(start, endPos);
+						var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#EAC684");
+						if (color != null)
+						{
+							textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+						}
 					}
 				}
+				
 			}
 		 
 		}
