@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	
@@ -77,9 +78,24 @@
 		</helpers:CustomDataGrid>
 		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import rules" Command="{Binding ImportCommand}"></Button>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export rules" Command="{Binding ExportCommand}"></Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Preview changes" Command="{Binding PreviewCommand}"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="ArrowDown" Margin="0,2,5,0"/>
+						<TextBlock>Import rules</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="ArrowUp" Margin="0,2,5,0"/>
+						<TextBlock>Export rules</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125"  Command="{Binding PreviewCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="Eye" Margin="0,0,5,0"/>
+						<TextBlock>Preview</TextBlock>
+					</StackPanel>
+				</Button>
 			</StackPanel>
 		</StackPanel>
 	</Grid>
