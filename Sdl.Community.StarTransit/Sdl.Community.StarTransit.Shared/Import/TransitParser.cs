@@ -244,22 +244,22 @@ namespace Sdl.Community.StarTransit.Shared.Import
                 thisTrgSegment = segment;
                 totalTagCount = totalTagCount - srcSegmentTagCount;
             }            
+			if(segNode !=null)
+			{ 
+				foreach (XmlNode item in segNode.ChildNodes)
+				{
+					if (item.NodeType == XmlNodeType.Text)
+					{
+						segment.Add(CreateText(item.InnerText));
+					}
 
-            foreach (XmlNode item in segNode.ChildNodes)
-            {
-                if (item.NodeType == XmlNodeType.Text)
-                {
-                    segment.Add(CreateText(item.InnerText));
-                }
-
-                if (item.NodeType == XmlNodeType.Element)
-                {
-                    segment.Add(CreatePhTag(item.Name, item, source));
-                }
-            }
-
-           
-
+					if (item.NodeType == XmlNodeType.Element)
+					{
+						segment.Add(CreatePhTag(item.Name, item, source));
+					}
+				}
+			}
+			
             return segment;
         }
 

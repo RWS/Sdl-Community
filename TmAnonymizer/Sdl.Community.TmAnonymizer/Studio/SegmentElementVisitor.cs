@@ -13,10 +13,15 @@ namespace Sdl.Community.TmAnonymizer.Studio
 {
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
+		private readonly List<WordDetails> _deSelectedWordsDetails;
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
+		public SegmentElementVisitor(List<WordDetails> deSelectedWords)
+		{
+			_deSelectedWordsDetails = deSelectedWords;
+		}
 
 		public void VisitText(Text text)
 		{
@@ -33,21 +38,48 @@ namespace Sdl.Community.TmAnonymizer.Studio
 		private void GetSubsegmentPi(string segmentText, List<int> personalData, List<object> segmentCollection)
 		{
 			var elementsColection = segmentText.SplitAt(personalData.ToArray());
-			foreach (var element in elementsColection)
+
+			for (int i = 0; i < elementsColection.Length; i++)
 			{
-				if (!string.IsNullOrEmpty(element))
+				if (!string.IsNullOrEmpty(elementsColection[i]))
 				{
-					if (ContainsPi(element))
+					if (i != 0)
 					{
-						//create new tag
-						var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
-						segmentCollection.Add(tag);
+						var shouldAnonymize = ShouldAnonymize(elementsColection[i], elementsColection[i - 1]);
+						//refactor the code put in method
+						if (shouldAnonymize)
+						{
+							//create new tag
+							var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
+							segmentCollection.Add(tag);
+						
+						}
+						else
+						{
+							//create text
+							var text = new Text(elementsColection[i]);
+							segmentCollection.Add(text);
+
+						}
 					}
 					else
 					{
-						//create text
-						var text = new Text(element);
-						segmentCollection.Add(text);
+						var shouldAnonymize = ShouldAnonymize(elementsColection[i], string.Empty);
+						//refactor the code put in method
+						if (shouldAnonymize)
+						{
+							//create new tag
+							var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
+							segmentCollection.Add(tag);
+
+						}
+						else
+						{
+							//create text
+							var text = new Text(elementsColection[i]);
+							segmentCollection.Add(text);
+
+						}
 					}
 				}
 			}
@@ -65,7 +97,7 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
-				
+
 				foreach (System.Text.RegularExpressions.Match match in matches)
 				{
 					if (match.Index.Equals(0))
@@ -88,11 +120,11 @@ namespace Sdl.Community.TmAnonymizer.Studio
 							personalDataIndex.Add(match.Index);
 						}
 					}
-					
 				}
 			}
 			return personalDataIndex;
 		}
+
 		private bool ContainsPi(string text)
 		{
 			foreach (var rule in SettingsMethods.GetRules())
@@ -102,6 +134,48 @@ namespace Sdl.Community.TmAnonymizer.Studio
 				if (match.Success)
 				{
 					return true;
+				}
+			}
+			return false;
+		}
+
+		private bool ShouldAnonymize(string currentText,string prevText)
+		{
+			foreach (var rule in SettingsMethods.GetRules())
+			{
+				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
+				var matches = regex.Matches(currentText);
+				foreach (System.Text.RegularExpressions.Match match in matches)
+				{
+					var matchesDeselected = _deSelectedWordsDetails.Where(n => n.Text.Equals(match.Value.TrimEnd())).ToList();
+					if (matchesDeselected.Any())
+					{
+						//check the previous word to see if is the same word which user deselected
+
+						if (!string.IsNullOrEmpty(prevText))
+						{
+							var combinedText = prevText + currentText;
+
+							var firstPartOfString = combinedText.Substring(0, combinedText.IndexOf(match.Value, StringComparison.Ordinal))
+								.TrimEnd();
+							var prevWord = firstPartOfString.Substring(firstPartOfString.LastIndexOf(" ", StringComparison.Ordinal));
+
+							var matchToBeDeselected = matchesDeselected.FirstOrDefault(w => w.PreviousWord.Equals(prevWord));
+							if (matchToBeDeselected != null)
+							{
+								return false;
+							}
+						}
+						else
+						{
+							//this means the unselected text is checked second time we need to skip it because we already created a text element
+							return false;
+						}
+					}
+					else
+					{
+						return true;
+					}
 				}
 			}
 			return false;

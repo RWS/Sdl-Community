@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
              mc:Ignorable="d" 
 			 Title="Login"
 			 Width="400"
@@ -16,6 +17,7 @@
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -32,17 +34,27 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
+		<Grid.Resources>
+			<Style TargetType="{x:Type fa:FontAwesome}">
+				<Setter Property="TextElement.FontFamily" Value="pack://application:,,,/fonts/#FontAwesome" />
+			</Style>
+		</Grid.Resources>
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url*</TextBlock>
-		<TextBox Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}"> </TextBox>
+		<TextBox  Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}" ></TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
 		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}" Text="{Binding UserName}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
 		<PasswordBox Name="Password" Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
 		<Button  Grid.Row="5" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
-				 Margin="102,28,10,54" Content="Ok" Command="{Binding OkCommand}" 
-				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI">
+		         Margin="90,28,10,54"
+				   Command="{Binding OkCommand}" 
+				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI" >
+			<StackPanel Orientation="Horizontal">
+				<fa:FontAwesome Icon="SignIn" Margin="0,2,5,0"/>
+				<TextBlock>Log in</TextBlock>
+			</StackPanel>
 		</Button>
 	</Grid>
 </Window>

@@ -111,6 +111,7 @@
     <Compile Include="..\Sdl.Community.StarTransit\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="Import\TransitExtension.cs" />
     <Compile Include="Import\TransitTmImporter.cs" />
     <Compile Include="Import\TransitParser.cs" />
     <Compile Include="Import\TransitSniffer.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Import\TransitWriter.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\LanguagePair.cs" />
+    <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\PackageModel.cs" />
     <Compile Include="Models\ReturnPackage.cs" />
