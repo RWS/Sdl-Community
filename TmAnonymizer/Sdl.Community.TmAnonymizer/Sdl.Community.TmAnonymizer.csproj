@@ -143,6 +143,7 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Helpers\SystemFields.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\Login.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Model\TabItem.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Model\TranslationUnitDetails.cs" />
+    <Compile Include="Model\UniqueUsername.cs" />
     <Compile Include="Model\WordDetails.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />
