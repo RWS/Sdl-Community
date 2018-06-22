@@ -4,19 +4,14 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Sdl.Community.StarTransit.Shared.Import;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Utils;
-using Sdl.Core.Globalization;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-    public class PackageService
+	public class PackageService
     {
         private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
             new List<KeyValuePair<string, string>>();

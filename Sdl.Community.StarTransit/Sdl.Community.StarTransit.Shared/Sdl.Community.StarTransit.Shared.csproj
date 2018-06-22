@@ -119,6 +119,7 @@
     <Compile Include="Import\TransitWriter.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Models\LanguagePair.cs" />
+    <Compile Include="Models\MessageModel.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\PackageModel.cs" />
     <Compile Include="Models\ReturnPackage.cs" />

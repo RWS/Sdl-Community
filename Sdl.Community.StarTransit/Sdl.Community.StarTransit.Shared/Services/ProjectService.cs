@@ -1,28 +1,27 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
-using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.ProjectAutomation.Core;
-using Sdl.Core.Globalization;
-using Sdl.ProjectAutomation.FileBased;
-using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Import;
-using Sdl.Desktop.IntegrationApi;
-using Sdl.TranslationStudioAutomation.IntegrationApi;
+using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Core.Globalization;
+using Sdl.Desktop.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using System.Windows.Forms;
+using Sdl.ProjectAutomation.Core;
+using Sdl.ProjectAutomation.FileBased;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
 {
-    public class ProjectService : AbstractViewControllerAction<ProjectsController>
-    {
+	public class ProjectService : AbstractViewControllerAction<ProjectsController>
+	{
+		#region Constructors
 
-        public void CreateProject(PackageModel package)
+		#endregion
+
+		#region Public Methods
+		public MessageModel CreateProject(PackageModel package)
         {
             var target = GetTargetLanguages(package.LanguagePairs);
 
@@ -32,8 +31,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                 LocalProjectFolder = package.Location,
                 SourceLanguage = new Language(package.LanguagePairs[0].SourceLanguage),
                 TargetLanguages = target,
-                DueDate = package.DueDate,
-
+                DueDate = package.DueDate
             };
 
             var newProject = new FileBasedProject(projectInfo,
@@ -41,9 +39,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
             if (package.Customer != null)
             {
                 newProject.SetCustomer(package.Customer);
-
             }
-
 
             //Add StarTransit package source files. The same on all language pairs
             ProjectFile[] sourceProjectFiles = newProject.AddFiles(package.LanguagePairs[0].SourceFile.ToArray());
@@ -82,10 +78,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
 				{
-					MessageBox.Show("Project was not created correctly because no target files were found in the package!",
-						"Informative message",
-						MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
+					var messageModel = new MessageModel()
+					{
+						IsProjectCreated = false,
+						Message = "Project was not created correctly because no target files were found in the package!",
+						Title = "Informative message"
+					};
+					return messageModel;
 				}
 				else
 				{
@@ -103,10 +102,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					if (taskSequence.Status.Equals(ProjectAutomation.Core.TaskStatus.Failed))
 					{
-						MessageBox.Show(
-							"Project could not be created. Error occured while running automatic tasks!", "Informative message",
-							MessageBoxButtons.OK,
-							MessageBoxIcon.Information);
+						var messageModel = new MessageModel()
+						{
+							IsProjectCreated = false,
+							Message = "Project could not be created.Error occured while running automatic tasks!",
+							Title = "Informative message"
+						};
+						return messageModel;
 					}
 					else
 					{
@@ -121,10 +123,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
 				Controller.RefreshProjects();
-			}         
+			}
+			return null;
         }
+		#endregion
 
-        private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
+		#region Private Methods
+		private Language[] GetTargetLanguages(List<LanguagePair> languagePairs)
         {
             var targetCultureInfoList = new List<CultureInfo>();
             foreach (var pair in languagePairs)
@@ -162,13 +167,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
             if (prjFileName != null)
             {
                 File.Copy(prjFilePath, Path.Combine(starTransitMetadataFolderPath, prjFileName), true);
-            }
-            
+            }            
         }
-
-        protected override void Execute()
+		protected override void Execute()
         {
             
         }
-    }
+		#endregion
+	}
 }

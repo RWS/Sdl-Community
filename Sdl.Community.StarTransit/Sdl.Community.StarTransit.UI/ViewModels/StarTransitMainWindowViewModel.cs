@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
-using System.IO.Packaging;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Services;
 using Sdl.Community.StarTransit.UI.Annotations;
@@ -19,9 +13,10 @@ using Sdl.Community.StarTransit.UI.Interfaces;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class StarTransitMainWindowViewModel:INotifyPropertyChanged, IWindowActions
+	public class StarTransitMainWindowViewModel:INotifyPropertyChanged, IWindowActions
     {
-        private ICommand _nextCommand;
+		#region Private Fields
+		private ICommand _nextCommand;
         private ICommand _backCommand;
         private ICommand _createCommand;
         private bool _canExecuteNext;
@@ -29,11 +24,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private bool _canExecuteCreate;
         private  readonly PackageDetailsViewModel _packageDetailsViewModel;
         private readonly PackageDetails _packageDetails;
-       private bool _isDetailsSelected;
+        private bool _isDetailsSelected;
         private bool _isTmSelected;
         private bool _isFinishSelected;
         private readonly FinishViewModel _finishViewModel;
-        private PackageModel _package;
         private readonly ProjectService _projectService;
         private bool _active;
         private bool _isEnabled;
@@ -42,7 +36,36 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private TranslationMemories _translationMemories;
         private TranslationMemoriesViewModel _translationMemoriesViewModel;
         private MetroWindow _window;
-        public bool DetailsSelected
+		#endregion
+
+		#region Constructors
+		public StarTransitMainWindowViewModel(
+			PackageDetailsViewModel packageDetailsViewModel,
+			PackageDetails packageDetails,
+			TranslationMemories translationMemories,
+			TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
+			FinishViewModel finishViewModel,
+			MetroWindow window)
+		{
+			_packageDetailsViewModel = packageDetailsViewModel;
+			_packageDetails = packageDetails;
+			_translationMemories = translationMemories;
+			_translationMemoriesViewModel = translationMeloriesMemoriesViewModel;
+			CanExecuteBack = false;
+			CanExecuteCreate = false;
+			CanExecuteNext = true;
+			_isDetailsSelected = true;
+			_isTmSelected = false;
+			_isFinishSelected = false;
+			_finishViewModel = finishViewModel;
+			Color = "#FFB69476";
+			_window = window;
+			_projectService = new ProjectService();
+		}
+		#endregion
+
+		#region Public Properties
+		public bool DetailsSelected
         {
             get { return _isDetailsSelected; }
             set
@@ -140,10 +163,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                     return;
                 }
                 _canExecuteCreate = value;
-                OnPropertyChanged();
-                
-            }
-            
+                OnPropertyChanged();                
+            }            
         }
 
         public bool IsEnabled
@@ -160,12 +181,30 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 OnPropertyChanged();
             }
         }
+		
+		public bool Active
+		{
+			get { return _active; }
+			set
+			{
+				if (Equals(value, _active))
+				{
+					return;
+				}
+				_active = value;
+				OnPropertyChanged();
+			}
+		}
+		#endregion
 
-        public Action CloseAction { get; set; }
+		#region Actions
+		public Action CloseAction { get; set; }
 
         public Action<string,string> ShowWindowsMessage { get; set; }
+		#endregion
 
-        public ICommand NextCommand
+		#region Commands
+		public ICommand NextCommand
         {
             get { return _nextCommand ?? (_nextCommand = new CommandHandler(Next, true)); }
         }
@@ -188,176 +227,156 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             get { return _createCommand ?? (_createCommand = new CommandHandler(Create, true)); }
         }
+		#endregion
 
-        public bool Active
-        {
-            get { return _active; }
-            set
-            {
-                if (Equals(value, _active))
-                {
-                    return;
-                }
-                _active = value;
-                OnPropertyChanged();
-
-            }
-        }
-
-       
-
-        /// <summary>
-        /// Check to see if the folder is empty, in case the user just paste the path in text box
-        /// </summary>
-        /// <param name="folderPath"></param>
-        /// <returns></returns>
-        private bool IsFolderEmpty(string folderPath)
-        {
-            if (!Utils.IsFolderEmpty(folderPath))
-            {
-                ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
-                return false;
-            }
-            return true;
-        }
-
-        public void Next()
+		#region Public Methods
+		public void Next()
         {
             var model = _packageDetailsViewModel.GetPackageModel();
-             _hasTm = false;
+            _hasTm = false;
             var isEmpty = IsFolderEmpty(_packageDetailsViewModel.TextLocation);
 
-            if (isEmpty)
-            {
-                foreach (var pair in model.LanguagePairs)
-                {
-                    if (pair.StarTranslationMemoryMetadatas.Count != 0)
-                    {
-                        _hasTm = true;
-                    }
-                }//tm page is disabled
-                if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
-                {
+			if (isEmpty)
+			{
+				foreach (var pair in model.LanguagePairs)
+				{
+					if (pair.StarTranslationMemoryMetadatas.Count != 0)
+					{
+						_hasTm = true;
+					}
+				}//tm page is disabled
+				if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm == false)
+				{
 
-                    DetailsSelected = false;
-                    TmSelected = false;
-                    FinishSelected = true;
-                    CanExecuteBack = true;
-                    CanExecuteNext = false;
-                    _finishViewModel.Refresh();
-                    CanExecuteCreate = true;
-                    IsEnabled = false;
-                    Color = "Gray";
-                }//tm page
-                else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
-                {
-                    DetailsSelected = false;
-                    TmSelected = true;
-                    FinishSelected = false;
-                    CanExecuteBack = true;
-                    CanExecuteNext = true;
-                    CanExecuteCreate = false;
-                    IsEnabled = true;
-                    Color = "#FF66290B";
-                }//finish page
-                else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
-                {
-                    DetailsSelected = false;
-                    CanExecuteNext = false;
-                    CanExecuteCreate = true;
-                    CanExecuteBack = true;
-                    TmSelected = false;
-                    IsEnabled = true;
-                    FinishSelected = true;
-                    _finishViewModel.Refresh();
-                    Color = "#FFB69476";
-                }
-            }
-            
-
+					DetailsSelected = false;
+					TmSelected = false;
+					FinishSelected = true;
+					CanExecuteBack = true;
+					CanExecuteNext = false;
+					_finishViewModel.Refresh();
+					CanExecuteCreate = true;
+					IsEnabled = false;
+					Color = "Gray";
+				}//tm page
+				else if (_packageDetails.FieldsAreCompleted() && DetailsSelected && _hasTm)
+				{
+					DetailsSelected = false;
+					TmSelected = true;
+					FinishSelected = false;
+					CanExecuteBack = true;
+					CanExecuteNext = true;
+					CanExecuteCreate = false;
+					IsEnabled = true;
+					Color = "#FF66290B";
+				}//finish page
+				else if (_packageDetails.FieldsAreCompleted() && TmSelected && _translationMemories.TmFieldIsCompleted())
+				{
+					DetailsSelected = false;
+					CanExecuteNext = false;
+					CanExecuteCreate = true;
+					CanExecuteBack = true;
+					TmSelected = false;
+					IsEnabled = true;
+					FinishSelected = true;
+					_finishViewModel.Refresh();
+					Color = "#FFB69476";
+				}
+			}
         }
 
-        public void Back()
-        {
-            if (DetailsSelected)
-            {
-                CanExecuteBack = false;
-            }
-            else if (FinishSelected && _hasTm==false)
-            {
-                CanExecuteBack = false;
-                DetailsSelected = true;
-                TmSelected = false;
-                CanExecuteNext = true;
-                FinishSelected = false;
-                CanExecuteCreate = false;
-            }else if (FinishSelected && _hasTm)
-            {
-                DetailsSelected = false;
-                TmSelected = true;
-                FinishSelected = false;
-                CanExecuteBack = true;
-                CanExecuteCreate = false;
-                CanExecuteNext = true;
-                Color = "#FF66290B";
-            }
-            else if (TmSelected)
-            {
-                DetailsSelected = true;
-                TmSelected = false;
-                FinishSelected = false;
-                CanExecuteBack = false;
-                CanExecuteCreate = false;
-                CanExecuteNext = true;
-                Color = "#FFB69476";
-            }
-        }
+		public void Back()
+		{
+			if (DetailsSelected)
+			{
+				CanExecuteBack = false;
+			}
+			else if (FinishSelected && _hasTm == false)
+			{
+				CanExecuteBack = false;
+				DetailsSelected = true;
+				TmSelected = false;
+				CanExecuteNext = true;
+				FinishSelected = false;
+				CanExecuteCreate = false;
+			}
+			else if (FinishSelected && _hasTm)
+			{
+				DetailsSelected = false;
+				TmSelected = true;
+				FinishSelected = false;
+				CanExecuteBack = true;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FF66290B";
+			}
+			else if (TmSelected)
+			{
+				DetailsSelected = true;
+				TmSelected = false;
+				FinishSelected = false;
+				CanExecuteBack = false;
+				CanExecuteCreate = false;
+				CanExecuteNext = true;
+				Color = "#FFB69476";
+			}
+		}
 
-        public async void Create()
-        {
-            Active = true;
-            CanExecuteBack= CanExecuteCreate = false;
-            var packageModel = _translationMemoriesViewModel.GetPackageModel();
+		public async void Create()
+		{
+			Active = true;
+			CanExecuteBack = CanExecuteCreate = false;
+			var packageModel = _translationMemoriesViewModel.GetPackageModel();
+			var isEmpty = IsFolderEmpty(packageModel.Location);
+			var messageModel = new MessageModel();
 
-            var isEmpty = IsFolderEmpty(packageModel.Location);
+			CloseAction();
 
-            if (isEmpty)
-            {
-               await Task.Run(() => _projectService.CreateProject(packageModel));
-            }
-            CanExecuteBack = CanExecuteCreate = false;
-            Active = false;
-            CloseAction();
-        }
+			if (isEmpty)
+			{
+				await Task.Run(() => messageModel = _projectService.CreateProject(packageModel));
+			}
+			if(messageModel == null)
+			{
+				CanExecuteBack = CanExecuteCreate = false;
+				Active = false;
+				CloseAction();
+			}
+			else if (messageModel != null && !messageModel.IsProjectCreated)
+			{
+				ShowWindowsMessage(messageModel.Title, messageModel.Message);
+				Active = false;
+				CanExecuteBack = CanExecuteCreate = false;
+			}
+		}
+		#endregion
 
+		#region Events
+		public event PropertyChangedEventHandler PropertyChanged;
+		#endregion
 
-        public StarTransitMainWindowViewModel(PackageDetailsViewModel packageDetailsViewModel,PackageDetails packageDetails,TranslationMemories translationMemories,TranslationMemoriesViewModel translationMeloriesMemoriesViewModel,
-            FinishViewModel finishViewModel,MetroWindow window)
-        {
-            _packageDetailsViewModel = packageDetailsViewModel;
-            _packageDetails = packageDetails;
-            _translationMemories = translationMemories;
-            _translationMemoriesViewModel = translationMeloriesMemoriesViewModel;
-            CanExecuteBack = false;
-            CanExecuteCreate = false;
-            CanExecuteNext = true;
-            _isDetailsSelected = true;
-            _isTmSelected = false;
-            _isFinishSelected = false;
-            _finishViewModel = finishViewModel;
-            _projectService = new ProjectService();
-            Color = "#FFB69476";
-            _window = window;
-        }
+		#region Protected Methods
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+		#endregion
 
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
+		#region Private Methods
+		/// <summary>
+		/// Check to see if the folder is empty, in case the user just paste the path in text box
+		/// </summary>
+		/// <param name="folderPath"></param>
+		/// <returns></returns>
+		private bool IsFolderEmpty(string folderPath)
+		{
+			if (!Utils.IsFolderEmpty(folderPath))
+			{
+				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
+				return false;
+			}
+			return true;
+		}
+		#endregion
+	}
 }

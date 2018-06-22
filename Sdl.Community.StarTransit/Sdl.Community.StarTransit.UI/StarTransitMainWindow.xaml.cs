@@ -1,31 +1,18 @@
-﻿using MahApps.Metro.Controls;
-using Sdl.Community.StarTransit.UI.Controls;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using HockeyApp;
+using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.Shared.Utils;
+using Sdl.Community.StarTransit.UI.Controls;
 using Sdl.Community.StarTransit.UI.ViewModels;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace Sdl.Community.StarTransit.UI
 {
-    /// <summary>
-    /// Interaction logic for StarTransitMainWindow.xaml
-    /// </summary>
-    public partial class StarTransitMainWindow : MetroWindow
+	/// <summary>
+	/// Interaction logic for StarTransitMainWindow.xaml
+	/// </summary>
+	public partial class StarTransitMainWindow : MetroWindow
     {
         private readonly PackageDetails _packageDetails;
         private readonly TranslationMemories _translationMemories;
@@ -35,8 +22,7 @@ namespace Sdl.Community.StarTransit.UI
        
         private PackageModel _package;
         public StarTransitMainWindow(PackageModel package)
-        {
-            
+        {            
             InitializeComponent();
 
             _package = package;
@@ -48,8 +34,8 @@ namespace Sdl.Community.StarTransit.UI
         
             finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
             _finish = new Finish(finishViewModel);
-            
-            var starTransitViewModel = new StarTransitMainWindowViewModel(packageDetailsViewModel
+
+			var starTransitViewModel = new StarTransitMainWindowViewModel(packageDetailsViewModel
                 , _packageDetails
                 , _translationMemories
                 ,tmViewModel
@@ -68,8 +54,6 @@ namespace Sdl.Community.StarTransit.UI
             {
                 packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
             }
-
-
         }
 
 
@@ -118,12 +102,14 @@ namespace Sdl.Community.StarTransit.UI
             var dialog = new MetroDialogSettings
             {
                 AffirmativeButtonText = "OK"
-
             };
-            await this.ShowMessageAsync(title, message,
-                        MessageDialogStyle.Affirmative, dialog);
-        }
+            await this.ShowMessageAsync(title, message, MessageDialogStyle.Affirmative, dialog);
 
+			if(dialog.AffirmativeButtonText.Equals("OK"))
+			{
+				Close();
+			}
+		}
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -132,7 +118,5 @@ namespace Sdl.Community.StarTransit.UI
             e.Cancel = starTransitViewModel.Active;
             TelemetryService.Instance.SendCrashes(false);
         }
-
-
     }
 }
