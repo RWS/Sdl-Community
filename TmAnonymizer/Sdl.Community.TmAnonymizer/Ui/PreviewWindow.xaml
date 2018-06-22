@@ -79,12 +79,12 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" >
+					<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" ElementStyle="{StaticResource WrapText}">
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
 								<Setter.Value>
-									<TextBlock Text='{Binding TmFilePath}' />
+									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" />
 								</Setter.Value>
 							</Setter>
 						</Style>

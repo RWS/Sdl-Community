@@ -65,7 +65,7 @@
 			</DataGrid.InputBindings>
 			<DataGrid.Columns>
 				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Preview" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
-				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}">
+				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}">
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
@@ -76,7 +76,7 @@
 						</Style>
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
-				<DataGridTextColumn Width="2*" Header="Path" Binding="{Binding Path}" >
+				<DataGridTextColumn Width="2*" Header="Path" Binding="{Binding Path}" ElementStyle="{StaticResource WrapText}">
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">

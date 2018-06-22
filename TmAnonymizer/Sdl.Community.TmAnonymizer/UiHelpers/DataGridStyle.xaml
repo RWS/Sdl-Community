@@ -45,4 +45,8 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
+	<!--Wrap text of text block-->
+	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
+		<Setter Property="TextWrapping" Value="Wrap"/>
+	</Style>
 </ResourceDictionary>
