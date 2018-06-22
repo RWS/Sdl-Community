@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
@@ -31,12 +32,34 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public SystemFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
+			_uniqueUsernames = new ObservableCollection<UniqueUsername>();
 			_selectedItems = new List<UniqueUsername>();
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 			if (_tmsCollection != null)
 			{
-				_uniqueUsernames = Tm.GetListOfUniqueSystemFields(_tmsCollection);
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					foreach (var serverTm in serverTms)
+					{
+						UniqueUsernames = SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+					}
+					
+				}
+
+				if (fileBasedTms.Any())
+				{
+					foreach (var fileTm in fileBasedTms)
+					{
+						UniqueUsernames = SystemFields.GetUniqueFileBasedSystemFields(fileTm);
+					}
+				}
 			}
 			
 			//foreach (var userName in _uniqueUsernames)
@@ -56,20 +79,20 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		//{
 		//		var x = Tm.GetListOfUniqueSystemFields(_tmsCollection);
 		//		x = UniqueUsernames;
-			
-		//}
 
-		//private void UniqueUsernames_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-		//{
-		//	if (e.Action == NotifyCollectionChangedAction.Add)
-		//	{
-		//		foreach (var item in e.NewItems)
-		//		{
-		//			var userName = (UniqueUsername)item;
-		//			userName.PropertyChanged += UserName_PropertyChanged;
-		//		}
-		//	}
-		//}
+			//}
+
+			//private void UniqueUsernames_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+			//{
+			//	if (e.Action == NotifyCollectionChangedAction.Add)
+			//	{
+			//		foreach (var item in e.NewItems)
+			//		{
+			//			var userName = (UniqueUsername)item;
+			//			userName.PropertyChanged += UserName_PropertyChanged;
+			//		}
+			//	}
+			//}
 		public IList SelectedItems
 		{
 			get => _selectedItems;
@@ -128,64 +151,87 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _translationMemoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals("TmsCollection"))
+			//if (e.PropertyName.Equals("TmsCollection"))
+			//{
+			//	//removed from tm collection
+			//	RefreshPreviewWindow();
+			//}
+			if ((e.PropertyName.Equals("IsSelected")) && _tmsCollection != null)
 			{
-				//removed from tm collection
-				RefreshPreviewWindow();
+				//var tmViewModel = sender as TranslationMemoryViewModel;
+				//var selectedTms = tmViewModel.SelectedItems;
+				//foreach (var tm in collection)
+				//{
+
+				//}
+				//var checkedTms = selectedTms.Where(t => t.IsSelected).ToList();
+				
 			}
 		}
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (e.Action == NotifyCollectionChangedAction.Remove)
-			{
-				if (e.OldItems == null) return;
-				foreach (TmFile removedTm in e.OldItems)
-				{
-					var tusForRemovedTm = SourceSearchResults.Where(t => t.TmFilePath.Equals(removedTm.Path)).ToList();
-					foreach (var tu in tusForRemovedTm)
-					{
-						SourceSearchResults.Remove(tu);
-					}
-				}
-				UniqueUsernames = Tm.GetListOfUniqueSystemFields(_tmsCollection);
-			}
-			if (e.Action == NotifyCollectionChangedAction.Add)
-			{
 				foreach (TmFile newTm in e.NewItems)
 				{
-					//if (_tmsCollection.Count != 0)
-					//{
-						UniqueUsernames = Tm.GetListOfUniqueSystemFields(_tmsCollection);
-					//}
+					
 					newTm.PropertyChanged += NewTm_PropertyChanged;
 				}
-			}
 		}
 
 		private void NewTm_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			RefreshPreviewWindow();
-		}
-
-		private void RefreshPreviewWindow()
-		{
-
-
-			var unselectedTms = _tmsCollection.Where(t => !t.IsSelected).ToList();
-			foreach (var tm in unselectedTms)
+			if (e.PropertyName.Equals("IsSelected"))
 			{
-				var anonymizedTmToRemove = _anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
-				if (anonymizedTmToRemove != null)
+				var tm = sender as TmFile;
+				if (tm.IsSelected)
 				{
-					_anonymizeTranslationMemories.Remove(anonymizedTmToRemove);
+					if (tm.IsServerTm)
+					{
+						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							_translationMemoryViewModel.Credentials.UserName,
+							_translationMemoryViewModel.Credentials.Password);
+						var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+						foreach (var name in names)
+						{
+							UniqueUsernames.Add(name);
+						}
+					}
+					else
+					{
+						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
+						foreach (var name in names)
+						{
+							UniqueUsernames.Add(name);
+						}
+					}
 				}
-
-				//remove search results for that tm
-				var searchResultsForTm = SourceSearchResults.Where(r => r.TmFilePath.Equals(tm.Path)).ToList();
-				foreach (var result in searchResultsForTm)
+				else
 				{
-					SourceSearchResults.Remove(result);
+					if (tm.IsServerTm)
+					{
+						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							_translationMemoryViewModel.Credentials.UserName,
+							_translationMemoryViewModel.Credentials.Password);
+						var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+						var newList = UniqueUsernames.ToList();
+						foreach (var name in names)
+						{
+							newList.RemoveAll(n=>n.Username == name.Username);
+						}
+						UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
+					}
+					else
+					{
+						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
+						var newList = UniqueUsernames.ToList();
+						foreach (var name in names)
+						{
+							newList.RemoveAll(n => n.Username == name.Username);
+						}
+						UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
+					}
 				}
 			}
 		}

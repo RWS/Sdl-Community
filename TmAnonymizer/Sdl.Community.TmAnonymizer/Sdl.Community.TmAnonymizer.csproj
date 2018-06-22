@@ -139,6 +139,7 @@
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="Helpers\SystemFields.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\Login.cs" />

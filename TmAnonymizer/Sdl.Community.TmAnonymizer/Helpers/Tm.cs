@@ -217,59 +217,10 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 					{
 						AnonymizeSegmentsWithoutTags(translationUnit, sourceTranslationElements, true);
 					}
-
-					//translationUnit.SystemFields.CreationUser = "N/A";
-					//translationUnit.SystemFields.UseUser = "N/A";
 					tm.LanguageDirection.UpdateTranslationUnit(translationUnit);
 				}
-				//	//foreach (FieldValue item in translationUnit.FieldValues)
-				//	//{
-				//	//	var anonymized = AnonymizeData.EncryptData(item.GetValueString(), "Andrea");
-				//	//	item.Clear();
-				//	//	item.Add(anonymized);
-				//	//}
-				//	//var test = translationUnit.DocumentSegmentPair
-				//}
 			}
-
 		}
-
-		public static ObservableCollection<UniqueUsername> GetListOfUniqueSystemFields(ObservableCollection<TmFile> tmsCollection)
-		{
-			var uniqueUsernames = new List<UniqueUsername>();
-			var listOfFieldNames = new List<string>();
-			foreach (var tm in tmsCollection)
-			{
-				var filebasedTm = new FileBasedTranslationMemory(tm.Path);
-				var unitsCount = filebasedTm.LanguageDirection.GetTranslationUnitCount();
-				var tmIterator = new RegularIterator(unitsCount);
-				var tus = filebasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-				foreach (var tu in tus)
-				{
-					listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
-				}
-			}
-			var uniqueUsers = listOfFieldNames.Distinct().ToList();
-			foreach (var name in uniqueUsers)
-			{
-				uniqueUsernames.Add(new UniqueUsername() { Username = name });
-			}
-			var observableCollection = new ObservableCollection<UniqueUsername>();
-			foreach (var item in uniqueUsernames)
-			{
-				observableCollection.Add(item);
-			}
-			return observableCollection;
-			
-		}
-
-		private static SearchSettings GetSearchSettings()
-		{
-			SearchSettings settings = new SearchSettings();
-			settings.MinScore = 100;
-			return settings;
-		}
-
 
 		private static void AnonymizeSegmentsWithoutTags(TranslationUnit translationUnit,
 			List<SegmentElement> sourceTranslationElements, bool isSource)
