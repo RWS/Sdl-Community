@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.TmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
@@ -28,6 +29,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
 		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private IList _selectedItems;
+		private WaitWindow _waitWindow;
 
 
 		public SystemFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
@@ -48,7 +50,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.Password);
 					foreach (var serverTm in serverTms)
 					{
-						UniqueUsernames = SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+						UniqueUsernames = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
 					}
 					
 				}
@@ -57,7 +59,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						UniqueUsernames = SystemFields.GetUniqueFileBasedSystemFields(fileTm);
+						UniqueUsernames = Helpers.SystemFields.GetUniqueFileBasedSystemFields(fileTm);
 					}
 				}
 			}
@@ -182,68 +184,82 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		{
 			if (e.PropertyName.Equals("IsSelected"))
 			{
-				var tm = sender as TmFile;
-				if (tm.IsSelected)
-				{
-					if (tm.IsServerTm)
-					{
-						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							_translationMemoryViewModel.Credentials.UserName,
-							_translationMemoryViewModel.Credentials.Password);
-						var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-						foreach (var name in names)
-						{
-							UniqueUsernames.Add(name);
-						}
-					}
-					else
-					{
-						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
-						foreach (var name in names)
-						{
-							UniqueUsernames.Add(name);
-						}
-					}
-				}
-				else
-				{
-					if (tm.IsServerTm)
-					{
-						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							_translationMemoryViewModel.Credentials.UserName,
-							_translationMemoryViewModel.Credentials.Password);
-						var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-						var newList = UniqueUsernames.ToList();
-						foreach (var name in names)
-						{
-							newList.RemoveAll(n=>n.Username == name.Username);
-						}
-						UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
-					}
-					else
-					{
-						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
-						var newList = UniqueUsernames.ToList();
-						foreach (var name in names)
-						{
-							newList.RemoveAll(n => n.Username == name.Username);
-						}
-						UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
-					}
-				}
+				_backgroundWorker.RunWorkerAsync(sender);
 			}
+
 		}
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			throw new NotImplementedException();
+			if (_waitWindow != null)
+			{
+				_waitWindow.Close();
+			}
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			throw new NotImplementedException();
+
+			var tm = e.Argument as TmFile;
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate
+			{
+				_waitWindow = new WaitWindow();
+				_waitWindow.Show();
+			});
+			if (tm.IsSelected)
+			{
+				if (tm.IsServerTm)
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+					foreach (var name in names)
+					{
+						System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+						{
+							UniqueUsernames.Add(name);
+						});
+						
+					}
+				}
+				else
+				{
+					var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(tm);
+					foreach (var name in names)
+					{
+						UniqueUsernames.Add(name);
+					}
+				}
+			}
+			else
+			{
+				if (tm.IsServerTm)
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+					var newList = UniqueUsernames.ToList();
+					foreach (var name in names)
+					{
+						newList.RemoveAll(n => n.Username == name.Username);
+					}
+					UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
+				}
+				else
+				{
+					var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(tm);
+					var newList = UniqueUsernames.ToList();
+					foreach (var name in names)
+					{
+						newList.RemoveAll(n => n.Username == name.Username);
+					}
+					UniqueUsernames = new ObservableCollection<UniqueUsername>(newList);
+				}
+			}
 		}
 
 		public ObservableCollection<SourceSearchResult> SourceSearchResults
