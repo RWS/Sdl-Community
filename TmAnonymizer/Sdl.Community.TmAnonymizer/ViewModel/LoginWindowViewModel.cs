@@ -23,11 +23,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private readonly BackgroundWorker _backgroundWorker;
 		private string _messageColor;
 		private bool _hasText;
+		private string _visibility;
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
 			_credentials = new Login();
 			_messageColor = "#DF4762";
+			_visibility = "Hidden";
 			_message = string.Empty;
 			_window = window;
 			_hasText = false;
@@ -97,6 +99,15 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			{
 				_hasText = value;
 				OnPropertyChanged(nameof(HasText));
+			}
+		}
+		public string Visibility
+		{
+			get => _visibility;
+			set
+			{
+				_visibility = value;
+				OnPropertyChanged(nameof(Visibility));
 			}
 		}
 		public string this[string columnName]
@@ -188,6 +199,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					_backgroundWorker.RunWorkerAsync();
 					MessageColor = "#3EA691";
 					Message = "Please wait until we connect to GroupShare";
+					Visibility = "Visible";
 				}
 				else
 				{

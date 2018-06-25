@@ -39,6 +39,7 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
@@ -75,7 +76,8 @@
 					  mah:TextBoxHelper.HasText="{Binding HasText,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
 					  Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
-		<Button  Grid.Row="5" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
+		<mah:MetroProgressBar Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding Visibility}" IsIndeterminate="True"></mah:MetroProgressBar>
+		<Button  Grid.Row="6" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 		         Margin="90,28,10,54"
 				   Command="{Binding OkCommand}" 
 				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI" >
