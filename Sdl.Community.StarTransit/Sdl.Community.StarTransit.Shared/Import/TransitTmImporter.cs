@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Sdl.FileTypeSupport.Framework.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.ProjectAutomation.Core;
-using System.Globalization;
 using Sdl.LanguagePlatform.Core.Tokenization;
+using Sdl.LanguagePlatform.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.Shared.Import
 {
-    public class TransitTmImporter
+	public class TransitTmImporter
     {
         private readonly IFileTypeManager _fileTypeManager;
         private readonly CultureInfo _sourceCulture;
@@ -30,9 +29,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
             _fileTypeManager = fileTypeManager;
 
             if (_createTm)
-            {
-
-
+            {				
                 _fileBasedTM = new FileBasedTranslationMemory(studioTranslationMemory,
                     string.Empty,
                     _sourceCulture,
@@ -52,13 +49,11 @@ namespace Sdl.Community.StarTransit.Shared.Import
         {
             string sdlXliffFullPath = CreateTemporarySdlXliff(starTransitTm);
 
-            ImportSdlXliffIntoTm( sdlXliffFullPath);
-            
+            ImportSdlXliffIntoTm(sdlXliffFullPath);            
         }
 
         private void ImportSdlXliffIntoTm( string sdlXliffFullPath)
         {
-
             var tmImporter = new TranslationMemoryImporter(_fileBasedTM.LanguageDirection);
             var importSettings = new ImportSettings()
             {
@@ -78,6 +73,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
         {
             return new TranslationProviderReference(_fileBasedTM.FilePath,true);
         }
+
         /// <summary>
         /// Create temporary bilingual file (sdlxliff) used to import the information
         /// in Studio translation memories
