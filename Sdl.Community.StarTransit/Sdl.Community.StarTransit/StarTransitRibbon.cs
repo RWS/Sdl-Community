@@ -223,7 +223,13 @@ namespace Sdl.Community.StarTransit
         }
     }
 
-   
-
-
+	[Action("Sdl.Community.StarTransit.Help", Name = "Help", Icon = "help_icon", Description = "Help")]
+	[ActionLayout(typeof(StarTransitRibbon), 20, DisplayType.Large)]
+	public class HelpLinkAction : AbstractAction
+	{
+		protected override void Execute()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3270.star-transit");
+		}
+	}
 }

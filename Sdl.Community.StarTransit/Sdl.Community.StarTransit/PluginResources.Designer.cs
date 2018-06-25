@@ -19,7 +19,7 @@ namespace Sdl.Community.StarTransit {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PluginResources {
@@ -76,6 +76,16 @@ namespace Sdl.Community.StarTransit {
         public static System.Drawing.Icon bil {
             get {
                 object obj = ResourceManager.GetObject("bil", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        public static System.Drawing.Icon help_icon {
+            get {
+                object obj = ResourceManager.GetObject("help_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
