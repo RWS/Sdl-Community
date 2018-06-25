@@ -22,12 +22,6 @@
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
-				<!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<!-- Accent and AppTheme setting -->
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/green.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>

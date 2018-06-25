@@ -10,9 +10,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 {
 	public class MainViewModel : ViewModelBase
 	{
-		private ObservableCollection<TabItem> _tabItems;
 		private TranslationMemoryViewModel _tmViewModel;
-		private int _selectedIndex;
 
 		public TranslationMemoryViewModel TmViewModel
 		{
@@ -23,7 +21,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(TmViewModel));
 			}
 		}
-
 	
 		public TranslationViewModel TranslationViewModel { get; set; }
 		public SystemFieldsViewModel SystemFieldsViewModel { get; set; }
@@ -34,36 +31,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			TranslationViewModel = new TranslationViewModel(_tmViewModel);
 			SystemFieldsViewModel =new SystemFieldsViewModel();
 			CustomFieldsViewModel=new CustomFieldsViewModel();
-		}
-
-		public int Selected
-		{
-			get => _selectedIndex;
-			set
-			{
-				if (Equals(value, _selectedIndex))
-				{
-					return;
-				}
-				_selectedIndex = value;
-				OnPropertyChanged(nameof(Selected));
-			}
-		}	
-
-
-		public ObservableCollection<TabItem> TabItems
-		{
-			get => _tabItems;
-
-			set
-			{
-				if (Equals(value, _tabItems))
-				{
-					return;
-				}
-				_tabItems = value;
-				OnPropertyChanged(nameof(TabItems));
-			}
 		}
 	}
 }

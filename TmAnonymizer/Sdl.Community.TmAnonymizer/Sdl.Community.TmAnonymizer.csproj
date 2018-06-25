@@ -158,7 +158,6 @@
     <Compile Include="Model\ServerTmBackUp.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Model\SourceSearchResult.cs" />
-    <Compile Include="Model\TabItem.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Model\TranslationUnitDetails.cs" />
     <Compile Include="Model\WordDetails.cs" />
