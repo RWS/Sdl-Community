@@ -121,9 +121,9 @@ namespace Sdl.Community.StarTransit
                 {
                     Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml")
                 };
-                var blueResources = new ResourceDictionary
+                var greenResources = new ResourceDictionary
                 {
-                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml")
+                    Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Accents/Green.xaml")
                 };
                 var baseLightResources = new ResourceDictionary
                 {
@@ -137,7 +137,7 @@ namespace Sdl.Community.StarTransit
                 Application.Current.Resources.MergedDictionaries.Add(controlsResources);
                 Application.Current.Resources.MergedDictionaries.Add(fontsResources);
                 Application.Current.Resources.MergedDictionaries.Add(colorsResources);
-                Application.Current.Resources.MergedDictionaries.Add(blueResources);
+                Application.Current.Resources.MergedDictionaries.Add(greenResources);
                 Application.Current.Resources.MergedDictionaries.Add(baseLightResources);
                 Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
 

@@ -57,14 +57,14 @@
             <ColumnDefinition Width="3*"/>
           
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="name" TextWrapping="Wrap" Text="Name" Foreground="#41B1E1"/>
-        <TextBlock x:Name="description" TextWrapping="Wrap" Text="Description" Grid.Row="1" Foreground="#41B1E1"/>
-        <TextBlock x:Name="location" TextWrapping="Wrap" Text="Location" Grid.Row="2" Foreground="#41B1E1" />
-        <TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4" Foreground="#41B1E1"/>
-        <TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5" Foreground="#41B1E1"/>
-        <TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6" Foreground="#41B1E1"/>
-        <TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8" Foreground="#41B1E1"/>
-        <TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Foreground="#41B1E1" Grid.RowSpan="2"/>
+		<TextBlock x:Name="name" TextWrapping="Wrap" Text="Name" Foreground="#80BA45"/>
+		<TextBlock x:Name="description" TextWrapping="Wrap" Text="Description" Grid.Row="1" Foreground="#80BA45"/>
+		<TextBlock x:Name="location" TextWrapping="Wrap" Text="Location" Grid.Row="2" Foreground="#80BA45" />
+		<TextBlock x:Name="customer" TextWrapping="Wrap" Text="Customer" Grid.Row="4" Foreground="#80BA45"/>
+		<TextBlock x:Name="Template" TextWrapping="Wrap" Text="Template" Grid.Row="5" Foreground="#80BA45"/>
+		<TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6" Foreground="#80BA45"/>
+		<TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8" Foreground="#80BA45"/>
+		<TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Foreground="#80BA45" Grid.RowSpan="2"/>
         <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"
                 
