@@ -12,6 +12,7 @@
              FontFamily="Calibri"
 			 Width="415"
 			 Height="350"
+			 ResizeMode="NoResize"
 			 WindowStartupLocation="CenterScreen"
 			 WindowTitleBrush="#3EA691"
              d:DesignHeight="300" d:DesignWidth="300">
@@ -55,19 +56,23 @@
 				   mah:TextBoxHelper.AutoWatermark="True"
 		           mah:TextBoxHelper.UseFloatingWatermark="True" 
 				   Margin="5,5,10,5"
-				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url}" ></TextBox>
+				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" ></TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
 		<TextBox  mah:TextBoxHelper.ClearTextButton="True"
 		          mah:TextBoxHelper.Watermark="User name"
 		          mah:TextBoxHelper.AutoWatermark="True"
 		          mah:TextBoxHelper.UseFloatingWatermark="True" 
 		          Margin="5,5,10,5"
-				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName}"></TextBox>
+				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
-		<PasswordBox  mah:TextBoxHelper.ClearTextButton="True"
+		<PasswordBox 
+			         Style="{DynamicResource MetroButtonRevealedPasswordBox}"
 		              mah:TextBoxHelper.Watermark="Password"
 		              mah:TextBoxHelper.UseFloatingWatermark="True"  
 		              Margin="5,5,10,5"
+		              mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
+					  mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
+					  mah:TextBoxHelper.HasText="{Binding HasText,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
 					  Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
 		<Button  Grid.Row="5" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 

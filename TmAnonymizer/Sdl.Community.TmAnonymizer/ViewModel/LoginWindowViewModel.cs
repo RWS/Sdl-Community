@@ -11,7 +11,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TmAnonymizer.ViewModel
 {
-	public class LoginWindowViewModel:ViewModelBase
+	public class LoginWindowViewModel: ViewModelBase,IDataErrorInfo, IWindowActions
 	{
 		private string _url;
 		private string _userName;
@@ -22,6 +22,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private string _message;
 		private readonly BackgroundWorker _backgroundWorker;
 		private string _messageColor;
+		private bool _hasText;
 
 		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
 		{
@@ -29,6 +30,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_messageColor = "#DF4762";
 			_message = string.Empty;
 			_window = window;
+			_hasText = false;
 			_tmsCollection = tmsCollection;
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
@@ -37,7 +39,28 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_window.Close();
+			if (e.Error != null)
+			{
+				if (e.Error.Message.Equals("One or more errors occurred."))
+				{
+					if (e.Error.InnerException != null)
+					{
+						Message = e.Error.InnerException.Message;
+						MessageColor = "#DF4762";
+					}
+				
+				}
+				else
+				{
+					Message = e.Error.Message;
+					MessageColor = "#DF4762";
+				}
+			}
+			else
+			{
+				_window.Close();
+			}
+			
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -65,6 +88,42 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				_message = value;
 				OnPropertyChanged(nameof(Message));
 			}
+		}
+
+		public bool HasText
+		{
+			get => _hasText;
+			set
+			{
+				_hasText = value;
+				OnPropertyChanged(nameof(HasText));
+			}
+		}
+		public string this[string columnName]
+		{
+			get
+			{
+				if (columnName == "Url")
+				{
+					if (string.IsNullOrEmpty(Url))
+
+						return "Url is required";
+				}
+				if (columnName == "UserName" && string.IsNullOrEmpty(UserName))
+				{
+
+					return "User name is rquired";
+
+				}
+				if (columnName == "HasText" && string.IsNullOrEmpty(Credentials.Password))
+				{
+
+					return "Password is rquired";
+
+				}
+				return null;
+			}
+
 		}
 		public string Url
 		{
@@ -109,6 +168,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 		}
 
+		public string Error { get; }
+
 		private void Ok(object parameter)
 		{
 			var passwordBox = parameter as PasswordBox;
@@ -121,6 +182,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					UserName = UserName
 				};
 				Credentials = login;
+				HasText = true;
 				if (IsValid())
 				{
 					_backgroundWorker.RunWorkerAsync();
@@ -170,19 +232,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			}
 			catch (Exception exception)
 			{
-				if (exception.Message.Equals("One or more errors occurred."))
-				{
-					if (exception.InnerException != null)
-					{
-						Message = exception.InnerException.Message;
-						MessageColor = "#DF4762";
-					}
-				}
-				else
-				{
-					Message = exception.Message;
-					MessageColor = "#DF4762";
-				}
+				throw ;
 			}
 		}
 		
@@ -196,5 +246,9 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
 			       !string.IsNullOrEmpty(Credentials.UserName);
 		}
+	}
+
+	public interface IWindowActions
+	{
 	}
 }
