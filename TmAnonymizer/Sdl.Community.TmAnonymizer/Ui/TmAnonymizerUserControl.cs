@@ -16,6 +16,7 @@ using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
+
 namespace Sdl.Community.TmAnonymizer.Ui
 {
 	public partial class TmAnonymizerUserControl : UserControl
@@ -45,7 +46,9 @@ namespace Sdl.Community.TmAnonymizer.Ui
 				new System.Windows.Application();
 			}
 			if (System.Windows.Application.Current != null)
+			{
 				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+			}
 
 			//create settings folder
 			if (!Directory.Exists(Constants.SettingsFolderPath))

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls;
 using Sdl.Community.TmAnonymizer.ViewModel;
 
 namespace Sdl.Community.TmAnonymizer.Ui
@@ -19,7 +20,7 @@ namespace Sdl.Community.TmAnonymizer.Ui
 	/// <summary>
 	/// Interaction logic for LoginWindow.xaml
 	/// </summary>
-	public partial class LoginWindow 
+	public partial class LoginWindow
 	{
 		public LoginWindow()
 		{

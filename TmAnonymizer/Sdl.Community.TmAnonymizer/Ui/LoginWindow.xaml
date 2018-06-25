@@ -1,15 +1,19 @@
-﻿<Window x:Class="Sdl.Community.TmAnonymizer.Ui.LoginWindow"
+﻿<mah:MetroWindow x:Class="Sdl.Community.TmAnonymizer.Ui.LoginWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
 			 Title="Login"
-			 Width="400"
-			 Height="300"
+             GlowBrush="#3EA691"
+             FontFamily="Calibri"
+			 Width="415"
+			 Height="350"
 			 WindowStartupLocation="CenterScreen"
+			 WindowTitleBrush="#3EA691"
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -17,7 +21,12 @@
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
-				
+				<!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
+				<!-- Accent and AppTheme setting -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/green.xaml" />
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
@@ -41,11 +50,25 @@
 		</Grid.Resources>
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url*</TextBlock>
-		<TextBox  Grid.Row="1" Grid.Column="1" IsEnabled="True" Style="{DynamicResource TextBoxStyle}" Text="{Binding Url}" ></TextBox>
+		<TextBox   mah:TextBoxHelper.ClearTextButton="True"
+				   mah:TextBoxHelper.Watermark="Url"
+				   mah:TextBoxHelper.AutoWatermark="True"
+		           mah:TextBoxHelper.UseFloatingWatermark="True" 
+				   Margin="5,5,10,5"
+				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url}" ></TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
-		<TextBox Grid.Row="2" Grid.Column="1" Style="{DynamicResource TextBoxStyle}" Text="{Binding UserName}"></TextBox>
+		<TextBox  mah:TextBoxHelper.ClearTextButton="True"
+		          mah:TextBoxHelper.Watermark="User name"
+		          mah:TextBoxHelper.AutoWatermark="True"
+		          mah:TextBoxHelper.UseFloatingWatermark="True" 
+		          Margin="5,5,10,5"
+				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
-		<PasswordBox Name="Password" Grid.Row="3" Grid.Column="1" Style="{DynamicResource PasswordBoxStyle}"></PasswordBox>
+		<PasswordBox  mah:TextBoxHelper.ClearTextButton="True"
+		              mah:TextBoxHelper.Watermark="Password"
+		              mah:TextBoxHelper.UseFloatingWatermark="True"  
+		              Margin="5,5,10,5"
+					  Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
 		<Button  Grid.Row="5" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 		         Margin="90,28,10,54"
@@ -57,4 +80,5 @@
 			</StackPanel>
 		</Button>
 	</Grid>
-</Window>
+</mah:MetroWindow>
+
