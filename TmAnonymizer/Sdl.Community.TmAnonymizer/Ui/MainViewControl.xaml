@@ -5,15 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              xmlns:viewModels="clr-namespace:Sdl.Community.TmAnonymizer.ViewModel"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
-			
+             
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
 			<local:TranslationMemory></local:TranslationMemory>
 		</DataTemplate>
+		<ResourceDictionary x:Key="Metro">
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBoxStyle.xaml"/>
+				<!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+				
+				<!-- Accent and AppTheme setting -->
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/green.xaml" />
+			
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+
 	</UserControl.Resources>
 	<Grid  Name="ParentGrid">
+		<Grid.Resources>
+			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+			<!--<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/green.xaml" />-->
+		</Grid.Resources>
+		
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
@@ -23,32 +45,20 @@
 		</Grid.ColumnDefinitions>
 		<ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" ></ContentControl>
 
-		<TabControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TabItems}"
-		            Height="{Binding ParentGrid}" SelectedIndex="{Binding Selected}" Margin="10,10" >
-			<TabControl.Resources>
-				<DataTemplate DataType="{x:Type viewModels:TranslationViewModel}">
-					<local:Translations></local:Translations>
-				</DataTemplate>
+		<TabControl Grid.Column="1" Grid.Row="0" 
+		            controls:TabControlHelper.Underlined="SelectedTabItem"
+					controls:TabControlHelper.UnderlineBrush="Red"
+		            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
+			<controls:MetroTabItem Header="Translations">
+				<local:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></local:Translations>
+			</controls:MetroTabItem>
+			<controls:MetroTabItem  Header ="System Fields">
+				<local:SystemFields DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
+			</controls:MetroTabItem>
+			<controls:MetroTabItem Header="Custom Fields" >
+				<local:CustomFields DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></local:CustomFields>
+			</controls:MetroTabItem>
 
-				<DataTemplate DataType="{x:Type viewModels:CustomFieldsViewModel}">
-					<local:CustomFields></local:CustomFields>
-				</DataTemplate>
-				<DataTemplate DataType="{x:Type viewModels:SystemFieldsViewModel}">
-					<local:SystemFields></local:SystemFields>
-				</DataTemplate>
-			</TabControl.Resources>
-			<TabControl.ItemTemplate>
-				<!-- this is the header template-->
-				<DataTemplate>
-					<TextBlock
-						Text="{Binding Header}"/>
-				</DataTemplate>
-			</TabControl.ItemTemplate>
-			<TabControl.ContentTemplate>
-				<DataTemplate>
-					<ContentControl Content="{Binding ViewModel}"></ContentControl>
-				</DataTemplate>
-			</TabControl.ContentTemplate>
 		</TabControl>
 	</Grid>
 </UserControl>

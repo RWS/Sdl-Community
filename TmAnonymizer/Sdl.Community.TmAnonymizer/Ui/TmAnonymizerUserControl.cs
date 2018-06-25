@@ -48,6 +48,11 @@ namespace Sdl.Community.TmAnonymizer.Ui
 			if (System.Windows.Application.Current != null)
 			{
 				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
+				var colorsResources = new ResourceDictionary
+				{
+					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml",UriKind.Absolute),
+				};
+				System.Windows.Application.Current.Resources.MergedDictionaries.Add(colorsResources);
 			}
 
 			//create settings folder

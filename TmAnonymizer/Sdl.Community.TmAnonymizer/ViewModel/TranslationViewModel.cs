@@ -35,6 +35,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private WaitWindow _waitWindow;
 		private IList _selectedItems;
 
+		public TranslationViewModel()
+		{
+			
+		}
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_selectedItems = new List<Rule>();

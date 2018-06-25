@@ -23,31 +23,17 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(TmViewModel));
 			}
 		}
+
+	
+		public TranslationViewModel TranslationViewModel { get; set; }
+		public SystemFieldsViewModel SystemFieldsViewModel { get; set; }
+		public CustomFieldsViewModel CustomFieldsViewModel { get; set; }
 		public MainViewModel()
 		{
 			_tmViewModel = new TranslationMemoryViewModel();
-			_tabItems = new ObservableCollection<TabItem>
-			{
-				new TabItem
-				{
-					Name = "Translations",
-					Header = "Translations",
-					ViewModel =  new TranslationViewModel(_tmViewModel)
-				},
-				new TabItem
-				{
-					Name = "System",
-					Header = "System fields",
-					ViewModel = new SystemFieldsViewModel()
-				},
-				new TabItem
-				{
-					Name = "Custom",
-					Header = "Custom fields",
-					ViewModel = new CustomFieldsViewModel()
-				}
-				
-			};
+			TranslationViewModel = new TranslationViewModel(_tmViewModel);
+			SystemFieldsViewModel =new SystemFieldsViewModel();
+			CustomFieldsViewModel=new CustomFieldsViewModel();
 		}
 
 		public int Selected
