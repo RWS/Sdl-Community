@@ -21,11 +21,9 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" Margin="5,10,0,5">Please select tm(s)</TextBlock>
-		<DockPanel Grid.Row="1" Margin="5,10,0,5" >
+		<DockPanel Grid.Row="0" Margin="5,15,0,5" >
 			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">
 				<ToolBar Style="{StaticResource Toolbar}" Background="WhiteSmoke" OverflowMode="Never" DockPanel.Dock="Top" >
 					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
@@ -48,7 +46,7 @@
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>
-		<CheckBox  Grid.Row="2" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
