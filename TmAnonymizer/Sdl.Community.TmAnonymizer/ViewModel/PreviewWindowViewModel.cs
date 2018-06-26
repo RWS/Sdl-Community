@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.Ui;
@@ -31,11 +32,12 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ScheduledServerTranslationMemoryExport _tmExporter;
 		private readonly List<ServerTmBackUp> _backupTms;
 		private string _filePath;
-
+		private IDialogCoordinator _dialogCoordinator;
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
-			TranslationMemoryViewModel tmViewModel)
+			TranslationMemoryViewModel tmViewModel, IDialogCoordinator dialogCoordinator)
 		{
+			_dialogCoordinator = dialogCoordinator;
 			_backupTms = new List<ServerTmBackUp>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
@@ -66,31 +68,39 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		                                           (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 	
-		private void ApplyChanges()
+		private async void ApplyChanges()
 		{
-			var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
-			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
-			//file base tms
-			var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
-			if (fileBasedSearchResult.Count > 0)
+			if (SourceSearchResults.Any(s => s.TuSelected))
 			{
-				BackupFileBasedTm();
-				tusToAnonymize =GetTranslationUnitsToAnonymize(fileBasedSearchResult);
-				Tm.AnonymizeFileBasedTu(tusToAnonymize);
-			}
-			//server based tms
-			var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
-			if (serverBasedSearchResult.Count > 0)
-			{
-				tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
-				var uri = new Uri(_tmViewModel.Credentials.Url);
-				var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
-					_tmViewModel.Credentials.Password);
+				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
+				var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+				//file base tms
+				var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
+				if (fileBasedSearchResult.Count > 0)
+				{
+					BackupFileBasedTm();
+					tusToAnonymize = GetTranslationUnitsToAnonymize(fileBasedSearchResult);
+					Tm.AnonymizeFileBasedTu(tusToAnonymize);
+				}
+				//server based tms
+				var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
+				if (serverBasedSearchResult.Count > 0)
+				{
+					tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
+					var uri = new Uri(_tmViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName,
+						_tmViewModel.Credentials.Password);
 
-				BackupServerBasedTm(translationProvider, tusToAnonymize);
-				Tm.AnonymizeServerBasedTu(translationProvider,tusToAnonymize);
+					BackupServerBasedTm(translationProvider, tusToAnonymize);
+					Tm.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
+				}
+				RemoveSelectedTusToAnonymize();
 			}
-			RemoveSelectedTusToAnonymize();
+			else
+			{
+				await _dialogCoordinator.ShowMessageAsync(this, "", "Please select at least one translation unit to apply the changes");
+			}
+			
 		}
 
 		private void BackupServerBasedTm(TranslationProviderServer translationProvider,

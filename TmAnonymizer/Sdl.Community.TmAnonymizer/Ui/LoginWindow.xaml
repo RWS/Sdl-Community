@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
 			 Title="Login"
              GlowBrush="#3EA691"
-             FontFamily="Calibri"
+             FontFamily="Segoe UI"
 			 Width="415"
 			 Height="350"
 			 ResizeMode="NoResize"
