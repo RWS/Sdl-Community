@@ -1,16 +1,20 @@
-﻿<Window x:Class="Sdl.Community.TmAnonymizer.Ui.AcceptWindow"
+﻿<controls:MetroWindow x:Class="Sdl.Community.TmAnonymizer.Ui.AcceptWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
 			Name="Accept"
-			Title="TM Anonymizer"
+			Title="Sdl TM Anonymizer"
+            WindowTitleBrush="#3EA691"
+            GlowBrush="#3EA691"
+            FontFamily="Segoe UI"
 			Width="400"
 			Height="300"
 			ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
+			WindowStartupLocation="CenterScreen"
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -33,4 +37,5 @@
 		<CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Accepted}" Margin="10,20,0,0" FontFamily="Segoe UI">I agree</CheckBox>
 		<Button  Grid.Row="2" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" Margin="102,41,10,41" Content="Ok" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=Accept}" Width="Auto"></Button>
 	</Grid>
-</Window>
+</controls:MetroWindow>
+
