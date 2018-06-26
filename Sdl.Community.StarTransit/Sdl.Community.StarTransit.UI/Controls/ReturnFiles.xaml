@@ -19,7 +19,7 @@
             <ColumnDefinition Width="1*"/>
 
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#41B1E1" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+			<TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#80BA45" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
 
         <ListBox Grid.Row="1" Grid.ColumnSpan="2"
                   Margin="0"

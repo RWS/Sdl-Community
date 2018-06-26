@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
 using Sdl.Community.TmAnonymizer.ViewModel;
@@ -25,11 +27,12 @@ namespace Sdl.Community.TmAnonymizer.Ui
 	/// </summary>
 	public partial class PreviewWindow
 	{
+		public  IDialogCoordinator DialogCoordinatorWindow;
 		private RichTextBox _textBox;
 		public PreviewWindow()
 		{
 			InitializeComponent();
-
+			DialogCoordinatorWindow =DialogCoordinator.Instance;
 		}
 
 		private void FrameworkElement_OnContextMenuOpening(object sender, ContextMenuEventArgs e)

@@ -14,7 +14,7 @@
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="Margin" Value="0,0,0,5"/>
                 <Setter Property="Padding" Value="0,0,0,5"/>
-                <Setter Property="Foreground" Value="#41B1E1"/>
+				<Setter Property="Foreground" Value="#80BA45"/>
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
               
