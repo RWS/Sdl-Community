@@ -93,7 +93,7 @@
                 <ColumnDefinition Width="Auto"/>
                
             </Grid.ColumnDefinitions>
-            <Button x:Name="button"  Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
+			<Button x:Name="button" Style="{DynamicResource StudioGreenButtonsStyle}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
             <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
@@ -106,9 +106,12 @@
                 x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
 
         </Grid>
-        <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}" SelectedValue="{Binding SelectedCustomer }" DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10" />
-        <ComboBox x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" SelectedValue="{Binding Path=Template,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"  />
-      
+        <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"
+				  SelectedValue="{Binding SelectedCustomer }" 
+				  DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10" />
+        <ComboBox x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}"
+				  SelectedValue="{Binding Path=Template,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+				  Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" Foreground="Black" />      
         <Grid Grid.Column="1" Grid.Row="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

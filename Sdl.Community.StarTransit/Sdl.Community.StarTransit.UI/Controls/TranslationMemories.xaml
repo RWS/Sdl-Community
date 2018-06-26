@@ -9,8 +9,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
     <UserControl.Resources>
-        <ResourceDictionary>
-            <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
+		<Thickness x:Key="ControlMargin">0 5 0 0</Thickness>
+		<ResourceDictionary x:Key="StyleResources">
+			<Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
 				<Setter Property="Foreground" Value="#FF0B6266" />
                 <Setter Property="FontSize" Value="18.667" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
@@ -78,10 +79,10 @@
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
-					<StackPanel Grid.Row="1 " Margin="20,20,20,20">
-                        <RadioButton Style="{StaticResource MetroRadioButton}" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
-                        <RadioButton Style="{StaticResource MetroRadioButton}" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
-                        <RadioButton Style="{StaticResource MetroRadioButton}" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
+					<StackPanel Grid.Row="1" Margin="20,15,22,15">
+						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="None" Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
+						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
                     <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1" Width="auto" Height="30" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
