@@ -29,7 +29,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		{
 			_tmViewModel = new TranslationMemoryViewModel();
 			TranslationViewModel = new TranslationViewModel(_tmViewModel);
-			SystemFieldsViewModel =new SystemFieldsViewModel();
+			SystemFieldsViewModel =new SystemFieldsViewModel(_tmViewModel);
 			CustomFieldsViewModel=new CustomFieldsViewModel();
 		}
 	}

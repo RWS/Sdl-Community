@@ -24,10 +24,11 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
-		<TextBlock Grid.Row="0" Margin="15,5,0,5">Please select which username you want to anonymize</TextBlock>
+		<!--<TextBlock Grid.Row="0" Margin="15,5,0,5">Please select which username you want to anonymize</TextBlock>-->
 		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
+								RowHeaderWidth="0"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding UniqueUsernames, Mode=TwoWay}"  Background="Black" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"

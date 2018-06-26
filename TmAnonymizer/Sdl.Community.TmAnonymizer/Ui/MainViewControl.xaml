@@ -46,7 +46,7 @@
 				<local:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></local:Translations>
 			</controls:MetroTabItem>
 			<controls:MetroTabItem  Header ="System Fields">
-				<local:SystemFields DataContext="{Binding StudioViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
+				<local:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</controls:MetroTabItem>
 			<controls:MetroTabItem Header="Custom Fields" >
 				<local:CustomFields DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></local:CustomFields>
