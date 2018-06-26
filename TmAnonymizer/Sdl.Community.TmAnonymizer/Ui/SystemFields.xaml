@@ -40,15 +40,6 @@
 				<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>
 			</DataGrid.InputBindings>
 
-			<DataGrid.RowStyle>
-				<Style TargetType="DataGridRow">
-					<Setter Property="ToolTip">
-						<Setter.Value>
-							<TextBlock  TextWrapping="Wrap" Text="{Binding Alias}"/>
-						</Setter.Value>
-					</Setter>
-				</Style>
-			</DataGrid.RowStyle>
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Use" Width="Auto" MinWidth="50">
 					<DataGridTemplateColumn.CellTemplate>
