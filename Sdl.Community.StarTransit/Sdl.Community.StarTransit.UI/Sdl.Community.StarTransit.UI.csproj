@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DC2686E0-8C10-4A3A-966A-2E7CD6806538}</ProjectGuid>
-    <OutputType>library</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.StarTransit.UI</RootNamespace>
     <AssemblyName>Sdl.Community.StarTransit.UI</AssemblyName>
@@ -36,6 +36,10 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="HockeyApp, Version=2.2.3.0, Culture=neutral, processorArchitecture=MSIL">
@@ -132,6 +136,7 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Interfaces\IWindowActions.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="ViewModels\CellViewModel.cs" />
     <Compile Include="ViewModels\FinishViewModel.cs" />
     <Compile Include="ViewModels\PackageDetailsViewModel.cs" />

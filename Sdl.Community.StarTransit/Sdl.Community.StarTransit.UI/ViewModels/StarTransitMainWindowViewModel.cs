@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -340,6 +341,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				CanExecuteBack = CanExecuteCreate = false;
 				Active = false;
 				CloseAction();
+				if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
+				{
+					Directory.Delete(packageModel.PathToPrjFile, true);
+				}
 			}
 			else if (messageModel != null && !messageModel.IsProjectCreated)
 			{
