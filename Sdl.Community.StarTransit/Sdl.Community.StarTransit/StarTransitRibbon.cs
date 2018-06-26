@@ -67,7 +67,6 @@ namespace Sdl.Community.StarTransit
 			{
 				System.Windows.Forms.MessageBox.Show(ptle.Message);
 			}
-
 		}
 
 		private string CreateTempPackageFolder()
@@ -85,7 +84,6 @@ namespace Sdl.Community.StarTransit
 
 		private void EnsureApplicationResources()
 		{
-
 			if (Application.Current == null)
 			{
 				new Application { ShutdownMode = ShutdownMode.OnExplicitShutdown };
