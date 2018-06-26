@@ -47,6 +47,7 @@
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
 		          Background="White" 
 		          CanUserAddRows="False"
+			      RowHeaderWidth="0"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          Margin="5,10"
 		          Width="{Binding ElementName=Grid, Path=ActualWidth}"

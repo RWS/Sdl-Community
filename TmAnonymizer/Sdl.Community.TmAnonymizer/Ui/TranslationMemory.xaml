@@ -51,6 +51,7 @@
 		          FontFamily="Segoe UI"
 				  AllowDrop="True"
 				  MinWidth="100"
+		          RowHeaderWidth="0"
 		          helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
