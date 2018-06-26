@@ -16,10 +16,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		{
 			var uniqueUsernames = new List<UniqueUsername>();
 			var listOfFieldNames = new List<string>();
-			var filebasedTm = new FileBasedTranslationMemory(tm.Path);
-			var unitsCount = filebasedTm.LanguageDirection.GetTranslationUnitCount();
-			var tmIterator = new RegularIterator(unitsCount);
-			var tus = filebasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			var tus = GetFileBasedTranslationUnits(tm);
 			foreach (var tu in tus)
 			{
 				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
@@ -37,18 +34,13 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		{
 			var uniqueUsernames = new List<UniqueUsername>();
 			var listOfFieldNames = new List<string>();
+
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var languageDirections = translationMemory.LanguageDirections;
-			foreach (var languageDirection in languageDirections)
+			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
+
+			foreach (var tu in translationUnits)
 			{
-				var unitsCount = languageDirection.GetTranslationUnitCount();
-				if (unitsCount == 0) continue;
-				var tmIterator = new RegularIterator(unitsCount);
-				var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-				foreach (var tu in translationUnits)
-				{
-					listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
-				}
+				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
 			}
 			var uniqueUsers = listOfFieldNames.Distinct().ToList();
 			foreach (var name in uniqueUsers)
@@ -57,6 +49,76 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 			var observableCollection = new ObservableCollection<UniqueUsername>(uniqueUsernames);
 			return observableCollection;
+		}
+
+		public static void AnonymizeFileBasedSystemFields(TmFile tm, List<UniqueUsername> UniqueUsernames)
+		{
+			var filebasedTm = new FileBasedTranslationMemory(tm.Path);
+			var translationUnits = GetFileBasedTranslationUnits(tm);
+			foreach (var userName in UniqueUsernames)
+			{
+				if (userName.IsSelected && !String.IsNullOrEmpty(userName.Alias))
+				{
+					foreach (var tu in translationUnits)
+					{
+						if (userName.Username == tu.SystemFields.CreationUser || userName.Username == tu.SystemFields.UseUser)
+						{
+							tu.SystemFields.CreationUser = userName.Alias;
+							tu.SystemFields.UseUser = userName.Alias;
+							filebasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+						}
+					}
+				}
+			}
+		}
+
+		public static void AnonymizeServerBasedSystemFields(TmFile tm, List<UniqueUsername> UniqueUsernames, TranslationProviderServer translationProvideServer)
+		{
+			var serverbasedTM = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
+			var languageDirections = serverbasedTM.LanguageDirections;
+			var translationUnits = GetServerBasedTranslationUnits(serverbasedTM.LanguageDirections);
+			
+			foreach (var userName in UniqueUsernames)
+			{
+				if (userName.IsSelected && !String.IsNullOrEmpty(userName.Alias))
+				{
+					foreach (var tu in translationUnits)
+					{
+						if (userName.Username == tu.SystemFields.CreationUser || userName.Username == tu.SystemFields.UseUser)
+						{
+							tu.SystemFields.CreationUser = userName.Alias;
+							tu.SystemFields.UseUser = userName.Alias;
+							foreach (var languageDirection in languageDirections)
+							{
+								languageDirection.UpdateTranslationUnit(tu);
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private static TranslationUnit[]  GetFileBasedTranslationUnits(TmFile tm)
+		{
+			var filebasedTm = new FileBasedTranslationMemory(tm.Path);
+			var unitsCount = filebasedTm.LanguageDirection.GetTranslationUnitCount();
+			var tmIterator = new RegularIterator(unitsCount);
+			var translationUnits = filebasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			return translationUnits;
+		}
+
+		private static TranslationUnit[] GetServerBasedTranslationUnits(ServerBasedTranslationMemoryLanguageDirectionCollection languageDirections)
+		{
+			var translationUnits = new TranslationUnit[] { };
+
+			foreach (var languageDirection in languageDirections)
+			{
+				var unitsCount = languageDirection.GetTranslationUnitCount();
+				if (unitsCount == 0) continue;
+				var tmIterator = new RegularIterator(unitsCount);
+				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
+			}
+			return translationUnits;
 		}
 	}
 }

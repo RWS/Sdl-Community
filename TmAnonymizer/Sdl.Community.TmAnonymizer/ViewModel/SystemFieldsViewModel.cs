@@ -64,10 +64,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				}
 			}
 			
-			//foreach (var userName in _uniqueUsernames)
-			//{
-			//	userName.PropertyChanged += UserName_PropertyChanged;
-			//}
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
@@ -77,24 +73,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 		}
 
-		//private void UserName_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		//{
-		//		var x = Tm.GetListOfUniqueSystemFields(_tmsCollection);
-		//		x = UniqueUsernames;
-
-			//}
-
-			//private void UniqueUsernames_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-			//{
-			//	if (e.Action == NotifyCollectionChangedAction.Add)
-			//	{
-			//		foreach (var item in e.NewItems)
-			//		{
-			//			var userName = (UniqueUsername)item;
-			//			userName.PropertyChanged += UserName_PropertyChanged;
-			//		}
-			//	}
-			//}
 		public IList SelectedItems
 		{
 			get => _selectedItems;
@@ -139,8 +117,70 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void ApplyChanges()
 		{
-			throw new NotImplementedException();
+			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
+			{
+				if (!tm.IsServerTm)
+				{
+					Helpers.SystemFields.AnonymizeFileBasedSystemFields(tm, UniqueUsernames.ToList());
+				}
+
+				else if (tm.IsServerTm)
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+
+					Helpers.SystemFields.AnonymizeServerBasedSystemFields(tm, UniqueUsernames.ToList(), translationProvider);
+				}
+			}
+			RefreshSystemFields();
+
 		}
+
+		private void RefreshSystemFields()
+		{
+			if (_tmsCollection != null)
+			{
+				UniqueUsernames = new ObservableCollection<UniqueUsername>();
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (fileBasedTms.Any())
+				{
+					foreach (var fileTm in fileBasedTms)
+					{
+						var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(fileTm);
+						foreach (var name in names)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+							{
+								UniqueUsernames.Add(name);
+							});
+						}
+					}
+				}
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					foreach (var serverTm in serverTms)
+					{
+						var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+						foreach (var name in names)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+							{
+								UniqueUsernames.Add(name);
+							});
+						}
+					}
+
+				}
+			}
+		}
+
 		private void Import()
 		{
 			throw new NotImplementedException();
@@ -173,11 +213,18 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
+			if (e.NewItems != null)
+			{
 				foreach (TmFile newTm in e.NewItems)
 				{
+					if (!newTm.IsServerTm)
+					{
+						UniqueUsernames = Helpers.SystemFields.GetUniqueFileBasedSystemFields(newTm);
+					}
 					
 					newTm.PropertyChanged += NewTm_PropertyChanged;
 				}
+			}
 		}
 
 		private void NewTm_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -229,7 +276,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(tm);
 					foreach (var name in names)
 					{
-						UniqueUsernames.Add(name);
+						System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate // <--- HERE
+						{
+							UniqueUsernames.Add(name);
+						});
 					}
 				}
 			}

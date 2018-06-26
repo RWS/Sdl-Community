@@ -77,7 +77,7 @@
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
 				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import" Command="{Binding ImportCommand}"></Button>
 				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export" Command="{Binding ExportCommand}"></Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Apply changes" Command="{Binding ApplyCommand}"></Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Apply changes" Command="{Binding ApplyChangesCommand}"></Button>
 			</StackPanel>
 		</StackPanel>
 	</Grid>
