@@ -8,18 +8,17 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="Return StarTransit package" Height="600" Width="900" BorderThickness="0"
-    WindowStartupLocation="CenterScreen"
-    Loaded="MetroWindow_Loaded"
-    ResizeMode="CanResizeWithGrip"
-    Closing="ReturnPackageMainWindow_OnClosing"
-    GlowBrush="Black">
+		WindowStartupLocation="CenterScreen"
+		WindowTitleBrush="#3EA691"
+	    GlowBrush="#3EA691"
+		Loaded="MetroWindow_Loaded"
+		ResizeMode="CanResizeWithGrip"
+		Closing="ReturnPackageMainWindow_OnClosing">
 
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
-
-
             <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
-                <Setter Property="Foreground" Value="#FFB69476" />
+				<Setter Property="Foreground" Value="#FF0B6266" />
                 <Setter Property="FontSize" Value="18.667" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Cursor" Value="Hand" />
@@ -34,7 +33,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="true">
-                        <Setter Property="Foreground" Value="#FF66290B" />
+						<Setter Property="Foreground" Value="#FF0B6266" />
                         <Setter Property="FontWeight" Value="Bold" />
                     </Trigger>
                 </Style.Triggers>
