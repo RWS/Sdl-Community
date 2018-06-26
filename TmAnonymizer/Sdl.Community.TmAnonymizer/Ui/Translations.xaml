@@ -52,7 +52,13 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Preview" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
