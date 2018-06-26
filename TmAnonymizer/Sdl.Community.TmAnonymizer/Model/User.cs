@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Sdl.Community.TmAnonymizer.Model
 {
-    public class UniqueUsername:ModelBase
+    public class User:ModelBase
     {
 		private bool _isSelected;
 		private string _name;
@@ -22,13 +22,13 @@ namespace Sdl.Community.TmAnonymizer.Model
 				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
-		public string Username
+		public string UserName
 		{
 			get => _name;
 			set
 			{
 				_name = value;
-				OnPropertyChanged(nameof(Username));
+				OnPropertyChanged(nameof(UserName));
 			}
 		}
 		public string Alias

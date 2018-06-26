@@ -24,14 +24,12 @@
 			<RowDefinition Height="Auto" MaxHeight="300" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-
-		<!--<TextBlock Grid.Row="0" Margin="15,5,0,5">Please select which username you want to anonymize</TextBlock>-->
 		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid Grid.Row="1"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 				  RowHeaderWidth="0"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
-		          ItemsSource="{Binding UniqueUsernames, Mode=TwoWay}"  Background="White" 
+		          ItemsSource="{Binding UniqueUserNames, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
 		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -41,19 +39,26 @@
 			</DataGrid.InputBindings>
 
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Use" Width="Auto" MinWidth="50">
+				<DataGridTemplateColumn Header="Use" Width="Auto" MinWidth="50" >
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="HorizontalContentAlignment" Value="Center" />
+							<Setter Property="Background" Value="#3EA691" />
+							<Setter Property="Foreground" Value="WhiteSmoke" />
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="2*" Header="Username" Binding="{Binding Username}" >
+				<DataGridTextColumn Width="2*" Header="User Name" Binding="{Binding UserName}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
 								<Setter.Value>
-									<TextBlock Text='{Binding Username}' />
+									<TextBlock Text='{Binding UserName}' />
 								</Setter.Value>
 							</Setter>
 						</Style>
