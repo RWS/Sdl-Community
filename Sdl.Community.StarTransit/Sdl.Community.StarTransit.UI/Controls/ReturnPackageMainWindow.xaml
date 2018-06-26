@@ -8,11 +8,12 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
         Title="Return StarTransit package" Height="600" Width="900" BorderThickness="0"
-    WindowStartupLocation="CenterScreen"
-    Loaded="MetroWindow_Loaded"
-    ResizeMode="CanResizeWithGrip"
-    Closing="ReturnPackageMainWindow_OnClosing"
-    GlowBrush="Black">
+		WindowStartupLocation="CenterScreen"
+		WindowTitleBrush="#3EA691"
+	    GlowBrush="#3EA691"
+		Loaded="MetroWindow_Loaded"
+		ResizeMode="CanResizeWithGrip"
+		Closing="ReturnPackageMainWindow_OnClosing">
 
     <controls:MetroWindow.Resources>
         <ResourceDictionary>

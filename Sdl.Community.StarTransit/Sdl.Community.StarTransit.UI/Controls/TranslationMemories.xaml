@@ -5,10 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-           
+             xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
-
     <UserControl.Resources>
         <ResourceDictionary>
             <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
@@ -27,21 +26,16 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="true">
-						<Setter Property="Foreground" Value="#80BA45" />
-                       
+						<Setter Property="Foreground" Value="#3EA691" />                       
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-
     <Grid>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
-
         </Grid.RowDefinitions>
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="4*" />
@@ -58,22 +52,17 @@
                 BorderThickness="0"
                 SelectedItem="{Binding SelectedItem}"
                 ItemContainerStyle="{DynamicResource NavigationButtonStyle}"  
-                SelectionMode="Single"
-                
+                SelectionMode="Single"                
                 ItemsSource ="{Binding LanguagePairs}" 
                    SelectedIndex="{Binding SelectedIndex}">
-
             <ListView.ItemTemplate>
                 <ItemContainerTemplate>
                     <TextBlock Text="{Binding PairName }" FontSize="14" Margin="10,10,10,10" />
                 </ItemContainerTemplate>
-
             </ListView.ItemTemplate>
         </ListView>
         <Border BorderThickness="1 0 0 0" BorderBrush="Gainsboro" Grid.Column="1" >
             <StackPanel  >
-           
-
                 <Grid VerticalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="50"></RowDefinition>
@@ -81,7 +70,6 @@
 						<RowDefinition Height="auto"></RowDefinition>
                         <RowDefinition Height="60"></RowDefinition>
                     </Grid.RowDefinitions>
-
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
                         <ColumnDefinition Width="1*"></ColumnDefinition>
@@ -89,19 +77,22 @@
                     <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding Title}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,0,0" FontSize="13" FontWeight="DemiBold"></TextBlock>
                     <StackPanel Grid.Row="1 " Margin="20,20,0,0">
                         <RadioButton x:Name="None"  Content="None" GroupName="1" IsChecked="{Binding IsNoneChecked}"  Command="{Binding SetBtnNameCommand}"></RadioButton>
-                        <RadioButton x:Name="Create"  Content="Create Tm" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"></RadioButton>
-                        <RadioButton  x:Name="Browse"  Content="Browse Tm" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"></RadioButton>
+                        <RadioButton x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"></RadioButton>
+                        <RadioButton  x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"></RadioButton>
                     </StackPanel>
                    <Button x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}"  Grid.Row="1" Grid.Column="1" Width="auto" Height="30" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
-                    <TextBlock Grid.Column="0" Grid.Row="2" Text="Tm name:" Margin="20,15,22,15"/>
-                    <TextBox x:Name="TmName"  Grid.Row="2" Grid.Column="1" Width="auto" Height="20" Text="{Binding TmName ,Mode=TwoWay,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" Margin="0,0,30,0" IsEnabled="{Binding IsEnabled}"/>
+                    <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
+					<TextBox Style="{StaticResource MetroTextBox}"
+						Controls:TextBoxHelper.ClearTextButton="True"                
+						Controls:TextBoxHelper.IsWaitingForData="True"
+						Controls:TextBoxHelper.UseFloatingWatermark="True" 
+  						Controls:TextBoxHelper.Watermark="TM name" 
+						ToolTip="TM Name" Grid.Row="2" Grid.Column="1" Width="auto" Height="40" Margin="0,0,30,0" 
+						    Text="{Binding TmName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" IsEnabled="{Binding IsEnabled}"
+						x:Name="TmName" TextWrapping="Wrap" />
 					<TextBlock Grid.ColumnSpan="2" Margin="20" Foreground="Red" Name="TmLanguageValidation" Visibility="{Binding TmMessage}" Grid.Column="0" Grid.Row="3">Please select a Translation Memory that matches the languages in this project.</TextBlock>
-
-                </Grid>
-           
-           
+				</Grid>
         </StackPanel>
         </Border>
     </Grid>
-
 </UserControl>

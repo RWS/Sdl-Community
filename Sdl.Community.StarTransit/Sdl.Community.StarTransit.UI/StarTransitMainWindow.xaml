@@ -10,10 +10,10 @@
     Title="Open StarTransit package"
     Width="900"
     Height="600"
-    BorderThickness="0"
-    GlowBrush="Black"
-    
+    BorderThickness="0"   
     WindowStartupLocation="CenterScreen"
+    WindowTitleBrush="#3EA691"
+	GlowBrush="#3EA691"
     Loaded="MetroWindow_Loaded"
     ResizeMode="CanResizeWithGrip"
  

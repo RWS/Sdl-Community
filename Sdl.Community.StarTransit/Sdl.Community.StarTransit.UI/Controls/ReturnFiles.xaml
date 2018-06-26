@@ -6,36 +6,33 @@
              xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-<ScrollViewer>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+	<ScrollViewer>
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="80"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
-
-        </Grid.ColumnDefinitions>
-			<TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#80BA45" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
-
-        <ListBox Grid.Row="1" Grid.ColumnSpan="2"
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="1*"/>
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.ColumnSpan="2" Text="{Binding Title}" FontSize="20" Foreground="#3EA691" VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="DemiBold"/>
+			<ListBox Grid.Row="1" Grid.ColumnSpan="2"
                   Margin="0"
                   Background="white"
                   BorderBrush="{x:Null}"
                    BorderThickness="0"
                ItemsSource="{Binding ProjectListCells}">
-            <ListBox.ItemTemplate >
-                <ItemContainerTemplate>
-                    <CheckBox IsChecked="{Binding Checked,Mode=TwoWay}" Content="{Binding Name}" Command="{Binding SelectCommand}"/>
-                </ItemContainerTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-        <TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="0,15,0,0" Text="{Binding ReturnPackageLocation}"/>
-
-        <Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
-    </Grid>
-    </ScrollViewer>
+				<ListBox.ItemTemplate >
+					<ItemContainerTemplate>
+						<CheckBox IsChecked="{Binding Checked,Mode=TwoWay}" Content="{Binding Name}" Command="{Binding SelectCommand}"/>
+					</ItemContainerTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+			<TextBox x:Name="ReturnPackagePath" Grid.Row="2" Margin="0,15,0,0" Text="{Binding ReturnPackageLocation}"/>
+			<Button x:Name="BrowseBtn" Grid.Row="2" Grid.Column="1" Margin="10,15,0,0" Width="70" Content="Browse" HorizontalAlignment="Left" Command="{Binding BrowseCommand}"/>
+		</Grid>
+	</ScrollViewer>
 </UserControl>
