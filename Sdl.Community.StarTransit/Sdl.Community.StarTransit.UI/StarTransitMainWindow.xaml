@@ -15,14 +15,12 @@
     WindowTitleBrush="#3EA691"
 	GlowBrush="#3EA691"
     Loaded="MetroWindow_Loaded"
-    ResizeMode="CanResizeWithGrip"
- 
+    ResizeMode="CanResizeWithGrip" 
     mc:Ignorable="d" Closing="MetroWindow_Closing">
-
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
             <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">
-                <Setter Property="Foreground" Value="#FFB69476" />
+				<Setter Property="Foreground" Value="#FF0B6266" />
                 <Setter Property="FontSize" Value="18.667" />
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="Cursor" Value="Hand" />
@@ -37,7 +35,7 @@
                 </Setter>
                 <Style.Triggers>
                     <Trigger Property="IsSelected" Value="true">
-                        <Setter Property="Foreground" Value="#FF66290B" />
+                        <Setter Property="Foreground" Value="#FF0B6266" />
                         <Setter Property="FontWeight" Value="Bold" />
                     </Trigger>
                 </Style.Triggers>
@@ -61,7 +59,7 @@
                 x:Name="listView"
                 Margin="0"
                 Padding="0,20,0,0"
-                Background="#FFE8E9EB"
+                Background="#FFE8E7E7"
                 BorderBrush="{x:Null}"
                 BorderThickness="0"
                 IsEnabled="False"
@@ -73,7 +71,7 @@
                     <TextBlock x:Name="tbPackageDetails" Text="Package Details" />
                 </ListViewItem>
                 <ListViewItem x:Name="TMItem" Tag="tm"  IsSelected="{Binding TmSelected}" Selected="ListViewItem_Selected" >
-                    <TextBlock x:Name="tbTM" Text="Translation Memories" IsEnabled="{Binding IsEnabled}" Foreground="{Binding Color}"/>
+                    <TextBlock x:Name="tbTM" Text="Translation Memories" IsEnabled="{Binding IsEnabled}"/>
                 </ListViewItem>
                 <ListViewItem Tag="finish" IsSelected="{Binding FinishSelected}" Selected="ListViewItem_Selected" >
                     <TextBlock x:Name="tbFinish" Text="Finish" />

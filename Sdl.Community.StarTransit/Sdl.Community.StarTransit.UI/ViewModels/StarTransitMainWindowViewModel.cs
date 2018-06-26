@@ -375,7 +375,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		/// <returns></returns>
 		private bool IsFolderEmpty(string folderPath)
 		{
-			if (!Utils.IsFolderEmpty(folderPath))
+			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
 				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
 				return false;

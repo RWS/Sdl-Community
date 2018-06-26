@@ -33,7 +33,7 @@
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="Margin" Value="0,0,0,5"/>
-                <Setter Property="Padding" Value="0,0,0,10"/>
+				<Setter Property="Padding" Value="0,0,0,10"/>
 				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
             </Style>
 			<Style TargetType="{x:Type TextBlock}">
@@ -127,8 +127,8 @@
         </StackPanel>
 
         </Grid>
-        <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
-        <TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Grid.Column="1" Grid.Row="9" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+        <TextBlock Text="{Binding SourceLanguage}" x:Name="sourceLanguageBlock" Foreground="Black" Grid.Column="1" Grid.Row="8" Margin="0,0,0,10" Grid.ColumnSpan="2" />
+		<TextBlock Text ="{Binding TargetLanguage}" x:Name="targetLanguageBlock" Foreground="Black" Grid.Column="1" Grid.Row="9" Margin="0,0,0,10" Grid.ColumnSpan="2" />
 
     </Grid>
 </UserControl>
