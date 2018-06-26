@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
 			 xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
+			 xmlns:fa="http://schemas.fontawesome.io/icons/"
 			 mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
@@ -25,8 +26,8 @@
 		</Grid.RowDefinitions>
 
 		<!--<TextBlock Grid.Row="0" Margin="15,5,0,5">Please select which username you want to anonymize</TextBlock>-->
-		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
+		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<helpers:CustomDataGrid Grid.Row="1"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
 								RowHeaderWidth="0"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
@@ -74,11 +75,26 @@
 				</DataGridTextColumn>
 			</DataGrid.Columns>
 		</helpers:CustomDataGrid>
-		<StackPanel Grid.Column="0" Grid.Row="3"  Orientation="Vertical"  Margin="5,15,10,10">
+		<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,15,10,10">
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Import" Command="{Binding ImportCommand}"></Button>
-				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Content="Export" Command="{Binding ExportCommand}"></Button>
-				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Content="Apply changes" Command="{Binding ApplyChangesCommand}"></Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="ArrowDown" Margin="0,2,5,0"/>
+						<TextBlock>Import rules</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="ArrowUp" Margin="0,2,5,0"/>
+						<TextBlock>Export rules</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
+					<StackPanel Orientation="Horizontal">
+						<fa:FontAwesome Icon="Save" Margin="0,2,5,0"/>
+						<TextBlock>Apply changes</TextBlock>
+					</StackPanel>
+				</Button>
 			</StackPanel>
 		</StackPanel>
 	</Grid>
