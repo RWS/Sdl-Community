@@ -29,9 +29,9 @@
 		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid Grid.Row="1"  Style="{DynamicResource DgHeaderStyle}" 
 		          FontFamily="Segoe UI"
-								RowHeaderWidth="0"
+				  RowHeaderWidth="0"
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
-		          ItemsSource="{Binding UniqueUsernames, Mode=TwoWay}"  Background="Black" 
+		          ItemsSource="{Binding UniqueUsernames, Mode=TwoWay}"  Background="White" 
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
 		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -50,7 +50,13 @@
 				</Style>
 			</DataGrid.RowStyle>
 			<DataGrid.Columns>
-				<DataGridCheckBoxColumn Width="Auto" MinWidth="50" CellStyle="{DynamicResource DataGridContentCellCentering}" Header = "Use" Binding = "{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" />
+				<DataGridTemplateColumn Header="Use" Width="Auto" MinWidth="50">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="2*" Header="Username" Binding="{Binding Username}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
@@ -91,7 +97,7 @@
 				</Button>
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
 					<StackPanel Orientation="Horizontal">
-						<fa:FontAwesome Icon="Save" Margin="0,2,5,0"/>
+						<fa:FontAwesome Icon="Save" Margin="0,1,5,0"/>
 						<TextBlock>Apply changes</TextBlock>
 					</StackPanel>
 				</Button>
