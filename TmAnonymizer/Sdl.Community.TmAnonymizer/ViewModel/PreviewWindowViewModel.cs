@@ -51,7 +51,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			
+			_waitWindow?.Close();
 		}
 
 		private async void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -101,7 +101,6 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					Tm.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
 				}
 				RemoveSelectedTusToAnonymize();
-				_waitWindow.Close();
 			}
 			else
 			{
