@@ -41,6 +41,9 @@
     <StartupObject>
     </StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\open_package.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HockeyApp, Version=2.2.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,6 +90,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Windows.Forms" />
@@ -135,6 +139,11 @@
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Interfaces\IWindowActions.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StarTransitUIResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StarTransitUIResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CellViewModel.cs" />
     <Compile Include="ViewModels\FinishViewModel.cs" />
     <Compile Include="ViewModels\PackageDetailsViewModel.cs" />
@@ -162,6 +171,10 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StarTransitUIResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StarTransitUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="key.snk" />
     <None Include="packages.config" />
@@ -213,6 +226,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\open_package.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

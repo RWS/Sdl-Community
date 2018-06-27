@@ -16,7 +16,7 @@
 	GlowBrush="#3EA691"
     Loaded="MetroWindow_Loaded"
     ResizeMode="CanResizeWithGrip" 
-    mc:Ignorable="d" Closing="MetroWindow_Closing">
+    mc:Ignorable="d" Closing="MetroWindow_Closing" Icon="Resources/open_package.ico">
     <controls:MetroWindow.Resources>
         <ResourceDictionary>
             <Style x:Key="NavigationButtonStyle" TargetType="{x:Type ListViewItem}">

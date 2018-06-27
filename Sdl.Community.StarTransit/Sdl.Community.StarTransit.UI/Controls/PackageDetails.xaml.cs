@@ -31,8 +31,8 @@ namespace Sdl.Community.StarTransit.UI.Controls
         {
             DataContext = packageDetailsViewModel;
             InitializeComponent();
-            
-        }
+			dueDatePicker.BlackoutDates.AddDatesInPast();
+		}
       
         public  bool FieldsAreCompleted()
         {
