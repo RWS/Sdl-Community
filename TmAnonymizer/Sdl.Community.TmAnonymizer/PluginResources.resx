@@ -130,4 +130,7 @@
   <data name="TranslationMemory" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\TranslationMemory.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="wiki" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\wiki.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

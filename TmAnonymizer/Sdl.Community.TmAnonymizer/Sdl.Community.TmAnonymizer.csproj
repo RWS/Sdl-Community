@@ -212,6 +212,8 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\wiki.ico" />
+    <None Include="Resources\help.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />

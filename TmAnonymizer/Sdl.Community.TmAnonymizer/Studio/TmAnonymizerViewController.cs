@@ -23,5 +23,25 @@ namespace Sdl.Community.TmAnonymizer.Studio
 		{
 			return Control.Value;
 		}
+
+		[RibbonGroup("TmRibbonGroup", "Tm Anonymizer user guide")]
+		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+		public class TmAnonymizerRibbonGroup : AbstractRibbonGroup
+		{
+
+		}
+
+		[Action("Sdl.Community.TmAnonymizer", typeof(TmAnonymizerViewController), Name = "Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
+		[ActionLayout(typeof(TmAnonymizerRibbonGroup), 250, DisplayType.Large)]
+		public class TmAnonymizerHelpAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdl-tm-anonymizer");
+
+			}
+		}
 	}
+	
+	
 }
