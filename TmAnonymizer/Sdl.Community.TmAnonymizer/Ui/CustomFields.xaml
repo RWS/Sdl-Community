@@ -3,10 +3,80 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-            <TextBlock>custom</TextBlock>
-    </Grid>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<DataTemplate x:Key="CustomFieldsTemplate">
+				<StackPanel Orientation = "Horizontal">
+					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "100" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"/>
+					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "100" Margin = "0 5 3 5" TextWrapping="Wrap"/>
+				</StackPanel>
+			</DataTemplate>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+
+	<Grid Height="{Binding ElementName=ParentControl}">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"  MaxHeight="300"/>
+			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
+		                        FontFamily="Segoe UI"
+		                        RowHeaderWidth="0"
+		                        BorderThickness="0" VerticalScrollBarVisibility="Auto"
+		                        AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
+		                        ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White">
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Header="Change" Width="Auto" MinWidth="50">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Width="2*" Header="Field name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Name}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTextColumn Width="2*" Header="Type" Binding="{Binding Type}" ElementStyle="{StaticResource WrapText}" >
+					<DataGridTextColumn.CellStyle>
+						<Style TargetType="DataGridCell">
+							<Setter Property="ToolTip">
+								<Setter.Value>
+									<TextBlock Text='{Binding Type}' />
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</DataGridTextColumn.CellStyle>
+				</DataGridTextColumn>
+				<DataGridTemplateColumn Header="Value" Width="Auto" MinWidth="50">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+							<ListBox ItemsSource="{Binding Details}" ItemTemplate="{StaticResource CustomFieldsTemplate}"></ListBox>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+
+			</DataGrid.Columns>
+			
+		</helpers:CustomDataGrid>
+	</Grid>
 </UserControl>

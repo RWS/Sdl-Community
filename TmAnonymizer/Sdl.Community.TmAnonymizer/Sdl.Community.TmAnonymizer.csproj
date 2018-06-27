@@ -151,6 +151,8 @@
     <Compile Include="Helpers\SystemFields.cs" />
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
+    <Compile Include="Model\CustomField.cs" />
+    <Compile Include="Model\Details.cs" />
     <Compile Include="Model\Login.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
