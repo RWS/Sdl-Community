@@ -5,19 +5,29 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:helpers="clr-namespace:Sdl.Community.TmAnonymizer.Helpers"
              xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<DataTemplate x:Key="CustomFieldsTemplate">
 				<StackPanel Orientation = "Horizontal">
-					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "100" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"/>
-					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "100" Margin = "0 5 3 5" TextWrapping="Wrap"/>
+					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "150" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"
+					         controls:TextBoxHelper.ClearTextButton="True"
+					         controls:TextBoxHelper.Watermark="Original value"
+					         controls:TextBoxHelper.AutoWatermark="True"
+					         controls:TextBoxHelper.UseFloatingWatermark="True" />
+					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "150" Margin = "0 5 3 5" TextWrapping="Wrap" 
+							 controls:TextBoxHelper.ClearTextButton="True"
+					         controls:TextBoxHelper.Watermark="New value"
+					         controls:TextBoxHelper.AutoWatermark="True"
+					         controls:TextBoxHelper.UseFloatingWatermark="True" />
 				</StackPanel>
 			</DataTemplate>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
 				<ResourceDictionary Source="..\UiHelpers\ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="..\UiHelpers\TextBlockStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
@@ -30,7 +40,7 @@
 			<RowDefinition Height="Auto" MaxHeight="300" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,10" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
 		                        FontFamily="Segoe UI"
 		                        RowHeaderWidth="0"
@@ -38,14 +48,22 @@
 		                        AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
 		                        ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White">
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Change" Width="Auto" MinWidth="50">
+				<DataGridTemplateColumn Header="Change" Width="1*" MinWidth="50">
+					<DataGridTemplateColumn.HeaderStyle>
+						<Style TargetType="DataGridColumnHeader">
+							<Setter Property="HorizontalContentAlignment" Value="Center" />
+							<Setter Property="Background" Value="#3EA691" />
+							<Setter Property="Foreground" Value="WhiteSmoke" />
+						</Style>
+					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="2*" Header="Field name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}" >
+				<DataGridTextColumn Width="1*" Header="Field name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}" >
+					
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
@@ -56,18 +74,18 @@
 						</Style>
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
-				<DataGridTextColumn Width="2*" Header="Type" Binding="{Binding Type}" ElementStyle="{StaticResource WrapText}" >
+				<DataGridTextColumn Width="1*" Header="Type" Binding="{Binding Type}" ElementStyle="{StaticResource WrapText}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
 								<Setter.Value>
-									<TextBlock Text='{Binding Type}' />
+									<TextBlock Text='{Binding Type}'/>
 								</Setter.Value>
 							</Setter>
 						</Style>
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
-				<DataGridTemplateColumn Header="Value" Width="Auto" MinWidth="50">
+				<DataGridTemplateColumn Header="Value" Width="3*" MinWidth="50">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
 							<ListBox ItemsSource="{Binding Details}" ItemTemplate="{StaticResource CustomFieldsTemplate}"></ListBox>

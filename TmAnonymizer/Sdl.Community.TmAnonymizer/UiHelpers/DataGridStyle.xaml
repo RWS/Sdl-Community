@@ -48,6 +48,7 @@
 	<!--Wrap text of text block-->
 	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
 		<Setter Property="TextWrapping" Value="Wrap"/>
+		<Setter Property="VerticalAlignment" Value="Center"></Setter>
 	</Style>
 
 	<Style TargetType="{x:Type DataGridRow}">

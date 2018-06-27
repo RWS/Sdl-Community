@@ -6,4 +6,7 @@
 		<Setter Property="FontFamily" Value="Segoe UI"></Setter>
 		<Setter Property="Margin" Value="10,0,0,0"></Setter>
 	</Style>
+	<Style x:Key="TextBlockAlignCenter" TargetType="{x:Type TextBlock}">
+		<Setter Property="VerticalAlignment" Value="Center" />
+	</Style>
 </ResourceDictionary>
