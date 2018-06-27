@@ -32,7 +32,8 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ScheduledServerTranslationMemoryExport _tmExporter;
 		private readonly List<ServerTmBackUp> _backupTms;
 		private string _filePath;
-		private IDialogCoordinator _dialogCoordinator;
+		private readonly IDialogCoordinator _dialogCoordinator;
+		private WaitWindow _waitWindow;
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel tmViewModel, IDialogCoordinator dialogCoordinator)
@@ -72,6 +73,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		{
 			if (SourceSearchResults.Any(s => s.TuSelected))
 			{
+				System.Windows.Application.Current.Dispatcher.Invoke(delegate
+				{
+					_waitWindow = new WaitWindow();
+					_waitWindow.Show();
+				});
 				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
 				var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 				//file base tms
@@ -95,6 +101,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					Tm.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
 				}
 				RemoveSelectedTusToAnonymize();
+				_waitWindow.Close();
 			}
 			else
 			{
