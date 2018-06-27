@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.TmAnonymizer.Helpers;
 using Sdl.Community.TmAnonymizer.Model;
@@ -175,6 +176,27 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void Import()
 		{
+			var fileDialog = new OpenFileDialog
+			{
+				Title = @"Please select the files you want to import",
+				Filter = @"Excel |*.xlsx",
+				CheckFileExists = true,
+				CheckPathExists = true,
+				DefaultExt = "xlsx",
+				Multiselect = true
+			};
+			var result = fileDialog.ShowDialog();
+			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
+			{
+				var importedUsers = Users.GetImportedUsers(fileDialog.FileNames.ToList());
+				foreach (var user in importedUsers)
+				{
+					var userExist = UniqueUserNames.First(u => u.UserName.Equals(user.UserName));
+					var index = UniqueUserNames.IndexOf(userExist);
+					if (index != -1)
+						UniqueUserNames[index] = user;
+				}
+			}
 		}
 
 		private void Export()

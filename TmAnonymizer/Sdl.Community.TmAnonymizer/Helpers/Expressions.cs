@@ -22,7 +22,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			var patterns = new List<Rule>();
 			foreach (var file in files)
 			{
-				var package = GetExcelPackage(file);
+				var package = ExcelFile.GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
 				for (var i = workSheet.Dimension.Start.Row;
 					i <= workSheet.Dimension.End.Row;
@@ -63,7 +63,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 		/// <param name="patterns">Selected patterns from grid</param>
 		public static void ExportExporessions(string filePath, List<Rule> patterns)
 		{
-			var package = GetExcelPackage(filePath);
+			var package = ExcelFile.GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
 			var lineNumber = 1;
 			foreach (var pattern in patterns)
@@ -77,11 +77,11 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 			package.Save();
 		}
-		private static ExcelPackage GetExcelPackage(string filePath)
-		{
-			var fileInfo = new FileInfo(filePath);
-			var excelPackage = new ExcelPackage(fileInfo);
-			return excelPackage;
-		}
+		//private static ExcelPackage GetExcelPackage(string filePath)
+		//{
+		//	var fileInfo = new FileInfo(filePath);
+		//	var excelPackage = new ExcelPackage(fileInfo);
+		//	return excelPackage;
+		//}
 	}
 }

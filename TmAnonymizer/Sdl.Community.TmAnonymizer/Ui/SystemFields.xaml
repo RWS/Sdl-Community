@@ -82,13 +82,13 @@
 				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
 					<StackPanel Orientation="Horizontal">
 						<fa:FontAwesome Icon="ArrowDown" Margin="0,2,5,0"/>
-						<TextBlock>Import rules</TextBlock>
+						<TextBlock>Import users</TextBlock>
 					</StackPanel>
 				</Button>
 				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
 					<StackPanel Orientation="Horizontal">
 						<fa:FontAwesome Icon="ArrowUp" Margin="0,2,5,0"/>
-						<TextBlock>Export rules</TextBlock>
+						<TextBlock>Export users</TextBlock>
 					</StackPanel>
 				</Button>
 				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
