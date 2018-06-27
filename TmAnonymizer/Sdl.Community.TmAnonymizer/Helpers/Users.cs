@@ -48,7 +48,7 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			return listOfUsers;
 		}
 
-		public static void ExportExporessions(string filePath, List<User> users)
+		public static void ExportUsers(string filePath, List<User> users)
 		{
 			var package = ExcelFile.GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");

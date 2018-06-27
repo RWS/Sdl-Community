@@ -191,16 +191,44 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 				var importedUsers = Users.GetImportedUsers(fileDialog.FileNames.ToList());
 				foreach (var user in importedUsers)
 				{
-					var userExist = UniqueUserNames.First(u => u.UserName.Equals(user.UserName));
-					var index = UniqueUserNames.IndexOf(userExist);
-					if (index != -1)
-						UniqueUserNames[index] = user;
+					var userExist = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
+					if (userExist != null)
+					{
+						var index = UniqueUserNames.IndexOf(userExist);
+						if (index != -1)
+						{
+							UniqueUserNames[index] = user;
+						}
+					}
 				}
 			}
 		}
 
 		private void Export()
 		{
+			if (SelectedItems.Count > 0)
+			{
+				var selectedUsers = new List<User>();
+				var fileDialog = new SaveFileDialog
+				{
+					Title = @"Export selected users",
+					Filter = @"Excel |*.xlsx"
+				};
+				var result = fileDialog.ShowDialog();
+				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
+				{
+					foreach (User user in SelectedItems)
+					{
+						selectedUsers.Add(user);
+					}
+					Users.ExportUsers(fileDialog.FileName, selectedUsers);
+					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+				}
+			}
+			else
+			{
+				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
 		}
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
