@@ -161,7 +161,7 @@
     <Compile Include="Model\SourceSearchResult.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Model\TranslationUnitDetails.cs" />
-    <Compile Include="Model\UniqueUsername.cs" />
+    <Compile Include="Model\User.cs" />
     <Compile Include="Model\WordDetails.cs" />
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />

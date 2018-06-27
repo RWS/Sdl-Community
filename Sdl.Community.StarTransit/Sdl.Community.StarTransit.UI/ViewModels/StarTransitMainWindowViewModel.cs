@@ -343,7 +343,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				CloseAction();
 				if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
 				{
-					Directory.Delete(packageModel.PathToPrjFile, true);
+					Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(packageModel.PathToPrjFile)), true);
 				}
 			}
 			else if (messageModel != null && !messageModel.IsProjectCreated)
@@ -375,7 +375,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		/// <returns></returns>
 		private bool IsFolderEmpty(string folderPath)
 		{
-			if (!Utils.IsFolderEmpty(folderPath))
+			if (!Helpers.Utils.IsFolderEmpty(folderPath))
 			{
 				ShowWindowsMessage("Folder not empty!", "Please select an empty folder");
 				return false;

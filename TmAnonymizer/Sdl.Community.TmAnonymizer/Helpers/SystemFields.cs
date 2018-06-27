@@ -12,79 +12,86 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 {
 	public static class SystemFields
 	{
-		public static ObservableCollection<UniqueUsername> GetUniqueFileBasedSystemFields(TmFile tm)
+		/// <summary>
+		/// Gets unique System Fields values from File Based Translation Memory
+		/// </summary>
+		/// <param name="tm">Translation Memory File</param>
+		/// <returns>An ObservableCollection of Users</returns>
+		public static ObservableCollection<User> GetUniqueFileBasedSystemFields(TmFile tm)
 		{
-			var uniqueUsernames = new List<UniqueUsername>();
+			var users = new List<User>();
 			var listOfFieldNames = new List<string>();
-			var tus = GetFileBasedTranslationUnits(tm);
-			foreach (var tu in tus)
-			{
-				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
-			}
-			var uniqueUsers = listOfFieldNames.Distinct().ToList();
-			foreach (var name in uniqueUsers)
-			{
-				uniqueUsernames.Add(new UniqueUsername() { Username = name });
-			}
-			var observableCollection = new ObservableCollection<UniqueUsername>(uniqueUsernames);
-			return observableCollection;
+			var translationUnits = GetFileBasedTranslationUnits(tm);
+			var uniqueUsersCollection = GetuniqueUserCollection(users, listOfFieldNames, translationUnits);
+			return uniqueUsersCollection;
 
 		}
-		public static ObservableCollection<UniqueUsername> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer)
+
+		/// <summary>
+		/// Gets unique System Fields values from Server Based Translation Memory
+		/// </summary>
+		/// <param name="tm">Translation Memory File</param>
+		/// <param name="translationProvideServer">Translation provider</param>
+		/// <returns>An ObservableCollection of UniqueUserName objects</returns>
+		/// TODO: SIMPLIFY METHOD
+		public static ObservableCollection<User> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer)
 		{
-			var uniqueUsernames = new List<UniqueUsername>();
+			var users = new List<User>();
 			var listOfFieldNames = new List<string>();
 
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
-
-			foreach (var tu in translationUnits)
-			{
-				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
-			}
-			var uniqueUsers = listOfFieldNames.Distinct().ToList();
-			foreach (var name in uniqueUsers)
-			{
-				uniqueUsernames.Add(new UniqueUsername() { Username = name });
-			}
-			var observableCollection = new ObservableCollection<UniqueUsername>(uniqueUsernames);
-			return observableCollection;
+			var uniqueUsersCollection = GetuniqueUserCollection(users, listOfFieldNames, translationUnits);
+			return uniqueUsersCollection;
 		}
 
-		public static void AnonymizeFileBasedSystemFields(TmFile tm, List<UniqueUsername> UniqueUsernames)
+
+
+		/// <summary>
+		/// Anonymizez each unique name from the UniqueUserNames list found in a specific File Based Translation Memory
+		/// </summary>
+		/// <param name="tm">Translation Memory File</param>
+		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
+		public static void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers)
 		{
-			var filebasedTm = new FileBasedTranslationMemory(tm.Path);
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var translationUnits = GetFileBasedTranslationUnits(tm);
-			foreach (var userName in UniqueUsernames)
+			foreach (var userName in uniqueUsers)
 			{
-				if (userName.IsSelected && !String.IsNullOrEmpty(userName.Alias))
+				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
 				{
 					foreach (var tu in translationUnits)
 					{
-						if (userName.Username == tu.SystemFields.CreationUser || userName.Username == tu.SystemFields.UseUser)
+						if (userName.UserName == tu.SystemFields.CreationUser || userName.UserName == tu.SystemFields.UseUser)
 						{
 							tu.SystemFields.CreationUser = userName.Alias;
 							tu.SystemFields.UseUser = userName.Alias;
-							filebasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+							fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 						}
 					}
 				}
 			}
 		}
 
-		public static void AnonymizeServerBasedSystemFields(TmFile tm, List<UniqueUsername> UniqueUsernames, TranslationProviderServer translationProvideServer)
+		/// <summary>
+		/// Anonymizez each unique name from the UniqueUserNames list found in a specific Server Based Translation Memory
+		/// </summary>
+		/// <param name="tm">Translation Memory File</param>
+		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
+		/// /// <param name="translationProvideServer">Translation provider</param>
+		public static void AnonymizeServerBasedSystemFields(TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
-			var serverbasedTM = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var languageDirections = serverbasedTM.LanguageDirections;
-			var translationUnits = GetServerBasedTranslationUnits(serverbasedTM.LanguageDirections);
+			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
+			var languageDirections = serverBasedTm.LanguageDirections;
+			var translationUnits = GetServerBasedTranslationUnits(serverBasedTm.LanguageDirections);
 			
-			foreach (var userName in UniqueUsernames)
+			foreach (var userName in uniqueUsers)
 			{
-				if (userName.IsSelected && !String.IsNullOrEmpty(userName.Alias))
+				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
 				{
 					foreach (var tu in translationUnits)
 					{
-						if (userName.Username == tu.SystemFields.CreationUser || userName.Username == tu.SystemFields.UseUser)
+						if (userName.UserName == tu.SystemFields.CreationUser || userName.UserName == tu.SystemFields.UseUser)
 						{
 							tu.SystemFields.CreationUser = userName.Alias;
 							tu.SystemFields.UseUser = userName.Alias;
@@ -98,15 +105,25 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 			}
 		}
 
+		/// <summary>
+		/// Retrieves an array of Translation Units for a File Based Translation Memory
+		/// </summary>
+		/// <param name="tm">Translation Memory File</param>
+		/// /// <returns>Array of TranslationUnits</returns>
 		private static TranslationUnit[]  GetFileBasedTranslationUnits(TmFile tm)
 		{
-			var filebasedTm = new FileBasedTranslationMemory(tm.Path);
-			var unitsCount = filebasedTm.LanguageDirection.GetTranslationUnitCount();
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
+			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
-			var translationUnits = filebasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			var translationUnits = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
 			return translationUnits;
 		}
 
+		/// <summary>
+		/// Retrieves an array of Translation Units for a Server Based Translation Memory
+		/// </summary>
+		/// <param name="languageDirections">Language Directions of a Server based Translation Memory</param>
+		/// /// <returns>Array of TranslationUnits</returns>
 		private static TranslationUnit[] GetServerBasedTranslationUnits(ServerBasedTranslationMemoryLanguageDirectionCollection languageDirections)
 		{
 			var translationUnits = new TranslationUnit[] { };
@@ -119,6 +136,21 @@ namespace Sdl.Community.TmAnonymizer.Helpers
 				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
 			}
 			return translationUnits;
+		}
+
+		private static ObservableCollection<User> GetuniqueUserCollection(List<User> users, List<string> listOfFieldNames, TranslationUnit[] translationUnits)
+		{
+			foreach (var tu in translationUnits)
+			{
+				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
+			}
+			var distinctUsers = listOfFieldNames.Distinct().ToList();
+			foreach (var name in distinctUsers)
+			{
+				users.Add(new User() { UserName = name });
+			}
+			var uniqueUsersCollection = new ObservableCollection<User>(users);
+			return uniqueUsersCollection;
 		}
 	}
 }

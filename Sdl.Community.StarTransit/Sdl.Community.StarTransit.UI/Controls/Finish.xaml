@@ -14,14 +14,11 @@
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="Margin" Value="0,0,0,5"/>
                 <Setter Property="Padding" Value="0,0,0,5"/>
-				<Setter Property="Foreground" Value="#80BA45"/>
+				<Setter Property="Foreground" Value="#3EA691"/>
                 <Setter Property="FontSize" Value="13"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
-              
-
             </Style>
         </Grid.Resources>
-
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -33,8 +30,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-          </Grid.RowDefinitions>
-        
+          </Grid.RowDefinitions>        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="46*"/>
             <ColumnDefinition Width="100*"/>
@@ -47,9 +43,7 @@
         <TextBlock x:Name="DueDate"  Text="Due date" Grid.Row="5" />
         <TextBlock x:Name="Source"  Text="Source language" Grid.Row="6" />
         <TextBlock x:Name="Target"  Text="Target language/TM name" Grid.Row="7" />
-        <TextBlock x:Name="Template"  Text="Project template" Grid.Row="8" />
-      
-
+        <TextBlock x:Name="Template"  Text="Project template" Grid.Row="8" />      
         <TextBlock x:Name="PackageName"  Text="{Binding Name}" Grid.Row="1" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageDescription"  Text="{Binding Description}" Grid.Row="2" Grid.Column="1"   FontWeight="DemiBold" Foreground="Black"/>
         <TextBlock x:Name="PackageLocation"  Text="{Binding Location}" Grid.Row="3" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
@@ -62,11 +56,8 @@
                   IsEnabled="False"
                   FontWeight="DemiBold"
                   Foreground="Black"
-                BorderThickness="0">
-           
+                BorderThickness="0">           
         </ListView>
         <TextBlock x:Name="PackageTemplate"  Text="{Binding TemplateName}" Grid.Row="8" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
-
-
     </Grid>
 </UserControl>
