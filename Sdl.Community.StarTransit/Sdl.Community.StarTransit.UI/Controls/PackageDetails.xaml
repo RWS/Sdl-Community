@@ -80,7 +80,7 @@
                
             </Grid.ColumnDefinitions>
 			<Button x:Name="button" Style="{DynamicResource StudioGreenButtonsStyle}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
-            <TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
+            <TextBox Style="{StaticResource MetroTextBox}"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -89,7 +89,7 @@
                      Margin="0,0,5,10"
                      Padding="0,0,0,15"          
                     Text="{Binding TextLocation,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0"/>
+                x:Name="txtLocation" TextWrapping="Wrap" Grid.Column="0" IsEnabled="False"/>
 
         </Grid>
         <ComboBox x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"

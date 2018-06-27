@@ -343,7 +343,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				CloseAction();
 				if (Directory.Exists(Path.GetDirectoryName(packageModel.PathToPrjFile)))
 				{
-					Directory.Delete(packageModel.PathToPrjFile, true);
+					Directory.Delete(Path.GetDirectoryName(Path.GetDirectoryName(packageModel.PathToPrjFile)), true);
 				}
 			}
 			else if (messageModel != null && !messageModel.IsProjectCreated)
