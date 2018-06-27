@@ -8,27 +8,13 @@
              xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.UI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <!--<UserControl.DataContext>
-        <viewModels:PackageDetailsViewModel/>
-</UserControl.DataContext>-->
-    <!--<UserControl.Resources>
-    <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                -->
-    <!--  MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive!  -->
-    <!--
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
-                -->
-    <!--  Accent and AppTheme setting  -->
-    <!--
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-</UserControl.Resources>-->
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\UIHelpers\ButtonsStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
     <Grid Margin="5,5,5,0">
         <Grid.Resources>
             <Style TargetType="{x:Type TextBox}">
@@ -66,7 +52,7 @@
 		<TextBlock  x:Name="dueDate" TextWrapping="Wrap" Text="Due Date / Time" Grid.Row="6"/>
 		<TextBlock  x:Name="sourceLanguage" TextWrapping="Wrap" Text="Source language" Grid.Row="8"/>
 		<TextBlock  x:Name="targetLanguage" TextWrapping="Wrap" Text="Target language" Grid.Row="9" Grid.RowSpan="2"/>
-        <TextBox Style="{StaticResource MetroTextBox}"
+        <TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -77,7 +63,7 @@
                  Text="{Binding Name}"
                  x:Name="txtName" Grid.Column="1" TextWrapping="Wrap" Grid.ColumnSpan="2"/>
 
-        <TextBox Style="{StaticResource MetroTextBox}"
+		<TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"               
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
@@ -94,7 +80,7 @@
                
             </Grid.ColumnDefinitions>
 			<Button x:Name="button" Style="{DynamicResource StudioGreenButtonsStyle}" Content="Browse" ToolTip="Browse for package" Grid.Column="1" Margin ="0,8.157,0,13.763"  Command="{Binding BrowseCommand}" Grid.ColumnSpan="2" />
-            <TextBox Style="{StaticResource MetroTextBox}"
+            <TextBox Style="{StaticResource MetroTextBox}" IsReadOnly="True"
                 Controls:TextBoxHelper.ClearTextButton="True"                
                 Controls:TextBoxHelper.IsWaitingForData="True"
                 Controls:TextBoxHelper.UseFloatingWatermark="True" 
