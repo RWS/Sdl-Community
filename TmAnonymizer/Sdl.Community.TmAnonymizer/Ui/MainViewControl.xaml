@@ -49,7 +49,7 @@
 				<local:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</controls:MetroTabItem>
 			<controls:MetroTabItem Header="Custom Fields" >
-				<local:CustomFields DataContext="{Binding MultiTermViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></local:CustomFields>
+				<local:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></local:CustomFields>
 			</controls:MetroTabItem>
 
 		</TabControl>

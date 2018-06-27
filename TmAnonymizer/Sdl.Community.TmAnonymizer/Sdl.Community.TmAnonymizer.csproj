@@ -153,6 +153,8 @@
     <Compile Include="Helpers\Tm.cs" />
     <Compile Include="Helpers\Users.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
+    <Compile Include="Model\CustomField.cs" />
+    <Compile Include="Model\Details.cs" />
     <Compile Include="Model\Login.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
@@ -214,6 +216,8 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\wiki.ico" />
+    <None Include="Resources\help.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
