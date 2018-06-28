@@ -95,6 +95,7 @@
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 							</xctk:RichTextBox>

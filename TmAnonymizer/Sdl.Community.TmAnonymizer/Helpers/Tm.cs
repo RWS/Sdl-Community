@@ -541,7 +541,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 					if (!translationUnitDetails.TranslationUnit.TargetSegment.Elements[i].GetType().UnderlyingSystemType.Name
 						.Equals("Text")) continue;
 
-					var visitor = new SegmentElementVisitor(translationUnitDetails.RemovedWordsFromMatches);
+					var visitor = new SegmentElementVisitor(translationUnitDetails.TargetRemovedWordsFromMatches);
 					//check for PI in each element from the list
 					translationUnitDetails.TranslationUnit.TargetSegment.Elements[i].AcceptSegmentElementVisitor(visitor);
 					var segmentColection = visitor.SegmentColection;
