@@ -1,0 +1,29 @@
+﻿<Window x:Class="Sdl.Community.StarTransit.UI.TranslationMemoriesPenaltiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        Title="Translation Memories Penalties" MaxHeight="600" MaxWidth="850">
+    <Grid>
+        <UserControl Margin="2,0,0,60" Grid.ColumnSpan="2">
+            <Grid>
+                <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" 
+				  Style="{DynamicResource AzureDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0"
+				  Margin="0,5,5,0" BorderThickness="1" BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Translation Memory"
+                                    Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+									IsReadOnly="True" Width="650" />
+                        <controls:DataGridNumericUpDownColumn Header="Penalty" Width="150"
+                                                      Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+                                                      Minimum="0" 
+													  Maximum="99"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </UserControl>
+    </Grid>
+</Window>

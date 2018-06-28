@@ -144,6 +144,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StarTransitUIResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TranslationMemoriesPenaltiesWindow.xaml.cs">
+      <DependentUpon>TranslationMemoriesPenaltiesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CellViewModel.cs" />
     <Compile Include="ViewModels\FinishViewModel.cs" />
     <Compile Include="ViewModels\PackageDetailsViewModel.cs" />
@@ -167,6 +170,7 @@
     <Compile Include="ViewModels\ReturnFilesViewModel.cs" />
     <Compile Include="ViewModels\ReturnPackageMainWindowViewModel.cs" />
     <Compile Include="ViewModels\StarTransitMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\TranslationMemoriesPenaltiesViewModel.cs" />
     <Compile Include="ViewModels\TranslationMemoriesViewModel.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -210,6 +214,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="StarTransitMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TranslationMemoriesPenaltiesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
-using Sdl.Community.StarTransit.UI.Helpers;
 using Sdl.Community.Toolkit.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class TranslationMemoriesViewModel: INotifyPropertyChanged,IDataErrorInfo
+	public class TranslationMemoriesViewModel: INotifyPropertyChanged,IDataErrorInfo
     {
         private List<LanguagePair> _languagePairs;
         private string _pair;
@@ -229,8 +222,11 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
                 SelectedItem.HasTm = true;
                 IsEnabled = true;
 				TmMessage = "Hidden";
+
+				var tmPenaltiesWindow = new TranslationMemoriesPenaltiesWindow(new TranslationMemoriesPenaltiesViewModel(_package));
+				tmPenaltiesWindow.Show();
 			}
-            if (IsBrowseChecked)
+			if (IsBrowseChecked)
             {
                 ButtonName = "Browse";
                 TmName = string.Empty;
@@ -370,16 +366,16 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         }
 
         public ObservableCollection<LanguagePair> Pairs { get; set; }
- 
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+		public event PropertyChangedEventHandler PropertyChanged;
 
-        public string this[string columnName]
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+
+		public string this[string columnName]
         {
             get {
                 if (columnName == "TmName")
