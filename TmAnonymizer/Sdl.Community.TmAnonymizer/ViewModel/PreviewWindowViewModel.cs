@@ -238,7 +238,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
 							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
 							IsSourceMatch = selectedResult.IsSourceMatch,
-							IsTargetMatch = selectedResult.IsTargetMatch
+							IsTargetMatch = selectedResult.IsTargetMatch,
+							TargetSelectedWordsDetails =  selectedResult.TargetSelectedWordsDetails,
+							TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
 						};
 						if (anonymizeTu != null)
 						{

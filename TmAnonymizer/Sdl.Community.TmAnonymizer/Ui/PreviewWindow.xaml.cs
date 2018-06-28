@@ -33,6 +33,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			var start = _textBox.Selection.Start;
 			var end = _textBox.Selection.End;
 
+			var parent = (RichTextBox)_textBox.Document.Parent;
+			var tag = string.Empty;
+			if (parent != null)
+			{
+				tag = (string)parent.Tag;
+			}
+
 			var tr = new TextRange(start, end);
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
 
@@ -49,7 +56,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			};
 			var nextWord = GetNextWord(wordDetails, text);
 			wordDetails.NextWord = nextWord;
-			dataContext?.SelectedWordsDetails.Add(wordDetails);
+			if (tag.Equals("SourceBox"))
+			{
+				dataContext?.SelectedWordsDetails.Add(wordDetails);
+			}
+			else
+			{
+				dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
+			}
+			
 		}
 			
 		private string GetNextWord(WordDetails wordDetails,string text)
@@ -68,6 +83,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			var start = _textBox.Selection.Start;
 			var end = _textBox.Selection.End;
 
+			var parent = (RichTextBox)_textBox.Document.Parent;
+			var tag = string.Empty;
+			if (parent != null)
+			{
+				tag = (string)parent.Tag;
+			}
 			var tr = new TextRange(start, end);
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
 			var dataContext = _textBox.DataContext as SourceSearchResult;
@@ -84,7 +105,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			};
 			var prevWord = GetPreviosWord(wordDetails, text);
 			wordDetails.PreviousWord = prevWord;
-			dataContext?.DeSelectedWordsDetails.Add(wordDetails);
+			if (tag.Equals("SourceBox"))
+			{
+				dataContext?.DeSelectedWordsDetails.Add(wordDetails);
+			}
+			else
+			{
+				dataContext?.TargetDeSelectedWordsDetails.Add(wordDetails);
+			}
 		}
 
 		private string GetPreviosWord(WordDetails wordDetails, string text)
