@@ -236,7 +236,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						{
 							TranslationUnit = tuToAnonymize,
 							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails
+							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
+							IsSourceMatch = selectedResult.IsSourceMatch,
+							IsTargetMatch = selectedResult.IsTargetMatch
 						};
 						if (anonymizeTu != null)
 						{
@@ -249,7 +251,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							{
 								TranslationUnits = new List<TranslationUnit>(),
 								TmPath = anonymizeUnits.TmPath,
-								TranslationUnitDetails = new List<TranslationUnitDetails>()
+								TranslationUnitDetails = new List<TranslationUnitDetails>(),
+								
 							};
 							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
 

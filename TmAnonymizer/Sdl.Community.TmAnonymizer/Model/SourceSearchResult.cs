@@ -17,6 +17,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public bool IsServer { get; set; }
 		public List<WordDetails> SelectedWordsDetails { get; set; }	
 		public List<WordDetails> DeSelectedWordsDetails { get; set; }
+		public bool IsSourceMatch { get; set; }
+		public bool IsTargetMatch { get; set; }
 		public bool TuSelected
 		{
 
