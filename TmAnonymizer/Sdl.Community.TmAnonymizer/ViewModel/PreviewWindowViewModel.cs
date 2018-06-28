@@ -224,13 +224,27 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			foreach (var selectedResult in selectedSearchResult)
 			{
 				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
-				{
-					var tuToAnonymize =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
-					if (tuToAnonymize != null)
+					{
+						var sourceTranslationUnit =
+							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
+						var targetTranslationUnit =
+							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.TargetSegment.ToPlain().Equals(selectedResult.TargetText.TrimEnd()));
+					//TranslationUnit tuToAnonymize;
+
+					if (sourceTranslationUnit != null|| targetTranslationUnit!=null)
 					{
 						// if there is an tm with the same path add translation units to that tm
 						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
+						TranslationUnit tuToAnonymize = new TranslationUnit();
+
+						if (sourceTranslationUnit != null)
+						{
+							tuToAnonymize = sourceTranslationUnit;
+						}
+						if (targetTranslationUnit != null)
+						{
+							tuToAnonymize = targetTranslationUnit;
+						}
 						//added for select custom words functionality
 						var tranlationUnitDetails = new TranslationUnitDetails
 						{
@@ -242,6 +256,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							TargetSelectedWordsDetails =  selectedResult.TargetSelectedWordsDetails,
 							TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
 						};
+						
 						if (anonymizeTu != null)
 						{
 							anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
