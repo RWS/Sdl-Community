@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.TmAnonymizer.Model;
-
-namespace Sdl.Community.TmAnonymizer.ViewModel
+﻿namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class MainViewModel : ViewModelBase
 	{

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public class CommandHandler : ICommand, INotifyPropertyChanged
 	{

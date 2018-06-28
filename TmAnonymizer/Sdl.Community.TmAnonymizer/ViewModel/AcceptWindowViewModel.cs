@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Input;
 using Newtonsoft.Json;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class AcceptWindowViewModel:ViewModelBase
 	{

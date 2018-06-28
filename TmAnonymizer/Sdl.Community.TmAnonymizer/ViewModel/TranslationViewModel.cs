@@ -5,16 +5,15 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows.Data;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class TranslationViewModel : ViewModelBase
 	{

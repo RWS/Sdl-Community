@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class SettingsMethods
 	{

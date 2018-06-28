@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
-namespace Sdl.Community.TmAnonymizer.Studio
+namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{

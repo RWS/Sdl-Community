@@ -4,20 +4,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class PreviewWindowViewModel:ViewModelBase
 	{
@@ -51,7 +48,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			_waitWindow?.Close();
+			
 		}
 
 		private async void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -101,6 +98,7 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 					Tm.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
 				}
 				RemoveSelectedTusToAnonymize();
+				_waitWindow?.Close();
 			}
 			else
 			{

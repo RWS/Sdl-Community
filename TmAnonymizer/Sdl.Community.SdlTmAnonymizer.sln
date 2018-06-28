@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.TmAnonymizer", "Sdl.Community.TmAnonymizer\Sdl.Community.TmAnonymizer.csproj", "{1C2A8063-6DBC-4BE4-87AD-CFF4FFBD08F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.SdlTmAnonymizer", "Sdl.Community.TmAnonymizer\Sdl.Community.SdlTmAnonymizer.csproj", "{1C2A8063-6DBC-4BE4-87AD-CFF4FFBD08F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,5 +18,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8400DFFA-0B54-40AB-911B-AF0F74169DF4}
 	EndGlobalSection
 EndGlobal

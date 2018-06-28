@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Studio;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class Tm
 	{

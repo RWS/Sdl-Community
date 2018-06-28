@@ -4,12 +4,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class LoginWindowViewModel: ViewModelBase,IDataErrorInfo, IWindowActions
 	{

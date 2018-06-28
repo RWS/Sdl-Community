@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using OfficeOpenXml;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class ExcelFile
 	{

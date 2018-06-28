@@ -1,16 +1,16 @@
-﻿<UserControl x:Class="Sdl.Community.TmAnonymizer.Ui.MainViewControl"
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.Ui.MainViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Sdl.Community.TmAnonymizer.Ui"
-             xmlns:viewModels="clr-namespace:Sdl.Community.TmAnonymizer.ViewModel"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:viewModels="clr-namespace:Sdl.Community.SdlTmAnonymizer.ViewModel"
+             xmlns:ui="clr-namespace:Sdl.Community.SdlTmAnonymizer.Ui"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
-			<local:TranslationMemory></local:TranslationMemory>
+			<ui:TranslationMemory></ui:TranslationMemory>
 		</DataTemplate>
 		<ResourceDictionary x:Key="Metro">
 			<ResourceDictionary.MergedDictionaries>
@@ -43,13 +43,13 @@
 					controls:ControlsHelper.HeaderFontSize="15"
 		            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
 			<controls:MetroTabItem Header="Translations">
-				<local:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></local:Translations>
+				<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></ui:Translations>
 			</controls:MetroTabItem>
 			<controls:MetroTabItem  Header ="System Fields">
-				<local:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
+				<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
 			</controls:MetroTabItem>
 			<controls:MetroTabItem Header="Custom Fields" >
-				<local:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></local:CustomFields>
+				<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></ui:CustomFields>
 			</controls:MetroTabItem>
 
 		</TabControl>

@@ -17,8 +17,8 @@
     <ProjectGuid>{1C2A8063-6DBC-4BE4-87AD-CFF4FFBD08F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sdl.Community.TmAnonymizer</RootNamespace>
-    <AssemblyName>Sdl.Community.TmAnonymizer</AssemblyName>
+    <RootNamespace>Sdl.Community.SdlTmAnonymizer</RootNamespace>
+    <AssemblyName>Sdl.Community.SdlTmAnonymizer</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>

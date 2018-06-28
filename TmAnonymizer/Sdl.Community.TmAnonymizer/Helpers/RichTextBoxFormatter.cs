@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Documents;
+﻿using System.Windows.Documents;
 using System.Windows.Media;
-using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model;
 using Xceed.Wpf.Toolkit;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
     public class RichTextBoxFormatter: ITextFormatter
     {

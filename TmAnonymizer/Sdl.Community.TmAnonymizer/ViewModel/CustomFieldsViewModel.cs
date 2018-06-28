@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.TmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class CustomFieldsViewModel : ViewModelBase
 	{

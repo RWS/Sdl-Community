@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.TmAnonymizer.Ui
+﻿namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
 	partial class TmAnonymizerUserControl
 	{

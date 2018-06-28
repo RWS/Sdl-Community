@@ -1,23 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 using Newtonsoft.Json;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
 
-
-namespace Sdl.Community.TmAnonymizer.Ui
+namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
 	public partial class TmAnonymizerUserControl : UserControl
 	{

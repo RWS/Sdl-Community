@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Sdl.Community.TmAnonymizer.Helpers;
-using Sdl.Community.TmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Studio;
-using Sdl.Community.TmAnonymizer.Ui;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 using DataFormats = System.Windows.Forms.DataFormats;
 using MessageBox = System.Windows.Forms.MessageBox;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class TranslationMemoryViewModel:ViewModelBase
 	{

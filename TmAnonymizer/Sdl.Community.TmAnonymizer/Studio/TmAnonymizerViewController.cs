@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
-using Sdl.Community.TmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
 
-namespace Sdl.Community.TmAnonymizer.Studio
+namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
 	[View(
-		Id = "TmAnonymizer",
-		Name = "Tm Anonymizer",
+		Id = "SdLTmAnonymizer",
+		Name = "SDLTm Anonymizer",
 		Description = "Anonymize personal information from tm",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class TmAnonymizerViewController: AbstractViewController
@@ -24,20 +24,20 @@ namespace Sdl.Community.TmAnonymizer.Studio
 			return Control.Value;
 		}
 
-		[RibbonGroup("TmRibbonGroup", "Tm Anonymizer user guide")]
+		[RibbonGroup("TmRibbonGroup", "SDLTm Anonymizer user guide")]
 		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 		public class TmAnonymizerRibbonGroup : AbstractRibbonGroup
 		{
 
 		}
 
-		[Action("Sdl.Community.TmAnonymizer", typeof(TmAnonymizerViewController), Name = "Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
+		[Action("Sdl.Community.SDLTmAnonymizer", typeof(TmAnonymizerViewController), Name = "Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
 		[ActionLayout(typeof(TmAnonymizerRibbonGroup), 250, DisplayType.Large)]
 		public class TmAnonymizerHelpAction : AbstractAction
 		{
 			protected override void Execute()
 			{
-				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdl-tm-anonymizer");
+				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdltmanonymizer");
 
 			}
 		}

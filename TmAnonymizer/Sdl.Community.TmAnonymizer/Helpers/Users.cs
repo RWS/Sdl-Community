@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.TmAnonymizer.Model;
+﻿using System.Collections.Generic;
+using Sdl.Community.SdlTmAnonymizer.Model;
 
-namespace Sdl.Community.TmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class Users
 	{
