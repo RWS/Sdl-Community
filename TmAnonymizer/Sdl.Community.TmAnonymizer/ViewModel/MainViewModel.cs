@@ -1,4 +1,6 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.ViewModel
+﻿using Sdl.Community.TmAnonymizer.ViewModel;
+
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class MainViewModel : ViewModelBase
 	{

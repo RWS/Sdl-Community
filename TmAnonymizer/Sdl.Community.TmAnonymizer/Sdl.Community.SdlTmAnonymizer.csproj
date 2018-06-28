@@ -136,6 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\CustomDataGrid.cs" />
+    <Compile Include="Helpers\CustomFieldsHandler.cs" />
     <Compile Include="Helpers\CustomTextBox.cs" />
     <Compile Include="Helpers\ExcelFile.cs" />
     <Compile Include="Helpers\Expressions.cs" />

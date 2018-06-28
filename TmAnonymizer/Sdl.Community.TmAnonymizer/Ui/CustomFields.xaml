@@ -35,8 +35,8 @@
 	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto"  MaxHeight="300"/>
-			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,10" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
@@ -45,7 +45,8 @@
 		                        RowHeaderWidth="0"
 		                        BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		                        AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
-		                        ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White">
+		                        ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White"
+								Height="auto">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Change" Width="1*" MinWidth="50">
 					<DataGridTemplateColumn.HeaderStyle>
@@ -73,12 +74,12 @@
 						</Style>
 					</DataGridTextColumn.CellStyle>
 				</DataGridTextColumn>
-				<DataGridTextColumn Width="1*" Header="Type" Binding="{Binding Type}" ElementStyle="{StaticResource WrapText}" >
+				<DataGridTextColumn Width="1*" Header="Type" Binding="{Binding ValueType}" ElementStyle="{StaticResource WrapText}" >
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
 								<Setter.Value>
-									<TextBlock Text='{Binding Type}'/>
+									<TextBlock Text='{Binding ValueType}'/>
 								</Setter.Value>
 							</Setter>
 						</Style>
