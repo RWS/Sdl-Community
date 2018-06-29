@@ -123,7 +123,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 				return string.Empty;
 			}
 			var firstPartOfString = text.Substring(0, wordDetails.Position).TrimEnd();
-			return firstPartOfString.Substring(firstPartOfString.LastIndexOf(" ", StringComparison.Ordinal));
+			var lastIndexOfSpace = firstPartOfString.LastIndexOf(" ", StringComparison.Ordinal);
+			if (lastIndexOfSpace != -1)
+			{
+				return firstPartOfString.Substring(lastIndexOfSpace);
+			}
+			//if user deselected only a part from the word
+			return string.Empty;
 		}
 	}
 }
