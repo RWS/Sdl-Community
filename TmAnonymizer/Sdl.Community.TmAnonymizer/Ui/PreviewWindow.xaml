@@ -67,11 +67,17 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-					<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
+					<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}">
+						<DataGridTextColumn.CellStyle>
+							<Style>
+								<Setter Property="FrameworkElement.VerticalAlignment" Value="Center"></Setter>
+							</Style>
+						</DataGridTextColumn.CellStyle>
+					</DataGridTextColumn>
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-								<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
@@ -88,7 +94,7 @@
 				<DataGridTemplateColumn Header="Target" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" IsReadOnly="True" BorderThickness="0" Background="White" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
