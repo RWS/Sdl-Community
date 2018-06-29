@@ -5,25 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Translation Memories Penalties" MaxHeight="500" MaxWidth="650">
+        Title="Translation Memories Penalties" MinHeight="405" MaxHeight="405" MaxWidth="650">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source=".\UIHelpers\ButtonsStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
-        <UserControl Margin="2,0,0,60" Grid.ColumnSpan="2">
-            <Grid>
-                <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-                  AutoGenerateColumns="False" CanUserAddRows="False" 
-				  Style="{DynamicResource AzureDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0"
-				  Margin="0,5,5,0" BorderThickness="1" BorderBrush="LightGray" GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Translation Memory"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="650"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="330"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+                  AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
+				  Style="{DynamicResource AzureDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
+				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen" Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Translation Memory"
                                     Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
 									IsReadOnly="True" Width="550" />
-                        <controls:DataGridNumericUpDownColumn Header="Penalty" Width="75"
+                <controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                                                       Minimum="0" 
 													  Maximum="99"/>
-                    </DataGrid.Columns>
-				</DataGrid>
-            </Grid>
-        </UserControl>
-    </Grid>
+            </DataGrid.Columns>
+        </DataGrid>
+		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,4,0">
+            <StackPanel Orientation="Horizontal">
+                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding Command}" Content="Ok"
+						Width="80" Height="30" Visibility="{Binding Visibility}"/>
+                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding Command}" Content="Cancel"
+						Width="80" Height="30" Visibility="{Binding Visibility}"/>
+            </StackPanel>
+        </StackPanel>
+	</Grid>
 </Window>

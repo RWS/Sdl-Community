@@ -31,6 +31,9 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 		#endregion
 
+		#region Commands
+		#endregion
+
 		#region Public Properties
 		public string Error { get; }
 
