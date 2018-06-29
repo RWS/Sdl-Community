@@ -53,23 +53,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				}
 			}
 			var segmentTextTrimed = segmentText.TrimStart();
+
 			var indexesBiggerThanTextLenght = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
 			//that means selected text is the last word
 			if (indexesBiggerThanTextLenght.Equals(wordsIndexes.Count))
 			{
 				var startIndex = segmentText.IndexOf(segmentTextTrimed, StringComparison.Ordinal);
 				positionOfSelectedText.Add(startIndex);
-				var elements = segmentText.SplitAt(positionOfSelectedText.ToArray());
-			
+				var elements = segmentText.SplitAt(positionOfSelectedText.ToArray()).ToList();
+
+				//check if the last character is a punctuation sign 
+				var lastCharacter = segmentTextTrimed[segmentTextTrimed.Length - 1];
+				if (char.IsPunctuation(lastCharacter))
+				{
+					elements.Add(lastCharacter.ToString());
+				}
 				CreateSegmentCollection(elements, positionOfSelectedText, segmentCollection);
 			}
 			else
 			{
 				//split text to indexes
-				var elementsCollection = segmentText.SplitAt(wordsIndexes.ToArray());
+				var elementsCollection = segmentText.SplitAt(wordsIndexes.ToArray()).ToList();
+				//if last character is punctuation sign add it to elements collection
+				var lastCharacter = segmentTextTrimed[segmentTextTrimed.Length - 1];
+				if (char.IsPunctuation(lastCharacter))
+				{
+					elementsCollection.Add(lastCharacter.ToString());
+				}
 				foreach (var selectedWord in _selectedWordsDetails)
 				{
-					for (var i = 0; i < elementsCollection.Length; i++)
+					for (var i = 0; i < elementsCollection.Count; i++)
 					{
 						//Check if is selected word
 						if (selectedWord.Text.Equals(elementsCollection[i]))
@@ -91,7 +104,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		
 			_selectedWordsDetails.Clear();
-			//CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
 		}
 
 		/// <summary>
@@ -100,9 +112,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// <param name="elementsCollection">List of words</param>
 		/// <param name="positionOfSelectedText">List with the positions of selected words in Preview Window</param>
 		/// <param name="segmentCollection">List with Text and Tags</param>
-		private void CreateSegmentCollection(string[] elementsCollection,List<int> positionOfSelectedText, List<object> segmentCollection)
+		private void CreateSegmentCollection(List<string>elementsCollection,List<int> positionOfSelectedText, List<object> segmentCollection)
 		{
-			for (int i = 0; i < elementsCollection.Length; i++)
+			for (int i = 0; i < elementsCollection.Count; i++)
 			{
 				var isTagAtPosition = positionOfSelectedText.Contains(i);
 				if (!isTagAtPosition)
