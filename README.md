@@ -41,8 +41,7 @@ To get started with this repository follow the following steps:
 
 The following table showns all the plugins available in the repository. 
 
-If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
-Documentation column will redirect to the source code for the selected plugin.
+By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in SDL App Store. Documentation column will redirect to the source code for the selected plugin.
   
 | Plugin Name | Description |
 | --- | --- |
