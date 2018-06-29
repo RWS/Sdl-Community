@@ -11,7 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public string SourceText { get; set; }
 		public string TargetText { get; set; }
 		public string TmFilePath { get; set; }
-		public object Document { get; set; }
+		public string IconFilePath { get; set; }
 		public MatchResult MatchResult { get; set; }
 		public MatchResult TargetMatchResult { get; set; }
 		public bool IsServer { get; set; }

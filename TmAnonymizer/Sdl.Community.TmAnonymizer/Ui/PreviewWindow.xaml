@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 			 ShowIconOnTitleBar="True"
              WindowStartupLocation="CenterScreen"
              FontFamily="Segoe UI"
@@ -102,18 +102,21 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-					<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" ElementStyle="{StaticResource WrapText}">
-					<DataGridTextColumn.CellStyle>
-						<Style TargetType="DataGridCell">
-							<Setter Property="ToolTip">
-								<Setter.Value>
-									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" />
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</DataGridTextColumn.CellStyle>
-				</DataGridTextColumn>
-			</DataGrid.Columns>
+					<DataGridTemplateColumn Width="*" Header="Tm path" >
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="20" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+									<Image Source='{Binding IconFilePath}' Stretch="None" Grid.Column="0" Margin="0,0,5,5"></Image>
+									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" Grid.Column="1" />
+								</Grid>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
 		</DataGrid>
 	  
 	    <StackPanel  Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">

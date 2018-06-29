@@ -43,7 +43,7 @@
 						<Style TargetType="DataGridColumnHeader">
 							<Setter Property="HorizontalContentAlignment" Value="Center" />
 							<Setter Property="Background" Value="#3EA691" />
-							<Setter Property="Foreground" Value="WhiteSmoke" />
+							<Setter Property="Foreground" Value="White" />
 						</Style>
 					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
