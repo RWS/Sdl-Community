@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Translation Memories Penalties" MaxHeight="600" MaxWidth="850">
+        Title="Translation Memories Penalties" MaxHeight="500" MaxWidth="650">
     <Grid>
         <UserControl Margin="2,0,0,60" Grid.ColumnSpan="2">
             <Grid>
@@ -16,13 +16,13 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Translation Memory"
                                     Binding="{Binding TranslationMemoryName, Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
-									IsReadOnly="True" Width="650" />
-                        <controls:DataGridNumericUpDownColumn Header="Penalty" Width="150"
+									IsReadOnly="True" Width="550" />
+                        <controls:DataGridNumericUpDownColumn Header="Penalty" Width="75"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                                                       Minimum="0" 
 													  Maximum="99"/>
                     </DataGrid.Columns>
-                </DataGrid>
+				</DataGrid>
             </Grid>
         </UserControl>
     </Grid>
