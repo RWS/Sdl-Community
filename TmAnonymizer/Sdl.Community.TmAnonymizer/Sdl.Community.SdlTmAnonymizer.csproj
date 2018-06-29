@@ -220,6 +220,7 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />
     <None Include="Resources\help.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemory.ico" />

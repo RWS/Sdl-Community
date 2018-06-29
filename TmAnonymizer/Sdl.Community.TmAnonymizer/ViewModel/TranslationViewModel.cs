@@ -28,7 +28,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
-		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
+		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
@@ -38,7 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_selectedItems = new List<Rule>();
 			_translationMemoryViewModel = translationMemoryViewModel;
-			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
+			_anonymizeTranslationMemories = new ObservableCollection<AnonymizeTranslationMemory>();
 			_rules = SettingsMethods.GetRules();
 			foreach (var rule in _rules)
 			{
@@ -108,7 +108,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						var tus = Tm.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
 							SourceSearchResults, GetSelectedRules());
-						if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+						if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 						{
 							_anonymizeTranslationMemories.Add(tus);
 						}
@@ -119,7 +119,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
 					var tus = Tm.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
-					if (!_anonymizeTranslationMemories.Exists(n => n.TmPath.Equals(tus.TmPath)))
+					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 					{
 						_anonymizeTranslationMemories.Add(tus);
 					}
@@ -272,10 +272,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (e.OldItems == null) return;
 				foreach (TmFile removedTm in e.OldItems)
 				{
+					//Remove search resoults for deleted tm
 					var tusForRemovedTm = SourceSearchResults.Where(t => t.TmFilePath.Equals(removedTm.Path)).ToList();
 					foreach (var tu in tusForRemovedTm)
 					{
 						SourceSearchResults.Remove(tu);
+					}
+					//remove the tm from the list use in preview windoew
+					var removed=_anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(removedTm.Path));
+					if (removed != null)
+					{
+						_anonymizeTranslationMemories.Remove(removed);
 					}
 				}
 			}

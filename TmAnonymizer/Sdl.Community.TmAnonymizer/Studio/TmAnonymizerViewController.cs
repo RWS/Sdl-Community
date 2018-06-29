@@ -10,6 +10,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	[View(
 		Id = "SdLTmAnonymizer",
 		Name = "SDLTm Anonymizer",
+		Icon = "icon",
 		Description = "Anonymize personal information from tm",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class TmAnonymizerViewController: AbstractViewController
