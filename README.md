@@ -17,23 +17,24 @@ If you have any questions, don't hesitate to ask on the [Sdl Language Developer 
 
 ## Getting started
 
-These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having SDL Trados Studio installed.
 
-If you don't have a licence please send an email to app-signing@sdl.com and ask for a developer licence.
+#### Required Tools
+To get started with this repository, install the following tools:
+1. **SDL Trados Studio 2017**. These libraries are built on top of SDL Trados Studio APIs and thus using them also requires having it installed.
+2. **Developer licence**. If you don't have a licence please send an email to app-signing@sdl.com.
+3. **.NET 4.5.2**
+4. **Microsoft Visual Studio 2013, 2015 or 2017**. If you don't have Microsoft Visual Studio you can install the community edition  for free [here](https://www.visualstudio.com/).
+5. **Git**. Find more details on installing git [here](https://www.atlassian.com/git/tutorials/install-git#windows). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
 
-All the plugins require .NET 4.5.2 and SDL Trados Studio 2017.
+Once you have installed the tools, follow these steps:
 
-To get started with this repository follow the following steps:
+1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). 
 
-1. Make sure you have installed Microsoft Visual Studio 2013, 2015 or 2017. If you don't have Microsoft Visual Studio you can install the community edition, available for free [here](https://www.visualstudio.com/).
+2. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
-2. To clone this repository you need to have Git installed and configured on your machine (more details [here](https://www.atlassian.com/git/tutorials/install-git#windows) and [here](https://help.github.com/articles/cloning-a-repository/)). If you prefer a more visual approach you can either use the [github extension for Microsoft Visual Studio](https://visualstudio.github.com/), [Github Desktop](https://desktop.github.com/) or [SourceTree](https://www.sourcetreeapp.com/).
+3. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder so all you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
-3. In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path : "https://github.com/sdl/Sdl-Community.git", in destination path select a path where the repository should be stored on your drive![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
-
-4. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder so all you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
-
-5. Build the solution, after the build has succeeded open SDL Trados Studio 2017. A warning message will appear click "Yes", after Studio loads, the built plugin will be available in Studio.
+4. Build the solution, after the build has succeeded open SDL Trados Studio 2017. A warning message will appear click "Yes", after Studio loads, the built plugin will be available in Studio.
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
