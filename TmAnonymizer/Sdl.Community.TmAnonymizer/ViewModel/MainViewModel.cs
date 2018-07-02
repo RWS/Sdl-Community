@@ -1,4 +1,4 @@
-﻿using Sdl.Community.TmAnonymizer.ViewModel;
+﻿using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {

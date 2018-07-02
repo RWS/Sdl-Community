@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
-using Sdl.Community.SdlTmAnonymizer.ViewModel;
 using Sdl.Community.TmAnonymizer.Model;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.TmAnonymizer.ViewModel
+namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class CustomFieldsViewModel : ViewModelBase
 	{
@@ -30,13 +24,13 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
 		private IList _selectedItems;
-		private ObservableCollection<CustomField> _customFields;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
 
 		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_customFields = new ObservableCollection<CustomField>();
+			_selectedItems = new List<CustomField>();
 			if (_tmsCollection != null)
 			{
 				PopulateCustomFieldGrid(_tmsCollection, _translationMemoryViewModel);
