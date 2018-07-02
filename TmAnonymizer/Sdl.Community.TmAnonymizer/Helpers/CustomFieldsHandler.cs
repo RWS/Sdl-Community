@@ -31,8 +31,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		public static List<CustomField> GetCustomField(FileBasedTranslationMemory fileBasedTranslationMemory)
 		{
 			var customFieldList = new List<CustomField>();
-
-
 			var tm =
 			new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
 			//var tm =
@@ -46,22 +44,26 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				
 				if (field.IsPicklist)
 				{
-					var customField = new CustomField();
-					customField.Id = field.Id;
-					customField.IsPickList = field.IsPicklist;
-					customField.Name = field.Name;
-					customField.ValueType = field.ValueType.ToString();
-					customField.Details = new ObservableCollection<Details>(GetPickListCustomFieldValues(field));
+					var customField = new CustomField
+					{
+						Id = field.Id,
+						IsPickList = field.IsPicklist,
+						Name = field.Name,
+						ValueType = field.ValueType.ToString(),
+						Details = new ObservableCollection<Details>(GetPickListCustomFieldValues(field))
+					};
 					customFieldList.Add(customField);
 				}
 				else
 				{
-					var customField = new CustomField();
-					customField.Id = field.Id;
-					customField.IsPickList = field.IsPicklist;
-					customField.Name = field.Name;
-					customField.ValueType = field.ValueType.ToString();
-					customField.Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(tus, field.Name));
+					var customField = new CustomField
+					{
+						Id = field.Id,
+						IsPickList = field.IsPicklist,
+						Name = field.Name,
+						ValueType = field.ValueType.ToString(),
+						Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(tus, field.Name))
+					};
 					customFieldList.Add(customField);
 				}
 				
@@ -98,7 +100,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			var distinctList = detailValues.Distinct().ToList();
 			foreach (var value in distinctList)
 			{
-				details.Add(new Details() { Value = value });
+				details.Add(new Details { Value = value });
 			}
 			return details;
 		}
@@ -109,8 +111,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			
 			foreach (var pickListItem in fieldDefinition.PicklistItems)
 			{
-				var detailsItem = new Details();
-				detailsItem.Value = pickListItem.Name;
+				var detailsItem = new Details
+				{
+					Value = pickListItem.Name
+				};
 				details.Add(detailsItem);
 			}
 			return details;
