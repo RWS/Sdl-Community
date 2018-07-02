@@ -28,20 +28,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return multipleStringValues;
 		}
 
-		public static List<CustomField> GetCustomField(FileBasedTranslationMemory fileBasedTranslationMemory)
+		public static List<CustomField> GetFilebasedCustomField(TmFile tm)
 		{
 			var customFieldList = new List<CustomField>();
 
 
-			var tm =
-			new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			//var tm =
 			//	new FileBasedTranslationMemory(@"C:\Users\aghisa\Desktop\cy-en_(Fields_and_Attributes).sdltm");
-			var unitsCount = tm.LanguageDirection.GetTranslationUnitCount();
+			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
-			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			var tus = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
 
-			foreach (var field in tm.FieldDefinitions)
+			foreach (var field in fileBasedTm.FieldDefinitions)
 			{
 				
 				if (field.IsPicklist)
