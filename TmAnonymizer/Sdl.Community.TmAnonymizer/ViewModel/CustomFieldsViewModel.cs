@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
@@ -16,17 +17,42 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 	public class CustomFieldsViewModel : ViewModelBase
 	{
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
-		private ObservableCollection<CustomField> _customFields = new ObservableCollection<CustomField>();
-
+		private bool _selectAll;
+		private ObservableCollection<CustomField> _customFields;
+		private ICommand _selectAllCommand;
 
 		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
-		//	var tm =
-		//	new FileBasedTranslationMemory(@"C:\Users\aghisa\Desktop\cy-en_(Fields_and_Attributes).sdltm");
+			//var tm =
+			//new FileBasedTranslationMemory(@"C:\Users\aghisa\Desktop\cy-en_(Fields_and_Attributes).sdltm");
 
-		//_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
+			//_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
 			_translationMemoryViewModel = translationMemoryViewModel;
 
+		}
+
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectFields, true));
+
+		private void SelectFields()
+		{
+			foreach (var field in CustomFieldsCollection)
+			{
+				field.IsSelected = SelectAll;
+			}
+		}
+		public bool SelectAll
+		{
+			get => _selectAll;
+
+			set
+			{
+				if (Equals(value, _selectAll))
+				{
+					return;
+				}
+				_selectAll = value;
+				OnPropertyChanged(nameof(SelectAll));
+			}
 		}
 
 		public ObservableCollection<CustomField> CustomFieldsCollection
