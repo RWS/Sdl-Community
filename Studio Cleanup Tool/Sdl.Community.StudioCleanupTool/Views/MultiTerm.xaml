@@ -73,7 +73,7 @@
 								</Border>
 								<ControlTemplate.Triggers>
 									<Trigger Property="IsSelected" Value="true">
-										<Setter TargetName="Border" Property="Background" Value="#9BB441"/>
+										<Setter TargetName="Border" Property="Background" Value="#3EA691"/>
 									</Trigger>
 								</ControlTemplate.Triggers>
 							</ControlTemplate>
@@ -109,11 +109,11 @@
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+									<Setter TargetName="bdr_main" Property="Background" Value="#3EA691" />
 								</Trigger>
 
 								<Trigger Property="IsPressed" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+									<Setter TargetName="bdr_main" Property="Background" Value="#3D9DAA"/>
 								</Trigger>
 
 							</ControlTemplate.Triggers>
@@ -130,11 +130,11 @@
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+									<Setter TargetName="bdr_main" Property="Background" Value="#3EA691" />
 								</Trigger>
 
 								<Trigger Property="IsPressed" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+									<Setter TargetName="bdr_main" Property="Background" Value="#3D9DAA"/>
 								</Trigger>
 
 							</ControlTemplate.Triggers>
@@ -145,16 +145,16 @@
 				<Button   FontSize="13" FontWeight="Normal" Width="110" Margin="10,20,0,0" Foreground="WhiteSmoke" Command="{Binding RestoreCommand}" VerticalAlignment="Center" HorizontalAlignment="Right" >
 					<Button.Template>
 						<ControlTemplate TargetType="{x:Type Button}">
-							<Border x:Name="bdr_main"   Background="#99b433" CornerRadius="3" >
+							<Border x:Name="bdr_main"   Background="#3D9DAA" CornerRadius="3" >
 								<ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" Margin="8,6,8,6" ContentSource="Content" />
 							</Border>
 							<ControlTemplate.Triggers>
 								<Trigger Property="IsMouseOver" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="Green" />
+									<Setter TargetName="bdr_main" Property="Background" Value="#3EA691" />
 								</Trigger>
 
 								<Trigger Property="IsPressed" Value="True">
-									<Setter TargetName="bdr_main" Property="Background" Value="#99b433"/>
+									<Setter TargetName="bdr_main" Property="Background" Value="#3D9DAA"/>
 								</Trigger>
 
 							</ControlTemplate.Triggers>

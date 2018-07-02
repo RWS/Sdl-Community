@@ -22,38 +22,38 @@
 		<Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Margin="0,5,0,0" >The paths shown in the interface are based on the current version of Studio and MultiTerm.  For older versions the correct path will be used, but not displayed:</Label>
 		<Label Grid.Column="0" Grid.Row="1"> All Studio versions are shown bellow:</Label>
 		<StackPanel Grid.Column="0" Grid.Row="2">
-			<Label FontWeight="Bold" Foreground="#8EBA69">Studio 2017</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2017</Label>
 			<Label>14</Label>
 			<Label>14.0.0.0</Label>
 			<Label>Studio 5</Label>
 		</StackPanel>
 	    <StackPanel Grid.Column="1" Grid.Row="2">
-		    <Label FontWeight="Bold" Foreground="#8EBA69">Studio 2015</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2015</Label>
 		    <Label>12</Label>
 		    <Label>12.0.0.0</Label>
 		    <Label>Studio 4</Label>
 	    </StackPanel>
 	    <StackPanel Grid.Column="2" Grid.Row="2">
-		    <Label FontWeight="Bold" Foreground="#8EBA69">Studio 2014</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2014</Label>
 		    <Label>11</Label>
 		    <Label>11.0.0.0</Label>
 		    <Label>Studio 3</Label>
 	    </StackPanel>
 		<Label Grid.Column="0" Margin="0,40,0,0" Grid.Row="3">All MultiTerm versions are shown bellow:</Label>
 	    <StackPanel Grid.Column="0" Grid.Row="4">
-			<Label FontWeight="Bold" Foreground="#8EBA69" >MultiTerm 2017</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691" >MultiTerm 2017</Label>
 		    <Label>14</Label>
 		    <Label>14.0.0.0</Label>
 			<Label>MultiTerm14</Label>
 	    </StackPanel>
 		<StackPanel Grid.Column="1" Margin="0,7,0,0" Grid.Row="4" >
-			<Label FontWeight="Bold" Foreground="#8EBA69">MultiTerm 2015</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691">MultiTerm 2015</Label>
 		    <Label>12</Label>
 		    <Label>12.0.0.0</Label>
 			<Label>MultiTerm12</Label>
 	    </StackPanel>
 		<StackPanel Grid.Column="2" Margin="0,9,0,0" Grid.Row="4">
-			<Label FontWeight="Bold" Foreground="#8EBA69">MultiTerm 2014</Label>
+			<Label FontWeight="Bold" Foreground="#3EA691">MultiTerm 2014</Label>
 		    <Label>11</Label>
 		    <Label>11.0.0.0</Label>
 			<Label>MultiTerm11</Label>
