@@ -13,14 +13,10 @@
 				<StackPanel Orientation = "Horizontal">
 					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "150" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"
 					         controls:TextBoxHelper.ClearTextButton="True"
-					         controls:TextBoxHelper.Watermark="Original value"
-					         controls:TextBoxHelper.AutoWatermark="True"
-					         controls:TextBoxHelper.UseFloatingWatermark="True" />
+					   />
 					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "150" Margin = "0 5 3 5" TextWrapping="Wrap" 
 							 controls:TextBoxHelper.ClearTextButton="True"
-					         controls:TextBoxHelper.Watermark="New value"
-					         controls:TextBoxHelper.AutoWatermark="True"
-					         controls:TextBoxHelper.UseFloatingWatermark="True" />
+					         />
 				</StackPanel>
 			</DataTemplate>
 			<ResourceDictionary.MergedDictionaries>

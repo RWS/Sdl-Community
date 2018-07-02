@@ -21,97 +21,11 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
-			var tm =
-			new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
+			//var tm =
+			//new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
 
-			_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
-
-			//var unitsCount = tm.LanguageDirection.GetTranslationUnitCount();
-			//var tmIterator = new RegularIterator(unitsCount);
-			//var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			//var multipleString = new ObservableCollection<Details>();
-			//var details = new ObservableCollection<Details>();
-			//var detailItem = new Details();
-			//foreach (var tu in tus)
-			//{
-			//	var values = tu.FieldValues.Values;
-			//	foreach(var value in values)
-			//	{
-			//		if (value.ValueType == FieldValueType.DateTime /*|| value.ValueType == FieldValueType.Integer*/)
-			//		{
-			//			detailItem.Value = value.GetValueString();
-			//			//details.Add(de)
-			//			//var fieldValues = CustomFieldsHandler.GetMultipleStringValues(value.GetValueString());
-			//		}
-					
-			//		//var details = new Details
-			//		//{
-			//		//	Value = value.v
-			//		//}
-			//	}
-				
-			//}
-
-			//foreach (var fieldDefinition in tm.FieldDefinitions)
-			//{
-			//	var type = fieldDefinition.ValueType;
-			//	_customFields.Add(new CustomField()
-			//	{
-			//		Name = fieldDefinition.Name,
-			//		ValueType = type.ToString(),
-			//		IsPickList = fieldDefinition.IsPicklist,
-			//		Details = new ObservableCollection<Details>() {new Details
-			//			{
-			//				Value = "Another value",
-			//				NewValue = ""
-			//			} }
-			//	});
-			//}
+			//_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
 			_translationMemoryViewModel = translationMemoryViewModel;
-			//_customFields = new ObservableCollection<CustomField>
-			//{
-			//	new CustomField
-			//	{
-			//		Name = "Client",
-			//		Type = "List",
-			//		Details = new ObservableCollection<Details>
-			//		{
-			//			new Details
-			//			{
-			//				Value = "Pedigree",
-			//				NewValue = ""
-			//			},
-			//			new Details
-			//			{
-			//				Value = "Another value",
-			//				NewValue = ""
-			//			}
-			//		}
-			//	},
-			//	new CustomField
-			//	{
-			//		Name = "Client1",
-			//		Type = "List",
-			//		Details = new ObservableCollection<Details>
-			//		{
-			//			new Details
-			//			{
-			//				Value = "Pedigree",
-			//				NewValue = ""
-			//			},
-			//			new Details
-			//			{
-			//				Value = "Another value",
-			//				NewValue = ""
-			//			},
-			//			new Details
-			//			{
-			//				Value = "Another value",
-			//				NewValue = ""
-			//			}
-			//		}
-			//	}
-			//};
 
 		}
 

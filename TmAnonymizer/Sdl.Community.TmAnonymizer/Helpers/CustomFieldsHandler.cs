@@ -59,7 +59,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 					customField.IsPickList = field.IsPicklist;
 					customField.Name = field.Name;
 					customField.ValueType = field.ValueType.ToString();
-					customField.Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(tus, customField.Name));
+					customField.Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(tus, field.Name));
 					customFieldList.Add(customField);
 				}
 				
@@ -82,8 +82,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						var valueList = GetMultipleStringValues(fieldValue.GetValueString());
 						foreach (var value in valueList)
 						{
-							var detailsItem = new Details();
-							detailsItem.Value = value;
+							var detailsItem = new Details
+							{
+								Value = value
+							};
 							detailValues.Add(detailsItem.Value);
 						}
 					}
