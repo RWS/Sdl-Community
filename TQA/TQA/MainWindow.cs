@@ -43,8 +43,9 @@ namespace Sdl.Community.TQA
                 }
                 catch(IOException  ex )
                 {
-                    MessageBox.Show( "Unable to open file:\n" + outputSaveDialog.FileName+"\n\n Please check if it not opened in another application and try again." );
-                    return;
+                    //MessageBox.Show( "Unable to open file:\n" + outputSaveDialog.FileName+"\n\n Please check if it not opened in another application and try again." );
+                   // return;
+	                throw ex;
                 }
                 catch( Exception ex )
                 {

@@ -31,10 +31,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		public static List<CustomField> GetCustomField(FileBasedTranslationMemory fileBasedTranslationMemory)
 		{
 			var customFieldList = new List<CustomField>();
-			
+
 
 			var tm =
 			new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
+			//var tm =
+			//	new FileBasedTranslationMemory(@"C:\Users\aghisa\Desktop\cy-en_(Fields_and_Attributes).sdltm");
 			var unitsCount = tm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);

@@ -21,10 +21,10 @@ namespace Sdl.Community.TmAnonymizer.ViewModel
 
 		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
-			//var tm =
-			//new FileBasedTranslationMemory(@"C:\Users\apascariu\Desktop\cy-en_(Fields_and_Attributes).sdltm");
+		//	var tm =
+		//	new FileBasedTranslationMemory(@"C:\Users\aghisa\Desktop\cy-en_(Fields_and_Attributes).sdltm");
 
-			//_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
+		//_customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetCustomField(tm));
 			_translationMemoryViewModel = translationMemoryViewModel;
 
 		}

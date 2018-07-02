@@ -21,38 +21,41 @@
 		</ResourceDictionary>
 
 	</UserControl.Resources>
-	<Grid  Name="ParentGrid">
-		<Grid.Resources>
-			<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-		</Grid.Resources>
-		
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto"></RowDefinition>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />
-			<ColumnDefinition Width="*" />
-		</Grid.ColumnDefinitions>
-		<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,0,5">Here we'll add a title</TextBlock>
-		<ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" ></ContentControl>
+	<ScrollViewer>
+		<Grid  Name="ParentGrid">
+			<Grid.Resources>
+				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
+			</Grid.Resources>
 
-		<TabControl Grid.Column="1" Grid.Row="1" 
-					Margin="5,20,0,0"
-		            controls:TabControlHelper.Underlined="SelectedTabItem"
-					controls:ControlsHelper.HeaderFontSize="15"
-		            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
-			<controls:MetroTabItem Header="Translations">
-				<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></ui:Translations>
-			</controls:MetroTabItem>
-			<controls:MetroTabItem  Header ="System Fields">
-				<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
-			</controls:MetroTabItem>
-			<controls:MetroTabItem Header="Custom Fields" >
-				<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></ui:CustomFields>
-			</controls:MetroTabItem>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto"></RowDefinition>
+			</Grid.RowDefinitions>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
+			<TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="5,10,0,5">Here we'll add a title</TextBlock>
+			<ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" ></ContentControl>
 
-		</TabControl>
-	</Grid>
+			<TabControl Grid.Column="1" Grid.Row="1" 
+			            Margin="5,20,0,0"
+			            controls:TabControlHelper.Underlined="SelectedTabItem"
+			            controls:ControlsHelper.HeaderFontSize="15"
+			            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
+				<controls:MetroTabItem Header="Translations">
+					<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="auto"></ui:Translations>
+				</controls:MetroTabItem>
+				<controls:MetroTabItem  Header ="System Fields">
+					<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="auto" Width="auto" />
+				</controls:MetroTabItem>
+				<controls:MetroTabItem Header="Custom Fields" >
+					<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="auto"></ui:CustomFields>
+				</controls:MetroTabItem>
+
+			</TabControl>
+		</Grid>
+	</ScrollViewer>
+	
 </UserControl>
 

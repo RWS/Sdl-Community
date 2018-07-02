@@ -11,12 +11,8 @@
 		<ResourceDictionary>
 			<DataTemplate x:Key="CustomFieldsTemplate">
 				<StackPanel Orientation = "Horizontal">
-					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "150" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"
-					         controls:TextBoxHelper.ClearTextButton="True"
-					   />
-					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "150" Margin = "0 5 3 5" TextWrapping="Wrap" 
-							 controls:TextBoxHelper.ClearTextButton="True"
-					         />
+					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "150" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"/>
+					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "150" Margin = "0 5 3 5" TextWrapping="Wrap" controls:TextBoxHelper.ClearTextButton="True"/>
 				</StackPanel>
 			</DataTemplate>
 			<ResourceDictionary.MergedDictionaries>
@@ -37,13 +33,13 @@
 		</Grid.RowDefinitions>
 		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,10" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<helpers:CustomDataGrid   Style="{DynamicResource DgHeaderStyle}"
-										Grid.Row="1"
+								Grid.Row="1"
 								FontFamily="Segoe UI"
 								RowHeaderWidth="0"
 								BorderThickness="0" VerticalScrollBarVisibility="Auto"
 								AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
 								ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White"
-								Height="600" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
+		                        MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Change" Width="1*" MinWidth="50">
 					<DataGridTemplateColumn.HeaderStyle>

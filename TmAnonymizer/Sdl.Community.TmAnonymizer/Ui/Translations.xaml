@@ -21,8 +21,8 @@
 	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto"  MaxHeight="300"/>
-			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto"  />
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 
@@ -35,6 +35,7 @@
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
 		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		           MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
 		          Margin="5,10" >
 			<DataGrid.InputBindings>
 				<KeyBinding Key="Delete" Command="{Binding RemoveRuleCommand}"/>
