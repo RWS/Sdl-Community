@@ -1,0 +1,157 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Threading.Tasks;
+using Sdl.Community.StarTransit.Shared.Annotations;
+using Sdl.Community.StarTransit.Shared.Models;
+
+namespace Sdl.Community.StarTransit.UI.ViewModels
+{
+    public class TranslationMemoriesPenaltiesViewModel : INotifyPropertyChanged
+	{
+		#region Private Fields
+		private PackageModel _packageModel;
+		private ObservableCollection<TranslationMemoriesPenaltiesModel> _translationMemoriesPenaltiesModelList;
+		private string _translationMemoryName;
+		private string _translationMemoryPath;
+		private int _tmPenalty;
+
+		#endregion
+
+		#region Constructors
+		public TranslationMemoriesPenaltiesViewModel(PackageModel packageModel)
+		{
+			_packageModel = packageModel;
+			LoadTranslationMemories();
+		}
+		#endregion
+
+		#region Commands
+		#endregion
+
+		#region Public Properties
+		public string Error { get; }
+
+		public ObservableCollection<TranslationMemoriesPenaltiesModel> TranslationMemoriesPenaltiesModelList
+		{
+			get
+			{
+				return _translationMemoriesPenaltiesModelList;
+			}
+			set
+			{
+				if (Equals(value, _translationMemoriesPenaltiesModelList))
+				{
+					return;
+				}
+				_translationMemoriesPenaltiesModelList = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string TranslationMemoryName
+		{
+			get
+			{
+				return _translationMemoryName;
+			}
+			set
+			{
+				if (Equals(value, _translationMemoryName))
+				{
+					return;
+				}
+				_translationMemoryName = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string TranslationMemoryPath
+		{
+			get
+			{
+				return _translationMemoryPath;
+			}
+			set
+			{
+				if (Equals(value, _translationMemoryPath))
+
+				{
+					return;
+				}
+				_translationMemoryPath = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public int TMPenalty
+		{
+			get
+			{
+				return _tmPenalty;
+			}
+			set
+			{
+				if (Equals(value, _tmPenalty))
+				{
+					return;
+				}
+				_tmPenalty = value;
+				OnPropertyChanged();
+			}
+		}
+
+		#endregion
+
+		#region Public Methods
+		#endregion
+
+		#region Private Methods
+		/// <summary>
+		/// Load translation memories
+		/// </summary>
+		private void LoadTranslationMemories()
+		{
+			TranslationMemoriesPenaltiesModelList = new ObservableCollection<TranslationMemoriesPenaltiesModel>();
+			if (_packageModel != null)
+			{
+				foreach (var langPair in _packageModel.LanguagePairs)
+				{
+					if (langPair.HasTm)
+					{
+						foreach (var filePath in langPair.SourceFile)
+						{
+							TranslationMemoryName = Path.GetFileName(filePath);
+							TranslationMemoryPath = filePath;
+
+							var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
+							{
+								TranslationMemoryName = TranslationMemoryName,
+								TranslationMemoryPath = TranslationMemoryPath,
+								TMPenalty = TMPenalty
+							};
+							
+							TranslationMemoriesPenaltiesModelList.Add(translationMemoriesPenaltiesModel);
+						}
+					}
+				}
+			}
+		}
+		#endregion
+
+		#region Events
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+		#endregion
+	}
+}

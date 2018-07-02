@@ -3,8 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-                      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
 			 ShowIconOnTitleBar="True"
              WindowStartupLocation="CenterScreen"
              FontFamily="Segoe UI"
@@ -67,11 +67,17 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-					<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}" ></DataGridTextColumn>
+					<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}">
+						<DataGridTextColumn.CellStyle>
+							<Style>
+								<Setter Property="FrameworkElement.VerticalAlignment" Value="Center"></Setter>
+							</Style>
+						</DataGridTextColumn.CellStyle>
+					</DataGridTextColumn>
 				<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-								<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" IsReadOnly="True" BorderThickness="0" Background="White"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
@@ -88,31 +94,35 @@
 				<DataGridTemplateColumn Header="Target" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" IsReadOnly="True" BorderThickness="0" Background="White" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
+											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
 							</xctk:RichTextBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-					<DataGridTextColumn Width="*" Header="Tm path" Binding="{Binding TmFilePath}" ElementStyle="{StaticResource WrapText}">
-					<DataGridTextColumn.CellStyle>
-						<Style TargetType="DataGridCell">
-							<Setter Property="ToolTip">
-								<Setter.Value>
-									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" />
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</DataGridTextColumn.CellStyle>
-				</DataGridTextColumn>
-			</DataGrid.Columns>
+					<DataGridTemplateColumn Width="*" Header="Tm path" >
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
+								<Grid>
+									<Grid.ColumnDefinitions>
+										<ColumnDefinition Width="20" />
+										<ColumnDefinition Width="*" />
+									</Grid.ColumnDefinitions>
+									<Image Source='{Binding IconFilePath}' Stretch="None" Grid.Column="0" Margin="0,0,5,5"></Image>
+									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" Grid.Column="1" />
+								</Grid>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+				</DataGrid.Columns>
 		</DataGrid>
 	  
 	    <StackPanel  Grid.Row="3"  Orientation="Vertical"  Margin="0,10,10,10">

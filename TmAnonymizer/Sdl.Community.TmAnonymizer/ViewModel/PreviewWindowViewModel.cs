@@ -19,7 +19,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	public class PreviewWindowViewModel:ViewModelBase
 	{
 		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
-		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
+		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
 		private readonly TranslationMemoryViewModel _tmViewModel;
@@ -31,24 +31,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _filePath;
 		private readonly IDialogCoordinator _dialogCoordinator;
 		private WaitWindow _waitWindow;
+
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
-			List<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
+			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel tmViewModel, IDialogCoordinator dialogCoordinator)
 		{
 			_dialogCoordinator = dialogCoordinator;
 			_backupTms = new List<ServerTmBackUp>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
-			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
 			_sourceSearchResults = searchResults;
 			_tmViewModel = tmViewModel;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
-		}
-
-		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			
 		}
 
 		private async void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -57,7 +52,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				using (Stream outputStream = new FileStream(tm.FilePath, FileMode.Create))
 				{
-					var export = tm.ScheduledExport.DownloadExport(outputStream);
+					 tm.ScheduledExport.DownloadExport(outputStream);
 				}
 			})));
 		}
@@ -76,7 +71,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_waitWindow.Show();
 				});
 				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
-				var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+				List<AnonymizeTranslationMemory> tusToAnonymize;
 				//file base tms
 				var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 				if (fileBasedSearchResult.Count > 0)
@@ -164,7 +159,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 									case ScheduledOperationStatus.Recovered:
 									case ScheduledOperationStatus.Recovering:
 									case ScheduledOperationStatus.Recovery:
-										continueWaiting = true;
 										_tmExporter.Refresh();
 										break;
 									default:
@@ -224,20 +218,39 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			foreach (var selectedResult in selectedSearchResult)
 			{
 				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
-				{
-					var tuToAnonymize =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
-					if (tuToAnonymize != null)
+					{
+						var sourceTranslationUnit =
+							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
+						var targetTranslationUnit =
+							anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.TargetSegment.ToPlain().Equals(selectedResult.TargetText.TrimEnd()));
+					//TranslationUnit tuToAnonymize;
+
+					if (sourceTranslationUnit != null|| targetTranslationUnit!=null)
 					{
 						// if there is an tm with the same path add translation units to that tm
 						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
+						TranslationUnit tuToAnonymize = new TranslationUnit();
+
+						if (sourceTranslationUnit != null)
+						{
+							tuToAnonymize = sourceTranslationUnit;
+						}
+						if (targetTranslationUnit != null)
+						{
+							tuToAnonymize = targetTranslationUnit;
+						}
 						//added for select custom words functionality
 						var tranlationUnitDetails = new TranslationUnitDetails
 						{
 							TranslationUnit = tuToAnonymize,
 							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails
+							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
+							IsSourceMatch = selectedResult.IsSourceMatch,
+							IsTargetMatch = selectedResult.IsTargetMatch,
+							TargetSelectedWordsDetails =  selectedResult.TargetSelectedWordsDetails,
+							TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
 						};
+						
 						if (anonymizeTu != null)
 						{
 							anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
@@ -249,7 +262,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							{
 								TranslationUnits = new List<TranslationUnit>(),
 								TmPath = anonymizeUnits.TmPath,
-								TranslationUnitDetails = new List<TranslationUnitDetails>()
+								TranslationUnitDetails = new List<TranslationUnitDetails>(),
+								
 							};
 							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
 

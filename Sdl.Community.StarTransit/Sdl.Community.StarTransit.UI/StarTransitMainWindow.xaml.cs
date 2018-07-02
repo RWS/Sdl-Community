@@ -34,11 +34,14 @@ namespace Sdl.Community.StarTransit.UI
 			finishViewModel = new FinishViewModel(tmViewModel, packageDetailsViewModel);
 			_finish = new Finish(finishViewModel);
 
-			var starTransitViewModel = new StarTransitMainWindowViewModel(packageDetailsViewModel
-				, _packageDetails
-				, _translationMemories
-				, tmViewModel
-				, finishViewModel, this);
+			var starTransitViewModel = new StarTransitMainWindowViewModel(
+				packageDetailsViewModel,
+				_packageDetails,
+				_translationMemories,
+				tmViewModel,
+				finishViewModel,
+				this);
+
 			DataContext = starTransitViewModel;
 
 			if (starTransitViewModel.CloseAction == null)

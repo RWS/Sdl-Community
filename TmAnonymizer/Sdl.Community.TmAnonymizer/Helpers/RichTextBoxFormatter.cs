@@ -34,21 +34,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		    }
 		    if (tag.Equals("SourceBox"))
 		    {
-				foreach (var matchPosition in dataContex.MatchResult.Positions)
-				{
-					var initialPointer = document.ContentStart;
-					var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
-					var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
+			    if (dataContex.MatchResult != null)
+			    {
+				    foreach (var matchPosition in dataContex.MatchResult.Positions)
+				    {
+					    var initialPointer = document.ContentStart;
+					    var start = CustomTextBox.GetPoint(initialPointer, matchPosition.Index);
+					    var endPos = CustomTextBox.GetPoint(initialPointer, matchPosition.Index + matchPosition.Length);
 
-					if (start == null || endPos == null) continue;
-					textRange.Select(start, endPos);
-					var color = (SolidColorBrush)new BrushConverter().ConvertFrom("#EAC684");
-					if (color != null)
-					{
-						textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
-					}
-				}
-			}
+					    if (start == null || endPos == null) continue;
+					    textRange.Select(start, endPos);
+					    var color = (SolidColorBrush) new BrushConverter().ConvertFrom("#EAC684");
+					    if (color != null)
+					    {
+						    textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
+					    }
+				    }
+			    }
+		    }
 		    if (tag.Equals("TargetBox"))
 		    {
 			    if (dataContex.TargetMatchResult != null)

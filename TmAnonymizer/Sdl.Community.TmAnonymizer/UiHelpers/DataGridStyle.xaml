@@ -6,7 +6,7 @@
 	<Style x:Key="DgcHeaderStyle" TargetType="DataGridColumnHeader">
 		<Setter Property="Height" Value="30"/>
 		<Setter Property="Background" Value="#3EA691" />
-		<Setter Property="Foreground" Value="WhiteSmoke"/>
+		<Setter Property="Foreground" Value="White"/>
 		<Setter Property="FontSize" Value="12" />
 		<Setter Property="FontFamily" Value="Segoe UI" />
 	</Style>
