@@ -35,25 +35,26 @@
 	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto"  />
+			<!--<RowDefinition Height="*"  />
+			<RowDefinition Height="Auto" />-->
 		</Grid.RowDefinitions>
-		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,10" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<helpers:CustomDataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}" 
-		                        FontFamily="Segoe UI"
-		                        RowHeaderWidth="0"
-		                        BorderThickness="0" VerticalScrollBarVisibility="Auto"
-		                        AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
-		                        ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White"
-								Height="auto">
+		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,10" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+		<helpers:CustomDataGrid   Style="{DynamicResource DgHeaderStyle}"
+										Grid.Row="1"
+								FontFamily="Segoe UI"
+								RowHeaderWidth="0"
+								BorderThickness="0" VerticalScrollBarVisibility="Auto"
+								AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
+								ItemsSource="{Binding CustomFieldsCollection, Mode=TwoWay}"  Background="White"
+								Height="600" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True">
 			<DataGrid.Columns>
 				<DataGridTemplateColumn Header="Change" Width="1*" MinWidth="50">
 					<DataGridTemplateColumn.HeaderStyle>
 						<Style TargetType="DataGridColumnHeader">
 							<Setter Property="HorizontalContentAlignment" Value="Center" />
 							<Setter Property="Background" Value="#3EA691" />
-							<Setter Property="Foreground" Value="WhiteSmoke" />
+							<Setter Property="Foreground" Value="White" />
 						</Style>
 					</DataGridTemplateColumn.HeaderStyle>
 					<DataGridTemplateColumn.CellTemplate>
@@ -63,7 +64,7 @@
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="1*" Header="Field name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}" >
-					
+
 					<DataGridTextColumn.CellStyle>
 						<Style TargetType="DataGridCell">
 							<Setter Property="ToolTip">
@@ -88,13 +89,11 @@
 				<DataGridTemplateColumn Header="Value" Width="3*" MinWidth="50">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<ListBox ItemsSource="{Binding Details}" ItemTemplate="{StaticResource CustomFieldsTemplate}"></ListBox>
+							<ListBox ItemsSource="{Binding Details}" ItemTemplate="{StaticResource CustomFieldsTemplate}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"></ListBox>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-
 			</DataGrid.Columns>
-			
 		</helpers:CustomDataGrid>
 	</Grid>
 </UserControl>
