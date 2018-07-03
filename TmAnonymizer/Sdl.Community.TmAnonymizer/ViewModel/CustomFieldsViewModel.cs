@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,6 +11,7 @@ using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -199,18 +201,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (tm.IsServerTm)
 				{
-					//var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					//var translationProvider = new TranslationProviderServer(uri, false,
-					//	_translationMemoryViewModel.Credentials.UserName,
-					//	_translationMemoryViewModel.Credentials.Password);
-					//var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-					//foreach (var name in names)
-					//{
-					//	System.Windows.Application.Current.Dispatcher.Invoke(() =>
-					//	{
-					//		UniqueUserNames.Add(name);
-					//	});
-					//}
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
+					foreach (var field in customFields)
+					{
+						System.Windows.Application.Current.Dispatcher.Invoke(() =>
+						{
+							CustomFieldsCollection.Add(field);
+						});
+					}
 				}
 				else
 				{
@@ -226,30 +228,30 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				//if (tm.IsServerTm)
-				//{
-				//	var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-				//	var translationProvider = new TranslationProviderServer(uri, false,
-				//		_translationMemoryViewModel.Credentials.UserName,
-				//		_translationMemoryViewModel.Credentials.Password);
-				//	var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-				//	var newList = UniqueUserNames.ToList();
-				//	foreach (var name in names)
-				//	{
-				//		newList.RemoveAll(n => n.UserName.Equals(name.UserName));
-				//	}
-				//	UniqueUserNames = new ObservableCollection<User>(newList);
-				//}
-				//else
-				//{
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+				if (tm.IsServerTm)
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
 					var newList = CustomFieldsCollection.ToList();
-					foreach (var fields in customFields)
+					foreach (var field in customFields)
 					{
-						newList.RemoveAll(n => n.Name.Equals(fields.Name));
+						newList.RemoveAll(n => n.Name.Equals(field.Name));
 					}
 					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
-				//}
+				}
+				else
+				{
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+					var newList = CustomFieldsCollection.ToList();
+					foreach (var field in customFields)
+					{
+						newList.RemoveAll(n => n.Name.Equals(field.Name));
+					}
+					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
+				}
 			}
 		}
 
@@ -258,18 +260,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var serverBasedTms = tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
 			var fileBasedTms = tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
-			//if (serverBasedTms.Any())
-			//{
-			//	var uri = new Uri(translationMemoryViewModel.Credentials.Url);
-			//	var translationProvider = new TranslationProviderServer(uri, false,
-			//		translationMemoryViewModel.Credentials.UserName,
-			//		translationMemoryViewModel.Credentials.Password);
-			//	foreach (var serverTm in serverBasedTms)
-			//	{
-			//		UniqueUserNames = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
-			//	}
-
-			//}
+			if (serverBasedTms.Any())
+			{
+				var uri = new Uri(translationMemoryViewModel.Credentials.Url);
+				var translationProvider = new TranslationProviderServer(uri, false,
+					translationMemoryViewModel.Credentials.UserName,
+					translationMemoryViewModel.Credentials.Password);
+				foreach (var serverTm in serverBasedTms)
+				{
+					CustomFieldsCollection =
+						 new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
+				}
+			}
 
 			if (fileBasedTms.Any())
 			{
