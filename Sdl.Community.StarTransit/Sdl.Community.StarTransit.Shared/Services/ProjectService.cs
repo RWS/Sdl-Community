@@ -51,7 +51,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
 			foreach (var pair in package.LanguagePairs)
 			{
-				//To do: separate all items from package.TMPenalties(files that are having penalties set)
+				// Separate all items from package.TMPenalties(files that are having penalties set)
 				// which are found in pair.StarTranslationMemoryMetadatas
 				foreach (var starTMMetadata in pair.StarTranslationMemoryMetadatas)
 				{
@@ -67,10 +67,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					pair.StarTranslationMemoryMetadatas.Remove(item);
 				}
 
-				// Continue actual flow to create one TM with the items in pair.StarTranslationMemoryMetadatas (as it is implmeneted now)
+				// Create one TM (that has the name equals with the project name) 
+				// with the TM files from pair.StarTranslationMemoryMetadatas (the onew without penalties set by the user)
 				targetProjectFiles.Clear();
 
-				//import language pair TM if any
+				// Import language pair TM if any
 				if (pair.HasTm)
 				{
 					if (pair.StarTranslationMemoryMetadatas.Count > 0)
@@ -89,8 +90,10 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							   true,
 							   true,
 							   true));
-
 					}
+
+					// Create separate TM for each TM file on which user set penalty
+					// (the name of the new TM will be the same with the one from StarTransit package)
 					foreach(var item in penaltiesTmsList)
 					{
 						var tmWithPenalty = TMCreator.CreateTM(
@@ -98,7 +101,13 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							pair.SourceLanguage, 
 							pair.TargetLanguage,
 							Path.GetFileName(item.TargetFile));
-						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(new TranslationProviderReference(tmWithPenalty.FilePath), true, true, true, item.TMPenalty));
+
+						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
+							new TranslationProviderReference(tmWithPenalty.FilePath),
+							true,
+							true,
+							true,
+							item.TMPenalty));
 					}
 				}
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
