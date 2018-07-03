@@ -237,7 +237,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					if (!newTm.IsServerTm)
 					{
-						UniqueUserNames = Helpers.SystemFields.GetUniqueFileBasedSystemFields(newTm);
+						var fields = Helpers.SystemFields.GetUniqueFileBasedSystemFields(newTm);
+						foreach (var user in fields)
+						{
+							UniqueUserNames.Add(user);
+						}
+						
 					}
 					
 					newTm.PropertyChanged += NewTm_PropertyChanged;
@@ -253,7 +258,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (e.PropertyName.Equals("IsSelected"))
 			{
-				_backgroundWorker.RunWorkerAsync(sender);
+				if (!_backgroundWorker.IsBusy)
+				{
+					_backgroundWorker.RunWorkerAsync(sender);
+				}
 			}
 
 		}
