@@ -69,7 +69,7 @@ namespace Sdl.Community.StarTransit.Shared.Import
             tmImporter.Import(sdlXliffFullPath);
         }
 
-        public TranslationProviderReference GeTranslationProviderReference()
+        public TranslationProviderReference GetTranslationProviderReference()
         {
             return new TranslationProviderReference(_fileBasedTM.FilePath,true);
         }
