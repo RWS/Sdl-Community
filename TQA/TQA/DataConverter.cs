@@ -117,90 +117,89 @@ namespace Sdl.Community.TQA
 	    }
 
 	    public static void WriteExcel(string path, ReportResults reportResults)
-        {
-            using( var fs = new FileStream( path, FileMode.Create ) )
-            {
-                fs.Write( PluginResources.template, 0, PluginResources.template.Length );
-            }
-	        var rows = reportResults.Entries;
-            var rowsArray = rows.ToArray();
-            var rowsCollection = rows.Select( r => r.GetArray() ).ToArray();
-            using( var wb = new XLWorkbook( path ) )
-            {
-                using( var ws = wb.Worksheet( "Evaluation details_input" ) )
-                {
-                    for( var i = 0; i < rows.Count; i++ )
-                    {
-                        for(var j = 0; j < rowsCollection[i].Length; j++ )
-                        {
-                            ws.Row( i + 4 ).Cell( j + 1 ).Value = rowsCollection[i][j];
-                        }
-                        var cell = ws.Cell( i + 4, 5 );
+	    {
+		    using (var fs = new FileStream(path, FileMode.Create))
+		    {
+			    fs.Write(PluginResources.template, 0, PluginResources.template.Length);
+		    }
+		    var rows = reportResults.Entries;
+		    var rowsArray = rows.ToArray();
+		    var rowsCollection = rows.Select(r => r.GetArray()).ToArray();
+		    var wb = new XLWorkbook(path);
 
-                        var entry = rowsArray[i].RevisedTranslation;
+		    var ws = wb.Worksheet("Evaluation details_input");
 
-                        for(var k = 0; k < entry.Count; k++ )
-                        {
-                            cell.RichText.AddText( entry[k].Item1 );
-                            switch( entry[k].Item2 )
-                            {
-                                case TextType.Added:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.GreenPigment );
-                                    cell.RichText.ToArray()[k].SetUnderline();
-                                    break;
-                                case TextType.Deleted:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.Red );
-                                    cell.RichText.ToArray()[k].SetStrikethrough( true );
-                                    break;
-                                case TextType.Regular:
-                                    continue;
-                                case TextType.Comment:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.Blue);
-                                    cell.RichText.ToArray()[k].SetBold();
-                                    break;
-                            }
-                        }
+		    for (var i = 0; i < rows.Count; i++)
+		    {
+			    for (var j = 0; j < rowsCollection[i].Length; j++)
+			    {
+				    ws.Row(i + 4).Cell(j + 1).Value = rowsCollection[i][j];
+			    }
+			    var cell = ws.Cell(i + 4, 5);
 
-                        cell = ws.Cell( i + 4, 3 );
+			    var entry = rowsArray[i].RevisedTranslation;
 
-                        entry = rowsArray[i].SourceContent;
-                        for(var k = 0; k < entry.Count; k++ )
-                        {
-                            cell.RichText.AddText( entry[k].Item1 );
-                            switch( entry[k].Item2 )
-                            {
-                                case TextType.Added:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.GreenPigment );
-                                    cell.RichText.ToArray()[k].SetUnderline();
-                                    break;
-                                case TextType.Deleted:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.Red );
-                                    cell.RichText.ToArray()[k].SetStrikethrough( true );
-                                    break;
-                                case TextType.Regular:
-                                    continue;
-                                case TextType.Comment:
-                                    cell.RichText.ToArray()[k].SetFontColor( XLColor.Blue );
-                                    cell.RichText.ToArray()[k].SetBold();
-                                    break;
-                            }
-                        }
-                    }
-                }
+			    for (var k = 0; k < entry.Count; k++)
+			    {
+				    cell.RichText.AddText(entry[k].Item1);
+				    switch (entry[k].Item2)
+				    {
+					    case TextType.Added:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.GreenPigment);
+						    cell.RichText.ToArray()[k].SetUnderline();
+						    break;
+					    case TextType.Deleted:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.Red);
+						    cell.RichText.ToArray()[k].SetStrikethrough(true);
+						    break;
+					    case TextType.Regular:
+						    continue;
+					    case TextType.Comment:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.Blue);
+						    cell.RichText.ToArray()[k].SetBold();
+						    break;
+				    }
+			    }
 
-                using(var ws = wb.Worksheet( "Evaluation Report_Initial" ) )
-                {
-                    ws.Cell( "B9" ).Value = DateTime.Now.ToString( "dd-MMM-yyyy" );
-	                ws.Cell("L8").Value = "TQA";
-	                for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
-	                {
-		                ws.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
+			    cell = ws.Cell(i + 4, 3);
 
-	                }
-				}
-                wb.CalculateMode = XLCalculateMode.Auto;
-                wb.Save();
-            }
-        }
+			    entry = rowsArray[i].SourceContent;
+			    for (var k = 0; k < entry.Count; k++)
+			    {
+				    cell.RichText.AddText(entry[k].Item1);
+				    switch (entry[k].Item2)
+				    {
+					    case TextType.Added:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.GreenPigment);
+						    cell.RichText.ToArray()[k].SetUnderline();
+						    break;
+					    case TextType.Deleted:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.Red);
+						    cell.RichText.ToArray()[k].SetStrikethrough(true);
+						    break;
+					    case TextType.Regular:
+						    continue;
+					    case TextType.Comment:
+						    cell.RichText.ToArray()[k].SetFontColor(XLColor.Blue);
+						    cell.RichText.ToArray()[k].SetBold();
+						    break;
+				    }
+			    }
+		    }
+
+
+		    var wsReport = wb.Worksheet("Evaluation Report_Initial");
+
+		    wsReport.Cell("B9").Value = DateTime.Now.ToString("dd-MMM-yyyy");
+		    wsReport.Cell("L8").Value = "TQA";
+		    for (var i = 0; i < reportResults.EvaluationComments.Count; i++)
+		    {
+			    wsReport.Row(i + 42).Cell(1).Value = reportResults.EvaluationComments[i];
+		    }
+
+
+		    wb.CalculateMode = XLCalculateMode.Auto;
+		    wb.Save();
+	    }
     }
 }

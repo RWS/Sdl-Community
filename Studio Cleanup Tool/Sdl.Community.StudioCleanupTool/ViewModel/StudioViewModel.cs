@@ -182,7 +182,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			if (AnyLocationSelected()&&AnyVersionSelected())
 			{
 				IsRemoveEnabled = true;
-				RemoveBtnColor = "#99b433";
+				RemoveBtnColor = "#3D9DAA";
 				RemoveForeground = "WhiteSmoke";
 			}
 			else
@@ -195,7 +195,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 			if (AnyVersionSelected())
 			{
 				IsRepairEnabled = true;
-				RepairBtnColor = "#99b433";
+				RepairBtnColor = "#3D9DAA";
 				RepairForeground = "WhiteSmoke";
 			}
 			else
@@ -286,7 +286,7 @@ namespace Sdl.Community.StudioCleanupTool.ViewModel
 					controller.SetIndeterminate();
 
 					//load saved folders path
-					var foldersToRestore = LocationsForSelectedVersions();//_persistenceSettings.Load(true);
+					var foldersToRestore = LocationsForSelectedVersions();
 					await Remove.RestoreBackupFiles(foldersToRestore);
 
 					UnselectGrids();

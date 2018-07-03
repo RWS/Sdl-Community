@@ -10,7 +10,8 @@
         ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen"
         BorderThickness="0"
         FontSize="14"
-        GlowBrush="MediumSeaGreen"
+        GlowBrush="#3EA691"
+         WindowTitleBrush="#3EA691"
 		FontFamily="Calibri"
 		Icon="icon.ico"
         Title="SDL Freshstart" Height="700" Width="1300" >
