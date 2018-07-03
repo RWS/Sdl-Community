@@ -296,11 +296,6 @@ namespace Sdl.Community.StudioMigrationUtility
                         installedPluginsListView.Items[0].Font = new Font(installedPluginsListView.Items[0].Font, FontStyle.Bold);
                     }
                 }
-<<<<<<< HEAD
-             
-=======
-                
->>>>>>> studio_2015
             }
             #endregion
         }
