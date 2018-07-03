@@ -258,7 +258,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (e.PropertyName.Equals("IsSelected"))
 			{
-				_backgroundWorker.RunWorkerAsync(sender);
+				if (!_backgroundWorker.IsBusy)
+				{
+					_backgroundWorker.RunWorkerAsync(sender);
+				}
 			}
 
 		}
