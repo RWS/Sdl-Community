@@ -28,7 +28,8 @@ To get started with this repository, install the following tools:
 
 Once you have installed the tools, follow the steps below:
 
-1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path: "https://github.com/sdl/Sdl-Community.git". In destination path, select a path where you want to store the repository on your drive![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
+1. Clone this repository (more details [here](https://help.github.com/articles/cloning-a-repository/)). In order to clone the repository using Source Tree, from menu select "Clone/New". In source path paste this path: "https://github.com/sdl/Sdl-Community.git". In destination path, select a path where you want to store the repository on your drive:
+[](https://raw.githubusercontent.com/sdl/Sdl-Community/master/cloneRepository.png)
 
 2. After the repository was cloned, navigate to the repository path you've specified when cloning the repository. Each plugin has a dedicated folder. All you need to do is to find the plugin you're looking for, enter the folder and open the solution file using Microsoft Visual Studio.
 
