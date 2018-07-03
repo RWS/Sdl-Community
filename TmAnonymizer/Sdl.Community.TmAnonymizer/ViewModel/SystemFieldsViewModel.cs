@@ -243,6 +243,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					newTm.PropertyChanged += NewTm_PropertyChanged;
 				}
 			}
+			else
+			{
+				RefreshSystemFields();
+			}
 		}
 
 		private void NewTm_PropertyChanged(object sender, PropertyChangedEventArgs e)
