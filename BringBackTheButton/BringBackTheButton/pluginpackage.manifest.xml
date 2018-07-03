@@ -4,5 +4,5 @@
   <Version>0.1.1.0</Version>
   <Description>#BringBackTheButton</Description>
   <Author>SDL Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="11.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
