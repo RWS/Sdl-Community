@@ -16,6 +16,7 @@ namespace Sdl.Community.StarTransit.UI
 	{
 		private PackageDetails _packageDetails;
 		private TranslationMemories _translationMemories;
+		private TranslationMemoriesPenaltiesWindow _translationMemoriesPenalties;
 		private FinishViewModel finishViewModel;
 		private Finish _finish;
 		private PackageModel _package;
@@ -55,7 +56,7 @@ namespace Sdl.Community.StarTransit.UI
 			if (packageDetailsViewModel.ShowWindowsMessage == null)
 			{
 				packageDetailsViewModel.ShowWindowsMessage = ShowWindowsMessage;
-			}
+			}			
 		}
 
 		private void ListViewItem_Selected(object sender, RoutedEventArgs e)

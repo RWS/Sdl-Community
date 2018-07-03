@@ -51,6 +51,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			foreach (var pair in package.LanguagePairs)
 			{
 				targetProjectFiles.Clear();
+
 				//import language pair TM if any
 				if (pair.HasTm)
 				{

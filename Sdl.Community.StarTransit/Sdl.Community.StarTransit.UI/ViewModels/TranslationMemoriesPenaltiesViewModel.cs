@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.StarTransit.Shared.Annotations;
 using Sdl.Community.StarTransit.Shared.Models;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class TranslationMemoriesPenaltiesViewModel : INotifyPropertyChanged
+	public class TranslationMemoriesPenaltiesViewModel : INotifyPropertyChanged
 	{
 		#region Private Fields
 		private PackageModel _packageModel;
@@ -20,6 +15,8 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		private string _translationMemoryName;
 		private string _translationMemoryPath;
 		private int _tmPenalty;
+		private ICommand _okCommand;
+		private ICommand _cancelCommand;
 
 		#endregion
 
@@ -144,14 +141,58 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 		}
 		#endregion
 
-		#region Events
-		public event PropertyChangedEventHandler PropertyChanged;
-
+		#region Virtual Methods
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 		}
+		#endregion
+
+		#region Commands
+		public ICommand OkCommand
+		{
+			get { return _okCommand ?? (_okCommand = new CommandHandler(OkAction, true)); }
+		}
+
+		public ICommand CancelCommand
+		{
+			get { return _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true)); }
+		}
+		#endregion
+
+		#region Actions
+		private void OkAction()
+		{
+			_packageModel.TMPenalties = new System.Collections.Generic.Dictionary<string, int>();
+
+			foreach (var tm in TranslationMemoriesPenaltiesModelList)
+			{
+				_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+			}
+			CloseWindow();
+		}
+
+		private void CancelAction()
+		{
+			CloseWindow();
+		}
+
+		private void CloseWindow()
+		{
+			var windows = Application.Current.Windows;
+			foreach (Window window in windows)
+			{
+				if (window.Title.Equals("Translation Memories Penalties"))
+				{
+					window.Close();
+				}
+			}
+		}
+		#endregion
+
+		#region Events
+		public event PropertyChangedEventHandler PropertyChanged;		
 		#endregion
 	}
 }

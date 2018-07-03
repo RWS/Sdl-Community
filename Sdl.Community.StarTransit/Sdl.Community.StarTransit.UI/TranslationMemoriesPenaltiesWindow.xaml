@@ -32,14 +32,14 @@
                 <controls:DataGridNumericUpDownColumn Header="Penalty" Width="80"
                                                       Binding="{Binding TMPenalty,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                                                       Minimum="0" 
-													  Maximum="99"/>
+													  Maximum="25"/>
             </DataGrid.Columns>
         </DataGrid>
 		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,4,0">
             <StackPanel Orientation="Horizontal">
-                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding Command}" Content="Ok"
+                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
-                <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding Command}" Content="Cancel"
+				<Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
             </StackPanel>
         </StackPanel>
