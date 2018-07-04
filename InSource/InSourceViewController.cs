@@ -149,7 +149,6 @@ namespace Sdl.Community.InSource
 	    public void CheckForProjects()
 	    {
 			var projectRequest = Persistence.Load();
-			_notificationGroup.RemoveGroup();
 		    var newProjectRequestList = new List<ProjectRequest>();
 		    if (projectRequest != null)
 		    {
