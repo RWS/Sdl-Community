@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -50,5 +51,14 @@ namespace Sdl.Community.InSource
             Controller.Contribute();
         }
     }
+	[Action("HelpAction", typeof(InSourceViewController), Name = "Help", Description = "An wiki page will be opened in browser uith user guide", Icon = "question")]
+	[ActionLayout(typeof(InSourceViewRibbonGroup), 0, DisplayType.Large)]
+	public class HelpAction : AbstractViewControllerAction<InSourceViewController>
+	{
+		protected override void Execute()
+		{
+			Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3267.insource");
+		}
+	}
 
 }
