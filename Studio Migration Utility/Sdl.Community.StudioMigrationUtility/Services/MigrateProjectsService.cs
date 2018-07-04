@@ -19,7 +19,6 @@ namespace Sdl.Community.StudioMigrationUtility.Services
         {
             _sourceStudioVersion = sourceVersion;
             _destinationStudioVersion = destinationVersion;
-            
         }
 
         public ProjectsController GetProjectsController()
@@ -39,60 +38,68 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
             var projectCustomerItem = XName.Get("Customer");
 
-
-
             foreach (var projectTagItems in projectsXml.Descendants(projectTagItem))
             {
-                var project = new Project
-                {
-                    Guid = new Guid(projectTagItems.Attribute("Guid").Value),
-                    ProjectFilePath = projectTagItems.Attribute("ProjectFilePath").Value
-                };
-                foreach (var projectInfoTagItems in projectTagItems.Descendants(projectInfoTagItem))
-                {
+	            var guidAttribute = projectTagItems.Attribute("Guid");
+	            if (guidAttribute != null)
+	            {
+		            var filePathAttribute = projectTagItems.Attribute("ProjectFilePath");
+		            if (filePathAttribute != null)
+		            {
+			            var project = new Project
+			            {
+				            Guid = new Guid(guidAttribute.Value),
+				            ProjectFilePath = filePathAttribute.Value
+			            };
+			            foreach (var projectInfoTagItems in projectTagItems.Descendants(projectInfoTagItem))
+			            {
                     
-                    if (projectInfoTagItems.Attribute("StartedAt") != null)
-                    {
-                        project.StartedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("StartedAt").Value,
-                            DateTimeFormatInfo.InvariantInfo);
-                    }
-                    else
-                    {
-                        project.StartedAt = DateTime.MinValue;
-                    }
-                    project.IsInPlace = Convert.ToBoolean(projectInfoTagItems.Attribute("IsInPlace").Value);
-                    project.IsImported = Convert.ToBoolean(projectInfoTagItems.Attribute("IsImported").Value);
-                    project.CreatedBy = projectInfoTagItems.Attribute("CreatedBy").Value;
-                    if (projectInfoTagItems.Attribute("Description") != null)
-                    {
-                        project.Description = projectInfoTagItems.Attribute("Description").Value;
-                    }
-                    project.CreatedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("CreatedAt").Value);
-                    project.Name = projectInfoTagItems.Attribute("Name").Value;
-                    project.Status = projectInfoTagItems.Attribute("Status").Value;
-
-
+				            if (projectInfoTagItems.Attribute("StartedAt") != null)
+				            {
+					            var startedAtAttribute = projectInfoTagItems.Attribute("StartedAt");
+					            if (startedAtAttribute != null)
+					            {
+									project.StartedAt = Convert.ToDateTime(startedAtAttribute.Value,
+										DateTimeFormatInfo.InvariantInfo);
+								}
+				            }
+				            else
+				            {
+					            project.StartedAt = DateTime.MinValue;
+				            }
+				            project.IsInPlace = Convert.ToBoolean(projectInfoTagItems.Attribute("IsInPlace").Value);
+				            project.IsImported = Convert.ToBoolean(projectInfoTagItems.Attribute("IsImported").Value);
+				            project.CreatedBy = projectInfoTagItems.Attribute("CreatedBy").Value;
+				            if (projectInfoTagItems.Attribute("Description") != null)
+				            {
+					            project.Description = projectInfoTagItems.Attribute("Description").Value;
+				            }
+				            project.CreatedAt = Convert.ToDateTime(projectInfoTagItems.Attribute("CreatedAt").Value);
+				            project.Name = projectInfoTagItems.Attribute("Name").Value;
+				            project.Status = projectInfoTagItems.Attribute("Status").Value;
 
                     
-                    //Modification ID: PH_2015-07-05T21:12:00
-                    //Date: 2015-07-05
-                    //Added by: Patrick Hartnett
-                    //Begin Edit (PH_2015-07-05T21:12:00)
-                    if (projectInfoTagItems.HasElements)
-                    {
-                        var customerElement = projectInfoTagItems.Element(projectCustomerItem);
-                        if (customerElement != null)
-                        {
-                            Guid c_Guid = new Guid(customerElement.Attribute("Guid").Value);
-                            string c_Name = customerElement.Attribute("Name").Value;
-                            string c_Email = customerElement.Attribute("Email").Value;
-                            project.Customer = new Customer(c_Guid, c_Name, c_Email);
-                        }
-                    }
-                    //End Edit (PH_2015-07-05T21:12:00)
+				            //Modification ID: PH_2015-07-05T21:12:00
+				            //Date: 2015-07-05
+				            //Added by: Patrick Hartnett
+				            //Begin Edit (PH_2015-07-05T21:12:00)
+				            if (projectInfoTagItems.HasElements)
+				            {
+					            var customerElement = projectInfoTagItems.Element(projectCustomerItem);
+					            if (customerElement != null)
+					            {
+						            var customerGuid = new Guid(customerElement.Attribute("Guid").Value);
+						            var customerName = customerElement.Attribute("Name").Value;
+						            var customerEmail = customerElement.Attribute("Email").Value;
+						            project.Customer = new Customer(customerGuid, customerName, customerEmail);
+					            }
+				            }
+				            //End Edit (PH_2015-07-05T21:12:00)
 
-                }
-                projects.Add(project);
+			            }
+			            projects.Add(project);
+		            }
+	            }
             }
 
             var destinationProjectsXml = XElement.Load(destinationProjectsPath);
@@ -106,7 +113,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             
         }
 
-        public String GetProjectsPath(StudioVersion studioVersion)
+        public string GetProjectsPath(StudioVersion studioVersion)
         {
              var myDocumnetsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
@@ -142,7 +149,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 var workFlowElement = projectsXml.Element("Workflow");
                 
                 projectsElement = new XElement("Projects");
-                workFlowElement.AddAfterSelf(projectsElement);
+	            workFlowElement?.AddAfterSelf(projectsElement);
             }
 
 
@@ -190,14 +197,11 @@ namespace Sdl.Community.StudioMigrationUtility.Services
                 //End Edit (PH_2015-07-05T31:12:00)
 
                 var projectItem = new XElement("ProjectListItem", new XAttribute("Guid", workingProject.Guid),
-                    new XAttribute("ProjectFilePath", workingProject.ProjectFilePath), projectInfoItem
-                    );
+                    new XAttribute("ProjectFilePath", workingProject.ProjectFilePath), projectInfoItem);
                 projectsElement.Add(projectItem);
-             
             }
          
             projectsXml.Save(destinationProjectPath);
-     
             reportProgress(95);
         }
 
@@ -207,14 +211,16 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             var sourceProjectsPath = GetProjectsPath(_sourceStudioVersion);
             var sourceProjectsXml = XElement.Load(sourceProjectsPath);
 
-            if (!sourceProjectsXml.Element("Customers").HasElements) return;
+	        var xElement = sourceProjectsXml.Element("Customers");
+	        if (xElement != null && !xElement.HasElements) return;
 
-            foreach (var sourceDescendant in from sourceDescendant in sourceProjectsXml.Descendants("Customer")
+	        var element = destinationProjectsXml.Element("Customers");
+	        foreach (var sourceDescendant in from sourceDescendant in sourceProjectsXml.Descendants("Customer")
                 let sourcePath = sourceDescendant.Attribute("Guid")
                 where
-                    destinationProjectsXml.Element("Customers")
-                        .Descendants("Customer")
-                        .All(x => x.Attribute("Guid").Value != sourcePath.Value)
+                    element != null && element
+	                    .Descendants("Customer")
+	                    .All(x => x.Attribute("Guid").Value != sourcePath.Value)
                 select sourceDescendant)
             {
                 //destinationProjectsXml.Element("Customers").Add(sourceDescendant);
@@ -241,21 +247,23 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             var type = currentProject.GetType();
 
             var internalProjectField = type.GetField("_project", BindingFlags.Instance | BindingFlags.NonPublic);
-            dynamic internalDynamicaProject = internalProjectField.GetValue(currentProject);
-            dynamic customersList = internalDynamicaProject.ProjectServer.Customers;
-            var existCustomer = false;
-            foreach (var customer in customersList)
-            {
-                if (customer.Name == name)
-                {
-                    existCustomer = true;
-                }
-            }
-            if (existCustomer==false)
-            {
-                internalDynamicaProject.ProjectServer.AddCustomer(name, email);
-            }
-            
+	        if (internalProjectField != null)
+	        {
+		        dynamic internalDynamicaProject = internalProjectField.GetValue(currentProject);
+		        dynamic customersList = internalDynamicaProject.ProjectServer.Customers;
+		        var existCustomer = false;
+		        foreach (var customer in customersList)
+		        {
+			        if (customer.Name == name)
+			        {
+				        existCustomer = true;
+			        }
+		        }
+		        if (existCustomer==false)
+		        {
+			        internalDynamicaProject.ProjectServer.AddCustomer(name, email);
+		        }
+	        }
         }
 
         private void MoveProjects(IEnumerable<Project> projectToBeMoved, Action<int> reportProgress)
@@ -293,16 +301,16 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             var dir = new DirectoryInfo(sourceDirectory);
             var dirs = dir.GetDirectories();
 
-            FileInfo[] files = dir.GetFiles();
-            foreach (FileInfo file in files)
+            var files = dir.GetFiles();
+            foreach (var file in files)
             {
-                string temppath = Path.Combine(destinationDirectory, file.Name);
+                var temppath = Path.Combine(destinationDirectory, file.Name);
                 file.CopyTo(temppath, false);
             }
 
-            foreach (DirectoryInfo subdir in dirs)
+            foreach (var subdir in dirs)
             {
-                string temppath = Path.Combine(destinationDirectory, subdir.Name);
+                var temppath = Path.Combine(destinationDirectory, subdir.Name);
                 DirectoryCopy(subdir.FullName, temppath);
             }
         }
@@ -317,20 +325,30 @@ namespace Sdl.Community.StudioMigrationUtility.Services
 
             foreach (var sourceDescendant in sourceTmXml.Descendants("TranslationMemory"))
             {
-                var sourcePath = sourceDescendant.Attribute("path").Value;
-                if (destinationTmXml.Descendants("TranslationMemory").All(x => x.Attribute("path").Value != sourcePath))
-                {
-                    destinationTmXml.Element("TranslationMemories").Add(sourceDescendant);
-                }
+	            var pathAttribute = sourceDescendant.Attribute("path");
+	            if (pathAttribute != null)
+	            {
+		            var sourcePath = pathAttribute.Value;
+		            if (destinationTmXml.Descendants("TranslationMemory").All(x => x.Attribute("path").Value != sourcePath))
+		            {
+			            var tmElement = destinationTmXml.Element("TranslationMemories");
+			            tmElement?.Add(sourceDescendant);
+		            }
+	            }
             }
 
             foreach (var sourceDescendant in sourceTmXml.Descendants("LanguageResources"))
             {
-                var sourcePath = sourceDescendant.Attribute("path").Value;
-                if (destinationTmXml.Descendants("LanguageResources").All(x => x.Attribute("path").Value != sourcePath))
-                {
-                    destinationTmXml.Element("LanguageResourceGroups").Add(sourceDescendant);
-                }
+	            var pathAttribute = sourceDescendant.Attribute("path");
+	            if (pathAttribute != null)
+	            {
+		            var sourcePath = pathAttribute.Value;
+		            if (destinationTmXml.Descendants("LanguageResources").All(x => x.Attribute("path").Value != sourcePath))
+		            {
+			            var languagteResourcesElement = destinationTmXml.Element("LanguageResourceGroups");
+			            languagteResourcesElement?.Add(sourceDescendant);
+		            }
+	            }
             }
 
             destinationTmXml.Save(destinationVersionTmPath);

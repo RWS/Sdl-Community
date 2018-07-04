@@ -23,7 +23,7 @@ namespace Sdl.Community.StudioMigrationUtility
         private readonly StudioVersionService _studioVersionService;
         private BackgroundWorker _bw;
         private List<Project> _projects=new List<Project>();
-        private List<PluginInfo> _pluginsToBeMigrated = new List<PluginInfo>(); 
+        private List<Model.PluginInfo> _pluginsToBeMigrated = new List<Model.PluginInfo>(); 
         public MigrateUtility(StudioVersionService studioVersionService)
         {
             InitializeComponent();
@@ -67,7 +67,7 @@ namespace Sdl.Community.StudioMigrationUtility
 
             pluginsColumn.AspectGetter = delegate(object rowObject)
             {
-                var plugin = (PluginInfo) rowObject;
+                var plugin = (Model.PluginInfo) rowObject;
                 return plugin.PluginName;
             };
             _bw = new BackgroundWorker { WorkerSupportsCancellation = true, WorkerReportsProgress = true };
@@ -259,7 +259,7 @@ namespace Sdl.Community.StudioMigrationUtility
                     foreach (var plugin in pluginsList)
                     {
                         var name = method.Invoke(instance, new object[] { plugin.Path });
-                        var pluginToBeMoved = new PluginInfo
+                        var pluginToBeMoved = new Model.PluginInfo
                         {
                             Path = plugin.Path,
                             PluginName = name as string
@@ -273,7 +273,7 @@ namespace Sdl.Community.StudioMigrationUtility
                     }
                 }
 
-                var selectAllPlugins = new PluginInfo
+                var selectAllPlugins = new Model.PluginInfo
                 {
                     PluginName = "Select all plugins"
                 };
@@ -320,14 +320,14 @@ namespace Sdl.Community.StudioMigrationUtility
                 ((OLVListItem)plugin).Checked = check;
             }
         }
-        private List<PluginInfo> GetInstallledPluginsForSpecificStudioVersion(StudioVersion studioVersion)
+        private List<Model.PluginInfo> GetInstallledPluginsForSpecificStudioVersion(StudioVersion studioVersion)
         {
             var pluginService = new PluginService();
 
-            var pluginsList = new List<PluginInfo>();
+            var pluginsList = new List<Model.PluginInfo>();
             foreach (var path in pluginService.GetInstalledPlugins(studioVersion))
             {
-                var plugin = new PluginInfo
+                var plugin = new Model.PluginInfo
                 {
                     Path = path,
                     PluginName = Path.GetFileNameWithoutExtension(path)
@@ -422,7 +422,7 @@ namespace Sdl.Community.StudioMigrationUtility
                 SourceStudioVersion = (StudioVersion) selectedSourceStudioVersionsGeneric[0],
                 MigrateTranslationMemories = chkTranslationMemories.Checked,
                 MigrateCustomers = chkCustomers.Checked,
-                PluginsToBeMoved = selectedPluginsToBeMoved.Cast<PluginInfo>().ToList()
+                PluginsToBeMoved = selectedPluginsToBeMoved.Cast<Model.PluginInfo>().ToList()
             };
 
             _bw.RunWorkerAsync(taskArgument);
@@ -488,7 +488,7 @@ namespace Sdl.Community.StudioMigrationUtility
 
         }
 
-        private void MovePlugins(List<PluginInfo> pluginsToBeMoved,int sourceStudioVersion)
+        private void MovePlugins(List<Model.PluginInfo> pluginsToBeMoved,int sourceStudioVersion)
         {
             var selectedDestinationStudioVersionsGeneric = chkDestinationStudioVersion.CheckedObjects;
             var destinationStudioVersion = (StudioVersion)selectedDestinationStudioVersionsGeneric[0];

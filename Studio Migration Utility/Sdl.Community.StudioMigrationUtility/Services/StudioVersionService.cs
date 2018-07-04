@@ -17,7 +17,8 @@ namespace Sdl.Community.StudioMigrationUtility.Services
             {"Studio2", "Studio 2011"},
             {"Studio3", "Studio 2014"},
             {"Studio4", "Studio 2015"},
-            {"Studio5", "Studio 2017"}
+            {"Studio5", "Studio 2017"},
+			{"Studio15","Studio 2019" }
         };
         private readonly List<StudioVersion> _installedStudioVersions;
 
@@ -72,7 +73,7 @@ namespace Sdl.Community.StudioMigrationUtility.Services
         {
             var assembly = Assembly.LoadFile(string.Format(@"{0}\{1}", installLocation, "SDLTradosStudio.exe"));
             var versionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string fullVersion = versionInfo.FileVersion;
+            var fullVersion = versionInfo.FileVersion;
             return fullVersion;
         }
 

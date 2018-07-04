@@ -21,12 +21,21 @@ namespace Sdl.Community.StudioMigrationUtility
 	[ActionLayout(typeof(StudioMigrationUtilityRibbon), 20, DisplayType.Large)]
 	class StudioMigrationUtilityViewPartAction : AbstractAction
 	{
-
 		protected override void Execute()
 		{
 
 			var migrateUtility = new MigrateUtility(new StudioVersionService());
 			migrateUtility.ShowDialog();
+
+		}
+	}
+	[Action("Sdl.Community.StudioMigrationUtilityHelp", Name = "Migration Utility help", Icon = "question", Description = "An wiki page will be opened in browser uith user documentation")]
+	[ActionLayout(typeof(StudioMigrationUtilityRibbon), 250, DisplayType.Large)]
+	public class AhkHelpAction : AbstractAction
+	{
+		protected override void Execute()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3265.studio-migration-utility");
 
 		}
 	}

@@ -122,7 +122,7 @@
     <value>..\Resources\migrate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="sdl_logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\sdl-logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+    <value>..\Resources\logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MigrateProjects_projectMigrationWizzard_BeforeSwitchPages_Select_a_studio_version" xml:space="preserve">
     <value>Select a studio version</value>
