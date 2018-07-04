@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
+		WindowStartupLocation="CenterScreen"
         Title="Translation Memories Penalties" MinHeight="405" MaxHeight="405" MaxWidth="650">
     <Window.Resources>
         <ResourceDictionary>

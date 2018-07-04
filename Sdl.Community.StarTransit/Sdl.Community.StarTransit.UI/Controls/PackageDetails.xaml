@@ -3,9 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Sdl.Community.StarTransit.UI.Controls"
              xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:viewModels="clr-namespace:Sdl.Community.StarTransit.UI.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
 	<UserControl.Resources>
@@ -99,10 +97,10 @@
         </Grid>
 		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"
 				  SelectedValue="{Binding SelectedCustomer }" 
-				  DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10" Foreground="Black"/>
+				  DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
 		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" 
 				  SelectedValue="{Binding Path=Template, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
-				  Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2" Foreground="Black"/>      
+				  Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"/>      
         <Grid Grid.Column="1" Grid.Row="6">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
