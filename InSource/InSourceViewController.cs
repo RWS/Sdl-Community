@@ -4,8 +4,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
+using Sdl.Community.InSource.Notifications;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Notifications;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -33,17 +36,19 @@ namespace Sdl.Community.InSource
         private readonly List<bool> _hasFiles; 
         public static Persistence Persistence = new Persistence();
         private int _percentComplete;
-        #endregion private fields
+	    private ICommand _clearCommand;
+	    private readonly NotificationsGroup _notificationGroup;
+		#endregion private fields
 
-        public event EventHandler ProjectRequestsChanged;
+		public event EventHandler ProjectRequestsChanged;
 
         public InSourceViewController()
         {
             _projectRequests = new List<ProjectRequest>();
             _hasTemplateList = new List<bool>();
             _hasFiles = new List<bool>();
-            
-        }
+			_notificationGroup = new NotificationsGroup(Guid.NewGuid());
+		}
 
         protected override void Initialize(IViewContext context)
         {
@@ -141,31 +146,54 @@ namespace Sdl.Community.InSource
             set;
         }
 
-        public void CheckForProjects()
-        {
-             var projectRequest = Persistence.Load();
-            var newProjectRequestList = new List<ProjectRequest>(); 
-            if (projectRequest != null)
-            {
+	    public void CheckForProjects()
+	    {
+			var projectRequest = Persistence.Load();
+			_notificationGroup.RemoveGroup();
+		    var newProjectRequestList = new List<ProjectRequest>();
+		    if (projectRequest != null)
+		    {
+			    var watchFoldersList = GetWatchFolders(projectRequest);
+			    foreach (var warchFolder in watchFoldersList)
+			    {
+				    newProjectRequestList.AddRange(GetNewDirectories(warchFolder, projectRequest));
+				}
+			    Persistence.SaveProjectRequestList(newProjectRequestList);
+			    ProjectRequests = newProjectRequestList;
+			    var notificationsList = new List<Notification>();
 
-                var watchFoldersList=GetWatchFolders(projectRequest);
-                foreach (var warchFolder in watchFoldersList)
-                {
-                    newProjectRequestList.AddRange( GetNewDirectories(warchFolder, projectRequest));
+				foreach (var newProjectRequest in ProjectRequests)
+			    {
+					var notification = new Notification
+					{
+						Title = newProjectRequest.Name,	
+						Details = new List<string> { "Project request path",Path.Combine(newProjectRequest.Path,newProjectRequest.Name)}
+					};
+				    newProjectRequest.NotificationId = notification.Id;
+					_clearCommand = new RelayCommand<Notification>(n =>
+				    {
+					    CreateProjectFromNotification(notification);
+				    });
+				    notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
+					notificationsList.Add(notification);
+				}
+				_notificationGroup.Add(notificationsList);
+				_notificationGroup.Publish();
+		    }
 
-                  
-                    
-                }
+	    }
+	    private void CreateProjectFromNotification(object notificationObject)
+	    {
+		    var notification = notificationObject as Notification;
+		    if (notification != null)
+		    {
+			    var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
+			    CreateProjectsFromNotifications(project);
+				_notificationGroup.Remove(notification.Id);
+		    }
+	    }
 
-                Persistence.SaveProjectRequestList(newProjectRequestList);
-                ProjectRequests = newProjectRequestList;
-            }
-            
-
-
-        }
-
-        private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
+		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
         {
             var watchFoldersPath = projectRequest.GroupBy(x => x.Path).Select(y => y.First());;
             var foldersPath = new List<string>();
@@ -249,6 +277,35 @@ namespace Sdl.Community.InSource
             return projectRequest;
         }
 
+	    public void CreateProjectsFromNotifications(ProjectRequest projectFromNotifications)
+	    {
+			ProjectCreator creator;
+			var worker = new BackgroundWorker
+			{
+				WorkerReportsProgress = true
+			};
+		    worker.DoWork += (sender, e) =>
+		    {
+			    creator = new ProjectCreator(projectFromNotifications, projectFromNotifications.ProjectTemplate);
+			    creator.Execute();
+		    };
+
+			    worker.RunWorkerCompleted += (sender, e) =>
+			    {
+
+				    if (e.Error != null)
+				    {
+					    MessageBox.Show(e.Error.ToString());
+				    }
+				    else
+				    {
+					    InSource.Instance.RequestAccepted(projectFromNotifications);
+						MessageBox.Show("Project "+ projectFromNotifications.Name +" was created");
+					}
+			    };
+			    worker.RunWorkerAsync();
+		}
+
         public void CreateProjects()
         {
             _control.Value.ClearMessages();
@@ -322,17 +379,17 @@ namespace Sdl.Community.InSource
                                 }
                                 else
                                 {
-                                    foreach (
-                                        Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
-                                    {
-                                        // accept the request
-                                        InSource.Instance.RequestAccepted(request.Item1);
+	                                foreach (
+		                                Tuple<ProjectRequest, FileBasedProject> request in creator.SuccessfulRequests)
+	                                {
+		                                // accept the request
+		                                InSource.Instance.RequestAccepted(request.Item1);
 
-                                        // remove the request from the list of requests
-                                        ProjectRequests.Remove(request.Item1);
+		                                // remove the request from the list of requests
+		                                ProjectRequests.Remove(request.Item1);
 
-                                        OnProjectRequestsChanged();
-                                    }
+		                                OnProjectRequestsChanged();
+	                                }
                                 }
                             };
                             worker.RunWorkerAsync();

@@ -43,8 +43,6 @@ namespace Sdl.Community.InSource
          
                 }
             }
-            
-           
         }
 
         public static List<ProjectRequest>  GetIncomingRequestsFolder()
@@ -66,7 +64,6 @@ namespace Sdl.Community.InSource
 
         internal void RequestAccepted(ProjectRequest request)
         {
-            
             _requestPath = Path.Combine(request.Path, request.Name);
 
             var delete = Persistence.LoadRequest().DeleteFolders;
@@ -107,8 +104,6 @@ namespace Sdl.Community.InSource
                         {
                             Directory.Delete(_requestPath);
                         }
-
-
                     }
                 }
                 catch (Exception exception)
@@ -128,7 +123,6 @@ namespace Sdl.Community.InSource
 	                throw ex;
                 }
             }
-
             Persistence.Update(request);
         }
 
@@ -171,7 +165,6 @@ namespace Sdl.Community.InSource
                     CheckForSubfolders(subdirectory, path);
                 }
             }
-            
         }
         private void MoveFilesToAcceptedFolder(string[] files,string acceptedFolderPath)
         {

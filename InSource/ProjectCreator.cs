@@ -15,6 +15,7 @@ namespace Sdl.Community.InSource
         public event ProgressChangedEventHandler ProgressChanged;
         public event EventHandler<ProjectMessageEventArgs> MessageReported;
         private double _currentProgress;
+	    private ProjectRequest _projectRequest;
 
         public ProjectCreator(List<ProjectRequest> requests, ProjectTemplateInfo projectTemplate)
         {
@@ -23,6 +24,11 @@ namespace Sdl.Community.InSource
             SuccessfulRequests = new List<Tuple<ProjectRequest, FileBasedProject>>();
         }
 
+	    public ProjectCreator(ProjectRequest projectRequest, ProjectTemplateInfo projectTemplate)
+	    {
+		    _projectRequest = projectRequest;
+		    ProjectTemplate = projectTemplate;
+	    }
         List<ProjectRequest> Requests
         {
             get; set;
@@ -43,12 +49,20 @@ namespace Sdl.Community.InSource
         public void Execute()
         {
             _currentProgress = 0;
-            foreach (ProjectRequest request in Requests)
-            {
-                CreateProject(request);
-                _currentProgress += 100.0 / Requests.Count;
-                OnProgressChanged(_currentProgress);
-            }
+	        if (Requests!=null)
+	        {
+		        foreach (ProjectRequest request in Requests)
+		        {
+			        CreateProject(request);
+			        _currentProgress += 100.0 / Requests.Count;
+			        OnProgressChanged(_currentProgress);
+		        }
+	        }
+	        else
+	        {
+		        CreateProject(_projectRequest);
+	        }
+            
             OnProgressChanged(100);
         }
 
@@ -80,7 +94,10 @@ namespace Sdl.Community.InSource
                     (sender, e)
                         =>
                     {
-                        OnProgressChanged(_currentProgress + (double) e.PercentComplete/Requests.Count);
+	                    if (Requests != null)
+	                    {
+							OnProgressChanged(_currentProgress + (double)e.PercentComplete / Requests.Count);
+						}
                     }
                     , (sender, e)
                         =>

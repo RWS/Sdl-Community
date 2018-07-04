@@ -160,7 +160,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Models\Request.cs" />
-    <Compile Include="Notifications\NotificationGroup.cs" />
+    <Compile Include="Notifications\RelayCommand.cs" />
     <Compile Include="Persistence.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>

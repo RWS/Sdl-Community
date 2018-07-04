@@ -1,4 +1,5 @@
-﻿using Sdl.ProjectAutomation.Core;
+﻿using System;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.InSource
 {
@@ -19,6 +20,8 @@ namespace Sdl.Community.InSource
         {
             return Name;
         }
+
+	    public Guid NotificationId { get; set; }	
 
         public string Path { get; set; }
 
