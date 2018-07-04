@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
-using Sdl.Community.InSource.Insights;
 using Sdl.Community.InSource.Models;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
@@ -211,7 +210,7 @@ namespace Sdl.Community.InSource
             }
             catch (Exception exception)
             {
-                TelemetryService.Instance.AddException(exception);
+	            throw exception;
             }
         }
 

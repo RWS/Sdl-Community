@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Sdl.Community.InSource.Insights;
+
 
 namespace Sdl.Community.InSource
 {
@@ -113,7 +113,7 @@ namespace Sdl.Community.InSource
                 }
                 catch (Exception exception)
                 {
-                    TelemetryService.Instance.AddException(exception);
+	                throw exception;
                 }
             }
             else
@@ -125,7 +125,7 @@ namespace Sdl.Community.InSource
                 catch (Exception ex)
                 {
 
-                    TelemetryService.Instance.AddException(ex);
+	                throw ex;
                 }
             }
 
@@ -160,7 +160,7 @@ namespace Sdl.Community.InSource
                 }
                 catch (Exception e)
                 {
-                    TelemetryService.Instance.AddException(e);
+	                throw e;
                 }
                 
             }
@@ -185,7 +185,7 @@ namespace Sdl.Community.InSource
                 }
                 catch (Exception e)
                 {
-                    TelemetryService.Instance.AddException(e);
+	                throw e;
                 }
             }
         }

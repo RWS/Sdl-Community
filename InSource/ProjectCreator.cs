@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Xml.Linq;
-using Sdl.Community.InSource.Insights;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 
@@ -50,7 +49,6 @@ namespace Sdl.Community.InSource
                 _currentProgress += 100.0 / Requests.Count;
                 OnProgressChanged(_currentProgress);
             }
-            TelemetryService.Instance.AddMetric("Created projects",Requests.Count);
             OnProgressChanged(100);
         }
 
@@ -95,12 +93,12 @@ namespace Sdl.Community.InSource
                 if (taskSequence.Status == TaskStatus.Completed)
                 {
                     SuccessfulRequests.Add(Tuple.Create(request, project));
-                    OnMessageReported(project, String.Format("Project {0} created successfully.", request.Name));
+                    OnMessageReported(project, string.Format("Project {0} created successfully.", request.Name));
                     return project;
                 }
                 else
                 {
-                    OnMessageReported(project, String.Format("Project {0} creation failed.", request.Name));
+                    OnMessageReported(project, string.Format("Project {0} creation failed.", request.Name));
                     return null;
                 }
 
@@ -109,7 +107,6 @@ namespace Sdl.Community.InSource
             {
                 MessageBox.Show(
                     @"Please go to File -> Setup -> Project templates -> Select a template -> Edit -> Default Task Sequence -> Ok after that run again Content connector");
-                TelemetryService.Instance.AddException(ex);
             }
 
             return project;

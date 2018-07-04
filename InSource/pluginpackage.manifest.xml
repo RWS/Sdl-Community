@@ -1,18 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>InSource!</PlugInName>
-  <Version>2.0.2.0</Version>
+  <Version>2.3</Version>
   <Description>Supports watch folders for the automatic creation of Projects.</Description>
   <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
   <Include>
     <File>Newtonsoft.Json.dll</File>
     <File>ObjectListView.dll</File>
-    <File>Microsoft.AI.Agent.Intercept.dll</File>
-    <File>Microsoft.AI.DependencyCollector.dll</File>
-    <File>Microsoft.AI.PerfCounterCollector.dll</File>
-    <File>Microsoft.AI.ServerTelemetryChannel.dll</File>
-    <File>Microsoft.AI.WindowsServer.dll</File>
-    <File>Microsoft.ApplicationInsights.dll</File>
     </Include>
 </PluginPackage>
