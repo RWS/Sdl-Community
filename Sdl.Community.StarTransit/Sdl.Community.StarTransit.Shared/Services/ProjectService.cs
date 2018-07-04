@@ -55,12 +55,16 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				// which are found in pair.StarTranslationMemoryMetadatas
 				foreach (var starTMMetadata in pair.StarTranslationMemoryMetadatas)
 				{
-					if(package.TMPenalties.Any(t=>t.Key.Equals(starTMMetadata.TargetFile)))
+					if(package.TMPenalties != null)
 					{
-						starTMMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTMMetadata.TargetFile)).Value;
-						penaltiesTmsList.Add(starTMMetadata);
+						if (package.TMPenalties.Any(t => t.Key.Equals(starTMMetadata.TargetFile)))
+						{
+							starTMMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTMMetadata.TargetFile)).Value;
+							penaltiesTmsList.Add(starTMMetadata);
+						}
 					}
 				}
+
 				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
 				foreach (var item in penaltiesTmsList)
 				{
@@ -96,14 +100,17 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					// (the name of the new TM will be the same with the one from StarTransit package)
 					foreach(var item in penaltiesTmsList)
 					{
-						var tmWithPenalty = TMCreator.CreateTM(
-							Path.GetDirectoryName(newProject.FilePath), 
-							pair.SourceLanguage, 
+						var tmWithPenaltyImporter = new TransitTmImporter(
+							Path.GetDirectoryName(newProject.FilePath),
+							pair.SourceLanguage,
 							pair.TargetLanguage,
-							Path.GetFileName(item.TargetFile));
+							Path.GetFileName(item.TargetFile),
+							fileTypeManager);
 
+						tmWithPenaltyImporter.ImportStarTransitTm(item.TargetFile);
+						
 						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
-							new TranslationProviderReference(tmWithPenalty.FilePath),
+							new TranslationProviderReference(tmWithPenaltyImporter.TMFilePath),
 							true,
 							true,
 							true,
