@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -17,16 +15,16 @@ namespace VariablesManager
         private string _selectedTm;
         private string _selectedLrt;
 
-        public String SelectedTM
+        public string SelectedTm
         {
-            get { return _selectedTm.Trim(); }
-            set { _selectedTm = value; }
+            get => _selectedTm.Trim();
+	        set => _selectedTm = value;
         }
 
-        public String SelectedLRT
+        public string SelectedLrt
         {
-            get { return _selectedLrt.Trim(); }
-            set { _selectedLrt = value; }
+            get => _selectedLrt.Trim();
+	        set => _selectedLrt = value;
         }
 
         public Form1()
@@ -36,10 +34,10 @@ namespace VariablesManager
 
         private void btnBrowseTM_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "Translation memory (*.sdltm)|*.sdltm";
+            openFileDialog.Filter = @"Translation memory (*.sdltm)|*.sdltm";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                SelectedTM = openFileDialog.FileName;
+                SelectedTm = openFileDialog.FileName;
                 txtTM.Text = Path.GetFileName(openFileDialog.FileName);
             }
 
@@ -47,26 +45,25 @@ namespace VariablesManager
 
         private void btnBrowseLRT_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "Language Resource Template (*.resource)|*.resource";
+            openFileDialog.Filter = @"Language Resource Template (*.resource)|*.resource";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                SelectedLRT = openFileDialog.FileName;
+                SelectedLrt = openFileDialog.FileName;
                 txtLRT.Text = Path.GetFileName(openFileDialog.FileName);
             }
         }
 
         private void btnImportFromFile_Click(object sender, EventArgs e)
         {
-            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.Filter = @"Text files (*.txt)|*.txt|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    using (StreamReader sr = new StreamReader(openFileDialog.FileName))
+                    using (var sr = new StreamReader(openFileDialog.FileName))
                     {
                         txtVariables.Text = sr.ReadToEnd();
                     }
-
                 }
                 catch
                 {
@@ -76,14 +73,14 @@ namespace VariablesManager
 
         private void btnExportToFile_Click(object sender, EventArgs e)
         {
-            saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog.Filter = @"Text files (*.txt)|*.txt|All files (*.*)|*.*";
             saveFileDialog.DefaultExt = "txt";
             saveFileDialog.AddExtension = true;
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    using (StreamWriter sw = new StreamWriter(saveFileDialog.FileName, false))
+                    using (var sw = new StreamWriter(saveFileDialog.FileName, false))
                     {
                         sw.Write(txtVariables.Text);
                     }
@@ -93,38 +90,44 @@ namespace VariablesManager
                 }
             }
 
-            MessageBox.Show("The variables list was exported to the selected file.");
+            MessageBox.Show(@"The variables list was exported to the selected file.");
         }
 
         private void btnFetchList_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(txtTM.Text))
-                FetchFromTM();
-            if (!String.IsNullOrEmpty(txtLRT.Text))
-                FetchFromLRT();
+	        if (!string.IsNullOrEmpty(txtTM.Text))
+	        {
+				FetchFromTm();
+			}
+                
+	        if (!string.IsNullOrEmpty(txtLRT.Text))
+	        {
+				FetchFromLrt();
+			}
+                
         }
 
-        private void FetchFromLRT()
+        private void FetchFromLrt()
         {
-            if (String.IsNullOrEmpty(SelectedLRT))
+            if (string.IsNullOrEmpty(SelectedLrt))
                 return;
 
-            String vars = GetVariablesAsTextFromLRT();
-            if (String.IsNullOrEmpty(vars))
+            var vars = GetVariablesAsTextFromLrt();
+            if (string.IsNullOrEmpty(vars))
                 return;
 
-            if (!String.IsNullOrEmpty(txtVariables.Text) &&
+            if (!string.IsNullOrEmpty(txtVariables.Text) &&
                               txtVariables.Text[txtVariables.Text.Length - 1] != '\n')
                 txtVariables.Text += "\r\n";
             txtVariables.Text += vars;
         }
 
-        private String GetVariablesAsTextFromLRT()
+        private string GetVariablesAsTextFromLrt()
         {
             try
             {
-                XmlDocument xFinalDoc = new XmlDocument();
-                xFinalDoc.Load(SelectedLRT);
+                var xFinalDoc = new XmlDocument();
+                xFinalDoc.Load(SelectedLrt);
                 XmlNodeList languageResources = xFinalDoc.DocumentElement.GetElementsByTagName("LanguageResource");
                 if (languageResources.Count > 0)
                 {
@@ -136,8 +139,8 @@ namespace VariablesManager
                             IEnumerable<XmlText> textElements = languageResource.ChildNodes.OfType<XmlText>();
                             if (textElements.Any())
                             {
-                                XmlText textElement = textElements.FirstOrDefault();
-                                String base64Vars = textElement.Value;
+                                var textElement = textElements.FirstOrDefault();
+                                var base64Vars = textElement.Value;
                                 return Encoding.UTF8.GetString(Convert.FromBase64String(base64Vars));
                             }
                         }
@@ -150,42 +153,41 @@ namespace VariablesManager
             return string.Empty;
         }
 
-        private void FetchFromTM()
+        private void FetchFromTm()
         {
-            if (String.IsNullOrEmpty(txtTM.Text) || String.IsNullOrEmpty(SelectedTM))
+            if (string.IsNullOrEmpty(txtTM.Text) || string.IsNullOrEmpty(SelectedTm))
                 return;
 
             int count = 0;
-            String vars = GetVariablesAsTextFromTM(out count);
-            if (String.IsNullOrEmpty(vars))
+            var vars = GetVariablesAsTextFromTm(out count);
+            if (string.IsNullOrEmpty(vars))
                 return;
 
-            if (!String.IsNullOrEmpty(txtVariables.Text) && txtVariables.Text[txtVariables.Text.Length - 1] != '\n')
+            if (!string.IsNullOrEmpty(txtVariables.Text) && txtVariables.Text[txtVariables.Text.Length - 1] != '\n')
                 txtVariables.Text += "\r\n";
             txtVariables.Text += vars;
         }
 
-        private string GetVariablesAsTextFromTM(out int count)
+        private string GetVariablesAsTextFromTm(out int count)
         {
             count = 0;
             try
             {
                 SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
-                sb.DataSource = SelectedTM;
+                sb.DataSource = SelectedTm;
                 sb.Version = 3;
                 sb.JournalMode = SQLiteJournalModeEnum.Off;
                 using (var connection = new SQLiteConnection(sb.ConnectionString, true))
                 using (var command = new SQLiteCommand(connection))
                 {
                     connection.Open();
-
                     command.CommandText = "SELECT data FROM resources where type = 1";
                     using (var reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
                             count++;
-                            byte[] buffer = GetBytes(reader);
+                           var buffer = GetBytes(reader);
                             return Encoding.UTF8.GetString(buffer);
                         }
                     }
@@ -196,13 +198,13 @@ namespace VariablesManager
             {
             }
 
-            return String.Empty;
+            return string.Empty;
         }
 
         static byte[] GetBytes(SQLiteDataReader reader)
         {
             const int CHUNK_SIZE = 2 * 1024;
-            byte[] buffer = new byte[CHUNK_SIZE];
+            var buffer = new byte[CHUNK_SIZE];
             long bytesRead;
             long fieldOffset = 0;
             using (MemoryStream stream = new MemoryStream())
@@ -218,33 +220,33 @@ namespace VariablesManager
 
         private void btnAddToTMorLRT_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(txtTM.Text))
-                AddToTM();
-            if (!String.IsNullOrEmpty(txtLRT.Text))
-                AddToLRT();
+            if (!string.IsNullOrEmpty(txtTM.Text))
+                AddToTm();
+            if (!string.IsNullOrEmpty(txtLRT.Text))
+                AddToLrt();
         }
 
-        private void AddToLRT()
+        private void AddToLrt()
         {
-            if (String.IsNullOrEmpty(SelectedLRT) || String.IsNullOrEmpty(txtVariables.Text))
+            if (string.IsNullOrEmpty(SelectedLrt) || string.IsNullOrEmpty(txtVariables.Text))
                 return;
 
-            String vars = GetVariablesAsTextFromLRT() + txtVariables.Text;
-            if (!String.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
+            var vars = GetVariablesAsTextFromLrt() + txtVariables.Text;
+            if (!string.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
                 vars += "\r\n";
 
-            String base64Vars = Convert.ToBase64String(Encoding.UTF8.GetBytes(vars));
-            SetVariablesInLRT(base64Vars);
+            var base64Vars = Convert.ToBase64String(Encoding.UTF8.GetBytes(vars));
+            SetVariablesInLrt(base64Vars);
 
-            MessageBox.Show("The variables list was add to the selected Language Resource Template.");
+            MessageBox.Show(@"The variables list was add to the selected Language Resource Template.");
         }
 
-        private void SetVariablesInLRT(String base64Vars)
+        private void SetVariablesInLrt(string base64Vars)
         {
             try
             {
-                XmlDocument xFinalDoc = new XmlDocument();
-                xFinalDoc.Load(SelectedLRT);
+                var xFinalDoc = new XmlDocument();
+                xFinalDoc.Load(SelectedLrt);
                 XmlNodeList languageResources = xFinalDoc.DocumentElement.GetElementsByTagName("LanguageResource");
                 if (languageResources.Count > 0)
                 {
@@ -258,7 +260,7 @@ namespace VariablesManager
                     }
                 }
 
-                using (var writer = new XmlTextWriter(SelectedLRT, null))
+                using (var writer = new XmlTextWriter(SelectedLrt, null))
                 {
                     writer.Formatting = Formatting.None;
                     xFinalDoc.Save(writer);
@@ -269,29 +271,31 @@ namespace VariablesManager
             }
         }
 
-        private void AddToTM()
+        private void AddToTm()
         {
-            if (String.IsNullOrEmpty(SelectedTM) || String.IsNullOrEmpty(txtVariables.Text))
+            if (string.IsNullOrEmpty(SelectedTm) || string.IsNullOrEmpty(txtVariables.Text))
                 return;
             int count = 0;
-            String vars = GetVariablesAsTextFromTM(out count) + txtVariables.Text;
-            if (!String.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
+            var vars = GetVariablesAsTextFromTm(out count) + txtVariables.Text;
+            if (!string.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
                 vars += "\r\n";
 
-            SetVariablesInTM(Encoding.UTF8.GetBytes(vars), count);
+            SetVariablesInTm(Encoding.UTF8.GetBytes(vars), count);
 
-            MessageBox.Show("The variables list was add to the selected Translation Memory.");
+            MessageBox.Show(@"The variables list was add to the selected Translation Memory.");
         }
 
-        private void SetVariablesInTM(byte[] variablesAsBytes, int count)
+        private void SetVariablesInTm(byte[] variablesAsBytes, int count)
         {
             try
             {
-                SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
-                sb.DataSource = SelectedTM;
-                sb.Version = 3;
-                sb.JournalMode = SQLiteJournalModeEnum.Off;
-                int maxID = 0;
+				var sb = new SQLiteConnectionStringBuilder
+				{
+					DataSource = SelectedTm,
+					Version = 3,
+					JournalMode = SQLiteJournalModeEnum.Off
+				};
+				int maxID = 0;
                 if (count == 0)
                 {
                     using (var connection = new SQLiteConnection(sb.ConnectionString, true))
@@ -310,11 +314,19 @@ namespace VariablesManager
                     using (var command = new SQLiteCommand(connection))
                     {
                         connection.Open();
-                        if (count == 0) command.CommandText = String.Format("insert into resources (rowid, id, guid, type, language, data) values ({2}, {2}, '{0}', 1, '{1}', @data)",Guid.NewGuid(), GetTMLanguage(), maxID);
-                        else
-                            command.CommandText = "update resources set data = @data where type = 1";
-                        command.Parameters.Add("@data", DbType.Binary).Value = variablesAsBytes;
-                        command.ExecuteNonQuery();
+	                    if (count == 0)
+	                    {
+		                    command.CommandText =
+			                    string.Format(
+				                    "insert into resources (rowid, id, guid, type, language, data) values ({2}, {2}, '{0}', 1, '{1}', @data)",
+				                    Guid.NewGuid(), GetTmLanguage(), maxID);
+	                    }
+	                    else
+	                    {
+							command.CommandText = "update resources set data = @data where type = 1";
+		                    command.Parameters.Add("@data", DbType.Binary).Value = variablesAsBytes;
+		                    command.ExecuteNonQuery();
+						}
                     }
                 }
             }
@@ -323,19 +335,20 @@ namespace VariablesManager
             }
         }
 
-        private object GetTMLanguage()
+        private object GetTmLanguage()
         {
             try
             {
-                SQLiteConnectionStringBuilder sb = new SQLiteConnectionStringBuilder();
-                sb.DataSource = SelectedTM;
-                sb.Version = 3;
-                sb.JournalMode = SQLiteJournalModeEnum.Off;
-                using (var connection = new SQLiteConnection(sb.ConnectionString, true))
+	            var sb = new SQLiteConnectionStringBuilder
+	            {
+		            DataSource = SelectedTm,
+		            Version = 3,
+		            JournalMode = SQLiteJournalModeEnum.Off
+	            };
+	            using (var connection = new SQLiteConnection(sb.ConnectionString, true))
                 using (var command = new SQLiteCommand(connection))
                 {
                     connection.Open();
-
                     command.CommandText = "SELECT source_language FROM translation_memories";
                     using (var reader = command.ExecuteReader())
                     {
@@ -344,53 +357,58 @@ namespace VariablesManager
                             return reader.GetString(0);
                         }
                     }
-
                 }
             }
             catch
             {
             }
-
-            return String.Empty;
+            return string.Empty;
         }
 
         private void btnReplateToTMorLRT_Click(object sender, EventArgs e)
         {
-            if (!String.IsNullOrEmpty(txtTM.Text))
-                ReplaceToTM();
-            if (!String.IsNullOrEmpty(txtLRT.Text))
-                ReplaceToLRT();
+	        if (!string.IsNullOrEmpty(txtTM.Text))
+	        {
+				ReplaceToTm();
+			}
+
+	        if (!string.IsNullOrEmpty(txtLRT.Text))
+	        {
+				ReplaceToLrt();
+			}
         }
 
-        private void ReplaceToLRT()
+        private void ReplaceToLrt()
         {
-            if (String.IsNullOrEmpty(SelectedLRT))
-                return;
+	        if (string.IsNullOrEmpty(SelectedLrt))
+	        {
+				return;
+			}
+	        var vars = txtVariables.Text;
+	        if (!string.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
+	        {
+				vars += "\r\n";
+			}
+            var base64Vars = Convert.ToBase64String(Encoding.UTF8.GetBytes(vars));
+            SetVariablesInLrt(base64Vars);
 
-            String vars = txtVariables.Text;
-            if (!String.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
-                vars += "\r\n";
-
-            String base64Vars = Convert.ToBase64String(Encoding.UTF8.GetBytes(vars));
-            SetVariablesInLRT(base64Vars);
-
-            MessageBox.Show("The variables list from the selected Language Resource Template was replaced with the new one.");
+            MessageBox.Show(@"The variables list from the selected Language Resource Template was replaced with the new one.");
         }
 
-        private void ReplaceToTM()
+        private void ReplaceToTm()
         {
-            if (String.IsNullOrEmpty(SelectedTM))
+            if (string.IsNullOrEmpty(SelectedTm))
                 return;
 
-            String vars = txtVariables.Text;
-            if (!String.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
+            var vars = txtVariables.Text;
+            if (!string.IsNullOrEmpty(vars) && vars[vars.Length - 1] != '\n')
                 vars += "\r\n";
 
-            int count = 0;
-            GetVariablesAsTextFromTM(out count);
-            SetVariablesInTM(Encoding.UTF8.GetBytes(vars), count);
+            var count = 0;
+            GetVariablesAsTextFromTm(out count);
+            SetVariablesInTm(Encoding.UTF8.GetBytes(vars), count);
 
-            MessageBox.Show("The variables list from the selected Translation Memory was replaced with the new one.");
+            MessageBox.Show(@"The variables list from the selected Translation Memory was replaced with the new one.");
         }
 
         private void btnClear_Click(object sender, EventArgs e)
