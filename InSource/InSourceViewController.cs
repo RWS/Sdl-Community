@@ -296,6 +296,11 @@ namespace Sdl.Community.InSource
 				    else
 				    {
 					    InSource.Instance.RequestAccepted(projectFromNotifications);
+						//Remove the created project from project request
+						//this will refresh the list from view part
+					    ProjectRequests.Remove(projectFromNotifications);
+
+					    OnProjectRequestsChanged();
 						MessageBox.Show("Project "+ projectFromNotifications.Name +" was created");
 					}
 			    };
