@@ -5,10 +5,8 @@ using System.Linq;
 using System.Windows.Forms;
 using BrightIdeasSoftware;
 using Sdl.Community.InSource.Helpers;
-using Sdl.Community.InSource.Models;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
-using Timer = System.Timers.Timer;
 
 namespace Sdl.Community.InSource
 {
@@ -19,27 +17,16 @@ namespace Sdl.Community.InSource
         private  List<ProjectRequest> _folderPathList;
         private readonly List<ProjectRequest> _selectedFolders;
         private readonly List<ProjectRequest> _watchFolders;
-     
-        private readonly Timer _timer;
-        private int _timeLeft;
-        private readonly TimerModel _timerModel;
 
+        public InSourceViewControl(){
 
-        public InSourceViewControl()
-        {
-            InitializeComponent();
-
+	        InitializeComponent();
             _persistence = new Persistence();
-            _projectsListBox.SelectedIndexChanged += new EventHandler(_projectsListBox_SelectedIndexChanged);
+            _projectsListBox.SelectedIndexChanged += _projectsListBox_SelectedIndexChanged;
             _folderPathList = new List<ProjectRequest>();
             _selectedFolders = new List<ProjectRequest>();
             _watchFolders = new List<ProjectRequest>();
-            _timerModel = _persistence.LoadRequest().Timer;
-
         }
-
-
-
         protected override void OnLoad(EventArgs e)
         {
             foldersListView.ShowGroups = false;
@@ -51,18 +38,20 @@ namespace Sdl.Community.InSource
                 return folderObject.Path;
             };
 
-            deleteColumn.AspectGetter = delegate {
-                                                     return string.Empty;
-            };
+	        deleteColumn.AspectGetter = delegate
+	        {
+		        return string.Empty;
+	        };
 
             var imageList = new ImageList();
             var image = Properties.Resources.delete;
             imageList.Images.Add(image);
 
             foldersListView.SmallImageList = imageList;
-            deleteColumn.ImageGetter = delegate {
-                                                    return 0;
-            };
+	        deleteColumn.ImageGetter = delegate
+	        {
+		        return 0;
+	        };
             foldersListView.CellEditActivation = ObjectListView.CellEditActivateMode.SingleClick;
             foldersListView.CellEditStarting += FoldersListView_CellEditStarting;
             foldersListView.CellEditFinishing += FoldersListView_CellEditFinishing;
@@ -71,30 +60,24 @@ namespace Sdl.Community.InSource
             templateColumn.AspectGetter = delegate(object rowObject)
             {
                 var folderObject = (ProjectRequest) rowObject;
-
                 return folderObject.ProjectTemplate;
             };
             InitializeListView(_watchFolders);
         }
 
+	    private void FoldersListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
+	    {
+		    if (((ObjectListView) sender).HotColumnIndex == 1)
+		    {
+			    e.Text = "Deletes a watch folder from list. Please save the changes.";
+		    }
+		    if (((ObjectListView) sender).HotColumnIndex == 2)
+		    {
+			    e.Text = " Click to select a custom template, and save the changes.";
+		    }
+	    }
 
-        private void FoldersListView_CellToolTipShowing(object sender, ToolTipShowingEventArgs e)
-        {
-           
-            if (((ObjectListView) sender).HotColumnIndex == 1)
-            {
-                e.Text = "Deletes a watch folder from list. Please save the changes.";
-            }
-            if (((ObjectListView) sender).HotColumnIndex == 2)
-            {
-                e.Text = " Click to select a custom template, and save the changes.";
-            }
-
-        }
-
-
-
-        /// <summary>
+	    /// <summary>
         /// Displays in cell template name selected by user, and save it in json file
         /// </summary>
         /// <param name="sender"></param>
@@ -108,26 +91,20 @@ namespace Sdl.Community.InSource
                 {
                     ((ProjectRequest) e.RowObject).ProjectTemplate = (ProjectTemplateInfo) value;
                     foldersListView.RefreshObject((ProjectRequest) e.RowObject);
-
                 }
                
                 _folderPathList = _persistence.Load();
-   
                 var items = _folderPathList.FindAll(p => p.Path == ((ProjectRequest)e.RowObject).Path);
 
                 foreach (var item in items)
                 {
                      item.ProjectTemplate = (ProjectTemplateInfo)value;
                 }
-                
 
                 Save();
                 InitializeListView(_watchFolders);
-
             }
         }
-
-
         /// <summary>
         /// A dropdown will appear when user click on a template cell
         /// </summary>
@@ -163,13 +140,9 @@ namespace Sdl.Community.InSource
                             {
                                 _watchFolders.Remove(watchFolderToRemove);
                             }
-                   
-                    
                         _persistence.SaveProjectRequestList(_folderPathList);
                         LoadProjectRequests();
-
                     }
-
                 }
 
                 if (e.Column != templateColumn) return;
@@ -189,19 +162,15 @@ namespace Sdl.Community.InSource
                         {
                             cb.Items.Add(projectTemplate);
                         }
-
                     }
                     cb.SelectedIndex = 0;
                     e.Control = cb;
-
                 }
                 else
                 {
                     MessageBox.Show(@"Please create a custom project template!", @"Warning", MessageBoxButtons.OK);
                     e.Cancel = true;
-
-                }
-
+				}
             }
             catch (Exception exception)
             {
@@ -209,30 +178,27 @@ namespace Sdl.Community.InSource
             }
         }
 
-
         private void InitializeListView(List<ProjectRequest> watchFolders)
         {
             watchFolders = _persistence.Load();
             if (watchFolders != null)
-            {
-                var distinct = watchFolders.GroupBy(x => x.Path).Select(y => y.First());
-                foldersListView.SetObjects(distinct);
-            }
-            
+			{
+				var distinct = watchFolders.GroupBy(x => x.Path).Select(y => y.First());
+				foldersListView.SetObjects(distinct);
+			}
         }
 
         internal InSourceViewController Controller
         {
-            get { return _controller; }
-            set
+            get => _controller;
+	        set
             {
                 _controller = value;
 
                 if (_controller != null)
                 {
-                    _controller.ProjectRequestsChanged += new EventHandler(_controller_ProjectRequestsChanged);
+                    _controller.ProjectRequestsChanged += _controller_ProjectRequestsChanged;
                 }
-
                 _progressBar.DataBindings.Add("Value", _controller, "PercentComplete");
 
                 LoadProjectRequests();
@@ -246,10 +212,8 @@ namespace Sdl.Community.InSource
 
         public void ReportMessage(FileBasedProject fileBasedProject, string message)
         {
-
             _resultsTextBox.AppendText("\r\n" + message);
         }
-
 
         private void LoadProjectRequests()
         {
@@ -266,7 +230,6 @@ namespace Sdl.Community.InSource
                     
                 }
             }
-
             LoadFileList();
         }
 
@@ -285,7 +248,6 @@ namespace Sdl.Community.InSource
                         _filesListView.Items.Add(fileName);
                     }
                 }
-                
             }
         }
 
@@ -299,18 +261,14 @@ namespace Sdl.Community.InSource
             LoadFileList();
         }
 
-
         private void addBtn_Click(object sender, EventArgs e)
         {
-
             if (_persistence.Load() != null)
             {
                 _folderPathList = _persistence.Load();
             }
 
             var folderDialog = new FolderSelectDialog();
-            
-
             if (folderDialog.ShowDialog())
             {
 
@@ -321,14 +279,11 @@ namespace Sdl.Community.InSource
                 };
                 _watchFolders.Add(watchFolder);
                 var folders = Directory.GetDirectories(folderPath);
-
                 if (folders.Length != 0)
                 {
                     foreach (var directory in folders)
                     {
-
                         var directoryInfo = new DirectoryInfo(directory);
-
                         if (_folderPathList != null)
                         {
                             if (directoryInfo.Name != "AcceptedRequests")
@@ -344,7 +299,6 @@ namespace Sdl.Community.InSource
                                     _folderPathList.Add(selectedFolder);
                                 }
                             }
-
                         }
                     }
                 }
@@ -352,17 +306,14 @@ namespace Sdl.Community.InSource
                 {
                     SetWatchFolder(folderPath);
                 }
-               
                 foldersListView.SetObjects(_watchFolders);
                 Save();
             }
-
         }
 
         private void SetWatchFolder(string path)
         {
             var directoryInfo = new DirectoryInfo(path);
-
             if (_folderPathList != null)
             {
                 if (directoryInfo.Name != "AcceptedRequests")
@@ -388,7 +339,6 @@ namespace Sdl.Community.InSource
 
             InSource.Refresh();
             _controller.ProjectRequests = _folderPathList;
-
             LoadProjectRequests();
         }
         private void saveBtn_Click(object sender, EventArgs e)
@@ -414,9 +364,7 @@ namespace Sdl.Community.InSource
                     _selectedFolders.Add((ProjectRequest)item);
                 }
             }
-            
             _controller.SelectedProjects = _selectedFolders;
-
         }
     }
 }

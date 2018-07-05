@@ -146,19 +146,31 @@ namespace Sdl.Community.InSource
 			    var notificationsList = new List<Notification>();
 
 				foreach (var newProjectRequest in ProjectRequests)
-			    {
-					var notification = new Notification
+				{
+					//to avoid duplication of notifications we save the path of the project in a list
+					//if the path is already there we don't create another notification
+					//in this version of Notification api there is a issue: RemoveGroup() is not working
+					var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+					//if the new diewctory does not contain files don't create a notification
+					if (Directory.GetFiles(newProjectPath).Any())
 					{
-						Title = newProjectRequest.Name,	
-						Details = new List<string> { "Project request path",Path.Combine(newProjectRequest.Path,newProjectRequest.Name)}
-					};
-				    newProjectRequest.NotificationId = notification.Id;
-					_clearCommand = new RelayCommand<Notification>(n =>
-				    {
-					    CreateProjectFromNotification(notification);
-				    });
-				    notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
-					notificationsList.Add(notification);
+						if (!_foldersRequestPath.Contains(newProjectPath))
+						{
+							var notification = new Notification
+							{
+								Title = newProjectRequest.Name,
+								Details = new List<string> { "Project request path", newProjectPath }
+							};
+							newProjectRequest.NotificationId = notification.Id;
+							_clearCommand = new RelayCommand<Notification>(n =>
+							{
+								CreateProjectFromNotification(notification);
+							});
+							notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
+							notificationsList.Add(notification);
+							_foldersRequestPath.Add(newProjectPath);
+						}
+					}
 				}
 				_notificationGroup.Add(notificationsList);
 				_notificationGroup.Publish();
