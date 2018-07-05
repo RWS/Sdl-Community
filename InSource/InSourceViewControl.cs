@@ -75,11 +75,6 @@ namespace Sdl.Community.InSource
                 return folderObject.ProjectTemplate;
             };
             InitializeListView(_watchFolders);
-
-
-            //allows user to select multiple projects in listbox
-  
-
         }
 
 
@@ -220,7 +215,6 @@ namespace Sdl.Community.InSource
             watchFolders = _persistence.Load();
             if (watchFolders != null)
             {
-               // var distinct = watchFolders.Select(x => x.Path).Distinct();
                 var distinct = watchFolders.GroupBy(x => x.Path).Select(y => y.First());
                 foldersListView.SetObjects(distinct);
             }
