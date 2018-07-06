@@ -6,12 +6,16 @@ using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using System.Windows.Documents;
 using Newtonsoft.Json;
 using RestSharp;
+using RestSharp.Deserializers;
 using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.TranslatorService;
+using Translation = Sdl.Community.MtEnhancedProvider.Model.Translation;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
 {
@@ -54,49 +58,71 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         {
             _subscriptionKey = cid;
         }
-        
-        
-        /// <summary>
-        /// translates the text input
-        /// </summary>
-        /// <param name="sourceLang"></param>
-        /// <param name="targetLang"></param>
-        /// <param name="textToTranslate"></param>
-        /// <param name="categoryId"></param>
-        /// <param name="format"></param>
-        /// <returns></returns>
-        internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId, string format)
-        {
-            //convert our language codes
-            var sourceLc = convertLangCode(sourceLang);
-            var targetLc = convertLangCode(targetLang);
 
-            //check to see if token is null
-            if (_authToken == null) _authToken = GetAuthToken();
-            
-            //check to see if token expired and if so, get a new one
-            if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
-            var binding = new BasicHttpBinding();
-            var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
+	    /// <summary>
+	    /// translates the text input
+	    /// </summary>
+	    /// <param name="sourceLang"></param>
+	    /// <param name="targetLang"></param>
+	    /// <param name="textToTranslate"></param>
+	    /// <param name="categoryId"></param>
+	    /// <param name="format"></param>
+	    /// <returns></returns>
+	    internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId,
+		    string format)
+	    {
+		    //convert our language codes
+		    var sourceLc = convertLangCode(sourceLang);
+		    var targetLc = convertLangCode(targetLang);
 
-            var translatedText = string.Empty;
-            if (categoryId != string.Empty)
-            {
-				//send full language source code in case of custom engine
-				translatedText = client.Translate(_authToken, textToTranslate, sourceLang, targetLc, "text/plain",
-				categoryId, string.Empty);
-			}
-            else
-            {
-                translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
-               "general", string.Empty);
-            } 
-          
-             return translatedText;
-        }
+		    //check to see if token is null
+		    if (_authToken == null) _authToken = GetAuthToken();
 
-        /// <summary>
+		    //check to see if token expired and if so, get a new one
+		    if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+		    var translatedText = string.Empty;
+		    try
+		    {
+			    const string host = "https://api.cognitive.microsofttranslator.com";
+			    const string path = "/translate?api-version=3.0";
+
+			    var languageParams = string.Format("&from={0}&to={1}", sourceLc, targetLc);
+			    var uri = string.Concat(host, path, languageParams);
+			    var body = new object[]
+			    {
+				    new
+				    {
+					    Text = textToTranslate
+				    }
+			    };
+			    var requestBody = JsonConvert.SerializeObject(body);
+			    using (var httpClient = new HttpClient())
+			    {
+				    using (var httpRequest = new HttpRequestMessage())
+				    {
+					    httpRequest.Method = HttpMethod.Post;
+					    httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+					    httpRequest.RequestUri = new Uri(uri);
+					    httpRequest.Headers.Add("Authorization", _authToken);
+
+					    var response = httpClient.SendAsync(httpRequest).Result;
+					    var responseBody = response.Content.ReadAsStringAsync().Result;
+					    var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
+					    translatedText = responseTranslation[0].Translations[0].Text;
+				    }
+			    }
+
+		    }
+		    catch (WebException exception)
+		    {
+			    var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+			    throw new Exception(mesg);
+		    }
+		    return translatedText;
+	    }
+
+	    /// <summary>
         /// Checks of lang pair is supported by MS
         /// </summary>
         /// <param name="sourceLang"></param>

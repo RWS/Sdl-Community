@@ -190,6 +190,9 @@
     <Compile Include="Model\LanguageDetails.cs" />
     <Compile Include="Model\LanguageResponse.cs" />
     <Compile Include="Model\TagInfo.cs" />
+    <Compile Include="Model\Translation.cs" />
+    <Compile Include="Model\TranslationDetails.cs" />
+    <Compile Include="Model\TranslationResponse.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">
       <AutoGen>True</AutoGen>
