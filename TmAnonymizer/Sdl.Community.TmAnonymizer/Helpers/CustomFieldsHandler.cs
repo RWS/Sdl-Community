@@ -13,12 +13,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class CustomFieldsHandler
 	{
-		private static  List<string> GetMultipleStringValues(string fieldValue)
+		private static  List<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
 		{
 			var multipleStringValues = new List<string>();
 			var trimStart = fieldValue.TrimStart('(');
 			var trimEnd = trimStart.TrimEnd(')');
-			var listValues = trimEnd.Split(',').ToList();
+			var listValues = new List<string> { trimEnd };
+			if (!fieldValueType.Equals(FieldValueType.DateTime))
+			{
+				listValues = trimEnd.Split(',').ToList();
+			}
+			
 			foreach (var value in listValues)
 			{
 				var trimStartValue = value.TrimStart(' ','"');
@@ -58,7 +63,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				{
 					if (fieldValue.Name.Equals(name))
 					{
-						var valueList = GetMultipleStringValues(fieldValue.GetValueString());
+						var valueList = GetMultipleStringValues(fieldValue.GetValueString(),fieldValue.ValueType);
 						foreach (var value in valueList)
 						{
 							var detailsItem = new Details
@@ -171,66 +176,126 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						}
 					}
 				}
-				//else
-				//{
-				//	foreach (var tu in tus)
-				//	{
-				//		foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
-				//		{
-				//			foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
-				//			{
-				//				var newFieldValues = new FieldValues();
-				//				switch (fieldValue.ValueType)
-				//				{
-									
-				//					case FieldValueType.SingleString:
-				//						//var singleStringFieldValue = new SingleStringFieldValue
-				//						//{
-				//						//	Name = fieldValue.Name,
-				//						//	Value = detail.NewValue,
-				//						//	ValueType = fieldValue.ValueType
-				//						//};
-				//						break;
-				//					case FieldValueType.MultipleString:
-				//						//newFieldValues.Values.Add(GetMultipleStringFieldValue(field));
-				//						break;
-				//					case FieldValueType.DateTime:
-				//						var dateTimeFieldValue = new DateTimeFieldValue
-				//						{
-				//							Name = fieldValue.Name,
-				//							Value = DateTime.Parse(detail.NewValue),
-				//							ValueType = fieldValue.ValueType
-				//						};
-				//						break;
-				//					case FieldValueType.Integer:
-				//						var intFieldValue = new IntFieldValue
-				//						{
-				//							Name = fieldValue.Name,
-				//							Value = int.Parse(detail.NewValue),
-				//							ValueType = fieldValue.ValueType
-				//						};
-				//						break;
-				//				}
-				//			}
-				//		}
-				//	}
-				//}
-				
+				else
+				{
+					foreach (var tu in tus)
+					{
+						var newListFieldValues = new List<FieldValue>();
+						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
+						{
+							foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+							{
+								switch (fieldValue.ValueType)
+								{
+									case FieldValueType.SingleString:
+										UpdateSingleStringFieldValue(fileBasedTm, fieldValue, tu, detail);
+										break;
+									case FieldValueType.MultipleString:
+										UpdateMultipleStringFieldValue(fileBasedTm,fieldValue,tu,detail);
+										break;
+									case FieldValueType.DateTime:
+										UpdateDateTimeFieldValue(fileBasedTm, fieldValue, tu, detail);
+										break;
+									case FieldValueType.Integer:
+										UpdateIntFieldValue(fileBasedTm, fieldValue, tu, detail);
+										break;
+								}
+							}
+						}
+						
+					}
+				}
+
 			}
 			fileBasedTm.Save();
 		}
-		
 
-		private static FieldValues CreateAnonymizedCustomFields (CustomField field)
+		private static void UpdateMultipleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
 		{
-			var newFieldValues = new FieldValues();
-			foreach (var detail in field.Details)
+			var listString = GetMultipleStringValues(fieldValue.GetValueString(),fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(details.Value))
 			{
-
+				var index = listString.IndexOf(details.Value);
+				if (index > -1)
+				{
+					listString[index] = details.NewValue;
+				}
 			}
+			var multiStrngFieldValue = new MultipleStringFieldValue
+			{
+				Name = fieldValue.Name,
+				Values = listString,
+				ValueType = FieldValueType.MultipleString
+			};
+			fieldValue.Clear();
+			fieldValue.Add(multiStrngFieldValue);
+			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+		}
 
+		private static void UpdateSingleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		{
+			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(details.Value))
+			{
+				var index = listString.IndexOf(details.Value);
+				if (index > -1)
+				{
+					listString[index] = details.NewValue;
+				}
+			}
+			var singleStringFieldValue = new SingleStringFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = listString.First(),
+				ValueType = FieldValueType.SingleString
+			};
+			fieldValue.Clear();
+			fieldValue.Merge(singleStringFieldValue);
+			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+		}
 
-			return newFieldValues;
+		private static void UpdateDateTimeFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		{
+			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(details.Value))
+			{
+				var index = listString.IndexOf(details.Value);
+				if (index > -1)
+				{
+					listString[index] = details.NewValue;
+				}
+			}
+			var dateTimeFieldValue = new DateTimeFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = DateTime.Parse(listString.First()),
+				ValueType = FieldValueType.DateTime
+			};
+			fieldValue.Clear();
+			fieldValue.Add(dateTimeFieldValue);
+			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+		}
+
+		private static void UpdateIntFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		{
+			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(details.Value))
+			{
+				var index = listString.IndexOf(details.Value);
+				if (index > -1)
+				{
+					listString[index] = details.NewValue;
+				}
+			}
+			var intFieldValue = new IntFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = int.Parse(listString.First()),
+				ValueType = FieldValueType.Integer
+			};
+			fieldValue.Clear();
+			fieldValue.Merge(intFieldValue);
+			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 	}
 }
