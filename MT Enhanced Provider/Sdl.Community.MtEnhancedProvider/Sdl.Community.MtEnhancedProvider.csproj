@@ -127,8 +127,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="RestSharp, Version=106.3.1.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.3.1\lib\net452\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization">
       <HintPath>C:\Program Files (x86)\SDL\SDL Trados Studio\Studio15\Sdl.Core.Globalization.dll</HintPath>
@@ -181,6 +187,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EditCollection.cs" />
+    <Compile Include="Model\LanguageDetails.cs" />
+    <Compile Include="Model\LanguageResponse.cs" />
     <Compile Include="Model\TagInfo.cs" />
     <Compile Include="MstConnect\ApiConnecter.cs" />
     <Compile Include="MtProviderConfDialogResources.Designer.cs">

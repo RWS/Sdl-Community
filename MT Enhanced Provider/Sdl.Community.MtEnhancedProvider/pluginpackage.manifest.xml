@@ -4,5 +4,9 @@
   <Version>2.5</Version>
   <Description>MT Enhanced Trados Plugin</Description>
   <Author>Sdl Community</Author>
+	<Include>
+		<File>Newtonsoft.Json.dll</File>
+		<File>RestSharp.dll</File>
+	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

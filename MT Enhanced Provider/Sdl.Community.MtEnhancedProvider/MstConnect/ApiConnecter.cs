@@ -8,6 +8,9 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
+using RestSharp;
+using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.TranslatorService;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
@@ -18,23 +21,31 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         private static DateTime _tokenExpiresAt; //to keep track of when token expires
         private static List<string> _supportedLangs;
         private MtTranslationOptions _options;
-        private string _subscriptionKey=string.Empty; 
-       private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
+        private string _subscriptionKey=string.Empty;
+	    private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
+
+	   private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
         private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 
-        /// <summary>
-        /// This class allows connection to the Microsoft Translation API
-        /// </summary>
-        /// <param name="_options"></param>
-        internal ApiConnecter(MtTranslationOptions options)
-        {
-            _options = options;
-            _subscriptionKey = _options.ClientId;
-            if (_authToken == null) _authToken = GetAuthToken(); //if the class variable has not been set
-            if (_supportedLangs == null) _supportedLangs = getSupportedLangs(); //if the class variable has not been set
+	    /// <summary>
+	    /// This class allows connection to the Microsoft Translation API
+	    /// </summary>
+	    /// <param name="options"></param>
+	    internal ApiConnecter(MtTranslationOptions options)
+	    {
+		    _options = options;
+		    _subscriptionKey = _options.ClientId;
+		    if (_authToken == null)
+		    {
+			    _authToken = GetAuthToken(); //if the class variable has not been set
+		    }
+		    if (_supportedLangs == null)
+		    {
+			    _supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
+		    }
+	    }
 
-        }
-        /// <summary>
+	    /// <summary>
         /// Allows static credentials to be updated by the calling program
         /// </summary>
         /// <param name="cid">the client Id obtained from Microsoft</param>
@@ -114,46 +125,39 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
         }
 
-
-        private List<string> getSupportedLangs()
+        private List<string> GetSupportedLanguages()
         {
             //check to see if token is null
             if (_authToken == null) _authToken = GetAuthToken();
-
             //check to see if token expired and if so, get a new one
             if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
-            var uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
-            httpWebRequest.Headers.Add("Authorization", _authToken); //add token to request headers
+	        var languageCodeList = new List<string>();
+	        try
+	        {
+		        var client = new RestClient(TranslatorUri);
+		        var request = new RestRequest("languages", Method.GET);
+		        request.AddHeader("Authorization", _authToken);
+		        request.AddParameter("api-version", "3.0");
+		        request.AddParameter("scope", "translation");
 
-            WebResponse response = null;
-            try
-            {
-                response = httpWebRequest.GetResponse();
-                using (Stream stream = response.GetResponseStream())
-                {
-
-                    System.Runtime.Serialization.DataContractSerializer dcs = new System.Runtime.Serialization.DataContractSerializer(typeof(List<string>));
-
-                    var results = (List<string>)dcs.ReadObject(stream);
-                    return results;
-                }
-            }
-            catch (WebException e)
-            {
-                var mesg = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
-                throw new Exception(mesg); //throw error up to calling program
-            }
-            finally
-            {
-                if (response != null)
-                {
-                    response.Close();
-                    response = null;
-                }
-            }
-        }
+		        var languageResponse = client.Execute(request).Content;
+		        var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse);
+		        if (languages != null)
+		        {
+			        foreach (var language in languages.Translation)
+			        {
+				        languageCodeList.Add(language.Key);
+			        }
+		        }
+	        }
+	        catch (WebException exception)
+	        {
+				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+		           throw new Exception(mesg);
+			}
+	        return languageCodeList;
+		}
 
         private string ProcessWebException(WebException e, string message)
         {
