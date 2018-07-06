@@ -54,7 +54,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			var detailValues = new List<string>();
 			foreach (var tu in translationUnits)
 			{
-				
 				foreach (var fieldValue in tu.FieldValues)
 				{
 					if (fieldValue.Name.Equals(name))
@@ -69,7 +68,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 							detailValues.Add(detailsItem.Value);
 						}
 					}
-
 				}
 			}
 
@@ -110,7 +108,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						Id = field.Id,
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
-						ValueType = field.ValueType.ToString(),
+						ValueType = field.ValueType,
 						Details = new ObservableCollection<Details>(GetPickListCustomFieldValues(field))
 					};
 					customFieldList.Add(customField);
@@ -122,7 +120,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						Id = field.Id,
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
-						ValueType = field.ValueType.ToString(),
+						ValueType = field.ValueType,
 						Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(translationUnits, field.Name))
 					};
 					customFieldList.Add(customField);
@@ -150,6 +148,89 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
 			}
 			return translationUnits;
+		}
+
+		public static void AnonymizeFileBasedSystemFields(TmFile tm, List<CustomField> anonymizeFields)
+		{
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
+			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
+			var tmIterator = new RegularIterator(unitsCount);
+			var tus = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			
+			
+			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+			{
+				if (anonymizedField.IsPickList)
+				{
+					foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+					{
+						foreach (var fieldDefinition in fileBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
+						{
+							fieldDefinition.PicklistItems.Remove(detail.Value);
+							fieldDefinition.PicklistItems.Add(detail.NewValue);
+						}
+					}
+				}
+				//else
+				//{
+				//	foreach (var tu in tus)
+				//	{
+				//		foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
+				//		{
+				//			foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+				//			{
+				//				var newFieldValues = new FieldValues();
+				//				switch (fieldValue.ValueType)
+				//				{
+									
+				//					case FieldValueType.SingleString:
+				//						//var singleStringFieldValue = new SingleStringFieldValue
+				//						//{
+				//						//	Name = fieldValue.Name,
+				//						//	Value = detail.NewValue,
+				//						//	ValueType = fieldValue.ValueType
+				//						//};
+				//						break;
+				//					case FieldValueType.MultipleString:
+				//						//newFieldValues.Values.Add(GetMultipleStringFieldValue(field));
+				//						break;
+				//					case FieldValueType.DateTime:
+				//						var dateTimeFieldValue = new DateTimeFieldValue
+				//						{
+				//							Name = fieldValue.Name,
+				//							Value = DateTime.Parse(detail.NewValue),
+				//							ValueType = fieldValue.ValueType
+				//						};
+				//						break;
+				//					case FieldValueType.Integer:
+				//						var intFieldValue = new IntFieldValue
+				//						{
+				//							Name = fieldValue.Name,
+				//							Value = int.Parse(detail.NewValue),
+				//							ValueType = fieldValue.ValueType
+				//						};
+				//						break;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
+				
+			}
+			fileBasedTm.Save();
+		}
+		
+
+		private static FieldValues CreateAnonymizedCustomFields (CustomField field)
+		{
+			var newFieldValues = new FieldValues();
+			foreach (var detail in field.Details)
+			{
+
+			}
+
+
+			return newFieldValues;
 		}
 	}
 }

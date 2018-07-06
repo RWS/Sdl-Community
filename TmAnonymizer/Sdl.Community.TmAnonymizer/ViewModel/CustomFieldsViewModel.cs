@@ -81,7 +81,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void ApplyChanges()
 		{
-			
+			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
+			{
+				if (!tm.IsServerTm)
+				{
+					CustomFieldsHandler.AnonymizeFileBasedSystemFields(tm, CustomFieldsCollection.ToList());
+				}
+				RefreshCustomFields();
+			}
 		}
 
 		private void Import()
@@ -149,8 +156,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			}
 		}
-
-
 		
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -278,6 +283,49 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				foreach (var fileTm in fileBasedTms)
 				{
 					CustomFieldsCollection = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+				}
+			}
+		}
+
+		private void RefreshCustomFields()
+		{
+			if (_tmsCollection != null)
+			{
+				CustomFieldsCollection = new ObservableCollection<CustomField>();
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (fileBasedTms.Any())
+				{
+					foreach (var fileTm in fileBasedTms)
+					{
+						var fields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+						foreach (var field in fields)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke(() =>
+							{
+								CustomFieldsCollection.Add(field);
+							});
+						}
+					}
+				}
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					foreach (var serverTm in serverTms)
+					{
+						var fields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
+						foreach (var field in fields)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke(() =>
+							{
+								CustomFieldsCollection.Add(field);
+							});
+						}
+					}
+
 				}
 			}
 		}

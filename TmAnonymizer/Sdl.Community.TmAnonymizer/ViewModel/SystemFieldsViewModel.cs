@@ -24,8 +24,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _applyChangesCommand;
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
-		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
-		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private IList _selectedItems;
 		private WaitWindow _waitWindow;
 		private bool _selectAll;
@@ -35,7 +33,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_uniqueUserNames = new ObservableCollection<User>();
 			_selectedItems = new List<User>();
-			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 			if (_tmsCollection != null)
 			{
@@ -47,7 +44,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
-			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 		}
 		
 
