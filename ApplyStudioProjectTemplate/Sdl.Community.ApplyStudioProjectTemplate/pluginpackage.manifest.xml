@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Apply Studio Project Template</PlugInName>
-  <Version>4.5</Version>
+  <Version>4.6</Version>
   <Description>Applies settings from a project template to the current project</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>

@@ -52,21 +52,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             }
         }
 
-        /// <summary>
-        /// Gets the assembly version.
-        /// </summary>
-        /// <value>
-        /// The assembly version.
-        /// </value>
-        public string AssemblyVersion
-        {
-            get
-            {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-        }
+	    /// <summary>
+	    /// Gets the assembly version.
+	    /// </summary>
+	    /// <value>
+	    /// The assembly version.
+	    /// </value>
+	    public string AssemblyVersion => "4.6"; // return the version of the plugin not the assembly
 
-        /// <summary>
+	    /// <summary>
         /// Gets the assembly description.
         /// </summary>
         /// <value>
