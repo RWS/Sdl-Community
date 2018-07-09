@@ -268,11 +268,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_waitWindow.Close();
 			}
+			_translationMemoryViewModel.IsEnabled = true;
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-
+			_translationMemoryViewModel.IsEnabled = false;
 			var tm = e.Argument as TmFile;
 			System.Windows.Application.Current.Dispatcher.Invoke(()=>
 			{
