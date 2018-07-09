@@ -112,10 +112,11 @@ namespace Sdl.Community.MtEnhancedProvider
                     dict.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
                 }
                 else
-				{//if not a tag sourceSegment.Elements[i].ToString();//
+				{
 					var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-					_preparedSourceText += str;
-                }
+																							 //_preparedSourceText += str;
+					_preparedSourceText += _sourceSegment.Elements[i].ToString();
+				}
             }
 			TagsInfo.Clear();
             return dict;

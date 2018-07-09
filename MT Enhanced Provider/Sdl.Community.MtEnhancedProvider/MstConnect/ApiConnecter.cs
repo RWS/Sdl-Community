@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Documents;
@@ -82,9 +84,18 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		    //check to see if token expired and if so, get a new one
 		    if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 		    var translatedText = string.Empty;
-		    try
+		   
+			try
 		    {
-			    const string host = "https://api.cognitive.microsofttranslator.com";
+			    //search for words like this <word> 
+			    var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
+			    var words = rgx.Matches(textToTranslate);
+			    if (words.Count > 0)
+			    {
+				    textToTranslate = ReplaceCharacters(textToTranslate, words);
+			    }
+
+				const string host = "https://api.cognitive.microsofttranslator.com";
 			    const string path = "/translate?api-version=3.0";
 
 			    var languageParams = string.Format("&from={0}&to={1}", sourceLc, targetLc);
@@ -93,7 +104,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 			    {
 				    new
 				    {
-					    Text = textToTranslate
+					    Text =textToTranslate
 				    }
 			    };
 			    var requestBody = JsonConvert.SerializeObject(body);
@@ -121,6 +132,58 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 		    }
 		    return translatedText;
 	    }
+
+	    private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
+	    {
+			var indexes = new List<int>();
+		    foreach (Match match in matches)
+		    {
+			    if (match.Index.Equals(0))
+			    {
+				    indexes.Add(match.Length);
+			    }
+			    else
+			    {
+				    //check if there is any text after PI
+				    var remainingText = textToTranslate.Substring(match.Index + match.Length);
+				    if (!string.IsNullOrEmpty(remainingText))
+				    {
+					    //get the position where PI starts to split before
+					    indexes.Add(match.Index);
+					    //split after PI
+					    indexes.Add(match.Index + match.Length);
+				    }
+				    else
+				    {
+					    indexes.Add(match.Index);
+				    }
+			    }
+		    }
+		    var splitedText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
+		    var positions = new List<int>();
+		    for (var i = 0; i < splitedText.Count; i++)
+		    {
+			    if (!splitedText[i].Contains("tg"))
+			    {
+				    positions.Add(i);
+			    }
+		    }
+
+		    foreach (var position in positions)
+		    {
+			    var originalString = splitedText[position];
+			    var start = Regex.Replace(originalString, "<", "&lt;");
+			    var finalString = Regex.Replace(start, ">", "&gt;");
+			    splitedText[position] = finalString;
+		    }
+		    var finalText = string.Empty;
+		    foreach (var text in splitedText)
+		    {
+			    finalText += text;
+		    }
+
+		    return finalText;
+		}
 
 	    /// <summary>
         /// Checks of lang pair is supported by MS
