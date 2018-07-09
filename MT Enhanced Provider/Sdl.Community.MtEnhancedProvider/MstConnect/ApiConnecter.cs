@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
+using RestSharp;
+using Sdl.Community.MtEnhancedProvider.Model;
 using Sdl.Community.MtEnhancedProvider.TranslatorService;
 
 namespace Sdl.Community.MtEnhancedProvider.MstConnect
@@ -18,8 +24,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         private static DateTime _tokenExpiresAt; //to keep track of when token expires
         private static List<string> _supportedLangs;
         private MtTranslationOptions _options;
-        private string _subscriptionKey=string.Empty; 
-       private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
+        private string _subscriptionKey=string.Empty;
+	    private static readonly string TranslatorUri = @"https://api.cognitive.microsofttranslator.com/";
+		private static readonly Uri ServiceUrl = new Uri("https://api.cognitive.microsoft.com/sts/v1.0/issueToken");
         private const string OcpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
 
         /// <summary>
@@ -31,7 +38,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
             _options = options;
             _subscriptionKey = _options.ClientId;
             if (_authToken == null) _authToken = GetAuthToken(); //if the class variable has not been set
-            if (_supportedLangs == null) _supportedLangs = getSupportedLangs(); //if the class variable has not been set
+            if (_supportedLangs == null) _supportedLangs = GetSupportedLanguages(); //if the class variable has not been set
 
         }
         /// <summary>
@@ -56,36 +63,114 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         /// <returns></returns>
         internal string Translate(string sourceLang, string targetLang, string textToTranslate, string categoryId, string format)
         {
-            //convert our language codes
-            var sourceLc = convertLangCode(sourceLang);
-            var targetLc = convertLangCode(targetLang);
+			//convert our language codes
+	        var sourceLc = convertLangCode(sourceLang);
+	        var targetLc = convertLangCode(targetLang);
 
-            //check to see if token is null
-            if (_authToken == null) _authToken = GetAuthToken();
-            
-            //check to see if token expired and if so, get a new one
-            if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+	        //check to see if token is null
+	        if (_authToken == null) _authToken = GetAuthToken();
+	        //check to see if token expired and if so, get a new one
+	        if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+	        var translatedText = string.Empty;
+	        try
+	        {
+		        //search for words like this <word> 
+		        var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
+		        var words = rgx.Matches(textToTranslate);
+		        if (words.Count > 0)
+		        {
+			        textToTranslate = ReplaceCharacters(textToTranslate, words);
+		        }
 
-            var binding = new BasicHttpBinding();
-            var client = new LanguageServiceClient(binding, new EndpointAddress("http://api.microsofttranslator.com/V2/soap.svc"));
+		        const string host = "https://api.cognitive.microsofttranslator.com";
+		        const string path = "/translate?api-version=3.0";
+		        var languageParams = string.Format("&from={0}&to={1}&textType={2}", sourceLc, targetLc, "html");
+		        var uri = string.Concat(host, path, languageParams);
+		        var body = new object[]
+		        {
+			        new
+			        {
+				        Text =textToTranslate
+			        }
+		        };
+		        var requestBody = JsonConvert.SerializeObject(body);
+		        using (var httpClient = new HttpClient())
+		        {
+			        using (var httpRequest = new HttpRequestMessage())
+			        {
+				        httpRequest.Method = HttpMethod.Post;
+				        httpRequest.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+				        httpRequest.RequestUri = new Uri(uri);
+				        httpRequest.Headers.Add("Authorization", _authToken);
 
-            var translatedText = string.Empty;
-            if (categoryId != string.Empty)
-            {
-				//send full language source code in case of custom engine
-				translatedText = client.Translate(_authToken, textToTranslate, sourceLang, targetLc, "text/plain",
-				categoryId, string.Empty);
-			}
-            else
-            {
-                translatedText = client.Translate(_authToken, textToTranslate, sourceLc, targetLc, "text/plain",
-               "general", string.Empty);
-            } 
-          
-             return translatedText;
-        }
+				        var response = httpClient.SendAsync(httpRequest).Result;
+				        var responseBody = response.Content.ReadAsStringAsync().Result;
+				        var responseTranslation = JsonConvert.DeserializeObject<List<TranslationResponse>>(responseBody);
+				        translatedText = responseTranslation[0].Translations[0].Text;
+			        }
+		        }
+	        }
+	        catch (WebException exception)
+	        {
+		        var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+		        throw new Exception(mesg);
+	        }
+	        return translatedText;
+		}
 
-        /// <summary>
+	    private string ReplaceCharacters(string textToTranslate, MatchCollection matches)
+	    {
+			var indexes = new List<int>();
+		    foreach (Match match in matches)
+		    {
+			    if (match.Index.Equals(0))
+			    {
+				    indexes.Add(match.Length);
+			    }
+			    else
+			    {
+				    //check if there is any text after PI
+				    var remainingText = textToTranslate.Substring(match.Index + match.Length);
+				    if (!string.IsNullOrEmpty(remainingText))
+				    {
+					    //get the position where PI starts to split before
+					    indexes.Add(match.Index);
+					    //split after PI
+					    indexes.Add(match.Index + match.Length);
+				    }
+				    else
+				    {
+					    indexes.Add(match.Index);
+				    }
+			    }
+		    }
+		    var splitedText = textToTranslate.SplitAt(indexes.ToArray()).ToList();
+		    var positions = new List<int>();
+		    for (var i = 0; i < splitedText.Count; i++)
+		    {
+			    if (!splitedText[i].Contains("tg"))
+			    {
+				    positions.Add(i);
+			    }
+		    }
+
+		    foreach (var position in positions)
+		    {
+			    var originalString = splitedText[position];
+			    var start = Regex.Replace(originalString, "<", "&lt;");
+			    var finalString = Regex.Replace(start, ">", "&gt;");
+			    splitedText[position] = finalString;
+		    }
+		    var finalText = string.Empty;
+		    foreach (var text in splitedText)
+		    {
+			    finalText += text;
+		    }
+
+		    return finalText;
+		}
+
+	    /// <summary>
         /// Checks of lang pair is supported by MS
         /// </summary>
         /// <param name="sourceLang"></param>
@@ -115,45 +200,38 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
         }
 
 
-        private List<string> getSupportedLangs()
-        {
-            //check to see if token is null
-            if (_authToken == null) _authToken = GetAuthToken();
+        private List<string> GetSupportedLanguages()
+		{ //check to see if token is null
+			if (_authToken == null) _authToken = GetAuthToken();
+			//check to see if token expired and if so, get a new one
+			if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 
-            //check to see if token expired and if so, get a new one
-            if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
+			var languageCodeList = new List<string>();
+			try
+			{
+				var client = new RestClient(TranslatorUri);
+				var request = new RestRequest("languages", Method.GET);
+				request.AddHeader("Authorization", _authToken);
+				request.AddParameter("api-version", "3.0");
+				request.AddParameter("scope", "translation");
 
-            var uri = "http://api.microsofttranslator.com/v2/Http.svc/GetLanguagesForTranslate";
-            var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
-            httpWebRequest.Headers.Add("Authorization", _authToken); //add token to request headers
-
-            WebResponse response = null;
-            try
-            {
-                response = httpWebRequest.GetResponse();
-                using (Stream stream = response.GetResponseStream())
-                {
-
-                    System.Runtime.Serialization.DataContractSerializer dcs = new System.Runtime.Serialization.DataContractSerializer(typeof(List<string>));
-
-                    var results = (List<string>)dcs.ReadObject(stream);
-                    return results;
-                }
-            }
-            catch (WebException e)
-            {
-                var mesg = ProcessWebException(e, PluginResources.MsApiFailedGetLanguagesMessage);
-                throw new Exception(mesg); //throw error up to calling program
-            }
-            finally
-            {
-                if (response != null)
-                {
-                    response.Close();
-                    response = null;
-                }
-            }
-        }
+				var languageResponse = client.Execute(request).Content;
+				var languages = JsonConvert.DeserializeObject<LanguageResponse>(languageResponse);
+				if (languages != null)
+				{
+					foreach (var language in languages.Translation)
+					{
+						languageCodeList.Add(language.Key);
+					}
+				}
+			}
+			catch (WebException exception)
+			{
+				var mesg = ProcessWebException(exception, PluginResources.MsApiFailedGetLanguagesMessage);
+				throw new Exception(mesg);
+			}
+			return languageCodeList;
+		}
 
         private string ProcessWebException(WebException e, string message)
         {
