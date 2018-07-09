@@ -374,7 +374,12 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
             var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var projectsPath = string.Empty;
-            if(assembly.Contains("14"))
+		
+			if(assembly.Contains("15"))
+			{
+				projectsPath = Path.Combine(myDocumentsPath, @"Studio 2019\Projects\projects.xml");
+			}
+			else if(assembly.Contains("14"))
             {
                 projectsPath = Path.Combine(myDocumentsPath, @"Studio 2017\Projects\projects.xml");
 
