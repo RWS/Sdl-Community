@@ -80,11 +80,9 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 		    //check to see if token is null
 		    if (_authToken == null) _authToken = GetAuthToken();
-
 		    //check to see if token expired and if so, get a new one
 		    if (DateTime.Now.CompareTo(_tokenExpiresAt) >= 0) _authToken = GetAuthToken();
 		    var translatedText = string.Empty;
-		   
 			try
 		    {
 			    //search for words like this <word> 
@@ -97,8 +95,7 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 				const string host = "https://api.cognitive.microsofttranslator.com";
 			    const string path = "/translate?api-version=3.0";
-
-			    var languageParams = string.Format("&from={0}&to={1}", sourceLc, targetLc);
+			    var languageParams = string.Format("&from={0}&to={1}&textType={2}", sourceLc, targetLc,"html");
 			    var uri = string.Concat(host, path, languageParams);
 			    var body = new object[]
 			    {
@@ -123,7 +120,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 					    translatedText = responseTranslation[0].Translations[0].Text;
 				    }
 			    }
-
 		    }
 		    catch (WebException exception)
 		    {
@@ -211,7 +207,6 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
             //otherwise return false
             return false;
-
         }
 
         private List<string> GetSupportedLanguages()
