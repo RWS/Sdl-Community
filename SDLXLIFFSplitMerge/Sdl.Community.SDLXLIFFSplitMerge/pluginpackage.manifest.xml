@@ -10,5 +10,5 @@
 		<File>Sdl.Utilities.SplitSDLXLIFF.Lib.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 </PluginPackage>
