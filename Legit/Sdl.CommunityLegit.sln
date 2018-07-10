@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Legit", "Sdl.Community.Legit\Sdl.Community.Legit.csproj", "{D45E3968-4632-4865-994D-83F4FADB1DB6}"
 EndProject
@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		setup.iss = setup.iss
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.Legit.Integration", "Sdl.Community.Legit.Integration\Sdl.Community.Legit.Integration.csproj", "{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,39 +59,12 @@ Global
 		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{D45E3968-4632-4865-994D-83F4FADB1DB6}.SingleImage|x86.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|Any CPU.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|Any CPU.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|Mixed Platforms.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|x86.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.CD_ROM|x86.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Debug|x86.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|x86.ActiveCfg = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.DVD-5|x86.Build.0 = Debug|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.Release|x86.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|Any CPU.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|Any CPU.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|x86.ActiveCfg = Release|Any CPU
-		{1CBF7231-A95E-43A5-942E-49D3A9C99D4A}.SingleImage|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1AC1BBC0-47EA-4EAB-B3A6-5C6608C7DF1B}
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Ttxr.vsmdi

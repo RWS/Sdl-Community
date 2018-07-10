@@ -13,14 +13,13 @@ using Sdl.Community.Legit.Properties;
 using TmAccess;
 using TMFileServices;
 using Trados.Interop.SettingsManager;
-using IManager = Trados.Interop.SettingsManager.IManager;
 using IRunStatus = TMFileServices.IRunStatus;
 using Settings = Sdl.Community.Legit.Properties.Settings;
 using tmaTmAccessMode = TMFileServices.tmaTmAccessMode;
 
 namespace Sdl.Community.Legit
 {
-    public partial class MainForm : Form
+	public partial class MainForm : Form
     {
 
         private IEnumerable<string> _filesToConvert;
