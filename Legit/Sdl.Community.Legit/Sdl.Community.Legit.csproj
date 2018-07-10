@@ -264,6 +264,7 @@
   <ItemGroup>
     <Content Include="Document.ico" />
     <Content Include="pluginpackage.manifest.xml" />
+    <None Include="Resources\help_icon.ico" />
     <None Include="Resources\LegIt.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

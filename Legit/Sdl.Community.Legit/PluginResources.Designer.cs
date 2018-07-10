@@ -63,6 +63,16 @@ namespace Sdl.Community.Legit {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon help_icon {
+            get {
+                object obj = ResourceManager.GetObject("help_icon", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon LegIt {
             get {
                 object obj = ResourceManager.GetObject("LegIt", resourceCulture);
