@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>projectAnonymizer</PlugInName>
-  <Version>2.1</Version>
+  <Version>3.0</Version>
   <Description>Plugin description</Description>
   <Author>Sdl Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
 	<Include>
-		<File>Sdl.Community.DAL.dll</File>
-		<File>Sdl.Community.Service.dll</File>
 		<File>Sdl.Community.Toolkit.Core.dll</File>
 		<File>Sdl.Community.Toolkit.FileType.dll</File>
 		<File>Newtonsoft.Json.dll</File>
