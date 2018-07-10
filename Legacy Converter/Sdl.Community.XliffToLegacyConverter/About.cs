@@ -31,9 +31,9 @@ namespace Sdl.Community.XliffToLegacyConverter
         public About()
         {
             InitializeComponent();
-            Text = String.Format("About {0}", AssemblyProduct + " for SDL Trados Studio 2017");
-            labelProductName.Text = AssemblyProduct + @" for SDL Trados Studio 2017";
-            labelVersion.Text = String.Format("Version {0}", AssemblyVersion );
+            Text = string.Format("About {0}", AssemblyProduct + " for SDL Trados Studio 2019");
+            labelProductName.Text = AssemblyProduct + @" for SDL Trados Studio 2019";
+	        labelVersion.Text = "2.0"; // we need to put the version from manifest file
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
             textBoxDescription.Text = AssemblyDescription + "\r\n\r\n\r\n" + copyRight;

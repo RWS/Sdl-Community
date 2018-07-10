@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDL Community")]
 [assembly: AssemblyProduct("SDLXLIFF to Legacy Converter")]
-[assembly: AssemblyCopyright("SDL Community © 2017")]
+[assembly: AssemblyCopyright("SDL Community © 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

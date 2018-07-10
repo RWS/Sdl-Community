@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,8 +32,8 @@ namespace Sdl.Community.XliffToLegacyConverter
         }
 
         private void FormMain_Load(object sender, EventArgs e)
-        {         
-            Text = Application.ProductName + @" (" + Application.ProductVersion + @")";
+        {
+	        Text = @"Legacy Converter";
 
 
             textBox_reportFileName.Text = @"SDLXLIFF to Legacy Converter Report "
@@ -1658,15 +1659,12 @@ namespace Sdl.Community.XliffToLegacyConverter
 
         private void toolStripButton_Help_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace);
+			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
         }
 
         private void help1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Help.ShowHelp(this, helpProvider1.HelpNamespace);
+			Process.Start(@"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3280.legacy-converter");
         }
-
-    
- 
     }
 }
