@@ -8,5 +8,5 @@
 		<File>Sdl.Community.AdaptiveMT.Service.dll</File>
 		<File>Newtonsoft.Json.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
+  <RequiredProduct name="SDLTradosStudio" maxversion ="16.0" minversion="15.0" />
 </PluginPackage>
