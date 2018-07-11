@@ -39,12 +39,9 @@ namespace Sdl.Community.ControlledMTProviders.Provider
                 foreach (var mtProviderUi in mtProvidersUi)
                 {
                     var innerProviders = mtProviderUi.Browse(owner, languagePairs, credentialStore);
-                    if (innerProviders != null && innerProviders.All(x => x.TranslationMethod == TranslationMethod.MachineTranslation))
-                    {
-                        mtProviders.AddRange(innerProviders);
-                    }
-                }
-            }
+					mtProviders.AddRange(innerProviders);
+				}
+			}
 
             return new ITranslationProvider[] { new ControlledMtProvidersProvider(mtProviders) };
         }

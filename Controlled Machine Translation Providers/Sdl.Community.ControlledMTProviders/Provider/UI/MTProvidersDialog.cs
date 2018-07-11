@@ -62,7 +62,7 @@ namespace Sdl.Community.ControlledMTProviders.Provider.UI
             if(clbProviders.CheckedItems.Count == 0)
             {
                 MessageBox.Show(this, "Please select a translation provider.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DialogResult = System.Windows.Forms.DialogResult.None;
+                DialogResult = DialogResult.None;
             }
         }
 
