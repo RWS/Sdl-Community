@@ -587,17 +587,17 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
 
                 while (rdr.Read())
                 {
+	                //var tagType = "empty";
 
-
-                    switch (rdr.NodeType)
-                    {
+					switch (rdr.NodeType)
+					{
                         case XmlNodeType.Element:
                             {
                                 #region  |  XmlNodeType.Element  |
 
                                 var elementName = rdr.Name;
-
-                                var elementAttributes = new Dictionary<string, string>();
+	                            tagType = "empty";
+								var elementAttributes = new Dictionary<string, string>();
                                 while (rdr.MoveToNextAttribute())
                                     elementAttributes.Add(rdr.Name, rdr.Value);
 
@@ -794,7 +794,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
                                 {
                                     stateManager.OtherTagsOpen--;
 									//aici ar trebui pus  atributul cu end tag
-                                    var tags = Core.Processor.SeperateTags(rdr.Value);
+                                    var tags = Core.Processor.SeperateTags(rdr.Value,tagType);
                                     foreach (var tag in tags)
                                     {
                                         switch (tag.Type)
