@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Record Source TU</PlugInName>
-  <Version>1.1.0.0</Version>
+  <Version>1.2.0.0</Version>
   <Description> TM provider that could use an SDLTM that contained at least one field value called "Source File" and then automatically stamp into that field value the full path and the file name of the source file</Description>
   <Author>Sdl Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Simple.Data.dll</File>
     <File>Simple.Data.Ado.dll</File>
