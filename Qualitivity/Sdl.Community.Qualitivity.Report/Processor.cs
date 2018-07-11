@@ -141,7 +141,7 @@ namespace Sdl.Community.Report
 
 
                 xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + xsltName + "'");
-                xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2015");
+                xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2019");
 
                 xmlTxtWriter.WriteStartElement("documents");
                 xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
@@ -1652,7 +1652,7 @@ namespace Sdl.Community.Report
             const string xsltName = "Report.StyleSheet.02.xslt";
 
             xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + xsltName + "'");
-            xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2015");
+            xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2019");
 
             xmlTxtWriter.WriteStartElement("qualityMetrics");
             xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
@@ -2529,7 +2529,7 @@ namespace Sdl.Community.Report
             const string xsltName = "Report.StyleSheet.03.xslt";
 
             xmlTxtWriter.WriteProcessingInstruction("xml-stylesheet", "type='text/xsl' href='" + xsltName + "'");
-            xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2015");
+            xmlTxtWriter.WriteComment("Qualitivity by Sdl Community, 2019");
 
             xmlTxtWriter.WriteStartElement("activityRecords");
             xmlTxtWriter.WriteAttributeString("xml:space", "preserve");
