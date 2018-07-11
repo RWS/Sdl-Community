@@ -591,8 +591,8 @@ Please wait until processing has completed.</value>
   <data name="Severity_Weight___Edit" xml:space="preserve">
     <value>Severity Weight - Edit</value>
   </data>
-  <data name="About_Qualitivity_for_SDL_Trados_Studio_2015" xml:space="preserve">
-    <value>About Qualitivity for SDL Trados Studio 2015</value>
+  <data name="About_Qualitivity_for_SDL_Trados_Studio_2017" xml:space="preserve">
+    <value>About Qualitivity for SDL Trados Studio 2017</value>
   </data>
   <data name="Qualitivity___Version__0_" xml:space="preserve">
     <value>Qualitivity - Version {0}</value>
