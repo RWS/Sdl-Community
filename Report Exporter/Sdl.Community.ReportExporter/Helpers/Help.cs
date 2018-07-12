@@ -38,6 +38,11 @@ namespace Sdl.Community.ReportExporter.Helpers
 				projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
 					@"Studio 2015\Projects\projects.xml");
 			}
+			if (installedStudioVersion.Equals(15))
+			{
+				projectsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+					@"Studio 2019\Projects\projects.xml");
+			}
 
 			return projectsPath;
 		}

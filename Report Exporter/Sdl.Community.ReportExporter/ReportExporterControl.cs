@@ -107,28 +107,31 @@ namespace Sdl.Community.ReportExporter
 		private void LoadProjectsList(string projectXmlPath)
 		{
 			var projectXmlDocument = new XmlDocument();
-
-			projectXmlDocument.Load(projectXmlPath);
-
-			var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
-			if (projectsNodeList == null) return;
-			foreach (var item in projectsNodeList)
+			if (!string.IsNullOrEmpty(projectXmlPath))
 			{
-				var projectInfo = ((XmlNode) item).SelectSingleNode("./ProjectInfo");
-				if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
+				projectXmlDocument.Load(projectXmlPath);
+
+				var projectsNodeList = projectXmlDocument.SelectNodes("//ProjectListItem");
+				if (projectsNodeList == null) return;
+				foreach (var item in projectsNodeList)
 				{
-					var reportExist = ReportFolderExist((XmlNode) item);
-					if (reportExist)
+					var projectInfo = ((XmlNode)item).SelectSingleNode("./ProjectInfo");
+					if (projectInfo?.Attributes != null && projectInfo.Attributes["IsInPlace"].Value != "true")
 					{
-						var projectDetails = CreateProjectDetails((XmlNode) item);
-						_projectsDataSource.Add(projectDetails);
-						_allStudioProjectsDetails.Add(projectDetails);
+						var reportExist = ReportFolderExist((XmlNode)item);
+						if (reportExist)
+						{
+							var projectDetails = CreateProjectDetails((XmlNode)item);
+							_projectsDataSource.Add(projectDetails);
+							_allStudioProjectsDetails.Add(projectDetails);
+						}
 					}
 				}
+				projListbox.DataSource = _projectsDataSource;
+				projListbox.ValueMember = "ShouldBeExported";
+				projListbox.DisplayMember = "ProjectName";
 			}
-			projListbox.DataSource = _projectsDataSource;
-			projListbox.ValueMember = "ShouldBeExported";
-			projListbox.DisplayMember = "ProjectName";
+			
 		}
 
 		private bool ReportFolderExist(XmlNode projectInfoNode)
