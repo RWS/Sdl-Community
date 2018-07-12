@@ -10,5 +10,5 @@
     <File>Newtonsoft.Json.dll</File>
     <File>Microsoft.Win32.TaskScheduler.dll</File>
   </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="15.0" maxversion="16.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0"/>
 </PluginPackage>
