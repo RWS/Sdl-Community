@@ -210,13 +210,11 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
         }
 
 
-        public static List<TagUnit> SeperateTags(string text)
+        public static List<TagUnit> SeperateTags(string text, string tagType)
         {
             //simple function to recover the tag information
             var tags = new List<TagUnit>();
 
-            //[1:TEXT][1:TEXT]
-            //<cf italic="true">che</cf>
             var sections = new List<TagUnit>();
 
             var rLockedContent = new Regex(@"\<ILockedContent\>(?<xContentText>.*?|)\<\/ILockedContent\>", RegexOptions.IgnoreCase | RegexOptions.Singleline);
@@ -334,23 +332,23 @@ namespace Sdl.Community.XliffToLegacyConverter.Core
 
                             if (ttag != string.Empty)
                             {
-                                if (rClosingTag.Match(ttag).Success)
-                                {
-                                    tags.Add(new TagUnit(string.Empty, GetEndTagName(ttag), ttag, TagUnit.TagUnitState.IsClosing, TagUnit.TagUnitType.IsTag));
-                                }
-                                else if (rEmptyTag.Match(ttag).Success)
-                                {
-                                    var tagId = string.Empty;
-                                    var tagName = GetStartTagName(ttag, ref tagId);
-                                    tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsEmpty, TagUnit.TagUnitType.IsTag));
-                                }
-                                else
-                                {
-                                    var tagId = string.Empty;
-                                    var tagName = GetStartTagName(ttag, ref tagId);
-                                    tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsOpening, TagUnit.TagUnitType.IsTag));
-                                }
-                            }
+								if (tagType.Equals("end"))
+	                            {
+		                            tags.Add(new TagUnit(string.Empty, GetEndTagName(ttag), ttag, TagUnit.TagUnitState.IsClosing, TagUnit.TagUnitType.IsTag));
+	                            }
+	                            if (tagType.Equals("empty"))
+	                            {
+		                            var tagId = string.Empty;
+		                            var tagName = GetStartTagName(ttag, ref tagId);
+		                            tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsEmpty, TagUnit.TagUnitType.IsTag));
+	                            }
+	                            if (tagType.Equals("start"))
+	                            {
+		                            var tagId = string.Empty;
+		                            var tagName = GetStartTagName(ttag, ref tagId);
+		                            tags.Add(new TagUnit(tagId, tagName, ttag, TagUnit.TagUnitState.IsOpening, TagUnit.TagUnitType.IsTag));
+	                            }
+							}
 
                             str = atag;
                         }

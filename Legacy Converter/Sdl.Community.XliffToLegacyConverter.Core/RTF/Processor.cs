@@ -378,7 +378,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.RTF
                 sections.Add(new SegmentSection(SegmentSection.ContentType.Text, string.Empty, stringColorType.Black));
             }
 
-            var tags = Core.Processor.SeperateTags(stringColorType.Red);
+            var tags = Core.Processor.SeperateTags(stringColorType.Red,string.Empty);
             foreach (var tag in tags)
             {
                 switch (tag.Type)

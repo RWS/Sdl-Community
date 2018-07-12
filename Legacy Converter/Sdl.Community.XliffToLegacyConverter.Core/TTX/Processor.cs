@@ -577,8 +577,8 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
                 var regexSeg = new Regex(@"\<seg id\=""(?<x1>[^""]*)""\s+pid\=""(?<x2>[^""]*)""\s+status\=""(?<x3>[^""]*)""\s+locked\=""(?<x4>[^""]*)""\s+match\=""(?<x5>[^""]*)""[^\>]*\>"
                     , RegexOptions.IgnoreCase | RegexOptions.Singleline);
 
-
-                var iTagIdSource = 90000;
+	            var tagType = string.Empty;
+				var iTagIdSource = 90000;
                 var iTagIdTarget = 90000;
 
                 var stateManager = new StateManager();
@@ -595,8 +595,8 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
                                 #region  |  XmlNodeType.Element  |
 
                                 var elementName = rdr.Name;
-
-                                var elementAttributes = new Dictionary<string, string>();
+	                            tagType = "empty";
+								var elementAttributes = new Dictionary<string, string>();
                                 while (rdr.MoveToNextAttribute())
                                     elementAttributes.Add(rdr.Name, rdr.Value);
 
@@ -607,8 +607,13 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
 
                                 foreach (var elementAttribute in elementAttributes)
                                 {
-                                    if (string.Compare(elementAttribute.Key, "Type", StringComparison.OrdinalIgnoreCase) == 0)
-                                        utAttributes.Type = elementAttribute.Value;
+	                                if (string.Compare(elementAttribute.Key, "Type", StringComparison.OrdinalIgnoreCase) ==
+	                                    0)
+	                                {
+										utAttributes.Type = elementAttribute.Value;
+		                                tagType = elementAttribute.Value;
+									}
+                                       
                                     else if (string.Compare(elementAttribute.Key, "Style", StringComparison.OrdinalIgnoreCase) == 0)
                                         utAttributes.Style = elementAttribute.Value;
                                     else if (string.Compare(elementAttribute.Key, "DisplayText", StringComparison.OrdinalIgnoreCase) == 0)
@@ -790,7 +795,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.TTX
                                 {
                                     stateManager.OtherTagsOpen--;
 
-                                    var tags = Core.Processor.SeperateTags(rdr.Value);
+                                    var tags = Core.Processor.SeperateTags(rdr.Value,tagType);
                                     foreach (var tag in tags)
                                     {
                                         switch (tag.Type)
