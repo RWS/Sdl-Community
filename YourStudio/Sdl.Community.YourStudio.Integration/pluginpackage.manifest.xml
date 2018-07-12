@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.YourStudio.Integration</PlugInName>
-  <Version>1.1</Version>
+  <Version>2.0</Version>
   <Description>Sdl.Community.YourStudio.Integration</Description>
   <Author>Sdl Community</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Sdl.Community.YourSDLStudio.dll</File>
   </Include>
