@@ -30,11 +30,5 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			return AgreementMethods.UserAgreed();
 		}
-
-		//public override void OnActivate()
-		//{
-		//	_control.EncryptionKey = _settings.EncryptionKey;
-		//	_control.RegexPatterns = _settings.RegexPatterns;
-		//}
 	}
 }
