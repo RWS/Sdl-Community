@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.TranslationMemoryManagementUtility</PlugInName>
-  <Version>1.0.0.4</Version>
+  <Version>1.0.0.5</Version>
   <Description>SDL Translation Memory Management Utility</Description>
   <Author>SDL Community</Author>
   <Include>
@@ -11,5 +11,5 @@
     <File>Sdl.Community.Utilities.TMTool.Tasks.RemoveDuplicates.dll</File>
     <File>Sdl.Community.Utilities.TMTool.Tasks.RevertIndex.dll</File>
   </Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="12.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="12.0" maxversion="15.0"/>
 </PluginPackage>
