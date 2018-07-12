@@ -22,7 +22,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             this.InitializeComponent();
             this.Text = string.Format("About {0}", this.AssemblyTitle);
             this.labelProductName.Text = this.AssemblyProduct;
-            this.labelVersion.Text = string.Format("Version {0}", this.AssemblyVersion);
+	        this.labelVersion.Text = "4.6";//string.Format("Version {0}", this.AssemblyVersion);
             this.labelCopyright.Text = this.AssemblyCopyright;
             this.labelCompanyName.Text = this.AssemblyCompany;
             this.textBoxDescription.Text = this.AssemblyDescription;
