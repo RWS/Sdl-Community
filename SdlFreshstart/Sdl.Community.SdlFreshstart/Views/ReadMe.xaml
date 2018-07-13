@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="Sdl.Community.SdlFreshstart.Views.ReadMe"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+         <Grid.RowDefinitions>
+			 <RowDefinition Height="Auto" />
+	         <RowDefinition Height="Auto"/>
+	         <RowDefinition Height="Auto"/>
+	         <RowDefinition Height="Auto"/>
+	         <RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions> 
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto" />
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="1*" />
+		</Grid.ColumnDefinitions>
+		<Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Margin="0,5,0,0" >The paths shown in the interface are based on the current version of Studio and MultiTerm.  For older versions the correct path will be used, but not displayed:</Label>
+		<Label Grid.Column="0" Grid.Row="1"> All Studio versions are shown bellow:</Label>
+		<StackPanel Grid.Column="0" Grid.Row="2">
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2017</Label>
+			<Label>14</Label>
+			<Label>14.0.0.0</Label>
+			<Label>Studio 5</Label>
+		</StackPanel>
+	    <StackPanel Grid.Column="1" Grid.Row="2">
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2015</Label>
+		    <Label>12</Label>
+		    <Label>12.0.0.0</Label>
+		    <Label>Studio 4</Label>
+	    </StackPanel>
+	    <StackPanel Grid.Column="2" Grid.Row="2">
+			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2014</Label>
+		    <Label>11</Label>
+		    <Label>11.0.0.0</Label>
+		    <Label>Studio 3</Label>
+	    </StackPanel>
+		<Label Grid.Column="0" Margin="0,40,0,0" Grid.Row="3">All MultiTerm versions are shown bellow:</Label>
+	    <StackPanel Grid.Column="0" Grid.Row="4">
+			<Label FontWeight="Bold" Foreground="#3EA691" >MultiTerm 2017</Label>
+		    <Label>14</Label>
+		    <Label>14.0.0.0</Label>
+			<Label>MultiTerm14</Label>
+	    </StackPanel>
+		<StackPanel Grid.Column="1" Margin="0,7,0,0" Grid.Row="4" >
+			<Label FontWeight="Bold" Foreground="#3EA691">MultiTerm 2015</Label>
+		    <Label>12</Label>
+		    <Label>12.0.0.0</Label>
+			<Label>MultiTerm12</Label>
+	    </StackPanel>
+		<StackPanel Grid.Column="2" Margin="0,9,0,0" Grid.Row="4">
+			<Label FontWeight="Bold" Foreground="#3EA691">MultiTerm 2014</Label>
+		    <Label>11</Label>
+		    <Label>11.0.0.0</Label>
+			<Label>MultiTerm11</Label>
+	    </StackPanel>
+	</Grid>
+</UserControl>
