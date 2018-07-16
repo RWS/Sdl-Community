@@ -72,14 +72,14 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14.0.0.0",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15.0.0.0",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataRoamingMajorFull(),
 					Alias = "roamingMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataLocalMajor(),
 					Alias = "localMajor"
@@ -87,56 +87,56 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\14",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL Trados Studio\15",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataRoamingMajor(),
 					Alias = "roamingMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\14.0.0.0",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL Trados Studio\15.0.0.0",
 					IsSelected = true,
 					Description = FoldersDescriptionText.AppDataLocalMajorFull(),
 					Alias = "localMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramData(),
 					Alias = "programDataMajor"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\14.0.0.0",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\15.0.0.0",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramDataFull(),
 					Alias = "programDataMajorFull"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio5",
+					DisplayName = @"C:\ProgramData\SDL\SDL Trados Studio\Studio15",
 					IsSelected = true,
 					Description = FoldersDescriptionText.ProgramDataVersionNumber(),
 					Alias = "programData"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Projects\projects.xml",
+					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Projects\projects.xml",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectsXml(),
 					Alias = "projectsXml"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2017\Project Templates",
+					DisplayName = @"C:\Users\[USERNAME]\Documents\Studio 2019\Project Templates",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectsTemplates(),
 					Alias = "projectTemplates"
 				},
 				new StudioLocationListItem
 				{
-					DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\14.0.0.0",
+					DisplayName = @"C:\Users[USERNAME]\AppData\Roaming\SDL\ProjectApi\15.0.0.0",
 					IsSelected = false,
 					Description = FoldersDescriptionText.ProjectApi(),
 					Alias = "roamingProjectApi"
@@ -210,6 +210,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 	    {
 		    _studioVersionsCollection = new ObservableCollection<StudioVersionListItem>
 		    {
+				new StudioVersionListItem
+				{
+					DisplayName = "Studio 2019",
+					IsSelected = false,
+					MajorVersionNumber = "15",
+					MinorVersionNumber = "15",
+					FolderName ="Studio15",
+					CacheFolderName = "SDLTradosStudio2019"
+				},
 			    new StudioVersionListItem
 			    {
 				    DisplayName = "Studio 2017",

@@ -26,7 +26,7 @@
 	    <ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding StudioVersionsCollection}" FontFamily="Calibri" FontSize="14">
 		    <ItemsControl.ItemsPanel>
 			    <ItemsPanelTemplate>
-				    <UniformGrid Columns="3" Margin="0,0,150,0"/>
+				    <UniformGrid Columns="4"/>
 			    </ItemsPanelTemplate>
 		    </ItemsControl.ItemsPanel>
 

@@ -12,14 +12,22 @@
 	         <RowDefinition Height="Auto"/>
 	         <RowDefinition Height="Auto"/>
 	         <RowDefinition Height="Auto"/>
+			
 		</Grid.RowDefinitions> 
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="auto" />
 			<ColumnDefinition Width="1*" />
 			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="1*" />
 		</Grid.ColumnDefinitions>
 		<Label Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Margin="0,5,0,0" >The paths shown in the interface are based on the current version of Studio and MultiTerm.  For older versions the correct path will be used, but not displayed:</Label>
 		<Label Grid.Column="0" Grid.Row="1"> All Studio versions are shown bellow:</Label>
+	    <StackPanel Grid.Column="0" Grid.Row="2">
+		    <Label FontWeight="Bold" Foreground="#3EA691">Studio 2019</Label>
+		    <Label>15</Label>
+		    <Label>15.0.0.0</Label>
+		    <Label>Studio 15</Label>
+	    </StackPanel>
 		<StackPanel Grid.Column="0" Grid.Row="2">
 			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2017</Label>
 			<Label>14</Label>
