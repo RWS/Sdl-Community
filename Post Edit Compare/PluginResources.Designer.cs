@@ -19,7 +19,7 @@ namespace Sdl.Community.PostEdit.Versions {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class PluginResources {
@@ -130,7 +130,7 @@ namespace Sdl.Community.PostEdit.Versions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to About {0} for SDL Trados Studio 2015.
+        ///   Looks up a localized string similar to About {0} for SDL Trados Studio 2019.
         /// </summary>
         internal static string About_SDL_Trados_Studio_2015 {
             get {

@@ -939,7 +939,7 @@ namespace PostEdit.Compare
 
         private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://posteditcompare.wiki-site.com/index.php/Main_Page");
+            System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3190.post-edit-compare");
         }
 
         private void toolStripComboBox_fileFilters_KeyPress(object sender, KeyPressEventArgs e)
