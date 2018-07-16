@@ -7,7 +7,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -42,7 +43,7 @@ namespace Sdl.Community.TMLifting
             reIndexCheckBox.Checked = true;
 			tabControlTMLifting.SelectedTab = tabControlTMLifting.TabPages["tabPageFileBasedTM"];
 			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
-			comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
+			//comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
 			groupBoxProgress.Visible = false;
 		}
 
@@ -62,9 +63,14 @@ namespace Sdl.Community.TMLifting
 							Properties.Settings.Default.Password = _userCredentials.Password;
 							Properties.Settings.Default.Uri = comboBoxServerBasedTM.SelectedItem.ToString();
 							Properties.Settings.Default.Save();
-							_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
-							var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
-							gridServerBasedTMs.DataSource = sortedBindingList;
+							var uri = new Uri(Properties.Settings.Default.Uri);
+							var translationProvider = new TranslationProviderServer(uri, false,
+														Properties.Settings.Default.UserName,
+														Properties.Settings.Default.Password);
+							var translationMemories = translationProvider.GetTranslationMemories(TranslationMemoryProperties.None);
+							//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
+							//var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
+							//gridServerBasedTMs.DataSource = sortedBindingList;
 							for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 							{
 								gridServerBasedTMs.Columns[i].Visible = false;
@@ -139,9 +145,35 @@ namespace Sdl.Community.TMLifting
 				Properties.Settings.Default.Password = password;
 				Properties.Settings.Default.Uri = uri;
 				Properties.Settings.Default.Save();
-				_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
-				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
+				//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
+				
+				var uriServer = new Uri(Properties.Settings.Default.Uri);
+				var translationProvider = new TranslationProviderServer(uriServer, false,
+											Properties.Settings.Default.UserName,
+											Properties.Settings.Default.Password);
+				var translationMemories = translationProvider.GetTranslationMemories(TranslationMemoryProperties.None);
+				//translationProvider.GetTranslationMemory()
+				var tmDetails = new List<TranslationMemoryDetails>();
+				foreach (var tm in translationMemories)
+				{
+					tmDetails.Add(new TranslationMemoryDetails
+					{
+						Id = tm.Id,
+						Name = tm.Name,
+						Description = tm.Description,
+						CreatedOn = tm.CreationDate,
+						Location = tm.ParentResourceGroupPath,
+						ShouldRecomputeStatistics = tm.ShouldRecomputeFuzzyIndexStatistics(),
+						LastReIndexDate = tm.FuzzyIndexStatisticsRecomputedAt,
+						LastReIndexSize = tm.FuzzyIndexStatisticsSize
+					});
+				}
+				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(tmDetails);
 				gridServerBasedTMs.DataSource = sortedBindingList;
+
+
+
+
 				for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
 				{
 					gridServerBasedTMs.Columns[i].Visible = false;
@@ -246,14 +278,32 @@ namespace Sdl.Community.TMLifting
 				foreach (dynamic row in gridServerBasedTMs.SelectedRows)
 				{
 					var selectedRow = gridServerBasedTMs.Rows[row.Index].DataBoundItem as TranslationMemoryDetails;
-					var fuzzyIndexRespose = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
-					var backgroundTask = new BackgroundTask();
-					do
-					{
-						backgroundTask = await _sbTMs.GroupShareClient.TranslationMemories.GetBackgroundTask(fuzzyIndexRespose.Id);
-						gridServerBasedTMs.Columns["Status"].Visible = true;
-						gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = backgroundTask.Status;
-					} while (backgroundTask.Status != "Done" && backgroundTask.Status != "AlreadyExecuting" && backgroundTask.Status != "Failed");
+					var uriServer = new Uri(Properties.Settings.Default.Uri);
+					var translationProvider = new TranslationProviderServer(uriServer, false,
+												Properties.Settings.Default.UserName,
+												Properties.Settings.Default.Password);
+					var selectedTm = translationProvider.GetTranslationMemory(selectedRow.Id, TranslationMemoryProperties.None);
+					selectedTm.Reindex();
+					//foreach (var languageDirection in selectedTm.LanguageDirections)
+					//{
+					//	var unitsCount = languageDirection.GetTranslationUnitCount();
+					//	var iterator = new RegularIterator(100);
+					//	//var result = languageDirection.ReindexTranslationUnits(ref iterator);
+
+					//	while (languageDirection.ReindexTranslationUnits(ref iterator))
+					//	{
+					//	}
+					//}
+					selectedTm.RecomputeFuzzyIndexStatistics();
+					selectedTm.Save();
+					//var fuzzyIndexRespose = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
+					//var backgroundTask = new BackgroundTask();
+					//do
+					//{
+					//	backgroundTask = await _sbTMs.GroupShareClient.TranslationMemories.GetBackgroundTask(fuzzyIndexRespose.Id);
+					//	gridServerBasedTMs.Columns["Status"].Visible = true;
+					//	gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = backgroundTask.Status;
+					//} while (backgroundTask.Status != "Done" && backgroundTask.Status != "AlreadyExecuting" && backgroundTask.Status != "Failed");
 				}
 			}
         }
@@ -366,13 +416,13 @@ namespace Sdl.Community.TMLifting
 				var i = 0;
 				for (; i < gridServerBasedTMs.RowCount-1; i++)
 				{
-					_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
-					Properties.Settings.Default.UserName,
-					Properties.Settings.Default.Password,
-					Properties.Settings.Default.Uri);
-					gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
-					gridServerBasedTMs["Status", i].Value = "";
-					gridServerBasedTMs.Refresh();
+					//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
+					//Properties.Settings.Default.UserName,
+					//Properties.Settings.Default.Password,
+					//Properties.Settings.Default.Uri);
+					//gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
+					//gridServerBasedTMs["Status", i].Value = "";
+					//gridServerBasedTMs.Refresh();
 				}
 			}
 			else

@@ -7,8 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 using Sdl.Community.TMLifting.TranslationMemory;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMLifting
 {
@@ -28,6 +28,12 @@ namespace Sdl.Community.TMLifting
 
 		private async void btnOkServerBased_Click(object sender, EventArgs e)
 		{
+			//Properties.Settings.Default.UserName = userNameTxtBox.Text;
+			//Properties.Settings.Default.Password = passwordTxtBox.Text;
+			//Properties.Settings.Default.Uri = serverNameTxtBox.Text;
+			//Properties.Settings.Default.Save();
+
+
 			_addDetailsCallback(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 			this.Close();
 		}
