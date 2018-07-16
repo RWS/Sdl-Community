@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SdlXliff.Toolkit.Integration</RootNamespace>
     <AssemblyName>SdlXliff.Toolkit.Integration</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,10 +58,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
-      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio15\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
