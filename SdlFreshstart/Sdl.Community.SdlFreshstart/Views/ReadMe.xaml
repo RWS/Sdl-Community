@@ -28,19 +28,19 @@
 		    <Label>15.0.0.0</Label>
 		    <Label>Studio 15</Label>
 	    </StackPanel>
-		<StackPanel Grid.Column="0" Grid.Row="2">
+		<StackPanel Grid.Column="1" Grid.Row="2">
 			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2017</Label>
 			<Label>14</Label>
 			<Label>14.0.0.0</Label>
 			<Label>Studio 5</Label>
 		</StackPanel>
-	    <StackPanel Grid.Column="1" Grid.Row="2">
+	    <StackPanel Grid.Column="2" Grid.Row="2">
 			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2015</Label>
 		    <Label>12</Label>
 		    <Label>12.0.0.0</Label>
 		    <Label>Studio 4</Label>
 	    </StackPanel>
-	    <StackPanel Grid.Column="2" Grid.Row="2">
+	    <StackPanel Grid.Column="3" Grid.Row="2">
 			<Label FontWeight="Bold" Foreground="#3EA691">Studio 2014</Label>
 		    <Label>11</Label>
 		    <Label>11.0.0.0</Label>
