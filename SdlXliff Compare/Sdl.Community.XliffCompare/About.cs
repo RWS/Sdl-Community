@@ -17,7 +17,7 @@ namespace Sdl.Community.XliffCompare
             InitializeComponent();
             Text = string.Format("About {0}", AssemblyProduct);
             labelProductName.Text = AssemblyProduct + "";
-            labelVersion.Text = string.Format("Version {0}", AssemblyVersion);
+	        labelVersion.Text = "1.3";
             labelCopyright.Text = AssemblyCopyright;
             labelCompanyName.Text = AssemblyCompany;
             textBoxDescription.Text = AssemblyDescription + "\r\n\r\n\r\n" + _copyRight;

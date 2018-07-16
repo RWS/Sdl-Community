@@ -41,85 +41,86 @@ namespace Sdl.Community.MtEnhancedProvider
 
         private Dictionary<string, MtTag> GetSourceTagsDict()
         {
-            dict = new Dictionary<string, MtTag>(); //try this
-													//build dict
-            for (var i = 0; i < _sourceSegment.Elements.Count; i++)
-            {
-                var elType = _sourceSegment.Elements[i].GetType();
+			dict = new Dictionary<string, MtTag>(); //try this
+	        //build dict
+	        for (var i = 0; i < _sourceSegment.Elements.Count; i++)
+	        {
+		        var elType = _sourceSegment.Elements[i].GetType();
 
-                if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag") //if tag, add to dictionary
-                {
-                    var theTag = new MtTag((Tag)_sourceSegment.Elements[i].Duplicate());
-					var tagText = string.Empty;
+		        if (elType.ToString() == "Sdl.LanguagePlatform.Core.Tag") //if tag, add to dictionary
+		        {
+			        var theTag = new MtTag((Tag)_sourceSegment.Elements[i].Duplicate());
+			        var tagText = string.Empty;
 
-	                var tagInfo = new TagInfo
-	                {
-		                TagType = theTag.SdlTag.Type,
-		                Index = i,
-		                IsClosed = false,
-		                TagId = theTag.SdlTag.TagID
-	                };
-	                if (!TagsInfo.Any(n => n.TagId.Equals(tagInfo.TagId)))
-	                {
-		                TagsInfo.Add(tagInfo);
-					}
+			        var tagInfo = new TagInfo
+			        {
+				        TagType = theTag.SdlTag.Type,
+				        Index = i,
+				        IsClosed = false,
+				        TagId = theTag.SdlTag.TagID
+			        };
+			        if (!TagsInfo.Any(n => n.TagId.Equals(tagInfo.TagId)))
+			        {
+				        TagsInfo.Add(tagInfo);
+			        }
 
-	                var tag = GetCorrespondingTag(theTag.SdlTag.TagID);
-					if (theTag.SdlTag.Type == TagType.Start)
-					{
-						if (tag != null)
-						{
-							tagText = "<tg" + tag.TagId + ">";
-						}
-					}
-					if(theTag.SdlTag.Type == TagType.End)
-					{
-						if (tag != null)
-						{
-							tag.IsClosed = true;
-							tagText = "</tg" + tag.TagId + ">";
-						}
-					}
-					if(theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
-					{
-						if (tag != null)
-						{
-							tagText = "<tg" + tag.TagId + "/>";
-						}
-					}
-	                _preparedSourceText += tagText;
-                    //now we have to figure out whether this tag is preceded and/or followed by whitespace
-                    if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-                    {
-                        var prevText = _sourceSegment.Elements[i - 1].ToString();
-                        if (!prevText.Trim().Equals(""))//and not just whitespace
-                        {
-                            //get number of trailing spaces for that segment
-                            var whitespace = prevText.Length - prevText.TrimEnd().Length;
-                            //add that trailing space to our tag as leading space
-                            theTag.PadLeft = prevText.Substring(prevText.Length - whitespace);
-                        }
-                    }
-                    if (i < _sourceSegment.Elements.Count - 1 && !_sourceSegment.Elements[i + 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
-                    {
-                        //here we don't care whether it is only whitespace
-                        //get number of leading spaces for that segment
-                        var nextText = _sourceSegment.Elements[i + 1].ToString();
-                        var whitespace = nextText.Length - nextText.TrimStart().Length;
-                        //add that trailing space to our tag as leading space
-                        theTag.PadRight = nextText.Substring(0, whitespace);
-                    }
-                    dict.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
-                }
-                else
-				{//if not a tag sourceSegment.Elements[i].ToString();//
-					var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
-					_preparedSourceText += str;
-                }
-            }
-			TagsInfo.Clear();
-            return dict;
-        }
+			        var tag = GetCorrespondingTag(theTag.SdlTag.TagID);
+			        if (theTag.SdlTag.Type == TagType.Start)
+			        {
+				        if (tag != null)
+				        {
+					        tagText = "<tg" + tag.TagId + ">";
+				        }
+			        }
+			        if (theTag.SdlTag.Type == TagType.End)
+			        {
+				        if (tag != null)
+				        {
+					        tag.IsClosed = true;
+					        tagText = "</tg" + tag.TagId + ">";
+				        }
+			        }
+			        if (theTag.SdlTag.Type == TagType.Standalone || theTag.SdlTag.Type == TagType.TextPlaceholder)
+			        {
+				        if (tag != null)
+				        {
+					        tagText = "<tg" + tag.TagId + "/>";
+				        }
+			        }
+			        _preparedSourceText += tagText;
+			        //now we have to figure out whether this tag is preceded and/or followed by whitespace
+			        if (i > 0 && !_sourceSegment.Elements[i - 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
+			        {
+				        var prevText = _sourceSegment.Elements[i - 1].ToString();
+				        if (!prevText.Trim().Equals(""))//and not just whitespace
+				        {
+					        //get number of trailing spaces for that segment
+					        var whitespace = prevText.Length - prevText.TrimEnd().Length;
+					        //add that trailing space to our tag as leading space
+					        theTag.PadLeft = prevText.Substring(prevText.Length - whitespace);
+				        }
+			        }
+			        if (i < _sourceSegment.Elements.Count - 1 && !_sourceSegment.Elements[i + 1].GetType().ToString().Equals("Sdl.LanguagePlatform.Core.Tag"))
+			        {
+				        //here we don't care whether it is only whitespace
+				        //get number of leading spaces for that segment
+				        var nextText = _sourceSegment.Elements[i + 1].ToString();
+				        var whitespace = nextText.Length - nextText.TrimStart().Length;
+				        //add that trailing space to our tag as leading space
+				        theTag.PadRight = nextText.Substring(0, whitespace);
+			        }
+			        dict.Add(tagText, theTag); //add our new tag code to the dict with the corresponding tag
+		        }
+		        else
+		        {
+			        var str = HttpUtility.HtmlEncode(_sourceSegment.Elements[i].ToString()); //HtmlEncode our plain text to be better processed by google and add to string
+			        //_preparedSourceText += str;
+			        _preparedSourceText += _sourceSegment.Elements[i].ToString();
+		        }
+	        }
+	        TagsInfo.Clear();
+	        return dict;
+		}
 
 	    private TagInfo GetCorrespondingTag(string tagId)
 	    {

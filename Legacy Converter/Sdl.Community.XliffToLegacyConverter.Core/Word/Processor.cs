@@ -429,7 +429,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.Word
                                                 lastIndexSource = mRegInternal.Index + mRegInternal.Length;
 
                                                 #region  |  add tags  |
-                                                var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value);
+                                                var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value,string.Empty);
                                                 foreach (var tag in tags)
                                                 {
                                                     switch (tag.Type)
@@ -493,7 +493,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.Word
                                                 lastIndexTarget = mRegInternal.Index + mRegInternal.Length;
 
                                                 #region  |  add tags  |
-                                                var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value);
+                                                var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value, string.Empty);
                                                 foreach (var tag in tags)
                                                 {
                                                     switch (tag.Type)
@@ -799,7 +799,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.Word
                                     lastIndexSource = mRegInternal.Index + mRegInternal.Length;
 
                                     #region  |  add tags  |
-                                    var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value);
+                                    var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value, string.Empty);
                                     foreach (var tag in tags)
                                     {
                                         switch (tag.Type)
@@ -861,7 +861,7 @@ namespace Sdl.Community.XliffToLegacyConverter.Core.Word
                                     lastIndexTarget = mRegInternal.Index + mRegInternal.Length;
 
                                     #region  |  add tags  |
-                                    var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value);
+                                    var tags = Core.Processor.SeperateTags(mRegInternal.Groups["tag"].Value, string.Empty);
                                     foreach (var tag in tags)
                                     {
                                         switch (tag.Type)

@@ -11,7 +11,7 @@ namespace Sdl.Community.Qualitivity.Dialogs
         {
             InitializeComponent();
 
-            Text = PluginResources.About_Qualitivity_for_SDL_Trados_Studio_2015;
+            Text = PluginResources.About_Qualitivity_for_SDL_Trados_Studio_2017;
             labelProductNameAndVersion.Text = string.Format(PluginResources.Qualitivity___Version__0_, AssemblyVersion);
             label1.Text = PluginResources.Qualitivity;            
             labelCopyright.Text = AssemblyCopyright;

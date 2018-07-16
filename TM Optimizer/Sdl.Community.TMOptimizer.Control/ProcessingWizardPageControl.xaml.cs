@@ -50,7 +50,7 @@ namespace Sdl.Community.TMOptimizer.Control
 
         public void Help()
         {
-            HelpManager.ShowHelp();
+           // HelpManager.ShowHelp();
         }
 
         public void Finish()

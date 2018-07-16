@@ -80,7 +80,7 @@ namespace Sdl.Community.TMOptimizer.Control
 
         private void Wizard_Help(object sender, RoutedEventArgs e)
         {
-            HelpManager.ShowHelp();
+           
         }
     }
 }
