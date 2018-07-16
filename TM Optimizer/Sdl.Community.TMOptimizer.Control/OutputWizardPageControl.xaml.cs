@@ -55,7 +55,7 @@ namespace Sdl.Community.TMOptimizer.Control
 
         public void Help()
         {
-            HelpManager.ShowHelp();
+           
         }
 
         public void Finish()

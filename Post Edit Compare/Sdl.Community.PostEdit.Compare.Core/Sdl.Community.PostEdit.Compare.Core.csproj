@@ -61,47 +61,50 @@
     <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
     </Reference>
-	  <Reference Include="Sdl.Community.Toolkit.LanguagePlatform">
-		  <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
-	  </Reference>
-    <Reference Include="Sdl.Core.Api" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Api.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.Core.Globalization" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
+    <Reference Include="Sdl.Community.Toolkit.LanguagePlatform, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.LanguagePlatform.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.LanguagePlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Api">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Api.dll</HintPath>
+    </Reference>
+    <Reference Include="Sdl.Core.Globalization">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Globalization.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Settings">
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Core.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Bilingual.SdlXliff">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Bilingual.SdlXliff.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Settings">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Settings.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
+    <Reference Include="Sdl.FileTypeSupport.Framework.Core.Utilities">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.Utilities.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemory" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemory">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemory.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
+    <Reference Include="Sdl.LanguagePlatform.TranslationMemoryApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.TranslationMemoryApi.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectApi" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectApi.dll</HintPath>
+    <Reference Include="Sdl.ProjectApi">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectApi.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.Core" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.Core">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Sdl.ProjectAutomation.FileBased" >
-	    <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
+    <Reference Include="Sdl.ProjectAutomation.FileBased">
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

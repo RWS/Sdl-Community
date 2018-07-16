@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.SplitMergeUIWix.Properties {
+namespace Sdl.Community.Legit {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Sdl.Community.SplitMergeUIWix.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    internal class PluginResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resources() {
+        internal PluginResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace Sdl.Community.SplitMergeUIWix.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.SplitMergeUIWix.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.Legit.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,25 @@ namespace Sdl.Community.SplitMergeUIWix.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon LegIt {
+            get {
+                object obj = ResourceManager.GetObject("LegIt", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sdl.Community.Legit.
+        /// </summary>
+        internal static string Plugin_Name {
+            get {
+                return ResourceManager.GetString("Plugin_Name", resourceCulture);
             }
         }
     }

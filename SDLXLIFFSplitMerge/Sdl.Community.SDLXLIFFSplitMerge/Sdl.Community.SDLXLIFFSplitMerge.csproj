@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Sdl.Community.SDLXLIFFSplitMerge</RootNamespace>
     <AssemblyName>Sdl.Community.SDLXLIFFSplitMerge</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
@@ -18,6 +18,7 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,61 +41,61 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
+      <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.6.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.LanguageProcessing">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.LanguageProcessing.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <HintPath>..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Desktop.IntegrationApi.Extensions">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.Desktop.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Core">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.FileTypeSupport.Framework.Implementation">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.FileTypeSupport.Framework.Implementation.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.LanguagePlatform.Core">
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.LanguagePlatform.Core.dll</HintPath>
-      <Private>False</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.FileBased">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.FileBased.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Settings">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.ProjectAutomation.Settings.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.TranslationStudioAutomation.IntegrationApi.Extensions">
-      <Private>False</Private>
+      <Private>True</Private>
       <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.TranslationStudioAutomation.IntegrationApi.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -130,14 +131,17 @@
     <ProjectReference Include="..\SplitSDLXLIFF\Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj">
       <Project>{b4f2fdee-3167-4295-a831-36b5bbbc9557}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF.Lib</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj">
       <Project>{7c927446-0461-4fcc-8c1d-a309430e064c}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\SplitSDLXLIFF\Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj">
       <Project>{80614F74-563D-418E-9BF6-1294F73521C0}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF.Wizard</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -154,15 +158,16 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\SplitSDLXLIFF\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\Build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

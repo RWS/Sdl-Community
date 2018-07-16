@@ -8,9 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Sdl.Community.SplitMergeUIWix</RootNamespace>
     <AssemblyName>Sdl.Community.SplitMergeUIWix</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,14 +33,21 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>SdlCommunity.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MoreLinq, Version=1.4.18916.0, Culture=neutral, PublicKeyToken=384d532d7e88985d, processorArchitecture=MSIL">
       <HintPath>..\packages\morelinq.1.4.0\lib\net35\MoreLinq.dll</HintPath>
-    </Reference>
-    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.6.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.6.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Sdl.Community.Toolkit.Core, Version=0.7.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Sdl.Community.Toolkit.Core.Studio2017.0.7.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.Core.Globalization, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -47,16 +57,6 @@
     <Reference Include="Sdl.Core.LanguageProcessing, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.LanguageProcessing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.PluginFramework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Sdl.Core.PluginFramework.PackageSupport, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.Core.PluginFramework.PackageSupport.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Sdl.Core.Settings, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
@@ -147,6 +147,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -158,6 +159,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SdlCommunity.snk" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -166,14 +168,17 @@
     <ProjectReference Include="..\SplitSDLXLIFF\Lib\Sdl.Utilities.SplitSDLXLIFF.Lib.csproj">
       <Project>{b4f2fdee-3167-4295-a831-36b5bbbc9557}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF.Lib</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\SplitSDLXLIFF\Sdl.Utilities.SplitSDLXLIFF.csproj">
       <Project>{7c927446-0461-4fcc-8c1d-a309430e064c}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF</Name>
+      <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\SplitSDLXLIFF\Wizard\Sdl.Utilities.SplitSDLXLIFF.Wizard.csproj">
       <Project>{80614F74-563D-418E-9BF6-1294F73521C0}</Project>
       <Name>Sdl.Utilities.SplitSDLXLIFF.Wizard</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -152,14 +152,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>..\..\SdlCommunity.snk</AssemblyOriginatorKeyFile>
+    <PluginDeploymentPath>$(AppData)\SDL\SDL Trados Studio\14\Plugins</PluginDeploymentPath>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
+  <Import Project="..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets" Condition="Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.14.0.0\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Sdl.Core.PluginFramework.Build.15.0.2\build\net45\Sdl.Core.PluginFramework.Build.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

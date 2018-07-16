@@ -351,7 +351,7 @@ namespace Sdl.Community.PostEdit.Versions
 
         public void ViewOnlineHelp()
         {
-            Process.Start("http://posteditcompare.wiki-site.com/index.php/Main_Page");
+            Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3190.post-edit-compare");
         }
         public void ViewAboutInfo()
         {
