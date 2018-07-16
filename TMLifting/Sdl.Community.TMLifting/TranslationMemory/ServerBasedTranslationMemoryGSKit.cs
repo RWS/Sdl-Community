@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Sdl.Community.GroupShareKit;
-using Sdl.Community.GroupShareKit.Models.Response.TranslationMemory;
 using System.Reflection;
 using System.IO;
 using Sdl.Community.TMLifting.Helpers;
@@ -15,8 +13,8 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 	{
 		private readonly Assembly _sdlTranslationStudioProjectManagementAssembly;
 
-		public BindingList<TranslationMemoryDetails> ServerBasedTMDetails { get; set; }
-		public GroupShareClient GroupShareClient { get; set; }
+		//public BindingList<TranslationMemoryDetails> ServerBasedTMDetails { get; set; }
+		//public GroupShareClient GroupShareClient { get; set; }
 
 		public ServerBasedTranslationMemoryGSKit()
 		{

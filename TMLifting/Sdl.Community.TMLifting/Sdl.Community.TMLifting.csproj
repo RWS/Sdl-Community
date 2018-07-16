@@ -81,10 +81,6 @@
       <HintPath>GSKit\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Sdl.Community.GroupShareKit">
-      <HintPath>GSKit\Sdl.Community.GroupShareKit.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="Sdl.Community.Toolkit.Core, Version=0.5.1.0, Culture=neutral, PublicKeyToken=15236fec901153ed, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Community.Toolkit.Core.0.5.1\lib\net45\Sdl.Community.Toolkit.Core.dll</HintPath>
       <Private>True</Private>
@@ -178,6 +174,7 @@
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
+    <Compile Include="Helpers\TranslationMemoryDetails.cs" />
     <Compile Include="Helpers\UserCredentials.cs" />
     <Compile Include="LoginPage.cs">
       <SubType>Form</SubType>
@@ -236,11 +233,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GSKit\Sdl.Community.GroupShareKit.dll" />
-    <EmbeddedResource Include="GSKit\System.Net.Http.dll" />
-    <EmbeddedResource Include="GSKit\Sdl.TmService.Sdk.dll" />
-    <EmbeddedResource Include="GSKit\Newtonsoft.Json.dll" />
-    <EmbeddedResource Include="GSKit\Sdl.TranslationStudio.ProjectManagement.dll" />
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="Resources\256x256.png" />
     <Content Include="Resources\128x128.png" />
