@@ -42,6 +42,8 @@ Once you have installed the tools, follow the steps below:
 The following table shows all the plugins available in the repository. 
 
 By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in SDL App Store. Documentation column will redirect to the source code for the selected plugin.
+
+## Batch Task Api
   
 | Plugin Name | Description |
 | --- | --- |
