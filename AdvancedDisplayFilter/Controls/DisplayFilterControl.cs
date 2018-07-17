@@ -601,7 +601,6 @@ namespace Sdl.Community.AdvancedDisplayFilter.Controls
 					    AddColor(color);
 				    }
 				    if (colorCodesList.Count > 0) continue;
-				    //  var formattingGroup = segmentPair.Source.ParentParagraphUnit.Properties.Contexts.EffectiveDefaultFormatting;
 					var contextInfoList = segmentPair.GetParagraphUnitProperties().Contexts.Contexts;
 				    var colorCode = ColorPickerHelper.DefaultFormatingColorCode(contextInfoList);
 				    AddColor(colorCode);
