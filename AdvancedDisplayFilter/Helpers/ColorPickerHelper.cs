@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
 using Sdl.FileTypeSupport.Framework.NativeApi;
 using Sdl.TranslationStudioAutomation.IntegrationApi.DisplayFilters;
@@ -80,6 +81,32 @@ namespace Sdl.Community.Plugins.AdvancedDisplayFilter.Helpers
 						}
 					}
 					
+				}
+				var colorFromMetadata = GetColorFromMetadata(contextInfo[0]);
+				return colorFromMetadata;
+			}
+			return string.Empty;
+		}
+		private static string GetColorFromMetadata(IContextInfo contextInfo)
+		{
+			if (contextInfo.HasMetaData)
+			{
+				if (contextInfo.MetaDataContainsKey("ParagraphFormatting"))
+				{
+					var paragraphValue = contextInfo.GetMetaData("ParagraphFormatting");
+					if (paragraphValue.Contains("color"))
+					{
+						var regex = new Regex("(w:val=\"[0-9a-fA-F]*\")");
+						var matches = regex.Matches(paragraphValue);
+						foreach (Match match in matches)
+						{
+							var value = match.Value;
+							//color string is like this "code" - we need to remove the "" characters
+							var color = value.Substring(value.IndexOf('"') + 1).TrimEnd('"');
+							return color;
+						}
+					}
+
 				}
 			}
 			return string.Empty;
