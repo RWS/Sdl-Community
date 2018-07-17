@@ -43,77 +43,30 @@ namespace Sdl.Community.TMLifting
             reIndexCheckBox.Checked = true;
 			tabControlTMLifting.SelectedTab = tabControlTMLifting.TabPages["tabPageFileBasedTM"];
 			tabControlTMLifting.SelectedIndexChanged += TabControlTMLifting_SelectedIndexChanged;
-			//comboBoxServerBasedTM.DataSource = await _sbTMs.GetServers();
 			groupBoxProgress.Visible = false;
 		}
 
-		private async void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
+		private void TabControlTMLifting_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			if(tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
 			{
 				cleanBtn.Text = "Refresh";
-				if (comboBoxServerBasedTM.SelectedItem != null)
+				if (_currentInstance == null && !gridServerBasedTMs.Visible)
 				{
-					_userCredentials = _sbTMs.GetUserCredentials(comboBoxServerBasedTM.SelectedItem as Uri);
-					if (_userCredentials.UserName != "N/A" && _userCredentials.Password != "N/A")
+					_currentInstance = new LoginPage();
+					_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(AddDetailsCallback);
+					_currentInstance.FormClosed += InstanceHasBeenClosed;
+					_currentInstance.Show();
+				}
+				else
+				{
+					if (_currentInstance != null && !gridServerBasedTMs.Visible)
 					{
-						try
-						{
-							Properties.Settings.Default.UserName = _userCredentials.UserName;
-							Properties.Settings.Default.Password = _userCredentials.Password;
-							Properties.Settings.Default.Uri = comboBoxServerBasedTM.SelectedItem.ToString();
-							Properties.Settings.Default.Save();
-							var uri = new Uri(Properties.Settings.Default.Uri);
-							var translationProvider = new TranslationProviderServer(uri, false,
-														Properties.Settings.Default.UserName,
-														Properties.Settings.Default.Password);
-							var translationMemories = translationProvider.GetTranslationMemories(TranslationMemoryProperties.None);
-							//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(Properties.Settings.Default.UserName, Properties.Settings.Default.Password, Properties.Settings.Default.Uri);
-							//var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(_sbTMs.ServerBasedTMDetails);
-							//gridServerBasedTMs.DataSource = sortedBindingList;
-							for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
-							{
-								gridServerBasedTMs.Columns[i].Visible = false;
-							}
-							gridServerBasedTMs.Columns["Name"].Visible = true;
-							gridServerBasedTMs.Columns["Description"].Visible = true;
-							gridServerBasedTMs.Columns["CreatedOn"].Visible = true;
-							gridServerBasedTMs.Columns["Location"].Visible = true;
-							gridServerBasedTMs.Columns["ShouldRecomputeStatistics"].Visible = true;
-							gridServerBasedTMs.Columns["LastReIndexDate"].Visible = true;
-							gridServerBasedTMs.Columns["LastReIndexSize"].Visible = true;
-							if (!gridServerBasedTMs.Columns.Contains("Status"))
-							{
-								gridServerBasedTMs.Columns.Add("Status", "Status");
-							}
-							gridServerBasedTMs.Columns["Status"].Visible = true;
-							gridServerBasedTMs.ReadOnly = true;
-							gridServerBasedTMs.Visible = true;
-							groupBoxTM.Controls.Add(gridServerBasedTMs);
-							connectToServerBtn.Text = "Logout";
-						}
-						catch (Exception ex)
-						{
-							throw new SystemException(Constants.AuthentificationErrorMsg);
-						}
-					}
-					else if (_currentInstance == null && !gridServerBasedTMs.Visible)
-					{
-						_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
-						_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(AddDetailsCallback);
+						_currentInstance = new LoginPage();
 						_currentInstance.FormClosed += InstanceHasBeenClosed;
-						_currentInstance.Show();
+						_currentInstance.BringToFront();
 					}
-					else
-					{
-						if (_currentInstance != null && !gridServerBasedTMs.Visible)
-						{
-							_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
-							_currentInstance.FormClosed += InstanceHasBeenClosed;
-							_currentInstance.BringToFront();
-						}
 						
-					}
 				}
 				btnBrowse.Enabled = false;
 				chkLoadStudioTMs.Enabled = false;
@@ -137,7 +90,7 @@ namespace Sdl.Community.TMLifting
 		{
 			_currentInstance = null;
 		}
-		private async void AddDetailsCallback(string userName, string password, string uri)
+		private void AddDetailsCallback(string userName, string password, string uri)
 		{
 			try
 			{
@@ -145,15 +98,14 @@ namespace Sdl.Community.TMLifting
 				Properties.Settings.Default.Password = password;
 				Properties.Settings.Default.Uri = uri;
 				Properties.Settings.Default.Save();
-				//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(userName, password, uri);
 				
 				var uriServer = new Uri(Properties.Settings.Default.Uri);
 				var translationProvider = new TranslationProviderServer(uriServer, false,
 											Properties.Settings.Default.UserName,
 											Properties.Settings.Default.Password);
 				var translationMemories = translationProvider.GetTranslationMemories(TranslationMemoryProperties.None);
-				//translationProvider.GetTranslationMemory()
 				var tmDetails = new List<TranslationMemoryDetails>();
+
 				foreach (var tm in translationMemories)
 				{
 					tmDetails.Add(new TranslationMemoryDetails
@@ -165,8 +117,9 @@ namespace Sdl.Community.TMLifting
 						Location = tm.ParentResourceGroupPath,
 						ShouldRecomputeStatistics = tm.ShouldRecomputeFuzzyIndexStatistics(),
 						LastReIndexDate = tm.FuzzyIndexStatisticsRecomputedAt,
-						LastReIndexSize = tm.FuzzyIndexStatisticsSize
+						LastReIndexSize = tm.GetTranslationUnitCount()
 					});
+					var result = tm.CurrentReindexOperation;
 				}
 				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(tmDetails);
 				gridServerBasedTMs.DataSource = sortedBindingList;
@@ -258,7 +211,7 @@ namespace Sdl.Community.TMLifting
             }
         }
 
-        private async void btnReindex_Click(object sender, EventArgs e)
+        private void btnReindex_Click(object sender, EventArgs e)
         {			
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageFileBasedTM"])
 			{
@@ -283,27 +236,13 @@ namespace Sdl.Community.TMLifting
 												Properties.Settings.Default.UserName,
 												Properties.Settings.Default.Password);
 					var selectedTm = translationProvider.GetTranslationMemory(selectedRow.Id, TranslationMemoryProperties.None);
-					selectedTm.Reindex();
-					//foreach (var languageDirection in selectedTm.LanguageDirections)
-					//{
-					//	var unitsCount = languageDirection.GetTranslationUnitCount();
-					//	var iterator = new RegularIterator(100);
-					//	//var result = languageDirection.ReindexTranslationUnits(ref iterator);
-
-					//	while (languageDirection.ReindexTranslationUnits(ref iterator))
-					//	{
-					//	}
-					//}
-					selectedTm.RecomputeFuzzyIndexStatistics();
-					selectedTm.Save();
-					//var fuzzyIndexRespose = await _sbTMs.GroupShareClient.TranslationMemories.Reindex(selectedRow.TranslationMemoryId, new FuzzyRequest());
-					//var backgroundTask = new BackgroundTask();
-					//do
-					//{
-					//	backgroundTask = await _sbTMs.GroupShareClient.TranslationMemories.GetBackgroundTask(fuzzyIndexRespose.Id);
-					//	gridServerBasedTMs.Columns["Status"].Visible = true;
-					//	gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = backgroundTask.Status;
-					//} while (backgroundTask.Status != "Done" && backgroundTask.Status != "AlreadyExecuting" && backgroundTask.Status != "Failed");
+					var reindexOperation = new ScheduledReindexOperation()
+					{
+						TranslationMemory = selectedTm
+					};
+					reindexOperation.Refresh();
+					reindexOperation.Queue();
+					gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = reindexOperation.Status;
 				}
 			}
         }
@@ -453,7 +392,7 @@ namespace Sdl.Community.TMLifting
 			{
 				if (_currentInstance == null)
 				{
-					_currentInstance = new LoginPage(comboBoxServerBasedTM.Text);
+					_currentInstance = new LoginPage();
 					_currentInstance._addDetailsCallback = new AddServerBasedTMsDetails(AddDetailsCallback);
 					_currentInstance.FormClosed += InstanceHasBeenClosed;
 					_currentInstance.Show();
