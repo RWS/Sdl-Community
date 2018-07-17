@@ -37,12 +37,14 @@ To get started with this repository follow the following steps:
 
  ![](https://raw.githubusercontent.com/sdl/Sdl-Community/gh-pages/unsignedPlugin.png)
 
-## List of plugins
+## Batch Task Api
 
 The following table showns all the plugins available in the repository. 
 
 If you click on the plugin name you'll be redirected to SDL App Store, from where you can download the selected plugin. 
 Documentation column will redirect to the source code for the selected plugin.
+
+## List of plugins
   
 | Plugin Name | Description |
 | --- | --- |
