@@ -180,7 +180,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					foreach (Rule rule in SelectedItems)
+					foreach (Rule rule in SelectedItems.OfType<Rule>())
 					{
 						selectedRules.Add(rule);
 					}

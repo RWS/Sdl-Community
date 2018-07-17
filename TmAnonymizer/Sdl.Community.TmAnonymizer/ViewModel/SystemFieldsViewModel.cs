@@ -211,7 +211,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					foreach (User user in SelectedItems)
+					foreach (User user in SelectedItems.OfType<User>())
 					{
 						selectedUsers.Add(user);
 					}
