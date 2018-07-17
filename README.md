@@ -44,6 +44,12 @@ The following table shows all the plugins available in the repository.
 By clicking on each plugin name in the table, you'll be redirected to the plugin's download page in SDL App Store. Documentation column will redirect to the source code for the selected plugin.
 
 ## Batch Task Api
+
+| Plugin Name | Description |
+| --- | --- |
+| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
+| [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
+
   
 | Plugin Name | Description |
 | --- | --- |
