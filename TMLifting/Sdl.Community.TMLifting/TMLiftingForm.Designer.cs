@@ -33,14 +33,14 @@ namespace Sdl.Community.TMLifting
             this.tabPageFileBasedTM = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
             this.rtbStatus = new System.Windows.Forms.RichTextBox();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
+            this.groupBoxProgress = new System.Windows.Forms.GroupBox();
+            this.progressBarFileBased = new System.Windows.Forms.ProgressBar();
+            this.labelMessage = new System.Windows.Forms.Label();
+            this.lstTms = new System.Windows.Forms.ListBox();
             this.tabControlTMLifting = new System.Windows.Forms.TabControl();
             this.tabPageServerBasedTM = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.groupBoxTM = new System.Windows.Forms.GroupBox();
-            this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
             this.connectToServerBtn = new System.Windows.Forms.Button();
-            this.server = new System.Windows.Forms.Label();
-            this.comboBoxServerBasedTM = new System.Windows.Forms.ComboBox();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.chkLoadStudioTMs = new System.Windows.Forms.CheckBox();
             this.reIndexCheckBox = new System.Windows.Forms.CheckBox();
@@ -49,21 +49,19 @@ namespace Sdl.Community.TMLifting
             this.cleanBtn = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnReindex = new System.Windows.Forms.Button();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-            this.lstTms = new System.Windows.Forms.ListBox();
-            this.groupBoxProgress = new System.Windows.Forms.GroupBox();
-            this.progressBarFileBased = new System.Windows.Forms.ProgressBar();
-            this.labelMessage = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.gridServerBasedTMs = new System.Windows.Forms.DataGridView();
+            this.groupBoxTM = new System.Windows.Forms.GroupBox();
             this.tabPageFileBasedTM.SuspendLayout();
             this.panel2.SuspendLayout();
-            this.tabControlTMLifting.SuspendLayout();
-            this.tabPageServerBasedTM.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
-            this.groupBoxTM.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
-            this.panel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.groupBoxProgress.SuspendLayout();
+            this.tabControlTMLifting.SuspendLayout();
+            this.tabPageServerBasedTM.SuspendLayout();
+            this.panel1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).BeginInit();
+            this.groupBoxTM.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabPageFileBasedTM
@@ -96,6 +94,62 @@ namespace Sdl.Community.TMLifting
             this.rtbStatus.TabIndex = 1;
             this.rtbStatus.Text = "";
             // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.groupBoxProgress, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lstTms, 0, 0);
+            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1126, 210);
+            this.tableLayoutPanel2.TabIndex = 8;
+            // 
+            // groupBoxProgress
+            // 
+            this.groupBoxProgress.Controls.Add(this.progressBarFileBased);
+            this.groupBoxProgress.Controls.Add(this.labelMessage);
+            this.groupBoxProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxProgress.Location = new System.Drawing.Point(566, 3);
+            this.groupBoxProgress.Name = "groupBoxProgress";
+            this.groupBoxProgress.Size = new System.Drawing.Size(557, 204);
+            this.groupBoxProgress.TabIndex = 8;
+            this.groupBoxProgress.TabStop = false;
+            this.groupBoxProgress.Text = "Progress Monitor";
+            // 
+            // progressBarFileBased
+            // 
+            this.progressBarFileBased.Location = new System.Drawing.Point(19, 57);
+            this.progressBarFileBased.Name = "progressBarFileBased";
+            this.progressBarFileBased.Size = new System.Drawing.Size(180, 23);
+            this.progressBarFileBased.TabIndex = 6;
+            // 
+            // labelMessage
+            // 
+            this.labelMessage.AutoSize = true;
+            this.labelMessage.Location = new System.Drawing.Point(16, 31);
+            this.labelMessage.Name = "labelMessage";
+            this.labelMessage.Size = new System.Drawing.Size(127, 13);
+            this.labelMessage.TabIndex = 5;
+            this.labelMessage.Text = "In progress, please wait...";
+            // 
+            // lstTms
+            // 
+            this.lstTms.AllowDrop = true;
+            this.lstTms.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstTms.FormattingEnabled = true;
+            this.lstTms.Location = new System.Drawing.Point(3, 3);
+            this.lstTms.Name = "lstTms";
+            this.lstTms.Size = new System.Drawing.Size(557, 204);
+            this.lstTms.TabIndex = 1;
+            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
+            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
+            // 
             // tabControlTMLifting
             // 
             this.tabControlTMLifting.Controls.Add(this.tabPageFileBasedTM);
@@ -118,81 +172,16 @@ namespace Sdl.Community.TMLifting
             this.tabPageServerBasedTM.TabIndex = 1;
             this.tabPageServerBasedTM.Text = "Server-Based Translation Memories";
             // 
-            // tableLayoutPanel1
-            // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel1.Controls.Add(this.groupBoxTM, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.connectToServerBtn, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.server, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.comboBoxServerBasedTM, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.1194F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 83.8806F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1126, 577);
-            this.tableLayoutPanel1.TabIndex = 13;
-            // 
-            // groupBoxTM
-            // 
-            this.tableLayoutPanel1.SetColumnSpan(this.groupBoxTM, 3);
-            this.groupBoxTM.Controls.Add(this.gridServerBasedTMs);
-            this.groupBoxTM.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxTM.Location = new System.Drawing.Point(3, 96);
-            this.groupBoxTM.Name = "groupBoxTM";
-            this.groupBoxTM.Size = new System.Drawing.Size(1120, 478);
-            this.groupBoxTM.TabIndex = 13;
-            this.groupBoxTM.TabStop = false;
-            this.groupBoxTM.Text = "Translation Memories";
-            // 
-            // gridServerBasedTMs
-            // 
-            this.gridServerBasedTMs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.gridServerBasedTMs.BackgroundColor = System.Drawing.SystemColors.Window;
-            this.gridServerBasedTMs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.gridServerBasedTMs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridServerBasedTMs.Location = new System.Drawing.Point(3, 16);
-            this.gridServerBasedTMs.Name = "gridServerBasedTMs";
-            this.gridServerBasedTMs.Size = new System.Drawing.Size(1114, 459);
-            this.gridServerBasedTMs.TabIndex = 6;
-            this.gridServerBasedTMs.Visible = false;
-            this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
-            this.gridServerBasedTMs.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridServerBasedTMs_ColumnHeaderMouseClick);
-            this.gridServerBasedTMs.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridServerBasedTMs_RowStateChanged);
-            // 
             // connectToServerBtn
             // 
             this.connectToServerBtn.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.connectToServerBtn.Location = new System.Drawing.Point(564, 35);
+            this.connectToServerBtn.Location = new System.Drawing.Point(978, 38);
             this.connectToServerBtn.Name = "connectToServerBtn";
             this.connectToServerBtn.Size = new System.Drawing.Size(75, 23);
             this.connectToServerBtn.TabIndex = 10;
             this.connectToServerBtn.Text = "Connect";
             this.connectToServerBtn.UseVisualStyleBackColor = true;
             this.connectToServerBtn.Click += new System.EventHandler(this.connectToServer_Click);
-            // 
-            // server
-            // 
-            this.server.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.server.AutoSize = true;
-            this.server.Location = new System.Drawing.Point(3, 40);
-            this.server.Name = "server";
-            this.server.Size = new System.Drawing.Size(41, 13);
-            this.server.TabIndex = 12;
-            this.server.Text = "Server:";
-            // 
-            // comboBoxServerBasedTM
-            // 
-            this.comboBoxServerBasedTM.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.comboBoxServerBasedTM.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBoxServerBasedTM.Location = new System.Drawing.Point(50, 36);
-            this.comboBoxServerBasedTM.Name = "comboBoxServerBasedTM";
-            this.comboBoxServerBasedTM.Size = new System.Drawing.Size(508, 21);
-            this.comboBoxServerBasedTM.TabIndex = 11;
             // 
             // btnBrowse
             // 
@@ -289,61 +278,49 @@ namespace Sdl.Community.TMLifting
             this.btnReindex.UseVisualStyleBackColor = true;
             this.btnReindex.Click += new System.EventHandler(this.btnReindex_Click);
             // 
-            // tableLayoutPanel2
+            // tableLayoutPanel1
             // 
-            this.tableLayoutPanel2.ColumnCount = 2;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Controls.Add(this.groupBoxProgress, 0, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lstTms, 0, 0);
-            this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1126, 210);
-            this.tableLayoutPanel2.TabIndex = 8;
+            this.tableLayoutPanel1.ColumnCount = 3;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel1.Controls.Add(this.groupBoxTM, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.connectToServerBtn, 0, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 16.1194F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 83.8806F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1126, 577);
+            this.tableLayoutPanel1.TabIndex = 13;
             // 
-            // lstTms
+            // gridServerBasedTMs
             // 
-            this.lstTms.AllowDrop = true;
-            this.lstTms.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lstTms.FormattingEnabled = true;
-            this.lstTms.Location = new System.Drawing.Point(3, 3);
-            this.lstTms.Name = "lstTms";
-            this.lstTms.Size = new System.Drawing.Size(557, 204);
-            this.lstTms.TabIndex = 1;
-            this.lstTms.DragDrop += new System.Windows.Forms.DragEventHandler(this.lstTms_DragDrop);
-            this.lstTms.DragOver += new System.Windows.Forms.DragEventHandler(this.lstTms_DragOver);
+            this.gridServerBasedTMs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.gridServerBasedTMs.BackgroundColor = System.Drawing.SystemColors.Window;
+            this.gridServerBasedTMs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridServerBasedTMs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridServerBasedTMs.Location = new System.Drawing.Point(3, 16);
+            this.gridServerBasedTMs.Name = "gridServerBasedTMs";
+            this.gridServerBasedTMs.Size = new System.Drawing.Size(1114, 459);
+            this.gridServerBasedTMs.TabIndex = 6;
+            this.gridServerBasedTMs.Visible = false;
+            this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
+            this.gridServerBasedTMs.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridServerBasedTMs_ColumnHeaderMouseClick);
+            this.gridServerBasedTMs.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridServerBasedTMs_RowStateChanged);
             // 
-            // groupBoxProgress
+            // groupBoxTM
             // 
-            this.groupBoxProgress.Controls.Add(this.progressBarFileBased);
-            this.groupBoxProgress.Controls.Add(this.labelMessage);
-            this.groupBoxProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxProgress.Location = new System.Drawing.Point(566, 3);
-            this.groupBoxProgress.Name = "groupBoxProgress";
-            this.groupBoxProgress.Size = new System.Drawing.Size(557, 204);
-            this.groupBoxProgress.TabIndex = 8;
-            this.groupBoxProgress.TabStop = false;
-            this.groupBoxProgress.Text = "Progress Monitor";
-            // 
-            // progressBarFileBased
-            // 
-            this.progressBarFileBased.Location = new System.Drawing.Point(19, 57);
-            this.progressBarFileBased.Name = "progressBarFileBased";
-            this.progressBarFileBased.Size = new System.Drawing.Size(180, 23);
-            this.progressBarFileBased.TabIndex = 6;
-            // 
-            // labelMessage
-            // 
-            this.labelMessage.AutoSize = true;
-            this.labelMessage.Location = new System.Drawing.Point(16, 31);
-            this.labelMessage.Name = "labelMessage";
-            this.labelMessage.Size = new System.Drawing.Size(127, 13);
-            this.labelMessage.TabIndex = 5;
-            this.labelMessage.Text = "In progress, please wait...";
+            this.tableLayoutPanel1.SetColumnSpan(this.groupBoxTM, 3);
+            this.groupBoxTM.Controls.Add(this.gridServerBasedTMs);
+            this.groupBoxTM.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.groupBoxTM.Location = new System.Drawing.Point(3, 96);
+            this.groupBoxTM.Name = "groupBoxTM";
+            this.groupBoxTM.Size = new System.Drawing.Size(1120, 478);
+            this.groupBoxTM.TabIndex = 13;
+            this.groupBoxTM.TabStop = false;
+            this.groupBoxTM.Text = "Translation Memories";
             // 
             // TMLiftingForm
             // 
@@ -355,17 +332,16 @@ namespace Sdl.Community.TMLifting
             this.Size = new System.Drawing.Size(1140, 655);
             this.tabPageFileBasedTM.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.tabControlTMLifting.ResumeLayout(false);
-            this.tabPageServerBasedTM.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
-            this.groupBoxTM.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).EndInit();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.groupBoxProgress.ResumeLayout(false);
             this.groupBoxProgress.PerformLayout();
+            this.tabControlTMLifting.ResumeLayout(false);
+            this.tabPageServerBasedTM.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridServerBasedTMs)).EndInit();
+            this.groupBoxTM.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -381,12 +357,7 @@ namespace Sdl.Community.TMLifting
 		private System.Windows.Forms.Button cleanBtn;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.TabPage tabPageServerBasedTM;
-		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.GroupBox groupBoxTM;
-		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 		private System.Windows.Forms.Button connectToServerBtn;
-		private System.Windows.Forms.Label server;
-		private System.Windows.Forms.ComboBox comboBoxServerBasedTM;
 		private System.Windows.Forms.Button btnReindex;
 		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.RichTextBox rtbStatus;
@@ -395,6 +366,9 @@ namespace Sdl.Community.TMLifting
 		public System.Windows.Forms.ProgressBar progressBarFileBased;
 		private System.Windows.Forms.Label labelMessage;
 		private System.Windows.Forms.ListBox lstTms;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.GroupBox groupBoxTM;
+		private System.Windows.Forms.DataGridView gridServerBasedTMs;
 	}
 }
 

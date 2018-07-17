@@ -15,10 +15,9 @@ namespace Sdl.Community.TMLifting
 	public partial class LoginPage : Form
 	{
 		public AddServerBasedTMsDetails _addDetailsCallback;
-		public LoginPage(string serverName)
+		public LoginPage()
 		{
 			InitializeComponent();
-			serverNameTxtBox.Text = serverName;
 		}
 
 		private void serverNameTxtBox_TextChanged(object sender, EventArgs e)
@@ -28,12 +27,6 @@ namespace Sdl.Community.TMLifting
 
 		private async void btnOkServerBased_Click(object sender, EventArgs e)
 		{
-			//Properties.Settings.Default.UserName = userNameTxtBox.Text;
-			//Properties.Settings.Default.Password = passwordTxtBox.Text;
-			//Properties.Settings.Default.Uri = serverNameTxtBox.Text;
-			//Properties.Settings.Default.Save();
-
-
 			_addDetailsCallback(userNameTxtBox.Text, passwordTxtBox.Text, serverNameTxtBox.Text);
 			this.Close();
 		}
