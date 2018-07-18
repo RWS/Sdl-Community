@@ -6,7 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using Sdl.Community.DeelLMTProvider;
+using Sdl.Community.DeepLMTProvider.WPF;
+
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -28,7 +31,11 @@ namespace Sdl.Community.DeepLMTProvider
 
 			//get credentials
 			var getCredGt = GetCredentials(credentialStore, "deeplprovider:///");
-			var dialog = new DeepLMtDialog(options,credentialStore);
+
+			//var dialog = new DeepLWindow();
+			//      ElementHost.EnableModelessKeyboardInterop(dialog);
+			//dialog.Show();
+			var dialog = new DeepLMtDialog(options, credentialStore);
 			if (dialog.ShowDialog(owner) == DialogResult.OK)
 			{
 				var provider = new DeepLMtTranslationProvider(options);

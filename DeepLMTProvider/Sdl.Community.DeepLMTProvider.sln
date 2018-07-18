@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvid
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvider.Telemetry", "Sdl.Community.DeepLMTProvider.Telemetry\Sdl.Community.DeepLMTProvider.Telemetry.csproj", "{AC53430B-C8DF-4045-BC49-EDAC167AAE1A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.DeepLMTProvider.WPF", "Sdl.Community.DeepLMTProvider.WPF\Sdl.Community.DeepLMTProvider.WPF.csproj", "{B645E128-286D-49E4-BC45-8EC319AB9CAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,8 +23,15 @@ Global
 		{AC53430B-C8DF-4045-BC49-EDAC167AAE1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC53430B-C8DF-4045-BC49-EDAC167AAE1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC53430B-C8DF-4045-BC49-EDAC167AAE1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B645E128-286D-49E4-BC45-8EC319AB9CAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {267498F1-EADF-48A7-BF00-F32B534F6A10}
 	EndGlobalSection
 EndGlobal

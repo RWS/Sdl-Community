@@ -8,7 +8,9 @@
     <File>Newtonsoft.Json.dll</File>
     <File>Sdl.Community.DeepLMTProvider.Telemetry.dll</File>
     <File>Microsoft.ApplicationInsights.dll</File>
-	  <File>RestSharp.dll</File>
+	<File>RestSharp.dll</File>
+	<File>Sdl.Community.DeepLMTProvider.WPF.dll</File>
+	<File>MahApps.Metro.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" maxversion="15.0" minversion="14.0" />
 </PluginPackage>
