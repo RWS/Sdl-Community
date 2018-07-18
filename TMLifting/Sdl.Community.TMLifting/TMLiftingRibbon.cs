@@ -30,15 +30,6 @@ namespace Sdl.Community.TMLifting
         }
         protected override void Initialize(IViewContext context)
         {
-			
-			var resourceGSKit = Constants.ProjectPathToDll + Constants.GSKitDll;
-			var resourceSystemNetHttp = Constants.ProjectPathToDll + Constants.SysNetHttpDll;
-			var resourceSdlTmServiceSdk = Constants.ProjectPathToDll + Constants.SdlTmServiceDll;
-			var resourceNewtonsoftJson = Constants.ProjectPathToDll + Constants.NewtonsoftJsonDll;			
-			//EmbeddedAssembly.Load(resourceGSKit, Constants.GSKitDll);
-			//EmbeddedAssembly.Load(resourceSystemNetHttp, Constants.SysNetHttpDll);
-			//EmbeddedAssembly.Load(resourceSdlTmServiceSdk, Constants.SdlTmServiceDll);
-			//EmbeddedAssembly.Load(resourceNewtonsoftJson, Constants.NewtonsoftJsonDll);
 			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
 		}
 		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)

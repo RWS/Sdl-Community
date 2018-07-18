@@ -18,7 +18,6 @@ namespace Sdl.Community.TMLifting
         private readonly BackgroundWorker _bw;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
-		private UserCredentials _userCredentials;
 		private LoginPage _currentInstance = null;
 
 		public TMLiftingForm()
@@ -28,7 +27,6 @@ namespace Sdl.Community.TMLifting
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-			_userCredentials = new UserCredentials();
 		}
 
         protected override async void OnLoad(EventArgs e)

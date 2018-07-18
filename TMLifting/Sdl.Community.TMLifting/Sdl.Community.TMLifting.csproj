@@ -178,7 +178,6 @@
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Helpers\TranslationMemoryDetails.cs" />
-    <Compile Include="Helpers\UserCredentials.cs" />
     <Compile Include="LoginPage.cs">
       <SubType>Form</SubType>
     </Compile>
