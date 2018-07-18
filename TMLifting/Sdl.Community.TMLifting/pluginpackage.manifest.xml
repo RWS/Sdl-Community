@@ -4,7 +4,7 @@
   <Version>1.1.0.0</Version>
   <Description>Sdl.Community.TMLifting</Description>
   <Author>SDL Community Developers</Author>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <RequiredProduct name="SDLTradosStudio" maxversion ="15.0" minversion="14.0" />
   <Include>
     <File>Sdl.Community.Toolkit.Core.dll</File>
   </Include>
