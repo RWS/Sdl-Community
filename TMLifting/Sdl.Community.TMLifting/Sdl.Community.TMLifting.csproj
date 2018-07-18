@@ -239,6 +239,7 @@
     <Content Include="pluginpackage.manifest.xml" />
     <Content Include="Resources\256x256.png" />
     <Content Include="Resources\128x128.png" />
+    <Content Include="Resources\question.ico" />
     <None Include="Resources\icon.ico" />
   </ItemGroup>
   <ItemGroup />
