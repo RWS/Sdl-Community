@@ -33,7 +33,7 @@ namespace Sdl.Community.DeepLMTProvider
 			var getCredGt = GetCredentials(credentialStore, "deeplprovider:///");
 
 			//var dialog = new DeepLWindow();
-			//      ElementHost.EnableModelessKeyboardInterop(dialog);
+			//ElementHost.EnableModelessKeyboardInterop(dialog);
 			//dialog.Show();
 			var dialog = new DeepLMtDialog(options, credentialStore);
 			if (dialog.ShowDialog(owner) == DialogResult.OK)

@@ -11,6 +11,7 @@
 	<File>RestSharp.dll</File>
 	<File>Sdl.Community.DeepLMTProvider.WPF.dll</File>
 	<File>MahApps.Metro.dll</File>
+	  <File>System.Windows.Interactivity.dll</File>
   </Include>
   <RequiredProduct name="SDLTradosStudio" maxversion="15.0" minversion="14.0" />
 </PluginPackage>

@@ -12,16 +12,15 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowTitleBrush="#0C2D47"
-        Title="DeepL Translation Provider" Height="450" Width="600">
+        Title="DeepL Translation Provider" Height="400" Width="600">
 
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<!-- MahApps.Metro resource dictionaries. Make sure that all file names are Case Sensitive! -->
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml" />
-				<!-- Accent and AppTheme setting -->
+		
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/Blue.xaml" />
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
