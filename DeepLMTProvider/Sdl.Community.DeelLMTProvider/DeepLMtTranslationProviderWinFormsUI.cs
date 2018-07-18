@@ -99,7 +99,8 @@ namespace Sdl.Community.DeepLMTProvider
         {
 			var info = new TranslationProviderDisplayInfo
 			{
-				Name = "DeepL Translation provider"
+				Name = "DeepL Translation provider",
+				TooltipText = "DeepL Translation provider"
 			};
 			return info;
         }
