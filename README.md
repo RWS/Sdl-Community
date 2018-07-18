@@ -97,7 +97,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [SDL TM Anonymizer]() |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TmAnonymizer)|
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
 | [DeepL Translation Provider](https://appstore.sdl.com/language/app/deepl-translation-provider/847/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/DeepLMTProvider)|
-
+| [MT Enhanced Provider](http://appstore.sdl.com/app/mt-enhanced-plugin-for-trados-studio/604/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)|
+| [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
+| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
+| [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
+| [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)|
 
 ## Integration Api
 
@@ -109,6 +113,11 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
 | [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
 | [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
+| [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
+| [AdaptiveMT Trainer](https://appstore.sdl.com/language/app/adaptivemt-trainer/863/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdaptiveMT)|
+| [Community Advenced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
+| [AutoHotKey Manager](https://appstore.sdl.com/language/app/autohotkey-manager/893/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AHK%20plugin) |
+| [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
 
 ## FileType Support API
 
@@ -120,41 +129,18 @@ By clicking on each plugin name in the table, you'll be redirected to the plugin
 | [Post Edit Compare](https://appstore.sdl.com/language/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Post%20Edit%20Compare)|
 | [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
 | [Project Anonymizer](https://appstore.sdl.com/language/app/projectanonymizer/895/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Anonymizer)|
-| [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms|
-
-  
-| Plugin Name | Description |
-| --- | --- |
-| [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
-| [Advenced Display Filter](https://www.nuget.org/packages/Sdl.Community.Toolkit.FileType/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
-| Bring Back The Button | [Documentation](https://github.com/sdl/Sdl-Community/blob/master/BringBackTheButton)
-| [Export to Excel](http://appstore.sdl.com/app/export-to-excel/532/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Export%20to%20Excel/)|
-| [InSource](http://appstore.sdl.com/app/sdl-insource/548/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InSource)|
-| [Legacy Converter](http://appstore.sdl.com/app/sdlxliff-to-legacy-converter/134/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Legacy%20Converter)|
-| [MT Enhanced Provider](http://appstore.sdl.com/app/mt-enhanced-plugin-for-trados-studio/604/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/MT%20Enhanced%20Provider)|
-| [Post Edit Compare](http://appstore.sdl.com/app/post-edit-compare/610/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/Post%20Edit%20Compare)|
+| [Project Terms](https://appstore.sdl.com/language/app/projecttermextract/817/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ProjectTerms)|
 | [Qualitivity](http://appstore.sdl.com/app/qualitivity/612/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Qualitivity)|
-| [SDLTM Repair](http://appstore.sdl.com/app/sdltm-repair/298/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLTMRepair)|
-| [Star Transit](http://appstore.sdl.com/app/transitpackage-handler/573/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit)|
-| [Segment Status Switcher](http://appstore.sdl.com/app/segment-status-switcher/754/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SegmentStatusSwitcher)|
-| [Studio Migration Utility](http://appstore.sdl.com/app/studio-migration-utility/481/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Studio%20Migration%20Utility)|
-| [TAUS Search](http://appstore.sdl.com/app/taus-search/164/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TAUSS%20Search)|
-| [TM Lifting](http://appstore.sdl.com/app/tm-lifting/419/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMLifting)|
-| [Term Injector](http://appstore.sdl.com/app/terminjector/97/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TermInjector)|
-| [Jobs](http://appstore.sdl.com/app/jobs/463/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Jobs)|
-| [YourProductivity](http://appstore.sdl.com/app/yourproductivity/491/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourProductivity)|
-| [Time Tracker](http://appstore.sdl.com/app/studio-time-tracker/361/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Time%20Tracker)|
+| [Community Advenced Display Filter](https://appstore.sdl.com/language/app/community-advanced-display-filter/849/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/AdvancedDisplayFilter) |
+| [Antidote Verifier](http://appstore.sdl.com/app/antidote-verifier/583/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Antidote%20Verifier) |
+| [SDLXLIFF Compare](https://appstore.sdl.com/language/app/sdlxliff-compare/89/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SdlXliff%20Compare) |
+| [SDLXLIFF Split/Merge](https://appstore.sdl.com/language/app/sdlxliff-split-merge/20/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/SDLXLIFFSplitMerge) |
+| [File type definition for TMX](https://appstore.sdl.com/language/app/file-type-definition-for-tmx/317/) | [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TMX) |
 | [Toolkit](http://appstore.sdl.com/app/sdlxliff-toolkit/296/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
-| [Variables Manager](http://appstore.sdl.com/app/variables-manager-for-sdl-trados-studio/297/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Toolkit)|
-| [Apply Studio Project Template](http://appstore.sdl.com/app/apply-studio-project-template/391/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/ApplyStudioProjectTemplate)|
-| Controlled Machine Translation Providers |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Controlled%20Machine%20Translation%20Providers)|
-| [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
-| [Number verifier](http://appstore.sdl.com/app/sdl-number-verifier/440/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Number%20Verifier)|
-| [TM Optimizer](http://appstore.sdl.com/app/tm-optimizer/347/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/TM%20Optimizer)|
-| [Record Source TU](http://appstore.sdl.com/app/record-source-tu/504/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Record%20Source%20TU)|
-| [Studio InQuote](http://appstore.sdl.com/app/sdl-studio-inquote/295/) |  [Documentation](https://github.com/sdl/Sdl-Community/blob/master/InvoiceAndQuotes)|
 | [Wordfast TXML](http://appstore.sdl.com/app/file-type-definition-for-wordfast-txml/247/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Wordfast%20TXML)|
-| [Your Studio](http://appstore.sdl.com/app/your-sdlstudio/300/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/YourStudio)|
+| [Word Cloud](http://appstore.sdl.com/app/sdl-trados-studio-word-cloud/402/) |  [Documentation](https://github.com/sdl/Sdl-Community/tree/master/Word%20Cloud)|
+  
+
 
 ## We want your feedback
 
