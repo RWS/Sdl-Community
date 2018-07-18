@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.LanguagePlatform.TranslationMemory;
-using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.TMLifting.Helpers
 {

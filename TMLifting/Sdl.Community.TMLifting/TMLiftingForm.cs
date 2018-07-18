@@ -8,7 +8,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.TMLifting
 {
@@ -19,7 +18,6 @@ namespace Sdl.Community.TMLifting
         private readonly BackgroundWorker _bw;
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
-		private ServerBasedTranslationMemoryGSKit _sbTMs;
 		private UserCredentials _userCredentials;
 		private LoginPage _currentInstance = null;
 
@@ -30,7 +28,6 @@ namespace Sdl.Community.TMLifting
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
             _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
-			_sbTMs = new ServerBasedTranslationMemoryGSKit();
 			_userCredentials = new UserCredentials();
 		}
 
