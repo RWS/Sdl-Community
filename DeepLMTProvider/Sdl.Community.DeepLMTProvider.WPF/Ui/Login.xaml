@@ -33,7 +33,6 @@
 		<TextBlock Margin="10,20,0,10"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > API Key*</TextBlock>
 		<PasswordBox   
-			Style="{DynamicResource MetroButtonRevealedPasswordBox}"
 			Name="ApiKeyBox"
 			controls:TextBoxHelper.UseFloatingWatermark="True"  
 			controls:TextBoxHelper.Watermark="API Key"

@@ -31,6 +31,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 			{
 				LoginTab.ApiKeyBox.Password = credentialStore.Credential;
 			}
+			if (options != null)
+			{
+				SettingsTab.Resend.IsChecked = options.ResendDrafts;
+			}
 		}
 		public DeepLWindow()
 		{
@@ -41,6 +45,10 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			DialogResult = true;
 			Options.ApiKey = LoginTab.ApiKeyBox.Password;
+			if (SettingsTab.Resend.IsChecked != null)
+			{
+				Options.ResendDrafts = SettingsTab.Resend.IsChecked.Value;
+			}
 			Close();
 		}
 

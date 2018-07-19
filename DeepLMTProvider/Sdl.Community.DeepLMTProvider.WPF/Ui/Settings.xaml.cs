@@ -23,7 +23,6 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Ui
 		public Settings()
 		{
 			InitializeComponent();
-			
 		}
 
 		private void Resend_OnChecked(object sender, RoutedEventArgs e)

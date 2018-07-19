@@ -72,7 +72,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 			// if there are match in tm the provider will not search the segment
 			#region "Confirmation Level"
-			if ( _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) 
+			if ( !_options.ResendDrafts &&_inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) 
 			{
 				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
 				//later get these strings from resource file

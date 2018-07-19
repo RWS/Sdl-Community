@@ -12,12 +12,12 @@ namespace Sdl.Community.DeepLMTProvider
     {
 		public ITranslationProvider CreateTranslationProvider(Uri translationProviderUri, string translationProviderState, ITranslationProviderCredentialStore credentialStore)
 		{
-			var uri = new Uri("deeplprovider:///");
-			var options = new DeepLTranslationOptions();
+			var originalUri = new Uri("deeplprovider:///");
+			var options = new DeepLTranslationOptions(translationProviderUri);
 
-			if (credentialStore.GetCredential(uri) != null)
+			if (credentialStore.GetCredential(originalUri) != null)
 			{
-				var credentials = credentialStore.GetCredential(uri);
+				var credentials = credentialStore.GetCredential(originalUri);
 				options.ApiKey = credentials.Credential;
 			}
 			return new DeepLMtTranslationProvider(options);
