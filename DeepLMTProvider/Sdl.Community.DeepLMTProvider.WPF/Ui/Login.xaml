@@ -31,7 +31,7 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Margin="10,20,0,10"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service.
+		<TextBlock Margin="10,20,10,15"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service.
 			To use this service, set up a DeepL account and create a API Key.<LineBreak/>
 			Please fill your key bellow:</TextBlock>
 		<PasswordBox   

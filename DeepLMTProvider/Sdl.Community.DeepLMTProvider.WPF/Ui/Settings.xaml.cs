@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,12 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Ui
 		private void Resend_OnChecked(object sender, RoutedEventArgs e)
 		{
 			
+		}
+
+		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3266.deepl-mt-provider");
 		}
 	}
 }

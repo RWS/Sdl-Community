@@ -20,10 +20,15 @@
     <Grid>
 	    <Grid.RowDefinitions>
 		    <RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="150" />
 		</Grid.RowDefinitions>
 	    <TextBlock Margin="10,20,0,10"  Grid.Row="0" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">Please select
-		the settings you want to apply to the Translation Provider</TextBlock>
-		<CheckBox x:Name="Resend" Margin="10,20,0,10"  Grid.Row="1" FontFamily="Segoe UI" Checked="Resend_OnChecked" >Re-send draft and translated segments</CheckBox>
+		the settings you want to apply to the Translation Provider. For more information about the application please read our
+		    <Hyperlink NavigateUri="https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3266.deepl-mt-provider" RequestNavigate="Hyperlink_OnRequestNavigate">
+			    wiki 
+		    </Hyperlink>
+			page.
+		</TextBlock>
+		<CheckBox x:Name="Resend" Margin="10,20,0,10"  Grid.Row="1" FontFamily="Segoe UI" Checked="Resend_OnChecked" VerticalAlignment="Top" >Re-send draft and translated segments</CheckBox>
 	</Grid>
 </UserControl>
