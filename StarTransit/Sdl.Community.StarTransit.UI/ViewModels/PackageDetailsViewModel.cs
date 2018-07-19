@@ -6,22 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Linq;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
-using Sdl.ProjectAutomation.Core;
 using Sdl.Community.StarTransit.UI.Interfaces;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged, IWindowActions
+	public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged, IWindowActions
     {
         private string _textLocation;
         private  string _txtName;
@@ -374,13 +369,13 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
             var assembly = Assembly.GetExecutingAssembly().GetName().CodeBase;
             var myDocumentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var projectsPath = string.Empty;
-		
-			if(assembly.Contains("15"))
+
+			if (assembly.Contains("15"))
 			{
 				projectsPath = Path.Combine(myDocumentsPath, @"Studio 2019\Projects\projects.xml");
 			}
-			else if(assembly.Contains("14"))
-            {
+			else if (assembly.Contains("14"))
+			{
                 projectsPath = Path.Combine(myDocumentsPath, @"Studio 2017\Projects\projects.xml");
 
             } else if (assembly.Contains("12"))
@@ -432,35 +427,35 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
      
     }
-    public class CommandHandler : ICommand,INotifyPropertyChanged
-    {
-        private Action _action;
-        private bool _canExecute;
-        public CommandHandler(Action action, bool canExecute)
-        {
-            _action = action;
-            _canExecute = canExecute;
-        }
+	public class CommandHandler : ICommand, INotifyPropertyChanged
+	{
+		private Action _action;
+		private bool _canExecute;
+		public CommandHandler(Action action, bool canExecute)
+		{
+			_action = action;
+			_canExecute = canExecute;
+		}
 
-        public bool CanExecute(object parameter)
-        {
-            return _canExecute;
-        }
+		public bool CanExecute(object parameter)
+		{
+			return _canExecute;
+		}
 
-       public event EventHandler CanExecuteChanged;
+		public event EventHandler CanExecuteChanged;
 
-        public void Execute(object parameter)
-        {
-            _action();
-        }
+		public void Execute(object parameter)
+		{
+			_action();
+		}
 
-        public event PropertyChangedEventHandler PropertyChanged;
+		public event PropertyChangedEventHandler PropertyChanged;
 
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
+		[NotifyPropertyChangedInvocator]
+		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
-    }
+	}
 }

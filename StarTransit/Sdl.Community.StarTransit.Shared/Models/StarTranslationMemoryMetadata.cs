@@ -6,5 +6,6 @@
         public string TargetFile { get; set; }
 		public string SourceLanguage { get; set; }
 		public string TargetLanguage { get; set; }
+		public int TMPenalty { get; set; }
 	}
 }

@@ -19,6 +19,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 		#region Public Methods
 		public MessageModel CreateProject(PackageModel package)
 		{
+			var penaltiesTmsList = new List<StarTranslationMemoryMetadata>();
 			var target = GetTargetLanguages(package.LanguagePairs);
 
 			var projectInfo = new ProjectInfo
@@ -50,25 +51,71 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
 			foreach (var pair in package.LanguagePairs)
 			{
+				// Separate all items from package.TMPenalties(files that are having penalties set)
+				// which are found in pair.StarTranslationMemoryMetadatas
+				foreach (var starTMMetadata in pair.StarTranslationMemoryMetadatas)
+				{
+					if(package.TMPenalties != null)
+					{
+						if (package.TMPenalties.Any(t => t.Key.Equals(starTMMetadata.TargetFile)))
+						{
+							starTMMetadata.TMPenalty = package.TMPenalties.FirstOrDefault(t => t.Key.Equals(starTMMetadata.TargetFile)).Value;
+							penaltiesTmsList.Add(starTMMetadata);
+						}
+					}
+				}
+
+				// Remove found items from pair.StarTranslationMemoryMetadatas (the remained ones are those which does not have penalties set on them)
+				foreach (var item in penaltiesTmsList)
+				{
+					pair.StarTranslationMemoryMetadatas.Remove(item);
+				}
+
+				// Create one TM (that has the name equals with the project name) 
+				// with the TM files from pair.StarTranslationMemoryMetadatas (the onew without penalties set by the user)
 				targetProjectFiles.Clear();
 
-				//import language pair TM if any
+				// Import language pair TM if any
 				if (pair.HasTm)
 				{
-					var importer = new TransitTmImporter(pair.SourceLanguage,
-						   pair.TargetLanguage,
-						   pair.CreateNewTm,
-						   fileTypeManager,
-						   pair.TmPath);
-					foreach (var tm in pair.StarTranslationMemoryMetadatas)
+					if (pair.StarTranslationMemoryMetadatas.Count > 0)
 					{
-						importer.ImportStarTransitTm(tm.TargetFile);
+						var importer = new TransitTmImporter(pair.SourceLanguage,
+							   pair.TargetLanguage,
+							   pair.CreateNewTm,
+							   fileTypeManager,
+							   Path.Combine(Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(pair.TmPath)));
+						foreach (var tm in pair.StarTranslationMemoryMetadatas)
+						{
+							importer.ImportStarTransitTm(tm.TargetFile);
+						}
+
+						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(),
+							   true,
+							   true,
+							   true));
 					}
 
-					tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GeTranslationProviderReference(),
-						   true,
-						   true,
-						   true));
+					// Create separate TM for each TM file on which user set penalty
+					// (the name of the new TM will be the same with the one from StarTransit package)
+					foreach(var item in penaltiesTmsList)
+					{
+						var tmWithPenaltyImporter = new TransitTmImporter(
+							Path.GetDirectoryName(newProject.FilePath),
+							pair.SourceLanguage,
+							pair.TargetLanguage,
+							Path.GetFileName(item.TargetFile),
+							fileTypeManager);
+
+						tmWithPenaltyImporter.ImportStarTransitTm(item.TargetFile);
+						
+						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
+							new TranslationProviderReference(tmWithPenaltyImporter.TMFilePath),
+							true,
+							true,
+							true,
+							item.TMPenalty));
+					}
 				}
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
 				{
@@ -94,7 +141,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
 					});
 
-					if (taskSequence.Status.Equals(ProjectAutomation.Core.TaskStatus.Failed))
+					if (taskSequence.Status.Equals(TaskStatus.Failed))
 					{
 						var messageModel = new MessageModel()
 						{

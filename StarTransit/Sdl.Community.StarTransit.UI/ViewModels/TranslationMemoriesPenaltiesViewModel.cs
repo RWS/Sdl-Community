@@ -123,10 +123,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 				{
 					if (langPair.HasTm)
 					{
-						foreach (var filePath in langPair.SourceFile)
+						foreach (var filePath in langPair.StarTranslationMemoryMetadatas)
 						{
-							TranslationMemoryName = Path.GetFileName(filePath);
-							TranslationMemoryPath = filePath;
+							TranslationMemoryName = Path.GetFileName(filePath.TargetFile);
+							TranslationMemoryPath = filePath.TargetFile;
 
 							var translationMemoriesPenaltiesModel = new TranslationMemoriesPenaltiesModel()
 							{
@@ -170,7 +170,10 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 
 			foreach (var tm in TranslationMemoriesPenaltiesModelList)
 			{
-				_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+				if (tm.TMPenalty > 0)
+				{
+					_packageModel.TMPenalties.Add(tm.TranslationMemoryPath, tm.TMPenalty);
+				}
 			}
 			CloseWindow();
 		}
