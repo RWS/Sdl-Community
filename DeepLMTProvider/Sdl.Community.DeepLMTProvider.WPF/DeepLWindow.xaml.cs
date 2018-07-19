@@ -23,5 +23,15 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 		{
 			InitializeComponent();
 		}
+
+		private void Ok_Click(object sender, RoutedEventArgs e)
+		{
+			
+		}
+
+		private void Cancel_Click(object sender, RoutedEventArgs e)
+		{
+			
+		}
 	}
 }

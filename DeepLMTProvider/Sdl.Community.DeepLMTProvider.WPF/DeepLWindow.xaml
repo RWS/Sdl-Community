@@ -25,12 +25,14 @@
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Accents/BaseLight.xaml" />
 				<ResourceDictionary Source="UiHelpers/TextBlockStyle.xaml"></ResourceDictionary>
 				<ResourceDictionary Source="UiHelpers/TextBoxStyle.xaml"></ResourceDictionary>
+				<ResourceDictionary Source="UiHelpers/ButtonsStyle.xaml"></ResourceDictionary>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
 
 	<Grid Name="MainGrid">
 		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
@@ -51,7 +53,21 @@
 				<ui:Settings x:Name="SettingsTab"></ui:Settings>
 			</mah:MetroTabItem>
 		</TabControl>
-		
-    </Grid>
+
+		<StackPanel Grid.Row="2"  Orientation="Vertical"  Margin="10,20,0,10" DockPanel.Dock="Bottom">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button  Style="{DynamicResource DarkBlueButtonsStyle }" Width="125" Click="Ok_Click">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>OK</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource DarkBlueButtonsStyle }" Width="125" Click="Cancel_Click" IsCancel="True" >
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>Cancel</TextBlock>
+					</StackPanel>
+				</Button>
+			</StackPanel>
+		</StackPanel>
+	</Grid>
 </mah:MetroWindow>
 

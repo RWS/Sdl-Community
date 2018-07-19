@@ -43,7 +43,7 @@
 			</Setter.Value>
 		</Setter>
 	</Style>
-	<Style x:Key="LightGreenButtonsStyle" TargetType="{x:Type Button}">
+	<Style x:Key="DarkBlueButtonsStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
 		<Setter Property="Background" Value="#0C2D47"/>
 		<Setter Property="BorderBrush" Value="#0C2D47"/>

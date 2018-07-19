@@ -34,7 +34,15 @@ namespace Sdl.Community.DeepLMTProvider
 
 			//var dialog = new DeepLWindow();
 			//ElementHost.EnableModelessKeyboardInterop(dialog);
-			//dialog.Show();
+			//dialog.ShowDialog();
+			//      if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
+			//      {
+
+			//      }
+			//      else
+			//      {
+
+			//      }
 			var dialog = new DeepLMtDialog(options, credentialStore);
 			if (dialog.ShowDialog(owner) == DialogResult.OK)
 			{
