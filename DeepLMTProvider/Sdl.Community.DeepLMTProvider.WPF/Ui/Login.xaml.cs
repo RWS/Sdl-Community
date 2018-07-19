@@ -24,12 +24,12 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Ui
 		public Login()
 		{
 			InitializeComponent();
-			
 		}
 
 		private void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
 		{
 			Process.Start("https://www.deepl.com/api-contact.html");
 		}
+		
 	}
 }

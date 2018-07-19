@@ -25,24 +25,27 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Margin="10,20,0,10"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service. To use this service, set up a DeepL account and create a API Key.</TextBlock>
-		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > API Key*</TextBlock>
+		<TextBlock Margin="10,20,0,10"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service.
+			To use this service, set up a DeepL account and create a API Key.<LineBreak/>
+			Please fill your key bellow:</TextBlock>
 		<PasswordBox   
 			Name="ApiKeyBox"
 			controls:TextBoxHelper.UseFloatingWatermark="True"  
 			controls:TextBoxHelper.Watermark="API Key"
 			controls:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(controls:TextBoxHelper.HasText), Mode=OneWay}"
 			controls:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-			Margin="5,5,10,5"
-			Grid.Row="1" Grid.Column="1" IsEnabled="True" 
-		></PasswordBox>
-		<TextBlock Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > This API Key will be used for all projects that use the DeepL Translation API</TextBlock>
-		<TextBlock Grid.Row="3" Grid.ColumnSpan="2" Margin="10,20,0,10" >
+			Margin="10,0,0,0"
+			Grid.Row="2" Grid.Column="0" IsEnabled="True">
+		</PasswordBox>
+		<TextBlock Name="ValidationBlock" Grid.Row="3" Grid.Column="0" Foreground="DarkRed" Margin="10,0,0,0" Visibility="Hidden"> API Key is required</TextBlock>
+		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > This API Key will be used for all projects that use the DeepL Translation API</TextBlock>
+		<TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,20,0,10" >
 			<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate">
 				Click here to obtain your API Key from DeepL
 			</Hyperlink>

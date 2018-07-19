@@ -12,7 +12,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         WindowTitleBrush="#0C2D47"
-        Title="DeepL Translation Provider" Height="400" Width="600">
+        Title="DeepL Translation Provider" Height="450" Width="600">
 
 	<Window.Resources>
 		<ResourceDictionary>

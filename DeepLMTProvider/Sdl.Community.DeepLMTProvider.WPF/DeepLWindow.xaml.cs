@@ -43,13 +43,22 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			DialogResult = true;
 			Options.ApiKey = LoginTab.ApiKeyBox.Password;
 			if (SettingsTab.Resend.IsChecked != null)
 			{
 				Options.ResendDrafts = SettingsTab.Resend.IsChecked.Value;
 			}
-			Close();
+			if (!string.IsNullOrEmpty(Options.ApiKey))
+			{
+				LoginTab.ValidationBlock.Visibility = Visibility.Hidden;
+				DialogResult = true;
+				Close();
+			}
+			else
+			{
+				LoginTab.ValidationBlock.Visibility = Visibility.Visible;
+			}
+			
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)
