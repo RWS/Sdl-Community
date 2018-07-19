@@ -6,6 +6,7 @@
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
 		WindowStartupLocation="CenterScreen"
+		ResizeMode="NoResize"
         Title="Translation Memories Penalties" MinHeight="405" MaxHeight="405" MaxWidth="650">
     <Window.Resources>
         <ResourceDictionary>
@@ -16,7 +17,7 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="650"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="330"/>
@@ -24,7 +25,7 @@
         </Grid.RowDefinitions>
         <DataGrid ItemsSource="{Binding TranslationMemoriesPenaltiesModelList,  Mode=TwoWay, ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
                   AutoGenerateColumns="False" CanUserAddRows="False" Grid.Column="0" Grid.Row="0"
-				  Style="{DynamicResource AzureDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
+				  Style="{DynamicResource MetroDataGrid}" SelectionUnit="Cell" RowHeaderWidth="0" BorderThickness="1" BorderBrush="LightGray"
 				  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGreen" Margin="0,0,0,10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Translation Memory"
@@ -36,8 +37,8 @@
 													  Maximum="25"/>
             </DataGrid.Columns>
         </DataGrid>
-		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,4,0">
-            <StackPanel Orientation="Horizontal">
+		<StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="0,0,4,0">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="OkButton" Command="{Binding OkCommand}" Content="Ok"
 						Width="80" Height="30" Visibility="{Binding Visibility}"/>
 				<Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CancelButton" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=TMPenaltiesWindow}" Content="Cancel"
