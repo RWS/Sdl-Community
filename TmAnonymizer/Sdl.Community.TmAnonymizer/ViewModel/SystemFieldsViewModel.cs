@@ -185,10 +185,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var importedUsers = Users.GetImportedUsers(fileDialog.FileNames.ToList());
 				foreach (var user in importedUsers)
 				{
-					var userExist = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
-					if (userExist != null)
+					var existingUser = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
+					if (existingUser != null)
 					{
-						var index = UniqueUserNames.IndexOf(userExist);
+						var index = UniqueUserNames.IndexOf(existingUser);
 						if (index != -1)
 						{
 							UniqueUserNames[index] = user;

@@ -50,35 +50,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
-
-		private void Export()
-		{
-			if (SelectedItems.Count > 0)
-			{
-				var selectedFields = new List<CustomField>();
-				var fileDialog = new SaveFileDialog
-				{
-					Title = @"Export selected custom fields",
-					Filter = @"Excel |*.xlsx"
-				};
-				var result = fileDialog.ShowDialog();
-				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
-				{
-					foreach (CustomField field in SelectedItems)
-					{
-						selectedFields.Add(field);
-					}
-					//Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
-					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK,
-						MessageBoxIcon.Information);
-				}
-			}
-			else
-			{
-				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			}
-		}
-
 		private void ApplyChanges()
 		{
 			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
@@ -99,6 +70,35 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		private void Export()
+		{
+			if (SelectedItems.Count > 0)
+			{
+				var selectedFields = new List<CustomField>();
+				var fileDialog = new SaveFileDialog
+				{
+					Title = @"Export selected custom fields",
+					Filter = @"Excel |*.xlsx"
+				};
+				var result = fileDialog.ShowDialog();
+				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
+				{
+					foreach (CustomField field in SelectedItems)
+					{
+						selectedFields.Add(field);
+					}
+					//Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
+					CustomFieldData.ExportCustomFields(fileDialog.FileName, selectedFields);
+					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK,
+						MessageBoxIcon.Information);
+				}
+			}
+			else
+			{
+				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+			}
+		}
+
 		private void Import()
 		{
 			var fileDialog = new OpenFileDialog
@@ -113,6 +113,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
+				var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
+				//var details = CustomFieldsCollection.se
+				//foreach (var importedField in importedCustomFields)
+				//{
+				//	foreach (var customField in CustomFieldsCollection)
+				//	{
+				//		foreach (var importedDetail in importedField.Details)
+				//		{
+				//			var existingDetail = customField.Details.FirstOrDefault(v => v.Value.Equals(importedDetail.Value));
+				//			if (existingDetail != null)
+				//			{
+				//				var index = customField.Details.IndexOf(existingDetail);
+				//				if (index != -1)
+				//				{
+				//					customField.Details[index] = importedDetail;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
 			}
 		}
 
