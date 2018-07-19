@@ -6,22 +6,17 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Xml.Linq;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
-using Sdl.Community.StarTransit.Shared.Services;
-using Sdl.Community.StarTransit.Shared.Utils;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Helpers;
-using Sdl.ProjectAutomation.Core;
 using Sdl.Community.StarTransit.UI.Interfaces;
+using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged, IWindowActions
+	public class PackageDetailsViewModel : IDataErrorInfo, INotifyPropertyChanged, IWindowActions
     {
         private string _textLocation;
         private  string _txtName;
