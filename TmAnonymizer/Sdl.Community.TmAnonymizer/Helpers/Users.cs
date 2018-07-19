@@ -29,11 +29,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						var address = workSheet.Cells[i, j].Address;
 
 						var cellValue = workSheet.Cells[i, j].Value;
-						if (address.Contains("A"))
+						if (address.Contains("A") && cellValue != null)
 						{
 							user.UserName = cellValue.ToString();
 						}
-						else
+						else if (address.Contains("B") && cellValue != null)
 						{
 							user.Alias = cellValue.ToString();
 						}

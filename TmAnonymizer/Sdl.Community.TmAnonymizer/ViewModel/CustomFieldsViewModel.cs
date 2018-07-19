@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -10,6 +11,7 @@ using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.Community.TmAnonymizer.Model;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -48,6 +50,25 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
+		private void ApplyChanges()
+		{
+			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
+			{
+				if (!tm.IsServerTm)
+				{
+					CustomFieldsHandler.AnonymizeFileBasedCustomFields(tm, CustomFieldsCollection.ToList());
+				}
+				else
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					CustomFieldsHandler.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
+				}
+				RefreshCustomFields();
+			}
+		}
 
 		private void Export()
 		{
@@ -67,6 +88,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedFields.Add(field);
 					}
 					//Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
+					CustomFieldData.ExportCustomFields(fileDialog.FileName, selectedFields);
 					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 				}
@@ -75,11 +97,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
-		}
-
-		private void ApplyChanges()
-		{
-			
 		}
 
 		private void Import()
@@ -96,6 +113,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
+				var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
+				//var details = CustomFieldsCollection.se
+				//foreach (var importedField in importedCustomFields)
+				//{
+				//	foreach (var customField in CustomFieldsCollection)
+				//	{
+				//		foreach (var importedDetail in importedField.Details)
+				//		{
+				//			var existingDetail = customField.Details.FirstOrDefault(v => v.Value.Equals(importedDetail.Value));
+				//			if (existingDetail != null)
+				//			{
+				//				var index = customField.Details.IndexOf(existingDetail);
+				//				if (index != -1)
+				//				{
+				//					customField.Details[index] = importedDetail;
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
 			}
 		}
 
@@ -147,8 +184,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			}
 		}
-
-
 		
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -199,18 +234,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (tm.IsServerTm)
 				{
-					//var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					//var translationProvider = new TranslationProviderServer(uri, false,
-					//	_translationMemoryViewModel.Credentials.UserName,
-					//	_translationMemoryViewModel.Credentials.Password);
-					//var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-					//foreach (var name in names)
-					//{
-					//	System.Windows.Application.Current.Dispatcher.Invoke(() =>
-					//	{
-					//		UniqueUserNames.Add(name);
-					//	});
-					//}
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
+					foreach (var field in customFields)
+					{
+						System.Windows.Application.Current.Dispatcher.Invoke(() =>
+						{
+							CustomFieldsCollection.Add(field);
+						});
+					}
 				}
 				else
 				{
@@ -226,30 +261,30 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				//if (tm.IsServerTm)
-				//{
-				//	var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-				//	var translationProvider = new TranslationProviderServer(uri, false,
-				//		_translationMemoryViewModel.Credentials.UserName,
-				//		_translationMemoryViewModel.Credentials.Password);
-				//	var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-				//	var newList = UniqueUserNames.ToList();
-				//	foreach (var name in names)
-				//	{
-				//		newList.RemoveAll(n => n.UserName.Equals(name.UserName));
-				//	}
-				//	UniqueUserNames = new ObservableCollection<User>(newList);
-				//}
-				//else
-				//{
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+				if (tm.IsServerTm)
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
 					var newList = CustomFieldsCollection.ToList();
-					foreach (var fields in customFields)
+					foreach (var field in customFields)
 					{
-						newList.RemoveAll(n => n.Name.Equals(fields.Name));
+						newList.RemoveAll(n => n.Name.Equals(field.Name));
 					}
 					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
-				//}
+				}
+				else
+				{
+					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+					var newList = CustomFieldsCollection.ToList();
+					foreach (var field in customFields)
+					{
+						newList.RemoveAll(n => n.Name.Equals(field.Name));
+					}
+					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
+				}
 			}
 		}
 
@@ -258,24 +293,67 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var serverBasedTms = tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
 			var fileBasedTms = tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
-			//if (serverBasedTms.Any())
-			//{
-			//	var uri = new Uri(translationMemoryViewModel.Credentials.Url);
-			//	var translationProvider = new TranslationProviderServer(uri, false,
-			//		translationMemoryViewModel.Credentials.UserName,
-			//		translationMemoryViewModel.Credentials.Password);
-			//	foreach (var serverTm in serverBasedTms)
-			//	{
-			//		UniqueUserNames = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
-			//	}
-
-			//}
+			if (serverBasedTms.Any())
+			{
+				var uri = new Uri(translationMemoryViewModel.Credentials.Url);
+				var translationProvider = new TranslationProviderServer(uri, false,
+					translationMemoryViewModel.Credentials.UserName,
+					translationMemoryViewModel.Credentials.Password);
+				foreach (var serverTm in serverBasedTms)
+				{
+					CustomFieldsCollection =
+						 new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
+				}
+			}
 
 			if (fileBasedTms.Any())
 			{
 				foreach (var fileTm in fileBasedTms)
 				{
 					CustomFieldsCollection = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+				}
+			}
+		}
+
+		private void RefreshCustomFields()
+		{
+			if (_tmsCollection != null)
+			{
+				CustomFieldsCollection = new ObservableCollection<CustomField>();
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (fileBasedTms.Any())
+				{
+					foreach (var fileTm in fileBasedTms)
+					{
+						var fields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+						foreach (var field in fields)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke(() =>
+							{
+								CustomFieldsCollection.Add(field);
+							});
+						}
+					}
+				}
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					foreach (var serverTm in serverTms)
+					{
+						var fields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
+						foreach (var field in fields)
+						{
+							System.Windows.Application.Current.Dispatcher.Invoke(() =>
+							{
+								CustomFieldsCollection.Add(field);
+							});
+						}
+					}
+
 				}
 			}
 		}

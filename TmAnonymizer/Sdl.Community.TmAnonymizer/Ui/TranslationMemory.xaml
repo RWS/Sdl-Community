@@ -55,6 +55,7 @@
 		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
 		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
 				  SelectedItem="{Binding SelectedTm,UpdateSourceTrigger=PropertyChanged}"
+				  IsEnabled="{Binding IsEnabled,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
 		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				  Margin="5,10" >
@@ -65,7 +66,8 @@
 				<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"
+									  />
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>

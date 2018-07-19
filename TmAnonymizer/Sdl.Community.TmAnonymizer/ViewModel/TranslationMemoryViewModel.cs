@@ -27,6 +27,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
 		private Login _credentials;
+		private bool _isEnabled = true;
 
 		public ObservableCollection<TmFile> TmsCollection
 		{
@@ -77,6 +78,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 				_credentials = value;
 				OnPropertyChanged(nameof(Credentials));
+			}
+		}
+
+
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+
+			set
+			{
+				if (Equals(value, _isEnabled))
+				{
+					return;
+				}
+				_isEnabled = value;
+				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
 		public ICommand SelectFoldersCommand => _selectFoldersCommand ??

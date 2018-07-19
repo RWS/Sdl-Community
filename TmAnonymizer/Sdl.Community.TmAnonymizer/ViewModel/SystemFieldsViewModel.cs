@@ -24,8 +24,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _applyChangesCommand;
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
-		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
-		private readonly List<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private IList _selectedItems;
 		private WaitWindow _waitWindow;
 		private bool _selectAll;
@@ -35,7 +33,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_uniqueUserNames = new ObservableCollection<User>();
 			_selectedItems = new List<User>();
-			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 			if (_tmsCollection != null)
 			{
@@ -47,7 +44,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
-			_anonymizeTranslationMemories = new List<AnonymizeTranslationMemory>();
 		}
 		
 
@@ -189,10 +185,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var importedUsers = Users.GetImportedUsers(fileDialog.FileNames.ToList());
 				foreach (var user in importedUsers)
 				{
-					var userExist = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
-					if (userExist != null)
+					var existingUser = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
+					if (existingUser != null)
 					{
-						var index = UniqueUserNames.IndexOf(userExist);
+						var index = UniqueUserNames.IndexOf(existingUser);
 						if (index != -1)
 						{
 							UniqueUserNames[index] = user;
@@ -215,7 +211,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					foreach (User user in SelectedItems)
+					foreach (User user in SelectedItems.OfType<User>())
 					{
 						selectedUsers.Add(user);
 					}
@@ -272,11 +268,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_waitWindow.Close();
 			}
+			_translationMemoryViewModel.IsEnabled = true;
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-
+			_translationMemoryViewModel.IsEnabled = false;
 			var tm = e.Argument as TmFile;
 			System.Windows.Application.Current.Dispatcher.Invoke(()=>
 			{
