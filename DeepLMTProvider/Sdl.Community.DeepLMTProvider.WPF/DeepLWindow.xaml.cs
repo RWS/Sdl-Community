@@ -11,6 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.Community.DeepLMTProvider.WPF.Ui;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF
 {
@@ -19,6 +22,16 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 	/// </summary>
 	public partial class DeepLWindow 
 	{
+		public DeepLTranslationOptions Options { get; set; }
+		public DeepLWindow(DeepLTranslationOptions options, TranslationProviderCredential credentialStore)
+		{
+			InitializeComponent();
+			Options = options;
+			if (credentialStore != null)
+			{
+				LoginTab.ApiKeyBox.Password = credentialStore.Credential;
+			}
+		}
 		public DeepLWindow()
 		{
 			InitializeComponent();
@@ -26,7 +39,9 @@ namespace Sdl.Community.DeepLMTProvider.WPF
 
 		private void Ok_Click(object sender, RoutedEventArgs e)
 		{
-			
+			DialogResult = true;
+			Options.ApiKey = LoginTab.ApiKeyBox.Password;
+			Close();
 		}
 
 		private void Cancel_Click(object sender, RoutedEventArgs e)

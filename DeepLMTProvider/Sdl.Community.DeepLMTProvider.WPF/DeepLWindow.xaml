@@ -44,9 +44,10 @@
 		<TabControl mah:TabControlHelper.Underlined="SelectedTabItem"
 					Grid.Row="1"
 					Margin="0,0,0,15"
+					Name="DeepLTabControl"
 		            mah:ControlsHelper.HeaderFontSize="15"
 		            mah:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
-			<mah:MetroTabItem Header="Login">
+			<mah:MetroTabItem Header="Login" IsSelected="True">
 				<ui:Login x:Name="LoginTab"></ui:Login>
 			</mah:MetroTabItem>
 			<mah:MetroTabItem Header="Provider Settings">

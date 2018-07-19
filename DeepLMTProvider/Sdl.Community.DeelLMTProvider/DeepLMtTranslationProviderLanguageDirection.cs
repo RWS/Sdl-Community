@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using Sdl.Core.Globalization;
 using Sdl.Community.DeelLMTProvider;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
 {
