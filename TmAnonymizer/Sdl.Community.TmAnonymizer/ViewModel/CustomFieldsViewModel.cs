@@ -85,7 +85,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					CustomFieldsHandler.AnonymizeFileBasedSystemFields(tm, CustomFieldsCollection.ToList());
+					CustomFieldsHandler.AnonymizeFileBasedCustomFields(tm, CustomFieldsCollection.ToList());
+				}
+				else
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+					CustomFieldsHandler.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
 				}
 				RefreshCustomFields();
 			}
