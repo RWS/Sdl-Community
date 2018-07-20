@@ -52,6 +52,7 @@
 			<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}"
 		          FontFamily="Segoe UI"
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
+				  SelectedItem="{Binding SelectedItem}"
 		          Background="White" 
 		          CanUserAddRows="False"
 			      RowHeaderWidth="0"
@@ -67,17 +68,24 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-					<DataGridTextColumn  Header="Id"  MinWidth="50" Width="Auto" Binding="{Binding SegmentNumber}">
+					<!--<DataGridTextColumn  Header="Id"  MinWidth="50"  Width="Auto" Binding="{Binding SegmentNumber}">
 						<DataGridTextColumn.CellStyle>
 							<Style>
 								<Setter Property="FrameworkElement.VerticalAlignment" Value="Center"></Setter>
 							</Style>
 						</DataGridTextColumn.CellStyle>
-					</DataGridTextColumn>
-				<DataGridTemplateColumn Header="Source" Width="3*">
+					</DataGridTextColumn>-->
+				<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" >
+						<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate>
+								<TextBlock Text="{Binding SegmentNumber}" VerticalAlignment="Center" ></TextBlock>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="Source" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-								<xctk:RichTextBox Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox Name="SourceTextBox" Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>
@@ -94,7 +102,7 @@
 				<DataGridTemplateColumn Header="Target" Width="3*">
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
-								<xctk:RichTextBox Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="White" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
+								<xctk:RichTextBox  Name="TargetTextBox" Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
 								<xctk:RichTextBox.TextFormatter>
 									<helpers:RichTextBoxFormatter />
 								</xctk:RichTextBox.TextFormatter>

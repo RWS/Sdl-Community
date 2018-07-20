@@ -53,8 +53,8 @@
 
 	<Style TargetType="{x:Type DataGridRow}">
 		<Style.Resources>
-			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#3EA691" />
-			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#3EA691" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#f4fef4" />
+			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#f4fef4" />
 			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
 			<SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
 		</Style.Resources>

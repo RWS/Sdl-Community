@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlTmAnonymizer.Model;

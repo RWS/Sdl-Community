@@ -31,11 +31,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _filePath;
 		private readonly IDialogCoordinator _dialogCoordinator;
 		private WaitWindow _waitWindow;
+		private SourceSearchResult _selectedItem;
+		private string _textBoxColor;
 
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel tmViewModel, IDialogCoordinator dialogCoordinator)
 		{
+			_textBoxColor = "White";
 			_dialogCoordinator = dialogCoordinator;
 			_backupTms = new List<ServerTmBackUp>();
 			_backgroundWorker = new BackgroundWorker();
@@ -329,6 +332,36 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SourceSearchResults));
 			}
 		}
+		public SourceSearchResult SelectedItem
+		{
+			get => _selectedItem;
+
+			set
+			{
+				if (Equals(value, _selectedItem))
+				{
+					return;
+				}
+				_selectedItem = value;
+				TextBoxColor = "#f4fef4";
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+		public string TextBoxColor
+		{
+			get => _textBoxColor;
+
+			set
+			{
+				if (Equals(value, _textBoxColor))
+				{
+					return;
+				}
+				_textBoxColor = value;
+				OnPropertyChanged(nameof(TextBoxColor));
+			}
+		}
+
 
 		private void SelectResults()
 		{
