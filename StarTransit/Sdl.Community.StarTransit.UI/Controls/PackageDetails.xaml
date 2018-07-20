@@ -96,9 +96,9 @@
 
         </Grid>
 		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="customersCombo" ItemsSource="{Binding Customers,Mode=TwoWay}"
-				  SelectedValue="{Binding SelectedCustomer }" 
+				  SelectedValue="{Binding SelectedCustomer }" IsEditable="True" IsReadOnly="True"
 				  DisplayMemberPath="Name" Grid.Column="1" Grid.Row="4" Grid.ColumnSpan="2" Margin="0,0,0,10"/>
-		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" 
+		<ComboBox Style="{StaticResource MetroComboBox}" x:Name="comboBox" ItemsSource="{Binding Templates,Mode=TwoWay}" IsEditable="True" IsReadOnly="True"
 				  SelectedValue="{Binding Path=Template, Mode=TwoWay, ValidatesOnDataErrors=True, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
 				  Grid.Column="1" Grid.Row="5" Margin="0,0,0,10" Grid.ColumnSpan="2"/>      
         <Grid Grid.Column="1" Grid.Row="6">
