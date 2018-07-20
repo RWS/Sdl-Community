@@ -84,7 +84,9 @@
 						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Create"  Content="Create TM" GroupName="1"  IsChecked="{Binding IsCreateChecked}"  Command="{Binding SetBtnNameCommand}"/>
 						<RadioButton Style="{StaticResource MetroRadioButton}" Margin="{StaticResource ControlMargin}" x:Name="Browse"  Content="Browse TM" GroupName="1" IsChecked="{Binding IsBrowseChecked}"  Command="{Binding SetBtnNameCommand}"/>
                     </StackPanel>
-                    <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1" Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}"></Button>
+                    <Button Style="{DynamicResource StudioGreenButtonsStyle}" x:Name="CreateTmButton" Command="{Binding Command}" Content="{Binding ButtonName}" Grid.Row="1" Grid.Column="1"
+							Width="auto" Height="auto" Margin="0,50,123,0" Visibility="{Binding Visibility}" Background="#FF3EA691" BorderBrush="#FF3EA691" Foreground="White">						
+					</Button>
                     <TextBlock Grid.Column="0" Grid.Row="2" Text="TM name:" Margin="20,15,22,15"/>
                     <TextBox Style="{StaticResource MetroTextBox}"
 						Controls:TextBoxHelper.ClearTextButton="True"                
