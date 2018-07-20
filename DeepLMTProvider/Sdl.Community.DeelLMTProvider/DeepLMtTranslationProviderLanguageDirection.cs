@@ -172,6 +172,7 @@ namespace Sdl.Community.DeepLMTProvider
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
+			
 			var results = new List<SearchResults>();
 			var errors = new List<KeyValuePair<string, string>>();
 			
