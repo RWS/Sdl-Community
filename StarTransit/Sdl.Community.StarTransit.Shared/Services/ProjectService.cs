@@ -159,7 +159,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 			}
 
-			if (Directory.Exists(newProject.FilePath))
+			if (Directory.Exists(Path.GetDirectoryName(newProject.FilePath)))
 			{
 				CreateMetadataFolder(package.Location, package.PathToPrjFile);
 
