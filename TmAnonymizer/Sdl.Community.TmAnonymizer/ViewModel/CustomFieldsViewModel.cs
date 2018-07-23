@@ -74,21 +74,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (SelectedItems.Count > 0)
 			{
-				var selectedFields = new List<CustomField>();
 				var fileDialog = new SaveFileDialog
 				{
 					Title = @"Export selected custom fields",
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
+				var valuesToBeAnonymized = CustomFieldsCollection.Where(f => f.IsSelected).ToList();
+				
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					foreach (CustomField field in SelectedItems)
-					{
-						selectedFields.Add(field);
-					}
-					//Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
-					CustomFieldData.ExportCustomFields(fileDialog.FileName, selectedFields);
+					CustomFieldData.ExportCustomFields(fileDialog.FileName, valuesToBeAnonymized);
 					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 				}

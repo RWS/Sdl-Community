@@ -73,14 +73,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			{
 				if (field != null)
 				{
-
 					foreach (var detail in field.Details)
 					{
-						worksheet.Cells["A" + lineNumber].Value = field.Name;
-						worksheet.Cells["B" + lineNumber].Value = field.ValueType;
-						worksheet.Cells["C" + lineNumber].Value = detail.Value;
-						worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
-						lineNumber++;
+						if (!string.IsNullOrEmpty(detail.NewValue) && !string.IsNullOrWhiteSpace(detail.NewValue))
+						{
+							worksheet.Cells["A" + lineNumber].Value = field.Name;
+							worksheet.Cells["B" + lineNumber].Value = field.ValueType;
+							worksheet.Cells["C" + lineNumber].Value = detail.Value;
+							worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
+							lineNumber++;
+						}
 					}
 				}
 			}
