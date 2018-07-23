@@ -32,7 +32,7 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
 			_window = window;
 			_title = "Please select files for the return package";
 
-			if (returnPackage.TargetFiles.Count > 0)
+			if(returnPackage != null || returnPackage.TargetFiles.Count > 0)
 			{
 				var xliffFiles = returnPackage.TargetFiles.Where(file => file.Name.EndsWith(".sdlxliff")).ToList();
 				if (xliffFiles.Count() != 0)
