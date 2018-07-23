@@ -114,25 +114,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 				{
 					var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
-					//var details = CustomFieldsCollection.se
-					//foreach (var importedField in importedCustomFields)
-					//{
-					//	foreach (var customField in CustomFieldsCollection)
-					//	{
-					//		foreach (var importedDetail in importedField.Details)
-					//		{
-					//			var existingDetail = customField.Details.FirstOrDefault(v => v.Value.Equals(importedDetail.Value));
-					//			if (existingDetail != null)
-					//			{
-					//				var index = customField.Details.IndexOf(existingDetail);
-					//				if (index != -1)
-					//				{
-					//					customField.Details[index] = importedDetail;
-					//				}
-					//			}
-					//		}
-					//	}
-					//}
+					foreach (var  importedField in importedCustomFields)
+					{
+						//var detailsToBeAnonymized = importedField.Details.Where(d => d.NewValue != null).ToList();
+						var customFieldToBeAnonymized = CustomFieldsCollection.FirstOrDefault(c => c.Name.Equals(importedField.Name));
+						if (customFieldToBeAnonymized != null)
+						{
+							customFieldToBeAnonymized.Details = importedField.Details;
+						}
+					}
+					OnPropertyChanged("CustomFieldsCollection");
+					//RefreshCustomFields();
 				}
 			}
 			

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 	{
 		public static List<CustomField> GetImportedCustomFields(List<string> files)
 		{
-			var listOfCustomFields = new List<CustomField>();
+			var customFields = new List<CustomField>();
 			foreach (var file in files)
 			{
 				var package = ExcelFile.GetExcelPackage(file);
@@ -22,46 +23,53 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 					i <= workSheet.Dimension.End.Row;
 					i++)
 				{
-					var details = new Details() { Value = string.Empty, NewValue = string.Empty };
-					var field = new CustomField()
+					var customFieldName = workSheet.Cells[i, 1].Value.ToString();
+					var existingField = customFields.FirstOrDefault(c => c.Name.Equals(customFieldName));
+					if (existingField == null)
 					{
-						IsSelected = true,
-						Name = string.Empty,
-						ValueType = FieldValueType.Unknown,
-						Details = new System.Collections.ObjectModel.ObservableCollection<Details>(){ details }
-					};
-					for (var j = workSheet.Dimension.Start.Column;
+						var fieldType = workSheet.Cells[i, 2].Value.ToString();
+						var studioCustomFieldType = (FieldValueType) Enum.Parse(typeof(FieldValueType), fieldType);
+						var field = new CustomField
+						{
+							IsSelected = true,
+							Name = customFieldName,
+							ValueType = studioCustomFieldType,
+							Details = new ObservableCollection<Details>()
+						};
+						customFields.Add(field);
+					}
+					for (var j = workSheet.Dimension.Start.Column+2;
 						j <= workSheet.Dimension.End.Column;
 						j++)
 					{
 						var address = workSheet.Cells[i, j].Address;
-
+						// get the filed with the same name
 						var cellValue = workSheet.Cells[i, j].Value;
+						var customExistingField = customFields.FirstOrDefault(c => c.Name.Equals(customFieldName));
 
-						foreach (var detail in field.Details)
+						if (customExistingField != null)
 						{
-							if (address.Contains("A") && cellValue != null)
+							var details = new Details
 							{
-								field.Name = cellValue.ToString();
-							}
-							if (address.Contains("B") && cellValue != null)
-							{
-								field.ValueType = (FieldValueType) Enum.Parse(typeof(FieldValueType), cellValue.ToString());
-							}
+								Value = string.Empty,
+								NewValue = string.Empty
+							};
 							if (address.Contains("C") && cellValue != null)
 							{
-								detail.Value = cellValue.ToString();
-							}
-							if (address.Contains("D") && cellValue != null)
-							{
-								detail.NewValue = cellValue.ToString();
+								details.Value = cellValue.ToString();
+								var newValue = workSheet.Cells[i, j + 1].Value;
+								if (newValue != null)
+								{
+									details.NewValue = newValue.ToString();
+								}
+								customExistingField.Details.Add(details);
+								break;
 							}
 						}
 					}
-					listOfCustomFields.Add(field);
 				}
 			}
-			return listOfCustomFields;
+			return customFields;
 		}
 
 		public static void ExportCustomFields(string filePath, List<CustomField> customFields)
