@@ -67,7 +67,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		public static void ExportCustomFields(string filePath, List<CustomField> customFields)
 		{
 			var package = ExcelFile.GetExcelPackage(filePath);
-			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+			var worksheet = package.Workbook.Worksheets.Add("Exported custom fields");
 			var lineNumber = 1;
 			foreach (var field in customFields)
 			{
@@ -75,14 +75,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				{
 					foreach (var detail in field.Details)
 					{
-						if (!string.IsNullOrEmpty(detail.NewValue) && !string.IsNullOrWhiteSpace(detail.NewValue))
-						{
-							worksheet.Cells["A" + lineNumber].Value = field.Name;
-							worksheet.Cells["B" + lineNumber].Value = field.ValueType;
-							worksheet.Cells["C" + lineNumber].Value = detail.Value;
-							worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
-							lineNumber++;
-						}
+						//if (!string.IsNullOrEmpty(detail.NewValue) && !string.IsNullOrWhiteSpace(detail.NewValue))
+						//{
+						//	worksheet.Cells["A" + lineNumber].Value = field.Name;
+						//	worksheet.Cells["B" + lineNumber].Value = field.ValueType;
+						//	worksheet.Cells["C" + lineNumber].Value = detail.Value;
+						//	worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
+						//	lineNumber++;
+						//}
+						worksheet.Cells["A" + lineNumber].Value = field.Name;
+						worksheet.Cells["B" + lineNumber].Value = field.ValueType;
+						worksheet.Cells["C" + lineNumber].Value = detail.Value;
+						worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
+						lineNumber++;
 					}
 				}
 			}

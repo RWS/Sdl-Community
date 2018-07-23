@@ -97,39 +97,46 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Import()
 		{
-			var fileDialog = new OpenFileDialog
+			var confirmation = MessageBox.Show(@"Existing fields values will be overwritten with the values form the file", @"Are you sure you want to import an excel file?", 
+				MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
+			if (confirmation == DialogResult.OK)
 			{
-				Title = @"Please select the files you want to import",
-				Filter = @"Excel |*.xlsx",
-				CheckFileExists = true,
-				CheckPathExists = true,
-				DefaultExt = "xlsx",
-				Multiselect = true
-			};
-			var result = fileDialog.ShowDialog();
-			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
-			{
-				var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
-				//var details = CustomFieldsCollection.se
-				//foreach (var importedField in importedCustomFields)
-				//{
-				//	foreach (var customField in CustomFieldsCollection)
-				//	{
-				//		foreach (var importedDetail in importedField.Details)
-				//		{
-				//			var existingDetail = customField.Details.FirstOrDefault(v => v.Value.Equals(importedDetail.Value));
-				//			if (existingDetail != null)
-				//			{
-				//				var index = customField.Details.IndexOf(existingDetail);
-				//				if (index != -1)
-				//				{
-				//					customField.Details[index] = importedDetail;
-				//				}
-				//			}
-				//		}
-				//	}
-				//}
+				var fileDialog = new OpenFileDialog
+				{
+					Title = @"Please select the files you want to import",
+					Filter = @"Excel |*.xlsx",
+					CheckFileExists = true,
+					CheckPathExists = true,
+					DefaultExt = "xlsx",
+					Multiselect = true
+				};
+				var result = fileDialog.ShowDialog();
+				if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
+				{
+					var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
+					//var details = CustomFieldsCollection.se
+					//foreach (var importedField in importedCustomFields)
+					//{
+					//	foreach (var customField in CustomFieldsCollection)
+					//	{
+					//		foreach (var importedDetail in importedField.Details)
+					//		{
+					//			var existingDetail = customField.Details.FirstOrDefault(v => v.Value.Equals(importedDetail.Value));
+					//			if (existingDetail != null)
+					//			{
+					//				var index = customField.Details.IndexOf(existingDetail);
+					//				if (index != -1)
+					//				{
+					//					customField.Details[index] = importedDetail;
+					//				}
+					//			}
+					//		}
+					//	}
+					//}
+				}
 			}
+			
+	
 		}
 
 		private void SelectFields()
