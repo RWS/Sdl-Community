@@ -122,17 +122,14 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
             }
 
             return items;
-
-
         }
 
 
         public static string GetAuthorizationKey(string userName, string password, string appKey)
         {
             string authKey;
-            //auth_app_key 67C52A1B
 
-            var result = string.Empty;
+			var result = string.Empty;
 
             var buffer = Encoding.UTF8.GetBytes("action=login");
             var webrequest = (HttpWebRequest) WebRequest.Create(new Uri("https://www.tausdata.org/api/auth_key.xml"));
@@ -161,7 +158,6 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
                 }
             }
 
-
             var resultSegmentParser = new ResultSegmentParser();
             var searchSegmentResult = resultSegmentParser.ReadResult(result);
 
@@ -177,11 +173,9 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
                                     searchSegmentResult.Reason);
             }
 
-            return authKey;
-        }
-
-
-
+			return authKey;
+		}
+		
         public static void DeleteSettingsFile()
         {
             try
@@ -408,8 +402,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
         }
 
         #endregion
-
-
+		
         #region  |  settings serialization  |
 
         private readonly string _cryptoKey = "m8jEh6axKnD9/eodQpVZyIMeyHKzdITO";
@@ -613,10 +606,6 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
          
         }
 
-        #endregion
-
-
-   
-
+        #endregion		
     }
 }
