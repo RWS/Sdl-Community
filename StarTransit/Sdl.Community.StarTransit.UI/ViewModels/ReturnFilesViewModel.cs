@@ -5,10 +5,8 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.StarTransit.Shared.Models;
 using Sdl.Community.StarTransit.UI.Annotations;
 using Sdl.Community.StarTransit.UI.Controls;
@@ -17,7 +15,7 @@ using Sdl.ProjectAutomation.Core;
 
 namespace Sdl.Community.StarTransit.UI.ViewModels
 {
-    public class ReturnFilesViewModel :INotifyPropertyChanged
+	public class ReturnFilesViewModel :INotifyPropertyChanged
     {
         private ReturnPackage _returnPackage;
         private string _title;
@@ -28,36 +26,41 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         private ObservableCollection<CellViewModel> _listView = new ObservableCollection<CellViewModel>();
         private CellViewModel _selectedItem;
 
-        public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
-        {
-            _returnPackage = returnPackage;
-            _window = window;
-            _title = "Please select files for the return package";
+		public ReturnFilesViewModel(ReturnPackage returnPackage, ReturnPackageMainWindow window)
+		{
+			_returnPackage = returnPackage;
+			_window = window;
+			_title = "Please select files for the return package";
 
-            var xliffFiles = returnPackage.TargetFiles.Where(file => file.Name.EndsWith(".sdlxliff")).ToList();
-            if (xliffFiles.Count() != 0)
-            {
-                foreach (var project in xliffFiles)
-                {
-                    var item = new CellViewModel
-                    {
-                        Id = project.Id,
-                        Name = project.Name,
-                        Checked = false
-                    };
+			if (returnPackage.TargetFiles.Count > 0)
+			{
+				var xliffFiles = returnPackage.TargetFiles.Where(file => file.Name.EndsWith(".sdlxliff")).ToList();
+				if (xliffFiles.Count() != 0)
+				{
+					foreach (var project in xliffFiles)
+					{
+						var item = new CellViewModel
+						{
+							Id = project.Id,
+							Name = project.Name,
+							Checked = false
+						};
 
-                    _listView.Add(item);
-                }
-                ProjectFiles = xliffFiles;
-            }
-            else
-            {
-                ProjectFiles = new List<ProjectFile>();
-            }
-            
-            Title = _title;
-
-        }
+						_listView.Add(item);
+					}
+					ProjectFiles = xliffFiles;
+				}
+				else
+				{
+					ProjectFiles = new List<ProjectFile>();
+				}
+				Title = _title;
+			}
+			else
+			{
+				MessageBox.Show("Please select target files!", "Informative message", MessageBoxButton.OK, MessageBoxImage.Warning);
+			}
+		}
 
         public string Title { get; set; }
 
@@ -92,8 +95,6 @@ namespace Sdl.Community.StarTransit.UI.ViewModels
         {
             get { return _browseCommand ?? (_browseCommand = new CommandHandler(Browse, true)); }
         }
-
-  
 
         public string ReturnPackageLocation
         {
