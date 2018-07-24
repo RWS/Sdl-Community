@@ -105,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					Helpers.SystemFields.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList());
+					SystemFields.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList());
 				}
 
 				else if (tm.IsServerTm)
@@ -115,7 +115,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					Helpers.SystemFields.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider);
+					SystemFields.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider);
 				}
 			}
 			RefreshSystemFields();
@@ -132,7 +132,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(fileTm);
+						var names = SystemFields.GetUniqueFileBasedSystemFields(fileTm);
 						foreach (var name in names)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(()=>
@@ -150,7 +150,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.Password);
 					foreach (var serverTm in serverTms)
 					{
-						var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+						var names = SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
 						foreach (var name in names)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(()=>
@@ -242,12 +242,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (e.OldItems == null) return;
 				foreach (TmFile removedTm in e.OldItems)
 				{
-					var userNamesToBeRemoved = UniqueUserNames.Where(t => t.TmFilePath.Equals(removedTm.Path)).ToList();
-					foreach (var userName in userNamesToBeRemoved)
-					{
-						UniqueUserNames.Remove(userName);
-					}
+					RemoveFieldsForTm(removedTm.Path);
 				}
+			}
+		}
+
+		private void RemoveFieldsForTm(string tmPath)
+		{
+			var userNamesToBeRemoved = UniqueUserNames.Where(t => t.TmFilePath.Equals(tmPath)).ToList();
+			foreach (var userName in userNamesToBeRemoved)
+			{
+				UniqueUserNames.Remove(userName);
 			}
 		}
 
@@ -279,6 +284,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			});
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
+				// add system fields for checked tms
 				if (tm != null && tm.IsSelected)
 				{
 					if (tm.IsServerTm)
@@ -304,29 +310,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 				else
 				{
-					if (tm.IsServerTm)
+					//remove system fields for unchecked tms
+					if (tm != null)
 					{
-						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							_translationMemoryViewModel.Credentials.UserName,
-							_translationMemoryViewModel.Credentials.Password);
-						var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
-						var newList = UniqueUserNames.ToList();
-						foreach (var name in names)
-						{
-							newList.RemoveAll(n => n.UserName.Equals(name.UserName));
-						}
-						UniqueUserNames = new ObservableCollection<User>(newList);
-					}
-					else
-					{
-						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
-						var newList = UniqueUserNames.ToList();
-						foreach (var name in names)
-						{
-							newList.RemoveAll(n => n.UserName.Equals(name.UserName));
-						}
-						UniqueUserNames = new ObservableCollection<User>(newList);
+						RemoveFieldsForTm(tm.Path);
 					}
 				}
 			});

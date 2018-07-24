@@ -199,11 +199,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (e.OldItems == null) return;
 				foreach (TmFile removedTm in e.OldItems)
 				{
-					var customFieldsToBeRemoved = CustomFieldsCollection.Where(c => c.TmPath.Equals(removedTm.Path)).ToList();
-					foreach (var customField in customFieldsToBeRemoved)
-					{
-						CustomFieldsCollection.Remove(customField);
-					}
+					RemoveCustomFieldsForTm(removedTm.Path);
 				}
 			}
 		}
@@ -260,34 +256,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 				else
-				{
-					if (tm.IsServerTm)
+				{   //remove custom fields for uncheked tm
+					if (tm != null)
 					{
-						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-						var translationProvider = new TranslationProviderServer(uri, false,
-							_translationMemoryViewModel.Credentials.UserName,
-							_translationMemoryViewModel.Credentials.Password);
-						var customFields =
-							new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
-						var newList = CustomFieldsCollection.ToList();
-						foreach (var field in customFields)
-						{
-							newList.RemoveAll(n => n.Name.Equals(field.Name));
-						}
-						CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
-					}
-					else
-					{
-						var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
-						var newList = CustomFieldsCollection.ToList();
-						foreach (var field in customFields)
-						{
-							newList.RemoveAll(n => n.Name.Equals(field.Name));
-						}
-						CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
+						RemoveCustomFieldsForTm(tm.Path);
 					}
 				}
 			});
+		}
+
+		private void RemoveCustomFieldsForTm(string tmFilePath)
+		{
+			var customFieldsToBeRemoved = CustomFieldsCollection.Where(c => c.TmPath.Equals(tmFilePath)).ToList();
+			foreach (var customField in customFieldsToBeRemoved)
+			{
+				CustomFieldsCollection.Remove(customField);
+			}
 		}
 
 		private void RefreshCustomFields()
