@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
@@ -16,9 +17,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 	{
 		public  IDialogCoordinator DialogCoordinatorWindow;
 		private RichTextBox _textBox;
-		public PreviewWindow()
+		private readonly PreviewWindowViewModel _previewWindowViewModel;
+
+		public PreviewWindow(PreviewWindowViewModel previewWindowViewModel)
 		{
 			InitializeComponent();
+			_previewWindowViewModel = previewWindowViewModel;
 			DialogCoordinatorWindow =DialogCoordinator.Instance;
 		}
 
@@ -131,6 +135,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			}
 			//if user deselected only a part from the word
 			return string.Empty;
+		}
+
+		private void AnonymizeAction(object sender, RoutedEventArgs e)
+		{
+			_previewWindowViewModel.ApplyChanges();
 		}
 	}
 }

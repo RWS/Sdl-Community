@@ -70,10 +70,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow.Close();
 
 				//open preview window
-				var previewWindow = new PreviewWindow();
-				var window = previewWindow.DialogCoordinatorWindow;
+				
 				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
-					_tmsCollection, _translationMemoryViewModel, window);
+					_tmsCollection, _translationMemoryViewModel);
+				var previewWindow = new PreviewWindow(previewViewModel);
+				var window = previewWindow.DialogCoordinatorWindow;
+
+				previewViewModel.Window = window;
 				previewWindow.DataContext = previewViewModel;
 				previewWindow.Closing += PreviewWindow_Closing;
 				previewWindow.Show();

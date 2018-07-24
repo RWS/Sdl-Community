@@ -29,17 +29,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ScheduledServerTranslationMemoryExport _tmExporter;
 		private readonly List<ServerTmBackUp> _backupTms;
 		private string _filePath;
-		private readonly IDialogCoordinator _dialogCoordinator;
+		//private readonly IDialogCoordinator _dialogCoordinator;
 		private WaitWindow _waitWindow;
 		private SourceSearchResult _selectedItem;
 		private string _textBoxColor;
 
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
-			TranslationMemoryViewModel tmViewModel, IDialogCoordinator dialogCoordinator)
+			TranslationMemoryViewModel tmViewModel)
 		{
 			_textBoxColor = "White";
-			_dialogCoordinator = dialogCoordinator;
+			
 			_backupTms = new List<ServerTmBackUp>();
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
@@ -63,8 +63,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ??
 		                                           (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
+		public IDialogCoordinator Window { get; set; }
 	
-		private async void ApplyChanges()
+		public async void ApplyChanges()
 		{
 			if (SourceSearchResults.Any(s => s.TuSelected))
 			{
@@ -100,7 +101,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				await _dialogCoordinator.ShowMessageAsync(this, "", "Please select at least one translation unit to apply the changes");
+				await Window.ShowMessageAsync(this, "", "Please select at least one translation unit to apply the changes");
 			}
 			
 		}
