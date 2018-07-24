@@ -121,10 +121,10 @@
     <value>A translation provider plug-in for performing searches in the TAUS TM</value>
   </data>
   <data name="Plugin_Name" xml:space="preserve">
-    <value>TAUS Search Plugin for Studio</value>
+    <value>TAUS Data Search</value>
   </data>
   <data name="Plugin_NiceName" xml:space="preserve">
-    <value>TAUS Search Plugin for Studio</value>
+    <value>TAUS Data Search</value>
   </data>
   <data name="Plugin_Tooltip" xml:space="preserve">
     <value>This provider retrieves translations from the TAUS TM</value>

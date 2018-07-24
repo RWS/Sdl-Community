@@ -130,7 +130,6 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
         public static string GetAuthorizationKey(string userName, string password, string appKey)
         {
             string authKey;
-            //auth_app_key 67C52A1B
 
             var result = string.Empty;
 
