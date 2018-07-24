@@ -54,9 +54,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 								Value = string.Empty,
 								NewValue = string.Empty
 							};
+							//C column contains the original value
 							if (address.Contains("C") && cellValue != null)
 							{
 								details.Value = cellValue.ToString();
+								//D column contains alias value
 								var newValue = workSheet.Cells[i, j + 1].Value;
 								if (newValue != null)
 								{
@@ -83,14 +85,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				{
 					foreach (var detail in field.Details)
 					{
-						//if (!string.IsNullOrEmpty(detail.NewValue) && !string.IsNullOrWhiteSpace(detail.NewValue))
-						//{
-						//	worksheet.Cells["A" + lineNumber].Value = field.Name;
-						//	worksheet.Cells["B" + lineNumber].Value = field.ValueType;
-						//	worksheet.Cells["C" + lineNumber].Value = detail.Value;
-						//	worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
-						//	lineNumber++;
-						//}
 						worksheet.Cells["A" + lineNumber].Value = field.Name;
 						worksheet.Cells["B" + lineNumber].Value = field.ValueType;
 						worksheet.Cells["C" + lineNumber].Value = detail.Value;

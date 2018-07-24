@@ -116,15 +116,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
 					foreach (var  importedField in importedCustomFields)
 					{
-						//var detailsToBeAnonymized = importedField.Details.Where(d => d.NewValue != null).ToList();
 						var customFieldToBeAnonymized = CustomFieldsCollection.FirstOrDefault(c => c.Name.Equals(importedField.Name));
 						if (customFieldToBeAnonymized != null)
 						{
+							var index = CustomFieldsCollection.IndexOf(customFieldToBeAnonymized);
+							customFieldToBeAnonymized.IsSelected = true;
 							customFieldToBeAnonymized.Details = importedField.Details;
+							CustomFieldsCollection.RemoveAt(index);
+							CustomFieldsCollection.Insert(index, customFieldToBeAnonymized);
 						}
+
 					}
-					OnPropertyChanged("CustomFieldsCollection");
-					//RefreshCustomFields();
 				}
 			}
 			
@@ -218,7 +220,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-
 			var tm = e.Argument as TmFile;
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
