@@ -122,7 +122,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 			}
 			RefreshSystemFields();
-
 		}
 
 		private void RefreshSystemFields()
@@ -163,7 +162,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							});
 						}
 					}
-
 				}
 			}
 		}
@@ -205,7 +203,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var selectedUsers = new List<User>();
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected users",
+					Title = @"Export selected system fields",
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
@@ -240,7 +238,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 						
 					}
-					
 					newTm.PropertyChanged += NewTm_PropertyChanged;
 				}
 			}
@@ -259,7 +256,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_backgroundWorker.RunWorkerAsync(sender);
 				}
 			}
-
 		}
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -352,7 +348,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					UniqueUserNames = Helpers.SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
 				}
-
 			}
 
 			if (fileBasedTms.Any())

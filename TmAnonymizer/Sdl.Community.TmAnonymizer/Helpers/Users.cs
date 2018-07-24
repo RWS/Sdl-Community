@@ -47,7 +47,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		public static void ExportUsers(string filePath, List<User> users)
 		{
 			var package = ExcelFile.GetExcelPackage(filePath);
-			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+			var worksheet = package.Workbook.Worksheets.Add("Exported system fields");
 			var lineNumber = 1;
 			foreach (var user in users)
 			{

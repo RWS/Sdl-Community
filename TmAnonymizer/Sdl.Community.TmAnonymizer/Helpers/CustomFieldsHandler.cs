@@ -39,7 +39,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var tus = translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus);
+			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus,tm.Path);
 
 			return customFieldList;
 		}
@@ -48,7 +48,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits);
+			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits,tm.Path);
 
 			return customFieldList;
 		}
@@ -99,7 +99,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return details;
 		}
 
-		private static List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, TranslationUnit[] translationUnits)
+		private static List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, TranslationUnit[] translationUnits,string tmFilePath)
 		{
 			var customFieldList = new List<CustomField>();
 
@@ -114,7 +114,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						Details = new ObservableCollection<Details>(GetPickListCustomFieldValues(field))
+						Details = new ObservableCollection<Details>(GetPickListCustomFieldValues(field)),
+						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
 				}
@@ -126,7 +127,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(translationUnits, field.Name))
+						Details = new ObservableCollection<Details>(GetNonPickListCustomFieldValues(translationUnits, field.Name)),
+						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
 				}

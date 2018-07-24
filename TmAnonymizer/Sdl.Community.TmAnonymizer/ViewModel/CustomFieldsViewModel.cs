@@ -125,12 +125,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							CustomFieldsCollection.RemoveAt(index);
 							CustomFieldsCollection.Insert(index, customFieldToBeAnonymized);
 						}
-
 					}
 				}
 			}
-			
-	
 		}
 
 		private void SelectFields()
@@ -185,16 +182,32 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (e.NewItems != null)
+			if (e.Action==NotifyCollectionChangedAction.Add)
 			{
 				foreach (TmFile newTm in e.NewItems)
 				{
+					//custom fields for server based tms wil be loaded only when user check the checkbox
 					if (!newTm.IsServerTm)
 					{
-						CustomFieldsCollection = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(newTm));
+						var customFields = CustomFieldsHandler.GetFilebasedCustomField(newTm);
+						foreach (var customField in customFields)
+						{
+							CustomFieldsCollection.Add(customField);
+						}
 					}
-
 					newTm.PropertyChanged += NewTm_PropertyChanged;
+				}
+			}
+			if (e.Action == NotifyCollectionChangedAction.Remove)
+			{
+				if (e.OldItems == null) return;
+				foreach (TmFile removedTm in e.OldItems)
+				{
+					var customFieldsToBeRemoved = CustomFieldsCollection.Where(c => c.TmPath.Equals(removedTm.Path)).ToList();
+					foreach (var customField in customFieldsToBeRemoved)
+					{
+						CustomFieldsCollection.Remove(customField);
+					}
 				}
 			}
 		}
@@ -212,10 +225,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			if (_waitWindow != null)
-			{
-				_waitWindow.Close();
-			}
+			_waitWindow?.Close();
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -306,7 +316,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				foreach (var fileTm in fileBasedTms)
 				{
-					CustomFieldsCollection = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+					var customFields = CustomFieldsHandler.GetFilebasedCustomField(fileTm);
+					foreach (var customField in customFields)
+					{
+						CustomFieldsCollection.Add(customField);
+					}
+					
 				}
 			}
 		}
