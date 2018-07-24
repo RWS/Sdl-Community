@@ -33,10 +33,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_customFields = new ObservableCollection<CustomField>();
 			_selectedItems = new List<CustomField>();
-			if (_tmsCollection != null)
-			{
-				PopulateCustomFieldGrid(_tmsCollection, _translationMemoryViewModel);
-			}
 			_translationMemoryViewModel = translationMemoryViewModel;
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
@@ -236,94 +232,62 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();
 			});
-			if (tm.IsSelected)
+			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
-				if (tm.IsServerTm)
+				if (tm != null && tm.IsSelected)
 				{
-					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						_translationMemoryViewModel.Credentials.UserName,
-						_translationMemoryViewModel.Credentials.Password);
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
-					foreach (var field in customFields)
+
+					if (tm.IsServerTm)
 					{
-						System.Windows.Application.Current.Dispatcher.Invoke(() =>
+						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							_translationMemoryViewModel.Credentials.UserName,
+							_translationMemoryViewModel.Credentials.Password);
+						var customFields =
+							new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
+						foreach (var field in customFields)
 						{
 							CustomFieldsCollection.Add(field);
-						});
+						}
+					}
+					else
+					{
+						var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+						foreach (var field in customFields)
+						{
+							CustomFieldsCollection.Add(field);
+						}
 					}
 				}
 				else
 				{
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
-					foreach (var field in customFields)
+					if (tm.IsServerTm)
 					{
-						System.Windows.Application.Current.Dispatcher.Invoke(() =>
+						var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							_translationMemoryViewModel.Credentials.UserName,
+							_translationMemoryViewModel.Credentials.Password);
+						var customFields =
+							new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
+						var newList = CustomFieldsCollection.ToList();
+						foreach (var field in customFields)
 						{
-							CustomFieldsCollection.Add(field);
-						});
+							newList.RemoveAll(n => n.Name.Equals(field.Name));
+						}
+						CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
 					}
-				}
-			}
-			else
-			{
-				if (tm.IsServerTm)
-				{
-					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						_translationMemoryViewModel.Credentials.UserName,
-						_translationMemoryViewModel.Credentials.Password);
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
-					var newList = CustomFieldsCollection.ToList();
-					foreach (var field in customFields)
+					else
 					{
-						newList.RemoveAll(n => n.Name.Equals(field.Name));
+						var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+						var newList = CustomFieldsCollection.ToList();
+						foreach (var field in customFields)
+						{
+							newList.RemoveAll(n => n.Name.Equals(field.Name));
+						}
+						CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
 					}
-					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
 				}
-				else
-				{
-					var customFields = new ObservableCollection<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
-					var newList = CustomFieldsCollection.ToList();
-					foreach (var field in customFields)
-					{
-						newList.RemoveAll(n => n.Name.Equals(field.Name));
-					}
-					CustomFieldsCollection = new ObservableCollection<CustomField>(newList);
-				}
-			}
-		}
-
-
-		private void PopulateCustomFieldGrid(ObservableCollection<TmFile> tmsCollection, TranslationMemoryViewModel translationMemoryViewModel)
-		{
-			var serverBasedTms = tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
-			var fileBasedTms = tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
-			if (serverBasedTms.Any())
-			{
-				var uri = new Uri(translationMemoryViewModel.Credentials.Url);
-				var translationProvider = new TranslationProviderServer(uri, false,
-					translationMemoryViewModel.Credentials.UserName,
-					translationMemoryViewModel.Credentials.Password);
-				foreach (var serverTm in serverBasedTms)
-				{
-					CustomFieldsCollection =
-						 new ObservableCollection<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
-				}
-			}
-
-			if (fileBasedTms.Any())
-			{
-				foreach (var fileTm in fileBasedTms)
-				{
-					var customFields = CustomFieldsHandler.GetFilebasedCustomField(fileTm);
-					foreach (var customField in customFields)
-					{
-						CustomFieldsCollection.Add(customField);
-					}
-					
-				}
-			}
+			});
 		}
 
 		private void RefreshCustomFields()
@@ -364,7 +328,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							});
 						}
 					}
-
 				}
 			}
 		}
