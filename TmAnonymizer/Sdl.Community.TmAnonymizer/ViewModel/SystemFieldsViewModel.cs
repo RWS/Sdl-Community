@@ -11,6 +11,8 @@ using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using SystemFields = Sdl.Community.SdlTmAnonymizer.Helpers.SystemFields;
+
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -220,25 +222,32 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			if (e.NewItems != null)
+			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				foreach (TmFile newTm in e.NewItems)
 				{
 					if (!newTm.IsServerTm)
 					{
-						var fields = Helpers.SystemFields.GetUniqueFileBasedSystemFields(newTm);
+						var fields = SystemFields.GetUniqueFileBasedSystemFields(newTm);
 						foreach (var user in fields)
 						{
 							UniqueUserNames.Add(user);
 						}
-						
 					}
 					newTm.PropertyChanged += NewTm_PropertyChanged;
 				}
 			}
-			else
+			if (e.Action == NotifyCollectionChangedAction.Remove)
 			{
-				RefreshSystemFields();
+				if (e.OldItems == null) return;
+				foreach (TmFile removedTm in e.OldItems)
+				{
+					var userNamesToBeRemoved = UniqueUserNames.Where(t => t.TmFilePath.Equals(removedTm.Path)).ToList();
+					foreach (var userName in userNamesToBeRemoved)
+					{
+						UniqueUserNames.Remove(userName);
+					}
+				}
 			}
 		}
 
@@ -278,7 +287,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var translationProvider = new TranslationProviderServer(uri, false,
 							_translationMemoryViewModel.Credentials.UserName,
 							_translationMemoryViewModel.Credentials.Password);
-						var names = Helpers.SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+						var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
 						foreach (var name in names)
 						{
 							UniqueUserNames.Add(name);
@@ -286,7 +295,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 					else
 					{
-						var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(tm);
+						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
 						foreach (var name in names)
 						{
 							UniqueUserNames.Add(name);
@@ -311,7 +320,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 					else
 					{
-						var names = Helpers.SystemFields.GetUniqueFileBasedSystemFields(tm);
+						var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
 						var newList = UniqueUserNames.ToList();
 						foreach (var name in names)
 						{

@@ -6,6 +6,7 @@
 		private string _name;
 		private string _alias;
 
+	    public string TmFilePath { get; set; }
 		public bool IsSelected
 		{
 

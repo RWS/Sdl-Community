@@ -15,11 +15,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		/// <param name="tm">Translation Memory File</param>
 		/// <returns>An ObservableCollection of Users</returns>
 		public static ObservableCollection<User> GetUniqueFileBasedSystemFields(TmFile tm)
-		{
-			var users = new List<User>();
-			var listOfFieldNames = new List<string>();
+		{ 
 			var translationUnits = GetFileBasedTranslationUnits(tm);
-			var uniqueUsersCollection = GetuniqueUserCollection(users, listOfFieldNames, translationUnits);
+			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path,translationUnits);
 			return uniqueUsersCollection;
 
 		}
@@ -38,7 +36,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
-			var uniqueUsersCollection = GetuniqueUserCollection(users, listOfFieldNames, translationUnits);
+			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits);
 			return uniqueUsersCollection;
 		}
 
@@ -135,19 +133,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return translationUnits;
 		}
 
-		private static ObservableCollection<User> GetuniqueUserCollection(List<User> users, List<string> listOfFieldNames, TranslationUnit[] translationUnits)
+		private static ObservableCollection<User> GetUniqueUserCollection(string tmFilePath, TranslationUnit[] translationUnits)
 		{
+			var systemFields = new List<string>();
+			var distinctUsersCollection = new ObservableCollection<User>();
 			foreach (var tu in translationUnits)
 			{
-				listOfFieldNames.AddRange(new List<string>() { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
+				systemFields.AddRange(new List<string> { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });
 			}
-			var distinctUsers = listOfFieldNames.Distinct().ToList();
-			foreach (var name in distinctUsers)
+			
+			foreach (var name in systemFields.Distinct().ToList())
 			{
-				users.Add(new User() { UserName = name });
+				distinctUsersCollection.Add(new User
+				{
+					UserName = name,TmFilePath = tmFilePath
+				});
 			}
-			var uniqueUsersCollection = new ObservableCollection<User>(users);
-			return uniqueUsersCollection;
+			return distinctUsersCollection;
 		}
 	}
 }
