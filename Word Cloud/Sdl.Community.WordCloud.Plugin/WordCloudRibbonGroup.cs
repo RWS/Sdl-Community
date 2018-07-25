@@ -55,9 +55,16 @@ namespace Sdl.Community.WordCloud.Plugin
             WordCloudViewPart wc = SdlTradosStudio.Application.GetController<WordCloudViewPart>();
             wc.Activate();
             wc.GenerateWordCloud();
-        }
-
-       
+        }       
     }
 
+	[Action("CodingBreeze.WordCloud.Help", Name = "Help", Icon = "help_icon", Description = "Help")]
+	[ActionLayout(typeof(WordCloudRibbonGroup), 20, DisplayType.Large)]
+	class HelpLinkAction : AbstractAction
+	{
+		protected override void Execute()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3289.word-cloud");
+		}
+	}	
 }
