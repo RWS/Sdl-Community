@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.WordCloud.Plugin", "Sdl.Community.WordCloud.Plugin\Sdl.Community.WordCloud.Plugin.csproj", "{BABD312B-6D0F-4BC2-B185-B79C0A94A05F}"
-EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.WordCloud.Installer", "Sdl.Community.WordCloud.Installer\Sdl.Community.WordCloud.Installer.wixproj", "{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.WordCloud.Controls", "Sdl.Community.WordCloud.Controls\Sdl.Community.WordCloud.Controls.csproj", "{34649D7D-04A9-4092-AD0B-F7022C123FD7}"
 EndProject
@@ -34,16 +32,6 @@ Global
 		{BABD312B-6D0F-4BC2-B185-B79C0A94A05F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BABD312B-6D0F-4BC2-B185-B79C0A94A05F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BABD312B-6D0F-4BC2-B185-B79C0A94A05F}.Release|x86.ActiveCfg = Release|Any CPU
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Debug|x86.ActiveCfg = Debug|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Debug|x86.Build.0 = Debug|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Release|Any CPU.ActiveCfg = Release|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Release|Mixed Platforms.Build.0 = Release|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Release|x86.ActiveCfg = Release|x86
-		{D8714F3C-2999-4FB6-96FB-A7DCD0120A1B}.Release|x86.Build.0 = Release|x86
 		{34649D7D-04A9-4092-AD0B-F7022C123FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{34649D7D-04A9-4092-AD0B-F7022C123FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34649D7D-04A9-4092-AD0B-F7022C123FD7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -57,5 +45,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BDA14B62-40F9-4CB1-9E91-88DF6EDC0919}
 	EndGlobalSection
 EndGlobal
