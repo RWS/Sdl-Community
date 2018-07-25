@@ -12,6 +12,7 @@
              GlowBrush="#3EA691"
              Title="Preview changes"
              mc:Ignorable="d" 
+			PreviewKeyUp="PreviewWindow_OnPreviewKeyUp"
              xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              xmlns:helpers="clr-namespace:Sdl.Community.SdlTmAnonymizer.Helpers"
@@ -26,8 +27,8 @@
 		</ResourceDictionary>
 	</Window.Resources>
 
-	<ScrollViewer >
-		<Grid Name="Grid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+	<ScrollViewer  Name="ScrollViewer">
+		<Grid Name="Grid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" >
 		<Grid.RowDefinitions>
 		    <RowDefinition Height="Auto" />
 		    <RowDefinition Height="Auto" />

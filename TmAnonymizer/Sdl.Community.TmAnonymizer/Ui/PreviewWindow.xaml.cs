@@ -155,5 +155,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 		{
 			_previewWindowViewModel.ApplyChanges();
 		}
+		
+		private void PreviewWindow_OnPreviewKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Down)
+			{
+				ScrollViewer.LineDown();
+			}
+			if (e.Key == Key.Up)
+			{
+				ScrollViewer.LineUp();
+			}
+		}
 	}
 }
