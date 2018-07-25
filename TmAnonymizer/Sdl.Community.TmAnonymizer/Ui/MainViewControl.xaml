@@ -21,8 +21,8 @@
 		</ResourceDictionary>
 
 	</UserControl.Resources>
-	<ScrollViewer>
-		<Grid  Name="ParentGrid">
+	<ScrollViewer Name="ScrollViewer">
+		<Grid  Name="ParentGrid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
 			<Grid.Resources>
 				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
 			</Grid.Resources>
