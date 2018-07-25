@@ -277,7 +277,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_translationMemoryViewModel.IsEnabled = false;
 			var tm = e.Argument as TmFile;
-			System.Windows.Application.Current.Dispatcher.Invoke(()=>
+			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();

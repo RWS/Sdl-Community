@@ -34,47 +34,61 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
 		{
-			var docStart = _textBox.Document.ContentStart;
-			var start = _textBox.Selection.Start;
-			var end = _textBox.Selection.End;
-
-			var parent = (RichTextBox)_textBox.Document.Parent;
-			var tag = string.Empty;
-			if (parent != null)
+			try
 			{
-				tag = (string)parent.Tag;
+				var docStart = _textBox.Document.ContentStart;
+				var start = _textBox.Selection.Start;
+				var end = _textBox.Selection.End;
+
+				var parent = (RichTextBox) _textBox.Document.Parent;
+				var tag = string.Empty;
+				if (parent != null)
+				{
+					tag = (string) parent.Tag;
+				}
+
+				var tr = new TextRange(start, end);
+				tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
+
+				var dataContext = _textBox.DataContext as SourceSearchResult;
+				var startRange = new TextRange(docStart, start);
+				var indexStartAbs = startRange.Text.Length;
+				var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
+				var wordDetails = new WordDetails
+				{
+					Position = indexStartAbs,
+					Length = indexStartAbs + _textBox.Selection.Text.TrimEnd().Length,
+					Text = _textBox.Selection.Text.TrimEnd()
+
+				};
+				var nextWord = GetNextWord(wordDetails, text);
+				wordDetails.NextWord = nextWord;
+				if (tag.Equals("SourceBox"))
+				{
+					dataContext?.SelectedWordsDetails.Add(wordDetails);
+				}
+				else
+				{
+					dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
+				}
 			}
-
-			var tr = new TextRange(start, end);
-			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
-
-			var dataContext = _textBox.DataContext as SourceSearchResult;
-			var startRange = new TextRange(docStart, start);
-			var indexStartAbs = startRange.Text.Length;
-			var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
-			var wordDetails = new WordDetails
+			catch (Exception exception)
 			{
-				Position = indexStartAbs,
-				Length = indexStartAbs+_textBox.Selection.Text.TrimEnd().Length, 
-				Text = _textBox.Selection.Text.TrimEnd()
 				
-			};
-			var nextWord = GetNextWord(wordDetails, text);
-			wordDetails.NextWord = nextWord;
-			if (tag.Equals("SourceBox"))
-			{
-				dataContext?.SelectedWordsDetails.Add(wordDetails);
 			}
-			else
-			{
-				dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
-			}
-			
 		}
 			
 		private string GetNextWord(WordDetails wordDetails,string text)
 		{
-			var splitedWord = text.Substring(wordDetails.Length+1);
+			var splitedWord = string.Empty;
+			if (wordDetails.Length.Equals(text.Length))
+			{
+				splitedWord=text.Substring(wordDetails.Length);
+			}
+			else
+			{
+				splitedWord = text.Substring(wordDetails.Length + 1);
+			}
 			if (!string.IsNullOrEmpty(splitedWord))
 			{
 				return splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));

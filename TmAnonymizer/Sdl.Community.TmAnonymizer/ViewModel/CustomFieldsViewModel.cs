@@ -56,11 +56,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 				else
 				{
+					System.Windows.Application.Current.Dispatcher.Invoke(delegate
+					{
+						_waitWindow = new WaitWindow();
+						_waitWindow.Show();
+					});
 					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
 					var translationProvider = new TranslationProviderServer(uri, false,
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 					CustomFieldsHandler.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
+					_waitWindow.Close();
 				}
 				RefreshCustomFields();
 			}

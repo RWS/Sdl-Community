@@ -33,7 +33,7 @@
 						<DockPanel >
 							<ToggleButton Visibility="Collapsed"  DockPanel.Dock="Right" IsEnabled="False" IsChecked="False" ClickMode="Press">
 								<Popup x:Name="OverflowPopup" AllowsTransparency="true" Placement="Bottom" IsOpen="{Binding Path=IsOverflowOpen,RelativeSource={RelativeSource TemplatedParent}}" StaysOpen="false" Focusable="false" PopupAnimation="Slide">
-									<Border x:Name="DropDownBorder" Background="pink" BorderThickness="1" BorderBrush="pink">
+									<Border x:Name="DropDownBorder" Background="White" BorderThickness="1" BorderBrush="white">
 										<ToolBarOverflowPanel x:Name="PART_ToolBarOverflowPanel" Margin="2" WrapWidth="200" Focusable="true"  FocusVisualStyle="{x:Null}" KeyboardNavigation.TabNavigation="Cycle" KeyboardNavigation.DirectionalNavigation="Cycle" Visibility="Collapsed"/>
 									</Border>
 								</Popup>

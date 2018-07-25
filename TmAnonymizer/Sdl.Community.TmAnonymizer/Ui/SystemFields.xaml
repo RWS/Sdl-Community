@@ -19,8 +19,8 @@
 	<Grid Height="{Binding ElementName=ParentControl}">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto"  MaxHeight="300"/>
-			<RowDefinition Height="Auto" MaxHeight="300" />
+			<RowDefinition Height="Auto"  />
+			<RowDefinition Height="Auto"  />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
@@ -32,6 +32,7 @@
 		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="True"
 				  SelectedItem="{Binding SelectedItem}"
 		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+		          MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
 		          Margin="5,10" >
 			<DataGrid.InputBindings>
 				<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>

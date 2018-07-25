@@ -242,7 +242,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					IsServerTm = false
 				};
 				tmFile.PropertyChanged += TmFile_PropertyChanged;
-				TmsCollection.Add(tmFile);
+				TmsCollection.Insert(0,tmFile);
 			}
 		}
 
