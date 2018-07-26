@@ -39,10 +39,9 @@ namespace Sdl.Community.InSource
         public static Persistence Persistence = new Persistence();
         private int _percentComplete;
 	    private IStudioNotificationCommand _createProjectCommand;
-	    private IStudioEventAggregator _eventAggregator;
+	    private readonly IStudioEventAggregator _eventAggregator;
 		private const string NotificationGroupId = "b0261aa3-b6a5-4f69-8f94-3713784ce8ef";
-		private List<string> _foldersRequestPath;
-	    private InSourceNotificationGroup _notificationGroup;
+	    private readonly InSourceNotificationGroup _notificationGroup;
 		#endregion private fields
 
 		public event EventHandler ProjectRequestsChanged;
@@ -54,41 +53,10 @@ namespace Sdl.Community.InSource
 		    _hasFiles = new List<bool>();
 		    _eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
-		 //   Action action = CreateProjectFromNotification;
-
-			//_createProjectCommand = new InSourceCommand(action)
-			//{
-			//	CommandText = "Create project"
-			//};
-
 			_notificationGroup = new InSourceNotificationGroup(NotificationGroupId)
 		    {
 			    Title = "InSource Notifications"
 		    };
-
-
-		 //   _notificationGroup.Notifications.Add(new InSourceNotification(new Guid())
-		 //   {
-			//    Title = "Second notification title",
-			//    AlwaysVisibleDetails = new List<string>
-			//    {
-			//	    "Third notification  description",
-			//	    "Forth notification description"
-			//    },
-			//	Action = _createProjectCommand,
-			//	IsActionVisible = true,
-			//	LinkAction = _createProjectCommand,
-			//	IsLinkVisible = true
-
-			//});
-
-		 //   // add group notification
-		 //   var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
-		 //   _eventAggregator.Publish(addTestGroup);
-
-		 //   var showNotification = new ShowStudioNotificationsViewEvent(showNotifications: true, setFocus: true);
-		 //   _eventAggregator.Publish(showNotification);
-		    _foldersRequestPath = new List<string>();
 	    }
 
 	    protected override void Initialize(IViewContext context)
@@ -171,6 +139,12 @@ namespace Sdl.Community.InSource
 
 	    public void CheckForProjects()
 	    {
+			//clear existing notifications
+		    _notificationGroup.Notifications.Clear();
+		    var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+			//publish notification group 
+		    _eventAggregator.Publish(addNotificationEvent);
+
 			var projectRequest = Persistence.Load();
 			var newProjectRequestList = new List<ProjectRequest>();
 		    if (projectRequest != null)
@@ -201,87 +175,40 @@ namespace Sdl.Community.InSource
 				    Action action = ()=>CreateProjectFromNotification(notification);
 				    _createProjectCommand = new InSourceCommand(action)
 				    {
-					    CommandText = "Create project"
+					    CommandText = "Create project",
+						CommandToolTip = "Create new project"
 				    };
 				    notification.Action = _createProjectCommand;
 					_notificationGroup.Notifications.Add(notification);
 					
 				}
-			    var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
-			    _eventAggregator.Publish(addTestGroup);
+			    var groupEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+			    _eventAggregator.Publish(groupEvent);
 
 			    var showNotification = new ShowStudioNotificationsViewEvent(true,true);
 			    _eventAggregator.Publish(showNotification);
-
-				//   var notificationsList = new List<Notification>();
-
-				//foreach (var newProjectRequest in ProjectRequests)
-				//{
-				//	//to avoid duplication of notifications we save the path of the project in a list
-				//	//if the path is already there we don't create another notification
-				//	//in this version of Notification api there is a issue: RemoveGroup() is not working
-				//	var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
-				//	//if the new diewctory does not contain files don't create a notification
-				//	if (Directory.GetFiles(newProjectPath).Any())
-				//	{
-				//		if (!_foldersRequestPath.Contains(newProjectPath))
-				//		{
-				//			var notification = new Notification
-				//			{
-				//				Title = newProjectRequest.Name,
-				//				Details = new List<string> { "Project request path", newProjectPath }
-				//			};
-				//			newProjectRequest.NotificationId = notification.Id;
-				//			_clearCommand = new RelayCommand<Notification>(n =>
-				//			{
-				//				CreateProjectFromNotification(notification);
-				//			});
-				//			notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
-				//			notificationsList.Add(notification);
-				//			_foldersRequestPath.Add(newProjectPath);
-				//		}
-				//	}
-				//}
-				//_notificationGroup.Add(notificationsList);
-				//_notificationGroup.Publish();
 			}
 
 	    }
 	    private void CreateProjectFromNotification(InSourceNotification notification)
 	    {
-			//  var notification = notificationObject as Notification;
 			if (notification != null)
 			{
 				var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-				//CreateProjectsFromNotifications(project);
-				//_notificationGroup.Remove(notification.Id);
+				CreateProjectsFromNotifications(project);
+				//remove the notificatio from list
 				_notificationGroup.Notifications.Remove(notification);
 				
-				var removeTestGroup = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-				_eventAggregator.Publish(removeTestGroup);
-				//_eventAggregator.Publish(_notificationGroup);
-
-				_notificationGroup = new InSourceNotificationGroup(NotificationGroupId);
-				var notification1 = new InSourceNotification(Guid.NewGuid())
+				if (_notificationGroup.Notifications.Count > 0)
 				{
-					Title = "dd",
-					AlwaysVisibleDetails = new List<string>
-					{
-						"Project request path",
-						"aaa"
-					},
-					IsActionVisible = true
-				};
-
-				Action action = () => CreateProjectFromNotification(notification1);
-				_createProjectCommand = new InSourceCommand(action)
+					var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+					_eventAggregator.Publish(addNotificationEvent);
+				}
+				else
 				{
-					CommandText = "Create project"
-				};
-				notification1.Action = _createProjectCommand;
-				_notificationGroup.Notifications.Add(notification1);
-				var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
-				_eventAggregator.Publish(addTestGroup);
+					var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
+					_eventAggregator.Publish(removeNotificationEvent);
+				}
 			}
 		}
 
@@ -316,21 +243,6 @@ namespace Sdl.Community.InSource
 						var projectRequest = CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
 		                projectRequestList.Add(projectRequest);
 					}
-
-					//This will be uncommented after testing proper the application 
-                    //var projectRequest=CreateProjectRequest(templateForWatchFolder, dirInfo, watchFolderPath);
-                    ////that means we don't have anoter folder besides "Accepted request", and we need to set the curent directory as project request
-                    //if (projectRequest.Name != null)
-                    //{
-                    //    projectRequestList.Add(projectRequest);
-                    //}
-                    //else
-                    //{
-                    //    var infoDir = new DirectoryInfo(watchFolderPath);
-                    //    var request = CreateRequestFromCurrentDirectory(templateForWatchFolder, infoDir, watchFolderPath);
-                    //    projectRequestList.Add(request);
-                    //}
-
                 }
             }
             else
@@ -341,20 +253,6 @@ namespace Sdl.Community.InSource
                 projectRequestList.Add(projectRequest);
             }
             return projectRequestList;
-        }
-
-        private ProjectRequest CreateRequestFromCurrentDirectory(ProjectTemplateInfo templateInfo,
-            DirectoryInfo directory, string path)
-        {
-            var projectRequest = new ProjectRequest();
-            if (directory.Name != "AcceptedRequests")
-            {
-                projectRequest.Name = directory.Name;
-                projectRequest.Path = path;
-                projectRequest.ProjectTemplate = templateInfo;
-                projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.TopDirectoryOnly);
-            }
-            return projectRequest;
         }
 
         private ProjectRequest CreateProjectRequest(ProjectTemplateInfo templateInfo, DirectoryInfo directory,
@@ -487,6 +385,26 @@ namespace Sdl.Community.InSource
 		                                // remove the request from the list of requests
 		                                ProjectRequests.Remove(request.Item1);
 
+										//remove notification for project created from the View part
+		                                var notification =
+			                                _notificationGroup.Notifications.FirstOrDefault(n => n.Id.Equals(request.Item1
+				                                .NotificationId));
+		                                if (notification != null)
+		                                {
+			                                _notificationGroup.Notifications.Remove(notification);
+			                                if (_notificationGroup.Notifications.Count > 0)
+			                                {
+				                                var addNotificationEvent = new AddStudioGroupNotificationEvent(_notificationGroup);
+
+				                                _eventAggregator.Publish(addNotificationEvent);
+			                                }
+			                                else
+			                                {
+				                                var removeNotificationEvent = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
+												_eventAggregator.Publish(removeNotificationEvent);
+			                                }
+
+		                                }
 		                                OnProjectRequestsChanged();
 	                                }
                                 }
