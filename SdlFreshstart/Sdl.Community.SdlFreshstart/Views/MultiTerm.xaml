@@ -15,7 +15,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 	    <Grid.ColumnDefinitions>
-		    <ColumnDefinition Width="500" />
+		    <ColumnDefinition Width="Auto" />
 		    <ColumnDefinition Width="Auto" />
 	    </Grid.ColumnDefinitions>
 	    <Label Grid.Column="0" Grid.Row="0" Margin="0,5,0,0" FontWeight="Bold">Please select MultiTerm versions</Label>
@@ -23,7 +23,7 @@
 		<ItemsControl Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MultiTermVersionsCollection}" FontFamily="Calibri">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<UniformGrid Columns="3" Margin="0,0,0,0"/>
+					<UniformGrid Columns="4"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 			<!-- ItemTemplate -->
@@ -49,6 +49,7 @@
 		    SelectionMode="Multiple"
 		    Grid.Column="0"
 			Width="auto"
+			
 			SelectedItem="{Binding SelectedLocation}"
 		    Grid.Row="4">
 			<ListBox.Resources>
@@ -95,7 +96,7 @@
 	    </ListBox>
 		<StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="4" Margin="10,0,0,0" VerticalAlignment="Top" Height="400">
 		    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" />
-			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="770" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
+			<TextBlock Margin="5,0,0,0" TextWrapping="WrapWithOverflow"  Width="740" TextAlignment="Justify" Text="{Binding SelectedLocation.Description}"></TextBlock>
 	    </StackPanel>
 
 		<StackPanel Grid.Column="1" Grid.Row="5"  Width="auto" VerticalAlignment="Top" Height="270" >

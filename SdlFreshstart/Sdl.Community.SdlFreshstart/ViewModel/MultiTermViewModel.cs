@@ -154,13 +154,13 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 			{
 			 new MultiTermLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm14",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Local\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
 					Description = FoldersDescriptionText.MultiTermLocal(),
 					Alias = "appDataLocal"
 				},new MultiTermLocationListItem
 				{
-					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm14",
+					DisplayName = @"C:\Users\[USERNAME]\AppData\Roaming\SDL\SDL MultiTerm\MultiTerm15",
 					IsSelected = false,
 					Description =FoldersDescriptionText.MultiTermRoaming(),
 					Alias = "appDataRoming"
@@ -312,6 +312,15 @@ namespace Sdl.Community.SdlFreshstart.ViewModel
 		{
 			_multiTermVersionsCollection = new ObservableCollection<MultiTermVersionListItem>
 			{
+				new MultiTermVersionListItem
+				{
+					DisplayName = "MultiTerm 2019",
+					IsSelected = false,
+					MajorVersionNumber = "15",
+					ReleaseNumber = "2019",
+					CacheFolderName = "SDLMultiTermDesktop2019"
+
+				},
 				new MultiTermVersionListItem
 				{
 					DisplayName = "MultiTerm 2017",
