@@ -256,11 +256,30 @@ namespace Sdl.Community.InSource
 				//CreateProjectsFromNotifications(project);
 				//_notificationGroup.Remove(notification.Id);
 				_notificationGroup.Notifications.Remove(notification);
-				_notificationGroup = new InSourceNotificationGroup(NotificationGroupId);
-				//var removeTestGroup = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
-				//_eventAggregator.Publish(removeTestGroup);
+				
+				var removeTestGroup = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
+				_eventAggregator.Publish(removeTestGroup);
 				//_eventAggregator.Publish(_notificationGroup);
 
+				_notificationGroup = new InSourceNotificationGroup(NotificationGroupId);
+				var notification1 = new InSourceNotification(Guid.NewGuid())
+				{
+					Title = "dd",
+					AlwaysVisibleDetails = new List<string>
+					{
+						"Project request path",
+						"aaa"
+					},
+					IsActionVisible = true
+				};
+
+				Action action = () => CreateProjectFromNotification(notification1);
+				_createProjectCommand = new InSourceCommand(action)
+				{
+					CommandText = "Create project"
+				};
+				notification1.Action = _createProjectCommand;
+				_notificationGroup.Notifications.Add(notification1);
 				var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
 				_eventAggregator.Publish(addTestGroup);
 			}
