@@ -48,16 +48,13 @@
             this.label2 = new System.Windows.Forms.Label();
             this.textBox_applicationKey = new System.Windows.Forms.TextBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.linkLabel_getOwnerName = new System.Windows.Forms.LinkLabel();
-            this.linkLabel_getProductName = new System.Windows.Forms.LinkLabel();
-            this.linkLabel_getProviderName = new System.Windows.Forms.LinkLabel();
+            this.comboBox_owner = new System.Windows.Forms.ComboBox();
+            this.comboBox_product = new System.Windows.Forms.ComboBox();
+            this.comboBox_provider = new System.Windows.Forms.ComboBox();
             this.numericUpDown_contentTypeId = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_industryId = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_productId = new System.Windows.Forms.NumericUpDown();
             this.label15 = new System.Windows.Forms.Label();
-            this.label_owner_name = new System.Windows.Forms.Label();
-            this.label_product_name = new System.Windows.Forms.Label();
-            this.label_provider_name = new System.Windows.Forms.Label();
             this.numericUpDown_ownerId = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown_providerId = new System.Windows.Forms.NumericUpDown();
             this.label14 = new System.Windows.Forms.Label();
@@ -305,16 +302,13 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.linkLabel_getOwnerName);
-            this.groupBox3.Controls.Add(this.linkLabel_getProductName);
-            this.groupBox3.Controls.Add(this.linkLabel_getProviderName);
+            this.groupBox3.Controls.Add(this.comboBox_owner);
+            this.groupBox3.Controls.Add(this.comboBox_product);
+            this.groupBox3.Controls.Add(this.comboBox_provider);
             this.groupBox3.Controls.Add(this.numericUpDown_contentTypeId);
             this.groupBox3.Controls.Add(this.numericUpDown_industryId);
             this.groupBox3.Controls.Add(this.numericUpDown_productId);
             this.groupBox3.Controls.Add(this.label15);
-            this.groupBox3.Controls.Add(this.label_owner_name);
-            this.groupBox3.Controls.Add(this.label_product_name);
-            this.groupBox3.Controls.Add(this.label_provider_name);
             this.groupBox3.Controls.Add(this.numericUpDown_ownerId);
             this.groupBox3.Controls.Add(this.numericUpDown_providerId);
             this.groupBox3.Controls.Add(this.label14);
@@ -330,45 +324,42 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Filters";
             // 
-            // linkLabel_getOwnerName
+            // comboBox_owner
             // 
-            this.linkLabel_getOwnerName.AutoSize = true;
-            this.linkLabel_getOwnerName.Location = new System.Drawing.Point(170, 126);
-            this.linkLabel_getOwnerName.Name = "linkLabel_getOwnerName";
-            this.linkLabel_getOwnerName.Size = new System.Drawing.Size(92, 13);
-            this.linkLabel_getOwnerName.TabIndex = 16;
-            this.linkLabel_getOwnerName.TabStop = true;
-            this.linkLabel_getOwnerName.Text = "view Owner name";
-            this.linkLabel_getOwnerName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_getOwnerName_LinkClicked);
+            this.comboBox_owner.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_owner.FormattingEnabled = true;
+            this.comboBox_owner.Location = new System.Drawing.Point(170, 121);
+            this.comboBox_owner.Name = "comboBox_owner";
+            this.comboBox_owner.Size = new System.Drawing.Size(334, 21);
+            this.comboBox_owner.TabIndex = 20;
+            this.comboBox_owner.SelectedIndexChanged += new System.EventHandler(this.comboBox_owner_SelectedIndexChanged);
             // 
-            // linkLabel_getProductName
+            // comboBox_product
             // 
-            this.linkLabel_getProductName.AutoSize = true;
-            this.linkLabel_getProductName.Location = new System.Drawing.Point(170, 102);
-            this.linkLabel_getProductName.Name = "linkLabel_getProductName";
-            this.linkLabel_getProductName.Size = new System.Drawing.Size(98, 13);
-            this.linkLabel_getProductName.TabIndex = 12;
-            this.linkLabel_getProductName.TabStop = true;
-            this.linkLabel_getProductName.Text = "view Product name";
-            this.linkLabel_getProductName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_getProductName_LinkClicked);
+            this.comboBox_product.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_product.FormattingEnabled = true;
+            this.comboBox_product.Location = new System.Drawing.Point(170, 98);
+            this.comboBox_product.Name = "comboBox_product";
+            this.comboBox_product.Size = new System.Drawing.Size(334, 21);
+            this.comboBox_product.TabIndex = 19;
+            this.comboBox_product.SelectedIndexChanged += new System.EventHandler(this.comboBox_product_SelectedIndexChanged);
             // 
-            // linkLabel_getProviderName
+            // comboBox_provider
             // 
-            this.linkLabel_getProviderName.AutoSize = true;
-            this.linkLabel_getProviderName.Location = new System.Drawing.Point(170, 78);
-            this.linkLabel_getProviderName.Name = "linkLabel_getProviderName";
-            this.linkLabel_getProviderName.Size = new System.Drawing.Size(100, 13);
-            this.linkLabel_getProviderName.TabIndex = 8;
-            this.linkLabel_getProviderName.TabStop = true;
-            this.linkLabel_getProviderName.Text = "view Provider name";
-            this.linkLabel_getProviderName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel_getProviderName_LinkClicked);
+            this.comboBox_provider.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_provider.FormattingEnabled = true;
+            this.comboBox_provider.Location = new System.Drawing.Point(170, 74);
+            this.comboBox_provider.Name = "comboBox_provider";
+            this.comboBox_provider.Size = new System.Drawing.Size(334, 21);
+            this.comboBox_provider.TabIndex = 18;
+            this.comboBox_provider.SelectedIndexChanged += new System.EventHandler(this.comboBox_provider_SelectedIndexChanged);
             // 
             // numericUpDown_contentTypeId
             // 
             this.numericUpDown_contentTypeId.Enabled = false;
             this.numericUpDown_contentTypeId.Location = new System.Drawing.Point(88, 50);
             this.numericUpDown_contentTypeId.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
@@ -381,7 +372,7 @@
             this.numericUpDown_industryId.Enabled = false;
             this.numericUpDown_industryId.Location = new System.Drawing.Point(88, 25);
             this.numericUpDown_industryId.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
@@ -391,16 +382,16 @@
             // 
             // numericUpDown_productId
             // 
+            this.numericUpDown_productId.Enabled = false;
             this.numericUpDown_productId.Location = new System.Drawing.Point(88, 98);
             this.numericUpDown_productId.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
             this.numericUpDown_productId.Name = "numericUpDown_productId";
             this.numericUpDown_productId.Size = new System.Drawing.Size(73, 20);
             this.numericUpDown_productId.TabIndex = 11;
-            this.numericUpDown_productId.ValueChanged += new System.EventHandler(this.numericUpDown_productId_ValueChanged);
             this.numericUpDown_productId.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown_productId_KeyUp);
             // 
             // label15
@@ -412,59 +403,32 @@
             this.label15.TabIndex = 10;
             this.label15.Text = "Product:";
             // 
-            // label_owner_name
-            // 
-            this.label_owner_name.Location = new System.Drawing.Point(273, 122);
-            this.label_owner_name.Name = "label_owner_name";
-            this.label_owner_name.Size = new System.Drawing.Size(231, 20);
-            this.label_owner_name.TabIndex = 17;
-            this.label_owner_name.Text = "(none)";
-            this.label_owner_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label_product_name
-            // 
-            this.label_product_name.Location = new System.Drawing.Point(273, 98);
-            this.label_product_name.Name = "label_product_name";
-            this.label_product_name.Size = new System.Drawing.Size(231, 20);
-            this.label_product_name.TabIndex = 13;
-            this.label_product_name.Text = "(none)";
-            this.label_product_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label_provider_name
-            // 
-            this.label_provider_name.Location = new System.Drawing.Point(273, 74);
-            this.label_provider_name.Name = "label_provider_name";
-            this.label_provider_name.Size = new System.Drawing.Size(231, 20);
-            this.label_provider_name.TabIndex = 9;
-            this.label_provider_name.Text = "(none)";
-            this.label_provider_name.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // numericUpDown_ownerId
             // 
+            this.numericUpDown_ownerId.Enabled = false;
             this.numericUpDown_ownerId.Location = new System.Drawing.Point(88, 122);
             this.numericUpDown_ownerId.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
             this.numericUpDown_ownerId.Name = "numericUpDown_ownerId";
             this.numericUpDown_ownerId.Size = new System.Drawing.Size(73, 20);
             this.numericUpDown_ownerId.TabIndex = 15;
-            this.numericUpDown_ownerId.ValueChanged += new System.EventHandler(this.numericUpDown_ownerId_ValueChanged);
             this.numericUpDown_ownerId.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown_ownerId_KeyUp);
             // 
             // numericUpDown_providerId
             // 
+            this.numericUpDown_providerId.Enabled = false;
             this.numericUpDown_providerId.Location = new System.Drawing.Point(88, 74);
             this.numericUpDown_providerId.Maximum = new decimal(new int[] {
-            10000,
+            1000000,
             0,
             0,
             0});
             this.numericUpDown_providerId.Name = "numericUpDown_providerId";
             this.numericUpDown_providerId.Size = new System.Drawing.Size(73, 20);
             this.numericUpDown_providerId.TabIndex = 7;
-            this.numericUpDown_providerId.ValueChanged += new System.EventHandler(this.numericUpDown_providerId_ValueChanged);
             this.numericUpDown_providerId.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numericUpDown_providerId_KeyUp);
             // 
             // label14
@@ -798,16 +762,13 @@
         private System.Windows.Forms.Button button_about;
         private System.Windows.Forms.NumericUpDown numericUpDown_contentTypeId;
         private System.Windows.Forms.NumericUpDown numericUpDown_industryId;
-        private System.Windows.Forms.Label label_owner_name;
-        private System.Windows.Forms.Label label_product_name;
-        private System.Windows.Forms.Label label_provider_name;
-        private System.Windows.Forms.LinkLabel linkLabel_getProviderName;
-        private System.Windows.Forms.LinkLabel linkLabel_getOwnerName;
-        private System.Windows.Forms.LinkLabel linkLabel_getProductName;
         private System.Windows.Forms.Button button_saveGlobalSettings;
         private System.Windows.Forms.LinkLabel linkLabel_viewAuthorizationKey;
         private System.Windows.Forms.PictureBox pictureBox_authorizationImage_01;
         private System.Windows.Forms.Label label_authorization_message;
         private System.Windows.Forms.PictureBox pictureBox_authorizationImage_02;
-    }
+		private System.Windows.Forms.ComboBox comboBox_provider;
+		private System.Windows.Forms.ComboBox comboBox_product;
+		private System.Windows.Forms.ComboBox comboBox_owner;
+	}
 }
