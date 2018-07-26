@@ -127,54 +127,53 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
         public static string GetAuthorizationKey(string userName, string password, string appKey)
         {
-			//         string authKey;
+			string authKey;
 
-			//var result = string.Empty;
+			var result = string.Empty;
 
-			//         var buffer = Encoding.UTF8.GetBytes("action=login");
-			//         var webrequest = (HttpWebRequest) WebRequest.Create(new Uri("https://www.tausdata.org/api/auth_key.xml"));
-			//         webrequest.KeepAlive = false;
-			//         webrequest.Method = @"POST";
-
-
-			//         webrequest.ContentLength = buffer.Length;
-			//         webrequest.Credentials = new NetworkCredential(userName, password);
-
-			//         webrequest.Headers.Add("X-TDA-App-Key", appKey);
+			var buffer = Encoding.UTF8.GetBytes("action=login");
+			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.tausdata.org/api/auth_key.xml"));
+			webrequest.KeepAlive = false;
+			webrequest.Method = @"POST";
 
 
-			//         webrequest.ContentType = "application/x-www-form-urlencoded";
+			webrequest.ContentLength = buffer.Length;
+			webrequest.Credentials = new NetworkCredential(userName, password);
 
-			//         var postData = webrequest.GetRequestStream();
-			//         postData.Write(buffer, 0, buffer.Length);
-			//         postData.Close();
-
-			//         using (var webresponse = webrequest.GetResponse() as HttpWebResponse)
-			//         {
-			//             if (webresponse != null)
-			//             {
-			//                 var reader = new StreamReader(webresponse.GetResponseStream());
-			//                 result = reader.ReadToEnd();
-			//             }
-			//         }
-
-			//         var resultSegmentParser = new ResultSegmentParser();
-			//         var searchSegmentResult = resultSegmentParser.ReadResult(result);
+			webrequest.Headers.Add("X-TDA-App-Key", appKey);
 
 
-			//         if (searchSegmentResult.Status == "201")
-			//         {
-			//             authKey = searchSegmentResult.AuthKey.Id;
-			//         }
+			webrequest.ContentType = "application/x-www-form-urlencoded";
 
-			//         else
-			//         {
-			//             throw new Exception("Status: " + searchSegmentResult.Status + "\r\nReason: " +
-			//                                 searchSegmentResult.Reason);
-			//         }
+			var postData = webrequest.GetRequestStream();
+			postData.Write(buffer, 0, buffer.Length);
+			postData.Close();
 
-			//return authKey;
-			return "67C52A1B";
+			using (var webresponse = webrequest.GetResponse() as HttpWebResponse)
+			{
+				if (webresponse != null)
+				{
+					var reader = new StreamReader(webresponse.GetResponseStream());
+					result = reader.ReadToEnd();
+				}
+			}
+
+			var resultSegmentParser = new ResultSegmentParser();
+			var searchSegmentResult = resultSegmentParser.ReadResult(result);
+
+
+			if (searchSegmentResult.Status == "201")
+			{
+				authKey = searchSegmentResult.AuthKey.Id;
+			}
+
+			else
+			{
+				throw new Exception("Status: " + searchSegmentResult.Status + "\r\nReason: " +
+									searchSegmentResult.Reason);
+			}
+
+			return authKey;
 		}
 		
         public static void DeleteSettingsFile()
