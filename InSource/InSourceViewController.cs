@@ -8,7 +8,9 @@ using System.Windows.Input;
 using Sdl.Community.InSource.Notifications;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
+using Sdl.Desktop.IntegrationApi.Interfaces;
 using Sdl.Desktop.IntegrationApi.Notifications;
+using Sdl.Desktop.IntegrationApi.Notifications.Events;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
@@ -36,23 +38,60 @@ namespace Sdl.Community.InSource
         private readonly List<bool> _hasFiles; 
         public static Persistence Persistence = new Persistence();
         private int _percentComplete;
-	    private ICommand _clearCommand;
-	    private readonly NotificationsGroup _notificationGroup;
-	    private List<string> _foldersRequestPath;
+	    private IStudioNotificationCommand _createProjectCommand;
+	    private IStudioEventAggregator _eventAggregator;
+		private const string NotificationGroupId = "b0261aa3-b6a5-4f69-8f94-3713784ce8ef";
+		private List<string> _foldersRequestPath;
+	    private InSourceNotificationGroup _notificationGroup;
 		#endregion private fields
 
 		public event EventHandler ProjectRequestsChanged;
 
-        public InSourceViewController()
-        {
-			_projectRequests = new List<ProjectRequest>();
-            _hasTemplateList = new List<bool>();
-            _hasFiles = new List<bool>();
-			_notificationGroup = new NotificationsGroup(Guid.NewGuid());
-	        _foldersRequestPath = new List<string>();
-		}
+	    public InSourceViewController()
+	    {
+		    _projectRequests = new List<ProjectRequest>();
+		    _hasTemplateList = new List<bool>();
+		    _hasFiles = new List<bool>();
+		    _eventAggregator = SdlTradosStudio.Application.GetService<IStudioEventAggregator>();
 
-        protected override void Initialize(IViewContext context)
+		 //   Action action = CreateProjectFromNotification;
+
+			//_createProjectCommand = new InSourceCommand(action)
+			//{
+			//	CommandText = "Create project"
+			//};
+
+			_notificationGroup = new InSourceNotificationGroup(NotificationGroupId)
+		    {
+			    Title = "InSource Notifications"
+		    };
+
+
+		 //   _notificationGroup.Notifications.Add(new InSourceNotification(new Guid())
+		 //   {
+			//    Title = "Second notification title",
+			//    AlwaysVisibleDetails = new List<string>
+			//    {
+			//	    "Third notification  description",
+			//	    "Forth notification description"
+			//    },
+			//	Action = _createProjectCommand,
+			//	IsActionVisible = true,
+			//	LinkAction = _createProjectCommand,
+			//	IsLinkVisible = true
+
+			//});
+
+		 //   // add group notification
+		 //   var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
+		 //   _eventAggregator.Publish(addTestGroup);
+
+		 //   var showNotification = new ShowStudioNotificationsViewEvent(showNotifications: true, setFocus: true);
+		 //   _eventAggregator.Publish(showNotification);
+		    _foldersRequestPath = new List<string>();
+	    }
+
+	    protected override void Initialize(IViewContext context)
         {
             ProjectsController = SdlTradosStudio.Application.GetController<ProjectsController>();
             Control.Value.Controller = this;
@@ -143,50 +182,89 @@ namespace Sdl.Community.InSource
 				}
 			    Persistence.SaveProjectRequestList(newProjectRequestList);
 			    ProjectRequests = newProjectRequestList;
-			    var notificationsList = new List<Notification>();
 
-				foreach (var newProjectRequest in ProjectRequests)
-				{
-					//to avoid duplication of notifications we save the path of the project in a list
-					//if the path is already there we don't create another notification
-					//in this version of Notification api there is a issue: RemoveGroup() is not working
-					var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
-					//if the new diewctory does not contain files don't create a notification
-					if (Directory.GetFiles(newProjectPath).Any())
-					{
-						if (!_foldersRequestPath.Contains(newProjectPath))
-						{
-							var notification = new Notification
-							{
-								Title = newProjectRequest.Name,
-								Details = new List<string> { "Project request path", newProjectPath }
-							};
-							newProjectRequest.NotificationId = notification.Id;
-							_clearCommand = new RelayCommand<Notification>(n =>
-							{
-								CreateProjectFromNotification(notification);
-							});
-							notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
-							notificationsList.Add(notification);
-							_foldersRequestPath.Add(newProjectPath);
-						}
-					}
+			    foreach (var newProjectRequest in ProjectRequests)
+			    {
+				    var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+
+					var notification = new  InSourceNotification(newProjectRequest.NotificationId)
+				    {
+					    Title = newProjectRequest.Name,
+					    AlwaysVisibleDetails = new List<string>
+					    {
+						    "Project request path",
+						    newProjectPath
+					    },
+					    IsActionVisible = true
+				    };
+				   
+				    Action action = ()=>CreateProjectFromNotification(notification);
+				    _createProjectCommand = new InSourceCommand(action)
+				    {
+					    CommandText = "Create project"
+				    };
+				    notification.Action = _createProjectCommand;
+					_notificationGroup.Notifications.Add(notification);
+					
 				}
-				_notificationGroup.Add(notificationsList);
-				_notificationGroup.Publish();
-		    }
+			    var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
+			    _eventAggregator.Publish(addTestGroup);
+
+			    var showNotification = new ShowStudioNotificationsViewEvent(true,true);
+			    _eventAggregator.Publish(showNotification);
+
+				//   var notificationsList = new List<Notification>();
+
+				//foreach (var newProjectRequest in ProjectRequests)
+				//{
+				//	//to avoid duplication of notifications we save the path of the project in a list
+				//	//if the path is already there we don't create another notification
+				//	//in this version of Notification api there is a issue: RemoveGroup() is not working
+				//	var newProjectPath = Path.Combine(newProjectRequest.Path, newProjectRequest.Name);
+				//	//if the new diewctory does not contain files don't create a notification
+				//	if (Directory.GetFiles(newProjectPath).Any())
+				//	{
+				//		if (!_foldersRequestPath.Contains(newProjectPath))
+				//		{
+				//			var notification = new Notification
+				//			{
+				//				Title = newProjectRequest.Name,
+				//				Details = new List<string> { "Project request path", newProjectPath }
+				//			};
+				//			newProjectRequest.NotificationId = notification.Id;
+				//			_clearCommand = new RelayCommand<Notification>(n =>
+				//			{
+				//				CreateProjectFromNotification(notification);
+				//			});
+				//			notification.SetCommand(_clearCommand, "Create new project", "Tooltip");
+				//			notificationsList.Add(notification);
+				//			_foldersRequestPath.Add(newProjectPath);
+				//		}
+				//	}
+				//}
+				//_notificationGroup.Add(notificationsList);
+				//_notificationGroup.Publish();
+			}
 
 	    }
-	    private void CreateProjectFromNotification(object notificationObject)
+	    private void CreateProjectFromNotification(InSourceNotification notification)
 	    {
-		    var notification = notificationObject as Notification;
-		    if (notification != null)
-		    {
-			    var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
-			    CreateProjectsFromNotifications(project);
-				_notificationGroup.Remove(notification.Id);
-		    }
-	    }
+			//  var notification = notificationObject as Notification;
+			if (notification != null)
+			{
+				var project = ProjectRequests.FirstOrDefault(n => n.NotificationId.Equals(notification.Id));
+				//CreateProjectsFromNotifications(project);
+				//_notificationGroup.Remove(notification.Id);
+				_notificationGroup.Notifications.Remove(notification);
+				_notificationGroup = new InSourceNotificationGroup(NotificationGroupId);
+				//var removeTestGroup = new RemoveStudioGroupNotificationEvent(NotificationGroupId);
+				//_eventAggregator.Publish(removeTestGroup);
+				//_eventAggregator.Publish(_notificationGroup);
+
+				var addTestGroup = new AddStudioGroupNotificationEvent(_notificationGroup);
+				_eventAggregator.Publish(addTestGroup);
+			}
+		}
 
 		private List<string> GetWatchFolders(List<ProjectRequest> projectRequest)
         {
@@ -269,6 +347,7 @@ namespace Sdl.Community.InSource
                 projectRequest.Name = directory.Name;
                 projectRequest.Path = path;
                 projectRequest.ProjectTemplate = templateInfo;
+				projectRequest.NotificationId = Guid.NewGuid();
                 projectRequest.Files = Directory.GetFiles(directory.FullName, "*", SearchOption.AllDirectories);
             }
             return projectRequest;
