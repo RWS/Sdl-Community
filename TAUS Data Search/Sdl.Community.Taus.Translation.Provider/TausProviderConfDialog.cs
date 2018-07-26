@@ -33,41 +33,6 @@ namespace Sdl.Community.Taus.Translation.Provider
 		{
 			try
 			{
-				comboBox_industry.Items.Clear();
-				foreach (var item in TausTranslationProvider.AttributesIndustry)
-				{
-					comboBox_industry.Items.Add(item.Value);
-				}
-				comboBox_industry.Sorted = true;
-
-				comboBox_contentType.Items.Clear();
-				foreach (var item in TausTranslationProvider.AttributesContentType)
-				{
-					comboBox_contentType.Items.Add(item.Value);
-				}
-				comboBox_contentType.Sorted = true;
-
-				_providers = Processor.GetAttributeListings(Options.ConnectionAuthKey, "provider", "segment", Options.ConnectionAppKey);
-				foreach (var item in _providers)
-				{
-					comboBox_provider.Items.Add(item.Value);
-				}
-				comboBox_provider.Sorted = true;
-
-				_products = Processor.GetAttributeListings(Options.ConnectionAuthKey, "product", "segment", Options.ConnectionAppKey);
-				foreach (var item in _products)
-				{
-					comboBox_product.Items.Add(item.Value);
-				}
-				comboBox_product.Sorted = true;
-
-				_owners = Processor.GetAttributeListings(Options.ConnectionAuthKey, "owner", "segment", Options.ConnectionAppKey);
-				foreach (var item in _owners)
-				{
-					comboBox_owner.Items.Add(item.Value);
-				}
-				comboBox_owner.Sorted = true;
-
 				if (Options.ConnectionAppKey == null)
 					Options.ConnectionAppKey = string.Empty;
 				if (Options.ConnectionUserName == null)
@@ -110,8 +75,7 @@ namespace Sdl.Community.Taus.Translation.Provider
 
 				if (Options.ConnectionAppKey.Trim() == string.Empty)
 					Options.ConnectionAppKey = TausTranslationProvider.TausApplicationProviderId;
-
-
+				
 				if (Options.ConnectionUserName.Trim() == string.Empty
 					&& Options.ConnectionUserPassword.Trim() == string.Empty
 					&& Options.ConnectionAuthKey.Trim() == string.Empty)
@@ -127,7 +91,23 @@ namespace Sdl.Community.Taus.Translation.Provider
 
 					#endregion
 				}
+				
+				comboBox_industry.Items.Clear();
+				foreach (var item in TausTranslationProvider.AttributesIndustry)
+				{
+					comboBox_industry.Items.Add(item.Value);
+				}
+				comboBox_industry.Sorted = true;
 
+				comboBox_contentType.Items.Clear();
+				foreach (var item in TausTranslationProvider.AttributesContentType)
+				{
+					comboBox_contentType.Items.Add(item.Value);
+				}
+				comboBox_contentType.Sorted = true;
+
+				GetFiltersByAuthentication();
+			
 				textBox_applicationKey.Text = Options.ConnectionAppKey;
 				textBox_userName.Text = Options.ConnectionUserName;
 				textBox_password.Text = Options.ConnectionUserPassword;
@@ -384,6 +364,38 @@ namespace Sdl.Community.Taus.Translation.Provider
 			{
 				Options.ConnectionAuthKey = textBox_authKey.Text;
 				CheckEnableOkButton();
+
+				GetFiltersByAuthentication();
+			}
+		}
+
+		/// <summary>
+		/// Retrieve Provider, Product and Owner filters based on the Auth key used in the web request.
+		/// </summary>
+		private void GetFiltersByAuthentication()
+		{
+			if (!string.IsNullOrEmpty(Options.ConnectionAuthKey))
+			{
+				_providers = Processor.GetAttributeListings(Options.ConnectionAuthKey, "provider", "segment", Options.ConnectionAppKey);
+				foreach (var item in _providers)
+				{
+					comboBox_provider.Items.Add(item.Value);
+				}
+				comboBox_provider.Sorted = true;
+
+				_products = Processor.GetAttributeListings(Options.ConnectionAuthKey, "product", "segment", Options.ConnectionAppKey);
+				foreach (var item in _products)
+				{
+					comboBox_product.Items.Add(item.Value);
+				}
+				comboBox_product.Sorted = true;
+
+				_owners = Processor.GetAttributeListings(Options.ConnectionAuthKey, "owner", "segment", Options.ConnectionAppKey);
+				foreach (var item in _owners)
+				{
+					comboBox_owner.Items.Add(item.Value);
+				}
+				comboBox_owner.Sorted = true;
 			}
 		}
 
@@ -465,7 +477,6 @@ namespace Sdl.Community.Taus.Translation.Provider
 
 		private void linkLabel_clearConnectionSettings_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 		{
-
 			textBox_userName.Text = string.Empty;
 			textBox_password.Text = string.Empty;
 			textBox_authKey.Text = string.Empty;
