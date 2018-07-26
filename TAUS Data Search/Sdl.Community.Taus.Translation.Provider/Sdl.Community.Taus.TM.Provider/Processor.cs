@@ -256,7 +256,9 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
             var searchString = "https://www.tausdata.org/api/segment.xml";
             searchString += "?source_lang=" + settings.SourceLanguageId;
             searchString += "&target_lang=" + settings.TargetLanguageId;
-            searchString += "&q=" + GetTausCompatibleSearchText(GetSectionText(settings.SearchSections));
+			var sectionText = GetSectionText(settings.SearchSections);
+
+			searchString += "&q=" + GetTausCompatibleSearchText(sectionText);
 
             if (settings.OwnerId != null && settings.OwnerId.Trim() != string.Empty)
                 searchString += "&owner=" + settings.OwnerId;
@@ -398,7 +400,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
         private string GetSectionText(List<SegmentSection> sections)
         {
-            return sections.Where(section => section.IsText).Aggregate(string.Empty, (current, section) => current + current);
+            return sections.Where(section => section.IsText).Aggregate(string.Empty, (current, section) => current + section.Content);
         }
 
         #endregion
