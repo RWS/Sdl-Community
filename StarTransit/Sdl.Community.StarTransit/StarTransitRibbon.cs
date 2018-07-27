@@ -193,7 +193,7 @@ namespace Sdl.Community.StarTransit
 	{
 		protected override void Execute()
 		{
-			System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/Sdl.Community.StarTransit");
+			System.Diagnostics.Process.Start("https://github.com/sdl/Sdl-Community/tree/master/StarTransit");
 		}
 	}
 
