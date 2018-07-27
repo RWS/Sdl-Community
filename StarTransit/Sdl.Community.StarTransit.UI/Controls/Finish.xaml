@@ -53,10 +53,10 @@
         <ListView ItemsSource="{Binding TargetLanguage}" Grid.Row="7" Grid.Column="1" Margin="0"
                 Background="White"
                 BorderBrush="{x:Null}"
-                  IsEnabled="False"
+                  IsEnabled="True"
                   FontWeight="DemiBold"
                   Foreground="Black"
-                BorderThickness="0">           
+                BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Visible">           
         </ListView>
         <TextBlock x:Name="PackageTemplate"  Text="{Binding TemplateName}" Grid.Row="8" Grid.Column="1" FontWeight="DemiBold" Foreground="Black"/>
     </Grid>

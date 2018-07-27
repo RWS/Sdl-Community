@@ -267,7 +267,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var multiLanguageExtensions = extension.Split(',');
 			foreach(var multiLangExtension in multiLanguageExtensions)
 			{
-				filesAndTms = Directory.GetFiles(pathToTempFolder, "*." + multiLangExtension, SearchOption.TopDirectoryOnly).ToList();
+				var files = Directory.GetFiles(pathToTempFolder, "*." + multiLangExtension, SearchOption.TopDirectoryOnly).ToList();
+				filesAndTms.AddRange(files);
 			}
 		    return filesAndTms;
         }
