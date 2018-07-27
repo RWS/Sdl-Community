@@ -10,6 +10,7 @@ using System.Windows.Forms.Integration;
 using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeepLMTProvider.WPF;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 
 namespace Sdl.Community.DeepLMTProvider
@@ -38,6 +39,10 @@ namespace Sdl.Community.DeepLMTProvider
 			dialog.ShowDialog();
 			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
+				//var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
+				//var editorController = SdlTradosStudio.Application.GetController<EditorController>();
+				//var activeProject = projectController.CurrentProject;
+				//var settings = activeProject.GetSettings();
 				var provider = new DeepLMtTranslationProvider(options)
 				{
 					Options = dialog.Options
