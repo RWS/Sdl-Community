@@ -19,6 +19,7 @@ namespace Sdl.Community.TMLifting
         private readonly Stopwatch _stopWatch;
         private readonly StringBuilder _elapsedTime;
 		private LoginPage _currentInstance = null;
+		private List<ReindexOperationStatus> _reIndexOperationStatus;
 
 		public TMLiftingForm()
         {
@@ -26,10 +27,11 @@ namespace Sdl.Community.TMLifting
             _tmHelper = new TranslationMemoryHelper();
             _stopWatch = new Stopwatch();
             _elapsedTime = new StringBuilder();
-            _bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+			_reIndexOperationStatus = new List<ReindexOperationStatus>();
+			_bw = new BackgroundWorker { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
 		}
 
-        protected override async void OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
 			base.OnLoad(e);
             _bw.DoWork += bw_DoWork;
@@ -110,34 +112,21 @@ namespace Sdl.Community.TMLifting
 						Description = tm.Description,
 						CreatedOn = tm.CreationDate,
 						Location = tm.ParentResourceGroupPath,
-						ShouldRecomputeStatistics = tm.ShouldRecomputeFuzzyIndexStatistics(),
-						LastReIndexDate = tm.FuzzyIndexStatisticsRecomputedAt,
-						LastReIndexSize = tm.GetTranslationUnitCount()
+						Size = tm.GetTranslationUnitCount()
 					});
 					var result = tm.CurrentReindexOperation;
 				}
 				var sortedBindingList = new SortableBindingList<TranslationMemoryDetails>(tmDetails);
 				gridServerBasedTMs.DataSource = sortedBindingList;
 
-
-
-
-				for (var i = 0; i < gridServerBasedTMs.Columns.Count; i++)
-				{
-					gridServerBasedTMs.Columns[i].Visible = false;
-				}
+				gridServerBasedTMs.Columns["Id"].Visible = false;
 				gridServerBasedTMs.Columns["Name"].Visible = true;
 				gridServerBasedTMs.Columns["Description"].Visible = true;
 				gridServerBasedTMs.Columns["CreatedOn"].Visible = true;
 				gridServerBasedTMs.Columns["Location"].Visible = true;
-				gridServerBasedTMs.Columns["ShouldRecomputeStatistics"].Visible = true;
-				gridServerBasedTMs.Columns["LastReIndexDate"].Visible = true;
-				gridServerBasedTMs.Columns["LastReIndexSize"].Visible = true;
-				if (!gridServerBasedTMs.Columns.Contains("Status"))
-				{
-					gridServerBasedTMs.Columns.Add("Status", "Status");
-				}
+				gridServerBasedTMs.Columns["Size"].Visible = true;
 				gridServerBasedTMs.Columns["Status"].Visible = true;
+				gridServerBasedTMs.AllowUserToAddRows = false;
 				gridServerBasedTMs.ReadOnly = true;
 				gridServerBasedTMs.Visible = true;
 				connectToServerBtn.Text = "Logout";
@@ -235,8 +224,10 @@ namespace Sdl.Community.TMLifting
 					{
 						TranslationMemory = selectedTm
 					};
-					reindexOperation.Refresh();
+					
 					reindexOperation.Queue();
+					reindexOperation.Refresh();
+					_reIndexOperationStatus.Add(new ReindexOperationStatus { RowIndex = row.Index, ReindexOperation = reindexOperation });
 					gridServerBasedTMs.Rows[row.Index].Cells["Status"].Value = reindexOperation.Status;
 				}
 			}
@@ -343,21 +334,18 @@ namespace Sdl.Community.TMLifting
 			}
 		}
 
-        private async void cleanBtn_Click(object sender, EventArgs e)
+        private void cleanBtn_Click(object sender, EventArgs e)
         {
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
 			{
-				var i = 0;
-				for (; i < gridServerBasedTMs.RowCount-1; i++)
+				var reIndexOperationStatus = _reIndexOperationStatus;
+				foreach (var state in reIndexOperationStatus)
 				{
-					//_sbTMs = await ServerBasedTranslationMemoryInfo.CreateAsync(
-					//Properties.Settings.Default.UserName,
-					//Properties.Settings.Default.Password,
-					//Properties.Settings.Default.Uri);
-					//gridServerBasedTMs["LastReIndexDate", i].Value = _sbTMs.ServerBasedTMDetails[i].LastReIndexDate;
-					//gridServerBasedTMs["Status", i].Value = "";
-					//gridServerBasedTMs.Refresh();
+					state.ReindexOperation.Refresh();
+					var newReindexStatus = state.ReindexOperation.Status;
+					gridServerBasedTMs.Rows[state.RowIndex].Cells["Status"].Value = newReindexStatus;
 				}
+				_reIndexOperationStatus = _reIndexOperationStatus.Where(s => s.ReindexOperation.Status != ScheduledOperationStatus.Completed).ToList();
 			}
 			else
 			{

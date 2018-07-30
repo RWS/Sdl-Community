@@ -9,9 +9,7 @@ namespace Sdl.Community.TMLifting.Helpers
 		public string Description { get; set; }
 		public DateTime CreatedOn { get; set; }
 		public string Location { get; set; }
-		public bool ShouldRecomputeStatistics { get; set; }
-		public DateTime? LastReIndexDate { get; set; }
-		public int? LastReIndexSize { get; set; }
+		public int Size { get; set; }
 		public string Status { get; set; }
 	}
 }

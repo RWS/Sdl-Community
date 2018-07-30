@@ -173,9 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Constants.cs" />
-    <Compile Include="Helpers\EmbeddedAssembly.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\Reflector.cs" />
+    <Compile Include="Helpers\ReindexOperationStatus.cs" />
     <Compile Include="Helpers\SortableBindingList.cs" />
     <Compile Include="Helpers\TranslationMemoryDetails.cs" />
     <Compile Include="LoginPage.cs">

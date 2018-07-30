@@ -214,29 +214,5 @@ namespace Sdl.Community.TMLifting.TranslationMemory
 
             bw.ReportProgress(0, _reindexStatus.ToString());
         }
-		public void ProcessReindexServerBasedTm(BackgroundWorker bw, ServerBasedTranslationMemory tm)
-		{
-			//foreach (var languageDirection in tm.LanguageDirections)
-			//{
-			//	var unitsCount = languageDirection.GetTranslationUnitCount();
-			//	var iterator = new RegularIterator(unitsCount);
-			//	//var result = languageDirection.ReindexTranslationUnits(ref iterator);
-
-			//	while (languageDirection.ReindexTranslationUnits(ref iterator))
-			//	{
-			//		if (!bw.CancellationPending)
-			//		{
-			//			//bw.ReportProgress(0, _reindexStatus.ToString());
-
-			//		}
-			//		else
-			//		{
-			//			//bw.ReportProgress(100, "");
-			//		}
-			//	}
-			//}
-			//tm.RecomputeFuzzyIndexStatistics();
-			//tm.Save();
-		}
     }
 }
