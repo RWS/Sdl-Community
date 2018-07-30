@@ -23,11 +23,6 @@ namespace Sdl.Community.TMLifting
         }
         protected override void Initialize(IViewContext context)
         {
-			AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
-		}
-		static Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
-		{
-			return EmbeddedAssembly.Get(args.Name);
 		}
 	}
 }
