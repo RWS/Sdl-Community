@@ -129,6 +129,8 @@ namespace Sdl.Community.DeepLMTProvider
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
 
+			//maybe this we need to add the score which Christine  requested
+			//
 			var score = 0; //score to 0...change if needed to support scoring
 			tu.Origin = TranslationUnitOrigin.MachineTranslation;
 			var searchResult = new SearchResult(tu)
@@ -172,34 +174,15 @@ namespace Sdl.Community.DeepLMTProvider
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
-			
-			var results = new List<SearchResults>();
-			var errors = new List<KeyValuePair<string, string>>();
-			
-			var i = 0;
-			foreach (var tu in translationUnits)
-			{
-				if (mask == null || mask[i])
-				{
-					var result = SearchTranslationUnit(settings, tu);
-					results.Add(result);
-				}
-				else
-				{
-					results.Add(null);
-				}
-				i++;
-			}
+			// because of the following bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
+			//we take only the last translation unit because the first one is CM
+			//this workaround works only when LookAhead option is disabled from Studio
 
-			if (errors.Count > 0)
-			{
-				var messages = "";
-				foreach (var pair in errors)
-				{
-					messages += pair.Key + ":  " + pair.Value + "\n";
-				}
-				MessageBox.Show(messages);
-			}
+			var results = new List<SearchResults>();
+
+	        var lastTu = translationUnits[translationUnits.Length - 1];
+	        var result = SearchTranslationUnit(settings, lastTu);
+	        results.Add(result);
 
 			return results.ToArray();
 		}
