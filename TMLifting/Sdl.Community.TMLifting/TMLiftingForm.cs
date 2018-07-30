@@ -394,9 +394,5 @@ namespace Sdl.Community.TMLifting
 		{
 			btnReindex.Enabled = false;
 		}
-
-		private void gridServerBasedTMs_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-		{
-		}
 	}
 }
