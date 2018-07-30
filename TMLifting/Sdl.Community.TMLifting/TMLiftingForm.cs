@@ -34,7 +34,7 @@ namespace Sdl.Community.TMLifting
 			_userCredentials = new UserCredentials();
 		}
 
-        protected override async void OnLoad(EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
 			base.OnLoad(e);
             _bw.DoWork += bw_DoWork;
@@ -348,7 +348,7 @@ namespace Sdl.Community.TMLifting
 			}
 		}
 
-        private async void cleanBtn_Click(object sender, EventArgs e)
+        private void cleanBtn_Click(object sender, EventArgs e)
         {
 			if (tabControlTMLifting.SelectedTab == tabControlTMLifting.TabPages["tabPageServerBasedTM"])
 			{
