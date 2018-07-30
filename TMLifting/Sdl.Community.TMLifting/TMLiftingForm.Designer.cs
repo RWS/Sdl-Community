@@ -307,7 +307,6 @@ namespace Sdl.Community.TMLifting
             this.gridServerBasedTMs.TabIndex = 6;
             this.gridServerBasedTMs.Visible = false;
             this.gridServerBasedTMs.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridServerBasedTMs_CellContentClick);
-            this.gridServerBasedTMs.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.gridServerBasedTMs_ColumnHeaderMouseClick);
             this.gridServerBasedTMs.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.gridServerBasedTMs_RowStateChanged);
             // 
             // groupBoxTM
