@@ -39,10 +39,6 @@ namespace Sdl.Community.DeepLMTProvider
 			dialog.ShowDialog();
 			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
-				//var projectController = SdlTradosStudio.Application.GetController<ProjectsController>();
-				//var editorController = SdlTradosStudio.Application.GetController<EditorController>();
-				//var activeProject = projectController.CurrentProject;
-				//var settings = activeProject.GetSettings();
 				var provider = new DeepLMtTranslationProvider(options)
 				{
 					Options = dialog.Options
@@ -51,14 +47,6 @@ namespace Sdl.Community.DeepLMTProvider
 				SetDeeplCredentials(credentialStore, apiKey, true);
 				return new ITranslationProvider[] { provider };
 			}
-			//var dialog = new DeepLMtDialog(options, credentialStore);
-			//if (dialog.ShowDialog(owner) == DialogResult.OK)
-			//{
-			//	var provider = new DeepLMtTranslationProvider(options);
-			//	var apiKey = dialog.Options.ApiKey;
-			//	SetDeeplCredentials(credentialStore, apiKey, true);
-			//	return new ITranslationProvider[] { provider };
-			//}
 			return null;
         }
 
@@ -102,14 +90,6 @@ namespace Sdl.Community.DeepLMTProvider
 				editProvider.Options.ApiKey = savedCredentials.Credential;
 			}
 
-			//var dialog = new DeepLMtDialog(editProvider.Options,credentialStore);
-			//if (dialog.ShowDialog(owner) == DialogResult.OK)
-			//{
-			//	editProvider.Options = dialog.Options;
-			//	var apiKey = editProvider.Options.ApiKey;
-			//	SetDeeplCredentials(credentialStore, apiKey, true);
-			//	return true;
-			//}
 			var dialog = new DeepLWindow(editProvider.Options, savedCredentials);
 			ElementHost.EnableModelessKeyboardInterop(dialog);
 			dialog.ShowDialog();

@@ -37,7 +37,6 @@ namespace Sdl.Community.DeepLMTProvider
 			return strInput;
 		}
 
-
 		private Dictionary<string, DeepLTag> GetSourceTagsDict()
 		{
 			_tagsDictionary = new Dictionary<string, DeepLTag>(); //try this
@@ -109,11 +108,6 @@ namespace Sdl.Community.DeepLMTProvider
 			return _tagsDictionary;
 		}
 
-		private TagInfo GetCorrespondingTag(string tagId)
-		{
-			return TagsInfo.FirstOrDefault(t => t.TagId.Equals(tagId));
-
-		}
 		/// <summary>
 		/// Returns a tagged segments from a target string containing markup, where the target string represents the translation of the class instance's source segment
 		/// </summary>
@@ -155,60 +149,7 @@ namespace Sdl.Community.DeepLMTProvider
 					}
 				}
 			}
-			//if (segment.Elements.Any())
-			//{
-			//	segment = RemoveTrailingClosingTags(segment);
-			//}
-
-
 			return segment; //this will return a tagged segment
-		}
-
-		/// <summary>
-		/// Microsoft always adds closing tags, but we don't keep track of our tags that way..so the segments always have garbage text at the end with the closing tag markup...this method removes them
-		/// </summary>
-		/// <param name="segment"></param>
-		/// <returns></returns>
-		public Segment RemoveTrailingClosingTags(Segment segment)
-		{
-			#region RemoveTrailingClosingTags
-			var element = segment.Elements[segment.Elements.Count - 1]; //get last element
-			var str = element.ToString();
-
-			//check for normal tags
-			var pattern = @"\</tg[0-9]*\>"; //we want to find "</tg" + {any number} + ">"
-			var rgx = new Regex(pattern);
-			var elType = element.GetType();
-			var matches = rgx.Matches(str);
-			if (elType.ToString().Equals("Sdl.LanguagePlatform.Core.Text") && matches.Count > 0) //if a text element containing matches
-			{
-				foreach (Match myMatch in matches)
-				{
-					str = str.Replace(myMatch.Value, ""); //puts our separator around tagtexts
-				}
-
-				segment.Elements.Remove(element);
-				segment.Add(str.TrimStart());
-			}
-			else
-			{
-				var placeholderPattern = @"\<tg[0-9]*/\>";
-				var placeRgx = new Regex(placeholderPattern);
-				var placeholderMatches = placeRgx.Matches(str);
-				if (elType.ToString().Equals("Sdl.LanguagePlatform.Core.Text") && placeholderMatches.Count > 0)
-				{
-					foreach (Match myMatch in placeholderMatches)
-					{
-						str = str.Replace(myMatch.Value, ""); //puts our separator around tagtexts
-					}
-
-					segment.Elements.Remove(element);
-					segment.Add(str.TrimStart());
-				}
-			}
-			#endregion
-
-			return segment;
 		}
 
 		/// <summary>

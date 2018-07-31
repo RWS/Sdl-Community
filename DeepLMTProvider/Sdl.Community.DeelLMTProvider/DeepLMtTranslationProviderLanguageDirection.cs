@@ -122,9 +122,11 @@ namespace Sdl.Community.DeepLMTProvider
 		private SearchResult CreateSearchResult(Segment segment, Segment translation, string v)
 		{
 			#region "TranslationUnit"
-			var tu = new TranslationUnit();
-			tu.SourceSegment = segment.Duplicate();//this makes the original source segment, with tags, appear in the search window
-			tu.TargetSegment = translation;
+			var tu = new TranslationUnit
+			{
+				SourceSegment = segment.Duplicate(),//this makes the original source segment, with tags, appear in the search window
+				TargetSegment = translation
+			};
 			#endregion
 
 			tu.ResourceId = new PersistentObjectToken(tu.GetHashCode(), Guid.Empty);
@@ -202,48 +204,6 @@ namespace Sdl.Community.DeepLMTProvider
 			        i++;
 		        }
 			}
-
-	  //      if (mask.Any(m => m.Equals(false)))
-	  //      {
-		 //       var i = 0;
-		 //       foreach (var tu in translationUnits)
-		 //       {
-			//        if (mask == null || mask[i])
-			//        {
-			//	        var result = SearchTranslationUnit(settings, tu);
-			//	        results.Add(result);
-			//        }
-			//        else
-			//        {
-			//	        results.Add(null);
-			//        }
-			//        i++;
-		 //       }
-	  //      }
-	  //      else
-	  //      {
-			//	var lastTu = translationUnits[translationUnits.Length - 1];
-		 //       var result = SearchTranslationUnit(settings, lastTu);
-			//	results.Add(null);
-		 //       results.Add(result);
-			//}
-
-			//return results.ToArray();
-			////var results = new List<SearchResults>();
-			//var errors = new List<KeyValuePair<string, string>>();
-
-			
-
-			//if (errors.Count > 0)
-	  //      {
-		 //       var messages = "";
-		 //       foreach (var pair in errors)
-		 //       {
-			//        messages += pair.Key + ":  " + pair.Value + "\n";
-		 //       }
-		 //       MessageBox.Show(messages);
-	  //      }
-
 	        return results.ToArray();
 		}
 
