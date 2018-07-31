@@ -125,7 +125,6 @@
     <Compile Include="DeepLMtTranslationProviderFactory.cs" />
     <Compile Include="DeepLMtTranslationProviderLanguageDirection.cs" />
     <Compile Include="DeepLMtTranslationProviderWinFormsUI.cs" />
-    <Compile Include="DeepLTranslationOptions.cs" />
     <Compile Include="DeepLTranslationProviderConnecter.cs" />
     <Compile Include="DeepLTranslationProviderTagPlacer.cs" />
     <Compile Include="Helpers.cs" />
