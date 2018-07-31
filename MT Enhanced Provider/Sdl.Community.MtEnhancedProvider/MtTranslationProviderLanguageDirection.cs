@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.MtEnhancedProvider.MstConnect;
 using Sdl.Core.Globalization;
@@ -330,33 +331,36 @@ namespace Sdl.Community.MtEnhancedProvider
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
-            var results = new List<SearchResults>();
-            var errors = new List<KeyValuePair<string, string>>();
-            var i = 0;
-            foreach (var tu in translationUnits)
-            {
-                if (mask == null || mask[i])
-                {
-                    var result = SearchTranslationUnit(settings, tu);
-                    results.Add(result);
-                }
-                else
-                {
-                    results.Add(null);
-                }
-                i++;
-            }
-
-            if (errors.Count > 0)
-            {
-                var messages = "";
-                foreach (var pair in errors)
-                    messages += pair.Key + ":  " + pair.Value + "\n";
-                MessageBox.Show(messages);
-            }
-
-            return results.ToArray();
-        }
+			// because of the following bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
+	        //we take only the last translation unit because the first one is CM
+	        //this workaround works only when LookAhead option is disabled from Studio
+	        var results = new List<SearchResults>();
+	        if (!mask.Any(m => m.Equals(false)) && mask.Length > 1)
+	        {
+		        var lastTu = translationUnits[translationUnits.Length - 1];
+		        var result = SearchTranslationUnit(settings, lastTu);
+		        results.Add(null);
+		        results.Add(result);
+	        }
+	        else
+	        {
+		        var i = 0;
+		        foreach (var tu in translationUnits)
+		        {
+			        if (mask == null || mask[i])
+			        {
+				        var result = SearchTranslationUnit(settings, tu);
+				        results.Add(result);
+			        }
+			        else
+			        {
+				        results.Add(null);
+			        }
+			        i++;
+		        }
+	        }
+	        return results.ToArray();
+		}
 
         #region "NotForThisImplementation"
         /// <summary>
