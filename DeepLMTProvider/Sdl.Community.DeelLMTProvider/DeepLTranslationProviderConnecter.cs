@@ -8,20 +8,17 @@ using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeelLMTProvider.Model;
-using Sdl.Community.DeepLMTProvider.Telemetry;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-	public class DeepLTranslationProviderConnecter
-	{
-		private readonly ITelemetryTracker _telemetryTracker;
+	public class DeepLTranslationProviderConnecter{
+
 		public string ApiKey { get; set; }
 
 		public DeepLTranslationProviderConnecter(string key)
 		{
 			ApiKey = key;
-			_telemetryTracker = new TelemetryTracker();
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
@@ -72,8 +69,6 @@ namespace Sdl.Community.DeepLMTProvider
 			catch (WebException e) 
 			{
 				var eReason = Helpers.ProcessWebException(e);
-				_telemetryTracker.TrackException(e);
-				_telemetryTracker.TrackTrace(e.StackTrace, Microsoft.ApplicationInsights.DataContracts.SeverityLevel.Error);
 				throw new Exception(eReason);
 			}
 

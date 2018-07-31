@@ -2,6 +2,7 @@
 using System;
 using Sdl.LanguagePlatform.Core;
 using Sdl.Community.DeelLMTProvider;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -23,7 +24,7 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public ProviderStatusInfo StatusInfo => new ProviderStatusInfo(true,"Deepl");
 
-        public Uri Uri => new TranslationProviderUriBuilder(ListTranslationProviderScheme).Uri;
+	    public Uri Uri => Options.Uri;
 
         public string Name => "DeepL Translator provider using DeepL Translator ";
 

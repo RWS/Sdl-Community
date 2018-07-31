@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sdl.Community.DeepLMTProvider {
+namespace Sdl.Community.DeepLMTProvider.WPF {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace Sdl.Community.DeepLMTProvider {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.DeepLMTProvider.PluginResources", typeof(PluginResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Sdl.Community.DeepLMTProvider.WPF.PluginResources", typeof(PluginResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,53 +57,6 @@ namespace Sdl.Community.DeepLMTProvider {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap deepL_logo_new {
-            get {
-                object obj = ResourceManager.GetObject("deepL_logo_new", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap deepLResized {
-            get {
-                object obj = ResourceManager.GetObject("deepLResized", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sdl.Community.DeepLMTProvider.
-        /// </summary>
-        internal static string Plugin_Name {
-            get {
-                return ResourceManager.GetString("Plugin_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DeepL MT Provider.
-        /// </summary>
-        internal static string Plugin_NiceName {
-            get {
-                return ResourceManager.GetString("Plugin_NiceName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [segment already translated...source not re-sent].
-        /// </summary>
-        internal static string TranslationLookupDraftNotResentMessage {
-            get {
-                return ResourceManager.GetString("TranslationLookupDraftNotResentMessage", resourceCulture);
             }
         }
     }

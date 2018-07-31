@@ -6,7 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using Sdl.Community.DeelLMTProvider;
+using Sdl.Community.DeepLMTProvider.WPF;
+using Sdl.Community.DeepLMTProvider.WPF.Model;
+using Sdl.TranslationStudioAutomation.IntegrationApi;
+
 
 namespace Sdl.Community.DeepLMTProvider
 {
@@ -27,11 +32,17 @@ namespace Sdl.Community.DeepLMTProvider
 			var options = new DeepLTranslationOptions();
 
 			//get credentials
-			var getCredGt = GetCredentials(credentialStore, "deeplprovider:///");
-			var dialog = new DeepLMtDialog(options,credentialStore);
-			if (dialog.ShowDialog(owner) == DialogResult.OK)
+			var credentials = GetCredentials(credentialStore, "deeplprovider:///");
+
+			var dialog = new DeepLWindow(options, credentials);
+			ElementHost.EnableModelessKeyboardInterop(dialog);
+			dialog.ShowDialog();
+			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
-				var provider = new DeepLMtTranslationProvider(options);
+				var provider = new DeepLMtTranslationProvider(options)
+				{
+					Options = dialog.Options
+				};
 				var apiKey = dialog.Options.ApiKey;
 				SetDeeplCredentials(credentialStore, apiKey, true);
 				return new ITranslationProvider[] { provider };
@@ -79,8 +90,10 @@ namespace Sdl.Community.DeepLMTProvider
 				editProvider.Options.ApiKey = savedCredentials.Credential;
 			}
 
-			var dialog = new DeepLMtDialog(editProvider.Options,credentialStore);
-			if (dialog.ShowDialog(owner) == DialogResult.OK)
+			var dialog = new DeepLWindow(editProvider.Options, savedCredentials);
+			ElementHost.EnableModelessKeyboardInterop(dialog);
+			dialog.ShowDialog();
+			if (dialog.DialogResult.HasValue && dialog.DialogResult.Value)
 			{
 				editProvider.Options = dialog.Options;
 				var apiKey = editProvider.Options.ApiKey;
