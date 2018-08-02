@@ -134,7 +134,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 			var result = string.Empty;
 
 			var buffer = Encoding.UTF8.GetBytes("action=login");
-			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.taus.net/data-cloud-lp/api/auth_key.xml"));
+			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("http://data-app.taus.net/"));
 			webrequest.KeepAlive = false;
 			webrequest.Method = @"POST";
 
