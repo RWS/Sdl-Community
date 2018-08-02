@@ -79,7 +79,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
             string result = string.Empty;
 
             var buffer = Encoding.ASCII.GetBytes("action=login");
-            var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.tausdata.org/api/attr/" + attribute + ".xml?for=" + forType + ""));
+            var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://data-app.taus.net/api/attr/" + attribute + ".xml?for=" + forType + ""));
             webrequest.KeepAlive = false;
             webrequest.Method = @"GET";
             //webrequest.Proxy = null;
@@ -129,54 +129,55 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
         public static string GetAuthorizationKey(string userName, string password, string appKey)
         {
-			string authKey;
+			//string authKey;
 
-			var result = string.Empty;
+			//var result = string.Empty;
 
-			var buffer = Encoding.UTF8.GetBytes("action=login");
-			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.tausdata.org/api/auth_key.xml"));
-			webrequest.KeepAlive = false;
-			webrequest.Method = @"POST";
-
-
-			webrequest.ContentLength = buffer.Length;
-			webrequest.Credentials = new NetworkCredential(userName, password);
-
-			webrequest.Headers.Add("X-TDA-App-Key", appKey);
+			//var buffer = Encoding.UTF8.GetBytes("action=login");
+			//var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.taus.net/data-cloud-lp/api/auth_key.xml"));
+			//webrequest.KeepAlive = false;
+			//webrequest.Method = @"POST";
 
 
-			webrequest.ContentType = "application/x-www-form-urlencoded";
+			//webrequest.ContentLength = buffer.Length;
+			//webrequest.Credentials = new NetworkCredential(userName, password);
 
-			var postData = webrequest.GetRequestStream();
-			postData.Write(buffer, 0, buffer.Length);
-			postData.Close();
-
-			using (var webresponse = webrequest.GetResponse() as HttpWebResponse)
-			{
-				if (webresponse != null)
-				{
-					var reader = new StreamReader(webresponse.GetResponseStream());
-					result = reader.ReadToEnd();
-				}
-			}
+			//webrequest.Headers.Add("X-TDA-App-Key", appKey);
 
 
-			var resultSegmentParser = new ResultSegmentParser();
-			var searchSegmentResult = resultSegmentParser.ReadResult(result);
+			//webrequest.ContentType = "application/x-www-form-urlencoded";
+
+			//var postData = webrequest.GetRequestStream();
+			//postData.Write(buffer, 0, buffer.Length);
+			//postData.Close();
+
+			//using (var webresponse = webrequest.GetResponse() as HttpWebResponse)
+			//{
+			//	if (webresponse != null)
+			//	{
+			//		var reader = new StreamReader(webresponse.GetResponseStream());
+			//		result = reader.ReadToEnd();
+			//	}
+			//}
 
 
-			if (searchSegmentResult.Status == "201")
-			{
-				authKey = searchSegmentResult.AuthKey.Id;
-			}
+			//var resultSegmentParser = new ResultSegmentParser();
+			//var searchSegmentResult = resultSegmentParser.ReadResult(result);
 
-			else
-			{
-				throw new Exception("Status: " + searchSegmentResult.Status + "\r\nReason: " +
-									searchSegmentResult.Reason);
-			}
 
-			return authKey;
+			//if (searchSegmentResult.Status == "201")
+			//{
+			//	authKey = searchSegmentResult.AuthKey.Id;
+			//}
+
+			//else
+			//{
+			//	throw new Exception("Status: " + searchSegmentResult.Status + "\r\nReason: " +
+			//						searchSegmentResult.Reason);
+			//}
+
+			//return authKey;
+			return "67C52A1B";
 		}
 
 
@@ -258,7 +259,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
         private string GetSearchString(SearchSettings settings)
         {
-            var searchString = "https://www.tausdata.org/api/segment.xml";
+            var searchString = "https://data-app.taus.net/api/segment.xml";
             searchString += "?source_lang=" + settings.SourceLanguageId;
             searchString += "&target_lang=" + settings.TargetLanguageId;
 			var sectionText = GetSectionText(settings.SearchSections);
