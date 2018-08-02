@@ -79,7 +79,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
             string result = string.Empty;
 
             var buffer = Encoding.ASCII.GetBytes("action=login");
-            var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.tausdata.org/api/attr/" + attribute + ".xml?for=" + forType + ""));
+            var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://data-app.taus.net/api/attr/" + attribute + ".xml?for=" + forType + ""));
             webrequest.KeepAlive = false;
             webrequest.Method = @"GET";
             //webrequest.Proxy = null;
@@ -132,7 +132,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 			var result = string.Empty;
 
 			var buffer = Encoding.UTF8.GetBytes("action=login");
-			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://www.tausdata.org/api/auth_key.xml"));
+			var webrequest = (HttpWebRequest)WebRequest.Create(new Uri("https://data-app.taus.net/api/auth_key.xml"));
 			webrequest.KeepAlive = false;
 			webrequest.Method = @"POST";
 
@@ -253,7 +253,7 @@ namespace Sdl.Community.Taus.Translation.Provider.Sdl.Community.Taus.TM.Provider
 
         private string GetSearchString(SearchSettings settings)
         {
-            var searchString = "https://www.tausdata.org/api/segment.xml";
+            var searchString = "https://data-app.taus.net/api/segment.xml";
             searchString += "?source_lang=" + settings.SourceLanguageId;
             searchString += "&target_lang=" + settings.TargetLanguageId;
 			var sectionText = GetSectionText(settings.SearchSections);
