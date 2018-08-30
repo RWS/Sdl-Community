@@ -31,9 +31,9 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Margin="10,20,10,15"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">DeepL API is a paid automated translation service.
-			To use this service, set up a DeepL account and create a API Key.<LineBreak/>
-			Please fill your key bellow:</TextBlock>
+		<TextBlock Margin="10,20,10,15"  Grid.Row="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" Style="{DynamicResource TextBlockColor}">The DeepL API is a paid machine translation service. 
+			Please purchase a DeepL Pro Subscription in order to get an API Key and use this service.<LineBreak/>
+			Please enter your API Key below:</TextBlock>
 		<PasswordBox   
 			Name="ApiKeyBox"
 			controls:TextBoxHelper.UseFloatingWatermark="True"  
@@ -44,7 +44,7 @@
 			Grid.Row="2" Grid.Column="0" IsEnabled="True">
 		</PasswordBox>
 		<TextBlock Name="ValidationBlock" Grid.Row="3" Grid.Column="0" Foreground="DarkRed" Margin="10,0,0,0" Visibility="Hidden"> API Key is required</TextBlock>
-		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > This API Key will be used for all projects that use the DeepL Translation API</TextBlock>
+		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,10" > This API Key will then be used in all projects where you will be using the DeepL Pro Translation plug-in.</TextBlock>
 		<TextBlock Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,20,0,10" >
 			<Hyperlink NavigateUri="https://www.deepl.com/api-contact.html" RequestNavigate="Hyperlink_OnRequestNavigate">
 				Click here to obtain your API Key from DeepL
