@@ -37,7 +37,7 @@
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
 		<StackPanel Grid.Row="0" Orientation="Horizontal">
-			<Label Margin="0,15,20,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Welcome to DeepL Translation Provider please add your account settings and provider settings</Label>
+			<Label Margin="0,15,20,0" HorizontalAlignment="Center" HorizontalContentAlignment="Center">Welcome to the DeepL Translation Provider. Please add your account and provider settings.</Label>
 			<Image Source="Logo/deepLResized.png" Width="50" Height="50" Margin="0,10,0,0"></Image>
 		</StackPanel>
 		
