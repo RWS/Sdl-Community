@@ -315,8 +315,8 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 	        var ci = new CultureInfo(languageCode); //construct a CultureInfo object with the language code
             
             //deal with chinese..MS Translator has different ones
-            if (ci.Name == "zh-TW") return "zh-CHT";
-            if (ci.Name == "zh-CN") return "zh-CHS";
+            if (ci.Name == "zh-TW") return "zh-Hant";
+            if (ci.Name == "zh-CN") return "zh-Hans";
             
             // deal with norwegian..MST needs "no" instead of nn or nb
             if (ci.Name.Equals("nb-NO") || ci.Name.Equals("nn-NO")) return "no";
