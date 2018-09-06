@@ -133,6 +133,11 @@
     <Compile Include="Models\Agreement.cs" />
     <Compile Include="Models\AnonymizedData.cs" />
     <Compile Include="Models\RegexPattern.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Process Xliff\AnonymizeData.cs" />
     <Compile Include="Process Xliff\AnonymizerPreProcessor.cs" />
     <Compile Include="Process Xliff\DecryptDataProcessor.cs" />
@@ -162,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\icon.ico" />
+    <None Include="Resources\lock.png" />
     <EmbeddedResource Include="Ui\AcceptWindow.resx">
       <DependentUpon>AcceptWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -174,8 +180,11 @@
     <None Include="app.config" />
     <None Include="Resources\unlock.ico" />
     <None Include="Resources\question.ico" />
-    <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
+    <EmbeddedResource Include="PluginResources.resx">
+      <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\SdlCommunity.snk">
