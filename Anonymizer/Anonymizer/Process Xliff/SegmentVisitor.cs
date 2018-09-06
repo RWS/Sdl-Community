@@ -14,9 +14,11 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		private IPropertiesFactory _propertiesFactory;
 		private readonly List<RegexPattern> _patterns;
 		private readonly string _encryptionKey;
+		private readonly bool _isEncrypted;
 
-		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey)
+		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey, bool isEncripted)
 		{
+			_isEncrypted = isEncripted;
 			_patterns = patterns;
 			_encryptionKey = encryptionKey;
 		}
@@ -31,7 +33,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		{
 			foreach (var pattern in _patterns)
 			{
-				var regex = new Regex(pattern.Pattern, RegexOptions.IgnoreCase);
+				var regex = DecryptIfEncrypted(pattern);
 
 				var match = regex.Match(text);
 				if (match.Success)
@@ -42,6 +44,8 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			}
 			return text;
 		}
+
+		
 
 		private string ProcessMatchData(Match match, RegexPattern pattern, bool isTagContent)
 		{
@@ -60,7 +64,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		{
 			foreach (var pattern in _patterns)
 			{
-				var regex = new Regex(pattern.Pattern, RegexOptions.IgnoreCase);
+				var regex = DecryptIfEncrypted(pattern);
 				var match = regex.Match(text);
 				if (match.Success)
 				{
@@ -75,7 +79,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			var anonymizedData = new List<AnonymizedData>();
 			foreach (var pattern in _patterns)
 			{
-				var regex = new Regex(pattern.Pattern, RegexOptions.IgnoreCase);
+				var regex = DecryptIfEncrypted(pattern);
 				var matches = regex.Matches(segmentText);
 				foreach (Match match in matches)
 				{
@@ -263,6 +267,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		{
 			
 		}
+
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)
@@ -271,6 +276,11 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			{
 				item.AcceptVisitor(this);
 			}
+		}
+
+		private Regex DecryptIfEncrypted(RegexPattern pattern)
+		{
+			return new Regex(!_isEncrypted ? pattern.Pattern : AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
 		}
 	}
 }
