@@ -101,6 +101,34 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			
 			ReadExistingExpressions();
 			SetSettings(Settings);
+
+			if (Settings.IsEncrypted)
+			{
+				mainPanel.Visible = false;
+				encryptedPanel.Visible = true;
+				
+			}
+		}
+
+		public void DecryptPatterns()
+		{
+			var decryptedPatterns = new BindingList<RegexPattern>();
+			foreach (var regexPattern in RegexPatterns)
+			{
+				decryptedPatterns.Add(new RegexPattern()
+				{
+					Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, Settings.EncryptionKey),
+					Description = regexPattern.Description,
+					ShouldEncrypt = regexPattern.ShouldEncrypt,
+					ShouldEnable = regexPattern.ShouldEnable,
+					IsDefaultPath = regexPattern.IsDefaultPath,
+					Id = regexPattern.Id
+				});
+			}
+
+			Settings.RegexPatterns = decryptedPatterns;
+			RegexPatterns = decryptedPatterns;
+			Settings.IsEncrypted = false;
 		}
 
 		public string EncryptionKey
@@ -310,6 +338,21 @@ namespace Sdl.Community.projectAnonymizer.Ui
 					}
 				}
 				Settings.RegexPatterns = RegexPatterns;
+			}
+		}
+
+		private void decryptButton_Click(object sender, EventArgs e)
+		{
+			var providedKey = AnonymizeData.EncryptData(keyTextBox.Text, Constants.Key);
+			if (providedKey == Settings.EncryptionKey)
+			{
+				DecryptPatterns();
+				mainPanel.Visible = true;
+				encryptedPanel.Visible = false;
+			}
+			else
+			{
+				errorLabel.Visible = true;
 			}
 		}
 		
