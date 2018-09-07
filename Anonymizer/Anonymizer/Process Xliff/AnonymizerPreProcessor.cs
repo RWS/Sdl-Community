@@ -9,8 +9,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 	{
 		private readonly List<RegexPattern> _patterns;
 		private readonly string _encryptionKey;
-		public AnonymizerPreProcessor(List<RegexPattern> patterns,string encryptionKey)
+		private readonly bool _isEncrypted;
+		public AnonymizerPreProcessor(List<RegexPattern> patterns,string encryptionKey, bool isEncrypted)
 		{
+			_isEncrypted = isEncrypted;
 			_patterns = patterns;
 			_encryptionKey = encryptionKey;
 		}
@@ -22,7 +24,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
-				var segmentVisitor = new SegmentVisitor(_patterns,_encryptionKey);
+				var segmentVisitor = new SegmentVisitor(_patterns,_encryptionKey, _isEncrypted);
 				segmentVisitor.ReplaceText(segmentPair.Source,ItemFactory,PropertiesFactory);
 				if (segmentPair.Target != null)
 				{
