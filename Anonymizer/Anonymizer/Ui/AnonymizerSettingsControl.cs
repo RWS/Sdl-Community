@@ -117,7 +117,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			{
 				decryptedPatterns.Add(new RegexPattern()
 				{
-					Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, Settings.EncryptionKey),
+					Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, EncryptionKey),
 					Description = regexPattern.Description,
 					ShouldEncrypt = regexPattern.ShouldEncrypt,
 					ShouldEnable = regexPattern.ShouldEnable,

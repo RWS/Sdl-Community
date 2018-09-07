@@ -44,7 +44,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					try
 					{
 						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
-						var decryptedText = AnonymizeData.DecryptData(encryptedText, _decryptSettings.EncryptionKey);
+						var decryptedText = DecryptText(encryptedText);
 						if (!_decryptSettings.IgnoreEncrypted)
 						{
 							return decryptedText;
@@ -86,7 +86,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
 						var decryptedText = _factory.CreateText(
 							_propertiesFactory.CreateTextProperties(
-								AnonymizeData.DecryptData(tag.Properties.TagContent, _decryptSettings.EncryptionKey)));
+								DecryptText(tag.Properties.TagContent)));
 
 						if (!_decryptSettings.IgnoreEncrypted)
 						{
@@ -158,6 +158,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			}
 		}
 
-	
+		private string DecryptText(string encryptedText)
+		{
+			return AnonymizeData.DecryptData(encryptedText, AnonymizeData.DecryptData(_decryptSettings.EncryptionKey, Constants.Key));
+		}
 	}
 }
