@@ -41,7 +41,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			foreach (var regexPattern in _control.RegexPatterns)
 			{
-				regexPattern.Pattern = AnonymizeData.EncryptData(regexPattern.Pattern, _settings.EncryptionKey);
+				regexPattern.Pattern = AnonymizeData.EncryptData(regexPattern.Pattern, _control.EncryptionKey);
 			}
 			_settings.IsEncrypted = true;
 		}
