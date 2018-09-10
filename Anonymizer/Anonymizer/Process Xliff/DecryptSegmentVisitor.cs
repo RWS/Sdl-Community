@@ -165,7 +165,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			var encryptedKey = _decryptSettings.EncryptionKey;
 			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
 
-			var key = _isOldVersion ? encryptedKey : decryptedKey;
+			var key = isOldVersion ? encryptedKey : decryptedKey;
 
 			return AnonymizeData.DecryptData(encryptedText, key);
 		}
