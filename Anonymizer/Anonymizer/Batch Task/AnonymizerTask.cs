@@ -70,7 +70,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			}
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,_settings.EncryptionKey, _settings.IsEncrypted)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), _settings.IsEncrypted)));
 		
 		}
 
