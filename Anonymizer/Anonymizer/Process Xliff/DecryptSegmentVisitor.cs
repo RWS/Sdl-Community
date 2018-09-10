@@ -19,9 +19,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		{
 			_decryptSettings = decryptSettings;
 		}
+
 		public void DecryptText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
-
 			_factory = factory;
 			_propertiesFactory = propertiesFactory;
 			VisitChildren(segment);
@@ -126,12 +126,12 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
-			
+
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-			
+
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -141,13 +141,14 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
-			
+
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
-			
+
 		}
+
 		private void VisitChildren(IAbstractMarkupDataContainer container)
 		{
 			if (container == null)
@@ -160,7 +161,13 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		private string DecryptText(string encryptedText)
 		{
-			return AnonymizeData.DecryptData(encryptedText, AnonymizeData.DecryptData(_decryptSettings.EncryptionKey, Constants.Key));
+			var isOldVersion = !_decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").IsEncrypted;
+			var encryptedKey = _decryptSettings.EncryptionKey;
+			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
+
+			var key = isOldVersion ? encryptedKey : decryptedKey;
+
+			return AnonymizeData.DecryptData(encryptedText, key);
 		}
 	}
 }
