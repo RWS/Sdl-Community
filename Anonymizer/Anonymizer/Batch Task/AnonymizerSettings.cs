@@ -12,10 +12,23 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
 		private readonly bool _defaultListAlreadyAdded = false;
 
-		public bool IsEncrypted
+		public bool? IsEncrypted
 		{
-			get => GetSetting<bool>(nameof(IsEncrypted));
-			set => GetSetting<bool>(nameof(IsEncrypted)).Value = value;
+			get => GetSetting<bool?>(nameof(IsEncrypted));
+			set => GetSetting<bool?>(nameof(IsEncrypted)).Value = value;
+		}
+
+		public bool IsOldVersion
+		{
+			get => GetSetting<bool>(nameof(IsOldVersion));
+			set => GetSetting<bool>(nameof(IsOldVersion)).Value = value;
+		}
+
+
+		public bool ShouldAnonymize
+		{
+			get => GetSetting<bool>(nameof(ShouldAnonymize));
+			set => GetSetting<bool>(nameof(ShouldAnonymize)).Value = value;
 		}
 
 		public BindingList<RegexPattern> RegexPatterns

@@ -25,8 +25,15 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			_settings.EncryptionKey = _control.EncryptionKey;
 
-			if (!_settings.IsEncrypted)
+			if ((!_settings.IsEncrypted ?? true) && !Settings.IsOldVersion)
+			{
+				_settings.ShouldAnonymize = true;
 				EncryptPatterns();
+			}
+			else
+			{
+				_settings.ShouldAnonymize = false;
+			}
 
 			_settings.RegexPatterns = _control.RegexPatterns;
 			_settings.SelectAll = _control.SelectAll;
