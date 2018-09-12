@@ -43,6 +43,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
 			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");
@@ -98,19 +99,29 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
-			
+
 			ReadExistingExpressions();
 			SetSettings(Settings);
 
-			if (Settings.IsOldVersion)
-				Settings.IsOldVersion = Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>() != null && Settings.IsEncrypted == null;
+			//if (Settings.IsOldVersion == null)
+			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>() != null && Settings.IsEncrypted == null;
+			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.EncryptionKey != "<dummy-encryption-key>" && Settings.IsEncrypted == null;
+			Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.IsProjectEncrypted == null && IsProjectAnonymized();
+			Settings.IsProjectEncrypted = Settings.IsProjectEncrypted ?? IsProjectAnonymized();
 
-			if ( (Settings.IsEncrypted ?? false) || Settings.IsOldVersion && !Settings.ShouldAnonymize)
+			//if ( (Settings.IsEncrypted ?? false) || (Settings.IsEncryptable ?? false) && (!Settings.ShouldAnonymize ?? false))
+			if (Settings.IsProjectEncrypted ?? false)
 			{
+				if (Settings.IsOldVersion ?? false)
+				{
+					encryptedMessage.Text = "Old version of Anonymizer was used on this project. Unprotect Data before proceeding.";
+				}
 				mainPanel.Visible = false;
 				encryptedPanel.Visible = true;
 			}
 		}
+
+		
 
 		//public void DecryptPatterns()
 		//{
@@ -166,6 +177,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			Settings = settings;
 			RegexPatterns= Settings.RegexPatterns;
 			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
+			key = key == "<dummy-encryption-key>" ? "" : key;
 			if (!string.IsNullOrEmpty(key))
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
@@ -343,6 +355,16 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 		}
 
+		private bool IsProjectAnonymized()
+		{
+			foreach (var regexPattern in RegexPatterns)
+			{
+				if (regexPattern.ShouldEncrypt)
+					return true;
+			}
+			return false;
+		}
+
 		//private void decryptButton_Click(object sender, EventArgs e)
 		//{
 		//	var providedKey = AnonymizeData.EncryptData(keyTextBox.Text, Constants.Key);
@@ -357,6 +379,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		//		errorLabel.Visible = true;
 		//	}
 		//}
-		
+
 	}
 }

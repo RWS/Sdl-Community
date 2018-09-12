@@ -12,23 +12,35 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
 		private readonly bool _defaultListAlreadyAdded = false;
 
-		public bool? IsEncrypted
+		public bool? ArePatternsEncrypted
 		{
-			get => GetSetting<bool?>(nameof(IsEncrypted));
-			set => GetSetting<bool?>(nameof(IsEncrypted)).Value = value;
+			get => GetSetting<bool?>(nameof(ArePatternsEncrypted));
+			set => GetSetting<bool?>(nameof(ArePatternsEncrypted)).Value = value;
 		}
 
-		public bool IsOldVersion
+		public bool? IsOldVersion
 		{
-			get => GetSetting<bool>(nameof(IsOldVersion));
-			set => GetSetting<bool>(nameof(IsOldVersion)).Value = value;
+			get => GetSetting<bool?>(nameof(IsOldVersion));
+			set => GetSetting<bool?>(nameof(IsOldVersion)).Value = value;
+		}
+
+		public bool? IsProjectEncrypted
+		{
+			get => GetSetting<bool?>(nameof(IsProjectEncrypted));
+			set => GetSetting<bool?>(nameof(IsProjectEncrypted)).Value = value;
+		}
+
+		public bool IsNewFile
+		{
+			get => GetSetting<bool>(nameof(IsNewFile));
+			set => GetSetting<bool>(nameof(IsNewFile)).Value = value;
 		}
 
 
-		public bool ShouldAnonymize
+		public bool? ShouldAnonymize
 		{
-			get => GetSetting<bool>(nameof(ShouldAnonymize));
-			set => GetSetting<bool>(nameof(ShouldAnonymize)).Value = value;
+			get => GetSetting<bool?>(nameof(ShouldAnonymize));
+			set => GetSetting<bool?>(nameof(ShouldAnonymize)).Value = value;
 		}
 
 		public BindingList<RegexPattern> RegexPatterns
@@ -87,6 +99,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				case nameof(RegexPatterns):
 					return _regexPatterns;
+				case nameof(EncryptionKey):
+					return "<dummy-encryption-key>";
 			}
 			return base.GetDefaultValue(settingId);
 		}

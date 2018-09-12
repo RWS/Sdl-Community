@@ -161,7 +161,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		private string DecryptText(string encryptedText)
 		{
-			var isOldVersion = _decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").IsEncrypted == null;
+			var isOldVersion = _decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").ArePatternsEncrypted == null;
 			var encryptedKey = _decryptSettings.EncryptionKey;
 			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
 
