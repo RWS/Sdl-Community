@@ -25,10 +25,12 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			_settings.EncryptionKey = _control.EncryptionKey;
 
-			if ((!_settings.IsEncrypted ?? true) && !Settings.IsOldVersion)
+			//if ((!_settings.ArePatternsEncrypted ?? true) && (Settings.IsNewFile ?? true))
+			if (!Settings.IsProjectEncrypted ?? true)
 			{
 				_settings.ShouldAnonymize = true;
 				EncryptPatterns();
+				Settings.IsNewFile = false;
 			}
 			else
 			{
@@ -50,7 +52,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				regexPattern.Pattern = AnonymizeData.EncryptData(regexPattern.Pattern, _control.EncryptionKey);
 			}
-			_settings.IsEncrypted = true;
+			_settings.ArePatternsEncrypted = true;
+			_settings.IsProjectEncrypted = true;
 		}
 	}
 }

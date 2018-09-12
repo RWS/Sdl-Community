@@ -26,10 +26,11 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		}
 		public override void Save()
 		{
-			if (_encryptionSettings.IsEncrypted != null)
+			if (_encryptionSettings.ArePatternsEncrypted ?? false)
 			{
 				DecryptPatterns();
 			}
+			_encryptionSettings.IsProjectEncrypted = false;
 			_encryptionSettings.IsOldVersion = false;
 			_settings.EncryptionKey = _control.EncryptionKey;
 			_settings.IgnoreEncrypted = _control.IgnoreEncrypted;
@@ -53,7 +54,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			}
 
 			_encryptionSettings.RegexPatterns = decryptedPatterns;
-			_encryptionSettings.IsEncrypted = false;
+			_encryptionSettings.ArePatternsEncrypted = false;
 		}
 	}
 }

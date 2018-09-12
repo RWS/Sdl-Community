@@ -64,7 +64,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			if (!_settings.ShouldAnonymize)
+			if (!_settings.ShouldAnonymize ?? false)
 			{
 				return;
 			}
@@ -74,7 +74,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			}
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), _settings.IsEncrypted ?? false)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), _settings.ArePatternsEncrypted ?? false)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
