@@ -40,16 +40,12 @@
 			this.encryptedPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.lockPictureBox = new System.Windows.Forms.PictureBox();
 			this.decryptionPanel = new System.Windows.Forms.Panel();
-			this.keyTextBox = new System.Windows.Forms.TextBox();
-			this.decryptButton = new System.Windows.Forms.Button();
 			this.encryptedMessage = new System.Windows.Forms.Label();
-			this.errorLabel = new System.Windows.Forms.Label();
 			this.mainPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.expressionsGrid)).BeginInit();
 			this.descriptionPanel.SuspendLayout();
 			this.encryptedPanel.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.lockPictureBox)).BeginInit();
-			this.decryptionPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// mainPanel
@@ -174,7 +170,6 @@
 			this.encryptedPanel.Controls.Add(this.lockPictureBox, 1, 1);
 			this.encryptedPanel.Controls.Add(this.decryptionPanel, 1, 5);
 			this.encryptedPanel.Controls.Add(this.encryptedMessage, 1, 3);
-			this.encryptedPanel.Controls.Add(this.errorLabel, 1, 6);
 			this.encryptedPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.encryptedPanel.Location = new System.Drawing.Point(0, 0);
 			this.encryptedPanel.Name = "encryptedPanel";
@@ -204,34 +199,10 @@
 			// decryptionPanel
 			// 
 			this.decryptionPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.decryptionPanel.Controls.Add(this.keyTextBox);
-			this.decryptionPanel.Controls.Add(this.decryptButton);
 			this.decryptionPanel.Location = new System.Drawing.Point(243, 208);
 			this.decryptionPanel.Name = "decryptionPanel";
 			this.decryptionPanel.Size = new System.Drawing.Size(342, 32);
 			this.decryptionPanel.TabIndex = 9;
-			// 
-			// keyTextBox
-			// 
-			this.keyTextBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.keyTextBox.CausesValidation = false;
-			this.keyTextBox.Location = new System.Drawing.Point(5, 5);
-			this.keyTextBox.Multiline = true;
-			this.keyTextBox.Name = "keyTextBox";
-			this.keyTextBox.PasswordChar = '*';
-			this.keyTextBox.Size = new System.Drawing.Size(231, 21);
-			this.keyTextBox.TabIndex = 5;
-			// 
-			// decryptButton
-			// 
-			this.decryptButton.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.decryptButton.Location = new System.Drawing.Point(242, 4);
-			this.decryptButton.Name = "decryptButton";
-			this.decryptButton.Size = new System.Drawing.Size(97, 23);
-			this.decryptButton.TabIndex = 6;
-			this.decryptButton.Text = "Decrypt";
-			this.decryptButton.UseVisualStyleBackColor = true;
-			this.decryptButton.Click += new System.EventHandler(this.decryptButton_Click);
 			// 
 			// encryptedMessage
 			// 
@@ -240,28 +211,12 @@
 			this.encryptedMessage.AutoSize = true;
 			this.encryptedMessage.CausesValidation = false;
 			this.encryptedMessage.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.encryptedMessage.Location = new System.Drawing.Point(177, 166);
+			this.encryptedMessage.Location = new System.Drawing.Point(193, 166);
 			this.encryptedMessage.Name = "encryptedMessage";
-			this.encryptedMessage.Size = new System.Drawing.Size(475, 25);
+			this.encryptedMessage.Size = new System.Drawing.Size(442, 25);
 			this.encryptedMessage.TabIndex = 7;
-			this.encryptedMessage.Text = "Settings are encrypted. Provide the key to edit patterns:";
+			this.encryptedMessage.Text = "Data encrypted. Unprotect Data before proceeding.";
 			this.encryptedMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// errorLabel
-			// 
-			this.errorLabel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.errorLabel.AutoEllipsis = true;
-			this.errorLabel.AutoSize = true;
-			this.errorLabel.CausesValidation = false;
-			this.errorLabel.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.errorLabel.ForeColor = System.Drawing.Color.Red;
-			this.errorLabel.Location = new System.Drawing.Point(268, 243);
-			this.errorLabel.Name = "errorLabel";
-			this.errorLabel.Size = new System.Drawing.Size(293, 17);
-			this.errorLabel.TabIndex = 9;
-			this.errorLabel.Text = "Decryption key doesn\'t match the encryption key.";
-			this.errorLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			this.errorLabel.Visible = false;
 			// 
 			// AnonymizerSettingsControl
 			// 
@@ -280,8 +235,6 @@
 			this.encryptedPanel.ResumeLayout(false);
 			this.encryptedPanel.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.lockPictureBox)).EndInit();
-			this.decryptionPanel.ResumeLayout(false);
-			this.decryptionPanel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -297,11 +250,8 @@
 		private System.Windows.Forms.TableLayoutPanel descriptionPanel;
 		private System.Windows.Forms.Label descriptionLbl;
 		private System.Windows.Forms.CheckBox selectAll;
-		private System.Windows.Forms.TextBox keyTextBox;
-		private System.Windows.Forms.Button decryptButton;
 		private System.Windows.Forms.Label encryptedMessage;
 		private System.Windows.Forms.PictureBox lockPictureBox;
-		private System.Windows.Forms.Label errorLabel;
 		private System.Windows.Forms.TableLayoutPanel encryptedPanel;
 		private System.Windows.Forms.Panel decryptionPanel;
 	}

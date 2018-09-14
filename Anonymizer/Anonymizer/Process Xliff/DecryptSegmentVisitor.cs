@@ -161,11 +161,11 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		private string DecryptText(string encryptedText)
 		{
-			var isOldVersion = !_decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").IsEncrypted;
+			var isOldVersion = _decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").ArePatternsEncrypted == null;
 			var encryptedKey = _decryptSettings.EncryptionKey;
 			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
 
-			var key = isOldVersion ? encryptedKey : decryptedKey;
+			var key = isOldVersion  ? encryptedKey : decryptedKey;
 
 			return AnonymizeData.DecryptData(encryptedText, key);
 		}

@@ -43,6 +43,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		protected override void OnLoad(EventArgs e)
 		{
 			base.OnLoad(e);
+
 			//create tooltips for buttons
 			var exportTooltip = new ToolTip();
 			exportTooltip.SetToolTip(exportBtn, "Export selected expressions to disk");
@@ -98,38 +99,50 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
-			
+
 			ReadExistingExpressions();
 			SetSettings(Settings);
 
-			if (Settings.IsEncrypted)
+			//if (Settings.IsOldVersion == null)
+			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>() != null && Settings.IsEncrypted == null;
+			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.EncryptionKey != "<dummy-encryption-key>" && Settings.IsEncrypted == null;
+			Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.IsProjectEncrypted == null && IsProjectAnonymized();
+			Settings.IsProjectEncrypted = Settings.IsProjectEncrypted ?? IsProjectAnonymized();
+
+			//if ( (Settings.IsEncrypted ?? false) || (Settings.IsEncryptable ?? false) && (!Settings.ShouldAnonymize ?? false))
+			if (Settings.IsProjectEncrypted ?? false)
 			{
+				if (Settings.IsOldVersion ?? false)
+				{
+					encryptedMessage.Text = "Old version of Anonymizer was used on this project. Unprotect Data before proceeding.";
+				}
 				mainPanel.Visible = false;
 				encryptedPanel.Visible = true;
-				
 			}
 		}
 
-		public void DecryptPatterns()
-		{
-			var decryptedPatterns = new BindingList<RegexPattern>();
-			foreach (var regexPattern in RegexPatterns)
-			{
-				decryptedPatterns.Add(new RegexPattern()
-				{
-					Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, EncryptionKey),
-					Description = regexPattern.Description,
-					ShouldEncrypt = regexPattern.ShouldEncrypt,
-					ShouldEnable = regexPattern.ShouldEnable,
-					IsDefaultPath = regexPattern.IsDefaultPath,
-					Id = regexPattern.Id
-				});
-			}
+		
 
-			Settings.RegexPatterns = decryptedPatterns;
-			RegexPatterns = decryptedPatterns;
-			Settings.IsEncrypted = false;
-		}
+		//public void DecryptPatterns()
+		//{
+		//	var decryptedPatterns = new BindingList<RegexPattern>();
+		//	foreach (var regexPattern in RegexPatterns)
+		//	{
+		//		decryptedPatterns.Add(new RegexPattern()
+		//		{
+		//			Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, EncryptionKey),
+		//			Description = regexPattern.Description,
+		//			ShouldEncrypt = regexPattern.ShouldEncrypt,
+		//			ShouldEnable = regexPattern.ShouldEnable,
+		//			IsDefaultPath = regexPattern.IsDefaultPath,
+		//			Id = regexPattern.Id
+		//		});
+		//	}
+
+		//	Settings.RegexPatterns = decryptedPatterns;
+		//	RegexPatterns = decryptedPatterns;
+		//	Settings.IsEncrypted = false;
+		//}
 
 		public string EncryptionKey
 		{
@@ -164,6 +177,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			Settings = settings;
 			RegexPatterns= Settings.RegexPatterns;
 			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
+			key = key == "<dummy-encryption-key>" ? "" : key;
 			if (!string.IsNullOrEmpty(key))
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
@@ -341,20 +355,30 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 		}
 
-		private void decryptButton_Click(object sender, EventArgs e)
+		private bool IsProjectAnonymized()
 		{
-			var providedKey = AnonymizeData.EncryptData(keyTextBox.Text, Constants.Key);
-			if (providedKey == Settings.EncryptionKey)
+			foreach (var regexPattern in RegexPatterns)
 			{
-				DecryptPatterns();
-				mainPanel.Visible = true;
-				encryptedPanel.Visible = false;
+				if (regexPattern.ShouldEncrypt)
+					return true;
 			}
-			else
-			{
-				errorLabel.Visible = true;
-			}
+			return false;
 		}
-		
+
+		//private void decryptButton_Click(object sender, EventArgs e)
+		//{
+		//	var providedKey = AnonymizeData.EncryptData(keyTextBox.Text, Constants.Key);
+		//	if (providedKey == Settings.EncryptionKey)
+		//	{
+		//		DecryptPatterns();
+		//		mainPanel.Visible = true;
+		//		encryptedPanel.Visible = false;
+		//	}
+		//	else
+		//	{
+		//		errorLabel.Visible = true;
+		//	}
+		//}
+
 	}
 }
