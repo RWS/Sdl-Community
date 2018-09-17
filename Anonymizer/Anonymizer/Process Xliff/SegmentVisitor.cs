@@ -14,11 +14,11 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		private IPropertiesFactory _propertiesFactory;
 		private readonly List<RegexPattern> _patterns;
 		private readonly string _encryptionKey;
-		private readonly bool _isEncrypted;
+		private readonly bool _arePatternsEcrypted;
 
-		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey, bool isEncripted)
+		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey, bool arePatternsEcnrypted)
 		{
-			_isEncrypted = isEncripted;
+			_arePatternsEcrypted = arePatternsEcnrypted;
 			_patterns = patterns;
 			_encryptionKey = encryptionKey;
 		}
@@ -235,7 +235,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 				segmentContent.Add(tag);
 			}
-
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -245,12 +244,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
-			
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-			
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -260,12 +257,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
-			
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
-			
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)
@@ -280,7 +275,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		private Regex DecryptIfEncrypted(RegexPattern pattern)
 		{
-			return new Regex(!_isEncrypted ? pattern.Pattern : AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
+			return new Regex(!_arePatternsEcrypted ? pattern.Pattern : AnonymizeData.DecryptData(pattern.Pattern, _encryptionKey), RegexOptions.IgnoreCase);
 		}
 	}
 }
