@@ -74,7 +74,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			}
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), _settings.ArePatternsEncrypted ?? false)));
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), (_settings.EncryptionState & State.PatternsEncrypted) != 0)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -89,24 +89,21 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		"Unprotect data in preparation for saving the target files",
 		GeneratedFileType = AutomaticTaskFileType.BilingualTarget)]
 	[AutomaticTaskSupportedFileType(AutomaticTaskFileType.BilingualTarget)]
-	[RequiresSettings(typeof(DecryptSettings), typeof(DecryptSettingsPage))]
+	[RequiresSettings(typeof(AnonymizerSettings), typeof(DecryptSettingsPage))]
 	public class DecryptTask : AbstractFileContentProcessingAutomaticTask
 	{
-		private DecryptSettings _settings;
+		private AnonymizerSettings _settings;
 		protected override void OnInitializeTask()
 		{
-			_settings = GetSetting<DecryptSettings>();
+			_settings = GetSetting<AnonymizerSettings>();
 		}
 
 		protected override void ConfigureConverter(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
 		{
-			var encryptSettings = GetSetting<AnonymizerSettings>();
-			//process only if the decryption key matches encryption key
-			if (encryptSettings.EncryptionKey.Equals(_settings.EncryptionKey))
-			{
-				multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
-			}
-			
+			if (!_settings.ShouldDeanonymize ?? false)
+				return;
+
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor(_settings)));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
@@ -114,34 +111,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			return true;
 		}
 	}
-	//[Action("Anonymizer Action",
-	//	Name = "Decrypt data",
-	//	Description = "Deanonymize data which was previously anonymize by the batch task",
-	//	Icon = "unlock"
-	//)]
-	//[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 2, DisplayType.Default, "",
-	//	true)]
-	//public class AnonymizerDeanonymizeAction : AbstractViewControllerAction<ProjectsController>
-	//{
-		
-	//	protected override void Execute()
-	//	{
-	//		var selectedProjects = Controller.SelectedProjects.ToList();
-	//		var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
-	//		foreach (var project in selectedProjects)
-	//		{
-	//			var targetFiles = project.GetTargetLanguageFiles();
-	//			foreach (var targetFile in targetFiles.ToList())
-	//			{
-	//				var converter =
-	//					fileTypeManager.GetConverterToDefaultBilingual(targetFile.LocalFilePath, targetFile.LocalFilePath, null);
-	//				converter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new DecryptDataProcessor()));
-	//				converter.Parse();
-	//			}
-				
-	//		}
-	//	}
-	//}
+
 	[Action("Help Anonymizer Action",
 		Name = "Help",
 		Description = "Help",
