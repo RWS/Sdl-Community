@@ -176,34 +176,23 @@ namespace Sdl.Community.DeepLMTProvider
 
         public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
         {
-			// because of the following bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-			//we take only the last translation unit because the first one is CM
-			//this workaround works only when LookAhead option is disabled from Studio
+			// Bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
 	        var results = new List<SearchResults>();
-	        if (!mask.Any(m => m.Equals(false)) && mask.Length > 1)
-	        {
-		        var lastTu = translationUnits[translationUnits.Length - 1];
-		        var result = SearchTranslationUnit(settings, lastTu);
-		        results.Add(null);
-		        results.Add(result);
-	        }
-	        else
-	        {
+	     
 				var i = 0;
-		        foreach (var tu in translationUnits)
+	        foreach (var tu in translationUnits)
+	        {
+		        if (mask == null || mask[i])
 		        {
-			        if (mask == null || mask[i])
-			        {
-				        var result = SearchTranslationUnit(settings, tu);
-				        results.Add(result);
-			        }
-			        else
-			        {
-				        results.Add(null);
-			        }
-			        i++;
+			        var result = SearchTranslationUnit(settings, tu);
+			        results.Add(result);
 		        }
-			}
+		        else
+		        {
+			        results.Add(null);
+		        }
+		        i++;
+	        }
 	        return results.ToArray();
 		}
 

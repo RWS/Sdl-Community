@@ -40,10 +40,6 @@ namespace Sdl.Community.DeepLMTProvider
 				{
 					sourcetext =ReplaceCharacters(sourcetext,words);
 				}
-				//request.AddParameter("auth_key", ApiKey);
-				//request.AddParameter("source_lang", sourceLanguage);
-				//request.AddParameter("target_lang", targetLanguage);
-				//request.AddParameter("text", sourcetext);
 
 				request.AddParameter("text", sourcetext);
 				request.AddParameter("source_lang", sourceLanguage);
