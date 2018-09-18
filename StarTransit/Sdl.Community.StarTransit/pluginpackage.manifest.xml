@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.StarTransit</PlugInName>
-  <Version>2.1</Version>
+  <Version>2.2</Version>
   <Description>This app introduces a new program group into the Project View ribbon of SDL Studio 2015 and above. It supports opening a Star Transit package (PPF file) and the creation of a Star Transit return package (TPF file).</Description>
-  <Author></Author>
+  <Author>SDL Community</Author>
   <RequiredProduct name="SDLTradosStudio" minversion="15.0" />
   <Include>
     <File>Sdl.Community.StarTransit.UI.dll</File>
