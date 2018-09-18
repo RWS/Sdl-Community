@@ -103,46 +103,21 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			ReadExistingExpressions();
 			SetSettings(Settings);
 
-			//if (Settings.IsOldVersion == null)
-			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>() != null && Settings.IsEncrypted == null;
-			//Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.EncryptionKey != "<dummy-encryption-key>" && Settings.IsEncrypted == null;
-			Settings.IsOldVersion = Settings.IsOldVersion ?? Settings.IsProjectEncrypted == null && IsProjectAnonymized();
-			Settings.IsProjectEncrypted = Settings.IsProjectEncrypted ?? IsProjectAnonymized();
-
-			//if ( (Settings.IsEncrypted ?? false) || (Settings.IsEncryptable ?? false) && (!Settings.ShouldAnonymize ?? false))
-			if (Settings.IsProjectEncrypted ?? false)
+			if (Settings.EncryptionState == State.DefaultState)
 			{
-				if (Settings.IsOldVersion ?? false)
-				{
-					encryptedMessage.Text = "Old version of Anonymizer was used on this project. Unprotect Data before proceeding.";
-				}
+				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
+			}
+
+			if ((Settings.EncryptionState & State.DataEncrypted) != 0)
+			{
+				//if (Settings.IsOldVersion ?? false)
+				//{
+				//	encryptedMessage.Text = "Old version of Anonymizer was used on this project. Unprotect Data before proceeding.";
+				//}
 				mainPanel.Visible = false;
 				encryptedPanel.Visible = true;
 			}
 		}
-
-		
-
-		//public void DecryptPatterns()
-		//{
-		//	var decryptedPatterns = new BindingList<RegexPattern>();
-		//	foreach (var regexPattern in RegexPatterns)
-		//	{
-		//		decryptedPatterns.Add(new RegexPattern()
-		//		{
-		//			Pattern = AnonymizeData.DecryptData(regexPattern.Pattern, EncryptionKey),
-		//			Description = regexPattern.Description,
-		//			ShouldEncrypt = regexPattern.ShouldEncrypt,
-		//			ShouldEnable = regexPattern.ShouldEnable,
-		//			IsDefaultPath = regexPattern.IsDefaultPath,
-		//			Id = regexPattern.Id
-		//		});
-		//	}
-
-		//	Settings.RegexPatterns = decryptedPatterns;
-		//	RegexPatterns = decryptedPatterns;
-		//	Settings.IsEncrypted = false;
-		//}
 
 		public string EncryptionKey
 		{
@@ -171,7 +146,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				Settings.DefaultListAlreadyAdded = true;
 			}
 		}
-	
+
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
@@ -357,28 +332,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		private bool IsProjectAnonymized()
 		{
-			foreach (var regexPattern in RegexPatterns)
-			{
-				if (regexPattern.ShouldEncrypt)
-					return true;
-			}
-			return false;
+			return Settings.EncryptionKey != "<dummy-encryption-key>";
 		}
-
-		//private void decryptButton_Click(object sender, EventArgs e)
-		//{
-		//	var providedKey = AnonymizeData.EncryptData(keyTextBox.Text, Constants.Key);
-		//	if (providedKey == Settings.EncryptionKey)
-		//	{
-		//		DecryptPatterns();
-		//		mainPanel.Visible = true;
-		//		encryptedPanel.Visible = false;
-		//	}
-		//	else
-		//	{
-		//		errorLabel.Visible = true;
-		//	}
-		//}
-
 	}
 }
