@@ -24,12 +24,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			set => encryptionBox.Text = value;
 		}
 
-		public bool IgnoreEncrypted
-		{
-			get => ignoreEncrypted.Checked;
-			set => ignoreEncrypted.Checked = value;
-		}
-
 		protected override void OnLoad(EventArgs e)
 		{
 			SetSettings(Settings);
@@ -48,8 +42,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			CheckIfKeysMatch();
-			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
 
 		private void CheckIfKeysMatch()
@@ -58,7 +50,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(encryptionBox.Text, Constants.Key)))
 			{
 				messageLbl.Visible = true;
-				messageLbl.Text = @"Decryption key doesn't match with the encryption key.";
+				messageLbl.Text = "Decryption key doesn't match the encryption key.";
 				messageLbl.ForeColor = Color.Crimson;
 			}
 		}

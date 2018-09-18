@@ -14,7 +14,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
 		private readonly AnonymizerSettings _decryptSettings;
-		private bool _isOldVersion;
 
 		public DecryptSegmentVisitor(AnonymizerSettings decryptSettings)
 		{
@@ -44,12 +43,8 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
 					try
 					{
-						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
 						var decryptedText = DecryptText(encryptedText);
-						if (!_decryptSettings.IgnoreEncrypted)
-						{
-							return decryptedText;
-						}
+						return decryptedText;
 					}
 					catch (Exception e)
 					{
@@ -84,7 +79,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					//if we catch an exception that means is only a taged text is not encrypted
 					try
 					{
-						//var key = AnonymizeData.EncryptData(_decryptSettings.EncryptionKey, Constants.Key);
 						var decryptedText = _factory.CreateText(
 							_propertiesFactory.CreateTextProperties(
 								DecryptText(tag.Properties.TagContent)));
