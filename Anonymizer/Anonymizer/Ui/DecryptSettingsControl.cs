@@ -8,7 +8,7 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Ui
 {
-	public partial class DecryptSettingsControl : UserControl, ISettingsAware<DecryptSettings>
+	public partial class DecryptSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
 		public DecryptSettingsControl()
 		{
@@ -16,11 +16,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			encryptionBox.LostFocus += EncryptionBox_LostFocus;
 		}
 
-		private void EncryptionBox_LostFocus(object sender, EventArgs e)
-		{
-			messageLbl.Visible = false;
-			CheckIfKeysMatch();
-		}
+		public AnonymizerSettings Settings { get; set; }
 
 		public string EncryptionKey
 		{
@@ -37,15 +33,21 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		protected override void OnLoad(EventArgs e)
 		{
 			SetSettings(Settings);
+
+			if (Settings.EncryptionState == State.DefaultState)
+			{
+				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
+			}
 		}
-		private void SetSettings(DecryptSettings settings)
+
+		private bool IsProjectAnonymized()
+		{
+			return Settings.EncryptionKey != "<dummy-encryption-key>";
+		}
+
+		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
-			if (!string.IsNullOrEmpty(key))
-			{
-				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
-			}
 			CheckIfKeysMatch();
 			SettingsBinder.DataBindSetting<bool>(ignoreEncrypted, "Checked", Settings, nameof(Settings.IgnoreEncrypted));
 		}
@@ -60,6 +62,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				messageLbl.ForeColor = Color.Crimson;
 			}
 		}
-		public DecryptSettings Settings { get ; set ; }
+
+		private void EncryptionBox_LostFocus(object sender, EventArgs e)
+		{
+			messageLbl.Visible = false;
+			CheckIfKeysMatch();
+		}
 	}
 }

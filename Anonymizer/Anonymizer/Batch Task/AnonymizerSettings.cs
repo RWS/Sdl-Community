@@ -12,35 +12,28 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
 		private readonly bool _defaultListAlreadyAdded = false;
 
-		public bool? ArePatternsEncrypted
-		{
-			get => GetSetting<bool?>(nameof(ArePatternsEncrypted));
-			set => GetSetting<bool?>(nameof(ArePatternsEncrypted)).Value = value;
-		}
-
 		public bool? IsOldVersion
 		{
 			get => GetSetting<bool?>(nameof(IsOldVersion));
 			set => GetSetting<bool?>(nameof(IsOldVersion)).Value = value;
 		}
 
-		public bool? IsProjectEncrypted
+		public State EncryptionState
 		{
-			get => GetSetting<bool?>(nameof(IsProjectEncrypted));
-			set => GetSetting<bool?>(nameof(IsProjectEncrypted)).Value = value;
+			get => GetSetting<State>(nameof(EncryptionState));
+			set => GetSetting<State>(nameof(EncryptionState)).Value = value;
 		}
-
-		public bool IsNewFile
-		{
-			get => GetSetting<bool>(nameof(IsNewFile));
-			set => GetSetting<bool>(nameof(IsNewFile)).Value = value;
-		}
-
 
 		public bool? ShouldAnonymize
 		{
 			get => GetSetting<bool?>(nameof(ShouldAnonymize));
 			set => GetSetting<bool?>(nameof(ShouldAnonymize)).Value = value;
+		}
+
+		public bool? ShouldDeanonymize
+		{
+			get => GetSetting<bool?>(nameof(ShouldDeanonymize));
+			set => GetSetting<bool?>(nameof(ShouldDeanonymize)).Value = value;
 		}
 
 		public BindingList<RegexPattern> RegexPatterns
@@ -62,16 +55,19 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			get => GetSetting<bool>(nameof(DefaultListAlreadyAdded));
 			set => GetSetting<bool>(nameof(DefaultListAlreadyAdded)).Value = value;
 		}
+
 		public bool SelectAll
 		{
 			get => GetSetting<bool>(nameof(SelectAll));
 			set => GetSetting<bool>(nameof(SelectAll)).Value = value;
 		}
+
 		public bool EnableAll
 		{
 			get => GetSetting<bool>(nameof(EnableAll));
 			set => GetSetting<bool>(nameof(EnableAll)).Value = value;
 		}
+
 		public bool EncryptAll
 		{
 			get => GetSetting<bool>(nameof(EncryptAll));
@@ -93,6 +89,12 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			return EncryptionKey;
 		}
 
+		public bool IgnoreEncrypted
+		{
+			get => GetSetting<bool>(nameof(IgnoreEncrypted));
+			set => GetSetting<bool>(nameof(IgnoreEncrypted)).Value = value;
+		}
+
 		protected override object GetDefaultValue(string settingId)
 		{
 			switch (settingId)
@@ -104,7 +106,5 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			}
 			return base.GetDefaultValue(settingId);
 		}
-
-
 	}
 }

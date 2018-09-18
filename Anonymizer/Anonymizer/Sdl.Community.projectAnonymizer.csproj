@@ -122,7 +122,7 @@
   <ItemGroup>
     <Compile Include="Batch Task\AnonymizerTask.cs" />
     <Compile Include="Batch Task\AnonymizerSettings.cs" />
-    <Compile Include="Batch Task\DecryptSettings.cs" />
+    <Compile Include="Batch Task\StateEnum.cs" />
     <Compile Include="Batch Task\DecryptSettingsPage.cs" />
     <Compile Include="Helpers\AgreementMethods.cs" />
     <Compile Include="Helpers\CheckBoxHeaderCellEventArgs.cs" />
@@ -194,7 +194,9 @@
     <None Include="..\..\SdlCommunity.snk">
       <Link>SdlCommunity.snk</Link>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

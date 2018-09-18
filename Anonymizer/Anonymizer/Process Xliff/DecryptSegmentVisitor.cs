@@ -13,9 +13,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 	{
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		private readonly DecryptSettings _decryptSettings;
+		private readonly AnonymizerSettings _decryptSettings;
+		private bool _isOldVersion;
 
-		public DecryptSegmentVisitor(DecryptSettings decryptSettings)
+		public DecryptSegmentVisitor(AnonymizerSettings decryptSettings)
 		{
 			_decryptSettings = decryptSettings;
 		}
@@ -161,12 +162,13 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		private string DecryptText(string encryptedText)
 		{
-			var isOldVersion = _decryptSettings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").ArePatternsEncrypted == null;
+			var isOldVersion = _decryptSettings.IsOldVersion ?? false;
 			var encryptedKey = _decryptSettings.EncryptionKey;
 			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
 
 			var key = isOldVersion  ? encryptedKey : decryptedKey;
 
+			_decryptSettings.IsOldVersion = false;
 			return AnonymizeData.DecryptData(encryptedText, key);
 		}
 	}

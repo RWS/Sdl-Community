@@ -8,15 +8,15 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
-	public class DecryptSettingsPage: DefaultSettingsPage<DecryptSettingsControl,DecryptSettings>
+	public class DecryptSettingsPage: DefaultSettingsPage<DecryptSettingsControl,AnonymizerSettings>
 	{
-		private DecryptSettings _settings;
+		private AnonymizerSettings _settings;
 		private DecryptSettingsControl _control;
-		private AnonymizerSettings _encryptionSettings;
 		public override object GetControl()
 		{
-			 _encryptionSettings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
-			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<DecryptSettings>();
+			//_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<DecryptSettings>();
+			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
+
 			_control = base.GetControl() as DecryptSettingsControl;
 			return _control;
 		}
@@ -26,21 +26,31 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		}
 		public override void Save()
 		{
-			if (_encryptionSettings.ArePatternsEncrypted ?? false)
+			if (_settings.EncryptionKey != AnonymizeData.EncryptData(_control.EncryptionKey, Constants.Key))
 			{
-				DecryptPatterns();
+				_settings.ShouldDeanonymize = false;
+				return;
 			}
-			_encryptionSettings.IsProjectEncrypted = false;
-			_encryptionSettings.IsOldVersion = false;
+
+			_settings.IsOldVersion = ((_settings.EncryptionState & State.PatternsEncrypted) == 0) && ((_settings.EncryptionState & State.DataEncrypted) != 0);
+			DecryptPatterns();
+
+			_settings.ShouldDeanonymize = (_settings.EncryptionState & State.DataEncrypted) != 0;
+			_settings.EncryptionState = State.Decrypted;
 			_settings.EncryptionKey = _control.EncryptionKey;
 			_settings.IgnoreEncrypted = _control.IgnoreEncrypted;
 		}
 
 		public void DecryptPatterns()
 		{
-			var key = AnonymizeData.DecryptData(_encryptionSettings.EncryptionKey, Constants.Key);
+			var patternsEncrypted = (_settings.EncryptionState & State.PatternsEncrypted) != 0;
+
+			if (!patternsEncrypted)
+				return;
+
+			var key = AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key);
 			var decryptedPatterns = new BindingList<RegexPattern>();
-			foreach (var regexPattern in _encryptionSettings.RegexPatterns)
+			foreach (var regexPattern in _settings.RegexPatterns)
 			{
 				decryptedPatterns.Add(new RegexPattern()
 				{
@@ -52,9 +62,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 					Id = regexPattern.Id
 				});
 			}
-
-			_encryptionSettings.RegexPatterns = decryptedPatterns;
-			_encryptionSettings.ArePatternsEncrypted = false;
+			_settings.RegexPatterns = decryptedPatterns;
+			_settings.EncryptionState &= ~State.PatternsEncrypted;
 		}
 	}
 }
