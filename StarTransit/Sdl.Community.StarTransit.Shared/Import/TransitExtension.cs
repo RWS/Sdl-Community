@@ -63,7 +63,6 @@
 					return "FRU";
 				case "FRI":
 					return "FRV";
-				case "FRA":
 				case "FRD":
 				case "MAF":
 				case "GLP":

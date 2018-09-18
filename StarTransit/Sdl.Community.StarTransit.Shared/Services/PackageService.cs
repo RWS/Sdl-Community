@@ -16,7 +16,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private readonly List<KeyValuePair<string, string>> _dictionaryPropetries =
             new List<KeyValuePair<string, string>>();
 
-        private Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
+        private readonly Dictionary<string, List<KeyValuePair<string, string>>> _pluginDictionary =
             new Dictionary<string, List<KeyValuePair<string, string>>>();
 
         private static PackageModel _package = new PackageModel();
@@ -30,9 +30,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
         /// <returns>Task<PackageModel></returns>
         public async Task<PackageModel> OpenPackage(string packagePath, string pathToTempFolder)
         {
-
             var entryName = string.Empty;
-
 
             using (var archive = ZipFile.OpenRead(packagePath))
             {
@@ -49,10 +47,8 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     {
                         entryName = entry.FullName;
                     }
-
                 }
             }
-
             return await ReadProjectMetadata(pathToTempFolder, entryName);
         }
 
@@ -67,14 +63,11 @@ namespace Sdl.Community.StarTransit.Shared.Services
             var filePath = Path.Combine(pathToTempFolder, fileName);
             var keyProperty = string.Empty;
 
-
             using (var reader = new StreamReader(filePath))
             {
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-
-
                     if (line.StartsWith("[") && line.EndsWith("]"))
                     {
                         var valuesDictionaries = new List<KeyValuePair<string, string>>();
@@ -97,17 +90,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
                         var firstPosition = line.IndexOf("[", StringComparison.Ordinal) + 1;
                         var lastPosition = line.IndexOf("]", StringComparison.Ordinal) - 1;
                         keyProperty = line.Substring(firstPosition, lastPosition);
-
                     }
                     else
                     {
                         var properties = line.Split('=');
                         _dictionaryPropetries.Add(new KeyValuePair<string, string>(properties[0], properties[1]));
-
-
                     }
-
-
                 }
             }
 
@@ -131,7 +119,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
         private async Task<PackageModel> CreateModel(string pathToTempFolder)
         {
             var model = new PackageModel();
-            
             CultureInfo sourceLanguage = null;
 
             var languagePairList = new List<LanguagePair>();
@@ -191,9 +178,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     AddFilesAndTmsToModel(languagePair, filesAndMetadata, targetFilesAndTmsPath);
                 }
             }
-
             return model;
-
         }
 
         private void AddFilesAndTmsToModel(LanguagePair languagePair,
@@ -219,14 +204,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
                             .Where(x => Path.GetFileNameWithoutExtension(x.SourceFile)
                                             .Equals(targetFileNameWithoutExtension))
                             .FirstOrDefault();
-                       
-                        if (metaData != null)
-                        {
-                            metaData.TargetFile = file;
-                        }
-                    tmMetaDatas.Add(metaData);
 
-                    }
+	                    if (metaData != null)
+	                    {
+		                    metaData.TargetFile = file;
+		                   // tmMetaDatas.Add(metaData);
+	                    }
+	                    tmMetaDatas.Add(metaData);
+				}
                     else
                     {
                         pathToTargetFiles.Add(file);
@@ -253,7 +238,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
                     (from ffd in tmFile.Descendants("FFD") select new Guid(ffd.Attribute("GUID").Value)).FirstOrDefault();
                 result = true;
             }
-
             return result;
         }
 
@@ -275,7 +259,6 @@ namespace Sdl.Community.StarTransit.Shared.Services
 
         private Tuple<List<string>,List<StarTranslationMemoryMetadata>> ReturnSourceFilesNameAndMetadata(List<string> filesAndTmsList )
         {
-           
             var translationMemoryMetadataList = new List<StarTranslationMemoryMetadata>();
             var fileNames = new List<string>();
 
@@ -289,14 +272,12 @@ namespace Sdl.Community.StarTransit.Shared.Services
                         SourceFile = file
                     };
                     translationMemoryMetadataList.Add(metadata);
-
                 }
                 else
                 {
                     fileNames.Add(file);
                 }
             }
-
             return new Tuple<List<string>, List<StarTranslationMemoryMetadata>>(fileNames,translationMemoryMetadataList);
         }
            
