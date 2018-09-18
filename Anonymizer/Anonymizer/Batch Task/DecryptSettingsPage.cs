@@ -24,6 +24,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			return AgreementMethods.UserAgreed();
 		}
+
 		public override void Save()
 		{
 			if (_settings.EncryptionKey != AnonymizeData.EncryptData(_control.EncryptionKey, Constants.Key))
@@ -38,7 +39,6 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			_settings.ShouldDeanonymize = (_settings.EncryptionState & State.DataEncrypted) != 0;
 			_settings.EncryptionState = State.Decrypted;
 			_settings.EncryptionKey = _control.EncryptionKey;
-			_settings.IgnoreEncrypted = _control.IgnoreEncrypted;
 		}
 
 		public void DecryptPatterns()
