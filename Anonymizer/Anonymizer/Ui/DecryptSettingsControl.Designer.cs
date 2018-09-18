@@ -29,82 +29,99 @@
 		private void InitializeComponent()
 		{
 			this.decryptPanel = new System.Windows.Forms.TableLayoutPanel();
-			this.descriptionLbl = new System.Windows.Forms.Label();
+			this.lockPictureBox = new System.Windows.Forms.PictureBox();
+			this.encryptedMessage = new System.Windows.Forms.Label();
+			this.decryptionPanel = new System.Windows.Forms.Panel();
 			this.encryptionBox = new System.Windows.Forms.TextBox();
-			this.ignoreEncrypted = new System.Windows.Forms.CheckBox();
-			this.label1 = new System.Windows.Forms.Label();
 			this.messageLbl = new System.Windows.Forms.Label();
 			this.decryptPanel.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.lockPictureBox)).BeginInit();
+			this.decryptionPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// decryptPanel
 			// 
-			this.decryptPanel.ColumnCount = 2;
-			this.decryptPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
-			this.decryptPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
-			this.decryptPanel.Controls.Add(this.descriptionLbl, 0, 0);
-			this.decryptPanel.Controls.Add(this.encryptionBox, 1, 0);
-			this.decryptPanel.Controls.Add(this.ignoreEncrypted, 0, 1);
-			this.decryptPanel.Controls.Add(this.label1, 1, 1);
-			this.decryptPanel.Controls.Add(this.messageLbl, 0, 2);
+			this.decryptPanel.AutoSize = true;
+			this.decryptPanel.ColumnCount = 3;
+			this.decryptPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.decryptPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.decryptPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.decryptPanel.Controls.Add(this.messageLbl, 1, 7);
+			this.decryptPanel.Controls.Add(this.decryptionPanel, 1, 5);
+			this.decryptPanel.Controls.Add(this.encryptedMessage, 1, 3);
+			this.decryptPanel.Controls.Add(this.lockPictureBox, 1, 1);
 			this.decryptPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.decryptPanel.Location = new System.Drawing.Point(0, 0);
 			this.decryptPanel.Name = "decryptPanel";
-			this.decryptPanel.RowCount = 3;
-			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 10F));
-			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
+			this.decryptPanel.RowCount = 10;
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.decryptPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.decryptPanel.Size = new System.Drawing.Size(717, 434);
 			this.decryptPanel.TabIndex = 0;
 			// 
-			// descriptionLbl
+			// lockPictureBox
 			// 
-			this.descriptionLbl.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.descriptionLbl.AutoSize = true;
-			this.descriptionLbl.Location = new System.Drawing.Point(3, 14);
-			this.descriptionLbl.Name = "descriptionLbl";
-			this.descriptionLbl.Size = new System.Drawing.Size(205, 13);
-			this.descriptionLbl.TabIndex = 0;
-			this.descriptionLbl.Text = "Enter the key you used to encrypt the files";
+			this.lockPictureBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.lockPictureBox.Image = global::Sdl.Community.projectAnonymizer.PluginResources.lockxxx;
+			this.lockPictureBox.Location = new System.Drawing.Point(294, 17);
+			this.lockPictureBox.Name = "lockPictureBox";
+			this.lockPictureBox.Size = new System.Drawing.Size(129, 132);
+			this.lockPictureBox.TabIndex = 9;
+			this.lockPictureBox.TabStop = false;
+			// 
+			// encryptedMessage
+			// 
+			this.encryptedMessage.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.encryptedMessage.AutoEllipsis = true;
+			this.encryptedMessage.AutoSize = true;
+			this.encryptedMessage.CausesValidation = false;
+			this.encryptedMessage.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.encryptedMessage.Location = new System.Drawing.Point(266, 166);
+			this.encryptedMessage.Name = "encryptedMessage";
+			this.encryptedMessage.Size = new System.Drawing.Size(184, 25);
+			this.encryptedMessage.TabIndex = 10;
+			this.encryptedMessage.Text = "Enter encryption key";
+			this.encryptedMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// decryptionPanel
+			// 
+			this.decryptionPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.decryptionPanel.Controls.Add(this.encryptionBox);
+			this.decryptionPanel.Location = new System.Drawing.Point(187, 208);
+			this.decryptionPanel.Name = "decryptionPanel";
+			this.decryptionPanel.Size = new System.Drawing.Size(342, 32);
+			this.decryptionPanel.TabIndex = 11;
 			// 
 			// encryptionBox
 			// 
-			this.encryptionBox.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.encryptionBox.Location = new System.Drawing.Point(289, 10);
+			this.encryptionBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.encryptionBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.encryptionBox.Location = new System.Drawing.Point(0, 0);
 			this.encryptionBox.Name = "encryptionBox";
 			this.encryptionBox.PasswordChar = '*';
-			this.encryptionBox.Size = new System.Drawing.Size(119, 20);
-			this.encryptionBox.TabIndex = 1;
-			// 
-			// ignoreEncrypted
-			// 
-			this.ignoreEncrypted.AutoSize = true;
-			this.ignoreEncrypted.Location = new System.Drawing.Point(3, 44);
-			this.ignoreEncrypted.Name = "ignoreEncrypted";
-			this.ignoreEncrypted.Size = new System.Drawing.Size(130, 17);
-			this.ignoreEncrypted.TabIndex = 2;
-			this.ignoreEncrypted.Text = "Ignore encrypted data";
-			this.ignoreEncrypted.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(289, 41);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(332, 13);
-			this.label1.TabIndex = 3;
-			this.label1.Text = "If this option is enabled only the tagged data will be converted in text.";
+			this.encryptionBox.Size = new System.Drawing.Size(342, 29);
+			this.encryptionBox.TabIndex = 0;
 			// 
 			// messageLbl
 			// 
+			this.messageLbl.Anchor = System.Windows.Forms.AnchorStyles.Top;
+			this.messageLbl.AutoEllipsis = true;
 			this.messageLbl.AutoSize = true;
-			this.decryptPanel.SetColumnSpan(this.messageLbl, 2);
-			this.messageLbl.Location = new System.Drawing.Point(3, 413);
+			this.messageLbl.CausesValidation = false;
+			this.messageLbl.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.messageLbl.Location = new System.Drawing.Point(358, 257);
 			this.messageLbl.Name = "messageLbl";
-			this.messageLbl.Size = new System.Drawing.Size(35, 13);
-			this.messageLbl.TabIndex = 4;
-			this.messageLbl.Text = "label2";
+			this.messageLbl.Size = new System.Drawing.Size(0, 25);
+			this.messageLbl.TabIndex = 12;
+			this.messageLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.messageLbl.Visible = false;
 			// 
 			// DecryptSettingsControl
@@ -116,17 +133,21 @@
 			this.Size = new System.Drawing.Size(717, 434);
 			this.decryptPanel.ResumeLayout(false);
 			this.decryptPanel.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.lockPictureBox)).EndInit();
+			this.decryptionPanel.ResumeLayout(false);
+			this.decryptionPanel.PerformLayout();
 			this.ResumeLayout(false);
+			this.PerformLayout();
 
 		}
 
 		#endregion
 
 		private System.Windows.Forms.TableLayoutPanel decryptPanel;
-		private System.Windows.Forms.Label descriptionLbl;
+		private System.Windows.Forms.PictureBox lockPictureBox;
+		private System.Windows.Forms.Label encryptedMessage;
+		private System.Windows.Forms.Panel decryptionPanel;
 		private System.Windows.Forms.TextBox encryptionBox;
-		private System.Windows.Forms.CheckBox ignoreEncrypted;
-		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label messageLbl;
 	}
 }
