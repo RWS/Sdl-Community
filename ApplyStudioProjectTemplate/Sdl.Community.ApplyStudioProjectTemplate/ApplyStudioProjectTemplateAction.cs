@@ -466,14 +466,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						Console.Write(e);
                     }
                 }
-
-                // Tell the user we're done
-                MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
+	            Controller.RefreshProjects();
+				// Tell the user we're done
+				MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
 
             // Save the project templates anyway
             applyTemplateForm.SaveProjectTemplates();
-        }
+	        Controller.RefreshProjects();
+		}
 	
 
 		/// <summary>
