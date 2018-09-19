@@ -10,6 +10,7 @@ using Sdl.Desktop.IntegrationApi;
 using Sdl.FileTypeSupport.Framework.Core.Utilities.IntegrationApi;
 using Sdl.ProjectAutomation.Core;
 using Sdl.ProjectAutomation.FileBased;
+using Sdl.ProjectAutomation.Settings;
 using Sdl.TranslationStudioAutomation.IntegrationApi;
 
 namespace Sdl.Community.StarTransit.Shared.Services
@@ -48,14 +49,14 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var tmConfig = newProject.GetTranslationProviderConfiguration();
 			var fileTypeManager = DefaultFileTypeManager.CreateInstance(true);
 
-			List<ProjectFile> targetProjectFiles = new List<ProjectFile>();
+			var targetProjectFiles = new List<ProjectFile>();
 			foreach (var pair in package.LanguagePairs)
 			{
 				// Separate all items from package.TMPenalties(files that are having penalties set)
 				// which are found in pair.StarTranslationMemoryMetadatas
 				foreach (var starTMMetadata in pair.StarTranslationMemoryMetadatas)
 				{
-					if(package.TMPenalties != null)
+					if (package.TMPenalties != null)
 					{
 						if (package.TMPenalties.Any(t => t.Key.Equals(starTMMetadata.TargetFile)))
 						{
@@ -81,24 +82,24 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					if (pair.StarTranslationMemoryMetadatas.Count > 0)
 					{
 						var importer = new TransitTmImporter(pair.SourceLanguage,
-							   pair.TargetLanguage,
-							   pair.CreateNewTm,
-							   fileTypeManager,
-							   Path.Combine(Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(pair.TmPath)));
+							pair.TargetLanguage,
+							pair.CreateNewTm,
+							fileTypeManager,
+							Path.Combine(Path.GetDirectoryName(newProject.FilePath), Path.GetFileName(pair.TmPath)));
 						foreach (var tm in pair.StarTranslationMemoryMetadatas)
 						{
 							importer.ImportStarTransitTm(tm.TargetFile);
 						}
 
 						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(importer.GetTranslationProviderReference(),
-							   true,
-							   true,
-							   true));
+							true,
+							true,
+							true));
 					}
 
 					// Create separate TM for each TM file on which user set penalty
 					// (the name of the new TM will be the same with the one from StarTransit package)
-					foreach(var item in penaltiesTmsList)
+					foreach (var item in penaltiesTmsList)
 					{
 						var tmWithPenaltyImporter = new TransitTmImporter(
 							Path.GetDirectoryName(newProject.FilePath),
@@ -108,7 +109,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 							fileTypeManager);
 
 						tmWithPenaltyImporter.ImportStarTransitTm(item.TargetFile);
-						
+
 						tmConfig.Entries.Add(new TranslationProviderCascadeEntry(
 							new TranslationProviderReference(tmWithPenaltyImporter.TMFilePath),
 							true,
@@ -119,7 +120,7 @@ namespace Sdl.Community.StarTransit.Shared.Services
 				}
 				if (!pair.TargetFile.Any() || pair.TargetFile.Count == 0)
 				{
-					var messageModel = new MessageModel()
+					var messageModel = new MessageModel
 					{
 						IsProjectCreated = false,
 						Message = "Project was not created correctly because no target files were found in the package!",
@@ -127,38 +128,38 @@ namespace Sdl.Community.StarTransit.Shared.Services
 					};
 					return messageModel;
 				}
-				else
+				targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
+
+				//update tm settings
+				UpdateTmSettings(newProject);
+				newProject.UpdateTranslationProviderConfiguration(tmConfig);
+
+				newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
+				var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new[]
 				{
-					targetProjectFiles.AddRange(newProject.AddFiles(pair.TargetFile.ToArray()));
-					newProject.RunAutomaticTask(targetProjectFiles.GetIds(), AutomaticTaskTemplateIds.Scan);
-					var taskSequence = newProject.RunAutomaticTasks(targetProjectFiles.GetIds(), new string[]
-					{
 					AutomaticTaskTemplateIds.ConvertToTranslatableFormat,
 					AutomaticTaskTemplateIds.CopyToTargetLanguages,
 					AutomaticTaskTemplateIds.PerfectMatch,
 					AutomaticTaskTemplateIds.PreTranslateFiles,
 					AutomaticTaskTemplateIds.AnalyzeFiles,
+					AutomaticTaskTemplateIds.UpdateMainTranslationMemories
 
-					});
+				});
 
-					if (taskSequence.Status.Equals(TaskStatus.Failed))
+				if (taskSequence.Status.Equals(TaskStatus.Failed))
+				{
+					var messageModel = new MessageModel
 					{
-						var messageModel = new MessageModel()
-						{
-							IsProjectCreated = false,
-							Message = "Project could not be created.Error occured while running automatic tasks!",
-							Title = "Informative message"
-						};
-						return messageModel;
-					}
-					else
-					{
-						newProject.UpdateTranslationProviderConfiguration(tmConfig);
-						newProject.Save();
-					}
+						IsProjectCreated = false,
+						Message = "Project could not be created.Error occured while running automatic tasks!",
+						Title = "Informative message"
+					};
+					return messageModel;
 				}
-			}
 
+				newProject.Save();
+			}
+			Controller.RefreshProjects();
 			if (Directory.Exists(Path.GetDirectoryName(newProject.FilePath)))
 			{
 				CreateMetadataFolder(package.Location, package.PathToPrjFile);
@@ -187,6 +188,18 @@ namespace Sdl.Community.StarTransit.Shared.Services
 			var targetArray = targetLanguageList.ToArray();
 
 			return targetArray;
+		}
+
+		private void UpdateTmSettings(FileBasedProject project)
+		{
+			var settings = project.GetSettings();
+			var updateTmSettings = settings.GetSettingsGroup<TranslationMemoryUpdateTaskSettings>();
+			updateTmSettings.TmImportOptions.Value = TmImportOption.AlwaysAddNewTranslation;
+			updateTmSettings.UpdateWithApprovedSignOffSegments.Value = true;
+			updateTmSettings.UpdateWithApprovedTranslationSegments.Value = true;
+			updateTmSettings.UpdateWithTranslatedSegments.Value = true;
+
+			project.UpdateSettings(settings);
 		}
 
 		/// <summary>
