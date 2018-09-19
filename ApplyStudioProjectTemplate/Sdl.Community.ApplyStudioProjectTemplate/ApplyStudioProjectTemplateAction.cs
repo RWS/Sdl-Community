@@ -473,6 +473,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
 			// Save the project templates anyway
 			applyTemplateForm.SaveProjectTemplates();
+			Controller.RefreshProjects();
 		}
 
 
