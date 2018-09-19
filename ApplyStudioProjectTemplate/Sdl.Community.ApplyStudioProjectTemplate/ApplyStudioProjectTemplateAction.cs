@@ -466,7 +466,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 						Console.Write(e);
 					}
 				}
-
+				Controller.RefreshProjects();
 				// Tell the user we're done
 				MessageBox.Show(projectsList.ToString(), PluginResources.Plugin_Name, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
