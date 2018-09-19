@@ -10,10 +10,20 @@ namespace Sdl.Community.projectAnonymizer.Ui
 {
 	public partial class DecryptSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
+		private Timer Timer { get; } = new Timer() { Interval = 500 };
+
 		public DecryptSettingsControl()
 		{
 			InitializeComponent();
-			encryptionBox.LostFocus += EncryptionBox_LostFocus;
+			//encryptionBox.LostFocus += EncryptionBox_LostFocus;
+			Timer.Tick += EncryptionBox_LostFocus;
+			encryptionBox.TextChanged += (t, e) => StartSearchTimer();
+		}
+
+		private void StartSearchTimer()
+		{
+			Timer.Stop();
+			Timer.Start();
 		}
 
 		public AnonymizerSettings Settings { get; set; }
