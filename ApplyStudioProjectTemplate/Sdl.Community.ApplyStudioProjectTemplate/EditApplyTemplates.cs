@@ -19,12 +19,12 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <summary>
         /// Indicates whether we are setting the name of the template
         /// </summary>
-        private bool settingName = false;
+        private bool settingName;
 
         /// <summary>
         /// The template list
         /// </summary>
-        private BindingList<ApplyTemplate> templateList = new BindingList<ApplyTemplate>();
+        private BindingList<ApplyTemplate> _templateList = new BindingList<ApplyTemplate>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="EditApplyTemplates"/> class.
@@ -36,19 +36,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             ProjectTemplates.DisplayMember = "Name";
         }
 
-        /// <summary>
-        /// Gets the project templates items.
-        /// </summary>
-        /// <value>
-        /// The project templates items.
-        /// </value>
-        public BindingList<ApplyTemplate> ProjectTemplatesItems
-        {
-            get
-            {
-                return templateList;
-            }
-        }
+	    /// <summary>
+	    /// Gets the project templates items.
+	    /// </summary>
+	    /// <value>
+	    /// The project templates items.
+	    /// </value>
+	    public BindingList<ApplyTemplate> ProjectTemplatesItems => _templateList;
+     
 
         /// <summary>
         /// Handles the TextChanged event of the ProjectTemplateName control.
@@ -60,8 +55,12 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             if (ProjectTemplates.SelectedItem != null)
             {
                 settingName = true;
-                (ProjectTemplates.SelectedItem as ApplyTemplate).Name = ProjectTemplateName.Text;
-                settingName = false;
+	            var applyTemplate = ProjectTemplates.SelectedItem as ApplyTemplate;
+	            if (applyTemplate != null)
+	            {
+					applyTemplate.Name = ProjectTemplateName.Text;
+				}
+	            settingName = false;
                 ProjectTemplates.DisplayMember = string.Empty;
                 ProjectTemplates.DisplayMember = "Name";
             }
@@ -82,11 +81,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                 }
                 else
                 {
-                    string templateName = (ProjectTemplates.SelectedItem as ApplyTemplate).Name;
-                    if (ProjectTemplateName.Text != templateName)
-                    {
-                        ProjectTemplateName.Text = templateName;
-                    }
+	                var applyTemplate = ProjectTemplates.SelectedItem as ApplyTemplate;
+	                if (applyTemplate != null)
+	                {
+		                var templateName = applyTemplate.Name;
+		                if (ProjectTemplateName.Text != templateName)
+		                {
+			                ProjectTemplateName.Text = templateName;
+		                }
+	                }
                 }
             }
         }
@@ -121,21 +124,26 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void AddTemplate_Click(object sender, EventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.CheckFileExists = true;
-            ofd.Filter = "SDL Trados Studio Templates|*.sdltpl|SDL Trados Studio Projects|*.sdlproj|All Files|*.*";
-            ofd.FilterIndex = 1;
-            ofd.Multiselect = false;
-            ofd.Title = "Add template";
-            if (ofd.ShowDialog() == DialogResult.OK)
+	        var ofd = new OpenFileDialog
+	        {
+		        CheckFileExists = true,
+		        Filter = @"SDL Trados Studio Templates|*.sdltpl|SDL Trados Studio Projects|*.sdlproj|All Files|*.*",
+		        FilterIndex = 1,
+		        Multiselect = false,
+		        Title = @"Add template"
+	        };
+	        if (ofd.ShowDialog() == DialogResult.OK)
             {
-                ApplyTemplate newTemplate = ProjectTemplatesItems.AddNew();
-                newTemplate.Name = Path.GetFileNameWithoutExtension(ofd.FileName);
-                newTemplate.FileLocation = ofd.FileName;
-                newTemplate.Uri = null;
-                newTemplate.Id = Guid.NewGuid();
-                ProjectTemplates.SelectedItem = newTemplate;
-                ProjectTemplates.DisplayMember = string.Empty;
+                var newTemplate = ProjectTemplatesItems.AddNew();
+	            if (newTemplate != null)
+	            {
+		            newTemplate.Name = Path.GetFileNameWithoutExtension(ofd.FileName);
+		            newTemplate.FileLocation = ofd.FileName;
+		            newTemplate.Uri = null;
+		            newTemplate.Id = Guid.NewGuid();
+		            ProjectTemplates.SelectedItem = newTemplate;
+	            }
+	            ProjectTemplates.DisplayMember = string.Empty;
                 ProjectTemplates.DisplayMember = "Name";
             }
         }

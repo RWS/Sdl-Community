@@ -26,19 +26,19 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
     [ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
     [Shortcut(Keys.Control | Keys.Alt | Keys.T)]
     public class ApplyStudioProjectTemplateAction : AbstractViewControllerAction<ProjectsController>
-    {
+	{
         /// <summary>
         /// Executes this instance.
         /// </summary>
         protected override void Execute()
         {
-            string grammarCheckerSettingsId = "GrammarCheckerSettings";
-            string numberVerifierSettingsId = "NumberVerifierSettings";
-            IExtensionPoint globalVerifiersExtensionPoint = PluginManager.DefaultPluginRegistry.GetExtensionPoint<GlobalVerifierAttribute>();
-            foreach (IExtension extension in globalVerifiersExtensionPoint.Extensions)
+            var grammarCheckerSettingsId = "GrammarCheckerSettings";
+            var numberVerifierSettingsId = "NumberVerifierSettings";
+            var globalVerifiersExtensionPoint = PluginManager.DefaultPluginRegistry.GetExtensionPoint<GlobalVerifierAttribute>();
+            foreach (var extension in globalVerifiersExtensionPoint.Extensions)
             {
-                IGlobalVerifier globalVerifier = (IGlobalVerifier)extension.CreateInstance();
-                string settingsGroupId = globalVerifier.SettingsId;
+	            var globalVerifier = (IGlobalVerifier)extension.CreateInstance();
+	            var settingsGroupId = globalVerifier.SettingsId;
                 if (settingsGroupId.Contains("Grammar"))
                 {
                     grammarCheckerSettingsId = settingsGroupId;
@@ -46,16 +46,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
             }
 
-            // Show the dialog
-            ApplyTemplateForm applyTemplateForm = new ApplyTemplateForm(Controller);
+			// Show the dialog
+	        var applyTemplateForm = new ApplyTemplateForm(Controller);
             if (applyTemplateForm.ShowDialog() == DialogResult.OK)
             {
-	            var shouldApplyTemplate = false;
-                // This is the template that the user selected
-                ApplyTemplate selectedTemplate = applyTemplateForm.ActiveTemplate;
+				// This is the template that the user selected
+	            var selectedTemplate = applyTemplateForm.ActiveTemplate;
 
-                // Create list of projects
-                List<FileBasedProject> selectedProjects = new List<FileBasedProject>();
+				// Create list of projects
+	            var selectedProjects = new List<FileBasedProject>();
                 if (applyTemplateForm.ApplyToSelected)
                 {
                     selectedProjects.AddRange(Controller.SelectedProjects);
@@ -75,21 +74,21 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     return;
                 }
 
-                // Work through all projects
-                StringBuilder projectsList = new StringBuilder();
+				// Work through all projects
+	            var projectsList = new StringBuilder();
                 projectsList.AppendLine(PluginResources.Settings_Applied);
-                foreach (FileBasedProject targetProject in selectedProjects)
+                foreach (var targetProject in selectedProjects)
                 {
-                    // Temporary folder path
-                    string tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
+					// Temporary folder path
+	                var tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
 
-                    // This is the current project and it's related information
-                    ProjectInfo targetProjectInfo = targetProject.GetProjectInfo();
+					// This is the current project and it's related information
+	                var targetProjectInfo = targetProject.GetProjectInfo();
                     projectsList.AppendLine(targetProjectInfo.Name);
-                    ISettingsBundle targetSettingsBundle = targetProject.GetSettings();
+	                var targetSettingsBundle = targetProject.GetSettings();
 
-                    // This is the source project - check if it's a loaded one
-                    FileBasedProject sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
+					// This is the source project - check if it's a loaded one
+	                var sourceProject = Controller.GetAllProjects().FirstOrDefault(loadedProject => string.Compare(loadedProject.FilePath, selectedTemplate.FileLocation, StringComparison.OrdinalIgnoreCase) == 0);
 
 					// Not found so load it from the filing system
 					if (sourceProject == null)
@@ -98,9 +97,10 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         {
                             if (selectedTemplate.Id != Guid.Empty)
                             {
-                                // Create a new project based on a template configured in Studio
-                                ProjectTemplateReference projectTemplate = new ProjectTemplateReference(selectedTemplate.Uri);
-                                string savedFolder = targetProjectInfo.LocalProjectFolder;
+								// Create a new project based on a template configured in Studio
+	                            var projectTemplate = new ProjectTemplateReference(selectedTemplate.Uri);
+
+	                            var savedFolder = targetProjectInfo.LocalProjectFolder;
                                 targetProjectInfo.LocalProjectFolder = tempFolder;
                                 sourceProject = new FileBasedProject(targetProjectInfo, projectTemplate);
                                 targetProjectInfo.LocalProjectFolder = savedFolder;
@@ -110,9 +110,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         {
                             if (Path.GetExtension(selectedTemplate.FileLocation).ToLowerInvariant() == ".sdltpl")
                             {
-                                // Create a new project based on a file-based template
-                                ProjectTemplateReference projectTemplate = new ProjectTemplateReference(selectedTemplate.FileLocation);
-                                string savedFolder = targetProjectInfo.LocalProjectFolder;
+								// Create a new project based on a file-based template
+	                            var projectTemplate = new ProjectTemplateReference(selectedTemplate.FileLocation);
+	                            var savedFolder = targetProjectInfo.LocalProjectFolder;
                                 targetProjectInfo.LocalProjectFolder = tempFolder;
                                 sourceProject = new FileBasedProject(targetProjectInfo, projectTemplate);
                                 targetProjectInfo.LocalProjectFolder = savedFolder;
@@ -125,10 +125,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         }
                     }
 
-                    // Get the information from the source project
-                    ProjectInfo sourceProjectInfo = sourceProject.GetProjectInfo();
-                    ISettingsBundle sourceSettingsBundle = sourceProject.GetSettings();
+					// Get the information from the source project
+	                var sourceProjectInfo = sourceProject.GetProjectInfo();
+	                var sourceSettingsBundle = sourceProject.GetSettings();
 
+	               
                     // Copy all languages translation providers
                     if (selectedTemplate.TranslationProvidersAllLanguages != ApplyTemplateOptions.Keep)
                     {
@@ -160,9 +161,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     {
                         if (sourceProjectInfo.SourceLanguage.Equals(targetProjectInfo.SourceLanguage))
                         {
-                            foreach (Language sourceTargetLanguage in sourceProjectInfo.TargetLanguages)
+                            foreach (var sourceTargetLanguage in sourceProjectInfo.TargetLanguages)
                             {
-                                foreach (Language targetTargetLanguage in targetProjectInfo.TargetLanguages)
+                                foreach (var targetTargetLanguage in targetProjectInfo.TargetLanguages)
                                 {
                                     if (sourceTargetLanguage.Equals(targetTargetLanguage))
                                     {
@@ -221,9 +222,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                                     {
                                         try
                                         {
-                                            // Now copy translation memory settings - different section
-                                            ISettingsBundle sourceTmSettings = sourceProject.GetSettings(sourceTargetLanguage);
-                                            ISettingsBundle targetTmSettings = targetProject.GetSettings(targetTargetLanguage);
+											// Now copy translation memory settings - different section
+	                                        var sourceTmSettings = sourceProject.GetSettings(sourceTargetLanguage);
+	                                        var targetTmSettings = targetProject.GetSettings(targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "TranslationMemorySettings", targetProject, targetTargetLanguage);
                                         }
                                         catch (Exception e)
@@ -239,8 +240,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     // Copy terminology termbases
                     if (selectedTemplate.TerminologyTermbases != ApplyTemplateOptions.Keep)
                     {
-                        TermbaseConfiguration sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
-                        TermbaseConfiguration targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
+	                    var sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
+	                    var targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
 
                         if (selectedTemplate.TerminologyTermbases == ApplyTemplateOptions.Merge)
                         {
@@ -271,8 +272,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     // Copy terminology settings
                     if (selectedTemplate.TerminologySearchSettings == ApplyTemplateOptions.Overwrite)
                     {
-                        TermbaseConfiguration sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
-                        TermbaseConfiguration targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
+	                    var sourceTermbaseConfig = sourceProject.GetTermbaseConfiguration();
+	                    var targetTermbaseConfig = targetProject.GetTermbaseConfiguration();
                         targetTermbaseConfig.TermRecognitionOptions = sourceTermbaseConfig.TermRecognitionOptions;
                         CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TermRecognitionSettings", targetProject, null);
                         
@@ -387,16 +388,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     {
                         try
                         {
-                            var copiedTypes = new List<string>();
-                            foreach (ProjectFile projectFile in targetProject.GetTargetLanguageFiles())
-                            {
-                                if (!copiedTypes.Contains(projectFile.FileTypeId))
-                                {
-                                    copiedTypes.Add(projectFile.FileTypeId);
-                                    CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, projectFile.FileTypeId, targetProject, null);
-                                }
-                            }
-                        }
+	                        CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FileTypeManagerConfigurationSettingsGroup", targetProject, null);
+						}
                         catch (Exception e)
                         {
                             MessageBox.Show(e.Message, PluginResources.FTTS_Failed, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -415,9 +408,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "FuzzyMatchRepairSettings", targetProject, null);
 							CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslateTaskSettings", targetProject, null);
                             CopySettingsGroup(sourceSettingsBundle, targetSettingsBundle, "TranslationMemoryUpdateTaskSettings", targetProject, null);
-
-							//set fuzzy bands from template using reflection
-	                       
+							
 						}
 						catch (Exception e)
                         {
@@ -430,17 +421,17 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                         // Update specific language pairs where possible
                         if (sourceProjectInfo.SourceLanguage.Equals(targetProjectInfo.SourceLanguage))
                         {
-                            foreach (Language sourceTargetLanguage in sourceProjectInfo.TargetLanguages)
+                            foreach (var sourceTargetLanguage in sourceProjectInfo.TargetLanguages)
                             {
-                                foreach (Language targetTargetLanguage in targetProjectInfo.TargetLanguages)
+                                foreach (var targetTargetLanguage in targetProjectInfo.TargetLanguages)
                                 {
                                     if (sourceTargetLanguage.Equals(targetTargetLanguage))
                                     {
                                         try
                                         {
-                                            // Now copy translation memory settings - different section
-                                            ISettingsBundle sourceTmSettings = sourceProject.GetSettings(sourceTargetLanguage);
-                                            ISettingsBundle targetTmSettings = targetProject.GetSettings(targetTargetLanguage);
+											// Now copy translation memory settings - different section
+	                                        var sourceTmSettings = sourceProject.GetSettings(sourceTargetLanguage);
+	                                        var targetTmSettings = targetProject.GetSettings(targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "PseudoTranslateSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "AnalysisTaskSettings", targetProject, targetTargetLanguage);
                                             CopySettingsGroup(sourceTmSettings, targetTmSettings, "VerificationSettings", targetProject, targetTargetLanguage);
@@ -472,6 +463,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                     }
                     catch(Exception e)
                     {
+						Console.Write(e);
                     }
                 }
 
@@ -482,37 +474,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             // Save the project templates anyway
             applyTemplateForm.SaveProjectTemplates();
         }
-
-		////
-		/// We don't delete this code yet we are not sure that fuzzy bands couses that strange behaviour
-	   // private void SetFuzzyBands(FileBasedProject sourceProject, FileBasedProject targetProject)
-	   // {
-		  //  //Get fuzzy values from template
-		  //  var internalProject = typeof(FileBasedProject).GetField("_project", BindingFlags.NonPublic | BindingFlags.Instance);
-		  //  if (internalProject != null)
-		  //  {
-			 //   var internalSourceProject = internalProject.GetValue(sourceProject);
-			 //   var propertyInfo = internalSourceProject.GetType().GetProperty("AnalysisBands");
-			 //   var fuzzies = new List<int>();
-			 //   if (propertyInfo != null)
-			 //   {
-				//    var fuzzyBands = propertyInfo.GetValue(internalSourceProject);
-				//    foreach (dynamic fuzzyValue in (Array)fuzzyBands)
-				//    {
-				//	    var minFuzzyValue = fuzzyValue.GetType().GetProperty("MinimumMatchValue").GetValue(fuzzyValue,null);
-				//	    fuzzies.Add(minFuzzyValue);
-				//    }
-			 //   }
-
-				////set fuzzy to project
-			 //   var internalTargetProject = internalProject.GetValue(targetProject);
-			 //   var setBandsMethod = internalTargetProject.GetType().GetMethod("SetAnalysisBands");
-			 //   if (setBandsMethod != null)
-			 //   {
-				//    setBandsMethod.Invoke(internalTargetProject, new object[] {fuzzies.ToArray()});
-			 //   }
-		  //  }
-	   // }
+	
 
 		/// <summary>
 		/// Validates the translation provider configuration.
@@ -520,7 +482,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 		/// <param name="providerConfig">The provider configuration.</param>
 		private void ValidateTranslationProviderConfiguration(TranslationProviderConfiguration providerConfig)
         {
-            foreach (TranslationProviderCascadeEntry entry in providerConfig.Entries)
+            foreach (var entry in providerConfig.Entries)
             {
                 if (entry.PerformUpdate && !entry.PerformNormalSearch)
                 {
@@ -548,8 +510,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 
                 if (sourceSettings.ContainsSettingsGroup(settingsGroupId))
                 {
-                    ISettingsGroup sourceSettingsGroup = sourceSettings.GetSettingsGroup(settingsGroupId);
-                    ISettingsGroup targetSettingsGroup = targetSettings.GetSettingsGroup(settingsGroupId);
+	                var sourceSettingsGroup = sourceSettings.GetSettingsGroup(settingsGroupId);
+	                var targetSettingsGroup = targetSettings.GetSettingsGroup(settingsGroupId);
                     targetSettingsGroup.ImportSettings(sourceSettingsGroup);
                     if (targetLanguage == null)
                     {
@@ -582,14 +544,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="targetProviderConfig">The target provider configuration.</param>
         private void MergeTranslationProviders(TranslationProviderConfiguration sourceProviderConfig, TranslationProviderConfiguration targetProviderConfig)
         {
-            // Remember where we're going to insert the translation providers
-            int indexToInsert = 0;
+			// Remember where we're going to insert the translation providers
+	        var indexToInsert = 0;
 
             // Look at each translation provider in the source project
-            foreach (TranslationProviderCascadeEntry sourceCascadeEntry in sourceProviderConfig.Entries)
+            foreach (var sourceCascadeEntry in sourceProviderConfig.Entries)
             {
-                // See if we can match the translation provider to one already there
-                bool foundEntry = targetProviderConfig.Entries.Any(targetCascadeEntry => sourceCascadeEntry.MainTranslationProvider.Uri == targetCascadeEntry.MainTranslationProvider.Uri);
+				// See if we can match the translation provider to one already there
+	            var foundEntry = targetProviderConfig.Entries.Any(targetCascadeEntry => sourceCascadeEntry.MainTranslationProvider.Uri == targetCascadeEntry.MainTranslationProvider.Uri);
 
                 // If we didn't find the translation provider then add a new one to the target project
                 if (!foundEntry)
@@ -607,11 +569,11 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         private void MergeTermbases(TermbaseConfiguration sourceTermbaseConfig, TermbaseConfiguration targetTermbaseConfig)
         {
             // Look at each termbase in the source project
-            foreach (Termbase sourceTermbase in sourceTermbaseConfig.Termbases)
+            foreach (var sourceTermbase in sourceTermbaseConfig.Termbases)
             {
-                // Look for a matching termbase in the target project
-                bool foundEntry = false;
-                foreach (Termbase targetTermbase in targetTermbaseConfig.Termbases)
+				// Look for a matching termbase in the target project
+	            var foundEntry = false;
+                foreach (var targetTermbase in targetTermbaseConfig.Termbases)
                 {
                     // Detect local or server termbases
                     if (sourceTermbase is LocalTermbase)
@@ -667,7 +629,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             }
 
             // Merge the language indexes
-            foreach (TermbaseLanguageIndex sourceLanguageIndex in sourceTermbaseConfig.LanguageIndexes)
+            foreach (var sourceLanguageIndex in sourceTermbaseConfig.LanguageIndexes)
             {
                 bool foundIndex = targetTermbaseConfig.LanguageIndexes.Any(targetLanguageIndex => sourceLanguageIndex.ProjectLanguage.Equals(targetLanguageIndex.ProjectLanguage));
 
@@ -678,7 +640,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
                 }
             }
         }
-    }
+	}
 
 	[Action("ApplyStudioProjectTemplateHelpAction", Icon = "question", Name = "Apply Studio Project Template Help", Description = "An wiki page will be opened in browser uith user documentation")]
 	[ActionLayout(typeof(ApplyStudioProjectTemplateRibbonGroup), 10, DisplayType.Large)]

@@ -386,7 +386,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <returns>The apply options for this specified attribute</returns>
         private ApplyTemplateOptions GetApplyTemplateOptions(XmlNode xmlNode, string attributeName)
         {
-            ApplyTemplateOptions returnValue = ApplyTemplateOptions.Keep;
+            var returnValue = ApplyTemplateOptions.Keep;
             if (((XmlElement)xmlNode).HasAttribute(attributeName))
             {
                 string attributeValue = xmlNode.SelectSingleNode("@" + attributeName).Value;
