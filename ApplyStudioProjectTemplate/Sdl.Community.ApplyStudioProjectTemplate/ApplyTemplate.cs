@@ -28,11 +28,15 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <param name="sourceXml">The source XML.</param>
         public ApplyTemplate(XmlNode sourceXml)
         {
-            Name = sourceXml.SelectSingleNode("@name").Value;
-            FileLocation = sourceXml.SelectSingleNode("@location").Value;
-            Uri = null;
-            Id = new Guid(sourceXml.SelectSingleNode("@id").Value);
-            TranslationProvidersAllLanguages = GetApplyTemplateOptions(sourceXml, "tpal");
+	        var selectSingleNode = sourceXml.SelectSingleNode("@name");
+	        if (selectSingleNode != null) Name = selectSingleNode.Value;
+	        var singleNode = sourceXml.SelectSingleNode("@location");
+	        if (singleNode != null)
+		        FileLocation = singleNode.Value;
+	        Uri = null;
+	        var xmlNode = sourceXml.SelectSingleNode("@id");
+	        if (xmlNode != null) Id = new Guid(xmlNode.Value);
+	        TranslationProvidersAllLanguages = GetApplyTemplateOptions(sourceXml, "tpal");
             TranslationProvidersSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tpsl");
             TranslationMemoriesAllLanguages = GetApplyTemplateOptions(sourceXml, "tmal");
             TranslationMemoriesSpecificLanguages = GetApplyTemplateOptions(sourceXml, "tmsl");
@@ -138,20 +142,14 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// </value>
         public string Name
         {
-            get
-            {
-                return _templateName;
-            }
+            get => _templateName;
 
-            set
+	        set
             {
                 if (_templateName != value)
                 {
                     _templateName = value;
-                    if (PropertyChanged != null)
-                    {
-                        PropertyChanged(this, new PropertyChangedEventArgs("Name"));
-                    }
+	                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("Name"));
                 }
             }
         }
@@ -386,17 +384,21 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
         /// <returns>The apply options for this specified attribute</returns>
         private ApplyTemplateOptions GetApplyTemplateOptions(XmlNode xmlNode, string attributeName)
         {
-            ApplyTemplateOptions returnValue = ApplyTemplateOptions.Keep;
+            var returnValue = ApplyTemplateOptions.Keep;
             if (((XmlElement)xmlNode).HasAttribute(attributeName))
             {
-                string attributeValue = xmlNode.SelectSingleNode("@" + attributeName).Value;
-                if (Enum.TryParse(attributeValue, out returnValue))
-                {
-                    if (!Enum.IsDefined(typeof(ApplyTemplateOptions), returnValue) && !returnValue.ToString().Contains(","))
-                    {
-                        returnValue = ApplyTemplateOptions.Keep;
-                    }
-                }
+	            var selectSingleNode = xmlNode.SelectSingleNode("@" + attributeName);
+	            if (selectSingleNode != null)
+	            {
+		            string attributeValue = selectSingleNode.Value;
+		            if (Enum.TryParse(attributeValue, out returnValue))
+		            {
+			            if (!Enum.IsDefined(typeof(ApplyTemplateOptions), returnValue) && !returnValue.ToString().Contains(","))
+			            {
+				            returnValue = ApplyTemplateOptions.Keep;
+			            }
+		            }
+	            }
             }
 
             return returnValue;
