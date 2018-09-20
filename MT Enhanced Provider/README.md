@@ -32,7 +32,7 @@ The plugin will apply these lists to the source text before sending to the machi
 
 The files can be saved with any file extension. They must have the following structure: ![](https://raw.githubusercontent.com/sdl/Sdl-Community/master/EditCollection1.PNG)
 
-The first node is <EditCollection>. It contains a list of <Items>.
+The first node is &lt;EditCollection&gt;. It contains a list of &lt;Items&gt;.
 
 The items list contains EditItem elements, each of which has two attributes Enabled and EditItemType.
 
@@ -40,10 +40,10 @@ The acceptable values for Enabled are true or false. If Enabled is “false” t
 
 The acceptable values for EditItemType are plain_text and regular_expression. You can use regular expression matching/replacement by setting the EditItemType to regular_expression. For simple plain text replacements, it is best to set it to plain_text to avoid unexpected behavior or the need to insert any special regular expression escape characters. The plugin uses .NET regular expressions.
 
-Each EditItem has two elements: <FindText> and <ReplaceText>. They represent the text to find and the replacement text, respectively.
+Each EditItem has two elements: &lt;FindText&gt; and &lt;ReplaceText&gt;. They represent the text to find and the replacement text, respectively.
 
 ## Important: note that there are several special XML characters that will cause problems if you type them directly into the XML file as the values for FindText and ReplaceText. 
-If you need to search and replace things like HTML tags, or any other text containing the < and/or > bracket character, the brackets must be ‘escaped’ with &lt; for <, and &gt; for >. Also, the ampersand character (&) must be escaped with &amp; to avoid problems. Escaping single quotes (&#39;) and double quotes (&quot;) in the text values is not absolutely mandatory, but it is a good idea in order to avoid any unexpected errors. Some XML editor programs will automatically escape these characters for you when saving the file.
+If you need to search and replace things like HTML tags, or any other text containing the < and/or > bracket character, the brackets must be ‘escaped’ with \&lt; for &lt;, and \&gt; for &gt;. Also, the ampersand character (&) must be escaped with &amp; to avoid problems. Escaping single quotes (&#39;) and double quotes (&quot;) in the text values is not absolutely mandatory, but it is a good idea in order to avoid any unexpected errors. Some XML editor programs will automatically escape these characters for you when saving the file.
 
 After the list of EditItems nodes, the other nodes are closed with the corresponding closing tags: </Items> and </EditCollection>.
 
