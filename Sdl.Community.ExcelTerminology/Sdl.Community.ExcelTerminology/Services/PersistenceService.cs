@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Sdl.Community.ExcelTerminology.Model;
 
@@ -22,7 +20,6 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         internal void WriteToFile()
         {
-
             if (!File.Exists(_persistancePath))
             {
                 var directory = Path.GetDirectoryName(_persistancePath);
@@ -52,12 +49,10 @@ namespace Sdl.Community.ExcelTerminology.Services
 
             if (providerSettings.Uri != null)
             {
-
                 var result = _providerSettingList.FirstOrDefault(s => s.Uri == providerSettings.Uri);
 
                 if (result != null)
                 {
-                  
                     result.WorksheetName = providerSettings.WorksheetName;
                     result.Uri = providerSettings.Uri;
                     result.ApprovedColumn = providerSettings.ApprovedColumn;
@@ -69,18 +64,13 @@ namespace Sdl.Community.ExcelTerminology.Services
                     result.TermFilePath = providerSettings.TermFilePath;
                     result.TargetLanguage = providerSettings.TargetLanguage;
                     result.IsReadOnly = providerSettings.IsReadOnly;
-
                 }
-
                 else
                 {
                     _providerSettingList.Add(providerSettings);
                 }
-                
             }
-
             WriteToFile();
-          
         }
 
         public void GetProviderSettingsList()
@@ -91,12 +81,10 @@ namespace Sdl.Community.ExcelTerminology.Services
             {
                 _providerSettingList = JsonConvert.DeserializeObject<List<ProviderSettings>>(json);
             }
-
         }
 
         public ProviderSettings Load(Uri providerUri)
         {
-
             if (providerUri == null)
             {
                 throw new NullReferenceException("Uri cannot be null");

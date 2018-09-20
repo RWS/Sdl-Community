@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.DataContracts;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
@@ -15,152 +10,143 @@ using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology
 {
-    public class TerminologyProviderExcel: AbstractTerminologyProvider
-    {
-        public const string ExcelUriTemplate = "excelglossary://";
+	public class TerminologyProviderExcel : AbstractTerminologyProvider
+	{
+		public const string ExcelUriTemplate = "excelglossary://";
 
-        private List<ExcelEntry> _termEntries;
+		private List<ExcelEntry> _termEntries;
 
-        private readonly ProviderSettings _providerSettings;
+		private readonly ProviderSettings _providerSettings;
 
-        public ProviderSettings ProviderSettings => _providerSettings;
+		public ProviderSettings ProviderSettings => _providerSettings;
 
-        private readonly ITermSearchService _termSearchService;
+		private readonly ITermSearchService _termSearchService;
 
-        public List<ExcelEntry> Terms => _termEntries;
+		public List<ExcelEntry> Terms => _termEntries;
 
-        public event Action<List<ExcelEntry>> TermsLoaded;
-        public override string Name =>
-            Path.GetFileName(_providerSettings.TermFilePath);
-        public override string Description => 
-            PluginResources.ExcelTerminologyProviderDescription;
+		public event Action<List<ExcelEntry>> TermsLoaded;
+		public override string Name =>
+			Path.GetFileName(_providerSettings.TermFilePath);
+		public override string Description =>
+			PluginResources.ExcelTerminologyProviderDescription;
 
-        public override Uri Uri =>
-            new Uri((ExcelUriTemplate +
-                     Path.GetFileName(_providerSettings.TermFilePath))
-                .RemoveUriForbiddenCharacters());
-                
-
-        public override IDefinition Definition => 
-            new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
-
-        public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
-        {
-            if (providerSettings == null) throw new ArgumentNullException(nameof(providerSettings));
-            if (termSearchService == null) throw new ArgumentNullException(nameof(termSearchService));
+		public override Uri Uri =>
+			new Uri((ExcelUriTemplate +
+			         Path.GetFileName(_providerSettings.TermFilePath))
+				.RemoveUriForbiddenCharacters());
 
 
-            _providerSettings = providerSettings; 
-  
-            _termSearchService = termSearchService;
+		public override IDefinition Definition =>
+			new Definition(GetDescriptiveFields(), GetDefinitionLanguages());
 
-            _termEntries = new List<ExcelEntry>();
-        }
+		public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
+		{
+			_providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
 
-        public TerminologyProviderExcel(ProviderSettings providerSettings)
-        {
-            _providerSettings = providerSettings;
-        }
-        public async Task LoadEntries()
-        {
-            try
-            {
-                var parser = new Parser(_providerSettings);
-                var transformerService = new EntryTransformerService(parser);
-                var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
-                var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
+			_termSearchService = termSearchService ?? throw new ArgumentNullException(nameof(termSearchService));
 
-                _termEntries = await excelTermProviderService.LoadEntries();
-              
-                TermsLoaded?.Invoke(_termEntries);
-            }
-            catch (Exception ex)
-            {
-              
-                throw ex;
-            }
-        }
+			_termEntries = new List<ExcelEntry>();
+		}
 
-        public override IList<ILanguage> GetLanguages()
-        {
-            return GetDefinitionLanguages().Cast<ILanguage>().ToList();
-        }
+		public TerminologyProviderExcel(ProviderSettings providerSettings)
+		{
+			_providerSettings = providerSettings;
+		}
+		public async Task LoadEntries()
+		{
+			try
+			{
+				var parser = new Parser(_providerSettings);
+				var transformerService = new EntryTransformerService(parser);
+				var excelTermLoader = new ExcelTermLoaderService(_providerSettings);
+				var excelTermProviderService = new ExcelTermProviderService(excelTermLoader, transformerService);
 
-        public IList<IDescriptiveField> GetDescriptiveFields()
-        {
-            var result = new List<IDescriptiveField>();
+				_termEntries = await excelTermProviderService.LoadEntries();
 
-            var approvedField = new DescriptiveField
-            {
-                Label = "Approved",
-                Level = FieldLevel.TermLevel,
-                Mandatory = false,
-                Multiple = true,
-                PickListValues = new List<string> {"Approved", "Not Approved"},
-                Type = FieldType.String
-            };
-            result.Add(approvedField);
+				TermsLoaded?.Invoke(_termEntries);
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+		}
 
-            return result;
-        }
-        public IList<IDefinitionLanguage> GetDefinitionLanguages()
-        {
-            var result = new List<IDefinitionLanguage>();
+		public override IList<ILanguage> GetLanguages()
+		{
+			return GetDefinitionLanguages().Cast<ILanguage>().ToList();
+		}
 
-            var sourceLanguage = new DefinitionLanguage
-            {
-                IsBidirectional = true,
-                Locale = _providerSettings.SourceLanguage,
-                Name = _providerSettings.SourceLanguage.EnglishName,
-                
-                TargetOnly = false
-            };
+		public IList<IDescriptiveField> GetDescriptiveFields()
+		{
+			var result = new List<IDescriptiveField>();
 
-            result.Add(sourceLanguage);
+			var approvedField = new DescriptiveField
+			{
+				Label = "Approved",
+				Level = FieldLevel.TermLevel,
+				Mandatory = false,
+				Multiple = true,
+				PickListValues = new List<string> { "Approved", "Not Approved" },
+				Type = FieldType.String
+			};
+			result.Add(approvedField);
 
-            var targetLanguage = new DefinitionLanguage
-            {
-                IsBidirectional = true,
-                Locale = _providerSettings.TargetLanguage,
-                Name = _providerSettings.TargetLanguage.EnglishName,
-                TargetOnly = false
-            };
+			return result;
+		}
+		public IList<IDefinitionLanguage> GetDefinitionLanguages()
+		{
+			var result = new List<IDefinitionLanguage>();
 
-            result.Add(targetLanguage);
-            return result;
-        }
+			var sourceLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = _providerSettings.SourceLanguage,
+				Name = _providerSettings.SourceLanguage.EnglishName,
 
-        public override IEntry GetEntry(int id)
-        {
-            return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
-        }
+				TargetOnly = false
+			};
 
-        public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
-        {
-            return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
+			result.Add(sourceLanguage);
 
-        }
+			var targetLanguage = new DefinitionLanguage
+			{
+				IsBidirectional = true,
+				Locale = _providerSettings.TargetLanguage,
+				Name = _providerSettings.TargetLanguage.EnglishName,
+				TargetOnly = false
+			};
 
-        public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
-            int maxResultsCount, SearchMode mode,
-            bool targetRequired)
-        {
+			result.Add(targetLanguage);
+			return result;
+		}
 
-            var results = new List<ISearchResult>();
-            try
-            {
-                results.AddRange(
-                    _termSearchService
-                        .Search(text, _termEntries, maxResultsCount));
-            }
-            catch (Exception ex)
-            {
-               
-                throw ex;
-            }
-            return results;
-        }
+		public override IEntry GetEntry(int id)
+		{
+			return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
+		}
 
-    }
+		public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
+		{
+			return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
+		}
+
+		public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
+			int maxResultsCount, SearchMode mode,
+			bool targetRequired)
+		{
+			var results = new List<ISearchResult>();
+			try
+			{
+				results.AddRange(
+					_termSearchService
+						.Search(text, _termEntries, maxResultsCount));
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			return results;
+		}
+	}
 
 }

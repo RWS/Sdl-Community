@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -30,16 +26,6 @@ namespace Sdl.Community.ExcelTerminology.Services
                     Id = entry.Id, Language = entry.Languages.Cast<ExcelEntryLanguage>().First(lang => lang.IsSource), Score = 100, Text = matchedSearch
                 }).ToList();
 
-
-            //return (from entry in entries
-            //    where Contains(lowerSearchText,entry.SearchText)
-            //    select new SearchResult
-            //    {
-            //        Id = entry.Id,
-            //        Language = entry.Languages.Cast<ExcelEntryLanguage>().First(lang => lang.IsSource),
-            //        Score = 100,
-            //        Text = entry.SearchText
-            //    })
             return results
                 .Take(maxResultsCount)
                 .Cast<ISearchResult>()
@@ -54,8 +40,6 @@ namespace Sdl.Community.ExcelTerminology.Services
             {
                 return searchText;
             }
-
-
             return string.Empty;
         }
     }

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using OfficeOpenXml;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
-using Sdl.Terminology.TerminologyProvider.Core;
-using Sdl.Community.ExcelTerminology.Insights;
 
 namespace Sdl.Community.ExcelTerminology.Services
 {
@@ -18,9 +15,7 @@ namespace Sdl.Community.ExcelTerminology.Services
 
         public ExcelTermLoaderService(ProviderSettings providerSettings)
         {
-            if (providerSettings == null) throw new ArgumentNullException(nameof(providerSettings));
-
-            _providerSettings = providerSettings;
+	        _providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings));
         }
 
         public async Task<Dictionary<int, ExcelTerm>> LoadTerms()
@@ -35,7 +30,6 @@ namespace Sdl.Community.ExcelTerminology.Services
                 }
             }catch(Exception ex)
             {
-                //TelemetryService.Instance.AddException(ex);
                 throw ex;
             }
             return result;

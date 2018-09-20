@@ -1,77 +1,69 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
 
 namespace Sdl.Community.ExcelTerminology
 {
-    [TerminologyProviderWinFormsUI]
-    public class TerminologyProviderWinFormsUIExcel: ITerminologyProviderWinFormsUI
-    {
-        
-        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
-        {
-            return terminologyProviderUri.Scheme == "excelglossary";
-        }
+	[TerminologyProviderWinFormsUI]
+	public class TerminologyProviderWinFormsUIExcel : ITerminologyProviderWinFormsUI
+	{
+		public string TypeName => PluginResources.ExcelTerminologyProviderName;
+		public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
+		public bool SupportsEditing => true;
 
-        public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
-        {
-            var result = new List<ITerminologyProvider>();
-            try
-            {
-               
-                var settingsDialog = new Settings();
-                var dialogResult = settingsDialog.ShowDialog();
+		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+		{
+			return terminologyProviderUri.Scheme == "excelglossary";
+		}
 
-                if (dialogResult == DialogResult.OK ||
-                    dialogResult == DialogResult.Yes)
-                {
-                    var settings = settingsDialog.GetSettings();
+		public ITerminologyProvider[] Browse(IWin32Window owner, ITerminologyProviderCredentialStore credentialStore)
+		{
+			var result = new List<ITerminologyProvider>();
+			try
+			{
+				var settingsDialog = new Settings();
+				var dialogResult = settingsDialog.ShowDialog();
 
-                    var persistenceService = new PersistenceService();
+				if (dialogResult == DialogResult.OK ||
+				    dialogResult == DialogResult.Yes)
+				{
+					var settings = settingsDialog.GetSettings();
 
-                    var provider = new TerminologyProviderExcel(settings);
-                    settings.Uri = provider.Uri;
-                    persistenceService.AddSettings(settings);
-                    var providerSettings = persistenceService.Load(provider.Uri);
-                    var termSearchService = new NormalTermSeachService(providerSettings);
+					var persistenceService = new PersistenceService();
 
-                    var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
+					var provider = new TerminologyProviderExcel(settings);
+					settings.Uri = provider.Uri;
+					persistenceService.AddSettings(settings);
+					var providerSettings = persistenceService.Load(provider.Uri);
+					var termSearchService = new NormalTermSeachService(providerSettings);
 
-                    result.Add(excelProvider);
-                }
-            }
-            catch (Exception ex)
-            {
-                
-                throw ex;
-            }
+					var excelProvider = new TerminologyProviderExcel(providerSettings, termSearchService);
 
-            return result.ToArray();
-        }
+					result.Add(excelProvider);
+				}
+			}
+			catch (Exception ex)
+			{
+				throw ex;
+			}
+			return result.ToArray();
+		}
 
-        public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
-        {
-            return true;
-        }
+		public bool Edit(IWin32Window owner, ITerminologyProvider terminologyProvider)
+		{
+			return true;
+		}
 
-        public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
-        {
-            return new TerminologyProviderDisplayInfo
-            {
-                Name = "Excel",
-                TooltipText = "excel"
-            };
-        }
-
-        public string TypeName => PluginResources.ExcelTerminologyProviderName;
-        public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
-        public bool SupportsEditing => true;
-    }
+		public TerminologyProviderDisplayInfo GetDisplayInfo(Uri terminologyProviderUri)
+		{
+			return new TerminologyProviderDisplayInfo
+			{
+				Name = "Excel",
+				TooltipText = "excel"
+			};
+		}
+	}
 }
