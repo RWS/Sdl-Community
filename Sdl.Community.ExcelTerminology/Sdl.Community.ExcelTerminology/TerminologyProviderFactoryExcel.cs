@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -21,7 +17,7 @@ namespace Sdl.Community.ExcelTerminology
             ITerminologyProviderCredentialStore credentials)
         {
            
-            TerminologyProviderExcel terminologyProvider = null;
+            TerminologyProviderExcel terminologyProvider;
             try
             {
                 var persistenceService = new PersistenceService();
@@ -30,9 +26,7 @@ namespace Sdl.Community.ExcelTerminology
                 //in case we didn't any settings stored there is no need to load the provider
                 if (providerSettings == null)
                 {
-                 
-                    //    new Dictionary<string, string> { { "Uri", terminologyProviderUri.ToString() } });
-                    return terminologyProvider;
+                    return null;
                 }
                 var termSearchService = new NormalTermSeachService(providerSettings);
 
@@ -42,10 +36,8 @@ namespace Sdl.Community.ExcelTerminology
             catch (Exception ex)
             {
                 throw ex;
-                
             }
             return terminologyProvider;
-
         }
     }
 }

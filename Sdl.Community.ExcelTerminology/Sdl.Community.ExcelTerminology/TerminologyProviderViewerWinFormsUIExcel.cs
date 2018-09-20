@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Community.ExcelTerminology.Model;
-using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
 
@@ -17,12 +12,6 @@ namespace Sdl.Community.ExcelTerminology
     public class TerminologyProviderViewerWinFormsUIExcel : ITerminologyProviderViewerWinFormsUI
     {
         private TerminologyProviderExcel _terminologyProvider;
-
-        public TerminologyProviderViewerWinFormsUIExcel()
-        {
-            
-        }
-
         private TermsList _control;
 
         public Control Control
@@ -78,17 +67,12 @@ namespace Sdl.Community.ExcelTerminology
         public void Initialize(ITerminologyProvider terminologyProvider, CultureInfo source, CultureInfo target)
         {
             _terminologyProvider = (TerminologyProviderExcel)terminologyProvider;
-            //if (_control != null)
-            //{
-            //    _control.TerminologyProvider = _terminologyProvider;
-            //}
         }
 
         public void Release()
         {
             _terminologyProvider = null;
         }
-
 
         public bool Initialized => true;
         public IEntry SelectedTerm { get; set; }

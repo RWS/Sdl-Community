@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.ApplicationInsights.DataContracts;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Services.Interfaces;
@@ -46,13 +41,9 @@ namespace Sdl.Community.ExcelTerminology
 
         public TerminologyProviderExcel(ProviderSettings providerSettings, ITermSearchService termSearchService)
         {
-            if (providerSettings == null) throw new ArgumentNullException(nameof(providerSettings));
-            if (termSearchService == null) throw new ArgumentNullException(nameof(termSearchService));
-
-
-            _providerSettings = providerSettings; 
+	        _providerSettings = providerSettings ?? throw new ArgumentNullException(nameof(providerSettings)); 
   
-            _termSearchService = termSearchService;
+            _termSearchService = termSearchService ?? throw new ArgumentNullException(nameof(termSearchService));
 
             _termEntries = new List<ExcelEntry>();
         }
@@ -76,7 +67,6 @@ namespace Sdl.Community.ExcelTerminology
             }
             catch (Exception ex)
             {
-              
                 throw ex;
             }
         }
@@ -138,14 +128,12 @@ namespace Sdl.Community.ExcelTerminology
         public override IEntry GetEntry(int id, IEnumerable<ILanguage> languages)
         {
             return _termEntries.FirstOrDefault(termEntry => termEntry.Id == id);
-
         }
 
         public override IList<ISearchResult> Search(string text, ILanguage source, ILanguage destination,
             int maxResultsCount, SearchMode mode,
             bool targetRequired)
         {
-
             var results = new List<ISearchResult>();
             try
             {
@@ -160,7 +148,6 @@ namespace Sdl.Community.ExcelTerminology
             }
             return results;
         }
-
     }
 
 }

@@ -4,9 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Model;
-using Sdl.Community.ExcelTerminology.Services;
 
 namespace Sdl.Community.ExcelTerminology.Ui
 {
@@ -27,7 +25,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             separatorTextBox.Text = @"|";
             descriptionLbl.Text =
                 @"From this screen you can fill your settings from your excel document.";
-            
 
             var source = GetCultureNames();
             sourceLanguageComboBox.DataSource = source;
@@ -61,7 +58,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             return CultureInfo
                 .GetCultures(CultureTypes.SpecificCultures).OrderBy(culture => culture.DisplayName)
                 .ToList();
-            
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -71,7 +67,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 DialogResult == DialogResult.Abort) return;
             if (string.IsNullOrWhiteSpace(separatorTextBox.Text) || string.IsNullOrWhiteSpace(pathTextBox.Text))
             {
-                MessageBox.Show(@"Please complete all fields", "", MessageBoxButtons.OK);
+                MessageBox.Show(@"Please complete all fields", string.Empty, MessageBoxButtons.OK);
                 e.Cancel = true;
                 return;
             }

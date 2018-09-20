@@ -19,27 +19,24 @@ namespace Sdl.Community.ExcelTerminology.Ui
         private readonly ProviderSettings _providerSettings;
         private readonly EntryTransformerService _transformerService;
         private List<ExcelEntry> _terms = new List<ExcelEntry>();
-        private TerminologyProviderExcel _terminologyProviderExcel;
-        private Uri _uri;
+        private readonly TerminologyProviderExcel _terminologyProviderExcel;
 
-        public TermsList()
+	    public TermsList()
         {
             InitializeComponent();
-
-
         }
 
         public TermsList(TerminologyProviderExcel terminologyProviderExcel) : this()
         {
-            _terminologyProviderExcel = terminologyProviderExcel;
+	        _terminologyProviderExcel = terminologyProviderExcel;
             _terms = _terminologyProviderExcel.Terms;
-            _uri = _terminologyProviderExcel.Uri;
+            var uri = _terminologyProviderExcel.Uri;
 
             var persistenceService = new PersistenceService();
-            _providerSettings = persistenceService.Load(_uri);
+            _providerSettings = persistenceService.Load(uri);
             if (string.IsNullOrEmpty(_providerSettings.ApprovedColumn))
             {
-                this.Approved.Visible = false;
+                Approved.Visible = false;
             }
             var excelTermLoaderService = new ExcelTermLoaderService(_providerSettings);
             var parser = new Parser(_providerSettings);
@@ -60,7 +57,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
         protected override void OnLoad(EventArgs e)
         {
 
-            FastObjectListView.EditorRegistry.Register(typeof (string), typeof (CustomTabTextBox));
+            ObjectListView.EditorRegistry.Register(typeof (string), typeof (CustomTabTextBox));
             sourceListView.ShowGroups = false;
             sourceListView.FullRowSelect = true;
             sourceListView.HeaderStyle = ColumnHeaderStyle.None;
@@ -118,7 +115,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-               
                 throw ex;
             }
 
@@ -128,7 +124,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
         {
             if (_providerSettings.IsReadOnly)
             {
-                MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
+                MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
                 return;
             }
             if (!_providerSettings.IsFileReady())
@@ -145,14 +141,21 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
         private void AddTermInternal(string source, string target)
         {
-            var excelTerm = new ExcelTerm
-            {
-                SourceCulture = _providerSettings.SourceLanguage,
-                TargetCulture = _providerSettings.TargetLanguage,
-                Source = source,
-                Target = target
-            };
-            AddTermInternal(excelTerm);
+	        if (!string.IsNullOrWhiteSpace(target))
+	        {
+		        var excelTerm = new ExcelTerm
+		        {
+			        SourceCulture = _providerSettings.SourceLanguage,
+			        TargetCulture = _providerSettings.TargetLanguage,
+			        Source = source,
+			        Target = target
+		        };
+		        AddTermInternal(excelTerm);
+	        }
+	        else
+	        {
+		        MessageBox.Show(@"Taget selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+	        }
         }
 
         private void AddTermInternal(ExcelTerm excelTerm)
@@ -161,7 +164,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 if (_providerSettings.IsReadOnly)
                 {
-                    MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
+                    MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
                     return;
                 }
                 if (!_providerSettings.IsFileReady())
@@ -189,7 +192,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-               
                 throw ex;
             }
         }
@@ -198,67 +200,71 @@ namespace Sdl.Community.ExcelTerminology.Ui
         {
             try
             {
-                if (_providerSettings.IsReadOnly)
-                {
-                    MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
-                    return;
-                }
-                if (!_providerSettings.IsFileReady())
-                {
-                    MessageBox.Show(
-                        @"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
-                        @"Excel file is used by another process",
-                        MessageBoxButtons.OK);
-                    return;
-                }
-                var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+	            if (!string.IsNullOrEmpty(excelDataGrid?.Term))
+	            {
+		            if (_providerSettings.IsReadOnly)
+		            {
+			            MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
+			            return;
+		            }
+		            if (!_providerSettings.IsFileReady())
+		            {
+			            MessageBox.Show(
+				            @"The excel file configured as a terminology provider appears to be also opened in the Excel application. Please close the file!",
+				            @"Excel file is used by another process",
+				            MessageBoxButtons.OK);
+			            return;
+		            }
+		            var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
+		            var selectedTerm = terms.FirstOrDefault(item => item.Id == entry.Id);
 
-                var selectedTerm = terms.FirstOrDefault(item => item.Id == entry.Id);
+		            var excelTerm = new ExcelTerm
+		            {
+			            SourceCulture = _providerSettings.SourceLanguage,
+			            TargetCulture = _providerSettings.TargetLanguage,
+			            Target = excelDataGrid.Term
+		            };
+		            var source = (ExcelEntry) entry;
+		            source.IsDirty = true;
+		            excelTerm.Source = source.SearchText;
 
+		            var exist = false;
+		            var targetLanguage = selectedTerm?.Languages.Cast<ExcelEntryLanguage>()
+			            .FirstOrDefault(x => !x.IsSource);
 
-                var excelTerm = new ExcelTerm
-                {
-                    SourceCulture = _providerSettings.SourceLanguage,
-                    TargetCulture = _providerSettings.TargetLanguage,
-                    Target = excelDataGrid.Term
-                };
-                var source = (ExcelEntry) entry;
-                source.IsDirty = true;
-                excelTerm.Source = source.SearchText;
+		            if (targetLanguage != null)
+		            {
+			            foreach (var term in targetLanguage.Terms)
+			            {
+				            if (term.Value == excelDataGrid.Term)
+				            {
+					            exist = true;
+				            }
+			            }
 
-                var exist = false;
-                var targetlanguage = selectedTerm?.Languages.Cast<ExcelEntryLanguage>()
-                    .FirstOrDefault(x => !x.IsSource);
+			            if (exist == false)
+			            {
+				            var termToAdd = new EntryTerm
+				            {
+					            Value = excelDataGrid.Term
+				            };
+				            targetLanguage.Terms.Add(termToAdd);
 
-                if (targetlanguage != null)
-                {
-                    foreach (var term in targetlanguage.Terms)
-                    {
-                        if (term.Value == excelDataGrid.Term)
-                        {
-                            exist = true;
-                        }
-                    }
+				            terms[entry.Id].Languages = selectedTerm.Languages;
+			            }
+		            }
 
-                    if (exist == false)
-                    {
-                        var termToAdd = new EntryTerm
-                        {
-                            Value = excelDataGrid.Term
-                        };
-                        targetlanguage.Terms.Add(termToAdd);
-
-                        terms[entry.Id].Languages = selectedTerm.Languages;
-                    }
-                }
-
-                JumpToTerm(entry);
-                Task.Run(Save);
+		            JumpToTerm(entry);
+		            Task.Run(Save);
+	            }
+	            else
+	            {
+					MessageBox.Show(@"Taget selection cannot be empty", string.Empty, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				}
             }
             catch (Exception ex)
             {
-               
-                throw ex;
+               Console.Write(ex);
             }
         }
 
@@ -266,7 +272,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
         {
             if (_providerSettings.IsReadOnly)
             {
-                MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
+                MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
                 return;
             }
             if (!_providerSettings.IsFileReady())
@@ -326,9 +332,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
                 if (entryToUpdate != null)
                 {
-
                     entryToUpdate.Languages = entryLanguage;
-
                 }
                 await _excelTermProviderService.AddOrUpdateEntry(entryId, entry);
                 source.IsDirty = false;
@@ -337,7 +341,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-                
                 throw ex;
             }
         }
@@ -347,9 +350,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             try
             {
                 var rowIndex = e.ItemIndex;
-
                 var terms = sourceListView.Objects.Cast<ExcelEntry>().ToList();
-
 
                 var result = new List<ExcelDataGrid>();
                 if (rowIndex == 0 && terms.Count == 0)
@@ -370,8 +371,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
                             Term = term.Value,
                             Approved = string.Join(string.Empty, term.Fields.Select(x => x.Value))
                         }));
-
-
                     }
                 }
                 bsTarget.DataSource = result;
@@ -379,7 +378,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-             
                 throw ex;
             }
         }
@@ -390,7 +388,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 if (_providerSettings.IsReadOnly)
                 {
-                    MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
+                    MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
                     return;
                 }
                 if (!_providerSettings.IsFileReady())
@@ -427,7 +425,7 @@ namespace Sdl.Community.ExcelTerminology.Ui
             {
                 if (_providerSettings.IsReadOnly)
                 {
-                    MessageBox.Show("Terminology Provider is configured as read only!", "Read Only", MessageBoxButtons.OK);
+                    MessageBox.Show(@"Terminology Provider is configured as read only!", @"Read Only", MessageBoxButtons.OK);
                     return;
                 }
                 if (!_providerSettings.IsFileReady())
@@ -513,20 +511,27 @@ namespace Sdl.Community.ExcelTerminology.Ui
                                 existingTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
                             var newTargetLanguage =
                                 newTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => !x.IsSource);
-                            foreach (
-                                var newTargetTerm in
-                                    newTargetLanguage.Terms.Where(newTargetTerm => !existingTargetLanguage.Terms.Any(
-                                        x =>
-                                            x.Value.Equals(newTargetTerm.Value,
-                                                StringComparison.InvariantCultureIgnoreCase))))
-                            {
-                                existingTargetLanguage.Terms.Add(newTargetTerm);
-                            }
-                            //we want to save in the excel the merge result so we need to override the value to be saved
-                            newTargetLanguage.Terms = existingTargetLanguage.Terms;
-
+	                        if (newTargetLanguage != null)
+	                        {
+		                        foreach (
+			                        var newTargetTerm in
+			                        newTargetLanguage.Terms.Where(newTargetTerm =>
+			                        {
+				                        return existingTargetLanguage != null && !existingTargetLanguage.Terms.Any(
+					                               x =>
+						                               x.Value.Equals(newTargetTerm.Value,
+							                               StringComparison.InvariantCultureIgnoreCase));
+			                        }))
+		                        {
+			                        existingTargetLanguage?.Terms.Add(newTargetTerm);
+		                        }
+		                        //we want to save in the excel the merge result so we need to override the value to be saved
+		                        if (existingTargetLanguage != null)
+		                        {
+			                        newTargetLanguage.Terms = existingTargetLanguage.Terms;
+		                        }
+	                        }
                         }
-
                     }
                     if (!ignoreTerm)
                     {
@@ -540,7 +545,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             }
             catch (Exception ex)
             {
-           
                 throw ex;
             }
         }
@@ -555,7 +559,6 @@ namespace Sdl.Community.ExcelTerminology.Ui
             var termName = e.NewValue as string;
             var entryTerm = e.RowObject as ExcelEntry;
             if (entryTerm == null) return;
-
 
             var sourceEntryTerms = _transformerService.CreateEntryTerms(termName);
             var sourceEntryLanguage = entryTerm.Languages.Cast<ExcelEntryLanguage>().FirstOrDefault(x => x.IsSource);
@@ -591,24 +594,22 @@ namespace Sdl.Community.ExcelTerminology.Ui
 
             var targetTerm = targetEntryLanguage.Terms.FirstOrDefault(
                 x => x.Value.Equals(currentSynonimEntry.Term, StringComparison.InvariantCultureIgnoreCase));
-
-
-
+			
             if (targetTerm == null)
             {
                 targetEntryLanguage.Terms.Clear();
                 var targetSynonims = bsTarget.DataSource as List<ExcelDataGrid>;
-                foreach (var targetSynonim in targetSynonims)
-                {
-                    var targetEntryTerms = _transformerService.CreateEntryTerms(targetSynonim.Term,
-                        targetSynonim.Approved);
-                    foreach (var targetEntryTerm in targetEntryTerms)
-                    {
-                        targetEntryLanguage.Terms.Add(targetEntryTerm);
-
-                    }
-                }
-                excelEntry.IsDirty = true;
+	            if (targetSynonims != null)
+		            foreach (var targetSynonim in targetSynonims)
+		            {
+			            var targetEntryTerms = _transformerService.CreateEntryTerms(targetSynonim.Term,
+				            targetSynonim.Approved);
+			            foreach (var targetEntryTerm in targetEntryTerms)
+			            {
+				            targetEntryLanguage.Terms.Add(targetEntryTerm);
+			            }
+		            }
+	            excelEntry.IsDirty = true;
             }
             else
             {
@@ -625,23 +626,18 @@ namespace Sdl.Community.ExcelTerminology.Ui
                 });
                 excelEntry.IsDirty = true;
             }
-
-
-
-
         }
 
         private void targetGridView_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
             var dataGridViewColumn = targetGridView.Columns["Approved"];
-            if (dataGridViewColumn != null && ((e.ColumnIndex == dataGridViewColumn.Index)
-                                               && e.Value != null))
-            {
-                var cell =
-                    this.targetGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
+	        if (dataGridViewColumn != null && ((e.ColumnIndex == dataGridViewColumn.Index)
+	                                           && e.Value != null))
+	        {
+		        var cell = targetGridView.Rows[e.RowIndex].Cells[e.ColumnIndex];
 
-                cell.ToolTipText = cell.Value.ToString();
-            }
+		        cell.ToolTipText = cell.Value.ToString();
+	        }
         }
 
         private void sourceListView_CellEditStarting(object sender, CellEditEventArgs e)

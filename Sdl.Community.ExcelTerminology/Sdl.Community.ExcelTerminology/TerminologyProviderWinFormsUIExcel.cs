@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Sdl.Community.ExcelTerminology.Insights;
 using Sdl.Community.ExcelTerminology.Services;
 using Sdl.Community.ExcelTerminology.Ui;
 using Sdl.Terminology.TerminologyProvider.Core;
@@ -14,8 +10,11 @@ namespace Sdl.Community.ExcelTerminology
     [TerminologyProviderWinFormsUI]
     public class TerminologyProviderWinFormsUIExcel: ITerminologyProviderWinFormsUI
     {
-        
-        public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
+		public string TypeName => PluginResources.ExcelTerminologyProviderName;
+	    public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
+	    public bool SupportsEditing => true;
+
+		public bool SupportsTerminologyProviderUri(Uri terminologyProviderUri)
         {
             return terminologyProviderUri.Scheme == "excelglossary";
         }
@@ -25,7 +24,6 @@ namespace Sdl.Community.ExcelTerminology
             var result = new List<ITerminologyProvider>();
             try
             {
-               
                 var settingsDialog = new Settings();
                 var dialogResult = settingsDialog.ShowDialog();
 
@@ -49,7 +47,6 @@ namespace Sdl.Community.ExcelTerminology
             }
             catch (Exception ex)
             {
-                
                 throw ex;
             }
 
@@ -69,9 +66,5 @@ namespace Sdl.Community.ExcelTerminology
                 TooltipText = "excel"
             };
         }
-
-        public string TypeName => PluginResources.ExcelTerminologyProviderName;
-        public string TypeDescription => PluginResources.ExcelTerminologyProviderDescription;
-        public bool SupportsEditing => true;
     }
 }
