@@ -16,8 +16,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		{
 			InitializeComponent();
 			//encryptionBox.LostFocus += EncryptionBox_LostFocus;
-			Timer.Tick += EncryptionBox_LostFocus;
-			encryptionBox.TextChanged += (t, e) => StartSearchTimer();
+			Timer.Tick += EncryptionBox_UserStoppedTyping;
+			decryptionBox.TextChanged += (t, e) => StartSearchTimer();
 		}
 
 		private void StartSearchTimer()
@@ -30,8 +30,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 
 		public string EncryptionKey
 		{
-			get => encryptionBox.Text;
-			set => encryptionBox.Text = value;
+			get => decryptionBox.Text;
+			set => decryptionBox.Text = value;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -41,6 +41,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			if (Settings.EncryptionState == State.DefaultState)
 			{
 				Settings.EncryptionState = IsProjectAnonymized() ? State.DataEncrypted : State.Decrypted;
+			}
+
+			if (Settings.EncryptionState.HasFlag(State.Decrypted))
+			{
+				encryptedMessage.Text = "Click finish to untag the text";
+				decryptionBox.Enabled = false;
 			}
 		}
 
@@ -57,7 +63,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 		private void CheckIfKeysMatch()
 		{
 			var anonymizerKey = Settings.SettingsBundle.GetSettingsGroup<AnonymizerSettings>("AnonymizerSettings").EncryptionKey;
-			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(encryptionBox.Text, Constants.Key)))
+			if (!anonymizerKey.Equals(AnonymizeData.EncryptData(decryptionBox.Text, Constants.Key)))
 			{
 				messageLbl.Visible = true;
 				messageLbl.Text = "Decryption key doesn't match the encryption key.";
@@ -65,7 +71,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 		}
 
-		private void EncryptionBox_LostFocus(object sender, EventArgs e)
+		private void EncryptionBox_UserStoppedTyping(object sender, EventArgs e)
 		{
 			messageLbl.Visible = false;
 			CheckIfKeysMatch();

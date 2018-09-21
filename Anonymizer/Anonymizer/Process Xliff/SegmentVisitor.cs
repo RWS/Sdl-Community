@@ -22,6 +22,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			_patterns = patterns;
 			_encryptionKey = encryptionKey;
 		}
+
 		public void ReplaceText(ISegment segment, IDocumentItemFactory factory, IPropertiesFactory propertiesFactory)
 		{
 			_factory = factory;
@@ -44,8 +45,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			}
 			return text;
 		}
-
-		
 
 		private string ProcessMatchData(Match match, RegexPattern pattern, bool isTagContent)
 		{
@@ -107,7 +106,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitPlaceholderTag(IPlaceholderTag tag)
 		{
-			
 		}
 
 		public void VisitText(IText text)
@@ -167,7 +165,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 					}
 				}
 				catch(Exception e) { }
-				
 			}
 		}
 

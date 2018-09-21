@@ -30,6 +30,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 				acceptWindow.ShowDialog();
 			}
 		}
+
 		private void CreateAcceptFile()
 		{
 			if (!Directory.Exists(Constants.AcceptFolderPath))
@@ -46,8 +47,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			};
 			File.WriteAllText(Constants.AcceptFilePath, JsonConvert.SerializeObject(accept));
 		}
-
 	}
+
 	[AutomaticTask("Anonymizer Task",
 				   "Protect Data",
 				   "Protect data during the project, with or without encryption",
@@ -57,6 +58,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 	public class AnonymizerTask : AbstractFileContentProcessingAutomaticTask
 	{
 		private AnonymizerSettings _settings;
+
 		protected override void OnInitializeTask()
 		{
 			_settings = GetSetting<AnonymizerSettings>();
@@ -74,7 +76,8 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			{
 				ProjectBackup.CreateProjectBackup(projectController.CurrentProject.FilePath);
 			}
-			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid,AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key), (_settings.EncryptionState & State.PatternsEncrypted) != 0)));
+			var key = _settings.EncryptionKey == "<dummy-encryption-key>" ? "" : AnonymizeData.DecryptData(_settings.EncryptionKey, Constants.Key);
+			multiFileConverter.AddBilingualProcessor(new BilingualContentHandlerAdapter(new AnonymizerPreProcessor(selectedPatternsFromGrid, key, _settings.EncryptionState.HasFlag(State.PatternsEncrypted))));
 		}
 
 		public override bool OnFileComplete(ProjectFile projectFile, IMultiFileConverter multiFileConverter)
