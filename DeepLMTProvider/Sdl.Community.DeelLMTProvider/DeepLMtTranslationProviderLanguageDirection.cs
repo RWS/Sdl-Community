@@ -108,7 +108,7 @@ namespace Sdl.Community.DeepLMTProvider
 		{
 			if (_deeplConnect == null)
 			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey);
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 			}
 			else
 			{
