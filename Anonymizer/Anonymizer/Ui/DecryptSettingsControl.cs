@@ -10,20 +10,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 {
 	public partial class DecryptSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
-		private Timer Timer { get; } = new Timer() { Interval = 500 };
-
 		public DecryptSettingsControl()
 		{
 			InitializeComponent();
 			//encryptionBox.LostFocus += EncryptionBox_LostFocus;
 			Timer.Tick += EncryptionBox_UserStoppedTyping;
 			decryptionBox.TextChanged += (t, e) => StartSearchTimer();
-		}
-
-		private void StartSearchTimer()
-		{
-			Timer.Stop();
-			Timer.Start();
 		}
 
 		public AnonymizerSettings Settings { get; set; }
@@ -33,6 +25,8 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			get => decryptionBox.Text;
 			set => decryptionBox.Text = value;
 		}
+
+		private Timer Timer { get; } = new Timer() { Interval = 500 };
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -48,6 +42,12 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				encryptedMessage.Text = "Click finish to untag the text";
 				decryptionBox.Enabled = false;
 			}
+		}
+
+		private void StartSearchTimer()
+		{
+			Timer.Stop();
+			Timer.Start();
 		}
 
 		private bool IsProjectAnonymized()

@@ -7,6 +7,32 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private System.Windows.Forms.TableLayoutPanel mainPanel;
+
+		private System.Windows.Forms.DataGridView expressionsGrid;
+
+		private System.Windows.Forms.Button importBtn;
+
+		private System.Windows.Forms.Button exportBtn;
+
+		private System.Windows.Forms.Label encryptionLbl;
+
+		private System.Windows.Forms.TextBox encryptionBox;
+
+		private System.Windows.Forms.TableLayoutPanel descriptionPanel;
+
+		private System.Windows.Forms.Label descriptionLbl;
+
+		private System.Windows.Forms.CheckBox selectAll;
+
+		private System.Windows.Forms.Label encryptedMessage;
+
+		private System.Windows.Forms.PictureBox lockPictureBox;
+
+		private System.Windows.Forms.TableLayoutPanel encryptedPanel;
+
+		private System.Windows.Forms.Panel decryptionPanel;
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
@@ -239,19 +265,5 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.TableLayoutPanel mainPanel;
-		private System.Windows.Forms.DataGridView expressionsGrid;
-		private System.Windows.Forms.Button importBtn;
-		private System.Windows.Forms.Button exportBtn;
-		private System.Windows.Forms.Label encryptionLbl;
-		private System.Windows.Forms.TextBox encryptionBox;
-		private System.Windows.Forms.TableLayoutPanel descriptionPanel;
-		private System.Windows.Forms.Label descriptionLbl;
-		private System.Windows.Forms.CheckBox selectAll;
-		private System.Windows.Forms.Label encryptedMessage;
-		private System.Windows.Forms.PictureBox lockPictureBox;
-		private System.Windows.Forms.TableLayoutPanel encryptedPanel;
-		private System.Windows.Forms.Panel decryptionPanel;
 	}
 }

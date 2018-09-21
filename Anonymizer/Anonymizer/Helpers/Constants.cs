@@ -14,6 +14,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 		public static string Key = @"dGhpc2lzdGhlZW5jb2RlZGt0eQ==";
 
 		public static string AcceptFilePath = Path.Combine(AcceptFolderPath, "accept.json");
+
 		public static BindingList<RegexPattern> GetDefaultRegexPatterns()
 		{
 			return new BindingList<RegexPattern>
@@ -78,14 +79,14 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 				@"Activate the “Enable” checkbox for all rules that should be applied to this project." +
 				Environment.NewLine + @"Activate the “Encrypt” checkbox for all data that should be encrypted using an encryption key." +
 				Environment.NewLine + @"New regular expressions, or plain text, can be added either by typing them into the empty row at the end of the grid, or by importing an Excel file containing the rules or lists of names, addresses etc. " +
-				Environment.NewLine + @"To edit a rule double click on the cell."+
+				Environment.NewLine + @"To edit a rule double click on the cell." +
 				Environment.NewLine + @"To remove a rule select the rows and hit the ‘Delete’ key.  Select all rules with Ctrl+A.";
 		}
 
 		public static string GetKeyDescription()
 		{
 			return @"Add an encryption key" +
-			       Environment.NewLine + @"(Do not forget this or you won’t be able to decrypt the data later)";
+				   Environment.NewLine + @"(Do not forget this or you won’t be able to decrypt the data later)";
 		}
 
 		public static string AcceptDescription()
@@ -95,7 +96,5 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 				Environment.NewLine +
 				@"SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.";
 		}
-
-		
 	}
 }

@@ -13,30 +13,47 @@ namespace Sdl.Community.projectAnonymizer.Ui
 {
 	public partial class AnonymizerSettingsControl : UserControl, ISettingsAware<AnonymizerSettings>
 	{
+		private BindingList<RegexPattern> regexPatterns;
+
 		public AnonymizerSettingsControl()
 		{
 			InitializeComponent();
 		}
 
-		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		public string EncryptionKey
 		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEncrypt = e.IsChecked;
-			}
-			Settings.EncryptAll = e.IsChecked;
-			Settings.RegexPatterns = RegexPatterns;
+			get => encryptionBox.Text;
+			set => encryptionBox.Text = value;
 		}
 
-		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		public bool SelectAll
 		{
-			foreach (var pattern in RegexPatterns)
-			{
-				pattern.ShouldEnable = e.IsChecked;
-			}
-			Settings.EnableAll = e.IsChecked;
-			Settings.RegexPatterns = RegexPatterns;
+			get => selectAll.Checked;
+			set => selectAll.Checked = value;
 		}
+
+		public BindingList<RegexPattern> RegexPatterns
+		{
+			get
+			{
+				expressionsGrid.EndEdit();
+				foreach (var pattern in regexPatterns)
+				{
+					if (string.IsNullOrEmpty(pattern.Id))
+					{
+						pattern.Id = Guid.NewGuid().ToString();
+					}
+				}
+
+				return regexPatterns;
+			}
+			set
+			{
+				regexPatterns = value;
+			}
+		}
+
+		public AnonymizerSettings Settings { get; set; }
 
 		protected override void OnLoad(EventArgs e)
 		{
@@ -93,7 +110,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				HeaderText = @"Description",
 				DataPropertyName = "Description",
 				AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-
 			};
 			expressionsGrid.Columns.Add(description);
 			expressionsGrid.Columns.Add(shouldEncryptColumn);
@@ -117,42 +133,25 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			}
 		}
 
-		public string EncryptionKey
+		private void EncryptHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
 		{
-			get => encryptionBox.Text;
-			set => encryptionBox.Text = value;
-		}
-
-		public bool SelectAll
-		{
-			get => selectAll.Checked;
-			set => selectAll.Checked = value;
-		}
-
-		private BindingList<RegexPattern> regexPatterns;
-
-		public BindingList<RegexPattern> RegexPatterns
-		{
-			get
+			foreach (var pattern in RegexPatterns)
 			{
-				expressionsGrid.EndEdit();
-				foreach (var pattern in regexPatterns)
-				{
-					if (string.IsNullOrEmpty(pattern.Id))
-					{
-						pattern.Id = Guid.NewGuid().ToString();
-					}
-				}
-
-				return regexPatterns;
+				pattern.ShouldEncrypt = e.IsChecked;
 			}
-			set
-			{
-				regexPatterns = value;
-			}
+			Settings.EncryptAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
 		}
 
-		public AnonymizerSettings Settings { get; set; }
+		private void ExportHeaderCell_OnCheckBoxHeaderClick(CheckBoxHeaderCellEventArgs e)
+		{
+			foreach (var pattern in RegexPatterns)
+			{
+				pattern.ShouldEnable = e.IsChecked;
+			}
+			Settings.EnableAll = e.IsChecked;
+			Settings.RegexPatterns = RegexPatterns;
+		}
 
 		private void ReadExistingExpressions()
 		{
@@ -240,7 +239,6 @@ namespace Sdl.Community.projectAnonymizer.Ui
 				var importedExpressions = Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
 				ImportExpressionsInSettings(importedExpressions);
 			}
-
 		}
 
 		private void ImportExpressionsInSettings(List<RegexPattern> expressions)
