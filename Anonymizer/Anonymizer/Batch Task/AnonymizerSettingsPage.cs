@@ -24,17 +24,13 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		public override void Save()
 		{
-			_settings.EncryptionKey = _control.EncryptionKey;
+			_settings.ShouldAnonymize = _settings.EncryptionState.HasFlag(State.Decrypted);
 
-			if ((Settings.EncryptionState & State.Decrypted) != 0)
+			if (IsEncryptionEnabled && (_settings.ShouldAnonymize ?? true))
 			{
-				_settings.ShouldAnonymize = true;
 				EncryptPatterns();
 				_settings.EncryptionState = State.Encrypted;
-			}
-			else
-			{
-				_settings.ShouldAnonymize = false;
+				_settings.EncryptionKey = _control.EncryptionKey;
 			}
 
 			_settings.RegexPatterns = _control.RegexPatterns;
@@ -51,6 +47,21 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			foreach (var regexPattern in _control.RegexPatterns)
 			{
 				regexPattern.Pattern = AnonymizeData.EncryptData(regexPattern.Pattern, _control.EncryptionKey);
+			}
+		}
+
+		private bool IsEncryptionEnabled
+		{
+			get
+			{
+				foreach (var pattern in _control.RegexPatterns)
+				{
+					if (pattern.ShouldEncrypt && pattern.ShouldEnable)
+					{
+						return true;
+					}
+				}
+				return false;
 			}
 		}
 	}
