@@ -8,15 +8,15 @@ using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
-	public class SegmentVisitor: IMarkupDataVisitor
+	public class SegmentVisitor : IMarkupDataVisitor
 	{
-		private IDocumentItemFactory _factory;
-		private IPropertiesFactory _propertiesFactory;
 		private readonly List<RegexPattern> _patterns;
 		private readonly string _encryptionKey;
 		private readonly bool _arePatternsEcrypted;
+		private IDocumentItemFactory _factory;
+		private IPropertiesFactory _propertiesFactory;
 
-		public SegmentVisitor(List<RegexPattern> patterns,string encryptionKey, bool arePatternsEcnrypted)
+		public SegmentVisitor(List<RegexPattern> patterns, string encryptionKey, bool arePatternsEcnrypted)
 		{
 			_arePatternsEcrypted = arePatternsEcnrypted;
 			_patterns = patterns;
@@ -30,7 +30,106 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			VisitChildren(segment);
 		}
 
-		private string Anonymizer(string text,bool isTagContent)
+		public void VisitTagPair(ITagPair tagPair)
+		{
+			if (tagPair.StartTagProperties != null)
+			{
+				tagPair.StartTagProperties.TagContent = Anonymizer(tagPair.StartTagProperties.TagContent, true);
+				tagPair.TagProperties.SetMetaData("Anonymizer", "Anonymizer");
+			}
+			VisitChildren(tagPair);
+		}
+
+		public void VisitPlaceholderTag(IPlaceholderTag tag)
+		{
+		}
+
+		public void VisitText(IText text)
+		{
+			var markUpCollection = new List<IAbstractMarkupData>();
+			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
+			var originalSegmentClone = text.Clone();
+			var count = 0;
+			if (shouldAnonymize)
+			{
+				try
+				{
+					var anonymizedData = GetAnonymizedData(text.Properties.Text);
+
+					GetSubsegmentPi(text, markUpCollection, anonymizedData);
+
+					var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
+					if (abstractMarkupData == null)
+					{
+						abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
+					}
+					if (abstractMarkupData != null)
+					{
+						var elementContainer = abstractMarkupData.Parent;
+
+						foreach (var markupData in markUpCollection)
+						{
+							//that means is a text we don't need to add it
+							if (elementContainer.Contains(markupData))
+							{
+								count++;
+							}
+							else
+							{
+								//in the case we have only PI in the segment
+								//remove the text -> add the anonymized data in the same position
+								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
+								{
+									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
+									{
+										elementContainer.Insert(count, markupData);
+									}
+									else
+									{
+										elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
+										elementContainer.Insert(0, markupData);
+									}
+								}
+								else
+								{
+									elementContainer.Insert(count, markupData);
+								}
+								count++;
+							}
+						}
+					}
+				}
+				catch (Exception e) { }
+			}
+		}
+
+		public void VisitSegment(ISegment segment)
+		{
+			VisitChildren(segment);
+		}
+
+		public void VisitLocationMarker(ILocationMarker location)
+		{
+		}
+
+		public void VisitCommentMarker(ICommentMarker commentMarker)
+		{
+		}
+
+		public void VisitOtherMarker(IOtherMarker marker)
+		{
+			VisitChildren(marker);
+		}
+
+		public void VisitLockedContent(ILockedContent lockedContent)
+		{
+		}
+
+		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
+		{
+		}
+
+		private string Anonymizer(string text, bool isTagContent)
 		{
 			foreach (var pattern in _patterns)
 			{
@@ -94,83 +193,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			return anonymizedData;
 		}
 
-		public void VisitTagPair(ITagPair tagPair)
+		private void GetSubsegmentPi(IText segmentText, List<IAbstractMarkupData> segmentContent, List<AnonymizedData> anonymizedDataList)
 		{
-			if (tagPair.StartTagProperties != null)
-			{
-				tagPair.StartTagProperties.TagContent = Anonymizer(tagPair.StartTagProperties.TagContent,true);
-				tagPair.TagProperties.SetMetaData("Anonymizer", "Anonymizer");
-			}
-			VisitChildren(tagPair);
-		}
-
-		public void VisitPlaceholderTag(IPlaceholderTag tag)
-		{
-		}
-
-		public void VisitText(IText text)
-		{
-			var markUpCollection = new List<IAbstractMarkupData>();
-			var shouldAnonymize = ShouldAnonymize(text.Properties.Text);
-			var originalSegmentClone = text.Clone();
-			var count = 0;
-			if (shouldAnonymize)
-			{
-				try
-				{
-					var anonymizedData = GetAnonymizedData(text.Properties.Text);
-
-					GetSubsegmentPi(text, markUpCollection, anonymizedData);
-
-					var abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(originalSegmentClone));
-					if (abstractMarkupData == null)
-					{
-						abstractMarkupData = text.Parent.AllSubItems.FirstOrDefault(n => n.Equals(text));
-					}
-					if (abstractMarkupData != null)
-					{
-						var elementContainer = abstractMarkupData.Parent;
-
-						foreach (var markupData in markUpCollection)
-						{
-							//that means is a text we don't need to add it
-							if (elementContainer.Contains(markupData))
-							{
-								count++;
-							}
-							else
-							{
-								//in the case we have only PI in the segment
-								//remove the text -> add the anonymized data in the same position
-								if (elementContainer.AllSubItems.ToList().Count.Equals(1))
-								{
-									if (elementContainer.AllSubItems.ToList().ElementAtOrDefault(count) == null)
-									{
-										elementContainer.Insert(count, markupData);
-									}
-									else {
-										elementContainer.AllSubItems.ToList()[0].RemoveFromParent();
-										elementContainer.Insert(0, markupData);
-									}
-
-									
-								}
-								else
-								{
-									elementContainer.Insert(count, markupData);
-								}
-								count++;
-							}
-						}
-					}
-				}
-				catch(Exception e) { }
-			}
-		}
-
-		private void GetSubsegmentPi(IText segmentText,List<IAbstractMarkupData> segmentContent, List<AnonymizedData> anonymizedDataList)
-		{
-				//this means we have PI data + text
+			//this means we have PI data + text
 			if (segmentText.Properties.Text.Length > anonymizedDataList[0].MatchText.Length)
 			{
 				//check if PI data is on first position split the segment after the PI
@@ -232,32 +257,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 				tag.Properties.SetMetaData("Anonymizer", "Anonymizer");
 				segmentContent.Add(tag);
 			}
-		}
-
-		public void VisitSegment(ISegment segment)
-		{
-			VisitChildren(segment);
-		}
-
-		public void VisitLocationMarker(ILocationMarker location)
-		{
-		}
-
-		public void VisitCommentMarker(ICommentMarker commentMarker)
-		{
-		}
-
-		public void VisitOtherMarker(IOtherMarker marker)
-		{
-			VisitChildren(marker);
-		}
-
-		public void VisitLockedContent(ILockedContent lockedContent)
-		{
-		}
-
-		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
-		{
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)

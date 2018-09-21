@@ -6,9 +6,9 @@ using Sdl.Community.projectAnonymizer.Models;
 
 namespace Sdl.Community.projectAnonymizer.Helpers
 {
-	public static  class Expressions
+	public static class Expressions
 	{
-		public  static void ExportExporessions(string  filePath,List<RegexPattern> patterns)
+		public static void ExportExporessions(string filePath, List<RegexPattern> patterns)
 		{
 			var package = GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
@@ -23,13 +23,6 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 				}
 			}
 			package.Save();
-		}
-
-		private static ExcelPackage GetExcelPackage(string filePath)
-		{
-			var fileInfo = new FileInfo(filePath);
-			var excelPackage = new ExcelPackage(fileInfo);
-			return excelPackage;
 		}
 
 		public static List<RegexPattern> GetImportedExpressions(List<string> files)
@@ -48,7 +41,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 						Id = Guid.NewGuid().ToString(),
 						ShouldEnable = true,
 						Description = string.Empty,
-						Pattern =  string.Empty
+						Pattern = string.Empty
 					};
 					for (var j = workSheet.Dimension.Start.Column;
 						j <= workSheet.Dimension.End.Column;
@@ -70,6 +63,13 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 				}
 			}
 			return patterns;
+		}
+
+		private static ExcelPackage GetExcelPackage(string filePath)
+		{
+			var fileInfo = new FileInfo(filePath);
+			var excelPackage = new ExcelPackage(fileInfo);
+			return excelPackage;
 		}
 	}
 }

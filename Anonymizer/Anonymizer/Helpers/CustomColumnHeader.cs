@@ -1,25 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 
 namespace Sdl.Community.projectAnonymizer.Helpers
 {
 	public delegate void CheckBoxHeaderClickHandler(CheckBoxHeaderCellEventArgs e);
+
 	public class CustomColumnHeader : DataGridViewColumnHeaderCell
 	{
-		Size checkboxsize;
 		public bool IsChecked;
-		 Point location;
-		Point cellboundsLocation;
 		public CheckBoxState state = CheckBoxState.UncheckedNormal;
-
-		public event CheckBoxHeaderClickHandler OnCheckBoxHeaderClick;
-
+		private Size checkboxsize;
+		private Point location;
+		private Point cellboundsLocation;
 		public CustomColumnHeader()
 		{
 			location = new Point();
@@ -27,6 +20,7 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			IsChecked = false;
 		}
 
+		public event CheckBoxHeaderClickHandler OnCheckBoxHeaderClick;
 		protected override void OnMouseClick(DataGridViewCellMouseEventArgs e)
 		{
 			/* Make a condition to check whether the click is fired inside a checkbox region */
@@ -49,7 +43,6 @@ namespace Sdl.Community.projectAnonymizer.Helpers
 			DataGridViewCellStyle cellStyle, DataGridViewAdvancedBorderStyle
 				advancedBorderStyle, DataGridViewPaintParts paintParts)
 		{
-
 			base.Paint(graphics, clipBounds, cellBounds, rowIndex, dataGridViewElementState,
 				value, formattedValue, errorText, cellStyle, advancedBorderStyle, paintParts);
 

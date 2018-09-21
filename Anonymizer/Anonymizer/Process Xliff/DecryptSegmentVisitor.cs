@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Wordprocessing;
 using Sdl.Community.projectAnonymizer.Batch_Task;
 using Sdl.Community.projectAnonymizer.Helpers;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
@@ -11,9 +10,9 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 {
 	public class DecryptSegmentVisitor : IMarkupDataVisitor
 	{
+		private readonly AnonymizerSettings _decryptSettings;
 		private IDocumentItemFactory _factory;
 		private IPropertiesFactory _propertiesFactory;
-		private readonly AnonymizerSettings _decryptSettings;
 
 		public DecryptSegmentVisitor(AnonymizerSettings decryptSettings)
 		{
@@ -27,34 +26,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			VisitChildren(segment);
 		}
 
-		private string Decrypt(string text)
-		{
-			var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
-			var result = regex.Replace(text, Process);
-			return result;
-		}
-
-		private string Process(Match match)
-		{
-			if (match.Success)
-			{
-				if (match.ToString().Contains("{") && match.ToString().Contains("}"))
-				{
-					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
-					try
-					{
-						var decryptedText = DecryptText(encryptedText);
-						return decryptedText;
-					}
-					catch (Exception e)
-					{
-						return encryptedText;
-					}
-				}
-			}
-			return match.ToString();
-		}
-
 		//tag pair comes as text with '{ }' symbol we need to match the text and remove the symbols
 		public void VisitTagPair(ITagPair tagPair)
 		{
@@ -62,8 +33,8 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			{
 				if (tagPair.StartTagProperties.MetaDataContainsKey("Anonymizer"))
 				{
-						var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
-						tagPair.StartTagProperties.TagContent = decryptedText;
+					var decryptedText = Decrypt(tagPair.StartTagProperties.TagContent);
+					tagPair.StartTagProperties.TagContent = decryptedText;
 				}
 			}
 			VisitChildren(tagPair);
@@ -99,19 +70,8 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			}
 		}
 
-		private void InsertTextBack(IAbstractMarkupData abstractMarkupData, IPlaceholderTag tag)
-		{
-			var elementContainer = abstractMarkupData.Parent;
-			var untagedText = _factory.CreateText(
-				_propertiesFactory.CreateTextProperties(tag.Properties.TagContent));
-			elementContainer.Insert(tag.IndexInParent, untagedText);
-
-			elementContainer.RemoveAt(tag.IndexInParent);
-		}
-
 		public void VisitText(IText text)
 		{
-
 		}
 
 		public void VisitSegment(ISegment segment)
@@ -121,12 +81,10 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLocationMarker(ILocationMarker location)
 		{
-
 		}
 
 		public void VisitCommentMarker(ICommentMarker commentMarker)
 		{
-
 		}
 
 		public void VisitOtherMarker(IOtherMarker marker)
@@ -136,12 +94,48 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 
 		public void VisitLockedContent(ILockedContent lockedContent)
 		{
-
 		}
 
 		public void VisitRevisionMarker(IRevisionMarker revisionMarker)
 		{
+		}
 
+		private string Decrypt(string text)
+		{
+			var regex = new Regex("{.*?}", RegexOptions.IgnoreCase);
+			var result = regex.Replace(text, Process);
+			return result;
+		}
+
+		private string Process(Match match)
+		{
+			if (match.Success)
+			{
+				if (match.ToString().Contains("{") && match.ToString().Contains("}"))
+				{
+					var encryptedText = match.ToString().Substring(1, match.ToString().Length - 2);
+					try
+					{
+						var decryptedText = DecryptText(encryptedText);
+						return decryptedText;
+					}
+					catch (Exception e)
+					{
+						return encryptedText;
+					}
+				}
+			}
+			return match.ToString();
+		}
+
+		private void InsertTextBack(IAbstractMarkupData abstractMarkupData, IPlaceholderTag tag)
+		{
+			var elementContainer = abstractMarkupData.Parent;
+			var untagedText = _factory.CreateText(
+				_propertiesFactory.CreateTextProperties(tag.Properties.TagContent));
+			elementContainer.Insert(tag.IndexInParent, untagedText);
+
+			elementContainer.RemoveAt(tag.IndexInParent);
 		}
 
 		private void VisitChildren(IAbstractMarkupDataContainer container)
@@ -160,7 +154,7 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 			var encryptedKey = _decryptSettings.EncryptionKey;
 			var decryptedKey = AnonymizeData.DecryptData(encryptedKey, Constants.Key);
 
-			var key = isOldVersion  ? encryptedKey : decryptedKey;
+			var key = isOldVersion ? encryptedKey : decryptedKey;
 
 			_decryptSettings.IsOldVersion = false;
 			return AnonymizeData.DecryptData(encryptedText, key);
