@@ -10,7 +10,6 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 	public class AnonymizerSettings : SettingsGroup, IAnonymizerSettings
 	{
 		private BindingList<RegexPattern> _regexPatterns = new BindingList<RegexPattern>();
-		private readonly bool _defaultListAlreadyAdded = false;
 
 		public bool? IsOldVersion
 		{
@@ -45,7 +44,6 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		public string EncryptionKey
 		{
-			//get => GetSetting<string>(AnonymizeData.EncryptData(nameof(EncryptionKey), Constants.Key));
 			get => GetSetting<string>(nameof(EncryptionKey));
 			set => GetSetting<string>(nameof(EncryptionKey)).Value = AnonymizeData.EncryptData(value, Constants.Key);
 		}

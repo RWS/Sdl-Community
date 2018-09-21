@@ -14,12 +14,12 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		private DecryptSettingsControl _control;
 		public override object GetControl()
 		{
-			//_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<DecryptSettings>();
 			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
 
 			_control = base.GetControl() as DecryptSettingsControl;
 			return _control;
 		}
+
 		public override bool ValidateInput()
 		{
 			return AgreementMethods.UserAgreed();
@@ -27,16 +27,15 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		public override void Save()
 		{
-			if (_settings.EncryptionKey != AnonymizeData.EncryptData(_control.EncryptionKey, Constants.Key))
+			if (_settings.EncryptionKey != AnonymizeData.EncryptData(_control.EncryptionKey, Constants.Key) && !_settings.EncryptionState.HasFlag(State.Decrypted))
 			{
 				_settings.ShouldDeanonymize = false;
 				return;
 			}
-
-			_settings.IsOldVersion = ((_settings.EncryptionState & State.PatternsEncrypted) == 0) && ((_settings.EncryptionState & State.DataEncrypted) != 0);
+			_settings.IsOldVersion = !_settings.EncryptionState.HasFlag(State.PatternsEncrypted) && _settings.EncryptionState.HasFlag(State.DataEncrypted);
 			DecryptPatterns();
 
-			_settings.ShouldDeanonymize = (_settings.EncryptionState & State.DataEncrypted) != 0;
+			_settings.ShouldDeanonymize = _settings.EncryptionState.HasFlag(State.DataEncrypted & State.Decrypted);
 			_settings.EncryptionState = State.Decrypted;
 			_settings.EncryptionKey = _control.EncryptionKey;
 		}
