@@ -7,6 +7,14 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private System.Windows.Forms.TableLayoutPanel mainPanel;
+
+		private System.Windows.Forms.Label descriptionLabel;
+
+		private System.Windows.Forms.CheckBox acceptBox;
+
+		private System.Windows.Forms.Button acceptBtn;
+
 		/// <summary>
 		/// Clean up any resources being used.
 		/// </summary>
@@ -107,10 +115,5 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.TableLayoutPanel mainPanel;
-		private System.Windows.Forms.Label descriptionLabel;
-		private System.Windows.Forms.CheckBox acceptBox;
-		private System.Windows.Forms.Button acceptBtn;
 	}
 }

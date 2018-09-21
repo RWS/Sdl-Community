@@ -8,10 +8,11 @@ using Sdl.Desktop.IntegrationApi;
 
 namespace Sdl.Community.projectAnonymizer.Batch_Task
 {
-	public class DecryptSettingsPage: DefaultSettingsPage<DecryptSettingsControl,AnonymizerSettings>
+	public class DecryptSettingsPage : DefaultSettingsPage<DecryptSettingsControl, AnonymizerSettings>
 	{
 		private AnonymizerSettings _settings;
 		private DecryptSettingsControl _control;
+
 		public override object GetControl()
 		{
 			_settings = ((ISettingsBundle)DataSource).GetSettingsGroup<AnonymizerSettings>();
