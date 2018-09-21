@@ -71,6 +71,13 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 			get => GetSetting<bool>(nameof(EncryptAll));
 			set => GetSetting<bool>(nameof(EncryptAll)).Value = value;
 		}
+
+		public bool IgnoreEncrypted
+		{
+			get => GetSetting<bool>(nameof(IgnoreEncrypted));
+			set => GetSetting<bool>(nameof(IgnoreEncrypted)).Value = value;
+		}
+
 		//Initialize settings with default regex list
 		public void AddPattern(RegexPattern pattern)
 		{
@@ -86,19 +93,13 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 		{
 			return EncryptionKey;
 		}
-
-		public bool IgnoreEncrypted
-		{
-			get => GetSetting<bool>(nameof(IgnoreEncrypted));
-			set => GetSetting<bool>(nameof(IgnoreEncrypted)).Value = value;
-		}
-
 		protected override object GetDefaultValue(string settingId)
 		{
 			switch (settingId)
 			{
 				case nameof(RegexPatterns):
 					return _regexPatterns;
+
 				case nameof(EncryptionKey):
 					return "<dummy-encryption-key>";
 			}

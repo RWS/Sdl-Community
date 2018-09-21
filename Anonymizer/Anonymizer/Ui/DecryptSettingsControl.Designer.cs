@@ -7,6 +7,18 @@
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 
+		private System.Windows.Forms.TableLayoutPanel decryptPanel;
+
+		private System.Windows.Forms.PictureBox lockPictureBox;
+
+		private System.Windows.Forms.Label encryptedMessage;
+
+		private System.Windows.Forms.Panel decryptionPanel;
+
+		private System.Windows.Forms.TextBox decryptionBox;
+
+		private System.Windows.Forms.Label messageLbl;
+
 		/// <summary> 
 		/// Clean up any resources being used.
 		/// </summary>
@@ -142,12 +154,5 @@
 		}
 
 		#endregion
-
-		private System.Windows.Forms.TableLayoutPanel decryptPanel;
-		private System.Windows.Forms.PictureBox lockPictureBox;
-		private System.Windows.Forms.Label encryptedMessage;
-		private System.Windows.Forms.Panel decryptionPanel;
-		private System.Windows.Forms.TextBox decryptionBox;
-		private System.Windows.Forms.Label messageLbl;
 	}
 }

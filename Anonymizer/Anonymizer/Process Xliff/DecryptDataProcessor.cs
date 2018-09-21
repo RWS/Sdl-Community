@@ -7,10 +7,12 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 	public class DecryptDataProcessor : AbstractBilingualContentProcessor
 	{
 		private readonly AnonymizerSettings _decryptSettings;
+
 		public DecryptDataProcessor(AnonymizerSettings decryptSettings)
 		{
 			_decryptSettings = decryptSettings;
 		}
+
 		public override void ProcessParagraphUnit(IParagraphUnit paragraphUnit)
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
