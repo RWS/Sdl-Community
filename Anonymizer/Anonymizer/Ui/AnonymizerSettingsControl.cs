@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.projectAnonymizer.Batch_Task;
@@ -131,101 +129,57 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			set => selectAll.Checked = value;
 		}
 
-		public BindingList<RegexPattern> RegexPatterns { get; set; }
+		private BindingList<RegexPattern> regexPatterns;
+
+		public BindingList<RegexPattern> RegexPatterns
+		{
+			get
+			{
+				expressionsGrid.EndEdit();
+				foreach (var pattern in regexPatterns)
+				{
+					if (string.IsNullOrEmpty(pattern.Id))
+					{
+						pattern.Id = Guid.NewGuid().ToString();
+					}
+				}
+
+				return regexPatterns;
+			}
+			set
+			{
+				regexPatterns = value;
+			}
+		}
+
 		public AnonymizerSettings Settings { get; set; }
 
 		private void ReadExistingExpressions()
 		{
-			if (!Settings.DefaultListAlreadyAdded)
+			if (Settings.DefaultListAlreadyAdded || Settings.RegexPatterns.Count > 0)
+				return;
+
+			Settings.RegexPatterns.Clear();
+			var patterns = Constants.GetDefaultRegexPatterns();
+			foreach (var pattern in patterns)
 			{
-				RegexPatterns = Constants.GetDefaultRegexPatterns();
-				foreach (var pattern in RegexPatterns)
-				{
-					Settings.AddPattern(pattern);
-				}
-				Settings.DefaultListAlreadyAdded = true;
+				Settings.AddPattern(pattern);
 			}
+			Settings.DefaultListAlreadyAdded = true;
 		}
 
 		private void SetSettings(AnonymizerSettings settings)
 		{
 			Settings = settings;
-			RegexPatterns= Settings.RegexPatterns;
+			RegexPatterns = Settings.RegexPatterns;
 			var key = Settings.GetSetting<string>(nameof(Settings.EncryptionKey)).Value;
 			key = key == "<dummy-encryption-key>" ? "" : key;
 			if (!string.IsNullOrEmpty(key))
 			{
 				encryptionBox.Text = AnonymizeData.DecryptData(key, Constants.Key);
 			}
-			SettingsBinder.DataBindSetting<bool>(selectAll, "Checked", Settings, nameof(Settings.SelectAll));
-			SettingsBinder.DataBindSetting<BindingList<RegexPattern>>(expressionsGrid, "DataSource", Settings,
-				nameof(Settings.RegexPatterns));
-			expressionsGrid.DataSource = RegexPatterns;
-		}
 
-		private void expressionsGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-		{
-			if (e.RowIndex.Equals(RegexPatterns.Count))
-			{
-				var row = expressionsGrid.Rows[e.RowIndex];
-				var newExpression = new RegexPattern
-				{
-					Id = Guid.NewGuid().ToString(),
-					ShouldEncrypt = (bool)row.Cells[3].Value,
-					ShouldEnable = (bool)row.Cells[0].Value
-				};
-				if (row.Cells[1].Value != null)
-				{
-					var pattern = (string) row.Cells[1].Value;
-					newExpression.Pattern = pattern;
-				}
-				if (row.Cells[2].Value != null)
-				{
-					var description = (string)row.Cells[2].Value;
-					newExpression.Description = description;
-				}
-				if (newExpression.Pattern != null)
-				{
-					RegexPatterns.Add(newExpression);
-				}
-			}
-			else
-			{
-				if (e.RowIndex < RegexPatterns.Count)
-				{
-					var selectedPattern = RegexPatterns[e.RowIndex];
-					if (expressionsGrid?.CurrentCell.Value != null)
-					{
-						var currentCellValue = expressionsGrid.CurrentCell.Value;
-						//Enable column
-						if (e.ColumnIndex.Equals(0))
-						{
-							selectedPattern.ShouldEnable = (bool) currentCellValue;
-						}
-						//Regex pattern column
-						if (e.ColumnIndex.Equals(1))
-						{
-							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
-							{
-								selectedPattern.Pattern = currentCellValue.ToString();
-							}
-						}
-						//Description column
-						if (e.ColumnIndex.Equals(2))
-						{
-							if (!string.IsNullOrEmpty(currentCellValue.ToString()))
-							{
-								selectedPattern.Description = currentCellValue.ToString();
-							}
-						}
-						//Encrypt column
-						if (e.ColumnIndex.Equals(3))
-						{
-							selectedPattern.ShouldEncrypt = (bool) currentCellValue;
-						}
-					}
-				}
-			}
+			expressionsGrid.DataSource = RegexPatterns;
 		}
 
 		private void selectAll_CheckedChanged(object sender, EventArgs e)
@@ -261,12 +215,11 @@ namespace Sdl.Community.projectAnonymizer.Ui
 					}
 					Expressions.ExportExporessions(fileDialog.FileName, selectedExpressions);
 					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
 				}
 			}
 			else
 			{
-				 MessageBox.Show(@"Please select at least one row to export","",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -284,7 +237,7 @@ namespace Sdl.Community.projectAnonymizer.Ui
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedExpressions =Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
+				var importedExpressions = Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
 				ImportExpressionsInSettings(importedExpressions);
 			}
 

@@ -80,7 +80,6 @@
 			this.expressionsGrid.Name = "expressionsGrid";
 			this.expressionsGrid.Size = new System.Drawing.Size(823, 186);
 			this.expressionsGrid.TabIndex = 1;
-			this.expressionsGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.expressionsGrid_CellValueChanged);
 			this.expressionsGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.expressionsGrid_KeyDown);
 			// 
 			// importBtn

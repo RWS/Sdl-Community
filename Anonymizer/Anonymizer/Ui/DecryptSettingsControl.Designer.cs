@@ -31,7 +31,7 @@
 			this.decryptPanel = new System.Windows.Forms.TableLayoutPanel();
 			this.messageLbl = new System.Windows.Forms.Label();
 			this.decryptionPanel = new System.Windows.Forms.Panel();
-			this.encryptionBox = new System.Windows.Forms.TextBox();
+			this.decryptionBox = new System.Windows.Forms.TextBox();
 			this.encryptedMessage = new System.Windows.Forms.Label();
 			this.lockPictureBox = new System.Windows.Forms.PictureBox();
 			this.decryptPanel.SuspendLayout();
@@ -84,21 +84,21 @@
 			// decryptionPanel
 			// 
 			this.decryptionPanel.Anchor = System.Windows.Forms.AnchorStyles.Top;
-			this.decryptionPanel.Controls.Add(this.encryptionBox);
+			this.decryptionPanel.Controls.Add(this.decryptionBox);
 			this.decryptionPanel.Location = new System.Drawing.Point(187, 208);
 			this.decryptionPanel.Name = "decryptionPanel";
 			this.decryptionPanel.Size = new System.Drawing.Size(342, 32);
 			this.decryptionPanel.TabIndex = 11;
 			// 
-			// encryptionBox
+			// decryptionBox
 			// 
-			this.encryptionBox.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.encryptionBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.encryptionBox.Location = new System.Drawing.Point(0, 0);
-			this.encryptionBox.Name = "encryptionBox";
-			this.encryptionBox.PasswordChar = '*';
-			this.encryptionBox.Size = new System.Drawing.Size(342, 29);
-			this.encryptionBox.TabIndex = 0;
+			this.decryptionBox.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.decryptionBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.decryptionBox.Location = new System.Drawing.Point(0, 0);
+			this.decryptionBox.Name = "decryptionBox";
+			this.decryptionBox.PasswordChar = '*';
+			this.decryptionBox.Size = new System.Drawing.Size(342, 29);
+			this.decryptionBox.TabIndex = 0;
 			// 
 			// encryptedMessage
 			// 
@@ -107,11 +107,11 @@
 			this.encryptedMessage.AutoSize = true;
 			this.encryptedMessage.CausesValidation = false;
 			this.encryptedMessage.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.encryptedMessage.Location = new System.Drawing.Point(266, 166);
+			this.encryptedMessage.Location = new System.Drawing.Point(250, 166);
 			this.encryptedMessage.Name = "encryptedMessage";
-			this.encryptedMessage.Size = new System.Drawing.Size(184, 25);
+			this.encryptedMessage.Size = new System.Drawing.Size(216, 25);
 			this.encryptedMessage.TabIndex = 10;
-			this.encryptedMessage.Text = "Enter encryption key";
+			this.encryptedMessage.Text = "Enter the encryption key";
 			this.encryptedMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// lockPictureBox
@@ -147,7 +147,7 @@
 		private System.Windows.Forms.PictureBox lockPictureBox;
 		private System.Windows.Forms.Label encryptedMessage;
 		private System.Windows.Forms.Panel decryptionPanel;
-		private System.Windows.Forms.TextBox encryptionBox;
+		private System.Windows.Forms.TextBox decryptionBox;
 		private System.Windows.Forms.Label messageLbl;
 	}
 }

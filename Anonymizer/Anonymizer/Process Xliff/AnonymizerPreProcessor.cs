@@ -21,7 +21,6 @@ namespace Sdl.Community.projectAnonymizer.Process_Xliff
 		{
 			base.ProcessParagraphUnit(paragraphUnit);
 			if (paragraphUnit.IsStructure) { return; }
-			
 			foreach (var segmentPair in paragraphUnit.SegmentPairs.ToList())
 			{
 				var segmentVisitor = new SegmentVisitor(_patterns,_encryptionKey, _arePatternsEncrypted);
