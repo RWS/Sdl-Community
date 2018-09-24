@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Sdl.FileTypeSupport.Framework.BilingualApi;
-using Sdl.FileTypeSupport.Framework.NativeApi;
 
 namespace ExportToExcel
 {
@@ -26,31 +25,13 @@ namespace ExportToExcel
             set;
         }
 
-        public List<string> Comments
-        {
-            get
-            {
-                return _comments;
-            }
-        }
+        public List<string> Comments => _comments;
 
-        public StringBuilder PlainText
-        {
-            get
-            {
-                return _plainText;
-            }
-        }
+	    public StringBuilder PlainText => _plainText;
 
-        public List<Token> Tokens
-        {
-            get
-            {
-                return _tokens;
-            }
-        }
+	    public List<Token> Tokens => _tokens;
 
-        public void Process(ISegment segment)
+	    public void Process(ISegment segment)
         {
             _plainText = new StringBuilder();
             _comments.Clear();
@@ -70,7 +51,7 @@ namespace ExportToExcel
             }
         }
 
-        private string RemoveTags(string input)
+        private static string RemoveTags(string input)
         {
             return Regex.Replace(input, @"</?[a-z][a-z0-9]*[^<>]*>", "");
         }
@@ -112,9 +93,9 @@ namespace ExportToExcel
         {
             if (Settings.ExtractComments)
             {
-                for (int i = 0; i < commentMarker.Comments.Count; i++)
+                for (var i = 0; i < commentMarker.Comments.Count; i++)
                 {
-                    IComment comment = commentMarker.Comments.GetItem(i);
+                    var comment = commentMarker.Comments.GetItem(i);
                     var startComment = new Token(comment.Text, Token.TokenType.CommentStart)
                     {
                         Author = comment.Author,
@@ -125,7 +106,9 @@ namespace ExportToExcel
                     Comments.Add("[" + comment.Author + " " + comment.Date + "] " + comment.Text);
                 }
             }
+
             VisitChildren(commentMarker);
+
             if (Settings.ExtractComments)
             {
                 for (var i = 0; i < commentMarker.Comments.Count; i++)
@@ -160,10 +143,15 @@ namespace ExportToExcel
 
         public void VisitRevisionMarker(IRevisionMarker revisionMarker)
         {
-            var revisionMarkerTokenStart = new Token(Token.TokenType.RevisionMarker);
-            revisionMarkerTokenStart.Author = revisionMarker.Properties.Author;
-            if (revisionMarker.Properties.Date != null)
-                revisionMarkerTokenStart.Date = (DateTime)revisionMarker.Properties.Date;
+	        var revisionMarkerTokenStart = new Token(Token.TokenType.RevisionMarker)
+	        {
+		        Author = revisionMarker.Properties.Author
+	        };
+
+	        if (revisionMarker.Properties.Date != null)
+	        {
+		        revisionMarkerTokenStart.Date = (DateTime)revisionMarker.Properties.Date;
+	        }
 
             switch (revisionMarker.Properties.RevisionType)
             {

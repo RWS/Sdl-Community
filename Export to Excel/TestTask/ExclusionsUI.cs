@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace ExportToExcel
 {
@@ -28,9 +27,8 @@ namespace ExportToExcel
         private void Cbl_ExcludedStatuses_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             var chkList = sender as CheckedListBox;
-            var segmentStatus = chkList?.Items[e.Index] as SegmentStatus;
 
-            if (segmentStatus != null)
+	        if (chkList?.Items[e.Index] is SegmentStatus segmentStatus)
 			{
 				_settings.SetSegmentStatus(segmentStatus.Status, e.NewValue == CheckState.Checked);
 			}
@@ -58,7 +56,7 @@ namespace ExportToExcel
                 nameof(_settings.DontExportFuzzy));
             SettingsBinder.DataBindSetting<bool>(cb_DontExportNoMatch, "Checked", _settings,
                 nameof(_settings.DontExportNoMatch));
-            UpdateUI(settings);
+            UpdateUi(settings);
         }
 
  
@@ -66,7 +64,7 @@ namespace ExportToExcel
         /// Updates the Ui after user set the changes
         /// </summary>
         /// <param name="settings"></param>
-        public void UpdateUI(GeneratorSettings settings)
+        public void UpdateUi(GeneratorSettings settings)
         {
             _settings = settings;
             switch (_settings.ExcludeExportType)
