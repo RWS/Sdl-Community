@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -13,7 +12,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public static class CustomFieldsHandler
 	{
-		private static  List<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		private static  IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
 		{
 			var multipleStringValues = new List<string>();
 			var trimStart = fieldValue.TrimStart('(');
@@ -330,7 +329,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedIntFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		private static void UpdateFileBasedIntFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(details.Value))

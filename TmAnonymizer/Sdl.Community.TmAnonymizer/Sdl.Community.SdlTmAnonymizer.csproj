@@ -92,7 +92,7 @@
     </Reference>
     <Reference Include="Sdl.MultiTerm.Client.Api, Version=14.0.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\SDL\SDL Trados Studio\Studio5\Sdl.MultiTerm.Client.Api.dll</HintPath>
+      <HintPath>$(ProgramFiles)\SDL\SDL Trados Studio\Studio5\Sdl.MultiTerm.Client.Api.dll</HintPath>
     </Reference>
     <Reference Include="Sdl.ProjectAutomation.Core">
       <Private>True</Private>
@@ -145,9 +145,9 @@
     <Compile Include="Helpers\CustomTextBox.cs" />
     <Compile Include="Helpers\ExcelFile.cs" />
     <Compile Include="Helpers\Expressions.cs" />
-    <Compile Include="Helpers\SettingsMethods.cs" />
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Helpers\CommandHandler.cs" />
-    <Compile Include="Helpers\Constants.cs" />
+    <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Helpers\DropBehavior.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\PersonalInformation.cs" />
@@ -156,7 +156,7 @@
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="Helpers\SystemFields.cs" />
-    <Compile Include="Helpers\Tm.cs" />
+    <Compile Include="Services\TmService.cs" />
     <Compile Include="Helpers\Users.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\CustomField.cs" />
@@ -173,6 +173,12 @@
     <Compile Include="Model\TranslationUnitDetails.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\WordDetails.cs" />
+    <Compile Include="Services\SerializerService.cs" />
+    <Compile Include="StringResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StringResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
@@ -231,6 +237,11 @@
     <Resource Include="Resources\TranslationMemory.ico" />
     <EmbeddedResource Include="PluginResources.resx" />
     <Content Include="pluginpackage.manifest.xml" />
+    <EmbeddedResource Include="StringResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\TmAnonymizerUserControl.resx">
       <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
     </EmbeddedResource>

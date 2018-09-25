@@ -7,8 +7,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 {
 	public class CommandHandler : ICommand, INotifyPropertyChanged
 	{
-		private Action _action;
-		private bool _canExecute;
+		private readonly Action _action;
+
+		private readonly bool _canExecute;
+
 		public CommandHandler(Action action, bool canExecute)
 		{
 			_action = action;
@@ -18,7 +20,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		public CommandHandler(bool canExecute)
 		{
 			_canExecute = canExecute;
-
 		}
 
 		public bool CanExecute(object parameter)

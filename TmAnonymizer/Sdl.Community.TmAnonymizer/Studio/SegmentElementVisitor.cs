@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
@@ -12,14 +13,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _deSelectedWordsDetails;
+		private readonly SettingsService _settingsService;
+
+		public SegmentElementVisitor(List<WordDetails> deSelectedWords, SettingsService settingsService)
+		{
+			_deSelectedWordsDetails = deSelectedWords;
+			_settingsService = settingsService;
+		}
+
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SegmentElementVisitor(List<WordDetails> deSelectedWords)
-		{
-			_deSelectedWordsDetails = deSelectedWords;
-		}
 
 		public void VisitText(Text text)
 		{
@@ -91,7 +96,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		private List<int> GetPersonalData(string text)
 		{
 			var personalDataIndex = new List<int>();
-			foreach (var rule in SettingsMethods.GetRules())
+
+			foreach (var rule in _settingsService.GetRules())
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
@@ -125,7 +131,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		private bool ContainsPi(string text)
 		{
-			foreach (var rule in SettingsMethods.GetRules())
+			foreach (var rule in _settingsService.GetRules())
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var match = regex.Match(text);
@@ -139,7 +145,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		private bool ShouldAnonymize(string currentText,string prevText)
 		{
-			foreach (var rule in SettingsMethods.GetRules())
+			foreach (var rule in _settingsService.GetRules())
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(currentText);
@@ -181,33 +187,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		public void VisitTag(Tag tag)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitDateTimeToken(DateTimeToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitNumberToken(NumberToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitMeasureToken(MeasureToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitSimpleToken(SimpleToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitTagToken(TagToken token)
 		{
-
+			// not required with this implementation
 		}
-
 	}
 }

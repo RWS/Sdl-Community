@@ -15,11 +15,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsFromUiElementVisitor(List<WordDetails>selectedWordsDetails)
+		public SelectedWordsFromUiElementVisitor(List<WordDetails> selectedWordsDetails)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
 		}
-		
+
 		public void VisitText(Text text)
 		{
 			var segmentCollection = new List<object>();
@@ -38,7 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// </summary>
 		/// <param name="segmentText"></param>
 		/// <param name="segmentCollection"></param>
-		private void SubsegmentSelectedData(string segmentText, List<object> segmentCollection)
+		private void SubsegmentSelectedData(string segmentText, ICollection<object> segmentCollection)
 		{
 			var wordsIndexes = new List<int>();
 			var positionOfSelectedText = new List<int>();
@@ -102,7 +102,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				}
 				CreateSegmentCollection(elementsCollection, positionOfSelectedText, segmentCollection);
 			}
-		
+
 			_selectedWordsDetails.Clear();
 		}
 
@@ -112,9 +112,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// <param name="elementsCollection">List of words</param>
 		/// <param name="positionOfSelectedText">List with the positions of selected words in Preview Window</param>
 		/// <param name="segmentCollection">List with Text and Tags</param>
-		private void CreateSegmentCollection(List<string>elementsCollection,List<int> positionOfSelectedText, List<object> segmentCollection)
+		private void CreateSegmentCollection(IReadOnlyList<string> elementsCollection, ICollection<int> positionOfSelectedText, ICollection<object> segmentCollection)
 		{
-			for (int i = 0; i < elementsCollection.Count; i++)
+			for (var i = 0; i < elementsCollection.Count; i++)
 			{
 				var isTagAtPosition = positionOfSelectedText.Contains(i);
 				if (!isTagAtPosition)
@@ -133,32 +133,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		public void VisitTag(Tag tag)
 		{
-			
+
 		}
 
 		public void VisitDateTimeToken(DateTimeToken token)
 		{
-			
+
 		}
 
 		public void VisitNumberToken(NumberToken token)
 		{
-			
+
 		}
 
 		public void VisitMeasureToken(MeasureToken token)
 		{
-			
+
 		}
 
 		public void VisitSimpleToken(SimpleToken token)
 		{
-			
+
 		}
 
 		public void VisitTagToken(TagToken token)
 		{
-			
+
 		}
 	}
 }

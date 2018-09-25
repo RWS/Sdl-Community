@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Helpers
@@ -54,6 +51,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 								Value = string.Empty,
 								NewValue = string.Empty
 							};
+
 							//C column contains the original value
 							if (address.Contains("C") && cellValue != null)
 							{

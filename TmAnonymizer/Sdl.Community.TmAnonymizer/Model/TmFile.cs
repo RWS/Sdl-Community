@@ -1,13 +1,13 @@
 ﻿namespace Sdl.Community.SdlTmAnonymizer.Model
 {
-	public class TmFile :ModelBase
+	public class TmFile : ModelBase
 	{
 		private bool _isSelected;
 		private string _name;
 		private string _path;
 		private bool _shouldRemove;
 		private bool _isServerTm;
-	
+
 		public string Name
 		{
 			get => _name;
@@ -17,6 +17,7 @@
 				OnPropertyChanged(nameof(Name));
 			}
 		}
+
 		public string Path
 		{
 			get => _path;
@@ -37,6 +38,7 @@
 				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
+
 		public bool ShouldRemove
 		{
 
@@ -47,6 +49,7 @@
 				OnPropertyChanged(nameof(ShouldRemove));
 			}
 		}
+
 		public bool IsServerTm
 		{
 

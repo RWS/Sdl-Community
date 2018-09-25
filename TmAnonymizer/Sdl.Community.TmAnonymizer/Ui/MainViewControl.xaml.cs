@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.Ui
@@ -8,10 +9,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 	/// </summary>
 	public partial class MainViewControl 
 	{
-		public MainViewControl()
+		public MainViewControl(SettingsService settingsService)
 		{
 			InitializeComponent();
-			DataContext = new MainViewModel();
+			DataContext = new MainViewModel(settingsService);
 		}
 
 		private void ParentGrid_OnPreviewKeyUp(object sender, KeyEventArgs e)

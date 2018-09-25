@@ -9,13 +9,14 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class TranslationViewModel : ViewModelBase
+	public class TranslationViewModel : ViewModelBase, IDisposable
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private TmFile _selectedTm;
@@ -33,24 +34,37 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
 		private IList _selectedItems;
+		private readonly Settings _settings;
+		private readonly SettingsService _settingsService;		
 
 		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
-			_selectedItems = new List<Rule>();
 			_translationMemoryViewModel = translationMemoryViewModel;
+			
+			_settingsService = _translationMemoryViewModel.SettingsService;
+			_settings = _settingsService.GetSettings();
+
+			_selectedItems = new List<Rule>();
+
 			_anonymizeTranslationMemories = new ObservableCollection<AnonymizeTranslationMemory>();
-			_rules = SettingsMethods.GetRules();
+
+			_rules = new ObservableCollection<Rule>(_settingsService.GetRules());
 			foreach (var rule in _rules)
 			{
 				rule.PropertyChanged += Rule_PropertyChanged;
 			}
+
 			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
+
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
+
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += _tmsCollection_CollectionChanged;
+
 			_translationMemoryViewModel.PropertyChanged += _translationMemoryViewModel_PropertyChanged;
+
 			RulesCollection.CollectionChanged += RulesCollection_CollectionChanged;
 		}
 
@@ -63,14 +77,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
+
 		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (_waitWindow != null)
 			{
 				_waitWindow.Close();
 
-				//open preview window
-				
+				//open preview window				
 				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
 					_tmsCollection, _translationMemoryViewModel);
 				var previewWindow = new PreviewWindow(previewViewModel);
@@ -99,6 +113,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_waitWindow = new WaitWindow();
 					_waitWindow.Show();
 				});
+
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())
 				{
@@ -109,7 +124,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					//get all tus for selected translation memories
 					foreach (var serverTm in serverTms)
 					{
-						var tus = Tm.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
+						var tus = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
 							SourceSearchResults, GetSelectedRules());
 						if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 						{
@@ -121,7 +136,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//file based tms
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					var tus = Tm.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
+					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
 					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 					{
 						_anonymizeTranslationMemories.Add(tus);
@@ -144,6 +159,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				RefreshPreviewWindow();
 			}
 		}
+
 		private void RulesCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action == NotifyCollectionChangedAction.Add)
@@ -158,16 +174,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Rule_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			var settings = SettingsMethods.GetSettings();
-			settings.Rules = RulesCollection;
-
-			SettingsMethods.SaveSettings(settings);
+			_settings.Rules = RulesCollection.ToList();
+			_settingsService.SaveSettings(_settings);
 		}
+
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
+
 		public ICommand PreviewCommand => _previewCommand ?? (_previewCommand = new CommandHandler(PreviewChanges, true));
 
 		public ICommand RemoveRuleCommand => _removeRuleCommand ??(_removeRuleCommand = new CommandHandler(RemoveRule, true));
+
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
+
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
 
 		private void Export()
@@ -197,7 +215,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-
 		private void Import()
 		{
 			var fileDialog = new OpenFileDialog
@@ -222,15 +239,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						RulesCollection.Add(expression);
 					}
 				}
-				var settings = SettingsMethods.GetSettings();
-				settings.Rules = RulesCollection;
-				SettingsMethods.SaveSettings(settings);
+
+				_settings.Rules = RulesCollection.ToList();
+				_settingsService.SaveSettings(_settings);
 			}
 		}
+
 		private void RemoveRule()
 		{
 			var message =MessageBox.Show(@"Are you sure you want to remove selected rules?",
 				"", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+
 			if (message == DialogResult.OK)
 			{
 				if (SelectedItems != null)
@@ -261,11 +280,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 
-				var settings = SettingsMethods.GetSettings();
-				settings.Rules = RulesCollection;
-				SettingsMethods.SaveSettings(settings);
-			}
-			
+				_settings.Rules = RulesCollection.ToList();
+				_settingsService.SaveSettings(_settings);
+			}			
 		}
 
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -332,6 +349,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			return RulesCollection.Where(r => r.IsSelected).ToList();
 		}
+
 		private void SelectAllRules()
 		{
 			foreach (var rule in RulesCollection)
@@ -339,6 +357,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				rule.IsSelected = SelectAll;
 			}
 		}
+
 		public bool SelectAll
 		{
 			get => _selectAll;
@@ -415,6 +434,24 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				rule.Id = Guid.NewGuid().ToString();
 			}
+		}
+
+		public void Dispose()
+		{
+			_backgroundWorker.DoWork -= _backgroundWorker_DoWork;
+			_backgroundWorker.RunWorkerCompleted -= _backgroundWorker_RunWorkerCompleted;
+
+			_backgroundWorker?.Dispose();
+			
+			_tmsCollection.CollectionChanged -= _tmsCollection_CollectionChanged;
+			_translationMemoryViewModel.PropertyChanged -= _translationMemoryViewModel_PropertyChanged;
+
+			foreach (var rule in _rules)
+			{
+				rule.PropertyChanged -= Rule_PropertyChanged;
+			}
+
+			RulesCollection.CollectionChanged -= RulesCollection_CollectionChanged;
 		}
 	}
 }

@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.TmAnonymizer.Model
+namespace Sdl.Community.SdlTmAnonymizer.Model
 {
 	public class CustomField:ModelBase
 	{

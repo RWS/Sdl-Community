@@ -10,7 +10,6 @@ using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
-using Sdl.Community.TmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
@@ -139,6 +138,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				field.IsSelected = SelectAll;
 			}
 		}
+
 		public bool SelectAll
 		{
 			get => _selectAll;
@@ -153,6 +153,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
+
 		public IList SelectedItems
 		{
 			get => _selectedItems;
@@ -161,9 +162,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_selectedItems = value;
 				OnPropertyChanged(nameof(SelectedItems));
 			}
-		}
-
-		
+		}		
 
 		public ObservableCollection<CustomField> CustomFieldsCollection
 		{
@@ -181,7 +180,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 		
-
 		private void _tmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.Action==NotifyCollectionChangedAction.Add)

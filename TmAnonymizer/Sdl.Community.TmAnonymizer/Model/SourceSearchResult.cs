@@ -31,6 +31,5 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				OnPropertyChanged(nameof(TuSelected));
 			}
 		}
-
 	}
 }
