@@ -36,6 +36,7 @@ namespace Sdl.Community.projectAnonymizer.Batch_Task
 
 		public override void Save()
 		{
+			base.Save();
 			_settings.ShouldAnonymize = _settings.EncryptionState.HasFlag(State.Decrypted);
 
 			if (IsEncryptionEnabled && (_settings.ShouldAnonymize ?? true))
