@@ -73,7 +73,6 @@
             this.cb_ExtractComments.TabIndex = 0;
             this.cb_ExtractComments.Text = "Extr&act comments";
             this.cb_ExtractComments.UseVisualStyleBackColor = true;
-            this.cb_ExtractComments.CheckedChanged += new System.EventHandler(this.cb_ExtractComments_CheckedChanged);
             // 
             // label10
             // 

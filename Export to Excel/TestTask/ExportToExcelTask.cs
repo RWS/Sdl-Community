@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
+﻿using Sdl.FileTypeSupport.Framework.IntegrationApi;
 using Sdl.ProjectAutomation.AutomaticTasks;
 using Sdl.ProjectAutomation.Core;
 
@@ -28,8 +23,7 @@ namespace ExportToExcel
         /// Initialize settings for the project
         /// </summary>
         protected override void OnInitializeTask()
-        {
-          
+        {          
             _settings = GetSetting<GeneratorSettings>();
         }
 
@@ -38,6 +32,5 @@ namespace ExportToExcel
             var worker = new Worker(_settings);
             worker.GeneratePreviewFiles(projectFile.LocalFilePath, multiFileConverter);
         }
-
     }
 }
