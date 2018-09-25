@@ -1,24 +1,27 @@
 ﻿using System;
 using System.ComponentModel;
-using System.IO;
 using System.Windows;
 using System.Windows.Forms;
-using Newtonsoft.Json;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
-using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
+using PathInfo = Sdl.Community.SdlTmAnonymizer.Model.PathInfo;
 
 namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
 	public partial class TmAnonymizerUserControl : UserControl
 	{
+		private readonly SettingsService _settingsService;		
+
 		public TmAnonymizerUserControl()
 		{
 			InitializeComponent();
-			InitializeWpfApplicationSettings();
 			
-			if (!SettingsMethods.UserAgreed())
+			_settingsService = new SettingsService(new PathInfo());		
+
+			InitializeWpfApplicationSettings();
+
+			if (!_settingsService.UserAgreed())
 			{
-				var acceptWindow = new AcceptWindow();
+				var acceptWindow = new AcceptWindow(_settingsService);
 				acceptWindow.InitializeComponent();
 				acceptWindow.Show();
 				acceptWindow.Closing += AcceptWindow_Closing;
@@ -31,20 +34,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 		private void InitializeWpfApplicationSettings()
 		{
+			// TODO: confirm is this required?
 			if (System.Windows.Application.Current == null)
 			{
 				new System.Windows.Application();
 			}
+
 			if (System.Windows.Application.Current != null)
 			{
 				System.Windows.Application.Current.ShutdownMode = ShutdownMode.OnExplicitShutdown;
 				var controlsResources = new ResourceDictionary
 				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml",UriKind.Absolute)
+					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml", UriKind.Absolute)
 				};
 				var colorsResources = new ResourceDictionary
 				{
-					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml",UriKind.Absolute)
+					Source = new Uri("pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml", UriKind.Absolute)
 				};
 				var fontsResources = new ResourceDictionary
 				{
@@ -71,36 +76,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 				System.Windows.Application.Current.Resources.MergedDictionaries.Add(controlsResources);
 			}
 
-			//create settings folder
-			if (!Directory.Exists(Constants.SettingsFolderPath))
-			{
-				Directory.CreateDirectory(Constants.SettingsFolderPath);
-			}
-		
-			var settings = SettingsMethods.GetSettings();
-			if (!settings.AlreadyAddedDefaultRules)
-			{
-				AddDefaultRules(settings);
-			}
-		}
-
-		private void AddDefaultRules(Settings settings)
-		{
-			settings.AlreadyAddedDefaultRules = true;
-			settings.Rules = Constants.GetDefaultRules();
-			File.WriteAllText(Constants.SettingsFilePath, JsonConvert.SerializeObject(settings));
+			_settingsService.AddDefaultRules();
 		}
 
 		private void LoadTmView()
 		{
-			var wpfMainWindow = new MainViewControl();
+			var wpfMainWindow = new MainViewControl(_settingsService);
+
 			wpfMainWindow.InitializeComponent();
 			elementHost.Child = wpfMainWindow;
 		}
 
 		private void AcceptWindow_Closing(object sender, CancelEventArgs e)
 		{
-			if (SettingsMethods.UserAgreed())
+			if (_settingsService.UserAgreed())
 			{
 				LoadTmView();
 			}

@@ -10,7 +10,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		{
 			SelectionChanged += CustomDataGrid_SelectionChanged;
 		}
-		void CustomDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+		private void CustomDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			SelectedItemsList = SelectedItems;
 		}

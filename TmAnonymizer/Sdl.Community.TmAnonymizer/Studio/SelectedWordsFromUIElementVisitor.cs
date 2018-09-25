@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sdl.Community.SdlTmAnonymizer.Extensions;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
-namespace Sdl.Community.SdlTmAnonymizer.Services
+namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
-	public class SelectedWordsVisitorService : ISegmentElementVisitor
+	public class SelectedWordsFromUiElementVisitor : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _selectedWordsDetails;
-		private readonly List<int> _anchorIds;
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsVisitorService(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
+		public SelectedWordsFromUiElementVisitor(List<WordDetails> selectedWordsDetails)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
-			_anchorIds = anchorIds;
 		}
 
 		public void VisitText(Text text)
@@ -44,8 +42,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			var wordsIndexes = new List<int>();
 			var positionOfSelectedText = new List<int>();
-
-			//for each selected word add start index, the length and the position of next word
+			//for each selected word add start index, the lenght and the position of next word
 			foreach (var selectedWord in _selectedWordsDetails)
 			{
 				wordsIndexes.Add(selectedWord.Position);
@@ -57,9 +54,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			var segmentTextTrimed = segmentText.TrimStart();
 
-			var biggerThanTextLength = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
+			var indexesBiggerThanTextLenght = wordsIndexes.Count(i => i > segmentTextTrimed.Length);
 			//that means selected text is the last word
-			if (biggerThanTextLength.Equals(wordsIndexes.Count))
+			if (indexesBiggerThanTextLenght.Equals(wordsIndexes.Count))
 			{
 				var startIndex = segmentText.IndexOf(segmentTextTrimed, StringComparison.Ordinal);
 				positionOfSelectedText.Add(startIndex);
@@ -109,20 +106,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			_selectedWordsDetails.Clear();
 		}
 
-		private int GetUniqueAnchorId()
-		{
-			for (var i = 1; i < 1000; i++)
-			{
-				if (!_anchorIds.Contains(i))
-				{
-					_anchorIds.Add(i);
-					return i;
-				}
-			}
-
-			return 0;
-		}
-
 		/// <summary>
 		/// Transforms words list into Text and Tags 
 		/// </summary>
@@ -141,41 +124,41 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 				else
 				{
-					var anchorId = GetUniqueAnchorId();
-					var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId );					
+					var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
 					segmentCollection.Add(tag);
 				}
+
 			}
 		}
 
 		public void VisitTag(Tag tag)
 		{
-			// not required with this implementation
+
 		}
 
 		public void VisitDateTimeToken(DateTimeToken token)
 		{
-			// not required with this implementation
+
 		}
 
 		public void VisitNumberToken(NumberToken token)
 		{
-			// not required with this implementation
+
 		}
 
 		public void VisitMeasureToken(MeasureToken token)
 		{
-			// not required with this implementation
+
 		}
 
 		public void VisitSimpleToken(SimpleToken token)
 		{
-			// not required with this implementation
+
 		}
 
 		public void VisitTagToken(TagToken token)
 		{
-			// not required with this implementation
+
 		}
 	}
 }

@@ -29,7 +29,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 		public class TmAnonymizerRibbonGroup : AbstractRibbonGroup
 		{
-
 		}
 
 		[Action("Sdl.Community.SDLTmAnonymizer", typeof(TmAnonymizerViewController), Name = "Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
@@ -39,7 +38,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			protected override void Execute()
 			{
 				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdltmanonymizer");
-
 			}
 		}
 	}

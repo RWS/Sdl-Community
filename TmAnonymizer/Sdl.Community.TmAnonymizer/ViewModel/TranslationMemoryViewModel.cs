@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -9,13 +10,14 @@ using System.Windows.Input;
 using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using DataFormats = System.Windows.Forms.DataFormats;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class TranslationMemoryViewModel:ViewModelBase
+	public class TranslationMemoryViewModel : ViewModelBase, IDisposable
 	{
 		private bool _selectAll;
 		private ICommand _selectFoldersCommand;
@@ -25,8 +27,23 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
 		private IList _selectedItems;
-		private ObservableCollection<TmFile> _tmsCollection = new ObservableCollection<TmFile>();
+		private ObservableCollection<TmFile> _tmsCollection;
 		private Login _credentials;
+		private bool _isEnabled;
+		private LoginWindowViewModel _loginWindowViewModel;		
+
+		public TranslationMemoryViewModel(SettingsService settingsService)
+		{
+			SettingsService = settingsService;
+			TmService = new TmService(settingsService);
+
+			_isEnabled = true;
+			_tmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
+		}
+
+		public TmService TmService { get; set; }
+
+		public SettingsService SettingsService { get; set; }
 
 		public ObservableCollection<TmFile> TmsCollection
 		{
@@ -38,10 +55,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					return;
 				}
+
 				_tmsCollection = value;
 				OnPropertyChanged(nameof(TmsCollection));
 			}
 		}
+
 		public IList SelectedItems
 		{
 			get => _selectedItems;
@@ -51,6 +70,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
+
 		public bool SelectAll
 		{
 			get => _selectAll;
@@ -65,6 +85,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(SelectAll));
 			}
 		}
+
 		public Login Credentials
 		{
 			get => _credentials;
@@ -79,38 +100,54 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(Credentials));
 			}
 		}
-		public ICommand SelectFoldersCommand => _selectFoldersCommand ??
-		                                        (_selectFoldersCommand = new CommandHandler(SelectFolder, true));
-		public ICommand RemoveCommand => _removeCommand ??
-		                                        (_removeCommand = new CommandHandler(Remove, true));
-		public ICommand SelectTmCommand => _selectTmCommand ??
-		                                 (_selectTmCommand = new CommandHandler(SelectTm, true));
-		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllTms, true));
-		public ICommand DragEnterCommand => _dragEnterCommand ??
-		                                    (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
-		public ICommand LoadServerTmCommand => _loadServerTmCommand ??
-		                                       (_loadServerTmCommand = new CommandHandler(ShowLogInWindow, true));
+		public bool IsEnabled
+		{
+			get => _isEnabled;
+
+			set
+			{
+				if (Equals(value, _isEnabled))
+				{
+					return;
+				}
+				_isEnabled = value;
+				OnPropertyChanged(nameof(IsEnabled));
+			}
+		}
+
+		public ICommand SelectFoldersCommand => _selectFoldersCommand ?? (_selectFoldersCommand = new CommandHandler(SelectFolder, true));
+
+		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
+
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(SelectTm, true));
+
+		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllTms, true));
+
+		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
+
+		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(ShowLogInWindow, true));
 
 		private void ShowLogInWindow()
 		{
 			var loginWindow = new LoginWindow();
-			var viewModel = new LoginWindowViewModel(loginWindow,TmsCollection);
-			loginWindow.DataContext = viewModel;
-			viewModel.PropertyChanged += ViewModel_PropertyChanged;
+
+			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, TmsCollection);
+			_loginWindowViewModel.PropertyChanged += ViewModel_PropertyChanged;
+			loginWindow.DataContext = _loginWindowViewModel;
+
 			//if we don't set element host we are not able to type in text box
 			ElementHost.EnableModelessKeyboardInterop(loginWindow);
 			loginWindow.Show();
 			Dispatcher.Run();
-			
 		}
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			var viewModel = (LoginWindowViewModel) sender;
-			
-			if(!string.IsNullOrEmpty(viewModel?.Credentials.Password)&&
-			   !string.IsNullOrEmpty(viewModel.Credentials.Url)&&
+			var viewModel = (LoginWindowViewModel)sender;
+
+			if (!string.IsNullOrEmpty(viewModel?.Credentials.Password) &&
+			   !string.IsNullOrEmpty(viewModel.Credentials.Url) &&
 			   !string.IsNullOrEmpty(viewModel.Credentials.UserName))
 			{
 				Credentials = viewModel.Credentials;
@@ -124,21 +161,21 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void HandlePreviewDrop(object dropedFile)
 		{
 			var file = dropedFile as System.Windows.DataObject;
-			if (null == file) return;
-			var tmsPath = (string[]) file.GetData(DataFormats.FileDrop);
+			var tmsPath = (string[])file?.GetData(DataFormats.FileDrop);
 			if (tmsPath != null)
 			{
 				foreach (var tm in tmsPath)
 				{
-					if (!string.IsNullOrEmpty(tm))
-					{
-						if (Path.GetExtension(tm).Equals(".sdltm"))
-						{
-							AddTm(tm);
-						}
-					}
+					if (!string.IsNullOrEmpty(tm) && Path.GetExtension(tm).Equals(".sdltm")) AddTm(tm);
 				}
 			}
+		}		
+
+		private void SaveSetttings()
+		{
+			var settings = SettingsService.GetSettings();
+			settings.TmFiles = TmsCollection.ToList();
+			SettingsService.SaveSettings(settings);			
 		}
 
 		private void SelectTm()
@@ -147,43 +184,40 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (fileDialog.ShowDialog() == DialogResult.OK)
 			{
 				var tmFilePath = fileDialog.FileName;
-				if (!string.IsNullOrEmpty(tmFilePath))
+				if (!string.IsNullOrEmpty(tmFilePath) && Path.GetExtension(tmFilePath).Equals(".sdltm"))
 				{
-					if (Path.GetExtension(tmFilePath).Equals(".sdltm"))
-					{
-						AddTm(tmFilePath);
-					}
-				}
+					AddTm(tmFilePath);					
+				}				
 			}
-		}
+		}		
 
-		private void Remove()
+		private void RemoveTm()
 		{
-			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation",MessageBoxButtons.OKCancel,MessageBoxIcon.Question);
-			if (result == DialogResult.OK)
+			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+			if (result == DialogResult.OK && SelectedItems != null)
 			{
-				if (SelectedItems != null)
-				{
-					var selectedTms = new List<TmFile>();
+				var selectedTms = new List<TmFile>();
 
-					foreach (TmFile selectedItem in SelectedItems)
+				foreach (TmFile selectedItem in SelectedItems)
+				{
+					var rule = new TmFile
 					{
-						var rule = new TmFile
-						{
-							Path = selectedItem.Path
-						};
-						selectedTms.Add(rule);
-					}
-					SelectedItems.Clear();
-					foreach (var tm in selectedTms)
+						Path = selectedItem.Path
+					};
+					selectedTms.Add(rule);
+				}
+
+				SelectedItems.Clear();
+				foreach (var tm in selectedTms)
+				{
+					var tmToRemove = TmsCollection.FirstOrDefault(r => r.Path.Equals(tm.Path));
+					if (tmToRemove != null)
 					{
-						var tmToRemove = TmsCollection.FirstOrDefault(r => r.Path.Equals(tm.Path));
-						if (tmToRemove != null)
-						{
-							TmsCollection.Remove(tmToRemove);
-						}
+						TmsCollection.Remove(tmToRemove);
 					}
 				}
+
+				SaveSetttings();
 			}
 		}
 
@@ -200,10 +234,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 			}
 		}
+
 		private bool TmAlreadyExist(string tmPath)
 		{
 			return TmsCollection.Any(t => t.Path.Equals(tmPath));
 		}
+
 		private void SelectAllTms()
 		{
 			foreach (var tm in TmsCollection)
@@ -224,8 +260,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					IsSelected = true,
 					IsServerTm = false
 				};
+
 				tmFile.PropertyChanged += TmFile_PropertyChanged;
-				TmsCollection.Add(tmFile);
+
+				TmsCollection.Insert(0, tmFile);
+
+				SaveSetttings();
 			}
 		}
 
@@ -237,6 +277,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void TmFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			OnPropertyChanged(nameof(TmsCollection));
+		}
+
+		public void Dispose()
+		{
+			if (_loginWindowViewModel != null)
+			{
+				_loginWindowViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+			}
+
+			if (TmsCollection != null)
+			{
+				foreach (var tmFile in TmsCollection)
+				{
+					tmFile.PropertyChanged -= TmFile_PropertyChanged;
+				}
+			}
 		}
 	}
 }
