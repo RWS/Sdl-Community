@@ -1,7 +1,5 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace ExportToExcel
 {
@@ -28,13 +26,6 @@ namespace ExportToExcel
                 nameof(_settings.ColumnWidth));
             SettingsBinder.DataBindSetting<bool>(cb_ExtractComments, "Checked", _settings,
                 nameof(_settings.ExtractComments));
-        }
-
-        private void cb_ExtractComments_CheckedChanged(object sender, EventArgs e)
-        {
-        }
-      
+        }             
     }
-
-
 }

@@ -1,15 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Sdl.Desktop.IntegrationApi;
-using Sdl.FileTypeSupport.Framework.IntegrationApi;
-using Sdl.ProjectAutomation.AutomaticTasks;
 
 namespace ExportToExcel
 {
@@ -49,7 +40,7 @@ namespace ExportToExcel
         private void btnReset_Click(object sender, EventArgs e)
         {
             Settings.ResetToDefaults();
-            exclusionsUI.UpdateUI(Settings);
+            exclusionsUI.UpdateUi(Settings);
         }
     }
 }
