@@ -7,8 +7,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -27,9 +29,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
+		private readonly CustomFieldsService _customFieldsService;
 
-		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
+		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel, CustomFieldsService customFieldsService)
 		{
+			_customFieldsService = customFieldsService;
+
 			_customFields = new ObservableCollection<CustomField>();
 			_selectedItems = new List<CustomField>();
 			_translationMemoryViewModel = translationMemoryViewModel;
@@ -81,7 +86,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.UserName,
 					_translationMemoryViewModel.Credentials.Password);
 
-				var customFields = new List<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(tm, translationProvider));
+				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider));
 				foreach (var field in customFields)
 				{
 					CustomFieldsCollection.Add(field);
@@ -89,7 +94,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				var customFields = new List<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(tm));
+				var customFields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(tm));
 				foreach (var field in customFields)
 				{
 					CustomFieldsCollection.Add(field);
@@ -113,7 +118,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					CustomFieldsHandler.AnonymizeFileBasedCustomFields(tm, CustomFieldsCollection.ToList());
+					_customFieldsService.AnonymizeFileBasedCustomFields(tm, CustomFieldsCollection.ToList());
 				}
 				else
 				{
@@ -128,7 +133,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					CustomFieldsHandler.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
+					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
 					_waitWindow.Close();
 				}
 
@@ -328,7 +333,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						var fields = new List<CustomField>(CustomFieldsHandler.GetFilebasedCustomField(fileTm));
+						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm));
 						foreach (var field in fields)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -348,7 +353,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var serverTm in serverTms)
 					{
-						var fields = new List<CustomField>(CustomFieldsHandler.GetServerBasedCustomFields(serverTm, translationProvider));
+						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider));
 						foreach (var field in fields)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(() =>

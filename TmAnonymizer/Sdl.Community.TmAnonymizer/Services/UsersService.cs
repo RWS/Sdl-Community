@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public static class Users
+	public class UsersService
 	{
-		public static List<User> GetImportedUsers(List<string> files)
+		public List<User> GetImportedUsers(List<string> files)
 		{
 			var listOfUsers = new List<User>();
 			foreach (var file in files)
@@ -44,7 +45,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return listOfUsers;
 		}
 
-		public static void ExportUsers(string filePath, List<User> users)
+		public void ExportUsers(string filePath, List<User> users)
 		{
 			var package = ExcelFile.GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");

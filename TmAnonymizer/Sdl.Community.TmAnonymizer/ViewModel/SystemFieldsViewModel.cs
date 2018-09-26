@@ -7,11 +7,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using SystemFields = Sdl.Community.SdlTmAnonymizer.Helpers.SystemFields;
 
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
@@ -29,9 +29,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private WaitWindow _waitWindow;
 		private bool _selectAll;
+		private readonly SystemFieldsService _systemFieldsService;
+		private readonly UsersService _usersService;
 
-		public SystemFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel)
+		public SystemFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel, SystemFieldsService systemFieldsService, UsersService usersService)
 		{
+			_systemFieldsService = systemFieldsService;
+			_usersService = usersService;
+
 			_uniqueUserNames = new ObservableCollection<User>();
 			_selectedItems = new List<User>();
 			_translationMemoryViewModel = translationMemoryViewModel;
@@ -124,7 +129,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.UserName,
 					_translationMemoryViewModel.Credentials.Password);
 
-				var names = SystemFields.GetUniqueServerBasedSystemFields(tm, translationProvider);
+				var names = _systemFieldsService.GetUniqueServerBasedSystemFields(tm, translationProvider);
 
 				foreach (var name in names)
 				{
@@ -133,7 +138,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				var names = SystemFields.GetUniqueFileBasedSystemFields(tm);
+				var names = _systemFieldsService.GetUniqueFileBasedSystemFields(tm);
 				foreach (var name in names)
 				{
 					UniqueUserNames.Add(name);
@@ -142,7 +147,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		private void UnselectTm(TmFile tm)
-		{			
+		{
 			var userNamesToBeRemoved = UniqueUserNames.Where(t => t.TmFilePath.Equals(tm.Path)).ToList();
 			foreach (var userName in userNamesToBeRemoved)
 			{
@@ -164,7 +169,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					SystemFields.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList());
+					_systemFieldsService.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList());
 				}
 
 				else if (tm.IsServerTm)
@@ -174,7 +179,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					SystemFields.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider);
+					_systemFieldsService.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider);
 				}
 			}
 
@@ -192,7 +197,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						var names = SystemFields.GetUniqueFileBasedSystemFields(fileTm);
+						var names = _systemFieldsService.GetUniqueFileBasedSystemFields(fileTm);
 						foreach (var name in names)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -212,7 +217,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var serverTm in serverTms)
 					{
-						var names = SystemFields.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+						var names = _systemFieldsService.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
 						foreach (var name in names)
 						{
 							System.Windows.Application.Current.Dispatcher.Invoke(() =>
@@ -240,7 +245,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedUsers = Users.GetImportedUsers(fileDialog.FileNames.ToList());
+				var importedUsers = _usersService.GetImportedUsers(fileDialog.FileNames.ToList());
 				foreach (var user in importedUsers)
 				{
 					var existingUser = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
@@ -275,7 +280,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedUsers.Add(user);
 					}
 
-					Users.ExportUsers(fileDialog.FileName, selectedUsers);
+					_usersService.ExportUsers(fileDialog.FileName, selectedUsers);
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
@@ -290,7 +295,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				foreach (TmFile tm in e.NewItems)
-				{		
+				{
 					AddTm(tm);
 				}
 			}
@@ -299,7 +304,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (e.OldItems == null) return;
 				foreach (TmFile tm in e.OldItems)
-				{					
+				{
 					RemoveTm(tm);
 				}
 			}
@@ -348,7 +353,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 			});
-		}		
+		}
 
 		public void Dispose()
 		{
