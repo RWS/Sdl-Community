@@ -7,7 +7,6 @@ namespace Sdl.Community.DeepLMTProvider
 	{
 		private static readonly List<string> SourceSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
 		private static readonly List<string> TargetSupportedLanguages = new List<string> { "EN", "DE", "FR", "IT", "NL", "PL", "ES" };
-
 		public static bool IsSuportedLanguagePair(string sourceLang, string targetLang)
 		{
 			if(SourceSupportedLanguages.Contains(sourceLang)&& TargetSupportedLanguages.Contains(targetLang))
