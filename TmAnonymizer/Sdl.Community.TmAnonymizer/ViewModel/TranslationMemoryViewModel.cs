@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using System.Windows.Threading;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;

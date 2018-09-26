@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Commands
 {
 	public class CommandHandler : ICommand, INotifyPropertyChanged
 	{

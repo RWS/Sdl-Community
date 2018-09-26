@@ -37,11 +37,6 @@
 					<Button Command="{Binding RemoveCommand}"  ToolTip="Remove selected tms" Margin="5,0,0,0">
 						<Image Source="../Resources/Remove.ico"/>
 					</Button>
-					<!--<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected tms">
-						<StackPanel Orientation="Horizontal" Margin="5,0,0,0">
-							<Image Source="../Resources/Remove.ico"/>
-						</StackPanel>
-					</Button>-->
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>

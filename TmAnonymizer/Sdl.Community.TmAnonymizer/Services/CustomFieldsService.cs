@@ -6,11 +6,11 @@ using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public static class CustomFieldsHandler
+	public class CustomFieldsService
 	{
-		private static  IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		private static IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
 		{
 			var multipleStringValues = new List<string>();
 			var trimStart = fieldValue.TrimStart('(');
@@ -30,7 +30,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return multipleStringValues;
 		}
 
-		public static List<CustomField> GetFilebasedCustomField(TmFile tm)
+		public List<CustomField> GetFilebasedCustomField(TmFile tm)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tm.Path);
 			var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
@@ -41,7 +41,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return customFieldList;
 		}
 
-		public static List<CustomField> GetServerBasedCustomFields(TmFile tm, TranslationProviderServer translationProvideServer)
+		public List<CustomField> GetServerBasedCustomFields(TmFile tm, TranslationProviderServer translationProvideServer)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
@@ -155,7 +155,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return translationUnits;
 		}
 
-		public static void AnonymizeFileBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields)
+		public void AnonymizeFileBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields)
 		{
 			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
@@ -208,7 +208,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			fileBasedTm.Save();
 		}
 
-		public static void AnonymizeServerBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
+		public void AnonymizeServerBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(serverBasedTm.LanguageDirections);
@@ -229,8 +229,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				else
 				{
 					foreach (var tu in translationUnits)
-					{
-						var newListFieldValues = new List<FieldValue>();
+					{						
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))

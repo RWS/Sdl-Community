@@ -11,8 +11,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_tmViewModel = new TranslationMemoryViewModel(settingsService);
 
 			TranslationViewModel = new TranslationViewModel(_tmViewModel);
-			SystemFieldsViewModel = new SystemFieldsViewModel(_tmViewModel);
-			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel);
+			SystemFieldsViewModel = new SystemFieldsViewModel(_tmViewModel, new SystemFieldsService(), new UsersService());
+			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, new CustomFieldsService());
 		}
 
 		public TranslationMemoryViewModel TmViewModel

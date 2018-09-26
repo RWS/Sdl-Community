@@ -71,11 +71,5 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			}
 			package.Save();
 		}
-		//private static ExcelPackage GetExcelPackage(string filePath)
-		//{
-		//	var fileInfo = new FileInfo(filePath);
-		//	var excelPackage = new ExcelPackage(fileInfo);
-		//	return excelPackage;
-		//}
 	}
 }

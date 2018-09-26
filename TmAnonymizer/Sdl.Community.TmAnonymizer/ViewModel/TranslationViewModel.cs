@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;

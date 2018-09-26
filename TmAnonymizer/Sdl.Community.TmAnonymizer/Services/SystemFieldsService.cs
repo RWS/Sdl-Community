@@ -1,25 +1,23 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public static class SystemFields
+	public class SystemFieldsService
 	{
 		/// <summary>
 		/// Gets unique System Fields values from File Based Translation Memory
 		/// </summary>
 		/// <param name="tm">Translation Memory File</param>
 		/// <returns>An ObservableCollection of Users</returns>
-		public static ObservableCollection<User> GetUniqueFileBasedSystemFields(TmFile tm)
+		public List<User> GetUniqueFileBasedSystemFields(TmFile tm)
 		{ 
 			var translationUnits = GetFileBasedTranslationUnits(tm);
 			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path,translationUnits);
 			return uniqueUsersCollection;
-
 		}
 
 		/// <summary>
@@ -29,11 +27,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		/// <param name="translationProvideServer">Translation provider</param>
 		/// <returns>An ObservableCollection of UniqueUserName objects</returns>
 		/// TODO: SIMPLIFY METHOD
-		public static ObservableCollection<User> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer)
-		{
-			var users = new List<User>();
-			var listOfFieldNames = new List<string>();
-
+		public List<User> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer)
+		{			
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
 			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits);
@@ -45,7 +40,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		/// </summary>
 		/// <param name="tm">Translation Memory File</param>
 		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
-		public static void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers)
+		public void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers)
 		{
 			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var translationUnits = GetFileBasedTranslationUnits(tm);
@@ -72,7 +67,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 		/// <param name="tm">Translation Memory File</param>
 		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
 		/// /// <param name="translationProvideServer">Translation provider</param>
-		public static void AnonymizeServerBasedSystemFields(TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
+		public void AnonymizeServerBasedSystemFields(TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 			var languageDirections = serverBasedTm.LanguageDirections;
@@ -131,10 +126,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return translationUnits;
 		}
 
-		private static ObservableCollection<User> GetUniqueUserCollection(string tmFilePath, TranslationUnit[] translationUnits)
+		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TranslationUnit> translationUnits)
 		{
 			var systemFields = new List<string>();
-			var distinctUsersCollection = new ObservableCollection<User>();
+			var distinctUsersCollection = new List<User>();
 			foreach (var tu in translationUnits)
 			{
 				systemFields.AddRange(new List<string> { tu.SystemFields.CreationUser, tu.SystemFields.UseUser });

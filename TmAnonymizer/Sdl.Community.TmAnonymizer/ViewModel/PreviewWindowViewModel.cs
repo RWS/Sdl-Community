@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using MahApps.Metro.Controls.Dialogs;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;

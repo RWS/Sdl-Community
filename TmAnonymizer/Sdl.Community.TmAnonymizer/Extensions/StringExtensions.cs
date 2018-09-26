@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Extensions
 {
 	public static class StringExtensions
 	{

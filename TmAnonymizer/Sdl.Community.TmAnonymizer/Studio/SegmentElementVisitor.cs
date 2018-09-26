@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.Core;
