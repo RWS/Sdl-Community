@@ -99,7 +99,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				await Window.ShowMessageAsync(this, "", "Please select at least one translation unit to apply the changes");
+				await Window.ShowMessageAsync(this, Application.ProductName, StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes);
 			}
 		}
 

@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Windows.Input;
-using Newtonsoft.Json;
+﻿using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;

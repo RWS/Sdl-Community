@@ -133,32 +133,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		public void VisitTag(Tag tag)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitDateTimeToken(DateTimeToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitNumberToken(NumberToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitMeasureToken(MeasureToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitSimpleToken(SimpleToken token)
 		{
-
+			// not required with this implementation
 		}
 
 		public void VisitTagToken(TagToken token)
 		{
-
+			// not required with this implementation
 		}
 	}
 }

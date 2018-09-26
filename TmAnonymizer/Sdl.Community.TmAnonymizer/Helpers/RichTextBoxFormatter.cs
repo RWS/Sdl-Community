@@ -70,10 +70,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 							textRange.ApplyPropertyValue(TextElement.BackgroundProperty, color);
 						}
 					}
-				}
-				
-			}
-		 
+				}				
+			}		 
 		}
 	}
 }

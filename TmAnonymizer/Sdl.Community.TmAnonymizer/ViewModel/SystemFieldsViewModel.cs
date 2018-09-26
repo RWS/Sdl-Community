@@ -229,7 +229,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var fileDialog = new OpenFileDialog
 			{
-				Title = @"Please select the files you want to import",
+				Title = StringResources.Import_Please_select_the_files_you_want_to_import,
 				Filter = @"Excel |*.xlsx",
 				CheckFileExists = true,
 				CheckPathExists = true,
@@ -263,7 +263,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var selectedUsers = new List<User>();
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected system fields",
+					Title = StringResources.Export_Export_selected_system_fields,
 					Filter = @"Excel |*.xlsx"
 				};
 
@@ -276,12 +276,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 
 					Users.ExportUsers(fileDialog.FileName, selectedUsers);
-					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -290,16 +290,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				foreach (TmFile tm in e.NewItems)
-				{
-					//if (!tm.IsServerTm)
-					//{
-					//	var fields = SystemFields.GetUniqueFileBasedSystemFields(tm);
-					//	foreach (var user in fields)
-					//	{
-					//		UniqueUserNames.Add(user);
-					//	}
-					//}
-
+				{		
 					AddTm(tm);
 				}
 			}

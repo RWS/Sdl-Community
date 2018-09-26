@@ -193,7 +193,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void RemoveTm()
 		{
-			var result = MessageBox.Show(@"Do you want to remove selected tms?", @"Confirmation", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+			var result = MessageBox.Show(StringResources.RemoveTm_Do_you_want_to_remove_selected_tms, StringResources.Confirmation, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 			if (result == DialogResult.OK && SelectedItems != null)
 			{
 				var selectedTms = new List<TmFile>();

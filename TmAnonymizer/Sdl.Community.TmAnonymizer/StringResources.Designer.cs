@@ -69,5 +69,176 @@ namespace Sdl.Community.SdlTmAnonymizer {
                 return ResourceManager.GetString("AcceptsNoLiability_Description", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one translation unit to apply the changes..
+        /// </summary>
+        internal static string ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes {
+            get {
+                return ResourceManager.GetString("ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        internal static string Confirmation {
+            get {
+                return ResourceManager.GetString("Confirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected custom fields.
+        /// </summary>
+        internal static string Export_Export_selected_custom_fields {
+            get {
+                return ResourceManager.GetString("Export_Export_selected_custom_fields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected expressions.
+        /// </summary>
+        internal static string Export_Export_selected_expressions {
+            get {
+                return ResourceManager.GetString("Export_Export_selected_expressions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export selected system fields.
+        /// </summary>
+        internal static string Export_Export_selected_system_fields {
+            get {
+                return ResourceManager.GetString("Export_Export_selected_system_fields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File was exported successfully to selected location..
+        /// </summary>
+        internal static string Export_File_was_exported_successfully_to_selected_location {
+            get {
+                return ResourceManager.GetString("Export_File_was_exported_successfully_to_selected_location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one row to export..
+        /// </summary>
+        internal static string Export_Please_select_at_least_one_row_to_export {
+            get {
+                return ResourceManager.GetString("Export_Please_select_at_least_one_row_to_export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a folder.
+        /// </summary>
+        internal static string FolderSelectDialog_Title_Select_a_folder {
+            get {
+                return ResourceManager.GetString("FolderSelectDialog_Title_Select_a_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to import an excel file?.
+        /// </summary>
+        internal static string Import_Are_you_sure_you_want_to_import_an_excel_file {
+            get {
+                return ResourceManager.GetString("Import_Are_you_sure_you_want_to_import_an_excel_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Existing fields values will be overwritten with the values form the file.
+        /// </summary>
+        internal static string Import_Existing_fields_values_will_be_overwritten_with_the_values_form_the_file {
+            get {
+                return ResourceManager.GetString("Import_Existing_fields_values_will_be_overwritten_with_the_values_form_the_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select the files you want to import.
+        /// </summary>
+        internal static string Import_Please_select_the_files_you_want_to_import {
+            get {
+                return ResourceManager.GetString("Import_Please_select_the_files_you_want_to_import", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All fields are required!.
+        /// </summary>
+        internal static string Ok_All_fields_are_required_ {
+            get {
+                return ResourceManager.GetString("Ok_All_fields_are_required_", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait until we connect to GroupShare.
+        /// </summary>
+        internal static string Ok_Please_wait_until_we_connect_to_GroupShare {
+            get {
+                return ResourceManager.GetString("Ok_Please_wait_until_we_connect_to_GroupShare", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password is rquired.
+        /// </summary>
+        internal static string Password_is_rquired {
+            get {
+                return ResourceManager.GetString("Password_is_rquired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one translation memory and a rule to preview the changes..
+        /// </summary>
+        internal static string Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes {
+            get {
+                return ResourceManager.GetString("Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to remove selected rules?.
+        /// </summary>
+        internal static string RemoveRule_Are_you_sure_you_want_to_remove_selected_rules {
+            get {
+                return ResourceManager.GetString("RemoveRule_Are_you_sure_you_want_to_remove_selected_rules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to remove selected tms?.
+        /// </summary>
+        internal static string RemoveTm_Do_you_want_to_remove_selected_tms {
+            get {
+                return ResourceManager.GetString("RemoveTm_Do_you_want_to_remove_selected_tms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Url is required.
+        /// </summary>
+        internal static string Url_is_required {
+            get {
+                return ResourceManager.GetString("Url_is_required", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User name is rquired.
+        /// </summary>
+        internal static string User_name_is_rquired {
+            get {
+                return ResourceManager.GetString("User_name_is_rquired", resourceCulture);
+            }
+        }
     }
 }
