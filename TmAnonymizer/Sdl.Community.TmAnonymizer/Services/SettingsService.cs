@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 using Sdl.Community.SdlTmAnonymizer.Model;
@@ -34,14 +35,46 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public List<Rule> GetDefaultRules()
 		{
-			if (!File.Exists(PathInfo.DefaultRulesFilePath))
+			// TODO: confirm if we should better manage provide these default settings from an external resource
+			return new List<Rule>
 			{
-				return new List<Rule>();
-			}
-
-			var json = File.ReadAllText(PathInfo.DefaultRulesFilePath);
-			var settings = JsonConvert.DeserializeObject<Settings>(json);
-			return settings.Rules;
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "Email addresses",
+					Name = @"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b"
+				},
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "PCI (Payment Card Industry)",
+					Name = @"\b(?:\d[ -]*?){13,16}\b"
+				},
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "IP4 Address",
+					Name = @"\b(?<![:.\w])(?:[A-F0-9]{1,4}:){7}[A-F0-9]{1,4}(?![:.\w])\b"
+				},
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "MAC Address",
+					Name = @"\b[0-9A-F]{2}([-:]?)(?:[0-9A-F]{2}\1){4}[0-9A-F]{2}\b"
+				},
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "UK National Insurance Number",
+					Name = @"\b[A-Z]{2}\s\d{2}\s\d{2}\s\d{2}\s[A-Z]\b"
+				},
+				new Rule
+				{
+					Id = Guid.NewGuid().ToString(),
+					Description = "Social Security Numbers",
+					Name = @"\b(?!000)(?!666)[0-8][0-9]{2}[- ](?!00)[0-9]{2}[- ](?!0000)[0-9]{4}\b"
+				}
+			};
 		}
 
 		public List<TmFile> GetTmFiles()
@@ -65,7 +98,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			file.Close();
 
 			settings = new Settings();
-			File.WriteAllText(PathInfo.SettingsFilePath, JsonConvert.SerializeObject(new Settings()));
+			File.WriteAllText(PathInfo.SettingsFilePath, JsonConvert.SerializeObject(settings));
 
 			return settings;
 		}

@@ -87,6 +87,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//open preview window				
 				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
 					_tmsCollection, _translationMemoryViewModel);
+
 				var previewWindow = new PreviewWindow(previewViewModel);
 				var window = previewWindow.DialogCoordinatorWindow;
 
@@ -201,7 +202,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					foreach (Rule rule in SelectedItems.OfType<Rule>())
+					foreach (var rule in SelectedItems.OfType<Rule>())
 					{
 						selectedRules.Add(rule);
 					}
@@ -440,7 +441,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_backgroundWorker.DoWork -= _backgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted -= _backgroundWorker_RunWorkerCompleted;
-
 			_backgroundWorker?.Dispose();
 			
 			_tmsCollection.CollectionChanged -= _tmsCollection_CollectionChanged;
