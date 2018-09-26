@@ -4,21 +4,47 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.IO;
 using Newtonsoft.Json;
 using RestSharp;
 using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
+using System.Xml;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter{
 
 		public string ApiKey { get; set; }
+		private string PluginVersion = "";
+		private string Identifier;
 
-		public DeepLTranslationProviderConnecter(string key)
+		public DeepLTranslationProviderConnecter(string key, string identifier)
 		{
 			ApiKey = key;
+			Identifier = identifier;
+
+			try
+			{
+				// fetch the version of the plugin from the manifest deployed
+				var p = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				p = Path.Combine(p, "pluginpackage.manifest.xml");
+				XmlDocument doc = new XmlDocument();
+				doc.Load(p);
+
+				foreach (XmlNode n in doc.DocumentElement.ChildNodes)
+				{
+					if (n.Name == "Version")
+					{
+						PluginVersion = n.InnerText;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
+			}
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
@@ -27,11 +53,13 @@ namespace Sdl.Community.DeepLMTProvider
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
+			
 			try
 			{
 				var client = new RestClient(@"https://api.deepl.com/v1");
+				client.UserAgent = "SDL Trados 2017 (v" + PluginVersion + ",id" + Identifier  + ")";
 				var request = new RestRequest("translate", Method.POST);
-
+				
 				//search for words like this <word> 
 				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 				var words = rgx.Matches(sourcetext);
