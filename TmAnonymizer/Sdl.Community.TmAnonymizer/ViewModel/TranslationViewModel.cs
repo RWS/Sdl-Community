@@ -146,8 +146,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				MessageBox.Show(@"Please select at least one translation memory and a rule to preview the changes",
-					"", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes,
+					Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 			
 		}
@@ -196,7 +196,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var selectedRules = new List<Rule>();
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected expressions",
+					Title = StringResources.Export_Export_selected_expressions,
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
@@ -207,12 +207,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedRules.Add(rule);
 					}
 					Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
-					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var fileDialog = new OpenFileDialog
 			{
-				Title = @"Please select the files you want to import",
+				Title = StringResources.Import_Please_select_the_files_you_want_to_import,
 				Filter = @"Excel |*.xlsx",
 				CheckFileExists = true,
 				CheckPathExists = true,
@@ -248,7 +248,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void RemoveRule()
 		{
-			var message =MessageBox.Show(@"Are you sure you want to remove selected rules?",
+			var message =MessageBox.Show(StringResources.RemoveRule_Are_you_sure_you_want_to_remove_selected_rules,
 				"", MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
 			if (message == DialogResult.OK)

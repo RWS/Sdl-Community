@@ -276,14 +276,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					if (exception.InnerException != null)
 					{
-						MessageBox.Show(exception.InnerException.Message,
-							"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 				else
 				{
-					MessageBox.Show(exception.Message,
-						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(exception.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 

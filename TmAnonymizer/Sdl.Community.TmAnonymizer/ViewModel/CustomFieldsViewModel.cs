@@ -151,26 +151,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
 					CustomFieldData.ExportCustomFields(fileDialog.FileName, valuesToBeAnonymized);
-					MessageBox.Show(@"File was exported successfully to selected location", "", MessageBoxButtons.OK,
+					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 				}
 			}
 			else
 			{
-				MessageBox.Show(@"Please select at least one row to export", "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Export_Please_select_at_least_one_row_to_export, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 		}
 
 		private void Import()
 		{
-			var confirmation = MessageBox.Show(@"Existing fields values will be overwritten with the values form the file", @"Are you sure you want to import an excel file?",
+			var confirmation = MessageBox.Show(StringResources.Import_Existing_fields_values_will_be_overwritten_with_the_values_form_the_file, StringResources.Import_Are_you_sure_you_want_to_import_an_excel_file,
 				MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 
 			if (confirmation == DialogResult.OK)
 			{
 				var fileDialog = new OpenFileDialog
 				{
-					Title = @"Please select the files you want to import",
+					Title = StringResources.Import_Please_select_the_files_you_want_to_import,
 					Filter = @"Excel |*.xlsx",
 					CheckFileExists = true,
 					CheckPathExists = true,

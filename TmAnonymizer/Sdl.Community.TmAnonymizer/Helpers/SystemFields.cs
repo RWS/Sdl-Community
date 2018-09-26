@@ -40,8 +40,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return uniqueUsersCollection;
 		}
 
-
-
 		/// <summary>
 		/// Anonymizez each unique name from the UniqueUserNames list found in a specific File Based Translation Memory
 		/// </summary>

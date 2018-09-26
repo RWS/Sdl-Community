@@ -11,7 +11,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class LoginWindowViewModel: ViewModelBase,IDataErrorInfo, IWindowActions
+	public class LoginWindowViewModel : ViewModelBase, IDataErrorInfo, IWindowActions
 	{
 		private string _url;
 		private string _userName;
@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private Login _credentials;
 		private string _message;
 		private readonly BackgroundWorker _backgroundWorker;
-		private string _messageColor;
+		private readonly string _messageColor;
 		private bool _hasText;
 		private string _visibility;
 
@@ -50,7 +50,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						Message = e.Error.InnerException.Message;
 						MessageColor = "#DF4762";
 					}
-				
+
 				}
 				else
 				{
@@ -62,7 +62,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_window.Close();
 			}
-			
+
 		}
 
 		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -71,7 +71,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		public ICommand OkCommand => _okCommand ??
-		                             (_okCommand = new RelayCommand(Ok));
+									 (_okCommand = new RelayCommand(Ok));
 		public Login Credentials
 		{
 			get => _credentials;
@@ -118,18 +118,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					if (string.IsNullOrEmpty(Url))
 
-						return "Url is required";
+						return StringResources.Url_is_required;
 				}
 				if (columnName == "UserName" && string.IsNullOrEmpty(UserName))
 				{
 
-					return "User name is rquired";
+					return StringResources.User_name_is_rquired;
 
 				}
 				if (columnName == "HasText" && string.IsNullOrEmpty(Credentials.Password))
 				{
 
-					return "Password is rquired";
+					return StringResources.Password_is_rquired;
 
 				}
 				return null;
@@ -183,8 +183,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Ok(object parameter)
 		{
-			var passwordBox = parameter as PasswordBox;
-			if (passwordBox != null)
+			if (parameter is PasswordBox passwordBox)
 			{
 				var login = new Login
 				{
@@ -198,12 +197,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					_backgroundWorker.RunWorkerAsync();
 					MessageColor = "#3EA691";
-					Message = "Please wait until we connect to GroupShare";
+					Message = StringResources.Ok_Please_wait_until_we_connect_to_GroupShare;
 					Visibility = "Visible";
 				}
 				else
 				{
-					Message = "All fields are required!";
+					Message = StringResources.Ok_All_fields_are_required_;
 					MessageColor = "#DF4762";
 				}
 			}
@@ -215,39 +214,32 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		/// <param name="login"></param>
 		private void GetServerTms(Login login)
 		{
-			try
+			var uri = new Uri(login.Url);
+			var translationProviderServer = new TranslationProviderServer(uri, false, login.UserName, login.Password);
+			var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
+
+			foreach (var tm in translationMemories)
 			{
-				var uri = new Uri(login.Url);
-				var translationProviderServer = new TranslationProviderServer(uri, false, login.UserName, login.Password);
-				var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
-
-				foreach (var tm in translationMemories)
+				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
+				var path = tmPath + "/" + tm.Name;
+				var tmAlreadyExist = _tmsCollection.Any(t => t.Path.Equals(path));
+				if (!tmAlreadyExist)
 				{
-					var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
-					var path = tmPath + "/" + tm.Name;
-					var tmAlreadyExist = _tmsCollection.Any(t => t.Path.Equals(path));
-					if (!tmAlreadyExist)
+					var serverTm = new TmFile
 					{
-						var serverTm = new TmFile
-						{
-							Path = path,
-							Name = tm.Name,
-							IsServerTm = true
-						};
+						Path = path,
+						Name = tm.Name,
+						IsServerTm = true
+					};
 
-						System.Windows.Application.Current.Dispatcher.Invoke(delegate
-						{
-							_tmsCollection.Add(serverTm);
-						});
-					}
+					System.Windows.Application.Current.Dispatcher.Invoke(delegate
+					{
+						_tmsCollection.Add(serverTm);
+					});
 				}
 			}
-			catch (Exception exception)
-			{
-				throw ;
-			}
 		}
-		
+
 		/// <summary>
 		/// Validation for the form
 		/// All fields are required
@@ -256,7 +248,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool IsValid()
 		{
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
-			       !string.IsNullOrEmpty(Credentials.UserName);
+				   !string.IsNullOrEmpty(Credentials.UserName);
 		}
 	}
 
