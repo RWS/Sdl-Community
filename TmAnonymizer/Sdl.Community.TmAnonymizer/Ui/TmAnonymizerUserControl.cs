@@ -9,7 +9,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
 	public partial class TmAnonymizerUserControl : UserControl
 	{
-		private readonly SettingsService _settingsService;		
+		private readonly SettingsService _settingsService;
+		private readonly AcceptWindow _acceptWindow;
 
 		public TmAnonymizerUserControl()
 		{
@@ -21,10 +22,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 			if (!_settingsService.UserAgreed())
 			{
-				var acceptWindow = new AcceptWindow(_settingsService);
-				acceptWindow.InitializeComponent();
-				acceptWindow.Show();
-				acceptWindow.Closing += AcceptWindow_Closing;
+				// TODO: confirm if this should rather be a model dialog?
+				_acceptWindow = new AcceptWindow(_settingsService);
+				_acceptWindow.InitializeComponent();
+				_acceptWindow.Show();
+				_acceptWindow.Closing += AcceptWindow_Closing;
 			}
 			else
 			{
@@ -34,9 +36,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 		private void InitializeWpfApplicationSettings()
 		{
-			// TODO: confirm is this required?
+			UpdateApplicationResources();
+
+			_settingsService.AddDefaultRules();
+		}
+
+		private static void UpdateApplicationResources()
+		{
 			if (System.Windows.Application.Current == null)
 			{
+				// TODO: confirm is this required?
 				new System.Windows.Application();
 			}
 
@@ -75,8 +84,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 				System.Windows.Application.Current.Resources.MergedDictionaries.Add(flatButtonsResources);
 				System.Windows.Application.Current.Resources.MergedDictionaries.Add(controlsResources);
 			}
-
-			_settingsService.AddDefaultRules();
 		}
 
 		private void LoadTmView()
@@ -89,6 +96,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 		private void AcceptWindow_Closing(object sender, CancelEventArgs e)
 		{
+			_acceptWindow.Closing -= AcceptWindow_Closing;
+
 			if (_settingsService.UserAgreed())
 			{
 				LoadTmView();

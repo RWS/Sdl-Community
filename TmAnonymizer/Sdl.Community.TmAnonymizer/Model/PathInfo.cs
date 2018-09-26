@@ -10,7 +10,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		private const string ServerTmBackupPathName = "TmAnonymizer ServerBackup";
 		private const string SettingsFolderPathName = "TmAnonymizer Settings";
 		private const string SettingsFileName = "settings.json";
-		private const string SettingsDefaultRulesFileName = "defaultRules.json";
 
 		private string _sdlCommunityFullPath;
 		private string _tmBackupFullPath;
@@ -95,9 +94,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			}
 		}
 
-		public string SettingsFilePath => Path.Combine(SettingsFolderFullPath, SettingsFileName);
-
-		public string DefaultRulesFilePath => Path.Combine(SettingsFolderFullPath, SettingsDefaultRulesFileName);
+		public string SettingsFilePath => Path.Combine(SettingsFolderFullPath, SettingsFileName);		
 	}
 }
 

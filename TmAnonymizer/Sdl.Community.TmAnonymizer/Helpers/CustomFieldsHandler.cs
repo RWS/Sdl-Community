@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -153,6 +151,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				var tmIterator = new RegularIterator(unitsCount);
 				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
 			}
+
 			return translationUnits;
 		}
 
@@ -162,8 +161,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var tus = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			
-			
+						
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
 				if (anonymizedField.IsPickList)
@@ -202,12 +200,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 										break;
 								}
 							}
-						}
-						
+						}						
 					}
 				}
-
 			}
+
 			fileBasedTm.Save();
 		}
 
@@ -255,11 +252,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 								}
 							}
 						}
-
 					}
 				}
-
 			}
+
 			serverBasedTm.Save();
 		}
 
@@ -280,12 +276,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				Values = listString,
 				ValueType = FieldValueType.MultipleString
 			};
+
 			fieldValue.Clear();
 			fieldValue.Add(multiStrngFieldValue);
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedSingleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		private static void UpdateFileBasedSingleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(details.Value))
@@ -307,7 +304,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedDateTimeFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
+		private static void UpdateFileBasedDateTimeFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, Details details)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(details.Value))
@@ -389,12 +386,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 					listString[index] = details.NewValue;
 				}
 			}
+
 			var singleStringFieldValue = new SingleStringFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = listString.First(),
 				ValueType = FieldValueType.SingleString
 			};
+
 			fieldValue.Clear();
 			fieldValue.Merge(singleStringFieldValue);
 			foreach (var languageDirection in serverBasedTm.LanguageDirections)
@@ -414,12 +413,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 					listString[index] = details.NewValue;
 				}
 			}
+
 			var dateTimeFieldValue = new DateTimeFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = DateTime.Parse(listString.First()),
 				ValueType = FieldValueType.DateTime
 			};
+
 			fieldValue.Clear();
 			fieldValue.Add(dateTimeFieldValue);
 			foreach (var languageDirection in serverBasedTm.LanguageDirections)
@@ -445,6 +446,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 				Value = int.Parse(listString.First()),
 				ValueType = FieldValueType.Integer
 			};
+
 			fieldValue.Clear();
 			fieldValue.Merge(intFieldValue);
 			foreach (var languageDirection in serverBasedTm.LanguageDirections)

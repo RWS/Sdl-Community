@@ -204,20 +204,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						Path = selectedItem.Path
 					};
+
 					selectedTms.Add(rule);
 				}
 
 				SelectedItems.Clear();
-				foreach (var tm in selectedTms)
+				foreach (var selectedTm in selectedTms)
 				{
-					var tmToRemove = TmsCollection.FirstOrDefault(r => r.Path.Equals(tm.Path));
-					if (tmToRemove != null)
+					var tm = TmsCollection.FirstOrDefault(r => r.Path.Equals(selectedTm.Path));
+					if (tm != null)
 					{
-						TmsCollection.Remove(tmToRemove);
+						RemoveTm(tm);
 					}
-				}
-
-				SaveSetttings();
+				}				
 			}
 		}
 
@@ -253,7 +252,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (!TmAlreadyExist(tmPath))
 			{
 				var tmFileInfo = new FileInfo(tmPath);
-				var tmFile = new TmFile
+				var tm = new TmFile
 				{
 					Name = tmFileInfo.Name,
 					Path = tmFileInfo.FullName,
@@ -261,12 +260,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					IsServerTm = false
 				};
 
-				tmFile.PropertyChanged += TmFile_PropertyChanged;
-
-				TmsCollection.Insert(0, tmFile);
-
-				SaveSetttings();
+				AddTm(tm);
 			}
+		}
+
+		private void AddTm(TmFile tm)
+		{
+			tm.PropertyChanged += Tm_PropertyChanged;
+
+			TmsCollection.Insert(0, tm);
+
+			SaveSetttings();
+		}
+
+		private void RemoveTm(TmFile tm)
+		{
+			tm.PropertyChanged -= Tm_PropertyChanged;
+
+			TmsCollection.Remove(tm);
+
+			SaveSetttings();
 		}
 
 		/// <summary>
@@ -274,7 +287,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void TmFile_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
 			OnPropertyChanged(nameof(TmsCollection));
 		}
@@ -288,9 +301,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (TmsCollection != null)
 			{
-				foreach (var tmFile in TmsCollection)
+				foreach (var tm in TmsCollection)
 				{
-					tmFile.PropertyChanged -= TmFile_PropertyChanged;
+					tm.PropertyChanged -= Tm_PropertyChanged;
 				}
 			}
 		}
