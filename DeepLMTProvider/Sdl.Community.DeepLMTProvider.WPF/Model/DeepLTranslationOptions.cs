@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.DeepLMTProvider.WPF.Model
@@ -10,6 +6,7 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 	public class DeepLTranslationOptions
 	{
 		public string ApiKey { get; set; }
+		public string Identifier { get; set; }
 		public string ResendDraftsParameter
 		{
 			get => GetStringParameter("resenddrafts");
@@ -20,6 +17,8 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			get => ResendDraftsParameter != null && Convert.ToBoolean(ResendDraftsParameter);
 			set => ResendDraftsParameter = value.ToString();
 		}
+
+		
 
 		private string GetStringParameter(string p)
 		{

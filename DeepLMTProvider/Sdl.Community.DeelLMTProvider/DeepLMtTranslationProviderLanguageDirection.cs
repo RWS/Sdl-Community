@@ -1,21 +1,16 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
-using System.Windows.Forms;
 using Sdl.Core.Globalization;
-using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
 {
-    public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
-    {
+	public class DeepLMtTranslationProviderLanguageDirection : ITranslationProviderLanguageDirection
+	{
 		private readonly DeepLMtTranslationProvider _deepLMtTranslationProvider;
 		private readonly DeepLTranslationOptions _options;
 		private readonly LanguagePair _languageDirection;
@@ -31,39 +26,39 @@ namespace Sdl.Community.DeepLMTProvider
 
 		public ITranslationProvider TranslationProvider => _deepLMtTranslationProvider;
 
-        public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
+		public CultureInfo SourceLanguage => _languageDirection.SourceCulture;
 
-        public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
+		public CultureInfo TargetLanguage => _languageDirection.TargetCulture;
 
-        public bool CanReverseLanguageDirection => throw new NotImplementedException();
+		public bool CanReverseLanguageDirection => throw new NotImplementedException();
 
-        public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddOrUpdateTranslationUnits(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddOrUpdateTranslationUnitsMasked(TranslationUnit[] translationUnits, int[] previousTranslationHashes, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult AddTranslationUnit(TranslationUnit translationUnit, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
-        {
-            throw new NotImplementedException();
-        }
+		public ImportResult[] AddTranslationUnits(TranslationUnit[] translationUnits, ImportSettings settings)
+		{
+			throw new NotImplementedException();
+		}
 
-        public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
-		
-        public SearchResults SearchSegment(SearchSettings settings, Segment segment)
-        {
+		public ImportResult[] AddTranslationUnitsMasked(TranslationUnit[] translationUnits, ImportSettings settings, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
+
+		public SearchResults SearchSegment(SearchSettings settings, Segment segment)
+		{
 			var translation = new Segment(_languageDirection.TargetCulture);
 			var results = new SearchResults()
 			{
@@ -72,43 +67,43 @@ namespace Sdl.Community.DeepLMTProvider
 
 			// if there are match in tm the provider will not search the segment
 			#region "Confirmation Level"
-			if ( !_options.ResendDrafts &&_inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified) 
+			if (!_options.ResendDrafts && _inputTu.ConfirmationLevel != ConfirmationLevel.Unspecified)
 			{
 				translation.Add(PluginResources.TranslationLookupDraftNotResentMessage);
 				//later get these strings from resource file
 				results.Add(CreateSearchResult(segment, translation, segment.ToString()));
 				return results;
 			}
-	        var newseg = segment.Duplicate();
-	        if (newseg.HasTags)
-	        {
-		        var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
-		        var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
-		         translation = tagPlacer.GetTaggedSegment(translatedText);
+			var newseg = segment.Duplicate();
+			if (newseg.HasTags)
+			{
+				var tagPlacer = new DeepLTranslationProviderTagPlacer(newseg);
+				var translatedText = LookupDeepl(tagPlacer.PreparedSourceText);
+				translation = tagPlacer.GetTaggedSegment(translatedText);
 
-		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-		        return results;
+				results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
+				return results;
 			}
-	        else
-	        {
+			else
+			{
 
-		        var sourcetext = newseg.ToPlain();
+				var sourcetext = newseg.ToPlain();
 
-		        var translatedText = LookupDeepl(sourcetext);
-		        translation.Add(translatedText);
+				var translatedText = LookupDeepl(sourcetext);
+				translation.Add(translatedText);
 
-		        results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
-		        return results;
-	        }
+				results.Add(CreateSearchResult(newseg, translation, newseg.ToPlain()));
+				return results;
+			}
 
-	        #endregion
+			#endregion
 		}
 
 		private string LookupDeepl(string sourcetext)
 		{
 			if (_deeplConnect == null)
 			{
-				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey);
+				_deeplConnect = new DeepLTranslationProviderConnecter(_options.ApiKey, _options.Identifier);
 			}
 			else
 			{
@@ -148,62 +143,62 @@ namespace Sdl.Community.DeepLMTProvider
 		}
 
 		public SearchResults[] SearchSegments(SearchSettings settings, Segment[] segments)
-        {
-            throw new NotImplementedException();
-        }
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults[] SearchSegmentsMasked(SearchSettings settings, Segment[] segments, bool[] mask)
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults SearchText(SearchSettings settings, string segment)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults SearchText(SearchSettings settings, string segment)
+		{
+			throw new NotImplementedException();
+		}
 
-        public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
-        {
+		public SearchResults SearchTranslationUnit(SearchSettings settings, TranslationUnit translationUnit)
+		{
 			//need to use the tu confirmation level in searchsegment method
 			_inputTu = translationUnit;
 			return SearchSegment(settings, translationUnit.SourceSegment);
 		}
 
-        public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
-        {
-            throw new NotImplementedException();
-        }
-
-        public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits, bool[] mask)
-        {
-			// Bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
-	        var results = new List<SearchResults>();
-	     
-				var i = 0;
-	        foreach (var tu in translationUnits)
-	        {
-		        if (mask == null || mask[i])
-		        {
-			        var result = SearchTranslationUnit(settings, tu);
-			        results.Add(result);
-		        }
-		        else
-		        {
-			        results.Add(null);
-		        }
-		        i++;
-	        }
-	        return results.ToArray();
+		public SearchResults[] SearchTranslationUnits(SearchSettings settings, TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
 		}
 
-        public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
-        {
-            throw new NotImplementedException();
-        }
+		public SearchResults[] SearchTranslationUnitsMasked(SearchSettings settings, TranslationUnit[] translationUnits,
+			bool[] mask)
+		{
+			// bug LG-15128 where mask parameters are true for both CM and the actual TU to be updated which cause an unnecessary call for CM segment
+			var results = new List<SearchResults>();
+			var i = 0;
+			foreach (var tu in translationUnits)
+			{
+				if (mask == null || mask[i])
+				{
+					var result = SearchTranslationUnit(settings, tu);
+					results.Add(result);
+				}
+				else
+				{
+					results.Add(null);
+				}
+				i++;
+			}
+			return results.ToArray();
+		}
 
-        public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
-        {
-            throw new NotImplementedException();
-        }
-    }
+		public ImportResult UpdateTranslationUnit(TranslationUnit translationUnit)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ImportResult[] UpdateTranslationUnits(TranslationUnit[] translationUnits)
+		{
+			throw new NotImplementedException();
+		}
+	}
 }
