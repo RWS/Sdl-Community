@@ -1,15 +1,10 @@
 ﻿using Sdl.LanguagePlatform.TranslationMemoryApi;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using System.Globalization;
-using System.Windows.Forms;
 using Sdl.Core.Globalization;
-using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeepLMTProvider.WPF.Model;
 
 namespace Sdl.Community.DeepLMTProvider
