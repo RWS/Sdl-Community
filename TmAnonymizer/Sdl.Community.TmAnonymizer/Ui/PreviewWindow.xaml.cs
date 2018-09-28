@@ -4,7 +4,6 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
@@ -15,15 +14,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 	/// </summary>
 	public partial class PreviewWindow
 	{
-		public  IDialogCoordinator DialogCoordinatorWindow;
 		private RichTextBox _textBox;
-		private readonly PreviewWindowViewModel _previewWindowViewModel;
+		private PreviewWindowViewModel _previewWindowViewModel;
 
 		public PreviewWindow(PreviewWindowViewModel previewWindowViewModel)
 		{
 			InitializeComponent();
+
 			_previewWindowViewModel = previewWindowViewModel;
-			DialogCoordinatorWindow =DialogCoordinator.Instance;
+			DataContext = _previewWindowViewModel;
 		}
 
 		private void FrameworkElement_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -40,11 +39,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 				var start = _textBox.Selection.Start;
 				var end = _textBox.Selection.End;
 
-				var parent = (RichTextBox) _textBox.Document.Parent;
+				var parent = (RichTextBox)_textBox.Document.Parent;
 				var tag = string.Empty;
 				if (parent != null)
 				{
-					tag = (string) parent.Tag;
+					tag = (string)parent.Tag;
 				}
 
 				var tr = new TextRange(start, end);
@@ -74,16 +73,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			}
 			catch (Exception exception)
 			{
-				
+				// ignored
 			}
 		}
-			
-		private string GetNextWord(WordDetails wordDetails,string text)
+
+		private string GetNextWord(WordDetails wordDetails, string text)
 		{
 			var splitedWord = string.Empty;
 			if (wordDetails.Length.Equals(text.Length))
 			{
-				splitedWord=text.Substring(wordDetails.Length);
+				splitedWord = text.Substring(wordDetails.Length);
 			}
 			else
 			{
@@ -155,7 +154,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 		{
 			_previewWindowViewModel.ApplyChanges();
 		}
-		
+
 		private void PreviewWindow_OnPreviewKeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.Key == Key.Down)
@@ -169,3 +168,4 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 		}
 	}
 }
+

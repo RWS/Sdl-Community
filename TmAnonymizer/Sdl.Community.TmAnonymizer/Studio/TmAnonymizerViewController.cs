@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;
 using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocations;
@@ -15,14 +18,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class TmAnonymizerViewController: AbstractViewController
 	{
-		private static readonly Lazy<TmAnonymizerUserControl> Control = new Lazy<TmAnonymizerUserControl>(() => new TmAnonymizerUserControl());
-		
+		private static readonly Lazy<TmAnonymizerUserControl> Control = new Lazy<TmAnonymizerUserControl>(() => new TmAnonymizerUserControl(_model));
+		private static readonly Lazy<TmAnonymizerExplorerControl> ExplorerControl = new Lazy<TmAnonymizerExplorerControl>(() => new TmAnonymizerExplorerControl(_model));
+		private static MainViewModel _model;
+		private SettingsService _settingsService;
+
 		protected override void Initialize(IViewContext context)
 		{
+			_settingsService = new SettingsService(new PathInfo());
+			_model = new MainViewModel(_settingsService);
 		}
 		protected override Control GetContentControl()
 		{
 			return Control.Value;
+		}
+
+		protected override Control GetExplorerBarControl()
+		{
+			return ExplorerControl.Value;
 		}
 
 		[RibbonGroup("TmRibbonGroup", "SDLTm Anonymizer user guide")]
@@ -41,6 +54,4 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 	}
-	
-	
 }

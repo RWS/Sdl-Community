@@ -18,8 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			Description = StringResources.AcceptsNoLiability_Description;
 
 		}
-		public ICommand OkCommand => _okCommand ??
-												(_okCommand = new RelayCommand(Ok));
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 
 		private void Ok(object window)
 		{
@@ -34,7 +33,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public string Description
 		{
 			get => _description;
-
 			set
 			{
 				if (Equals(value, _description))
@@ -49,7 +47,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public bool Accepted
 		{
 			get => _accepted;
-
 			set
 			{
 				if (Equals(value, _accepted))

@@ -90,6 +90,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var json = File.ReadAllText(PathInfo.SettingsFilePath);
 				settings = JsonConvert.DeserializeObject<Settings>(json);
+
+				AddDefaultRules(settings);
+
 				return settings;
 			}
 
@@ -108,10 +111,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			File.WriteAllText(PathInfo.SettingsFilePath, JsonConvert.SerializeObject(settings));
 		}
 
-		public void AddDefaultRules()
-		{
-			var settings = GetSettings();
-
+		public void AddDefaultRules(Settings settings)
+		{			
 			if (settings.AlreadyAddedDefaultRules)
 			{
 				return;

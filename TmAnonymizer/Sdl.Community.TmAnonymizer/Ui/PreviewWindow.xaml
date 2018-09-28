@@ -1,23 +1,16 @@
-﻿<controls:MetroWindow x:Class="Sdl.Community.SdlTmAnonymizer.Ui.PreviewWindow"
+﻿<Window x:Class="Sdl.Community.SdlTmAnonymizer.Ui.PreviewWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-			 ShowIconOnTitleBar="True"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"          
              WindowStartupLocation="CenterScreen"
              FontFamily="Segoe UI"
-             WindowTitleBrush="#3EA691"
-             GlowBrush="#3EA691"
              Title="Preview changes"
              mc:Ignorable="d" 
-			PreviewKeyUp="PreviewWindow_OnPreviewKeyUp"
-             xmlns:dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-             xmlns:fa="http://schemas.fontawesome.io/icons/"
+			 PreviewKeyUp="PreviewWindow_OnPreviewKeyUp"
              xmlns:helpers="clr-namespace:Sdl.Community.SdlTmAnonymizer.Helpers"
-             dialog:DialogParticipation.Register="{Binding}"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="200" d:DesignWidth="600">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -29,10 +22,10 @@
 
 	<ScrollViewer  Name="ScrollViewer">
 		<Grid Name="Grid" ScrollViewer.CanContentScroll="True"  ScrollViewer.HorizontalScrollBarVisibility="Auto" >
-		<Grid.RowDefinitions>
-		    <RowDefinition Height="Auto" />
-		    <RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
 			<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,15,10,10">
@@ -41,14 +34,14 @@
 					<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
 						<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="185"  Margin="15,0,10,0" Command="{Binding ApplyCommand}">
 							<StackPanel Orientation="Horizontal">
-								<fa:FontAwesome Icon="Save" Margin="0,2,5,0"/>
+								<!--<fa:FontAwesome Icon="Save" Margin="0,2,5,0"/>-->
 								<TextBlock>Apply selected changes</TextBlock>
 							</StackPanel>
 						</Button>
 					</StackPanel>
 				</StackPanel>
 			</StackPanel>
-			
+
 			<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}"
 		          FontFamily="Segoe UI"
 				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
@@ -60,46 +53,46 @@
 		          Margin="5,10"
 		          Width="{Binding ElementName=Grid, Path=ActualWidth}"
 		          AutoGenerateColumns="False" GridLinesVisibility="None">
-			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Apply" Width="Auto" MinWidth="50">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-								<CheckBox IsChecked="{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" >
+				<DataGrid.Columns>
+					<DataGridTemplateColumn Header="Apply" Width="Auto" MinWidth="50">
 						<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
+							<DataTemplate>
+								<CheckBox IsChecked="{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" >
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
 								<TextBlock Text="{Binding SegmentNumber}" VerticalAlignment="Center" ></TextBlock>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Header="Source" Width="3*">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
 								<xctk:RichTextBox Name="SourceTextBox" Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
-								<xctk:RichTextBox.TextFormatter>
-									<helpers:RichTextBoxFormatter />
-								</xctk:RichTextBox.TextFormatter>
-								<xctk:RichTextBox.ContextMenu>
-									<ContextMenu >
+									<xctk:RichTextBox.TextFormatter>
+										<helpers:RichTextBoxFormatter />
+									</xctk:RichTextBox.TextFormatter>
+									<xctk:RichTextBox.ContextMenu>
+										<ContextMenu >
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"></MenuItem>
 											<MenuItem Header="Deselect word" Click="UnselectWord"></MenuItem>
 											<MenuItem Header="Apply selected changes" Click="AnonymizeAction"></MenuItem>
 										</ContextMenu>
-								</xctk:RichTextBox.ContextMenu>
+									</xctk:RichTextBox.ContextMenu>
 								</xctk:RichTextBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTemplateColumn Header="Target" Width="3*">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
+					<DataGridTemplateColumn Header="Target" Width="3*">
+						<DataGridTemplateColumn.CellTemplate>
+							<DataTemplate>
 								<xctk:RichTextBox  Name="TargetTextBox" Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
-								<xctk:RichTextBox.TextFormatter>
-									<helpers:RichTextBoxFormatter />
-								</xctk:RichTextBox.TextFormatter>
+									<xctk:RichTextBox.TextFormatter>
+										<helpers:RichTextBoxFormatter />
+									</xctk:RichTextBox.TextFormatter>
 									<xctk:RichTextBox.ContextMenu>
 										<ContextMenu>
 											<MenuItem Header="Select word for anonymization" Click="MenuItem_OnClick"/>
@@ -107,10 +100,10 @@
 											<MenuItem Header="Anonymize selected translation units" Click="AnonymizeAction"></MenuItem>
 										</ContextMenu>
 									</xctk:RichTextBox.ContextMenu>
-							</xctk:RichTextBox>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
+								</xctk:RichTextBox>
+							</DataTemplate>
+						</DataGridTemplateColumn.CellTemplate>
+					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Width="*" Header="Tm path" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
@@ -126,8 +119,8 @@
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
-		</DataGrid>
-	</Grid>
-		</ScrollViewer>
-</controls:MetroWindow>
+			</DataGrid>
+		</Grid>
+	</ScrollViewer>
+</Window>
 

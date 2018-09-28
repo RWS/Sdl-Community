@@ -45,17 +45,12 @@
     <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="FontAwesome.WPF, Version=4.7.0.37774, Culture=neutral, PublicKeyToken=0758b07a11a4f466, processorArchitecture=MSIL">
-      <HintPath>..\packages\FontAwesome.WPF.4.7.0.9\lib\net40\FontAwesome.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="MahApps.Metro, Version=1.5.0.23, Culture=neutral, PublicKeyToken=f4fb5a3c4d1e5b4f, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\MahApps.Metro.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="presentationframework.aero2" />
     <Reference Include="Sdl.Core.PluginFramework, Version=1.8.0.0, Culture=neutral, PublicKeyToken=c28cdb26c445c888, processorArchitecture=MSIL">
       <HintPath>..\packages\Sdl.Core.PluginFramework.1.8.0\lib\net45\Sdl.Core.PluginFramework.dll</HintPath>
     </Reference>
@@ -126,9 +121,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MahApps.Metro.1.5.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="UIAutomationProvider" />
@@ -139,7 +131,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\CustomDataGrid.cs" />
+    <Compile Include="Behaviours\DragDropBehaviour.cs" />
+    <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Helpers\CustomFieldData.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Services\CustomFieldsService.cs" />
@@ -149,7 +143,6 @@
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />
-    <Compile Include="Helpers\DropBehavior.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
     <Compile Include="Helpers\PersonalInformation.cs" />
     <Compile Include="Helpers\Reflector.cs" />
@@ -160,7 +153,7 @@
     <Compile Include="Services\UsersService.cs" />
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\CustomField.cs" />
-    <Compile Include="Model\Details.cs" />
+    <Compile Include="Model\CustomFieldValue.cs" />
     <Compile Include="Model\Login.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
@@ -193,6 +186,9 @@
     <Compile Include="Ui\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Ui\MainExplorerControl.xaml.cs">
+      <DependentUpon>MainExplorerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Ui\MainViewControl.xaml.cs">
       <DependentUpon>MainViewControl.xaml</DependentUpon>
     </Compile>
@@ -201,6 +197,12 @@
     </Compile>
     <Compile Include="Ui\SystemFields.xaml.cs">
       <DependentUpon>SystemFields.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Ui\TmAnonymizerExplorerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ui\TmAnonymizerExplorerControl.Designer.cs">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\TmAnonymizerUserControl.cs">
       <SubType>UserControl</SubType>
@@ -242,6 +244,9 @@
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Ui\TmAnonymizerExplorerControl.resx">
+      <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\TmAnonymizerUserControl.resx">
       <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -280,6 +285,10 @@
     <Page Include="Ui\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Ui\MainExplorerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Ui\MainViewControl.xaml">
       <SubType>Designer</SubType>

@@ -10,6 +10,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 		public Translations()
 		{
 			InitializeComponent();
-		}
+		}	
 	}
 }
