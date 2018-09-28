@@ -9,10 +9,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 	/// </summary>
 	public partial class MainViewControl 
 	{
-		public MainViewControl(SettingsService settingsService)
+		public MainViewControl(MainViewModel model)
 		{
 			InitializeComponent();
-			DataContext = new MainViewModel(settingsService);
+			DataContext = model;
 		}
 
 		private void ParentGrid_OnPreviewKeyUp(object sender, KeyEventArgs e)

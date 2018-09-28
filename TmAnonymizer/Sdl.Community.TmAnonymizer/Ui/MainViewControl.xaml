@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:viewModels="clr-namespace:Sdl.Community.SdlTmAnonymizer.ViewModel"
              xmlns:ui="clr-namespace:Sdl.Community.SdlTmAnonymizer.Ui"
              mc:Ignorable="d" 
@@ -14,33 +13,19 @@
 		</DataTemplate>
 	</UserControl.Resources>
 
-	<ScrollViewer Name="ScrollViewer">
-		<Grid  Name="ParentGrid" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
-			<Grid.Resources>
-				<ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.AnimatedTabControl.xaml" />
-			</Grid.Resources>
-
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />
-				<ColumnDefinition Width="*" />
-			</Grid.ColumnDefinitions>
-
-			<ContentControl Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" />
-
-			<TabControl Grid.Column="1" 
-			            Margin="5,20,0,0"
-			            controls:TabControlHelper.Underlined="SelectedTabItem"
-			            controls:ControlsHelper.HeaderFontSize="15"
-			            controls:TabControlHelper.UnderlineMouseOverBrush="#3C92C0">
-				<controls:MetroTabItem Header="Translations">
+	<ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left">
+		<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
+			<TabControl
+			            Margin="5,20,0,0">
+				<TabItem Header="Translations">
 					<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="Auto"/>
-				</controls:MetroTabItem>
-				<controls:MetroTabItem  Header ="System Fields">
+				</TabItem>
+				<TabItem  Header ="System Fields">
 					<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
-				</controls:MetroTabItem>
-				<controls:MetroTabItem Header="Custom Fields" >
+				</TabItem>
+				<TabItem Header="Custom Fields" >
 					<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
-				</controls:MetroTabItem>
+				</TabItem>
 
 			</TabControl>
 		</Grid>

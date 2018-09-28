@@ -31,7 +31,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 							IsSelected = true,
 							Name = customFieldName,
 							ValueType = studioCustomFieldType,
-							Details = new ObservableCollection<Details>()
+							Details = new ObservableCollection<CustomFieldValue>()
 						};
 						customFields.Add(field);
 					}
@@ -46,7 +46,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 
 						if (customExistingField != null)
 						{
-							var details = new Details
+							var details = new CustomFieldValue
 							{
 								Value = string.Empty,
 								NewValue = string.Empty

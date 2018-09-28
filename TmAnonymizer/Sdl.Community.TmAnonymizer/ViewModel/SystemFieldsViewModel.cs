@@ -13,7 +13,6 @@ using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
-
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class SystemFieldsViewModel : ViewModelBase, IDisposable
@@ -200,10 +199,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var names = _systemFieldsService.GetUniqueFileBasedSystemFields(fileTm);
 						foreach (var name in names)
 						{
-							System.Windows.Application.Current.Dispatcher.Invoke(() =>
-							{
-								UniqueUserNames.Add(name);
-							});
+							UniqueUserNames.Add(name);
 						}
 					}
 				}
@@ -220,10 +216,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var names = _systemFieldsService.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
 						foreach (var name in names)
 						{
-							System.Windows.Application.Current.Dispatcher.Invoke(() =>
-							{
-								UniqueUserNames.Add(name);
-							});
+							UniqueUserNames.Add(name);
 						}
 					}
 				}

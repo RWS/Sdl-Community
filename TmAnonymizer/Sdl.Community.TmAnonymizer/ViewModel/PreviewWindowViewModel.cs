@@ -7,12 +7,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using Application = System.Windows.Forms.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -31,24 +32,25 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _filePath;
 		private WaitWindow _waitWindow;
 		private SourceSearchResult _selectedItem;
-		private string _textBoxColor;
+		private string _textBoxColor;	
 
 		public PreviewWindowViewModel(ObservableCollection<SourceSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel tmViewModel)
-		{
+		{		
 			_textBoxColor = "White";
 
 			_backupTms = new List<ServerTmBackUp>();
 			_backgroundWorker = new BackgroundWorker();
-			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
+			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
+
 			_sourceSearchResults = searchResults;
 			_tmViewModel = tmViewModel;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
 		}
 
-		private async void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		private async void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			await Task.WhenAll(Task.Run(() => Parallel.ForEach(_backupTms, tm =>
 			{
@@ -61,9 +63,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ?? (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
-		public IDialogCoordinator Window { get; set; }
-
-		public async void ApplyChanges()
+		
+		public void ApplyChanges()
 		{
 			if (SourceSearchResults.Any(s => s.TuSelected))
 			{
@@ -94,12 +95,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					BackupServerBasedTm(translationProvider, tusToAnonymize);
 					_tmViewModel.TmService.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
 				}
+
 				RemoveSelectedTusToAnonymize();
+
 				_waitWindow?.Close();
 			}
 			else
-			{
-				await Window.ShowMessageAsync(this, Application.ProductName, StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes);
+			{				
+				MessageBox.Show(Application.ProductName, StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes);
 			}
 		}
 
@@ -176,8 +179,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							}
 							else if (_tmExporter.Status == ScheduledOperationStatus.Error)
 							{
-								MessageBox.Show(_tmExporter.ErrorMessage,
-									"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+								MessageBox.Show(_tmExporter.ErrorMessage, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
 					}
@@ -194,14 +196,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					if (exception.InnerException != null)
 					{
-						MessageBox.Show(exception.InnerException.Message,
-							"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 					}
 				}
 				else
 				{
-					MessageBox.Show(exception.Message,
-						"", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					MessageBox.Show(exception.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
 				}
 			}
 		}
@@ -364,7 +364,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public void Dispose()
 		{
 			_tmViewModel?.Dispose();
-			_backgroundWorker?.Dispose();
+
+			if (_backgroundWorker != null)
+			{
+				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
+				_backgroundWorker.Dispose();
+			}
 		}
 	}
 }

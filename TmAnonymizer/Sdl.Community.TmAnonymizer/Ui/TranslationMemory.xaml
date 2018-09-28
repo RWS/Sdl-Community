@@ -3,10 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:helpers="clr-namespace:Sdl.Community.SdlTmAnonymizer.Helpers"
+             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"            
+             xmlns:behaviours="clr-namespace:Sdl.Community.SdlTmAnonymizer.Behaviours"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" >
-	
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignData TranslationViewModel}">
+
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -20,9 +21,10 @@
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
+			<RowDefinition />
 		</Grid.RowDefinitions>
 
-		<DockPanel Grid.Row="0" Margin="5,15,0,5" >
+		<DockPanel Grid.Row="0" Margin="0" >
 			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">
 				<ToolBar Style="{StaticResource Toolbar}" Background="WhiteSmoke" OverflowMode="Never" DockPanel.Dock="Top" >
 					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
@@ -34,59 +36,86 @@
 					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Load Server Based tms" Margin="5,0,0,0">
 						<Image Source="../Resources/ServerBasedTranslationMemory.ico"  />
 					</Button>
-					<Button Command="{Binding RemoveCommand}"  ToolTip="Remove selected tms" Margin="5,0,0,0">
+					<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected tms" Margin="5,0,0,0">
 						<Image Source="../Resources/Remove.ico"/>
 					</Button>
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>
-		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
-		<helpers:CustomDataGrid Grid.Row="3" Style="{DynamicResource DgHeaderStyle}" 
-		          FontFamily="Segoe UI"
-				  AllowDrop="True"
-				  MinWidth="100"
-		          RowHeaderWidth="0"
-		          helpers:DropBehavior.PreviewDropCommand="{Binding DragEnterCommand}"
-		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
-		          ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White" 
-				  SelectedItem="{Binding SelectedTm,UpdateSourceTrigger=PropertyChanged}"
-		          AutoGenerateColumns="False" GridLinesVisibility="None" CanUserAddRows="False"
-		          SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				  Margin="5,10" >
-			<DataGrid.InputBindings>
-				<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-			</DataGrid.InputBindings>
-			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50">
-					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
-							<CheckBox IsChecked="{Binding IsSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
-						</DataTemplate>
-					</DataGridTemplateColumn.CellTemplate>
-				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="1*" MinWidth="80" Header="Name" Binding="{Binding Name}" ElementStyle="{StaticResource WrapText}">
-					<DataGridTextColumn.CellStyle>
-						<Style TargetType="DataGridCell">
-							<Setter Property="ToolTip">
-								<Setter.Value>
-									<TextBlock Text='{Binding Name}' />
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</DataGridTextColumn.CellStyle>
-				</DataGridTextColumn>
-				<DataGridTextColumn Width="2*" Header="Path" Binding="{Binding Path}" ElementStyle="{StaticResource WrapText}">
-					<DataGridTextColumn.CellStyle>
-						<Style TargetType="DataGridCell">
-							<Setter Property="ToolTip">
-								<Setter.Value>
-									<TextBlock Text="{Binding Path}" />
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</DataGridTextColumn.CellStyle>
-				</DataGridTextColumn>
-			</DataGrid.Columns>
-		</helpers:CustomDataGrid>
+
+		<CheckBox  Grid.Row="1" FontFamily="Segoe UI" Margin="5" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
+
+		<Border BorderThickness="0,1,0,0" BorderBrush="LightGray"  Grid.Row="3">
+			<ScrollViewer  Name="ScrollViewer" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<controls:SortAwareDataGrid Style="{DynamicResource FilesGridStyle}" 
+				        DefaultColumnName="Name"
+				        DefaultSortDirection="Ascending"
+						FontFamily="Segoe UI"
+						AllowDrop="True"
+						MinWidth="100"
+						SelectionUnit="FullRow"
+						SelectionMode="Extended"
+						HeadersVisibility="Column"
+						behaviours:DragDropBehaviour.DragDrop="{Binding DragEnterCommand}"
+						BorderThickness="0" VerticalScrollBarVisibility="Auto"
+						ItemsSource="{Binding TmsCollection, Mode=TwoWay}"  Background="White"
+						IsEnabled="{Binding IsEnabled, UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+						GridLinesVisibility="None"
+						SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+						Padding="0,3,0,3" >
+					<DataGrid.InputBindings>
+						<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+					</DataGrid.InputBindings>
+					<DataGrid.Columns>
+						<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50">
+							<DataGridTemplateColumn.CellStyle>
+								<Style TargetType="DataGridCell">
+									<Setter Property="BorderThickness" Value="0" />
+									<Setter Property="Margin" Value="0" />
+								</Style>
+							</DataGridTemplateColumn.CellStyle>
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<CheckBox Margin="0,2" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						<DataGridTemplateColumn Width="1*" MinWidth="80" Header="Name" IsReadOnly="True" SortMemberPath="Name" >
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<StackPanel Orientation="Horizontal">
+										<Image Margin="0,0,3,0">
+											<Image.Style>
+												<Style TargetType="Image">
+													<Setter Property="Source" Value="../Resources/TranslationMemory.ico"></Setter>
+													<Style.Triggers>
+														<DataTrigger Binding="{Binding IsServerTm}" Value="True">
+															<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemory.ico"></Setter>
+														</DataTrigger>
+													</Style.Triggers>
+												</Style>
+											</Image.Style>
+										</Image>
+										<TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTemplateColumn.CellTemplate>
+							<DataGridTemplateColumn.CellStyle>
+								<Style TargetType="DataGridCell">
+									<Setter Property="ToolTip">
+										<Setter.Value>
+											<TextBlock Text='{Binding Path}' />
+										</Setter.Value>
+									</Setter>
+									<Setter Property="BorderThickness" Value="0" />
+									<Setter Property="Margin" Value="0" />
+								</Style>
+							</DataGridTemplateColumn.CellStyle>
+						</DataGridTemplateColumn>
+					</DataGrid.Columns>
+				</controls:SortAwareDataGrid>
+			</ScrollViewer>
+		</Border>
 	</Grid>
 </UserControl>
+

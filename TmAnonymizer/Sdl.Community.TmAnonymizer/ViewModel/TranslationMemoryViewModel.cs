@@ -38,8 +38,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			SettingsService = settingsService;
 			TmService = new TmService(settingsService);
 
-			_isEnabled = true;
-			_tmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
+			IsEnabled = true;
+			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
 		}
 
 		public TmService TmService { get; set; }
@@ -49,7 +49,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ObservableCollection<TmFile> TmsCollection
 		{
 			get => _tmsCollection;
-
 			set
 			{
 				if (Equals(value, _tmsCollection))
@@ -57,7 +56,24 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					return;
 				}
 
+				if (value != null)
+				{
+					foreach (var tm in value)
+					{
+						tm.PropertyChanged -= Tm_PropertyChanged;
+					}
+				}
+
 				_tmsCollection = value;
+
+				if (_tmsCollection != null)
+				{
+					foreach (var tm in _tmsCollection)
+					{
+						tm.PropertyChanged += Tm_PropertyChanged;
+					}
+				}
+
 				OnPropertyChanged(nameof(TmsCollection));
 			}
 		}
@@ -68,6 +84,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			set
 			{
 				_selectedItems = value;
+			
 				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
@@ -75,7 +92,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public bool SelectAll
 		{
 			get => _selectAll;
-
 			set
 			{
 				if (Equals(value, _selectAll))
@@ -90,7 +106,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public Login Credentials
 		{
 			get => _credentials;
-
 			set
 			{
 				if (Equals(value, _credentials))
@@ -105,7 +120,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public bool IsEnabled
 		{
 			get => _isEnabled;
-
 			set
 			{
 				if (Equals(value, _isEnabled))
@@ -158,18 +172,23 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		/// <summary>
 		/// Handle drop file event
 		/// </summary>
-		/// <param name="dropedFile"></param>
-		private void HandlePreviewDrop(object dropedFile)
+		/// <param name="parameter"></param>
+		private void HandlePreviewDrop(object parameter)
 		{
-			var file = dropedFile as System.Windows.DataObject;
-			var tmsPath = (string[])file?.GetData(DataFormats.FileDrop);
-			if (tmsPath != null)
+			if (parameter != null && parameter is System.Windows.DragEventArgs eventArgs)
 			{
-				foreach (var tm in tmsPath)
+				var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+				if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
 				{
-					if (!string.IsNullOrEmpty(tm) && Path.GetExtension(tm).Equals(".sdltm")) AddTm(tm);
+					foreach (var fullPath in filesOrDirectories)
+					{
+						if (!string.IsNullOrEmpty(fullPath) && Path.GetExtension(fullPath).Equals(".sdltm"))
+						{
+							AddTm(fullPath);
+						}
+					}
 				}
-			}
+			}		
 		}		
 
 		private void SaveSetttings()
@@ -268,18 +287,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void AddTm(TmFile tm)
 		{
 			tm.PropertyChanged += Tm_PropertyChanged;
-
 			TmsCollection.Insert(0, tm);
-
 			SaveSetttings();
 		}
 
 		private void RemoveTm(TmFile tm)
 		{
 			tm.PropertyChanged -= Tm_PropertyChanged;
-
 			TmsCollection.Remove(tm);
-
 			SaveSetttings();
 		}
 
@@ -290,6 +305,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		/// <param name="e"></param>
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
+			if (e.PropertyName.Equals("IsSelected"))
+			{
+				SaveSetttings();
+			}
+
 			OnPropertyChanged(nameof(TmsCollection));
 		}
 

@@ -11,7 +11,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class LoginWindowViewModel : ViewModelBase, IDataErrorInfo, IWindowActions
+	public class LoginWindowViewModel : ViewModelBase, IDataErrorInfo, IDisposable
 	{
 		private string _url;
 		private string _userName;
@@ -35,11 +35,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_hasText = false;
 			_tmsCollection = tmsCollection;
 			_backgroundWorker = new BackgroundWorker();
-			_backgroundWorker.DoWork += _backgroundWorker_DoWork;
-			_backgroundWorker.RunWorkerCompleted += _backgroundWorker_RunWorkerCompleted;
+			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
+			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 		}
 
-		private void _backgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (e.Error != null)
 			{
@@ -50,7 +50,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						Message = e.Error.InnerException.Message;
 						MessageColor = "#DF4762";
 					}
-
 				}
 				else
 				{
@@ -62,16 +61,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_window.Close();
 			}
-
 		}
 
-		private void _backgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			GetServerTms(Credentials);
 		}
 
-		public ICommand OkCommand => _okCommand ??
-									 (_okCommand = new RelayCommand(Ok));
+		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 		public Login Credentials
 		{
 			get => _credentials;
@@ -250,9 +247,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
 				   !string.IsNullOrEmpty(Credentials.UserName);
 		}
-	}
 
-	public interface IWindowActions
-	{
-	}
+		public void Dispose()
+		{
+			if (_backgroundWorker != null)
+			{
+				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
+				_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
+				_backgroundWorker.Dispose();
+			}
+		}
+	}	
 }

@@ -2,9 +2,10 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
-using MahApps.Metro.Controls.Dialogs;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.Ui
 {
@@ -13,12 +14,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 	/// </summary>
 	public partial class PreviewWindow
 	{
-		public  IDialogCoordinator DialogCoordinatorWindow;
 		private RichTextBox _textBox;
-		public PreviewWindow()
+		private PreviewWindowViewModel _previewWindowViewModel;
+
+		public PreviewWindow(PreviewWindowViewModel previewWindowViewModel)
 		{
 			InitializeComponent();
-			DialogCoordinatorWindow =DialogCoordinator.Instance;
+
+			_previewWindowViewModel = previewWindowViewModel;
+			DataContext = _previewWindowViewModel;
 		}
 
 		private void FrameworkElement_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -29,47 +33,61 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 
 		private void MenuItem_OnClick(object sender, RoutedEventArgs e)
 		{
-			var docStart = _textBox.Document.ContentStart;
-			var start = _textBox.Selection.Start;
-			var end = _textBox.Selection.End;
-
-			var parent = (RichTextBox)_textBox.Document.Parent;
-			var tag = string.Empty;
-			if (parent != null)
+			try
 			{
-				tag = (string)parent.Tag;
+				var docStart = _textBox.Document.ContentStart;
+				var start = _textBox.Selection.Start;
+				var end = _textBox.Selection.End;
+
+				var parent = (RichTextBox)_textBox.Document.Parent;
+				var tag = string.Empty;
+				if (parent != null)
+				{
+					tag = (string)parent.Tag;
+				}
+
+				var tr = new TextRange(start, end);
+				tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
+
+				var dataContext = _textBox.DataContext as SourceSearchResult;
+				var startRange = new TextRange(docStart, start);
+				var indexStartAbs = startRange.Text.Length;
+				var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
+				var wordDetails = new WordDetails
+				{
+					Position = indexStartAbs,
+					Length = indexStartAbs + _textBox.Selection.Text.TrimEnd().Length,
+					Text = _textBox.Selection.Text.TrimEnd()
+
+				};
+				var nextWord = GetNextWord(wordDetails, text);
+				wordDetails.NextWord = nextWord;
+				if (tag.Equals("SourceBox"))
+				{
+					dataContext?.SelectedWordsDetails.Add(wordDetails);
+				}
+				else
+				{
+					dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
+				}
 			}
-
-			var tr = new TextRange(start, end);
-			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
-
-			var dataContext = _textBox.DataContext as SourceSearchResult;
-			var startRange = new TextRange(docStart, start);
-			var indexStartAbs = startRange.Text.Length;
-			var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
-			var wordDetails = new WordDetails
+			catch (Exception exception)
 			{
-				Position = indexStartAbs,
-				Length = indexStartAbs+_textBox.Selection.Text.TrimEnd().Length, 
-				Text = _textBox.Selection.Text.TrimEnd()
-				
-			};
-			var nextWord = GetNextWord(wordDetails, text);
-			wordDetails.NextWord = nextWord;
-			if (tag.Equals("SourceBox"))
+				// ignored
+			}
+		}
+
+		private string GetNextWord(WordDetails wordDetails, string text)
+		{
+			var splitedWord = string.Empty;
+			if (wordDetails.Length.Equals(text.Length))
 			{
-				dataContext?.SelectedWordsDetails.Add(wordDetails);
+				splitedWord = text.Substring(wordDetails.Length);
 			}
 			else
 			{
-				dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
+				splitedWord = text.Substring(wordDetails.Length + 1);
 			}
-			
-		}
-			
-		private string GetNextWord(WordDetails wordDetails,string text)
-		{
-			var splitedWord = text.Substring(wordDetails.Length+1);
 			if (!string.IsNullOrEmpty(splitedWord))
 			{
 				return splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));
@@ -131,5 +149,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Ui
 			//if user deselected only a part from the word
 			return string.Empty;
 		}
+
+		private void AnonymizeAction(object sender, RoutedEventArgs e)
+		{
+			_previewWindowViewModel.ApplyChanges();
+		}
+
+		private void PreviewWindow_OnPreviewKeyUp(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Down)
+			{
+				ScrollViewer.LineDown();
+			}
+			if (e.Key == Key.Up)
+			{
+				ScrollViewer.LineUp();
+			}
+		}
 	}
 }
+

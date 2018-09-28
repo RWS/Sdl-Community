@@ -1,19 +1,15 @@
-﻿<mah:MetroWindow x:Class="Sdl.Community.SdlTmAnonymizer.Ui.LoginWindow"
+﻿<Window x:Class="Sdl.Community.SdlTmAnonymizer.Ui.LoginWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:fa="http://schemas.fontawesome.io/icons/"
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
 			 Title="Login"
-             GlowBrush="#3EA691"
              FontFamily="Segoe UI"
 			 Width="415"
 			 Height="350"
 			 ResizeMode="NoResize"
-			 WindowStartupLocation="CenterScreen"
-			 WindowTitleBrush="#3EA691"
+			 WindowStartupLocation="CenterScreen"			
              d:DesignHeight="300" d:DesignWidth="300">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -38,47 +34,34 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<Grid.Resources>
-			<Style TargetType="{x:Type fa:FontAwesome}">
-				<Setter Property="TextElement.FontFamily" Value="pack://application:,,,/fonts/#FontAwesome" />
-			</Style>
-		</Grid.Resources>
+
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url*</TextBlock>
-		<TextBox   mah:TextBoxHelper.ClearTextButton="True"
-				   mah:TextBoxHelper.Watermark="Url"
-				   mah:TextBoxHelper.AutoWatermark="True"
-		           mah:TextBoxHelper.UseFloatingWatermark="True" 
+		<TextBox 
 				   Margin="5,5,10,5"
 				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" ></TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
-		<TextBox  mah:TextBoxHelper.ClearTextButton="True"
-		          mah:TextBoxHelper.Watermark="User name"
-		          mah:TextBoxHelper.AutoWatermark="True"
-		          mah:TextBoxHelper.UseFloatingWatermark="True" 
+		<TextBox 
 		          Margin="5,5,10,5"
 				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
 		<PasswordBox 
 			         Style="{DynamicResource MetroButtonRevealedPasswordBox}"
-		              mah:TextBoxHelper.Watermark="Password"
-		              mah:TextBoxHelper.UseFloatingWatermark="True"  
+		              
 		              Margin="5,5,10,5"
-		              mah:TextBoxHelper.ClearTextButton="{Binding RelativeSource={RelativeSource Self}, Path=(mah:TextBoxHelper.HasText), Mode=OneWay}"
-					  mah:PasswordBoxHelper.CapsLockWarningToolTip="Caps lock is on"
-					  mah:TextBoxHelper.HasText="{Binding HasText,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"
+		              
 					  Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
-		<mah:MetroProgressBar Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Visibility="{Binding Visibility}" IsIndeterminate="True"></mah:MetroProgressBar>
+		
 		<Button  Grid.Row="6" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
 		         Margin="90,28,10,54"
 				   Command="{Binding OkCommand}" 
 				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI" >
 			<StackPanel Orientation="Horizontal">
-				<fa:FontAwesome Icon="SignIn" Margin="0,2,5,0"/>
+				<!--<fa:FontAwesome Icon="SignIn" Margin="0,2,5,0"/>-->
 				<TextBlock>Log in</TextBlock>
 			</StackPanel>
 		</Button>
 	</Grid>
-</mah:MetroWindow>
+</Window>
 

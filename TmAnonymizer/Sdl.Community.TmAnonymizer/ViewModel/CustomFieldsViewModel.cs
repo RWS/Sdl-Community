@@ -22,6 +22,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private static TranslationMemoryViewModel _translationMemoryViewModel;
 		private bool _selectAll;
 		private ObservableCollection<CustomField> _customFields;
+		private ObservableCollection<CustomFieldValue> _customFieldValues;
+		private CustomField _selectedItem;
 		private ICommand _selectAllCommand;
 		private ICommand _applyCommand;
 		private ICommand _importCommand;
@@ -36,6 +38,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_customFieldsService = customFieldsService;
 
 			_customFields = new ObservableCollection<CustomField>();
+			_customFieldValues = new ObservableCollection<CustomFieldValue>();			
+
 			_selectedItems = new List<CustomField>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 
@@ -89,7 +93,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider));
 				foreach (var field in customFields)
 				{
-					CustomFieldsCollection.Add(field);
+					CustomFields.Add(field);
 				}
 			}
 			else
@@ -97,18 +101,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var customFields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(tm));
 				foreach (var field in customFields)
 				{
-					CustomFieldsCollection.Add(field);
+					CustomFields.Add(field);
 				}
 			}
 		}
 
 		private void UnselectTm(TmFile tm)
 		{
-			var customFieldsToBeRemoved = CustomFieldsCollection.Where(c => c.TmPath.Equals(tm.Path)).ToList();
+			var customFieldsToBeRemoved = CustomFields.Where(c => c.TmPath.Equals(tm.Path)).ToList();
 
 			foreach (var customField in customFieldsToBeRemoved)
 			{
-				CustomFieldsCollection.Remove(customField);
+				CustomFields.Remove(customField);
 			}
 		}
 
@@ -118,7 +122,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					_customFieldsService.AnonymizeFileBasedCustomFields(tm, CustomFieldsCollection.ToList());
+					_customFieldsService.AnonymizeFileBasedCustomFields(tm, CustomFields.ToList());
 				}
 				else
 				{
@@ -133,7 +137,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFieldsCollection.ToList(), translationProvider);
+					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFields.ToList(), translationProvider);
 					_waitWindow.Close();
 				}
 
@@ -147,11 +151,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				var fileDialog = new SaveFileDialog
 				{
-					Title = @"Export selected custom fields",
+					Title = StringResources.Export_Export_selected_custom_fields,
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
-				var valuesToBeAnonymized = CustomFieldsCollection.Where(f => f.IsSelected).ToList();
+				var valuesToBeAnonymized = CustomFields.Where(f => f.IsSelected).ToList();
 
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
@@ -189,14 +193,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
 					foreach (var importedField in importedCustomFields)
 					{
-						var customFieldToBeAnonymized = CustomFieldsCollection.FirstOrDefault(c => c.Name.Equals(importedField.Name));
+						var customFieldToBeAnonymized = CustomFields.FirstOrDefault(c => c.Name.Equals(importedField.Name));
 						if (customFieldToBeAnonymized != null)
 						{
-							var index = CustomFieldsCollection.IndexOf(customFieldToBeAnonymized);
+							var index = CustomFields.IndexOf(customFieldToBeAnonymized);
 							customFieldToBeAnonymized.IsSelected = true;
 							customFieldToBeAnonymized.Details = importedField.Details;
-							CustomFieldsCollection.RemoveAt(index);
-							CustomFieldsCollection.Insert(index, customFieldToBeAnonymized);
+							CustomFields.RemoveAt(index);
+							CustomFields.Insert(index, customFieldToBeAnonymized);
 						}
 					}
 				}
@@ -205,7 +209,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectFields()
 		{
-			foreach (var field in CustomFieldsCollection)
+			foreach (var field in CustomFields)
 			{
 				field.IsSelected = SelectAll;
 			}
@@ -236,7 +240,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public ObservableCollection<CustomField> CustomFieldsCollection
+		public CustomField SelectedItem {
+			get => _selectedItem;
+
+			set
+			{
+				if (Equals(value, _selectedItem))
+				{
+					return;
+				}				
+				_selectedItem = value;
+
+				CustomFieldsValues = new ObservableCollection<CustomFieldValue>(_selectedItem.Details);
+
+
+				OnPropertyChanged(nameof(SelectedItem));
+				//OnPropertyChanged(nameof(CustomFieldsValues));
+			}
+		}
+
+		public ObservableCollection<CustomField> CustomFields
 		{
 			get => _customFields;
 
@@ -247,7 +270,21 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					return;
 				}
 				_customFields = value;
-				OnPropertyChanged(nameof(CustomFieldsCollection));
+				OnPropertyChanged(nameof(CustomFields));
+			}
+		}
+
+		public ObservableCollection<CustomFieldValue> CustomFieldsValues
+		{
+			get => _customFieldValues;
+			set
+			{
+				if (Equals(value, _customFieldValues))
+				{
+					return;
+				}
+				_customFieldValues = value;
+				OnPropertyChanged(nameof(CustomFieldsValues));
 			}
 		}
 
@@ -257,16 +294,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				foreach (TmFile tm in e.NewItems)
 				{
-					//custom fields for server based tms wil be loaded only when user check the checkbox
-					//if (!tm.IsServerTm)
-					//{
-					//	var customFields = CustomFieldsHandler.GetFilebasedCustomField(tm);
-					//	foreach (var customField in customFields)
-					//	{
-					//		CustomFieldsCollection.Add(customField);
-					//	}
-					//}
-
 					AddTm(tm);
 				}
 			}
@@ -326,7 +353,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (_tmsCollection != null)
 			{
-				CustomFieldsCollection = new ObservableCollection<CustomField>();
+				CustomFields = new ObservableCollection<CustomField>();
 				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
 				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
 				if (fileBasedTms.Any())
@@ -336,10 +363,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm));
 						foreach (var field in fields)
 						{
-							System.Windows.Application.Current.Dispatcher.Invoke(() =>
-							{
-								CustomFieldsCollection.Add(field);
-							});
+							CustomFields.Add(field);
 						}
 					}
 				}
@@ -356,10 +380,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider));
 						foreach (var field in fields)
 						{
-							System.Windows.Application.Current.Dispatcher.Invoke(() =>
-							{
-								CustomFieldsCollection.Add(field);
-							});
+							CustomFields.Add(field);
 						}
 					}
 				}
