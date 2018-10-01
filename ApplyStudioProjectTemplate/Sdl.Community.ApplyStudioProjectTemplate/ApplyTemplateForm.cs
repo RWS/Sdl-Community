@@ -619,10 +619,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 				}
 			}
 
-			if (SelectedTemplate.SelectedIndex > 0)
-			{
-				_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
-			}
+			_languageMatches = Helpers.Matches(_projectController.SelectedProjects.ToList(), ActiveTemplate);
 
 			if (!_languageMatches)
 			{
