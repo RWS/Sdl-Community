@@ -69,13 +69,13 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
 			{
 				targetLanguagesCode.Add(language.CultureInfo.Name);
 			}
-			if (!projectTemplateLanguages.SourceLanguageCode.Equals(sourceLanguage))
+			if (!projectTemplateLanguages.SourceLanguageCode.Equals(sourceLanguage, System.StringComparison.CurrentCultureIgnoreCase))
 			{
 				return false;
 			}
 			foreach (var templateTargetLanguage in projectTemplateLanguages.TagrgetLanguagesCodeList)
 			{
-				var sourceProjectContaisLanguage = targetLanguagesCode.Any(l=>l.Equals(templateTargetLanguage));
+				var sourceProjectContaisLanguage = targetLanguagesCode.Any(l=>l.Equals(templateTargetLanguage, System.StringComparison.CurrentCultureIgnoreCase));
 				if (!sourceProjectContaisLanguage)
 				{
 					return false;

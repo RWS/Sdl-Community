@@ -53,6 +53,8 @@
 			this.BatchTasksAllLanguagesLabel = new System.Windows.Forms.Label();
 			this.BatchTasksAllLanguages = new System.Windows.Forms.ComboBox();
 			this.VerificationGroup = new System.Windows.Forms.GroupBox();
+			this.VerificationSpecificLanguages = new System.Windows.Forms.ComboBox();
+			this.VerificationSpecificLanguagesLabel = new System.Windows.Forms.Label();
 			this.VerificationGrammerCheckerLabel = new System.Windows.Forms.Label();
 			this.VerificationGrammarChecker = new System.Windows.Forms.ComboBox();
 			this.VerificationNumberVerifierLabel = new System.Windows.Forms.Label();
@@ -73,13 +75,13 @@
 			this.OkButton = new System.Windows.Forms.Button();
 			this.FormToolTip = new System.Windows.Forms.ToolTip(this.components);
 			this.TranslationQualityAssessment = new System.Windows.Forms.ComboBox();
+			this.matchRepairBox = new System.Windows.Forms.ComboBox();
 			this.ShowToolTips = new System.Windows.Forms.CheckBox();
 			this.AboutButton = new System.Windows.Forms.Button();
 			this.QualityGroup = new System.Windows.Forms.GroupBox();
 			this.TranslationQualityAssessmentLabel = new System.Windows.Forms.Label();
 			this.matchRepairGroupBox = new System.Windows.Forms.GroupBox();
 			this.matchRepLabel = new System.Windows.Forms.Label();
-			this.matchRepairBox = new System.Windows.Forms.ComboBox();
 			this.TranslationProvidersGroup.SuspendLayout();
 			this.TranslationMemoriesGroup.SuspendLayout();
 			this.TerminologyGroup.SuspendLayout();
@@ -420,6 +422,8 @@
 			// 
 			// VerificationGroup
 			// 
+			this.VerificationGroup.Controls.Add(this.VerificationSpecificLanguages);
+			this.VerificationGroup.Controls.Add(this.VerificationSpecificLanguagesLabel);
 			this.VerificationGroup.Controls.Add(this.VerificationGrammerCheckerLabel);
 			this.VerificationGroup.Controls.Add(this.VerificationGrammarChecker);
 			this.VerificationGroup.Controls.Add(this.VerificationNumberVerifierLabel);
@@ -437,6 +441,35 @@
 			this.VerificationGroup.TabIndex = 6;
 			this.VerificationGroup.TabStop = false;
 			this.VerificationGroup.Text = "Verification";
+			// 
+			// VerificationSpecificLanguages
+			// 
+			this.VerificationSpecificLanguages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.VerificationSpecificLanguages.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.VerificationSpecificLanguages.FormattingEnabled = true;
+			this.VerificationSpecificLanguages.Items.AddRange(new object[] {
+            "Keep",
+            "Overwrite"});
+			this.VerificationSpecificLanguages.Location = new System.Drawing.Point(194, 170);
+			this.VerificationSpecificLanguages.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
+			this.VerificationSpecificLanguages.Name = "VerificationSpecificLanguages";
+			this.VerificationSpecificLanguages.Size = new System.Drawing.Size(80, 21);
+			this.VerificationSpecificLanguages.TabIndex = 11;
+			this.VerificationSpecificLanguages.Tag = "Verification Specific Languages";
+			this.FormToolTip.SetToolTip(this.VerificationSpecificLanguages, "Select the behaviour for applying the Grammar Checker settings (requires the Gram" +
+        "mar Checker plug-in)");
+			this.VerificationSpecificLanguages.SelectedIndexChanged += new System.EventHandler(this.VerificationSpecificLanguages_SelectedIndexChanged);
+			// 
+			// VerificationSpecificLanguagesLabel
+			// 
+			this.VerificationSpecificLanguagesLabel.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.VerificationSpecificLanguagesLabel.Location = new System.Drawing.Point(11, 170);
+			this.VerificationSpecificLanguagesLabel.Margin = new System.Windows.Forms.Padding(8, 4, 8, 4);
+			this.VerificationSpecificLanguagesLabel.Name = "VerificationSpecificLanguagesLabel";
+			this.VerificationSpecificLanguagesLabel.Size = new System.Drawing.Size(167, 21);
+			this.VerificationSpecificLanguagesLabel.TabIndex = 10;
+			this.VerificationSpecificLanguagesLabel.Text = "Specific language pairs";
+			this.VerificationSpecificLanguagesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// VerificationGrammerCheckerLabel
 			// 
@@ -721,6 +754,22 @@
 			this.TranslationQualityAssessment.SelectedIndexChanged += new System.EventHandler(this.TranslationQualityAssessment_SelectedIndexChanged);
 			this.TranslationQualityAssessment.MouseEnter += new System.EventHandler(this.ControlMouseEnter);
 			// 
+			// matchRepairBox
+			// 
+			this.matchRepairBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.matchRepairBox.FormattingEnabled = true;
+			this.matchRepairBox.Items.AddRange(new object[] {
+            "Keep",
+            "Overwrite"});
+			this.matchRepairBox.Location = new System.Drawing.Point(193, 33);
+			this.matchRepairBox.Name = "matchRepairBox";
+			this.matchRepairBox.Size = new System.Drawing.Size(80, 21);
+			this.matchRepairBox.TabIndex = 1;
+			this.matchRepairBox.Tag = "Match Repair Settings";
+			this.FormToolTip.SetToolTip(this.matchRepairBox, "Select the behaviour for applying the Match Repair settings");
+			this.matchRepairBox.SelectedIndexChanged += new System.EventHandler(this.matchRepairBox_SelectedIndexChanged);
+			this.matchRepairBox.MouseEnter += new System.EventHandler(this.matchRepairBox_MouseEnter);
+			// 
 			// ShowToolTips
 			// 
 			this.ShowToolTips.Location = new System.Drawing.Point(12, 503);
@@ -786,25 +835,8 @@
 			this.matchRepLabel.TabIndex = 0;
 			this.matchRepLabel.Text = "Match repair";
 			// 
-			// matchRepairBox
-			// 
-			this.matchRepairBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.matchRepairBox.FormattingEnabled = true;
-			this.matchRepairBox.Items.AddRange(new object[] {
-            "Keep",
-            "Overwrite"});
-			this.matchRepairBox.Location = new System.Drawing.Point(193, 33);
-			this.matchRepairBox.Name = "matchRepairBox";
-			this.matchRepairBox.Size = new System.Drawing.Size(80, 21);
-			this.matchRepairBox.TabIndex = 1;
-			this.matchRepairBox.Tag = "Match Repair Settings";
-			this.FormToolTip.SetToolTip(this.matchRepairBox, "Select the behaviour for applying the Match Repair settings");
-			this.matchRepairBox.SelectedIndexChanged += new System.EventHandler(this.matchRepairBox_SelectedIndexChanged);
-			this.matchRepairBox.MouseEnter += new System.EventHandler(this.matchRepairBox_MouseEnter);
-			// 
 			// ApplyTemplateForm
 			// 
-			this.AcceptButton = this.OkButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.DismissButton;
@@ -891,5 +923,7 @@
 		private System.Windows.Forms.GroupBox matchRepairGroupBox;
 		private System.Windows.Forms.ComboBox matchRepairBox;
 		private System.Windows.Forms.Label matchRepLabel;
+		private System.Windows.Forms.ComboBox VerificationSpecificLanguages;
+		private System.Windows.Forms.Label VerificationSpecificLanguagesLabel;
 	}
 }

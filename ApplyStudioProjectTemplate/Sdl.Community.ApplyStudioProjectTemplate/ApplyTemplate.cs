@@ -47,7 +47,8 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             BatchTasksAllLanguages = GetApplyTemplateOptions(sourceXml, "btal");
             BatchTasksSpecificLanguages = GetApplyTemplateOptions(sourceXml, "btsl");
             FileTypes = GetApplyTemplateOptions(sourceXml, "ftts");
-	        MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
+			MatchRepairSettings = GetApplyTemplateOptions(sourceXml, "mrs");
+			VerificationSpecificLanguages = GetApplyTemplateOptions(sourceXml, "vsl");
         }
 
         /// <summary>
@@ -76,7 +77,9 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             BatchTasksSpecificLanguages = ApplyTemplateOptions.Keep;
             FileTypes = ApplyTemplateOptions.Keep;
 			MatchRepairSettings = ApplyTemplateOptions.Keep;
-        }
+			VerificationSpecificLanguages = ApplyTemplateOptions.Keep;
+
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplyTemplate"/> class.
@@ -156,13 +159,19 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             }
         }
 
-        /// <summary>
-        /// Gets or sets the translation providers all languages.
-        /// </summary>
-        /// <value>
-        /// The translation providers all languages.
-        /// </value>
-        public ApplyTemplateOptions TranslationProvidersAllLanguages
+		public ApplyTemplateOptions VerificationSpecificLanguages
+		{
+			get;
+			set;
+		}
+
+		/// <summary>
+		/// Gets or sets the translation providers all languages.
+		/// </summary>
+		/// <value>
+		/// The translation providers all languages.
+		/// </value>
+		public ApplyTemplateOptions TranslationProvidersAllLanguages
         {
             get;
             set;
@@ -375,6 +384,7 @@ namespace Sdl.Community.ApplyStudioProjectTemplate
             writer.WriteAttributeString("btsl", BatchTasksSpecificLanguages.ToString());
             writer.WriteAttributeString("ftts", FileTypes.ToString());
 			writer.WriteAttributeString("mrs",MatchRepairSettings.ToString());
+			writer.WriteAttributeString("vsl", VerificationSpecificLanguages.ToString());
             writer.WriteEndElement();
         }
 
