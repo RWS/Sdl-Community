@@ -52,8 +52,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static List<CustomFieldValue> GetNonPickListCustomFieldValues(TranslationUnit[] translationUnits, string name)
 		{
-			var details = new List<CustomFieldValue>();
-			var detailValues = new List<string>();
+			var customFieldValues = new List<CustomFieldValue>();
+			var distinctFieldValues = new List<string>();
 			foreach (var tu in translationUnits)
 			{
 				foreach (var fieldValue in tu.FieldValues)
@@ -68,18 +68,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								Value = value
 							};
 
-							detailValues.Add(detailsItem.Value);
+							distinctFieldValues.Add(detailsItem.Value);
 						}
 					}
 				}
 			}
 
-			var distinctList = detailValues.Distinct().ToList();
+			var distinctList = distinctFieldValues.Distinct().ToList();
 			foreach (var value in distinctList)
 			{
-				details.Add(new CustomFieldValue { Value = value });
+				customFieldValues.Add(new CustomFieldValue { Value = value });
 			}
-			return details;
+			return customFieldValues;
 		}
 
 		private static List<CustomFieldValue> GetPickListCustomFieldValues(FieldDefinition fieldDefinition)
@@ -104,7 +104,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var field in fieldDefinitions)
 			{
-
 				if (field.IsPicklist)
 				{
 					var customField = new CustomField
@@ -113,7 +112,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						Details = new ObservableCollection<CustomFieldValue>(GetPickListCustomFieldValues(field)),
+						FieldValues = new ObservableCollection<CustomFieldValue>(GetPickListCustomFieldValues(field)),
 						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
@@ -126,7 +125,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						Details = new ObservableCollection<CustomFieldValue>(GetNonPickListCustomFieldValues(translationUnits, field.Name)),
+						FieldValues = new ObservableCollection<CustomFieldValue>(GetNonPickListCustomFieldValues(translationUnits, field.Name)),
 						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
@@ -168,12 +167,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				if (anonymizedField.IsPickList)
 				{
-					foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
 					{
 						foreach (var fieldDefinition in fileBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							fieldDefinition.PicklistItems.Remove(detail.Value);
-							fieldDefinition.PicklistItems.Add(detail.NewValue);
+							fieldDefinition.PicklistItems.Remove(fieldValue.Value);
+							fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
 					}
 				}
@@ -183,21 +182,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{						
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
 							{
 								switch (fieldValue.ValueType)
 								{
 									case FieldValueType.SingleString:
-										UpdateFileBasedSingleStringFieldValue(fileBasedTm, fieldValue, tu, detail);
+										UpdateFileBasedSingleStringFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
 										break;
 									case FieldValueType.MultipleString:
-										UpdateFileBasedMultipleStringFieldValue(fileBasedTm,fieldValue,tu,detail);
+										UpdateFileBasedMultipleStringFieldValue(fileBasedTm,fieldValue,tu,customFieldValue);
 										break;
 									case FieldValueType.DateTime:
-										UpdateFileBasedDateTimeFieldValue(fileBasedTm, fieldValue, tu, detail);
+										UpdateFileBasedDateTimeFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
 										break;
 									case FieldValueType.Integer:
-										UpdateFileBasedIntFieldValue(fileBasedTm, fieldValue, tu, detail);
+										UpdateFileBasedIntFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
 										break;
 								}
 							}
@@ -218,12 +217,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				if (anonymizedField.IsPickList)
 				{
-					foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
 					{
 						foreach (var fieldDefinition in serverBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							fieldDefinition.PicklistItems.Remove(detail.Value);
-							fieldDefinition.PicklistItems.Add(detail.NewValue);
+							fieldDefinition.PicklistItems.Remove(fieldValue.Value);
+							fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
 					}
 				}
@@ -233,21 +232,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{						
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							foreach (var detail in anonymizedField.Details.Where(n => n.NewValue != null))
+							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
 							{
 								switch (fieldValue.ValueType)
 								{
 									case FieldValueType.SingleString:
-										UpdateServerBasedSingleStringFieldValue(serverBasedTm, fieldValue, tu, detail);
+										UpdateServerBasedSingleStringFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
 										break;
 									case FieldValueType.MultipleString:
-										UpdateServerBasedMultipleStringFieldValue(serverBasedTm, fieldValue, tu, detail);
+										UpdateServerBasedMultipleStringFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
 										break;
 									case FieldValueType.DateTime:
-										UpdateServerBasedDateTimeFieldValue(serverBasedTm, fieldValue, tu, detail);
+										UpdateServerBasedDateTimeFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
 										break;
 									case FieldValueType.Integer:
-										UpdateServerBasedIntFieldValue(serverBasedTm, fieldValue, tu, detail);
+										UpdateServerBasedIntFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
 										break;
 								}
 							}
@@ -259,15 +258,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			serverBasedTm.Save();
 		}
 
-		private static void UpdateFileBasedMultipleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateFileBasedMultipleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(),fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var multiStrngFieldValue = new MultipleStringFieldValue
@@ -282,15 +281,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedSingleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateFileBasedSingleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var singleStringFieldValue = new SingleStringFieldValue
@@ -304,15 +303,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedDateTimeFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateFileBasedDateTimeFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var dateTimeFieldValue = new DateTimeFieldValue
@@ -326,15 +325,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedIntFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateFileBasedIntFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var intFieldValue = new IntFieldValue
@@ -350,15 +349,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		//serve-based
 
-		private static void UpdateServerBasedMultipleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateServerBasedMultipleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var multiStringFieldValue = new MultipleStringFieldValue
@@ -375,15 +374,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static void UpdateServerBasedSingleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateServerBasedSingleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 
@@ -402,15 +401,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static void UpdateServerBasedDateTimeFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateServerBasedDateTimeFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 
@@ -429,15 +428,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static void UpdateServerBasedIntFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue details)
+		private static void UpdateServerBasedIntFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(details.Value))
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
-				var index = listString.IndexOf(details.Value);
+				var index = listString.IndexOf(customFieldValue.Value);
 				if (index > -1)
 				{
-					listString[index] = details.NewValue;
+					listString[index] = customFieldValue.NewValue;
 				}
 			}
 			var intFieldValue = new IntFieldValue

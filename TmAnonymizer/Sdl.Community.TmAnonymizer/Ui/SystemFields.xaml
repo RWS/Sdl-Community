@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
+             xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignData SystemFieldsViewModel}">
 	<UserControl.Resources>
@@ -29,15 +30,14 @@
 				Style="{DynamicResource FilesGridStyle}" 
 				FontFamily="Segoe UI"
 				BorderThickness="0" 
-		        SelectionMode="Single"
+		        SelectionMode="Extended"
 		        SelectionUnit="FullRow"
 				VerticalScrollBarVisibility="Auto"
-				HorizontalScrollBarVisibility="Disabled"
-				ItemsSource="{Binding UniqueUserNames, Mode=TwoWay}"  
+				HorizontalScrollBarVisibility="Disabled"				 
 				Background="White"
-				GridLinesVisibility="None" 
-				CanUserAddRows="True"
-				SelectedItem="{Binding SelectedItem}"
+				GridLinesVisibility="None"
+		        ItemsSource="{Binding UniqueUserNames, Mode=TwoWay}" 
+		        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
 				SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
 				Margin="5,10" >
@@ -46,14 +46,14 @@
 			</DataGrid.InputBindings>
 
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Use" Width="Auto" IsReadOnly="True" MinWidth="50" >
+				<DataGridTemplateColumn Header="Change" Width="Auto" IsReadOnly="True" MinWidth="50" SortMemberPath="IsSelected" >
 					<DataGridTemplateColumn.CellTemplate>
-						<DataTemplate>
+						<DataTemplate DataType="model:User">
 							<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="2*" Header="User Name" IsReadOnly="False" Binding="{Binding UserName}" />
+				<DataGridTextColumn Width="2*" Header="User Name" IsReadOnly="True" Binding="{Binding UserName}" />
 				<DataGridTextColumn Width="3*" Header="Alias" IsReadOnly="False" Binding="{Binding Alias}" />
 			</DataGrid.Columns>
 		</controls:SortAwareDataGrid>

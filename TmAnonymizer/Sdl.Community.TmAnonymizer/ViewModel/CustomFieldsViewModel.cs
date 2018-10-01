@@ -8,7 +8,6 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Ui;
@@ -32,13 +31,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly BackgroundWorker _backgroundWorker;
 		private WaitWindow _waitWindow;
 		private readonly CustomFieldsService _customFieldsService;
+		private readonly ExcelImportExportService _excelImportExportService;
 
-		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel, CustomFieldsService customFieldsService)
+		public CustomFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel, CustomFieldsService customFieldsService, ExcelImportExportService excelImportExportService)
 		{
 			_customFieldsService = customFieldsService;
+			_excelImportExportService = excelImportExportService;
 
 			_customFields = new ObservableCollection<CustomField>();
-			_customFieldValues = new ObservableCollection<CustomFieldValue>();			
+			_customFieldValues = new ObservableCollection<CustomFieldValue>();
 
 			_selectedItems = new List<CustomField>();
 			_translationMemoryViewModel = translationMemoryViewModel;
@@ -57,6 +58,132 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand ImportCommand => _importCommand ?? (_importCommand = new CommandHandler(Import, true));
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		public ICommand ExportCommand => _exportCommand ?? (_exportCommand = new CommandHandler(Export, true));
+
+		public bool SelectAll
+		{
+			get => _selectAll;
+			set
+			{
+				if (Equals(value, _selectAll))
+				{
+					return;
+				}
+
+				_selectAll = value;
+
+				OnPropertyChanged(nameof(SelectAll));
+			}
+		}
+
+		public IList SelectedItems
+		{
+			get => _selectedItems;
+			set
+			{
+				_selectedItems = value;
+				OnPropertyChanged(nameof(SelectedItems));
+			}
+		}
+
+		public CustomField SelectedItem
+		{
+			get => _selectedItem;
+			set
+			{
+				if (Equals(value, _selectedItem))
+				{
+					return;
+				}
+
+				_selectedItem = value;
+
+				CustomFieldsValues = new ObservableCollection<CustomFieldValue>(_selectedItem?.FieldValues);
+
+				UpdateCheckedAllState();
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+
+		public ObservableCollection<CustomField> CustomFields
+		{
+			get => _customFields;
+			set
+			{
+				if (Equals(value, _customFields))
+				{
+					return;
+				}
+
+				if (value != null)
+				{
+					foreach (var customField in value)
+					{
+						foreach (var customFieldValue in customField.FieldValues)
+						{
+							customFieldValue.PropertyChanged -= FieldValue_PropertyChanged;
+						}
+					}
+				}
+
+				_customFields = value;
+
+				if (_customFields != null)
+				{
+					foreach (var customField in _customFields)
+					{
+						foreach (var customFieldValue in customField.FieldValues)
+						{
+							customFieldValue.PropertyChanged += FieldValue_PropertyChanged;
+						}
+					}
+				}
+
+				OnPropertyChanged(nameof(CustomFields));
+			}
+		}
+
+		private void FieldValue_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			foreach (var customField in _customFields)
+			{
+				customField.IsSelected = customField.FieldValues.Count(a => a.IsSelected) > 0;
+			}
+			
+			OnPropertyChanged(nameof(CustomFields));
+
+			UpdateCheckedAllState();
+		}
+
+		private void UpdateCheckedAllState()
+		{
+			if (SelectedItem is CustomField selectedFeield)
+			{
+				if (selectedFeield.FieldValues.Count > 0)
+				{
+					SelectAll = selectedFeield.FieldValues.Count(a => !a.IsSelected) <= 0;
+				}
+				else
+				{
+					SelectAll = false;
+				}
+			}
+		}
+
+		public ObservableCollection<CustomFieldValue> CustomFieldsValues
+		{
+			get => _customFieldValues;
+			set
+			{
+				if (Equals(value, _customFieldValues))
+				{
+					return;
+				}
+
+				_customFieldValues = value;
+
+				OnPropertyChanged(nameof(CustomFieldsValues));
+			}
+		}
 
 		private void InitializeComponents()
 		{
@@ -91,17 +218,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.Password);
 
 				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider));
+
 				foreach (var field in customFields)
 				{
-					CustomFields.Add(field);
+					AddCustomFieldValue(field);
 				}
 			}
 			else
 			{
 				var customFields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(tm));
+
 				foreach (var field in customFields)
 				{
-					CustomFields.Add(field);
+					AddCustomFieldValue(field);
 				}
 			}
 		}
@@ -110,9 +239,21 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var customFieldsToBeRemoved = CustomFields.Where(c => c.TmPath.Equals(tm.Path)).ToList();
 
-			foreach (var customField in customFieldsToBeRemoved)
+			foreach (var field in customFieldsToBeRemoved)
 			{
-				CustomFields.Remove(customField);
+				RemoveCustomFieldValue(field);
+			}
+
+			if (SelectedItem == null)
+			{
+				if (_customFields?.Count > 0)
+				{
+					SelectedItem = _customFields[0];
+				}
+				else
+				{
+					CustomFieldsValues.Clear();
+				}
 			}
 		}
 
@@ -155,11 +296,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					Filter = @"Excel |*.xlsx"
 				};
 				var result = fileDialog.ShowDialog();
-				var valuesToBeAnonymized = CustomFields.Where(f => f.IsSelected).ToList();
+				var valuesToBeAnonymized = new List<CustomField>();
+				foreach (var item in SelectedItems)
+				{
+					valuesToBeAnonymized.Add(item as CustomField);
+				}
 
 				if (result == DialogResult.OK && fileDialog.FileName != string.Empty)
 				{
-					CustomFieldData.ExportCustomFields(fileDialog.FileName, valuesToBeAnonymized);
+					_excelImportExportService.ExportCustomFields(fileDialog.FileName, valuesToBeAnonymized);
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK,
 						MessageBoxIcon.Information);
 				}
@@ -190,102 +335,120 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 				{
-					var importedCustomFields = CustomFieldData.GetImportedCustomFields(fileDialog.FileNames.ToList());
-					foreach (var importedField in importedCustomFields)
+					var importedFields = _excelImportExportService.GetImportedCustomFields(fileDialog.FileNames.ToList());
+
+					foreach (var importedField in importedFields)
 					{
-						var customFieldToBeAnonymized = CustomFields.FirstOrDefault(c => c.Name.Equals(importedField.Name));
-						if (customFieldToBeAnonymized != null)
+						var existingField = CustomFields.FirstOrDefault(c => c.Name.Equals(importedField.Name));
+
+						if (existingField != null)
 						{
-							var index = CustomFields.IndexOf(customFieldToBeAnonymized);
-							customFieldToBeAnonymized.IsSelected = true;
-							customFieldToBeAnonymized.Details = importedField.Details;
-							CustomFields.RemoveAt(index);
-							CustomFields.Insert(index, customFieldToBeAnonymized);
+							foreach (var importedFieldValue in importedField.FieldValues)
+							{
+								if (importedFieldValue == null)
+								{
+									continue;
+								}
+
+								var existingFieldValue = existingField.FieldValues.FirstOrDefault(a => a.Value == importedFieldValue.Value);
+								if (existingFieldValue != null && FieldValuesAreEqual(existingFieldValue.NewValue, importedFieldValue.NewValue))
+								{
+									existingFieldValue.IsSelected = true;
+									existingFieldValue.NewValue = importedFieldValue.NewValue;
+								}
+							}
 						}
 					}
 				}
 			}
 		}
 
+		private void Refresh()
+		{
+			if (_tmsCollection != null)
+			{
+				CustomFields = new ObservableCollection<CustomField>();
+
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (fileBasedTms.Any())
+				{
+					foreach (var fileTm in fileBasedTms)
+					{
+						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm));
+						foreach (var field in fields)
+						{
+							AddCustomFieldValue(field);
+						}
+					}
+				}
+
+				if (serverTms.Any())
+				{
+					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false,
+						_translationMemoryViewModel.Credentials.UserName,
+						_translationMemoryViewModel.Credentials.Password);
+
+					foreach (var serverTm in serverTms)
+					{
+						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider));
+						foreach (var field in fields)
+						{
+							AddCustomFieldValue(field);
+						}
+					}
+				}
+
+				if (CustomFields.Count > 0 && SelectedItem == null)
+				{
+					SelectedItem = CustomFields[0];
+				}
+			}
+		}
+
+		private void AddCustomFieldValue(CustomField field)
+		{
+			if (CustomFields.Contains(field))
+			{
+				return;
+			}
+
+			foreach (var customFieldValue in field.FieldValues)
+			{
+				customFieldValue.PropertyChanged += FieldValue_PropertyChanged;
+			}
+
+			CustomFields.Add(field);
+		}
+
+		private void RemoveCustomFieldValue(CustomField field)
+		{
+			foreach (var customFieldValue in field.FieldValues)
+			{
+				customFieldValue.PropertyChanged -= FieldValue_PropertyChanged;
+			}
+
+			CustomFields.Remove(field);
+		}
+
 		private void SelectFields()
 		{
-			foreach (var field in CustomFields)
+			var value = SelectAll;
+			foreach (var fieldValue in CustomFieldsValues)
 			{
-				field.IsSelected = SelectAll;
+				fieldValue.IsSelected = value;
 			}
 		}
 
-		public bool SelectAll
+		private static bool FieldValuesAreEqual(string existingFieldValue, string importedFieldValue)
 		{
-			get => _selectAll;
-
-			set
+			if (existingFieldValue == null || importedFieldValue == null)
 			{
-				if (Equals(value, _selectAll))
-				{
-					return;
-				}
-				_selectAll = value;
-				OnPropertyChanged(nameof(SelectAll));
+				return !string.IsNullOrEmpty(existingFieldValue) || !string.IsNullOrEmpty(importedFieldValue);
 			}
-		}
 
-		public IList SelectedItems
-		{
-			get => _selectedItems;
-			set
-			{
-				_selectedItems = value;
-				OnPropertyChanged(nameof(SelectedItems));
-			}
-		}
-
-		public CustomField SelectedItem {
-			get => _selectedItem;
-
-			set
-			{
-				if (Equals(value, _selectedItem))
-				{
-					return;
-				}				
-				_selectedItem = value;
-
-				CustomFieldsValues = new ObservableCollection<CustomFieldValue>(_selectedItem.Details);
-
-
-				OnPropertyChanged(nameof(SelectedItem));
-				//OnPropertyChanged(nameof(CustomFieldsValues));
-			}
-		}
-
-		public ObservableCollection<CustomField> CustomFields
-		{
-			get => _customFields;
-
-			set
-			{
-				if (Equals(value, _customFields))
-				{
-					return;
-				}
-				_customFields = value;
-				OnPropertyChanged(nameof(CustomFields));
-			}
-		}
-
-		public ObservableCollection<CustomFieldValue> CustomFieldsValues
-		{
-			get => _customFieldValues;
-			set
-			{
-				if (Equals(value, _customFieldValues))
-				{
-					return;
-				}
-				_customFieldValues = value;
-				OnPropertyChanged(nameof(CustomFieldsValues));
-			}
+			return existingFieldValue != importedFieldValue;
 		}
 
 		private void TmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -349,44 +512,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			});
 		}
 
-		private void Refresh()
-		{
-			if (_tmsCollection != null)
-			{
-				CustomFields = new ObservableCollection<CustomField>();
-				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
-				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
-				if (fileBasedTms.Any())
-				{
-					foreach (var fileTm in fileBasedTms)
-					{
-						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm));
-						foreach (var field in fields)
-						{
-							CustomFields.Add(field);
-						}
-					}
-				}
-
-				if (serverTms.Any())
-				{
-					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						_translationMemoryViewModel.Credentials.UserName,
-						_translationMemoryViewModel.Credentials.Password);
-
-					foreach (var serverTm in serverTms)
-					{
-						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider));
-						foreach (var field in fields)
-						{
-							CustomFields.Add(field);
-						}
-					}
-				}
-			}
-		}
-
 		public void Dispose()
 		{
 			if (_backgroundWorker != null)
@@ -404,6 +529,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 
 				_tmsCollection.CollectionChanged -= TmsCollection_CollectionChanged;
+			}
+
+			if (_customFields != null)
+			{
+				foreach (var customField in _customFields)
+				{
+					foreach (var customFieldValue in customField.FieldValues)
+					{
+						customFieldValue.PropertyChanged -= FieldValue_PropertyChanged;
+					}
+				}
 			}
 		}
 	}

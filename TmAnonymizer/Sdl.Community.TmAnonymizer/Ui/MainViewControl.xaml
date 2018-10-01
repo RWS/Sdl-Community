@@ -15,15 +15,14 @@
 
 	<ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left">
 		<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
-			<TabControl
-			            Margin="5,20,0,0">
+			<TabControl Margin="5,20,0,0">
 				<TabItem Header="Translations">
-					<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Right" Height="Auto" Width="Auto"/>
+					<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
 				<TabItem  Header ="System Fields">
 					<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
-				<TabItem Header="Custom Fields" >
+				<TabItem Header="Custom Fields">
 					<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -8,16 +9,26 @@ using System.Windows.Data;
 
 namespace Sdl.Community.SdlTmAnonymizer.Controls
 {
-	public class SortAwareDataGrid : DataGrid
+	public class SortAwareDataGrid : DataGrid, IDisposable
 	{
 		public SortAwareDataGrid()
 		{
 			SelectionChanged += CustomDataGrid_SelectionChanged;
-		}
+			Loaded += SortAwareDataGrid_Loaded;
+		}		
 
 		public string DefaultColumnName { get; set; }
 
 		public ListSortDirection DefaultSortDirection { get; set; }
+
+		public IList SelectedItemsList
+		{
+			get { return (IList)GetValue(SelectedItemsListProperty); }
+			set { SetValue(SelectedItemsListProperty, value); }
+		}
+
+		public static readonly DependencyProperty SelectedItemsListProperty =
+			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
 
 		private List<SortDescription> _sortDescriptions;
 
@@ -26,6 +37,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 			base.OnSorting(eventArgs);
 
 			UpdateSorting();
+		}
+
+		private void SortAwareDataGrid_Loaded(object sender, RoutedEventArgs e)
+		{
+			SelectedItem = Items.Count > 0 ? Items[0] : null;
 		}
 
 		protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
@@ -90,14 +106,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		{
 			SelectedItemsList = SelectedItems;
 		}
-
-		public IList SelectedItemsList
+	
+		public void Dispose()
 		{
-			get { return (IList)GetValue(SelectedItemsListProperty); }
-			set { SetValue(SelectedItemsListProperty, value); }
+			SelectionChanged -= CustomDataGrid_SelectionChanged;
+			Loaded -= SortAwareDataGrid_Loaded;
 		}
-
-		public static readonly DependencyProperty SelectedItemsListProperty =
-			DependencyProperty.Register("SelectedItemsList", typeof(IList), typeof(SortAwareDataGrid), new PropertyMetadata(null));
 	}
 }

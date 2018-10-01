@@ -47,7 +47,7 @@
 					<KeyBinding Key="Delete" Command="{Binding RemoveRuleCommand}"/>
 				</DataGrid.InputBindings>
 				<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Preview" Width="Auto" IsReadOnly="True" MinWidth="50">
+				<DataGridTemplateColumn Header="Preview" Width="Auto" IsReadOnly="True" MinWidth="50" SortMemberPath="IsSelected">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>

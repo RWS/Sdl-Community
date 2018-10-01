@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public static class CustomFieldData
+	public class ExcelImportExportService
 	{
-		public static List<CustomField> GetImportedCustomFields(List<string> files)
+		public List<CustomField> GetImportedCustomFields(List<string> files)
 		{
 			var customFields = new List<CustomField>();
 			foreach (var file in files)
@@ -31,7 +32,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 							IsSelected = true,
 							Name = customFieldName,
 							ValueType = studioCustomFieldType,
-							Details = new ObservableCollection<CustomFieldValue>()
+							FieldValues = new ObservableCollection<CustomFieldValue>()
 						};
 						customFields.Add(field);
 					}
@@ -62,7 +63,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 								{
 									details.NewValue = newValue.ToString();
 								}
-								customExistingField.Details.Add(details);
+								customExistingField.FieldValues.Add(details);
 								break;
 							}
 						}
@@ -72,7 +73,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			return customFields;
 		}
 
-		public static void ExportCustomFields(string filePath, List<CustomField> customFields)
+		public void ExportCustomFields(string filePath, List<CustomField> customFields)
 		{
 			var package = ExcelFile.GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported custom fields");
@@ -81,7 +82,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Helpers
 			{
 				if (field != null)
 				{
-					foreach (var detail in field.Details)
+					foreach (var detail in field.FieldValues)
 					{
 						worksheet.Cells["A" + lineNumber].Value = field.Name;
 						worksheet.Cells["B" + lineNumber].Value = field.ValueType;

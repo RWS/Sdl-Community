@@ -134,7 +134,7 @@
     <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
-    <Compile Include="Helpers\CustomFieldData.cs" />
+    <Compile Include="Services\ExcelImportExportService.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Services\CustomFieldsService.cs" />
     <Compile Include="Helpers\CustomTextBox.cs" />
