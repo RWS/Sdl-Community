@@ -11,7 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public string Name { get; set; }
 		public FieldValueType ValueType { get; set; }
 		public bool IsPickList { get; set; }
-		public ObservableCollection<CustomFieldValue> Details { get; set; }
+		public ObservableCollection<CustomFieldValue> FieldValues { get; set; }
 		public string TmPath { get; set; }
 		public bool IsSelected
 		{

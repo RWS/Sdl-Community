@@ -10,6 +10,7 @@
              mc:Ignorable="d" 
 			 PreviewKeyUp="PreviewWindow_OnPreviewKeyUp"
              xmlns:helpers="clr-namespace:Sdl.Community.SdlTmAnonymizer.Helpers"
+             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
              d:DesignHeight="200" d:DesignWidth="600">
 	<Window.Resources>
 		<ResourceDictionary>
@@ -42,33 +43,35 @@
 				</StackPanel>
 			</StackPanel>
 
-			<DataGrid Grid.Row="2"  Style="{DynamicResource DgHeaderStyle}"
-		          FontFamily="Segoe UI"
-				  ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
-				  SelectedItem="{Binding SelectedItem}"
-		          Background="White" 
-		          CanUserAddRows="False"
-			      RowHeaderWidth="0"
-		          BorderThickness="0" VerticalScrollBarVisibility="Auto"
-		          Margin="5,10"
-		          Width="{Binding ElementName=Grid, Path=ActualWidth}"
-		          AutoGenerateColumns="False" GridLinesVisibility="None">
+			<controls:SortAwareDataGrid Grid.Row="2"
+			                            DefaultColumnName="SegmentNumber"
+			                            DefaultSortDirection="Ascending"
+			                            Style="{DynamicResource FilesGridStyle}" 
+										FontFamily="Segoe UI"
+										ItemsSource="{Binding SourceSearchResults, Mode=TwoWay}"
+										SelectedItem="{Binding SelectedItem}"
+										Background="White"
+										BorderThickness="0" 
+										VerticalScrollBarVisibility="Auto"
+										Margin="5,10"
+										Width="{Binding ElementName=Grid, Path=ActualWidth}"
+										GridLinesVisibility="None">
 				<DataGrid.Columns>
-					<DataGridTemplateColumn Header="Apply" Width="Auto" MinWidth="50">
+					<DataGridTemplateColumn Header="Apply" Width="Auto" MinWidth="50" SortMemberPath="TuSelected">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<CheckBox IsChecked="{Binding TuSelected,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" >
+					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" SortMemberPath="SegmentNumber" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock Text="{Binding SegmentNumber}" VerticalAlignment="Center" ></TextBlock>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Header="Source" Width="3*">
+					<DataGridTemplateColumn Header="Source" Width="3*" SortMemberPath="SourceText">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<xctk:RichTextBox Name="SourceTextBox" Tag="SourceBox" Text="{Binding SourceText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}"  ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
@@ -86,7 +89,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Header="Target" Width="3*">
+					<DataGridTemplateColumn Header="Target" Width="3*" SortMemberPath="SourceText">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<xctk:RichTextBox  Name="TargetTextBox" Tag="TargetBox" Text="{Binding TargetText}" HorizontalAlignment="Center" VerticalAlignment="Center" IsReadOnly="True" BorderThickness="0" Background="{Binding TextBoxColor}" ContextMenuOpening="FrameworkElement_OnContextMenuOpening">
@@ -104,7 +107,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Width="*" Header="Tm path" >
+					<DataGridTemplateColumn Width="*" Header="Tm path" SortMemberPath="TmFilePath" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
 								<Grid>
@@ -119,7 +122,7 @@
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 				</DataGrid.Columns>
-			</DataGrid>
+			</controls:SortAwareDataGrid>
 		</Grid>
 	</ScrollViewer>
 </Window>

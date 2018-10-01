@@ -67,7 +67,7 @@
 						<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
 					</DataGrid.InputBindings>
 					<DataGrid.Columns>
-						<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50">
+						<DataGridTemplateColumn Header="Preview" Width="Auto" MinWidth="50" SortMemberPath="IsSelected">
 							<DataGridTemplateColumn.CellStyle>
 								<Style TargetType="DataGridCell">
 									<Setter Property="BorderThickness" Value="0" />

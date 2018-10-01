@@ -17,12 +17,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					i <= workSheet.Dimension.End.Row;
 					i++)
 				{
-					var user = new User()
+					var user = new User
 					{
 						IsSelected = true,
 						UserName = string.Empty,
 						Alias = string.Empty
 					};
+
 					for (var j = workSheet.Dimension.Start.Column;
 						j <= workSheet.Dimension.End.Column;
 						j++)

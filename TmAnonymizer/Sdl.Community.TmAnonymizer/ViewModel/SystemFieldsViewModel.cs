@@ -19,8 +19,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private ObservableCollection<User> _uniqueUserNames;
-		private static TranslationMemoryViewModel _translationMemoryViewModel;
+		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
+		private User _selectedItem;
 		private ICommand _selectAllCommand;
 		private ICommand _applyChangesCommand;
 		private ICommand _importCommand;
@@ -57,6 +58,21 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_selectedItems = value;
 				OnPropertyChanged(nameof(SelectedItems));
+			}
+		}
+
+		public User SelectedItem
+		{
+			get => _selectedItem;
+			set
+			{
+				if (Equals(value, _selectedItem))
+				{
+					return;
+				}
+
+				_selectedItem = value;
+				OnPropertyChanged(nameof(SelectedItem));
 			}
 		}
 
@@ -129,16 +145,20 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.Password);
 
 				var names = _systemFieldsService.GetUniqueServerBasedSystemFields(tm, translationProvider);
-
-				foreach (var name in names)
-				{
-					UniqueUserNames.Add(name);
-				}
+				AddUniqueUserNames(names);
 			}
 			else
 			{
 				var names = _systemFieldsService.GetUniqueFileBasedSystemFields(tm);
-				foreach (var name in names)
+				AddUniqueUserNames(names);
+			}
+		}
+
+		private void AddUniqueUserNames(IEnumerable<User> names)
+		{
+			foreach (var name in names)
+			{
+				if (!UniqueUserNames.Contains(name))
 				{
 					UniqueUserNames.Add(name);
 				}
@@ -197,10 +217,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					foreach (var fileTm in fileBasedTms)
 					{
 						var names = _systemFieldsService.GetUniqueFileBasedSystemFields(fileTm);
-						foreach (var name in names)
-						{
-							UniqueUserNames.Add(name);
-						}
+						AddUniqueUserNames(names);
 					}
 				}
 
@@ -214,11 +231,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					foreach (var serverTm in serverTms)
 					{
 						var names = _systemFieldsService.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
-						foreach (var name in names)
-						{
-							UniqueUserNames.Add(name);
-						}
+						AddUniqueUserNames(names);
 					}
+				}
+
+				if (UniqueUserNames.Count > 0 && SelectedItem == null)
+				{
+					SelectedItem = UniqueUserNames[0];
 				}
 			}
 		}
