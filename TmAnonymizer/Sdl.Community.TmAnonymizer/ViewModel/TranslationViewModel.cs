@@ -13,8 +13,9 @@ using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.Ui;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using PreviewWindow = Sdl.Community.SdlTmAnonymizer.View.PreviewWindow;
+using WaitWindow = Sdl.Community.SdlTmAnonymizer.View.WaitWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {

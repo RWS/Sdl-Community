@@ -1,6 +1,6 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.Ui
+﻿namespace Sdl.Community.SdlTmAnonymizer.View
 {
-	partial class TmAnonymizerUserControl
+	partial class TmAnonymizerExplorerControl
 	{
 		/// <summary> 
 		/// Required designer variable.

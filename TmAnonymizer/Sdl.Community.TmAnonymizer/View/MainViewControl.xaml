@@ -1,15 +1,15 @@
-﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.Ui.MainViewControl"
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.MainViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:viewModels="clr-namespace:Sdl.Community.SdlTmAnonymizer.ViewModel"
-             xmlns:ui="clr-namespace:Sdl.Community.SdlTmAnonymizer.Ui"
+             xmlns:view="clr-namespace:Sdl.Community.SdlTmAnonymizer.View"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
 	<UserControl.Resources>
 		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
-			<ui:TranslationMemory/>
+			<view:TranslationMemory/>
 		</DataTemplate>
 	</UserControl.Resources>
 
@@ -17,13 +17,13 @@
 		<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
 			<TabControl Margin="5,20,0,0">
 				<TabItem Header="Translations">
-					<ui:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+					<view:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
 				<TabItem  Header ="System Fields">
-					<ui:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+					<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
 				<TabItem Header="Custom Fields">
-					<ui:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+					<view:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 				</TabItem>
 
 			</TabControl>

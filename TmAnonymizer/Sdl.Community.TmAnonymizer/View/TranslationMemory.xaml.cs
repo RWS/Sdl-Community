@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.Ui
+﻿namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
 	/// Interaction logic for TranslationMemory.xaml
@@ -8,7 +8,6 @@
 		public TranslationMemory()
 		{
 			InitializeComponent();
-		//	DataContext = new TranslationMemoryViewModel();
 		}
 	}
 }

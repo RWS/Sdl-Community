@@ -7,7 +7,7 @@ using System.Windows.Media;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
-namespace Sdl.Community.SdlTmAnonymizer.Ui
+namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
 	/// Interaction logic for PreviewWindow.xaml

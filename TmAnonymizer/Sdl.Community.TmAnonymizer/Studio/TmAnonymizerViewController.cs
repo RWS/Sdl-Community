@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 using Sdl.Desktop.IntegrationApi;
 using Sdl.Desktop.IntegrationApi.Extensions;

@@ -12,8 +12,8 @@ using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.Ui;
 using DataFormats = System.Windows.Forms.DataFormats;
+using LoginWindow = Sdl.Community.SdlTmAnonymizer.View.LoginWindow;
 using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
@@ -147,8 +147,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var loginWindow = new LoginWindow();
 
-			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, TmsCollection);
+			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService);
 			_loginWindowViewModel.PropertyChanged += ViewModel_PropertyChanged;
+
 			loginWindow.DataContext = _loginWindowViewModel;
 
 			//if we don't set element host we are not able to type in text box

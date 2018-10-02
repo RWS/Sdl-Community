@@ -177,46 +177,50 @@
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
-    <Compile Include="Ui\AcceptWindow.xaml.cs">
+    <Compile Include="ViewModel\SelectServersWindowViewModel.cs" />
+    <Compile Include="View\SelectServersWindow.xaml.cs">
+      <DependentUpon>SelectServersWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\AcceptWindow.xaml.cs">
       <DependentUpon>AcceptWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\CustomFields.xaml.cs">
+    <Compile Include="View\CustomFields.xaml.cs">
       <DependentUpon>CustomFields.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\LoginWindow.xaml.cs">
+    <Compile Include="View\LoginWindow.xaml.cs">
       <DependentUpon>LoginWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\MainExplorerControl.xaml.cs">
+    <Compile Include="View\MainExplorerControl.xaml.cs">
       <DependentUpon>MainExplorerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\MainViewControl.xaml.cs">
+    <Compile Include="View\MainViewControl.xaml.cs">
       <DependentUpon>MainViewControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\PreviewWindow.xaml.cs">
+    <Compile Include="View\PreviewWindow.xaml.cs">
       <DependentUpon>PreviewWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\SystemFields.xaml.cs">
+    <Compile Include="View\SystemFields.xaml.cs">
       <DependentUpon>SystemFields.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerExplorerControl.cs">
+    <Compile Include="View\TmAnonymizerExplorerControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerExplorerControl.Designer.cs">
+    <Compile Include="View\TmAnonymizerExplorerControl.Designer.cs">
       <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerUserControl.cs">
+    <Compile Include="View\TmAnonymizerUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Ui\TmAnonymizerUserControl.Designer.cs">
+    <Compile Include="View\TmAnonymizerUserControl.Designer.cs">
       <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\TranslationMemory.xaml.cs">
+    <Compile Include="View\TranslationMemory.xaml.cs">
       <DependentUpon>TranslationMemory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\Translations.xaml.cs">
+    <Compile Include="View\Translations.xaml.cs">
       <DependentUpon>Translations.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Ui\WaitWindow.xaml.cs">
+    <Compile Include="View\WaitWindow.xaml.cs">
       <DependentUpon>WaitWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\AcceptWindowViewModel.cs" />
@@ -244,10 +248,10 @@
       <LastGenOutput>StringResources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ui\TmAnonymizerExplorerControl.resx">
+    <EmbeddedResource Include="View\TmAnonymizerExplorerControl.resx">
       <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ui\TmAnonymizerUserControl.resx">
+    <EmbeddedResource Include="View\TmAnonymizerUserControl.resx">
       <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
@@ -258,66 +262,68 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="UiHelpers\ButtonsStyle.xaml">
+    <Page Include="Styles\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\DataGridStyle.xaml">
+    <Page Include="Styles\DataGridStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\TextBlockStyle.xaml">
+    <Page Include="Styles\TextBlockStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UiHelpers\TextBoxStyle.xaml">
+    <Page Include="Styles\TextBoxStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Ui\AcceptWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\CustomFields.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\LoginWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Ui\MainExplorerControl.xaml">
+    <Page Include="View\SelectServersWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Ui\MainViewControl.xaml">
+    <Page Include="View\AcceptWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\PreviewWindow.xaml">
+    <Page Include="View\CustomFields.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\SystemFields.xaml">
+    <Page Include="View\LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\TranslationMemory.xaml">
+    <Page Include="View\MainExplorerControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\MainViewControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\Translations.xaml">
+    <Page Include="View\PreviewWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Ui\WaitWindow.xaml">
+    <Page Include="View\SystemFields.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TranslationMemory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Translations.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WaitWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="3rd party\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup />
   <PropertyGroup>
     <CreatePluginPackage>true</CreatePluginPackage>
