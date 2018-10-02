@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.Ui;
+using AcceptWindow = Sdl.Community.SdlTmAnonymizer.View.AcceptWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -24,6 +24,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var settings = _settingsService.GetSettings();
 			settings.Accepted = Accepted;
+
 			_settingsService.SaveSettings(settings);
 
 			var accept = (AcceptWindow)window;

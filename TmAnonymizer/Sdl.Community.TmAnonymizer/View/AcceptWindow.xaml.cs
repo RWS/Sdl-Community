@@ -1,7 +1,7 @@
 ﻿using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
-namespace Sdl.Community.SdlTmAnonymizer.Ui
+namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
 	/// Interaction logic for AcceptWindow.xaml

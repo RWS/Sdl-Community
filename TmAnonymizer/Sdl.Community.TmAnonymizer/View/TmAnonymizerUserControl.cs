@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
-namespace Sdl.Community.SdlTmAnonymizer.Ui
+namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	public partial class TmAnonymizerUserControl : UserControl
 	{

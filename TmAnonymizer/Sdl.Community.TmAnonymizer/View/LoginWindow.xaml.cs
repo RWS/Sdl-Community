@@ -1,4 +1,4 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.Ui
+﻿namespace Sdl.Community.SdlTmAnonymizer.View
 {
 	/// <summary>
 	/// Interaction logic for LoginWindow.xaml

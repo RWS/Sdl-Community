@@ -6,8 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Ui;
+using Sdl.Community.SdlTmAnonymizer.Services;
+using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using LoginWindow = Sdl.Community.SdlTmAnonymizer.View.LoginWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -17,15 +19,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _userName;
 		private ICommand _okCommand;
 		private readonly LoginWindow _window;
-		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private Login _credentials;
 		private string _message;
-		private readonly BackgroundWorker _backgroundWorker;
+		//private readonly BackgroundWorker _backgroundWorker;
 		private readonly string _messageColor;
 		private bool _hasText;
 		private string _visibility;
+		private readonly SettingsService _settingsService;
 
-		public LoginWindowViewModel(LoginWindow window, ObservableCollection<TmFile> tmsCollection)
+		public LoginWindowViewModel(LoginWindow window, SettingsService settingsService)
 		{
 			_credentials = new Login();
 			_messageColor = "#DF4762";
@@ -33,10 +35,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_message = string.Empty;
 			_window = window;
 			_hasText = false;
-			_tmsCollection = tmsCollection;
-			_backgroundWorker = new BackgroundWorker();
-			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
-			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+
+			_settingsService = settingsService;
+			//_tmsCollection = tmsCollection;
+			//_backgroundWorker = new BackgroundWorker();
+			//_backgroundWorker.DoWork += BackgroundWorker_DoWork;
+			//_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 		}
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -65,7 +69,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			GetServerTms(Credentials);
+			//GetServerTms(Credentials);
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
@@ -107,6 +111,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(Visibility));
 			}
 		}
+
 		public string this[string columnName]
 		{
 			get
@@ -131,8 +136,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 				return null;
 			}
-
 		}
+
 		public string Url
 		{
 			get => _url;
@@ -188,11 +193,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					Url = Url,
 					UserName = UserName
 				};
+
 				Credentials = login;
 				HasText = true;
 				if (IsValid())
 				{
-					_backgroundWorker.RunWorkerAsync();
+					var selectServers = new SelectServersWindow(_settingsService, login);
+					//_backgroundWorker.RunWorkerAsync();
+					selectServers.ShowDialog();
+
+
 					MessageColor = "#3EA691";
 					Message = StringResources.Ok_Please_wait_until_we_connect_to_GroupShare;
 					Visibility = "Visible";
@@ -205,37 +215,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		/// <summary>
-		/// Connects to GS and set the list of TMS
-		/// </summary>
-		/// <param name="login"></param>
-		private void GetServerTms(Login login)
-		{
-			var uri = new Uri(login.Url);
-			var translationProviderServer = new TranslationProviderServer(uri, false, login.UserName, login.Password);
-			var translationMemories = translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
 
-			foreach (var tm in translationMemories)
-			{
-				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
-				var path = tmPath + "/" + tm.Name;
-				var tmAlreadyExist = _tmsCollection.Any(t => t.Path.Equals(path));
-				if (!tmAlreadyExist)
-				{
-					var serverTm = new TmFile
-					{
-						Path = path,
-						Name = tm.Name,
-						IsServerTm = true
-					};
-
-					System.Windows.Application.Current.Dispatcher.Invoke(delegate
-					{
-						_tmsCollection.Add(serverTm);
-					});
-				}
-			}
-		}
 
 		/// <summary>
 		/// Validation for the form
@@ -250,12 +230,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public void Dispose()
 		{
-			if (_backgroundWorker != null)
-			{
-				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
-				_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
-				_backgroundWorker.Dispose();
-			}
+			//if (_backgroundWorker != null)
+			//{
+			//	_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
+			//	_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
+			//	_backgroundWorker.Dispose();
+			//}
 		}
-	}	
+	}
 }

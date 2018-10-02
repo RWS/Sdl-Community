@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.Ui.TranslationMemory"
+﻿<UserControl x:Class="Sdl.Community.SdlTmAnonymizer.View.TranslationMemory"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -11,7 +11,7 @@
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="..\UiHelpers\DataGridStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
