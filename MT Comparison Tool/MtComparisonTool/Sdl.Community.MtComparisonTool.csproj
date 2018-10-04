@@ -92,6 +92,9 @@
   <ItemGroup>
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
+    <Compile Include="Models\OosAccounts.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserResponse.cs" />
     <Compile Include="PluginResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -101,6 +104,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\PluginProperties.cs" />
+    <Compile Include="Service\ApiUrls.cs" />
+    <Compile Include="Service\AuthenticationService.cs" />
     <Compile Include="Studio\MtComparisonAction.cs" />
     <EmbeddedResource Include="PluginResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -118,8 +123,6 @@
     <Resource Include="pluginpackage.manifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
-    <Folder Include="Service\" />
     <Folder Include="UI\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
