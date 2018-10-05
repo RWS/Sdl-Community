@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
@@ -176,6 +175,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						selectedRules.Add(rule);
 					}
+					
 					Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
 					System.Windows.Forms.MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
@@ -292,7 +292,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_waitWindow = new WaitWindow();
 					_waitWindow.Show();
 				});
-				System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
+				DoEvents();
 
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())
@@ -331,7 +331,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//file based tms
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(Path.Combine(tm.Path, tm.Name), SourceSearchResults, GetSelectedRules());
+					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
 
 					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 					{
@@ -345,6 +345,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
 
+		}
+
+		private static void DoEvents()
+		{
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		private void TranslationMemoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

@@ -73,7 +73,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_waitWindow = new WaitWindow();
 					_waitWindow.Show();
 				});
-				System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
+				DoEvents();
 
 				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
 				List<AnonymizeTranslationMemory> tusToAnonymize;
@@ -105,6 +105,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{				
 				MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, Application.ProductName);
 			}
+		}
+
+		private static void DoEvents()
+		{
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		public bool SelectAllResults

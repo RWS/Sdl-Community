@@ -38,10 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_customFieldsService = customFieldsService;
 			_excelImportExportService = excelImportExportService;
-
-			_customFields = new ObservableCollection<CustomField>();
-			_customFieldValues = new ObservableCollection<CustomFieldValue>();
-
+			
 			_selectedItems = new List<CustomField>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 
@@ -97,7 +94,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 
 				_selectedItem = value;
-
+				
 				CustomFieldsValues = new ObservableCollection<CustomFieldValue>(_selectedItem?.FieldValues);
 
 				UpdateCheckedAllState();
@@ -107,7 +104,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ObservableCollection<CustomField> CustomFields
 		{
-			get => _customFields;
+			get => _customFields ?? (_customFields = new ObservableCollection<CustomField>());
 			set
 			{
 				if (Equals(value, _customFields))
@@ -143,9 +140,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		public ObservableCollection<CustomFieldValue> CustomFieldsValues
+		{
+			get => _customFieldValues ?? (_customFieldValues = new ObservableCollection<CustomFieldValue>());
+			set
+			{
+				if (Equals(value, _customFieldValues))
+				{
+					return;
+				}
+
+				_customFieldValues = value;
+
+				OnPropertyChanged(nameof(CustomFieldsValues));
+			}
+		}
+
+
 		private void FieldValue_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			foreach (var customField in _customFields)
+			foreach (var customField in CustomFields)
 			{
 				customField.IsSelected = customField.FieldValues.Count(a => a.IsSelected) > 0;
 			}
@@ -170,21 +184,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public ObservableCollection<CustomFieldValue> CustomFieldsValues
-		{
-			get => _customFieldValues;
-			set
-			{
-				if (Equals(value, _customFieldValues))
-				{
-					return;
-				}
-
-				_customFieldValues = value;
-
-				OnPropertyChanged(nameof(CustomFieldsValues));
-			}
-		}
 
 		private void InitializeComponents()
 		{
@@ -252,9 +251,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (SelectedItem == null)
 			{
-				if (_customFields?.Count > 0)
+				if (CustomFields?.Count > 0)
 				{
-					SelectedItem = _customFields[0];
+					SelectedItem = CustomFields[0];
 				}
 				else
 				{
@@ -278,7 +277,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_waitWindow = new WaitWindow();
 						_waitWindow.Show();
 					});
-					System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
+					DoEvents();
 
 					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
 					var translationProvider = new TranslationProviderServer(uri, false,
@@ -291,6 +290,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				Refresh();
 			}
+		}
+
+		private static void DoEvents()
+		{
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		private void Export()
@@ -374,7 +378,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (_tmsCollection != null)
 			{
-				CustomFields = new ObservableCollection<CustomField>();
+				CustomFields.Clear();
 
 				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
 				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
@@ -502,7 +506,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();
 			});
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
+			DoEvents();
 
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
@@ -539,9 +543,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_tmsCollection.CollectionChanged -= TmsCollection_CollectionChanged;
 			}
 
-			if (_customFields != null)
+			if (CustomFields != null)
 			{
-				foreach (var customField in _customFields)
+				foreach (var customField in CustomFields)
 				{
 					foreach (var customFieldValue in customField.FieldValues)
 					{
