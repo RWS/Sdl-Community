@@ -69,6 +69,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_translationMemoryViewModel.PropertyChanged += TranslationMemoryViewModel_PropertyChanged;
 
 			RulesCollection.CollectionChanged += RulesCollection_CollectionChanged;
+
+			UpdateCheckedAllState();
 		}
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllRules, true));
@@ -175,7 +177,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						selectedRules.Add(rule);
 					}
-					
+
 					Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
 					System.Windows.Forms.MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
@@ -375,8 +377,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Rule_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			_settings.Rules = RulesCollection.ToList();
+			_settings.Rules = RulesCollection.ToList();		
 			_settingsService.SaveSettings(_settings);
+
+			UpdateCheckedAllState();
+		}
+
+		private void UpdateCheckedAllState()
+		{
+			if (RulesCollection.Count > 0)
+			{
+				SelectAll = RulesCollection.Count(a => !a.IsSelected) <= 0;
+			}
+			else
+			{
+				SelectAll = false;
+			}
 		}
 
 		private void TmsCollection_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

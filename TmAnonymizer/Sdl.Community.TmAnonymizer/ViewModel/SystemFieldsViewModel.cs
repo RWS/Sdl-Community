@@ -37,8 +37,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_systemFieldsService = systemFieldsService;
 			_usersService = usersService;
-
-			_selectedItems = new List<User>();
+			
 			_translationMemoryViewModel = translationMemoryViewModel;
 
 			_backgroundWorker = new BackgroundWorker();
@@ -48,12 +47,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
 
-			InitializeComponents();
+			InitializeComponents();			
 		}
 
 		public IList SelectedItems
 		{
-			get => _selectedItems;
+			get => _selectedItems ?? (_selectedItems = new List<User>());
 			set
 			{
 				_selectedItems = value;
@@ -120,13 +119,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 
 			Refresh();
+
+			UpdateCheckedAllState();
 		}
 
 		private void AddTm(TmFile tm)
 		{
 			tm.PropertyChanged -= Tm_PropertyChanged;
 			tm.PropertyChanged += Tm_PropertyChanged;
-
 
 			SelectTm(tm);
 		}
@@ -161,23 +161,42 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void AddUniqueUserNames(IEnumerable<User> names)
+		private void AddUniqueUserNames(IEnumerable<User> userNames)
 		{
-			foreach (var name in names)
+			foreach (var name in userNames)
 			{
 				if (!UniqueUserNames.Contains(name))
 				{
+					name.PropertyChanged += Name_PropertyChanged;
 					UniqueUserNames.Add(name);
 				}
 			}
 		}
 
+		private void Name_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			UpdateCheckedAllState();
+		}
+
+		private void UpdateCheckedAllState()
+		{
+			if (UniqueUserNames.Count > 0)
+			{
+				SelectAll = UniqueUserNames.Count(a => !a.IsSelected) <= 0;
+			}
+			else
+			{
+				SelectAll = false;
+			}
+		}
+
 		private void UnselectTm(TmFile tm)
 		{
-			var userNamesToBeRemoved = UniqueUserNames.Where(t => t.TmFilePath.Equals(tm.Path)).ToList();
-			foreach (var userName in userNamesToBeRemoved)
+			var userNames = UniqueUserNames.Where(t => t.TmFilePath.Equals(tm.Path)).ToList();
+			foreach (var name in userNames)
 			{
-				UniqueUserNames.Remove(userName);
+				name.PropertyChanged -= Name_PropertyChanged;
+				UniqueUserNames.Remove(name);
 			}
 		}
 
@@ -337,7 +356,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (!_backgroundWorker.IsBusy)
 				{
 					_backgroundWorker.RunWorkerAsync(sender);
-				}
+				}				
 			}
 		}
 
@@ -398,6 +417,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 
 				_tmsCollection.CollectionChanged -= TmsCollection_CollectionChanged;
+			}
+
+			foreach (var name in UniqueUserNames)
+			{
+				name.PropertyChanged -= Name_PropertyChanged;
 			}
 		}
 	}

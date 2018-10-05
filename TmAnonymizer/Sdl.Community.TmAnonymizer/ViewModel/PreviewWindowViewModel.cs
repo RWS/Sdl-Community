@@ -43,7 +43,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 
-			_sourceSearchResults = searchResults;
+			SourceSearchResults = searchResults;
+
 			_tmViewModel = tmViewModel;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
@@ -129,14 +130,31 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ObservableCollection<SourceSearchResult> SourceSearchResults
 		{
 			get => _sourceSearchResults;
-
 			set
 			{
 				if (Equals(value, _sourceSearchResults))
 				{
 					return;
 				}
+
+				if (_sourceSearchResults != null)
+				{
+					foreach (var result in _sourceSearchResults)
+					{
+						result.PropertyChanged -= Result_PropertyChanged;
+					}
+				}
+
 				_sourceSearchResults = value;
+
+				if (_sourceSearchResults != null)
+				{
+					foreach (var result in _sourceSearchResults)
+					{
+						result.PropertyChanged += Result_PropertyChanged;
+					}
+				}
+
 				OnPropertyChanged(nameof(SourceSearchResults));
 			}
 		}
@@ -359,10 +377,28 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectResults()
 		{
+			var value = SelectAllResults;
 			foreach (var result in _sourceSearchResults)
 			{
-				result.TuSelected = SelectAllResults;
+				result.TuSelected = value;
 			}
+		}
+
+		private void UpdateCheckedAllState()
+		{
+			if (SourceSearchResults.Count > 0)
+			{
+				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
+			}
+			else
+			{
+				SelectAllResults = false;
+			}
+		}
+
+		private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			UpdateCheckedAllState();
 		}
 
 		public void Dispose()
@@ -373,6 +409,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
 				_backgroundWorker.Dispose();
+			}
+
+			foreach (var result in SourceSearchResults)
+			{
+				result.PropertyChanged -= Result_PropertyChanged;
 			}
 		}
 	}

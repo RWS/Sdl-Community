@@ -70,16 +70,7 @@
 					<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
 				</DataGrid.InputBindings>
 				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="Auto" MinWidth="60" IsReadOnly="True" SortMemberPath="IsSelected">
-						<DataGridTemplateColumn.Header>
-							<CheckBox Content="Load" FontFamily="Segoe UI" IsChecked="{Binding Path=DataContext.SelectAll, ElementName=TranslationMemoryControl}" Command="{Binding Path=DataContext.SelectAllCommand, ElementName=TranslationMemoryControl}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-						</DataGridTemplateColumn.Header>
-						<DataGridTemplateColumn.CellStyle>
-							<Style TargetType="DataGridCell">
-								<Setter Property="BorderThickness" Value="0" />
-								<Setter Property="Margin" Value="0" />
-							</Style>
-						</DataGridTemplateColumn.CellStyle>
+					<DataGridTemplateColumn Width="Auto" Header="Load" MinWidth="50" IsReadOnly="True" SortMemberPath="IsSelected">
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:TmFile">
 								<CheckBox Margin="0,2" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
