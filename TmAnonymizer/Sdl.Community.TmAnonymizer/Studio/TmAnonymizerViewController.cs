@@ -42,7 +42,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return ExplorerControl.Value;
 		}
 
-		[RibbonGroup("TmRibbonGroup", "SDLTm Anonymizer user guide")]
+		[RibbonGroup("TmRibbonGroup", "Online Help")]
 		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
 		public class TmAnonymizerRibbonGroup : AbstractRibbonGroup
 		{
