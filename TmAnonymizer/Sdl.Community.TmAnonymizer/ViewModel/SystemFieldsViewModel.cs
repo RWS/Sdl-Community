@@ -38,7 +38,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_systemFieldsService = systemFieldsService;
 			_usersService = usersService;
 
-			_uniqueUserNames = new ObservableCollection<User>();
 			_selectedItems = new List<User>();
 			_translationMemoryViewModel = translationMemoryViewModel;
 
@@ -79,7 +78,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ObservableCollection<User> UniqueUserNames
 		{
-			get => _uniqueUserNames;
+			get => _uniqueUserNames ?? (_uniqueUserNames = new ObservableCollection<User>());
 			set
 			{
 				if (Equals(value, _uniqueUserNames))
@@ -218,7 +217,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (_tmsCollection != null)
 			{
-				UniqueUserNames = new ObservableCollection<User>();
+				UniqueUserNames.Clear();
 				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
 				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
 				if (fileBasedTms.Any())
@@ -357,7 +356,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();
 			});
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
+			DoEvents();
 
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
@@ -375,6 +374,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 			});
+		}
+
+		private static void DoEvents()
+		{
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		public void Dispose()

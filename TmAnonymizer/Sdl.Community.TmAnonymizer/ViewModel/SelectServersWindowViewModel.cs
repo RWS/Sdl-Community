@@ -56,11 +56,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			_waitWindow?.Close();
-			Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
-
-			OnPropertyChanged(nameof(TranslationMemories));
-
-			((SelectServersWindow)_controlWindow).Refresh();			
+			
+			RefreshView();
 		}
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
@@ -70,10 +67,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();
 			});
-			Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+			DoEvents();
 
 			GetServerTms();
-		}		
+		}
+
+		private static void DoEvents()
+		{
+			Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
+		}
 
 		private void GetServerTms()
 		{
@@ -111,10 +113,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					Application.Current.Dispatcher.Invoke(() =>
 					{
 						_translationMemories.Add(serverTm);
-						OnPropertyChanged(nameof(TranslationMemories));
+						RefreshView();
 					});					
 				}
 			}
+		}
+
+		private void RefreshView()
+		{
+			OnPropertyChanged(nameof(TranslationMemories));
+			((SelectServersWindow) _controlWindow).Refresh();
 		}
 
 		public void Dispose()

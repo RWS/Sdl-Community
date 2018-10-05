@@ -17,7 +17,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public List<User> GetUniqueFileBasedSystemFields(TmFile tm)
 		{
 			var translationUnits = GetFileBasedTranslationUnits(tm);
-			var uniqueUsersCollection = GetUniqueUserCollection(Path.Combine(tm.Path, tm.Name), translationUnits);
+			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits);
 			return uniqueUsersCollection;
 		}
 
@@ -43,7 +43,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
 		public void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers)
 		{
-			var fileBasedTm = new FileBasedTranslationMemory(Path.Combine(tm.Path, tm.Name));
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var translationUnits = GetFileBasedTranslationUnits(tm);
 			foreach (var userName in uniqueUsers)
 			{
@@ -101,7 +101,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		/// /// <returns>Array of TranslationUnits</returns>
 		private static TranslationUnit[] GetFileBasedTranslationUnits(TmFile tm)
 		{
-			var fileBasedTm = new FileBasedTranslationMemory(Path.Combine(tm.Path, tm.Name));
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var translationUnits = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);

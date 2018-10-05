@@ -13,11 +13,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	{
 		public List<CustomField> GetFilebasedCustomField(TmFile tm)
 		{
-			var translationMemory = new FileBasedTranslationMemory(Path.Combine(tm.Path, tm.Name));
+			var translationMemory = new FileBasedTranslationMemory(tm.Path);
 			var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var tus = translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus, Path.Combine(tm.Path, tm.Name));
+			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus, tm.Path);
 
 			return customFieldList;
 		}
@@ -159,7 +159,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeFileBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields)
 		{
-			var fileBasedTm = new FileBasedTranslationMemory(Path.Combine(tm.Path, tm.Name));
+			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
 			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
 			var tmIterator = new RegularIterator(unitsCount);
 			var tus = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);

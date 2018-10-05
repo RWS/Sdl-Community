@@ -301,7 +301,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var tm = new TmFile
 				{
 					Name = tmFileInfo.Name,
-					Path = Path.GetDirectoryName(tmFileInfo.FullName),
+					Path = tmFileInfo.FullName,
 					TranslationUnits = unitsCount,
 					TmLanguageDirections = new List<TmLanguageDirection>
 					{
