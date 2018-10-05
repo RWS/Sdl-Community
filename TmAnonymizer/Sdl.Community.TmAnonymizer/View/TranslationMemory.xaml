@@ -46,7 +46,7 @@
 		</DockPanel>
 		
 		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="LightGray">
-			<controls:SortAwareDataGrid Style="{DynamicResource FilesGridStyle}" 
+			<controls:SortAwareDataGrid Style="{StaticResource FilesGridStyle}" 
 				        DefaultColumnName="Name"
 				        DefaultSortDirection="Ascending"
 						FontFamily="Segoe UI"

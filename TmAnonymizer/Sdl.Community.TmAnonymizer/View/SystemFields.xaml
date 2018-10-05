@@ -29,7 +29,7 @@
 		<controls:SortAwareDataGrid Grid.Row="1" 
 		        DefaultColumnName="UserName"
 		        DefaultSortDirection="Ascending"
-				Style="{DynamicResource FilesGridStyle}" 
+				Style="{StaticResource FilesGridStyle}" 
 				FontFamily="Segoe UI"
 				BorderThickness="0" 
 		        SelectionMode="Extended"
