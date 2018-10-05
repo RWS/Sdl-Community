@@ -1,8 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model">
+	
+	<ResourceDictionary.MergedDictionaries>
+		<ResourceDictionary Source="DataGridStyle.xaml"/>
+	</ResourceDictionary.MergedDictionaries>
 
-	<Style x:Key="PropertyTitleLabel.TextBlock.Style" TargetType="TextBlock">
+		<Style x:Key="PropertyTitleLabel.TextBlock.Style" TargetType="TextBlock">
 		<Setter Property="FontWeight" Value="DemiBold"/>
 		<Setter Property="Margin" Value="4,1,1,1"/>
 	</Style>
@@ -43,7 +47,7 @@
 
 							<GroupBox Header="Language Directions" Margin="0,5,0,0" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Height="130">
 								<DataGrid Margin="0,0,0,0"
-								        Style="{DynamicResource FilesGridStyle}" 							
+								        Style="{StaticResource FilesGridStyle}" 							
 								        FontFamily="Segoe UI"								
 								        BorderThickness="0"
 								        SelectionMode="Extended"
