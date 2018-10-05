@@ -18,7 +18,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class TranslationViewModel : ViewModelBase, IDisposable
+	public class ContentFilteringRulesViewModel : ViewModelBase, IDisposable
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
@@ -39,7 +39,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private WaitWindow _waitWindow;
 		private IList _selectedItems;
 
-		public TranslationViewModel(TranslationMemoryViewModel translationMemoryViewModel)
+		public ContentFilteringRulesViewModel(TranslationMemoryViewModel translationMemoryViewModel)
 		{
 			_translationMemoryViewModel = translationMemoryViewModel;
 
