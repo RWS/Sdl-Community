@@ -1,12 +1,32 @@
-﻿namespace Sdl.Community.SdlTmAnonymizer.Model
+﻿using System.Collections.Generic;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+
+namespace Sdl.Community.SdlTmAnonymizer.Model
 {
 	public class TmFile : ModelBase
 	{
 		private bool _isSelected;
 		private string _name;
-		private string _path;
+		private string _description;		
+		private string _path;		
 		private bool _shouldRemove;
 		private bool _isServerTm;
+		private bool _isLoaded;
+		private string _type;
+		private int _translationUnits;
+		private List<TmLanguageDirection> _tmLanguageDirections;
+
+		public TmFile()
+		{
+			IsSelected = false;
+			IsServerTm = false;
+			_tmLanguageDirections=new List<TmLanguageDirection>();
+		}
+
+		[JsonIgnore]
+		[XmlIgnore]
+		public Credentials Credentials { get; set; }
 
 		public string Name
 		{
@@ -15,6 +35,26 @@
 			{
 				_name = value;
 				OnPropertyChanged(nameof(Name));
+			}
+		}
+
+		public string Type
+		{
+			get => _type;
+			set
+			{
+				_type = value;
+				OnPropertyChanged(nameof(Type));
+			}
+		}
+
+		public string Description
+		{
+			get => _description;
+			set
+			{
+				_description = value;
+				OnPropertyChanged(nameof(Description));
 			}
 		}
 
@@ -28,9 +68,19 @@
 			}
 		}
 
-		public bool IsSelected
+		public bool IsLoaded
 		{
 
+			get => _isLoaded;
+			set
+			{
+				_isLoaded = value;
+				OnPropertyChanged(nameof(IsLoaded));
+			}
+		}
+
+		public bool IsSelected
+		{
 			get => _isSelected;
 			set
 			{
@@ -47,6 +97,26 @@
 			{
 				_shouldRemove = value;
 				OnPropertyChanged(nameof(ShouldRemove));
+			}
+		}
+
+		public int TranslationUnits
+		{
+			get => _translationUnits;
+			set
+			{
+				_translationUnits = value;
+				OnPropertyChanged(nameof(TranslationUnits));
+			}
+		}
+
+		public List<TmLanguageDirection> TmLanguageDirections
+		{
+			get => _tmLanguageDirections;
+			set
+			{
+				_tmLanguageDirections = value;
+				OnPropertyChanged(nameof(TmLanguageDirections));
 			}
 		}
 

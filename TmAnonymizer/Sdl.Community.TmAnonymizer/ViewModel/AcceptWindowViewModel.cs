@@ -1,7 +1,7 @@
 ﻿using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using AcceptWindow = Sdl.Community.SdlTmAnonymizer.View.AcceptWindow;
+using Sdl.Community.SdlTmAnonymizer.View;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {

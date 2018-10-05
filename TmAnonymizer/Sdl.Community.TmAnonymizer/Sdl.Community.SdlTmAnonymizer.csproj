@@ -133,13 +133,16 @@
   <ItemGroup>
     <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Model\TmLanguageDirection.cs" />
     <Compile Include="Services\ExcelImportExportService.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
     <Compile Include="Services\CustomFieldsService.cs" />
     <Compile Include="Helpers\CustomTextBox.cs" />
     <Compile Include="Helpers\ExcelFile.cs" />
     <Compile Include="Helpers\Expressions.cs" />
+    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />
@@ -154,7 +157,7 @@
     <Compile Include="Model\AnonymizeTranslationMemory.cs" />
     <Compile Include="Model\CustomField.cs" />
     <Compile Include="Model\CustomFieldValue.cs" />
-    <Compile Include="Model\Login.cs" />
+    <Compile Include="Model\Credentials.cs" />
     <Compile Include="Model\MatchResult.cs" />
     <Compile Include="Model\ModelBase.cs" />
     <Compile Include="Model\Position.cs" />
@@ -271,6 +274,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBlockStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\ToolTipStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

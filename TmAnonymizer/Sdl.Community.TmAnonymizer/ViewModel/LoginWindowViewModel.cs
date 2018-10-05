@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using LoginWindow = Sdl.Community.SdlTmAnonymizer.View.LoginWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -18,62 +15,68 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private string _url;
 		private string _userName;
 		private ICommand _okCommand;
-		private readonly LoginWindow _window;
-		private Login _credentials;
+		private readonly Window _window;
+		private Credentials _credentials;
 		private string _message;
-		//private readonly BackgroundWorker _backgroundWorker;
-		private readonly string _messageColor;
+		private readonly BackgroundWorker _backgroundWorker;
+		private readonly string _messageColorError;
+		private readonly string _messageColorInformation;
 		private bool _hasText;
 		private string _visibility;
-		private readonly SettingsService _settingsService;
 
-		public LoginWindowViewModel(LoginWindow window, SettingsService settingsService)
+		public LoginWindowViewModel(Window window, SettingsService settingsService)
 		{
-			_credentials = new Login();
-			_messageColor = "#DF4762";
+			_window = window;
+			_credentials = new Credentials();
+			_messageColorError = "#DF4762";
+			_messageColorInformation = "#3EA691";
 			_visibility = "Hidden";
 			_message = string.Empty;
 			_window = window;
 			_hasText = false;
 
-			_settingsService = settingsService;
-			//_tmsCollection = tmsCollection;
-			//_backgroundWorker = new BackgroundWorker();
-			//_backgroundWorker.DoWork += BackgroundWorker_DoWork;
-			//_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+			_backgroundWorker = new BackgroundWorker();
+			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
+			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
+
+			Url = settingsService.Credentials.Url;
+			UserName = settingsService.Credentials.UserName;
+
+			Credentials = settingsService.Credentials;
 		}
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			if (e.Error != null)
 			{
-				if (e.Error.Message.Equals("One or more errors occurred."))
-				{
-					if (e.Error.InnerException != null)
-					{
-						Message = e.Error.InnerException.Message;
-						MessageColor = "#DF4762";
-					}
-				}
-				else
-				{
-					Message = e.Error.Message;
-					MessageColor = "#DF4762";
-				}
+				Error = e.Error.Message;
+
+				MessageColor = _messageColorError;
+				Message = e.Error.InnerException?.Message ?? e.Error.Message;
 			}
 			else
 			{
-				_window.Close();
+				TranslationProviderServer = e.Result as TranslationProviderServer;
+				_window.DialogResult = true;
 			}
 		}
 
-		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+		private static void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
-			//GetServerTms(Credentials);
+			var isValid = Login(e.Argument as Credentials, out var server);
+			if (isValid)
+			{
+				e.Result = server;
+			}
+			else
+			{
+				throw new Exception(StringResources.Login_Not_Authorized);
+			}
 		}
 
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
-		public Login Credentials
+
+		public Credentials Credentials
 		{
 			get => _credentials;
 			set
@@ -102,6 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(HasText));
 			}
 		}
+
 		public string Visibility
 		{
 			get => _visibility;
@@ -119,8 +123,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (columnName == "Url")
 				{
 					if (string.IsNullOrEmpty(Url))
-
+					{
 						return StringResources.Url_is_required;
+					}
 				}
 				if (columnName == "UserName" && string.IsNullOrEmpty(UserName))
 				{
@@ -152,6 +157,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(Url));
 			}
 		}
+
 		public string UserName
 		{
 			get => _userName;
@@ -166,6 +172,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(UserName));
 			}
 		}
+
 		public string MessageColor
 		{
 			get => _message;
@@ -181,61 +188,68 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public string Error { get; }
+		public string Error { get; private set; }
+
+		public TranslationProviderServer TranslationProviderServer { get; set; }
+
+		private static bool IsValid(Credentials credentials)
+		{
+			return !string.IsNullOrEmpty(credentials.Password) &&
+			        !string.IsNullOrEmpty(credentials.Url) &&
+			        !string.IsNullOrEmpty(credentials.UserName);
+
+		}
+
+		private static bool Login(Credentials credentials, out TranslationProviderServer translationProviderServer)
+		{
+			if (IsValid(credentials))
+			{
+				translationProviderServer = new TranslationProviderServer(new Uri(credentials.Url), false, credentials.UserName, credentials.Password);
+				return true;
+			}
+
+			translationProviderServer = null;
+			return false;
+		}
 
 		private void Ok(object parameter)
 		{
 			if (parameter is PasswordBox passwordBox)
 			{
-				var login = new Login
+				var credentials = new Credentials
 				{
-					Password = passwordBox.Password,
 					Url = Url,
-					UserName = UserName
+					UserName = UserName,
+					Password = passwordBox.Password,
 				};
 
-				Credentials = login;
+				Credentials = credentials;
 				HasText = true;
-				if (IsValid())
+
+				MessageColor = _messageColorInformation;
+				Message = StringResources.Ok_Please_wait_until_we_connect_to_GroupShare;
+				Visibility = "Visible";
+
+				if (IsValid(Credentials))
 				{
-					var selectServers = new SelectServersWindow(_settingsService, login);
-					//_backgroundWorker.RunWorkerAsync();
-					selectServers.ShowDialog();
-
-
-					MessageColor = "#3EA691";
-					Message = StringResources.Ok_Please_wait_until_we_connect_to_GroupShare;
-					Visibility = "Visible";
+					_backgroundWorker.RunWorkerAsync(Credentials);
 				}
 				else
 				{
-					Message = StringResources.Ok_All_fields_are_required_;
-					MessageColor = "#DF4762";
+					MessageColor = _messageColorError;
+					Message = StringResources.Ok_All_fields_are_required;
 				}
 			}
 		}
 
-
-
-		/// <summary>
-		/// Validation for the form
-		/// All fields are required
-		/// </summary>
-		/// <returns></returns>
-		private bool IsValid()
-		{
-			return !string.IsNullOrEmpty(Credentials.Password) && !string.IsNullOrEmpty(Credentials.Url) &&
-				   !string.IsNullOrEmpty(Credentials.UserName);
-		}
-
 		public void Dispose()
 		{
-			//if (_backgroundWorker != null)
-			//{
-			//	_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
-			//	_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
-			//	_backgroundWorker.Dispose();
-			//}
+			if (_backgroundWorker != null)
+			{
+				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
+				_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
+				_backgroundWorker.Dispose();
+			}
 		}
 	}
 }

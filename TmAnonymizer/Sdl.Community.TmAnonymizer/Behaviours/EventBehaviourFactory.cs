@@ -62,7 +62,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Behaviours
 			protected DependencyProperty Property;
 			protected abstract void AdjustEventHandlers(DependencyObject sender, object oldValue, object newValue);
 
-			protected void HandleEvent(object sender, System.EventArgs e)
+			protected void HandleEvent(object sender, EventArgs e)
 			{
 				var dp = sender as DependencyObject;
 

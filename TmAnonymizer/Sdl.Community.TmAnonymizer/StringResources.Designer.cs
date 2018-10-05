@@ -170,11 +170,20 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not Authorized!.
+        /// </summary>
+        internal static string Login_Not_Authorized {
+            get {
+                return ResourceManager.GetString("Login_Not_Authorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All fields are required!.
         /// </summary>
-        internal static string Ok_All_fields_are_required_ {
+        internal static string Ok_All_fields_are_required {
             get {
-                return ResourceManager.GetString("Ok_All_fields_are_required_", resourceCulture);
+                return ResourceManager.GetString("Ok_All_fields_are_required", resourceCulture);
             }
         }
         

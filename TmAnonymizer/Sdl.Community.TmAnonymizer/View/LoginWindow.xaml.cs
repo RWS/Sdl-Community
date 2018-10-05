@@ -8,6 +8,6 @@
 		public LoginWindow()
 		{
 			InitializeComponent();
-		}
+		}	
 	}
 }

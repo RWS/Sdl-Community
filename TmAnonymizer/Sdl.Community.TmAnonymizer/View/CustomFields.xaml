@@ -5,26 +5,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model"
              xmlns:viewModel="clr-namespace:Sdl.Community.SdlTmAnonymizer.ViewModel"
-             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"			
-             mc:Ignorable="d" 
-             d:DesignHeight="200" d:DataContext="{d:DesignInstance viewModel:CustomFieldsViewModel}">
+             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"	
+             d:DesignHeight="200"
+			 Name="CustomFieldsControl"
+             mc:Ignorable="d" d:DataContext="{d:DesignInstance viewModel:CustomFieldsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
-			<DataTemplate x:Key="CustomFieldsTemplate" DataType="model:CustomFieldValue">
-				<StackPanel Orientation = "Horizontal">
-					<TextBox Text = "{Binding Path = Value, Mode = TwoWay}" Width = "150" Margin = "3 5 3 5" TextWrapping="Wrap" IsEnabled="False"/>
-					<TextBox Text = "{Binding Path = NewValue, Mode = TwoWay}" Width = "150" Margin = "0 5 3 5" TextWrapping="Wrap"/>
-				</StackPanel>
-			</DataTemplate>
 			<ResourceDictionary.MergedDictionaries>
 				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
 				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
 				<ResourceDictionary Source="..\Styles\TextBlockStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+
+			<controls:BindingDataProxy x:Key="DataProxy" Data="{Binding}" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 	<DockPanel>
-		<Grid Height="{Binding ElementName=ParentControl}">
+		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" MinWidth="420"/>
 				<ColumnDefinition Width="5" />
@@ -34,11 +31,11 @@
 			<Border Grid.Column="0" BorderBrush="{StaticResource OutterBorderColor}" BorderThickness="0" MinWidth="200" Margin="0,0,2,0">
 				<Grid>
 					<Grid.RowDefinitions>
-						<RowDefinition Height="Auto" />
+						<RowDefinition />
 						<RowDefinition Height="Auto"  />
 					</Grid.RowDefinitions>
 
-					<controls:SortAwareDataGrid Grid.Row="0" Margin="0,30,0,10"
+					<controls:SortAwareDataGrid Grid.Row="0" Margin="5,10"
 					            DefaultColumnName="Name"
 					            DefaultSortDirection="Ascending"
 					            Style="{DynamicResource FilesGridStyle}" 							
@@ -56,10 +53,10 @@
 					            SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"					            											                       
 		                        MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 						<DataGrid.Columns>
-							<DataGridTemplateColumn Header="Changes" MinWidth="60" IsReadOnly="True" Width="Auto" SortMemberPath="IsSelected">
+							<DataGridTemplateColumn Header="Changes" MinWidth="70" IsReadOnly="True" Width="Auto" SortMemberPath="IsSelected">
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:CustomField">
-										<CheckBox IsEnabled="False" BorderBrush="White" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+										<CheckBox IsEnabled="False" BorderBrush="White" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 									</DataTemplate>
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
@@ -71,19 +68,16 @@
 						<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
 							<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Command="{Binding ImportCommand}">
 								<StackPanel Orientation="Horizontal">
-									<!--<fa:FontAwesome Icon="ArrowDown" Margin="0,2,5,0"/>-->
 									<TextBlock>Import fields</TextBlock>
 								</StackPanel>
 							</Button>
 							<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125" Command="{Binding ExportCommand}">
 								<StackPanel Orientation="Horizontal">
-									<!--<fa:FontAwesome Icon="ArrowUp" Margin="0,2,5,0"/>-->
 									<TextBlock>Export fields</TextBlock>
 								</StackPanel>
 							</Button>
 							<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyCommand}">
 								<StackPanel Orientation="Horizontal">
-									<!--<fa:FontAwesome Icon="Eye" Margin="0,0,5,0"/>-->
 									<TextBlock>Apply changes</TextBlock>
 								</StackPanel>
 							</Button>
@@ -99,14 +93,13 @@
 					<Grid >
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto" />
-							<RowDefinition Height="Auto"  />
+							<RowDefinition  />
 						</Grid.RowDefinitions>
 
-						<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,10" 
-							IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 
-						<controls:SortAwareDataGrid Grid.Row="1" 
-						                            DefaultColumnName="Name"
+
+						<controls:SortAwareDataGrid Grid.Row="1" Margin="5,10"
+						                            DefaultColumnName="Value"
 						                            DefaultSortDirection="Ascending"
 						                            Style="{DynamicResource FilesGridStyle}" 							
 						                            FontFamily="Segoe UI"								
@@ -121,10 +114,14 @@
 						                            ItemsSource="{Binding CustomFieldsValues, Mode=TwoWay}" 						                            											                       
 						                            MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 							<DataGrid.Columns>
-								<DataGridTemplateColumn Header="Change" MinWidth="60" IsReadOnly="True" Width="Auto" SortMemberPath="IsSelected">
+								<DataGridTemplateColumn MinWidth="85" IsReadOnly="True" Width="Auto" SortMemberPath="IsSelected">
+									<DataGridTemplateColumn.Header>
+										<CheckBox Content="Change" FontFamily="Segoe UI" Margin="0" 
+										           IsChecked="{Binding Path=Data.SelectAll, Source={StaticResource DataProxy}}" Command="{Binding Path=Data.SelectAllCommand, Source={StaticResource DataProxy}}"/>
+									</DataGridTemplateColumn.Header>
 									<DataGridTemplateColumn.CellTemplate>
 										<DataTemplate DataType="model:CustomFieldValue">
-											<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+											<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 										</DataTemplate>
 									</DataGridTemplateColumn.CellTemplate>
 								</DataGridTemplateColumn>

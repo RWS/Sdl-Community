@@ -6,10 +6,9 @@
                       mc:Ignorable="d" 					  
                       WindowStartupLocation="CenterScreen"                     
                       FontFamily="Segoe UI"
-                      Width="200"
-                      Height="150"
-                      WindowStyle="None"
-                      d:DesignHeight="300" d:DesignWidth="300">
+                      Width="279"
+                      Height="75"
+                      WindowStyle="None">
 	<Window.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -19,22 +18,17 @@
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Window.Resources>
-	<Grid >
+	<Grid Margin="5,0,5,0">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*" />
-	
+
 		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
 			<RowDefinition />
 		</Grid.RowDefinitions>
 		<TextBlock x:Name="TextLabel"  Grid.Row="0" Text="Please wait..." FontFamily="Segoe UI" TextTrimming="CharacterEllipsis" Margin="10" FontSize="20" Foreground="#3EA691"/>
-		<!--<controls:MetroProgressBar Grid.Row="1" Grid.Column="0"
-		                       Width="auto"
-								   Visibility="Visible"
-		                           IsIndeterminate="True"
-		                       ToolTip="Please wait">
-		</controls:MetroProgressBar>-->
+		<ProgressBar Grid.Row="1" Width="Auto" IsIndeterminate="True" Height="5"/>
 	</Grid>
 
 

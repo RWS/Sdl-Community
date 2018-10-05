@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
              xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model"
              mc:Ignorable="d" 
+			 Name="SystemFieldsControl"
              d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignData SystemFieldsViewModel}">
 	<UserControl.Resources>
 		<ResourceDictionary>
@@ -13,17 +14,18 @@
 				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
 				<ResourceDictionary Source="..\Styles\ButtonsStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
+
+			<controls:BindingDataProxy x:Key="DataProxy" Data="{Binding}" />
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid Height="{Binding ElementName=ParentControl}">
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto"  />
+			<RowDefinition  />
 			<RowDefinition Height="Auto"  />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
-		<CheckBox  Grid.Row="0" FontFamily="Segoe UI" Margin="5,5,0,0" IsChecked="{Binding SelectAll}" Command="{Binding SelectAllCommand}">Select all</CheckBox>
 		<controls:SortAwareDataGrid Grid.Row="1" 
 		        DefaultColumnName="UserName"
 		        DefaultSortDirection="Ascending"
@@ -40,16 +42,19 @@
 		        SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
 				SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-				Margin="5,10" >
+				Margin="5,10">
 			<DataGrid.InputBindings>
 				<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>
 			</DataGrid.InputBindings>
 
 			<DataGrid.Columns>
-				<DataGridTemplateColumn Header="Change" Width="Auto" IsReadOnly="True" MinWidth="50" SortMemberPath="IsSelected" >
+				<DataGridTemplateColumn Width="Auto" IsReadOnly="True" MinWidth="85" SortMemberPath="IsSelected" >
+					<DataGridTemplateColumn.Header>
+						<CheckBox Content="Change" FontFamily="Segoe UI" Margin="0" IsChecked="{Binding Data.SelectAll, Source={StaticResource DataProxy}}" Command="{Binding Data.SelectAllCommand, Source={StaticResource DataProxy}}"/>
+					</DataGridTemplateColumn.Header>
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:User">
-							<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+							<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
