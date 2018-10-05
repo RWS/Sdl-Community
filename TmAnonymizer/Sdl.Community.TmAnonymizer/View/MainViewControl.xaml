@@ -14,9 +14,9 @@
 	</UserControl.Resources>
 
 	<Grid Name="ParentGrid">
-		<TabControl Margin="5,20,0,0">
-			<TabItem Header="Translations">
-				<view:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+		<TabControl Margin="5">
+			<TabItem Header="Content Filtering Rules">
+				<view:ContentFilteringRules DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 			<TabItem  Header ="System Fields">
 				<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>

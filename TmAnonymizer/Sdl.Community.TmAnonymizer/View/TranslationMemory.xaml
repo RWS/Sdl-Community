@@ -72,7 +72,7 @@
 				<DataGrid.Columns>
 					<DataGridTemplateColumn Width="Auto" MinWidth="60" IsReadOnly="True" SortMemberPath="IsSelected">
 						<DataGridTemplateColumn.Header>
-							<CheckBox Content="Load" FontFamily="Segoe UI" IsChecked="{Binding Path=DataContext.SelectAll, ElementName=TranslationMemoryControl}" Command="{Binding Path=DataContext.SelectAllCommand, ElementName=TranslationMemoryControl}"/>
+							<CheckBox Content="Load" FontFamily="Segoe UI" IsChecked="{Binding Path=DataContext.SelectAll, ElementName=TranslationMemoryControl}" Command="{Binding Path=DataContext.SelectAllCommand, ElementName=TranslationMemoryControl}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
 						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellStyle>
 							<Style TargetType="DataGridCell">

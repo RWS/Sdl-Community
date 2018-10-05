@@ -220,8 +220,8 @@
     <Compile Include="View\TranslationMemory.xaml.cs">
       <DependentUpon>TranslationMemory.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\Translations.xaml.cs">
-      <DependentUpon>Translations.xaml</DependentUpon>
+    <Compile Include="View\ContentFilteringRules.xaml.cs">
+      <DependentUpon>ContentFilteringRules.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WaitWindow.xaml.cs">
       <DependentUpon>WaitWindow.xaml</DependentUpon>
@@ -233,7 +233,7 @@
     <Compile Include="ViewModel\PreviewWindowViewModel.cs" />
     <Compile Include="ViewModel\SystemFieldsViewModel.cs" />
     <Compile Include="ViewModel\TranslationMemoryViewModel.cs" />
-    <Compile Include="ViewModel\TranslationViewModel.cs" />
+    <Compile Include="ViewModel\ContentFilteringRulesViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -321,7 +321,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\Translations.xaml">
+    <Page Include="View\ContentFilteringRules.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
