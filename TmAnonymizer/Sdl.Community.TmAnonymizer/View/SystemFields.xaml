@@ -20,14 +20,14 @@
 	</UserControl.Resources>
 
 
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition />
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
-			<controls:SortAwareDataGrid Grid.Row="1" 
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<controls:SortAwareDataGrid Grid.Row="1" 
 		        DefaultColumnName="UserName"
 		        DefaultSortDirection="Ascending"
 				Style="{StaticResource FilesGridStyle}" 
@@ -44,45 +44,45 @@
 				SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
 				Margin="5,10">
-				<DataGrid.InputBindings>
-					<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>
-				</DataGrid.InputBindings>
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding RemoveUserCommand}"/>
+			</DataGrid.InputBindings>
 
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="Auto" IsReadOnly="True" MinWidth="85" SortMemberPath="IsSelected" >
-						<DataGridTemplateColumn.Header>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Width="Auto" IsReadOnly="True" MinWidth="85" SortMemberPath="IsSelected" >
+					<DataGridTemplateColumn.Header>
 						<CheckBox Content="Change" FontFamily="Segoe UI" Margin="0" IsChecked="{Binding Data.SelectAll, Source={StaticResource DataProxy}}" Command="{Binding Data.SelectAllCommand, Source={StaticResource DataProxy}}" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-						</DataGridTemplateColumn.Header>
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:User">
-								<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTextColumn Width="2*" Header="User Name" IsReadOnly="True" Binding="{Binding UserName}" />
-					<DataGridTextColumn Width="3*" Header="Alias" IsReadOnly="False" Binding="{Binding Alias}" />
-				</DataGrid.Columns>
-			</controls:SortAwareDataGrid>
-			<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,10,10,10">
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-					<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock>Import users</TextBlock>
-						</StackPanel>
-					</Button>
-					<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock>Export users</TextBlock>
-						</StackPanel>
-					</Button>
-					<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
-						<StackPanel Orientation="Horizontal">
-							<TextBlock>Apply changes</TextBlock>
-						</StackPanel>
-					</Button>
-				</StackPanel>
+					</DataGridTemplateColumn.Header>
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:User">
+							<CheckBox IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTextColumn Width="2*" Header="User Name" IsReadOnly="True" Binding="{Binding UserName}" />
+				<DataGridTextColumn Width="3*" Header="Alias" IsReadOnly="False" Binding="{Binding Alias}" />
+			</DataGrid.Columns>
+		</controls:SortAwareDataGrid>
+		<StackPanel Grid.Column="0" Grid.Row="2"  Orientation="Vertical"  Margin="5,10,10,10">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ImportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>Import users</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource LightGreenButtonsStyle }" Width="125"  Command="{Binding ExportCommand}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>Export users</TextBlock>
+					</StackPanel>
+				</Button>
+				<Button  Style="{DynamicResource StudioGreenButtonsStyle }" Width="125" Command="{Binding ApplyChangesCommand}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock>Apply changes</TextBlock>
+					</StackPanel>
+				</Button>
 			</StackPanel>
-		</Grid>
-	
+		</StackPanel>
+	</Grid>
+
 </UserControl>
 

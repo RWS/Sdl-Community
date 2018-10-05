@@ -38,8 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			_customFieldsService = customFieldsService;
 			_excelImportExportService = excelImportExportService;
-			
-			_selectedItems = new List<CustomField>();
+	
 			_translationMemoryViewModel = translationMemoryViewModel;
 
 			_backgroundWorker = new BackgroundWorker();
@@ -75,7 +74,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public IList SelectedItems
 		{
-			get => _selectedItems;
+			get => _selectedItems ?? (_selectedItems = new List<CustomField>());
 			set
 			{
 				_selectedItems = value;
@@ -156,7 +155,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-
 		private void FieldValue_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			foreach (var customField in CustomFields)
@@ -183,7 +181,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 			}
 		}
-
 
 		private void InitializeComponents()
 		{

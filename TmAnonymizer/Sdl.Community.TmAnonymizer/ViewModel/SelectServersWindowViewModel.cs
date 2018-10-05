@@ -23,7 +23,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public SelectServersWindowViewModel(Window controlWindow, SettingsService settingsService, TranslationProviderServer translationProviderServer)
 		{
 			_controlWindow = controlWindow;
-			_translationMemories = new List<TmFile>();
+			
 			_settingsService = settingsService;
 			_translationProviderServer = translationProviderServer;
 
@@ -36,10 +36,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public List<TmFile> TranslationMemories
 		{
-			get
-			{
-				return _translationMemories;
-			}
+			get => _translationMemories ?? (_translationMemories = new List<TmFile>());
 			set
 			{
 				if (_translationMemories == value)
@@ -85,7 +82,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
 				var path = tmPath + "/" + tm.Name;
-				var tmAlreadyExist = _translationMemories.Any(t => t.Path.Equals(path));
+				var tmAlreadyExist = TranslationMemories.Any(t => t.Path.Equals(path));
 
 				if (!tmAlreadyExist)
 				{
@@ -112,7 +109,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					Application.Current.Dispatcher.Invoke(() =>
 					{
-						_translationMemories.Add(serverTm);
+						TranslationMemories.Add(serverTm);
 						RefreshView();
 					});					
 				}

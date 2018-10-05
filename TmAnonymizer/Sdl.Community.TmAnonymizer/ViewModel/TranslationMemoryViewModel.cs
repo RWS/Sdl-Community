@@ -132,9 +132,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
 
-		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));
-
-		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllTms, true));
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));		
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
@@ -280,14 +278,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			return TmsCollection.Any(t => t.Path.Equals(tmPath));
 		}
 
-		private void SelectAllTms()
-		{
-			var value = SelectAll;
-			foreach (var tm in TmsCollection)
-			{
-				tm.IsSelected = value;
-			}
-		}
+		//private void SelectAllTms()
+		//{
+		//	var value = SelectAll;
+		//	foreach (var tm in TmsCollection)
+		//	{
+		//		tm.IsSelected = value;				
+		//	}
+		//}
 
 		private void AddTm(string tmPath)
 		{
@@ -342,7 +340,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 
 			OnPropertyChanged(nameof(TmsCollection));
-		}
+		}		
 
 		public void Dispose()
 		{
