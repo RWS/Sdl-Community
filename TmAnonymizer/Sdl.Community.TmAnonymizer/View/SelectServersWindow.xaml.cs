@@ -1,6 +1,5 @@
-﻿using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Services;
-using Sdl.Community.SdlTmAnonymizer.ViewModel;
+﻿using System.Windows;
+using System.Windows.Data;
 
 namespace Sdl.Community.SdlTmAnonymizer.View
 {
@@ -9,11 +8,21 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// </summary>
 	public partial class SelectServersWindow
 	{
-		public SelectServersWindow(SettingsService settingsService, Login login)
+		public SelectServersWindow()
 		{
 			InitializeComponent();
+			Visibility = Visibility.Visible;			
+		}
 
-			DataContext = new SelectServersWindowViewModel(settingsService, login);
+		public void Refresh()
+		{
+			var collectionView = CollectionViewSource.GetDefaultView(DataGridServers.ItemsSource);
+			collectionView.Refresh();
+		}
+
+		private void OKButton_OnClick(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
 		}
 	}
 }

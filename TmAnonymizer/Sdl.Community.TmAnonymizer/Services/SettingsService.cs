@@ -11,7 +11,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public SettingsService(PathInfo pathInfo)
 		{
 			PathInfo = pathInfo;
+			RemoveServerBasedTMs();
+			UncheckAllTMs();
 		}
+		
+		public Credentials Credentials { get; set; }
 
 		public PathInfo PathInfo { get; }
 
@@ -93,6 +97,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				AddDefaultRules(settings);
 
+				if (Credentials == null)
+				{
+					Credentials = new Credentials
+					{
+						Url = settings.ServerUri
+					};
+				}
+
 				return settings;
 			}
 
@@ -107,7 +119,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		public void SaveSettings(Settings settings)
-		{
+		{			
 			File.WriteAllText(PathInfo.SettingsFilePath, JsonConvert.SerializeObject(settings));
 		}
 
@@ -120,6 +132,29 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			settings.AlreadyAddedDefaultRules = true;
 			settings.Rules = GetDefaultRules();
+			SaveSettings(settings);
+		}
+
+		private void RemoveServerBasedTMs()
+		{
+			var settings = GetSettings();
+			var tmFiles = GetTmFiles();
+			tmFiles.RemoveAll(a => a.IsServerTm);
+		
+			settings.TmFiles = tmFiles;
+			SaveSettings(settings);
+		}
+
+		private void UncheckAllTMs()
+		{
+			var settings = GetSettings();
+			var tmFiles = GetTmFiles();
+			foreach (var tmFile in tmFiles)
+			{
+				tmFile.IsSelected = false;
+			}
+
+			settings.TmFiles = tmFiles;
 			SaveSettings(settings);
 		}
 	}

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Sdl.Community.SdlTmAnonymizer.Model;
 
 namespace Sdl.Community.SdlTmAnonymizer.Controls
 {
@@ -15,7 +16,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		{
 			SelectionChanged += CustomDataGrid_SelectionChanged;
 			Loaded += SortAwareDataGrid_Loaded;
-		}		
+		}
 
 		public string DefaultColumnName { get; set; }
 
@@ -23,8 +24,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 
 		public IList SelectedItemsList
 		{
-			get { return (IList)GetValue(SelectedItemsListProperty); }
-			set { SetValue(SelectedItemsListProperty, value); }
+			get => (IList)GetValue(SelectedItemsListProperty);
+			set => SetValue(SelectedItemsListProperty, value);
 		}
 
 		public static readonly DependencyProperty SelectedItemsListProperty =
@@ -71,6 +72,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 					column.SortDirection = sortDescription.Direction;
 				}
 			}
+
+			AddSegmentNumberSorter(view);
 		}
 
 		private void UpdateSorting()
@@ -80,15 +83,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 				return;
 			}
 
-			var view = CollectionViewSource.GetDefaultView(ItemsSource);
-
 			_sortDescriptions.Clear();
+
+			var view = CollectionViewSource.GetDefaultView(ItemsSource);
+			
+			AddSegmentNumberSorter(view);
+
 			foreach (var sortDescription in view.SortDescriptions)
 			{
 				_sortDescriptions.Add(new SortDescription(sortDescription.PropertyName, sortDescription.Direction));
 			}
 		}
-
+		
 		private void SetDefaultSortDescriptions()
 		{
 			if (string.IsNullOrEmpty(DefaultColumnName))
@@ -102,15 +108,63 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 			};
 		}
 
+		private static void AddSegmentNumberSorter(ICollectionView view)
+		{
+			if (view.SortDescriptions.Count > 0 &&
+			    view.SortDescriptions[0].PropertyName == "SegmentNumber" &&
+			    view.CurrentItem is SourceSearchResult)
+			{
+				var collection = (ListCollectionView)view;
+				collection.CustomSort = new SegmentNumberSorter(view.SortDescriptions[0]);
+			}
+		}
+
+
 		private void CustomDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			SelectedItemsList = SelectedItems;
 		}
-	
+
 		public void Dispose()
 		{
 			SelectionChanged -= CustomDataGrid_SelectionChanged;
 			Loaded -= SortAwareDataGrid_Loaded;
+		}
+	}
+
+	public class SegmentNumberSorter : IComparer
+	{
+		private readonly SortDescription _sortDescription;
+
+		public SegmentNumberSorter(SortDescription sortDescription)
+		{
+			_sortDescription = sortDescription;
+		}
+
+		public int Compare(object x, object y)
+		{
+			if (!(x is SourceSearchResult searchResultX) || !(y is SourceSearchResult searchResultY))
+			{
+				return 0;
+			}
+
+			try
+			{
+				var intx = Convert.ToInt32(searchResultX.SegmentNumber);
+				var inty = Convert.ToInt32(searchResultY.SegmentNumber);
+
+				return _sortDescription.Direction == ListSortDirection.Ascending 
+					? intx.CompareTo(inty) 
+					: inty.CompareTo(intx);
+			}
+			catch
+			{
+				// don't raise exception here
+			}
+
+			return _sortDescription.Direction == ListSortDirection.Ascending
+				? string.Compare(searchResultX.SegmentNumber, searchResultY.SegmentNumber, StringComparison.Ordinal)
+				: string.Compare(searchResultY.SegmentNumber, searchResultX.SegmentNumber, StringComparison.Ordinal);			
 		}
 	}
 }

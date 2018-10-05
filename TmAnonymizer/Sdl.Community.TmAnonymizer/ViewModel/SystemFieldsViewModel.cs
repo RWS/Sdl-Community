@@ -7,11 +7,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
+using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using WaitWindow = Sdl.Community.SdlTmAnonymizer.View.WaitWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -126,6 +127,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			tm.PropertyChanged -= Tm_PropertyChanged;
 			tm.PropertyChanged += Tm_PropertyChanged;
+
+
 			SelectTm(tm);
 		}
 
@@ -137,6 +140,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectTm(TmFile tm)
 		{
+			if (!tm.IsSelected)
+			{
+				return;
+			}
+
 			if (tm.IsServerTm)
 			{
 				var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
@@ -176,9 +184,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectAllUserNames()
 		{
+			var value = SelectAll;
 			foreach (var userName in UniqueUserNames)
 			{
-				userName.IsSelected = SelectAll;
+				userName.IsSelected = value;
 			}
 		}
 
@@ -324,7 +333,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Tm_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals("IsSelected"))
+			if (e.PropertyName.Equals(nameof(TmFile.IsSelected)))
 			{
 				if (!_backgroundWorker.IsBusy)
 				{
@@ -348,6 +357,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_waitWindow = new WaitWindow();
 				_waitWindow.Show();
 			});
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{

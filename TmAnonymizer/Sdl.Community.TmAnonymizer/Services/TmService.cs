@@ -138,8 +138,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									DeSelectedWordsDetails = new List<WordDetails>(),
 									TargetDeSelectedWordsDetails = new List<WordDetails>(),
 									TargetSelectedWordsDetails = new List<WordDetails>()
-
 								};
+
 								if (sourceContainsPi)
 								{
 									searchResult.IsSourceMatch = true;
@@ -156,40 +156,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 										Positions = pi.GetPersonalDataPositions(targetText)
 									};
 								}
+
 								sourceSearchResult.Add(searchResult);
 							}
-							//if (pi.ContainsPi(sourceText))
-							//{
-							//	var searchResult = new SourceSearchResult
-							//	{
-							//		Id = translationUnit.ResourceId.Guid.ToString(),
-							//		SourceText = sourceText,
-							//		MatchResult = new MatchResult
-							//		{
-							//			Positions = pi.GetPersonalDataPositions(sourceText)
-							//		},
-							//		TmFilePath = tmPath,
-							//		IsServer = true,
-							//		SegmentNumber = translationUnit.ResourceId.Id.ToString(),
-							//		SelectedWordsDetails =  new List<WordDetails>(),
-							//		DeSelectedWordsDetails = new List<WordDetails>(),
-							//		TargetDeSelectedWordsDetails = new List<WordDetails>(),
-							//		TargetSelectedWordsDetails = new List<WordDetails>(),
-							//		IsSourceMatch = true
-
-							//	};
-
-							//	if (pi.ContainsPi(targetText))
-							//	{
-							//		searchResult.TargetText = targetText;
-							//		searchResult.IsTargetMatch = true;
-							//		searchResult.TargetMatchResult = new MatchResult
-							//		{
-							//			Positions = pi.GetPersonalDataPositions(targetText)
-							//		};
-							//	}
-							//	sourceSearchResult.Add(searchResult);
-							//}
 						}
 					}
 				}

@@ -13,22 +13,20 @@
 		</DataTemplate>
 	</UserControl.Resources>
 
-	<ScrollViewer Name="ScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Left">
-		<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" PreviewKeyUp="ParentGrid_OnPreviewKeyUp">
-			<TabControl Margin="5,20,0,0">
-				<TabItem Header="Translations">
-					<view:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
-				</TabItem>
-				<TabItem  Header ="System Fields">
-					<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
-				</TabItem>
-				<TabItem Header="Custom Fields">
-					<view:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
-				</TabItem>
+	<Grid Name="ParentGrid">
+		<TabControl Margin="5,20,0,0">
+			<TabItem Header="Translations">
+				<view:Translations DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+			</TabItem>
+			<TabItem  Header ="System Fields">
+				<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+			</TabItem>
+			<TabItem Header="Custom Fields">
+				<view:CustomFields DataContext="{Binding CustomFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+			</TabItem>
 
-			</TabControl>
-		</Grid>
-	</ScrollViewer>
-	
+		</TabControl>
+	</Grid>
+
 </UserControl>
 

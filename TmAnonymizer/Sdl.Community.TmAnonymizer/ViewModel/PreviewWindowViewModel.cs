@@ -7,13 +7,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using Application = System.Windows.Forms.Application;
-using MessageBox = System.Windows.Forms.MessageBox;
-using WaitWindow = Sdl.Community.SdlTmAnonymizer.View.WaitWindow;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -62,6 +61,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		public ICommand SelectAllResultsCommand => _selectAllResultsCommand ?? (_selectAllResultsCommand = new CommandHandler(SelectResults, true));
+
 		public ICommand ApplyCommand => _applyCommand ?? (_applyCommand = new CommandHandler(ApplyChanges, true));
 		
 		public void ApplyChanges()
@@ -73,6 +73,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_waitWindow = new WaitWindow();
 					_waitWindow.Show();
 				});
+				System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 
 				var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
 				List<AnonymizeTranslationMemory> tusToAnonymize;
@@ -102,7 +103,66 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{				
-				MessageBox.Show(Application.ProductName, StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes);
+				MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, Application.ProductName);
+			}
+		}
+
+		public bool SelectAllResults
+		{
+			get => _selectAllResults;
+			set
+			{
+				if (Equals(value, _selectAllResults))
+				{
+					return;
+				}
+				_selectAllResults = value;
+				OnPropertyChanged(nameof(SelectAllResults));
+			}
+		}
+
+		public ObservableCollection<SourceSearchResult> SourceSearchResults
+		{
+			get => _sourceSearchResults;
+
+			set
+			{
+				if (Equals(value, _sourceSearchResults))
+				{
+					return;
+				}
+				_sourceSearchResults = value;
+				OnPropertyChanged(nameof(SourceSearchResults));
+			}
+		}
+
+		public SourceSearchResult SelectedItem
+		{
+			get => _selectedItem;
+
+			set
+			{
+				if (Equals(value, _selectedItem))
+				{
+					return;
+				}
+				_selectedItem = value;
+				TextBoxColor = "#f4fef4";
+				OnPropertyChanged(nameof(SelectedItem));
+			}
+		}
+
+		public string TextBoxColor
+		{
+			get => _textBoxColor;
+			set
+			{
+				if (Equals(value, _textBoxColor))
+				{
+					return;
+				}
+				_textBoxColor = value;
+				OnPropertyChanged(nameof(TextBoxColor));
 			}
 		}
 
@@ -206,12 +266,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		/// <summary>
-		/// Gets corresponding tus from TMs
-		/// </summary>
-		/// <param name="selectedSearchResult"></param>
-		/// <returns></returns>
-		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(List<SourceSearchResult> selectedSearchResult)
+		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(IEnumerable<SourceSearchResult> selectedSearchResult)
 		{
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			foreach (var selectedResult in selectedSearchResult)
@@ -274,6 +329,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			return tusToAnonymize;
 		}
+
 		private void RemoveSelectedTusToAnonymize()
 		{
 			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
@@ -282,6 +338,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 
 		}
+
 		private void BackupFileBasedTm()
 		{
 			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
@@ -294,64 +351,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 			}
 		}
-		public bool SelectAllResults
-		{
-			get => _selectAllResults;
-
-			set
-			{
-				if (Equals(value, _selectAllResults))
-				{
-					return;
-				}
-				_selectAllResults = value;
-				OnPropertyChanged(nameof(SelectAllResults));
-			}
-		}
-		public ObservableCollection<SourceSearchResult> SourceSearchResults
-		{
-			get => _sourceSearchResults;
-
-			set
-			{
-				if (Equals(value, _sourceSearchResults))
-				{
-					return;
-				}
-				_sourceSearchResults = value;
-				OnPropertyChanged(nameof(SourceSearchResults));
-			}
-		}
-		public SourceSearchResult SelectedItem
-		{
-			get => _selectedItem;
-
-			set
-			{
-				if (Equals(value, _selectedItem))
-				{
-					return;
-				}
-				_selectedItem = value;
-				TextBoxColor = "#f4fef4";
-				OnPropertyChanged(nameof(SelectedItem));
-			}
-		}
-		public string TextBoxColor
-		{
-			get => _textBoxColor;
-
-			set
-			{
-				if (Equals(value, _textBoxColor))
-				{
-					return;
-				}
-				_textBoxColor = value;
-				OnPropertyChanged(nameof(TextBoxColor));
-			}
-		}
-
 
 		private void SelectResults()
 		{

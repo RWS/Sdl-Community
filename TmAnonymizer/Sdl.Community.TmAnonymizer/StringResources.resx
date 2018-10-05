@@ -133,7 +133,7 @@
   <data name="Ok_Please_wait_until_we_connect_to_GroupShare" xml:space="preserve">
     <value>Please wait until we connect to GroupShare</value>
   </data>
-  <data name="Ok_All_fields_are_required_" xml:space="preserve">
+  <data name="Ok_All_fields_are_required" xml:space="preserve">
     <value>All fields are required!</value>
   </data>
   <data name="Export_Export_selected_custom_fields" xml:space="preserve">
@@ -177,5 +177,8 @@
   </data>
   <data name="Import_Are_you_sure_you_want_to_import_an_excel_file" xml:space="preserve">
     <value>Are you sure you want to import an excel file?</value>
+  </data>
+  <data name="Login_Not_Authorized" xml:space="preserve">
+    <value>Not Authorized!</value>
   </data>
 </root>

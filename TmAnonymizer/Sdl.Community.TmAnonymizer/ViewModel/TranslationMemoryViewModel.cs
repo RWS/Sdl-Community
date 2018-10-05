@@ -5,16 +5,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.Integration;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
-using DataFormats = System.Windows.Forms.DataFormats;
-using LoginWindow = Sdl.Community.SdlTmAnonymizer.View.LoginWindow;
-using MessageBox = System.Windows.Forms.MessageBox;
+using Sdl.Community.SdlTmAnonymizer.View;
+using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -29,9 +26,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _loadServerTmCommand;
 		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection;
-		private Login _credentials;
+		private Credentials _credentials;
 		private bool _isEnabled;
-		private LoginWindowViewModel _loginWindowViewModel;		
+		private LoginWindowViewModel _loginWindowViewModel;
 
 		public TranslationMemoryViewModel(SettingsService settingsService)
 		{
@@ -84,7 +81,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			set
 			{
 				_selectedItems = value;
-			
+
 				OnPropertyChanged(nameof(SelectedItems));
 			}
 		}
@@ -103,7 +100,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public Login Credentials
+		public Credentials Credentials
 		{
 			get => _credentials;
 			set
@@ -135,7 +132,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
 
-		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(SelectTm, true));
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));
 
 		public ICommand SelectAllCommand => _selectAllCommand ?? (_selectAllCommand = new CommandHandler(SelectAllTms, true));
 
@@ -151,11 +148,38 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_loginWindowViewModel.PropertyChanged += ViewModel_PropertyChanged;
 
 			loginWindow.DataContext = _loginWindowViewModel;
+			loginWindow.ShowDialog();
 
-			//if we don't set element host we are not able to type in text box
-			ElementHost.EnableModelessKeyboardInterop(loginWindow);
-			loginWindow.Show();
-			Dispatcher.Run();
+			if (loginWindow.DialogResult.HasValue && loginWindow.DialogResult.Value)
+			{
+				SettingsService.Credentials = _loginWindowViewModel.Credentials;
+			}
+
+			var settings = SettingsService.GetSettings();
+			settings.ServerUri = SettingsService.Credentials.Url;
+
+			SettingsService.SaveSettings(settings);
+
+			if (_loginWindowViewModel.TranslationProviderServer != null)
+			{
+				var selectServers = new SelectServersWindow();
+				var model = new SelectServersWindowViewModel(selectServers, SettingsService, _loginWindowViewModel.TranslationProviderServer);
+
+				selectServers.DataContext = model;
+				selectServers.ShowDialog();
+
+				if (selectServers.DialogResult.HasValue && selectServers.DialogResult.Value)
+				{
+					foreach (var tmFile in model.TranslationMemories)
+					{
+						if (tmFile.IsSelected)
+						{
+							tmFile.Credentials = Credentials;
+							AddTm(tmFile);
+						}
+					}
+				}
+			}
 		}
 
 		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -170,10 +194,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		/// <summary>
-		/// Handle drop file event
-		/// </summary>
-		/// <param name="parameter"></param>
 		private void HandlePreviewDrop(object parameter)
 		{
 			if (parameter != null && parameter is System.Windows.DragEventArgs eventArgs)
@@ -189,17 +209,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 					}
 				}
-			}		
-		}		
+			}
+		}
 
 		private void SaveSetttings()
 		{
 			var settings = SettingsService.GetSettings();
 			settings.TmFiles = TmsCollection.ToList();
-			SettingsService.SaveSettings(settings);			
+			SettingsService.SaveSettings(settings);
 		}
 
-		private void SelectTm()
+		private void AddTm()
 		{
 			var fileDialog = new OpenFileDialog();
 			if (fileDialog.ShowDialog() == DialogResult.OK)
@@ -207,10 +227,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var tmFilePath = fileDialog.FileName;
 				if (!string.IsNullOrEmpty(tmFilePath) && Path.GetExtension(tmFilePath).Equals(".sdltm"))
 				{
-					AddTm(tmFilePath);					
-				}				
+					AddTm(tmFilePath);
+				}
 			}
-		}		
+		}
 
 		private void RemoveTm()
 		{
@@ -237,7 +257,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						RemoveTm(tm);
 					}
-				}				
+				}
 			}
 		}
 
@@ -262,9 +282,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectAllTms()
 		{
+			var value = SelectAll;
 			foreach (var tm in TmsCollection)
 			{
-				tm.IsSelected = SelectAll;
+				tm.IsSelected = value;
 			}
 		}
 
@@ -273,13 +294,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (!TmAlreadyExist(tmPath))
 			{
 				var tmFileInfo = new FileInfo(tmPath);
+
+				var fileBasedTm = new FileBasedTranslationMemory(tmFileInfo.FullName);
+				var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
+
 				var tm = new TmFile
 				{
 					Name = tmFileInfo.Name,
-					Path = tmFileInfo.FullName,
-					IsSelected = true,
-					IsServerTm = false
+					Path = Path.GetDirectoryName(tmFileInfo.FullName),
+					TranslationUnits = unitsCount,
+					TmLanguageDirections = new List<TmLanguageDirection>
+					{
+						new TmLanguageDirection
+						{
+							Source = fileBasedTm.LanguageDirection.SourceLanguage,
+							Target = fileBasedTm.LanguageDirection.TargetLanguage,
+							TranslationUnits = unitsCount
+						}
+					}
 				};
+
 
 				AddTm(tm);
 			}
@@ -287,6 +321,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void AddTm(TmFile tm)
 		{
+			tm.IsSelected = false;
 			tm.PropertyChanged += Tm_PropertyChanged;
 			TmsCollection.Insert(0, tm);
 			SaveSetttings();
@@ -299,14 +334,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			SaveSetttings();
 		}
 
-		/// <summary>
-		/// Raise property change event for TM Collection
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals("IsSelected"))
+			if (e.PropertyName.Equals(nameof(TmFile.IsSelected)))
 			{
 				SaveSetttings();
 			}

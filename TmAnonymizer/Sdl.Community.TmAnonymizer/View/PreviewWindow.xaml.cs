@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.ViewModel;
@@ -15,7 +14,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	public partial class PreviewWindow
 	{
 		private RichTextBox _textBox;
-		private PreviewWindowViewModel _previewWindowViewModel;
+		private readonly PreviewWindowViewModel _previewWindowViewModel;
 
 		public PreviewWindow(PreviewWindowViewModel previewWindowViewModel)
 		{
@@ -95,6 +94,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 			//that means selected word is the last one
 			return string.Empty;
 		}
+
 		private void UnselectWord(object sender, RoutedEventArgs e)
 		{
 			var docStart = _textBox.Document.ContentStart;
@@ -153,18 +153,6 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		private void AnonymizeAction(object sender, RoutedEventArgs e)
 		{
 			_previewWindowViewModel.ApplyChanges();
-		}
-
-		private void PreviewWindow_OnPreviewKeyUp(object sender, KeyEventArgs e)
-		{
-			if (e.Key == Key.Down)
-			{
-				ScrollViewer.LineDown();
-			}
-			if (e.Key == Key.Up)
-			{
-				ScrollViewer.LineUp();
-			}
 		}
 	}
 }

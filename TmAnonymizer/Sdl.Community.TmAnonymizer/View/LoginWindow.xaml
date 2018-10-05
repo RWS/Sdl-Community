@@ -7,7 +7,7 @@
 			 Title="Login"
              FontFamily="Segoe UI"
 			 Width="415"
-			 Height="350"
+			 Height="270"
 			 ResizeMode="NoResize"
 			 WindowStartupLocation="CenterScreen"			
              d:DesignHeight="300" d:DesignWidth="300">
@@ -37,28 +37,41 @@
 
 		<TextBlock Grid.Row="0" Style="{DynamicResource TextBlockColor}" Margin="10,20,0,20">Please fill following information:</TextBlock>
 		<TextBlock Grid.Row="1" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> Url*</TextBlock>
-		<TextBox 
-				   Margin="5,5,10,5"
+		<TextBox Margin="5,5,10,5"
 				   Grid.Row="1" Grid.Column="1" IsEnabled="True"  Text="{Binding Url,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}" ></TextBox>
 		<TextBlock Grid.Row="2" Grid.Column="0" Style="{DynamicResource TextBlockColor}"> User name*</TextBlock>
 		<TextBox 
 		          Margin="5,5,10,5"
 				  Grid.Row="2" Grid.Column="1" Text="{Binding UserName,ValidatesOnDataErrors=True,UpdateSourceTrigger=PropertyChanged,NotifyOnValidationError=True}"></TextBox>
 		<TextBlock Grid.Row="3" Grid.Column="0" Style="{DynamicResource TextBlockColor}" > Password*</TextBlock>
-		<PasswordBox 
-			         Style="{DynamicResource MetroButtonRevealedPasswordBox}"
-		              
-		              Margin="5,5,10,5"
-		              
-					  Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
+		<PasswordBox Margin="5,5,10,5" Name="Password" Grid.Row="3" Grid.Column="1"></PasswordBox>
 		<TextBlock Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Foreground="{Binding MessageColor}" FontFamily="Segoe UI" Margin="10,20,0,10" Text="{Binding Message}"></TextBlock>
-		
-		<Button  Grid.Row="6" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" 
-		         Margin="90,28,10,54"
-				   Command="{Binding OkCommand}" 
-				 CommandParameter="{Binding ElementName=Password}" Width="Auto" FontFamily="Segoe UI" >
+
+		<Button  Grid.Row="6"
+		         Grid.Column="1" 
+		         IsDefault="False" 
+		         IsCancel="True"
+		         Style="{DynamicResource StudioGreenButtonsStyle }" 
+		         Margin="0,5,10,50"
+		         Width="105" 
+		         FontFamily="Segoe UI" 
+		         HorizontalAlignment="Right" VerticalAlignment="Bottom" >
 			<StackPanel Orientation="Horizontal">
-				<!--<fa:FontAwesome Icon="SignIn" Margin="0,2,5,0"/>-->
+				<TextBlock>Cancel</TextBlock>
+			</StackPanel>
+		</Button>
+
+		<Button Grid.Row="6" 
+		        Grid.Column="0" 
+		        Grid.ColumnSpan="2"
+		        IsDefault="True" 
+		        Style="{DynamicResource StudioGreenButtonsStyle }" 
+		        Margin="0,5,129,50"
+				Command="{Binding OkCommand}" 
+				CommandParameter="{Binding ElementName=Password}"
+		        Width="105" FontFamily="Segoe UI"		        
+		        HorizontalAlignment="Right" VerticalAlignment="Bottom" >
+			<StackPanel Orientation="Horizontal">
 				<TextBlock>Log in</TextBlock>
 			</StackPanel>
 		</Button>
