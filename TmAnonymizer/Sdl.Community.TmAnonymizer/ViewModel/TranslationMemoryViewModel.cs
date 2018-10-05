@@ -20,8 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _selectAll;
 		private ICommand _selectFoldersCommand;
 		private ICommand _removeCommand;
-		private ICommand _selectTmCommand;
-		private ICommand _selectAllCommand;
+		private ICommand _selectTmCommand;		
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
 		private IList _selectedItems;
@@ -277,15 +276,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			return TmsCollection.Any(t => t.Path.Equals(tmPath));
 		}
-
-		//private void SelectAllTms()
-		//{
-		//	var value = SelectAll;
-		//	foreach (var tm in TmsCollection)
-		//	{
-		//		tm.IsSelected = value;				
-		//	}
-		//}
 
 		private void AddTm(string tmPath)
 		{
