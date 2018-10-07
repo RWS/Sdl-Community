@@ -8,8 +8,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	{
 		private bool _isSelected;
 		private string _name;
-		private string _description;		
-		private string _path;		
+		private string _description;
+		private string _path;
 		private bool _shouldRemove;
 		private bool _isServerTm;
 		private bool _isLoaded;
@@ -21,7 +21,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		{
 			IsSelected = false;
 			IsServerTm = false;
-			_tmLanguageDirections=new List<TmLanguageDirection>();
 		}
 
 		[JsonIgnore]
@@ -112,7 +111,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 
 		public List<TmLanguageDirection> TmLanguageDirections
 		{
-			get => _tmLanguageDirections;
+			get => _tmLanguageDirections ?? (_tmLanguageDirections = new List<TmLanguageDirection>());
 			set
 			{
 				_tmLanguageDirections = value;

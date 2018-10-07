@@ -1,4 +1,7 @@
 ﻿using System.Globalization;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
@@ -6,7 +9,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	{		
 		private CultureInfo _source;
 		private CultureInfo _target;		
-		private int _translationUnits;
+		private int _translationUnitsCount;		
 
 		public CultureInfo Source
 		{
@@ -28,15 +31,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			}
 		}
 
-		public int TranslationUnits
+		public int TranslationUnitsCount
 		{
 
-			get => _translationUnits;
+			get => _translationUnitsCount;
 			set
 			{
-				_translationUnits = value;
-				OnPropertyChanged(nameof(TranslationUnits));
+				_translationUnitsCount = value;
+				OnPropertyChanged(nameof(TranslationUnitsCount));
 			}
-		}		
+		}
+
+		[JsonIgnore]
+		[XmlIgnore]
+		public TranslationUnit[] TranslationUnits { get; set; }
 	}
 }

@@ -219,7 +219,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.UserName,
 					_translationMemoryViewModel.Credentials.Password);
 
-				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider));
+				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider, _translationMemoryViewModel.TmService));
 
 				foreach (var field in customFields)
 				{
@@ -228,7 +228,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				var customFields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(tm));
+				var customFields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(tm, _translationMemoryViewModel.TmService));
 
 				foreach (var field in customFields)
 				{
@@ -265,7 +265,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					_customFieldsService.AnonymizeFileBasedCustomFields(tm, CustomFields.ToList());
+					_customFieldsService.AnonymizeFileBasedCustomFields(tm, CustomFields.ToList(), _translationMemoryViewModel.TmService);
 				}
 				else
 				{
@@ -281,7 +281,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFields.ToList(), translationProvider);
+					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFields.ToList(), translationProvider, _translationMemoryViewModel.TmService);
 					_waitWindow.Close();
 				}
 
@@ -383,7 +383,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm));
+						var fields = new List<CustomField>(_customFieldsService.GetFilebasedCustomField(fileTm, _translationMemoryViewModel.TmService));
 						foreach (var field in fields)
 						{
 							AddCustomFieldValue(field);
@@ -400,7 +400,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var serverTm in serverTms)
 					{
-						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider));
+						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider, _translationMemoryViewModel.TmService));
 						foreach (var field in fields)
 						{
 							AddCustomFieldValue(field);

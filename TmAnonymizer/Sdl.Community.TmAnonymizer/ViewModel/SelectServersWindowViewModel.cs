@@ -103,7 +103,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							{
 								Source = languageDirection.SourceLanguage,
 								Target = languageDirection.TargetLanguage,
-								TranslationUnits = languageDirection.GetTranslationUnitCount()
+								TranslationUnitsCount = languageDirection.GetTranslationUnitCount()
 							});
 					}
 

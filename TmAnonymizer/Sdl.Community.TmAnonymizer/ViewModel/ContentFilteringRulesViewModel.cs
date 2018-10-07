@@ -18,7 +18,7 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
-	public class ContentFilteringRulesViewModel : ViewModelBase, IDisposable
+	public sealed class ContentFilteringRulesViewModel : ViewModelBase, IDisposable
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
@@ -35,7 +35,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _removeRuleCommand;
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
-		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
+		private List<SourceSearchResult> _sourceSearchResults;
 		private WaitWindow _waitWindow;
 		private IList _selectedItems;
 
@@ -45,30 +45,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			_settingsService = _translationMemoryViewModel.SettingsService;
 			_settings = _settingsService.GetSettings();
-
-			_selectedItems = new List<Rule>();
-
+				
 			_anonymizeTranslationMemories = new ObservableCollection<AnonymizeTranslationMemory>();
-
-			_rules = new ObservableCollection<Rule>(_settingsService.GetRules());
-			foreach (var rule in _rules)
-			{
-				rule.PropertyChanged += Rule_PropertyChanged;
-			}
-
-			_sourceSearchResults = new ObservableCollection<SourceSearchResult>();
-
+			
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
-
 
 			_tmsCollection = _translationMemoryViewModel.TmsCollection;
 			_tmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
 
 			_translationMemoryViewModel.PropertyChanged += TranslationMemoryViewModel_PropertyChanged;
 
-			RulesCollection.CollectionChanged += RulesCollection_CollectionChanged;
+			Rules.CollectionChanged += RulesCollection_CollectionChanged;
 
 			UpdateCheckedAllState();
 		}
@@ -85,7 +74,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public IList SelectedItems
 		{
-			get => _selectedItems;
+			get => _selectedItems ?? (_selectedItems = new List<Rule>());
 			set
 			{
 				_selectedItems = value;
@@ -93,9 +82,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public ObservableCollection<SourceSearchResult> SourceSearchResults
+		public List<SourceSearchResult> SourceSearchResults
 		{
-			get => _sourceSearchResults;
+			get => _sourceSearchResults ?? (_sourceSearchResults = new List<SourceSearchResult>());
 			set
 			{
 				if (Equals(value, _sourceSearchResults))
@@ -107,17 +96,47 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public ObservableCollection<Rule> RulesCollection
+		public ObservableCollection<Rule> Rules
 		{
-			get => _rules;
+			get
+			{
+				if (_rules == null)
+				{
+					_rules = new ObservableCollection<Rule>(_settingsService.GetRules());
+					foreach (var rule in _rules)
+					{
+						rule.PropertyChanged += Rule_PropertyChanged;
+					}
+				}
+
+				return _rules;
+			}
 			set
 			{
 				if (Equals(value, _rules))
 				{
 					return;
 				}
+
+				if (_rules != null)
+				{
+					foreach (var rule in _rules)
+					{
+						rule.PropertyChanged -= Rule_PropertyChanged;
+					}
+				}
+
 				_rules = value;
-				OnPropertyChanged(nameof(RulesCollection));
+
+				if (_rules != null)
+				{
+					foreach (var rule in _rules)
+					{
+						rule.PropertyChanged += Rule_PropertyChanged;
+					}
+				}
+
+				OnPropertyChanged(nameof(Rules));
 			}
 		}
 
@@ -128,7 +147,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				_selectedItem = value;
 				OnPropertyChanged(nameof(SelectedItem));
-				if (RulesCollection.Any(r => r.Id == null))
+				if (Rules.Any(r => r.Id == null))
 				{
 					SetIdForNewRules();
 				}
@@ -207,14 +226,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				foreach (var expression in importedExpressions)
 				{
-					var ruleExist = RulesCollection.FirstOrDefault(s => s.Name.Equals(expression.Name));
+					var ruleExist = Rules.FirstOrDefault(s => s.Name.Equals(expression.Name));
 					if (ruleExist == null)
 					{
-						RulesCollection.Add(expression);
+						Rules.Add(expression);
 					}
 				}
 
-				_settings.Rules = RulesCollection.ToList();
+				_settings.Rules = Rules.ToList();
 				_settingsService.SaveSettings(_settings);
 			}
 		}
@@ -246,15 +265,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					SelectedItems.Clear();
 					foreach (var rule in selectedRules)
 					{
-						var ruleRoRemove = RulesCollection.FirstOrDefault(r => r.Id.Equals(rule.Id));
+						var ruleRoRemove = Rules.FirstOrDefault(r => r.Id.Equals(rule.Id));
 						if (ruleRoRemove != null)
 						{
-							RulesCollection.Remove(ruleRoRemove);
+							Rules.Remove(ruleRoRemove);
 						}
 					}
 				}
 
-				_settings.Rules = RulesCollection.ToList();
+				_settings.Rules = Rules.ToList();
 				_settingsService.SaveSettings(_settings);
 			}
 		}
@@ -286,7 +305,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
-			var selectedRulesCount = RulesCollection.Count(r => r.IsSelected);
+			var selectedRulesCount = Rules.Count(r => r.IsSelected);
 			if (selectedTms.Count > 0 && selectedRulesCount > 0)
 			{
 				System.Windows.Application.Current.Dispatcher.Invoke(delegate
@@ -321,8 +340,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							return;
 						}
 
-						var tus = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(translationProvider, serverTm.Path,
-							SourceSearchResults, GetSelectedRules());
+						var tus = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(serverTm, translationProvider,
+							GetSelectedRules(), out var searchResults);
+
+						SourceSearchResults.AddRange(searchResults);
+
 						if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 						{
 							_anonymizeTranslationMemories.Add(tus);
@@ -333,7 +355,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//file based tms
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm.Path, SourceSearchResults, GetSelectedRules());
+					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm, GetSelectedRules(), out var searchResults);
+					SourceSearchResults.AddRange(searchResults);
 
 					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
 					{
@@ -377,7 +400,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Rule_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			_settings.Rules = RulesCollection.ToList();		
+			_settings.Rules = Rules.ToList();
 			_settingsService.SaveSettings(_settings);
 
 			UpdateCheckedAllState();
@@ -385,9 +408,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void UpdateCheckedAllState()
 		{
-			if (RulesCollection.Count > 0)
+			if (Rules.Count > 0)
 			{
-				SelectAll = RulesCollection.Count(a => !a.IsSelected) <= 0;
+				SelectAll = Rules.Count(a => !a.IsSelected) <= 0;
 			}
 			else
 			{
@@ -459,13 +482,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private List<Rule> GetSelectedRules()
 		{
-			return RulesCollection.Where(r => r.IsSelected).ToList();
+			return Rules.Where(r => r.IsSelected).ToList();
 		}
 
 		private void SelectAllRules()
 		{
 			var value = SelectAll;
-			foreach (var rule in RulesCollection)
+			foreach (var rule in Rules)
 			{
 				rule.IsSelected = value;
 			}
@@ -473,7 +496,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SetIdForNewRules()
 		{
-			var newRules = RulesCollection.Where(r => r.Id == null).ToList();
+			var newRules = Rules.Where(r => r.Id == null).ToList();
 			foreach (var rule in newRules)
 			{
 				rule.Id = Guid.NewGuid().ToString();
@@ -494,7 +517,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				rule.PropertyChanged -= Rule_PropertyChanged;
 			}
 
-			RulesCollection.CollectionChanged -= RulesCollection_CollectionChanged;
+			Rules.CollectionChanged -= RulesCollection_CollectionChanged;
 		}
 	}
 }
