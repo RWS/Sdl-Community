@@ -16,7 +16,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 
 		public List<Rule> Rules { get; set; }
 
-		public string ServerUri { get; set; }		
+		public string LastUsedServerUri { get; set; }
+
+		public string LastUsedServerUserName { get; set; }
 
 		public bool Accepted { get; set; }
 

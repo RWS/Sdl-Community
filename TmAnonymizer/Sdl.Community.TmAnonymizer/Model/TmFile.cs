@@ -22,9 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			IsSelected = false;
 			IsServerTm = false;
 		}
-
-		[JsonIgnore]
-		[XmlIgnore]
+		
 		public Credentials Credentials { get; set; }
 
 		public string Name

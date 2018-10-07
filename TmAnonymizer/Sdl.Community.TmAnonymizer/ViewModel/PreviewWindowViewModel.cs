@@ -92,10 +92,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (serverBasedSearchResult.Count > 0)
 				{
 					tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
+
+					//TODO - resolve for server based TMs
 					var uri = new Uri(_tmViewModel.Credentials.Url);
 					var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName, _tmViewModel.Credentials.Password);
 
 					BackupServerBasedTm(translationProvider, tusToAnonymize);
+
 					_tmViewModel.TmService.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
 				}
 
