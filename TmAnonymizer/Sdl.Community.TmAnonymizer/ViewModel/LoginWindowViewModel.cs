@@ -24,10 +24,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _hasText;
 		private string _visibility;
 
-		public LoginWindowViewModel(Window window, SettingsService settingsService)
+		public LoginWindowViewModel(Window window, SettingsService settingsService, Credentials credentials)
 		{
 			_window = window;
-			_credentials = new Credentials();
+			
 			_messageColorError = "#DF4762";
 			_messageColorInformation = "#3EA691";
 			_visibility = "Hidden";
@@ -39,10 +39,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
-			Url = settingsService.Credentials.Url;
-			UserName = settingsService.Credentials.UserName;
+			if (credentials == null)
+			{
+				credentials = new Credentials();
+			}
 
-			Credentials = settingsService.Credentials;
+			Url = credentials.Url;
+			UserName = credentials.UserName;			
+
+			Credentials = credentials;
 		}
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

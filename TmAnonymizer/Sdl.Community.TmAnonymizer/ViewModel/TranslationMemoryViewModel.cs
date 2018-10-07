@@ -20,12 +20,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _selectAll;
 		private ICommand _selectFoldersCommand;
 		private ICommand _removeCommand;
-		private ICommand _selectTmCommand;		
+		private ICommand _selectTmCommand;
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
 		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection;
-		private Credentials _credentials;
 		private bool _isEnabled;
 		private LoginWindowViewModel _loginWindowViewModel;
 
@@ -99,20 +98,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public Credentials Credentials
-		{
-			get => _credentials;
-			set
-			{
-				if (Equals(value, _credentials))
-				{
-					return;
-				}
-				_credentials = value;
-				OnPropertyChanged(nameof(Credentials));
-			}
-		}
-
 		public bool IsEnabled
 		{
 			get => _isEnabled;
@@ -131,31 +116,34 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
 
-		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));		
+		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
-		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(ShowLogInWindow, true));
+		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));
 
-		private void ShowLogInWindow()
+		private void AddServerTranslationMemory()
 		{
+			var settings = SettingsService.GetSettings();
 			var loginWindow = new LoginWindow();
 
-			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService);
-			_loginWindowViewModel.PropertyChanged += ViewModel_PropertyChanged;
+			var credentials = new Credentials
+			{
+				Url = settings.LastUsedServerUri,
+				UserName = settings.LastUsedServerUserName
+			};
 
+			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, credentials);
+			
 			loginWindow.DataContext = _loginWindowViewModel;
 			loginWindow.ShowDialog();
 
 			if (loginWindow.DialogResult.HasValue && loginWindow.DialogResult.Value)
 			{
-				SettingsService.Credentials = _loginWindowViewModel.Credentials;
+				settings.LastUsedServerUri = _loginWindowViewModel.Credentials.Url;
+				settings.LastUsedServerUserName = _loginWindowViewModel.Credentials.UserName;
+				SettingsService.SaveSettings(settings);
 			}
-
-			var settings = SettingsService.GetSettings();
-			settings.ServerUri = SettingsService.Credentials.Url;
-
-			SettingsService.SaveSettings(settings);
 
 			if (_loginWindowViewModel.TranslationProviderServer != null)
 			{
@@ -171,23 +159,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						if (tmFile.IsSelected)
 						{
-							tmFile.Credentials = Credentials;
+							tmFile.Credentials = _loginWindowViewModel.Credentials;
 							AddTm(tmFile);
 						}
 					}
 				}
-			}
-		}
-
-		private void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-		{
-			var viewModel = (LoginWindowViewModel)sender;
-
-			if (!string.IsNullOrEmpty(viewModel?.Credentials.Password) &&
-			   !string.IsNullOrEmpty(viewModel.Credentials.Url) &&
-			   !string.IsNullOrEmpty(viewModel.Credentials.UserName))
-			{
-				Credentials = viewModel.Credentials;
 			}
 		}
 
@@ -326,19 +302,48 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (e.PropertyName.Equals(nameof(TmFile.IsSelected)))
 			{
-				SaveSetttings();
-			}
+				if (sender is TmFile tmFile &&
+					((tmFile.IsSelected && tmFile.IsServerTm && tmFile.Credentials == null)
+						|| tmFile.Credentials != null && tmFile.Credentials.Password == null))
+				{
+					var settings = SettingsService.GetSettings();
 
-			OnPropertyChanged(nameof(TmsCollection));
-		}		
+					if (tmFile.Credentials == null)
+					{
+						tmFile.Credentials = new Credentials
+						{
+							Url = settings.LastUsedServerUri,
+							UserName = settings.LastUsedServerUserName
+						};
+					}
+
+					var loginWindow = new LoginWindow();
+					_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, tmFile.Credentials);				
+
+					loginWindow.DataContext = _loginWindowViewModel;
+					loginWindow.ShowDialog();
+
+					if (loginWindow.DialogResult.HasValue && loginWindow.DialogResult.Value)
+					{
+						tmFile.Credentials = _loginWindowViewModel.Credentials;
+						SettingsService.SaveSettings(settings);
+					}
+					else
+					{
+						tmFile.IsSelected = false;
+					}
+				}
+				else
+				{
+					SaveSetttings();
+				}
+
+				OnPropertyChanged(nameof(TmsCollection));
+			}
+		}
 
 		public void Dispose()
-		{
-			if (_loginWindowViewModel != null)
-			{
-				_loginWindowViewModel.PropertyChanged -= ViewModel_PropertyChanged;
-			}
-
+		{			
 			if (TmsCollection != null)
 			{
 				foreach (var tm in TmsCollection)

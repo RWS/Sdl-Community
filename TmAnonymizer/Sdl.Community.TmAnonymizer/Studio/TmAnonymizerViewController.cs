@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
@@ -28,7 +27,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			_settingsService = new SettingsService(new PathInfo());
 			
-
 			_model = new MainViewModel(_settingsService);
 		}
 

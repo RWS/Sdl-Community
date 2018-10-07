@@ -214,10 +214,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (tm.IsServerTm)
 			{
-				var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+				var uri = new Uri(tm.Credentials.Url);
 				var translationProvider = new TranslationProviderServer(uri, false,
-					_translationMemoryViewModel.Credentials.UserName,
-					_translationMemoryViewModel.Credentials.Password);
+					tm.Credentials.UserName,
+					tm.Credentials.Password);
 
 				var customFields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider, _translationMemoryViewModel.TmService));
 
@@ -276,10 +276,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					});
 					DoEvents();
 
-					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
+					var uri = new Uri(tm.Credentials.Url);
 					var translationProvider = new TranslationProviderServer(uri, false,
-						_translationMemoryViewModel.Credentials.UserName,
-						_translationMemoryViewModel.Credentials.Password);
+						tm.Credentials.UserName,
+						tm.Credentials.Password);
 
 					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFields.ToList(), translationProvider, _translationMemoryViewModel.TmService);
 					_waitWindow.Close();
@@ -392,15 +392,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 
 				if (serverTms.Any())
-				{
-					var uri = new Uri(_translationMemoryViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false,
-						_translationMemoryViewModel.Credentials.UserName,
-						_translationMemoryViewModel.Credentials.Password);
-
-					foreach (var serverTm in serverTms)
+				{					
+					foreach (var tm in serverTms)
 					{
-						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(serverTm, translationProvider, _translationMemoryViewModel.TmService));
+						var uri = new Uri(tm.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							tm.Credentials.UserName,
+							tm.Credentials.Password);
+
+						var fields = new List<CustomField>(_customFieldsService.GetServerBasedCustomFields(tm, translationProvider, _translationMemoryViewModel.TmService));
 						foreach (var field in fields)
 						{
 							AddCustomFieldValue(field);
