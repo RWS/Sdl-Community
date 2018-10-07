@@ -61,12 +61,20 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information.
-        ///		SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        ///   Looks up a localized string similar to The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information..
         /// </summary>
-        internal static string AcceptsNoLiability_Description {
+        internal static string AcceptsNoLiability_Description_Line01 {
             get {
-                return ResourceManager.GetString("AcceptsNoLiability_Description", resourceCulture);
+                return ResourceManager.GetString("AcceptsNoLiability_Description_Line01", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables..
+        /// </summary>
+        internal static string AcceptsNoLiability_Description_Line02 {
+            get {
+                return ResourceManager.GetString("AcceptsNoLiability_Description_Line02", resourceCulture);
             }
         }
         

@@ -151,12 +151,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					_translationMemoryViewModel.Credentials.UserName,
 					_translationMemoryViewModel.Credentials.Password);
 
-				var names = _systemFieldsService.GetUniqueServerBasedSystemFields(tm, translationProvider);
+				var names = _systemFieldsService.GetUniqueServerBasedSystemFields(tm, translationProvider, _translationMemoryViewModel.TmService);
 				AddUniqueUserNames(names);
 			}
 			else
 			{
-				var names = _systemFieldsService.GetUniqueFileBasedSystemFields(tm);
+				var names = _systemFieldsService.GetUniqueFileBasedSystemFields(tm, _translationMemoryViewModel.TmService);
 				AddUniqueUserNames(names);
 			}
 		}
@@ -215,7 +215,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				if (!tm.IsServerTm)
 				{
-					_systemFieldsService.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList());
+					_systemFieldsService.AnonymizeFileBasedSystemFields(tm, UniqueUserNames.ToList(), _translationMemoryViewModel.TmService);
 				}
 
 				else if (tm.IsServerTm)
@@ -225,7 +225,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_translationMemoryViewModel.Credentials.UserName,
 						_translationMemoryViewModel.Credentials.Password);
 
-					_systemFieldsService.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider);
+					_systemFieldsService.AnonymizeServerBasedSystemFields(tm, UniqueUserNames.ToList(), translationProvider, _translationMemoryViewModel.TmService);
 				}
 			}
 
@@ -243,7 +243,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var fileTm in fileBasedTms)
 					{
-						var names = _systemFieldsService.GetUniqueFileBasedSystemFields(fileTm);
+						var names = _systemFieldsService.GetUniqueFileBasedSystemFields(fileTm, _translationMemoryViewModel.TmService);
 						AddUniqueUserNames(names);
 					}
 				}
@@ -257,7 +257,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var serverTm in serverTms)
 					{
-						var names = _systemFieldsService.GetUniqueServerBasedSystemFields(serverTm, translationProvider);
+						var names = _systemFieldsService.GetUniqueServerBasedSystemFields(serverTm, translationProvider, _translationMemoryViewModel.TmService);
 						AddUniqueUserNames(names);
 					}
 				}

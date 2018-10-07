@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
@@ -11,7 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public string Name { get; set; }
 		public FieldValueType ValueType { get; set; }
 		public bool IsPickList { get; set; }
-		public ObservableCollection<CustomFieldValue> FieldValues { get; set; }
+		public List<CustomFieldValue> FieldValues { get; set; }
 		public string TmPath { get; set; }
 		public bool IsSelected
 		{

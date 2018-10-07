@@ -35,7 +35,7 @@
 						BorderBrush="LightGray"
 						VerticalScrollBarVisibility="Auto"
 						HorizontalScrollBarVisibility="Disabled"
-						ItemsSource="{Binding RulesCollection, Mode=TwoWay}"  
+						ItemsSource="{Binding Rules, Mode=TwoWay}"  
 						Background="White" 
 						GridLinesVisibility="None" 
 						CanUserAddRows="True"

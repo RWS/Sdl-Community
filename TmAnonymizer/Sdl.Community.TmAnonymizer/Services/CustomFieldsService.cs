@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
@@ -11,22 +9,46 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class CustomFieldsService
 	{
-		public List<CustomField> GetFilebasedCustomField(TmFile tm)
+		public List<CustomField> GetFilebasedCustomField(TmFile tm, TmService tmService)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tm.Path);
-			var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
-			var tmIterator = new RegularIterator(unitsCount);
-			var tus = translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus, tm.Path);
+		
+			var tus = tmService.LoadTranslationUnits(tm, null, new LanguageDirection
+			{
+				Source = translationMemory.LanguageDirection.SourceLanguage,
+				Target = translationMemory.LanguageDirection.TargetLanguage
+			});
 
-			return customFieldList;
+			if (tus != null)
+			{
+				var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, tus, tm.Path);
+				return customFieldList;
+			}
+
+			return null;
 		}
 
-		public List<CustomField> GetServerBasedCustomFields(TmFile tm, TranslationProviderServer translationProvideServer)
+		public List<CustomField> GetServerBasedCustomFields(TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits, tm.Path);
+
+			var translationUnits = new List<TranslationUnit>();
+
+			foreach (var languageDirection in translationMemory.LanguageDirections)
+			{
+				var tus = tmService.LoadTranslationUnits(tm, translationProvideServer, new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+
+				if (tus != null)
+				{
+					translationUnits.AddRange(tus);
+				}
+			}
+
+			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits.ToArray(), tm.Path);
 
 			return customFieldList;
 		}
@@ -51,7 +73,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return multipleStringValues;
 		}
 
-		private static List<CustomFieldValue> GetNonPickListCustomFieldValues(TranslationUnit[] translationUnits, string name)
+		private static IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TranslationUnit> translationUnits, string name)
 		{
 			var customFieldValues = new List<CustomFieldValue>();
 			var distinctFieldValues = new List<string>();
@@ -83,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldValues;
 		}
 
-		private static List<CustomFieldValue> GetPickListCustomFieldValues(FieldDefinition fieldDefinition)
+		private static IEnumerable<CustomFieldValue> GetPickListCustomFieldValues(FieldDefinition fieldDefinition)
 		{
 			var details = new List<CustomFieldValue>();
 
@@ -113,7 +135,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						FieldValues = new ObservableCollection<CustomFieldValue>(GetPickListCustomFieldValues(field)),
+						FieldValues = new List<CustomFieldValue>(GetPickListCustomFieldValues(field)),
 						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
@@ -126,7 +148,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						IsPickList = field.IsPicklist,
 						Name = field.Name,
 						ValueType = field.ValueType,
-						FieldValues = new ObservableCollection<CustomFieldValue>(GetNonPickListCustomFieldValues(translationUnits, field.Name)),
+						FieldValues = new List<CustomFieldValue>(GetNonPickListCustomFieldValues(translationUnits, field.Name)),
 						TmPath = tmFilePath
 					};
 					customFieldList.Add(customField);
@@ -137,32 +159,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		/// <summary>
-		/// Retrieves an array of Translation Units for a Server Based Translation Memory
-		/// </summary>
-		/// <param name="languageDirections">Language Directions of a Server based Translation Memory</param>
-		/// /// <returns>Array of TranslationUnits</returns>
-		private static TranslationUnit[] GetServerBasedTranslationUnits(ServerBasedTranslationMemoryLanguageDirectionCollection languageDirections)
+		public void AnonymizeFileBasedCustomFields(TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
 		{
-			var translationUnits = new TranslationUnit[] { };
-
-			foreach (var languageDirection in languageDirections)
-			{
-				var unitsCount = languageDirection.GetTranslationUnitCount();
-				if (unitsCount == 0) continue;
-				var tmIterator = new RegularIterator(unitsCount);
-				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-			}
-
-			return translationUnits;
-		}
-
-		public void AnonymizeFileBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields)
-		{
-			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
-			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
-			var tmIterator = new RegularIterator(unitsCount);
-			var tus = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
+			var fileBasedTm = new FileBasedTranslationMemory(tmFile.Path);
+			
+			var tus = tmService.LoadTranslationUnits(tmFile, null,
+				new LanguageDirection
+				{
+					Source = fileBasedTm.LanguageDirection.SourceLanguage,
+					Target = fileBasedTm.LanguageDirection.TargetLanguage
+				});
 
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
@@ -209,11 +215,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fileBasedTm.Save();
 		}
 
-		public void AnonymizeServerBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
+		public void AnonymizeServerBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var translationUnits = GetServerBasedTranslationUnits(serverBasedTm.LanguageDirections);
 
+			var languageDirections = new List<LanguageDirection>();
+			foreach (var languageDirection in serverBasedTm.LanguageDirections)
+			{
+				languageDirections.Add(new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+			}
+
+			var translationUnits = tmService.LoadTranslationUnits(tm, translationProvideServer, languageDirections);
+			
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
 				if (anonymizedField.IsPickList)

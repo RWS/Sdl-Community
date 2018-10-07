@@ -117,9 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AcceptsNoLiability_Description" xml:space="preserve">
-    <value>The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information.
-		SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
+  <data name="AcceptsNoLiability_Description_Line01" xml:space="preserve">
+    <value>The tool has been designed to help the Client create specific rules in accordance with their requirements and tag identifiable information.</value>
   </data>
   <data name="Url_is_required" xml:space="preserve">
     <value>Url is required</value>
@@ -180,5 +179,8 @@
   </data>
   <data name="Login_Not_Authorized" xml:space="preserve">
     <value>Not Authorized!</value>
+  </data>
+	<data name="AcceptsNoLiability_Description_Line02" xml:space="preserve">
+    <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
   </data>
 </root>

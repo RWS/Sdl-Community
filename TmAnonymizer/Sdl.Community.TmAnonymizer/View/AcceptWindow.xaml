@@ -21,7 +21,7 @@
 	</Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
+			<RowDefinition Height="*" />
 			<RowDefinition Height="Auto" />
 			<RowDefinition Height="Auto" />
 		</Grid.RowDefinitions>
@@ -29,9 +29,9 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<TextBlock Name="Description" FontFamily="Segoe UI" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10" Text="{Binding Description}" TextWrapping="WrapWithOverflow"></TextBlock>
-		<CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Accepted}" Margin="10,20,0,0" FontFamily="Segoe UI">I agree</CheckBox>
-		<Button  Grid.Row="2" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" Margin="102,41,10,41" Content="Ok" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=Accept}" Width="Auto"></Button>
+		<TextBlock Name="Description" FontFamily="Segoe UI" Grid.Row="0" Grid.ColumnSpan="2" Margin="10,10" Text="{Binding Description}" TextWrapping="WrapWithOverflow"/>
+		<CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Accepted}" Margin="10,0,0,0" FontFamily="Segoe UI" Height="15" VerticalAlignment="Bottom">I agree</CheckBox>
+		<Button  Grid.Row="2" Grid.Column="1" Style="{DynamicResource StudioGreenButtonsStyle }" Margin="102,0,10,10" Content="Ok" Command="{Binding OkCommand}" CommandParameter="{Binding ElementName=Accept}" Width="Auto" VerticalAlignment="Bottom"></Button>
 	</Grid>
 </Window>
 

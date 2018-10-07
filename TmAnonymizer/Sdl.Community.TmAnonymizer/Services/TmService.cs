@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
@@ -21,171 +20,230 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			_settingsService = settingsService;
 		}
 
-		/// <summary>
-		/// Gets TUs which contains PI
-		/// </summary>
-		/// <param name="tmPath"></param>
-		/// <param name="sourceSearchResult">Regex search result</param>
-		/// <param name="selectedRules">Selected rules from the grid</param>
-		/// <returns>An object which has Tm path and a list of trasnlation units which contains PI</returns>
-		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(string tmPath,
-			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
+		public TranslationUnit[] LoadTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
 		{
-			var tm = new FileBasedTranslationMemory(tmPath);
-			var unitsCount = tm.LanguageDirection.GetTranslationUnitCount();
-			var tmIterator = new RegularIterator(unitsCount);
-			var tus = tm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate
+			if (tmFile != null)
 			{
-				var pi = new PersonalInformation(selectedRules);
+				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a => Equals(a.Source, languageDirectionp.Source) && Equals(a.Target, languageDirectionp.Target));
 
-				foreach (var translationUnit in tus)
+				if (languageDirection == null)
 				{
-					var sourceText = translationUnit.SourceSegment.ToPlain();
-					var targetText = translationUnit.TargetSegment.ToPlain();
-					var sourceContainsPi = pi.ContainsPi(sourceText);
-					var targetContainsPi = pi.ContainsPi(targetText);
+					return null;
+				}
 
-					if (sourceContainsPi || targetContainsPi)
+				if (languageDirection.TranslationUnits != null)
+				{
+					return languageDirection.TranslationUnits;
+				}
+
+				if (tmFile.IsServerTm)
+				{
+					var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+					var serverBasedLanguageDirection = translationMemory.LanguageDirections.FirstOrDefault(a =>
+						a.SourceLanguage.Equals(languageDirectionp.Source) && a.TargetLanguage.Equals(languageDirectionp.Target));
+
+					if (serverBasedLanguageDirection != null)
 					{
-						var searchResult = new SourceSearchResult
-						{
-							Id = translationUnit.ResourceId.Guid.ToString(),
-							SourceText = sourceText,
-							TargetText = targetText,
-							TmFilePath = tmPath,
-							IconFilePath = "../Resources/TranslationMemory.ico",
-							IsServer = false,
-							SegmentNumber = translationUnit.ResourceId.Id.ToString(),
-							SelectedWordsDetails = new List<WordDetails>(),
-							DeSelectedWordsDetails = new List<WordDetails>(),
-							TargetDeSelectedWordsDetails = new List<WordDetails>(),
-							TargetSelectedWordsDetails = new List<WordDetails>()
+						var unitsCount = serverBasedLanguageDirection.GetTranslationUnitCount();
+						var tmIterator = new RegularIterator(unitsCount);
 
-						};
-						if (sourceContainsPi)
-						{
-							searchResult.IsSourceMatch = true;
-							searchResult.MatchResult = new MatchResult
-							{
-								Positions = pi.GetPersonalDataPositions(sourceText)
-							};
-						}
-						if (targetContainsPi)
-						{
-							searchResult.IsTargetMatch = true;
-							searchResult.TargetMatchResult = new MatchResult
-							{
-								Positions = pi.GetPersonalDataPositions(targetText)
-							};
-						}
-						sourceSearchResult.Add(searchResult);
+						languageDirection.TranslationUnits = serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator);
+						languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
 					}
 				}
-			});
+				else
+				{
+					var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
+
+					if (translationMemory.LanguageDirection.SourceLanguage.Equals(languageDirectionp.Source) &&
+						translationMemory.LanguageDirection.TargetLanguage.Equals(languageDirectionp.Target))
+					{
+						var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
+						var tmIterator = new RegularIterator(unitsCount);
+
+						languageDirection.TranslationUnits = translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator);
+						languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
+					}
+				}
+
+				return languageDirection.TranslationUnits;
+			}
+
+			return null;
+		}
+
+		public TranslationUnit[] LoadTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
+		{
+			var translationUnits = new List<TranslationUnit>();
+			foreach (var languageDirection in languageDirections)
+			{
+				var tus = LoadTranslationUnits(tmFile, translationProvider, languageDirection);
+				if (tus != null)
+				{
+					translationUnits.AddRange(tus);
+				}
+			}
+
+			return translationUnits.ToArray();
+		}
+
+
+		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(TmFile tmFile,
+			List<Rule> selectedRules, out List<SourceSearchResult> sourceSearchResult)
+		{
+			var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
+			var tus = LoadTranslationUnits(tmFile, null,
+				new LanguageDirection
+				{
+					Source = translationMemory.LanguageDirection.SourceLanguage,
+					Target = translationMemory.LanguageDirection.TargetLanguage
+				});
+
+			sourceSearchResult = new List<SourceSearchResult>();
+
+			var pi = new PersonalInformation(selectedRules);
+
+			foreach (var translationUnit in tus)
+			{
+				var sourceText = translationUnit.SourceSegment.ToPlain();
+				var targetText = translationUnit.TargetSegment.ToPlain();
+				var sourceContainsPi = pi.ContainsPi(sourceText);
+				var targetContainsPi = pi.ContainsPi(targetText);
+
+				if (sourceContainsPi || targetContainsPi)
+				{
+					var searchResult = new SourceSearchResult
+					{
+						Id = translationUnit.ResourceId.Guid.ToString(),
+						SourceText = sourceText,
+						TargetText = targetText,
+						TmFilePath = tmFile.Path,
+						IconFilePath = "../Resources/TranslationMemory.ico",
+						IsServer = false,
+						SegmentNumber = translationUnit.ResourceId.Id.ToString(),
+						SelectedWordsDetails = new List<WordDetails>(),
+						DeSelectedWordsDetails = new List<WordDetails>(),
+						TargetDeSelectedWordsDetails = new List<WordDetails>(),
+						TargetSelectedWordsDetails = new List<WordDetails>()
+
+					};
+					if (sourceContainsPi)
+					{
+						searchResult.IsSourceMatch = true;
+						searchResult.MatchResult = new MatchResult
+						{
+							Positions = pi.GetPersonalDataPositions(sourceText)
+						};
+					}
+					if (targetContainsPi)
+					{
+						searchResult.IsTargetMatch = true;
+						searchResult.TargetMatchResult = new MatchResult
+						{
+							Positions = pi.GetPersonalDataPositions(targetText)
+						};
+					}
+
+					sourceSearchResult.Add(searchResult);
+				}
+			}
+
 			return new AnonymizeTranslationMemory
 			{
-				TmPath = tmPath,
+				TmPath = tmFile.Path,
 				TranslationUnits = tus.ToList(),
 				TranslationUnitDetails = new List<TranslationUnitDetails>()
 			};
 		}
-		/// <summary>
-		/// Gets server based TUs which contains PI
-		/// </summary>
-		/// <param name="translationProvider">Translation provider</param>
-		/// <param name="tmPath">Translation memory path</param>
-		/// <param name="sourceSearchResult">Regex search result</param>
-		/// <param name="selectedRules">Selected rules from the grid</param>
-		/// <returns>An object which has Tm path and a list of trasnlation units which contains PI</returns>
-		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TranslationProviderServer translationProvider, string tmPath,
-			ObservableCollection<SourceSearchResult> sourceSearchResult, List<Rule> selectedRules)
+
+		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider,
+			List<Rule> selectedRules, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var allTusForLanguageDirections = new List<TranslationUnit>();
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate
+			var searchResults = new List<SourceSearchResult>();
+
+			var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+			var languageDirections = translationMemory.LanguageDirections;
+			var pi = new PersonalInformation(selectedRules);
+
+			foreach (var languageDirection in languageDirections)
 			{
-				var translationMemory = translationProvider.GetTranslationMemory(tmPath, TranslationMemoryProperties.All);
-				var languageDirections = translationMemory.LanguageDirections;
-				var pi = new PersonalInformation(selectedRules);
-
-				foreach (var languageDirection in languageDirections)
+				var translationUnits = LoadTranslationUnits(tmFile, translationProvider, new LanguageDirection
 				{
-					var unitsCount = languageDirection.GetTranslationUnitCount();
-					var tmIterator = new RegularIterator(unitsCount);
-					var translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-					if (translationUnits != null)
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+
+				if (translationUnits != null)
+				{
+					allTusForLanguageDirections.AddRange(translationUnits);
+					foreach (var translationUnit in translationUnits)
 					{
-						allTusForLanguageDirections.AddRange(translationUnits);
-						foreach (var translationUnit in translationUnits)
+						var sourceText = translationUnit.SourceSegment.ToPlain();
+						var targetText = translationUnit.TargetSegment.ToPlain();
+						var sourceContainsPi = pi.ContainsPi(sourceText);
+						var targetContainsPi = pi.ContainsPi(targetText);
+						if (sourceContainsPi || targetContainsPi)
 						{
-							var sourceText = translationUnit.SourceSegment.ToPlain();
-							var targetText = translationUnit.TargetSegment.ToPlain();
-							var sourceContainsPi = pi.ContainsPi(sourceText);
-							var targetContainsPi = pi.ContainsPi(targetText);
-							if (sourceContainsPi || targetContainsPi)
+							var searchResult = new SourceSearchResult
 							{
-								var searchResult = new SourceSearchResult
+								Id = translationUnit.ResourceId.Guid.ToString(),
+								SourceText = sourceText,
+								TargetText = targetText,
+								TmFilePath = tmFile.Path,
+								IsServer = true,
+								IconFilePath = "../Resources/ServerBasedTranslationMemory.ico",
+								SegmentNumber = translationUnit.ResourceId.Id.ToString(),
+								SelectedWordsDetails = new List<WordDetails>(),
+								DeSelectedWordsDetails = new List<WordDetails>(),
+								TargetDeSelectedWordsDetails = new List<WordDetails>(),
+								TargetSelectedWordsDetails = new List<WordDetails>()
+							};
+
+							if (sourceContainsPi)
+							{
+								searchResult.IsSourceMatch = true;
+								searchResult.MatchResult = new MatchResult
 								{
-									Id = translationUnit.ResourceId.Guid.ToString(),
-									SourceText = sourceText,
-									TargetText = targetText,
-									TmFilePath = tmPath,
-									IsServer = true,
-									IconFilePath = "../Resources/ServerBasedTranslationMemory.ico",
-									SegmentNumber = translationUnit.ResourceId.Id.ToString(),
-									SelectedWordsDetails = new List<WordDetails>(),
-									DeSelectedWordsDetails = new List<WordDetails>(),
-									TargetDeSelectedWordsDetails = new List<WordDetails>(),
-									TargetSelectedWordsDetails = new List<WordDetails>()
+									Positions = pi.GetPersonalDataPositions(sourceText)
 								};
-
-								if (sourceContainsPi)
-								{
-									searchResult.IsSourceMatch = true;
-									searchResult.MatchResult = new MatchResult
-									{
-										Positions = pi.GetPersonalDataPositions(sourceText)
-									};
-								}
-								if (targetContainsPi)
-								{
-									searchResult.IsTargetMatch = true;
-									searchResult.TargetMatchResult = new MatchResult
-									{
-										Positions = pi.GetPersonalDataPositions(targetText)
-									};
-								}
-
-								sourceSearchResult.Add(searchResult);
 							}
+							if (targetContainsPi)
+							{
+								searchResult.IsTargetMatch = true;
+								searchResult.TargetMatchResult = new MatchResult
+								{
+									Positions = pi.GetPersonalDataPositions(targetText)
+								};
+							}
+
+							searchResults.Add(searchResult);
 						}
 					}
 				}
+			}
 
-			});
+			sourceSearchResult = searchResults;
+
 			return new AnonymizeTranslationMemory
 			{
-				TmPath = tmPath,
+				TmPath = tmFile.Path,
 				TranslationUnits = allTusForLanguageDirections,
 				TranslationUnitDetails = new List<TranslationUnitDetails>()
 			};
 		}
-		/// <summary>
-		/// Anonymize Server Based TU
-		/// </summary>
-		/// <param name="translationProvider"></param>
-		/// <param name="tusToAnonymize">TUs which contains PI</param>
-		public void AnonymizeServerBasedTu(TranslationProviderServer translationProvider,
-			List<AnonymizeTranslationMemory> tusToAnonymize)
+
+		public void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			try
 			{
 				foreach (var tuToAonymize in tusToAnonymize)
 				{
-					var translationMemory =
-						translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+					var translationMemory = translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
 					var languageDirections = translationMemory.LanguageDirections;
+
 					foreach (var languageDirection in languageDirections)
 					{
 						foreach (var translationUnitDetails in tuToAonymize.TranslationUnitDetails)
@@ -193,8 +251,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							if (translationUnitDetails.IsSourceMatch)
 							{
 								var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
-								var elementsContainsTag =
-									sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+								var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 								if (elementsContainsTag)
 								{
 									if (translationUnitDetails.SelectedWordsDetails.Any())
@@ -212,6 +269,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
 								}
 							}
+
 							if (translationUnitDetails.IsTargetMatch)
 							{
 								var targetTranslationElements = translationUnitDetails.TranslationUnit.TargetSegment.Elements.ToList();
@@ -234,6 +292,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									AnonymizeSegmentsWithoutTags(translationUnitDetails, false);
 								}
 							}
+							
 							languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
 						}
 					}
@@ -255,10 +314,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 		}
-		/// <summary>
-		/// Anonymize File Based TU
-		/// </summary>
-		/// <param name="tusToAnonymize">TUs which contains PI</param>
+
 		public void AnonymizeFileBasedTu(List<AnonymizeTranslationMemory> tusToAnonymize)
 		{
 			foreach (var translationUnitPair in tusToAnonymize)
@@ -316,11 +372,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		/// <summary>
-		/// Replace selected words from UI with tags
-		/// </summary>
-		/// <param name="translationUnitDetails">Translation unit details</param>
-		/// <param name="sourceTranslationElements">A List with the elements of segment</param>
 		private static void AnonymizeSelectedWordsFromPreview(TranslationUnitDetails translationUnitDetails, List<SegmentElement> sourceTranslationElements, bool isSource)
 		{
 			if (isSource)
@@ -412,11 +463,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		/// <summary>
-		/// Anonymize segments without tags
-		/// </summary>
-		/// <param name="translationUnitDetails">Translation unit details</param>
-		/// <param name="isSource"> Is source parameter</param>
 		private void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails, bool isSource)
 		{
 			var finalList = new List<SegmentElement>();
@@ -481,11 +527,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		/// <summary>
-		/// Anonymize segments with tags
-		/// </summary>
-		/// <param name="translationUnitDetails"></param>
-		/// <param name="isSource"></param>
 		private void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails, bool isSource)
 		{
 			var translationUnitElements = isSource

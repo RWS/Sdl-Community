@@ -297,7 +297,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						{
 							Source = fileBasedTm.LanguageDirection.SourceLanguage,
 							Target = fileBasedTm.LanguageDirection.TargetLanguage,
-							TranslationUnits = unitsCount
+							TranslationUnitsCount = unitsCount
 						}
 					}
 				};

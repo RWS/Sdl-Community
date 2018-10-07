@@ -15,8 +15,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public AcceptWindowViewModel(SettingsService settingsService)
 		{
 			_settingsService = settingsService;
-			Description = StringResources.AcceptsNoLiability_Description;
-
+			Description = StringResources.AcceptsNoLiability_Description_Line01 +
+						  "\r\n\r\n" + 
+			              StringResources.AcceptsNoLiability_Description_Line02;
 		}
 		public ICommand OkCommand => _okCommand ?? (_okCommand = new RelayCommand(Ok));
 

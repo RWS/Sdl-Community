@@ -6,15 +6,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	public class PathInfo
 	{
 		private const string SdlCommunityPathName = "SDL Community";
-		private const string TmBackupPathName = "TmAnonymizer Backup";
-		private const string ServerTmBackupPathName = "TmAnonymizer ServerBackup";
-		private const string SettingsFolderPathName = "TmAnonymizer Settings";
+		private const string ApplicationPathName = "TmAnonymizer";
+		private const string BackupPathName = "Backup";
+		private const string SettingsPathName = "Settings";
 		private const string SettingsFileName = "settings.json";
 
 		private string _sdlCommunityFullPath;
-		private string _tmBackupFullPath;
-		private string _serverTmBackupFullPath;
-		private string _settingsFolderFullPath;
+		private string _applicationFullPath;
+		private string _backupFullPath;		
+		private string _settingsFullPath;
 
 		public string SdlCommunityFullPath
 		{
@@ -37,64 +37,64 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			}
 		}
 
-		public string TmBackupFullPath
+		public string ApplicationFullPath
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(_tmBackupFullPath))
+				if (!string.IsNullOrEmpty(_applicationFullPath))
 				{
-					return _tmBackupFullPath;
+					return _applicationFullPath;
 				}
 
-				_tmBackupFullPath = Path.Combine(SdlCommunityFullPath, TmBackupPathName);
-				if (!Directory.Exists(_tmBackupFullPath))
+				_applicationFullPath = Path.Combine(SdlCommunityFullPath, ApplicationPathName);
+				if (!Directory.Exists(_applicationFullPath))
 				{
-					Directory.CreateDirectory(_tmBackupFullPath);
+					Directory.CreateDirectory(_applicationFullPath);
 				}
 
-				return _tmBackupFullPath;
+				return _applicationFullPath;
 			}
 		}
 
-		public string ServerTmBackupFullPath
+		public string BackupFullPath
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(_serverTmBackupFullPath))
+				if (!string.IsNullOrEmpty(_backupFullPath))
 				{
-					return _serverTmBackupFullPath;
+					return _backupFullPath;
 				}
 
-				_serverTmBackupFullPath = Path.Combine(SdlCommunityFullPath, ServerTmBackupPathName);
-				if (!Directory.Exists(_serverTmBackupFullPath))
+				_backupFullPath = Path.Combine(ApplicationFullPath, BackupPathName);
+				if (!Directory.Exists(_backupFullPath))
 				{
-					Directory.CreateDirectory(_serverTmBackupFullPath);
+					Directory.CreateDirectory(_backupFullPath);
 				}
 
-				return _serverTmBackupFullPath;
+				return _backupFullPath;
 			}
 		}
 
-		public string SettingsFolderFullPath
+		public string SettingsFullPath
 		{
 			get
 			{
-				if (!string.IsNullOrEmpty(_settingsFolderFullPath))
+				if (!string.IsNullOrEmpty(_settingsFullPath))
 				{
-					return _settingsFolderFullPath;
+					return _settingsFullPath;
 				}
 
-				_settingsFolderFullPath = Path.Combine(SdlCommunityFullPath, SettingsFolderPathName);
-				if (!Directory.Exists(_settingsFolderFullPath))
+				_settingsFullPath = Path.Combine(ApplicationFullPath, SettingsPathName);
+				if (!Directory.Exists(_settingsFullPath))
 				{
-					Directory.CreateDirectory(_settingsFolderFullPath);
+					Directory.CreateDirectory(_settingsFullPath);
 				}
 
-				return _settingsFolderFullPath;
+				return _settingsFullPath;
 			}
 		}
 
-		public string SettingsFilePath => Path.Combine(SettingsFolderFullPath, SettingsFileName);		
+		public string SettingsFilePath => Path.Combine(SettingsFullPath, SettingsFileName);		
 	}
 }
 

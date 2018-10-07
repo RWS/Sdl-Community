@@ -8,43 +8,63 @@ using Sdl.LanguagePlatform.TranslationMemoryApi;
 namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class SystemFieldsService
-	{
-		/// <summary>
-		/// Gets unique System Fields values from File Based Translation Memory
-		/// </summary>
-		/// <param name="tm">Translation Memory File</param>
-		/// <returns>An ObservableCollection of Users</returns>
-		public List<User> GetUniqueFileBasedSystemFields(TmFile tm)
+	{	
+		public List<User> GetUniqueFileBasedSystemFields(TmFile tm, TmService tmService)
 		{
-			var translationUnits = GetFileBasedTranslationUnits(tm);
-			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits);
-			return uniqueUsersCollection;
+			var translationMemory = new FileBasedTranslationMemory(tm.Path);
+
+			var tus = tmService.LoadTranslationUnits(tm, null, new LanguageDirection
+			{
+				Source = translationMemory.LanguageDirection.SourceLanguage,
+				Target = translationMemory.LanguageDirection.TargetLanguage
+			});
+
+			if (tus != null)
+			{
+				var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, tus);
+
+				return uniqueUsersCollection;
+			}
+
+			return null;			
 		}
 
-		/// <summary>
-		/// Gets unique System Fields values from Server Based Translation Memory
-		/// </summary>
-		/// <param name="tm">Translation Memory File</param>
-		/// <param name="translationProvideServer">Translation provider</param>
-		/// <returns>An ObservableCollection of UniqueUserName objects</returns>
-		/// TODO: SIMPLIFY METHOD
-		public List<User> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer)
+	
+		public List<User> GetUniqueServerBasedSystemFields(TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var translationUnits = GetServerBasedTranslationUnits(translationMemory.LanguageDirections);
-			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits);
+
+			var translationUnits = new List<TranslationUnit>();
+
+			foreach (var languageDirection in translationMemory.LanguageDirections)
+			{
+				var tus = tmService.LoadTranslationUnits(tm, translationProvideServer, new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+
+				if (tus != null)
+				{
+					translationUnits.AddRange(tus);
+				}
+			}
+
+			var uniqueUsersCollection = GetUniqueUserCollection(tm.Path, translationUnits.ToArray());
+
 			return uniqueUsersCollection;
 		}
 
-		/// <summary>
-		/// Anonymizez each unique name from the UniqueUserNames list found in a specific File Based Translation Memory
-		/// </summary>
-		/// <param name="tm">Translation Memory File</param>
-		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
-		public void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers)
+		public void AnonymizeFileBasedSystemFields(TmFile tm, List<User> uniqueUsers, TmService tmService)
 		{
-			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
-			var translationUnits = GetFileBasedTranslationUnits(tm);
+			var translationMemory = new FileBasedTranslationMemory(tm.Path);
+
+			var translationUnits = tmService.LoadTranslationUnits(tm, null, new LanguageDirection
+			{
+				Source = translationMemory.LanguageDirection.SourceLanguage,
+				Target = translationMemory.LanguageDirection.TargetLanguage
+			});
+
 			foreach (var userName in uniqueUsers)
 			{
 				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
@@ -55,7 +75,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							tu.SystemFields.CreationUser = userName.Alias;
 							tu.SystemFields.UseUser = userName.Alias;
-							fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
+							translationMemory.LanguageDirection.UpdateTranslationUnit(tu);
 						}
 					}
 				}
@@ -68,12 +88,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		/// <param name="tm">Translation Memory File</param>
 		/// <param name="uniqueUsers">List of UniqueUserName objects</param>
 		/// /// <param name="translationProvideServer">Translation provider</param>
-		public void AnonymizeServerBasedSystemFields(TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
+		public void AnonymizeServerBasedSystemFields(TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
-			var languageDirections = serverBasedTm.LanguageDirections;
-			var translationUnits = GetServerBasedTranslationUnits(serverBasedTm.LanguageDirections);
-
+			
+			var languageDirections = new List<LanguageDirection>();
+			foreach (var languageDirection in serverBasedTm.LanguageDirections)
+			{
+				languageDirections.Add(new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+			}
+			var translationUnits = tmService.LoadTranslationUnits(tm, translationProvideServer, languageDirections);
+			
 			foreach (var userName in uniqueUsers)
 			{
 				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
@@ -84,7 +113,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							tu.SystemFields.CreationUser = userName.Alias;
 							tu.SystemFields.UseUser = userName.Alias;
-							foreach (var languageDirection in languageDirections)
+							foreach (var languageDirection in serverBasedTm.LanguageDirections)
 							{
 								languageDirection.UpdateTranslationUnit(tu);
 							}
@@ -92,39 +121,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 			}
-		}
-
-		/// <summary>
-		/// Retrieves an array of Translation Units for a File Based Translation Memory
-		/// </summary>
-		/// <param name="tm">Translation Memory File</param>
-		/// /// <returns>Array of TranslationUnits</returns>
-		private static TranslationUnit[] GetFileBasedTranslationUnits(TmFile tm)
-		{
-			var fileBasedTm = new FileBasedTranslationMemory(tm.Path);
-			var unitsCount = fileBasedTm.LanguageDirection.GetTranslationUnitCount();
-			var tmIterator = new RegularIterator(unitsCount);
-			var translationUnits = fileBasedTm.LanguageDirection.GetTranslationUnits(ref tmIterator);
-			return translationUnits;
-		}
-
-		/// <summary>
-		/// Retrieves an array of Translation Units for a Server Based Translation Memory
-		/// </summary>
-		/// <param name="languageDirections">Language Directions of a Server based Translation Memory</param>
-		/// /// <returns>Array of TranslationUnits</returns>
-		private static TranslationUnit[] GetServerBasedTranslationUnits(ServerBasedTranslationMemoryLanguageDirectionCollection languageDirections)
-		{
-			var translationUnits = new TranslationUnit[] { };
-
-			foreach (var languageDirection in languageDirections)
-			{
-				var unitsCount = languageDirection.GetTranslationUnitCount();
-				if (unitsCount == 0) continue;
-				var tmIterator = new RegularIterator(unitsCount);
-				translationUnits = languageDirection.GetTranslationUnits(ref tmIterator);
-			}
-			return translationUnits;
 		}
 
 		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TranslationUnit> translationUnits)

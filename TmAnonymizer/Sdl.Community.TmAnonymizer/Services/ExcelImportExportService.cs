@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
@@ -32,7 +31,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							IsSelected = true,
 							Name = customFieldName,
 							ValueType = studioCustomFieldType,
-							FieldValues = new ObservableCollection<CustomFieldValue>()
+							FieldValues = new List<CustomFieldValue>()
 						};
 						customFields.Add(field);
 					}

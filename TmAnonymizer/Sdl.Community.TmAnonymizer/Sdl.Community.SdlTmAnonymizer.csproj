@@ -135,6 +135,7 @@
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Controls\BindingDataProxy.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
+    <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />
     <Compile Include="Services\ExcelImportExportService.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />
