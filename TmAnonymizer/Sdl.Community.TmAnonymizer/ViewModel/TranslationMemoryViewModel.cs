@@ -134,7 +134,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			};
 
 			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, credentials);
-			
+
 			loginWindow.DataContext = _loginWindowViewModel;
 			loginWindow.ShowDialog();
 
@@ -300,50 +300,66 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void Tm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals(nameof(TmFile.IsSelected)))
+			if (e.PropertyName.Equals(nameof(TmFile.IsSelected)) && sender is TmFile tmFile)
 			{
-				if (sender is TmFile tmFile &&
-					((tmFile.IsSelected && tmFile.IsServerTm && tmFile.Credentials == null)
-						|| tmFile.Credentials != null && tmFile.Credentials.Password == null))
+				if ((tmFile.IsSelected && tmFile.IsServerTm && tmFile.Credentials == null)
+					|| tmFile.Credentials != null && tmFile.Credentials.Password == null && tmFile.Credentials.CanAuthenticate)
 				{
-					var settings = SettingsService.GetSettings();
+					var authenticated = TmsCollection.FirstOrDefault(a => 
+										a.Credentials != null && 
+										a.Credentials.Url.Equals(tmFile.Credentials.Url) &&
+										a.Credentials.UserName.Equals(tmFile.Credentials.UserName) &&
+					                    a.Credentials.IsAuthenticated);
 
-					if (tmFile.Credentials == null)
+					if (authenticated != null)
 					{
-						tmFile.Credentials = new Credentials
-						{
-							Url = settings.LastUsedServerUri,
-							UserName = settings.LastUsedServerUserName
-						};
-					}
-
-					var loginWindow = new LoginWindow();
-					_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, tmFile.Credentials);				
-
-					loginWindow.DataContext = _loginWindowViewModel;
-					loginWindow.ShowDialog();
-
-					if (loginWindow.DialogResult.HasValue && loginWindow.DialogResult.Value)
-					{
-						tmFile.Credentials = _loginWindowViewModel.Credentials;
-						SettingsService.SaveSettings(settings);
+						tmFile.Credentials = authenticated.Credentials;
 					}
 					else
 					{
-						tmFile.IsSelected = false;
+						var settings = SettingsService.GetSettings();
+
+						if (tmFile.Credentials == null)
+						{
+							tmFile.Credentials = new Credentials
+							{
+								Url = settings.LastUsedServerUri,
+								UserName = settings.LastUsedServerUserName
+							};
+						}
+
+						var loginWindow = new LoginWindow();
+						_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, tmFile.Credentials);
+
+						loginWindow.DataContext = _loginWindowViewModel;
+						loginWindow.ShowDialog();
+
+						if (loginWindow.DialogResult.HasValue && loginWindow.DialogResult.Value)
+						{
+							tmFile.Credentials = _loginWindowViewModel.Credentials;
+							SettingsService.SaveSettings(settings);
+						}
+						else
+						{
+							tmFile.Credentials.CanAuthenticate = false;
+							tmFile.IsSelected = false;
+						}
 					}
 				}
-				else
+
+				if (tmFile.Credentials != null)
 				{
-					SaveSetttings();
+					tmFile.Credentials.CanAuthenticate = true;
 				}
+
+				SaveSetttings();
 
 				OnPropertyChanged(nameof(TmsCollection));
 			}
 		}
 
 		public void Dispose()
-		{			
+		{
 			if (TmsCollection != null)
 			{
 				foreach (var tm in TmsCollection)

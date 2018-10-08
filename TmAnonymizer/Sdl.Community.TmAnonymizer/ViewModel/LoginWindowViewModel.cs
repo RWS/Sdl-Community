@@ -51,16 +51,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
+		{			
 			if (e.Error != null)
-			{
+			{				
+				Credentials.IsAuthenticated = false;
 				Error = e.Error.Message;
 
 				MessageColor = _messageColorError;
 				Message = e.Error.InnerException?.Message ?? e.Error.Message;
 			}
 			else
-			{
+			{				
+				Credentials.IsAuthenticated = true;
 				TranslationProviderServer = e.Result as TranslationProviderServer;
 				_window.DialogResult = true;
 			}
@@ -70,7 +72,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var isValid = Login(e.Argument as Credentials, out var server);
 			if (isValid)
-			{
+			{				
 				e.Result = server;
 			}
 			else
@@ -209,7 +211,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (IsValid(credentials))
 			{
-				translationProviderServer = new TranslationProviderServer(new Uri(credentials.Url), false, credentials.UserName, credentials.Password);
+				translationProviderServer = new TranslationProviderServer(new Uri(credentials.Url), false, credentials.UserName, credentials.Password);				
 				return true;
 			}
 
@@ -221,14 +223,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (parameter is PasswordBox passwordBox)
 			{
-				var credentials = new Credentials
+				Credentials = new Credentials
 				{
 					Url = Url,
 					UserName = UserName,
 					Password = passwordBox.Password,
 				};
-
-				Credentials = credentials;
+				
 				HasText = true;
 
 				MessageColor = _messageColorInformation;

@@ -38,11 +38,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			SegmentColection = segmentCollection;
 		}
 
-		private void GetSubsegmentPi(string segmentText, List<int> personalData, List<object> segmentCollection)
+		private void GetSubsegmentPi(string segmentText, List<int> personalData, ICollection<object> segmentCollection)
 		{
 			var elementsColection = segmentText.SplitAt(personalData.ToArray());
 
-			for (int i = 0; i < elementsColection.Length; i++)
+			for (var i = 0; i < elementsColection.Length; i++)
 			{
 				if (!string.IsNullOrEmpty(elementsColection[i]))
 				{

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Xml.Serialization;
-using Newtonsoft.Json;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
@@ -126,6 +124,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				_isServerTm = value;
 				OnPropertyChanged(nameof(IsServerTm));
 			}
-		}
+		}		
 	}
 }
