@@ -8,13 +8,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
 	<UserControl.Resources>
-		<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
-			<view:TranslationMemory/>
-		</DataTemplate>
+
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="..\Styles\TabControlStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+
+			<DataTemplate DataType="{x:Type viewModels:TranslationMemoryViewModel}">
+				<view:TranslationMemory/>
+			</DataTemplate>
+		</ResourceDictionary>
+
+		
 	</UserControl.Resources>
 
 	<Grid Name="ParentGrid">
-		<TabControl Margin="5">
+		<TabControl Margin="5" BorderBrush="Gainsboro" ItemContainerStyle="{StaticResource TabItemStyle}" >
+
 			<TabItem Header="Content Filtering Rules">
 				<view:ContentFilteringRules DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
