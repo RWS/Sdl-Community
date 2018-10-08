@@ -143,7 +143,6 @@
     <Compile Include="Helpers\CustomTextBox.cs" />
     <Compile Include="Helpers\ExcelFile.cs" />
     <Compile Include="Helpers\Expressions.cs" />
-    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />

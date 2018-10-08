@@ -93,13 +93,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
 
-					//TODO - resolve for server based TMs
-					var uri = new Uri(_tmViewModel.Credentials.Url);
-					var translationProvider = new TranslationProviderServer(uri, false, _tmViewModel.Credentials.UserName, _tmViewModel.Credentials.Password);
+					foreach (var tuToAnonymize in tusToAnonymize)
+					{
+						var tmFile = _tmsCollection.FirstOrDefault(a => a.Path == tuToAnonymize.TmPath);
 
-					BackupServerBasedTm(translationProvider, tusToAnonymize);
+						if (tmFile == null)
+						{
+							continue;
+						}
 
-					_tmViewModel.TmService.AnonymizeServerBasedTu(translationProvider, tusToAnonymize);
+						var uri = new Uri(tmFile.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false, tmFile.Credentials.UserName, tmFile.Credentials.Password);
+
+						BackupServerBasedTm(translationProvider, tusToAnonymize);
+
+						_tmViewModel.TmService.AnonymizeServerBasedTu(translationProvider, tuToAnonymize);
+					}
 				}
 
 				RemoveSelectedTusToAnonymize();
@@ -311,59 +320,46 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			foreach (var selectedResult in selectedSearchResult)
 			{
-				foreach (var anonymizeUnits in _anonymizeTranslationMemories)
+				var anonymizeUnits = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmPath == selectedResult.TmFilePath);
+
+				var translationUnit = anonymizeUnits?.TranslationUnits.FirstOrDefault(n =>
+					n.ResourceId.Guid.ToString() == selectedResult.Id &&
+					n.ResourceId.Id.ToString() == selectedResult.SegmentNumber);
+				
+				if (translationUnit != null)
 				{
-					var sourceTranslationUnit =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.SourceSegment.ToPlain().Equals(selectedResult.SourceText.TrimEnd()));
-					var targetTranslationUnit =
-						anonymizeUnits.TranslationUnits.FirstOrDefault(n => n.TargetSegment.ToPlain().Equals(selectedResult.TargetText.TrimEnd()));
-					//TranslationUnit tuToAnonymize;
+					// if there is an tm with the same path add translation units to that tm
+					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
 
-					if (sourceTranslationUnit != null || targetTranslationUnit != null)
+					//added for select custom words functionality
+					var tranlationUnitDetails = new TranslationUnitDetails
 					{
-						// if there is an tm with the same path add translation units to that tm
-						var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
-						var tuToAnonymize = new TranslationUnit();
+						TranslationUnit = translationUnit,
+						SelectedWordsDetails = selectedResult.SelectedWordsDetails,
+						RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
+						IsSourceMatch = selectedResult.IsSourceMatch,
+						IsTargetMatch = selectedResult.IsTargetMatch,
+						TargetSelectedWordsDetails = selectedResult.TargetSelectedWordsDetails,
+						TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
+					};
 
-						if (sourceTranslationUnit != null)
+					if (anonymizeTu != null)
+					{
+						anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
+						anonymizeTu.TranslationUnits.Add(translationUnit);
+					}
+					else
+					{
+						var anonymizeTm = new AnonymizeTranslationMemory
 						{
-							tuToAnonymize = sourceTranslationUnit;
-						}
-						if (targetTranslationUnit != null)
-						{
-							tuToAnonymize = targetTranslationUnit;
-						}
-						//added for select custom words functionality
-						var tranlationUnitDetails = new TranslationUnitDetails
-						{
-							TranslationUnit = tuToAnonymize,
-							SelectedWordsDetails = selectedResult.SelectedWordsDetails,
-							RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
-							IsSourceMatch = selectedResult.IsSourceMatch,
-							IsTargetMatch = selectedResult.IsTargetMatch,
-							TargetSelectedWordsDetails = selectedResult.TargetSelectedWordsDetails,
-							TargetRemovedWordsFromMatches = selectedResult.TargetDeSelectedWordsDetails
+							TranslationUnits = new List<TranslationUnit>(),
+							TmPath = anonymizeUnits.TmPath,
+							TranslationUnitDetails = new List<TranslationUnitDetails>(),
 						};
 
-						if (anonymizeTu != null)
-						{
-							anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
-							anonymizeTu.TranslationUnits.Add(tuToAnonymize);
-						}
-						else
-						{
-							var anonymizeTm = new AnonymizeTranslationMemory
-							{
-								TranslationUnits = new List<TranslationUnit>(),
-								TmPath = anonymizeUnits.TmPath,
-								TranslationUnitDetails = new List<TranslationUnitDetails>(),
-
-							};
-							anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
-
-							anonymizeTm.TranslationUnits.Add(tuToAnonymize);
-							tusToAnonymize.Add(anonymizeTm);
-						}
+						anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
+						anonymizeTm.TranslationUnits.Add(translationUnit);
+						tusToAnonymize.Add(anonymizeTm);
 					}
 				}
 			}

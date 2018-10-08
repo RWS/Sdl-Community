@@ -185,6 +185,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var targetText = translationUnit.TargetSegment.ToPlain();
 						var sourceContainsPi = pi.ContainsPi(sourceText);
 						var targetContainsPi = pi.ContainsPi(targetText);
+
 						if (sourceContainsPi || targetContainsPi)
 						{
 							var searchResult = new SourceSearchResult
@@ -235,66 +236,69 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			};
 		}
 
-		public void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, List<AnonymizeTranslationMemory> tusToAnonymize)
+		public void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, AnonymizeTranslationMemory tuToAnonymize)
 		{
 			try
 			{
-				foreach (var tuToAonymize in tusToAnonymize)
+				var translationMemory = translationProvider.GetTranslationMemory(tuToAnonymize.TmPath, TranslationMemoryProperties.All);
+				var languageDirections = translationMemory.LanguageDirections;
+
+				foreach (var languageDirection in languageDirections)
 				{
-					var translationMemory = translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
-					var languageDirections = translationMemory.LanguageDirections;
-
-					foreach (var languageDirection in languageDirections)
+					foreach (var translationUnitDetails in tuToAnonymize.TranslationUnitDetails)
 					{
-						foreach (var translationUnitDetails in tuToAonymize.TranslationUnitDetails)
+						if (!translationUnitDetails.TranslationUnit.SourceSegment.Culture.Equals(languageDirection.SourceLanguage) ||
+						    !translationUnitDetails.TranslationUnit.TargetSegment.Culture.Equals(languageDirection.TargetLanguage))
 						{
-							if (translationUnitDetails.IsSourceMatch)
-							{
-								var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
-								var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-								if (elementsContainsTag)
-								{
-									if (translationUnitDetails.SelectedWordsDetails.Any())
-									{
-										AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
-									}
-									AnonymizeSegmentsWithTags(translationUnitDetails, true);
-								}
-								else
-								{
-									if (translationUnitDetails.SelectedWordsDetails.Any())
-									{
-										AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
-									}
-									AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
-								}
-							}
-
-							if (translationUnitDetails.IsTargetMatch)
-							{
-								var targetTranslationElements = translationUnitDetails.TranslationUnit.TargetSegment.Elements.ToList();
-								var elementsContainsTag =
-									targetTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-								if (elementsContainsTag)
-								{
-									if (translationUnitDetails.TargetSelectedWordsDetails.Any())
-									{
-										AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
-									}
-									AnonymizeSegmentsWithTags(translationUnitDetails, false);
-								}
-								else
-								{
-									if (translationUnitDetails.TargetSelectedWordsDetails.Any())
-									{
-										AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
-									}
-									AnonymizeSegmentsWithoutTags(translationUnitDetails, false);
-								}
-							}
-							
-							languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
+							continue;
 						}
+
+						if (translationUnitDetails.IsSourceMatch)
+						{
+							var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
+							var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+							if (elementsContainsTag)
+							{
+								if (translationUnitDetails.SelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
+								}
+								AnonymizeSegmentsWithTags(translationUnitDetails, true);
+							}
+							else
+							{
+								if (translationUnitDetails.SelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
+								}
+								AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
+							}
+						}
+
+						if (translationUnitDetails.IsTargetMatch)
+						{
+							var targetTranslationElements = translationUnitDetails.TranslationUnit.TargetSegment.Elements.ToList();
+							var elementsContainsTag = targetTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+							if (elementsContainsTag)
+							{
+								if (translationUnitDetails.TargetSelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
+								}
+
+								AnonymizeSegmentsWithTags(translationUnitDetails, false);
+							}
+							else
+							{
+								if (translationUnitDetails.TargetSelectedWordsDetails.Any())
+								{
+									AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
+								}
+								AnonymizeSegmentsWithoutTags(translationUnitDetails, false);
+							}
+						}
+
+						languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
 					}
 				}
 			}
@@ -537,8 +541,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				if (isSource)
 				{
-					if (!translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].GetType().UnderlyingSystemType.Name
-						.Equals("Text")) continue;
+					if (!translationUnitDetails.TranslationUnit.SourceSegment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text"))
+					{
+						continue;
+					}
 
 					var visitor = new SegmentElementVisitor(translationUnitDetails.RemovedWordsFromMatches, _settingsService);
 					//check for PI in each element from the list
@@ -570,8 +576,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 				else
 				{
-					if (!translationUnitDetails.TranslationUnit.TargetSegment.Elements[i].GetType().UnderlyingSystemType.Name
-						.Equals("Text")) continue;
+					if (!translationUnitDetails.TranslationUnit.TargetSegment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text"))
+					{
+						continue;
+					}
 
 					var visitor = new SegmentElementVisitor(translationUnitDetails.TargetRemovedWordsFromMatches, _settingsService);
 					//check for PI in each element from the list
