@@ -2,12 +2,15 @@
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class PersonalInformation
+	public class PersonalDataParsingService
 	{
+		//TODO - reorganize and optimize usage; too many separate calls with Regex
+
 		private readonly List<Rule> _patterns;
-		public PersonalInformation(List<Rule> patterns)
+
+		public PersonalDataParsingService(List<Rule> patterns)
 		{
 			_patterns = patterns;
 		}

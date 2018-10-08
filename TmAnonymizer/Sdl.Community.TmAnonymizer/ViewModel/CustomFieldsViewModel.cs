@@ -274,6 +274,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						_waitWindow = new WaitWindow();
 						_waitWindow.Show();
 					});
+
 					DoEvents();
 
 					var uri = new Uri(tm.Credentials.Url);
@@ -282,6 +283,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						tm.Credentials.Password);
 
 					_customFieldsService.AnonymizeServerBasedCustomFields(tm, CustomFields.ToList(), translationProvider, _translationMemoryViewModel.TmService);
+
 					_waitWindow.Close();
 				}
 

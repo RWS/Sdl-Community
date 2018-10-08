@@ -45,9 +45,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			_settingsService = _translationMemoryViewModel.SettingsService;
 			_settings = _settingsService.GetSettings();
-				
+
 			_anonymizeTranslationMemories = new ObservableCollection<AnonymizeTranslationMemory>();
-			
+
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
@@ -308,11 +308,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var selectedRulesCount = Rules.Count(r => r.IsSelected);
 			if (selectedTms.Count > 0 && selectedRulesCount > 0)
 			{
+				var personalDataParsingService = new PersonalDataParsingService(GetSelectedRules());
+
 				System.Windows.Application.Current.Dispatcher.Invoke(delegate
 				{
 					_waitWindow = new WaitWindow();
 					_waitWindow.Show();
 				});
+
 				DoEvents();
 
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
@@ -341,7 +344,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 
 						var tus = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(serverTm, translationProvider,
-							GetSelectedRules(), out var searchResults);
+							personalDataParsingService, out var searchResults);
 
 						SourceSearchResults.AddRange(searchResults);
 
@@ -355,7 +358,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//file based tms
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm, GetSelectedRules(), out var searchResults);
+					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm,
+						personalDataParsingService, out var searchResults);
+
 					SourceSearchResults.AddRange(searchResults);
 
 					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))

@@ -42,7 +42,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPPlus, Version=4.5.2.1, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+    <Reference Include="EPPlus">
       <HintPath>..\packages\EPPlus.4.5.2.1\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -147,7 +147,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Helpers\FolderSelectDialog.cs" />
-    <Compile Include="Helpers\PersonalInformation.cs" />
+    <Compile Include="Services\PersonalDataParsingService.cs" />
     <Compile Include="Helpers\Reflector.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
