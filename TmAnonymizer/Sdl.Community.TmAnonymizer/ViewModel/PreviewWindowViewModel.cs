@@ -202,7 +202,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private string GetDateTimeString()
+		private static string GetDateTimeString()
 		{
 			var dt = DateTime.Now;
 			return dt.Year +
@@ -373,7 +373,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				SourceSearchResults.Remove(searchResult);
 			}
-
 		}
 
 		private void BackupFileBasedTm()

@@ -10,15 +10,20 @@ using Sdl.LanguagePlatform.Core.Tokenization;
 
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
+
+	//TODO - reorganize and optimize usage; too many separate calls with Regex
+
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _deSelectedWordsDetails;
 		private readonly SettingsService _settingsService;
+		private readonly List<Rule> _rules;
 
 		public SegmentElementVisitor(List<WordDetails> deSelectedWords, SettingsService settingsService)
 		{
 			_deSelectedWordsDetails = deSelectedWords;
 			_settingsService = settingsService;
+			_rules = _settingsService.GetRules();
 		}
 
 		/// <summary>
@@ -97,7 +102,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			var personalDataIndex = new List<int>();
 
-			foreach (var rule in _settingsService.GetRules())
+			foreach (var rule in _rules)
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
@@ -131,7 +136,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		private bool ContainsPi(string text)
 		{
-			foreach (var rule in _settingsService.GetRules())
+			foreach (var rule in _rules)
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var match = regex.Match(text);
@@ -145,7 +150,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		private bool ShouldAnonymize(string currentText,string prevText)
 		{
-			foreach (var rule in _settingsService.GetRules())
+			foreach (var rule in _rules)
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(currentText);

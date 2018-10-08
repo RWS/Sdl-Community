@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
@@ -13,11 +12,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class TmService
 	{
-		private readonly SettingsService _settingsService;
+		private readonly SettingsService _settingsService;		
 
 		public TmService(SettingsService settingsService)
 		{
-			_settingsService = settingsService;
+			_settingsService = settingsService;			
 		}
 
 		public TranslationUnit[] LoadTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
@@ -90,7 +89,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 
 		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(TmFile tmFile,
-			List<Rule> selectedRules, out List<SourceSearchResult> sourceSearchResult)
+			PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
 			var tus = LoadTranslationUnits(tmFile, null,
@@ -101,15 +100,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				});
 
 			sourceSearchResult = new List<SourceSearchResult>();
-
-			var pi = new PersonalInformation(selectedRules);
-
+			
 			foreach (var translationUnit in tus)
 			{
 				var sourceText = translationUnit.SourceSegment.ToPlain();
 				var targetText = translationUnit.TargetSegment.ToPlain();
-				var sourceContainsPi = pi.ContainsPi(sourceText);
-				var targetContainsPi = pi.ContainsPi(targetText);
+				var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
+				var targetContainsPi = personalDataParsingService.ContainsPi(targetText);
 
 				if (sourceContainsPi || targetContainsPi)
 				{
@@ -133,7 +130,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						searchResult.IsSourceMatch = true;
 						searchResult.MatchResult = new MatchResult
 						{
-							Positions = pi.GetPersonalDataPositions(sourceText)
+							Positions = personalDataParsingService.GetPersonalDataPositions(sourceText)
 						};
 					}
 					if (targetContainsPi)
@@ -141,7 +138,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						searchResult.IsTargetMatch = true;
 						searchResult.TargetMatchResult = new MatchResult
 						{
-							Positions = pi.GetPersonalDataPositions(targetText)
+							Positions = personalDataParsingService.GetPersonalDataPositions(targetText)
 						};
 					}
 
@@ -158,7 +155,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider,
-			List<Rule> selectedRules, out List<SourceSearchResult> sourceSearchResult)
+			PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var allTusForLanguageDirections = new List<TranslationUnit>();
 			var searchResults = new List<SourceSearchResult>();
@@ -166,8 +163,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
 			var languageDirections = translationMemory.LanguageDirections;
-			var pi = new PersonalInformation(selectedRules);
-
+			
 			foreach (var languageDirection in languageDirections)
 			{
 				var translationUnits = LoadTranslationUnits(tmFile, translationProvider, new LanguageDirection
@@ -183,8 +179,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{
 						var sourceText = translationUnit.SourceSegment.ToPlain();
 						var targetText = translationUnit.TargetSegment.ToPlain();
-						var sourceContainsPi = pi.ContainsPi(sourceText);
-						var targetContainsPi = pi.ContainsPi(targetText);
+						var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
+						var targetContainsPi = personalDataParsingService.ContainsPi(targetText);
 
 						if (sourceContainsPi || targetContainsPi)
 						{
@@ -208,7 +204,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								searchResult.IsSourceMatch = true;
 								searchResult.MatchResult = new MatchResult
 								{
-									Positions = pi.GetPersonalDataPositions(sourceText)
+									Positions = personalDataParsingService.GetPersonalDataPositions(sourceText)
 								};
 							}
 							if (targetContainsPi)
@@ -216,7 +212,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								searchResult.IsTargetMatch = true;
 								searchResult.TargetMatchResult = new MatchResult
 								{
-									Positions = pi.GetPersonalDataPositions(targetText)
+									Positions = personalDataParsingService.GetPersonalDataPositions(targetText)
 								};
 							}
 
@@ -298,7 +294,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							}
 						}
 
-						languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
+						//TODO manage the Import result and inform the user of TU's updated/not updated
+						var result = languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
 					}
 				}
 			}

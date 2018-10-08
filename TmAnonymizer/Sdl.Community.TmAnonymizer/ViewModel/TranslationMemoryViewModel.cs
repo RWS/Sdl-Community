@@ -305,11 +305,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if ((tmFile.IsSelected && tmFile.IsServerTm && tmFile.Credentials == null)
 					|| tmFile.Credentials != null && tmFile.Credentials.Password == null && tmFile.Credentials.CanAuthenticate)
 				{
-					var authenticated = TmsCollection.FirstOrDefault(a => 
-										a.Credentials != null && 
+					var authenticated = TmsCollection.FirstOrDefault(a =>
+										a.Credentials != null &&
 										a.Credentials.Url.Equals(tmFile.Credentials.Url) &&
 										a.Credentials.UserName.Equals(tmFile.Credentials.UserName) &&
-					                    a.Credentials.IsAuthenticated);
+										a.Credentials.IsAuthenticated);
 
 					if (authenticated != null)
 					{
@@ -350,6 +350,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (tmFile.Credentials != null)
 				{
 					tmFile.Credentials.CanAuthenticate = true;
+				}
+
+				if (!tmFile.IsSelected)
+				{
+					foreach (var languageDirection in tmFile.TmLanguageDirections)
+					{
+						languageDirection.TranslationUnits = null;
+					}
 				}
 
 				SaveSetttings();

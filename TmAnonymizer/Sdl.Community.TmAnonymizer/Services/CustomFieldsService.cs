@@ -174,10 +174,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				if (anonymizedField.IsPickList)
 				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 					{
 						foreach (var fieldDefinition in fileBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
+							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
+							if (pickListItem != null)
+							{
+								pickListItem.Name = fieldValue.NewValue;
+							}
 							fieldDefinition.PicklistItems.Remove(fieldValue.Value);
 							fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
@@ -189,7 +194,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
+							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 							{
 								switch (fieldValue.ValueType)
 								{
@@ -235,13 +240,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				if (anonymizedField.IsPickList)
 				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
-					{
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+					{						
 						foreach (var fieldDefinition in serverBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{
-							fieldDefinition.PicklistItems.Remove(fieldValue.Value);
-							fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
+						{							
+							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
+							if (pickListItem != null)
+							{
+								pickListItem.Name = fieldValue.NewValue;							
+							}
+							//fieldDefinition.
+
+							//fieldDefinition.PicklistItems.Remove(fieldValue.Value);
+							//fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
+
 					}
 				}
 				else
@@ -250,7 +263,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
-							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.NewValue != null))
+							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 							{
 								switch (fieldValue.ValueType)
 								{
@@ -316,6 +329,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Value = listString.First(),
 				ValueType = FieldValueType.SingleString
 			};
+
 			fieldValue.Clear();
 			fieldValue.Merge(singleStringFieldValue);
 			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
