@@ -70,6 +70,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			foreach (var tu in translationUnits)
 			{
 				iCurrent++;
+
+				if (context.CheckCancellationPending())
+				{
+					break;
+				}
+
 				var progress = iCurrent / iTotalUnits * 100;
 				context.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
