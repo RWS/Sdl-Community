@@ -1,5 +1,6 @@
 ﻿using System.Windows.Documents;
 using System.Windows.Media;
+using Sdl.Community.SdlTmAnonymizer.Controls;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Xceed.Wpf.Toolkit;
 

@@ -412,6 +412,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			decimal iTotalUnits = languageDirection.GetTranslationUnitCount();
 
+			if (iTotalUnits == 0)
+			{
+				return;
+			}
+
 			var tus = new List<TranslationUnit>();
 
 			decimal groups = 1;
