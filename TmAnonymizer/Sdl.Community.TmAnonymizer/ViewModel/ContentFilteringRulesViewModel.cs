@@ -5,11 +5,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Commands;
+using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
@@ -21,7 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	public sealed class ContentFilteringRulesViewModel : ViewModelBase, IDisposable
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
-		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
+		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
 		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
 		private readonly BackgroundWorker _backgroundWorker;
 		private readonly Settings _settings;
@@ -36,7 +35,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
 		private List<SourceSearchResult> _sourceSearchResults;
-		private WaitWindow _waitWindow;
 		private IList _selectedItems;
 
 		public ContentFilteringRulesViewModel(TranslationMemoryViewModel translationMemoryViewModel)
@@ -46,7 +44,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_settingsService = _translationMemoryViewModel.SettingsService;
 			_settings = _settingsService.GetSettings();
 
-			_anonymizeTranslationMemories = new ObservableCollection<AnonymizeTranslationMemory>();
+			_anonymizeTms = new ObservableCollection<AnonymizeTranslationMemory>();
 
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
@@ -280,22 +278,26 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate
+			// check for error
+			if (e.Error != null)
 			{
-				var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTranslationMemories,
-					_tmsCollection, _translationMemoryViewModel);
+				SourceSearchResults.Clear();
+				MessageBox.Show(e.Error.Message, Application.ProductName);
+			}
+			else
+			{
+				System.Windows.Application.Current.Dispatcher.Invoke(delegate
+				{
+					var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTms,
+						_tmsCollection, _translationMemoryViewModel);
 
-				var previewWindow = new PreviewWindow(previewViewModel);
-				previewWindow.Loaded += PreviewWindow_Loaded;
-				previewWindow.Closing += PreviewWindow_Closing;
-				previewWindow.ShowDialog();
-			});
+					var previewWindow = new PreviewWindow(previewViewModel);				
+					previewWindow.Closing += PreviewWindow_Closing;
+					previewWindow.ShowDialog();
+				});
+			}
 		}
 
-		private void PreviewWindow_Loaded(object sender, RoutedEventArgs e)
-		{
-			_waitWindow?.Close();
-		}
 
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
 		{
@@ -304,19 +306,36 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
+			System.Windows.Application.Current.Dispatcher.Invoke(() =>
+			{
+				var settings = new ProgressDialogSettings(_translationMemoryViewModel.ControlParent, true, true, false);
+				var result = ProgressDialog.Execute("Loading data...", () =>
+				{
+					ProcessData(ProgressDialog.Current);
+				}, settings);
+
+
+				if (result.Cancelled)
+				{
+					throw new Exception("Process cancelled." + "\r\n\r\n" + result.Error);
+				}
+				if (result.OperationFailed)
+				{
+					throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+				}
+			});
+		}
+
+
+		private void ProcessData(ProgressDialogContext context)
+		{
 			var selectedTms = _tmsCollection.Where(t => t.IsSelected).ToList();
 			var selectedRulesCount = Rules.Count(r => r.IsSelected);
 			if (selectedTms.Count > 0 && selectedRulesCount > 0)
 			{
+				context.Report("Recovering content parsing rules...");
+
 				var personalDataParsingService = new PersonalDataParsingService(GetSelectedRules());
-
-				System.Windows.Application.Current.Dispatcher.Invoke(delegate
-				{
-					_waitWindow = new WaitWindow();
-					_waitWindow.Show();
-				});
-
-				DoEvents();
 
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())
@@ -325,6 +344,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var serverTm in serverTms)
 					{
+						if (context.CheckCancellationPending())
+						{
+							break;
+						}
+
+						context.Report("Connecting to: " + serverTm.Name);
+
 						var uri = new Uri(serverTm.Credentials.Url);
 						if (providers.Count(a => a.Uri == uri) == 0)
 						{
@@ -335,22 +361,30 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 
 					//get all tus for selected translation memories
-					foreach (var serverTm in serverTms)
+					foreach (var tm in serverTms)
 					{
-						var translationProvider = providers.FirstOrDefault(a => a.Uri == new Uri(serverTm.Credentials.Url));
+						if (context.CheckCancellationPending())
+						{
+							break;
+						}
+
+						context.Report(tm.Name);
+
+						var translationProvider = providers.FirstOrDefault(a => a.Uri == new Uri(tm.Credentials.Url));
 						if (translationProvider == null)
 						{
 							return;
 						}
 
-						var tus = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(serverTm, translationProvider,
+						var anonymizeTm = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(context,
+							tm, translationProvider,
 							personalDataParsingService, out var searchResults);
 
 						SourceSearchResults.AddRange(searchResults);
 
-						if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
+						if (!_anonymizeTms.Any(n => n.TmPath.Equals(anonymizeTm.TmPath)))
 						{
-							_anonymizeTranslationMemories.Add(tus);
+							_anonymizeTms.Add(anonymizeTm);
 						}
 					}
 				}
@@ -358,28 +392,29 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				//file based tms
 				foreach (var tm in selectedTms.Where(s => !s.IsServerTm))
 				{
-					var tus = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(tm,
-						personalDataParsingService, out var searchResults);
+					if (context.CheckCancellationPending())
+					{
+						break;
+					}
+
+					context.Report(tm.Name);
+
+					var anonymizeTm = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(context,
+					tm, personalDataParsingService, out var searchResults);
 
 					SourceSearchResults.AddRange(searchResults);
 
-					if (!_anonymizeTranslationMemories.Any(n => n.TmPath.Equals(tus.TmPath)))
+					if (!_anonymizeTms.Any(n => n.TmPath.Equals(anonymizeTm.TmPath)))
 					{
-						_anonymizeTranslationMemories.Add(tus);
+						_anonymizeTms.Add(anonymizeTm);
 					}
 				}
 			}
 			else
 			{
-				System.Windows.Forms.MessageBox.Show(StringResources.Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes,
-					System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				MessageBox.Show(StringResources.Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes,
+					Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
 			}
-
-		}
-
-		private static void DoEvents()
-		{
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		private void TranslationMemoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -438,10 +473,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 
 					//remove the tm from the list use in preview windoew
-					var removed = _anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(removedTm.Path));
+					var removed = _anonymizeTms.FirstOrDefault(t => t.TmPath.Equals(removedTm.Path));
 					if (removed != null)
 					{
-						_anonymizeTranslationMemories.Remove(removed);
+						_anonymizeTms.Remove(removed);
 					}
 				}
 			}
@@ -465,10 +500,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var unselectedTms = _tmsCollection.Where(t => !t.IsSelected).ToList();
 			foreach (var tm in unselectedTms)
 			{
-				var anonymizedTmToRemove = _anonymizeTranslationMemories.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
+				var anonymizedTmToRemove = _anonymizeTms.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
 				if (anonymizedTmToRemove != null)
 				{
-					_anonymizeTranslationMemories.Remove(anonymizedTmToRemove);
+					_anonymizeTms.Remove(anonymizedTmToRemove);
 				}
 
 				//remove search results for that tm

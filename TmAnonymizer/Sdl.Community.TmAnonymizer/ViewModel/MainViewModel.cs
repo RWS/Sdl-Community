@@ -1,4 +1,5 @@
 ﻿using Sdl.Community.SdlTmAnonymizer.Services;
+using Sdl.Community.SdlTmAnonymizer.Studio;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
@@ -6,13 +7,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private TranslationMemoryViewModel _tmViewModel;
 
-		public MainViewModel(SettingsService settingsService)
+		public MainViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
 		{
-			_tmViewModel = new TranslationMemoryViewModel(settingsService);
 
-			TranslationViewModel = new ContentFilteringRulesViewModel(_tmViewModel);
+			_tmViewModel = new TranslationMemoryViewModel(settingsService, controller);
+			
+			TranslationViewModel = new ContentFilteringRulesViewModel(_tmViewModel);			
 			SystemFieldsViewModel = new SystemFieldsViewModel(_tmViewModel, new SystemFieldsService(), new UsersService());
-			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, new CustomFieldsService(), new ExcelImportExportService());
+			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, new CustomFieldsService(), new ExcelImportExportService());			
 		}
 
 		public TranslationMemoryViewModel TmViewModel

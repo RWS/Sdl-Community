@@ -11,8 +11,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 	
 		public object Data
 		{
-			get { return (object)GetValue(DataProperty); }
-			set { SetValue(DataProperty, value); }
+			get => (object)GetValue(DataProperty);
+			set => SetValue(DataProperty, value);
 		}
 		
 		public static readonly DependencyProperty DataProperty =

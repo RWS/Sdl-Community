@@ -5,11 +5,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
+using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.Community.SdlTmAnonymizer.View;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -27,14 +29,36 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ObservableCollection<TmFile> _tmsCollection;
 		private bool _isEnabled;
 		private LoginWindowViewModel _loginWindowViewModel;
+		private readonly TmAnonymizerViewController _controller;
+		private Form _controlParent;
 
-		public TranslationMemoryViewModel(SettingsService settingsService)
-		{
+
+		public TranslationMemoryViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
+		{			
 			SettingsService = settingsService;
 			TmService = new TmService(settingsService);
+			_controller = controller;
 
 			IsEnabled = true;
 			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
+		}		
+
+		public Form ControlParent
+		{
+			get
+			{
+				if (_controlParent == null)
+				{
+					try
+					{
+						var elementHost = _controller?.ContentControl?.Controls[0] as ElementHost;
+						_controlParent = elementHost?.FindForm();
+					}
+					catch{}					
+				}
+
+				return _controlParent;
+			}
 		}
 
 		public TmService TmService { get; set; }
@@ -120,7 +144,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
-		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));
+		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));		
 
 		private void AddServerTranslationMemory()
 		{

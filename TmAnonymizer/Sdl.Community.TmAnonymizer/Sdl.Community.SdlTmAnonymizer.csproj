@@ -134,6 +134,13 @@
     <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
     <Compile Include="Controls\BindingDataProxy.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialog.xaml.cs">
+      <DependentUpon>ProgressDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ProgressDialog\ProgressDialogCancellationExcpetion.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogContext.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogResult.cs" />
+    <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />
@@ -265,6 +272,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\ProgressDialog\ProgressDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\ButtonsStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

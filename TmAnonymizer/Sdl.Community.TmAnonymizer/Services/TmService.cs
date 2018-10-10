@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
@@ -12,72 +13,161 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class TmService
 	{
-		private readonly SettingsService _settingsService;		
+		private readonly SettingsService _settingsService;
+		private readonly object _lockObject = new object();
 
 		public TmService(SettingsService settingsService)
 		{
-			_settingsService = settingsService;			
+			_settingsService = settingsService;
 		}
 
-		public TranslationUnit[] LoadTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
+		public TranslationUnit[] LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
 		{
+
 			if (tmFile != null)
 			{
-				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a => Equals(a.Source, languageDirectionp.Source) && Equals(a.Target, languageDirectionp.Target));
+				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a =>
+					Equals(a.Source, languageDirectionp.Source) && Equals(a.Target, languageDirectionp.Target));
 
 				if (languageDirection == null)
 				{
 					return null;
 				}
 
-				if (languageDirection.TranslationUnits != null)
+				lock (_lockObject)
 				{
+					if (languageDirection.TranslationUnits != null)
+					{
+						return languageDirection.TranslationUnits;
+					}
+
+					if (tmFile.IsServerTm)
+					{
+						var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+						var serverBasedLanguageDirection = translationMemory.LanguageDirections.FirstOrDefault(a =>
+							a.SourceLanguage.Equals(languageDirectionp.Source) && a.TargetLanguage.Equals(languageDirectionp.Target));
+
+						if (serverBasedLanguageDirection != null)
+						{
+							var iTotalUnits = serverBasedLanguageDirection.GetTranslationUnitCount();
+
+							var tus = new List<TranslationUnit>();
+
+							var groups = 1;
+							var unitCount = iTotalUnits;
+
+							if (iTotalUnits > 1000)
+							{
+								groups = iTotalUnits / 1000;
+								unitCount = Convert.ToInt32(iTotalUnits / groups);
+							}
+
+							var tmIterator = new RegularIterator
+							{
+								Forward = true,
+								MaxCount = unitCount
+							};
+
+
+							for (var i = 1; i <= groups; i++)
+							{
+								if (context.CheckCancellationPending())
+								{
+									break;
+								}
+
+								var iCurrent = i * unitCount;
+								var progress = iCurrent / iTotalUnits * 100;
+								context.Report(Convert.ToInt32(progress), "Downloading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+								tus.AddRange(serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator));
+							}
+
+							if (!context.CheckCancellationPending() && tmIterator.ProcessedTranslationUnits < iTotalUnits)
+							{
+								context.Report(100, "Downloading: " + iTotalUnits + " of " + iTotalUnits + " Translation Units");
+
+								tmIterator.MaxCount = iTotalUnits - tmIterator.ProcessedTranslationUnits;
+								tus.AddRange(serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator));
+							}
+
+							if (!context.CheckCancellationPending())
+							{
+								languageDirection.TranslationUnits = tus.ToArray();
+								languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
+							}
+						}
+					}
+					else
+					{
+						var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
+
+						if (translationMemory.LanguageDirection.SourceLanguage.Equals(languageDirectionp.Source) &&
+							translationMemory.LanguageDirection.TargetLanguage.Equals(languageDirectionp.Target))
+						{
+							decimal iTotalUnits = translationMemory.LanguageDirection.GetTranslationUnitCount();
+
+							var tus = new List<TranslationUnit>();
+
+							decimal groups = 1;
+							var unitCount = (int)iTotalUnits;
+							decimal threshold = 1000;
+
+							if (iTotalUnits > threshold)
+							{
+								groups = iTotalUnits / threshold;
+								unitCount = Convert.ToInt32(iTotalUnits / groups);
+							}
+
+							var tmIterator = new RegularIterator
+							{
+								Forward = true,
+								MaxCount = unitCount
+							};
+
+							for (var i = 1; i <= groups; i++)
+							{
+								if (context.CheckCancellationPending())
+								{
+									break;
+								}
+
+								var iCurrent = i * unitCount;
+								var progress = iCurrent / iTotalUnits * 100;
+								context.Report(Convert.ToInt32(progress), "Reading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+								tus.AddRange(translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator));
+							}
+
+							if (!context.CheckCancellationPending() && tmIterator.ProcessedTranslationUnits < iTotalUnits)
+							{
+								context.Report(100, "Reading: " + iTotalUnits + " of " + iTotalUnits + " Translation Units");
+								tmIterator.MaxCount = (int)iTotalUnits - tmIterator.ProcessedTranslationUnits;
+								tus.AddRange(translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator));
+							}
+
+							if (!context.CheckCancellationPending())
+							{
+								languageDirection.TranslationUnits = tus.ToArray();
+								languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
+							}
+						}
+					}
+
 					return languageDirection.TranslationUnits;
 				}
-
-				if (tmFile.IsServerTm)
-				{
-					var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
-
-					var serverBasedLanguageDirection = translationMemory.LanguageDirections.FirstOrDefault(a =>
-						a.SourceLanguage.Equals(languageDirectionp.Source) && a.TargetLanguage.Equals(languageDirectionp.Target));
-
-					if (serverBasedLanguageDirection != null)
-					{
-						var unitsCount = serverBasedLanguageDirection.GetTranslationUnitCount();
-						var tmIterator = new RegularIterator(unitsCount);
-
-						languageDirection.TranslationUnits = serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator);
-						languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
-					}
-				}
-				else
-				{
-					var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
-
-					if (translationMemory.LanguageDirection.SourceLanguage.Equals(languageDirectionp.Source) &&
-						translationMemory.LanguageDirection.TargetLanguage.Equals(languageDirectionp.Target))
-					{
-						var unitsCount = translationMemory.LanguageDirection.GetTranslationUnitCount();
-						var tmIterator = new RegularIterator(unitsCount);
-
-						languageDirection.TranslationUnits = translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator);
-						languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
-					}
-				}
-
-				return languageDirection.TranslationUnits;
 			}
 
 			return null;
 		}
 
-		public TranslationUnit[] LoadTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
+		public TranslationUnit[] LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
 		{
 			var translationUnits = new List<TranslationUnit>();
 			foreach (var languageDirection in languageDirections)
 			{
-				var tus = LoadTranslationUnits(tmFile, translationProvider, languageDirection);
+				var tus = LoadTranslationUnits(context, tmFile, translationProvider, languageDirection);
 				if (tus != null)
 				{
 					translationUnits.AddRange(tus);
@@ -88,11 +178,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 
-		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(TmFile tmFile,
-			PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
+		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(ProgressDialogContext context,
+			TmFile tmFile, PersonalDataParsingService personalDataParsingService,
+			out List<SourceSearchResult> sourceSearchResult)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
-			var tus = LoadTranslationUnits(tmFile, null,
+			var tus = LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
 					Source = translationMemory.LanguageDirection.SourceLanguage,
@@ -100,9 +191,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				});
 
 			sourceSearchResult = new List<SourceSearchResult>();
-			
+
+			decimal iTotal = tmFile.TranslationUnits;
+			decimal iCurrent = 0;
 			foreach (var translationUnit in tus)
 			{
+				if (context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				iCurrent++;
+				if (iCurrent == 1 || iCurrent % 100 == 0)
+				{					
+					var progress = iCurrent / iTotal * 100;
+					context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units");
+				}
+
 				var sourceText = translationUnit.SourceSegment.ToPlain();
 				var targetText = translationUnit.TargetSegment.ToPlain();
 				var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
@@ -154,7 +259,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			};
 		}
 
-		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(TmFile tmFile, TranslationProviderServer translationProvider,
+		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider,
 			PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var allTusForLanguageDirections = new List<TranslationUnit>();
@@ -163,10 +268,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
 			var languageDirections = translationMemory.LanguageDirections;
-			
+
+			decimal iTotal = tmFile.TranslationUnits;
+			decimal iCurrent = 0;
+
 			foreach (var languageDirection in languageDirections)
 			{
-				var translationUnits = LoadTranslationUnits(tmFile, translationProvider, new LanguageDirection
+				var translationUnits = LoadTranslationUnits(context, tmFile, translationProvider, new LanguageDirection
 				{
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
@@ -177,6 +285,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					allTusForLanguageDirections.AddRange(translationUnits);
 					foreach (var translationUnit in translationUnits)
 					{
+						if (context.CheckCancellationPending())
+						{
+							break;
+						}
+
+						iCurrent++;
+						if (iCurrent == 1 || iCurrent % 100 == 0)
+						{
+							var progress = iCurrent / iTotal * 100;
+							context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units");
+						}
+
 						var sourceText = translationUnit.SourceSegment.ToPlain();
 						var targetText = translationUnit.TargetSegment.ToPlain();
 						var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
@@ -244,7 +364,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					foreach (var translationUnitDetails in tuToAnonymize.TranslationUnitDetails)
 					{
 						if (!translationUnitDetails.TranslationUnit.SourceSegment.Culture.Equals(languageDirection.SourceLanguage) ||
-						    !translationUnitDetails.TranslationUnit.TargetSegment.Culture.Equals(languageDirection.TargetLanguage))
+							!translationUnitDetails.TranslationUnit.TargetSegment.Culture.Equals(languageDirection.TargetLanguage))
 						{
 							continue;
 						}
