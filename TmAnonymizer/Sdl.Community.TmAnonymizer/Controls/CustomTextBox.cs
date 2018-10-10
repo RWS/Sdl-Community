@@ -1,6 +1,6 @@
 ﻿using System.Windows.Documents;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Controls
 {
 	public static class CustomTextBox
 	{

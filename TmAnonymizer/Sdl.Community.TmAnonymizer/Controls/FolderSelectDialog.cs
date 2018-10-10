@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
+using Sdl.Community.SdlTmAnonymizer.Helpers;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Controls
 {
 	public class FolderSelectDialog
 	{

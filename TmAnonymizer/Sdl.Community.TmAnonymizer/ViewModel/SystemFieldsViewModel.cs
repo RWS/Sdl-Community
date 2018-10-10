@@ -132,9 +132,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void SelectTm(TmFile tm)
 		{		
-			if (!tm.IsSelected || _model.CancelProcess)
+			if (!tm.IsSelected)
 			{
-				_model.CancelProcess = false;
 				return;
 			}
 			
@@ -164,13 +163,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (result.Cancelled)
 			{
-				_model.CancelProcess = true;
 				tm.IsSelected = false;
 				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
 			}
 			if (result.OperationFailed)
 			{
-				_model.CancelProcess = true;
 				tm.IsSelected = false;
 				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}

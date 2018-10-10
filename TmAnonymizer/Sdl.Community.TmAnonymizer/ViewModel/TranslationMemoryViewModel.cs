@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Controls;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.Studio;
@@ -144,9 +144,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
 		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));		
-
-		public bool CancelProcess { get; set; }
-
+		
 		private void AddServerTranslationMemory()
 		{
 			var settings = SettingsService.GetSettings();

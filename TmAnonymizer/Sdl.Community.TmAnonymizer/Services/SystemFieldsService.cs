@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
+using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -67,9 +68,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
-			foreach (var tu in translationUnits)
+
+			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
+			if (translationUnits.Length > 50)
 			{
-				iCurrent++;
+				unitGroups = translationUnits.ToList().ChunkBy(50);
+			}
+
+			foreach (var tus in unitGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())
 				{
 					break;
@@ -80,39 +88,42 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				var updateSystemFields = false;
 
-				foreach (var userName in uniqueUsers)
+				foreach (var tu in tus)
 				{
-					var updateCreationUser = false;
-					var updateUseUser = false;
-
-					if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
+					foreach (var userName in uniqueUsers)
 					{
-						var systemFields = tu.SystemFields;
+						var updateCreationUser = false;
+						var updateUseUser = false;
 
-						if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-							userName.UserName == systemFields.CreationUser)
+						if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
 						{
-							updateCreationUser = true;
-						}
+							var systemFields = tu.SystemFields;
 
-						if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-							userName.UserName == systemFields.UseUser)
-						{
-							updateUseUser = true;
-						}
-
-						if (updateCreationUser || updateUseUser)
-						{
-							updateSystemFields = true;
-
-							if (updateCreationUser)
+							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
+								userName.UserName == systemFields.CreationUser)
 							{
-								systemFields.CreationUser = userName.Alias;
+								updateCreationUser = true;
 							}
 
-							if (updateUseUser)
+							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
+								userName.UserName == systemFields.UseUser)
 							{
-								systemFields.UseUser = userName.Alias;
+								updateUseUser = true;
+							}
+
+							if (updateCreationUser || updateUseUser)
+							{
+								updateSystemFields = true;
+
+								if (updateCreationUser)
+								{
+									systemFields.CreationUser = userName.Alias;
+								}
+
+								if (updateUseUser)
+								{
+									systemFields.UseUser = userName.Alias;
+								}
 							}
 						}
 					}
@@ -120,7 +131,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				if (updateSystemFields)
 				{
-					translationMemory.LanguageDirection.UpdateTranslationUnit(tu);
+					var results = translationMemory.LanguageDirection.UpdateTranslationUnits(tus.ToArray());
 				}
 			}
 		}
@@ -142,9 +153,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
-			foreach (var tu in translationUnits)
+
+			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
+			if (translationUnits.Length > 50)
 			{
-				iCurrent++;
+				unitGroups = translationUnits.ToList().ChunkBy(50);
+			}
+
+			foreach (var tus in unitGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())
 				{
 					break;
@@ -155,39 +173,42 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				var updateSystemFields = false;
 
-				foreach (var userName in uniqueUsers)
+				foreach (var tu in tus)
 				{
-					var updateCreationUser = false;
-					var updateUseUser = false;
-
-					if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
+					foreach (var userName in uniqueUsers)
 					{
-						var systemFields = tu.SystemFields;
+						var updateCreationUser = false;
+						var updateUseUser = false;
 
-						if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-							userName.UserName == systemFields.CreationUser)
+						if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
 						{
-							updateCreationUser = true;
-						}
+							var systemFields = tu.SystemFields;
 
-						if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-							userName.UserName == systemFields.UseUser)
-						{
-							updateUseUser = true;
-						}
-
-						if (updateCreationUser || updateUseUser)
-						{
-							updateSystemFields = true;
-
-							if (updateCreationUser)
+							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
+							    userName.UserName == systemFields.CreationUser)
 							{
-								systemFields.CreationUser = userName.Alias;
+								updateCreationUser = true;
 							}
 
-							if (updateUseUser)
+							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
+							    userName.UserName == systemFields.UseUser)
 							{
-								systemFields.UseUser = userName.Alias;
+								updateUseUser = true;
+							}
+
+							if (updateCreationUser || updateUseUser)
+							{
+								updateSystemFields = true;
+
+								if (updateCreationUser)
+								{
+									systemFields.CreationUser = userName.Alias;
+								}
+
+								if (updateUseUser)
+								{
+									systemFields.UseUser = userName.Alias;
+								}
 							}
 						}
 					}
@@ -197,10 +218,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					foreach (var languageDirection in serverBasedTm.LanguageDirections)
 					{
-						if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
-							languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+						var tusToUpdate = new List<TranslationUnit>();
+						foreach (var tu in tus)
 						{
-							languageDirection.UpdateTranslationUnit(tu);
+							if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
+							    languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+							{
+								tusToUpdate.Add(tu);
+							}
+						}
+
+						if (tusToUpdate.Count > 0)
+						{
+							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 						}
 					}
 				}
