@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Studio;
@@ -259,98 +258,104 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			};
 		}
 
-		public void AnonymizeServerBasedTu(TranslationProviderServer translationProvider, AnonymizeTranslationMemory tuToAnonymize)
+		public void AnonymizeServerBasedTu(ProgressDialogContext context, TranslationProviderServer translationProvider, AnonymizeTranslationMemory tuToAnonymize)
 		{
-			try
+			var translationMemory = translationProvider.GetTranslationMemory(tuToAnonymize.TmPath, TranslationMemoryProperties.All);
+			var languageDirections = translationMemory.LanguageDirections;
+
+			decimal iCurrent = 0;
+			decimal iTotalUnits = tuToAnonymize.TranslationUnitDetails.Count;
+
+			foreach (var translationUnitDetails in tuToAnonymize.TranslationUnitDetails)
 			{
-				var translationMemory = translationProvider.GetTranslationMemory(tuToAnonymize.TmPath, TranslationMemoryProperties.All);
-				var languageDirections = translationMemory.LanguageDirections;
+				iCurrent++;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
 				foreach (var languageDirection in languageDirections)
 				{
-					foreach (var translationUnitDetails in tuToAnonymize.TranslationUnitDetails)
+					if (!translationUnitDetails.TranslationUnit.SourceSegment.Culture.Equals(languageDirection.SourceLanguage) ||
+						!translationUnitDetails.TranslationUnit.TargetSegment.Culture.Equals(languageDirection.TargetLanguage))
 					{
-						if (!translationUnitDetails.TranslationUnit.SourceSegment.Culture.Equals(languageDirection.SourceLanguage) ||
-							!translationUnitDetails.TranslationUnit.TargetSegment.Culture.Equals(languageDirection.TargetLanguage))
-						{
-							continue;
-						}
-
-						if (translationUnitDetails.IsSourceMatch)
-						{
-							var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
-							var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-							if (elementsContainsTag)
-							{
-								if (translationUnitDetails.SelectedWordsDetails.Any())
-								{
-									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
-								}
-								AnonymizeSegmentsWithTags(translationUnitDetails, true);
-							}
-							else
-							{
-								if (translationUnitDetails.SelectedWordsDetails.Any())
-								{
-									AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
-								}
-								AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
-							}
-						}
-
-						if (translationUnitDetails.IsTargetMatch)
-						{
-							var targetTranslationElements = translationUnitDetails.TranslationUnit.TargetSegment.Elements.ToList();
-							var elementsContainsTag = targetTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
-							if (elementsContainsTag)
-							{
-								if (translationUnitDetails.TargetSelectedWordsDetails.Any())
-								{
-									AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
-								}
-
-								AnonymizeSegmentsWithTags(translationUnitDetails, false);
-							}
-							else
-							{
-								if (translationUnitDetails.TargetSelectedWordsDetails.Any())
-								{
-									AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
-								}
-								AnonymizeSegmentsWithoutTags(translationUnitDetails, false);
-							}
-						}
-
-						//TODO manage the Import result and inform the user of TU's updated/not updated
-						var result = languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
+						continue;
 					}
+
+					if (translationUnitDetails.IsSourceMatch)
+					{
+						var sourceTranslationElements = translationUnitDetails.TranslationUnit.SourceSegment.Elements.ToList();
+						var elementsContainsTag = sourceTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+						if (elementsContainsTag)
+						{
+							if (translationUnitDetails.SelectedWordsDetails.Any())
+							{
+								AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
+							}
+							AnonymizeSegmentsWithTags(translationUnitDetails, true);
+						}
+						else
+						{
+							if (translationUnitDetails.SelectedWordsDetails.Any())
+							{
+								AnonymizeSelectedWordsFromPreview(translationUnitDetails, sourceTranslationElements, true);
+							}
+							AnonymizeSegmentsWithoutTags(translationUnitDetails, true);
+						}
+					}
+
+					if (translationUnitDetails.IsTargetMatch)
+					{
+						var targetTranslationElements = translationUnitDetails.TranslationUnit.TargetSegment.Elements.ToList();
+						var elementsContainsTag = targetTranslationElements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
+						if (elementsContainsTag)
+						{
+							if (translationUnitDetails.TargetSelectedWordsDetails.Any())
+							{
+								AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
+							}
+
+							AnonymizeSegmentsWithTags(translationUnitDetails, false);
+						}
+						else
+						{
+							if (translationUnitDetails.TargetSelectedWordsDetails.Any())
+							{
+								AnonymizeSelectedWordsFromPreview(translationUnitDetails, targetTranslationElements, false);
+							}
+							AnonymizeSegmentsWithoutTags(translationUnitDetails, false);
+						}
+					}
+
+					//TODO manage the Import result and inform the user of TU's updated/not updated
+					var result = languageDirection.UpdateTranslationUnit(translationUnitDetails.TranslationUnit);
 				}
 			}
-			catch (Exception exception)
-			{
-				if (exception.Message.Equals("One or more errors occurred."))
-				{
-					if (exception.InnerException != null)
-					{
-						MessageBox.Show(exception.InnerException.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-					}
-				}
-				else
-				{
-					MessageBox.Show(exception.Message, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
-				}
-			}
-
 		}
 
-		public void AnonymizeFileBasedTu(List<AnonymizeTranslationMemory> tusToAnonymize)
-		{
-			foreach (var translationUnitPair in tusToAnonymize)
+		public void AnonymizeFileBasedTu(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
+		{			
+			foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
 			{
-				var tm = new FileBasedTranslationMemory(translationUnitPair.TmPath);
+				decimal iCurrent = 0;
+				decimal iTotalUnits = anonymizeTranslationMemory.TranslationUnitDetails.Count;
 
-				foreach (var tuDetails in translationUnitPair.TranslationUnitDetails)
+				var tm = new FileBasedTranslationMemory(anonymizeTranslationMemory.TmPath);
+				foreach (var tuDetails in anonymizeTranslationMemory.TranslationUnitDetails)
 				{
+					iCurrent++;
+					if (context != null && context.CheckCancellationPending())
+					{
+						break;
+					}
+
+					var progress = iCurrent / iTotalUnits * 100;
+					context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+
 					if (tuDetails.IsSourceMatch)
 					{
 						var sourceTranslationElements = tuDetails.TranslationUnit.SourceSegment.Elements.ToList();
@@ -373,6 +378,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							AnonymizeSegmentsWithoutTags(tuDetails, true);
 						}
 					}
+
 					if (tuDetails.IsTargetMatch)
 					{
 						var targetTranslationElements = tuDetails.TranslationUnit.TargetSegment.Elements.ToList();
@@ -395,6 +401,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							AnonymizeSegmentsWithoutTags(tuDetails, false);
 						}
 					}
+
 					tm.LanguageDirection.UpdateTranslationUnit(tuDetails.TranslationUnit);
 				}
 			}
