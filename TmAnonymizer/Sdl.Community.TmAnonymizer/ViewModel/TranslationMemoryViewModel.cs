@@ -32,7 +32,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly TmAnonymizerViewController _controller;
 		private Form _controlParent;
 
-
 		public TranslationMemoryViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
 		{			
 			SettingsService = settingsService;
@@ -145,6 +144,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
 		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));		
+
+		public bool CancelProcess { get; set; }
 
 		private void AddServerTranslationMemory()
 		{

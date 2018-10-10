@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
-		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
+		private readonly TranslationMemoryViewModel _model;
 		private readonly BackgroundWorker _backgroundWorker;
 		private readonly Settings _settings;
 		private readonly SettingsService _settingsService;
@@ -37,11 +37,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private List<SourceSearchResult> _sourceSearchResults;
 		private IList _selectedItems;
 
-		public ContentFilteringRulesViewModel(TranslationMemoryViewModel translationMemoryViewModel)
+		public ContentFilteringRulesViewModel(TranslationMemoryViewModel model)
 		{
-			_translationMemoryViewModel = translationMemoryViewModel;
+			_model = model;
 
-			_settingsService = _translationMemoryViewModel.SettingsService;
+			_settingsService = _model.SettingsService;
 			_settings = _settingsService.GetSettings();
 
 			_anonymizeTms = new ObservableCollection<AnonymizeTranslationMemory>();
@@ -50,10 +50,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
 
-			_tmsCollection = _translationMemoryViewModel.TmsCollection;
+			_tmsCollection = _model.TmsCollection;
 			_tmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
 
-			_translationMemoryViewModel.PropertyChanged += TranslationMemoryViewModel_PropertyChanged;
+			_model.PropertyChanged += ModelPropertyChanged;
 
 			Rules.CollectionChanged += RulesCollection_CollectionChanged;
 
@@ -289,9 +289,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				System.Windows.Application.Current.Dispatcher.Invoke(delegate
 				{
 					var previewViewModel = new PreviewWindowViewModel(SourceSearchResults, _anonymizeTms,
-						_tmsCollection, _translationMemoryViewModel);
+						_tmsCollection, _model);
 
-					var previewWindow = new PreviewWindow(previewViewModel);				
+					var previewWindow = new PreviewWindow(previewViewModel);
 					previewWindow.Closing += PreviewWindow_Closing;
 					previewWindow.ShowDialog();
 				});
@@ -308,8 +308,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			System.Windows.Application.Current.Dispatcher.Invoke(() =>
 			{
-				var settings = new ProgressDialogSettings(_translationMemoryViewModel.ControlParent, true, true, false);
-				var result = ProgressDialog.Execute("Loading data...", () =>
+				var settings = new ProgressDialogSettings(_model.ControlParent, true, true, false);
+				var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
 				{
 					ProcessData(ProgressDialog.Current);
 				}, settings);
@@ -317,11 +317,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					throw new Exception("Process cancelled by user.");
+					throw new Exception(StringResources.Process_cancelled_by_user);
 				}
 				if (result.OperationFailed)
 				{
-					throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+					throw new Exception(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message);
 				}
 			});
 		}
@@ -376,7 +376,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							return;
 						}
 
-						var anonymizeTm = _translationMemoryViewModel.TmService.ServerBasedTmGetTranslationUnits(context,
+						var anonymizeTm = _model.TmService.ServerBasedTmGetTranslationUnits(context,
 							tm, translationProvider,
 							personalDataParsingService, out var searchResults);
 
@@ -399,7 +399,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					context.Report(tm.Name);
 
-					var anonymizeTm = _translationMemoryViewModel.TmService.FileBaseTmGetTranslationUnits(context,
+					var anonymizeTm = _model.TmService.FileBaseTmGetTranslationUnits(context,
 					tm, personalDataParsingService, out var searchResults);
 
 					SourceSearchResults.AddRange(searchResults);
@@ -412,16 +412,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{
-				MessageBox.Show(StringResources.Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes,
-					Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+				throw new Exception(StringResources.Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes);
 			}
 		}
 
-		private void TranslationMemoryViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+		private void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
 			if (e.PropertyName.Equals(nameof(TranslationMemoryViewModel.TmsCollection)))
 			{
-				//removed from tm collection
 				RefreshPreviewWindow();
 			}
 		}
@@ -550,7 +548,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker?.Dispose();
 
 			_tmsCollection.CollectionChanged -= TmsCollection_CollectionChanged;
-			_translationMemoryViewModel.PropertyChanged -= TranslationMemoryViewModel_PropertyChanged;
+			_model.PropertyChanged -= ModelPropertyChanged;
 
 			foreach (var rule in _rules)
 			{

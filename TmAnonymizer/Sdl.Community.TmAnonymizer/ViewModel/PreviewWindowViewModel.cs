@@ -22,7 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
-		private readonly TranslationMemoryViewModel _tmViewModel;
+		private readonly TranslationMemoryViewModel _model;
 		private ICommand _selectAllResultsCommand;
 		private ICommand _applyCommand;
 		private readonly BackgroundWorker _backgroundWorker;
@@ -35,7 +35,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public PreviewWindowViewModel(List<SourceSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
-			TranslationMemoryViewModel tmViewModel)
+			TranslationMemoryViewModel model)
 		{
 			_textBoxColor = "White";
 
@@ -45,7 +45,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			SourceSearchResults = new ObservableCollection<SourceSearchResult>(searchResults);
 
-			_tmViewModel = tmViewModel;
+			_model = model;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
 			_tmsCollection = tmsCollection;
 		}
@@ -84,7 +84,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					BackupFileBasedTm();
 					tusToAnonymize = GetTranslationUnitsToAnonymize(fileBasedSearchResult);
-					_tmViewModel.TmService.AnonymizeFileBasedTu(tusToAnonymize);
+					_model.TmService.AnonymizeFileBasedTu(tusToAnonymize);
 				}
 
 				//server based tms
@@ -107,7 +107,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 						BackupServerBasedTm(translationProvider, tusToAnonymize);
 
-						_tmViewModel.TmService.AnonymizeServerBasedTu(translationProvider, tuToAnonymize);
+						_model.TmService.AnonymizeServerBasedTu(translationProvider, tuToAnonymize);
 					}
 				}
 
@@ -227,7 +227,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					foreach (var languageDirection in languageDirections)
 					{
-						var folderPath = Path.Combine(_tmViewModel.SettingsService.PathInfo.BackupFullPath, translationMemory.Name,
+						var folderPath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, translationMemory.Name,
 							languageDirection.TargetLanguageCode);
 
 						if (!Directory.Exists(folderPath))
@@ -388,7 +388,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					tmName = tmName.Substring(0, tmName.Length - extension.Length);
 				}
 
-				var backupFilePath = Path.Combine(_tmViewModel.SettingsService.PathInfo.BackupFullPath, tmName + ". " + GetDateTimeString() + extension);
+				var backupFilePath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, tmName + ". " + GetDateTimeString() + extension);
 
 				if (!File.Exists(backupFilePath))
 				{
@@ -425,7 +425,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public void Dispose()
 		{
-			_tmViewModel?.Dispose();
+			_model?.Dispose();
 
 			if (_backgroundWorker != null)
 			{

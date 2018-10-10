@@ -19,7 +19,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private ObservableCollection<User> _uniqueUserNames;
-		private readonly TranslationMemoryViewModel _translationMemoryViewModel;
+		private readonly TranslationMemoryViewModel _model;
 		private User _selectedItem;
 		private ICommand _selectAllCommand;
 		private ICommand _applyChangesCommand;
@@ -30,14 +30,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly SystemFieldsService _systemFieldsService;
 		private readonly UsersService _usersService;
 
-		public SystemFieldsViewModel(TranslationMemoryViewModel translationMemoryViewModel, SystemFieldsService systemFieldsService, UsersService usersService)
+		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService, UsersService usersService)
 		{
 			_systemFieldsService = systemFieldsService;
 			_usersService = usersService;
 
-			_translationMemoryViewModel = translationMemoryViewModel;
+			_model = model;
 
-			_tmsCollection = _translationMemoryViewModel.TmsCollection;
+			_tmsCollection = _model.TmsCollection;
 			_tmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
 
 			InitializeComponents();
@@ -131,16 +131,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		private void SelectTm(TmFile tm)
-		{
-			if (!tm.IsSelected)
+		{		
+			if (!tm.IsSelected || _model.CancelProcess)
 			{
+				_model.CancelProcess = false;
 				return;
 			}
-
+			
 			var users = new List<User>();
-			var settings = new ProgressDialogSettings(_translationMemoryViewModel.ControlParent, true, true, false);
-			var result = ProgressDialog.Execute("Loading data...", () =>
+			var settings = new ProgressDialogSettings(_model.ControlParent, true, true, false);
+			var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
 			{
+				ProgressDialog.Current.Report(0, tm.Path);
+
 				if (tm.IsServerTm)
 				{
 					var uri = new Uri(tm.Credentials.Url);
@@ -149,26 +152,32 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						tm.Credentials.Password);
 
 					users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
-						translationProvider, _translationMemoryViewModel.TmService));
+						translationProvider, _model.TmService));
 				}
 				else
 				{
 					users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm,
-						_translationMemoryViewModel.TmService));
+						_model.TmService));
 				}
 
 			}, settings);
 
 			if (result.Cancelled)
 			{
-				MessageBox.Show("Process cancelled by user.");
+				_model.CancelProcess = true;
+				tm.IsSelected = false;
+				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
 			}
 			if (result.OperationFailed)
 			{
-				MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
+				_model.CancelProcess = true;
+				tm.IsSelected = false;
+				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}
-
-			AddUniqueUserNames(users);
+			else
+			{				
+				AddUniqueUserNames(users);
+			}
 		}
 
 		private void AddUniqueUserNames(IEnumerable<User> userNames)
@@ -221,14 +230,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void ApplyChanges()
 		{
-			var settings = new ProgressDialogSettings(_translationMemoryViewModel.ControlParent, true, true, false);
-			var result = ProgressDialog.Execute("Updating data...", () =>
+			var settings = new ProgressDialogSettings(_model.ControlParent, true, true, false);
+			var result = ProgressDialog.Execute(StringResources.Applying_changes, () =>
 			{
 				foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
 				{
 					if (!tm.IsServerTm)
 					{
-						_systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), _translationMemoryViewModel.TmService);
+						_systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), _model.TmService);
 					}
 
 					else if (tm.IsServerTm)
@@ -238,18 +247,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						_systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider, _translationMemoryViewModel.TmService);
+						_systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider, _model.TmService);
 					}
 				}
 			}, settings);
 
 			if (result.Cancelled)
 			{
-				MessageBox.Show("Process cancelled by user.");
+				MessageBox.Show(StringResources.Process_cancelled_by_user, Application.ProductName);
 			}
 			if (result.OperationFailed)
 			{
-				MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
+				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}
 
 			Refresh();
@@ -261,46 +270,34 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				UniqueUserNames.Clear();
 
-				if (_translationMemoryViewModel.ControlParent == null)
+				if (_model.ControlParent == null)
 				{
 					return;
 				}
 
 				var users = new List<User>();
-				var settings = new ProgressDialogSettings(_translationMemoryViewModel.ControlParent, true, true, true);
-				var result = ProgressDialog.Execute("Saving data...", () =>
+
+				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
+				var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
+				if (fileBasedTms.Any())
 				{
-					var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
-					var fileBasedTms = _tmsCollection.Where(s => !s.IsServerTm && s.IsSelected).ToList();
-					if (fileBasedTms.Any())
+					foreach (var tm in fileBasedTms)
 					{
-						foreach (var fileTm in fileBasedTms)
-						{
-							users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, fileTm, _translationMemoryViewModel.TmService));
-						}
+						users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm, _model.TmService));
 					}
-
-					if (serverTms.Any())
-					{
-						foreach (var tm in serverTms)
-						{
-							var uri = new Uri(tm.Credentials.Url);
-							var translationProvider = new TranslationProviderServer(uri, false,
-								tm.Credentials.UserName,
-								tm.Credentials.Password);
-
-							users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm, translationProvider, _translationMemoryViewModel.TmService));
-						}
-					}
-				}, settings);
-
-				if (result.Cancelled)
-				{
-					MessageBox.Show("Process cancelled by user.");
 				}
-				if (result.OperationFailed)
+
+				if (serverTms.Any())
 				{
-					MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
+					foreach (var tm in serverTms)
+					{
+						var uri = new Uri(tm.Credentials.Url);
+						var translationProvider = new TranslationProviderServer(uri, false,
+							tm.Credentials.UserName,
+							tm.Credentials.Password);
+
+						users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm, translationProvider, _model.TmService));
+					}
 				}
 
 				AddUniqueUserNames(users);
