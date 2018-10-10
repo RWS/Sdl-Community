@@ -11,6 +11,8 @@ namespace FileBasedProjectPublish
     [ApplicationInitializer]
     public class Project : IApplicationInitializer
     {
+		// application will thorw an error when trying to publishing the project to Group Share using Windows credentials,
+		// because of an exiting bug in Studio API(the issue was raised to Studio team)
         public void Execute()
         {
             var groupShareServer = "GS server address";
