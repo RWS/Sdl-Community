@@ -13,15 +13,11 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 	/// </summary>
 	public partial class PreviewWindow
 	{
-		private RichTextBox _textBox;
-		private readonly PreviewWindowViewModel _previewWindowViewModel;
+		private RichTextBox _textBox;		
 
-		public PreviewWindow(PreviewWindowViewModel previewWindowViewModel)
+		public PreviewWindow()
 		{
-			InitializeComponent();
-
-			_previewWindowViewModel = previewWindowViewModel;
-			DataContext = _previewWindowViewModel;
+			InitializeComponent();			
 		}
 
 		private void FrameworkElement_OnContextMenuOpening(object sender, ContextMenuEventArgs e)
@@ -152,7 +148,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void AnonymizeAction(object sender, RoutedEventArgs e)
 		{
-			_previewWindowViewModel.ApplyChanges();
+			((PreviewWindowViewModel)DataContext).ApplyChanges();
 		}
 	}
 }
