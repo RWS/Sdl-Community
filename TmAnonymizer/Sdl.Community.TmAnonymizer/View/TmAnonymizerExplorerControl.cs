@@ -31,7 +31,8 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 				_acceptWindow = new AcceptWindow(model.TmViewModel.SettingsService);
 				_acceptWindow.InitializeComponent();
 				_acceptWindow.Closing += AcceptWindow_Closing;
-				_acceptWindow.ShowDialog();				
+				_acceptWindow.Topmost = true;
+				_acceptWindow.Show();				
 			}
 			else
 			{

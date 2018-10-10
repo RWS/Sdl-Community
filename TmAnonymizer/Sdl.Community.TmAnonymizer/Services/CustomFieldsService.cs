@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -9,11 +10,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class CustomFieldsService
 	{
-		public List<CustomField> GetFilebasedCustomField(TmFile tm, TmService tmService)
+		public List<CustomField> GetFilebasedCustomField(ProgressDialogContext context, TmFile tm, TmService tmService)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tm.Path);
-		
-			var tus = tmService.LoadTranslationUnits(tm, null, new LanguageDirection
+
+			var tus = tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
 			{
 				Source = translationMemory.LanguageDirection.SourceLanguage,
 				Target = translationMemory.LanguageDirection.TargetLanguage
@@ -28,7 +29,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return null;
 		}
 
-		public List<CustomField> GetServerBasedCustomFields(TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
+		public List<CustomField> GetServerBasedCustomFields(ProgressDialogContext context, TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
@@ -36,7 +37,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in translationMemory.LanguageDirections)
 			{
-				var tus = tmService.LoadTranslationUnits(tm, translationProvideServer, new LanguageDirection
+				var tus = tmService.LoadTranslationUnits(context, tm, translationProvideServer, new LanguageDirection
 				{
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
@@ -159,11 +160,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		public void AnonymizeFileBasedCustomFields(TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
+		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
 		{
 			var fileBasedTm = new FileBasedTranslationMemory(tmFile.Path);
-			
-			var tus = tmService.LoadTranslationUnits(tmFile, null,
+
+			var tus = tmService.LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
 					Source = fileBasedTm.LanguageDirection.SourceLanguage,
@@ -183,8 +184,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							{
 								pickListItem.Name = fieldValue.NewValue;
 							}
-							fieldDefinition.PicklistItems.Remove(fieldValue.Value);
-							fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
 					}
 				}
@@ -192,10 +191,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					foreach (var tu in tus)
 					{
+						if (context.CheckCancellationPending())
+						{
+							break;
+						}
+
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-							{
+							{								
 								switch (fieldValue.ValueType)
 								{
 									case FieldValueType.SingleString:
@@ -220,7 +224,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fileBasedTm.Save();
 		}
 
-		public void AnonymizeServerBasedCustomFields(TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
+		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
@@ -234,25 +238,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				});
 			}
 
-			var translationUnits = tmService.LoadTranslationUnits(tm, translationProvideServer, languageDirections);
-			
+			var translationUnits = tmService.LoadTranslationUnits(context, tm, translationProvideServer, languageDirections);
+
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
 				if (anonymizedField.IsPickList)
 				{
 					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-					{						
+					{
 						foreach (var fieldDefinition in serverBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{							
+						{
 							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
 							if (pickListItem != null)
 							{
-								pickListItem.Name = fieldValue.NewValue;							
+								pickListItem.Name = fieldValue.NewValue;
 							}
-							//fieldDefinition.
-
-							//fieldDefinition.PicklistItems.Remove(fieldValue.Value);
-							//fieldDefinition.PicklistItems.Add(fieldValue.NewValue);
 						}
 
 					}
@@ -261,6 +261,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					foreach (var tu in translationUnits)
 					{
+						if (context.CheckCancellationPending())
+						{
+							break;
+						}
+
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
@@ -392,6 +397,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					listString[index] = customFieldValue.NewValue;
 				}
 			}
+
 			var multiStringFieldValue = new MultipleStringFieldValue
 			{
 				Name = fieldValue.Name,

@@ -18,26 +18,31 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
 	public class TmAnonymizerViewController: AbstractViewController
 	{
-		private static readonly Lazy<TmAnonymizerUserControl> Control = new Lazy<TmAnonymizerUserControl>(() => new TmAnonymizerUserControl(_model));
-		private static readonly Lazy<TmAnonymizerExplorerControl> ExplorerControl = new Lazy<TmAnonymizerExplorerControl>(() => new TmAnonymizerExplorerControl(_model));
-		private static MainViewModel _model;
+		private TmAnonymizerUserControl _control;
+		private TmAnonymizerExplorerControl _explorerControl;
+		private MainViewModel _model;
 		private SettingsService _settingsService;
 
 		protected override void Initialize(IViewContext context)
 		{
 			_settingsService = new SettingsService(new PathInfo());
 			
-			_model = new MainViewModel(_settingsService);
+			_model = new MainViewModel(_settingsService, this);
+
+			_control = new TmAnonymizerUserControl(_model);
+			_explorerControl = new TmAnonymizerExplorerControl(_model);
 		}
+
+		public UserControl ContentControl => _control;
 
 		protected override Control GetContentControl()
 		{
-			return Control.Value;
+			return _control;
 		}
 
 		protected override Control GetExplorerBarControl()
 		{
-			return ExplorerControl.Value;
+			return _explorerControl;
 		}
 
 		[RibbonGroup("TmRibbonGroup", "Online Help")]

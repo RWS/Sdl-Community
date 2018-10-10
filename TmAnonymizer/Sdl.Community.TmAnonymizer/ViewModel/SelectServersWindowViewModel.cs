@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Threading;
+using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
@@ -18,19 +18,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly TranslationProviderServer _translationProviderServer;
 		private readonly BackgroundWorker _backgroundWorker;
 		private readonly Window _controlWindow;
-		private WaitWindow _waitWindow;
 
 		public SelectServersWindowViewModel(Window controlWindow, SettingsService settingsService, TranslationProviderServer translationProviderServer)
 		{
 			_controlWindow = controlWindow;
-			
+
 			_settingsService = settingsService;
 			_translationProviderServer = translationProviderServer;
 
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
-			_backgroundWorker.RunWorkerCompleted += BackgroundWorker_RunWorkerCompleted;
-
 			_backgroundWorker.RunWorkerAsync();
 		}
 
@@ -50,39 +47,47 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void BackgroundWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			_waitWindow?.Close();
-			
-			RefreshView();
-		}
-
 		private void BackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
 		{
 			Application.Current.Dispatcher.Invoke(() =>
 			{
-				_waitWindow = new WaitWindow();
-				_waitWindow.Show();
+				var settings = new ProgressDialogSettings(_controlWindow, true, true, true);
+				var result = ProgressDialog.Execute("Loading data...", () =>
+				{
+					GetServerTms(ProgressDialog.Current);
+
+				}, settings);
+
+				RefreshView();
+
+				if (result.Cancelled)
+				{
+					throw new Exception("Process cancelled." + "\r\n\r\n" + result.Error);
+				}
+
+				if (result.OperationFailed)
+				{
+					throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+				}
 			});
-			DoEvents();
-
-			GetServerTms();
 		}
 
-		private static void DoEvents()
-		{
-			Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.ContextIdle);
-		}
-
-		private void GetServerTms()
+		private void GetServerTms(ProgressDialogContext context)
 		{
 			var translationMemories = _translationProviderServer.GetTranslationMemories(TranslationMemoryProperties.None);
 
 			foreach (var tm in translationMemories)
 			{
+				if (context.CheckCancellationPending())
+				{
+					break;
+				}
+
 				var tmPath = tm.ParentResourceGroupPath == "/" ? "" : tm.ParentResourceGroupPath;
 				var path = tmPath + "/" + tm.Name;
 				var tmAlreadyExist = TranslationMemories.Any(t => t.Path.Equals(path));
+
+				context.Report(path);
 
 				if (!tmAlreadyExist)
 				{
@@ -111,7 +116,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						TranslationMemories.Add(serverTm);
 						RefreshView();
-					});					
+					});
 				}
 			}
 		}
@@ -119,7 +124,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void RefreshView()
 		{
 			OnPropertyChanged(nameof(TranslationMemories));
-			((SelectServersWindow) _controlWindow).Refresh();
+			((SelectServersWindow)_controlWindow).Refresh();
 		}
 
 		public void Dispose()
@@ -127,7 +132,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (_backgroundWorker != null)
 			{
 				_backgroundWorker.DoWork -= BackgroundWorker_DoWork;
-				_backgroundWorker.RunWorkerCompleted -= BackgroundWorker_RunWorkerCompleted;
 				_backgroundWorker.Dispose();
 			}
 		}
