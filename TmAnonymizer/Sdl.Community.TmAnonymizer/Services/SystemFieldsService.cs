@@ -70,21 +70,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			foreach (var tu in translationUnits)
 			{
 				iCurrent++;
-
-				if (context.CheckCancellationPending())
+				if (context != null && context.CheckCancellationPending())
 				{
 					break;
 				}
 
 				var progress = iCurrent / iTotalUnits * 100;
-				context.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
 				var updateSystemFields = false;
 
 				foreach (var userName in uniqueUsers)
 				{
 					var updateCreationUser = false;
-					//var updateChangeUser = false;
 					var updateUseUser = false;
 
 					if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
@@ -92,19 +90,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var systemFields = tu.SystemFields;
 
 						if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-						    userName.UserName == systemFields.CreationUser)
+							userName.UserName == systemFields.CreationUser)
 						{
 							updateCreationUser = true;
 						}
 
-						//if (!string.IsNullOrEmpty(systemFields.ChangeUser) &&
-						//    userName.UserName == systemFields.ChangeUser)
-						//{
-						//	updateChangeUser = true;
-						//}
-
 						if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-						    userName.UserName == systemFields.UseUser)
+							userName.UserName == systemFields.UseUser)
 						{
 							updateUseUser = true;
 						}
@@ -118,11 +110,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								systemFields.CreationUser = userName.Alias;
 							}
 
-							//if (updateChangeUser)
-							//{
-							//	systemFields.ChangeUser = userName.Alias;
-							//}
-
 							if (updateUseUser)
 							{
 								systemFields.UseUser = userName.Alias;
@@ -135,10 +122,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					translationMemory.LanguageDirection.UpdateTranslationUnit(tu);
 				}
-				
 			}
 		}
-	
+
 		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tm, List<User> uniqueUsers, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
@@ -154,46 +140,38 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			var translationUnits = tmService.LoadTranslationUnits(context, tm, translationProvideServer, languageDirections);
 
-
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
 			foreach (var tu in translationUnits)
 			{
 				iCurrent++;
-				if (context.CheckCancellationPending())
+				if (context != null && context.CheckCancellationPending())
 				{
 					break;
 				}
 
 				var progress = iCurrent / iTotalUnits * 100;
-				context.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
 				var updateSystemFields = false;
-				
+
 				foreach (var userName in uniqueUsers)
 				{
 					var updateCreationUser = false;
-					//var updateChangeUser = false;
 					var updateUseUser = false;
 
 					if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
-					{										
+					{
 						var systemFields = tu.SystemFields;
 
 						if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-						    userName.UserName == systemFields.CreationUser)
+							userName.UserName == systemFields.CreationUser)
 						{
 							updateCreationUser = true;
 						}
 
-						//if (!string.IsNullOrEmpty(systemFields.ChangeUser) &&
-						//    userName.UserName == systemFields.ChangeUser)
-						//{
-						//	updateChangeUser = true;
-						//}
-
 						if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-						    userName.UserName == systemFields.UseUser)
+							userName.UserName == systemFields.UseUser)
 						{
 							updateUseUser = true;
 						}
@@ -207,15 +185,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								systemFields.CreationUser = userName.Alias;
 							}
 
-							//if (updateChangeUser)
-							//{
-							//	systemFields.ChangeUser = userName.Alias;
-							//}
-
 							if (updateUseUser)
 							{
 								systemFields.UseUser = userName.Alias;
-							}							
+							}
 						}
 					}
 				}
@@ -225,13 +198,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					foreach (var languageDirection in serverBasedTm.LanguageDirections)
 					{
 						if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
-						    languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+							languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
 						{
 							languageDirection.UpdateTranslationUnit(tu);
 						}
 					}
 				}
-			}		
+			}
+
+			serverBasedTm.Save();
 		}
 
 		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TranslationUnit> translationUnits)
@@ -242,7 +217,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				systemFields.AddRange(new List<string> {
 					tu.SystemFields.CreationUser,
-					//tu.SystemFields.ChangeUser,
 					tu.SystemFields.UseUser });
 			}
 

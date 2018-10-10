@@ -52,7 +52,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			Application.Current.Dispatcher.Invoke(() =>
 			{
 				var settings = new ProgressDialogSettings(_controlWindow, true, true, true);
-				var result = ProgressDialog.Execute("Loading data...", () =>
+				var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
 				{
 					GetServerTms(ProgressDialog.Current);
 
@@ -62,12 +62,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					throw new Exception("Process cancelled by user.");
+					throw new Exception(StringResources.Process_cancelled_by_user);
 				}
 
 				if (result.OperationFailed)
 				{
-					throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+					throw new Exception(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message);
 				}
 			});
 		}

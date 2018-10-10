@@ -183,4 +183,22 @@
 	<data name="AcceptsNoLiability_Description_Line02" xml:space="preserve">
     <value>SDL accepts no liability associated with creating such tags or any errors or omissions associated with the use of the tool or any deliverables.</value>
   </data>
+	<data name="Process_cancelled_by_user" xml:space="preserve">
+    <value>Process cancelled by user.</value>
+  </data>
+	<data name="Process_failed" xml:space="preserve">
+    <value>Process failed. </value>
+  </data>
+	<data name="Reading_servers" xml:space="preserve">
+    <value>Reading servers...</value>
+  </data>
+	<data name="Loading_data" xml:space="preserve">
+    <value>Loading data...</value>
+  </data>
+	<data name="Updating_Multiple_PickList_fields" xml:space="preserve">
+    <value>Updating 'Multiple PickList' fields...</value>
+  </data>
+	<data name="Applying_changes" xml:space="preserve">
+    <value>Applying changes</value>
+  </data>
 </root>

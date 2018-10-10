@@ -23,7 +23,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public TranslationUnit[] LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
 		{
-
 			if (tmFile != null)
 			{
 				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a =>
@@ -50,53 +49,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 						if (serverBasedLanguageDirection != null)
 						{
-							var iTotalUnits = serverBasedLanguageDirection.GetTranslationUnitCount();
-
-							var tus = new List<TranslationUnit>();
-
-							var groups = 1;
-							var unitCount = iTotalUnits;
-
-							if (iTotalUnits > 1000)
-							{
-								groups = iTotalUnits / 1000;
-								unitCount = Convert.ToInt32(iTotalUnits / groups);
-							}
-
-							var tmIterator = new RegularIterator
-							{
-								Forward = true,
-								MaxCount = unitCount
-							};
-
-
-							for (var i = 1; i <= groups; i++)
-							{
-								if (context.CheckCancellationPending())
-								{
-									break;
-								}
-
-								var iCurrent = i * unitCount;
-								var progress = iCurrent / iTotalUnits * 100;
-								context.Report(Convert.ToInt32(progress), "Downloading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-								tus.AddRange(serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator));
-							}
-
-							if (!context.CheckCancellationPending() && tmIterator.ProcessedTranslationUnits < iTotalUnits)
-							{
-								context.Report(100, "Downloading: " + iTotalUnits + " of " + iTotalUnits + " Translation Units");
-
-								tmIterator.MaxCount = iTotalUnits - tmIterator.ProcessedTranslationUnits;
-								tus.AddRange(serverBasedLanguageDirection.GetTranslationUnits(ref tmIterator));
-							}
-
-							if (!context.CheckCancellationPending())
-							{
-								languageDirection.TranslationUnits = tus.ToArray();
-								languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
-							}
+							ReadTranslationUnits(context, serverBasedLanguageDirection, languageDirection);
 						}
 					}
 					else
@@ -106,52 +59,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						if (translationMemory.LanguageDirection.SourceLanguage.Equals(languageDirectionp.Source) &&
 							translationMemory.LanguageDirection.TargetLanguage.Equals(languageDirectionp.Target))
 						{
-							decimal iTotalUnits = translationMemory.LanguageDirection.GetTranslationUnitCount();
-
-							var tus = new List<TranslationUnit>();
-
-							decimal groups = 1;
-							var unitCount = (int)iTotalUnits;
-							decimal threshold = 1000;
-
-							if (iTotalUnits > threshold)
-							{
-								groups = iTotalUnits / threshold;
-								unitCount = Convert.ToInt32(iTotalUnits / groups);
-							}
-
-							var tmIterator = new RegularIterator
-							{
-								Forward = true,
-								MaxCount = unitCount
-							};
-
-							for (var i = 1; i <= groups; i++)
-							{
-								if (context.CheckCancellationPending())
-								{
-									break;
-								}
-
-								var iCurrent = i * unitCount;
-								var progress = iCurrent / iTotalUnits * 100;
-								context.Report(Convert.ToInt32(progress), "Reading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-								tus.AddRange(translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator));
-							}
-
-							if (!context.CheckCancellationPending() && tmIterator.ProcessedTranslationUnits < iTotalUnits)
-							{
-								context.Report(100, "Reading: " + iTotalUnits + " of " + iTotalUnits + " Translation Units");
-								tmIterator.MaxCount = (int)iTotalUnits - tmIterator.ProcessedTranslationUnits;
-								tus.AddRange(translationMemory.LanguageDirection.GetTranslationUnits(ref tmIterator));
-							}
-
-							if (!context.CheckCancellationPending())
-							{
-								languageDirection.TranslationUnits = tus.ToArray();
-								languageDirection.TranslationUnitsCount = languageDirection.TranslationUnits.Length;
-							}
+							ReadTranslationUnits(context, translationMemory.LanguageDirection, languageDirection);
 						}
 					}
 
@@ -176,7 +84,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return translationUnits.ToArray();
 		}
-
 
 		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(ProgressDialogContext context,
 			TmFile tmFile, PersonalDataParsingService personalDataParsingService,
@@ -203,7 +110,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				iCurrent++;
 				if (iCurrent == 1 || iCurrent % 100 == 0)
-				{					
+				{
 					var progress = iCurrent / iTotal * 100;
 					context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units");
 				}
@@ -491,6 +398,64 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					tm.LanguageDirection.UpdateTranslationUnit(tuDetails.TranslationUnit);
 				}
 			}
+		}
+
+		private static void ReadTranslationUnits(ProgressDialogContext context,
+			ITranslationMemoryLanguageDirection languageDirection, TmLanguageDirection tmLanguageDirection)
+		{
+			decimal iTotalUnits = languageDirection.GetTranslationUnitCount();
+
+			var tus = new List<TranslationUnit>();
+
+			decimal groups = 1;
+			var unitCount = (int)iTotalUnits;
+			decimal threshold = 1000;
+
+			if (iTotalUnits > threshold)
+			{
+				groups = iTotalUnits / threshold;
+				unitCount = Convert.ToInt32(iTotalUnits / groups);
+			}
+
+			var tmIterator = new RegularIterator
+			{
+				Forward = true,
+				MaxCount = unitCount
+			};
+
+			for (var i = 1; i <= groups; i++)
+			{
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var iCurrent = i * unitCount;
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Reading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+				tus.AddRange(languageDirection.GetTranslationUnits(ref tmIterator));
+			}
+
+			if (context != null && context.CheckCancellationPending())
+			{
+				return;
+			}
+
+			if (tmIterator.ProcessedTranslationUnits < iTotalUnits)
+			{
+				tmIterator.MaxCount = (int)iTotalUnits - tmIterator.ProcessedTranslationUnits;
+				tus.AddRange(languageDirection.GetTranslationUnits(ref tmIterator));
+			}
+
+			if (context != null && context.CheckCancellationPending())
+			{
+				return;
+			}
+
+			tmLanguageDirection.TranslationUnits = tus.ToArray();
+			tmLanguageDirection.TranslationUnitsCount = tmLanguageDirection.TranslationUnits.Length;
+
 		}
 
 		private static void AnonymizeSelectedWordsFromPreview(TranslationUnitDetails translationUnitDetails, List<SegmentElement> sourceTranslationElements, bool isSource)

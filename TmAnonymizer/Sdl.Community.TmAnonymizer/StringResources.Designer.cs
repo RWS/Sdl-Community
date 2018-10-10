@@ -88,6 +88,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Applying changes.
+        /// </summary>
+        internal static string Applying_changes {
+            get {
+                return ResourceManager.GetString("Applying_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         internal static string Confirmation {
@@ -178,6 +187,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading data....
+        /// </summary>
+        internal static string Loading_data {
+            get {
+                return ResourceManager.GetString("Loading_data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not Authorized!.
         /// </summary>
         internal static string Login_Not_Authorized {
@@ -223,6 +241,33 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Process cancelled by user..
+        /// </summary>
+        internal static string Process_cancelled_by_user {
+            get {
+                return ResourceManager.GetString("Process_cancelled_by_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Process failed. .
+        /// </summary>
+        internal static string Process_failed {
+            get {
+                return ResourceManager.GetString("Process_failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reading servers....
+        /// </summary>
+        internal static string Reading_servers {
+            get {
+                return ResourceManager.GetString("Reading_servers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to remove selected rules?.
         /// </summary>
         internal static string RemoveRule_Are_you_sure_you_want_to_remove_selected_rules {
@@ -237,6 +282,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         internal static string RemoveTm_Do_you_want_to_remove_selected_tms {
             get {
                 return ResourceManager.GetString("RemoveTm_Do_you_want_to_remove_selected_tms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating &apos;Multiple PickList&apos; fields....
+        /// </summary>
+        internal static string Updating_Multiple_PickList_fields {
+            get {
+                return ResourceManager.GetString("Updating_Multiple_PickList_fields", resourceCulture);
             }
         }
         

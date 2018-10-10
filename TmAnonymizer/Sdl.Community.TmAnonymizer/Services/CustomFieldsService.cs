@@ -163,13 +163,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
 		{
 			var fileBasedTm = new FileBasedTranslationMemory(tmFile.Path);
-
-			var tus = tmService.LoadTranslationUnits(context, tmFile, null,
+			
+			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
 					Source = fileBasedTm.LanguageDirection.SourceLanguage,
 					Target = fileBasedTm.LanguageDirection.TargetLanguage
 				});
+
+			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
 
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
@@ -186,20 +188,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							}
 						}
 					}
-				}
-				else
-				{
-					foreach (var tu in tus)
-					{
-						if (context.CheckCancellationPending())
-						{
-							break;
-						}
+				}				
+			}
 
+			fileBasedTm.Save();
+
+			decimal iCurrent = 0;
+			decimal iTotalUnits = translationUnits.Length;
+			foreach (var tu in translationUnits)
+			{			
+				iCurrent++;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+				{
+					if (!anonymizedField.IsPickList)
+					{
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-							{								
+							{
 								switch (fieldValue.ValueType)
 								{
 									case FieldValueType.SingleString:
@@ -220,8 +234,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 			}
-
-			fileBasedTm.Save();
 		}
 
 		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
@@ -240,6 +252,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			var translationUnits = tmService.LoadTranslationUnits(context, tm, translationProvideServer, languageDirections);
 
+			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
+
 			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 			{
 				if (anonymizedField.IsPickList)
@@ -254,18 +268,29 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								pickListItem.Name = fieldValue.NewValue;
 							}
 						}
-
 					}
-				}
-				else
-				{
-					foreach (var tu in translationUnits)
-					{
-						if (context.CheckCancellationPending())
-						{
-							break;
-						}
+				}				
+			}
 
+			serverBasedTm.Save();
+
+			decimal iCurrent = 0;
+			decimal iTotalUnits = translationUnits.Length;
+			foreach (var tu in translationUnits)
+			{
+				iCurrent++;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+				{
+					if (!anonymizedField.IsPickList)
+					{
 						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
@@ -290,11 +315,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 			}
-
-			serverBasedTm.Save();
 		}
 
-		private static void UpdateFileBasedMultipleStringFieldValue(FileBasedTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
+		private static void UpdateFileBasedMultipleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
