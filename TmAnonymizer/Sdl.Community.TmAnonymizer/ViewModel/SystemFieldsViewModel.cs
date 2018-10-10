@@ -161,11 +161,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (result.Cancelled)
 			{
-				throw new Exception("Progress cancelled." + "\r\n\r\n" + result.Error);
+				MessageBox.Show("Process cancelled by user.");
 			}
 			if (result.OperationFailed)
 			{
-				throw new Exception("Progress failed." + "\r\n\r\n" + result.Error);
+				MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
 			}
 
 			AddUniqueUserNames(users);
@@ -245,11 +245,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			if (result.Cancelled)
 			{
-				throw new Exception("Process cancelled." + "\r\n\r\n" + result.Error);
+				MessageBox.Show("Process cancelled by user.");
 			}
 			if (result.OperationFailed)
 			{
-				throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+				MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
 			}
 
 			Refresh();
@@ -296,11 +296,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					throw new Exception("Process cancelled." + "\r\n\r\n" + result.Error);
+					MessageBox.Show("Process cancelled by user.");
 				}
 				if (result.OperationFailed)
 				{
-					throw new Exception("Process failed." + "\r\n\r\n" + result.Error);
+					MessageBox.Show("Process failed. " + "\r\n\r\n" + result.Error);
 				}
 
 				AddUniqueUserNames(users);

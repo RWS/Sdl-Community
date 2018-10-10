@@ -62,7 +62,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 				if (result.Cancelled)
 				{
-					throw new Exception("Process cancelled." + "\r\n\r\n" + result.Error);
+					throw new Exception("Process cancelled by user.");
 				}
 
 				if (result.OperationFailed)
