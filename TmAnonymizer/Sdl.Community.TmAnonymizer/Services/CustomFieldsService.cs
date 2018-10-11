@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
+using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
@@ -71,6 +72,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var trimEndValue = trimStartValue.TrimEnd('"');
 				multipleStringValues.Add(trimEndValue);
 			}
+
 			return multipleStringValues;
 		}
 
@@ -163,7 +165,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
 		{
 			var fileBasedTm = new FileBasedTranslationMemory(tmFile.Path);
-			
+
 			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
@@ -188,16 +190,31 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							}
 						}
 					}
-				}				
+				}
 			}
 
 			fileBasedTm.Save();
 
+			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
+
+			if (units.Count == 0)
+			{
+				return;
+			}
+
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
-			foreach (var tu in translationUnits)
-			{			
-				iCurrent++;
+			var groupsOf = 200;
+
+			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(units) };
+			if (units.Count > groupsOf)
+			{
+				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
+			}
+
+			foreach (var tus in unitGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())
 				{
 					break;
@@ -206,34 +223,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
-				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
-				{
-					if (!anonymizedField.IsPickList)
-					{
-						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{
-							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-							{
-								switch (fieldValue.ValueType)
-								{
-									case FieldValueType.SingleString:
-										UpdateFileBasedSingleStringFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
-										break;
-									case FieldValueType.MultipleString:
-										UpdateFileBasedMultipleStringFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
-										break;
-									case FieldValueType.DateTime:
-										UpdateFileBasedDateTimeFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
-										break;
-									case FieldValueType.Integer:
-										UpdateFileBasedIntFieldValue(fileBasedTm, fieldValue, tu, customFieldValue);
-										break;
-								}
-							}
-						}
-					}
-				}
+				var results = fileBasedTm.LanguageDirection.UpdateTranslationUnits(tus.ToArray());
 			}
+
 		}
 
 		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
@@ -269,16 +261,31 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							}
 						}
 					}
-				}				
+				}
 			}
 
 			serverBasedTm.Save();
 
+			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
+
+			if (units.Count == 0)
+			{
+				return;
+			}
+
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
-			foreach (var tu in translationUnits)
+			var groupsOf = 100;
+
+			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(units) };
+			if (units.Count > groupsOf)
 			{
-				iCurrent++;
+				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
+			}
+
+			foreach (var tus in unitGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())
 				{
 					break;
@@ -287,6 +294,33 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
+				foreach (var languageDirection in serverBasedTm.LanguageDirections)
+				{
+					var tusToUpdate = new List<TranslationUnit>();
+					foreach (var tu in tus)
+					{
+						if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
+							languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+						{
+							tusToUpdate.Add(tu);
+						}
+					}
+
+					if (tusToUpdate.Count > 0)
+					{
+						var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+					}
+				}
+			}
+		}
+
+		private static List<TranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TranslationUnit> translationUnits)
+		{
+			var units = new List<TranslationUnit>();
+
+			foreach (var tu in translationUnits)
+			{
+				var update = false;
 				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 				{
 					if (!anonymizedField.IsPickList)
@@ -298,26 +332,37 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								switch (fieldValue.ValueType)
 								{
 									case FieldValueType.SingleString:
-										UpdateServerBasedSingleStringFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
+										update = true;
+										UpdateSingleStringFieldValue(fieldValue, customFieldValue);
 										break;
 									case FieldValueType.MultipleString:
-										UpdateServerBasedMultipleStringFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
+										update = true;
+										UpdateMultipleStringFieldValue(fieldValue, customFieldValue);
 										break;
 									case FieldValueType.DateTime:
-										UpdateServerBasedDateTimeFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
+										update = true;
+										UpdateDateTimeFieldValue(fieldValue, customFieldValue);
 										break;
 									case FieldValueType.Integer:
-										UpdateServerBasedIntFieldValue(serverBasedTm, fieldValue, tu, customFieldValue);
+										update = true;
+										UpdateIntFieldValue(fieldValue, customFieldValue);
 										break;
 								}
 							}
 						}
 					}
 				}
+
+				if (update)
+				{
+					units.Add(tu);
+				}
 			}
+
+			return units;
 		}
 
-		private static void UpdateFileBasedMultipleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
+		private static void UpdateMultipleStringFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -328,6 +373,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					listString[index] = customFieldValue.NewValue;
 				}
 			}
+
 			var multiStrngFieldValue = new MultipleStringFieldValue
 			{
 				Name = fieldValue.Name,
@@ -337,107 +383,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			fieldValue.Clear();
 			fieldValue.Add(multiStrngFieldValue);
-			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
 		}
 
-		private static void UpdateFileBasedSingleStringFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
+		private static void UpdateSingleStringFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-			var singleStringFieldValue = new SingleStringFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = listString.First(),
-				ValueType = FieldValueType.SingleString
-			};
 
-			fieldValue.Clear();
-			fieldValue.Merge(singleStringFieldValue);
-			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
-		}
-
-		private static void UpdateFileBasedDateTimeFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
-		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-			var dateTimeFieldValue = new DateTimeFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = DateTime.Parse(listString.First()),
-				ValueType = FieldValueType.DateTime
-			};
-			fieldValue.Clear();
-			fieldValue.Add(dateTimeFieldValue);
-			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
-		}
-
-		private static void UpdateFileBasedIntFieldValue(ILocalTranslationMemory fileBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
-		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-			var intFieldValue = new IntFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = int.Parse(listString.First()),
-				ValueType = FieldValueType.Integer
-			};
-			fieldValue.Clear();
-			fieldValue.Merge(intFieldValue);
-			fileBasedTm.LanguageDirection.UpdateTranslationUnit(tu);
-		}
-
-		//serve-based
-
-		private static void UpdateServerBasedMultipleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
-		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-
-			var multiStringFieldValue = new MultipleStringFieldValue
-			{
-				Name = fieldValue.Name,
-				Values = listString,
-				ValueType = FieldValueType.MultipleString
-			};
-			fieldValue.Clear();
-			fieldValue.Add(multiStringFieldValue);
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirection.UpdateTranslationUnit(tu);
-			}
-		}
-
-		private static void UpdateServerBasedSingleStringFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
-		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
 				var index = listString.IndexOf(customFieldValue.Value);
@@ -456,13 +407,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			fieldValue.Clear();
 			fieldValue.Merge(singleStringFieldValue);
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirection.UpdateTranslationUnit(tu);
-			}
 		}
 
-		private static void UpdateServerBasedDateTimeFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
+		private static void UpdateDateTimeFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -473,23 +420,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					listString[index] = customFieldValue.NewValue;
 				}
 			}
-
 			var dateTimeFieldValue = new DateTimeFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = DateTime.Parse(listString.First()),
 				ValueType = FieldValueType.DateTime
 			};
-
 			fieldValue.Clear();
 			fieldValue.Add(dateTimeFieldValue);
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirection.UpdateTranslationUnit(tu);
-			}
 		}
 
-		private static void UpdateServerBasedIntFieldValue(ServerBasedTranslationMemory serverBasedTm, FieldValue fieldValue, TranslationUnit tu, CustomFieldValue customFieldValue)
+		private static void UpdateIntFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -506,13 +447,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Value = int.Parse(listString.First()),
 				ValueType = FieldValueType.Integer
 			};
-
 			fieldValue.Clear();
 			fieldValue.Merge(intFieldValue);
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirection.UpdateTranslationUnit(tu);
-			}
 		}
+
 	}
 }

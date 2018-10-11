@@ -68,11 +68,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
+			var groupsOf = 200;
 
 			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
-			if (translationUnits.Length > 50)
+			if (translationUnits.Length > groupsOf)
 			{
-				unitGroups = translationUnits.ToList().ChunkBy(50);
+				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in unitGroups)
@@ -153,11 +154,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Length;
+			var groupsOf = 100;
 
 			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
-			if (translationUnits.Length > 50)
+			if (translationUnits.Length > groupsOf)
 			{
-				unitGroups = translationUnits.ToList().ChunkBy(50);
+				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in unitGroups)
