@@ -70,13 +70,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			decimal iTotalUnits = translationUnits.Length;
 			var groupsOf = 200;
 
-			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
+			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
 			if (translationUnits.Length > groupsOf)
 			{
-				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
 			}
 
-			foreach (var tus in unitGroups)
+			foreach (var tus in tusGroups)
 			{
 				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())
@@ -156,13 +156,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			decimal iTotalUnits = translationUnits.Length;
 			var groupsOf = 100;
 
-			var unitGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
+			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
 			if (translationUnits.Length > groupsOf)
 			{
-				unitGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
 			}
 
-			foreach (var tus in unitGroups)
+			foreach (var tus in tusGroups)
 			{
 				iCurrent = iCurrent + tus.Count;
 				if (context != null && context.CheckCancellationPending())

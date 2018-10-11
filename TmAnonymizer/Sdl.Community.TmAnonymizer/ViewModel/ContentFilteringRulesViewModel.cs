@@ -384,7 +384,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 						SourceSearchResults.AddRange(searchResults);
 
-						if (!_anonymizeTms.Any(n => n.TmPath.Equals(anonymizeTm.TmPath)))
+						if (!_anonymizeTms.Any(n => n.TmFile.Path.Equals(anonymizeTm.TmFile.Path)))
 						{
 							_anonymizeTms.Add(anonymizeTm);
 						}
@@ -406,7 +406,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					SourceSearchResults.AddRange(searchResults);
 
-					if (!_anonymizeTms.Any(n => n.TmPath.Equals(anonymizeTm.TmPath)))
+					if (!_anonymizeTms.Any(n => n.TmFile.Path.Equals(anonymizeTm.TmFile.Path)))
 					{
 						_anonymizeTms.Add(anonymizeTm);
 					}
@@ -473,7 +473,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 
 					//remove the tm from the list use in preview windoew
-					var removed = _anonymizeTms.FirstOrDefault(t => t.TmPath.Equals(removedTm.Path));
+					var removed = _anonymizeTms.FirstOrDefault(t => t.TmFile.Path.Equals(removedTm.Path));
 					if (removed != null)
 					{
 						_anonymizeTms.Remove(removed);
@@ -500,7 +500,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var unselectedTms = _tmsCollection.Where(t => !t.IsSelected).ToList();
 			foreach (var tm in unselectedTms)
 			{
-				var anonymizedTmToRemove = _anonymizeTms.FirstOrDefault(t => t.TmPath.Equals(tm.Path));
+				var anonymizedTmToRemove = _anonymizeTms.FirstOrDefault(t => t.TmFile.Path.Equals(tm.Path));
 				if (anonymizedTmToRemove != null)
 				{
 					_anonymizeTms.Remove(anonymizedTmToRemove);
