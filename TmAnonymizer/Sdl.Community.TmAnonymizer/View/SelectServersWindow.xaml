@@ -87,7 +87,7 @@
 								<DataGrid.Columns>
 									<DataGridTextColumn Header="Source" Binding="{Binding Source.DisplayName}" MinWidth="90" Width="*" IsReadOnly="True" />
 									<DataGridTextColumn Header="Target" Binding="{Binding Target.DisplayName}" MinWidth="60" Width="*" IsReadOnly="True"/>
-									<DataGridTextColumn Header="Translation Units" Binding="{Binding TranslationUnits}" MinWidth="110" Width="Auto" IsReadOnly="True"/>
+									<DataGridTextColumn Header="Translation Units" Binding="{Binding TranslationUnitsCount}" MinWidth="110" Width="Auto" IsReadOnly="True"/>
 								</DataGrid.Columns>
 							</DataGrid>
 						</GroupBox>
