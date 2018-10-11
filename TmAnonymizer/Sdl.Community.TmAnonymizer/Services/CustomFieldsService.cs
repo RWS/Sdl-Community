@@ -450,6 +450,5 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Clear();
 			fieldValue.Merge(intFieldValue);
 		}
-
 	}
 }
