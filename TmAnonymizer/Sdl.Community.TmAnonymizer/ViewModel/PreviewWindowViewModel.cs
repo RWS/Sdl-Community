@@ -79,22 +79,30 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					//file base tms
 					var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 					if (fileBasedSearchResult.Count > 0)
-					{
-						tusToAnonymize = GetTranslationUnitsToAnonymize(fileBasedSearchResult);
+					{						
+						tusToAnonymize = GetTranslationUnitsToAnonymize(ProgressDialog.Current, fileBasedSearchResult);
 
+						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
+						{
+							ProgressDialog.Current.ThrowIfCancellationPending();
+						}
 						BackupFileBasedTms(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
-
-						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, tusToAnonymize);
+						
+						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, tusToAnonymize);						
 					}
 
 					//server based tms
 					var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
 					if (serverBasedSearchResult.Count > 0)
-					{
-						tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
+					{						
+						tusToAnonymize = GetTranslationUnitsToAnonymize(ProgressDialog.Current, serverBasedSearchResult);
 
+						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
+						{
+							ProgressDialog.Current.ThrowIfCancellationPending();
+						}
 						BackupServerBasedTm(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
-
+						
 						_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, tusToAnonymize);					
 					}
 				}, settings);
@@ -102,6 +110,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (result.Cancelled)
 				{
 					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, System.Windows.Forms.Application.ProductName);
+					_window.Close();
 				}
 				if (result.OperationFailed)
 				{
@@ -350,11 +359,28 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(IEnumerable<SourceSearchResult> selectedSearchResult)
+		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(ProgressDialogContext context, IReadOnlyCollection<SourceSearchResult> selectedSearchResults)
 		{
-			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
-			foreach (var selectedResult in selectedSearchResult)
+			if (selectedSearchResults == null)
 			{
+				return null;
+			}
+
+			decimal iCurrent = 0;			
+			decimal iTotalUnits = selectedSearchResults.Count;
+
+			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
+			foreach (var selectedResult in selectedSearchResults)
+			{
+				iCurrent++;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Analyzing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
 				var anonymizeUnits = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
 
 				var translationUnit = anonymizeUnits?.TranslationUnits.FirstOrDefault(n =>

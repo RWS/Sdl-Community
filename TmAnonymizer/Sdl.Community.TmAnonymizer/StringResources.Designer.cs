@@ -223,6 +223,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Operation type is not supported.
+        /// </summary>
+        internal static string Operation_type_is_not_supported {
+            get {
+                return ResourceManager.GetString("Operation_type_is_not_supported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password is rquired.
         /// </summary>
         internal static string Password_is_rquired {
@@ -237,6 +246,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         internal static string Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes {
             get {
                 return ResourceManager.GetString("Please_select_at_least_one_translation_memory_and_a_rule_to_preview_the_changes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please wait while process will be cancelled....
+        /// </summary>
+        internal static string Please_wait_while_process_will_be_cancelled {
+            get {
+                return ResourceManager.GetString("Please_wait_while_process_will_be_cancelled", resourceCulture);
             }
         }
         
@@ -282,6 +300,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         internal static string RemoveTm_Do_you_want_to_remove_selected_tms {
             get {
                 return ResourceManager.GetString("RemoveTm_Do_you_want_to_remove_selected_tms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.OutOfMemoryException was thrown..
+        /// </summary>
+        internal static string System_OutOfMemoryException_was_thrown {
+            get {
+                return ResourceManager.GetString("System_OutOfMemoryException_was_thrown", resourceCulture);
             }
         }
         
