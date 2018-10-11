@@ -95,7 +95,8 @@ namespace Sdl.Community.MtEnhancedProvider.MstConnect
 
 				const string host = "https://api.cognitive.microsofttranslator.com";
 			    const string path = "/translate?api-version=3.0";
-			    var languageParams = string.Format("&from={0}&to={1}&textType={2}", sourceLc, targetLc,"html");
+				var category = categoryId == "" ? "general" : categoryId;
+				var languageParams = string.Format("&from={0}&to={1}&textType={2}&category={3}", sourceLc, targetLc,"html", category);
 			    var uri = string.Concat(host, path, languageParams);
 			    var body = new object[]
 			    {
