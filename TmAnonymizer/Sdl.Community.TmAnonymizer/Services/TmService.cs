@@ -392,18 +392,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (tuDetails.IsSourceMatch)
 					{
-						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.SourceSegment.Elements.ToList());
+						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.SourceSegment.Elements.ToList(), true);
 					}
 
 					if (tuDetails.IsTargetMatch)
 					{
-						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.TargetSegment.Elements.ToList());					
+						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.TargetSegment.Elements.ToList(), false);					
 					}
 				}
 			}
 		}
 
-		private void AnonymizeSegment(TranslationUnitDetails tuDetails, List<SegmentElement> elements)
+		private void AnonymizeSegment(TranslationUnitDetails tuDetails, List<SegmentElement> elements, bool isSource)
 		{			
 			var elementsContainsTag = elements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 			if (elementsContainsTag)
@@ -411,19 +411,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				//check if there are selected words from the ui
 				if (tuDetails.SelectedWordsDetails.Any())
 				{
-					AnonymizeSelectedWordsFromPreview(tuDetails, elements, true);
+					AnonymizeSelectedWordsFromPreview(tuDetails, elements, isSource);
 				}
 
-				AnonymizeSegmentsWithTags(tuDetails, true);
+				AnonymizeSegmentsWithTags(tuDetails, isSource);
 			}
 			else
 			{
 				if (tuDetails.SelectedWordsDetails.Any())
 				{
-					AnonymizeSelectedWordsFromPreview(tuDetails, elements, true);
+					AnonymizeSelectedWordsFromPreview(tuDetails, elements, isSource);
 				}
 
-				AnonymizeSegmentsWithoutTags(tuDetails, true);
+				AnonymizeSegmentsWithoutTags(tuDetails, isSource);
 			}
 		}
 
