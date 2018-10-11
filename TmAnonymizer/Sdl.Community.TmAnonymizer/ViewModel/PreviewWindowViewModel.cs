@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
@@ -80,9 +79,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					//file base tms
 					var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 					if (fileBasedSearchResult.Count > 0)
-					{						
-						BackupFileBasedTms(ProgressDialog.Current);
+					{
 						tusToAnonymize = GetTranslationUnitsToAnonymize(fileBasedSearchResult);
+
+						BackupFileBasedTms(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
 
 						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, tusToAnonymize);
 					}
@@ -93,23 +93,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						tusToAnonymize = GetTranslationUnitsToAnonymize(serverBasedSearchResult);
 
-						foreach (var tuToAnonymize in tusToAnonymize)
-						{
-							var tm = _tmsCollection.FirstOrDefault(a => a.Path == tuToAnonymize.TmPath);
+						BackupServerBasedTm(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
 
-							if (tm == null)
-							{
-								continue;
-							}
-
-							var uri = new Uri(tm.Credentials.Url);
-							var translationProvider = new TranslationProviderServer(uri, false, tm.Credentials.UserName, tm.Credentials.Password);
-
-							ProgressDialog.Current.Report(0, "Backup " + tm.Path);
-							BackupServerBasedTm(translationProvider, tusToAnonymize);
-
-							_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, translationProvider, tuToAnonymize);
-						}
+						_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, tusToAnonymize);					
 					}
 				}, settings);
 
@@ -128,11 +114,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				System.Windows.Forms.MessageBox.Show(StringResources.ApplyChanges_Please_select_at_least_one_translation_unit_to_apply_the_changes, System.Windows.Forms.Application.ProductName);
 			}
-		}
-
-		private static void DoEvents()
-		{
-			System.Windows.Application.Current.Dispatcher.Invoke(delegate { }, DispatcherPriority.Background);
 		}
 
 		public bool SelectAllResults
@@ -223,15 +204,27 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				   dt.Second.ToString().PadLeft(2, '0');
 		}
 
-		private void BackupServerBasedTm(TranslationProviderServer translationProvider, IEnumerable<AnonymizeTranslationMemory> tusToAnonymize)
+		private void BackupServerBasedTm(ProgressDialogContext context, IEnumerable<string> paths)
 		{
 			_backupTms.Clear();
 
 			try
 			{
-				foreach (var tuToAonymize in tusToAnonymize)
+				foreach (var path in paths)
 				{
-					var translationMemory = translationProvider.GetTranslationMemory(tuToAonymize.TmPath, TranslationMemoryProperties.All);
+					var tm = _tmsCollection.FirstOrDefault(a => a.IsServerTm && a.Path.Equals(path));
+
+					if (tm == null)
+					{
+						continue;
+					}
+
+					var uri = new Uri(tm.Credentials.Url);
+					var translationProvider = new TranslationProviderServer(uri, false, tm.Credentials.UserName, tm.Credentials.Password);
+
+					context.Report(0, "Backup " + tm.Path);
+
+					var translationMemory =translationProvider.GetTranslationMemory(path, TranslationMemoryProperties.All);
 					var languageDirections = translationMemory.LanguageDirections;
 
 					foreach (var languageDirection in languageDirections)
@@ -298,10 +291,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							}
 							else if (_tmExporter.Status == ScheduledOperationStatus.Error)
 							{
-								System.Windows.Forms.MessageBox.Show(_tmExporter.ErrorMessage, System.Windows.Forms.Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+								System.Windows.Forms.MessageBox.Show(_tmExporter.ErrorMessage, System.Windows.Forms.Application.ProductName,
+									MessageBoxButtons.OK, MessageBoxIcon.Error);
 							}
 						}
 					}
+
 					if (!_backgroundWorker.IsBusy)
 					{
 						_backgroundWorker.RunWorkerAsync();
@@ -324,12 +319,43 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		private void BackupFileBasedTms(ProgressDialogContext context, IEnumerable<string> paths)
+		{
+			foreach (var path in paths)
+			{
+				var tm = _tmsCollection.FirstOrDefault(a => !a.IsServerTm && a.Path.Equals(path));
+
+				if (tm == null)
+				{
+					continue;
+				}
+
+				context.Report(0, "Backup " + tm.Path);
+
+				var tmInfo = new FileInfo(tm.Path);
+
+				var extension = Path.GetExtension(tm.Name);
+				var tmName = tm.Name;
+				if (extension?.Length > 0)
+				{
+					tmName = tmName.Substring(0, tmName.Length - extension.Length);
+				}
+
+				var backupFilePath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, tmName + ". " + GetDateTimeString() + extension);
+
+				if (!File.Exists(backupFilePath))
+				{
+					tmInfo.CopyTo(backupFilePath, false);
+				}
+			}
+		}
+
 		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(IEnumerable<SourceSearchResult> selectedSearchResult)
 		{
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			foreach (var selectedResult in selectedSearchResult)
 			{
-				var anonymizeUnits = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmPath == selectedResult.TmFilePath);
+				var anonymizeUnits = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
 
 				var translationUnit = anonymizeUnits?.TranslationUnits.FirstOrDefault(n =>
 					n.ResourceId.Guid.ToString() == selectedResult.Id &&
@@ -338,7 +364,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (translationUnit != null)
 				{
 					// if there is an tm with the same path add translation units to that tm
-					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmPath.Equals(anonymizeUnits.TmPath));
+					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmFile.Path.Equals(anonymizeUnits.TmFile.Path));
 
 					//added for select custom words functionality
 					var tranlationUnitDetails = new TranslationUnitDetails
@@ -362,7 +388,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var anonymizeTm = new AnonymizeTranslationMemory
 						{
 							TranslationUnits = new List<TranslationUnit>(),
-							TmPath = anonymizeUnits.TmPath,
+							TmFile = anonymizeUnits.TmFile,
 							TranslationUnitDetails = new List<TranslationUnitDetails>(),
 						};
 
@@ -381,30 +407,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			foreach (var searchResult in SourceSearchResults.Where(s => s.TuSelected).ToList())
 			{
 				SourceSearchResults.Remove(searchResult);
-			}
-		}
-
-		private void BackupFileBasedTms(ProgressDialogContext context)
-		{
-			foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
-			{
-				context.Report(0, "Backup " + tm.Path);
-
-				var tmInfo = new FileInfo(tm.Path);
-
-				var extension = Path.GetExtension(tm.Name);
-				var tmName = tm.Name;
-				if (extension?.Length > 0)
-				{
-					tmName = tmName.Substring(0, tmName.Length - extension.Length);
-				}
-
-				var backupFilePath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, tmName + ". " + GetDateTimeString() + extension);
-
-				if (!File.Exists(backupFilePath))
-				{
-					tmInfo.CopyTo(backupFilePath, false);
-				}
 			}
 		}
 
