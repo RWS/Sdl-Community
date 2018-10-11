@@ -34,7 +34,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 		{
 			InitializeComponent();
 
-			_settings = settings;			
+			_settings = settings;
 
 			if (_settings.ShowSubLabel)
 			{
@@ -105,17 +105,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 						}
 						else
 						{
-							throw new InvalidOperationException("Operation type is not supoorted");
+							throw new InvalidOperationException(StringResources.Operation_type_is_not_supported);
 						}
-						
+
 						Current?.CheckCancellationPending();
 					}
 					catch (ProgressDialogCancellationExcpetion) { }
-					catch (Exception)
-					{
+					catch (Exception ex)
+					{						
 						if (!Current.CheckCancellationPending())
 						{
-							throw;
+							if (ex is LanguagePlatform.Core.LanguagePlatformException exception)
+							{
+								var errorText = exception.Description?.Data?.ToString();
+								if (errorText != null && errorText.Contains("OutOfMemoryException"))
+								{
+									throw new Exception(StringResources.System_OutOfMemoryException_was_thrown);
+								}
+								else
+								{
+									throw exception;
+								}
+							}						
+							else
+							{
+								throw;
+							}
 						}
 					}
 					finally
@@ -160,7 +175,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 		{
 			if (_worker != null && _worker.WorkerSupportsCancellation)
 			{
-				SubLabel = "Please wait while process will be cancelled...";
+				SubLabel = StringResources.Please_wait_while_process_will_be_cancelled;
 				CancelButton.IsEnabled = false;
 				_worker.CancelAsync();
 			}
@@ -186,22 +201,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 
 		internal static ProgressDialogResult Execute(string label, Action operation)
 		{
-			return ExecuteInternal(label, (object)operation, null);
+			return ExecuteInternal(label, operation, null);
 		}
 
 		internal static ProgressDialogResult Execute(string label, Action operation, ProgressDialogSettings settings)
 		{
-			return ExecuteInternal(label, (object)operation, settings);
+			return ExecuteInternal(label, operation, settings);
 		}
 
 		internal static ProgressDialogResult Execute(string label, Func<object> operationWithResult)
 		{
-			return ExecuteInternal(label, (object)operationWithResult, null);
+			return ExecuteInternal(label, operationWithResult, null);
 		}
 
 		internal static ProgressDialogResult Execute(string label, Func<object> operationWithResult, ProgressDialogSettings settings)
 		{
-			return ExecuteInternal(label, (object)operationWithResult, settings);
+			return ExecuteInternal(label, operationWithResult, settings);
 		}
 
 		internal static void Execute(string label, Action operation, Action<ProgressDialogResult> successOperation, Action<ProgressDialogResult> failureOperation = null, Action<ProgressDialogResult> cancelledOperation = null)
