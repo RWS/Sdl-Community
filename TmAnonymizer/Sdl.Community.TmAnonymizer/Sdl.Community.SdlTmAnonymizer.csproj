@@ -144,6 +144,8 @@
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\LanguageDirection.cs" />
+    <Compile Include="Model\TmTranslationUnit.cs" />
+    <Compile Include="Model\TmSegment.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />
     <Compile Include="Services\ExcelImportExportService.cs" />
     <Compile Include="Helpers\RichTextBoxFormatter.cs" />

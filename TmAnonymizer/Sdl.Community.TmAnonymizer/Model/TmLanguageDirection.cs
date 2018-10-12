@@ -1,7 +1,7 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
-using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
@@ -44,6 +44,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 
 		[JsonIgnore]
 		[XmlIgnore]
-		public TranslationUnit[] TranslationUnits { get; set; }
+		public List<TmTranslationUnit> TranslationUnits { get; set; }
 	}
 }

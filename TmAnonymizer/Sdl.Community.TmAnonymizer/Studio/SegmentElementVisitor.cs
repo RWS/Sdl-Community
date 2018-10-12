@@ -60,7 +60,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 							//create new tag
 							var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
 							segmentCollection.Add(tag);
-						
+
 						}
 						else
 						{
@@ -102,7 +102,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			var personalDataIndex = new List<int>();
 
-			foreach (var rule in _rules)
+			foreach (var rule in _rules.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);
@@ -136,7 +136,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		private bool ContainsPi(string text)
 		{
-			foreach (var rule in _rules)
+			foreach (var rule in _rules.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var match = regex.Match(text);
@@ -148,9 +148,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return false;
 		}
 
-		private bool ShouldAnonymize(string currentText,string prevText)
+		private bool ShouldAnonymize(string currentText, string prevText)
 		{
-			foreach (var rule in _rules)
+			foreach (var rule in _rules.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(currentText);

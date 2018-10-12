@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
