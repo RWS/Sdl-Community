@@ -357,7 +357,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = fileDialog.ShowDialog();
 				if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 				{
-					var importedFields = _excelImportExportService.GetImportedCustomFields(fileDialog.FileNames.ToList());
+					var importedFields = _excelImportExportService.ImportCustomFields(fileDialog.FileNames.ToList());
 
 					foreach (var importedField in importedFields)
 					{

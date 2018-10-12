@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using OfficeOpenXml;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.TranslationMemory;
 
@@ -9,12 +10,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class ExcelImportExportService
 	{
-		public List<CustomField> GetImportedCustomFields(List<string> files)
+		public ExcelPackage GetExcelPackage(string filePath)
+		{
+			var fileInfo = new FileInfo(filePath);
+			var excelPackage = new ExcelPackage(fileInfo);
+			return excelPackage;
+		}
+
+		public List<CustomField> ImportCustomFields(List<string> files)
 		{
 			var customFields = new List<CustomField>();
 			foreach (var file in files)
 			{
-				var package = ExcelFile.GetExcelPackage(file);
+				var package = GetExcelPackage(file);
 				var workSheet = package.Workbook.Worksheets[1];
 				for (var i = workSheet.Dimension.Start.Row;
 					i <= workSheet.Dimension.End.Row;
@@ -74,7 +82,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void ExportCustomFields(string filePath, List<CustomField> customFields)
 		{
-			var package = ExcelFile.GetExcelPackage(filePath);
+			var package = GetExcelPackage(filePath);
 			var worksheet = package.Workbook.Worksheets.Add("Exported custom fields");
 			var lineNumber = 1;
 			foreach (var field in customFields)
@@ -89,6 +97,121 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						worksheet.Cells["D" + lineNumber].Value = detail.NewValue;
 						lineNumber++;
 					}
+				}
+			}
+			package.Save();
+		}
+		
+		public List<Rule> ImportedRules(List<string> files)
+		{
+			var patterns = new List<Rule>();
+			foreach (var file in files)
+			{
+				var package = GetExcelPackage(file);
+				var workSheet = package.Workbook.Worksheets[1];
+				for (var i = workSheet.Dimension.Start.Row;
+					i <= workSheet.Dimension.End.Row;
+					i++)
+				{
+					var pattern = new Rule()
+					{
+						Id = Guid.NewGuid().ToString(),
+						IsSelected = true,
+						Description = string.Empty,
+						Name = string.Empty
+					};
+
+					for (var j = workSheet.Dimension.Start.Column;
+						j <= workSheet.Dimension.End.Column;
+						j++)
+					{
+						var address = workSheet.Cells[i, j].Address;
+
+						var cellValue = workSheet.Cells[i, j].Value;
+						if (address.Contains("A"))
+						{
+							pattern.Name = cellValue.ToString();
+						}
+						else
+						{
+							pattern.Description = cellValue.ToString();
+						}
+					}
+					patterns.Add(pattern);
+				}
+			}
+			return patterns;
+		}
+		
+		public void ExportRules(string filePath, List<Rule> patterns)
+		{
+			var package = GetExcelPackage(filePath);
+			var worksheet = package.Workbook.Worksheets.Add("Exported expressions");
+			var lineNumber = 1;
+			foreach (var pattern in patterns)
+			{
+				if (pattern != null)
+				{
+					worksheet.Cells["A" + lineNumber].Value = pattern.Name;
+					worksheet.Cells["B" + lineNumber].Value = pattern.Description;
+					lineNumber++;
+				}
+			}
+			package.Save();
+		}
+
+		public List<User> ImportUsers(List<string> files)
+		{
+			var listOfUsers = new List<User>();
+			foreach (var file in files)
+			{
+				var package = GetExcelPackage(file);
+				var workSheet = package.Workbook.Worksheets[1];
+				for (var i = workSheet.Dimension.Start.Row;
+					i <= workSheet.Dimension.End.Row;
+					i++)
+				{
+					var user = new User
+					{
+						IsSelected = true,
+						UserName = string.Empty,
+						Alias = string.Empty
+					};
+
+					for (var j = workSheet.Dimension.Start.Column;
+						j <= workSheet.Dimension.End.Column;
+						j++)
+					{
+						var address = workSheet.Cells[i, j].Address;
+
+						var cellValue = workSheet.Cells[i, j].Value;
+						if (address.Contains("A") && cellValue != null)
+						{
+							user.UserName = cellValue.ToString();
+						}
+						else if (address.Contains("B") && cellValue != null)
+						{
+							user.Alias = cellValue.ToString();
+						}
+					}
+					listOfUsers.Add(user);
+				}
+			}
+			return listOfUsers;
+		}
+
+		public void ExportUsers(string filePath, List<User> users)
+		{
+			var package = GetExcelPackage(filePath);
+			var worksheet = package.Workbook.Worksheets.Add("Exported system fields");
+			var lineNumber = 1;
+			foreach (var user in users)
+			{
+				if (user != null)
+				{
+					worksheet.Cells["A" + lineNumber].Value = user.UserName;
+					worksheet.Cells["B" + lineNumber].Value = user.Alias;
+					lineNumber++;
 				}
 			}
 			package.Save();

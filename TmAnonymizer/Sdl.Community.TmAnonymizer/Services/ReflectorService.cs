@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Sdl.Community.SdlTmAnonymizer.Helpers
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class Reflector
+	public class ReflectorService
 	{
 		private readonly string _mNs;
 
 		private readonly Assembly _mAsmb;
 
-		public Reflector(string ns) : this(ns, ns)
+		public ReflectorService(string ns) : this(ns, ns)
 		{
 		}
 
-		public Reflector(string an, string ns)
+		public ReflectorService(string an, string ns)
 		{
 			_mNs = ns;
 			_mAsmb = null;

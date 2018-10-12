@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
+using Sdl.Community.SdlTmAnonymizer.Services;
 
 namespace Sdl.Community.SdlTmAnonymizer.Controls
 {
@@ -53,7 +53,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		{
 			bool flag;
 
-			var reflector = new Reflector("System.Windows.Forms");
+			var reflector = new ReflectorService("System.Windows.Forms");
 			uint num = 0;
 			var type = reflector.GetType("FileDialogNative.IFileDialog");
 			var obj = reflector.Call(_ofd, "CreateVistaDialog");
