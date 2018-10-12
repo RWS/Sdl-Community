@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlTmAnonymizer.Model;
 
@@ -17,7 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public bool ContainsPi(string text)
 		{
-			foreach (var pattern in _patterns)
+			foreach (var pattern in _patterns.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(pattern.Name, RegexOptions.IgnoreCase);
 				var match = regex.Match(text);
@@ -37,7 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public List<Position> GetPersonalDataPositions(string text)
 		{
 			var personalDataIndex = new List<Position>();
-			foreach (var pattern in _patterns)
+			foreach (var pattern in _patterns.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(pattern.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(text);

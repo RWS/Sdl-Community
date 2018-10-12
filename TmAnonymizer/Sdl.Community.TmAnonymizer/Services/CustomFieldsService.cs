@@ -34,7 +34,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
-			var translationUnits = new List<TranslationUnit>();
+			var translationUnits = new List<TmTranslationUnit>();
 
 			foreach (var languageDirection in translationMemory.LanguageDirections)
 			{
@@ -50,7 +50,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			}
 
-			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits.ToArray(), tm.Path);
+			var customFieldList = GetCustomFieldList(translationMemory.FieldDefinitions, translationUnits, tm.Path);
 
 			return customFieldList;
 		}
@@ -76,7 +76,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return multipleStringValues;
 		}
 
-		private static IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TranslationUnit> translationUnits, string name)
+		private static IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits, string name)
 		{
 			var customFieldValues = new List<CustomFieldValue>();
 			var distinctFieldValues = new List<string>();
@@ -124,7 +124,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return details;
 		}
 
-		private static List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, TranslationUnit[] translationUnits, string tmFilePath)
+		private static List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, List<TmTranslationUnit> translationUnits, string tmFilePath)
 		{
 			var customFieldList = new List<CustomField>();
 
@@ -164,13 +164,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
 		{
-			var fileBasedTm = new FileBasedTranslationMemory(tmFile.Path);
+			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
 			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
-					Source = fileBasedTm.LanguageDirection.SourceLanguage,
-					Target = fileBasedTm.LanguageDirection.TargetLanguage
+					Source = tm.LanguageDirection.SourceLanguage,
+					Target = tm.LanguageDirection.TargetLanguage
 				});
 
 			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
@@ -181,7 +181,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 					{
-						foreach (var fieldDefinition in fileBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
+						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
 						{
 							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
 							if (pickListItem != null)
@@ -193,7 +193,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			}
 
-			fileBasedTm.Save();
+			tm.Save();
 
 			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
 
@@ -203,13 +203,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Length;
+			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 200;
 
-			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(units) };
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
 			if (units.Count > groupsOf)
 			{
-				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in tusGroups)
@@ -223,7 +223,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 
-				var results = fileBasedTm.LanguageDirection.UpdateTranslationUnits(tus.ToArray());
+
+				var tusToUpdate = new List<TranslationUnit>();
+				foreach (var tu in tus)
+				{
+					if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+						tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+					{
+						var unit = tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
+
+						tusToUpdate.Add(unit);
+					}
+				}
+
+				if (tusToUpdate.Count > 0)
+				{
+					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+				}				
 			}
 
 		}
@@ -274,13 +290,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Length;
+			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;
 
-			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(units) };
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
 			if (units.Count > groupsOf)
 			{
-				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in tusGroups)
@@ -299,10 +315,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					var tusToUpdate = new List<TranslationUnit>();
 					foreach (var tu in tus)
 					{
-						if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
-							languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+						if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+							languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 						{
-							tusToUpdate.Add(tu);
+							var unit = tmService.CreateTranslationUnit(tu, languageDirection);
+							tusToUpdate.Add(unit);
 						}
 					}
 
@@ -314,9 +331,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static List<TranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TranslationUnit> translationUnits)
+		private static List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
 		{
-			var units = new List<TranslationUnit>();
+			var units = new List<TmTranslationUnit>();
 
 			foreach (var tu in translationUnits)
 			{

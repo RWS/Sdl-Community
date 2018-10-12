@@ -35,7 +35,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
-			var translationUnits = new List<TranslationUnit>();
+			var translationUnits = new List<TmTranslationUnit>();
 
 			foreach (var languageDirection in translationMemory.LanguageDirections)
 			{
@@ -56,24 +56,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return uniqueUsersCollection;
 		}
 
-		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tm, List<User> uniqueUsers, TmService tmService)
+		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TmService tmService)
 		{
-			var translationMemory = new FileBasedTranslationMemory(tm.Path);
+			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
-			var translationUnits = tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
+			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null, new LanguageDirection
 			{
-				Source = translationMemory.LanguageDirection.SourceLanguage,
-				Target = translationMemory.LanguageDirection.TargetLanguage
+				Source = tm.LanguageDirection.SourceLanguage,
+				Target = tm.LanguageDirection.TargetLanguage
 			});
 
 			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Length;
+			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 200;
 
-			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
-			if (translationUnits.Length > groupsOf)
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
+			if (translationUnits.Count > groupsOf)
 			{
-				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in tusGroups)
@@ -132,7 +132,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				if (updateSystemFields)
 				{
-					var results = translationMemory.LanguageDirection.UpdateTranslationUnits(tus.ToArray());
+					var tusToUpdate = new List<TranslationUnit>();
+					foreach (var tu in tus)
+					{
+						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+						    tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+						{
+							var unit = tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
+
+							tusToUpdate.Add(unit);
+						}
+					}
+
+					if (tusToUpdate.Count > 0)
+					{
+						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+					}					
 				}
 			}
 		}
@@ -153,13 +168,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var translationUnits = tmService.LoadTranslationUnits(context, tm, translationProvideServer, languageDirections);
 
 			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Length;
+			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;
 
-			var tusGroups = new List<List<TranslationUnit>> { new List<TranslationUnit>(translationUnits) };
-			if (translationUnits.Length > groupsOf)
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
+			if (translationUnits.Count > groupsOf)
 			{
-				tusGroups = translationUnits.ToList().ChunkBy(groupsOf);
+				tusGroups = translationUnits.ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in tusGroups)
@@ -223,10 +238,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var tusToUpdate = new List<TranslationUnit>();
 						foreach (var tu in tus)
 						{
-							if (languageDirection.SourceLanguage.Equals(tu.SourceSegment.Culture) &&
-							    languageDirection.TargetLanguage.Equals(tu.TargetSegment.Culture))
+							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+							    languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 							{
-								tusToUpdate.Add(tu);
+								var unit = tmService.CreateTranslationUnit(tu, languageDirection);
+								tusToUpdate.Add(unit);
 							}
 						}
 
@@ -241,7 +257,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			serverBasedTm.Save();
 		}
 
-		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TranslationUnit> translationUnits)
+		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var systemFields = new List<string>();
 			var distinctUsersCollection = new List<User>();

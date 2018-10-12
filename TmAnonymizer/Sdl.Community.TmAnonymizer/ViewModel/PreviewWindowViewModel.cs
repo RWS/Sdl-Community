@@ -11,7 +11,6 @@ using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
@@ -74,36 +73,36 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				var result = ProgressDialog.Execute(StringResources.Applying_changes, () =>
 				{
 					var selectedSearchResult = SourceSearchResults.Where(s => s.TuSelected).ToList();
-					List<AnonymizeTranslationMemory> tusToAnonymize;
+					List<AnonymizeTranslationMemory> anonymizeTranslationMemories;
 
 					//file base tms
 					var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 					if (fileBasedSearchResult.Count > 0)
 					{						
-						tusToAnonymize = GetTranslationUnitsToAnonymize(ProgressDialog.Current, fileBasedSearchResult);
+						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, fileBasedSearchResult);
 
 						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
-						BackupFileBasedTms(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
+						BackupFileBasedTms(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
 						
-						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, tusToAnonymize);						
+						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, anonymizeTranslationMemories);						
 					}
 
 					//server based tms
 					var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
 					if (serverBasedSearchResult.Count > 0)
 					{						
-						tusToAnonymize = GetTranslationUnitsToAnonymize(ProgressDialog.Current, serverBasedSearchResult);
+						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, serverBasedSearchResult);
 
 						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
-						BackupServerBasedTm(ProgressDialog.Current, tusToAnonymize.Select(a => a.TmFile.Path).ToList());
+						BackupServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
 						
-						_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, tusToAnonymize);					
+						_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, anonymizeTranslationMemories);					
 					}
 				}, settings);
 
@@ -413,9 +412,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						var anonymizeTm = new AnonymizeTranslationMemory
 						{
-							TranslationUnits = new List<TranslationUnit>(),
+							TranslationUnits = new List<TmTranslationUnit>(),
 							TmFile = anonymizeUnits.TmFile,
-							TranslationUnitDetails = new List<TranslationUnitDetails>(),
+							TranslationUnitDetails = new List<TranslationUnitDetails>()
 						};
 
 						anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);

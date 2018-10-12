@@ -300,7 +300,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
 		{
 			SourceSearchResults.Clear();
@@ -327,7 +326,6 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				}
 			});
 		}
-
 
 		private void ProcessData(ProgressDialogContext context)
 		{
@@ -401,8 +399,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					context.Report(tm.Name);
 
-					var anonymizeTm = _model.TmService.FileBaseTmGetTranslationUnits(context,
-					tm, personalDataParsingService, out var searchResults);
+					var anonymizeTm = _model.TmService.FileBaseTmGetTranslationUnits(context, tm, personalDataParsingService, out var searchResults);
 
 					SourceSearchResults.AddRange(searchResults);
 
