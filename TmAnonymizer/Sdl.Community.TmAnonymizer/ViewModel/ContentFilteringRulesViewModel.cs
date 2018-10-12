@@ -9,7 +9,6 @@ using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
-using Sdl.Community.SdlTmAnonymizer.Helpers;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
@@ -36,10 +35,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _exportCommand;
 		private List<SourceSearchResult> _sourceSearchResults;
 		private IList _selectedItems;
+		private readonly ExcelImportExportService _excelImportExportService;
 
-		public ContentFilteringRulesViewModel(TranslationMemoryViewModel model)
+		public ContentFilteringRulesViewModel(TranslationMemoryViewModel model, ExcelImportExportService excelImportExportService)
 		{
 			_model = model;
+			_excelImportExportService = excelImportExportService;
 
 			_settingsService = _model.SettingsService;
 			_settings = _settingsService.GetSettings();
@@ -195,7 +196,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedRules.Add(rule);
 					}
 
-					Expressions.ExportExporessions(fileDialog.FileName, selectedRules);
+					_excelImportExportService.ExportRules(fileDialog.FileName, selectedRules);
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
@@ -220,7 +221,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedExpressions = Expressions.GetImportedExpressions(fileDialog.FileNames.ToList());
+				var importedExpressions = _excelImportExportService.ImportedRules(fileDialog.FileNames.ToList());
 
 				foreach (var expression in importedExpressions)
 				{

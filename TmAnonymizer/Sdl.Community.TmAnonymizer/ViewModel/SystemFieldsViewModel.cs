@@ -28,12 +28,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private bool _selectAll;
 		private readonly SystemFieldsService _systemFieldsService;
-		private readonly UsersService _usersService;
+		private readonly ExcelImportExportService _excelImportExportService;
 
-		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService, UsersService usersService)
+		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService, ExcelImportExportService excelImportExportService)
 		{
 			_systemFieldsService = systemFieldsService;
-			_usersService = usersService;
+			_excelImportExportService = excelImportExportService;
 
 			_model = model;
 
@@ -321,7 +321,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var result = fileDialog.ShowDialog();
 			if (result == DialogResult.OK && fileDialog.FileNames.Length > 0)
 			{
-				var importedUsers = _usersService.GetImportedUsers(fileDialog.FileNames.ToList());
+				var importedUsers = _excelImportExportService.ImportUsers(fileDialog.FileNames.ToList());
 				foreach (var user in importedUsers)
 				{
 					var existingUser = UniqueUserNames.FirstOrDefault(u => u.UserName.Equals(user.UserName));
@@ -356,7 +356,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						selectedUsers.Add(user);
 					}
 
-					_usersService.ExportUsers(fileDialog.FileName, selectedUsers);
+					_excelImportExportService.ExportUsers(fileDialog.FileName, selectedUsers);
 					MessageBox.Show(StringResources.Export_File_was_exported_successfully_to_selected_location, Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information);
 				}
 			}
