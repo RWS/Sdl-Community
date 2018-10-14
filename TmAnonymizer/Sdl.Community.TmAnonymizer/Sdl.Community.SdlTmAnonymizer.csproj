@@ -116,6 +116,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
@@ -143,6 +144,13 @@
     <Compile Include="Controls\ProgressDialog\ProgressDialogSettings.cs" />
     <Compile Include="Controls\SortAwareDataGrid.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Model\FieldDefinitions\DateTimeFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\FieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\IntFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\MultiplePicklistFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\MultipleStringFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\SinglePicklistFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\SingleStringFieldValue.cs" />
     <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\TmTranslationUnit.cs" />
     <Compile Include="Model\TmSegment.cs" />
@@ -151,6 +159,7 @@
     <Compile Include="Controls\RichTextBoxFormatter.cs" />
     <Compile Include="Services\CustomFieldsService.cs" />
     <Compile Include="Controls\CustomTextBox.cs" />
+    <Compile Include="Services\SegmentService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />

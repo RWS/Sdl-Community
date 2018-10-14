@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
@@ -8,6 +9,7 @@ using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using FieldValue = Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions.FieldValue;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
 {
@@ -21,53 +23,67 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			_settingsService = settingsService;
 		}
 
-		public List<TmTranslationUnit> LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection languageDirectionp)
+		public List<TmTranslationUnit> LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, LanguageDirection providerLanguageDirection)
 		{
-			if (tmFile != null)
+			if (tmFile == null)
+			{
+				return null;
+			}
+
+			lock (_lockObject)
 			{
 				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a =>
-					Equals(a.Source, languageDirectionp.Source) && Equals(a.Target, languageDirectionp.Target));
+					Equals(a.Source, providerLanguageDirection.Source) && Equals(a.Target, providerLanguageDirection.Target));
 
 				if (languageDirection == null)
 				{
 					return null;
 				}
 
-				lock (_lockObject)
+				if (languageDirection.TranslationUnits != null)
 				{
-					if (languageDirection.TranslationUnits != null)
-					{
-						return languageDirection.TranslationUnits;
-					}
-
-					if (tmFile.IsServerTm)
-					{
-						var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
-
-						var serverBasedLanguageDirection = translationMemory.LanguageDirections.FirstOrDefault(a =>
-							a.SourceLanguage.Equals(languageDirectionp.Source) && a.TargetLanguage.Equals(languageDirectionp.Target));
-
-						if (serverBasedLanguageDirection != null)
-						{
-							ReadTranslationUnits(context, serverBasedLanguageDirection, languageDirection);
-						}
-					}
-					else
-					{
-						var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
-
-						if (translationMemory.LanguageDirection.SourceLanguage.Equals(languageDirectionp.Source) &&
-							translationMemory.LanguageDirection.TargetLanguage.Equals(languageDirectionp.Target))
-						{
-							ReadTranslationUnits(context, translationMemory.LanguageDirection, languageDirection);
-						}
-					}
-
 					return languageDirection.TranslationUnits;
 				}
-			}
 
-			return null;
+				//TODO [PACH 14-10-2018]
+				// temporary changes... for dev. testing
+				var oPath = Path.Combine(@"C:\temp\_temp\", tmFile.Name.Replace(@"\", "_") + ".xml");
+				var serializer = new SerializerService();
+				if (File.Exists(oPath))
+				{
+					languageDirection.TranslationUnits = serializer.Read<List<TmTranslationUnit>>(oPath);
+					return languageDirection.TranslationUnits;
+				}
+
+				if (tmFile.IsServerTm)
+				{
+					var translationMemory = translationProvider.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+					var serverBasedLanguageDirection = translationMemory.LanguageDirections.FirstOrDefault(a =>
+						a.SourceLanguage.Equals(providerLanguageDirection.Source) && a.TargetLanguage.Equals(providerLanguageDirection.Target));
+
+					if (serverBasedLanguageDirection != null)
+					{
+						ReadTranslationUnits(context, serverBasedLanguageDirection, languageDirection);
+					}
+				}
+				else
+				{
+					var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
+
+					if (translationMemory.LanguageDirection.SourceLanguage.Equals(providerLanguageDirection.Source) &&
+						translationMemory.LanguageDirection.TargetLanguage.Equals(providerLanguageDirection.Target))
+					{
+						ReadTranslationUnits(context, translationMemory.LanguageDirection, languageDirection);
+					}
+				}
+
+
+				///TODO [PACH 14-10-2018]
+				serializer.Save(languageDirection.TranslationUnits, oPath);
+
+				return languageDirection.TranslationUnits;
+			}
 		}
 
 		public List<TmTranslationUnit> LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
@@ -327,7 +343,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				tm.Save();
 			}
 		}
-		
+
 		public void AnonymizeFileBasedTu(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
@@ -398,7 +414,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var unit = new TranslationUnit
 			{
 				ResourceId = tu.ResourceId,
-				FieldValues = tu.FieldValues,
+				FieldValues = GetFieldValues(tu.FieldValues),
 				SystemFields = tu.SystemFields,
 				SourceSegment = new Segment
 				{
@@ -411,7 +427,139 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Elements = tu.TargetSegment.Elements
 				}
 			};
+
 			return unit;
+		}
+
+		private static List<FieldValue> SetFieldValues(FieldValues fieldValues)
+		{
+			var result = new List<FieldValue>();
+
+			foreach (var fieldValue in fieldValues)
+			{
+				switch (fieldValue.ValueType)
+				{
+					case FieldValueType.Unknown:
+						break;
+					case FieldValueType.SingleString:
+						var singleStringValue = new Model.FieldDefinitions.SingleStringFieldValue();
+						singleStringValue.Name = fieldValue.Name;
+						singleStringValue.Value = fieldValue.GetValueString();
+
+						result.Add(singleStringValue);
+						break;
+					case FieldValueType.MultipleString:
+						var multipleStringValue = new Model.FieldDefinitions.MultipleStringFieldValue();
+						multipleStringValue.Name = fieldValue.Name;
+						multipleStringValue.Values = 
+							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList());
+
+						result.Add(multipleStringValue);
+						break;
+					case FieldValueType.DateTime:
+						var dateTimeValue = new Model.FieldDefinitions.DateTimeFieldValue();
+						dateTimeValue.Name = fieldValue.Name;
+						dateTimeValue.Value = DateTime.Parse(fieldValue.GetValueString());
+
+						result.Add(dateTimeValue);
+						break;
+					case FieldValueType.SinglePicklist:
+						var singlePickValue = new Model.FieldDefinitions.SinglePicklistFieldValue();
+						singlePickValue.Name = fieldValue.Name;
+						singlePickValue.Value = new PicklistItem();
+
+						if (fieldValue is SinglePicklistFieldValue singlePicklistFieldValue)
+						{
+							singlePickValue.Value.ID = singlePicklistFieldValue.Value.ID;
+							singlePickValue.Value.Name = singlePicklistFieldValue.Value.Name;
+
+							result.Add(singlePickValue);
+						}						
+						break;
+					case FieldValueType.MultiplePicklist:
+						var multiplePickValue = new Model.FieldDefinitions.MultiplePicklistFieldValue();
+						multiplePickValue.Name = fieldValue.Name;
+						multiplePickValue.Values = new List<PicklistItem>();
+
+						if (fieldValue is MultiplePicklistFieldValue multiplePicklistFieldValue)
+						{
+							multiplePickValue.Values = multiplePicklistFieldValue.Values;
+							result.Add(multiplePickValue);
+						}					
+						break;
+					case FieldValueType.Integer:
+						var intValue = new Model.FieldDefinitions.IntFieldValue();
+						intValue.Name = fieldValue.Name;
+						intValue.Value = int.Parse(fieldValue.GetValueString());
+
+						result.Add(intValue);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+
+			return result;
+		}
+
+		private static IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		{
+			//TODO [PACH 14-10-2018]
+			var multipleStringValues = new List<string>();
+			var trimStart = fieldValue.TrimStart('(');
+			var trimEnd = trimStart.TrimEnd(')');
+			var listValues = new List<string> { trimEnd };
+			if (!fieldValueType.Equals(FieldValueType.DateTime))
+			{
+				listValues = trimEnd.Split(',').ToList();
+			}
+
+			foreach (var value in listValues)
+			{
+				var trimStartValue = value.TrimStart(' ', '"');
+				var trimEndValue = trimStartValue.TrimEnd('"');
+				multipleStringValues.Add(trimEndValue);
+			}
+
+			return multipleStringValues;
+		}
+
+		private static FieldValues GetFieldValues(IEnumerable<FieldValue> fieldValues)
+		{
+			var result = new FieldValues();
+			foreach (var fieldValue in fieldValues)
+			{
+				switch (fieldValue.ValueType)
+				{
+					case FieldValueType.Unknown:
+						break;
+					case FieldValueType.SingleString:
+						var singleStringValue = new Model.FieldDefinitions.SingleStringFieldValue();
+						singleStringValue.Name = fieldValue.Name;
+						singleStringValue.Value = fieldValue.GetValueString();						
+						break;
+					case FieldValueType.MultipleString:
+						break;
+					case FieldValueType.DateTime:
+						var dateTimeValue = new Model.FieldDefinitions.DateTimeFieldValue();
+						dateTimeValue.Name = fieldValue.Name;
+						dateTimeValue.Value = DateTime.Parse(fieldValue.GetValueString());
+						break;
+					case FieldValueType.SinglePicklist:
+						break;
+					case FieldValueType.MultiplePicklist:
+						break;
+					case FieldValueType.Integer:
+						var intValue = new Model.FieldDefinitions.IntFieldValue();
+						intValue.Name = fieldValue.Name;
+						intValue.Value = int.Parse(fieldValue.GetValueString());
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+
+			return result;
 		}
 
 		private void PrepareTranslationUnits(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
@@ -522,7 +670,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			tus.AddRange(units.Select(unit => new TmTranslationUnit
 			{
 				ResourceId = unit.ResourceId,
-				FieldValues = unit.FieldValues,
+				FieldValues = SetFieldValues(unit.FieldValues),
 				SystemFields = unit.SystemFields,
 				SourceSegment = new TmSegment
 				{

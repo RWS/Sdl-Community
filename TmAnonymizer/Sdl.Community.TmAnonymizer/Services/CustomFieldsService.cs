@@ -379,7 +379,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return units;
 		}
 
-		private static void UpdateMultipleStringFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private static void UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -391,10 +391,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			}
 
-			var multiStrngFieldValue = new MultipleStringFieldValue
+			var multiStrngFieldValue = new Model.FieldDefinitions.MultipleStringFieldValue
 			{
 				Name = fieldValue.Name,
-				Values = listString,
+				Values = new HashSet<string>(listString),
 				ValueType = FieldValueType.MultipleString
 			};
 
@@ -402,7 +402,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Add(multiStrngFieldValue);
 		}
 
-		private static void UpdateSingleStringFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private static void UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 
@@ -415,7 +415,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			}
 
-			var singleStringFieldValue = new SingleStringFieldValue
+			var singleStringFieldValue = new Model.FieldDefinitions.SingleStringFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = listString.First(),
@@ -426,7 +426,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Merge(singleStringFieldValue);
 		}
 
-		private static void UpdateDateTimeFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private static void UpdateDateTimeFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -437,7 +437,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					listString[index] = customFieldValue.NewValue;
 				}
 			}
-			var dateTimeFieldValue = new DateTimeFieldValue
+			var dateTimeFieldValue = new Model.FieldDefinitions.DateTimeFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = DateTime.Parse(listString.First()),
@@ -447,7 +447,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Add(dateTimeFieldValue);
 		}
 
-		private static void UpdateIntFieldValue(FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private static void UpdateIntFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
@@ -458,12 +458,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					listString[index] = customFieldValue.NewValue;
 				}
 			}
-			var intFieldValue = new IntFieldValue
+			var intFieldValue = new Model.FieldDefinitions.IntFieldValue
 			{
 				Name = fieldValue.Name,
 				Value = int.Parse(listString.First()),
 				ValueType = FieldValueType.Integer
 			};
+
 			fieldValue.Clear();
 			fieldValue.Merge(intFieldValue);
 		}
