@@ -210,4 +210,7 @@
 	<data name="Please_wait_while_process_will_be_cancelled" xml:space="preserve">
     <value>Please wait while process will be cancelled...</value>
   </data>
+	<data name="Cant_compare_different_field_types" xml:space="preserve">
+    <value>Can't compare different field types</value>
+  </data>
 </root>

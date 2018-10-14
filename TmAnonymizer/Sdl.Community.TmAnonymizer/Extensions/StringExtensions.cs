@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 
 namespace Sdl.Community.SdlTmAnonymizer.Extensions
 {
@@ -25,5 +26,30 @@ namespace Sdl.Community.SdlTmAnonymizer.Extensions
 			output[index.Length] = source.Substring(pos);
 			return output;
 		}
+
+		public static string EscapeString(this string source)
+		{
+			return EscapeString(source, "\"\\");
+		}
+
+		public static string EscapeString(this string source, string charactersToEscape)
+		{
+			if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(charactersToEscape))
+				return source;
+
+			var sb = new StringBuilder();
+
+			foreach (var value in source)
+			{
+				if (charactersToEscape.IndexOf(value) >= 0)
+				{
+					sb.Append("\\");
+				}
+
+				sb.Append(value);
+			}
+
+			return sb.ToString();
+		}	
 	}
 }

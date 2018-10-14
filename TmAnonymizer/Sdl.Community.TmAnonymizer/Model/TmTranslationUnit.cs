@@ -1,13 +1,20 @@
-﻿using Sdl.LanguagePlatform.TranslationMemory;
+﻿using System;
+using System.Collections.Generic;
+using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
+	[Serializable]
 	public class TmTranslationUnit
 	{
 		public PersistentObjectToken ResourceId { get; set; }
+
 		public TmSegment SourceSegment { get; set; }
+
 		public TmSegment TargetSegment { get; set; }
+
 		public SystemFields SystemFields { get; set; }
-		public FieldValues FieldValues { get; set; }
+
+		public List<FieldDefinitions.FieldValue> FieldValues { get; set; }
 	}
 }

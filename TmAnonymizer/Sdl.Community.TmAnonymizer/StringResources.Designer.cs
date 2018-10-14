@@ -97,6 +97,15 @@ namespace Sdl.Community.SdlTmAnonymizer {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t compare different field types.
+        /// </summary>
+        internal static string Cant_compare_different_field_types {
+            get {
+                return ResourceManager.GetString("Cant_compare_different_field_types", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirmation.
         /// </summary>
         internal static string Confirmation {

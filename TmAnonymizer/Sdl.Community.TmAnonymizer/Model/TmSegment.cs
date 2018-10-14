@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
-{
+{	
+	[Serializable]
 	public class TmSegment
 	{						
 		public List<SegmentElement> Elements { get; set; }		
