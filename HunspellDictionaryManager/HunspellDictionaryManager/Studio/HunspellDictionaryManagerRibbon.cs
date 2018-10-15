@@ -20,7 +20,8 @@ namespace Sdl.Community.HunspellDictionaryManager.Studio
 			{
 				Utils.InitializeWpfApplicationSettings();
 
-				new Lazy<MainViewControl>(() => new MainViewControl());
+				var mainWindow = new MainWindow();
+				mainWindow.Show();
 			}
 		}
 	}

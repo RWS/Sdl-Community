@@ -46,5 +46,15 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
 				Application.Current.Resources.MergedDictionaries.Add(controlsResources);
 			}
 		}
+
+		/// <summary>
+		/// Get installed version for Studio
+		/// </summary>
+		/// <returns></returns>
+		public static string GetInstalledStudioPath()
+		{
+			var studio = new Toolkit.Core.Studio().GetStudioVersion();
+			return studio.InstallPath;
+		}
 	}
 }

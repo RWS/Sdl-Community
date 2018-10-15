@@ -2,6 +2,8 @@
 {
 	public static class Constants
 	{
+		public static readonly string HunspellDictionaries = "HunspellDictionaries";
+
 		public static readonly string ControlsStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml";
 		public static readonly string ColorsStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/Colors.xaml";
 		public static readonly string FontsStylePath = "pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml";
