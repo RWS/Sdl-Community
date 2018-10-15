@@ -22,6 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _selectAll;
 		private ICommand _selectFoldersCommand;
 		private ICommand _removeCommand;
+		private ICommand _clearCacheCommand;
 		private ICommand _selectTmCommand;
 		private ICommand _dragEnterCommand;
 		private ICommand _loadServerTmCommand;
@@ -33,14 +34,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private Form _controlParent;
 
 		public TranslationMemoryViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
-		{			
+		{
 			SettingsService = settingsService;
 			TmService = new TmService(settingsService);
 			_controller = controller;
 
 			IsEnabled = true;
 			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
-		}		
+		}
 
 		public Form ControlParent
 		{
@@ -53,7 +54,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						var elementHost = _controller?.ContentControl?.Controls[0] as ElementHost;
 						_controlParent = elementHost?.FindForm();
 					}
-					catch{}					
+					catch { }
 				}
 
 				return _controlParent;
@@ -139,12 +140,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
 
+		public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new CommandHandler(ClearCache, true));
+
 		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));
 
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
 
-		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));		
-		
+		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));
+
 		private void AddServerTranslationMemory()
 		{
 			var settings = SettingsService.GetSettings();
@@ -257,6 +260,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		private void ClearCache()
+		{
+			foreach (TmFile tmFile in SelectedItems)
+			{
+				if (!string.IsNullOrEmpty(tmFile.CachePath) && File.Exists(tmFile.CachePath))
+				{
+					File.Delete(tmFile.CachePath);
+					tmFile.CachePath = string.Empty;
+					tmFile.IsSelected = false;					
+				}
+			}
+		}
+
 		private void SelectFolder()
 		{
 			var folderDialog = new FolderSelectDialog();
@@ -318,6 +334,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			tm.PropertyChanged -= Tm_PropertyChanged;
 			TmsCollection.Remove(tm);
+
+			if (!string.IsNullOrEmpty(tm.CachePath) && File.Exists(tm.CachePath))
+			{
+				File.Delete(tm.CachePath);
+			}
+
 			SaveSetttings();
 		}
 

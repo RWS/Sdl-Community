@@ -155,6 +155,8 @@
     <Compile Include="Model\TmTranslationUnit.cs" />
     <Compile Include="Model\TmSegment.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />
+    <Compile Include="Services\Converters\FieldValueTypeConverter.cs" />
+    <Compile Include="Services\Converters\SegmentElementTypeConverter.cs" />
     <Compile Include="Services\ExcelImportExportService.cs" />
     <Compile Include="Controls\RichTextBoxFormatter.cs" />
     <Compile Include="Services\CustomFieldsService.cs" />
@@ -253,6 +255,11 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\RemoveCache.ico" />
+    <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
+    <Resource Include="Resources\TranslationMemoryCache.ico" />
+    <Resource Include="Resources\Check.ico" />
+    <Resource Include="Resources\CheckedCircle.png" />
     <None Include="Resources\icon.ico" />
     <None Include="Resources\wiki.ico" />
     <None Include="Resources\help.ico" />
