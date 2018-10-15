@@ -11,7 +11,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Studio
 	[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.AddinsRibbonTabLocation))]
 	public class HunspellDictionaryManagerRibbon : AbstractRibbonGroup
 	{
-		[Action("HunspellDictionaryManager.HunspellDictionaryManager", Name = "Hunspell Dictionary Manager", Icon = "icon", Description = "Hunspell Dictionary Manager")]
+		[Action("HunspellDictionaryManager.HunspellDictionaryManager", Name = "Hunspell Dictionary Manager", Icon = "h_icon", Description = "Hunspell Dictionary Manager")]
 		[ActionLayout(typeof(HunspellDictionaryManagerRibbon), 20, DisplayType.Large)]
 		[ActionLayout(typeof(TranslationStudioDefaultContextMenus.ProjectsContextMenuLocation), 10, DisplayType.Large)]
 		public class HunspellDictionaryManagerAction : AbstractAction

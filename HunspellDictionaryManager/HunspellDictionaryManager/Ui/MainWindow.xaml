@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:Sdl.Community.HunspellDictionaryManager.Ui"
         xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-		GlowBrush="AliceBlue"
+		GlowBrush="#008C95"
+        WindowTitleBrush="#008C95"
         Title="HunspellDictionaryManager" Height="450" Width="800"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
@@ -36,13 +37,13 @@
 				         SelectedItem="{Binding SelectedDictionaryLanguage}"  DisplayMemberPath ="DisplayName" SelectedIndex="0"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"/>
-		<TextBox Style="{DynamicResource TextBoxStyle}" Grid.Row="0" Grid.Column="2" Margin="10 5 5 5" controls:TextBoxHelper.Watermark="Enter new dictionary language"
+		<TextBox Style="{DynamicResource TextBoxStyle}" Grid.Row="0" Grid.Column="2" Margin="10 5 5 5" Height="25"  controls:TextBoxHelper.Watermark="Enter new dictionary language"
 		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True">
 			<TextBox.InputBindings>
 				<KeyBinding Key="Enter" Command="{Binding CreateHunspellDictionaryCommand}" />
 			</TextBox.InputBindings>
 		</TextBox>
-		<Button Style="{DynamicResource GreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="2" Grid.Column="2" Width="200" Height="50"
-                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0 10 0 0"/>
+		<Button Style="{DynamicResource GreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="2" Grid.Column="2" Width="100" Height="30"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 10 0 0"/>
 	</Grid>
 </controls:MetroWindow>

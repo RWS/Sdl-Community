@@ -255,8 +255,8 @@
 
 	<Style x:Key="GreenButtonsStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#FF1E8923"/>
-		<Setter Property="BorderBrush" Value="#FF1E8923"/>
+		<Setter Property="Background" Value="#FF6DC371"/>
+		<Setter Property="BorderBrush" Value="#FF6DC371"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Foreground" Value="#ffffff"/>
 		<Setter Property="HorizontalContentAlignment" Value="Center"/>
@@ -284,17 +284,17 @@
 							<Setter Property="Foreground" Value="#333333" />
 						</Trigger>
 						<Trigger Property="IsMouseOver" Value="True">
-							<Setter Property="Background" Value="#FF1E8923" />
-							<Setter Property="BorderBrush" Value="#FF1E8923" />
+							<Setter Property="Background" Value="#FF619B9E" />
+							<Setter Property="BorderBrush" Value="#FF619B9E" />
 							<Setter Property="Foreground" Value="#ffffff" />
 						</Trigger>
 						<Trigger Property="IsPressed" Value="True">
-							<Setter Property="Background" Value="#ED7030" />
-							<Setter Property="BorderBrush" Value="#ED7030"/>
+							<Setter Property="Background" Value="#008C95" />
+							<Setter Property="BorderBrush" Value="#008C95"/>
 							<Setter Property="Foreground" Value="#ffffff"/>
 						</Trigger>
 						<Trigger Property="IsFocused" Value="true">
-							<Setter TargetName="Chrome" Property="BorderBrush" Value="#FF1E8923" />
+							<Setter TargetName="Chrome" Property="BorderBrush" Value="#FF619B9E" />
 						</Trigger>
 					</ControlTemplate.Triggers>
 				</ControlTemplate>
