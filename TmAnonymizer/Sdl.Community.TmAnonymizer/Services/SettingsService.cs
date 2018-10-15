@@ -131,6 +131,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			foreach (var tmFile in tmFiles)
 			{
 				tmFile.IsSelected = false;
+
+				if (!string.IsNullOrEmpty(tmFile.CachePath) && !File.Exists(tmFile.CachePath))
+				{
+					tmFile.CachePath = string.Empty;
+				}
 			}
 
 			settings.TmFiles = tmFiles;
