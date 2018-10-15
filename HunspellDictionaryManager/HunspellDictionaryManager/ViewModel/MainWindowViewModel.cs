@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
+using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
 
@@ -11,6 +13,10 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		#region Private Fields
 		private ObservableCollection<HunspellLangDictionaryModel> _dictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
+		private string _newDictionaryLanguage;
+
+		private ICommand _createHunspellDictionaryCommand;
+
 		#endregion
 
 		#region Constructors
@@ -37,6 +43,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_dictionaryLanguages = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string NewDictionaryLanguage
+		{
+			get => _newDictionaryLanguage;
+			set
+			{
+				_newDictionaryLanguage = value;
 				OnPropertyChanged();
 			}
 		}
@@ -81,6 +97,15 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				}
 			}
 		}
+
+		private void CreateHunspellDictionaryAction()
+		{
+
+		}
+		#endregion
+
+		#region Commands
+		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
 		#endregion
 	}
 }
