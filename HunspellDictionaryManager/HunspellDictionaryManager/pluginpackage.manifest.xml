@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
+	<PlugInName>Hunspell Dictionary Manager</PlugInName>
+	<Version>1.0</Version>
+	<Description></Description>
+	<Author></Author>
+	<Include>
+		<File>FontAwesome.WPF.dll</File>
+		<File>MahApps.Metro.dll</File>
+		<File>System.Windows.Interactivity.dll</File>
+	</Include>
+	<RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+</PluginPackage>
