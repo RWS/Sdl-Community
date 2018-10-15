@@ -28,6 +28,7 @@
 								<RowDefinition Height="Auto"/>
 								<RowDefinition Height="Auto"/>
 								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
 							</Grid.RowDefinitions>
 
 							<TextBlock Text="Name: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" Grid.Column="0" Grid.Row="0" />
@@ -41,11 +42,14 @@
 
 							<TextBlock Text="Server-based: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" Grid.Column="0" Grid.Row="3" />
 							<TextBlock Text="{Binding Path=IsServerTm}" Grid.Column="1" Grid.Row="3" Margin="1"/>
+						
+							<TextBlock Text="Cache Available: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" Grid.Column="0" Grid.Row="4" />
+							<TextBlock Text="{Binding Path=IsTmCache}" Grid.Column="1" Grid.Row="4" Margin="1"/>
+							
+							<TextBlock Text="Units: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" Grid.Column="0" Grid.Row="5" />
+							<TextBlock Text="{Binding Path=TranslationUnits}" Grid.Column="1" Grid.Row="5" Margin="1"/>
 
-							<TextBlock Text="Units: " Style="{StaticResource PropertyTitleLabel.TextBlock.Style}" Grid.Column="0" Grid.Row="4" />
-							<TextBlock Text="{Binding Path=TranslationUnits}" Grid.Column="1" Grid.Row="4" Margin="1"/>
-
-							<GroupBox Header="Language Directions" Margin="0,5,0,0" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Height="130">
+							<GroupBox Header="Language Directions" Margin="0,5,0,0" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Height="130">
 								<DataGrid Margin="0,0,0,0"
 								        Style="{StaticResource FilesGridStyle}" 							
 								        FontFamily="Segoe UI"								

@@ -9,7 +9,6 @@ using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
-using FieldValue = Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions.FieldValue;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
 {
@@ -45,13 +44,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					return languageDirection.TranslationUnits;
 				}
 
-				//TODO [PACH 14-10-2018]
-				// temporary changes... for dev. testing
-				var oPath = Path.Combine(@"C:\temp\_temp\", tmFile.Name.Replace(@"\", "_") + ".xml");
-				var serializer = new SerializerService();
-				if (File.Exists(oPath))
+				if (File.Exists(tmFile.CachePath))
 				{
-					languageDirection.TranslationUnits = serializer.Read<List<TmTranslationUnit>>(oPath);
+					var serializer = new SerializerService();
+					context.Report(0, "Reading data from cache...");
+					languageDirection.TranslationUnits = serializer.Read<List<TmTranslationUnit>>(tmFile.CachePath);
 					return languageDirection.TranslationUnits;
 				}
 
@@ -78,14 +75,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 
-
-				///TODO [PACH 14-10-2018]
-				serializer.Save(languageDirection.TranslationUnits, oPath);
+				SaveTmCacheStorage(context, tmFile, languageDirection);
 
 				return languageDirection.TranslationUnits;
 			}
 		}
-
+	
 		public List<TmTranslationUnit> LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
 		{
 			var translationUnits = new List<TmTranslationUnit>();
@@ -99,6 +94,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return translationUnits;
+		}
+
+		public void SaveTmCacheStorage(ProgressDialogContext context, TmFile tmFile, TmLanguageDirection languageDirection)
+		{
+			context.Report(0, "Saving data to cache...");
+			if (string.IsNullOrEmpty(tmFile.CachePath) || !File.Exists(tmFile.CachePath))
+			{
+				var path = Path.Combine(_settingsService.PathInfo.TemporaryStorageFullPath,
+					Path.GetFileName(tmFile.Name) + "." +
+					languageDirection.Source.Name + "-" +
+					languageDirection.Target.Name + ".xml");
+
+				var index = 0;
+				while (File.Exists(path) && index < 1000)
+				{
+					path = Path.Combine(_settingsService.PathInfo.TemporaryStorageFullPath,
+						Path.GetFileName(tmFile.Name) + "." +
+						languageDirection.Source.Name + "-" +
+						languageDirection.Target.Name + "." +
+						(index++).ToString().PadLeft(4, '0') + ".xml");
+				}
+
+				tmFile.CachePath = path;
+			}
+
+			var serializer = new SerializerService();
+			serializer.Save(languageDirection.TranslationUnits, tmFile.CachePath);
+
+			var settings = _settingsService.GetSettings();
+			_settingsService.SaveSettings(settings);
 		}
 
 		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(ProgressDialogContext context,
@@ -341,6 +366,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 
 				tm.Save();
+
+				foreach (var languageDirection in translationMemory.TmFile.TmLanguageDirections)
+				{
+					SaveTmCacheStorage(context, translationMemory.TmFile, languageDirection);
+				}
 			}
 		}
 
@@ -360,15 +390,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return;
 			}
 
-			foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
+			foreach (var translationMemory in anonymizeTranslationMemories)
 			{
-				var tm = new FileBasedTranslationMemory(anonymizeTranslationMemory.TmFile.Path);
+				var tm = new FileBasedTranslationMemory(translationMemory.TmFile.Path);
 
 				var groupsOf = 200;
-				var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(anonymizeTranslationMemory.TranslationUnits) };
-				if (anonymizeTranslationMemory.TranslationUnits.Count > groupsOf)
+				var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationMemory.TranslationUnits) };
+				if (translationMemory.TranslationUnits.Count > groupsOf)
 				{
-					tusGroups = anonymizeTranslationMemory.TranslationUnits.ChunkBy(groupsOf);
+					tusGroups = translationMemory.TranslationUnits.ChunkBy(groupsOf);
 				}
 
 				if (tusGroups.Count == 0)
@@ -406,6 +436,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 
 				tm.Save();
+
+				foreach (var languageDirection in translationMemory.TmFile.TmLanguageDirections)
+				{
+					SaveTmCacheStorage(context, translationMemory.TmFile, languageDirection);
+				}
 			}
 		}
 
@@ -431,9 +466,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return unit;
 		}
 
-		private static List<FieldValue> SetFieldValues(FieldValues fieldValues)
+		private static List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
 		{
-			var result = new List<FieldValue>();
+			var result = new List<Model.FieldDefinitions.FieldValue>();
 
 			foreach (var fieldValue in fieldValues)
 			{
@@ -444,22 +479,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					case FieldValueType.SingleString:
 						var singleStringValue = new Model.FieldDefinitions.SingleStringFieldValue();
 						singleStringValue.Name = fieldValue.Name;
-						singleStringValue.Value = fieldValue.GetValueString();
+						singleStringValue.Value = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0];
 
 						result.Add(singleStringValue);
 						break;
 					case FieldValueType.MultipleString:
 						var multipleStringValue = new Model.FieldDefinitions.MultipleStringFieldValue();
 						multipleStringValue.Name = fieldValue.Name;
-						multipleStringValue.Values = 
-							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList());
+						multipleStringValue.Values =
+							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType));
 
 						result.Add(multipleStringValue);
 						break;
 					case FieldValueType.DateTime:
 						var dateTimeValue = new Model.FieldDefinitions.DateTimeFieldValue();
 						dateTimeValue.Name = fieldValue.Name;
-						dateTimeValue.Value = DateTime.Parse(fieldValue.GetValueString());
+						dateTimeValue.Value = DateTime.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
 
 						result.Add(dateTimeValue);
 						break;
@@ -474,7 +509,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							singlePickValue.Value.Name = singlePicklistFieldValue.Value.Name;
 
 							result.Add(singlePickValue);
-						}						
+						}
 						break;
 					case FieldValueType.MultiplePicklist:
 						var multiplePickValue = new Model.FieldDefinitions.MultiplePicklistFieldValue();
@@ -485,12 +520,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							multiplePickValue.Values = multiplePicklistFieldValue.Values;
 							result.Add(multiplePickValue);
-						}					
+						}
 						break;
 					case FieldValueType.Integer:
 						var intValue = new Model.FieldDefinitions.IntFieldValue();
 						intValue.Name = fieldValue.Name;
-						intValue.Value = int.Parse(fieldValue.GetValueString());
+						intValue.Value = int.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
 
 						result.Add(intValue);
 						break;
@@ -502,9 +537,78 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return result;
 		}
 
-		private static IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		private static FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
 		{
-			//TODO [PACH 14-10-2018]
+			var result = new FieldValues();
+			foreach (var fieldValue in fieldValues)
+			{
+				switch (fieldValue.ValueType)
+				{
+					case FieldValueType.Unknown:
+						break;
+					case FieldValueType.SingleString:
+						var singleStringValue = new SingleStringFieldValue();
+						singleStringValue.Name = fieldValue.Name;
+						singleStringValue.Value = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0];
+
+						result.Add(singleStringValue);
+						break;
+					case FieldValueType.MultipleString:
+						var multipleStringValue = new MultipleStringFieldValue();
+						multipleStringValue.Name = fieldValue.Name;
+						multipleStringValue.Values =
+							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType));
+
+						result.Add(multipleStringValue);
+						break;
+					case FieldValueType.DateTime:
+						var dateTimeValue = new DateTimeFieldValue();
+						dateTimeValue.Name = fieldValue.Name;
+						dateTimeValue.Value = DateTime.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+
+						result.Add(dateTimeValue);
+						break;
+					case FieldValueType.SinglePicklist:
+						var singlePickValue = new SinglePicklistFieldValue();
+						singlePickValue.Name = fieldValue.Name;
+						singlePickValue.Value = new PicklistItem();
+
+						if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue singlePicklistFieldValue)
+						{
+							singlePickValue.Value.ID = singlePicklistFieldValue.Value.ID;
+							singlePickValue.Value.Name = singlePicklistFieldValue.Value.Name;
+
+							result.Add(singlePickValue);
+						}
+						break;
+					case FieldValueType.MultiplePicklist:
+						var multiplePickValue = new MultiplePicklistFieldValue();
+						multiplePickValue.Name = fieldValue.Name;
+						multiplePickValue.Values = new List<PicklistItem>();
+
+						if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
+						{
+							multiplePickValue.Values = multiplePicklistFieldValue.Values;
+							result.Add(multiplePickValue);
+						}
+						break;
+					case FieldValueType.Integer:
+						var intValue = new IntFieldValue();
+						intValue.Name = fieldValue.Name;
+						intValue.Value = int.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+
+						result.Add(intValue);
+						break;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+
+			return result;
+		}
+
+		private static List<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		{
 			var multipleStringValues = new List<string>();
 			var trimStart = fieldValue.TrimStart('(');
 			var trimEnd = trimStart.TrimEnd(')');
@@ -522,44 +626,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return multipleStringValues;
-		}
-
-		private static FieldValues GetFieldValues(IEnumerable<FieldValue> fieldValues)
-		{
-			var result = new FieldValues();
-			foreach (var fieldValue in fieldValues)
-			{
-				switch (fieldValue.ValueType)
-				{
-					case FieldValueType.Unknown:
-						break;
-					case FieldValueType.SingleString:
-						var singleStringValue = new Model.FieldDefinitions.SingleStringFieldValue();
-						singleStringValue.Name = fieldValue.Name;
-						singleStringValue.Value = fieldValue.GetValueString();						
-						break;
-					case FieldValueType.MultipleString:
-						break;
-					case FieldValueType.DateTime:
-						var dateTimeValue = new Model.FieldDefinitions.DateTimeFieldValue();
-						dateTimeValue.Name = fieldValue.Name;
-						dateTimeValue.Value = DateTime.Parse(fieldValue.GetValueString());
-						break;
-					case FieldValueType.SinglePicklist:
-						break;
-					case FieldValueType.MultiplePicklist:
-						break;
-					case FieldValueType.Integer:
-						var intValue = new Model.FieldDefinitions.IntFieldValue();
-						intValue.Name = fieldValue.Name;
-						intValue.Value = int.Parse(fieldValue.GetValueString());
-						break;
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
-			}
-
-			return result;
 		}
 
 		private void PrepareTranslationUnits(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)

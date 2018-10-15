@@ -32,19 +32,22 @@
 					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
 						<Image Source="../Resources/TranslationMemoriesFolder_Open.ico"/>
 					</Button>
-					<Button Command="{Binding SelectTmCommand}" ToolTip="Select tm" Margin="5,0,0,0">
+					<Button Command="{Binding SelectTmCommand}" ToolTip="Add TM" Margin="5,0,0,0">
 						<Image Source="../Resources/TranslationMemory.ico"  />
 					</Button>
-					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Load Server Based tms" Margin="5,0,0,0">
+					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Add Server Based TM's" Margin="5,0,0,0">
 						<Image Source="../Resources/ServerBasedTranslationMemory.ico"  />
 					</Button>
-					<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected tms" Margin="5,0,0,0">
+					<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected TM's" Margin="5,0,0,0">
 						<Image Source="../Resources/Remove.ico"/>
+					</Button>
+					<Button Command="{Binding ClearCacheCommand}" ToolTip="Clear cache from selected TM's" Margin="5,0,0,0">
+						<Image Source="../Resources/RemoveCache.ico" Height="17.5" />
 					</Button>
 				</ToolBar>
 			</ToolBarTray>
 		</DockPanel>
-		
+
 		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="LightGray">
 			<controls:SortAwareDataGrid Style="{StaticResource FilesGridStyle}" 
 				        DefaultColumnName="Name"
@@ -86,20 +89,45 @@
 											<Style TargetType="Image">
 												<Setter Property="Source" Value="../Resources/TranslationMemory.ico"/>
 												<Style.Triggers>
-													<DataTrigger Binding="{Binding IsServerTm}" Value="True">
-														<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemory.ico"/>
-													</DataTrigger>
+													<MultiDataTrigger>
+														<MultiDataTrigger.Conditions>
+															<Condition Binding="{Binding IsTmCache}" Value="False"/>
+															<Condition Binding="{Binding IsServerTm}" Value="True"/>
+														</MultiDataTrigger.Conditions>
+														<MultiDataTrigger.Setters>
+															<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemory.ico"/>
+														</MultiDataTrigger.Setters>
+													</MultiDataTrigger>
+													<MultiDataTrigger>
+														<MultiDataTrigger.Conditions>
+															<Condition Binding="{Binding IsTmCache}" Value="True"/>
+															<Condition Binding="{Binding IsServerTm}" Value="False"/>
+														</MultiDataTrigger.Conditions>
+														<MultiDataTrigger.Setters>
+															<Setter Property="Source" Value="../Resources/TranslationMemoryCache.ico"/>
+														</MultiDataTrigger.Setters>
+													</MultiDataTrigger>
+													<MultiDataTrigger>
+														<MultiDataTrigger.Conditions>
+															<Condition Binding="{Binding IsTmCache}" Value="True"/>
+															<Condition Binding="{Binding IsServerTm}" Value="True"/>
+														</MultiDataTrigger.Conditions>
+														<MultiDataTrigger.Setters>
+															<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemoryCache.ico"/>
+														</MultiDataTrigger.Setters>
+													</MultiDataTrigger>
 												</Style.Triggers>
 											</Style>
 										</Image.Style>
 									</Image>
+
 									<TextBlock Text="{Binding Name}" TextWrapping="WrapWithOverflow" Style="{StaticResource CustomToolTip.TextBlock.Style}"/>
 								</StackPanel>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
-						
+
 					</DataGridTemplateColumn>
-					
+
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</Border>

@@ -8,6 +8,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		private string _name;
 		private string _description;
 		private string _path;
+		private string _cachePath;
+		private bool _isTmCache;
 		private bool _shouldRemove;
 		private bool _isServerTm;
 		private bool _isLoaded;
@@ -20,7 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			IsSelected = false;
 			IsServerTm = false;
 		}
-		
+
 		public Credentials Credentials { get; set; }
 
 		public string Name
@@ -63,6 +65,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			}
 		}
 
+		public string CachePath
+		{
+			get => _cachePath;
+			set
+			{
+				_cachePath = value;
+
+				OnPropertyChanged(nameof(CachePath));
+				OnPropertyChanged(nameof(IsTmCache));
+			}
+		}
+
+		public bool IsTmCache
+		{
+			get { return !string.IsNullOrEmpty(_cachePath); }
+		}
+
 		public bool IsLoaded
 		{
 
@@ -80,6 +99,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			set
 			{
 				_isSelected = value;
+
+				if (!_isSelected && TmLanguageDirections != null)
+				{
+					foreach (var languageDirection in TmLanguageDirections)
+					{
+						languageDirection?.TranslationUnits?.Clear();
+					}
+				}
+
 				OnPropertyChanged(nameof(IsSelected));
 			}
 		}
@@ -124,6 +152,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				_isServerTm = value;
 				OnPropertyChanged(nameof(IsServerTm));
 			}
-		}		
+		}
 	}
 }

@@ -1,8 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Newtonsoft.Json;
+using Sdl.Community.SdlTmAnonymizer.Services.Converters;
 using Sdl.LanguagePlatform.Core;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
@@ -11,9 +12,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	{
 		public void Save<T>(T obj, string path)
 		{
+			var serializer = new XmlSerializer(typeof(T), new[]{
+				typeof(Tag),
+				typeof(Text)
+			});
+
 			using (var w = new StreamWriter(path, false, Encoding.UTF8))
 			{
-				w.WriteLine(Serialize(obj));
+				serializer.Serialize(w, obj);
+			}
+		}
+
+		public void SaveJson<T>(T obj, string path)
+		{
+			var serializer = new JsonSerializer();
+
+			using (var w = new StreamWriter(path, false, Encoding.UTF8))
+			{
+				serializer.Serialize(w, obj);
 			}
 		}
 
@@ -42,13 +58,38 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			if (File.Exists(path))
 			{
-				string content;
+				var serializer = new XmlSerializer(typeof(T), new[]{
+					typeof(Tag),
+					typeof(Text)
+				});
+
+				object content;
 				using (var w = new StreamReader(path, Encoding.UTF8))
 				{
-					content = w.ReadToEnd();
+					content = serializer.Deserialize(w);
 				}
 
-				return Deserialize<T>(content);
+				return (T)content;
+			}
+
+			return default(T);
+		}
+
+		public T ReadJson<T>(string path) where T : new()
+		{
+			if (File.Exists(path))
+			{
+				var serializer = new JsonSerializer();
+				serializer.Converters.Add(new SegmentElementTypeConverter());
+				serializer.Converters.Add(new FieldValueTypeConverter());
+
+				object content;
+				using (var w = new StreamReader(path, Encoding.UTF8))
+				{
+					content = serializer.Deserialize(w, typeof(T));
+				}
+
+				return (T)content;
 			}
 
 			return default(T);

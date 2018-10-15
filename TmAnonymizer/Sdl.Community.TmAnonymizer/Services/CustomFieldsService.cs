@@ -239,14 +239,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				if (tusToUpdate.Count > 0)
 				{
 					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-				}				
+				}
 			}
 
+			foreach (var languageDirection in tmFile.TmLanguageDirections)
+			{
+				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+			}
 		}
 
-		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tm, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
+		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
 		{
-			var serverBasedTm = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
+			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
 			var languageDirections = new List<LanguageDirection>();
 			foreach (var languageDirection in serverBasedTm.LanguageDirections)
@@ -258,7 +262,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				});
 			}
 
-			var translationUnits = tmService.LoadTranslationUnits(context, tm, translationProvideServer, languageDirections);
+			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
 			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
 
@@ -329,6 +333,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 			}
+
+			foreach (var languageDirection in tmFile.TmLanguageDirections)
+			{
+				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+			}
 		}
 
 		private static List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
@@ -340,31 +349,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var update = false;
 				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
 				{
-					if (!anonymizedField.IsPickList)
+					foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
 					{
-						foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
+						foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 						{
-							foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+							switch (fieldValue.ValueType)
 							{
-								switch (fieldValue.ValueType)
-								{
-									case FieldValueType.SingleString:
-										update = true;
-										UpdateSingleStringFieldValue(fieldValue, customFieldValue);
-										break;
-									case FieldValueType.MultipleString:
-										update = true;
-										UpdateMultipleStringFieldValue(fieldValue, customFieldValue);
-										break;
-									case FieldValueType.DateTime:
-										update = true;
-										UpdateDateTimeFieldValue(fieldValue, customFieldValue);
-										break;
-									case FieldValueType.Integer:
-										update = true;
-										UpdateIntFieldValue(fieldValue, customFieldValue);
-										break;
-								}
+								case FieldValueType.SingleString:
+									update = true;
+									UpdateSingleStringFieldValue(fieldValue, customFieldValue);
+									break;
+								case FieldValueType.MultipleString:
+									update = true;
+									UpdateMultipleStringFieldValue(fieldValue, customFieldValue);
+									break;
+								case FieldValueType.DateTime:
+									update = true;
+									UpdateDateTimeFieldValue(fieldValue, customFieldValue);
+									break;
+								case FieldValueType.Integer:
+									update = true;
+									UpdateIntFieldValue(fieldValue, customFieldValue);
+									break;
+								case FieldValueType.MultiplePicklist:
+									update = true;
+									UpdateMultiplePickListFieldValue(fieldValue, customFieldValue);
+									break;
+								case FieldValueType.SinglePicklist:
+									update = true;
+									UpdateSinglePicklistFieldValue(fieldValue, customFieldValue);
+									break;
 							}
 						}
 					}
@@ -377,6 +391,54 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return units;
+		}
+
+		private static void UpdateSinglePicklistFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			var picklistFieldValue = new Model.FieldDefinitions.SinglePicklistFieldValue();
+
+			if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue multiplePicklistFieldValue &&
+				multiplePicklistFieldValue.Value.Name.Equals(customFieldValue.Value))
+			{
+				multiplePicklistFieldValue.Value.Name = customFieldValue.NewValue;
+
+				picklistFieldValue.ValueType = FieldValueType.SinglePicklist;
+				picklistFieldValue.Name = fieldValue.Name;
+				picklistFieldValue.Value = new PicklistItem(multiplePicklistFieldValue.Value.Name)
+				{
+					ID = multiplePicklistFieldValue.Value.ID
+				};
+
+				fieldValue.Clear();
+				fieldValue.Merge(picklistFieldValue);
+			}
+		}
+
+		private static void UpdateMultiplePickListFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			var values = new List<PicklistItem>();
+			if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
+			{
+				foreach (var picklistItem in multiplePicklistFieldValue.Values)
+				{
+					if (picklistItem.Name.Equals(customFieldValue.Value))
+					{
+						picklistItem.Name = customFieldValue.NewValue;
+					}
+
+					values.Add(new PicklistItem(picklistItem.Name) { ID = picklistItem.ID });
+				}
+			}
+
+			var picklistFieldValue = new Model.FieldDefinitions.MultiplePicklistFieldValue
+			{
+				ValueType = FieldValueType.MultiplePicklist,
+				Name = fieldValue.Name,
+				Values = values
+			};
+
+			fieldValue.Clear();
+			fieldValue.Merge(picklistFieldValue);
 		}
 
 		private static void UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
