@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Xml;
 using System.Xml.Linq;
 using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
