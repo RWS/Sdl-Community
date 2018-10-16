@@ -8,7 +8,7 @@
         mc:Ignorable="d"
 		GlowBrush="#008C95"
         WindowTitleBrush="#008C95"
-        Title="HunspellDictionaryManager" Height="450" Width="800"
+        Title="HunspellDictionaryManager" Height="200" Width="650"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
@@ -25,6 +25,7 @@
 			<Style TargetType="{x:Type TextBox}">
 				<Setter Property="Margin" Value="10,5,5,5"/>
 				<Setter Property="Height" Value="25"/>
+				<Setter Property="Width" Value="300"/>
 				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
 			</Style>
 			<Style TargetType="{x:Type Label}">
@@ -39,20 +40,23 @@
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"></ColumnDefinition>
 			<ColumnDefinition Width="*"></ColumnDefinition>
-			<ColumnDefinition Width="*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<Label Name="selectLbl" Grid.Row="0"  Grid.Column="0" Content="Please select appropiate dictionary language" Margin="10 0 0 0" />
-		<ComboBox Grid.Row="0" Grid.Column="1" Height="25"
+		<ComboBox Grid.Row="0" Grid.Column="1" Height="25" Width="300"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				         SelectedItem="{Binding SelectedDictionaryLanguage}"  DisplayMemberPath ="DisplayName" SelectedIndex="0"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language">			
 		</ComboBox>
-		<TextBox  Grid.Row="0" Grid.Column="2"
+		
+		<Label Name="enterLangLbl" Grid.Row="1"  Grid.Column="0" Content="Enter new dictionary language" Margin="10 0 0 0" />
+		<TextBox  Grid.Row="1" Grid.Column="1"
 				 controls:TextBoxHelper.Watermark="Enter new dictionary language"  ToolTip="Dictionary name format example: de_De or de-DE" 
 		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 		</TextBox>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="2" Grid.Column="2" Width="100" Height="30"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="2" Grid.Column="1" Width="100" Height="30"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 10 0 0"/>
+		<Label Name="successLbl" Grid.Row="2"  Grid.Column="0" Margin="10 80 0 0" Content="Dictionary language was successfully created!"
+			   Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 	</Grid>
 </controls:MetroWindow>

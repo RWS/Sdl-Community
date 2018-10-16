@@ -14,7 +14,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ObservableCollection<HunspellLangDictionaryModel> _dictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
 		private string _newDictionaryLanguage;
-
+		private string _labelVisibility = Constants.Hidden;
 		private ICommand _createHunspellDictionaryCommand;
 
 		#endregion
@@ -53,6 +53,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_newDictionaryLanguage = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public string LabelVisibility
+		{
+			get => _labelVisibility;
+			set
+			{
+				_labelVisibility = value;
 				OnPropertyChanged();
 			}
 		}
@@ -100,7 +110,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void CreateHunspellDictionaryAction()
 		{
-
+			LabelVisibility = Constants.Visible;
 		}
 		#endregion
 
