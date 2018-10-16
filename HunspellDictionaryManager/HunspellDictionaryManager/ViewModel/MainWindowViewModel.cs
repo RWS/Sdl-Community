@@ -19,6 +19,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _cancelCommand;
 		private MainWindow _mainWindow;
+		private string _hunspellDictionariesFolderPath;
 		#endregion
 
 		#region Constructors
@@ -76,17 +77,36 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 
+		#region Actions
+		private void CreateHunspellDictionaryAction()
+		{
+			CopyFiles();
+			UpdateConfigFile();
+
+			LabelVisibility = Constants.Visible;
+		}
+
+		private void CancelAction()
+		{
+			if (_mainWindow.IsLoaded)
+			{
+				_mainWindow.Close();
+			}
+		}
+		#endregion
+
 		#region Private Methods
+
 		/// <summary>
 		/// Load .dic and .aff files from the installed Studio location -> HunspellDictionaries folder
 		/// </summary>
 		private void LoadStudioLanguageDictionaries()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
-			var hunspellDictionaryFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
+			_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
 
 			// get .dic files from Studio HunspellDictionaries folder
-			var dictionaryFiles = Directory.GetFiles(hunspellDictionaryFolderPath, "*.dic").ToList();
+			var dictionaryFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.dic").ToList();
 			foreach (var hunspellDictionary in dictionaryFiles)
 			{
 				var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
@@ -99,7 +119,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			}
 
 			// get .aff files from Studio HunspellDictionaries folder
-			var affFiles = Directory.GetFiles(hunspellDictionaryFolderPath, "*.aff").ToList();
+			var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
 			foreach (var affFile in affFiles)
 			{
 				var dictLang = _dictionaryLanguages
@@ -113,23 +133,24 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			}
 		}
 
-		private void CreateHunspellDictionaryAction()
+		/// <summary>
+		/// Copy selected (.dic and .aff) files and rename them using the specified dictionary language
+		/// </summary>
+		private void CopyFiles()
 		{
-			var newDictionaryFilePath = Path.Combine(Path.GetDirectoryName(SelectedDictionaryLanguage.DictionaryFile), $"{NewDictionaryLanguage}.dic");
-            var newAffFilePath = Path.Combine(Path.GetDirectoryName(SelectedDictionaryLanguage.AffFile), $"{NewDictionaryLanguage}.aff");
-			
+			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage}.dic");
+			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage}.aff");
+
 			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
 			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newAffFilePath, true);
-
-			//LabelVisibility = Constants.Visible;
 		}
 
-		private void CancelAction()
+		/// <summary>
+		/// Update spellcheckmanager_config.xml file by adding a new node which contains the new dictionary language
+		/// </summary>
+		private void UpdateConfigFile()
 		{
-			if(_mainWindow.IsLoaded)
-			{
-				_mainWindow.Close();
-			}
+			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
 		}
 		#endregion
 	}
