@@ -71,7 +71,9 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		}
 		#endregion
 
-		#region Public Methods
+		#region Commands
+		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
+		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 
 		#region Private Methods
@@ -113,7 +115,13 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void CreateHunspellDictionaryAction()
 		{
-			LabelVisibility = Constants.Visible;
+			var newDictionaryFilePath = Path.Combine(Path.GetDirectoryName(SelectedDictionaryLanguage.DictionaryFile), $"{NewDictionaryLanguage}.dic");
+            var newAffFilePath = Path.Combine(Path.GetDirectoryName(SelectedDictionaryLanguage.AffFile), $"{NewDictionaryLanguage}.aff");
+			
+			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
+			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newAffFilePath, true);
+
+			//LabelVisibility = Constants.Visible;
 		}
 
 		private void CancelAction()
@@ -123,11 +131,6 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				_mainWindow.Close();
 			}
 		}
-		#endregion
-
-		#region Commands
-		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 	}
 }
