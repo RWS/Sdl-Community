@@ -219,12 +219,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						tm.Credentials.Password);
 
 					customFields.AddRange(_customFieldsService.GetServerBasedCustomFields(ProgressDialog.Current, tm,
-						translationProvider, _model.TmService));
+						translationProvider));
 				}
 				else
 				{
-					customFields.AddRange(_customFieldsService.GetFilebasedCustomField(ProgressDialog.Current, tm,
-						_model.TmService));
+					customFields.AddRange(_customFieldsService.GetFilebasedCustomField(ProgressDialog.Current, tm));
 				}
 			}, settings);
 
@@ -280,8 +279,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					if (!tm.IsServerTm)
 					{
-						_customFieldsService.AnonymizeFileBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(),
-							_model.TmService);
+						_customFieldsService.AnonymizeFileBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList());
 					}
 					else
 					{
@@ -290,8 +288,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						_customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider,
-							_model.TmService);
+						_customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider);
 					}
 				}
 			}, settings);
@@ -404,7 +401,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var tm in fileBasedTms)
 					{						
-						customFields.AddRange(_customFieldsService.GetFilebasedCustomField(ProgressDialog.Current, tm, _model.TmService));
+						customFields.AddRange(_customFieldsService.GetFilebasedCustomField(ProgressDialog.Current, tm));
 					}
 				}
 
@@ -417,7 +414,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						customFields.AddRange(_customFieldsService.GetServerBasedCustomFields(ProgressDialog.Current, tm, translationProvider, _model.TmService));
+						customFields.AddRange(_customFieldsService.GetServerBasedCustomFields(ProgressDialog.Current, tm, translationProvider));
 					}
 				}
 

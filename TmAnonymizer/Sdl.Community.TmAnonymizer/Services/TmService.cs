@@ -466,7 +466,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return unit;
 		}
 
-		private static List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
+		public List<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
+		{
+			var multipleStringValues = new List<string>();
+			var trimStart = fieldValue.TrimStart('(');
+			var trimEnd = trimStart.TrimEnd(')');
+			var listValues = new List<string> { trimEnd };
+			if (!fieldValueType.Equals(FieldValueType.DateTime))
+			{
+				listValues = trimEnd.Split(',').ToList();
+			}
+
+			foreach (var value in listValues)
+			{
+				var trimStartValue = value.TrimStart(' ', '"');
+				var trimEndValue = trimStartValue.TrimEnd('"');
+				multipleStringValues.Add(trimEndValue);
+			}
+
+			return multipleStringValues;
+		}
+
+		private List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
 		{
 			var result = new List<Model.FieldDefinitions.FieldValue>();
 
@@ -537,7 +558,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return result;
 		}
 
-		private static FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
+		private FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
 		{
 			var result = new FieldValues();
 			foreach (var fieldValue in fieldValues)
@@ -607,27 +628,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return result;
 		}
 
-		private static List<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
-		{
-			var multipleStringValues = new List<string>();
-			var trimStart = fieldValue.TrimStart('(');
-			var trimEnd = trimStart.TrimEnd(')');
-			var listValues = new List<string> { trimEnd };
-			if (!fieldValueType.Equals(FieldValueType.DateTime))
-			{
-				listValues = trimEnd.Split(',').ToList();
-			}
-
-			foreach (var value in listValues)
-			{
-				var trimStartValue = value.TrimStart(' ', '"');
-				var trimEndValue = trimStartValue.TrimEnd('"');
-				multipleStringValues.Add(trimEndValue);
-			}
-
-			return multipleStringValues;
-		}
-
+		
 		private void PrepareTranslationUnits(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			decimal iCurrent = 0;
@@ -668,7 +669,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static void ReadTranslationUnits(ProgressDialogContext context, ITranslationMemoryLanguageDirection languageDirection, TmLanguageDirection localLanguageDirection)
+		private void ReadTranslationUnits(ProgressDialogContext context, ITranslationMemoryLanguageDirection languageDirection, TmLanguageDirection localLanguageDirection)
 		{
 			decimal iTotalUnits = languageDirection.GetTranslationUnitCount();
 
@@ -730,7 +731,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			localLanguageDirection.TranslationUnitsCount = tus.Count;
 		}
 
-		private static IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<TranslationUnit> units)
+		private IEnumerable<TmTranslationUnit> AddTranslationUnits(IEnumerable<TranslationUnit> units)
 		{
 			var tus = new List<TmTranslationUnit>();
 			tus.AddRange(units.Select(unit => new TmTranslationUnit
