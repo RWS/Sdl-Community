@@ -14,14 +14,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 	public class MainWindowViewModel : ViewModelBase
 	{
 		#region Private Fields
+		private MainWindow _mainWindow;
 		private ObservableCollection<HunspellLangDictionaryModel> _dictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
+		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
+		private string _hunspellDictionariesFolderPath;
 		private string _newDictionaryLanguage;
 		private string _labelVisibility = Constants.Hidden;
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _cancelCommand;
-		private MainWindow _mainWindow;
-		private string _hunspellDictionariesFolderPath;
+		private ICommand _deleteCommand;
 		#endregion
 
 		#region Constructors
@@ -39,6 +41,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			set
 			{
 				_selectedDictionaryLanguage = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public HunspellLangDictionaryModel DeletedDictionaryLanguage
+		{
+			get => _deletedDictionaryLanguage;
+			set
+			{
+				_deletedDictionaryLanguage = value;
 				OnPropertyChanged();
 			}
 		}
@@ -77,14 +89,19 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		#region Commands
 		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
+		public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new CommandHandler(DeleteAction, true));
+
 		#endregion
 
 		#region Actions
 		private void CreateHunspellDictionaryAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			CopyFiles();
-			UpdateConfigFile();
+			if (NewDictionaryLanguage != null)
+			{
+				CopyFiles();
+				UpdateConfigFile();
+			}
 		}
 
 		private void CancelAction()
@@ -93,6 +110,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			{
 				_mainWindow.Close();
 			}
+		}
+
+		private void DeleteAction()
+		{
+			if (DeletedDictionaryLanguage != null)
+			{
+				DeleteSelectedFies();
+				RemoveConfigLanguageNode();
+			}
+			// display message that language dictionary was deleted correctly;
 		}
 		#endregion
 
@@ -118,14 +145,14 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 						DisplayName = Path.GetFileNameWithoutExtension(hunspellDictionary)
 					};
 
-					_dictionaryLanguages.Add(hunspellLangDictionaryModel);
+					DictionaryLanguages.Add(hunspellLangDictionaryModel);
 				}
 
 				// get .aff files from Studio HunspellDictionaries folder
 				var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
 				foreach (var affFile in affFiles)
 				{
-					var dictLang = _dictionaryLanguages
+					var dictLang = DictionaryLanguages
 						.Where(d => Path.GetFileNameWithoutExtension(d.DictionaryFile).Equals(Path.GetFileNameWithoutExtension(affFile)))
 						.FirstOrDefault();
 
@@ -157,7 +184,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// Update spellcheckmanager_config.xml file by adding a new node which contains the new dictionary language
 		/// </summary>
 		private void UpdateConfigFile()
-		{			
+		{
 			// load xml config file
 			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
 			var xmlDoc = XDocument.Load(configFilePath);
@@ -167,7 +194,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 									  .Elements("language")
 									  .FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage);
 
-			if(string.IsNullOrEmpty(languageElem))
+			if (string.IsNullOrEmpty(languageElem))
 			{
 				var node = new XElement("language",
 					new XElement("isoCode", NewDictionaryLanguage), new XElement("dict", NewDictionaryLanguage));
@@ -175,12 +202,37 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				xmlDoc.Element("config").Add(node);
 				xmlDoc.Save(configFilePath);
 
+				LoadStudioLanguageDictionaries();
 				LabelVisibility = Constants.Visible;
 			}
 			else
 			{
 				MessageBox.Show(Constants.LanguageAlreadyExists, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
-			}									  
+			}
+		}
+
+		/// <summary>
+		/// Delete from HunspellDictionaries folder the .aff and .dic files based on user selection
+		/// </summary>
+		private void DeleteSelectedFies()
+		{
+			if (File.Exists(DeletedDictionaryLanguage.DictionaryFile))
+			{
+				File.Delete(DeletedDictionaryLanguage.DictionaryFile);
+			}
+			if (File.Exists(DeletedDictionaryLanguage.AffFile))
+			{
+				File.Delete(DeletedDictionaryLanguage.AffFile);
+			}
+			LoadStudioLanguageDictionaries();
+		}
+
+		/// <summary>
+		/// Remove corresponding nodes from the xml config file
+		/// </summary>
+		private void RemoveConfigLanguageNode()
+		{
+
 		}
 		#endregion
 	}
