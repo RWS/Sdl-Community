@@ -21,6 +21,8 @@ namespace Sdl.Community.HunspellDictionaryManager.Studio
 				Utils.InitializeWpfApplicationSettings();
 
 				var mainWindow = new MainWindow();
+				System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(mainWindow);
+
 				mainWindow.Show();
 			}
 		}

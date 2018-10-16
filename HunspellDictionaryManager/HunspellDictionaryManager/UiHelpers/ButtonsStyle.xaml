@@ -252,10 +252,9 @@
             </Setter.Value>
         </Setter>
     </Style>
-
 	<Style x:Key="GreenButtonsStyle" TargetType="{x:Type Button}">
 		<Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-		<Setter Property="Background" Value="#FF6DC371"/>
+		<Setter Property="Background" Value="#FF5EA3A6"/>
 		<Setter Property="BorderBrush" Value="#FF6DC371"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="Foreground" Value="#ffffff"/>
