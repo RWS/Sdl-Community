@@ -11,11 +11,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class CustomFieldsService
 	{
-		public List<CustomField> GetFilebasedCustomField(ProgressDialogContext context, TmFile tm, TmService tmService)
+		private readonly TmService _tmService;
+
+		public CustomFieldsService(TmService tmService)
+		{
+			_tmService = tmService;
+		}
+
+		public List<CustomField> GetFilebasedCustomField(ProgressDialogContext context, TmFile tm)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tm.Path);
 
-			var tus = tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
+			var tus = _tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
 			{
 				Source = translationMemory.LanguageDirection.SourceLanguage,
 				Target = translationMemory.LanguageDirection.TargetLanguage
@@ -30,7 +37,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return null;
 		}
 
-		public List<CustomField> GetServerBasedCustomFields(ProgressDialogContext context, TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
+		public List<CustomField> GetServerBasedCustomFields(ProgressDialogContext context, TmFile tm, TranslationProviderServer translationProvideServer)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
@@ -38,7 +45,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in translationMemory.LanguageDirections)
 			{
-				var tus = tmService.LoadTranslationUnits(context, tm, translationProvideServer, new LanguageDirection
+				var tus = _tmService.LoadTranslationUnits(context, tm, translationProvideServer, new LanguageDirection
 				{
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
@@ -54,29 +61,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return customFieldList;
 		}
-
-		private static IEnumerable<string> GetMultipleStringValues(string fieldValue, FieldValueType fieldValueType)
-		{
-			var multipleStringValues = new List<string>();
-			var trimStart = fieldValue.TrimStart('(');
-			var trimEnd = trimStart.TrimEnd(')');
-			var listValues = new List<string> { trimEnd };
-			if (!fieldValueType.Equals(FieldValueType.DateTime))
-			{
-				listValues = trimEnd.Split(',').ToList();
-			}
-
-			foreach (var value in listValues)
-			{
-				var trimStartValue = value.TrimStart(' ', '"');
-				var trimEndValue = trimStartValue.TrimEnd('"');
-				multipleStringValues.Add(trimEndValue);
-			}
-
-			return multipleStringValues;
-		}
-
-		private static IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits, string name)
+		
+		private IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits, string name)
 		{
 			var customFieldValues = new List<CustomFieldValue>();
 			var distinctFieldValues = new List<string>();
@@ -86,7 +72,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					if (fieldValue.Name.Equals(name))
 					{
-						var valueList = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType);
+						var valueList = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType);
 						foreach (var value in valueList)
 						{
 							var detailsItem = new CustomFieldValue
@@ -124,7 +110,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return details;
 		}
 
-		private static List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, List<TmTranslationUnit> translationUnits, string tmFilePath)
+		private List<CustomField> GetCustomFieldList(FieldDefinitionCollection fieldDefinitions, List<TmTranslationUnit> translationUnits, string tmFilePath)
 		{
 			var customFieldList = new List<CustomField>();
 
@@ -162,11 +148,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TmService tmService)
+		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
 		{
 			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
-			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null,
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null,
 				new LanguageDirection
 				{
 					Source = tm.LanguageDirection.SourceLanguage,
@@ -230,7 +216,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 						tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 					{
-						var unit = tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
+						var unit = _tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
 
 						tusToUpdate.Add(unit);
 					}
@@ -244,11 +230,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in tmFile.TmLanguageDirections)
 			{
-				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}
 		}
 
-		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer, TmService tmService)
+		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
@@ -262,7 +248,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				});
 			}
 
-			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
 			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
 
@@ -322,7 +308,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 							languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 						{
-							var unit = tmService.CreateTranslationUnit(tu, languageDirection);
+							var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
 							tusToUpdate.Add(unit);
 						}
 					}
@@ -336,11 +322,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in tmFile.TmLanguageDirections)
 			{
-				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}
 		}
 
-		private static List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
+		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var units = new List<TmTranslationUnit>();
 
@@ -441,9 +427,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Merge(picklistFieldValue);
 		}
 
-		private static void UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private void UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
 				var index = listString.IndexOf(customFieldValue.Value);
@@ -464,9 +450,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Add(multiStrngFieldValue);
 		}
 
-		private static void UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private void UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
@@ -488,9 +474,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Merge(singleStringFieldValue);
 		}
 
-		private static void UpdateDateTimeFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private void UpdateDateTimeFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
 				var index = listString.IndexOf(customFieldValue.Value);
@@ -509,9 +495,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Add(dateTimeFieldValue);
 		}
 
-		private static void UpdateIntFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		private void UpdateIntFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
-			var listString = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
 				var index = listString.IndexOf(customFieldValue.Value);

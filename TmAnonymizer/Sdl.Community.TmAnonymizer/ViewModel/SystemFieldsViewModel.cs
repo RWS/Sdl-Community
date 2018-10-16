@@ -151,12 +151,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						tm.Credentials.Password);
 
 					users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
-						translationProvider, _model.TmService));
+						translationProvider));
 				}
 				else
 				{
-					users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm,
-						_model.TmService));
+					users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm));
 				}
 
 			}, settings);
@@ -234,7 +233,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					if (!tm.IsServerTm)
 					{
-						_systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), _model.TmService);
+						_systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList());
 					}
 
 					else if (tm.IsServerTm)
@@ -244,7 +243,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						_systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider, _model.TmService);
+						_systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider);
 					}
 				}
 			}, settings);
@@ -280,7 +279,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					foreach (var tm in fileBasedTms)
 					{
-						users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm, _model.TmService));
+						users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm));
 					}
 				}
 
@@ -293,7 +292,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm, translationProvider, _model.TmService));
+						users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm, translationProvider));
 					}
 				}
 

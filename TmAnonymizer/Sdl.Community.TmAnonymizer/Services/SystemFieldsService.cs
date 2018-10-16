@@ -11,11 +11,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 {
 	public class SystemFieldsService
 	{
-		public List<User> GetUniqueFileBasedSystemFields(ProgressDialogContext context, TmFile tm, TmService tmService)
+		private readonly TmService _tmService;
+
+		public SystemFieldsService(TmService tmService)
+		{
+			_tmService = tmService;
+		}
+
+		public List<User> GetUniqueFileBasedSystemFields(ProgressDialogContext context, TmFile tm)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tm.Path);
 
-			var tus = tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
+			var tus = _tmService.LoadTranslationUnits(context, tm, null, new LanguageDirection
 			{
 				Source = translationMemory.LanguageDirection.SourceLanguage,
 				Target = translationMemory.LanguageDirection.TargetLanguage
@@ -31,7 +38,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return null;
 		}
 
-		public List<User> GetUniqueServerBasedSystemFields(ProgressDialogContext context, TmFile tm, TranslationProviderServer translationProvideServer, TmService tmService)
+		public List<User> GetUniqueServerBasedSystemFields(ProgressDialogContext context, TmFile tm, TranslationProviderServer translationProvideServer)
 		{
 			var translationMemory = translationProvideServer.GetTranslationMemory(tm.Path, TranslationMemoryProperties.All);
 
@@ -39,7 +46,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in translationMemory.LanguageDirections)
 			{
-				var tus = tmService.LoadTranslationUnits(context, tm, translationProvideServer, new LanguageDirection
+				var tus = _tmService.LoadTranslationUnits(context, tm, translationProvideServer, new LanguageDirection
 				{
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
@@ -56,11 +63,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return uniqueUsersCollection;
 		}
 
-		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TmService tmService)
+		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers)
 		{
 			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
-			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, null, new LanguageDirection
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null, new LanguageDirection
 			{
 				Source = tm.LanguageDirection.SourceLanguage,
 				Target = tm.LanguageDirection.TargetLanguage
@@ -138,7 +145,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 						    tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 						{
-							var unit = tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
+							var unit = _tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
 
 							tusToUpdate.Add(unit);
 						}
@@ -155,11 +162,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in tmFile.TmLanguageDirections)
 			{
-				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}			
 		}
 
-		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer, TmService tmService)
+		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
@@ -172,7 +179,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Target = languageDirection.TargetLanguage
 				});
 			}
-			var translationUnits = tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Count;
@@ -248,7 +255,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 							    languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
 							{
-								var unit = tmService.CreateTranslationUnit(tu, languageDirection);
+								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
 								tusToUpdate.Add(unit);
 							}
 						}
@@ -265,7 +272,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var languageDirection in tmFile.TmLanguageDirections)
 			{
-				tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}
 		}
 
