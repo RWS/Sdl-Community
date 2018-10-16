@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Xml;
 using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
@@ -150,7 +151,27 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void UpdateConfigFile()
 		{
+			// load xml config file
 			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
+			var doc = new XmlDocument();
+			doc.Load(configFilePath);
+
+			// clone first language node and set new dictionary language		
+			var clonedLangNode = doc.DocumentElement.SelectSingleNode("language").Clone();
+			clonedLangNode.FirstChild.ChildNodes[0].Value = NewDictionaryLanguage;
+			clonedLangNode.LastChild.ChildNodes[0].Value = NewDictionaryLanguage;
+
+			// create a new language node
+			var newLanguageNode = doc.CreateElement("language");
+
+			// set the inner xml of the new language node with the inner xml of the cloned language node
+			newLanguageNode.InnerXml = clonedLangNode.InnerXml;
+
+			// append the new language node to DocumentElement
+			doc.DocumentElement.AppendChild(newLanguageNode);
+
+			// save xml config document
+			doc.Save(configFilePath);
 		}
 		#endregion
 	}
