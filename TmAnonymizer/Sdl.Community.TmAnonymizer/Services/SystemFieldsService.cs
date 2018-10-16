@@ -153,6 +153,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (tusToUpdate.Count > 0)
 					{
+						//TODO - output results to log
 						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 					}					
 				}
@@ -262,6 +263,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 						if (tusToUpdate.Count > 0)
 						{
+							//TODO - output results to log
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 						}
 					}
