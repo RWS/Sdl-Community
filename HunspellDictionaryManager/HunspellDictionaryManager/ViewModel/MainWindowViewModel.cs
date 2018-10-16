@@ -82,10 +82,9 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		#region Actions
 		private void CreateHunspellDictionaryAction()
 		{
+			LabelVisibility = Constants.Hidden;
 			CopyFiles();
 			UpdateConfigFile();
-
-			LabelVisibility = Constants.Visible;
 		}
 
 		private void CancelAction()
@@ -175,6 +174,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 				xmlDoc.Element("config").Add(node);
 				xmlDoc.Save(configFilePath);
+
+				LabelVisibility = Constants.Visible;
 			}
 			else
 			{
