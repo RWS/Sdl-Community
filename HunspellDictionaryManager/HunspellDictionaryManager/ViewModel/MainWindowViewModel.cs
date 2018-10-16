@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
+using Sdl.Community.HunspellDictionaryManager.Ui;
 
 namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 {
@@ -16,12 +17,14 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private string _newDictionaryLanguage;
 		private string _labelVisibility = Constants.Hidden;
 		private ICommand _createHunspellDictionaryCommand;
-
+		private ICommand _cancelCommand;
+		private MainWindow _mainWindow;
 		#endregion
 
 		#region Constructors
-		public MainWindowViewModel()
+		public MainWindowViewModel(MainWindow mainWindow)
 		{
+			_mainWindow = mainWindow;
 			LoadStudioLanguageDictionaries();
 		}
 		#endregion
@@ -112,10 +115,19 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		{
 			LabelVisibility = Constants.Visible;
 		}
+
+		private void CancelAction()
+		{
+			if(_mainWindow.IsLoaded)
+			{
+				_mainWindow.Close();
+			}
+		}
 		#endregion
 
 		#region Commands
 		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
+		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		#endregion
 	}
 }

@@ -11,7 +11,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Ui
 		public MainWindow()
 		{
 			InitializeComponent();
-			DataContext = new MainWindowViewModel();
+			DataContext = new MainWindowViewModel(this);
 		}
 	}
 }
