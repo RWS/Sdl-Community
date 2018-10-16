@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sdl.Community.HunspellDictionaryManager", "HunspellDictionaryManager\Sdl.Community.HunspellDictionaryManager.csproj", "{DEFE5A67-B89D-4563-B3F8-3A96F5E12649}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Sdl.Community.HunspellDictionaryManager.Installer", "Sdl.Community.HunspellDictionaryManager.Installer\Sdl.Community.HunspellDictionaryManager.Installer.wixproj", "{46EDF187-715A-40BD-90AA-04DAF671152A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,12 +21,6 @@ Global
 		{DEFE5A67-B89D-4563-B3F8-3A96F5E12649}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEFE5A67-B89D-4563-B3F8-3A96F5E12649}.Release|x86.ActiveCfg = Release|Any CPU
 		{DEFE5A67-B89D-4563-B3F8-3A96F5E12649}.Release|x86.Build.0 = Release|Any CPU
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Debug|x86.ActiveCfg = Debug|x86
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Debug|x86.Build.0 = Debug|x86
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Release|Any CPU.ActiveCfg = Release|x86
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Release|x86.ActiveCfg = Release|x86
-		{46EDF187-715A-40BD-90AA-04DAF671152A}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
