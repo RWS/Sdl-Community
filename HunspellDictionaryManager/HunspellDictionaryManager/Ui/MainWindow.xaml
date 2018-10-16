@@ -27,14 +27,17 @@
                 <Setter Property="Height" Value="25"/>
                 <Setter Property="Width" Value="300"/>
                 <Setter Property="Foreground" Value="#FF00747C"/>
-                <Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
             </Style>
             <Style TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="#FF00747C"/>
-            </Style>
+				<Setter Property="FontSize" Value="14"/>
+			</Style>
             <Style TargetType="{x:Type ComboBoxItem}">
                 <Setter Property="Foreground" Value="#FF00747C"/>
-            </Style>
+				<Setter Property="FontSize" Value="14"/>
+			</Style>
             <Style TargetType="{x:Type ComboBox}">
                 <Setter Property="Foreground" Value="#3EA691"/>
                 <Setter Property="Margin" Value="10,5,0,0"/>

@@ -61,7 +61,7 @@ namespace Sdl.Community.HunspellDictionaryManager.Helpers
             }
             else
             {
-                MessageBox.Show(Constants.Studio2017ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(Constants.Studio2017ErrorMessage, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
         }

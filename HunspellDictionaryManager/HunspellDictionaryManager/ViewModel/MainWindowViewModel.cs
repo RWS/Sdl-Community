@@ -1,8 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml;
+using System.Xml.Linq;
 using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
@@ -104,33 +106,40 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void LoadStudioLanguageDictionaries()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
-			_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
-
-			// get .dic files from Studio HunspellDictionaries folder
-			var dictionaryFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.dic").ToList();
-			foreach (var hunspellDictionary in dictionaryFiles)
+			if (!string.IsNullOrEmpty(studioPath))
 			{
-				var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
+				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
+
+				// get .dic files from Studio HunspellDictionaries folder
+				var dictionaryFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.dic").ToList();
+				foreach (var hunspellDictionary in dictionaryFiles)
 				{
-					DictionaryFile = hunspellDictionary,
-					DisplayName = Path.GetFileNameWithoutExtension(hunspellDictionary)					
-				};
+					var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
+					{
+						DictionaryFile = hunspellDictionary,
+						DisplayName = Path.GetFileNameWithoutExtension(hunspellDictionary)
+					};
 
-				_dictionaryLanguages.Add(hunspellLangDictionaryModel);
-			}
-
-			// get .aff files from Studio HunspellDictionaries folder
-			var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
-			foreach (var affFile in affFiles)
-			{
-				var dictLang = _dictionaryLanguages
-					.Where(d => Path.GetFileNameWithoutExtension(d.DictionaryFile).Equals(Path.GetFileNameWithoutExtension(affFile)))
-					.FirstOrDefault();
-
-				if(dictLang != null)
-				{
-					dictLang.AffFile = affFile;
+					_dictionaryLanguages.Add(hunspellLangDictionaryModel);
 				}
+
+				// get .aff files from Studio HunspellDictionaries folder
+				var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
+				foreach (var affFile in affFiles)
+				{
+					var dictLang = _dictionaryLanguages
+						.Where(d => Path.GetFileNameWithoutExtension(d.DictionaryFile).Equals(Path.GetFileNameWithoutExtension(affFile)))
+						.FirstOrDefault();
+
+					if (dictLang != null)
+					{
+						dictLang.AffFile = affFile;
+					}
+				}
+			}
+			else
+			{
+				_mainWindow.Close();
 			}
 		}
 
@@ -150,28 +159,28 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// Update spellcheckmanager_config.xml file by adding a new node which contains the new dictionary language
 		/// </summary>
 		private void UpdateConfigFile()
-		{
+		{			
 			// load xml config file
 			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
-			var doc = new XmlDocument();
-			doc.Load(configFilePath);
+			var xmlDoc = XDocument.Load(configFilePath);
 
-			// clone first language node and set new dictionary language		
-			var clonedLangNode = doc.DocumentElement.SelectSingleNode("language").Clone();
-			clonedLangNode.FirstChild.ChildNodes[0].Value = NewDictionaryLanguage;
-			clonedLangNode.LastChild.ChildNodes[0].Value = NewDictionaryLanguage;
+			// add new language dictionary if doesn't already exists in the config file
+			var languageElem = (string)xmlDoc.Root
+									  .Elements("language")
+									  .FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage);
 
-			// create a new language node
-			var newLanguageNode = doc.CreateElement("language");
+			if(string.IsNullOrEmpty(languageElem))
+			{
+				var node = new XElement("language",
+					new XElement("isoCode", NewDictionaryLanguage), new XElement("dict", NewDictionaryLanguage));
 
-			// set the inner xml of the new language node with the inner xml of the cloned language node
-			newLanguageNode.InnerXml = clonedLangNode.InnerXml;
-
-			// append the new language node to DocumentElement
-			doc.DocumentElement.AppendChild(newLanguageNode);
-
-			// save xml config document
-			doc.Save(configFilePath);
+				xmlDoc.Element("config").Add(node);
+				xmlDoc.Save(configFilePath);
+			}
+			else
+			{
+				MessageBox.Show(Constants.LanguageAlreadyExists, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
+			}									  
 		}
 		#endregion
 	}
