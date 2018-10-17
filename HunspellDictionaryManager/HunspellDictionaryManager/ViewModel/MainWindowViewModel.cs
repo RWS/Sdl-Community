@@ -21,6 +21,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private string _hunspellDictionariesFolderPath;
 		private string _newDictionaryLanguage;
 		private string _labelVisibility = Constants.Hidden;
+		private string _resultMessage;
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _cancelCommand;
 		private ICommand _deleteCommand;
@@ -84,6 +85,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				OnPropertyChanged();
 			}
 		}
+
+		public string ResultMessage
+		{
+			get => _resultMessage;
+			set
+			{
+				_resultMessage = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		#region Commands
@@ -114,12 +125,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void DeleteAction()
 		{
+			LabelVisibility = Constants.Hidden;
 			if (DeletedDictionaryLanguage != null)
 			{
 				DeleteSelectedFies();
 				RemoveConfigLanguageNode();
-			}
-			// display message that language dictionary was deleted correctly;
+			}			
 		}
 		#endregion
 
@@ -203,12 +214,15 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				xmlDoc.Save(configFilePath);
 
 				LoadStudioLanguageDictionaries();
-				LabelVisibility = Constants.Visible;
+				ResultMessage = Constants.SuccessfullCreateMessage;
 			}
 			else
 			{
-				MessageBox.Show(Constants.LanguageAlreadyExists, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
+				//MessageBox.Show(Constants.LanguageAlreadyExists, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
+				ResultMessage = Constants.LanguageAlreadyExists;
 			}
+			LabelVisibility = Constants.Visible;
+
 		}
 
 		/// <summary>
@@ -223,8 +237,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			if (File.Exists(DeletedDictionaryLanguage.AffFile))
 			{
 				File.Delete(DeletedDictionaryLanguage.AffFile);
-			}
-			LoadStudioLanguageDictionaries();
+			}			
 		}
 
 		/// <summary>
@@ -232,7 +245,29 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void RemoveConfigLanguageNode()
 		{
+			// load xml config file
+			var configFilePath = Path.Combine(_hunspellDictionariesFolderPath, Constants.ConfigFileName);
+			var xmlDoc = XDocument.Load(configFilePath);
+			var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
 
+			// add new language dictionary if doesn't already exists in the config file
+			var languageElem = xmlDoc.Root
+									  .Elements("language")
+									  .FirstOrDefault(x => (string)x.Element("isoCode") == dictionaryLanguage);
+
+			if (languageElem != null)
+			{
+				languageElem.Remove();
+				xmlDoc.Save(configFilePath);
+
+				LoadStudioLanguageDictionaries();
+				ResultMessage = Constants.SuccessfullDeleteMessage;
+			}
+			else
+			{
+				ResultMessage = Constants.NoLanguageDictionaryFound;
+			}
+			LabelVisibility = Constants.Visible;
 		}
 		#endregion
 	}
