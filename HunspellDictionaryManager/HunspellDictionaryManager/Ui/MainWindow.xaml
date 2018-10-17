@@ -56,7 +56,7 @@
 			<ColumnDefinition Width="72*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 
-		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Please select appropiate dictionary language" Margin="3 0 0 0" />
+		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Please select appropriate dictionary language" Margin="3 0 0 0" />
 		<ComboBox Grid.Row="1" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
