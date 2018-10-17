@@ -19,11 +19,13 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
 		private string _hunspellDictionariesFolderPath;
 		private string _newDictionaryLanguage;
+		private string _resultMessageColor;
 		private string _labelVisibility = Constants.Hidden;
 		private string _resultMessage;
 		private ICommand _createHunspellDictionaryCommand;
 		private ICommand _cancelCommand;
 		private ICommand _deleteCommand;
+		private ICommand _refreshCommand;
 		#endregion
 
 		#region Constructors
@@ -93,13 +95,24 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				_resultMessage = value;
 				OnPropertyChanged();
 			}
-		}		
+		}	
+		
+		public string ResultMessageColor
+		{
+			get => _resultMessageColor;
+			set
+			{
+				_resultMessageColor = value;
+				OnPropertyChanged();
+			}
+		}
 		#endregion
 
 		#region Commands
 		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new CommandHandler(DeleteAction, true));
+		public ICommand RefreshCommand => _refreshCommand ?? (_refreshCommand = new CommandHandler(RefreshAction, true));
 
 		#endregion
 
@@ -107,7 +120,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void CreateHunspellDictionaryAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			if (NewDictionaryLanguage != null)
+			if (!string.IsNullOrEmpty(NewDictionaryLanguage))
 			{
 				CopyFiles();
 				UpdateConfigFile();
@@ -130,6 +143,17 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				DeleteSelectedFies();
 				RemoveConfigLanguageNode();
 			}
+		}
+
+		private void RefreshAction()
+		{
+			NewDictionaryLanguage = string.Empty;
+			DeletedDictionaryLanguage = new HunspellLangDictionaryModel();
+			SelectedDictionaryLanguage = new HunspellLangDictionaryModel();
+			DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
+
+			LoadStudioLanguageDictionaries();
+			LabelVisibility = Constants.Hidden;
 		}
 		#endregion
 
@@ -200,9 +224,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var xmlDoc = XDocument.Load(configFilePath);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = (string)xmlDoc.Root
-									  .Elements("language")
-									  .FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage);
+			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage);
 
 			if (string.IsNullOrEmpty(languageElem))
 			{
@@ -213,11 +235,11 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				xmlDoc.Save(configFilePath);
 
 				LoadStudioLanguageDictionaries();
-				ResultMessage = Constants.SuccessfullCreateMessage;
+				SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
 			}
 			else
 			{
-				ResultMessage = Constants.LanguageAlreadyExists;
+				SetGridSettings(Constants.LanguageAlreadyExists, Constants.RedColor);
 			}
 			LabelVisibility = Constants.Visible;
 
@@ -249,23 +271,26 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = xmlDoc.Root
-									  .Elements("language")
-									  .FirstOrDefault(x => (string)x.Element("isoCode") == dictionaryLanguage);
+			var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == dictionaryLanguage);
 
 			if (languageElem != null)
 			{
 				languageElem.Remove();
 				xmlDoc.Save(configFilePath);
-
-				LoadStudioLanguageDictionaries();
-				ResultMessage = Constants.SuccessfullDeleteMessage;
+				SetGridSettings(Constants.SuccessfullDeleteMessage, Constants.GreenColor);
 			}
 			else
 			{
-				ResultMessage = Constants.NoLanguageDictionaryFound;
+				SetGridSettings(Constants.NoLanguageDictionaryFound, Constants.RedColor);
 			}
+			RefreshAction();
 			LabelVisibility = Constants.Visible;
+		}
+
+		private void SetGridSettings(string resultMessage, string resultMessageColor)
+		{
+			ResultMessage = resultMessage;
+			ResultMessageColor = resultMessageColor;
 		}
 		#endregion
 	}
