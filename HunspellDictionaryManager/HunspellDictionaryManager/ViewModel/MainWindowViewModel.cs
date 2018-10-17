@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Sdl.Community.HunspellDictionaryManager.Commands;
@@ -94,7 +93,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				_resultMessage = value;
 				OnPropertyChanged();
 			}
-		}
+		}		
 		#endregion
 
 		#region Commands
@@ -125,12 +124,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void DeleteAction()
 		{
-			LabelVisibility = Constants.Hidden;
+			LabelVisibility = Constants.Hidden;		
 			if (DeletedDictionaryLanguage != null)
 			{
 				DeleteSelectedFies();
 				RemoveConfigLanguageNode();
-			}			
+			}
 		}
 		#endregion
 
@@ -218,7 +217,6 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			}
 			else
 			{
-				//MessageBox.Show(Constants.LanguageAlreadyExists, Constants.InformativeMessage, MessageBoxButton.OK, MessageBoxImage.Information);
 				ResultMessage = Constants.LanguageAlreadyExists;
 			}
 			LabelVisibility = Constants.Visible;

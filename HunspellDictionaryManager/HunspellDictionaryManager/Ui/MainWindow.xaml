@@ -32,7 +32,7 @@
             </Style>
             <Style TargetType="{x:Type Label}">
                 <Setter Property="Foreground" Value="#FF00747C"/>
-				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="FontSize" Value="13"/>
 			</Style>
             <Style TargetType="{x:Type ComboBoxItem}">
                 <Setter Property="Foreground" Value="#FF00747C"/>
@@ -76,11 +76,11 @@
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayName" >
 		</ComboBox>
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="3" Grid.Column="1" Width="100" Height="30"
-                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5 10 6 3"/>
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5 10 6 3" />
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="3" Grid.Column="1" Width="100" Height="30"
-                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5 10 7 3"/>
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="5 10 7 3" />
         <Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="3" Grid.Column="1" Width="100" Height="30"
-                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 10 7 3"/>
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 10 7 3" />
         <Label Name="resultMessageLbl" Grid.Row="3"  Grid.Column="0" Margin="10 50 0 0" Content="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			   Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
