@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2019" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="icon.ico" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\terms_and_conditions.rtf" />
+
+    <Property Id="WIXUI_INSTALLDIR" Value="Studio15" />
+    <!--bellow line describes the UI of the Wix installer which does not include the possibility to select an installation path-->
+    <UIRef Id="WixUI_Minimal"/>
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+    <MediaTemplate EmbedCab="yes"/>
+
+    <!-- Compoments needed for the installation - by defining the below components, installer knows to install the application to Desktop and Program Data. -->
+    <Feature Id="ProductFeature" Title="Sdl.Community.HunspellDictionaryManager.Installer" Level="1">
+      <ComponentGroupRef Id="ProductComponents" />
+			<ComponentRef Id='ApplicationProgramDataShortcut' />
+			<ComponentRef Id='ApplicationShortcutDesktop' />
+    </Feature>
+  </Product>
+
+  <!-- Create shortcut to the Desktop directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
+  <Fragment>
+    <DirectoryRef Id="DesktopFolder">
+      <Component Id="ApplicationShortcutDesktop" Guid="efeb0124-7cd7-4261-a060-8a471932f793">
+        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2019" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2019" Target="[Studio15]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio15" />
+        <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+
+	<!-- Create shortcut to the SDLTradosStudio2019Apps directory. Use .exe from the INSTALLFOLDER where the application together with all 
+	.dll dependecies will be installed. INSTALLFOLDER is the location provided by user when running .msi file -->
+	<Fragment>
+		<DirectoryRef Id="SDLTradosStudio2019Apps">
+			<Component Id="ApplicationProgramDataShortcut" Guid="b993a102-f7c3-4e21-8dbf-90396113c099">
+				<Shortcut Id="ApplicationProgDataShortcut" Name="Hunspell Dictionary Manager 2019" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2019" Target="[Studio15]\Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio15" />
+				<RemoveFolder Id="RemoveSDLTradosStudio2019Apps" Directory="SDLTradosStudio2019Apps" On="uninstall" />
+				<RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManagerShortcut" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+	
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <!-- Define location where the app will be installed, Studio15 folder (it is used because dll's needs to be loaded from the Studio folder)-->
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="SDL" Name="SDL" >
+          <Directory Id="SDLTradosStudio" Name="SDL Trados Studio" >
+            <Directory Id="Studio15" Name="Studio15"/>
+          </Directory>
+        </Directory>
+      </Directory>
+
+			<!-- Define location where the shortcut will be added: in our case, folder SDLTradosStudio2019Apps is defined to C:\ProgramData\Microsoft\Windows\Start Menu\Programs\ path.
+			 Way to construct the path where the shortcut will be added -->
+			<Directory Id="ProgramMenuFolder"  Name="All Programs folder">
+				<Directory Id="SDLTradosStudio2019Apps" Name="SDL Trados Studio 2019 Apps" />
+			</Directory>
+
+			<!-- Define location where the shortcut will be added: in our case: Desktop -->
+      <Directory Id="DesktopFolder" Name="Desktop" />
+    </Directory>
+  </Fragment>
+
+  <!-- .exe and .dll's which are installed to selected location when user is running the .msi file-->
+  <Fragment>
+    <ComponentGroup Id="ProductComponents" Directory="Studio15">
+      <Component Id="Sdl.Community.HunspellDictionaryManager">
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe" Name="Sdl.Community.HunspellDictionaryManager.exe" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetPath)" KeyPath="yes" />
+      </Component>
+
+      <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="334d68e8-dc7a-43b3-b722-7e4fffafcc8d">
+        <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.HunspellDictionaryManager.exe.config" />
+      </Component>
+
+			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+			</Component>
+
+			<Component Id="MahApps.Metro.dll" Guid="*">
+				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\MahApps.Metro.dll"></File>
+			</Component>
+
+			<Component Id="System.Windows.Interactivity.dll" Guid="*">
+				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\System.Windows.Interactivity.dll"></File>
+			</Component>
+
+			<Component Id="FontAwesome.WPF.dll" Guid="*">
+				<File Id="FontAwesome.WPF.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\FontAwesome.WPF.dll"></File>
+			</Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

@@ -1,0 +1,91 @@
+﻿<controls:MetroWindow x:Class="Sdl.Community.HunspellDictionaryManager.Ui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sdl.Community.HunspellDictionaryManager.Ui"
+        xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+		GlowBrush="#008C95"
+        WindowTitleBrush="#008C95"
+        Title="Hunspell Dictionary Manager" Height="200" Width="650"
+		ResizeMode="NoResize"
+		WindowStartupLocation="CenterScreen">
+	<Window.Resources>
+		<ResourceDictionary >
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceDictionary Source="../UiHelpers/ButtonsStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBlockStyle.xaml"/>
+				<ResourceDictionary Source="../UiHelpers/TextBoxStyle.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Window.Resources>
+	<Grid>
+		<Grid.Resources>
+			<Style TargetType="{x:Type TextBox}">
+				<Setter Property="Margin" Value="10,5,0,0"/>
+				<Setter Property="Height" Value="25"/>
+				<Setter Property="Width" Value="300"/>
+				<Setter Property="Foreground" Value="#FF00747C"/>
+				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="Validation.ErrorTemplate" Value="{DynamicResource ValidationErrorTemplate}" />
+			</Style>
+			<Style TargetType="{x:Type Label}">
+				<Setter Property="Foreground" Value="#FF00747C"/>
+				<Setter Property="FontSize" Value="13"/>
+			</Style>
+			<Style TargetType="{x:Type ComboBoxItem}">
+				<Setter Property="Foreground" Value="#FF00747C"/>
+				<Setter Property="FontSize" Value="14"/>
+				<Setter Property="FontWeight" Value="Normal"/>
+			</Style>
+			<Style TargetType="{x:Type ComboBox}">
+				<Setter Property="Foreground" Value="#3EA691"/>
+				<Setter Property="Margin" Value="10,5,0,0"/>
+			</Style>
+		</Grid.Resources>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="*"></RowDefinition>
+		</Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="89*"></ColumnDefinition>
+			<ColumnDefinition Width="72*"></ColumnDefinition>
+		</Grid.ColumnDefinitions>
+
+		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Please select appropriate dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="1" Grid.Column="1"
+		    controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
+			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayName" Margin="5,5,3,0" />
+
+		<Label Name="enterLangLbl" Grid.Row="2"  Grid.Column="0" Content="Enter new dictionary language" Margin="3 0 0 0" />
+		<TextBox  Grid.Row="2" Grid.Column="1"
+				 controls:TextBoxHelper.Watermark="Enter new dictionary language"  ToolTip="Dictionary name format example: de_De/de or de-DE" 
+		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Margin="5,5,3,0" Width="Auto">
+		</TextBox>
+
+		<Label Name="deleteLangLbl" Grid.Row="3"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="3" Grid.Column="1"
+		    controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
+			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayName" Margin="5,5,3,0" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+                    HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="4" Grid.Column="0" Width="80" Height="25"
+                    HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
+		<TextBox Name="resultMessageLbl" Grid.Row="0"  Grid.Column="0" Margin="5 0 0 0"
+				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
+			     Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				 Foreground="{Binding ResultMessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
+	</Grid>
+</controls:MetroWindow>
