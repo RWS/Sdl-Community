@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2017" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
@@ -27,7 +27,7 @@
   <Fragment>
     <DirectoryRef Id="DesktopFolder">
       <Component Id="ApplicationShortcutDesktop" Guid="efeb0124-7cd7-4261-a060-8a471932f793">
-        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager" Icon="icon.ico" Description="Hunspell Dictionary Manager" Target="[Studio5]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio5" />
+        <Shortcut Id="ApplicationDesktopShortcut" Name="Hunspell Dictionary Manager 2017" Icon="icon.ico" Description="Hunspell Dictionary Manager for Trados Studio 2017" Target="[Studio5]Sdl.Community.HunspellDictionaryManager.exe" WorkingDirectory="Studio5" />
         <RemoveFolder Id="RemoveDesktopFolder" Directory="DesktopFolder" On="uninstall" />
         <RegistryValue Root="HKCU" Key="Software\Microsoft\Sdl.Community.HunspellDictionaryManager" Name="installed" Type="integer" Value="1" KeyPath="yes" />
       </Component>
@@ -60,6 +60,22 @@
       <Component Id="Sdl.Community.HunspellDictionaryManager.exe.config" Guid="334d68e8-dc7a-43b3-b722-7e4fffafcc8d">
         <File Id="Sdl.Community.HunspellDictionaryManager.exe.config" Name="Sdl.Community.HunspellDictionaryManager.exe.config" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.HunspellDictionaryManager.exe.config" />
       </Component>
+
+			<Component Id="Sdl.Community.Toolkit.Core.dll" Guid="*">
+				<File Id="Sdl.Community.Toolkit.Core.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\Sdl.Community.Toolkit.Core.dll"></File>
+			</Component>
+
+			<Component Id="MahApps.Metro.dll" Guid="*">
+				<File Id="MahApps.Metro.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\MahApps.Metro.dll"></File>
+			</Component>
+
+			<Component Id="System.Windows.Interactivity.dll" Guid="*">
+				<File Id="System.Windows.Interactivity.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\System.Windows.Interactivity.dll"></File>
+			</Component>
+
+			<Component Id="FontAwesome.WPF.dll" Guid="*">
+				<File Id="FontAwesome.WPF.dll" KeyPath="yes" Source="$(var.Sdl.Community.HunspellDictionaryManager.TargetDir)\FontAwesome.WPF.dll"></File>
+			</Component>
     </ComponentGroup>
   </Fragment>
 </Wix>
