@@ -13,6 +13,7 @@
    limitations under the License.*/
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
@@ -370,7 +371,10 @@ namespace Sdl.Community.AmazonTranslateTradosPlugin
             }
         }
 
-
-
-    }
+		private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+		{
+			Process.Start(
+				"https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3315.amazon-translate-mt-provider");
+		}
+	}
 }
