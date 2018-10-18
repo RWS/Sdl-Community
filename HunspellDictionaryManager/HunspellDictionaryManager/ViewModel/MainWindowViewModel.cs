@@ -224,12 +224,11 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var xmlDoc = XDocument.Load(configFilePath);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage);
-
+			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == NewDictionaryLanguage);
 			if (string.IsNullOrEmpty(languageElem))
 			{
 				var node = new XElement("language",
-					new XElement("isoCode", NewDictionaryLanguage), new XElement("dict", NewDictionaryLanguage));
+					new XElement("isoCode", NewDictionaryLanguage.Replace('_', '-')), new XElement("dict", NewDictionaryLanguage));
 
 				xmlDoc.Element("config").Add(node);
 				xmlDoc.Save(configFilePath);
