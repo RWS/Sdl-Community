@@ -270,7 +270,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == dictionaryLanguage);
+			var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == dictionaryLanguage);
 
 			if (languageElem != null)
 			{
