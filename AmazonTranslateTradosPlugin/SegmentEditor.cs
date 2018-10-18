@@ -18,6 +18,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Sdl.Community.AmazonTranslateProvider;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
 {

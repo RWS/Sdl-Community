@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sdl.Community.AmazonTranslateProvider;
 using Sdl.Community.AmazonTranslateTradosPlugin.AmzConnect;
 using Sdl.Core.Globalization;
 using Sdl.LanguagePlatform.Core;

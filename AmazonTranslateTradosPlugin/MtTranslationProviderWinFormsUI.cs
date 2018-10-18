@@ -14,6 +14,7 @@
 
 using System;
 using System.Windows.Forms;
+using Sdl.Community.AmazonTranslateProvider;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 

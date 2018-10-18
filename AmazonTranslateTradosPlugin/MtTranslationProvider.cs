@@ -13,6 +13,7 @@
    limitations under the License.*/
 
 using System;
+using Sdl.Community.AmazonTranslateProvider;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
