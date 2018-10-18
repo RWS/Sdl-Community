@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Xml.Linq;
 using Sdl.Community.HunspellDictionaryManager.Commands;
@@ -137,7 +138,6 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			if (NewDictionaryLanguage != null)
 			{
 				CopyFiles();
-				UpdateConfigFile();
 			}
 		}
 
@@ -165,6 +165,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			DeletedDictionaryLanguage = new HunspellLangDictionaryModel();
 			SelectedDictionaryLanguage = new HunspellLangDictionaryModel();
 			DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
+			Languages = new ObservableCollection<LanguageModel>();
 
 			LoadDictionariesLanguages();
 			LabelVisibility = Constants.Hidden;
@@ -220,14 +221,25 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		/// <summary>
 		/// Copy selected (.dic and .aff) files and rename them using the specified dictionary language
+		/// If dictionary files already exists in folder, allow user the possibility to override or not the file
 		/// </summary>
 		private void CopyFiles()
 		{
-			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode}.dic");
-			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode}.aff");
+			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-','_')}.dic");
+			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.aff");
 
-			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
-			File.Copy(SelectedDictionaryLanguage.AffFile, newAffFilePath, true);
+			if(DictionaryLanguages.Any(d=>d.DictionaryFile.Equals(newDictionaryFilePath)))
+			{
+				var result = MessageBox.Show(Constants.DictionaryAlreadyExists, Constants.InformativeMessage, MessageBoxButton.YesNo, MessageBoxImage.Warning);
+				if(result.Equals(MessageBoxResult.Yes))
+				{
+					CreateLanguageDictionary(newDictionaryFilePath, newAffFilePath);
+				}
+			}	
+			else
+			{
+				CreateLanguageDictionary(newDictionaryFilePath, newAffFilePath);
+			}
 		}
 
 		/// <summary>
@@ -240,24 +252,19 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var xmlDoc = XDocument.Load(configFilePath);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == NewDictionaryLanguage.IsoCode);
+			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("isoCode") == NewDictionaryLanguage.IsoCode);
 			if (string.IsNullOrEmpty(languageElem))
 			{
 				var node = new XElement("language",
-					new XElement("isoCode", NewDictionaryLanguage.IsoCode.Replace('_', '-')), new XElement("dict", NewDictionaryLanguage.IsoCode.Replace('-', '_')));
+					new XElement("isoCode", NewDictionaryLanguage.IsoCode), new XElement("dict", NewDictionaryLanguage.IsoCode.Replace('-', '_')));
 
 				xmlDoc.Element("config").Add(node);
 				xmlDoc.Save(configFilePath);
 
 				LoadDictionariesLanguages();
-				SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
-			}
-			else
-			{
-				SetGridSettings(Constants.LanguageAlreadyExists, Constants.RedColor);
-			}
+			}			
 			LabelVisibility = Constants.Visible;
-
+			SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
 		}
 
 		/// <summary>
@@ -285,7 +292,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var xmlDoc = XDocument.Load(configFilePath);
 			var dictionaryLanguage = Path.GetFileNameWithoutExtension(DeletedDictionaryLanguage.DictionaryFile);
 
-			// add new language dictionary if doesn't already exists in the config file
+			// remove the language dictionary from the config
 			var languageElem = xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == dictionaryLanguage);
 
 			if (languageElem != null)
@@ -350,6 +357,13 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				};
 				Languages.Add(languageModel);
 			}
+		}
+
+		private void CreateLanguageDictionary(string newDictionaryFilePath, string newAffFilePath)
+		{
+			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
+			File.Copy(SelectedDictionaryLanguage.AffFile, newAffFilePath, true);
+			UpdateConfigFile();
 		}
 		#endregion
 	}
