@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Globalization;
 using System.Linq;
 using System.Xml.Serialization;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
@@ -18,10 +19,13 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 	{
 		private readonly SQLiteConnection _connection;
 		private readonly SerializerService _serializerService;
+		private readonly SegmentService _segmentService;
+		private readonly DateTime _minDate = new DateTime(1900, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 
-		public Query(string databasePath, string password, SerializerService serializerService)
+		public Query(string databasePath, string password, SerializerService serializerService, SegmentService segmentService)
 		{
 			_serializerService = serializerService;
+			_segmentService = segmentService;
 			_connection = new SQLiteConnection(GetConnectionString(databasePath, password));
 			_connection.Open();
 		}
@@ -106,7 +110,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 							"type, " + //3
 							"tm_id " + //4
 							"FROM " + tableName + " " +
-							"WHERE tm_id IN (" + IdsString(ids) + ")";
+							"WHERE tm_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -141,7 +145,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// </summary>
 		/// <param name="ids">A list of TM attribute IDs</param>
 		/// <returns>A list of string attributes</returns>
-		public Dictionary<int, List<StringAttribute>> StringAttributes(List<int> ids)
+		public Dictionary<int, List<StringAttribute>> GetStringAttributes(List<int> ids)
 		{
 			var values = new Dictionary<int, List<StringAttribute>>();
 
@@ -151,7 +155,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + IdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -195,7 +199,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// </summary>
 		/// <param name="ids">A list of TM attribute IDs</param>
 		/// <returns>A list of numeric attributes</returns>
-		public Dictionary<int, List<NumericAttribute>> NumericAttributes(List<int> ids)
+		public Dictionary<int, List<NumericAttribute>> GetNumericAttributes(List<int> ids)
 		{
 			var values = new Dictionary<int, List<NumericAttribute>>();
 
@@ -205,7 +209,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + IdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -249,7 +253,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// </summary>
 		/// <param name="ids">A list of TM attribute IDs</param>
 		/// <returns>A list of date attributes</returns>
-		public Dictionary<int, List<DateAttribute>> DateAttributes(List<int> ids)
+		public Dictionary<int, List<DateAttribute>> GetDateAttributes(List<int> ids)
 		{
 			var values = new Dictionary<int, List<DateAttribute>>();
 
@@ -259,7 +263,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + IdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -303,7 +307,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// </summary>
 		/// <param name="ids">A list of TM attribute IDs</param>
 		/// <returns>A list of picklist values</returns>
-		public List<PickListValue> PickListValues(List<int> ids)
+		public List<PickListValue> GetPickListValues(List<int> ids)
 		{
 			var values = new List<PickListValue>();
 
@@ -314,7 +318,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //2
 						   "value " + //3
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + IdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -349,7 +353,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// </summary>
 		/// <param name="ids">A list of picklist value IDs</param>
 		/// <returns>A list of picklist attributes</returns>
-		public Dictionary<int, List<PickListAttribute>> PickListAttributes(List<int> ids)
+		public Dictionary<int, List<PickListAttribute>> GetPickListAttributes(List<int> ids)
 		{
 			var values = new Dictionary<int, List<PickListAttribute>>();
 
@@ -358,7 +362,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "translation_unit_id, " + //0
 						   "picklist_value_id " + //1
 						   "FROM " + tableName + " " +
-						   "WHERE picklist_value_id IN (" + IdsString(ids) + ")";
+						   "WHERE picklist_value_id IN (" + GetIdsString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -403,11 +407,11 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		/// <param name="context"></param>
 		/// <param name="ids">A list of TM IDs</param>
 		/// <returns>A list of Translation Units</returns>
-		public List<TmTranslationUnit> TranslationUnits(ProgressDialogContext context, List<int> ids)
+		public List<TmTranslationUnit> GetTranslationUnits(ProgressDialogContext context, List<int> ids)
 		{
 			var values = new List<TmTranslationUnit>();
 
-			decimal iTotalUnits = TranslationUnitsCount(ids);
+			decimal iTotalUnits = GetTranslationUnitsCount(ids);
 
 			var tableName = "translation_units";
 			var sqlQuery = "SELECT " +
@@ -420,9 +424,10 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "change_date, " + //6
 						   "change_user, " + //7
 						   "last_used_date, " + //8
-						   "last_used_user " + //9
+						   "last_used_user, " + //9
+						   "usage_counter " + //10
 						   "FROM " + tableName + " " +
-						   "WHERE translation_memory_id IN (" + IdsString(ids) + ")";
+						   "WHERE translation_memory_id IN (" + GetIdsString(ids) + ")";
 
 			var serializer = new XmlSerializer(typeof(Segment), new[]{
 				typeof(Tag),
@@ -471,7 +476,96 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			return values;
 		}
 
-		public int TranslationUnitsCount(List<int> ids)
+		public void UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> units)
+		{
+			decimal iTotalUnits = units.Count;
+
+			var tableName = "translation_units";
+			var sqlQuery = "UPDATE " + tableName + " SET " +
+						   "creation_date = @creation_date, " +
+						   "creation_user = @creation_user, " +
+						   "change_date = @change_date, " +
+						   "change_user = @change_user, " +
+						   "last_used_date = @last_used_date, " +
+						   "last_used_user = @last_used_user, " +
+						   "usage_counter = @usage_counter " +
+						   "WHERE id = @id";
+
+			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
+			{
+				decimal iCurrent = 0;
+				foreach (var unit in units)
+				{
+					iCurrent++;
+
+					if (iCurrent % 100 == 0)
+					{
+						var progress = iCurrent++ / iTotalUnits * 100;
+						context?.Report(Convert.ToInt32(progress),
+							"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+					}
+
+					cmdQuery.Parameters.Add("@id", DbType.Int32).Value = unit.ResourceId.Id;
+					cmdQuery.Parameters.Add("@creation_date", DbType.String).Value = NormalizeToString(unit.SystemFields.ChangeDate);
+					cmdQuery.Parameters.Add("@creation_user", DbType.String).Value = unit.SystemFields.ChangeUser;
+					cmdQuery.Parameters.Add("@change_date", DbType.String).Value = NormalizeToString(unit.SystemFields.ChangeDate);
+					cmdQuery.Parameters.Add("@change_user", DbType.String).Value = unit.SystemFields.ChangeUser;
+					cmdQuery.Parameters.Add("@last_used_date", DbType.String).Value = NormalizeToString(unit.SystemFields.UseDate);
+					cmdQuery.Parameters.Add("@last_used_user", DbType.String).Value = unit.SystemFields.UseUser;
+					cmdQuery.Parameters.Add("@usage_counter", DbType.Int32).Value = unit.SystemFields.UseCount;
+
+					//TODO log result; -1: error; >=0: number of records updated
+					var result = cmdQuery.ExecuteNonQuery();
+				}
+			}
+		}
+
+		public void UpdateTranslationUnitContent(ProgressDialogContext context, List<TmTranslationUnit> units)
+		{
+			decimal iTotalUnits = units.Count;
+
+			var tableName = "translation_units";
+			var sqlQuery = "UPDATE " + tableName + " SET " +
+						   "source_segment = @source_segment, " +
+						   "target_segment = @target_segment " +
+						   "WHERE id = @id";
+
+			var serializer = new XmlSerializer(typeof(Segment), new[]{
+				typeof(Tag),
+				typeof(Text)
+			});
+
+			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
+			{
+				decimal iCurrent = 0;
+				foreach (var unit in units)
+				{
+					iCurrent++;
+
+					if (iCurrent % 100 == 0)
+					{
+						var progress = iCurrent++ / iTotalUnits * 100;
+						context?.Report(Convert.ToInt32(progress),
+							"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+					}
+
+					var sourceXml = _serializerService.Serialize(_segmentService.BuildSegment(
+						new CultureInfo(unit.SourceSegment.Language), unit.SourceSegment.Elements), serializer);
+
+					var targetXml = _serializerService.Serialize(_segmentService.BuildSegment(
+						new CultureInfo(unit.TargetSegment.Language), unit.TargetSegment.Elements), serializer);
+
+					cmdQuery.Parameters.Add("@id", DbType.Int32).Value = unit.ResourceId.Id;
+					cmdQuery.Parameters.Add("@source_segment", DbType.String).Value = sourceXml;
+					cmdQuery.Parameters.Add("@target_segment", DbType.String).Value = targetXml;
+
+					//TODO log result; -1: error; >=0: number of records updated
+					var result = cmdQuery.ExecuteNonQuery();
+				}
+			}
+		}
+
+		public int GetTranslationUnitsCount(List<int> ids)
 		{
 			var value = 0;
 
@@ -624,7 +718,8 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 					ChangeDate = rdrSelect.GetDateTime(6), //6
 					ChangeUser = rdrSelect["change_user"].ToString(), //7
 					UseDate = rdrSelect.GetDateTime(8), //8
-					UseUser = rdrSelect["last_used_user"].ToString() //9
+					UseUser = rdrSelect["last_used_user"].ToString(), //9
+					UseCount = Convert.ToInt32(rdrSelect["usage_counter"]) //10
 				},
 				FieldValues = new List<FieldValue>()
 			};
@@ -638,12 +733,12 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 			context?.Report(0, "Analyzing custom fields data...");
 
-			var stringAttributes = StringAttributes(attributeIds.Select(a => a.Id).ToList());
-			var numericAttributes = NumericAttributes(attributeIds.Select(a => a.Id).ToList());
-			var dateAttributes = DateAttributes(attributeIds.Select(a => a.Id).ToList());
+			var stringAttributes = GetStringAttributes(attributeIds.Select(a => a.Id).ToList());
+			var numericAttributes = GetNumericAttributes(attributeIds.Select(a => a.Id).ToList());
+			var dateAttributes = GetDateAttributes(attributeIds.Select(a => a.Id).ToList());
 
-			var pickListValues = PickListValues(attributeIds.Select(a => a.Id).ToList());
-			var pickListAttributes = PickListAttributes(pickListValues.Select(a => a.Id).ToList());
+			var pickListValues = GetPickListValues(attributeIds.Select(a => a.Id).ToList());
+			var pickListAttributes = GetPickListAttributes(pickListValues.Select(a => a.Id).ToList());
 
 			decimal iCurrent = 0;
 			decimal iTotalUnits = values.Count;
@@ -698,7 +793,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 								else
 								{
 									multipleStringFieldValue.Add(item.Value);
-								}								
+								}
 							}
 						}
 					}
@@ -789,7 +884,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 								{
 									((Model.FieldDefinitions.MultiplePicklistFieldValue)multiplePicklistFieldValue).Add(
 										new PicklistItem(pickListValue.Value) { ID = pickListValue.Id });
-								}								
+								}
 							}
 						}
 					}
@@ -814,9 +909,21 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			return null;
 		}
 
-		private static string IdsString(IEnumerable<int> ids)
+		private static string GetIdsString(IEnumerable<int> ids)
 		{
 			return ids.Aggregate(string.Empty, (current, id) => current + ((current != string.Empty ? "," : string.Empty) + id));
+		}
+
+		private string NormalizeToString(DateTime val)
+		{
+			if (val < _minDate)
+			{
+				val = _minDate;
+			}
+
+			return DateTime.SpecifyKind(
+				new DateTime(val.Year, val.Month, val.Day, val.Hour, val.Minute, val.Second),
+				DateTimeKind.Utc).ToString("yyyy-MM-dd HH:mm:ss");
 		}
 	}
 }

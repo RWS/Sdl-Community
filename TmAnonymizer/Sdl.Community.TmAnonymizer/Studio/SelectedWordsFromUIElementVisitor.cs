@@ -11,13 +11,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	public class SelectedWordsFromUiElementVisitor : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _selectedWordsDetails;
+		private readonly List<int> _anchorIds;
 		/// <summary>
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsFromUiElementVisitor(List<WordDetails> selectedWordsDetails)
+		public SelectedWordsFromUiElementVisitor(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
+			_anchorIds = anchorIds;
 		}
 
 		public void VisitText(Text text)
@@ -106,6 +108,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			_selectedWordsDetails.Clear();
 		}
 
+		private int GetUniqueAnchorId()
+		{
+			for (var i = 1; i < 1000; i++)
+			{
+				if (!_anchorIds.Contains(i))
+				{
+					_anchorIds.Add(i);
+					return i;
+				}
+			}
+
+			return 0;
+		}
+
 		/// <summary>
 		/// Transforms words list into Text and Tags 
 		/// </summary>
@@ -124,10 +140,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				}
 				else
 				{
-					var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
+					var anchorId = GetUniqueAnchorId();
+					var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId );					
 					segmentCollection.Add(tag);
 				}
-
 			}
 		}
 

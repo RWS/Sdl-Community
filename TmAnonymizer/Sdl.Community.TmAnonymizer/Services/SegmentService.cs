@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -14,16 +15,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public Segment BuildSegment(System.Globalization.CultureInfo culture, params object[] elements)
 		{
-			//var segment = BuildSegment("This segment contains ",
-			//	new Tag(TagType.Start, "x", 15),
-			//	"one",
-			//	new Tag(TagType.End, "x", 15),
-			//	" tag which is aligned to a tag in the ",
-			//	new Tag(TagType.Start, "y", 18),
-			//	"target",
-			//	new Tag(TagType.End, "y", 18),
-			//	" segment.");
-
 			var segment = new Segment(culture);
 
 			foreach (var element in elements)
@@ -31,29 +22,42 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				switch (element)
 				{
 					case string _:
-					{
-						segment.Add(new Text(element as string));
-						break;
-					}
+						{
+							segment.Add(new Text(element as string));
+							break;
+						}
 					case Tag _:
-					{
-						segment.Add(element as Tag);
-						break;
-					}
+						{
+							segment.Add(element as Tag);
+							break;
+						}
 					case SegmentElement _:
-					{
-						segment.Add(element as SegmentElement);
-						break;
-					}
+						{
+							segment.Add(element as SegmentElement);
+							break;
+						}
 					default:
-					{
-						throw new InvalidOperationException("Unexpected parameter");
-					}
+						{
+							throw new InvalidOperationException("Unexpected parameter");
+						}
 				}
 			}
 
 			return segment;
 		}
+
+		public Segment BuildSegment(System.Globalization.CultureInfo culture, List<SegmentElement> elements)
+		{	
+			var segment = new Segment(culture);
+
+			foreach (var element in elements)
+			{
+				segment.Add(element);
+			}
+
+			return segment;
+		}
+
 
 		public string MakeString(IAbstractMarkupDataContainer container)
 		{
@@ -65,27 +69,27 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				switch (item)
 				{
 					case IText txt:
-					{
-						sb.Append(txt.Properties.Text);
-						break;
-					}
+						{
+							sb.Append(txt.Properties.Text);
+							break;
+						}
 					case ITagPair tagPair:
-					{
-						sb.Append(tagPair.StartTagProperties.TagContent);
-						sb.Append(MakeString(tagPair));
-						sb.Append(tagPair.EndTagProperties.TagContent);
-						break;
-					}
+						{
+							sb.Append(tagPair.StartTagProperties.TagContent);
+							sb.Append(MakeString(tagPair));
+							sb.Append(tagPair.EndTagProperties.TagContent);
+							break;
+						}
 					case IAbstractTag tag:
-					{
-						sb.Append(tag.TagProperties.TagContent);
-						break;
-					}
+						{
+							sb.Append(tag.TagProperties.TagContent);
+							break;
+						}
 					case IAbstractMarkupDataContainer subcontainer:
-					{
-						sb.Append(MakeString(subcontainer));
-						break;
-					}
+						{
+							sb.Append(MakeString(subcontainer));
+							break;
+						}
 				}
 
 				// if we get here we encountered an unexpected element type
@@ -156,6 +160,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			wtr.Flush();
 
 			return sb.ToString();
-		}		
+		}
 	}
 }
