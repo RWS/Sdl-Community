@@ -7,6 +7,7 @@ using Sdl.Community.HunspellDictionaryManager.Commands;
 using Sdl.Community.HunspellDictionaryManager.Helpers;
 using Sdl.Community.HunspellDictionaryManager.Model;
 using Sdl.Community.HunspellDictionaryManager.Ui;
+using Sdl.Core.Globalization;
 
 namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 {
@@ -167,6 +168,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var studioPath = Utils.GetInstalledStudioPath();
 			if (!string.IsNullOrEmpty(studioPath))
 			{
+				var studioLanguages = Language.GetAllLanguages();
 				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
 
 				// get .dic files from Studio HunspellDictionaries folder
@@ -176,17 +178,21 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 					var hunspellLangDictionaryModel = new HunspellLangDictionaryModel()
 					{
 						DictionaryFile = hunspellDictionary,
-						DisplayName = Path.GetFileNameWithoutExtension(hunspellDictionary)
+						ShortLanguageName = Path.GetFileNameWithoutExtension(hunspellDictionary),
+						DisplayLanguageName = SetDisplayLanguageName(Path.GetFileNameWithoutExtension(hunspellDictionary), studioLanguages)
 					};
-
-					DictionaryLanguages.Add(hunspellLangDictionaryModel);
+					// add to dropdown list only dictionaries that has language correspondence in Studio
+					if (!string.IsNullOrEmpty(hunspellLangDictionaryModel.DisplayLanguageName))
+					{
+						DictionaryLanguages.Add(hunspellLangDictionaryModel);
+					}
 				}
 
 				// get .aff files from Studio HunspellDictionaries folder
 				var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
 				foreach (var dicFile in DictionaryLanguages)
 				{
-					var affFile = affFiles.Where(d => d.Contains($"{dicFile.DisplayName}.aff")).FirstOrDefault();
+					var affFile = affFiles.Where(d => d.Contains($"{dicFile.ShortLanguageName}.aff")).FirstOrDefault();
 					if (affFile != null)
 					{
 						dicFile.AffFile = affFile;
@@ -287,6 +293,33 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		{
 			ResultMessage = resultMessage;
 			ResultMessageColor = resultMessageColor;
+		}
+
+		/// <summary>
+		/// Set dictionary language display name based on the studio languages
+		/// </summary>
+		/// <param name="hunspellDictionaryName">hunspell dictionary name</param>
+		/// <param name="studioLanguages">all Studio languages</param>
+		/// <returns>Dictionary display language name</returns>
+		private string SetDisplayLanguageName(string hunspellDictionaryName, Language[] studioLanguages)
+		{
+			hunspellDictionaryName = hunspellDictionaryName.Replace('_', '-');
+			//search for Language based on IsoAbbreviation
+			var displayLanguageName = studioLanguages.Where(a => a.IsoAbbreviation.Equals(hunspellDictionaryName)).FirstOrDefault();
+			if (displayLanguageName != null)
+			{
+				return displayLanguageName.DisplayName;
+			}
+			else
+			{
+				// search for Language based on TwoLetterISOLanguageName
+				displayLanguageName = studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
+				if(displayLanguageName != null)
+				{
+					return displayLanguageName.DisplayName;
+				}
+			}
+			return string.Empty;
 		}
 		#endregion
 	}

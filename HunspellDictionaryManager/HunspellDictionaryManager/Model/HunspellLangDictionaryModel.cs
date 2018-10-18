@@ -4,6 +4,7 @@
 	{
 		public string DictionaryFile { get; set; }
 		public string AffFile { get; set; }
-		public string DisplayName { get; set; }
+		public string ShortLanguageName { get; set; }
+		public string DisplayLanguageName { get; set; } 
 	}
 }
