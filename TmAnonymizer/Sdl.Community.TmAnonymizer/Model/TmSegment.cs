@@ -8,7 +8,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	[Serializable]
 	public class TmSegment
 	{						
-		public List<SegmentElement> Elements { get; set; }		
+		public List<SegmentElement> Elements { get; set; }
 
 		public string Language { get; set; }
 

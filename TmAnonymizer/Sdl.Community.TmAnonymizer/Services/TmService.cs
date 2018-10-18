@@ -5,10 +5,12 @@ using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.TM;
 using Sdl.Community.SdlTmAnonymizer.Studio;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
+using TranslationUnit = Sdl.LanguagePlatform.TranslationMemory.TranslationUnit;
 
 namespace Sdl.Community.SdlTmAnonymizer.Services
 {
@@ -47,8 +49,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				if (File.Exists(tmFile.CachePath))
 				{
 					var serializer = new SerializerService();
+
 					context.Report(0, "Reading data from cache...");
+
 					languageDirection.TranslationUnits = serializer.Read<List<TmTranslationUnit>>(tmFile.CachePath);
+
+					return languageDirection.TranslationUnits;
+				}
+
+				if (!tmFile.IsServerTm)
+				{
+					languageDirection.TranslationUnits = GetTranslationUnitsFromLocalTm(context, tmFile);
 					return languageDirection.TranslationUnits;
 				}
 
@@ -62,6 +73,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (serverBasedLanguageDirection != null)
 					{
 						ReadTranslationUnits(context, serverBasedLanguageDirection, languageDirection);
+
+						SaveTmCacheStorage(context, tmFile, languageDirection);
 					}
 				}
 				else
@@ -74,9 +87,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						ReadTranslationUnits(context, translationMemory.LanguageDirection, languageDirection);
 					}
 				}
-
-				SaveTmCacheStorage(context, tmFile, languageDirection);
-
+				
 				return languageDirection.TranslationUnits;
 			}
 		}
@@ -465,6 +476,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			};
 
+			var v1 = unit.SourceSegment.GetHashCode();
+			var v2 = unit.TargetSegment.GetHashCode();
+
+			var v3 = unit.SourceSegment.GetWeakHashCode();
+			var v4 = unit.TargetSegment.GetWeakHashCode();
+
 			return unit;
 		}
 
@@ -487,6 +504,54 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return multipleStringValues;
+		}
+
+		private static List<TmTranslationUnit> GetTranslationUnitsFromLocalTm(ProgressDialogContext context, TmFile tmFile)
+		{
+			List<TmTranslationUnit> values;
+
+			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService());
+
+			try
+			{
+				query.OpenConnection();
+
+				values = query.TranslationUnits(context, GetTmIds(tmFile, query.GeTranslationMemories()));
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				throw;
+			}
+			finally
+			{
+				query.CloseConnection();
+			}
+
+			return values;
+		}
+
+		private static List<int> GetTmIds(TmFile tmFile, IEnumerable<TranslationMemory> tms)
+		{
+			var ids = new List<int>();
+			foreach (var tm in tms)
+			{
+				foreach (var tmFileTmLanguageDirection in tmFile.TmLanguageDirections)
+				{
+					if (tm.SourceLangauge == tmFileTmLanguageDirection.Source.Name &&
+					    tm.TargetLanguage == tmFileTmLanguageDirection.Target.Name)
+					{
+						if (!ids.Contains(tm.Id))
+						{
+							ids.Add(tm.Id);
+						}
+
+						break;
+					}
+				}
+			}
+
+			return ids;
 		}
 
 		private List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
@@ -630,7 +695,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return result;
 		}
 
-		
 		private void PrepareTranslationUnits(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			decimal iCurrent = 0;
