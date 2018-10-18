@@ -10,10 +10,11 @@
 		public static readonly string ConfigFileName = "spellcheckmanager_config.xml";
 
 		public static readonly string Studio2017ErrorMessage = "Application error occured: Studio 2017 needs to be installed!";
-        public static readonly string Studio2019ErrorMessage = "Application error occured: Studio 2019 needs to be installed!";
-        public static readonly string InformativeMessage = "Informative message";
+		public static readonly string Studio2019ErrorMessage = "Application error occured: Studio 2019 needs to be installed!";
+		public static readonly string InformativeMessage = "Informative message";
 		public static readonly string SuccessfullCreateMessage = "Dictionary language was successfully created!";
 		public static readonly string SuccessfullDeleteMessage = "Dictionary language was successfully deleted!";
+		public static readonly string DictionaryAlreadyExists = "Dictionary already exists! Are you sure you want to override?";
 
 		public static readonly string LanguageAlreadyExists = "Hunspell language dictionary already exists with specified configuration!";
 		public static readonly string NoLanguageDictionaryFound = "Please select a language dictionary for deletion!";

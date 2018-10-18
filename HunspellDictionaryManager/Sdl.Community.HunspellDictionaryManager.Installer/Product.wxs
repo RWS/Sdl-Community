@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Hunspell Dictionary Manager 2019" Language="1033" Version="1.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
+  <Product Id="*" Name="Hunspell Dictionary Manager 2019" Language="1033" Version="2.0.0.0" Manufacturer="Sdl Community" UpgradeCode="3e35f8d6-cb98-4410-a336-aaa76ffee6d9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <Icon Id="icon.ico" SourceFile="$(var.ProjectDir)icon.ico" />
