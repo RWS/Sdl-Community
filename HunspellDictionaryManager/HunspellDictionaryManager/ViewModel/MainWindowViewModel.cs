@@ -184,15 +184,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 				// get .aff files from Studio HunspellDictionaries folder
 				var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
-				foreach (var affFile in affFiles)
+				foreach (var dicFile in DictionaryLanguages)
 				{
-					var dictLang = DictionaryLanguages
-						.Where(d => Path.GetFileNameWithoutExtension(d.DictionaryFile).Equals(Path.GetFileNameWithoutExtension(affFile)))
-						.FirstOrDefault();
-
-					if (dictLang != null)
+					var affFile = affFiles.Where(d => d.Contains(dicFile.DisplayName)).FirstOrDefault();
+					if (affFile != null)
 					{
-						dictLang.AffFile = affFile;
+						dicFile.AffFile = affFile;
 					}
 				}
 			}
@@ -211,7 +208,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage}.aff");
 
 			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
-			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newAffFilePath, true);
+			File.Copy(SelectedDictionaryLanguage.AffFile, newAffFilePath, true);
 		}
 
 		/// <summary>
