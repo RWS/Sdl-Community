@@ -10,7 +10,6 @@ using Sdl.LanguagePlatform.Core.Tokenization;
 
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
-
 	//TODO - reorganize and optimize usage; too many separate calls with Regex
 
 	public class SegmentElementVisitor : ISegmentElementVisitor
@@ -18,10 +17,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		private readonly List<WordDetails> _deSelectedWordsDetails;
 		private readonly SettingsService _settingsService;
 		private readonly List<Rule> _rules;
+		private readonly List<int> _anchorIds;
 
-		public SegmentElementVisitor(List<WordDetails> deSelectedWords, SettingsService settingsService)
+		public SegmentElementVisitor(List<WordDetails> deSelectedWords, List<int> anchorIds, SettingsService settingsService)
 		{
 			_deSelectedWordsDetails = deSelectedWords;
+			_anchorIds = anchorIds;
 			_settingsService = settingsService;
 			_rules = _settingsService.GetRules();
 		}
@@ -43,6 +44,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			SegmentColection = segmentCollection;
 		}
 
+		private int GetUniqueAnchorId()
+		{
+			for (var i = 1; i < 1000; i++)
+			{
+				if (!_anchorIds.Contains(i))
+				{
+					_anchorIds.Add(i);
+					return i;
+				}
+			}
+
+			return 0;
+		}
+
 		private void GetSubsegmentPi(string segmentText, List<int> personalData, ICollection<object> segmentCollection)
 		{
 			var elementsColection = segmentText.SplitAt(personalData.ToArray());
@@ -50,45 +65,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			for (var i = 0; i < elementsColection.Length; i++)
 			{
 				if (!string.IsNullOrEmpty(elementsColection[i]))
-				{
-					if (i != 0)
+				{					
+					var shouldAnonymize = i != 0
+						? ShouldAnonymize(elementsColection[i], elementsColection[i - 1])
+						: ShouldAnonymize(elementsColection[i], string.Empty);
+
+					//refactor the code put in method
+					if (shouldAnonymize)
 					{
-						var shouldAnonymize = ShouldAnonymize(elementsColection[i], elementsColection[i - 1]);
-						//refactor the code put in method
-						if (shouldAnonymize)
-						{
-							//create new tag
-							var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
-							segmentCollection.Add(tag);
-
-						}
-						else
-						{
-							//create text
-							var text = new Text(elementsColection[i]);
-							segmentCollection.Add(text);
-
-						}
+						//create new tag
+						var anchorId = GetUniqueAnchorId();
+						var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId);
+						segmentCollection.Add(tag);
 					}
 					else
 					{
-						var shouldAnonymize = ShouldAnonymize(elementsColection[i], string.Empty);
-						//refactor the code put in method
-						if (shouldAnonymize)
-						{
-							//create new tag
-							var tag = new Tag(TagType.TextPlaceholder, string.Empty, 1);
-							segmentCollection.Add(tag);
-
-						}
-						else
-						{
-							//create text
-							var text = new Text(elementsColection[i]);
-							segmentCollection.Add(text);
-
-						}
-					}
+						//create text
+						var text = new Text(elementsColection[i]);
+						segmentCollection.Add(text);
+					}										
 				}
 			}
 		}

@@ -87,11 +87,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						ReadTranslationUnits(context, translationMemory.LanguageDirection, languageDirection);
 					}
 				}
-				
+
 				return languageDirection.TranslationUnits;
 			}
 		}
-	
+
 		public List<TmTranslationUnit> LoadTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider, List<LanguageDirection> languageDirections)
 		{
 			var translationUnits = new List<TmTranslationUnit>();
@@ -390,66 +390,73 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
-			decimal iCurrent = 0;
-			decimal iTotalUnits = 0;
-			foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
-			{
-				iTotalUnits += anonymizeTranslationMemory.TranslationUnitDetails.Count;
-			}
-
-			if (iTotalUnits == 0)
-			{
-				return;
-			}
-
 			foreach (var translationMemory in anonymizeTranslationMemories)
 			{
-				var tm = new FileBasedTranslationMemory(translationMemory.TmFile.Path);
-
-				var groupsOf = 200;
-				var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationMemory.TranslationUnits) };
-				if (translationMemory.TranslationUnits.Count > groupsOf)
-				{
-					tusGroups = translationMemory.TranslationUnits.ChunkBy(groupsOf);
-				}
-
-				if (tusGroups.Count == 0)
-				{
-					continue;
-				}
-
-				foreach (var tus in tusGroups)
-				{
-					iCurrent = iCurrent + tus.Count;
-					if (context != null && context.CheckCancellationPending())
-					{
-						break;
-					}
-
-					var progress = iCurrent / iTotalUnits * 100;
-					context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-					var tusToUpdate = new List<TranslationUnit>();
-					foreach (var tu in tus)
-					{
-						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-							tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-						{
-							var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
-
-							tusToUpdate.Add(unit);
-						}
-					}
-
-					if (tusToUpdate.Count > 0)
-					{
-						//TODO - output results to log
-						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-					}
-				}
-
-				tm.Save();				
+				UpdateTranslationUnitsContentInLocalTm(context, translationMemory.TmFile, translationMemory.TranslationUnits);
 			}
+
+
+
+			//decimal iCurrent = 0;
+			//decimal iTotalUnits = 0;
+			//foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
+			//{
+			//	iTotalUnits += anonymizeTranslationMemory.TranslationUnitDetails.Count;
+			//}
+
+			//if (iTotalUnits == 0)
+			//{
+			//	return;
+			//}
+
+			//foreach (var translationMemory in anonymizeTranslationMemories)
+			//{
+			//	var tm = new FileBasedTranslationMemory(translationMemory.TmFile.Path);
+
+			//	var groupsOf = 200;
+			//	var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationMemory.TranslationUnits) };
+			//	if (translationMemory.TranslationUnits.Count > groupsOf)
+			//	{
+			//		tusGroups = translationMemory.TranslationUnits.ChunkBy(groupsOf);
+			//	}
+
+			//	if (tusGroups.Count == 0)
+			//	{
+			//		continue;
+			//	}
+
+			//	foreach (var tus in tusGroups)
+			//	{
+			//		iCurrent = iCurrent + tus.Count;
+			//		if (context != null && context.CheckCancellationPending())
+			//		{
+			//			break;
+			//		}
+
+			//		var progress = iCurrent / iTotalUnits * 100;
+			//		context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+			//		var tusToUpdate = new List<TranslationUnit>();
+			//		foreach (var tu in tus)
+			//		{
+			//			if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+			//				tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+			//			{
+			//				var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
+
+			//				tusToUpdate.Add(unit);
+			//			}
+			//		}
+
+			//		if (tusToUpdate.Count > 0)
+			//		{
+			//			//TODO - output results to log
+			//			var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+			//		}
+			//	}
+
+			//	tm.Save();
+			//}
 		}
 
 		public TranslationUnit CreateTranslationUnit(TmTranslationUnit tu, ITranslationProviderLanguageDirection languageDirection)
@@ -505,13 +512,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			List<TmTranslationUnit> values;
 
-			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService());
+			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
 				query.OpenConnection();
 
-				values = query.TranslationUnits(context, GetTmIds(tmFile, query.GeTranslationMemories()));
+				values = query.GetTranslationUnits(context, GetTmIds(tmFile, query.GeTranslationMemories()));
 			}
 			catch (Exception ex)
 			{
@@ -526,6 +533,27 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return values;
 		}
 
+		private static void UpdateTranslationUnitsContentInLocalTm(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
+		{			
+			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+
+			try
+			{
+				query.OpenConnection();
+
+				query.UpdateTranslationUnitContent(context, units);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				throw;
+			}
+			finally
+			{
+				query.CloseConnection();
+			}			
+		}
+
 		private static List<int> GetTmIds(TmFile tmFile, IEnumerable<TranslationMemory> tms)
 		{
 			var ids = new List<int>();
@@ -534,7 +562,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				foreach (var tmFileTmLanguageDirection in tmFile.TmLanguageDirections)
 				{
 					if (tm.SourceLangauge == tmFileTmLanguageDirection.Source.Name &&
-					    tm.TargetLanguage == tmFileTmLanguageDirection.Target.Name)
+						tm.TargetLanguage == tmFileTmLanguageDirection.Target.Name)
 					{
 						if (!ids.Contains(tm.Id))
 						{
@@ -856,10 +884,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		private static void AnonymizeSelectedWordsFromPreview(TmSegment segment, IEnumerable<SegmentElement> translationElements, List<WordDetails> selectedWords)
 		{
 			segment.Elements.Clear();
-
+			var anchorIds = GetAnchorIds(segment);
 			foreach (var element in translationElements.ToList())
 			{
-				var visitor = new SelectedWordsFromUiElementVisitor(selectedWords);
+				var visitor = new SelectedWordsFromUiElementVisitor(selectedWords, anchorIds);
 				element.AcceptSegmentElementVisitor(visitor);
 
 				//new elements after splited the text for selected words
@@ -896,9 +924,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			var segmentElements = new List<SegmentElement>();
 
+			var anchorIds = GetAnchorIds(segment);
 			foreach (var element in segment.Elements.ToList())
 			{
-				var visitor = new SegmentElementVisitor(removeWords, _settingsService);
+				var visitor = new SegmentElementVisitor(removeWords, anchorIds, _settingsService);
 
 				element.AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
@@ -938,6 +967,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private void AnonymizeSegmentsWithTags(TmSegment segment, List<WordDetails> removeWords)
 		{
+			var anchorIds = GetAnchorIds(segment);
 			for (var i = 0; i < segment.Elements.Count; i++)
 			{
 				if (!segment.Elements[i].GetType().UnderlyingSystemType.Name.Equals("Text"))
@@ -945,7 +975,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					continue;
 				}
 
-				var visitor = new SegmentElementVisitor(removeWords, _settingsService);
+				var visitor = new SegmentElementVisitor(removeWords, anchorIds, _settingsService);
 				//check for PI in each element from the list
 				segment.Elements[i].AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
@@ -966,6 +996,27 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					segment.Elements.InsertRange(i, segmentElements);
 				}
 			}
+		}
+
+		private static List<int> GetAnchorIds(TmSegment segment)
+		{
+			var anchorIds = new List<int>();
+			foreach (var element in segment.Elements)
+			{
+				if (element is Tag tag)
+				{
+					if (!anchorIds.Contains(tag.AlignmentAnchor))
+					{
+						anchorIds.Add(tag.AlignmentAnchor);
+					}
+					if (!anchorIds.Contains(tag.Anchor))
+					{
+						anchorIds.Add(tag.Anchor);
+					}					
+				}
+			}
+
+			return anchorIds;
 		}
 
 		private static void AddElement(SegmentElement element, ICollection<SegmentElement> elements)

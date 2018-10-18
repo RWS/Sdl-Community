@@ -37,13 +37,44 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			string result;
 
+			var settings = new XmlWriterSettings
+			{
+				Indent = false,
+				OmitXmlDeclaration = true,
+				DoNotEscapeUriAttributes = true
+			};
+
 			using (var stream = new MemoryStream())
 			{
 				var serializer = new XmlSerializer(typeof(T), new[]{
 					typeof(Tag),
 					typeof(Text)
 				});
-				serializer.Serialize(XmlWriter.Create(stream), obj);
+				serializer.Serialize(XmlWriter.Create(stream, settings), obj);
+				stream.Flush();
+
+				stream.Position = 0;
+				var reader = new StreamReader(stream);
+				result = reader.ReadToEnd();
+			}
+
+			return result;
+		}
+
+		public string Serialize<T>(T obj, XmlSerializer serializer)
+		{
+			string result;
+
+			var settings = new XmlWriterSettings
+			{
+				Indent = false,
+				OmitXmlDeclaration = true,
+				DoNotEscapeUriAttributes = true
+			};
+
+			using (var stream = new MemoryStream())
+			{
+				serializer.Serialize(XmlWriter.Create(stream, settings), obj);
 				stream.Flush();
 
 				stream.Position = 0;
@@ -110,7 +141,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public T Deserialize<T>(string content, XmlSerializer serializer) where T : new()
 		{
-			var reader = new StringReader(content);			
+			var reader = new StringReader(content);
 			var obj = serializer.Deserialize(XmlReader.Create(reader));
 			var result = (T)obj;
 
