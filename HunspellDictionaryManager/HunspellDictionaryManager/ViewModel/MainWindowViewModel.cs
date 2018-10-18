@@ -16,10 +16,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		#region Private Fields
 		private MainWindow _mainWindow;
 		private ObservableCollection<HunspellLangDictionaryModel> _dictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
+		private ObservableCollection<LanguageModel> _languages = new ObservableCollection<LanguageModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
 		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
+		private Language[] _studioLanguages = Language.GetAllLanguages();
 		private string _hunspellDictionariesFolderPath;
-		private string _newDictionaryLanguage;
+		private LanguageModel _newDictionaryLanguage;
 		private string _resultMessageColor;
 		private string _labelVisibility = Constants.Hidden;
 		private string _resultMessage;
@@ -33,7 +35,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		public MainWindowViewModel(MainWindow mainWindow)
 		{
 			_mainWindow = mainWindow;
-			LoadStudioLanguageDictionaries();
+			LoadDictionariesLanguages();
+			LoadStudioLanguages();
 		}
 		#endregion
 
@@ -68,7 +71,17 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			}
 		}
 
-		public string NewDictionaryLanguage
+		public ObservableCollection<LanguageModel> Languages
+		{
+			get => _languages;
+			set
+			{
+				_languages = value;
+				OnPropertyChanged();
+			}
+		}
+
+		public LanguageModel NewDictionaryLanguage
 		{
 			get => _newDictionaryLanguage;
 			set
@@ -121,7 +134,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private void CreateHunspellDictionaryAction()
 		{
 			LabelVisibility = Constants.Hidden;
-			if (!string.IsNullOrEmpty(NewDictionaryLanguage))
+			if (NewDictionaryLanguage != null)
 			{
 				CopyFiles();
 				UpdateConfigFile();
@@ -148,12 +161,12 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void RefreshAction()
 		{
-			NewDictionaryLanguage = string.Empty;
+			NewDictionaryLanguage = new LanguageModel();
 			DeletedDictionaryLanguage = new HunspellLangDictionaryModel();
 			SelectedDictionaryLanguage = new HunspellLangDictionaryModel();
 			DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>();
 
-			LoadStudioLanguageDictionaries();
+			LoadDictionariesLanguages();
 			LabelVisibility = Constants.Hidden;
 		}
 		#endregion
@@ -162,13 +175,13 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		/// <summary>
 		/// Load .dic and .aff files from the installed Studio location -> HunspellDictionaries folder
+		/// and display the dictionary language name which is compatible with Studio 
 		/// </summary>
-		private void LoadStudioLanguageDictionaries()
+		private void LoadDictionariesLanguages()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
 			if (!string.IsNullOrEmpty(studioPath))
 			{
-				var studioLanguages = Language.GetAllLanguages();
 				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
 
 				// get .dic files from Studio HunspellDictionaries folder
@@ -179,7 +192,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 					{
 						DictionaryFile = hunspellDictionary,
 						ShortLanguageName = Path.GetFileNameWithoutExtension(hunspellDictionary),
-						DisplayLanguageName = SetDisplayLanguageName(Path.GetFileNameWithoutExtension(hunspellDictionary), studioLanguages)
+						DisplayLanguageName = SetDisplayLanguageName(Path.GetFileNameWithoutExtension(hunspellDictionary))
 					};
 					// add to dropdown list only dictionaries that has language correspondence in Studio
 					if (!string.IsNullOrEmpty(hunspellLangDictionaryModel.DisplayLanguageName))
@@ -210,8 +223,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void CopyFiles()
 		{
-			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage}.dic");
-			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage}.aff");
+			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode}.dic");
+			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode}.aff");
 
 			File.Copy(SelectedDictionaryLanguage.DictionaryFile, newDictionaryFilePath, true);
 			File.Copy(SelectedDictionaryLanguage.AffFile, newAffFilePath, true);
@@ -227,16 +240,16 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			var xmlDoc = XDocument.Load(configFilePath);
 
 			// add new language dictionary if doesn't already exists in the config file
-			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == NewDictionaryLanguage);
+			var languageElem = (string)xmlDoc.Root.Elements("language").FirstOrDefault(x => (string)x.Element("dict") == NewDictionaryLanguage.IsoCode);
 			if (string.IsNullOrEmpty(languageElem))
 			{
 				var node = new XElement("language",
-					new XElement("isoCode", NewDictionaryLanguage.Replace('_', '-')), new XElement("dict", NewDictionaryLanguage));
+					new XElement("isoCode", NewDictionaryLanguage.IsoCode.Replace('_', '-')), new XElement("dict", NewDictionaryLanguage.IsoCode.Replace('-', '_')));
 
 				xmlDoc.Element("config").Add(node);
 				xmlDoc.Save(configFilePath);
 
-				LoadStudioLanguageDictionaries();
+				LoadDictionariesLanguages();
 				SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
 			}
 			else
@@ -301,11 +314,11 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// <param name="hunspellDictionaryName">hunspell dictionary name</param>
 		/// <param name="studioLanguages">all Studio languages</param>
 		/// <returns>Dictionary display language name</returns>
-		private string SetDisplayLanguageName(string hunspellDictionaryName, Language[] studioLanguages)
+		private string SetDisplayLanguageName(string hunspellDictionaryName)
 		{
 			hunspellDictionaryName = hunspellDictionaryName.Replace('_', '-');
 			//search for Language based on IsoAbbreviation
-			var displayLanguageName = studioLanguages.Where(a => a.IsoAbbreviation.Equals(hunspellDictionaryName)).FirstOrDefault();
+			var displayLanguageName = _studioLanguages.Where(a => a.IsoAbbreviation.Equals(hunspellDictionaryName)).FirstOrDefault();
 			if (displayLanguageName != null)
 			{
 				return displayLanguageName.DisplayName;
@@ -313,13 +326,30 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			else
 			{
 				// search for Language based on TwoLetterISOLanguageName
-				displayLanguageName = studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
+				displayLanguageName = _studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
 				if(displayLanguageName != null)
 				{
 					return displayLanguageName.DisplayName;
 				}
 			}
 			return string.Empty;
+		}
+
+		/// <summary>
+		/// Load languages which are compatible in Studio
+		/// </summary>
+		private void LoadStudioLanguages()
+		{
+			foreach(var language in _studioLanguages)
+			{
+				var languageModel = new LanguageModel
+				{
+					LanguageName = language.DisplayName,
+					IsoCode = language.IsoAbbreviation,
+					TwoLetterISOLanguageName = language.CultureInfo.TwoLetterISOLanguageName
+				};
+				Languages.Add(languageModel);
+			}
 		}
 		#endregion
 	}

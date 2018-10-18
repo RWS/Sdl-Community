@@ -56,18 +56,23 @@
 			<ColumnDefinition Width="72*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 
-		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Please select appropriate dictionary language" Margin="3 0 0 0" />
+		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
 		<ComboBox Grid.Row="1" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,3,0" />
 
-		<Label Name="enterLangLbl" Grid.Row="2"  Grid.Column="0" Content="Enter new dictionary language" Margin="3 0 0 0" />
-		<TextBox  Grid.Row="2" Grid.Column="1"
+		<Label Name="enterLangLbl" Grid.Row="2"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="2" Grid.Column="1"
+		    controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Selecte language for the new dictionary"
+			ItemsSource="{Binding Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,3,0" />
+		<!--<TextBox  Grid.Row="2" Grid.Column="1"
 				 controls:TextBoxHelper.Watermark="Enter new dictionary language"  ToolTip="Dictionary name format example: de_De/de or de-DE" 
 		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Margin="5,5,3,0" Width="Auto">
-		</TextBox>
+		</TextBox>-->
 
 		<Label Name="deleteLangLbl" Grid.Row="3"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
 		<ComboBox Grid.Row="3" Grid.Column="1"
