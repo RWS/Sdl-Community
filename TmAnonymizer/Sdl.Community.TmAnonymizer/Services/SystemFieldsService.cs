@@ -159,12 +159,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			}
 
-			tm.Save();
-
-			foreach (var languageDirection in tmFile.TmLanguageDirections)
-			{
-				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
-			}			
+			tm.Save();					
 		}
 
 		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)

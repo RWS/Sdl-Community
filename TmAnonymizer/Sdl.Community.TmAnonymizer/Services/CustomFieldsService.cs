@@ -227,12 +227,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					//TODO - output results to log
 					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 				}
-			}
-
-			foreach (var languageDirection in tmFile.TmLanguageDirections)
-			{
-				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
-			}
+			}			
 		}
 
 		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
