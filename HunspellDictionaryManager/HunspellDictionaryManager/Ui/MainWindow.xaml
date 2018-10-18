@@ -52,8 +52,8 @@
 			<RowDefinition Height="*"></RowDefinition>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="89*"></ColumnDefinition>
-			<ColumnDefinition Width="72*"></ColumnDefinition>
+			<ColumnDefinition Width="85*"></ColumnDefinition>
+			<ColumnDefinition Width="75*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 
 		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
@@ -61,14 +61,14 @@
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,3,0" />
+			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
 		<Label Name="enterLangLbl" Grid.Row="2"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
 		<ComboBox Grid.Row="2" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Selecte language for the new dictionary"
 			ItemsSource="{Binding Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,3,0" />
+			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,5,0" />
 		<!--<TextBox  Grid.Row="2" Grid.Column="1"
 				 controls:TextBoxHelper.Watermark="Enter new dictionary language"  ToolTip="Dictionary name format example: de_De/de or de-DE" 
 		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Margin="5,5,3,0" Width="Auto">
@@ -79,14 +79,14 @@
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,3,0" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="80" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="4" Grid.Column="0" Width="80" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="4" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
 		<TextBox Name="resultMessageLbl" Grid.Row="0"  Grid.Column="0" Margin="5 0 0 0"
 				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
