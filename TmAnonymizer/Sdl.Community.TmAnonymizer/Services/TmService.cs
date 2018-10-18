@@ -448,12 +448,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 
-				tm.Save();
-
-				foreach (var languageDirection in translationMemory.TmFile.TmLanguageDirections)
-				{
-					SaveTmCacheStorage(context, translationMemory.TmFile, languageDirection);
-				}
+				tm.Save();				
 			}
 		}
 
