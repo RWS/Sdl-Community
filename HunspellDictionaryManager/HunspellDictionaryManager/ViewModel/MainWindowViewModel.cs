@@ -186,7 +186,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				var affFiles = Directory.GetFiles(_hunspellDictionariesFolderPath, "*.aff").ToList();
 				foreach (var dicFile in DictionaryLanguages)
 				{
-					var affFile = affFiles.Where(d => d.Contains(dicFile.DisplayName)).FirstOrDefault();
+					var affFile = affFiles.Where(d => d.Contains($"{dicFile.DisplayName}.aff")).FirstOrDefault();
 					if (affFile != null)
 					{
 						dicFile.AffFile = affFile;
