@@ -5,9 +5,10 @@
   <Description></Description>
   <Author></Author>
 	<Include>
+		<File>EPPlus.dll</File>
 		<File>Xceed.Wpf.Toolkit.dll</File>
 		<File>Newtonsoft.Json.dll</File>
-		<File>EPPlus.dll</File>
+		<File>System.Data.SQLite.dll</File>
 	</Include>
   <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
 </PluginPackage>

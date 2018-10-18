@@ -107,5 +107,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return result;
 		}
+
+		public T Deserialize<T>(string content, XmlSerializer serializer) where T : new()
+		{
+			var reader = new StringReader(content);			
+			var obj = serializer.Deserialize(XmlReader.Create(reader));
+			var result = (T)obj;
+
+			return result;
+		}
 	}
 }
