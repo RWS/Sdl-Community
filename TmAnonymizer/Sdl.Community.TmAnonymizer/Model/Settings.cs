@@ -10,11 +10,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			Rules = new List<Rule>();
 			Accepted = false;
 			AlreadyAddedDefaultRules = false;
+			UseSqliteApiForFileBasedTm = true;
 		}
 
 		public List<TmFile> TmFiles { get; set; }
 
 		public List<Rule> Rules { get; set; }
+
+		public bool UseSqliteApiForFileBasedTm { get; set; }
 
 		public string LastUsedServerUri { get; set; }
 

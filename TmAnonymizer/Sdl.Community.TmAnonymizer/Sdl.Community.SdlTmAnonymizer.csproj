@@ -153,6 +153,7 @@
     <Compile Include="Model\FieldDefinitions\IntFieldValue.cs" />
     <Compile Include="Model\FieldDefinitions\MultiplePicklistFieldValue.cs" />
     <Compile Include="Model\FieldDefinitions\MultipleStringFieldValue.cs" />
+    <Compile Include="Model\FieldDefinitions\PicklistItem.cs" />
     <Compile Include="Model\FieldDefinitions\SinglePicklistFieldValue.cs" />
     <Compile Include="Model\FieldDefinitions\SingleStringFieldValue.cs" />
     <Compile Include="Model\LanguageDirection.cs" />

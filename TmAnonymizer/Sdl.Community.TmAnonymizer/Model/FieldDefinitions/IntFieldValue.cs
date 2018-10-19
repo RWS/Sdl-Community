@@ -9,13 +9,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 	{
 		public int Value { get; set; }
 
+		public int? PreviousValue { get; set; }
+
 		public override bool Merge(FieldValue rhs)
 		{
 			if (Equals(rhs))
 			{
 				return false;
 			}
-
+			
 			Value = ((IntFieldValue)rhs).Value;
 			return true;
 		}
@@ -26,7 +28,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 			{
 				throw new LanguagePlatformException(ErrorCode.EditScriptIncompatibleFieldValueTypes);
 			}
-
+			
 			Value += v.Value;
 			return true;
 		}
@@ -51,7 +53,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 		}
 
 		public override void Clear()
-		{
+		{			
 			Value = 0;
 		}
 

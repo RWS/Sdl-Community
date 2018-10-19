@@ -310,7 +310,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			};
 		}
 
-		public void AnonymizeServerBasedTu(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
+		public void AnonymizeServerBasedTm(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
@@ -386,77 +386,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		public void AnonymizeFileBasedTu(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
+		public void AnonymizeFileBasedTm(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
-			foreach (var translationMemory in anonymizeTranslationMemories)
+			var settings = _settingsService.GetSettings();
+			if (settings.UseSqliteApiForFileBasedTm)
 			{
-				UpdateTranslationUnitsContentInLocalTm(context, translationMemory.TmFile, translationMemory.TranslationUnits);
+				foreach (var translationMemory in anonymizeTranslationMemories)
+				{
+					UpdateTranslationUnitsContentSqlite(context, translationMemory.TmFile, translationMemory.TranslationUnits);
+					return;
+				}
 			}
 
-
-
-			//decimal iCurrent = 0;
-			//decimal iTotalUnits = 0;
-			//foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
-			//{
-			//	iTotalUnits += anonymizeTranslationMemory.TranslationUnitDetails.Count;
-			//}
-
-			//if (iTotalUnits == 0)
-			//{
-			//	return;
-			//}
-
-			//foreach (var translationMemory in anonymizeTranslationMemories)
-			//{
-			//	var tm = new FileBasedTranslationMemory(translationMemory.TmFile.Path);
-
-			//	var groupsOf = 200;
-			//	var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationMemory.TranslationUnits) };
-			//	if (translationMemory.TranslationUnits.Count > groupsOf)
-			//	{
-			//		tusGroups = translationMemory.TranslationUnits.ChunkBy(groupsOf);
-			//	}
-
-			//	if (tusGroups.Count == 0)
-			//	{
-			//		continue;
-			//	}
-
-			//	foreach (var tus in tusGroups)
-			//	{
-			//		iCurrent = iCurrent + tus.Count;
-			//		if (context != null && context.CheckCancellationPending())
-			//		{
-			//			break;
-			//		}
-
-			//		var progress = iCurrent / iTotalUnits * 100;
-			//		context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-			//		var tusToUpdate = new List<TranslationUnit>();
-			//		foreach (var tu in tus)
-			//		{
-			//			if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-			//				tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-			//			{
-			//				var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
-
-			//				tusToUpdate.Add(unit);
-			//			}
-			//		}
-
-			//		if (tusToUpdate.Count > 0)
-			//		{
-			//			//TODO - output results to log
-			//			var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-			//		}
-			//	}
-
-			//	tm.Save();
-			//}
+			UpdateTranslationUnitsContent(context, anonymizeTranslationMemories);
 		}
 
 		public TranslationUnit CreateTranslationUnit(TmTranslationUnit tu, ITranslationProviderLanguageDirection languageDirection)
@@ -478,11 +422,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 			};
 
-			var v1 = unit.SourceSegment.GetHashCode();
-			var v2 = unit.TargetSegment.GetHashCode();
-
-			var v3 = unit.SourceSegment.GetWeakHashCode();
-			var v4 = unit.TargetSegment.GetWeakHashCode();
 
 			return unit;
 		}
@@ -506,6 +445,70 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return multipleStringValues;
+		}
+
+		private void UpdateTranslationUnitsContent(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
+		{
+			decimal iCurrent = 0;
+			decimal iTotalUnits = 0;
+			foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
+			{
+				iTotalUnits += anonymizeTranslationMemory.TranslationUnitDetails.Count;
+			}
+
+			if (iTotalUnits == 0)
+			{
+				return;
+			}
+
+			foreach (var translationMemory in anonymizeTranslationMemories)
+			{
+				var tm = new FileBasedTranslationMemory(translationMemory.TmFile.Path);
+
+				var groupsOf = 200;
+				var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationMemory.TranslationUnits) };
+				if (translationMemory.TranslationUnits.Count > groupsOf)
+				{
+					tusGroups = translationMemory.TranslationUnits.ChunkBy(groupsOf);
+				}
+
+				if (tusGroups.Count == 0)
+				{
+					continue;
+				}
+
+				foreach (var tus in tusGroups)
+				{
+					iCurrent = iCurrent + tus.Count;
+					if (context != null && context.CheckCancellationPending())
+					{
+						break;
+					}
+
+					var progress = iCurrent / iTotalUnits * 100;
+					context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+					var tusToUpdate = new List<TranslationUnit>();
+					foreach (var tu in tus)
+					{
+						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+							tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+						{
+							var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
+
+							tusToUpdate.Add(unit);
+						}
+					}
+
+					if (tusToUpdate.Count > 0)
+					{
+						//TODO - output results to log
+						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+					}
+				}
+
+				tm.Save();
+			}
 		}
 
 		private static List<TmTranslationUnit> GetTranslationUnitsFromLocalTm(ProgressDialogContext context, TmFile tmFile)
@@ -533,8 +536,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return values;
 		}
 
-		private static void UpdateTranslationUnitsContentInLocalTm(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
-		{			
+		private static void UpdateTranslationUnitsContentSqlite(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
+		{
 			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
@@ -551,7 +554,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			finally
 			{
 				query.CloseConnection();
-			}			
+			}
 		}
 
 		private static List<int> GetTmIds(TmFile tmFile, IEnumerable<TranslationMemory> tms)
@@ -577,7 +580,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return ids;
 		}
 
-		private List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
+		private static List<Model.FieldDefinitions.FieldValue> SetFieldValues(FieldValues fieldValues)
 		{
 			var result = new List<Model.FieldDefinitions.FieldValue>();
 
@@ -590,29 +593,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					case FieldValueType.SingleString:
 						var singleStringValue = new Model.FieldDefinitions.SingleStringFieldValue();
 						singleStringValue.Name = fieldValue.Name;
-						singleStringValue.Value = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0];
+						singleStringValue.Value = ((SingleStringFieldValue)fieldValue).Value;
 
 						result.Add(singleStringValue);
 						break;
 					case FieldValueType.MultipleString:
 						var multipleStringValue = new Model.FieldDefinitions.MultipleStringFieldValue();
 						multipleStringValue.Name = fieldValue.Name;
-						multipleStringValue.Values =
-							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType));
-
+						multipleStringValue.Values = ((MultipleStringFieldValue)fieldValue).Values as HashSet<string>;
+					
 						result.Add(multipleStringValue);
 						break;
 					case FieldValueType.DateTime:
 						var dateTimeValue = new Model.FieldDefinitions.DateTimeFieldValue();
 						dateTimeValue.Name = fieldValue.Name;
-						dateTimeValue.Value = DateTime.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+						dateTimeValue.Value = ((DateTimeFieldValue)fieldValue).Value;
 
 						result.Add(dateTimeValue);
 						break;
 					case FieldValueType.SinglePicklist:
 						var singlePickValue = new Model.FieldDefinitions.SinglePicklistFieldValue();
 						singlePickValue.Name = fieldValue.Name;
-						singlePickValue.Value = new PicklistItem();
+						singlePickValue.Value = new Model.FieldDefinitions.PicklistItem();
 
 						if (fieldValue is SinglePicklistFieldValue singlePicklistFieldValue)
 						{
@@ -625,18 +627,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					case FieldValueType.MultiplePicklist:
 						var multiplePickValue = new Model.FieldDefinitions.MultiplePicklistFieldValue();
 						multiplePickValue.Name = fieldValue.Name;
-						multiplePickValue.Values = new List<PicklistItem>();
+						multiplePickValue.Values = new List<Model.FieldDefinitions.PicklistItem>();
 
 						if (fieldValue is MultiplePicklistFieldValue multiplePicklistFieldValue)
 						{
-							multiplePickValue.Values = multiplePicklistFieldValue.Values;
+							foreach (var value in multiplePicklistFieldValue.Values)
+							{
+								var picklist = new Model.FieldDefinitions.PicklistItem
+								{
+									ID = value.ID,
+									Name = value.Name
+								};
+
+								multiplePickValue.Values.Add(picklist);
+							}
+
 							result.Add(multiplePickValue);
 						}
 						break;
 					case FieldValueType.Integer:
 						var intValue = new Model.FieldDefinitions.IntFieldValue();
 						intValue.Name = fieldValue.Name;
-						intValue.Value = int.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+						intValue.Value = ((IntFieldValue)fieldValue).Value;
 
 						result.Add(intValue);
 						break;
@@ -648,7 +660,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return result;
 		}
 
-		private FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
+		private static FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
 		{
 			var result = new FieldValues();
 			foreach (var fieldValue in fieldValues)
@@ -660,34 +672,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					case FieldValueType.SingleString:
 						var singleStringValue = new SingleStringFieldValue();
 						singleStringValue.Name = fieldValue.Name;
-						singleStringValue.Value = GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0];
+						singleStringValue.Value = ((Model.FieldDefinitions.SingleStringFieldValue)fieldValue).Value;
 
 						result.Add(singleStringValue);
 						break;
 					case FieldValueType.MultipleString:
 						var multipleStringValue = new MultipleStringFieldValue();
 						multipleStringValue.Name = fieldValue.Name;
-						multipleStringValue.Values =
-							new HashSet<string>(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType));
+						multipleStringValue.Values = ((Model.FieldDefinitions.MultipleStringFieldValue)fieldValue).Values;
 
 						result.Add(multipleStringValue);
 						break;
 					case FieldValueType.DateTime:
 						var dateTimeValue = new DateTimeFieldValue();
 						dateTimeValue.Name = fieldValue.Name;
-						dateTimeValue.Value = DateTime.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+						dateTimeValue.Value = ((Model.FieldDefinitions.DateTimeFieldValue)fieldValue).Value;
 
 						result.Add(dateTimeValue);
 						break;
 					case FieldValueType.SinglePicklist:
 						var singlePickValue = new SinglePicklistFieldValue();
 						singlePickValue.Name = fieldValue.Name;
-						singlePickValue.Value = new PicklistItem();
+
 
 						if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue singlePicklistFieldValue)
 						{
-							singlePickValue.Value.ID = singlePicklistFieldValue.Value.ID;
-							singlePickValue.Value.Name = singlePicklistFieldValue.Value.Name;
+							singlePickValue.Value = new PicklistItem
+							{
+								ID = singlePicklistFieldValue.Value.ID,
+								Name = singlePicklistFieldValue.Value.Name
+							};
 
 							result.Add(singlePickValue);
 						}
@@ -699,14 +713,23 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 						if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
 						{
-							multiplePickValue.Values = multiplePicklistFieldValue.Values;
+							foreach (var value in multiplePicklistFieldValue.Values)
+							{
+								var pickList = new PicklistItem
+								{
+									ID = value.ID,
+									Name = value.Name
+								};
+
+								multiplePickValue.Add(pickList);
+							}
 							result.Add(multiplePickValue);
 						}
 						break;
 					case FieldValueType.Integer:
 						var intValue = new IntFieldValue();
 						intValue.Name = fieldValue.Name;
-						intValue.Value = int.Parse(GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType)[0]);
+						intValue.Value = ((Model.FieldDefinitions.IntFieldValue)fieldValue).Value;
 
 						result.Add(intValue);
 						break;
@@ -1012,7 +1035,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					if (!anchorIds.Contains(tag.Anchor))
 					{
 						anchorIds.Add(tag.Anchor);
-					}					
+					}
 				}
 			}
 

@@ -14,14 +14,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			UncheckAllTMs();
 		}
 				
-		public PathInfo PathInfo { get; }
+		public PathInfo PathInfo { get; }		
 
 		public bool UserAgreed()
 		{
 			var settings = GetSettings();
 			return settings.Accepted;
 		}
-
+	
 		public bool DefaultRulesAlreadyAdded()
 		{
 			var settings = GetSettings();

@@ -87,7 +87,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 						BackupFileBasedTms(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
 						
-						_model.TmService.AnonymizeFileBasedTu(ProgressDialog.Current, anonymizeTranslationMemories);						
+						_model.TmService.AnonymizeFileBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);						
 					}
 
 					//server based tms
@@ -102,7 +102,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 						BackupServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
 						
-						_model.TmService.AnonymizeServerBasedTu(ProgressDialog.Current, anonymizeTranslationMemories);					
+						_model.TmService.AnonymizeServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);					
 					}
 				}, settings);
 

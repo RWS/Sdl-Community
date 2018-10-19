@@ -14,6 +14,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 	public class MultiplePicklistFieldValue : FieldValue
 	{
 		public List<PicklistItem> Values { get; set; }
+		public List<PicklistItem> PreviousValues { get; set; }
 
 		public override bool Merge(FieldValue rhs)
 		{
@@ -51,7 +52,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 			Values.Add(v);
 			return true;
 		}
-
 
 		public override bool Equals(object obj)
 		{
@@ -99,7 +99,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 		}
 
 		public override void Clear()
-		{
+		{			
 			Values.Clear();
 		}
 

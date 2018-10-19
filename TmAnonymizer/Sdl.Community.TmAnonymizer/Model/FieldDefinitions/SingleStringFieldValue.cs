@@ -10,6 +10,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 	{
 		public string Value { get; set; }
 
+		public string PreviousValue { get; set; }
+
 		public override bool Merge(FieldValue rhs)
 		{
 			if (Equals(rhs))
@@ -48,7 +50,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 		}
 
 		public override void Clear()
-		{
+		{		
 			Value = null;
 		}
 

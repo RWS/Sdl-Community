@@ -11,7 +11,6 @@ using Sdl.Community.SdlTmAnonymizer.Model.TM;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
-using FieldValue = Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions.FieldValue;
 
 namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 {
@@ -402,13 +401,18 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 		}
 
 		/// <summary>
-		/// Get translation units
+		/// Get Translation Units
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="ids">A list of TM IDs</param>
-		/// <returns>A list of Translation Units</returns>
+		/// <param name="context">Progress dialog context</param>
+		/// <param name="ids">A list of Translation Memory Ids</param>
+		/// <returns>A list of Translation Unit</returns>
 		public List<TmTranslationUnit> GetTranslationUnits(ProgressDialogContext context, List<int> ids)
 		{
+			if (ids == null || ids.Count == 0)
+			{
+				return null;
+			}
+
 			var values = new List<TmTranslationUnit>();
 
 			decimal iTotalUnits = GetTranslationUnitsCount(ids);
@@ -417,15 +421,16 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			var sqlQuery = "SELECT " +
 						   "id, " + //0
 						   "guid, " + //1
-						   "source_segment, " + //2
-						   "target_segment, " + //3
-						   "creation_date, " + //4
-						   "creation_user, " + //5
-						   "change_date, " + //6
-						   "change_user, " + //7
-						   "last_used_date, " + //8
-						   "last_used_user, " + //9
-						   "usage_counter " + //10
+						   "translation_memory_id, " + //2
+						   "source_segment, " + //3
+						   "target_segment, " + //4
+						   "creation_date, " + //5
+						   "creation_user, " + //6
+						   "change_date, " + //7
+						   "change_user, " + //8
+						   "last_used_date, " + //9
+						   "last_used_user, " + //10
+						   "usage_counter " + //11
 						   "FROM " + tableName + " " +
 						   "WHERE translation_memory_id IN (" + GetIdsString(ids) + ")";
 
@@ -476,52 +481,168 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			return values;
 		}
 
+		/// <summary>
+		/// Update System Fields
+		/// </summary>
+		/// <param name="context">Progress dialog context</param>
+		/// <param name="units">Translation Units with updated System Field data</param>
 		public void UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> units)
 		{
+			if (units == null || units.Count == 0)
+			{
+				return;
+			}
+
 			decimal iTotalUnits = units.Count;
 
 			var tableName = "translation_units";
 			var sqlQuery = "UPDATE " + tableName + " SET " +
-						   "creation_date = @creation_date, " +
 						   "creation_user = @creation_user, " +
-						   "change_date = @change_date, " +
 						   "change_user = @change_user, " +
-						   "last_used_date = @last_used_date, " +
-						   "last_used_user = @last_used_user, " +
-						   "usage_counter = @usage_counter " +
+						   "last_used_user = @last_used_user " +
 						   "WHERE id = @id";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
-				decimal iCurrent = 0;
-				foreach (var unit in units)
-				{
-					iCurrent++;
+				cmdQuery.Parameters.Add(new SQLiteParameter("@id", DbType.Int32));
+				cmdQuery.Parameters.Add(new SQLiteParameter("@creation_user", DbType.String));
+				cmdQuery.Parameters.Add(new SQLiteParameter("@change_user", DbType.String));
+				cmdQuery.Parameters.Add(new SQLiteParameter("@last_used_user", DbType.String));
 
-					if (iCurrent % 100 == 0)
+				using (var transaction = _connection.BeginTransaction())
+				{
+					decimal iCurrent = 0;
+					foreach (var unit in units)
 					{
-						var progress = iCurrent++ / iTotalUnits * 100;
-						context?.Report(Convert.ToInt32(progress),
-							"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						iCurrent++;
+
+						if (iCurrent % 1000 == 0)
+						{
+							if (context != null && context.CheckCancellationPending())
+							{
+								break;
+							}
+
+							var progress = iCurrent++ / iTotalUnits * 100;
+							context?.Report(Convert.ToInt32(progress),
+								"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						}
+
+						cmdQuery.Parameters["@id"].Value = unit.ResourceId.Id;
+						cmdQuery.Parameters["@creation_user"].Value = unit.SystemFields.CreationUser;
+						cmdQuery.Parameters["@change_user"].Value = unit.SystemFields.ChangeUser;
+						cmdQuery.Parameters["@last_used_user"].Value = unit.SystemFields.UseUser;
+
+						//TODO log result; -1: error; >=0: number of records updated
+						var result = cmdQuery.ExecuteNonQuery();
 					}
 
-					cmdQuery.Parameters.Add("@id", DbType.Int32).Value = unit.ResourceId.Id;
-					cmdQuery.Parameters.Add("@creation_date", DbType.String).Value = NormalizeToString(unit.SystemFields.ChangeDate);
-					cmdQuery.Parameters.Add("@creation_user", DbType.String).Value = unit.SystemFields.ChangeUser;
-					cmdQuery.Parameters.Add("@change_date", DbType.String).Value = NormalizeToString(unit.SystemFields.ChangeDate);
-					cmdQuery.Parameters.Add("@change_user", DbType.String).Value = unit.SystemFields.ChangeUser;
-					cmdQuery.Parameters.Add("@last_used_date", DbType.String).Value = NormalizeToString(unit.SystemFields.UseDate);
-					cmdQuery.Parameters.Add("@last_used_user", DbType.String).Value = unit.SystemFields.UseUser;
-					cmdQuery.Parameters.Add("@usage_counter", DbType.Int32).Value = unit.SystemFields.UseCount;
-
-					//TODO log result; -1: error; >=0: number of records updated
-					var result = cmdQuery.ExecuteNonQuery();
+					transaction.Commit();
 				}
 			}
 		}
 
+		/// <summary>
+		/// Update Custom Fields
+		/// </summary>
+		/// <param name="context">Progress dialog context</param>
+		/// <param name="units">Translation Units with updated Custom Field data</param>
+		public void UpdateCustomFields(ProgressDialogContext context, List<TmTranslationUnit> units)
+		{
+			if (units == null || units.Count == 0)
+			{
+				return;
+			}
+
+			var attributeIds = GetTmAttributes(units.Select(a => a.TmId).Distinct().ToList());
+
+			var singleStringFieldValues = new List<Model.FieldDefinitions.SingleStringFieldValue>();
+			var multpleStringFieldValues = new List<Model.FieldDefinitions.MultipleStringFieldValue>();
+			var intFieldValues = new List<Model.FieldDefinitions.IntFieldValue>();
+			var dateFieldValues = new List<Model.FieldDefinitions.DateTimeFieldValue>();
+
+			foreach (var unit in units)
+			{
+				foreach (var value in unit.FieldValues)
+				{
+					if (value.ValueType == FieldValueType.SingleString &&
+						value is Model.FieldDefinitions.SingleStringFieldValue singleStringFieldValue)
+					{
+						var item = singleStringFieldValues.FirstOrDefault(
+							a => a.Name == singleStringFieldValue.Name &&
+								 a.Value == singleStringFieldValue.Value &&
+								 a.PreviousValue == singleStringFieldValue.PreviousValue);
+
+						if (item == null && singleStringFieldValue.PreviousValue != null)
+						{
+							singleStringFieldValues.Add(singleStringFieldValue);
+						}
+					}
+
+					if (value.ValueType == FieldValueType.MultipleString &&
+						value is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue)
+					{
+						var item = multpleStringFieldValues.FirstOrDefault(
+							a => a.Name == multipleStringFieldValue.Name &&
+								 a.Values == multipleStringFieldValue.Values &&
+								 a.PreviousValues == multipleStringFieldValue.PreviousValues);
+
+						if (item == null && multipleStringFieldValue.PreviousValues != null)
+						{
+							multpleStringFieldValues.Add(multipleStringFieldValue);
+						}
+					}
+
+					if (value.ValueType == FieldValueType.Integer &&
+						value is Model.FieldDefinitions.IntFieldValue intFieldValue)
+					{
+						var item = intFieldValues.FirstOrDefault(
+							a => a.Name == intFieldValue.Name &&
+								 a.Value == intFieldValue.Value &&
+								 a.PreviousValue == intFieldValue.PreviousValue);
+
+						if (item == null && intFieldValue.PreviousValue != null)
+						{
+							intFieldValues.Add(intFieldValue);
+						}
+					}
+
+					if (value.ValueType == FieldValueType.DateTime &&
+						value is Model.FieldDefinitions.DateTimeFieldValue dateFieldValue)
+					{
+						var item = dateFieldValues.FirstOrDefault(
+							a => a.Name == dateFieldValue.Name &&
+								 a.Value == dateFieldValue.Value &&
+								 a.PreviousValue == dateFieldValue.PreviousValue);
+
+						if (item == null && dateFieldValue.PreviousValue != null)
+						{
+							dateFieldValues.Add(dateFieldValue);
+						}
+					}
+				}
+			}
+
+			//TODO: add logic to update picklists; currently the picklists are updated via the TM API for convinience...
+
+			UpdateCustomFields(context, FieldValueType.SingleString, singleStringFieldValues, attributeIds);
+			UpdateCustomFields(context, FieldValueType.MultipleString, multpleStringFieldValues, attributeIds);
+			UpdateCustomFields(context, FieldValueType.Integer, intFieldValues, attributeIds);
+			UpdateCustomFields(context, FieldValueType.DateTime, dateFieldValues, attributeIds);
+		}
+
+		/// <summary>
+		/// Update Translation Unit content
+		/// </summary>
+		/// <param name="context">Progress dialog context</param>
+		/// <param name="units">Translation Units with updated source and/or target data</param>
 		public void UpdateTranslationUnitContent(ProgressDialogContext context, List<TmTranslationUnit> units)
 		{
+			if (units == null || units.Count == 0)
+			{
+				return;
+			}
+
 			decimal iTotalUnits = units.Count;
 
 			var tableName = "translation_units";
@@ -537,36 +658,60 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
-				decimal iCurrent = 0;
-				foreach (var unit in units)
-				{
-					iCurrent++;
+				cmdQuery.Parameters.Add(new SQLiteParameter("@id", DbType.Int32));
+				cmdQuery.Parameters.Add(new SQLiteParameter("@source_segment", DbType.String));
+				cmdQuery.Parameters.Add(new SQLiteParameter("@target_segment", DbType.String));
 
-					if (iCurrent % 100 == 0)
+				using (var transaction = _connection.BeginTransaction())
+				{
+					decimal iCurrent = 0;
+					foreach (var unit in units)
 					{
-						var progress = iCurrent++ / iTotalUnits * 100;
-						context?.Report(Convert.ToInt32(progress),
-							"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						iCurrent++;
+
+						if (iCurrent % 1000 == 0)
+						{
+							if (context != null && context.CheckCancellationPending())
+							{
+								break;
+							}
+
+							var progress = iCurrent++ / iTotalUnits * 100;
+							context?.Report(Convert.ToInt32(progress),
+								"Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+						}
+
+						var sourceXml = _serializerService.Serialize(_segmentService.BuildSegment(
+							new CultureInfo(unit.SourceSegment.Language), unit.SourceSegment.Elements), serializer);
+
+						var targetXml = _serializerService.Serialize(_segmentService.BuildSegment(
+							new CultureInfo(unit.TargetSegment.Language), unit.TargetSegment.Elements), serializer);
+
+						cmdQuery.Parameters["@id"].Value = unit.ResourceId.Id;
+						cmdQuery.Parameters["@source_segment"].Value = sourceXml;
+						cmdQuery.Parameters["@target_segment"].Value = targetXml;
+
+						//TODO log result; -1: error; >=0: number of records updated
+						var result = cmdQuery.ExecuteNonQuery();
 					}
 
-					var sourceXml = _serializerService.Serialize(_segmentService.BuildSegment(
-						new CultureInfo(unit.SourceSegment.Language), unit.SourceSegment.Elements), serializer);
-
-					var targetXml = _serializerService.Serialize(_segmentService.BuildSegment(
-						new CultureInfo(unit.TargetSegment.Language), unit.TargetSegment.Elements), serializer);
-
-					cmdQuery.Parameters.Add("@id", DbType.Int32).Value = unit.ResourceId.Id;
-					cmdQuery.Parameters.Add("@source_segment", DbType.String).Value = sourceXml;
-					cmdQuery.Parameters.Add("@target_segment", DbType.String).Value = targetXml;
-
-					//TODO log result; -1: error; >=0: number of records updated
-					var result = cmdQuery.ExecuteNonQuery();
+					transaction.Commit();
 				}
 			}
 		}
 
+		/// <summary>
+		/// Get Translation Unit count
+		/// </summary>
+		/// <param name="ids">A list of Translation Memory Ids</param>
+		/// <returns>Translation Unit count</returns>
 		public int GetTranslationUnitsCount(List<int> ids)
 		{
+			if (ids == null || ids.Count == 0)
+			{
+				return 0;
+			}
+
 			var value = 0;
 
 			var idsString = string.Empty;
@@ -579,7 +724,6 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			var sqlQuery = "SELECT COUNT(*) as record_count " +
 						   "FROM " + tableName + " " +
 						   "WHERE translation_memory_id IN (" + idsString + ")";
-
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -709,19 +853,20 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			var value = new TmTranslationUnit
 			{
 				ResourceId = new PersistentObjectToken(Convert.ToInt32(rdrSelect["id"]), rdrSelect.GetGuid(1)),
-				SourceSegment = GetTmSegment(rdrSelect["source_segment"].ToString(), serializer), //2
-				TargetSegment = GetTmSegment(rdrSelect["target_segment"].ToString(), serializer), //3
+				TmId = Convert.ToInt32(rdrSelect["translation_memory_id"]), //2
+				SourceSegment = GetTmSegment(rdrSelect["source_segment"].ToString(), serializer), //3
+				TargetSegment = GetTmSegment(rdrSelect["target_segment"].ToString(), serializer), //4
 				SystemFields = new SystemFields
 				{
-					CreationDate = rdrSelect.GetDateTime(4), //4
-					CreationUser = rdrSelect["creation_user"].ToString(), //5
-					ChangeDate = rdrSelect.GetDateTime(6), //6
-					ChangeUser = rdrSelect["change_user"].ToString(), //7
-					UseDate = rdrSelect.GetDateTime(8), //8
-					UseUser = rdrSelect["last_used_user"].ToString(), //9
-					UseCount = Convert.ToInt32(rdrSelect["usage_counter"]) //10
+					CreationDate = rdrSelect.GetDateTime(5), //5
+					CreationUser = rdrSelect["creation_user"].ToString(), //6
+					ChangeDate = rdrSelect.GetDateTime(7), //7
+					ChangeUser = rdrSelect["change_user"].ToString(), //8
+					UseDate = rdrSelect.GetDateTime(9), //9
+					UseUser = rdrSelect["last_used_user"].ToString(), //10
+					UseCount = Convert.ToInt32(rdrSelect["usage_counter"]) //11
 				},
-				FieldValues = new List<FieldValue>()
+				FieldValues = new List<Model.FieldDefinitions.FieldValue>()
 			};
 
 			return value;
@@ -729,6 +874,11 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 		private void AddCustomFields(ProgressDialogContext context, List<int> ids, IReadOnlyCollection<TmTranslationUnit> values)
 		{
+			if (values == null || values.Count == 0)
+			{
+				return;
+			}
+
 			var attributeIds = GetTmAttributes(ids);
 
 			context?.Report(0, "Analyzing custom fields data...");
@@ -785,7 +935,10 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 									multipleStringFieldValue = new Model.FieldDefinitions.MultipleStringFieldValue
 									{
 										Name = attribute.Name,
-										Values = new HashSet<string>(new List<string> { item.Value }),
+										Values = new HashSet<string>(new List<string>
+										{
+											item.Value
+										}),
 										ValueType = FieldValueType.MultipleString
 									};
 									unit.FieldValues.Add(multipleStringFieldValue);
@@ -856,7 +1009,10 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 									singlePicklistFieldValue = new Model.FieldDefinitions.SinglePicklistFieldValue
 									{
 										Name = attribute.Name,
-										Value = new PicklistItem(pickListValue.Value) { ID = pickListValue.Id },
+										Value = new Model.FieldDefinitions.PicklistItem(pickListValue.Value)
+										{
+											ID = pickListValue.Id
+										},
 										ValueType = FieldValueType.SinglePicklist
 									};
 								}
@@ -871,9 +1027,12 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 									multiplePicklistFieldValue = new Model.FieldDefinitions.MultiplePicklistFieldValue
 									{
 										Name = attribute.Name,
-										Values = new List<PicklistItem>
+										Values = new List<Model.FieldDefinitions.PicklistItem>
 										{
-											new PicklistItem(pickListValue.Value) { ID = pickListValue.Id }
+											new Model.FieldDefinitions.PicklistItem(pickListValue.Value)
+											{
+												ID = pickListValue.Id
+											}
 										},
 										ValueType = FieldValueType.MultiplePicklist
 									};
@@ -883,7 +1042,10 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 								else
 								{
 									((Model.FieldDefinitions.MultiplePicklistFieldValue)multiplePicklistFieldValue).Add(
-										new PicklistItem(pickListValue.Value) { ID = pickListValue.Id });
+										new Model.FieldDefinitions.PicklistItem(pickListValue.Value)
+										{
+											ID = pickListValue.Id
+										});
 								}
 							}
 						}
@@ -892,6 +1054,183 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			}
 
 			context?.Report(Convert.ToInt32(values.Count), "Analyzing: done!");
+		}
+
+		private void UpdateCustomFields(ProgressDialogContext context, FieldValueType fieldValueType, IReadOnlyCollection<Model.FieldDefinitions.FieldValue> fieldValues, List<TmAttribute> attributeIds)
+		{
+			if (fieldValues == null || fieldValues.Count == 0)
+			{
+				return;
+			}
+
+			decimal iTotalUnits = fieldValues.Count;
+
+			var tableName = string.Empty;
+			switch (fieldValueType)
+			{
+				case FieldValueType.SingleString:
+				case FieldValueType.MultipleString:
+					tableName = "string_attributes";
+					break;
+				case FieldValueType.DateTime:
+					tableName = "date_attributes";
+					break;
+				case FieldValueType.Integer:
+					tableName = "numeric_attributes";
+					break;
+			}
+
+			var sqlQuery = "UPDATE " + tableName + " SET " +
+						   "value = @value " +
+						   "WHERE attribute_id = @attribute_id AND value = @previous_value";
+
+			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
+			{
+				cmdQuery.Parameters.Add(new SQLiteParameter("@attribute_id", DbType.Int32));
+
+				switch (fieldValueType)
+				{
+					case FieldValueType.SingleString:
+					case FieldValueType.MultipleString:
+						cmdQuery.Parameters.Add(new SQLiteParameter("@value", DbType.String));
+						cmdQuery.Parameters.Add(new SQLiteParameter("@previous_value", DbType.String));
+						break;
+					case FieldValueType.DateTime:
+						cmdQuery.Parameters.Add(new SQLiteParameter("@value", DbType.DateTime));
+						cmdQuery.Parameters.Add(new SQLiteParameter("@previous_value", DbType.DateTime));
+						break;
+					case FieldValueType.Integer:
+						cmdQuery.Parameters.Add(new SQLiteParameter("@value", DbType.Int32));
+						cmdQuery.Parameters.Add(new SQLiteParameter("@previous_value", DbType.Int32));
+						break;
+				}
+
+				using (var transaction = _connection.BeginTransaction())
+				{
+					decimal iCurrent = 0;
+					foreach (var field in fieldValues)
+					{
+						iCurrent++;
+
+						if (iCurrent % 1000 == 0)
+						{
+							if (context != null && context.CheckCancellationPending())
+							{
+								break;
+							}
+
+							var progress = iCurrent++ / iTotalUnits * 100;
+							context?.Report(Convert.ToInt32(progress),
+								"Updating: " + iCurrent + " of " + iTotalUnits + " '" + field.ValueType + "' values");
+						}
+
+						var attributes = attributeIds.Where(a => a.Type == (int)field.ValueType && a.Name == field.Name).ToList();
+
+						if (attributes.Count > 0)
+						{
+							foreach (var attribute in attributes)
+							{
+								var result = 0;
+								switch (fieldValueType)
+								{
+									case FieldValueType.SingleString:
+										var singleStringFieldValue = field as Model.FieldDefinitions.DateTimeFieldValue;
+										if (singleStringFieldValue?.PreviousValue != null && singleStringFieldValue.Value != singleStringFieldValue.PreviousValue)
+										{
+											result = UpdateCustomFields(cmdQuery, attribute, singleStringFieldValue);
+										}
+
+										break;
+									case FieldValueType.MultipleString:
+										if (field is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue)
+										{
+											for (var i = 0; i < multipleStringFieldValue.Values.Count; i++)
+											{
+												var multipleStringFieldValues = multipleStringFieldValue.Values.ToList();
+												var multipleStringFieldPreviousValues = multipleStringFieldValue.PreviousValues.ToList();
+												if (multipleStringFieldPreviousValues[i] != null && multipleStringFieldValues[i] != multipleStringFieldPreviousValues[i])
+												{
+													var stringFieldValue = new Model.FieldDefinitions.SingleStringFieldValue
+													{
+														Name = multipleStringFieldValue.Name,
+														Value = multipleStringFieldValues[i],
+														PreviousValue = multipleStringFieldPreviousValues[i]
+													};
+													result = UpdateCustomFields(cmdQuery, attribute, stringFieldValue);
+												}
+											}
+										}
+										break;
+									case FieldValueType.DateTime:
+										var dateTimeFieldValue = field as Model.FieldDefinitions.DateTimeFieldValue;
+										if (dateTimeFieldValue?.PreviousValue != null && dateTimeFieldValue.Value != dateTimeFieldValue.PreviousValue)
+										{
+											result = UpdateCustomFields(cmdQuery, attribute, dateTimeFieldValue);
+										}
+										break;
+									case FieldValueType.Integer:
+										var intFieldValue = field as Model.FieldDefinitions.IntFieldValue;
+										if (intFieldValue?.PreviousValue != null && intFieldValue.Value != intFieldValue.PreviousValue)
+										{
+											result = UpdateCustomFields(cmdQuery, attribute, intFieldValue);
+										}
+										break;
+								}
+
+								//TODO log result; -1: error; >=0: number of records updated
+								if (result > 0)
+								{
+
+								}
+							}
+						}
+					}
+
+					transaction.Commit();
+				}
+			}
+		}
+
+		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.SingleStringFieldValue field)
+		{
+			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
+			cmdQuery.Parameters["@value"].Value = field.Value;
+			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
+
+			//TODO log result; -1: error; >=0: number of records updated
+			var result = cmdQuery.ExecuteNonQuery();
+
+			field.PreviousValue = null;
+
+			return result;
+		}
+
+		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.IntFieldValue field)
+		{
+			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
+			cmdQuery.Parameters["@value"].Value = field.Value;
+			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
+
+			//TODO log result; -1: error; >=0: number of records updated
+			var result = cmdQuery.ExecuteNonQuery();
+
+			field.PreviousValue = null;
+
+			return result;
+		}
+
+		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.DateTimeFieldValue field)
+		{
+			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
+			cmdQuery.Parameters["@value"].Value = field.Value;
+			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
+
+			//TODO log result; -1: error; >=0: number of records updated
+			var result = cmdQuery.ExecuteNonQuery();
+
+			field.PreviousValue = null;
+
+			return result;
 		}
 
 		private TmSegment GetTmSegment(string content, XmlSerializer serializer)

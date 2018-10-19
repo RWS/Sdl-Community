@@ -12,6 +12,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 	public class MultipleStringFieldValue : FieldValue
 	{
 		public HashSet<string> Values { get; set; }
+		public HashSet<string> PreviousValues { get; set; }
 
 		public override bool Merge(FieldValue rhs)
 		{
@@ -21,7 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 			}
 
 			var retVal = false;
-
+			
 			foreach (var s in other.Values)
 			{
 				retVal |= Add(s);
@@ -90,7 +91,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 		}
 
 		public override void Clear()
-		{
+		{			
 			Values?.Clear();
 		}
 
