@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Xml.Serialization;
+using Sdl.Community.AmazonTranslateProvider;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.AmazonTranslateTradosPlugin
