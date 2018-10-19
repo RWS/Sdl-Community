@@ -9,6 +9,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 	{
 		public PersistentObjectToken ResourceId { get; set; }
 
+		public int TmId { get; set; }
+
 		public TmSegment SourceSegment { get; set; }
 
 		public TmSegment TargetSegment { get; set; }

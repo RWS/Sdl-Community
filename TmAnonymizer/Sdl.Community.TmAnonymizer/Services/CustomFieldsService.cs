@@ -12,10 +12,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 	public class CustomFieldsService
 	{
 		private readonly TmService _tmService;
+		private readonly SettingsService _settingsService;
 
-		public CustomFieldsService(TmService tmService)
+		public CustomFieldsService(TmService tmService, SettingsService settingsService)
 		{
 			_tmService = tmService;
+			_settingsService = settingsService;
 		}
 
 		public List<CustomField> GetFilebasedCustomField(ProgressDialogContext context, TmFile tm)
@@ -61,7 +63,529 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return customFieldList;
 		}
+	
+		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
+		{
+			var tm = new FileBasedTranslationMemory(tmFile.Path);
+
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null,
+				new LanguageDirection
+				{
+					Source = tm.LanguageDirection.SourceLanguage,
+					Target = tm.LanguageDirection.TargetLanguage
+				});
+
+
+			UpdateCustomFieldPickLists(context, anonymizeFields, tm);
+
+			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
+
+			if (units.Count == 0)
+			{
+				return;
+			}
+
+			var settings = _settingsService.GetSettings();
+			if (settings.UseSqliteApiForFileBasedTm)
+			{
+				UpdateCustomFieldsSqlite(context, tmFile, units);
+			}
+			else
+			{
+				UpdateCustomFields(context, translationUnits, units, tm);
+			}
+
+			ClearPreviousCustomFieldValues(translationUnits);
+		}
 		
+		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
+		{
+			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+			var languageDirections = new List<LanguageDirection>();
+			foreach (var languageDirection in serverBasedTm.LanguageDirections)
+			{
+				languageDirections.Add(new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+			}
+
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
+
+			UpdateCustomFieldPickLists(context, anonymizeFields, serverBasedTm);
+
+			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
+
+			if (units.Count == 0)
+			{
+				return;
+			}
+
+			UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
+
+			ClearPreviousCustomFieldValues(translationUnits);
+		}
+
+		private static void UpdateCustomFieldsSqlite(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
+		{
+			if (units.Count == 0)
+			{
+				return;
+			}
+
+			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+
+			try
+			{
+				query.OpenConnection();
+
+				query.UpdateCustomFields(context, units);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				throw;
+			}
+			finally
+			{
+				query.CloseConnection();
+			}
+		}
+
+		private static void UpdateCustomFieldPickLists(ProgressDialogContext context, IEnumerable<CustomField> anonymizeFields, ITranslationMemory tm)
+		{
+			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
+
+			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+			{
+				if (anonymizedField.IsPickList)
+				{
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+					{
+						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
+						{
+							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
+							if (pickListItem != null)
+							{
+								pickListItem.Name = fieldValue.NewValue;
+							}
+						}
+					}
+				}
+			}
+
+			tm.Save();
+		}
+
+		private void UpdateCustomFields(ProgressDialogContext context, List<TmTranslationUnit> translationUnits, IReadOnlyCollection<TmTranslationUnit> units, ILocalTranslationMemory tm)
+		{
+			decimal iCurrent = 0;
+			decimal iTotalUnits = translationUnits.Count;
+			var groupsOf = 200;
+
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
+			if (units.Count > groupsOf)
+			{
+				tusGroups = translationUnits.ChunkBy(groupsOf);
+			}
+
+			foreach (var tus in tusGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+
+				var tusToUpdate = new List<TranslationUnit>();
+				foreach (var tu in tus)
+				{
+					if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+						tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+					{
+						var unit = _tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
+
+						tusToUpdate.Add(unit);
+					}
+				}
+
+				if (tusToUpdate.Count > 0)
+				{
+					//TODO - output results to log
+					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+				}
+			}
+		}
+
+		private void UpdateCustomFields(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> translationUnits,
+			IReadOnlyCollection<TmTranslationUnit> units, ServerBasedTranslationMemory serverBasedTm)
+		{
+			decimal iCurrent = 0;
+			decimal iTotalUnits = translationUnits.Count;
+			var groupsOf = 100;
+
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
+			if (units.Count > groupsOf)
+			{
+				tusGroups = translationUnits.ChunkBy(groupsOf);
+			}
+
+			foreach (var tus in tusGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+				foreach (var languageDirection in serverBasedTm.LanguageDirections)
+				{
+					var tusToUpdate = new List<TranslationUnit>();
+					foreach (var tu in tus)
+					{
+						if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+							languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+						{
+							var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
+							tusToUpdate.Add(unit);
+						}
+					}
+
+					if (tusToUpdate.Count > 0)
+					{
+						//TODO - output results to log
+						var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+					}
+				}
+			}
+
+			foreach (var languageDirection in tmFile.TmLanguageDirections)
+			{
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+			}
+		}
+
+		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
+		{
+			var units = new List<TmTranslationUnit>();
+
+			foreach (var tu in translationUnits)
+			{
+				var updatedFieldValues = false;
+				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+				{
+					foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
+					{
+						var updatedFieldValue = false;
+						foreach (var customFieldValue in anonymizedField.FieldValues.Where(
+							n => n.IsSelected && n.NewValue != null && n.Value != n.NewValue))
+						{
+							switch (fieldValue.ValueType)
+							{
+								case FieldValueType.SingleString:
+									if (UpdateSingleStringFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+								case FieldValueType.MultipleString:
+									if (UpdateMultipleStringFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+								case FieldValueType.DateTime:
+									if (UpdateDateTimeFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+								case FieldValueType.Integer:
+									if (UpdateIntFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+								case FieldValueType.MultiplePicklist:
+									if (UpdateMultiplePickListFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+								case FieldValueType.SinglePicklist:
+									if (UpdateSinglePicklistFieldValue(fieldValue, customFieldValue))
+									{
+										updatedFieldValue = true;
+									}
+									break;
+							}
+						}
+
+						if (updatedFieldValue)
+						{
+							updatedFieldValues = true;
+						}
+					}
+				}
+
+				if (updatedFieldValues)
+				{
+					units.Add(tu);
+				}
+			}
+
+			return units;
+		}
+
+		private static bool UpdateSinglePicklistFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue singlePicklistFieldValue))
+			{
+				return false;
+			}
+
+			if (!singlePicklistFieldValue.Value.Name.Equals(customFieldValue.Value))
+			{
+				return false;
+			}
+
+			singlePicklistFieldValue.PreviousValue = new Model.FieldDefinitions.PicklistItem
+			{
+				Name = singlePicklistFieldValue.Value.Name,
+				ID = singlePicklistFieldValue.Value.ID,
+				PreviousName = singlePicklistFieldValue.Value.Name
+			};
+
+			singlePicklistFieldValue.Value.PreviousName = singlePicklistFieldValue.Value.Name;
+			singlePicklistFieldValue.Value.Name = customFieldValue.NewValue;
+
+			var picklistFieldValue = new Model.FieldDefinitions.SinglePicklistFieldValue
+			{
+				ValueType = FieldValueType.SinglePicklist,
+				Name = fieldValue.Name,
+				Value = new Model.FieldDefinitions.PicklistItem(singlePicklistFieldValue.Value.Name)
+				{
+					ID = singlePicklistFieldValue.Value.ID,
+					PreviousName = singlePicklistFieldValue.Value.PreviousName
+				}
+			};
+
+			fieldValue.Clear();
+			fieldValue.Merge(picklistFieldValue);
+
+			return true;
+		}
+
+		private static bool UpdateMultiplePickListFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue))
+			{
+				return false;
+			}
+
+			multiplePicklistFieldValue.PreviousValues = new List<Model.FieldDefinitions.PicklistItem>();
+			foreach (var picklistItem in multiplePicklistFieldValue.Values)
+			{
+				var pickListItemClone = new Model.FieldDefinitions.PicklistItem(picklistItem.Name)
+				{
+					ID = picklistItem.ID,
+					PreviousName = picklistItem.Name
+				};
+				multiplePicklistFieldValue.PreviousValues.Add(pickListItemClone);
+			}
+
+			var updated = false;
+			var values = new List<Model.FieldDefinitions.PicklistItem>();
+			foreach (var picklistItem in multiplePicklistFieldValue.Values)
+			{
+				picklistItem.PreviousName = picklistItem.Name;
+				if (picklistItem.Name.Equals(customFieldValue.Value) && customFieldValue.NewValue != null)
+				{
+					updated = true;
+					picklistItem.Name = customFieldValue.NewValue;
+				}
+
+				values.Add(new Model.FieldDefinitions.PicklistItem(picklistItem.Name)
+				{
+					ID = picklistItem.ID,
+					PreviousName = picklistItem.PreviousName
+				});
+			}
+
+			var picklistFieldValue = new Model.FieldDefinitions.MultiplePicklistFieldValue
+			{
+				ValueType = FieldValueType.MultiplePicklist,
+				Name = fieldValue.Name,
+				Values = values
+			};
+
+			fieldValue.Clear();
+			fieldValue.Merge(picklistFieldValue);
+
+			return updated;
+		}
+
+		private bool UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue))
+			{
+				return false;
+			}
+
+			multipleStringFieldValue.PreviousValues = new HashSet<string>();
+			foreach (var value in multipleStringFieldValue.Values)
+			{
+				multipleStringFieldValue.PreviousValues.Add(value.Clone().ToString());
+			}
+
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
+			{
+				var index = listString.IndexOf(customFieldValue.Value);
+				if (index > -1)
+				{
+					listString[index] = customFieldValue.NewValue;
+				}
+			}
+
+			var multiStrngFieldValue = new Model.FieldDefinitions.MultipleStringFieldValue
+			{
+				Name = fieldValue.Name,
+				Values = new HashSet<string>(listString),
+				ValueType = FieldValueType.MultipleString
+			};
+
+			fieldValue.Clear();
+			fieldValue.Add(multiStrngFieldValue);
+
+			var valueString = string.Empty;
+			foreach (var value in multipleStringFieldValue.Values)
+			{
+				valueString += value;
+			}
+
+			var previousValueString = string.Empty;
+			foreach (var value in multipleStringFieldValue.PreviousValues)
+			{
+				previousValueString += value;
+			}
+
+			return previousValueString != valueString;
+		}
+
+		private bool UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.SingleStringFieldValue singleStringFieldValue))
+			{
+				return false;
+			}
+
+			if (singleStringFieldValue.Value != customFieldValue.Value)
+			{
+				return false;
+			}
+
+			singleStringFieldValue.PreviousValue = singleStringFieldValue.Value;
+
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
+			{
+				var index = listString.IndexOf(customFieldValue.Value);
+				if (index > -1)
+				{
+					listString[index] = customFieldValue.NewValue;
+				}
+			}
+
+			var newSingleStringFieldValue = new Model.FieldDefinitions.SingleStringFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = listString.First(),
+				ValueType = FieldValueType.SingleString
+			};
+
+			fieldValue.Clear();
+			fieldValue.Merge(newSingleStringFieldValue);
+
+			return singleStringFieldValue.PreviousValue != singleStringFieldValue.Value;
+		}
+
+		private bool UpdateDateTimeFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.DateTimeFieldValue dateTimeFieldValue))
+			{
+				return false;
+			}
+
+			dateTimeFieldValue.PreviousValue = dateTimeFieldValue.Value;
+
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
+			{
+				var index = listString.IndexOf(customFieldValue.Value);
+				if (index > -1)
+				{
+					listString[index] = customFieldValue.NewValue;
+				}
+			}
+			var newDateTimeFieldValue = new Model.FieldDefinitions.DateTimeFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = DateTime.Parse(listString.First()),
+				ValueType = FieldValueType.DateTime
+			};
+			fieldValue.Clear();
+			fieldValue.Add(newDateTimeFieldValue);
+
+			return dateTimeFieldValue.PreviousValue != dateTimeFieldValue.Value;
+		}
+
+		private bool UpdateIntFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
+		{
+			if (!(fieldValue is Model.FieldDefinitions.IntFieldValue intFieldValue))
+			{
+				return false;
+			}
+
+			if (intFieldValue.Value.ToString() != customFieldValue.Value)
+			{
+				return false;
+			}
+
+			intFieldValue.PreviousValue = intFieldValue.Value;
+
+			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
+			if (!string.IsNullOrEmpty(customFieldValue.Value))
+			{
+				var index = listString.IndexOf(customFieldValue.Value);
+				if (index > -1)
+				{
+					listString[index] = customFieldValue.NewValue;
+				}
+			}
+			var newIntFieldValue = new Model.FieldDefinitions.IntFieldValue
+			{
+				Name = fieldValue.Name,
+				Value = int.Parse(listString.First()),
+				ValueType = FieldValueType.Integer
+			};
+
+			fieldValue.Clear();
+			fieldValue.Merge(newIntFieldValue);
+
+			return intFieldValue.PreviousValue != intFieldValue.Value;
+		}
+
 		private IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits, string name)
 		{
 			var customFieldValues = new List<CustomFieldValue>();
@@ -148,370 +672,53 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
+		private static void ClearPreviousCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits)
 		{
-			var tm = new FileBasedTranslationMemory(tmFile.Path);
-
-			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null,
-				new LanguageDirection
-				{
-					Source = tm.LanguageDirection.SourceLanguage,
-					Target = tm.LanguageDirection.TargetLanguage
-				});
-
-			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
-
-			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+			foreach (var unit in translationUnits)
 			{
-				if (anonymizedField.IsPickList)
+				foreach (var fieldValue in unit.FieldValues)
 				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+					switch (fieldValue.ValueType)
 					{
-						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{
-							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
-							if (pickListItem != null)
+						case FieldValueType.SingleString:
+							if (fieldValue is Model.FieldDefinitions.SingleStringFieldValue singleStringFieldValue)
 							{
-								pickListItem.Name = fieldValue.NewValue;
+								singleStringFieldValue.PreviousValue = null;
 							}
-						}
-					}
-				}
-			}
-
-			tm.Save();
-
-			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
-
-			if (units.Count == 0)
-			{
-				return;
-			}
-
-			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Count;
-			var groupsOf = 200;
-
-			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
-			if (units.Count > groupsOf)
-			{
-				tusGroups = translationUnits.ChunkBy(groupsOf);
-			}
-
-			foreach (var tus in tusGroups)
-			{
-				iCurrent = iCurrent + tus.Count;
-				if (context != null && context.CheckCancellationPending())
-				{
-					break;
-				}
-
-				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-
-				var tusToUpdate = new List<TranslationUnit>();
-				foreach (var tu in tus)
-				{
-					if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-						tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-					{
-						var unit = _tmService.CreateTranslationUnit(tu, tm.LanguageDirection);
-
-						tusToUpdate.Add(unit);
-					}
-				}
-
-				if (tusToUpdate.Count > 0)
-				{
-					//TODO - output results to log
-					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-				}
-			}			
-		}
-
-		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
-		{
-			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
-
-			var languageDirections = new List<LanguageDirection>();
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirections.Add(new LanguageDirection
-				{
-					Source = languageDirection.SourceLanguage,
-					Target = languageDirection.TargetLanguage
-				});
-			}
-
-			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
-
-			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
-
-			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
-			{
-				if (anonymizedField.IsPickList)
-				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-					{
-						foreach (var fieldDefinition in serverBasedTm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{
-							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
-							if (pickListItem != null)
+							break;
+						case FieldValueType.MultipleString:
+							if (fieldValue is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue)
 							{
-								pickListItem.Name = fieldValue.NewValue;
+								multipleStringFieldValue.PreviousValues = null;
 							}
-						}
-					}
-				}
-			}
-
-			serverBasedTm.Save();
-
-			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
-
-			if (units.Count == 0)
-			{
-				return;
-			}
-
-			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Count;
-			var groupsOf = 100;
-
-			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
-			if (units.Count > groupsOf)
-			{
-				tusGroups = translationUnits.ChunkBy(groupsOf);
-			}
-
-			foreach (var tus in tusGroups)
-			{
-				iCurrent = iCurrent + tus.Count;
-				if (context != null && context.CheckCancellationPending())
-				{
-					break;
-				}
-
-				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-				foreach (var languageDirection in serverBasedTm.LanguageDirections)
-				{
-					var tusToUpdate = new List<TranslationUnit>();
-					foreach (var tu in tus)
-					{
-						if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-							languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-						{
-							var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
-							tusToUpdate.Add(unit);
-						}
-					}
-
-					if (tusToUpdate.Count > 0)
-					{
-						//TODO - output results to log
-						var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-					}
-				}
-			}
-
-			foreach (var languageDirection in tmFile.TmLanguageDirections)
-			{
-				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
-			}
-		}
-
-		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
-		{
-			var units = new List<TmTranslationUnit>();
-
-			foreach (var tu in translationUnits)
-			{
-				var update = false;
-				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
-				{
-					foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
-					{
-						foreach (var customFieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-						{
-							switch (fieldValue.ValueType)
+							break;
+						case FieldValueType.DateTime:
+							if (fieldValue is Model.FieldDefinitions.DateTimeFieldValue dateTimeFieldValue)
 							{
-								case FieldValueType.SingleString:
-									update = true;
-									UpdateSingleStringFieldValue(fieldValue, customFieldValue);
-									break;
-								case FieldValueType.MultipleString:
-									update = true;
-									UpdateMultipleStringFieldValue(fieldValue, customFieldValue);
-									break;
-								case FieldValueType.DateTime:
-									update = true;
-									UpdateDateTimeFieldValue(fieldValue, customFieldValue);
-									break;
-								case FieldValueType.Integer:
-									update = true;
-									UpdateIntFieldValue(fieldValue, customFieldValue);
-									break;
-								case FieldValueType.MultiplePicklist:
-									update = true;
-									UpdateMultiplePickListFieldValue(fieldValue, customFieldValue);
-									break;
-								case FieldValueType.SinglePicklist:
-									update = true;
-									UpdateSinglePicklistFieldValue(fieldValue, customFieldValue);
-									break;
+								dateTimeFieldValue.PreviousValue = null;
 							}
-						}
+							break;
+						case FieldValueType.Integer:
+							if (fieldValue is Model.FieldDefinitions.IntFieldValue intFieldValue)
+							{
+								intFieldValue.PreviousValue = null;
+							}
+							break;
+						case FieldValueType.MultiplePicklist:
+							if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
+							{
+								multiplePicklistFieldValue.PreviousValues = null;
+							}
+							break;
+						case FieldValueType.SinglePicklist:
+							if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue singlePicklistFieldValue)
+							{
+								singlePicklistFieldValue.PreviousValue = null;
+							}
+							break;
 					}
 				}
-
-				if (update)
-				{
-					units.Add(tu);
-				}
 			}
-
-			return units;
-		}
-
-		private static void UpdateSinglePicklistFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var picklistFieldValue = new Model.FieldDefinitions.SinglePicklistFieldValue();
-
-			if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue multiplePicklistFieldValue &&
-				multiplePicklistFieldValue.Value.Name.Equals(customFieldValue.Value))
-			{
-				multiplePicklistFieldValue.Value.Name = customFieldValue.NewValue;
-
-				picklistFieldValue.ValueType = FieldValueType.SinglePicklist;
-				picklistFieldValue.Name = fieldValue.Name;
-				picklistFieldValue.Value = new PicklistItem(multiplePicklistFieldValue.Value.Name)
-				{
-					ID = multiplePicklistFieldValue.Value.ID
-				};
-
-				fieldValue.Clear();
-				fieldValue.Merge(picklistFieldValue);
-			}
-		}
-
-		private static void UpdateMultiplePickListFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var values = new List<PicklistItem>();
-			if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
-			{
-				foreach (var picklistItem in multiplePicklistFieldValue.Values)
-				{
-					if (picklistItem.Name.Equals(customFieldValue.Value))
-					{
-						picklistItem.Name = customFieldValue.NewValue;
-					}
-
-					values.Add(new PicklistItem(picklistItem.Name) { ID = picklistItem.ID });
-				}
-			}
-
-			var picklistFieldValue = new Model.FieldDefinitions.MultiplePicklistFieldValue
-			{
-				ValueType = FieldValueType.MultiplePicklist,
-				Name = fieldValue.Name,
-				Values = values
-			};
-
-			fieldValue.Clear();
-			fieldValue.Merge(picklistFieldValue);
-		}
-
-		private void UpdateMultipleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-
-			var multiStrngFieldValue = new Model.FieldDefinitions.MultipleStringFieldValue
-			{
-				Name = fieldValue.Name,
-				Values = new HashSet<string>(listString),
-				ValueType = FieldValueType.MultipleString
-			};
-
-			fieldValue.Clear();
-			fieldValue.Add(multiStrngFieldValue);
-		}
-
-		private void UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-
-			var singleStringFieldValue = new Model.FieldDefinitions.SingleStringFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = listString.First(),
-				ValueType = FieldValueType.SingleString
-			};
-
-			fieldValue.Clear();
-			fieldValue.Merge(singleStringFieldValue);
-		}
-
-		private void UpdateDateTimeFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-			var dateTimeFieldValue = new Model.FieldDefinitions.DateTimeFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = DateTime.Parse(listString.First()),
-				ValueType = FieldValueType.DateTime
-			};
-			fieldValue.Clear();
-			fieldValue.Add(dateTimeFieldValue);
-		}
-
-		private void UpdateIntFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
-		{
-			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
-			if (!string.IsNullOrEmpty(customFieldValue.Value))
-			{
-				var index = listString.IndexOf(customFieldValue.Value);
-				if (index > -1)
-				{
-					listString[index] = customFieldValue.NewValue;
-				}
-			}
-			var intFieldValue = new Model.FieldDefinitions.IntFieldValue
-			{
-				Name = fieldValue.Name,
-				Value = int.Parse(listString.First()),
-				ValueType = FieldValueType.Integer
-			};
-
-			fieldValue.Clear();
-			fieldValue.Merge(intFieldValue);
 		}
 	}
 }

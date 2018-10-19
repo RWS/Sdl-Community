@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PluginPackage xmlns="http://www.sdl.com/Plugins/PluginPackage/1.0">
   <PlugInName>Sdl.Community.SDLTmAnonymizer</PlugInName>
-  <Version>1.2</Version>
+  <Version>1.5</Version>
   <Description></Description>
   <Author></Author>
 	<Include>
@@ -10,5 +10,5 @@
 		<File>Newtonsoft.Json.dll</File>
 		<File>System.Data.SQLite.dll</File>
 	</Include>
-  <RequiredProduct name="SDLTradosStudio" minversion="14.0" />
+  <RequiredProduct name="SDLTradosStudio" minversion="14.0" maxversion="15.0" />
 </PluginPackage>

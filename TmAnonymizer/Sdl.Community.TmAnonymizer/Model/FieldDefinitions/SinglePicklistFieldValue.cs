@@ -11,6 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 	public class SinglePicklistFieldValue : FieldValue
 	{
 		public PicklistItem Value { get; set; }
+		public PicklistItem PreviousValue { get; set; }
 
 		public override bool Merge(FieldValue rhs)
 		{

@@ -16,13 +16,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 			set => _dateTime = Normalize(value);
 		}
 
+		public DateTime? PreviousValue { get; set; }
+
 		public override bool Merge(FieldValue rhs)
 		{
 			if (Equals(rhs))
 			{
 				return false;
 			}
-
+			
 			Value = ((DateTimeFieldValue)rhs).Value;
 			return true;
 		}
@@ -59,7 +61,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.FieldDefinitions
 		}
 
 		public override void Clear()
-		{
+		{			
 			Value = Normalize(DateTime.MinValue);
 		}
 
