@@ -8,7 +8,7 @@
         mc:Ignorable="d"
 		GlowBrush="#008C95"
         WindowTitleBrush="#008C95"
-        Title="Hunspell Dictionary Manager" Height="200" Width="650"
+        Title="Hunspell Dictionary Manager" Height="225" Width="650"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
@@ -53,11 +53,12 @@
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
+			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="*"></RowDefinition>
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="85*"></ColumnDefinition>
-			<ColumnDefinition Width="75*"></ColumnDefinition>
+			<ColumnDefinition Width="80*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
 		<DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
 			<Menu DockPanel.Dock="Top" Background="#3EA691">
@@ -69,37 +70,38 @@
 				</MenuItem>
 			</Menu>
 		</DockPanel>
-		<TextBox Name="resultMessageLbl" Grid.Row="1"  Grid.Column="0" Margin="5 0 0 0"
+		<Label Name="instructionLbl" Grid.Row="1"  Grid.Column="0" Grid.ColumnSpan="2" Foreground="Red" FontSize="14" Content="IMPORTANT: Studio must be restarted for any changes to take effect." Margin="3 0 0 0" />
+		<TextBox Name="resultMessageLbl" Grid.Row="2"  Grid.Column="0" Margin="5 0 0 0"
 				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
 			     Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 				 Foreground="{Binding ResultMessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
-		<Label Name="selectLbl" Grid.Row="2"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="2" Grid.Column="1"
+		<Label Name="selectLbl" Grid.Row="3"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="3" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Label Name="enterLangLbl" Grid.Row="3"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="3" Grid.Column="1"
+		<Label Name="enterLangLbl" Grid.Row="4"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="4" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Selecte language for the new dictionary"
 			ItemsSource="{Binding Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,5,0" />
 
-		<Label Name="deleteLangLbl" Grid.Row="4"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="4" Grid.Column="1"
+		<Label Name="deleteLangLbl" Grid.Row="5"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="5" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="5" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="6" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
 	</Grid>
 </controls:MetroWindow>
