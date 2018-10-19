@@ -43,8 +43,12 @@
 				<Setter Property="Foreground" Value="#3EA691"/>
 				<Setter Property="Margin" Value="10,5,0,0"/>
 			</Style>
+			<Style TargetType="{x:Type MenuItem}">
+				<Setter Property="FontWeight" Value="Normal"/>
+			</Style>
 		</Grid.Resources>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
@@ -55,42 +59,48 @@
 			<ColumnDefinition Width="85*"></ColumnDefinition>
 			<ColumnDefinition Width="75*"></ColumnDefinition>
 		</Grid.ColumnDefinitions>
-
-		<Label Name="selectLbl" Grid.Row="1"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="1" Grid.Column="1"
+		<DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+			<Menu DockPanel.Dock="Top" Background="#3EA691">
+				<MenuItem Header="_About" Foreground="White" FontSize="14">
+					<MenuItem Header="_Help" Foreground="#FF00747C" FontSize ="13" Command="{Binding HelpCommand}">
+						<MenuItem.Icon>
+							<Image Source="/Sdl.Community.HunspellDictionaryManager;component/Resources/help.png" Width="15"></Image>
+						</MenuItem.Icon>
+					</MenuItem>
+				</MenuItem>
+			</Menu>
+		</DockPanel>
+		<TextBox Name="resultMessageLbl" Grid.Row="1"  Grid.Column="0" Margin="5 0 0 0"
+				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
+			     Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+				 Foreground="{Binding ResultMessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
+		<Label Name="selectLbl" Grid.Row="2"  Grid.Column="0" Content="Select appropriate dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="2" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding SelectedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
 
-		<Label Name="enterLangLbl" Grid.Row="2"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="2" Grid.Column="1"
+		<Label Name="enterLangLbl" Grid.Row="3"  Grid.Column="0" Content="Select new dictionary language" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="3" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Selecte language for the new dictionary"
 			ItemsSource="{Binding Languages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="LanguageName" Margin="5,5,5,0" />
-		<!--<TextBox  Grid.Row="2" Grid.Column="1"
-				 controls:TextBoxHelper.Watermark="Enter new dictionary language"  ToolTip="Dictionary name format example: de_De/de or de-DE" 
-		         Text="{Binding NewDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto" Margin="5,5,3,0" Width="Auto">
-		</TextBox>-->
 
-		<Label Name="deleteLangLbl" Grid.Row="3"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
-		<ComboBox Grid.Row="3" Grid.Column="1"
+		<Label Name="deleteLangLbl" Grid.Row="4"  Grid.Column="0" Content="Select dictionary to delete" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="4" Grid.Column="1"
 		    controls:TextBoxHelper.ClearTextButton="True"
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="4" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CancelCommand}" Content="Cancel" Grid.Row="5" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="4" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="5" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<TextBox Name="resultMessageLbl" Grid.Row="0"  Grid.Column="0" Margin="5 0 0 0"
-				 Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" FontWeight="Normal" FontSize="15" Width="Auto" BorderThickness="0"	   
-			     Visibility="{Binding LabelVisibility, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-				 Foreground="{Binding ResultMessageColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Height="Auto"/>
 	</Grid>
 </controls:MetroWindow>
