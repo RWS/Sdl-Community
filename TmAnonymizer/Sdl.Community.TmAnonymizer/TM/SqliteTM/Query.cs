@@ -1134,7 +1134,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 								switch (fieldValueType)
 								{
 									case FieldValueType.SingleString:
-										var singleStringFieldValue = field as Model.FieldDefinitions.DateTimeFieldValue;
+										var singleStringFieldValue = field as Model.FieldDefinitions.SingleStringFieldValue;
 										if (singleStringFieldValue?.PreviousValue != null && singleStringFieldValue.Value != singleStringFieldValue.PreviousValue)
 										{
 											result = UpdateCustomFields(cmdQuery, attribute, singleStringFieldValue);
@@ -1199,9 +1199,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 			//TODO log result; -1: error; >=0: number of records updated
 			var result = cmdQuery.ExecuteNonQuery();
-
-			field.PreviousValue = null;
-
+			
 			return result;
 		}
 
@@ -1213,9 +1211,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 			//TODO log result; -1: error; >=0: number of records updated
 			var result = cmdQuery.ExecuteNonQuery();
-
-			field.PreviousValue = null;
-
+			
 			return result;
 		}
 
@@ -1227,9 +1223,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 			//TODO log result; -1: error; >=0: number of records updated
 			var result = cmdQuery.ExecuteNonQuery();
-
-			field.PreviousValue = null;
-
+			
 			return result;
 		}
 

@@ -63,7 +63,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return customFieldList;
 		}
-	
+
 		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
 		{
 			var tm = new FileBasedTranslationMemory(tmFile.Path);
@@ -97,7 +97,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			ClearPreviousCustomFieldValues(translationUnits);
 		}
-		
+
 		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
 		{
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
@@ -441,12 +441,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return false;
 			}
 
-			multipleStringFieldValue.PreviousValues = new HashSet<string>();
-			foreach (var value in multipleStringFieldValue.Values)
+			if (multipleStringFieldValue.PreviousValues == null)
 			{
-				multipleStringFieldValue.PreviousValues.Add(value.Clone().ToString());
+				multipleStringFieldValue.PreviousValues = new HashSet<string>();
+				foreach (var value in multipleStringFieldValue.Values)
+				{
+					multipleStringFieldValue.PreviousValues.Add(value.Clone().ToString());
+				}
 			}
-
+		
 			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
