@@ -126,7 +126,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		#region Commands
 		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
-		public ICommand CancelCommand => _closeCommand ?? (_closeCommand = new CommandHandler(CloseAction, true));
+		public ICommand CloseCommand => _closeCommand ?? (_closeCommand = new CommandHandler(CloseAction, true));
 		public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new CommandHandler(DeleteAction, true));
 		public ICommand RefreshCommand => _refreshCommand ?? (_refreshCommand = new CommandHandler(RefreshAction, true));
 		public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new CommandHandler(HelpAction, true));
