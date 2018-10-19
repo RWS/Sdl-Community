@@ -30,6 +30,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ICommand _cancelCommand;
 		private ICommand _deleteCommand;
 		private ICommand _refreshCommand;
+		private ICommand _helpCommand;
 		#endregion
 
 		#region Constructors
@@ -128,7 +129,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
 		public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new CommandHandler(DeleteAction, true));
 		public ICommand RefreshCommand => _refreshCommand ?? (_refreshCommand = new CommandHandler(RefreshAction, true));
-
+		public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new CommandHandler(HelpAction, true));
 		#endregion
 
 		#region Actions
@@ -169,6 +170,11 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 			LoadDictionariesLanguages();
 			LabelVisibility = Constants.Hidden;
+		}
+
+		private void HelpAction()
+		{
+			System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3316.hunspell-dictionary-manager");
 		}
 		#endregion
 
