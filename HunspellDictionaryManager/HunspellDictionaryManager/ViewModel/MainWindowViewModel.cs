@@ -20,14 +20,14 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ObservableCollection<LanguageModel> _languages = new ObservableCollection<LanguageModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
 		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
-		private Language[] _studioLanguages = Language.GetAllLanguages();
+		private Language[] _studioLanguages = Language.GetAllLanguages().OrderBy(s => s.DisplayName).ToArray();
 		private string _hunspellDictionariesFolderPath;
 		private LanguageModel _newDictionaryLanguage;
 		private string _resultMessageColor;
 		private string _labelVisibility = Constants.Hidden;
 		private string _resultMessage;
 		private ICommand _createHunspellDictionaryCommand;
-		private ICommand _cancelCommand;
+		private ICommand _closeCommand;
 		private ICommand _deleteCommand;
 		private ICommand _refreshCommand;
 		private ICommand _helpCommand;
@@ -126,7 +126,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		#region Commands
 		public ICommand CreateHunspellDictionaryCommand => _createHunspellDictionaryCommand ?? (_createHunspellDictionaryCommand = new CommandHandler(CreateHunspellDictionaryAction, true));
-		public ICommand CancelCommand => _cancelCommand ?? (_cancelCommand = new CommandHandler(CancelAction, true));
+		public ICommand CloseCommand => _closeCommand ?? (_closeCommand = new CommandHandler(CloseAction, true));
 		public ICommand DeleteCommand => _deleteCommand ?? (_deleteCommand = new CommandHandler(DeleteAction, true));
 		public ICommand RefreshCommand => _refreshCommand ?? (_refreshCommand = new CommandHandler(RefreshAction, true));
 		public ICommand HelpCommand => _helpCommand ?? (_helpCommand = new CommandHandler(HelpAction, true));
@@ -142,7 +142,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			}
 		}
 
-		private void CancelAction()
+		private void CloseAction()
 		{
 			if (_mainWindow.IsLoaded)
 			{
@@ -219,6 +219,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 						dicFile.AffFile = affFile;
 					}
 				}
+				DictionaryLanguages = new ObservableCollection<HunspellLangDictionaryModel>(DictionaryLanguages.OrderBy(d => d.DisplayLanguageName));
 			}
 			else
 			{
