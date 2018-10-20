@@ -4,27 +4,23 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
-	//TODO - reorganize and optimize usage; too many separate calls with Regex
-
 	public class SegmentElementVisitor : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _deSelectedWordsDetails;
-		private readonly SettingsService _settingsService;
 		private readonly List<Rule> _rules;
 		private readonly List<int> _anchorIds;
 
-		public SegmentElementVisitor(List<WordDetails> deSelectedWords, List<int> anchorIds, SettingsService settingsService)
+		public SegmentElementVisitor(List<WordDetails> deSelectedWords, List<int> anchorIds, List<Rule> rules)
 		{
 			_deSelectedWordsDetails = deSelectedWords;
 			_anchorIds = anchorIds;
-			_settingsService = settingsService;
-			_rules = _settingsService.GetRules();
+			_rules = rules;
+			SegmentColection = new List<object>();
 		}
 
 		/// <summary>
@@ -33,15 +29,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public List<object> SegmentColection { get; set; }
 
 		public void VisitText(Text text)
-		{
-			var segmentCollection = new List<object>();
-			var containsPi = ContainsPi(text.Value);
-			if (containsPi)
+		{			
+			var personalData = GetPersonalData(text.Value);
+			if (personalData.Count > 0)
 			{
-				var personalData = GetPersonalData(text.Value);
-				GetSubsegmentPi(text.Value, personalData, segmentCollection);
+				SegmentColection.AddRange(GetSubsegmentPi(text.Value, personalData));
 			}
-			SegmentColection = segmentCollection;
 		}
 
 		private int GetUniqueAnchorId()
@@ -58,14 +51,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return 0;
 		}
 
-		private void GetSubsegmentPi(string segmentText, List<int> personalData, ICollection<object> segmentCollection)
+		private IEnumerable<object> GetSubsegmentPi(string segmentText, List<int> personalData)
 		{
+			var segmentCollection = new List<object>();
 			var elementsColection = segmentText.SplitAt(personalData.ToArray());
 
 			for (var i = 0; i < elementsColection.Length; i++)
 			{
 				if (!string.IsNullOrEmpty(elementsColection[i]))
-				{					
+				{
 					var shouldAnonymize = i != 0
 						? ShouldAnonymize(elementsColection[i], elementsColection[i - 1])
 						: ShouldAnonymize(elementsColection[i], string.Empty);
@@ -76,6 +70,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 						//create new tag
 						var anchorId = GetUniqueAnchorId();
 						var tag = new Tag(TagType.TextPlaceholder, string.Empty, anchorId);
+
 						segmentCollection.Add(tag);
 					}
 					else
@@ -83,9 +78,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 						//create text
 						var text = new Text(elementsColection[i]);
 						segmentCollection.Add(text);
-					}										
+					}
 				}
 			}
+
+			return segmentCollection;
 		}
 
 		/// <summary>
@@ -116,6 +113,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 						{
 							//get the position where PI starts to split before
 							personalDataIndex.Add(match.Index);
+
 							//split after PI
 							personalDataIndex.Add(match.Index + match.Length);
 						}
@@ -129,39 +127,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return personalDataIndex;
 		}
 
-		private bool ContainsPi(string text)
-		{
-			foreach (var rule in _rules.Where(a => a.IsSelected))
-			{
-				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
-				var match = regex.Match(text);
-				if (match.Success)
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
 		private bool ShouldAnonymize(string currentText, string prevText)
 		{
 			foreach (var rule in _rules.Where(a => a.IsSelected))
 			{
 				var regex = new Regex(rule.Name, RegexOptions.IgnoreCase);
 				var matches = regex.Matches(currentText);
+
 				foreach (System.Text.RegularExpressions.Match match in matches)
 				{
 					var matchesDeselected = _deSelectedWordsDetails.Where(n => n.Text.Equals(match.Value.TrimEnd())).ToList();
 					if (matchesDeselected.Any())
 					{
 						//check the previous word to see if is the same word which user deselected
-
 						if (!string.IsNullOrEmpty(prevText))
 						{
 							var combinedText = prevText + currentText;
 
-							var firstPartOfString = combinedText.Substring(0, combinedText.IndexOf(match.Value, StringComparison.Ordinal))
-								.TrimEnd();
+							var firstPartOfString = combinedText.Substring(0, combinedText.IndexOf(match.Value, StringComparison.Ordinal)).TrimEnd();
 							var prevWord = firstPartOfString.Substring(firstPartOfString.LastIndexOf(" ", StringComparison.Ordinal));
 
 							var matchToBeDeselected = matchesDeselected.FirstOrDefault(w => w.PreviousWord.Equals(prevWord));

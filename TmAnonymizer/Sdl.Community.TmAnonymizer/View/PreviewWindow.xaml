@@ -29,7 +29,7 @@
 		</Grid.RowDefinitions>
 		<Grid Grid.Row="0">
 			<controls:SortAwareDataGrid x:Name="SortAwareDataGrid"
-			        DefaultColumnName="SegmentNumber"
+			        DefaultColumnName="TranslationUnit.ResourceId.Id"
 			        DefaultSortDirection="Ascending"
 			        Style="{StaticResource FilesGridStyle}" 
 					FontFamily="Segoe UI"
@@ -50,21 +50,21 @@
 							           IsChecked="{Binding Path=DataContext.SelectAllResults, ElementName=ControlWindow}" Command="{Binding Path=DataContext.SelectAllResultsCommand, ElementName=ControlWindow}"/>
 						</DataGridTemplateColumn.Header>
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:SourceSearchResult">
+							<DataTemplate DataType="model:ContentSearchResult">
 								<CheckBox IsChecked="{Binding TuSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" SortMemberPath="SegmentNumber" >
+					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:SourceSearchResult">
-								<TextBlock Text="{Binding SegmentNumber}" VerticalAlignment="Center" />
+							<DataTemplate DataType="model:ContentSearchResult">
+								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" />
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Header="Source" Width="3*" SortMemberPath="SourceText">
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:SourceSearchResult">
+							<DataTemplate DataType="model:ContentSearchResult">
 								<xctk:RichTextBox Name="SourceTextBox" Tag="SourceBox"
 								                  Background="Transparent"
 								                  Text="{Binding SourceText}" 
@@ -88,7 +88,7 @@
 					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Header="Target" Width="3*" SortMemberPath="TargetText">
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:SourceSearchResult">
+							<DataTemplate DataType="model:ContentSearchResult">
 								<xctk:RichTextBox  Name="TargetTextBox" Tag="TargetBox"
 								                   Background="Transparent"
 								                   Text="{Binding TargetText}" 
@@ -113,7 +113,7 @@
 					</DataGridTemplateColumn>
 					<DataGridTemplateColumn Width="*" Header="Tm path" SortMemberPath="TmFilePath" >
 						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:SourceSearchResult">
+							<DataTemplate DataType="model:ContentSearchResult">
 								<Grid>
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="20" />

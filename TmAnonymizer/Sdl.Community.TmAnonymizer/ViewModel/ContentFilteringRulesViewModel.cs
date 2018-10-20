@@ -20,7 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
-		private readonly TranslationMemoryViewModel _model;		
+		private readonly TranslationMemoryViewModel _model;
 		private readonly Settings _settings;
 		private readonly SettingsService _settingsService;
 		private TmFile _selectedTm;
@@ -32,7 +32,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ICommand _removeRuleCommand;
 		private ICommand _importCommand;
 		private ICommand _exportCommand;
-		private List<SourceSearchResult> _sourceSearchResults;
+		private List<ContentSearchResult> _sourceSearchResults;
 		private IList _selectedItems;
 		private readonly ExcelImportExportService _excelImportExportService;
 
@@ -76,9 +76,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public List<SourceSearchResult> SourceSearchResults
+		public List<ContentSearchResult> SourceSearchResults
 		{
-			get => _sourceSearchResults ?? (_sourceSearchResults = new List<SourceSearchResult>());
+			get => _sourceSearchResults ?? (_sourceSearchResults = new List<ContentSearchResult>());
 			set
 			{
 				if (Equals(value, _sourceSearchResults))
@@ -270,7 +270,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				_settings.Rules = Rules.ToList();
 				_settingsService.SaveSettings(_settings);
 			}
-		}		
+		}
 
 		private void ModelPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
@@ -399,9 +399,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var selectedRulesCount = Rules.Count(r => r.IsSelected);
 			if (selectedTms.Count > 0 && selectedRulesCount > 0)
 			{
-				context.Report("Recovering content parsing rules...");
-
-				var personalDataParsingService = new ContentParsingService(GetSelectedRules());
+				context.Report("Initializing process...");
 
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())
@@ -442,9 +440,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							return;
 						}
 
-						var anonymizeTm = _model.TmService.ServerBasedTmGetTranslationUnits(context,
-							tm, translationProvider,
-							personalDataParsingService, out var searchResults);
+						var anonymizeTm = _model.TmService.GetAnonymizeTmServerBased(context, tm, translationProvider, out var searchResults);
 
 						SourceSearchResults.AddRange(searchResults);
 
@@ -465,7 +461,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					context.Report(tm.Name);
 
-					var anonymizeTm = _model.TmService.FileBaseTmGetTranslationUnits(context, tm, personalDataParsingService, out var searchResults);
+					var anonymizeTm = _model.TmService.GetAnonymizeTmFileBased(context, tm, out var searchResults);
 
 					SourceSearchResults.AddRange(searchResults);
 
@@ -483,14 +479,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		private void LoadPreviewWindow()
 		{
-			var previewWindow = new PreviewWindow();
-			var previewViewModel = new PreviewWindowViewModel(previewWindow, SourceSearchResults,
-				_anonymizeTms, _tmsCollection, _model);
+			System.Windows.Application.Current.Dispatcher.Invoke(delegate
+			{
+				var previewWindow = new PreviewWindow();
+				var previewViewModel = new PreviewWindowViewModel(previewWindow, SourceSearchResults,
+					_anonymizeTms, _tmsCollection, _model);
 
-			previewWindow.DataContext = previewViewModel;
+				previewWindow.DataContext = previewViewModel;
 
-			previewWindow.Closing += PreviewWindow_Closing;
-			previewWindow.ShowDialog();
+				previewWindow.Closing += PreviewWindow_Closing;
+				previewWindow.ShowDialog();
+			});
 		}
 
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)

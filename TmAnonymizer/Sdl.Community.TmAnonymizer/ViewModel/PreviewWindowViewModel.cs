@@ -17,7 +17,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class PreviewWindowViewModel : ViewModelBase, IDisposable
 	{
-		private ObservableCollection<SourceSearchResult> _sourceSearchResults;
+		private ObservableCollection<ContentSearchResult> _sourceSearchResults;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
@@ -28,11 +28,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ScheduledServerTranslationMemoryExport _tmExporter;
 		private readonly List<ServerTmBackUp> _backupTms;
 		private string _filePath;
-		private SourceSearchResult _selectedItem;
+		private ContentSearchResult _selectedItem;
 		private string _textBoxColor;
 		private readonly Window _window;
 
-		public PreviewWindowViewModel(Window window, List<SourceSearchResult> searchResults,
+		public PreviewWindowViewModel(Window window, List<ContentSearchResult> searchResults,
 			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel model)
 		{
@@ -43,7 +43,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_backgroundWorker = new BackgroundWorker();
 			_backgroundWorker.DoWork += BackgroundWorker_DoWork;
 
-			SourceSearchResults = new ObservableCollection<SourceSearchResult>(searchResults);
+			SourceSearchResults = new ObservableCollection<ContentSearchResult>(searchResults);
 
 			_model = model;
 			_anonymizeTranslationMemories = anonymizeTranslationMemories;
@@ -78,31 +78,33 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					//file base tms
 					var fileBasedSearchResult = selectedSearchResult.Where(t => !t.IsServer).ToList();
 					if (fileBasedSearchResult.Count > 0)
-					{						
+					{
 						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, fileBasedSearchResult);
 
 						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
+
 						BackupFileBasedTms(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
-						
-						_model.TmService.AnonymizeFileBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);						
+
+						_model.TmService.AnonymizeFileBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
 					}
 
 					//server based tms
 					var serverBasedSearchResult = selectedSearchResult.Where(t => t.IsServer).ToList();
 					if (serverBasedSearchResult.Count > 0)
-					{						
+					{
 						anonymizeTranslationMemories = GetTranslationUnitsToAnonymize(ProgressDialog.Current, serverBasedSearchResult);
 
 						if (ProgressDialog.Current != null && ProgressDialog.Current.CheckCancellationPending())
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
+
 						BackupServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile.Path).ToList());
-						
-						_model.TmService.AnonymizeServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);					
+
+						_model.TmService.AnonymizeServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
 					}
 				}, settings);
 
@@ -133,12 +135,13 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					return;
 				}
+
 				_selectAllResults = value;
 				OnPropertyChanged(nameof(SelectAllResults));
 			}
 		}
 
-		public ObservableCollection<SourceSearchResult> SourceSearchResults
+		public ObservableCollection<ContentSearchResult> SourceSearchResults
 		{
 			get => _sourceSearchResults;
 			set
@@ -170,7 +173,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public SourceSearchResult SelectedItem
+		public ContentSearchResult SelectedItem
 		{
 			get => _selectedItem;
 
@@ -180,7 +183,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					return;
 				}
+
 				_selectedItem = value;
+
 				TextBoxColor = "#f4fef4";
 				OnPropertyChanged(nameof(SelectedItem));
 			}
@@ -232,7 +237,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 					context.Report(0, "Backup " + tm.Path);
 
-					var translationMemory =translationProvider.GetTranslationMemory(path, TranslationMemoryProperties.All);
+					var translationMemory = translationProvider.GetTranslationMemory(path, TranslationMemoryProperties.All);
 					var languageDirections = translationMemory.LanguageDirections;
 
 					foreach (var languageDirection in languageDirections)
@@ -358,43 +363,42 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(ProgressDialogContext context, IReadOnlyCollection<SourceSearchResult> selectedSearchResults)
+		private List<AnonymizeTranslationMemory> GetTranslationUnitsToAnonymize(ProgressDialogContext context, IReadOnlyCollection<ContentSearchResult> selectedSearchResults)
 		{
 			if (selectedSearchResults == null)
 			{
 				return null;
 			}
 
-			decimal iCurrent = 0;			
+			decimal iCurrent = 0;
 			decimal iTotalUnits = selectedSearchResults.Count;
 
 			var tusToAnonymize = new List<AnonymizeTranslationMemory>();
 			foreach (var selectedResult in selectedSearchResults)
 			{
 				iCurrent++;
-				if (context != null && context.CheckCancellationPending())
+				if (iCurrent % 1000 == 0)
 				{
-					break;
+					if (context != null && context.CheckCancellationPending())
+					{
+						break;
+					}
+
+					var progress = iCurrent / iTotalUnits * 100;
+					context?.Report(Convert.ToInt32(progress), "Analyzing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 				}
 
-				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Analyzing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+				var anonymizeTranslationMemory = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
 
-				var anonymizeUnits = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
-
-				var translationUnit = anonymizeUnits?.TranslationUnits.FirstOrDefault(n =>
-					n.ResourceId.Guid.ToString() == selectedResult.Id &&
-					n.ResourceId.Id.ToString() == selectedResult.SegmentNumber);
-
-				if (translationUnit != null)
+				if (anonymizeTranslationMemory != null && selectedResult.TranslationUnit != null)
 				{
 					// if there is an tm with the same path add translation units to that tm
-					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmFile.Path.Equals(anonymizeUnits.TmFile.Path));
+					var anonymizeTu = tusToAnonymize.FirstOrDefault(t => t.TmFile.Path.Equals(anonymizeTranslationMemory.TmFile.Path));
 
 					//added for select custom words functionality
 					var tranlationUnitDetails = new TranslationUnitDetails
 					{
-						TranslationUnit = translationUnit,
+						TranslationUnit = selectedResult.TranslationUnit,
 						SelectedWordsDetails = selectedResult.SelectedWordsDetails,
 						RemovedWordsFromMatches = selectedResult.DeSelectedWordsDetails,
 						IsSourceMatch = selectedResult.IsSourceMatch,
@@ -406,19 +410,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					if (anonymizeTu != null)
 					{
 						anonymizeTu.TranslationUnitDetails.Add(tranlationUnitDetails);
-						anonymizeTu.TranslationUnits.Add(translationUnit);
+						anonymizeTu.TranslationUnits.Add(selectedResult.TranslationUnit);
 					}
 					else
 					{
 						var anonymizeTm = new AnonymizeTranslationMemory
 						{
 							TranslationUnits = new List<TmTranslationUnit>(),
-							TmFile = anonymizeUnits.TmFile,
+							TmFile = anonymizeTranslationMemory.TmFile,
 							TranslationUnitDetails = new List<TranslationUnitDetails>()
 						};
 
 						anonymizeTm.TranslationUnitDetails.Add(tranlationUnitDetails);
-						anonymizeTm.TranslationUnits.Add(translationUnit);
+						anonymizeTm.TranslationUnits.Add(selectedResult.TranslationUnit);
 						tusToAnonymize.Add(anonymizeTm);
 					}
 				}
@@ -435,24 +439,40 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		private bool SelectingAllAction { get; set; }
+
 		private void SelectResults()
 		{
 			var value = SelectAllResults;
-			foreach (var result in _sourceSearchResults)
+
+			try
 			{
-				result.TuSelected = value;
+				SelectingAllAction = true;
+				foreach (var result in _sourceSearchResults)
+				{
+					result.TuSelected = value;
+				}
+			}
+			finally
+			{
+				SelectingAllAction = false;
+
+				UpdateCheckedAllState();
 			}
 		}
 
 		private void UpdateCheckedAllState()
 		{
-			if (SourceSearchResults.Count > 0)
+			if (!SelectingAllAction)
 			{
-				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
-			}
-			else
-			{
-				SelectAllResults = false;
+				if (SourceSearchResults.Count > 0)
+				{
+					SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
+				}
+				else
+				{
+					SelectAllResults = false;
+				}
 			}
 		}
 

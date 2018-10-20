@@ -112,7 +112,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		{
 			if (view.SortDescriptions.Count > 0 &&
 			    view.SortDescriptions[0].PropertyName == "SegmentNumber" &&
-			    view.CurrentItem is SourceSearchResult)
+			    view.CurrentItem is ContentSearchResult)
 			{
 				var collection = (ListCollectionView)view;
 				collection.CustomSort = new SegmentNumberSorter(view.SortDescriptions[0]);
@@ -143,15 +143,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 
 		public int Compare(object x, object y)
 		{
-			if (!(x is SourceSearchResult searchResultX) || !(y is SourceSearchResult searchResultY))
+			if (!(x is ContentSearchResult searchResultX) || !(y is ContentSearchResult searchResultY))
 			{
 				return 0;
 			}
 
 			try
 			{
-				var intx = Convert.ToInt32(searchResultX.SegmentNumber);
-				var inty = Convert.ToInt32(searchResultY.SegmentNumber);
+				var intx = searchResultX.TranslationUnit.ResourceId.Id;
+				var inty = searchResultY.TranslationUnit.ResourceId.Id;
 
 				return _sortDescription.Direction == ListSortDirection.Ascending 
 					? intx.CompareTo(inty) 
@@ -163,8 +163,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 			}
 
 			return _sortDescription.Direction == ListSortDirection.Ascending
-				? string.Compare(searchResultX.SegmentNumber, searchResultY.SegmentNumber, StringComparison.Ordinal)
-				: string.Compare(searchResultY.SegmentNumber, searchResultX.SegmentNumber, StringComparison.Ordinal);			
+				? string.Compare(searchResultX.TranslationUnit.ResourceId.Id.ToString(), searchResultY.TranslationUnit.ResourceId.Id.ToString(), StringComparison.Ordinal)
+				: string.Compare(searchResultY.TranslationUnit.ResourceId.Id.ToString(), searchResultX.TranslationUnit.ResourceId.Id.ToString(), StringComparison.Ordinal);			
 		}
 	}
 }

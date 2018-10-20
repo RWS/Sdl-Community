@@ -44,7 +44,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 				var tr = new TextRange(start, end);
 				tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.LightSalmon);
 
-				var dataContext = _textBox.DataContext as SourceSearchResult;
+				var dataContext = _textBox.DataContext as ContentSearchResult;
 				var startRange = new TextRange(docStart, start);
 				var indexStartAbs = startRange.Text.Length;
 				var text = new TextRange(docStart, _textBox.Document.ContentEnd).Text.TrimEnd();
@@ -105,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 			}
 			var tr = new TextRange(start, end);
 			tr.ApplyPropertyValue(TextElement.BackgroundProperty, Brushes.White);
-			var dataContext = _textBox.DataContext as SourceSearchResult;
+			var dataContext = _textBox.DataContext as ContentSearchResult;
 
 			var startRange = new TextRange(docStart, start);
 			var indexStartAbs = startRange.Text.Length;
