@@ -187,7 +187,7 @@
     <Compile Include="Model\Rule.cs" />
     <Compile Include="Model\ServerTmBackUp.cs" />
     <Compile Include="Model\Settings.cs" />
-    <Compile Include="Model\SourceSearchResult.cs" />
+    <Compile Include="Model\ContentSearchResult.cs" />
     <Compile Include="Model\TmFile.cs" />
     <Compile Include="Model\TranslationUnitDetails.cs" />
     <Compile Include="Model\User.cs" />

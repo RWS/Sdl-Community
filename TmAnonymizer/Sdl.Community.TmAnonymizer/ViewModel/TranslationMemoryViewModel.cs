@@ -31,14 +31,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _isEnabled;
 		private LoginWindowViewModel _loginWindowViewModel;
 		private readonly TmAnonymizerViewController _controller;
+		private readonly ContentParsingService _contentParsingService;
 		private Form _controlParent;
 
-		public TranslationMemoryViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
+		public TranslationMemoryViewModel(SettingsService settingsService, ContentParsingService contentParsingService, TmAnonymizerViewController controller)
 		{
 			SettingsService = settingsService;
-			TmService = new TmService(settingsService);
+
+			_contentParsingService = contentParsingService;
 			_controller = controller;
 
+			TmService = new TmService(settingsService, _contentParsingService);
+			
 			IsEnabled = true;
 			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
 		}

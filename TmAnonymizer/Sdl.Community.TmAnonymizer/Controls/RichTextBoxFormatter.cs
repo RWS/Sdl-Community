@@ -24,7 +24,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		    {
 			    Text = text
 		    };
-		    var dataContex = (SourceSearchResult) document.DataContext;
+		    var dataContex = (ContentSearchResult) document.DataContext;
 		    if (dataContex == null) return;
 		    var parent = (RichTextBox)document.Parent;
 		    var tag = string.Empty;

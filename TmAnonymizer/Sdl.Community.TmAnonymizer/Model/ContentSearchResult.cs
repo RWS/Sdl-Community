@@ -2,12 +2,10 @@
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
-    public class SourceSearchResult : ModelBase
+    public class ContentSearchResult : ModelBase
 	{
-		private bool _tuSelected;
-		public string Id { get; set; }
-		public string TmSegmentId { get; set; }
-		public string SegmentNumber { get; set; }
+		private bool _tuSelected;		
+		public TmTranslationUnit TranslationUnit { get; set; }		
 		public string SourceText { get; set; }
 		public string TargetText { get; set; }
 		public string TmFilePath { get; set; }

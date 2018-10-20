@@ -9,15 +9,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public MainViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
 		{
-			_tmViewModel = new TranslationMemoryViewModel(settingsService, controller);
-			
+			_tmViewModel = new TranslationMemoryViewModel(settingsService,
+				new ContentParsingService(), controller);
+
 			var excelImportExportService = new ExcelImportExportService();
 			var systemFieldsService = new SystemFieldsService(_tmViewModel.TmService, settingsService);
 			var customFieldsService = new CustomFieldsService(_tmViewModel.TmService, settingsService);
 
-			TranslationViewModel = new ContentFilteringRulesViewModel(_tmViewModel, excelImportExportService);			
+			TranslationViewModel = new ContentFilteringRulesViewModel(_tmViewModel, excelImportExportService);
 			SystemFieldsViewModel = new SystemFieldsViewModel(_tmViewModel, systemFieldsService, excelImportExportService);
-			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, customFieldsService, excelImportExportService);			
+			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, customFieldsService, excelImportExportService);
 		}
 
 		public TranslationMemoryViewModel TmViewModel
