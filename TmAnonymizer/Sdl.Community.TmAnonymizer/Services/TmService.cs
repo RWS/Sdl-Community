@@ -138,7 +138,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		public AnonymizeTranslationMemory FileBaseTmGetTranslationUnits(ProgressDialogContext context,
-			TmFile tmFile, PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
+			TmFile tmFile, ContentParsingService contentParsingService, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var translationMemory = new FileBasedTranslationMemory(tmFile.Path);
 			var tus = LoadTranslationUnits(context, tmFile, null,
@@ -154,24 +154,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			decimal iCurrent = 0;
 			foreach (var translationUnit in tus)
 			{
-				if (context.CheckCancellationPending())
-				{
-					break;
-				}
-
 				iCurrent++;
-				if (iCurrent == 1 || iCurrent % 100 == 0)
+				if (iCurrent % 100 == 0)
 				{
+					if (context.CheckCancellationPending())
+					{
+						break;
+					}
+
 					var progress = iCurrent / iTotal * 100;
 					context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units");
 				}
 
 				var sourceText = translationUnit.SourceSegment.ToPlain();
 				var targetText = translationUnit.TargetSegment.ToPlain();
-				var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
-				var targetContainsPi = personalDataParsingService.ContainsPi(targetText);
 
-				if (sourceContainsPi || targetContainsPi)
+				var sourcePositions = contentParsingService.GetMatchPositions(sourceText);
+				var targetPositions = contentParsingService.GetMatchPositions(targetText);
+
+				if (sourcePositions?.Count > 0 || targetPositions?.Count > 0)
 				{
 					var searchResult = new SourceSearchResult
 					{
@@ -188,20 +189,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						TargetSelectedWordsDetails = new List<WordDetails>()
 
 					};
-					if (sourceContainsPi)
+
+					if (sourcePositions?.Count > 0)
 					{
 						searchResult.IsSourceMatch = true;
 						searchResult.MatchResult = new MatchResult
 						{
-							Positions = personalDataParsingService.GetPersonalDataPositions(sourceText)
+							Positions = sourcePositions
 						};
 					}
-					if (targetContainsPi)
+
+					if (targetPositions?.Count > 0)
 					{
 						searchResult.IsTargetMatch = true;
 						searchResult.TargetMatchResult = new MatchResult
 						{
-							Positions = personalDataParsingService.GetPersonalDataPositions(targetText)
+							Positions = targetPositions
 						};
 					}
 
@@ -218,7 +221,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		public AnonymizeTranslationMemory ServerBasedTmGetTranslationUnits(ProgressDialogContext context, TmFile tmFile, TranslationProviderServer translationProvider,
-			PersonalDataParsingService personalDataParsingService, out List<SourceSearchResult> sourceSearchResult)
+			ContentParsingService contentParsingService, out List<SourceSearchResult> sourceSearchResult)
 		{
 			var allTusForLanguageDirections = new List<TmTranslationUnit>();
 			var searchResults = new List<SourceSearchResult>();
@@ -243,24 +246,27 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					allTusForLanguageDirections.AddRange(translationUnits);
 					foreach (var translationUnit in translationUnits)
 					{
-						if (context.CheckCancellationPending())
-						{
-							break;
-						}
+
 
 						iCurrent++;
-						if (iCurrent == 1 || iCurrent % 100 == 0)
+						if (iCurrent % 100 == 0)
 						{
+							if (context.CheckCancellationPending())
+							{
+								break;
+							}
+
 							var progress = iCurrent / iTotal * 100;
 							context.Report(Convert.ToInt32(progress), "Parsing: " + iCurrent + " of " + iTotal + " Translation Units");
 						}
 
 						var sourceText = translationUnit.SourceSegment.ToPlain();
 						var targetText = translationUnit.TargetSegment.ToPlain();
-						var sourceContainsPi = personalDataParsingService.ContainsPi(sourceText);
-						var targetContainsPi = personalDataParsingService.ContainsPi(targetText);
 
-						if (sourceContainsPi || targetContainsPi)
+						var sourcePositions = contentParsingService.GetMatchPositions(sourceText);
+						var targetPositions = contentParsingService.GetMatchPositions(targetText);
+
+						if (sourcePositions?.Count > 0 || targetPositions?.Count > 0)
 						{
 							var searchResult = new SourceSearchResult
 							{
@@ -277,20 +283,21 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								TargetSelectedWordsDetails = new List<WordDetails>()
 							};
 
-							if (sourceContainsPi)
+							if (sourcePositions?.Count > 0)
 							{
 								searchResult.IsSourceMatch = true;
 								searchResult.MatchResult = new MatchResult
 								{
-									Positions = personalDataParsingService.GetPersonalDataPositions(sourceText)
+									Positions = sourcePositions
 								};
 							}
-							if (targetContainsPi)
+
+							if (targetPositions?.Count > 0)
 							{
 								searchResult.IsTargetMatch = true;
 								searchResult.TargetMatchResult = new MatchResult
 								{
-									Positions = personalDataParsingService.GetPersonalDataPositions(targetText)
+									Positions = targetPositions
 								};
 							}
 
@@ -601,7 +608,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var multipleStringValue = new Model.FieldDefinitions.MultipleStringFieldValue();
 						multipleStringValue.Name = fieldValue.Name;
 						multipleStringValue.Values = ((MultipleStringFieldValue)fieldValue).Values as HashSet<string>;
-					
+
 						result.Add(multipleStringValue);
 						break;
 					case FieldValueType.DateTime:

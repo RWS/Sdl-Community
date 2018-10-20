@@ -20,8 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
-		private readonly TranslationMemoryViewModel _model;
-		//private readonly BackgroundWorker _backgroundWorker;
+		private readonly TranslationMemoryViewModel _model;		
 		private readonly Settings _settings;
 		private readonly SettingsService _settingsService;
 		private TmFile _selectedTm;
@@ -402,7 +401,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				context.Report("Recovering content parsing rules...");
 
-				var personalDataParsingService = new PersonalDataParsingService(GetSelectedRules());
+				var personalDataParsingService = new ContentParsingService(GetSelectedRules());
 
 				var serverTms = selectedTms.Where(s => s.IsServerTm).ToList();
 				if (serverTms.Any())

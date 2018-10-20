@@ -171,7 +171,7 @@
     <Compile Include="Commands\CommandHandler.cs" />
     <Compile Include="Model\PathInfo.cs" />
     <Compile Include="Controls\FolderSelectDialog.cs" />
-    <Compile Include="Services\PersonalDataParsingService.cs" />
+    <Compile Include="Services\ContentParsingService.cs" />
     <Compile Include="Services\ReflectorService.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
