@@ -515,13 +515,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			List<TmTranslationUnit> values;
 
-			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
-				query.OpenConnection();
+				service.OpenConnection();
 
-				values = query.GetTranslationUnits(context, GetTmIds(tmFile, query.GeTranslationMemories()));
+				values = service.GetTranslationUnits(context, GetTmIds(tmFile, service.GeTranslationMemories()));
 			}
 			catch (Exception ex)
 			{
@@ -530,7 +530,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			finally
 			{
-				query.CloseConnection();
+				service.CloseConnection();
 			}
 
 			return values;
@@ -538,13 +538,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static void UpdateTranslationUnitsContentSqlite(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
 		{
-			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
-				query.OpenConnection();
+				service.OpenConnection();
 
-				query.UpdateTranslationUnitContent(context, units);
+				service.UpdateTranslationUnitContent(context, units);
 			}
 			catch (Exception ex)
 			{
@@ -553,7 +553,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			finally
 			{
-				query.CloseConnection();
+				service.CloseConnection();
 			}
 		}
 
