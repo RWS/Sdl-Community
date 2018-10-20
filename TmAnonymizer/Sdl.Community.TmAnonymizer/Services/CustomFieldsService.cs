@@ -75,7 +75,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Target = tm.LanguageDirection.TargetLanguage
 				});
 
-
 			UpdateCustomFieldPickLists(context, anonymizeFields, tm);
 
 			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
@@ -135,13 +134,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return;
 			}
 
-			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
-				query.OpenConnection();
+				service.OpenConnection();
 
-				query.UpdateCustomFields(context, units);
+				service.UpdateCustomFields(context, units);
 			}
 			catch (Exception ex)
 			{
@@ -150,7 +149,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			finally
 			{
-				query.CloseConnection();
+				service.CloseConnection();
 			}
 		}
 
@@ -449,7 +448,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					multipleStringFieldValue.PreviousValues.Add(value.Clone().ToString());
 				}
 			}
-		
+
 			var listString = _tmService.GetMultipleStringValues(fieldValue.GetValueString(), fieldValue.ValueType).ToList();
 			if (!string.IsNullOrEmpty(customFieldValue.Value))
 			{
@@ -470,20 +469,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Clear();
 			fieldValue.Add(multiStrngFieldValue);
 
-			var valueString = string.Empty;
-			foreach (var value in multipleStringFieldValue.Values)
-			{
-				valueString += value;
-			}
-
-			var previousValueString = string.Empty;
-			foreach (var value in multipleStringFieldValue.PreviousValues)
-			{
-				previousValueString += value;
-			}
+			var valueString = ValuesToString(multipleStringFieldValue.Values);
+			var previousValueString = ValuesToString(multipleStringFieldValue.PreviousValues);
 
 			return previousValueString != valueString;
-		}
+		}		
 
 		private bool UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
@@ -587,6 +577,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			fieldValue.Merge(newIntFieldValue);
 
 			return intFieldValue.PreviousValue != intFieldValue.Value;
+		}
+
+		private static string ValuesToString(IEnumerable<string> values)
+		{
+			return values.Aggregate(string.Empty, (current, value) => current + (!string.IsNullOrEmpty(current) ? ", " : string.Empty) + value);
 		}
 
 		private IEnumerable<CustomFieldValue> GetNonPickListCustomFieldValues(IEnumerable<TmTranslationUnit> translationUnits, string name)

@@ -87,11 +87,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static void UpdateSystemFieldsSqlite(ProgressDialogContext context, TmFile tmFile, IEnumerable<TmTranslationUnit> units, List<User> uniqueUsers)
 		{
-			var query = new TM.SqliteTM.Query(tmFile.Path, null, new SerializerService(), new SegmentService());
+			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
-				query.OpenConnection();
+				service.OpenConnection();
 
 				var updateList = new List<TmTranslationUnit>();
 				foreach (var unit in units)
@@ -104,7 +104,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				if (updateList.Count > 0)
 				{
-					query.UpdateSystemFields(context, updateList);
+					service.UpdateSystemFields(context, updateList);
 				}
 			}
 			catch (Exception ex)
@@ -114,7 +114,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			finally
 			{
-				query.CloseConnection();
+				service.CloseConnection();
 			}
 		}
 

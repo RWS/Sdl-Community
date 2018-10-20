@@ -8,20 +8,18 @@ using System.Xml.Serialization;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Model.TM;
-using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.TranslationMemory;
 
-namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class Query
+	public class SqliteTmService
 	{
 		private readonly SQLiteConnection _connection;
 		private readonly SerializerService _serializerService;
 		private readonly SegmentService _segmentService;
-		private readonly DateTime _minDate = new DateTime(1900, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 
-		public Query(string databasePath, string password, SerializerService serializerService, SegmentService segmentService)
+		public SqliteTmService(string databasePath, string password, SerializerService serializerService, SegmentService segmentService)
 		{
 			_serializerService = serializerService;
 			_segmentService = segmentService;
@@ -29,6 +27,9 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			_connection.Open();
 		}
 
+		/// <summary>
+		/// Open a connection to the database
+		/// </summary>
 		public void OpenConnection()
 		{
 			if (_connection.State == ConnectionState.Closed)
@@ -37,6 +38,9 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			}
 		}
 
+		/// <summary>
+		/// Close connection to the database
+		/// </summary>
 		public void CloseConnection()
 		{
 			_connection?.Close();
@@ -109,7 +113,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 							"type, " + //3
 							"tm_id " + //4
 							"FROM " + tableName + " " +
-							"WHERE tm_id IN (" + GetIdsString(ids) + ")";
+							"WHERE tm_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -154,7 +158,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -208,7 +212,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -262,7 +266,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //1
 						   "value " + //2
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -317,7 +321,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "attribute_id, " + //2
 						   "value " + //3
 						   "FROM " + tableName + " " +
-						   "WHERE attribute_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE attribute_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -361,7 +365,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "translation_unit_id, " + //0
 						   "picklist_value_id " + //1
 						   "FROM " + tableName + " " +
-						   "WHERE picklist_value_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE picklist_value_id IN (" + IdsToString(ids) + ")";
 
 			using (var cmdQuery = new SQLiteCommand(sqlQuery, _connection))
 			{
@@ -432,7 +436,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 						   "last_used_user, " + //10
 						   "usage_counter " + //11
 						   "FROM " + tableName + " " +
-						   "WHERE translation_memory_id IN (" + GetIdsString(ids) + ")";
+						   "WHERE translation_memory_id IN (" + IdsToString(ids) + ")";
 
 			var serializer = new XmlSerializer(typeof(Segment), new[]{
 				typeof(Tag),
@@ -453,6 +457,11 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 
 							if (iCurrent % 1000 == 0)
 							{
+								if (context != null && context.CheckCancellationPending())
+								{
+									break;
+								}
+
 								var progress = iCurrent++ / iTotalUnits * 100;
 								context?.Report(Convert.ToInt32(progress),
 									"Reading: " + iCurrent + " of " + iTotalUnits + " Translation Units");
@@ -1137,9 +1146,8 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 										var singleStringFieldValue = field as Model.FieldDefinitions.SingleStringFieldValue;
 										if (singleStringFieldValue?.PreviousValue != null && singleStringFieldValue.Value != singleStringFieldValue.PreviousValue)
 										{
-											result = UpdateCustomFields(cmdQuery, attribute, singleStringFieldValue);
+											result = UpdateStringCustomFields(cmdQuery, attribute, singleStringFieldValue);
 										}
-
 										break;
 									case FieldValueType.MultipleString:
 										if (field is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue)
@@ -1156,7 +1164,7 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 														Value = multipleStringFieldValues[i],
 														PreviousValue = multipleStringFieldPreviousValues[i]
 													};
-													result = UpdateCustomFields(cmdQuery, attribute, stringFieldValue);
+													result = UpdateStringCustomFields(cmdQuery, attribute, stringFieldValue);
 												}
 											}
 										}
@@ -1165,14 +1173,14 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 										var dateTimeFieldValue = field as Model.FieldDefinitions.DateTimeFieldValue;
 										if (dateTimeFieldValue?.PreviousValue != null && dateTimeFieldValue.Value != dateTimeFieldValue.PreviousValue)
 										{
-											result = UpdateCustomFields(cmdQuery, attribute, dateTimeFieldValue);
+											result = UpdateDateTimeCustomFields(cmdQuery, attribute, dateTimeFieldValue);
 										}
 										break;
 									case FieldValueType.Integer:
 										var intFieldValue = field as Model.FieldDefinitions.IntFieldValue;
 										if (intFieldValue?.PreviousValue != null && intFieldValue.Value != intFieldValue.PreviousValue)
 										{
-											result = UpdateCustomFields(cmdQuery, attribute, intFieldValue);
+											result = UpdateIntCustomFields(cmdQuery, attribute, intFieldValue);
 										}
 										break;
 								}
@@ -1191,40 +1199,31 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			}
 		}
 
-		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.SingleStringFieldValue field)
+		private static int UpdateStringCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.SingleStringFieldValue field)
 		{
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-
-			//TODO log result; -1: error; >=0: number of records updated
-			var result = cmdQuery.ExecuteNonQuery();
-			
-			return result;
+						
+			return cmdQuery.ExecuteNonQuery();
 		}
 
-		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.IntFieldValue field)
+		private static int UpdateIntCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.IntFieldValue field)
 		{
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-
-			//TODO log result; -1: error; >=0: number of records updated
-			var result = cmdQuery.ExecuteNonQuery();
 			
-			return result;
+			return cmdQuery.ExecuteNonQuery();
 		}
 
-		private static int UpdateCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.DateTimeFieldValue field)
+		private static int UpdateDateTimeCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.DateTimeFieldValue field)
 		{
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-
-			//TODO log result; -1: error; >=0: number of records updated
-			var result = cmdQuery.ExecuteNonQuery();
 			
-			return result;
+			return cmdQuery.ExecuteNonQuery();
 		}
 
 		private TmSegment GetTmSegment(string content, XmlSerializer serializer)
@@ -1242,21 +1241,9 @@ namespace Sdl.Community.SdlTmAnonymizer.TM.SqliteTM
 			return null;
 		}
 
-		private static string GetIdsString(IEnumerable<int> ids)
+		private static string IdsToString(IEnumerable<int> ids)
 		{
 			return ids.Aggregate(string.Empty, (current, id) => current + ((current != string.Empty ? "," : string.Empty) + id));
-		}
-
-		private string NormalizeToString(DateTime val)
-		{
-			if (val < _minDate)
-			{
-				val = _minDate;
-			}
-
-			return DateTime.SpecifyKind(
-				new DateTime(val.Year, val.Month, val.Day, val.Hour, val.Minute, val.Second),
-				DateTimeKind.Utc).ToString("yyyy-MM-dd HH:mm:ss");
 		}
 	}
 }
