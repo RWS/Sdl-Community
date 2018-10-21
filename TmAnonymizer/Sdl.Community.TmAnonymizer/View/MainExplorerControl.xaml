@@ -14,7 +14,7 @@
 	</UserControl.Resources>
 
 	<Grid Name="ParentGrid" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-		<ContentControl Grid.Column="0" Content="{Binding TmViewModel}" Height="{Binding ParentGrid}" />
+		<ContentControl Grid.Column="0" Content="{Binding TranslationMemoryViewModel}" Height="{Binding ParentGrid}" />
 	</Grid>
 
 </UserControl>

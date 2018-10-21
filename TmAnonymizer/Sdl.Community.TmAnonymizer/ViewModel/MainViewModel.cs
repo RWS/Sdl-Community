@@ -5,34 +5,33 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 {
 	public class MainViewModel : ViewModelBase
 	{
-		private TranslationMemoryViewModel _tmViewModel;
+		private TranslationMemoryViewModel _translationMemoryViewModel;
 
 		public MainViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
 		{
-			_tmViewModel = new TranslationMemoryViewModel(settingsService,
-				new ContentParsingService(), controller);
+			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, new ContentParsingService(), controller);
 
 			var excelImportExportService = new ExcelImportExportService();
-			var systemFieldsService = new SystemFieldsService(_tmViewModel.TmService, settingsService);
-			var customFieldsService = new CustomFieldsService(_tmViewModel.TmService, settingsService);
+			var systemFieldsService = new SystemFieldsService(_translationMemoryViewModel.TmService, settingsService);
+			var customFieldsService = new CustomFieldsService(_translationMemoryViewModel.TmService, settingsService);
 
-			TranslationViewModel = new ContentFilteringRulesViewModel(_tmViewModel, excelImportExportService);
-			SystemFieldsViewModel = new SystemFieldsViewModel(_tmViewModel, systemFieldsService, excelImportExportService);
-			CustomFieldsViewModel = new CustomFieldsViewModel(_tmViewModel, customFieldsService, excelImportExportService);
+			ContentFilteringRulesViewModel = new ContentFilteringRulesViewModel(_translationMemoryViewModel, excelImportExportService);
+			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService);
+			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService);
 		}
 
-		public TranslationMemoryViewModel TmViewModel
+		public TranslationMemoryViewModel TranslationMemoryViewModel
 		{
-			get => _tmViewModel;
+			get => _translationMemoryViewModel;
 			set
 			{
-				_tmViewModel = value;
+				_translationMemoryViewModel = value;
 
-				OnPropertyChanged(nameof(TmViewModel));
+				OnPropertyChanged(nameof(TranslationMemoryViewModel));
 			}
 		}
 
-		public ContentFilteringRulesViewModel TranslationViewModel { get; set; }
+		public ContentFilteringRulesViewModel ContentFilteringRulesViewModel { get; set; }
 
 		public SystemFieldsViewModel SystemFieldsViewModel { get; set; }
 

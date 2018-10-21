@@ -18,10 +18,10 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void LoadView()
 		{
-			var wpfMainWindow = new MainViewControl(_model);
+			var mainWindow = new MainViewControl(_model);
 
-			wpfMainWindow.InitializeComponent();
-			elementHost.Child = wpfMainWindow;
+			mainWindow.InitializeComponent();
+			elementHost.Child = mainWindow;
 		}
 	}
 }

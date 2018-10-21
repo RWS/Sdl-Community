@@ -19,37 +19,9 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto" />
-			<RowDefinition Height="Auto" />
-			<RowDefinition />
-		</Grid.RowDefinitions>
 
-		<DockPanel Grid.Row="0" Margin="0" >
-			<ToolBarTray DockPanel.Dock="Top" Background="WhiteSmoke" OverridesDefaultStyle="True" IsLocked="True">
-				<ToolBar Style="{StaticResource Toolbar}" Background="WhiteSmoke" OverflowMode="Never" DockPanel.Dock="Top" >
-					<Button Command="{Binding SelectFoldersCommand}" ToolTip="Select folder" Margin="5,0,0,0">
-						<Image Source="../Resources/TranslationMemoriesFolder_Open.ico"/>
-					</Button>
-					<Button Command="{Binding SelectTmCommand}" ToolTip="Add TM" Margin="5,0,0,0">
-						<Image Source="../Resources/TranslationMemory.ico"  />
-					</Button>
-					<Button Command="{Binding LoadServerTmCommand}" ToolTip="Add Server Based TM's" Margin="5,0,0,0">
-						<Image Source="../Resources/ServerBasedTranslationMemory.ico"  />
-					</Button>
-					<Button Command="{Binding RemoveCommand}" ToolTip="Remove selected TM's" Margin="5,0,0,0">
-						<Image Source="../Resources/Remove.ico"/>
-					</Button>
-					<Button Command="{Binding ClearCacheCommand}" ToolTip="Clear cache from selected TM's" Margin="5,0,0,0">
-						<Image Source="../Resources/RemoveCache.ico" Height="17.5" />
-					</Button>
-				</ToolBar>
-			</ToolBarTray>
-		</DockPanel>
-
-		<Border Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="LightGray">
-			<controls:SortAwareDataGrid Style="{StaticResource FilesGridStyle}" 
+	<Border BorderThickness="0,1,0,0" BorderBrush="LightGray">
+		<controls:SortAwareDataGrid Style="{StaticResource FilesGridStyle}" 
 				        DefaultColumnName="Name"
 				        DefaultSortDirection="Ascending"
 						FontFamily="Segoe UI"
@@ -69,68 +41,68 @@
 						SelectedItemsList="{Binding SelectedItems, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 						Padding="0,3,0,3"
 			            MaxHeight="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}">
-				<DataGrid.InputBindings>
-					<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-				</DataGrid.InputBindings>
-				<DataGrid.Columns>
-					<DataGridTemplateColumn Width="Auto" Header="Load" MinWidth="50" IsReadOnly="True" SortMemberPath="IsSelected">
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:TmFile">
-								<CheckBox Margin="0,2" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
-					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Width="1*" MinWidth="80" Header="Name" IsReadOnly="True" SortMemberPath="Name"  >
-						<DataGridTemplateColumn.CellTemplate>
-							<DataTemplate DataType="model:TmFile">
-								<StackPanel Orientation="Horizontal">
-									<Image Margin="0,0,3,0">
-										<Image.Style>
-											<Style TargetType="Image">
-												<Setter Property="Source" Value="../Resources/TranslationMemory.ico"/>
-												<Style.Triggers>
-													<MultiDataTrigger>
-														<MultiDataTrigger.Conditions>
-															<Condition Binding="{Binding IsTmCache}" Value="False"/>
-															<Condition Binding="{Binding IsServerTm}" Value="True"/>
-														</MultiDataTrigger.Conditions>
-														<MultiDataTrigger.Setters>
-															<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemory.ico"/>
-														</MultiDataTrigger.Setters>
-													</MultiDataTrigger>
-													<MultiDataTrigger>
-														<MultiDataTrigger.Conditions>
-															<Condition Binding="{Binding IsTmCache}" Value="True"/>
-															<Condition Binding="{Binding IsServerTm}" Value="False"/>
-														</MultiDataTrigger.Conditions>
-														<MultiDataTrigger.Setters>
-															<Setter Property="Source" Value="../Resources/TranslationMemoryCache.ico"/>
-														</MultiDataTrigger.Setters>
-													</MultiDataTrigger>
-													<MultiDataTrigger>
-														<MultiDataTrigger.Conditions>
-															<Condition Binding="{Binding IsTmCache}" Value="True"/>
-															<Condition Binding="{Binding IsServerTm}" Value="True"/>
-														</MultiDataTrigger.Conditions>
-														<MultiDataTrigger.Setters>
-															<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemoryCache.ico"/>
-														</MultiDataTrigger.Setters>
-													</MultiDataTrigger>
-												</Style.Triggers>
-											</Style>
-										</Image.Style>
-									</Image>
+			<DataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+			</DataGrid.InputBindings>
+			<DataGrid.Columns>
+				<DataGridTemplateColumn Width="Auto" Header="Load" MinWidth="50" IsReadOnly="True" SortMemberPath="IsSelected">
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:TmFile">
+							<CheckBox Margin="0,2" IsChecked="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
+				<DataGridTemplateColumn Width="1*" MinWidth="80" Header="Name" IsReadOnly="True" SortMemberPath="Name"  >
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:TmFile">
+							<StackPanel Orientation="Horizontal">
+								<Image Margin="0,0,3,0">
+									<Image.Style>
+										<Style TargetType="Image">
+											<Setter Property="Source" Value="../Resources/TranslationMemory.ico"/>
+											<Style.Triggers>
+												<MultiDataTrigger>
+													<MultiDataTrigger.Conditions>
+														<Condition Binding="{Binding IsTmCache}" Value="False"/>
+														<Condition Binding="{Binding IsServerTm}" Value="True"/>
+													</MultiDataTrigger.Conditions>
+													<MultiDataTrigger.Setters>
+														<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemory.ico"/>
+													</MultiDataTrigger.Setters>
+												</MultiDataTrigger>
+												<MultiDataTrigger>
+													<MultiDataTrigger.Conditions>
+														<Condition Binding="{Binding IsTmCache}" Value="True"/>
+														<Condition Binding="{Binding IsServerTm}" Value="False"/>
+													</MultiDataTrigger.Conditions>
+													<MultiDataTrigger.Setters>
+														<Setter Property="Source" Value="../Resources/TranslationMemoryCache.ico"/>
+													</MultiDataTrigger.Setters>
+												</MultiDataTrigger>
+												<MultiDataTrigger>
+													<MultiDataTrigger.Conditions>
+														<Condition Binding="{Binding IsTmCache}" Value="True"/>
+														<Condition Binding="{Binding IsServerTm}" Value="True"/>
+													</MultiDataTrigger.Conditions>
+													<MultiDataTrigger.Setters>
+														<Setter Property="Source" Value="../Resources/ServerBasedTranslationMemoryCache.ico"/>
+													</MultiDataTrigger.Setters>
+												</MultiDataTrigger>
+											</Style.Triggers>
+										</Style>
+									</Image.Style>
+								</Image>
 
-									<TextBlock Text="{Binding Name}" TextWrapping="WrapWithOverflow" Style="{StaticResource CustomToolTip.TextBlock.Style}"/>
-								</StackPanel>
-							</DataTemplate>
-						</DataGridTemplateColumn.CellTemplate>
+								<TextBlock Text="{Binding Name}" TextWrapping="WrapWithOverflow" Style="{StaticResource CustomToolTip.TextBlock.Style}"/>
+							</StackPanel>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
 
-					</DataGridTemplateColumn>
+				</DataGridTemplateColumn>
 
-				</DataGrid.Columns>
-			</controls:SortAwareDataGrid>
-		</Border>
-	</Grid>
+			</DataGrid.Columns>
+		</controls:SortAwareDataGrid>
+	</Border>
+
 </UserControl>
 

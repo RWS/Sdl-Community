@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
+             xmlns:model="clr-namespace:Sdl.Community.SdlTmAnonymizer.Model"
              mc:Ignorable="d" 
 			 Name="TranslationsControl"
              d:DesignHeight="300" d:DesignWidth="500">
@@ -59,7 +60,18 @@
 						</DataTemplate>
 					</DataGridTemplateColumn.CellTemplate>
 				</DataGridTemplateColumn>
-				<DataGridTextColumn Width="2*" Header="Rule" Binding="{Binding Name}" IsReadOnly="False" ElementStyle="{StaticResource WrapText}" />
+
+
+				<DataGridTemplateColumn Width="2*" Header="Rule"  IsReadOnly="False" >
+
+					<DataGridTemplateColumn.CellTemplate>
+						<DataTemplate DataType="model:Rule">
+							<TextBox TextWrapping="Wrap" HorizontalContentAlignment="Stretch" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}, Path=ActualWidth}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+							         HorizontalAlignment="Left" VerticalAlignment="Top"
+							         Background="Transparent" BorderThickness="0" Padding="2,0,2,0"/>
+						</DataTemplate>
+					</DataGridTemplateColumn.CellTemplate>
+				</DataGridTemplateColumn>
 				<DataGridTextColumn Width="3*" Header="Description" Binding="{Binding Description}" IsReadOnly="False" ElementStyle="{StaticResource WrapText}"/>
 			</DataGrid.Columns>
 		</controls:SortAwareDataGrid>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using Sdl.LanguagePlatform.TranslationMemory;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
@@ -13,6 +14,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public bool IsPickList { get; set; }
 		public List<CustomFieldValue> FieldValues { get; set; }
 		public string TmPath { get; set; }
+		public string TmName => TmPath != null ? Path.GetFileName(TmPath) : string.Empty;
 		public bool IsSelected
 		{
 

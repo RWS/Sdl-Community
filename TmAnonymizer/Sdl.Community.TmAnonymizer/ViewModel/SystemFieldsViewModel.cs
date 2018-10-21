@@ -137,7 +137,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				return;
 			}
 			
-			var users = new List<User>();
+			var userNames = new List<User>();
 			var settings = new ProgressDialogSettings(_model.ControlParent, true, true, false);
 			var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
 			{
@@ -150,12 +150,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						tm.Credentials.UserName,
 						tm.Credentials.Password);
 
-					users.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
+					userNames.AddRange(_systemFieldsService.GetUniqueServerBasedSystemFields(ProgressDialog.Current, tm,
 						translationProvider));
 				}
 				else
 				{
-					users.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm));
+					userNames.AddRange(_systemFieldsService.GetUniqueFileBasedSystemFields(ProgressDialog.Current, tm));
 				}
 
 			}, settings);
@@ -172,7 +172,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 			else
 			{				
-				AddUniqueUserNames(users);
+				AddUniqueUserNames(userNames);
+
+				if (userNames.Count > 0 && SelectedItem == null)
+				{
+					SelectedItem = userNames[0];
+				}
 			}
 		}
 

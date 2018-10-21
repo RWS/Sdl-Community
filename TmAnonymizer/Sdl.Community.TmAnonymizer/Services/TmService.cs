@@ -345,15 +345,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		{
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
-			var settings = _settingsService.GetSettings();
-			if (settings.UseSqliteApiForFileBasedTm)
-			{
-				foreach (var translationMemory in anonymizeTranslationMemories)
-				{
-					UpdateTranslationUnitsContentSqlite(context, translationMemory.TmFile, translationMemory.TranslationUnits);
-					return;
-				}
-			}
+			//var settings = _settingsService.GetSettings();
+			//if (settings.UseSqliteApiForFileBasedTm)
+			//{
+			//	foreach (var translationMemory in anonymizeTranslationMemories)
+			//	{
+			//		UpdateTranslationUnitsContentSqlite(context, translationMemory.TmFile, translationMemory.TranslationUnits);
+			//		return;
+			//	}
+			//}
 
 			UpdateTranslationUnitsContent(context, anonymizeTranslationMemories);
 		}

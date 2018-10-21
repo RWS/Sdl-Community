@@ -238,10 +238,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}
 			else
-			{			
+			{
 				foreach (var field in customFields)
 				{
 					AddCustomFieldValue(field);
+				}
+
+				if (CustomFields.Count > 0 && SelectedItem == null)
+				{
+					SelectedItem = customFields[0];
 				}
 			}
 		}
@@ -386,12 +391,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			if (_tmsCollection != null)
 			{
+				var selectedItem = SelectedItem;
+
 				CustomFields.Clear();
 
 				if (_model.ControlParent == null)
 				{
 					return;
 				}
+
 				var customFields = new List<CustomField>();
 
 				var serverTms = _tmsCollection.Where(s => s.IsServerTm && s.IsSelected).ToList();
@@ -422,10 +430,20 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					AddCustomFieldValue(field);
 				}
-
+			
 				if (CustomFields.Count > 0 && SelectedItem == null)
 				{
-					SelectedItem = CustomFields[0];
+					var selected = customFields.FirstOrDefault(
+						a => a.Name.Equals(selectedItem.Name) && a.TmPath.Equals(selectedItem.TmPath));
+
+					if (selected != null)
+					{
+						SelectedItem = selected;
+					}
+					else
+					{
+						SelectedItem = CustomFields[0];
+					}
 				}
 			}
 		}

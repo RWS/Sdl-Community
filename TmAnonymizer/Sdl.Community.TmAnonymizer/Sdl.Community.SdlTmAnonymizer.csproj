@@ -270,6 +270,8 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\information.ico" />
+    <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\RemoveCache.ico" />
     <Resource Include="Resources\ServerBasedTranslationMemoryCache.ico" />
     <Resource Include="Resources\TranslationMemoryCache.ico" />
