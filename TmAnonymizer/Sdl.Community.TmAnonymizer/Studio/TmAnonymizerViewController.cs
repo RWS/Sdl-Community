@@ -18,15 +18,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	public class TmAnonymizerViewController: AbstractViewController
 	{
 		private TmAnonymizerUserControl _control;
-		private TmAnonymizerExplorerControl _explorerControl;
-		private MainViewModel _model;
+		private TmAnonymizerExplorerControl _explorerControl;		
 		private SettingsService _settingsService;
+		private static MainViewModel _model;
 
 		protected override void Initialize(IViewContext context)
 		{
 			_settingsService = new SettingsService(new PathInfo());
 			
-			_model = new MainViewModel(_settingsService, this);
+			_model = new MainViewModel(_settingsService, this);			
 
 			_control = new TmAnonymizerUserControl(_model);
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
@@ -44,20 +44,108 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			return _explorerControl;
 		}
 
-		[RibbonGroup("TmRibbonGroup", "Online Help")]
+
+		[RibbonGroup("TmAnonymizerSettingsRibbonGroup", "  Settings  ")]
 		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
-		public class TmAnonymizerRibbonGroup : AbstractRibbonGroup
+		public class TmAnonymizerSettingsRibbonGroup : AbstractRibbonGroup
 		{
 		}
 
-		[Action("Sdl.Community.SDLTmAnonymizer", typeof(TmAnonymizerViewController), Name = "Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
-		[ActionLayout(typeof(TmAnonymizerRibbonGroup), 250, DisplayType.Large)]
-		public class TmAnonymizerHelpAction : AbstractAction
+		[Action("TmAnonymizerTmRibbonGroupSettingsAction", typeof(TmAnonymizerViewController), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
+		[ActionLayout(typeof(TmAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
+		public class TmAnonymizerTmRibbonGroupSettingsAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				MessageBox.Show("TODO!");
+			}
+		}
+
+
+		[RibbonGroup("TmAnonymizerTMRibbonGroup", "Translation Memories")]
+		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+		public class TmAnonymizerTmRibbonGroup : AbstractRibbonGroup
+		{
+		}
+
+		[Action("TmAnonymizerTmRibbonGroupAddFileBasedTmAction", typeof(TmAnonymizerViewController), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
+		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 6, DisplayType.Large)]
+		public class TmAnonymizerTmRibbonGroupAddFileBasedTmAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				_model?.TranslationMemoryViewModel.AddFileBasedTm();
+			}
+		}
+
+		[Action("TmAnonymizerTmRibbonGroupAddServerTmAction", typeof(TmAnonymizerViewController), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
+		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 5, DisplayType.Large)]
+		public class TmAnonymizerTmRibbonGroupAddServerTmAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				_model?.TranslationMemoryViewModel.AddServerTm();
+			}
+		}
+
+		[Action("TmAnonymizerTMRibbonGroupOpenFolderAction", typeof(TmAnonymizerViewController), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
+		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 4, DisplayType.Normal)]
+		public class TmAnonymizerTmRibbonGroupOpenFolderAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				_model?.TranslationMemoryViewModel.SelectFolder();
+			}
+		}
+
+		[Action("TmAnonymizerTmRibbonGroupRemoveTmAction", typeof(TmAnonymizerViewController), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
+		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 3, DisplayType.Normal)]
+		public class TmAnonymizerTmRibbonGroupRemoveTmAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				_model?.TranslationMemoryViewModel.RemoveTm();
+			}
+		}
+
+		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(TmAnonymizerViewController), Name = "Add TM Cache", Icon = "RemoveCache", Description = "Add TM Cache")]
+		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 2, DisplayType.Normal)]
+		public class TmAnonymizerTmRibbonGroupRemoveTmCacheAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				_model?.TranslationMemoryViewModel.ClearCache();
+			}
+		}
+
+
+		[RibbonGroup("TmAnonymizerHelpRibbonGroup", "    Help    ")]
+		[RibbonGroupLayout(LocationByType = typeof(TranslationStudioDefaultRibbonTabs.HomeRibbonTabLocation))]
+		public class TmAnonymizerHelpRibbonGroup : AbstractRibbonGroup
+		{
+		}
+
+		[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(TmAnonymizerViewController), Name = "Online Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
+		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
+		public class TmAnonymizerHelpRibbonGroupHelpAction : AbstractAction
 		{
 			protected override void Execute()
 			{
 				System.Diagnostics.Process.Start("https://community.sdl.com/product-groups/translationproductivity/w/customer-experience/3272.sdltmanonymizer");
 			}
 		}
+
+		[Action("TmAnonymizerHelpRibbonGroupAboutAction", typeof(TmAnonymizerViewController), Name = "About", Icon = "information", Description = "About")]
+		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
+		public class TmAnonymizerHelpRibbonGroupAboutAction : AbstractAction
+		{
+			protected override void Execute()
+			{
+				MessageBox.Show("TODO!");
+			}
+		}
+
+
+		
 	}
 }

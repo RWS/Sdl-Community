@@ -20,12 +20,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	public class TranslationMemoryViewModel : ViewModelBase, IDisposable
 	{
 		private bool _selectAll;
-		private ICommand _selectFoldersCommand;
-		private ICommand _removeCommand;
-		private ICommand _clearCacheCommand;
-		private ICommand _selectTmCommand;
 		private ICommand _dragEnterCommand;
-		private ICommand _loadServerTmCommand;
 		private IList _selectedItems;
 		private ObservableCollection<TmFile> _tmsCollection;
 		private bool _isEnabled;
@@ -139,20 +134,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
-
-		public ICommand SelectFoldersCommand => _selectFoldersCommand ?? (_selectFoldersCommand = new CommandHandler(SelectFolder, true));
-
-		public ICommand RemoveCommand => _removeCommand ?? (_removeCommand = new CommandHandler(RemoveTm, true));
-
-		public ICommand ClearCacheCommand => _clearCacheCommand ?? (_clearCacheCommand = new CommandHandler(ClearCache, true));
-
-		public ICommand SelectTmCommand => _selectTmCommand ?? (_selectTmCommand = new CommandHandler(AddTm, true));
-
+	
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
-
-		public ICommand LoadServerTmCommand => _loadServerTmCommand ?? (_loadServerTmCommand = new CommandHandler(AddServerTranslationMemory, true));
-
-		private void AddServerTranslationMemory()
+		
+		public void AddServerTm()
 		{
 			var settings = SettingsService.GetSettings();
 			var loginWindow = new LoginWindow();
@@ -195,47 +180,28 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 			}
-		}
+		}		
 
-		private void HandlePreviewDrop(object parameter)
+		public void AddFileBasedTm()
 		{
-			if (parameter != null && parameter is System.Windows.DragEventArgs eventArgs)
+			var fileDialog = new OpenFileDialog
 			{
-				var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
-				if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
-				{
-					foreach (var fullPath in filesOrDirectories)
-					{
-						if (!string.IsNullOrEmpty(fullPath) && Path.GetExtension(fullPath).Equals(".sdltm"))
-						{
-							AddTm(fullPath);
-						}
-					}
-				}
-			}
-		}
+				Multiselect = true
+			};
 
-		private void SaveSetttings()
-		{
-			var settings = SettingsService.GetSettings();
-			settings.TmFiles = TmsCollection.ToList();
-			SettingsService.SaveSettings(settings);
-		}
-
-		private void AddTm()
-		{
-			var fileDialog = new OpenFileDialog();
 			if (fileDialog.ShowDialog() == DialogResult.OK)
 			{
-				var tmFilePath = fileDialog.FileName;
-				if (!string.IsNullOrEmpty(tmFilePath) && Path.GetExtension(tmFilePath).Equals(".sdltm"))
-				{
-					AddTm(tmFilePath);
-				}
+				foreach (var fileName in fileDialog.FileNames)
+				{					
+					if (!string.IsNullOrEmpty(fileName) && Path.GetExtension(fileName).Equals(".sdltm"))
+					{
+						AddTm(fileName);
+					}
+				}				
 			}
 		}
 
-		private void RemoveTm()
+		public void RemoveTm()
 		{
 			var result = MessageBox.Show(StringResources.RemoveTm_Do_you_want_to_remove_selected_tms, StringResources.Confirmation, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
 			if (result == DialogResult.OK && SelectedItems != null)
@@ -264,7 +230,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void ClearCache()
+		public void ClearCache()
 		{
 			foreach (TmFile tmFile in SelectedItems)
 			{
@@ -277,7 +243,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void SelectFolder()
+		public void SelectFolder()
 		{
 			var folderDialog = new FolderSelectDialog();
 			if (folderDialog.ShowDialog())
@@ -289,6 +255,31 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					AddTm(file);
 				}
 			}
+		}
+
+		private void HandlePreviewDrop(object parameter)
+		{
+			if (parameter != null && parameter is System.Windows.DragEventArgs eventArgs)
+			{
+				var fileDrop = eventArgs.Data.GetData(DataFormats.FileDrop, false);
+				if (fileDrop is string[] filesOrDirectories && filesOrDirectories.Length > 0)
+				{
+					foreach (var fullPath in filesOrDirectories)
+					{
+						if (!string.IsNullOrEmpty(fullPath) && Path.GetExtension(fullPath).Equals(".sdltm"))
+						{
+							AddTm(fullPath);
+						}
+					}
+				}
+			}
+		}
+
+		private void SaveSetttings()
+		{
+			var settings = SettingsService.GetSettings();
+			settings.TmFiles = TmsCollection.ToList();
+			SettingsService.SaveSettings(settings);
 		}
 
 		private bool TmAlreadyExist(string tmPath)

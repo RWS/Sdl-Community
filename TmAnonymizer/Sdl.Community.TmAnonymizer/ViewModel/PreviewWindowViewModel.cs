@@ -18,7 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	public class PreviewWindowViewModel : ViewModelBase, IDisposable
 	{
 		private ObservableCollection<ContentSearchResult> _sourceSearchResults;
-		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTranslationMemories;
+		private readonly ObservableCollection<AnonymizeTranslationMemory> _anonymizeTms;
 		private readonly ObservableCollection<TmFile> _tmsCollection;
 		private bool _selectAllResults;
 		private readonly TranslationMemoryViewModel _model;
@@ -33,7 +33,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly Window _window;
 
 		public PreviewWindowViewModel(Window window, List<ContentSearchResult> searchResults,
-			ObservableCollection<AnonymizeTranslationMemory> anonymizeTranslationMemories, ObservableCollection<TmFile> tmsCollection,
+			ObservableCollection<AnonymizeTranslationMemory> anonymizeTms,
+			ObservableCollection<TmFile> tmsCollection,
 			TranslationMemoryViewModel model)
 		{
 			_window = window;
@@ -46,7 +47,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			SourceSearchResults = new ObservableCollection<ContentSearchResult>(searchResults);
 
 			_model = model;
-			_anonymizeTranslationMemories = anonymizeTranslationMemories;
+			_anonymizeTms = anonymizeTms;
 			_tmsCollection = tmsCollection;
 		}
 
@@ -205,6 +206,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
+		public int SelectedCount
+		{
+			get { return SourceSearchResults?.Count(a => a.TuSelected) ?? 0; }
+		}
+
 		private static string GetDateTimeString()
 		{
 			var dt = DateTime.Now;
@@ -354,7 +360,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					tmName = tmName.Substring(0, tmName.Length - extension.Length);
 				}
 
-				var backupFilePath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, tmName + ". " + GetDateTimeString() + extension);
+				var backupFilePath = Path.Combine(_model.SettingsService.PathInfo.BackupFullPath, tmName + "." + GetDateTimeString() + extension);
 
 				if (!File.Exists(backupFilePath))
 				{
@@ -388,7 +394,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					context?.Report(Convert.ToInt32(progress), "Analyzing: " + iCurrent + " of " + iTotalUnits + " Translation Units");
 				}
 
-				var anonymizeTranslationMemory = _anonymizeTranslationMemories.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
+				var anonymizeTranslationMemory = _anonymizeTms.FirstOrDefault(a => a.TmFile.Path == selectedResult.TmFilePath);
 
 				if (anonymizeTranslationMemory != null && selectedResult.TranslationUnit != null)
 				{
@@ -437,6 +443,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				SourceSearchResults.Remove(searchResult);
 			}
+
+			OnPropertyChanged(nameof(SelectedCount));
 		}
 
 		private bool SelectingAllAction { get; set; }
@@ -458,27 +466,33 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				SelectingAllAction = false;
 
 				UpdateCheckedAllState();
+				OnPropertyChanged(nameof(SelectedCount));
 			}
 		}
 
 		private void UpdateCheckedAllState()
 		{
-			if (!SelectingAllAction)
+			if (SourceSearchResults.Count > 0)
 			{
-				if (SourceSearchResults.Count > 0)
-				{
-					SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
-				}
-				else
-				{
-					SelectAllResults = false;
-				}
+				SelectAllResults = SourceSearchResults.Count(a => !a.TuSelected) <= 0;
+			}
+			else
+			{
+				SelectAllResults = false;
 			}
 		}
 
 		private void Result_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			UpdateCheckedAllState();
+			if (!SelectingAllAction)
+			{
+				if (e.PropertyName == nameof(ContentSearchResult.TuSelected))
+				{
+					UpdateCheckedAllState();
+
+					OnPropertyChanged(nameof(SelectedCount));
+				}
+			}
 		}
 
 		public void Dispose()

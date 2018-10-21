@@ -26,9 +26,9 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 			_model = model;
 
-			if (!model.TmViewModel.SettingsService.UserAgreed())
+			if (!model.TranslationMemoryViewModel.SettingsService.UserAgreed())
 			{				
-				_acceptWindow = new AcceptWindow(model.TmViewModel.SettingsService);
+				_acceptWindow = new AcceptWindow(model.TranslationMemoryViewModel.SettingsService);
 				_acceptWindow.InitializeComponent();
 				_acceptWindow.Closing += AcceptWindow_Closing;
 				_acceptWindow.Topmost = true;
@@ -44,7 +44,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 		{
 			_acceptWindow.Closing -= AcceptWindow_Closing;
 
-			if (_model.TmViewModel.SettingsService.UserAgreed())
+			if (_model.TranslationMemoryViewModel.SettingsService.UserAgreed())
 			{
 				LoadView();
 			}
@@ -52,10 +52,10 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 
 		private void LoadView()
 		{
-			var wpfMainWindow = new MainExplorerControl(_model);
+			var mainWindow = new MainExplorerControl(_model);
 
-			wpfMainWindow.InitializeComponent();
-			elementHost.Child = wpfMainWindow;
+			mainWindow.InitializeComponent();
+			elementHost.Child = mainWindow;
 		}	
 	}
 }

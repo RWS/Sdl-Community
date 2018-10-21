@@ -129,8 +129,15 @@
 			</controls:SortAwareDataGrid>
 		</Grid>
 		<StackPanel Grid.Row="1" Orientation="Vertical" Margin="5,0,10,15">
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
+			<Grid>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5,0,0,0">
+					<Label Content="Filtered:" Padding="2,0,2,0"/>
+					<Label Content="{Binding ElementName=SortAwareDataGrid, Path=Items.Count}" Padding="2,0,2,0"/>
+					<Label Content=", " Padding="0"/>
+					<Label Content="Selected:" Padding="2,0,2,0"/>
+					<Label Content="{Binding Path=SelectedCount, FallbackValue=0}" Padding="2,0,2,0"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
 					<Button  Width="180" Style="{DynamicResource LightGreenButtonsStyle }" Command="{Binding ApplyCommand}">
 						<StackPanel Orientation="Horizontal">
 							<TextBlock>Apply selected changes</TextBlock>
@@ -142,7 +149,7 @@
 						</StackPanel>
 					</Button>
 				</StackPanel>
-			</StackPanel>
+			</Grid>
 		</StackPanel>
 	</Grid>
 

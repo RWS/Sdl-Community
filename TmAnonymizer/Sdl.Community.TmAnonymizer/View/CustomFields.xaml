@@ -61,8 +61,9 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTextColumn Header="Field name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="220" Width="*" ElementStyle="{StaticResource WrapText}" />
-						<DataGridTextColumn Header="Type" Binding="{Binding ValueType}" MinWidth="120" Width="*" IsReadOnly="True" ElementStyle="{StaticResource WrapText}" />
+						<DataGridTextColumn Width="1*" Header="TM" MinWidth="70" IsReadOnly="True" Binding="{Binding TmName}" />
+						<DataGridTextColumn Width="2*" Header="Field name" MinWidth="160" Binding="{Binding Name}" IsReadOnly="True"  ElementStyle="{StaticResource WrapText}" />
+						<DataGridTextColumn Width="1*" Header="Type" MinWidth="100" Binding="{Binding ValueType}" IsReadOnly="True" ElementStyle="{StaticResource WrapText}" />
 						</DataGrid.Columns>
 					</controls:SortAwareDataGrid>
 					

@@ -26,7 +26,7 @@
 		<TabControl Margin="5" BorderBrush="Gainsboro" ItemContainerStyle="{StaticResource TabItemStyle}" >
 
 			<TabItem Header="Content Filtering Rules">
-				<view:ContentFilteringRules DataContext="{Binding TranslationViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
+				<view:ContentFilteringRules DataContext="{Binding ContentFilteringRulesViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
 			</TabItem>
 			<TabItem  Header ="System Fields">
 				<view:SystemFields DataContext="{Binding SystemFieldsViewModel}" HorizontalAlignment="Stretch" Height="Auto" Width="Auto"/>
