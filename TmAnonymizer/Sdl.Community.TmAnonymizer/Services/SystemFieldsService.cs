@@ -75,6 +75,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Target = tm.LanguageDirection.TargetLanguage
 			});
 
+			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
+
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
@@ -83,6 +85,119 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			UpdateSystemFields(context, translationUnits, tm, uniqueUsers);
+		}
+
+		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
+		{
+			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
+
+			var languageDirections = new List<LanguageDirection>();
+			foreach (var languageDirection in serverBasedTm.LanguageDirections)
+			{
+				languageDirections.Add(new LanguageDirection
+				{
+					Source = languageDirection.SourceLanguage,
+					Target = languageDirection.TargetLanguage
+				});
+			}
+			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
+
+			_tmService.BackupServerBasedTm(context, new List<TmFile> { tmFile });
+
+			decimal iCurrent = 0;
+			decimal iTotalUnits = translationUnits.Count;
+			var groupsOf = 100;
+
+			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
+			if (translationUnits.Count > groupsOf)
+			{
+				tusGroups = translationUnits.ChunkBy(groupsOf);
+			}
+
+			foreach (var tus in tusGroups)
+			{
+				iCurrent = iCurrent + tus.Count;
+				if (context != null && context.CheckCancellationPending())
+				{
+					break;
+				}
+
+				var progress = iCurrent / iTotalUnits * 100;
+				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
+
+				var updateSystemFields = false;
+
+				foreach (var tu in tus)
+				{
+					foreach (var userName in uniqueUsers)
+					{
+						var updateCreationUser = false;
+						var updateUseUser = false;
+
+						if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
+						{
+							var systemFields = tu.SystemFields;
+
+							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
+								userName.UserName == systemFields.CreationUser)
+							{
+								updateCreationUser = true;
+							}
+
+							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
+								userName.UserName == systemFields.UseUser)
+							{
+								updateUseUser = true;
+							}
+
+							if (updateCreationUser || updateUseUser)
+							{
+								updateSystemFields = true;
+
+								if (updateCreationUser)
+								{
+									systemFields.CreationUser = userName.Alias;
+								}
+
+								if (updateUseUser)
+								{
+									systemFields.UseUser = userName.Alias;
+								}
+							}
+						}
+					}
+				}
+
+				if (updateSystemFields)
+				{
+					foreach (var languageDirection in serverBasedTm.LanguageDirections)
+					{
+						var tusToUpdate = new List<TranslationUnit>();
+						foreach (var tu in tus)
+						{
+							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
+								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+							{
+								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
+								tusToUpdate.Add(unit);
+							}
+						}
+
+						if (tusToUpdate.Count > 0)
+						{
+							//TODO - output results to log
+							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+						}
+					}
+				}
+			}
+
+			serverBasedTm.Save();
+
+			foreach (var languageDirection in tmFile.TmLanguageDirections)
+			{
+				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
+			}
 		}
 
 		private static void UpdateSystemFieldsSqlite(ProgressDialogContext context, TmFile tmFile, IEnumerable<TmTranslationUnit> units, List<User> uniqueUsers)
@@ -229,118 +344,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return updateSystemFields;
 		}
-
-		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
-		{
-			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
-
-			var languageDirections = new List<LanguageDirection>();
-			foreach (var languageDirection in serverBasedTm.LanguageDirections)
-			{
-				languageDirections.Add(new LanguageDirection
-				{
-					Source = languageDirection.SourceLanguage,
-					Target = languageDirection.TargetLanguage
-				});
-			}
-			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
-
-			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Count;
-			var groupsOf = 100;
-
-			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
-			if (translationUnits.Count > groupsOf)
-			{
-				tusGroups = translationUnits.ChunkBy(groupsOf);
-			}
-
-			foreach (var tus in tusGroups)
-			{
-				iCurrent = iCurrent + tus.Count;
-				if (context != null && context.CheckCancellationPending())
-				{
-					break;
-				}
-
-				var progress = iCurrent / iTotalUnits * 100;
-				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
-				var updateSystemFields = false;
-
-				foreach (var tu in tus)
-				{
-					foreach (var userName in uniqueUsers)
-					{
-						var updateCreationUser = false;
-						var updateUseUser = false;
-
-						if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
-						{
-							var systemFields = tu.SystemFields;
-
-							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-								userName.UserName == systemFields.CreationUser)
-							{
-								updateCreationUser = true;
-							}
-
-							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-								userName.UserName == systemFields.UseUser)
-							{
-								updateUseUser = true;
-							}
-
-							if (updateCreationUser || updateUseUser)
-							{
-								updateSystemFields = true;
-
-								if (updateCreationUser)
-								{
-									systemFields.CreationUser = userName.Alias;
-								}
-
-								if (updateUseUser)
-								{
-									systemFields.UseUser = userName.Alias;
-								}
-							}
-						}
-					}
-				}
-
-				if (updateSystemFields)
-				{
-					foreach (var languageDirection in serverBasedTm.LanguageDirections)
-					{
-						var tusToUpdate = new List<TranslationUnit>();
-						foreach (var tu in tus)
-						{
-							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-							{
-								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
-								tusToUpdate.Add(unit);
-							}
-						}
-
-						if (tusToUpdate.Count > 0)
-						{
-							//TODO - output results to log
-							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
-						}
-					}
-				}
-			}
-
-			serverBasedTm.Save();
-
-			foreach (var languageDirection in tmFile.TmLanguageDirections)
-			{
-				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
-			}
-		}
-
+		
 		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var systemFields = new List<string>();

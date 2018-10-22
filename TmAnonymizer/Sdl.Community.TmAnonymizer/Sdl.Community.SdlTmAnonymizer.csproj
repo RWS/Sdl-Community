@@ -138,7 +138,16 @@
   <ItemGroup>
     <Compile Include="Behaviours\DragDropBehaviour.cs" />
     <Compile Include="Behaviours\EventBehaviourFactory.cs" />
+    <Compile Include="Controls\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Controls\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\BindingDataProxy.cs" />
+    <Compile Include="Controls\LabelledTextBox.xaml.cs">
+      <DependentUpon>LabelledTextBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ProgressDialog\ProgressDialog.xaml.cs">
       <DependentUpon>ProgressDialog.xaml</DependentUpon>
     </Compile>
@@ -160,6 +169,11 @@
     <Compile Include="Model\TmTranslationUnit.cs" />
     <Compile Include="Model\TmSegment.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />
+    <Compile Include="PluginResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PluginResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\Converters\FieldValueTypeConverter.cs" />
     <Compile Include="Services\Converters\SegmentElementTypeConverter.cs" />
     <Compile Include="Services\ExcelImportExportService.cs" />
@@ -216,6 +230,10 @@
     <Compile Include="Model\TM\TranslationUnitContext.cs" />
     <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\SelectServersWindowViewModel.cs" />
+    <Compile Include="ViewModel\SettingsViewModel.cs" />
+    <Compile Include="View\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\LogViewControl.xaml.cs">
       <DependentUpon>LogViewControl.xaml</DependentUpon>
     </Compile>
@@ -281,6 +299,8 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\ReportsView.ico" />
+    <None Include="Resources\Report.ico" />
     <Resource Include="Resources\information.ico" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\RemoveCache.ico" />
@@ -295,7 +315,14 @@
     <Resource Include="Resources\Remove.ico" />
     <Resource Include="Resources\TranslationMemoriesFolder_Open.ico" />
     <Resource Include="Resources\TranslationMemory.ico" />
-    <EmbeddedResource Include="PluginResources.resx" />
+    <EmbeddedResource Include="Controls\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>PluginResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <Content Include="pluginpackage.manifest.xml" />
     <EmbeddedResource Include="StringResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -319,6 +346,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Controls\LabelledTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ProgressDialog\ProgressDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -344,6 +375,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

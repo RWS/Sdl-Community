@@ -9,6 +9,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 	[ViewPart(
 		Id = "SdLTmAnonymizerLogViewController",
 		Name = "Log Report",
+		Icon = "ReportsView",
 		Description = "Log Report")]
 	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 0, LocationByType = typeof(TmAnonymizerViewController))]
 	public class TmAnonymizerLogViewController : AbstractViewPartController

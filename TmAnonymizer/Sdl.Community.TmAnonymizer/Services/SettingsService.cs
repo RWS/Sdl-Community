@@ -11,7 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public SettingsService(PathInfo pathInfo)
 		{
 			PathInfo = pathInfo;
-			UncheckAllTMs();
+			UncheckAllTMs();			
 		}
 				
 		public PathInfo PathInfo { get; }		
@@ -92,7 +92,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var json = File.ReadAllText(PathInfo.SettingsFilePath);
 				settings = JsonConvert.DeserializeObject<Settings>(json);
 
-				AddDefaultRules(settings);				
+				AddDefaultRules(settings);
+
+				if (string.IsNullOrEmpty(settings.BackupFullPath) || !Directory.Exists(settings.BackupFullPath))
+				{
+					settings.BackupFullPath = PathInfo.BackupFullPath;
+				}
+
+				if (string.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
+				{
+					settings.LogsFullPath = PathInfo.LogsFullPath;
+				}
 
 				return settings;
 			}

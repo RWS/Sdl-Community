@@ -11,6 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			Accepted = false;
 			AlreadyAddedDefaultRules = false;
 			UseSqliteApiForFileBasedTm = true;
+			Backup = true;
 		}
 
 		public List<TmFile> TmFiles { get; set; }
@@ -22,6 +23,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public string LastUsedServerUri { get; set; }
 
 		public string LastUsedServerUserName { get; set; }
+
+		public bool Backup { get; set; }
+
+		public string BackupFullPath { get; set; }
+
+		public string LogsFullPath { get; set; }
 
 		public bool Accepted { get; set; }
 
