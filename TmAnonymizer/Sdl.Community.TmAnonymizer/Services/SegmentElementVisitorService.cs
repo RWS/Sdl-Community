@@ -7,15 +7,15 @@ using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
-namespace Sdl.Community.SdlTmAnonymizer.Studio
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class SegmentElementVisitor : ISegmentElementVisitor
+	public class SegmentElementVisitorService : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _deSelectedWordsDetails;
 		private readonly List<Rule> _rules;
 		private readonly List<int> _anchorIds;
 
-		public SegmentElementVisitor(List<WordDetails> deSelectedWords, List<int> anchorIds, List<Rule> rules)
+		public SegmentElementVisitorService(List<WordDetails> deSelectedWords, List<int> anchorIds, List<Rule> rules)
 		{
 			_deSelectedWordsDetails = deSelectedWords;
 			_anchorIds = anchorIds;

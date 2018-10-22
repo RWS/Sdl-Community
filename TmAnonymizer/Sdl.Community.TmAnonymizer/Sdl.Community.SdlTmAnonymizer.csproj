@@ -198,8 +198,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Studio\SegmentElementVisitor.cs" />
-    <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />
+    <Compile Include="Services\SegmentElementVisitorService.cs" />
+    <Compile Include="Services\SelectedWordsVisitorService.cs" />
     <Compile Include="Studio\TmAnonymizerLogViewController.cs" />
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
