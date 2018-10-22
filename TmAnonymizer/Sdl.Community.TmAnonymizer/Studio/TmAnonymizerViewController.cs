@@ -1,4 +1,5 @@
 ﻿using System.Windows.Forms;
+using Sdl.Community.SdlTmAnonymizer.Controls;
 using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.Community.SdlTmAnonymizer.View;
@@ -16,25 +17,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		Description = "Anonymize personal information in Translation Memories",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),
 		AllowViewParts = true)]
-	public class TmAnonymizerViewController: AbstractViewController
+	public class TmAnonymizerViewController : AbstractViewController
 	{
 		private static TmAnonymizerViewControl _control;
 		private static TmAnonymizerExplorerControl _explorerControl;
 		private static TmAnonymizerLogViewController _logViewController;
 
 		private static MainViewModel _model;
-		private SettingsService _settingsService;
+		private static SettingsService _settingsService;
 
 		protected override void Initialize(IViewContext context)
 		{
 			_settingsService = new SettingsService(new PathInfo());
 
 			_model = new MainViewModel(_settingsService, this);
-											
+
 			_control = new TmAnonymizerViewControl(_model);
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
 			_logViewController = new TmAnonymizerLogViewController(_model);
-		}	
+		}
 
 		public UserControl ContentControl => _control;
 
@@ -60,8 +61,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		public class TmAnonymizerTmRibbonGroupSettingsAction : AbstractAction
 		{
 			protected override void Execute()
-			{
-				MessageBox.Show("TODO!");
+			{			
+				var settingsWindow = new SettingsWindow();
+				var settingsViewModel = new SettingsViewModel(settingsWindow, _settingsService);
+				settingsWindow.DataContext = settingsViewModel;
+
+				settingsWindow.ShowDialog();				
 			}
 		}
 
@@ -145,7 +150,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			protected override void Execute()
 			{
-				MessageBox.Show("TODO!");
+				var about = new AboutBox();
+				about.ShowDialog();
 			}
 		}
 	}

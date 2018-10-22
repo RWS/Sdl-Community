@@ -66,27 +66,23 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 					dataContext?.TargetSelectedWordsDetails.Add(wordDetails);
 				}
 			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 				// ignored
 			}
 		}
 
-		private string GetNextWord(WordDetails wordDetails, string text)
+		private static string GetNextWord(WordDetails wordDetails, string text)
 		{
-			var splitedWord = string.Empty;
-			if (wordDetails.Length.Equals(text.Length))
-			{
-				splitedWord = text.Substring(wordDetails.Length);
-			}
-			else
-			{
-				splitedWord = text.Substring(wordDetails.Length + 1);
-			}
+			var splitedWord = wordDetails.Length.Equals(text.Length) 
+				? text.Substring(wordDetails.Length) 
+				: text.Substring(wordDetails.Length + 1);
+
 			if (!string.IsNullOrEmpty(splitedWord))
 			{
 				return splitedWord.Substring(0, splitedWord.IndexOf(" ", StringComparison.Ordinal));
 			}
+
 			//that means selected word is the last one
 			return string.Empty;
 		}
@@ -117,7 +113,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 				Length = indexStartAbs + _textBox.Selection.Text.TrimEnd().Length,
 				Text = _textBox.Selection.Text.TrimEnd()
 			};
-			var prevWord = GetPreviosWord(wordDetails, text);
+			var prevWord = GetPreviousWord(wordDetails, text);
 			wordDetails.PreviousWord = prevWord;
 			if (tag.Equals("SourceBox"))
 			{
@@ -129,7 +125,7 @@ namespace Sdl.Community.SdlTmAnonymizer.View
 			}
 		}
 
-		private string GetPreviosWord(WordDetails wordDetails, string text)
+		private static string GetPreviousWord(WordDetails wordDetails, string text)
 		{
 			//if is first word we don't have prev word
 			if (wordDetails.Position.Equals(0))

@@ -148,7 +148,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				UserName = settings.LastUsedServerUserName
 			};
 
-			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, credentials);
+			_loginWindowViewModel = new LoginWindowViewModel(loginWindow, credentials);
 
 			loginWindow.DataContext = _loginWindowViewModel;
 			loginWindow.ShowDialog();
@@ -369,7 +369,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						}
 
 						var loginWindow = new LoginWindow();
-						_loginWindowViewModel = new LoginWindowViewModel(loginWindow, SettingsService, tmFile.Credentials);
+						_loginWindowViewModel = new LoginWindowViewModel(loginWindow, tmFile.Credentials);
 
 						loginWindow.DataContext = _loginWindowViewModel;
 						loginWindow.ShowDialog();

@@ -66,7 +66,9 @@
 
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:Rule">
-							<TextBox TextWrapping="Wrap" HorizontalContentAlignment="Stretch" Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}, Path=ActualWidth}" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+							<TextBox TextWrapping="Wrap" HorizontalContentAlignment="Stretch" 
+							         Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}, Path=ActualWidth}" 
+							         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
 							         HorizontalAlignment="Left" VerticalAlignment="Top"
 							         Background="Transparent" BorderThickness="0" Padding="2,0,2,0"/>
 						</DataTemplate>

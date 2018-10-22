@@ -84,6 +84,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return;
 			}
 
+			_tmService.BackupFileBasedTms(context, new List<TmFile>{ tmFile });
+
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
@@ -112,6 +114,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
+
+			_tmService.BackupServerBasedTm(context, new List<TmFile> { tmFile });
 
 			UpdateCustomFieldPickLists(context, anonymizeFields, serverBasedTm);
 

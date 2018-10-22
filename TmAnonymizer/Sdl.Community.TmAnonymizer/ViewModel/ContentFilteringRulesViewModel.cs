@@ -482,8 +482,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			System.Windows.Application.Current.Dispatcher.Invoke(delegate
 			{
 				var previewWindow = new PreviewWindow();
-				var previewViewModel = new PreviewWindowViewModel(previewWindow, SourceSearchResults,
-					_anonymizeTms, _tmsCollection, _model);
+				var previewViewModel = new PreviewWindowViewModel(previewWindow, SourceSearchResults, _anonymizeTms, _model);
 
 				previewWindow.DataContext = previewViewModel;
 

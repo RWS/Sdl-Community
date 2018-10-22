@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Model;
-using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
 namespace Sdl.Community.SdlTmAnonymizer.ViewModel
@@ -24,7 +23,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _hasText;
 		private string _visibility;
 
-		public LoginWindowViewModel(Window window, SettingsService settingsService, Credentials credentials)
+		public LoginWindowViewModel(Window window, Credentials credentials)
 		{
 			_window = window;
 			
