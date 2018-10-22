@@ -709,6 +709,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return;
 			}
 
+			var rules = _settingsService.GetRules();
+
 			foreach (var anonymizeTranslationMemory in anonymizeTranslationMemories)
 			{
 				foreach (var tuDetails in anonymizeTranslationMemory.TranslationUnitDetails)
@@ -729,12 +731,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (tuDetails.IsSourceMatch)
 					{
-						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.SourceSegment.Elements.ToList(), true);
+						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.SourceSegment.Elements.ToList(), rules, true);
 					}
 
 					if (tuDetails.IsTargetMatch)
 					{
-						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.TargetSegment.Elements.ToList(), false);
+						AnonymizeSegment(tuDetails, tuDetails.TranslationUnit.TargetSegment.Elements.ToList(), rules, false);
 					}
 				}
 			}
@@ -825,7 +827,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return tus;
 		}
 
-		private void AnonymizeSegment(TranslationUnitDetails tuDetails, List<SegmentElement> elements, bool isSource)
+		private void AnonymizeSegment(TranslationUnitDetails tuDetails, List<SegmentElement> elements, List<Rule> rules, bool isSource)
 		{
 			var elementsContainsTag = elements.Any(s => s.GetType().UnderlyingSystemType.Name.Equals("Tag"));
 			if (elementsContainsTag)
@@ -836,7 +838,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					AnonymizeSelectedWordsFromPreview(tuDetails, elements, isSource);
 				}
 
-				AnonymizeSegmentsWithTags(tuDetails, isSource);
+				AnonymizeSegmentsWithTags(tuDetails, rules, isSource);
 			}
 			else
 			{
@@ -845,7 +847,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					AnonymizeSelectedWordsFromPreview(tuDetails, elements, isSource);
 				}
 
-				AnonymizeSegmentsWithoutTags(tuDetails, isSource);
+				AnonymizeSegmentsWithoutTags(tuDetails, rules, isSource);
 			}
 		}
 
@@ -869,7 +871,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var anchorIds = GetAnchorIds(segment);
 			foreach (var element in translationElements.ToList())
 			{
-				var visitor = new SelectedWordsFromUiElementVisitor(selectedWords, anchorIds);
+				var visitor = new SelectedWordsVisitorService(selectedWords, anchorIds);
 				element.AcceptSegmentElementVisitor(visitor);
 
 				//new elements after splited the text for selected words
@@ -890,26 +892,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails, bool isSource)
+		private void AnonymizeSegmentsWithoutTags(TranslationUnitDetails translationUnitDetails, List<Rule> rules, bool isSource)
 		{
 			if (isSource)
 			{
-				AnonymizeSegmentsWithoutTags(translationUnitDetails.TranslationUnit.SourceSegment, translationUnitDetails.RemovedWordsFromMatches);
+				AnonymizeSegmentsWithoutTags(translationUnitDetails.TranslationUnit.SourceSegment, rules, translationUnitDetails.RemovedWordsFromMatches);
 			}
 			else
 			{
-				AnonymizeSegmentsWithoutTags(translationUnitDetails.TranslationUnit.TargetSegment, translationUnitDetails.TargetRemovedWordsFromMatches);
+				AnonymizeSegmentsWithoutTags(translationUnitDetails.TranslationUnit.TargetSegment, rules, translationUnitDetails.TargetRemovedWordsFromMatches);
 			}
 		}
 
-		private void AnonymizeSegmentsWithoutTags(TmSegment segment, List<WordDetails> removeWords)
+		private void AnonymizeSegmentsWithoutTags(TmSegment segment, List<Rule> rules, List<WordDetails> removeWords)
 		{
-			var segmentElements = new List<SegmentElement>();
-			var rules = _settingsService.GetRules();
+			var segmentElements = new List<SegmentElement>();			
 			var anchorIds = GetAnchorIds(segment);
 			foreach (var element in segment.Elements.ToList())
 			{
-				var visitor = new SegmentElementVisitor(removeWords, anchorIds, rules);
+				var visitor = new SegmentElementVisitorService(removeWords, anchorIds, rules);
 
 				element.AcceptSegmentElementVisitor(visitor);
 				var segmentColection = visitor.SegmentColection;
@@ -935,21 +936,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			segment.Elements = segmentElements;
 		}
 
-		private void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails, bool isSource)
+		private void AnonymizeSegmentsWithTags(TranslationUnitDetails translationUnitDetails, List<Rule> rules, bool isSource)
 		{
 			if (isSource)
 			{
-				AnonymizeSegmentsWithTags(translationUnitDetails.TranslationUnit.SourceSegment, translationUnitDetails.RemovedWordsFromMatches);
+				AnonymizeSegmentsWithTags(translationUnitDetails.TranslationUnit.SourceSegment, rules, translationUnitDetails.RemovedWordsFromMatches);
 			}
 			else
 			{
-				AnonymizeSegmentsWithTags(translationUnitDetails.TranslationUnit.TargetSegment, translationUnitDetails.TargetRemovedWordsFromMatches);
+				AnonymizeSegmentsWithTags(translationUnitDetails.TranslationUnit.TargetSegment, rules, translationUnitDetails.TargetRemovedWordsFromMatches);
 			}
 		}
 
-		private void AnonymizeSegmentsWithTags(TmSegment segment, List<WordDetails> removeWords)
-		{
-			var rules = _settingsService.GetRules();
+		private void AnonymizeSegmentsWithTags(TmSegment segment, List<Rule> rules, List<WordDetails> removeWords)
+		{			
 			var anchorIds = GetAnchorIds(segment);
 			for (var i = 0; i < segment.Elements.Count; i++)
 			{
@@ -958,7 +958,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					continue;
 				}
 
-				var visitor = new SegmentElementVisitor(removeWords, anchorIds, rules);
+				var visitor = new SegmentElementVisitorService(removeWords, anchorIds, rules);
 
 				//check for PI in each element from the list
 				segment.Elements[i].AcceptSegmentElementVisitor(visitor);

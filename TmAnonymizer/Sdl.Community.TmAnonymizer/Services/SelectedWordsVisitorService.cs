@@ -6,9 +6,9 @@ using Sdl.Community.SdlTmAnonymizer.Model;
 using Sdl.LanguagePlatform.Core;
 using Sdl.LanguagePlatform.Core.Tokenization;
 
-namespace Sdl.Community.SdlTmAnonymizer.Studio
+namespace Sdl.Community.SdlTmAnonymizer.Services
 {
-	public class SelectedWordsFromUiElementVisitor : ISegmentElementVisitor
+	public class SelectedWordsVisitorService : ISegmentElementVisitor
 	{
 		private readonly List<WordDetails> _selectedWordsDetails;
 		private readonly List<int> _anchorIds;
@@ -16,7 +16,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		/// All subsegments in current translation unit
 		/// </summary>
 		public List<object> SegmentColection { get; set; }
-		public SelectedWordsFromUiElementVisitor(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
+		public SelectedWordsVisitorService(List<WordDetails> selectedWordsDetails, List<int> anchorIds)
 		{
 			_selectedWordsDetails = selectedWordsDetails;
 			_anchorIds = anchorIds;
@@ -44,6 +44,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 			var wordsIndexes = new List<int>();
 			var positionOfSelectedText = new List<int>();
+
 			//for each selected word add start index, the lenght and the position of next word
 			foreach (var selectedWord in _selectedWordsDetails)
 			{
