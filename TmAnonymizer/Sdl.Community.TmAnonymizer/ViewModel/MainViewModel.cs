@@ -18,6 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			ContentFilteringRulesViewModel = new ContentFilteringRulesViewModel(_translationMemoryViewModel, excelImportExportService);
 			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService);
 			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService);
+			LogViewModel = new LogViewModel(_translationMemoryViewModel);
 		}
 
 		public TranslationMemoryViewModel TranslationMemoryViewModel
@@ -36,5 +37,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public SystemFieldsViewModel SystemFieldsViewModel { get; set; }
 
 		public CustomFieldsViewModel CustomFieldsViewModel { get; set; }
+
+		public LogViewModel LogViewModel { get; set; }
 	}
 }

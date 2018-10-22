@@ -200,6 +200,7 @@
     </Compile>
     <Compile Include="Studio\SegmentElementVisitor.cs" />
     <Compile Include="Studio\SelectedWordsFromUiElementVisitor.cs" />
+    <Compile Include="Studio\TmAnonymizerLogViewController.cs" />
     <Compile Include="Studio\TmAnonymizerViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
@@ -213,7 +214,11 @@
     <Compile Include="Model\TM\TranslationMemory.cs" />
     <Compile Include="Model\TM\TranslationUnit.cs" />
     <Compile Include="Model\TM\TranslationUnitContext.cs" />
+    <Compile Include="ViewModel\LogViewModel.cs" />
     <Compile Include="ViewModel\SelectServersWindowViewModel.cs" />
+    <Compile Include="View\LogViewControl.xaml.cs">
+      <DependentUpon>LogViewControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SelectServersWindow.xaml.cs">
       <DependentUpon>SelectServersWindow.xaml</DependentUpon>
     </Compile>
@@ -244,11 +249,17 @@
     <Compile Include="View\TmAnonymizerExplorerControl.Designer.cs">
       <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\TmAnonymizerUserControl.cs">
+    <Compile Include="View\TmAnonymizerLogViewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\TmAnonymizerUserControl.Designer.cs">
-      <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
+    <Compile Include="View\TmAnonymizerLogViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\TmAnonymizerViewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\TmAnonymizerViewControl.Designer.cs">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
     </Compile>
     <Compile Include="View\TranslationMemory.xaml.cs">
       <DependentUpon>TranslationMemory.xaml</DependentUpon>
@@ -294,8 +305,11 @@
     <EmbeddedResource Include="View\TmAnonymizerExplorerControl.resx">
       <DependentUpon>TmAnonymizerExplorerControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\TmAnonymizerUserControl.resx">
-      <DependentUpon>TmAnonymizerUserControl.cs</DependentUpon>
+    <EmbeddedResource Include="View\TmAnonymizerLogViewControl.resx">
+      <DependentUpon>TmAnonymizerLogViewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\TmAnonymizerViewControl.resx">
+      <DependentUpon>TmAnonymizerViewControl.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -330,6 +344,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\TextBoxStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\LogViewControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

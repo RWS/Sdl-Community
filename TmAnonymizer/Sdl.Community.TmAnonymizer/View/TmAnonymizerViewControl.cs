@@ -3,11 +3,11 @@ using Sdl.Community.SdlTmAnonymizer.ViewModel;
 
 namespace Sdl.Community.SdlTmAnonymizer.View
 {
-	public partial class TmAnonymizerUserControl : UserControl
+	public partial class TmAnonymizerViewControl : UserControl
 	{
 		private readonly MainViewModel _model;
 
-		public TmAnonymizerUserControl(MainViewModel model)
+		public TmAnonymizerViewControl(MainViewModel model)
 		{
 			InitializeComponent();
 
