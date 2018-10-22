@@ -10,27 +10,31 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
 	[View(
-		Id = "SdLTmAnonymizer",
-		Name = "SDLTm Anonymizer",
+		Id = "SdLTmAnonymizerController",
+		Name = "SDLTM Anonymizer",
 		Icon = "icon",
-		Description = "Anonymize personal information from tm",
-		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation))]
+		Description = "Anonymize personal information in Translation Memories",
+		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),
+		AllowViewParts = true)]
 	public class TmAnonymizerViewController: AbstractViewController
 	{
-		private TmAnonymizerUserControl _control;
-		private TmAnonymizerExplorerControl _explorerControl;		
-		private SettingsService _settingsService;
+		private static TmAnonymizerViewControl _control;
+		private static TmAnonymizerExplorerControl _explorerControl;
+		private static TmAnonymizerLogViewController _logViewController;
+
 		private static MainViewModel _model;
+		private SettingsService _settingsService;
 
 		protected override void Initialize(IViewContext context)
 		{
 			_settingsService = new SettingsService(new PathInfo());
-			
-			_model = new MainViewModel(_settingsService, this);			
 
-			_control = new TmAnonymizerUserControl(_model);
+			_model = new MainViewModel(_settingsService, this);
+											
+			_control = new TmAnonymizerViewControl(_model);
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
-		}
+			_logViewController = new TmAnonymizerLogViewController(_model);
+		}	
 
 		public UserControl ContentControl => _control;
 
@@ -108,7 +112,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(TmAnonymizerViewController), Name = "Add TM Cache", Icon = "RemoveCache", Description = "Add TM Cache")]
+		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(TmAnonymizerViewController), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 2, DisplayType.Normal)]
 		public class TmAnonymizerTmRibbonGroupRemoveTmCacheAction : AbstractAction
 		{
@@ -144,8 +148,5 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 				MessageBox.Show("TODO!");
 			}
 		}
-
-
-		
 	}
 }

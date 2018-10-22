@@ -1,6 +1,6 @@
 ﻿namespace Sdl.Community.SdlTmAnonymizer.View
 {
-	partial class TmAnonymizerUserControl
+	partial class TmAnonymizerLogViewControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -41,12 +41,12 @@
 			this.elementHost.Text = "elementHost1";
 			this.elementHost.Child = null;
 			// 
-			// TmAnonymizerUserControl
+			// TmAnonymizerViewControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.elementHost);
-			this.Name = "TmAnonymizerUserControl";
+			this.Name = "TmAnonymizerLogViewControl";
 			this.Size = new System.Drawing.Size(512, 353);
 			this.ResumeLayout(false);
 
