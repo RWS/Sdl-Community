@@ -67,6 +67,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers)
 		{
+			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
+
 			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null, new LanguageDirection
@@ -74,8 +76,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Source = tm.LanguageDirection.SourceLanguage,
 				Target = tm.LanguageDirection.TargetLanguage
 			});
-
-			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
 
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
@@ -89,6 +89,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
+			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
+
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
 			var languageDirections = new List<LanguageDirection>();
@@ -100,10 +102,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Target = languageDirection.TargetLanguage
 				});
 			}
+			
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
-
-			_tmService.BackupServerBasedTm(context, new List<TmFile> { tmFile });
-
+			
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;

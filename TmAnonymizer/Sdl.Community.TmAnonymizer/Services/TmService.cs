@@ -265,6 +265,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeServerBasedTm(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
+			BackupServerBasedTms(context, anonymizeTranslationMemories.Select(a => a.TmFile).ToList());
+
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
 			decimal iCurrent = 0;
@@ -344,6 +346,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeFileBasedTm(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
+			BackupFileBasedTms(context, anonymizeTranslationMemories.Select(a => a.TmFile).ToList());
+
 			PrepareTranslationUnits(context, anonymizeTranslationMemories);
 
 			//var settings = _settingsService.GetSettings();
@@ -414,7 +418,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				   dt.Second.ToString().PadLeft(2, '0');
 		}
 
-		public void BackupServerBasedTm(ProgressDialogContext context, IEnumerable<TmFile> tmsCollection)
+		public void BackupServerBasedTms(ProgressDialogContext context, IEnumerable<TmFile> tmsCollection)
 		{
 			var settings = _settingsService.GetSettings();
 			if (!settings.Backup)

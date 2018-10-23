@@ -65,7 +65,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		public Project SelectedProject { get; set; }
 		public List<Activity> SelectedActivities { get; set; }
 
-
 		protected override Control GetContentControl()
 		{
 			return _viewContent.Value;
@@ -74,7 +73,6 @@ namespace Sdl.Community.Qualitivity.Panels.Main
 		{
 			return _viewNavigation.Value;
 		}
-
 
 		public event EventHandler CheckEnabledObjectsEvent;
 		public void CheckEnabledObjects()
