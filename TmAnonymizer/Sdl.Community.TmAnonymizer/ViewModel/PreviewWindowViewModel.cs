@@ -60,9 +60,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
-
-						_model.TmService.BackupFileBasedTms(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile).ToList());
-
+						
 						_model.TmService.AnonymizeFileBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
 					}
 
@@ -76,9 +74,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						{
 							ProgressDialog.Current.ThrowIfCancellationPending();
 						}
-
-						_model.TmService.BackupServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories.Select(a => a.TmFile).ToList());
-
+						
 						_model.TmService.AnonymizeServerBasedTm(ProgressDialog.Current, anonymizeTranslationMemories);
 					}
 				}, progressDialogSettings);

@@ -66,6 +66,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
 		{
+			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
+
 			var tm = new FileBasedTranslationMemory(tmFile.Path);
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, null,
@@ -84,8 +86,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				return;
 			}
 
-			_tmService.BackupFileBasedTms(context, new List<TmFile>{ tmFile });
-
+			
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
@@ -101,6 +102,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
 		{
+			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
+
 			var serverBasedTm = translationProvideServer.GetTranslationMemory(tmFile.Path, TranslationMemoryProperties.All);
 
 			var languageDirections = new List<LanguageDirection>();
@@ -111,11 +114,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
 				});
-			}
+			}			
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
-
-			_tmService.BackupServerBasedTm(context, new List<TmFile> { tmFile });
 
 			UpdateCustomFieldPickLists(context, anonymizeFields, serverBasedTm);
 

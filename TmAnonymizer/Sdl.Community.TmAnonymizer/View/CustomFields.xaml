@@ -136,7 +136,7 @@
 							<DataGridTemplateColumn Header="New Value" MinWidth="110" Width="*" IsReadOnly="False"  >
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:CustomFieldValue">
-										<TextBox Text="{Binding NewValue}" Background="Transparent" BorderThickness="0" 
+										<TextBox Text="{Binding NewValue, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" 
 										         TextWrapping="Wrap" HorizontalContentAlignment="Stretch" Padding="2,0,2,0" 
 										         Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type DataGridCell}}, Path=ActualWidth}"/>
 									</DataTemplate>
