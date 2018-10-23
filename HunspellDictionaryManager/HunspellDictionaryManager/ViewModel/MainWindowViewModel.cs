@@ -20,7 +20,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		private ObservableCollection<LanguageModel> _languages = new ObservableCollection<LanguageModel>();
 		private HunspellLangDictionaryModel _selectedDictionaryLanguage;
 		private HunspellLangDictionaryModel _deletedDictionaryLanguage;
-		private Language[] _studioLanguages = Language.GetAllLanguages().OrderBy(s=>s.DisplayName).ToArray();
+		private Language[] _studioLanguages = Language.GetAllLanguages().OrderBy(s => s.DisplayName).ToArray();
 		private LanguageModel _newDictionaryLanguage;
 		private string _resultMessageColor;
 		private string _labelVisibility = Constants.Hidden;
@@ -115,8 +115,8 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				_resultMessage = value;
 				OnPropertyChanged();
 			}
-		}	
-		
+		}
+
 		public string ResultMessageColor
 		{
 			get => _resultMessageColor;
@@ -157,7 +157,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 
 		private void DeleteAction()
 		{
-			LabelVisibility = Constants.Hidden;		
+			LabelVisibility = Constants.Hidden;
 			if (DeletedDictionaryLanguage != null)
 			{
 				DeleteSelectedFies();
@@ -177,6 +177,9 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			LabelVisibility = Constants.Hidden;
 		}
 
+		/// <summary>
+		/// Backup Hunspell Dictionaries (used when user deletes dictionary and wants to revert the action)
+		/// </summary>
 		private void BackupHunspellDictionaries()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
@@ -189,21 +192,19 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 					Directory.Delete(_backupFolderPath, true);
 				}
 			});
-			task.Wait();			
-			Directory.CreateDirectory(_backupFolderPath);
+			task.Wait();
 
+			Directory.CreateDirectory(_backupFolderPath);
 			if (!string.IsNullOrEmpty(studioPath))
 			{
 				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
-
-				var files = Directory.EnumerateFiles(_hunspellDictionariesFolderPath);
-				foreach (var file in files)
-				{
-					File.Copy(file, Path.Combine(_backupFolderPath, Path.GetFileName(file)));
-				}
+				CopyFiles(_hunspellDictionariesFolderPath, _backupFolderPath);
 			}
 		}
-		
+
+		/// <summary>
+		/// Revert the deletion of dictionaries by moving back to original folder the backup folder files
+		/// </summary>
 		private void RevertAction()
 		{
 			var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -214,16 +215,26 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				}
 			});
 			task.Wait();
-			Directory.CreateDirectory(_hunspellDictionariesFolderPath);
-			
-			var files = Directory.EnumerateFiles(_backupFolderPath);
-			foreach (var file in files)
+
+			var createDirTask = System.Threading.Tasks.Task.Factory.StartNew(() =>
 			{
-				File.Copy(file, Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(file)));
-			}
+				Directory.CreateDirectory(_hunspellDictionariesFolderPath);
+			});
+			createDirTask.Wait();
+
+			CopyFiles(_backupFolderPath, _hunspellDictionariesFolderPath);
 			RefreshAction();
 			ResultMessage = Constants.RevertSuccess;
 			LabelVisibility = Constants.Visible;
+		}
+
+		private void CopyFiles(string initialPath, string destinationPath)
+		{
+			var files = Directory.EnumerateFiles(initialPath);
+			foreach (var file in files)
+			{
+				File.Copy(file, Path.Combine(destinationPath, Path.GetFileName(file)));
+			}
 		}
 
 		private void HelpAction()
@@ -283,17 +294,17 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void CopyFiles()
 		{
-			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-','_')}.dic");
+			var newDictionaryFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.dic");
 			var newAffFilePath = Path.Combine(_hunspellDictionariesFolderPath, $"{NewDictionaryLanguage.IsoCode.Replace('-', '_')}.aff");
 
-			if(DictionaryLanguages.Any(d=>d.DictionaryFile.Equals(newDictionaryFilePath)))
+			if (DictionaryLanguages.Any(d => d.DictionaryFile.Equals(newDictionaryFilePath)))
 			{
 				var result = MessageBox.Show(Constants.DictionaryAlreadyExists, Constants.InformativeMessage, MessageBoxButton.YesNo, MessageBoxImage.Warning);
-				if(result.Equals(MessageBoxResult.Yes))
+				if (result.Equals(MessageBoxResult.Yes))
 				{
 					CreateLanguageDictionary(newDictionaryFilePath, newAffFilePath);
 				}
-			}	
+			}
 			else
 			{
 				CreateLanguageDictionary(newDictionaryFilePath, newAffFilePath);
@@ -320,7 +331,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				xmlDoc.Save(configFilePath);
 
 				LoadDictionariesLanguages();
-			}			
+			}
 			LabelVisibility = Constants.Visible;
 			SetGridSettings(Constants.SuccessfullCreateMessage, Constants.GreenColor);
 		}
@@ -337,7 +348,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			if (File.Exists(DeletedDictionaryLanguage.AffFile))
 			{
 				File.Delete(DeletedDictionaryLanguage.AffFile);
-			}			
+			}
 		}
 
 		/// <summary>
@@ -392,7 +403,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			{
 				// search for Language based on TwoLetterISOLanguageName
 				displayLanguageName = _studioLanguages.Where(a => a.CultureInfo.TwoLetterISOLanguageName.Equals(hunspellDictionaryName)).FirstOrDefault();
-				if(displayLanguageName != null)
+				if (displayLanguageName != null)
 				{
 					return displayLanguageName.DisplayName;
 				}
@@ -405,7 +416,7 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 		/// </summary>
 		private void LoadStudioLanguages()
 		{
-			foreach(var language in _studioLanguages)
+			foreach (var language in _studioLanguages)
 			{
 				var languageModel = new LanguageModel
 				{
