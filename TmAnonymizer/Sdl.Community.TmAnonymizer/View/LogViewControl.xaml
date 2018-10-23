@@ -3,21 +3,52 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
 	<UserControl.Resources>
 
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
-				<ResourceDictionary Source="..\Styles\TabControlStyle.xaml"/>
+				<ResourceDictionary Source="..\Styles\DataGridStyle.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 
-		
+
 	</UserControl.Resources>
 
-	<Grid >
-		<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">Hello SDLTM Anonymizer log report world!</TextBlock>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="300"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid Grid.Column="0" Margin="0,0,3,0">
+			<controls:SortAwareDataGrid 
+						DefaultColumnName="Name"
+						DefaultSortDirection="Ascending"
+						Style="{StaticResource FilesGridStyle}" 							
+						FontFamily="Segoe UI"								
+						BorderBrush="LightGray"
+						SelectionMode="Single"
+						SelectionUnit="FullRow"
+						HeadersVisibility="Column"
+						VerticalScrollBarVisibility="Auto"	
+						HorizontalScrollBarVisibility="Auto"
+						GridLinesVisibility="None" 
+						Background="White"						
+						ItemsSource="{Binding Reports, Mode=TwoWay}" 						                            											                       
+						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
+				<DataGrid.Columns>
+					<DataGridTextColumn Header="Name" Binding="{Binding Value}" IsReadOnly="True" MinWidth="110" Width="2*" ElementStyle="{StaticResource WrapText}" />
+					<DataGridTextColumn Header="Date" Binding="{Binding Value}" IsReadOnly="True" MinWidth="110" Width="1*" ElementStyle="{StaticResource WrapText}" />
+				</DataGrid.Columns>
+			</controls:SortAwareDataGrid>
+		</Grid>
+
+		<GridSplitter Grid.Column="0" Width="3" Margin="0"/>
+		<Grid Grid.Column="1" Margin="3,0,0,0">
+			<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding SelectedReportHtml}" />
+		</Grid>
 	</Grid>
 
 </UserControl>

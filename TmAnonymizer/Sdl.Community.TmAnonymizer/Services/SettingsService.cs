@@ -14,7 +14,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			UncheckAllTMs();			
 		}
 				
-		public PathInfo PathInfo { get; }		
+		public PathInfo PathInfo { get; }
+
+		public string GetLogReportPath()
+		{
+			var settings = GetSettings();
+			if (String.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
+			{
+				settings.LogsFullPath = PathInfo.LogsFullPath;
+				SaveSettings(settings);
+			}
+
+			return settings.LogsFullPath;
+		}
 
 		public bool UserAgreed()
 		{
@@ -94,12 +106,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				AddDefaultRules(settings);
 
-				if (string.IsNullOrEmpty(settings.BackupFullPath) || !Directory.Exists(settings.BackupFullPath))
+				if (String.IsNullOrEmpty(settings.BackupFullPath) || !Directory.Exists(settings.BackupFullPath))
 				{
 					settings.BackupFullPath = PathInfo.BackupFullPath;
 				}
 
-				if (string.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
+				if (String.IsNullOrEmpty(settings.LogsFullPath) || !Directory.Exists(settings.LogsFullPath))
 				{
 					settings.LogsFullPath = PathInfo.LogsFullPath;
 				}
@@ -133,7 +145,19 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			settings.Rules = GetDefaultRules();
 			SaveSettings(settings);
 		}
-	
+
+		public string GetDateTimeString()
+		{
+			var dt = DateTime.Now;
+			return dt.Year +
+			       dt.Month.ToString().PadLeft(2, '0') +
+			       dt.Day.ToString().PadLeft(2, '0') +
+			       "T" +
+			       dt.Hour.ToString().PadLeft(2, '0') +
+			       dt.Minute.ToString().PadLeft(2, '0') +
+			       dt.Second.ToString().PadLeft(2, '0');
+		}
+
 		private void UncheckAllTMs()
 		{
 			var settings = GetSettings();
@@ -142,9 +166,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				tmFile.IsSelected = false;
 
-				if (!string.IsNullOrEmpty(tmFile.CachePath) && !File.Exists(tmFile.CachePath))
+				if (!String.IsNullOrEmpty(tmFile.CachePath) && !File.Exists(tmFile.CachePath))
 				{
-					tmFile.CachePath = string.Empty;
+					tmFile.CachePath = String.Empty;
 				}
 			}
 

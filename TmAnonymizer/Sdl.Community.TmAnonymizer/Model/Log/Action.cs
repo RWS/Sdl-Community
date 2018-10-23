@@ -20,6 +20,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 			Update = 2
 		}
 
+		public int Id { get; set; }
+
 		public ActionType Type { get; set; }
 
 		public ActionScope Scope { get; set; }

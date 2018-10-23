@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -64,7 +67,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		public void AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
+		public Report AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
 		{
 			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
 
@@ -79,28 +82,72 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			UpdateCustomFieldPickLists(context, anonymizeFields, tm);
 
-			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
+			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);			
 
-			if (units.Count == 0)
+			var report = new Report
 			{
-				return;
-			}
+				TmFile = tmFile,
+				ReportFullPath = Path.Combine(
+					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
+					                                     "." + _settingsService.GetDateTimeString() + ".xml"),
+				Created = DateTime.Now,
+				ElapsedTime = new TimeSpan()
+			};
 
-			
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
-				UpdateCustomFieldsSqlite(context, tmFile, units);
+				report.UpdatedCount = UpdateCustomFieldsSqlite(context, tmFile, units);
 			}
 			else
 			{
-				UpdateCustomFields(context, translationUnits, units, tm);
+				report.UpdatedCount = UpdateCustomFields(context, tm, units);
 			}
 
+			var changesReport = GetCustomFieldChangesReport(units);
+			report.Actions = GetCustomFieldsActionsReport(changesReport);
+
+
 			ClearPreviousCustomFieldValues(translationUnits);
+
+
+			stopWatch.Stop();
+			report.ElapsedTime = stopWatch.Elapsed;
+
+			return report;
 		}
 
-		public void AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
+		private static List<Model.Log.Action> GetCustomFieldsActionsReport(Dictionary<int, List<string>> changesReport)
+		{
+			var actions = new List<Model.Log.Action>();
+			foreach (var change in changesReport)
+			{
+				var action = new Model.Log.Action
+				{
+					Id = change.Key,
+					Type = Model.Log.Action.ActionType.Update,
+					Scope = Model.Log.Action.ActionScope.CustomFields,
+					Details = string.Empty
+				};
+
+				if (change.Value != null)
+				{
+					foreach (var value in change.Value)
+					{
+						action.Details += (!string.IsNullOrEmpty(action.Details) ? "\r\n" : string.Empty) + value;
+					}
+				}
+
+				actions.Add(action);
+			}
+
+			return actions;
+		}
+
+		public Report AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
 		{
 			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
 
@@ -114,7 +161,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Source = languageDirection.SourceLanguage,
 					Target = languageDirection.TargetLanguage
 				});
-			}			
+			}
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
@@ -122,30 +169,48 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
 
-			if (units.Count == 0)
-			{
-				return;
-			}
 
-			UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
+			var report = new Report
+			{
+				TmFile = tmFile,
+				ReportFullPath = Path.Combine(
+					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
+				                            "." + _settingsService.GetDateTimeString() + ".xml"),
+				Created = DateTime.Now,
+				ElapsedTime = new TimeSpan()
+			};
+
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+
+			report.UpdatedCount = UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
+
+			var changesReport = GetCustomFieldChangesReport(units);
+			report.Actions = GetCustomFieldsActionsReport(changesReport);
 
 			ClearPreviousCustomFieldValues(translationUnits);
+
+			stopWatch.Stop();
+			report.ElapsedTime = stopWatch.Elapsed;
+
+			return report;
 		}
 
-		private static void UpdateCustomFieldsSqlite(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
+		private static int UpdateCustomFieldsSqlite(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> units)
 		{
 			if (units.Count == 0)
 			{
-				return;
+				return 0;
 			}
 
+			int updatedCount;
 			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
 				service.OpenConnection();
 
-				service.UpdateCustomFields(context, units);
+				updatedCount = service.UpdateCustomFields(context, units);
 			}
 			catch (Exception ex)
 			{
@@ -156,43 +221,22 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				service.CloseConnection();
 			}
+
+			return updatedCount;
 		}
 
-		private static void UpdateCustomFieldPickLists(ProgressDialogContext context, IEnumerable<CustomField> anonymizeFields, ITranslationMemory tm)
+		private int UpdateCustomFields(ProgressDialogContext context, ILocalTranslationMemory tm, List<TmTranslationUnit> units)
 		{
-			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
+			var updatedCount = 0;
 
-			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
-			{
-				if (anonymizedField.IsPickList)
-				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
-					{
-						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
-						{
-							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
-							if (pickListItem != null)
-							{
-								pickListItem.Name = fieldValue.NewValue;
-							}
-						}
-					}
-				}
-			}
-
-			tm.Save();
-		}
-
-		private void UpdateCustomFields(ProgressDialogContext context, List<TmTranslationUnit> translationUnits, IReadOnlyCollection<TmTranslationUnit> units, ILocalTranslationMemory tm)
-		{
 			decimal iCurrent = 0;
-			decimal iTotalUnits = translationUnits.Count;
+			decimal iTotalUnits = units.Count;
 			var groupsOf = 200;
 
 			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(units) };
 			if (units.Count > groupsOf)
 			{
-				tusGroups = translationUnits.ChunkBy(groupsOf);
+				tusGroups = units.ChunkBy(groupsOf);
 			}
 
 			foreach (var tus in tusGroups)
@@ -205,7 +249,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				var progress = iCurrent / iTotalUnits * 100;
 				context?.Report(Convert.ToInt32(progress), "Updating: " + iCurrent + " of " + iTotalUnits + " Translation Units");
-
 
 				var tusToUpdate = new List<TranslationUnit>();
 				foreach (var tu in tus)
@@ -221,15 +264,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 				if (tusToUpdate.Count > 0)
 				{
-					//TODO - output results to log
-					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray()).ToList();
+					foreach (var result in results)
+					{
+						if (result.Action != LanguagePlatform.TranslationMemory.Action.Error)
+						{
+							updatedCount++;
+						}
+					}
 				}
 			}
+
+			return updatedCount;
 		}
 
-		private void UpdateCustomFields(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> translationUnits,
+		private int UpdateCustomFields(ProgressDialogContext context, TmFile tmFile, List<TmTranslationUnit> translationUnits,
 			IReadOnlyCollection<TmTranslationUnit> units, ServerBasedTranslationMemory serverBasedTm)
 		{
+			var updatedCount = 0;
+
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;
@@ -266,8 +319,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (tusToUpdate.Count > 0)
 					{
-						//TODO - output results to log
 						var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+						foreach (var result in results)
+						{
+							if (result.Action != LanguagePlatform.TranslationMemory.Action.Error)
+							{
+								updatedCount++;
+							}
+						}
 					}
 				}
 			}
@@ -276,6 +335,33 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}
+
+			return updatedCount;
+		}
+
+		private static void UpdateCustomFieldPickLists(ProgressDialogContext context, IEnumerable<CustomField> anonymizeFields, ITranslationMemory tm)
+		{
+			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
+
+			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+			{
+				if (anonymizedField.IsPickList)
+				{
+					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+					{
+						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
+						{
+							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
+							if (pickListItem != null)
+							{
+								pickListItem.Name = fieldValue.NewValue;
+							}
+						}
+					}
+				}
+			}
+
+			tm.Save();
 		}
 
 		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
@@ -478,7 +564,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var previousValueString = ValuesToString(multipleStringFieldValue.PreviousValues);
 
 			return previousValueString != valueString;
-		}		
+		}
 
 		private bool UpdateSingleStringFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
@@ -722,6 +808,162 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					}
 				}
 			}
+		}
+
+		private static Dictionary<int, List<string>> GetCustomFieldChangesReport(IEnumerable<TmTranslationUnit> translationUnits)
+		{
+			var reports = new Dictionary<int, List<string>>();
+			foreach (var unit in translationUnits)
+			{
+				foreach (var fieldValue in unit.FieldValues)
+				{
+					switch (fieldValue.ValueType)
+					{
+						case FieldValueType.SingleString:
+							if (fieldValue is Model.FieldDefinitions.SingleStringFieldValue singleStringFieldValue)
+							{
+								if (singleStringFieldValue.PreviousValue != null &&
+									singleStringFieldValue.PreviousValue != singleStringFieldValue.Value)
+								{
+									var exists = reports.ContainsKey(unit.ResourceId.Id);
+									var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
+
+									report.Add("Name: " + singleStringFieldValue.Name +
+											   ", Type: " + singleStringFieldValue.ValueType +
+											   ", Previous: " + singleStringFieldValue.PreviousValue +
+											   ", Value: " + singleStringFieldValue.Value);
+
+									if (!exists)
+									{
+										reports.Add(unit.ResourceId.Id, report);
+									}
+								}
+							}
+							break;
+						case FieldValueType.MultipleString:
+							if (fieldValue is Model.FieldDefinitions.MultipleStringFieldValue multipleStringFieldValue)
+							{
+								if (multipleStringFieldValue.PreviousValues != null)
+								{
+									var previous = ValuesToString(multipleStringFieldValue.PreviousValues);
+									var values = ValuesToString(multipleStringFieldValue.Values);
+
+									if (previous != values)
+									{
+										var exists = reports.ContainsKey(unit.ResourceId.Id);
+										var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
+
+										report.Add("Name: " + multipleStringFieldValue.Name +
+												   ", Type: " + multipleStringFieldValue.ValueType +
+												   ", Previous: (" + previous + ")" +
+												   ", Value: (" + values + ")");
+
+										if (!exists)
+										{
+											reports.Add(unit.ResourceId.Id, report);
+										}
+									}
+								}
+							}
+							break;
+						case FieldValueType.DateTime:
+							if (fieldValue is Model.FieldDefinitions.DateTimeFieldValue dateTimeFieldValue)
+							{
+								if (dateTimeFieldValue.PreviousValue != null &&
+									dateTimeFieldValue.PreviousValue != dateTimeFieldValue.Value)
+								{
+									var exists = reports.ContainsKey(unit.ResourceId.Id);
+									var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
+
+									report.Add("Name: " + dateTimeFieldValue.Name +
+											   ", Type: " + dateTimeFieldValue.ValueType +
+											   ", Previous: " + dateTimeFieldValue.PreviousValue.Value +
+											   ", Value: " + dateTimeFieldValue.Value);
+
+									if (!exists)
+									{
+										reports.Add(unit.ResourceId.Id, report);
+									}
+								}
+							}
+							break;
+						case FieldValueType.Integer:
+							if (fieldValue is Model.FieldDefinitions.IntFieldValue intFieldValue)
+							{
+								if (intFieldValue.PreviousValue != null &&
+									intFieldValue.PreviousValue != intFieldValue.Value)
+								{
+									var exists = reports.ContainsKey(unit.ResourceId.Id);
+									var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+
+									report.Add("Name: " + intFieldValue.Name +
+											   ", Type: " + intFieldValue.ValueType +
+											   ", Previous: " + intFieldValue.PreviousValue.Value +
+											   ", Value: " + intFieldValue.Value);
+
+									if (!exists)
+									{
+										reports.Add(unit.ResourceId.Id, report);
+									}
+								}
+							}
+							break;
+						case FieldValueType.MultiplePicklist:
+							if (fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue)
+							{
+								if (multiplePicklistFieldValue.PreviousValues != null)
+								{
+									foreach (var value in multiplePicklistFieldValue.Values)
+									{
+										if (value.PreviousName != null &&
+											value.PreviousName != value.Name)
+										{
+											var exists = reports.ContainsKey(unit.ResourceId.Id);
+											var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+
+											report.Add("Name: " + multiplePicklistFieldValue.Name +
+													   ", Type: " + multiplePicklistFieldValue.ValueType +
+													   ", Previous: " + value.PreviousName +
+													   ", Value: " + value.Name);
+
+											if (!exists)
+											{
+												reports.Add(unit.ResourceId.Id, report);
+											}
+										}
+									}
+								}
+							}
+							break;
+						case FieldValueType.SinglePicklist:
+							if (fieldValue is Model.FieldDefinitions.SinglePicklistFieldValue singlePicklistFieldValue)
+							{
+								if (singlePicklistFieldValue.PreviousValue != null)
+								{
+									if (singlePicklistFieldValue.Value.PreviousName != null &&
+										singlePicklistFieldValue.Value.PreviousName != singlePicklistFieldValue.Value.Name)
+									{
+										var exists = reports.ContainsKey(unit.ResourceId.Id);
+										var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+
+										report.Add("Name: " + singlePicklistFieldValue.Name +
+												   ", Type: " + singlePicklistFieldValue.ValueType +
+												   ", Previous: " + singlePicklistFieldValue.Value.PreviousName +
+												   ", Value: " + singlePicklistFieldValue.Value.Name);
+
+										if (!exists)
+										{
+											reports.Add(unit.ResourceId.Id, report);
+										}
+									}
+								}
+							}
+							break;
+					}
+				}
+			}
+
+			return reports;
 		}
 	}
 }

@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -30,13 +32,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private IList _selectedItems;
 		private readonly CustomFieldsService _customFieldsService;
 		private readonly ExcelImportExportService _excelImportExportService;
+		private readonly SettingsService _settingsService;
+		private readonly SerializerService _serializerService;
 
-		public CustomFieldsViewModel(TranslationMemoryViewModel model, CustomFieldsService customFieldsService, ExcelImportExportService excelImportExportService)
+		public CustomFieldsViewModel(TranslationMemoryViewModel model, CustomFieldsService customFieldsService, 
+			ExcelImportExportService excelImportExportService, SerializerService serializerService)
 		{
 			_customFieldsService = customFieldsService;
 			_excelImportExportService = excelImportExportService;
 
+			_serializerService = serializerService;
+
 			_model = model;
+			_settingsService = model.SettingsService;
 
 			_tmsCollection = _model.TmsCollection;
 			_tmsCollection.CollectionChanged += TmsCollection_CollectionChanged;
@@ -282,9 +290,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					ProgressDialog.Current.Report(0, tm.Path);
 
+					Report report;
 					if (!tm.IsServerTm)
 					{
-						_customFieldsService.AnonymizeFileBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList());
+						report = _customFieldsService.AnonymizeFileBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList());
 					}
 					else
 					{
@@ -293,8 +302,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						_customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider);
+						report = _customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider);
 					}
+
+					_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
+					//Write Report to file
 				}
 			}, settings);
 

@@ -178,7 +178,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-							{
+							{								
 								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
 								tusToUpdate.Add(unit);
 							}

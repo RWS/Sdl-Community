@@ -145,6 +145,7 @@
       <DependentUpon>AboutBox.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\BindingDataProxy.cs" />
+    <Compile Include="Controls\BindingWebBrowserSource.cs" />
     <Compile Include="Controls\LabelledTextBox.xaml.cs">
       <DependentUpon>LabelledTextBox.xaml</DependentUpon>
     </Compile>

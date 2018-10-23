@@ -64,8 +64,8 @@
 								        ItemsSource="{Binding TmLanguageDirections}" 													            											                       
 								        MaxHeight="{Binding Path=ActualWidth, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type GroupBox}}}">
 									<DataGrid.Columns>
-										<DataGridTextColumn Header="Source" Binding="{Binding Source.DisplayName}" MinWidth="150" Width="*" IsReadOnly="True" />
-										<DataGridTextColumn Header="Target" Binding="{Binding Target.DisplayName}" MinWidth="150" Width="*" IsReadOnly="True"/>
+										<DataGridTextColumn Header="Source" Binding="{Binding SourceDisplayName, Mode=OneWay}" MinWidth="150" Width="*" IsReadOnly="True" />
+										<DataGridTextColumn Header="Target" Binding="{Binding TargetDisplayName, Mode=OneTime}" MinWidth="150" Width="*" IsReadOnly="True"/>
 										<DataGridTextColumn Header="Units" Binding="{Binding TranslationUnitsCount}" MinWidth="80" Width="Auto" IsReadOnly="True"/>
 									</DataGrid.Columns>
 								</DataGrid>
