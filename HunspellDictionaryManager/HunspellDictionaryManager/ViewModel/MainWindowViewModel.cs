@@ -216,9 +216,13 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			});
 			task.Wait();
 
-			Directory.CreateDirectory(_hunspellDictionariesFolderPath);
-			CopyFiles(_backupFolderPath, _hunspellDictionariesFolderPath);
+			var createDirTask = System.Threading.Tasks.Task.Factory.StartNew(() =>
+			{
+				Directory.CreateDirectory(_hunspellDictionariesFolderPath);
+			});
+			createDirTask.Wait();
 
+			CopyFiles(_backupFolderPath, _hunspellDictionariesFolderPath);
 			RefreshAction();
 			ResultMessage = Constants.RevertSuccess;
 			LabelVisibility = Constants.Visible;
