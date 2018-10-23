@@ -61,7 +61,7 @@
 								</DataTemplate>
 							</DataGridTemplateColumn.CellTemplate>
 						</DataGridTemplateColumn>
-						<DataGridTemplateColumn Width="1*" Header="TM" MinWidth="70" IsReadOnly="True"  >
+						<DataGridTemplateColumn Width="1*" Header="TM" MinWidth="70" IsReadOnly="True" SortMemberPath="TmName" >
 							<DataGridTemplateColumn.CellTemplate>
 								<DataTemplate DataType="model:CustomField">
 									<TextBlock Text="{Binding TmName}" Background="Transparent" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"  />
@@ -133,7 +133,7 @@
 								</DataGridTemplateColumn.CellTemplate>
 							</DataGridTemplateColumn>
 							<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" MinWidth="110" Width="*" ElementStyle="{StaticResource WrapText}" />
-							<DataGridTemplateColumn Header="New Value" MinWidth="110" Width="*" IsReadOnly="False"  >
+							<DataGridTemplateColumn Header="New Value" MinWidth="110" Width="*" IsReadOnly="False" SortMemberPath="NewValue"  >
 								<DataGridTemplateColumn.CellTemplate>
 									<DataTemplate DataType="model:CustomFieldValue">
 										<TextBox Text="{Binding NewValue, UpdateSourceTrigger=PropertyChanged}" Background="Transparent" BorderThickness="0" 
