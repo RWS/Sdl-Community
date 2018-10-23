@@ -62,8 +62,7 @@
 				</DataGridTemplateColumn>
 
 
-				<DataGridTemplateColumn Width="2*" Header="Rule"  IsReadOnly="False" >
-
+				<DataGridTemplateColumn Width="2*" Header="Rule"  IsReadOnly="False" SortMemberPath="Name" >
 					<DataGridTemplateColumn.CellTemplate>
 						<DataTemplate DataType="model:Rule">
 							<TextBox TextWrapping="Wrap" HorizontalContentAlignment="Stretch" 

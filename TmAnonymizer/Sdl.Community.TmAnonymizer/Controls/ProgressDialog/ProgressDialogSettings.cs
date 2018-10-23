@@ -4,11 +4,7 @@ using System.Windows.Forms;
 namespace Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog
 {
 	public class ProgressDialogSettings
-	{
-		//public static ProgressDialogSettings WithLabelOnly = new ProgressDialogSettings(null, false, false, true);
-		//public static ProgressDialogSettings WithSubLabel = new ProgressDialogSettings(null, true, false, true);
-		//public static ProgressDialogSettings WithSubLabelAndCancel = new ProgressDialogSettings(null, true, true, true);
-
+	{		
 		public bool ShowSubLabel { get; set; }
 		public bool ShowCancelButton { get; set; }
 		public bool ShowProgressBarIndeterminate { get; set; }
