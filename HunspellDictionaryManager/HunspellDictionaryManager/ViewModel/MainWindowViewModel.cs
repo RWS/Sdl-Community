@@ -177,6 +177,9 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 			LabelVisibility = Constants.Hidden;
 		}
 
+		/// <summary>
+		/// Backup Hunspell Dictionaries (used when user deletes dictionary and wants to revert the action)
+		/// </summary>
 		private void BackupHunspellDictionaries()
 		{
 			var studioPath = Utils.GetInstalledStudioPath();
@@ -190,20 +193,18 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				}
 			});
 			task.Wait();
-			Directory.CreateDirectory(_backupFolderPath);
 
+			Directory.CreateDirectory(_backupFolderPath);
 			if (!string.IsNullOrEmpty(studioPath))
 			{
 				_hunspellDictionariesFolderPath = Path.Combine(Path.GetDirectoryName(studioPath), Constants.HunspellDictionaries);
-
-				var files = Directory.EnumerateFiles(_hunspellDictionariesFolderPath);
-				foreach (var file in files)
-				{
-					File.Copy(file, Path.Combine(_backupFolderPath, Path.GetFileName(file)));
-				}
+				CopyFiles(_hunspellDictionariesFolderPath, _backupFolderPath);
 			}
 		}
 
+		/// <summary>
+		/// Revert the deletion of dictionaries by moving back to original folder the backup folder files
+		/// </summary>
 		private void RevertAction()
 		{
 			var task = System.Threading.Tasks.Task.Factory.StartNew(() =>
@@ -214,16 +215,22 @@ namespace Sdl.Community.HunspellDictionaryManager.ViewModel
 				}
 			});
 			task.Wait();
-			Directory.CreateDirectory(_hunspellDictionariesFolderPath);
 
-			var files = Directory.EnumerateFiles(_backupFolderPath);
-			foreach (var file in files)
-			{
-				File.Copy(file, Path.Combine(_hunspellDictionariesFolderPath, Path.GetFileName(file)));
-			}
+			Directory.CreateDirectory(_hunspellDictionariesFolderPath);
+			CopyFiles(_backupFolderPath, _hunspellDictionariesFolderPath);
+
 			RefreshAction();
 			ResultMessage = Constants.RevertSuccess;
 			LabelVisibility = Constants.Visible;
+		}
+
+		private void CopyFiles(string initialPath, string destinationPath)
+		{
+			var files = Directory.EnumerateFiles(initialPath);
+			foreach (var file in files)
+			{
+				File.Copy(file, Path.Combine(destinationPath, Path.GetFileName(file)));
+			}
 		}
 
 		private void HelpAction()
