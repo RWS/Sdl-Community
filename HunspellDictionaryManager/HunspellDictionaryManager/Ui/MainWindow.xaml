@@ -103,5 +103,7 @@
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="6" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RevertCommand}" Content="Revert" Grid.Row="6" Grid.Column="0" Width="85" Height="25"
+				   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Revert deleted dictionaries"/>
 	</Grid>
 </controls:MetroWindow>
