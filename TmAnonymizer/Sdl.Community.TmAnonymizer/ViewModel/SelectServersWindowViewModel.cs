@@ -106,8 +106,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						serverTm.TmLanguageDirections.Add(
 							new TmLanguageDirection
 							{
-								Source = languageDirection.SourceLanguage,
-								Target = languageDirection.TargetLanguage,
+								Source = languageDirection.SourceLanguage.Name,
+								Target = languageDirection.TargetLanguage.Name,
 								TranslationUnitsCount = languageDirection.GetTranslationUnitCount()
 							});
 					}

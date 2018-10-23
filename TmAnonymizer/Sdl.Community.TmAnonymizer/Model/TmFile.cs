@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
@@ -10,9 +11,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		private string _path;
 		private string _cachePath;
 		private bool _isTmCache;
-		private bool _shouldRemove;
 		private bool _isServerTm;
-		private bool _isLoaded;
 		private string _type;
 		private int _translationUnits;
 		private List<TmLanguageDirection> _tmLanguageDirections;
@@ -23,6 +22,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			IsServerTm = false;
 		}
 
+		[XmlIgnore]
 		public Credentials Credentials { get; set; }
 
 		public string Name
@@ -64,7 +64,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				OnPropertyChanged(nameof(Path));
 			}
 		}
-
+		
 		public string CachePath
 		{
 			get => _cachePath;
@@ -80,17 +80,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public bool IsTmCache
 		{
 			get { return !string.IsNullOrEmpty(_cachePath); }
-		}
-
-		public bool IsLoaded
-		{
-
-			get => _isLoaded;
-			set
-			{
-				_isLoaded = value;
-				OnPropertyChanged(nameof(IsLoaded));
-			}
 		}
 
 		public bool IsSelected
@@ -112,17 +101,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 			}
 		}
 
-		public bool ShouldRemove
-		{
-
-			get => _shouldRemove;
-			set
-			{
-				_shouldRemove = value;
-				OnPropertyChanged(nameof(ShouldRemove));
-			}
-		}
-
 		public int TranslationUnits
 		{
 			get => _translationUnits;
@@ -132,7 +110,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				OnPropertyChanged(nameof(TranslationUnits));
 			}
 		}
-
+	
 		public List<TmLanguageDirection> TmLanguageDirections
 		{
 			get => _tmLanguageDirections ?? (_tmLanguageDirections = new List<TmLanguageDirection>());

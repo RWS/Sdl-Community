@@ -7,11 +7,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 {
 	public class TmLanguageDirection : ModelBase
 	{		
-		private CultureInfo _source;
-		private CultureInfo _target;		
+		private string _source;
+		private string _target;		
 		private int _translationUnitsCount;		
 
-		public CultureInfo Source
+		public string Source
 		{
 			get => _source;
 			set
@@ -19,9 +19,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				_source = value;
 				OnPropertyChanged(nameof(Source));
 			}
-		}
+		}	
 
-		public CultureInfo Target
+		public string Target
 		{
 			get => _target;
 			set
@@ -41,6 +41,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 				OnPropertyChanged(nameof(TranslationUnitsCount));
 			}
 		}
+
+		[JsonIgnore]
+		[XmlIgnore]
+		public string SourceDisplayName => !string.IsNullOrEmpty(Source) ? new CultureInfo(Source).DisplayName : string.Empty;
+
+		[JsonIgnore]
+		[XmlIgnore]
+		public string TargetDisplayName => !string.IsNullOrEmpty(Target) ? new CultureInfo(Target).DisplayName : string.Empty;
 
 		[JsonIgnore]
 		[XmlIgnore]

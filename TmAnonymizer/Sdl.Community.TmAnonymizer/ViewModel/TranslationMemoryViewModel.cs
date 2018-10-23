@@ -305,8 +305,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					{
 						new TmLanguageDirection
 						{
-							Source = fileBasedTm.LanguageDirection.SourceLanguage,
-							Target = fileBasedTm.LanguageDirection.TargetLanguage,
+							Source = fileBasedTm.LanguageDirection.SourceLanguage.Name,
+							Target = fileBasedTm.LanguageDirection.TargetLanguage.Name,
 							TranslationUnitsCount = unitsCount
 						}
 					}

@@ -556,12 +556,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		/// </summary>
 		/// <param name="context">Progress dialog context</param>
 		/// <param name="units">Translation Units with updated Custom Field data</param>
-		public void UpdateCustomFields(ProgressDialogContext context, List<TmTranslationUnit> units)
+		public int UpdateCustomFields(ProgressDialogContext context, List<TmTranslationUnit> units)
 		{
 			if (units == null || units.Count == 0)
 			{
-				return;
+				return 0;
 			}
+
+			var updatedCount = 0;
 
 			var attributeIds = GetTmAttributes(units.Select(a => a.TmId).Distinct().ToList());
 
@@ -634,10 +636,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			//TODO: add logic to update picklists; currently the picklists are updated via the TM API for convinience...
 
-			UpdateCustomFields(context, FieldValueType.SingleString, singleStringFieldValues, attributeIds);
-			UpdateCustomFields(context, FieldValueType.MultipleString, multpleStringFieldValues, attributeIds);
-			UpdateCustomFields(context, FieldValueType.Integer, intFieldValues, attributeIds);
-			UpdateCustomFields(context, FieldValueType.DateTime, dateFieldValues, attributeIds);
+			updatedCount += UpdateCustomFields(context, FieldValueType.SingleString, singleStringFieldValues, attributeIds);
+			updatedCount += UpdateCustomFields(context, FieldValueType.MultipleString, multpleStringFieldValues, attributeIds);
+			updatedCount += UpdateCustomFields(context, FieldValueType.Integer, intFieldValues, attributeIds);
+			updatedCount += UpdateCustomFields(context, FieldValueType.DateTime, dateFieldValues, attributeIds);
+
+			return updatedCount;
 		}
 
 		/// <summary>
@@ -1065,12 +1069,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			context?.Report(Convert.ToInt32(values.Count), "Analyzing: done!");
 		}
 
-		private void UpdateCustomFields(ProgressDialogContext context, FieldValueType fieldValueType, IReadOnlyCollection<Model.FieldDefinitions.FieldValue> fieldValues, List<TmAttribute> attributeIds)
+		private int UpdateCustomFields(ProgressDialogContext context, FieldValueType fieldValueType, IReadOnlyCollection<Model.FieldDefinitions.FieldValue> fieldValues, List<TmAttribute> attributeIds)
 		{
 			if (fieldValues == null || fieldValues.Count == 0)
 			{
-				return;
+				return 0;
 			}
+
+			var updatedCount = 0;
 
 			decimal iTotalUnits = fieldValues.Count;
 
@@ -1139,14 +1145,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							foreach (var attribute in attributes)
 							{
-								var result = 0;
 								switch (fieldValueType)
 								{
 									case FieldValueType.SingleString:
 										var singleStringFieldValue = field as Model.FieldDefinitions.SingleStringFieldValue;
 										if (singleStringFieldValue?.PreviousValue != null && singleStringFieldValue.Value != singleStringFieldValue.PreviousValue)
 										{
-											result = UpdateStringCustomFields(cmdQuery, attribute, singleStringFieldValue);
+											updatedCount += UpdateStringCustomFields(cmdQuery, attribute, singleStringFieldValue);
 										}
 										break;
 									case FieldValueType.MultipleString:
@@ -1164,7 +1169,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 														Value = multipleStringFieldValues[i],
 														PreviousValue = multipleStringFieldPreviousValues[i]
 													};
-													result = UpdateStringCustomFields(cmdQuery, attribute, stringFieldValue);
+
+													updatedCount += UpdateStringCustomFields(cmdQuery, attribute, stringFieldValue);
 												}
 											}
 										}
@@ -1173,22 +1179,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 										var dateTimeFieldValue = field as Model.FieldDefinitions.DateTimeFieldValue;
 										if (dateTimeFieldValue?.PreviousValue != null && dateTimeFieldValue.Value != dateTimeFieldValue.PreviousValue)
 										{
-											result = UpdateDateTimeCustomFields(cmdQuery, attribute, dateTimeFieldValue);
+											updatedCount += UpdateDateTimeCustomFields(cmdQuery, attribute, dateTimeFieldValue);
 										}
 										break;
 									case FieldValueType.Integer:
 										var intFieldValue = field as Model.FieldDefinitions.IntFieldValue;
 										if (intFieldValue?.PreviousValue != null && intFieldValue.Value != intFieldValue.PreviousValue)
 										{
-											result = UpdateIntCustomFields(cmdQuery, attribute, intFieldValue);
+											updatedCount += UpdateIntCustomFields(cmdQuery, attribute, intFieldValue);
 										}
 										break;
-								}
-
-								//TODO log result; -1: error; >=0: number of records updated
-								if (result > 0)
-								{
-
 								}
 							}
 						}
@@ -1197,6 +1197,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					transaction.Commit();
 				}
 			}
+
+			return updatedCount;
 		}
 
 		private static int UpdateStringCustomFields(SQLiteCommand cmdQuery, TmAttribute attribute, Model.FieldDefinitions.SingleStringFieldValue field)
@@ -1204,7 +1206,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-						
+
 			return cmdQuery.ExecuteNonQuery();
 		}
 
@@ -1213,7 +1215,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-			
+
 			return cmdQuery.ExecuteNonQuery();
 		}
 
@@ -1222,7 +1224,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			cmdQuery.Parameters["@attribute_id"].Value = attribute.Id;
 			cmdQuery.Parameters["@value"].Value = field.Value;
 			cmdQuery.Parameters["@previous_value"].Value = field.PreviousValue;
-			
+
 			return cmdQuery.ExecuteNonQuery();
 		}
 

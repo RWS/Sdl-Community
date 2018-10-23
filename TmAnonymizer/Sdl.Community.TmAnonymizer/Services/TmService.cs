@@ -36,7 +36,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			lock (_lockObject)
 			{
 				var languageDirection = tmFile.TmLanguageDirections?.FirstOrDefault(a =>
-					Equals(a.Source, providerLanguageDirection.Source) && Equals(a.Target, providerLanguageDirection.Target));
+					Equals(a.Source, providerLanguageDirection.Source.Name) && Equals(a.Target, providerLanguageDirection.Target.Name));
 
 				if (languageDirection == null)
 				{
@@ -116,16 +116,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				var path = Path.Combine(_settingsService.PathInfo.TemporaryStorageFullPath,
 					Path.GetFileName(tmFile.Name) + "." +
-					languageDirection.Source.Name + "-" +
-					languageDirection.Target.Name + ".xml");
+					languageDirection.Source + "-" +
+					languageDirection.Target + ".xml");
 
 				var index = 0;
 				while (File.Exists(path) && index < 1000)
 				{
 					path = Path.Combine(_settingsService.PathInfo.TemporaryStorageFullPath,
 						Path.GetFileName(tmFile.Name) + "." +
-						languageDirection.Source.Name + "-" +
-						languageDirection.Target.Name + "." +
+						languageDirection.Source + "-" +
+						languageDirection.Target + "." +
 						(index++).ToString().PadLeft(4, '0') + ".xml");
 				}
 
@@ -320,7 +320,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-							{
+							{								
 								var unit = CreateTranslationUnit(tu, languageDirection);
 
 								tusToUpdate.Add(unit);
@@ -404,19 +404,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return multipleStringValues;
-		}
-
-		private static string GetDateTimeString()
-		{
-			var dt = DateTime.Now;
-			return dt.Year +
-				   dt.Month.ToString().PadLeft(2, '0') +
-				   dt.Day.ToString().PadLeft(2, '0') +
-				   "T" +
-				   dt.Hour.ToString().PadLeft(2, '0') +
-				   dt.Minute.ToString().PadLeft(2, '0') +
-				   dt.Second.ToString().PadLeft(2, '0');
-		}
+		}		
 
 		public void BackupServerBasedTms(ProgressDialogContext context, IEnumerable<TmFile> tmsCollection)
 		{
@@ -454,7 +442,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							Directory.CreateDirectory(folderPath);
 						}
 
-						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." + GetDateTimeString() + ".tmx.gz";
+						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." + _settingsService.GetDateTimeString() + ".tmx.gz";
 						var filePath = Path.Combine(folderPath, fileName);
 
 						//if tm does not exist download it
@@ -568,14 +556,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					tmName = tmName.Substring(0, tmName.Length - extension.Length);
 				}
 
-				var backupFilePath = Path.Combine(settings.BackupFullPath, tmName + "." + GetDateTimeString() + extension);
+				var backupFilePath = Path.Combine(settings.BackupFullPath, tmName + "." + _settingsService.GetDateTimeString() + extension);
 
 				if (!File.Exists(backupFilePath))
 				{
 					tmInfo.CopyTo(backupFilePath, false);
 				}
 			}
-		}
+		}	
 
 		private void UpdateTranslationUnitsContent(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
@@ -623,7 +611,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{
 						if (tm.LanguageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
 							tm.LanguageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-						{
+						{							
 							var unit = CreateTranslationUnit(tu, tm.LanguageDirection);
 
 							tusToUpdate.Add(unit);
@@ -694,8 +682,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				foreach (var tmFileTmLanguageDirection in tmFile.TmLanguageDirections)
 				{
-					if (tm.SourceLangauge == tmFileTmLanguageDirection.Source.Name &&
-						tm.TargetLanguage == tmFileTmLanguageDirection.Target.Name)
+					if (tm.SourceLangauge == tmFileTmLanguageDirection.Source &&
+						tm.TargetLanguage == tmFileTmLanguageDirection.Target)
 					{
 						if (!ids.Contains(tm.Id))
 						{
@@ -792,7 +780,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		private static FieldValues GetFieldValues(IEnumerable<Model.FieldDefinitions.FieldValue> fieldValues)
 		{
-			var result = new FieldValues();
+			var result = new FieldValues();		
 			foreach (var fieldValue in fieldValues)
 			{
 				switch (fieldValue.ValueType)
