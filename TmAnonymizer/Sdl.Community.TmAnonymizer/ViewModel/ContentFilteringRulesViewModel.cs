@@ -494,12 +494,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private void PreviewWindow_Closing(object sender, CancelEventArgs e)
 		{
 			SourceSearchResults.Clear();
-		}
-
-		private List<Rule> GetSelectedRules()
-		{
-			return Rules.Where(r => r.IsSelected).ToList();
-		}
+		}		
 
 		private void SelectAllRules()
 		{
