@@ -495,12 +495,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		/// </summary>
 		/// <param name="context">Progress dialog context</param>
 		/// <param name="units">Translation Units with updated System Field data</param>
-		public void UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> units)
+		public int UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> units)
 		{
 			if (units == null || units.Count == 0)
 			{
-				return;
+				return 0;
 			}
+
+			var updatedCount = 0;
 
 			decimal iTotalUnits = units.Count;
 
@@ -542,13 +544,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						cmdQuery.Parameters["@change_user"].Value = unit.SystemFields.ChangeUser;
 						cmdQuery.Parameters["@last_used_user"].Value = unit.SystemFields.UseUser;
 
-						//TODO log result; -1: error; >=0: number of records updated
-						var result = cmdQuery.ExecuteNonQuery();
+						updatedCount+= cmdQuery.ExecuteNonQuery();
 					}
 
 					transaction.Commit();
 				}
 			}
+
+			return updatedCount;
 		}
 
 		/// <summary>

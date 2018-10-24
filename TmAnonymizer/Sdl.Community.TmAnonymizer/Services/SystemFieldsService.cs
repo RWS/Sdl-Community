@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.LanguagePlatform.TranslationMemory;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -65,7 +68,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return uniqueUsersCollection;
 		}
 
-		public void AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers)
+		public Report AnonymizeFileBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers)
 		{
 			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
 
@@ -77,17 +80,43 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Target = tm.LanguageDirection.TargetLanguage
 			});
 
-			var settings = _settingsService.GetSettings();
-			if (settings.UseSqliteApiForFileBasedTm)
+			var report = new Report
 			{
-				UpdateSystemFieldsSqlite(context, tmFile, translationUnits, uniqueUsers);
-				return;
-			}
+				TmFile = tmFile,
+				ReportFullPath = Path.Combine(
+					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.SystemFields + "." +
+					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					                                     _settingsService.GetDateTimeString() + "." +
+					                                     tmFile.Name + "." + ".xml"),
+				Created = DateTime.Now,
+				UpdatedCount = translationUnits.Count,
+				ElapsedTime = new TimeSpan(),
+				Actions = new List<Model.Log.Action>()
+			};
 
-			UpdateSystemFields(context, translationUnits, tm, uniqueUsers);
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+			
+			var action = new Model.Log.Action
+			{
+				Type = Model.Log.Action.ActionType.Update,
+				Scope = Model.Log.Action.ActionScope.SystemFields,
+				Details = GetSystemFieldChangesReport(uniqueUsers)
+			};
+			report.Actions.Add(action);
+		
+			var settings = _settingsService.GetSettings();
+			report.UpdatedCount = settings.UseSqliteApiForFileBasedTm 
+				? UpdateSystemFieldsSqlite(context, tmFile, translationUnits, uniqueUsers) 
+				: UpdateSystemFields(context, translationUnits, tm, uniqueUsers);
+
+			stopWatch.Stop();
+			report.ElapsedTime = stopWatch.Elapsed;
+
+			return report;
 		}
-
-		public void AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
+	
+		public Report AnonymizeServerBasedSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, TranslationProviderServer translationProvideServer)
 		{
 			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
 
@@ -104,12 +133,49 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 			
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
-			
+
+			var report = new Report
+			{
+				TmFile = tmFile,
+				ReportFullPath = Path.Combine(
+					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.SystemFields + "." +
+					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					                                     _settingsService.GetDateTimeString() + "." +
+					                                     tmFile.Name + "." + ".xml"),
+				Created = DateTime.Now,
+				UpdatedCount = translationUnits.Count,
+				ElapsedTime = new TimeSpan(),
+				Actions = new List<Model.Log.Action>()
+			};
+
+			var action = new Model.Log.Action
+			{
+				Type = Model.Log.Action.ActionType.Update,
+				Scope = Model.Log.Action.ActionScope.SystemFields,
+				Details = GetSystemFieldChangesReport(uniqueUsers)
+			};
+			report.Actions.Add(action);
+
+			var stopWatch = new Stopwatch();
+			stopWatch.Start();
+
+			report.UpdatedCount = UpdateSystemFields(context, tmFile, uniqueUsers, translationUnits, serverBasedTm);
+
+			stopWatch.Stop();
+			report.ElapsedTime = stopWatch.Elapsed;
+
+			return report;
+		}
+
+		private int UpdateSystemFields(ProgressDialogContext context, TmFile tmFile, List<User> uniqueUsers, 
+			List<TmTranslationUnit> translationUnits, ServerBasedTranslationMemory serverBasedTm)
+		{
+			var updatedCount = 0;
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 100;
 
-			var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(translationUnits) };
+			var tusGroups = new List<List<TmTranslationUnit>> {new List<TmTranslationUnit>(translationUnits)};
 			if (translationUnits.Count > groupsOf)
 			{
 				tusGroups = translationUnits.ChunkBy(groupsOf);
@@ -140,13 +206,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							var systemFields = tu.SystemFields;
 
 							if (!string.IsNullOrEmpty(systemFields.CreationUser) &&
-								userName.UserName == systemFields.CreationUser)
+							    userName.UserName == systemFields.CreationUser)
 							{
 								updateCreationUser = true;
 							}
 
 							if (!string.IsNullOrEmpty(systemFields.UseUser) &&
-								userName.UserName == systemFields.UseUser)
+							    userName.UserName == systemFields.UseUser)
 							{
 								updateUseUser = true;
 							}
@@ -177,8 +243,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						foreach (var tu in tus)
 						{
 							if (languageDirection.SourceLanguage.Name.Equals(tu.SourceSegment.Language) &&
-								languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
-							{								
+							    languageDirection.TargetLanguage.Name.Equals(tu.TargetSegment.Language))
+							{
 								var unit = _tmService.CreateTranslationUnit(tu, languageDirection);
 								tusToUpdate.Add(unit);
 							}
@@ -186,8 +252,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 						if (tusToUpdate.Count > 0)
 						{
-							//TODO - output results to log
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+							updatedCount += results.Count(result => result.Action != LanguagePlatform.TranslationMemory.Action.Error);
 						}
 					}
 				}
@@ -199,28 +265,25 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				_tmService.SaveTmCacheStorage(context, tmFile, languageDirection);
 			}
+
+			return updatedCount;
 		}
 
-		private static void UpdateSystemFieldsSqlite(ProgressDialogContext context, TmFile tmFile, IEnumerable<TmTranslationUnit> units, List<User> uniqueUsers)
+		private static int UpdateSystemFieldsSqlite(ProgressDialogContext context, TmFile tmFile, IEnumerable<TmTranslationUnit> units, List<User> uniqueUsers)
 		{
+			var updatedCount = 0;
+
 			var service = new SqliteTmService(tmFile.Path, null, new SerializerService(), new SegmentService());
 
 			try
 			{
 				service.OpenConnection();
 
-				var updateList = new List<TmTranslationUnit>();
-				foreach (var unit in units)
-				{
-					if (UpdateSystemFields(uniqueUsers, unit))
-					{
-						updateList.Add(unit);
-					}
-				}
+				var updateList = units.Where(unit => UpdateSystemFields(uniqueUsers, unit)).ToList();
 
 				if (updateList.Count > 0)
 				{
-					service.UpdateSystemFields(context, updateList);
+					updatedCount = service.UpdateSystemFields(context, updateList);
 				}
 			}
 			catch (Exception ex)
@@ -232,10 +295,14 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				service.CloseConnection();
 			}
+
+			return updatedCount;
 		}
 
-		private void UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> translationUnits, IFileBasedTranslationMemory tm, List<User> uniqueUsers)
+		private int UpdateSystemFields(ProgressDialogContext context, List<TmTranslationUnit> translationUnits, IFileBasedTranslationMemory tm, List<User> uniqueUsers)
 		{
+			var updatedCount = 0;
+
 			decimal iCurrent = 0;
 			decimal iTotalUnits = translationUnits.Count;
 			var groupsOf = 200;
@@ -280,13 +347,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (tusToUpdate.Count > 0)
 					{
-						//TODO - output results to log
 						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
+						updatedCount += results.Count(result => result.Action != LanguagePlatform.TranslationMemory.Action.Error);
 					}
 				}
 			}
 
 			tm.Save();
+
+			return updatedCount;
 		}
 
 		private static bool UpdateSystemFields(IEnumerable<User> uniqueUsers, TmTranslationUnit tu)
@@ -345,7 +414,32 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return updateSystemFields;
 		}
-		
+
+		private static List<Detail> GetSystemFieldChangesReport(IEnumerable<User> uniqueUsers)
+		{
+			var details = new List<Detail>();
+
+			foreach (var userName in uniqueUsers)
+			{				
+				if (userName.IsSelected && !string.IsNullOrEmpty(userName.Alias))
+				{
+					var detailCreationUser = details.FirstOrDefault(a => a.Value == userName.Alias && a.Previous == userName.UserName);
+					if (detailCreationUser == null)
+					{
+						var detail = new Detail
+						{
+							Name = "UserName",
+							Previous = userName.UserName,
+							Value = userName.Alias
+						};
+						details.Add(detail);
+					}
+				}
+			}
+
+			return details;
+		}
+
 		private static List<User> GetUniqueUserCollection(string tmFilePath, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var systemFields = new List<string>();
