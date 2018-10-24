@@ -40,7 +40,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			_controller = controller;
 
 			TmService = new TmService(settingsService, _contentParsingService, _serializerService);
-			
+
 			IsEnabled = true;
 			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());
 		}
@@ -137,9 +137,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				OnPropertyChanged(nameof(IsEnabled));
 			}
 		}
-	
+
+		public void Refresh()
+		{
+			OnPropertyChanged(nameof(TmsCollection));
+		}
+
 		public ICommand DragEnterCommand => _dragEnterCommand ?? (_dragEnterCommand = new RelayCommand(HandlePreviewDrop));
-		
+
 		public void AddServerTm()
 		{
 			var settings = SettingsService.GetSettings();
@@ -183,7 +188,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					}
 				}
 			}
-		}		
+		}
 
 		public void AddFileBasedTm()
 		{
@@ -195,12 +200,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			if (fileDialog.ShowDialog() == DialogResult.OK)
 			{
 				foreach (var fileName in fileDialog.FileNames)
-				{					
+				{
 					if (!string.IsNullOrEmpty(fileName) && Path.GetExtension(fileName).Equals(".sdltm"))
 					{
 						AddTm(fileName);
 					}
-				}				
+				}
 			}
 		}
 
@@ -241,7 +246,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					File.Delete(tmFile.CachePath);
 					tmFile.CachePath = string.Empty;
-					tmFile.IsSelected = false;					
+					tmFile.IsSelected = false;
 				}
 			}
 		}

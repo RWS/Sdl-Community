@@ -100,7 +100,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				UpdateCheckedAllState();
 				OnPropertyChanged(nameof(SelectedItem));
 			}
-		}
+		}		
 
 		public ObservableCollection<CustomField> CustomFields
 		{
@@ -409,7 +409,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				if (_model.ControlParent == null)
 				{
 					return;
-				}
+				}				
 
 				var customFields = new List<CustomField>();
 
@@ -456,6 +456,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						SelectedItem = CustomFields[0];
 					}
 				}
+
+				_model.Refresh();
 			}
 		}
 

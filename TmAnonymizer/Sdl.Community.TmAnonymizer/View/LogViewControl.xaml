@@ -19,12 +19,12 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="300"/>
+			<ColumnDefinition Width="400"/>
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		<Grid Grid.Column="0" Margin="0,0,3,0">
 			<controls:SortAwareDataGrid 
-						DefaultColumnName="Name"
+						DefaultColumnName="TmFile.Name"
 						DefaultSortDirection="Ascending"
 						Style="{StaticResource FilesGridStyle}" 							
 						FontFamily="Segoe UI"								
@@ -35,19 +35,21 @@
 						VerticalScrollBarVisibility="Auto"	
 						HorizontalScrollBarVisibility="Auto"
 						GridLinesVisibility="None" 
-						Background="White"						
-						ItemsSource="{Binding Reports, Mode=TwoWay}" 						                            											                       
+						Background="White"		
+						SelectedItem="{Binding LogViewModel.SelectedItem, Mode=TwoWay}"
+						ItemsSource="{Binding LogViewModel.Reports, Mode=TwoWay}" 						                            											                       
 						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Name" Binding="{Binding Value}" IsReadOnly="True" MinWidth="110" Width="2*" ElementStyle="{StaticResource WrapText}" />
-					<DataGridTextColumn Header="Date" Binding="{Binding Value}" IsReadOnly="True" MinWidth="110" Width="1*" ElementStyle="{StaticResource WrapText}" />
+					<DataGridTextColumn Header="Name" Binding="{Binding TmFile.Name}" IsReadOnly="True" MinWidth="150" Width="2*" />
+					<DataGridTextColumn Header="Report Type" Binding="{Binding Type}" IsReadOnly="True" MinWidth="100" Width="100"  />
+					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="120" Width="1*" />
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</Grid>
 
 		<GridSplitter Grid.Column="0" Width="3" Margin="0"/>
 		<Grid Grid.Column="1" Margin="3,0,0,0">
-			<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding SelectedReportHtml}" />
+			<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding LogViewModel.SelectedReportHtml}" />
 		</Grid>
 	</Grid>
 

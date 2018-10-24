@@ -296,17 +296,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					TmFile = memory.TmFile,
 					ReportFullPath = Path.Combine(
-						_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.Content + "." +
-															 (int)Model.Log.Action.ActionType.Update + "." +
+						_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.Content + "." +
 															 _settingsService.GetDateTimeString() + "." +
 															 memory.TmFile.Name + "." + ".xml"),
 					Created = DateTime.Now,
 					UpdatedCount = memory.TranslationUnits.Count,
-					ElapsedTime = new TimeSpan(),
+					ElapsedSeconds = 0,
+					Type =  Model.Log.Report.ReportType.Content,
 					Actions = new List<Model.Log.Action>()
 				};
 
-				var details = new List<Model.Log.Detail>();
+				var actions = new List<Model.Log.Action>();
 
 				var stopWatch = new Stopwatch();
 				stopWatch.Start();
@@ -352,24 +352,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					{
 						var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 
-						details.AddRange(GetResultDetails(results, unitsClone, tus));
+						actions.AddRange(GetResultActions(results, unitsClone, tus));
 
 						updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
 					}
 				}
 
 				tm.Save();
-
-				var action = new Model.Log.Action
-				{
-					Type = Model.Log.Action.ActionType.Update,
-					Scope = Model.Log.Action.ActionScope.Content,
-					Details = details
-				};
-				report.Actions.Add(action);
+				
+				report.Actions.AddRange(actions);
 
 				stopWatch.Stop();
-				report.ElapsedTime = stopWatch.Elapsed;
+				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 				_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
 
@@ -407,26 +401,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					TmFile = memory.TmFile,
 					ReportFullPath = Path.Combine(
-						_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.Content + "." +
-															 (int)Model.Log.Action.ActionType.Update + "." +
+						_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.Content + "." +
 															 _settingsService.GetDateTimeString() + "." +
 															 memory.TmFile.Name + "." + ".xml"),
 					Created = DateTime.Now,
 					UpdatedCount = memory.TranslationUnits.Count,
-					ElapsedTime = new TimeSpan(),
+					ElapsedSeconds = 0,
+					Type = Report.ReportType.Content,
 					Actions = new List<Model.Log.Action>()
 				};
 
-				var details = new List<Model.Log.Detail>();
+				var actions = new List<Model.Log.Action>();
 
 				var stopWatch = new Stopwatch();
 				stopWatch.Start();
 
-
 				var uri = new Uri(memory.TmFile.Credentials.Url);
 				var translationProvider = new TranslationProviderServer(uri, false, memory.TmFile.Credentials.UserName, memory.TmFile.Credentials.Password);
 				var tm = translationProvider.GetTranslationMemory(memory.TmFile.Path, TranslationMemoryProperties.All);
-
 
 				var groupsOf = 100;
 				var tusGroups = new List<List<TmTranslationUnit>> { new List<TmTranslationUnit>(memory.TranslationUnits) };
@@ -472,7 +464,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							var results = languageDirection.UpdateTranslationUnits(tusToUpdate.ToArray());
 
-							details.AddRange(GetResultDetails(results, unitsClone, tus));
+							actions.AddRange(GetResultActions(results, unitsClone, tus));
 
 							updatedCount += results.Count(a => a.ErrorCode == ErrorCode.OK);
 						}
@@ -486,8 +478,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					SaveTmCacheStorage(context, memory.TmFile, languageDirection);
 				}
 
+				report.Actions.AddRange(actions);
+
 				stopWatch.Stop();
-				report.ElapsedTime = stopWatch.Elapsed;
+				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 				_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
 			}
@@ -495,9 +489,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private static IEnumerable<Detail> GetResultDetails(IEnumerable<ImportResult> results, List<TranslationUnitDetails> unitsClone, List<TmTranslationUnit> units)
+		private static IEnumerable<Model.Log.Action> GetResultActions(IEnumerable<ImportResult> results, List<TranslationUnitDetails> unitsClone, List<TmTranslationUnit> units)
 		{
-			var details = new List<Model.Log.Detail>();
+			var details = new List<Model.Log.Action>();
 			foreach (var result in results)
 			{
 				var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
@@ -506,7 +500,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				{
 					if (previousTu.IsSourceMatch)
 					{
-						var detail = new Model.Log.Detail
+						var detail = new Model.Log.Action
 						{
 							TmId = updateTu.ResourceId,
 							Result = result.ErrorCode.ToString(),
@@ -520,7 +514,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 					if (previousTu.IsTargetMatch)
 					{
-						var detail = new Model.Log.Detail
+						var detail = new Model.Log.Action
 						{
 							TmId = updateTu.ResourceId,
 							Result = result.ErrorCode.ToString(),
