@@ -27,16 +27,19 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private LoginWindowViewModel _loginWindowViewModel;
 		private readonly SDLTMAnonymizerView _controller;
 		private readonly ContentParsingService _contentParsingService;
+		private readonly SerializerService _serializerService;
 		private Form _controlParent;
 
-		public TranslationMemoryViewModel(SettingsService settingsService, ContentParsingService contentParsingService, SDLTMAnonymizerView controller)
+		public TranslationMemoryViewModel(SettingsService settingsService, ContentParsingService contentParsingService,
+			SerializerService serializerService, SDLTMAnonymizerView controller)
 		{
 			SettingsService = settingsService;
 
 			_contentParsingService = contentParsingService;
+			_serializerService = serializerService;
 			_controller = controller;
 
-			TmService = new TmService(settingsService, _contentParsingService);
+			TmService = new TmService(settingsService, _contentParsingService, _serializerService);
 			
 			IsEnabled = true;
 			TmsCollection = new ObservableCollection<TmFile>(SettingsService.GetTmFiles());

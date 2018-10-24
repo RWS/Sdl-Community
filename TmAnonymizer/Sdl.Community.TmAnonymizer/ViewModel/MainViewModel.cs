@@ -10,10 +10,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		public MainViewModel(SettingsService settingsService, SDLTMAnonymizerView controller)
 		{
 			var contentParsingService = new ContentParsingService();
-			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, contentParsingService, controller);
-
-			var excelImportExportService = new ExcelImportExportService();
 			var serializerService = new SerializerService();
+			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, contentParsingService, serializerService, controller);
+
+			var excelImportExportService = new ExcelImportExportService();			
 			var systemFieldsService = new SystemFieldsService(_translationMemoryViewModel.TmService, settingsService);
 			var customFieldsService = new CustomFieldsService(_translationMemoryViewModel.TmService, settingsService);
 
