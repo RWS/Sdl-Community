@@ -305,8 +305,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 						report = _customFieldsService.AnonymizeServerBasedCustomFields(ProgressDialog.Current, tm, CustomFields.ToList(), translationProvider);
 					}
 
-					_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
-					//Write Report to file
+					_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);				
 				}
 			}, settings);
 

@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Sdl.Community.SdlTmAnonymizer.Commands;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Model;
+using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlTmAnonymizer.Services;
 using Sdl.LanguagePlatform.TranslationMemoryApi;
 
@@ -29,11 +30,14 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private bool _selectAll;
 		private readonly SystemFieldsService _systemFieldsService;
 		private readonly ExcelImportExportService _excelImportExportService;
+		private readonly SerializerService _serializerService;
 
-		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService, ExcelImportExportService excelImportExportService)
+		public SystemFieldsViewModel(TranslationMemoryViewModel model, SystemFieldsService systemFieldsService,
+			ExcelImportExportService excelImportExportService, SerializerService serializerService)
 		{
 			_systemFieldsService = systemFieldsService;
 			_excelImportExportService = excelImportExportService;
+			_serializerService = serializerService;
 
 			_model = model;
 
@@ -131,12 +135,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		}
 
 		private void SelectTm(TmFile tm)
-		{		
+		{
 			if (!tm.IsSelected)
 			{
 				return;
 			}
-			
+
 			var userNames = new List<User>();
 			var settings = new ProgressDialogSettings(_model.ControlParent, true, true, false);
 			var result = ProgressDialog.Execute(StringResources.Loading_data, () =>
@@ -171,7 +175,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, Application.ProductName);
 			}
 			else
-			{				
+			{
 				AddUniqueUserNames(userNames);
 
 				if (userNames.Count > 0 && SelectedItem == null)
@@ -236,20 +240,22 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			{
 				foreach (var tm in _tmsCollection.Where(t => t.IsSelected))
 				{
+					Report report;
 					if (!tm.IsServerTm)
 					{
-						_systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList());
+						report = _systemFieldsService.AnonymizeFileBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList());
 					}
-
-					else if (tm.IsServerTm)
+					else
 					{
 						var uri = new Uri(tm.Credentials.Url);
 						var translationProvider = new TranslationProviderServer(uri, false,
 							tm.Credentials.UserName,
 							tm.Credentials.Password);
 
-						_systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider);
+						report = _systemFieldsService.AnonymizeServerBasedSystemFields(ProgressDialog.Current, tm, UniqueUserNames.ToList(), translationProvider);
 					}
+
+					_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
 				}
 			}, settings);
 

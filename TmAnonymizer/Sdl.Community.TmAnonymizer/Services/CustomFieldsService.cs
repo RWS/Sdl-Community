@@ -87,8 +87,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
-														 "." + _settingsService.GetDateTimeString() + ".xml"),
+					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.CustomFields + "." + 
+					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					                                     _settingsService.GetDateTimeString() + "." +
+														 tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = units.Count,
 				ElapsedTime = new TimeSpan(),
@@ -127,12 +129,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				Type = Model.Log.Action.ActionType.Update,
 				Scope = Model.Log.Action.ActionScope.CustomFields,
-				Detail = new List<Detail>()
+				Details = new List<Detail>()
 			};
-			
+
 			foreach (var change in changesReport)
 			{
-				action.Detail.AddRange(change.Value);
+				action.Details.AddRange(change.Value);
 			}
 
 			return action;
@@ -162,8 +164,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
-											"." + _settingsService.GetDateTimeString() + ".xml"),
+					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.CustomFields + "." +
+					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					                                     _settingsService.GetDateTimeString() + "." +
+					                                     tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = units.Count,
 				ElapsedTime = new TimeSpan(),
@@ -257,13 +261,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				if (tusToUpdate.Count > 0)
 				{
 					var results = tm.LanguageDirection.UpdateTranslationUnits(tusToUpdate.ToArray()).ToList();
-					foreach (var result in results)
-					{
-						if (result.Action != LanguagePlatform.TranslationMemory.Action.Error)
-						{
-							updatedCount++;
-						}
-					}
+					updatedCount += results.Count(result => result.Action != LanguagePlatform.TranslationMemory.Action.Error);
 				}
 			}
 

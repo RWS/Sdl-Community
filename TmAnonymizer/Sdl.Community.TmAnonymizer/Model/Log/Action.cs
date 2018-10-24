@@ -16,16 +16,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 
 		public enum ActionType
 		{
-			None = 0,
+			All = 0,
 			Backup = 1,
 			Update = 2
 		}
-		public int Id { get; set; }
+		public string Id { get; set; }
+
 		public ActionType Type { get; set; }
 
 		public ActionScope Scope { get; set; }
 
-		public List<Detail> Detail { get; set; }
+		public List<Detail> Details { get; set; }
 
 		public string Result { get; set; }
 	}

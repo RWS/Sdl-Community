@@ -18,7 +18,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			var customFieldsService = new CustomFieldsService(_translationMemoryViewModel.TmService, settingsService);
 
 			ContentFilteringRulesViewModel = new ContentFilteringRulesViewModel(_translationMemoryViewModel, excelImportExportService);
-			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService);
+			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService, serializerService);
 			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService, serializerService);
 			
 			LogViewModel = new LogViewModel(_translationMemoryViewModel, serializerService);
