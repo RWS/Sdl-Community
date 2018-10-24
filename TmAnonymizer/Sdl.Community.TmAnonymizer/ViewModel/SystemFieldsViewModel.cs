@@ -313,6 +313,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					SelectedItem = UniqueUserNames[0];
 				}
+
+				_model.Refresh();
 			}
 		}
 

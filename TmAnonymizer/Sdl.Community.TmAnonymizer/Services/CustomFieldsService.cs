@@ -87,13 +87,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.CustomFields + "." + 
-					                                     (int)Model.Log.Action.ActionType.Update + "." +
-					                                     _settingsService.GetDateTimeString() + "." +
+					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.CustomFields + "." +
+														 _settingsService.GetDateTimeString() + "." +
 														 tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = units.Count,
-				ElapsedTime = new TimeSpan(),
+				ElapsedSeconds = 0,
+				Type = Report.ReportType.CustomFields,
 				Actions = new List<Model.Log.Action>()
 			};
 
@@ -101,7 +101,10 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			stopWatch.Start();
 
 			var changesReport = GetCustomFieldChangesReport(units, customFields);
-			report.Actions.Add(GetCustomFieldsActionsReport(changesReport));
+			foreach (var change in changesReport)
+			{
+				report.Actions.AddRange(change.Value);
+			}
 
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
@@ -118,26 +121,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			ClearPreviousCustomFieldValues(translationUnits);
 
 			stopWatch.Stop();
-			report.ElapsedTime = stopWatch.Elapsed;
+			report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 			return report;
-		}
-
-		private static Model.Log.Action GetCustomFieldsActionsReport(Dictionary<FieldValueType, List<Detail>> changesReport)
-		{
-			var action = new Model.Log.Action
-			{
-				Type = Model.Log.Action.ActionType.Update,
-				Scope = Model.Log.Action.ActionScope.CustomFields,
-				Details = new List<Detail>()
-			};
-
-			foreach (var change in changesReport)
-			{
-				action.Details.AddRange(change.Value);
-			}
-
-			return action;
 		}
 
 		public Report AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> customFields, TranslationProviderServer translationProvideServer)
@@ -164,13 +150,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.CustomFields + "." +
-					                                     (int)Model.Log.Action.ActionType.Update + "." +
-					                                     _settingsService.GetDateTimeString() + "." +
-					                                     tmFile.Name + "." + ".xml"),
+					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.CustomFields + "." +
+														 _settingsService.GetDateTimeString() + "." +
+														 tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = units.Count,
-				ElapsedTime = new TimeSpan(),
+				ElapsedSeconds = 0,
+				Type = Report.ReportType.CustomFields,
 				Actions = new List<Model.Log.Action>()
 			};
 
@@ -178,7 +164,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			stopWatch.Start();
 
 			var changesReport = GetCustomFieldChangesReport(units, customFields);
-			report.Actions.Add(GetCustomFieldsActionsReport(changesReport));
+			foreach (var change in changesReport)
+			{
+				report.Actions.AddRange(change.Value);
+			}
+
 
 			UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
 
@@ -187,7 +177,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			ClearPreviousCustomFieldValues(translationUnits);
 
 			stopWatch.Stop();
-			report.ElapsedTime = stopWatch.Elapsed;
+			report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 			return report;
 		}
@@ -815,9 +805,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static Dictionary<FieldValueType, List<Detail>> GetCustomFieldChangesReport(IEnumerable<TmTranslationUnit> translationUnits, IEnumerable<CustomField> customFields)
+		private static Dictionary<FieldValueType, List<Model.Log.Action>> GetCustomFieldChangesReport(IEnumerable<TmTranslationUnit> translationUnits, IEnumerable<CustomField> customFields)
 		{
-			var reports = new Dictionary<FieldValueType, List<Detail>>();
+			var reports = new Dictionary<FieldValueType, List<Model.Log.Action>>();
 			foreach (var unit in translationUnits)
 			{
 				foreach (var fieldValue in unit.FieldValues)
@@ -831,7 +821,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									singleStringFieldValue.PreviousValue != singleStringFieldValue.Value)
 								{
 									var exists = reports.ContainsKey(singleStringFieldValue.ValueType);
-									var details = exists ? reports[singleStringFieldValue.ValueType] : new List<Detail>();
+									var details = exists ? reports[singleStringFieldValue.ValueType] : new List<Model.Log.Action>();
 
 									var detail = details.FirstOrDefault(a =>
 										a.Name == singleStringFieldValue.Name &&
@@ -840,7 +830,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 									if (detail == null)
 									{
-										details.Add(new Detail
+										details.Add(new Model.Log.Action
 										{
 											Name = singleStringFieldValue.Name,
 											Type = singleStringFieldValue.ValueType.ToString(),
@@ -869,7 +859,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 										if (previousValues[i] != null && previousValues[i] != values[i])
 										{
 											var exists = reports.ContainsKey(multipleStringFieldValue.ValueType);
-											var details = exists ? reports[multipleStringFieldValue.ValueType] : new List<Detail>();
+											var details = exists ? reports[multipleStringFieldValue.ValueType] : new List<Model.Log.Action>();
 
 											var detail = details.FirstOrDefault(a =>
 												a.Name == multipleStringFieldValue.Name &&
@@ -878,7 +868,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 											if (detail == null)
 											{
-												details.Add(new Detail
+												details.Add(new Model.Log.Action
 												{
 													Name = multipleStringFieldValue.Name,
 													Type = multipleStringFieldValue.ValueType.ToString(),
@@ -902,7 +892,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								if (dateTimeFieldValue.PreviousValue != null && dateTimeFieldValue.PreviousValue != dateTimeFieldValue.Value)
 								{
 									var exists = reports.ContainsKey(dateTimeFieldValue.ValueType);
-									var details = exists ? reports[dateTimeFieldValue.ValueType] : new List<Detail>();
+									var details = exists ? reports[dateTimeFieldValue.ValueType] : new List<Model.Log.Action>();
 
 									var detail = details.FirstOrDefault(a =>
 										a.Name == dateTimeFieldValue.Name &&
@@ -911,7 +901,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 									if (detail == null)
 									{
-										details.Add(new Detail
+										details.Add(new Model.Log.Action
 										{
 											Name = dateTimeFieldValue.Name,
 											Type = dateTimeFieldValue.ValueType.ToString(),
@@ -934,7 +924,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									intFieldValue.PreviousValue != intFieldValue.Value)
 								{
 									var exists = reports.ContainsKey(intFieldValue.ValueType);
-									var details = exists ? reports[intFieldValue.ValueType] : new List<Detail>();
+									var details = exists ? reports[intFieldValue.ValueType] : new List<Model.Log.Action>();
 
 									var detail = details.FirstOrDefault(a =>
 										a.Name == intFieldValue.Name &&
@@ -943,7 +933,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 									if (detail == null)
 									{
-										details.Add(new Detail
+										details.Add(new Model.Log.Action
 										{
 											Name = intFieldValue.Name,
 											Type = intFieldValue.ValueType.ToString(),
@@ -969,7 +959,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 										if (value.PreviousName != null && value.PreviousName != value.Name)
 										{
 											var exists = reports.ContainsKey(multiplePicklistFieldValue.ValueType);
-											var details = exists ? reports[multiplePicklistFieldValue.ValueType] : new List<Detail>();
+											var details = exists ? reports[multiplePicklistFieldValue.ValueType] : new List<Model.Log.Action>();
 
 											var detail = details.FirstOrDefault(a =>
 												a.Name == multiplePicklistFieldValue.Name &&
@@ -978,7 +968,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 											if (detail == null)
 											{
-												details.Add(new Detail
+												details.Add(new Model.Log.Action
 												{
 													Name = multiplePicklistFieldValue.Name,
 													Type = multiplePicklistFieldValue.ValueType.ToString(),
@@ -1005,7 +995,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 										singlePicklistFieldValue.Value.PreviousName != singlePicklistFieldValue.Value.Name)
 									{
 										var exists = reports.ContainsKey(singlePicklistFieldValue.ValueType);
-										var details = exists ? reports[singlePicklistFieldValue.ValueType] : new List<Detail>();
+										var details = exists ? reports[singlePicklistFieldValue.ValueType] : new List<Model.Log.Action>();
 
 										var detail = details.FirstOrDefault(a =>
 											a.Name == singlePicklistFieldValue.Name &&
@@ -1014,7 +1004,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 										if (detail == null)
 										{
-											details.Add(new Detail
+											details.Add(new Model.Log.Action
 											{
 												Name = singlePicklistFieldValue.Name,
 												Type = singlePicklistFieldValue.ValueType.ToString(),
@@ -1043,7 +1033,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					case FieldValueType.SinglePicklist:
 						{
 							var exists = reports.ContainsKey(customField.ValueType);
-							var details = exists ? reports[customField.ValueType] : new List<Detail>();
+							var details = exists ? reports[customField.ValueType] : new List<Model.Log.Action>();
 
 							foreach (var fieldValue in customField.FieldValues.Where(n =>
 								n.IsSelected && n.NewValue != null && n.Value != n.NewValue))
@@ -1056,7 +1046,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 								if (detail == null)
 								{
-									details.Add(new Detail
+									details.Add(new Model.Log.Action
 									{
 										Name = customField.Name,
 										Type = customField.ValueType.ToString(),

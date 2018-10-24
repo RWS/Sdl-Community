@@ -84,12 +84,15 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 					System.Windows.Forms.MessageBox.Show(StringResources.Process_cancelled_by_user, System.Windows.Forms.Application.ProductName);
 					_window.Close();
 				}
+
 				if (result.OperationFailed)
 				{
 					System.Windows.Forms.MessageBox.Show(StringResources.Process_failed + "\r\n\r\n" + result.Error.Message, System.Windows.Forms.Application.ProductName);
 				}
 
 				RemoveSelectedTusToAnonymize();
+
+				_model.Refresh();
 			}
 			else
 			{

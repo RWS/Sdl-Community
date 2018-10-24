@@ -84,26 +84,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.SystemFields + "." +
-					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.SystemFields + "." +
 					                                     _settingsService.GetDateTimeString() + "." +
 					                                     tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = translationUnits.Count,
-				ElapsedTime = new TimeSpan(),
+				ElapsedSeconds = 0,
+				Type = Report.ReportType.SystemFields,
 				Actions = new List<Model.Log.Action>()
 			};
 
 			var stopWatch = new Stopwatch();
-			stopWatch.Start();
+			stopWatch.Start();			
 			
-			var action = new Model.Log.Action
-			{
-				Type = Model.Log.Action.ActionType.Update,
-				Scope = Model.Log.Action.ActionScope.SystemFields,
-				Details = GetSystemFieldChangesReport(uniqueUsers)
-			};
-			report.Actions.Add(action);
+			report.Actions.AddRange(GetSystemFieldChangesReport(uniqueUsers));
 		
 			var settings = _settingsService.GetSettings();
 			report.UpdatedCount = settings.UseSqliteApiForFileBasedTm 
@@ -111,7 +105,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				: UpdateSystemFields(context, translationUnits, tm, uniqueUsers);
 
 			stopWatch.Stop();
-			report.ElapsedTime = stopWatch.Elapsed;
+			report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 			return report;
 		}
@@ -138,23 +132,18 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Action.ActionScope.SystemFields + "." +
-					                                     (int)Model.Log.Action.ActionType.Update + "." +
+					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.SystemFields + "." +
 					                                     _settingsService.GetDateTimeString() + "." +
 					                                     tmFile.Name + "." + ".xml"),
 				Created = DateTime.Now,
 				UpdatedCount = translationUnits.Count,
-				ElapsedTime = new TimeSpan(),
+				ElapsedSeconds = 0,
+				Type = Report.ReportType.SystemFields,
 				Actions = new List<Model.Log.Action>()
 			};
 
-			var action = new Model.Log.Action
-			{
-				Type = Model.Log.Action.ActionType.Update,
-				Scope = Model.Log.Action.ActionScope.SystemFields,
-				Details = GetSystemFieldChangesReport(uniqueUsers)
-			};
-			report.Actions.Add(action);
+			
+			report.Actions.AddRange(GetSystemFieldChangesReport(uniqueUsers));
 
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
@@ -162,7 +151,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			report.UpdatedCount = UpdateSystemFields(context, tmFile, uniqueUsers, translationUnits, serverBasedTm);
 
 			stopWatch.Stop();
-			report.ElapsedTime = stopWatch.Elapsed;
+			report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 			return report;
 		}
@@ -415,9 +404,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return updateSystemFields;
 		}
 
-		private static List<Detail> GetSystemFieldChangesReport(IEnumerable<User> uniqueUsers)
+		private static List<Model.Log.Action> GetSystemFieldChangesReport(IEnumerable<User> uniqueUsers)
 		{
-			var details = new List<Detail>();
+			var details = new List<Model.Log.Action>();
 
 			foreach (var userName in uniqueUsers)
 			{				
@@ -426,7 +415,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					var detailCreationUser = details.FirstOrDefault(a => a.Value == userName.Alias && a.Previous == userName.UserName);
 					if (detailCreationUser == null)
 					{
-						var detail = new Detail
+						var detail = new Model.Log.Action
 						{
 							Name = "UserName",
 							Previous = userName.UserName,
