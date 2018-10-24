@@ -8,7 +8,7 @@
         mc:Ignorable="d"
 		GlowBrush="#008C95"
         WindowTitleBrush="#008C95"
-        Title="Hunspell Dictionary Manager" Height="225" Width="650"
+        Title="Hunspell Dictionary Manager" Height="280" Width="650"
 		ResizeMode="NoResize"
 		WindowStartupLocation="CenterScreen">
 	<Window.Resources>
@@ -48,6 +48,7 @@
 			</Style>
 		</Grid.Resources>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
 			<RowDefinition Height="auto"></RowDefinition>
@@ -95,15 +96,23 @@
 			controls:TextBoxHelper.Watermark="Choose alternative dictionary language"
 			ItemsSource="{Binding DictionaryLanguages, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
 			SelectedItem="{Binding DeletedDictionaryLanguage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
+
+		<Label Name="undoDictionaryLbl" Grid.Row="6"  Grid.Column="0" Content="Select dictionary to undo" Visibility="{Binding UndoLabelVisibility}" Margin="3 0 0 0" />
+		<ComboBox Grid.Row="6" Grid.Column="1"
+		    controls:TextBoxHelper.ClearTextButton="True"
+			controls:TextBoxHelper.Watermark="Choose dictionary language to undo" Visibility="{Binding UndoDictVisibility}"
+			ItemsSource="{Binding UndoDictionaries, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			SelectedItem="{Binding SelectedUndoDictionary, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  DisplayMemberPath ="DisplayLanguageName" Margin="5,5,5,0" />
+		
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CreateHunspellDictionaryCommand}" Content="Create" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" ToolTip="Create new Hunspell dictionary"/>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding DeleteCommand}" Content="Delete" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="92,0,90,5" ToolTip="Delete selected Hunspell dictionary"/>
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="6" Grid.Column="1" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding CloseCommand}" Content="Close" Grid.Row="7" Grid.Column="1" Width="85" Height="25"
                     HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,5,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="6" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
-		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RevertCommand}" Content="Revert" Grid.Row="6" Grid.Column="0" Width="85" Height="25"
+		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding UndoCommand}" Content="Undo" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
 				   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Revert the dictionaries deletion"/>
 	</Grid>
 </controls:MetroWindow>
