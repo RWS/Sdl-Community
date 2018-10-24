@@ -113,6 +113,6 @@
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding RefreshCommand}" Content="Refresh" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
                     HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="5,0,0,5" />
 		<Button Style="{DynamicResource StudioGreenButtonsStyle}" Command="{Binding UndoCommand}" Content="Undo" Grid.Row="7" Grid.Column="0" Width="85" Height="25"
-				   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Revert the dictionaries deletion"/>
+				   HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="100,0,0,5" ToolTip="Undo the dictionary deletion"/>
 	</Grid>
 </controls:MetroWindow>
