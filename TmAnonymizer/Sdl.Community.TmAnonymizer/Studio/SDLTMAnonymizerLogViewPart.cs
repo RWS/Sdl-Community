@@ -7,19 +7,19 @@ using Sdl.Desktop.IntegrationApi.Extensions;
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
 	[ViewPart(
-		Id = "SdLTmAnonymizerLogViewController",
+		Id = "SDLTMAnonymizerLogViewPart",
 		Name = "Log Report",
 		Icon = "ReportsView",
 		Description = "Log Report")]
-	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 0, LocationByType = typeof(TmAnonymizerViewController))]
-	public class TmAnonymizerLogViewController : AbstractViewPartController
+	[ViewPartLayout(Dock = DockType.Bottom, Pinned = false, Height = 200, ZIndex = 0, LocationByType = typeof(SDLTMAnonymizerView))]
+	public class SDLTMAnonymizerLogViewPart : AbstractViewPartController
 	{
 		private static TmAnonymizerLogViewControl _control;
 		private static MainViewModel _model;
 
-		public TmAnonymizerLogViewController() { }
+		public SDLTMAnonymizerLogViewPart() { }
 
-		public TmAnonymizerLogViewController(MainViewModel model)
+		public SDLTMAnonymizerLogViewPart(MainViewModel model)
 		{
 			_model = model;
 		}

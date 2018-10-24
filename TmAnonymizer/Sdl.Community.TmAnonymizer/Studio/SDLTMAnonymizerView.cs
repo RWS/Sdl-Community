@@ -11,17 +11,17 @@ using Sdl.TranslationStudioAutomation.IntegrationApi.Presentation.DefaultLocatio
 namespace Sdl.Community.SdlTmAnonymizer.Studio
 {
 	[View(
-		Id = "SdLTmAnonymizerController",
+		Id = "SDLTMAnonymizerView",
 		Name = "SDLTM Anonymizer",
 		Icon = "icon",
 		Description = "Anonymize personal information in Translation Memories",
 		LocationByType = typeof(TranslationStudioDefaultViews.TradosStudioViewsLocation),
 		AllowViewParts = true)]
-	public class TmAnonymizerViewController : AbstractViewController
+	public class SDLTMAnonymizerView : AbstractViewController
 	{
 		private static TmAnonymizerViewControl _control;
 		private static TmAnonymizerExplorerControl _explorerControl;
-		private static TmAnonymizerLogViewController _logViewController;
+		private static SDLTMAnonymizerLogViewPart _logViewController;
 
 		private static MainViewModel _model;
 		private static SettingsService _settingsService;
@@ -34,7 +34,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 			_control = new TmAnonymizerViewControl(_model);
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
-			_logViewController = new TmAnonymizerLogViewController(_model);
+			_logViewController = new SDLTMAnonymizerLogViewPart(_model);
 		}
 
 		public UserControl ContentControl => _control;
@@ -56,7 +56,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupSettingsAction", typeof(TmAnonymizerViewController), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
+		[Action("TmAnonymizerTmRibbonGroupSettingsAction", typeof(SDLTMAnonymizerView), Name = " Settings ", Icon = "Settings", Description = "Settings ")]
 		[ActionLayout(typeof(TmAnonymizerSettingsRibbonGroup), 7, DisplayType.Large)]
 		public class TmAnonymizerTmRibbonGroupSettingsAction : AbstractAction
 		{
@@ -77,7 +77,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupAddFileBasedTmAction", typeof(TmAnonymizerViewController), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
+		[Action("TmAnonymizerTmRibbonGroupAddFileBasedTmAction", typeof(SDLTMAnonymizerView), Name = "Add file-based TM", Icon = "TranslationMemory", Description = "Add file-based TM")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 6, DisplayType.Large)]
 		public class TmAnonymizerTmRibbonGroupAddFileBasedTmAction : AbstractAction
 		{
@@ -87,7 +87,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupAddServerTmAction", typeof(TmAnonymizerViewController), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
+		[Action("TmAnonymizerTmRibbonGroupAddServerTmAction", typeof(SDLTMAnonymizerView), Name = "Add server TM", Icon = "ServerBasedTranslationMemory", Description = "Add server TM")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 5, DisplayType.Large)]
 		public class TmAnonymizerTmRibbonGroupAddServerTmAction : AbstractAction
 		{
@@ -97,7 +97,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerTMRibbonGroupOpenFolderAction", typeof(TmAnonymizerViewController), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
+		[Action("TmAnonymizerTMRibbonGroupOpenFolderAction", typeof(SDLTMAnonymizerView), Name = "Select Folder", Icon = "TranslationMemoriesFolder_Open", Description = "Add all file-based TMs in the selected folder")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 4, DisplayType.Normal)]
 		public class TmAnonymizerTmRibbonGroupOpenFolderAction : AbstractAction
 		{
@@ -107,7 +107,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupRemoveTmAction", typeof(TmAnonymizerViewController), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
+		[Action("TmAnonymizerTmRibbonGroupRemoveTmAction", typeof(SDLTMAnonymizerView), Name = "Remove TM", Icon = "Remove", Description = "Remove TM")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 3, DisplayType.Normal)]
 		public class TmAnonymizerTmRibbonGroupRemoveTmAction : AbstractAction
 		{
@@ -117,7 +117,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(TmAnonymizerViewController), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
+		[Action("TmAnonymizerTmRibbonGroupRemoveTmCacheAction", typeof(SDLTMAnonymizerView), Name = "Clear TM Cache", Icon = "RemoveCache", Description = "Clear TM Cache")]
 		[ActionLayout(typeof(TmAnonymizerTmRibbonGroup), 2, DisplayType.Normal)]
 		public class TmAnonymizerTmRibbonGroupRemoveTmCacheAction : AbstractAction
 		{
@@ -134,7 +134,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 		{
 		}
 
-		[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(TmAnonymizerViewController), Name = "Online Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
+		[Action("TmAnonymizerHelpRibbonGroupHelpAction", typeof(SDLTMAnonymizerView), Name = "Online Help", Icon = "wiki", Description = "An wiki page will be opened in browser with user documentation")]
 		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 1, DisplayType.Large)]
 		public class TmAnonymizerHelpRibbonGroupHelpAction : AbstractAction
 		{
@@ -144,7 +144,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			}
 		}
 
-		[Action("TmAnonymizerHelpRibbonGroupAboutAction", typeof(TmAnonymizerViewController), Name = "About", Icon = "information", Description = "About")]
+		[Action("TmAnonymizerHelpRibbonGroupAboutAction", typeof(SDLTMAnonymizerView), Name = "About", Icon = "information", Description = "About")]
 		[ActionLayout(typeof(TmAnonymizerHelpRibbonGroup), 0, DisplayType.Large)]
 		public class TmAnonymizerHelpRibbonGroupAboutAction : AbstractAction
 		{

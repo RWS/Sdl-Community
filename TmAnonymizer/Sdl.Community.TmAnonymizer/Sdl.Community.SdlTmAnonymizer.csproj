@@ -168,6 +168,7 @@
     <Compile Include="Model\FieldDefinitions\SingleStringFieldValue.cs" />
     <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\Log\Action.cs" />
+    <Compile Include="Model\Log\Detail.cs" />
     <Compile Include="Model\Log\Report.cs" />
     <Compile Include="Model\TmTranslationUnit.cs" />
     <Compile Include="Model\TmSegment.cs" />
@@ -217,8 +218,8 @@
     </Compile>
     <Compile Include="Services\SegmentElementVisitorService.cs" />
     <Compile Include="Services\SelectedWordsVisitorService.cs" />
-    <Compile Include="Studio\TmAnonymizerLogViewController.cs" />
-    <Compile Include="Studio\TmAnonymizerViewController.cs" />
+    <Compile Include="Studio\SDLTMAnonymizerLogViewPart.cs" />
+    <Compile Include="Studio\SDLTMAnonymizerView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\PluginProperties.cs" />
     <Compile Include="Services\SqliteTMService.cs" />
