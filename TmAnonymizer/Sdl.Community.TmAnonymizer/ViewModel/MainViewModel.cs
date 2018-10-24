@@ -7,7 +7,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 	{
 		private TranslationMemoryViewModel _translationMemoryViewModel;
 
-		public MainViewModel(SettingsService settingsService, TmAnonymizerViewController controller)
+		public MainViewModel(SettingsService settingsService, SDLTMAnonymizerView controller)
 		{
 			var contentParsingService = new ContentParsingService();
 			_translationMemoryViewModel = new TranslationMemoryViewModel(settingsService, contentParsingService, controller);

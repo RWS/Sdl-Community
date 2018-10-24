@@ -25,11 +25,11 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private ObservableCollection<TmFile> _tmsCollection;
 		private bool _isEnabled;
 		private LoginWindowViewModel _loginWindowViewModel;
-		private readonly TmAnonymizerViewController _controller;
+		private readonly SDLTMAnonymizerView _controller;
 		private readonly ContentParsingService _contentParsingService;
 		private Form _controlParent;
 
-		public TranslationMemoryViewModel(SettingsService settingsService, ContentParsingService contentParsingService, TmAnonymizerViewController controller)
+		public TranslationMemoryViewModel(SettingsService settingsService, ContentParsingService contentParsingService, SDLTMAnonymizerView controller)
 		{
 			SettingsService = settingsService;
 

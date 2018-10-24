@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
@@ -67,7 +68,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return customFieldList;
 		}
 
-		public Report AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields)
+		public Report AnonymizeFileBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> customFields)
 		{
 			_tmService.BackupFileBasedTms(context, new List<TmFile> { tmFile });
 
@@ -80,39 +81,39 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					Target = tm.LanguageDirection.TargetLanguage
 				});
 
-			UpdateCustomFieldPickLists(context, anonymizeFields, tm);
-
-			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);			
+			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
 			var report = new Report
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
 					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
-					                                     "." + _settingsService.GetDateTimeString() + ".xml"),
+														 "." + _settingsService.GetDateTimeString() + ".xml"),
 				Created = DateTime.Now,
-				ElapsedTime = new TimeSpan()
+				UpdatedCount = units.Count,
+				ElapsedTime = new TimeSpan(),
+				Actions = new List<Model.Log.Action>()
 			};
 
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
 
+			var changesReport = GetCustomFieldChangesReport(units, customFields);
+			report.Actions.Add(GetCustomFieldsActionsReport(changesReport));
+
 			var settings = _settingsService.GetSettings();
 			if (settings.UseSqliteApiForFileBasedTm)
 			{
-				report.UpdatedCount = UpdateCustomFieldsSqlite(context, tmFile, units);
+				UpdateCustomFieldsSqlite(context, tmFile, units);
 			}
 			else
 			{
-				report.UpdatedCount = UpdateCustomFields(context, tm, units);
+				UpdateCustomFields(context, tm, units);
 			}
 
-			var changesReport = GetCustomFieldChangesReport(units);
-			report.Actions = GetCustomFieldsActionsReport(changesReport);
-
+			UpdateCustomFieldPickLists(context, customFields, tm);
 
 			ClearPreviousCustomFieldValues(translationUnits);
-
 
 			stopWatch.Stop();
 			report.ElapsedTime = stopWatch.Elapsed;
@@ -120,34 +121,24 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return report;
 		}
 
-		private static List<Model.Log.Action> GetCustomFieldsActionsReport(Dictionary<int, List<string>> changesReport)
+		private static Model.Log.Action GetCustomFieldsActionsReport(Dictionary<FieldValueType, List<Detail>> changesReport)
 		{
-			var actions = new List<Model.Log.Action>();
+			var action = new Model.Log.Action
+			{
+				Type = Model.Log.Action.ActionType.Update,
+				Scope = Model.Log.Action.ActionScope.CustomFields,
+				Detail = new List<Detail>()
+			};
+			
 			foreach (var change in changesReport)
 			{
-				var action = new Model.Log.Action
-				{
-					Id = change.Key,
-					Type = Model.Log.Action.ActionType.Update,
-					Scope = Model.Log.Action.ActionScope.CustomFields,
-					Details = string.Empty
-				};
-
-				if (change.Value != null)
-				{
-					foreach (var value in change.Value)
-					{
-						action.Details += (!string.IsNullOrEmpty(action.Details) ? "\r\n" : string.Empty) + value;
-					}
-				}
-
-				actions.Add(action);
+				action.Detail.AddRange(change.Value);
 			}
 
-			return actions;
+			return action;
 		}
 
-		public Report AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> anonymizeFields, TranslationProviderServer translationProvideServer)
+		public Report AnonymizeServerBasedCustomFields(ProgressDialogContext context, TmFile tmFile, List<CustomField> customFields, TranslationProviderServer translationProvideServer)
 		{
 			_tmService.BackupServerBasedTms(context, new List<TmFile> { tmFile });
 
@@ -165,28 +156,29 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
-			UpdateCustomFieldPickLists(context, anonymizeFields, serverBasedTm);
-
-			var units = GetUpdatableTranslationUnits(anonymizeFields, translationUnits);
-
+			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
 			var report = new Report
 			{
 				TmFile = tmFile,
 				ReportFullPath = Path.Combine(
 					_settingsService.GetLogReportPath(), tmFile.Name.Replace("\\", string.Empty) +
-				                            "." + _settingsService.GetDateTimeString() + ".xml"),
+											"." + _settingsService.GetDateTimeString() + ".xml"),
 				Created = DateTime.Now,
-				ElapsedTime = new TimeSpan()
+				UpdatedCount = units.Count,
+				ElapsedTime = new TimeSpan(),
+				Actions = new List<Model.Log.Action>()
 			};
 
 			var stopWatch = new Stopwatch();
 			stopWatch.Start();
 
-			report.UpdatedCount = UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
+			var changesReport = GetCustomFieldChangesReport(units, customFields);
+			report.Actions.Add(GetCustomFieldsActionsReport(changesReport));
 
-			var changesReport = GetCustomFieldChangesReport(units);
-			report.Actions = GetCustomFieldsActionsReport(changesReport);
+			UpdateCustomFields(context, tmFile, translationUnits, units, serverBasedTm);
+
+			UpdateCustomFieldPickLists(context, customFields, serverBasedTm);
 
 			ClearPreviousCustomFieldValues(translationUnits);
 
@@ -339,44 +331,45 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return updatedCount;
 		}
 
-		private static void UpdateCustomFieldPickLists(ProgressDialogContext context, IEnumerable<CustomField> anonymizeFields, ITranslationMemory tm)
+		private static int UpdateCustomFieldPickLists(ProgressDialogContext context, IEnumerable<CustomField> customFields, ITranslationMemory tm)
 		{
+			var updatedCount = 0;
 			context?.Report(0, StringResources.Updating_Multiple_PickList_fields);
 
-			foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+			foreach (var customField in customFields.Where(f => f.IsSelected && f.IsPickList))
 			{
-				if (anonymizedField.IsPickList)
+				foreach (var fieldValue in customField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
 				{
-					foreach (var fieldValue in anonymizedField.FieldValues.Where(n => n.IsSelected && n.NewValue != null))
+					foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(customField.Name)))
 					{
-						foreach (var fieldDefinition in tm.FieldDefinitions.Where(n => n.Name.Equals(anonymizedField.Name)))
+						var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
+						if (pickListItem != null)
 						{
-							var pickListItem = fieldDefinition.PicklistItems.FirstOrDefault(a => a.Name.Equals(fieldValue.Value));
-							if (pickListItem != null)
-							{
-								pickListItem.Name = fieldValue.NewValue;
-							}
+							pickListItem.Name = fieldValue.NewValue;
+							updatedCount++;
 						}
 					}
 				}
 			}
 
 			tm.Save();
+
+			return updatedCount;
 		}
 
-		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> anonymizeFields, IEnumerable<TmTranslationUnit> translationUnits)
+		private List<TmTranslationUnit> GetUpdatableTranslationUnits(List<CustomField> customFields, IEnumerable<TmTranslationUnit> translationUnits)
 		{
 			var units = new List<TmTranslationUnit>();
 
 			foreach (var tu in translationUnits)
 			{
 				var updatedFieldValues = false;
-				foreach (var anonymizedField in anonymizeFields.Where(f => f.IsSelected))
+				foreach (var customField in customFields.Where(f => f.IsSelected))
 				{
-					foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(anonymizedField.Name)))
+					foreach (var fieldValue in tu.FieldValues.Where(n => n.Name.Equals(customField.Name)))
 					{
 						var updatedFieldValue = false;
-						foreach (var customFieldValue in anonymizedField.FieldValues.Where(
+						foreach (var customFieldValue in customField.FieldValues.Where(
 							n => n.IsSelected && n.NewValue != null && n.Value != n.NewValue))
 						{
 							switch (fieldValue.ValueType)
@@ -478,6 +471,20 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		private static bool UpdateMultiplePickListFieldValue(Model.FieldDefinitions.FieldValue fieldValue, CustomFieldValue customFieldValue)
 		{
 			if (!(fieldValue is Model.FieldDefinitions.MultiplePicklistFieldValue multiplePicklistFieldValue))
+			{
+				return false;
+			}
+
+			var canUpdate = false;
+			foreach (var picklistItem in multiplePicklistFieldValue.Values)
+			{
+				if (picklistItem.Name.Equals(customFieldValue.Value) && customFieldValue.NewValue != null)
+				{
+					canUpdate = true;
+				}
+			}
+
+			if (!canUpdate)
 			{
 				return false;
 			}
@@ -810,9 +817,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 		}
 
-		private static Dictionary<int, List<string>> GetCustomFieldChangesReport(IEnumerable<TmTranslationUnit> translationUnits)
+		private static Dictionary<FieldValueType, List<Detail>> GetCustomFieldChangesReport(IEnumerable<TmTranslationUnit> translationUnits, IEnumerable<CustomField> customFields)
 		{
-			var reports = new Dictionary<int, List<string>>();
+			var reports = new Dictionary<FieldValueType, List<Detail>>();
 			foreach (var unit in translationUnits)
 			{
 				foreach (var fieldValue in unit.FieldValues)
@@ -825,17 +832,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								if (singleStringFieldValue.PreviousValue != null &&
 									singleStringFieldValue.PreviousValue != singleStringFieldValue.Value)
 								{
-									var exists = reports.ContainsKey(unit.ResourceId.Id);
-									var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
+									var exists = reports.ContainsKey(singleStringFieldValue.ValueType);
+									var details = exists ? reports[singleStringFieldValue.ValueType] : new List<Detail>();
 
-									report.Add("Name: " + singleStringFieldValue.Name +
-											   ", Type: " + singleStringFieldValue.ValueType +
-											   ", Previous: " + singleStringFieldValue.PreviousValue +
-											   ", Value: " + singleStringFieldValue.Value);
+									var detail = details.FirstOrDefault(a =>
+										a.Name == singleStringFieldValue.Name &&
+										a.Previous == singleStringFieldValue.PreviousValue &&
+										a.Value == singleStringFieldValue.Value);
 
-									if (!exists)
+									if (detail == null)
 									{
-										reports.Add(unit.ResourceId.Id, report);
+										details.Add(new Detail
+										{
+											Name = singleStringFieldValue.Name,
+											Type = singleStringFieldValue.ValueType.ToString(),
+											Previous = singleStringFieldValue.PreviousValue,
+											Value = singleStringFieldValue.Value
+										});
+
+										if (!exists)
+										{
+											reports.Add(singleStringFieldValue.ValueType, details);
+										}
 									}
 								}
 							}
@@ -845,22 +863,36 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							{
 								if (multipleStringFieldValue.PreviousValues != null)
 								{
-									var previous = ValuesToString(multipleStringFieldValue.PreviousValues);
-									var values = ValuesToString(multipleStringFieldValue.Values);
+									var previousValues = multipleStringFieldValue.PreviousValues.ToList();
+									var values = multipleStringFieldValue.Values.ToList();
 
-									if (previous != values)
+									for (var i = 0; i < previousValues.Count; i++)
 									{
-										var exists = reports.ContainsKey(unit.ResourceId.Id);
-										var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
-
-										report.Add("Name: " + multipleStringFieldValue.Name +
-												   ", Type: " + multipleStringFieldValue.ValueType +
-												   ", Previous: (" + previous + ")" +
-												   ", Value: (" + values + ")");
-
-										if (!exists)
+										if (previousValues[i] != null && previousValues[i] != values[i])
 										{
-											reports.Add(unit.ResourceId.Id, report);
+											var exists = reports.ContainsKey(multipleStringFieldValue.ValueType);
+											var details = exists ? reports[multipleStringFieldValue.ValueType] : new List<Detail>();
+
+											var detail = details.FirstOrDefault(a =>
+												a.Name == multipleStringFieldValue.Name &&
+												a.Previous == previousValues[i] &&
+												a.Value == values[i]);
+
+											if (detail == null)
+											{
+												details.Add(new Detail
+												{
+													Name = multipleStringFieldValue.Name,
+													Type = multipleStringFieldValue.ValueType.ToString(),
+													Previous = previousValues[i],
+													Value = values[i]
+												});
+
+												if (!exists)
+												{
+													reports.Add(multipleStringFieldValue.ValueType, details);
+												}
+											}
 										}
 									}
 								}
@@ -869,20 +901,30 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						case FieldValueType.DateTime:
 							if (fieldValue is Model.FieldDefinitions.DateTimeFieldValue dateTimeFieldValue)
 							{
-								if (dateTimeFieldValue.PreviousValue != null &&
-									dateTimeFieldValue.PreviousValue != dateTimeFieldValue.Value)
+								if (dateTimeFieldValue.PreviousValue != null && dateTimeFieldValue.PreviousValue != dateTimeFieldValue.Value)
 								{
-									var exists = reports.ContainsKey(unit.ResourceId.Id);
-									var report = exists ? reports[unit.ResourceId.Id] : new List<string>();
+									var exists = reports.ContainsKey(dateTimeFieldValue.ValueType);
+									var details = exists ? reports[dateTimeFieldValue.ValueType] : new List<Detail>();
 
-									report.Add("Name: " + dateTimeFieldValue.Name +
-											   ", Type: " + dateTimeFieldValue.ValueType +
-											   ", Previous: " + dateTimeFieldValue.PreviousValue.Value +
-											   ", Value: " + dateTimeFieldValue.Value);
+									var detail = details.FirstOrDefault(a =>
+										a.Name == dateTimeFieldValue.Name &&
+										a.Previous == dateTimeFieldValue.PreviousValue.Value.ToString(CultureInfo.InvariantCulture) &&
+										a.Value == dateTimeFieldValue.Value.ToString(CultureInfo.InvariantCulture));
 
-									if (!exists)
+									if (detail == null)
 									{
-										reports.Add(unit.ResourceId.Id, report);
+										details.Add(new Detail
+										{
+											Name = dateTimeFieldValue.Name,
+											Type = dateTimeFieldValue.ValueType.ToString(),
+											Previous = dateTimeFieldValue.PreviousValue.Value.ToString(CultureInfo.InvariantCulture),
+											Value = dateTimeFieldValue.Value.ToString(CultureInfo.InvariantCulture)
+										});
+
+										if (!exists)
+										{
+											reports.Add(dateTimeFieldValue.ValueType, details);
+										}
 									}
 								}
 							}
@@ -893,17 +935,28 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								if (intFieldValue.PreviousValue != null &&
 									intFieldValue.PreviousValue != intFieldValue.Value)
 								{
-									var exists = reports.ContainsKey(unit.ResourceId.Id);
-									var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+									var exists = reports.ContainsKey(intFieldValue.ValueType);
+									var details = exists ? reports[intFieldValue.ValueType] : new List<Detail>();
 
-									report.Add("Name: " + intFieldValue.Name +
-											   ", Type: " + intFieldValue.ValueType +
-											   ", Previous: " + intFieldValue.PreviousValue.Value +
-											   ", Value: " + intFieldValue.Value);
+									var detail = details.FirstOrDefault(a =>
+										a.Name == intFieldValue.Name &&
+										a.Previous == intFieldValue.PreviousValue.ToString() &&
+										a.Value == intFieldValue.Value.ToString());
 
-									if (!exists)
+									if (detail == null)
 									{
-										reports.Add(unit.ResourceId.Id, report);
+										details.Add(new Detail
+										{
+											Name = intFieldValue.Name,
+											Type = intFieldValue.ValueType.ToString(),
+											Previous = intFieldValue.PreviousValue.ToString(),
+											Value = intFieldValue.Value.ToString()
+										});
+
+										if (!exists)
+										{
+											reports.Add(intFieldValue.ValueType, details);
+										}
 									}
 								}
 							}
@@ -915,20 +968,30 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 								{
 									foreach (var value in multiplePicklistFieldValue.Values)
 									{
-										if (value.PreviousName != null &&
-											value.PreviousName != value.Name)
+										if (value.PreviousName != null && value.PreviousName != value.Name)
 										{
-											var exists = reports.ContainsKey(unit.ResourceId.Id);
-											var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+											var exists = reports.ContainsKey(multiplePicklistFieldValue.ValueType);
+											var details = exists ? reports[multiplePicklistFieldValue.ValueType] : new List<Detail>();
 
-											report.Add("Name: " + multiplePicklistFieldValue.Name +
-													   ", Type: " + multiplePicklistFieldValue.ValueType +
-													   ", Previous: " + value.PreviousName +
-													   ", Value: " + value.Name);
+											var detail = details.FirstOrDefault(a =>
+												a.Name == multiplePicklistFieldValue.Name &&
+												a.Previous == value.PreviousName &&
+												a.Value == value.Name);
 
-											if (!exists)
+											if (detail == null)
 											{
-												reports.Add(unit.ResourceId.Id, report);
+												details.Add(new Detail
+												{
+													Name = multiplePicklistFieldValue.Name,
+													Type = multiplePicklistFieldValue.ValueType.ToString(),
+													Previous = value.PreviousName,
+													Value = value.Name
+												});
+
+												if (!exists)
+												{
+													reports.Add(multiplePicklistFieldValue.ValueType, details);
+												}
 											}
 										}
 									}
@@ -943,23 +1006,75 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 									if (singlePicklistFieldValue.Value.PreviousName != null &&
 										singlePicklistFieldValue.Value.PreviousName != singlePicklistFieldValue.Value.Name)
 									{
-										var exists = reports.ContainsKey(unit.ResourceId.Id);
-										var report = reports.ContainsKey(unit.ResourceId.Id) ? reports[unit.ResourceId.Id] : new List<string>();
+										var exists = reports.ContainsKey(singlePicklistFieldValue.ValueType);
+										var details = exists ? reports[singlePicklistFieldValue.ValueType] : new List<Detail>();
 
-										report.Add("Name: " + singlePicklistFieldValue.Name +
-												   ", Type: " + singlePicklistFieldValue.ValueType +
-												   ", Previous: " + singlePicklistFieldValue.Value.PreviousName +
-												   ", Value: " + singlePicklistFieldValue.Value.Name);
+										var detail = details.FirstOrDefault(a =>
+											a.Name == singlePicklistFieldValue.Name &&
+											a.Previous == singlePicklistFieldValue.Value.PreviousName &&
+											a.Value == singlePicklistFieldValue.Value.Name);
 
-										if (!exists)
+										if (detail == null)
 										{
-											reports.Add(unit.ResourceId.Id, report);
+											details.Add(new Detail
+											{
+												Name = singlePicklistFieldValue.Name,
+												Type = singlePicklistFieldValue.ValueType.ToString(),
+												Previous = singlePicklistFieldValue.Value.PreviousName,
+												Value = singlePicklistFieldValue.Value.Name
+											});
+
+											if (!exists)
+											{
+												reports.Add(singlePicklistFieldValue.ValueType, details);
+											}
 										}
 									}
 								}
 							}
 							break;
 					}
+				}
+			}
+
+			foreach (var customField in customFields.Where(f => f.IsSelected && f.IsPickList))
+			{
+				switch (customField.ValueType)
+				{
+					case FieldValueType.MultiplePicklist:
+					case FieldValueType.SinglePicklist:
+						{
+							var exists = reports.ContainsKey(customField.ValueType);
+							var details = exists ? reports[customField.ValueType] : new List<Detail>();
+
+							foreach (var fieldValue in customField.FieldValues.Where(n =>
+								n.IsSelected && n.NewValue != null && n.Value != n.NewValue))
+							{
+								var detail = details.FirstOrDefault(a =>
+									a.Name == customField.Name &&
+									a.Type == customField.ValueType.ToString() &&
+									a.Previous == fieldValue.Value &&
+									a.Value == fieldValue.NewValue);
+
+								if (detail == null)
+								{
+									details.Add(new Detail
+									{
+										Name = customField.Name,
+										Type = customField.ValueType.ToString(),
+										Previous = fieldValue.Value,
+										Value = fieldValue.NewValue
+									});
+
+									if (!exists)
+									{
+										reports.Add(customField.ValueType, details);
+									}
+								}
+							}
+
+							break;
+						}
 				}
 			}
 

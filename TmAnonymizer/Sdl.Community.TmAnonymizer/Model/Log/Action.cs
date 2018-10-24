@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 {
@@ -19,14 +20,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 			Backup = 1,
 			Update = 2
 		}
-
 		public int Id { get; set; }
-
 		public ActionType Type { get; set; }
 
 		public ActionScope Scope { get; set; }
 
-		public string Details { get; set; }
+		public List<Detail> Detail { get; set; }
 
 		public string Result { get; set; }
 	}
