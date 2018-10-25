@@ -86,10 +86,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var report = new Report
 			{
 				TmFile = tmFile,
-				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.CustomFields + "." +
-														 _settingsService.GetDateTimeString() + "." +
-														 tmFile.Name + "." + ".xml"),
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.CustomFields),
 				Created = DateTime.Now,
 				UpdatedCount = units.Count,
 				ElapsedSeconds = 0,
@@ -149,15 +146,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var report = new Report
 			{
 				TmFile = tmFile,
-				ReportFullPath = Path.Combine(
-					_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.CustomFields + "." +
-														 _settingsService.GetDateTimeString() + "." +
-														 tmFile.Name + "." + ".xml"),
-				Created = DateTime.Now,
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.CustomFields),				
 				UpdatedCount = units.Count,
-				ElapsedSeconds = 0,
 				Type = Report.ReportType.CustomFields,
-				Actions = new List<Model.Log.Action>()
 			};
 
 			var stopWatch = new Stopwatch();

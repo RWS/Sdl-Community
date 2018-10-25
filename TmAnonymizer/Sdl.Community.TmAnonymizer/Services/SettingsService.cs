@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using Sdl.Community.SdlTmAnonymizer.Model;
 
@@ -11,9 +12,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		public SettingsService(PathInfo pathInfo)
 		{
 			PathInfo = pathInfo;
-			UncheckAllTMs();			
+			UncheckAllTMs();
 		}
-				
+
 		public PathInfo PathInfo { get; }
 
 		public string GetLogReportPath()
@@ -28,12 +29,17 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return settings.LogsFullPath;
 		}
 
+		public string GetLogReportFullPath(string name, Model.Log.Report.ReportType type)
+		{
+			return Path.Combine(GetLogReportPath(), (int)type + "." + GetDateTimeToString() + "." + name + "." + ".xml");
+		}
+
 		public bool UserAgreed()
 		{
 			var settings = GetSettings();
 			return settings.Accepted;
 		}
-	
+
 		public bool DefaultRulesAlreadyAdded()
 		{
 			var settings = GetSettings();
@@ -130,12 +136,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		}
 
 		public void SaveSettings(Settings settings)
-		{			
+		{
 			File.WriteAllText(PathInfo.SettingsFilePath, JsonConvert.SerializeObject(settings));
 		}
 
 		public void AddDefaultRules(Settings settings)
-		{			
+		{
 			if (settings.AlreadyAddedDefaultRules)
 			{
 				return;
@@ -146,16 +152,35 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			SaveSettings(settings);
 		}
 
-		public string GetDateTimeString()
+		public string GetDateTimeToString()
 		{
 			var dt = DateTime.Now;
 			return dt.Year +
-			       dt.Month.ToString().PadLeft(2, '0') +
-			       dt.Day.ToString().PadLeft(2, '0') +
-			       "T" +
-			       dt.Hour.ToString().PadLeft(2, '0') +
-			       dt.Minute.ToString().PadLeft(2, '0') +
-			       dt.Second.ToString().PadLeft(2, '0');
+				   dt.Month.ToString().PadLeft(2, '0') +
+				   dt.Day.ToString().PadLeft(2, '0') +
+				   "T" +
+				   dt.Hour.ToString().PadLeft(2, '0') +
+				   dt.Minute.ToString().PadLeft(2, '0') +
+				   dt.Second.ToString().PadLeft(2, '0');
+		}
+
+		public DateTime GetDateTimeFromString(string dateTimeString)
+		{
+			var regexDateTime = new Regex(@"^(?<year>\d{4})(?<month>\d{2})(?<day>\d{2})T(?<hour>\d{2})(?<minute>\d{2})(?<second>\d{2})");
+			var match = regexDateTime.Match(dateTimeString);
+			if (match.Success)
+			{
+				var year = Convert.ToInt32(match.Groups["year"].Value);
+				var month = Convert.ToInt32(match.Groups["month"].Value);
+				var day = Convert.ToInt32(match.Groups["day"].Value);
+				var hour = Convert.ToInt32(match.Groups["hour"].Value);
+				var minute = Convert.ToInt32(match.Groups["minute"].Value);
+				var second = Convert.ToInt32(match.Groups["second"].Value);
+
+				return new DateTime(year, month, day, hour, minute, second);
+			}
+
+			return DateTime.Now;
 		}
 
 		private void UncheckAllTMs()

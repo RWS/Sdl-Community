@@ -169,6 +169,7 @@
     <Compile Include="Model\LanguageDirection.cs" />
     <Compile Include="Model\Log\Action.cs" />
     <Compile Include="Model\Log\Report.cs" />
+    <Compile Include="Model\Log\ReportFile.cs" />
     <Compile Include="Model\TmTranslationUnit.cs" />
     <Compile Include="Model\TmSegment.cs" />
     <Compile Include="Model\TmLanguageDirection.cs" />

@@ -295,15 +295,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				var report = new Model.Log.Report
 				{
 					TmFile = memory.TmFile,
-					ReportFullPath = Path.Combine(
-						_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.Content + "." +
-															 _settingsService.GetDateTimeString() + "." +
-															 memory.TmFile.Name + "." + ".xml"),
-					Created = DateTime.Now,
-					UpdatedCount = memory.TranslationUnits.Count,
-					ElapsedSeconds = 0,
-					Type =  Model.Log.Report.ReportType.Content,
-					Actions = new List<Model.Log.Action>()
+					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportType.Content),					
+					UpdatedCount = memory.TranslationUnits.Count,					
+					Type =  Model.Log.Report.ReportType.Content,				
 				};
 
 				var actions = new List<Model.Log.Action>();
@@ -396,19 +390,12 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var memory in anonymizeTranslationMemories)
 			{
-
 				var report = new Model.Log.Report
 				{
 					TmFile = memory.TmFile,
-					ReportFullPath = Path.Combine(
-						_settingsService.GetLogReportPath(), (int)Model.Log.Report.ReportType.Content + "." +
-															 _settingsService.GetDateTimeString() + "." +
-															 memory.TmFile.Name + "." + ".xml"),
-					Created = DateTime.Now,
+					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportType.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
-					ElapsedSeconds = 0,
 					Type = Report.ReportType.Content,
-					Actions = new List<Model.Log.Action>()
 				};
 
 				var actions = new List<Model.Log.Action>();
@@ -487,7 +474,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return updatedCount;
-		}
+		}		
 
 		private static IEnumerable<Model.Log.Action> GetResultActions(IEnumerable<ImportResult> results, List<TranslationUnitDetails> unitsClone, List<TmTranslationUnit> units)
 		{
@@ -504,7 +491,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							TmId = updateTu.ResourceId,
 							Result = result.ErrorCode.ToString(),
-							Name = "TU",
 							Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
 							Value = updateTu.SourceSegment.ToPlain(true),
 							Type = "Source"
@@ -518,7 +504,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						{
 							TmId = updateTu.ResourceId,
 							Result = result.ErrorCode.ToString(),
-							Name = "TU",
 							Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
 							Value = updateTu.TargetSegment.ToPlain(true),
 							Type = "Target"
@@ -634,7 +619,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 							Directory.CreateDirectory(folderPath);
 						}
 
-						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." + _settingsService.GetDateTimeString() + ".tmx.gz";
+						var fileName = translationMemory.Name + languageDirection.TargetLanguageCode + "." + _settingsService.GetDateTimeToString() + ".tmx.gz";
 						var filePath = Path.Combine(folderPath, fileName);
 
 						//if tm does not exist download it
@@ -748,7 +733,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 					tmName = tmName.Substring(0, tmName.Length - extension.Length);
 				}
 
-				var backupFilePath = Path.Combine(settings.BackupFullPath, tmName + "." + _settingsService.GetDateTimeString() + extension);
+				var backupFilePath = Path.Combine(settings.BackupFullPath, tmName + "." + _settingsService.GetDateTimeToString() + extension);
 
 				if (!File.Exists(backupFilePath))
 				{

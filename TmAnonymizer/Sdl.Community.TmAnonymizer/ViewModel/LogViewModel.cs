@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sdl.Community.SdlTmAnonymizer.Model.Log;
 using Sdl.Community.SdlTmAnonymizer.Services;
 
@@ -13,8 +14,8 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		private readonly TranslationMemoryViewModel _model;
 		private readonly SettingsService _settingsService;
 		private readonly SerializerService _serializerService;
-		private ObservableCollection<Report> _reports;
-		private Report _selectedItem;
+		private ObservableCollection<ReportFile> _reportFiles;
+		private ReportFile _selectedItem;
 
 		public LogViewModel(TranslationMemoryViewModel model, SerializerService serializerService)
 		{
@@ -43,8 +44,9 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 		{
 			var logsFullPath = _settingsService.GetLogReportPath();
 
-			var logReports = new List<Report>();
+			var reportFiles = new List<ReportFile>();
 			var logFiles = Directory.GetFiles(logsFullPath, "*.xml").ToList();
+			var regexFileName = new Regex(@"^(?<type>\d)\.(?<date>[^\.]+)\.(?<name>.*)$", RegexOptions.None);
 
 			foreach (var logFile in logFiles)
 			{
@@ -53,16 +55,38 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 				{
 					if (logFileName?.IndexOf(tmFile.Name, StringComparison.CurrentCultureIgnoreCase) > 0)
 					{
-						var report = _serializerService.Read<Report>(logFile);
 
-						logReports.Add(report);
+						var reportFile = new ReportFile
+						{
+							FullPath = logFile,
+							Name = Path.GetFileName(logFile),
+							Created = DateTime.Now,
+							Type = Report.ReportType.All
+						};
+						
+						
+						var match = regexFileName.Match(reportFile.Name);
+						if (match.Success)
+						{							
+							var type = match.Groups["type"].Value;
+							var date = match.Groups["date"].Value;
+							var name = match.Groups["name"].Value;
+
+							reportFile.Type = (Report.ReportType)Convert.ToInt32(type);
+							reportFile.Created = _settingsService.GetDateTimeFromString(date);
+							reportFile.Name = name;
+						}
+
+						reportFiles.Add(reportFile);
 					}
 				}
 			}
 
-			Reports = new ObservableCollection<Report>(logReports);
-			OnPropertyChanged(nameof(Reports));
+			ReportFiles = new ObservableCollection<ReportFile>(reportFiles);
+			OnPropertyChanged(nameof(ReportFiles));
 		}
+
+
 
 		private static string GetSafeFileName(string name)
 		{
@@ -78,10 +102,10 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public string SelectedReportHtml
 		{
-			get { return SelectedItem != null ? SelectedItem.ReportFullPath : string.Empty; }
+			get { return SelectedItem != null ? SelectedItem.FullPath : string.Empty; }
 		}
 
-		public Report SelectedItem
+		public ReportFile SelectedItem
 		{
 			get
 			{
@@ -96,17 +120,17 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		public ObservableCollection<Report> Reports
+		public ObservableCollection<ReportFile> ReportFiles
 		{
 			get
 			{
-				return _reports;
+				return _reportFiles;
 
 			}
 			set
 			{
-				_reports = value;
-				OnPropertyChanged(nameof(Reports));
+				_reportFiles = value;
+				OnPropertyChanged(nameof(ReportFiles));
 			}
 		}
 
