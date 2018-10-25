@@ -291,9 +291,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var memory in anonymizeTranslationMemories)
 			{
-
 				var report = new Model.Log.Report(memory.TmFile)
-				{					
+				{
 					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
 					Scope = Model.Log.Report.ReportScope.Content
@@ -359,7 +358,6 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				report.ElapsedSeconds = stopWatch.Elapsed.TotalSeconds;
 
 				_serializerService.Save<Model.Log.Report>(report, report.ReportFullPath);
-
 			}
 
 			return updatedCount;
@@ -390,7 +388,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			foreach (var memory in anonymizeTranslationMemories)
 			{
 				var report = new Model.Log.Report(memory.TmFile)
-				{					
+				{
 					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
 					Scope = Report.ReportScope.Content
@@ -479,36 +477,39 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			var details = new List<Model.Log.Action>();
 			foreach (var result in results)
 			{
-				var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
-				var updateTu = units.FirstOrDefault(a => a.ResourceId.Id == result.TuId.Id);
-				if (updateTu != null && previousTu != null)
+				if (result.TuId != null)
 				{
-					if (previousTu.IsSourceMatch)
+					var previousTu = unitsClone.FirstOrDefault(a => a.TranslationUnit.ResourceId.Id == result.TuId.Id);
+					var updateTu = units.FirstOrDefault(a => a.ResourceId.Id == result.TuId.Id);
+					if (updateTu != null && previousTu != null)
 					{
-						var detail = new Model.Log.Action
+						if (previousTu.IsSourceMatch)
 						{
-							TmId = updateTu.ResourceId,
-							Name = "Source",
-							Result = result.ErrorCode.ToString(),
-							Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
-							Value = updateTu.SourceSegment.ToPlain(true),
-							Type = "Segment"
-						};
-						details.Add(detail);
-					}
+							var detail = new Model.Log.Action
+							{
+								TmId = updateTu.ResourceId,
+								Name = "Source",
+								Result = result.ErrorCode.ToString(),
+								Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
+								Value = updateTu.SourceSegment.ToPlain(true),
+								Type = "Segment"
+							};
+							details.Add(detail);
+						}
 
-					if (previousTu.IsTargetMatch)
-					{
-						var detail = new Model.Log.Action
+						if (previousTu.IsTargetMatch)
 						{
-							TmId = updateTu.ResourceId,
-							Name = "Target",
-							Result = result.ErrorCode.ToString(),
-							Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
-							Value = updateTu.TargetSegment.ToPlain(true),
-							Type = "Segment"
-						};
-						details.Add(detail);
+							var detail = new Model.Log.Action
+							{
+								TmId = updateTu.ResourceId,
+								Name = "Target",
+								Result = result.ErrorCode.ToString(),
+								Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
+								Value = updateTu.TargetSegment.ToPlain(true),
+								Type = "Segment"
+							};
+							details.Add(detail);
+						}
 					}
 				}
 			}
@@ -519,6 +520,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 		private static List<TranslationUnitDetails> GetAnonymizeTranslationUnitsClone(IEnumerable<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			var unitsClone = new List<TranslationUnitDetails>();
+
 			foreach (var memory in anonymizeTranslationMemories)
 			{
 				foreach (var unit in memory.TranslationUnitDetails)
