@@ -80,12 +80,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				Target = tm.LanguageDirection.TargetLanguage
 			});
 
-			var report = new Report
-			{
-				TmFile = tmFile,
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.SystemFields),
+			var report = new Report(tmFile)
+			{				
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.SystemFields),
 				UpdatedCount = translationUnits.Count,
-				Type = Report.ReportType.SystemFields,
+				Scope = Report.ReportScope.SystemFields,
 			};
 
 			var stopWatch = new Stopwatch();
@@ -122,12 +121,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			
 			var translationUnits = _tmService.LoadTranslationUnits(context, tmFile, translationProvideServer, languageDirections);
 
-			var report = new Report
-			{
-				TmFile = tmFile,
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.SystemFields),
+			var report = new Report(tmFile)
+			{				
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.SystemFields),
 				UpdatedCount = translationUnits.Count,
-				Type = Report.ReportType.SystemFields,
+				Scope = Report.ReportScope.SystemFields,
 			};
 
 			
@@ -392,7 +390,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return updateSystemFields;
 		}
 
-		private static List<Model.Log.Action> GetSystemFieldChangesReport(IEnumerable<User> uniqueUsers)
+		private static IEnumerable<Model.Log.Action> GetSystemFieldChangesReport(IEnumerable<User> uniqueUsers)
 		{
 			var details = new List<Model.Log.Action>();
 
@@ -406,6 +404,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var detail = new Model.Log.Action
 						{
 							Name = "UserName",
+							Type = "SystemField",
 							Previous = userName.UserName,
 							Value = userName.Alias
 						};

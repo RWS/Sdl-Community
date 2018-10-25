@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 
 namespace Sdl.Community.SdlTmAnonymizer.Model
 {
@@ -9,6 +10,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Model
 		public string SourceText { get; set; }
 		public string TargetText { get; set; }
 		public string TmFilePath { get; set; }
+
+		public string TmFileName => !string.IsNullOrEmpty(TmFilePath) ? Path.GetFileName(TmFilePath) : string.Empty;
+
 		public string IconFilePath { get; set; }
 		public MatchResult MatchResult { get; set; }
 		public MatchResult TargetMatchResult { get; set; }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -35,13 +36,16 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			}
 		}
 
-		private void TmsCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		private void TmsCollection_CollectionChanged(object sender,
+			System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
 		{
 			Refresh();
 		}
 
 		private void Refresh()
 		{
+			var selectedFullPath = SelectedItem?.FullPath;
+
 			var logsFullPath = _settingsService.GetLogReportPath();
 
 			var reportFiles = new List<ReportFile>();
@@ -61,18 +65,18 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 							FullPath = logFile,
 							Name = Path.GetFileName(logFile),
 							Created = DateTime.Now,
-							Type = Report.ReportType.All
+							Scope = Report.ReportScope.All
 						};
-						
-						
+
+
 						var match = regexFileName.Match(reportFile.Name);
 						if (match.Success)
-						{							
+						{
 							var type = match.Groups["type"].Value;
 							var date = match.Groups["date"].Value;
 							var name = match.Groups["name"].Value;
 
-							reportFile.Type = (Report.ReportType)Convert.ToInt32(type);
+							reportFile.Scope = (Report.ReportScope)Convert.ToInt32(type);
 							reportFile.Created = _settingsService.GetDateTimeFromString(date);
 							reportFile.Name = name;
 						}
@@ -84,9 +88,12 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 			ReportFiles = new ObservableCollection<ReportFile>(reportFiles);
 			OnPropertyChanged(nameof(ReportFiles));
+
+			if (ReportFiles?.Count > 0)
+			{
+				SelectedItem = ReportFiles.FirstOrDefault(a => a.FullPath == selectedFullPath) ?? ReportFiles[0];
+			}
 		}
-
-
 
 		private static string GetSafeFileName(string name)
 		{
@@ -107,16 +114,37 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 
 		public ReportFile SelectedItem
 		{
-			get
-			{
-				return _selectedItem;
-			}
+			get { return _selectedItem; }
 			set
 			{
 				_selectedItem = value;
 
 				OnPropertyChanged(nameof(SelectedItem));
-				OnPropertyChanged(nameof(SelectedReportHtml));
+				OnPropertyChanged(nameof(Report));
+			}
+		}
+
+		public string ReportCreated { get; set; }
+
+		public Report Report
+		{
+			get
+			{
+				Report report;
+				if (SelectedItem != null && File.Exists(SelectedItem.FullPath))
+				{
+					report = _serializerService.Read<Report>(SelectedItem.FullPath);
+					ReportCreated = report.Created.ToString(CultureInfo.InvariantCulture);									
+				}
+				else
+				{
+					report = new Report();
+					ReportCreated = string.Empty;
+				}
+				
+				OnPropertyChanged(nameof(ReportCreated));
+
+				return report;
 			}
 		}
 

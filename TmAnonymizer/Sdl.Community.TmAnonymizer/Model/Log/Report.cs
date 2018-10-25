@@ -6,7 +6,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 	[Serializable]
 	public class Report
 	{
-		public enum ReportType
+		public enum ReportScope
 		{
 			All = 0,
 			Content = 1,
@@ -16,9 +16,15 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 
 		public Report()
 		{
+		}
+
+		public Report(TmFile tmFile)
+		{
+			TmFile = tmFile;
 			Actions = new List<Model.Log.Action>();
 			ElapsedSeconds = 0;
 			Created = DateTime.Now;
+			Type = "Update";
 		}
 
 		public string ReportFullPath { get; set; }
@@ -33,6 +39,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 
 		public List<Action> Actions { get; set; }
 		
-		public ReportType Type { get; set; }
+		public ReportScope Scope { get; set; }
+
+		public string Type { get; set; }
 	}
 }
