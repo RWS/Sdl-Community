@@ -14,6 +14,13 @@ namespace Sdl.Community.SdlTmAnonymizer.Model.Log
 			CustomFields = 3
 		}
 
+		public Report()
+		{
+			Actions = new List<Model.Log.Action>();
+			ElapsedSeconds = 0;
+			Created = DateTime.Now;
+		}
+
 		public string ReportFullPath { get; set; }
 
 		public int UpdatedCount { get; set; }

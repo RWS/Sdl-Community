@@ -19,7 +19,7 @@
 
 	<Grid>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="400"/>
+			<ColumnDefinition Width="430"/>
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		<Grid Grid.Column="0" Margin="0,0,3,0">
@@ -37,12 +37,12 @@
 						GridLinesVisibility="None" 
 						Background="White"		
 						SelectedItem="{Binding LogViewModel.SelectedItem, Mode=TwoWay}"
-						ItemsSource="{Binding LogViewModel.Reports, Mode=TwoWay}" 						                            											                       
+						ItemsSource="{Binding LogViewModel.ReportFiles, Mode=TwoWay}" 						                            											                       
 						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 				<DataGrid.Columns>
-					<DataGridTextColumn Header="Name" Binding="{Binding TmFile.Name}" IsReadOnly="True" MinWidth="150" Width="2*" />
-					<DataGridTextColumn Header="Report Type" Binding="{Binding Type}" IsReadOnly="True" MinWidth="100" Width="100"  />
-					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="120" Width="1*" />
+					<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="150" Width="2*" />
+					<DataGridTextColumn Header="Report Type" Binding="{Binding Type}" IsReadOnly="True" Width="80"  />
+					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="125" Width="1*" />
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
 		</Grid>
