@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:controls="clr-namespace:Sdl.Community.SdlTmAnonymizer.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="600" d:DataContext="{d:DesignData MainViewModel}">
+             d:DesignHeight="300" d:DesignWidth="900" d:DataContext="{d:DesignData MainViewModel}">
 	<UserControl.Resources>
 
 		<ResourceDictionary>
@@ -24,7 +24,7 @@
 		</Grid.ColumnDefinitions>
 		<Grid Grid.Column="0" Margin="0,0,3,0">
 			<controls:SortAwareDataGrid 
-						DefaultColumnName="TmFile.Name"
+						DefaultColumnName="Name"
 						DefaultSortDirection="Ascending"
 						Style="{StaticResource FilesGridStyle}" 							
 						FontFamily="Segoe UI"								
@@ -41,7 +41,7 @@
 						MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
 				<DataGrid.Columns>
 					<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="150" Width="2*" />
-					<DataGridTextColumn Header="Report Type" Binding="{Binding Type}" IsReadOnly="True" Width="80"  />
+					<DataGridTextColumn Header="Scope" Binding="{Binding Scope}" IsReadOnly="True" Width="80"  />
 					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="125" Width="1*" />
 				</DataGrid.Columns>
 			</controls:SortAwareDataGrid>
@@ -49,7 +49,68 @@
 
 		<GridSplitter Grid.Column="0" Width="3" Margin="0"/>
 		<Grid Grid.Column="1" Margin="3,0,0,0">
-			<WebBrowser controls:BindingWebBrowserSource.BindableSource="{Binding LogViewModel.SelectedReportHtml}" />
+			<Grid.RowDefinitions>
+				<RowDefinition Height="120"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<GroupBox Grid.Row="0" Margin="2,4,2,4" Padding="2,4,2,2" Header="Report Details" Background="White" >
+				<Grid Margin="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<TextBlock Text="Path: " Margin="4,1,2,1" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="0" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.ReportFullPath}" Grid.Column="1" Grid.Row="0" Margin="2"/>
+
+					<TextBlock Text="Type: " Margin="4,1,2,1" TextWrapping="WrapWithOverflow" Grid.Column="0" Grid.Row="1" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.Type}" Grid.Column="1" Grid.Row="1" Margin="2"/>
+
+					<TextBlock Text="Created: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="2" />
+					<TextBlock Text="{Binding Path=LogViewModel.ReportCreated}" Grid.Column="1" Grid.Row="2" Margin="2"/>
+
+					<TextBlock Text="Updated Units: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="3" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.UpdatedCount}" Grid.Column="1" Grid.Row="3" Margin="2"/>
+
+					<TextBlock Text="Time-elapsed: " Margin="4,1,2,1" Grid.Column="0" Grid.Row="4" />
+					<TextBlock Text="{Binding Path=LogViewModel.Report.ElapsedSeconds}" Grid.Column="1" Grid.Row="4" Margin="2"/>
+				</Grid>
+			</GroupBox>
+
+
+			<Grid Grid.Row="1" Margin="2">
+				<controls:SortAwareDataGrid 
+					DefaultColumnName="Name"
+					DefaultSortDirection="Ascending"
+					Style="{StaticResource FilesGridStyle}" 							
+					FontFamily="Segoe UI"								
+					BorderBrush="LightGray"
+					SelectionMode="Single"
+					SelectionUnit="FullRow"
+					HeadersVisibility="Column"
+					VerticalScrollBarVisibility="Auto"	
+					HorizontalScrollBarVisibility="Auto"
+					GridLinesVisibility="None" 
+					Background="White"	
+					ItemsSource="{Binding LogViewModel.Report.Actions, Mode=TwoWay}" 						                            											                       
+					MaxHeight="{Binding Path=ActualHeight, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}">
+					<DataGrid.Columns>
+						<DataGridTextColumn Header="ID" Binding="{Binding TmId.Id}" IsReadOnly="True" MinWidth="30" Width="30" />
+						<DataGridTextColumn Header="Name" Binding="{Binding Name}" IsReadOnly="True" MinWidth="80" Width="110" ElementStyle="{StaticResource WrapText}" />
+						<DataGridTextColumn Header="Type" Binding="{Binding Type}" IsReadOnly="True" MinWidth="80" Width="100"  />
+						<DataGridTextColumn Header="Value" Binding="{Binding Value}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}"/>
+						<DataGridTextColumn Header="Previous" Binding="{Binding Previous}" IsReadOnly="True" MinWidth="150" Width="2*" ElementStyle="{StaticResource WrapText}" />
+					</DataGrid.Columns>
+				</controls:SortAwareDataGrid>
+			</Grid>
 		</Grid>
 	</Grid>
 

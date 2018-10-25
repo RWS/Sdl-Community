@@ -55,7 +55,7 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn  Header="Id"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
+					<DataGridTemplateColumn  Header="ID"  MinWidth="50"  Width="Auto" SortMemberPath="TranslationUnit.ResourceId.Id" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ContentSearchResult">
 								<TextBlock Text="{Binding TranslationUnit.ResourceId.Id}" VerticalAlignment="Center" />
@@ -111,16 +111,11 @@
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>
 					</DataGridTemplateColumn>
-					<DataGridTemplateColumn Width="*" Header="Tm path" SortMemberPath="TmFilePath" >
+					<DataGridTemplateColumn Width="*" Header="TM" SortMemberPath="TmFilePath" >
 						<DataGridTemplateColumn.CellTemplate>
 							<DataTemplate DataType="model:ContentSearchResult">
 								<Grid>
-									<Grid.ColumnDefinitions>
-										<ColumnDefinition Width="20" />
-										<ColumnDefinition Width="*" />
-									</Grid.ColumnDefinitions>
-									<Image Source='{Binding IconFilePath}' Stretch="None" Grid.Column="0" Margin="0,0,5,5"></Image>
-									<TextBlock Text='{Binding TmFilePath}' TextWrapping="WrapWithOverflow" Grid.Column="1" />
+									<TextBlock Text='{Binding TmFileName}' TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" />
 								</Grid>
 							</DataTemplate>
 						</DataGridTemplateColumn.CellTemplate>

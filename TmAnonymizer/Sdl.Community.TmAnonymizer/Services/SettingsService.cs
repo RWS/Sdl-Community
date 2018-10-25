@@ -29,9 +29,9 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			return settings.LogsFullPath;
 		}
 
-		public string GetLogReportFullPath(string name, Model.Log.Report.ReportType type)
+		public string GetLogReportFullPath(string name, Model.Log.Report.ReportScope scope)
 		{
-			return Path.Combine(GetLogReportPath(), (int)type + "." + GetDateTimeToString() + "." + name + "." + ".xml");
+			return Path.Combine(GetLogReportPath(), (int)scope + "." + GetDateTimeToString() + "." + name  + ".xml");
 		}
 
 		public bool UserAgreed()

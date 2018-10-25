@@ -292,12 +292,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			foreach (var memory in anonymizeTranslationMemories)
 			{
 
-				var report = new Model.Log.Report
-				{
-					TmFile = memory.TmFile,
-					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportType.Content),					
-					UpdatedCount = memory.TranslationUnits.Count,					
-					Type =  Model.Log.Report.ReportType.Content,				
+				var report = new Model.Log.Report(memory.TmFile)
+				{					
+					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
+					UpdatedCount = memory.TranslationUnits.Count,
+					Scope = Model.Log.Report.ReportScope.Content
 				};
 
 				var actions = new List<Model.Log.Action>();
@@ -353,7 +352,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 				}
 
 				tm.Save();
-				
+
 				report.Actions.AddRange(actions);
 
 				stopWatch.Stop();
@@ -365,7 +364,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			return updatedCount;
 		}
-		
+
 		public int AnonymizeServerBasedTm(ProgressDialogContext context, List<AnonymizeTranslationMemory> anonymizeTranslationMemories)
 		{
 			var updatedCount = 0;
@@ -390,12 +389,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			foreach (var memory in anonymizeTranslationMemories)
 			{
-				var report = new Model.Log.Report
-				{
-					TmFile = memory.TmFile,
-					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportType.Content),
+				var report = new Model.Log.Report(memory.TmFile)
+				{					
+					ReportFullPath = _settingsService.GetLogReportFullPath(memory.TmFile.Name, Report.ReportScope.Content),
 					UpdatedCount = memory.TranslationUnits.Count,
-					Type = Report.ReportType.Content,
+					Scope = Report.ReportScope.Content
 				};
 
 				var actions = new List<Model.Log.Action>();
@@ -474,7 +472,7 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 			}
 
 			return updatedCount;
-		}		
+		}
 
 		private static IEnumerable<Model.Log.Action> GetResultActions(IEnumerable<ImportResult> results, List<TranslationUnitDetails> unitsClone, List<TmTranslationUnit> units)
 		{
@@ -490,10 +488,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var detail = new Model.Log.Action
 						{
 							TmId = updateTu.ResourceId,
+							Name = "Source",
 							Result = result.ErrorCode.ToString(),
 							Previous = previousTu.TranslationUnit.SourceSegment.ToPlain(true),
 							Value = updateTu.SourceSegment.ToPlain(true),
-							Type = "Source"
+							Type = "Segment"
 						};
 						details.Add(detail);
 					}
@@ -503,10 +502,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 						var detail = new Model.Log.Action
 						{
 							TmId = updateTu.ResourceId,
+							Name = "Target",
 							Result = result.ErrorCode.ToString(),
 							Previous = previousTu.TranslationUnit.TargetSegment.ToPlain(true),
 							Value = updateTu.TargetSegment.ToPlain(true),
-							Type = "Target"
+							Type = "Segment"
 						};
 						details.Add(detail);
 					}

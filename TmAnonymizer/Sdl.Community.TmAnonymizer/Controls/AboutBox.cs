@@ -9,8 +9,8 @@ namespace Sdl.Community.SdlTmAnonymizer.Controls
 		public AboutBox()
 		{
 			InitializeComponent();
-			this.Text = String.Format("About {0}", AssemblyTitle);
-			this.labelProductName.Text = AssemblyProduct;
+			this.Text = String.Format("About {0}", "SDLTM Anonymizer");
+			this.labelProductName.Text = "SDLTM Anonymizer";
 			this.labelVersion.Text = String.Format("Version {0}", AssemblyVersion);
 			this.labelCopyright.Text = AssemblyCopyright;
 			this.labelCompanyName.Text = AssemblyCompany;

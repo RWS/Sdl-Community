@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
@@ -83,15 +82,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
-			var report = new Report
-			{
-				TmFile = tmFile,
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.CustomFields),
-				Created = DateTime.Now,
-				UpdatedCount = units.Count,
-				ElapsedSeconds = 0,
-				Type = Report.ReportType.CustomFields,
-				Actions = new List<Model.Log.Action>()
+			var report = new Report(tmFile)
+			{				
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),				
+				UpdatedCount = units.Count,				
+				Scope = Report.ReportScope.CustomFields
 			};
 
 			var stopWatch = new Stopwatch();
@@ -143,12 +138,11 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 			var units = GetUpdatableTranslationUnits(customFields, translationUnits);
 
-			var report = new Report
-			{
-				TmFile = tmFile,
-				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportType.CustomFields),				
+			var report = new Report(tmFile)
+			{				
+				ReportFullPath = _settingsService.GetLogReportFullPath(tmFile.Name, Report.ReportScope.CustomFields),				
 				UpdatedCount = units.Count,
-				Type = Report.ReportType.CustomFields,
+				Scope = Report.ReportScope.CustomFields,
 			};
 
 			var stopWatch = new Stopwatch();

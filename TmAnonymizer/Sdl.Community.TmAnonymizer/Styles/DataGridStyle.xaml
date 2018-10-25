@@ -53,17 +53,9 @@
 	<!--Wrap text of text block-->
 	<Style TargetType="{x:Type TextBlock}" x:Key="WrapText">
 		<Setter Property="TextWrapping" Value="Wrap"/>
-		<Setter Property="VerticalAlignment" Value="Center"/>
+		<Setter Property="VerticalAlignment" Value="Top"/>
 	</Style>
 
-	<!--<Style TargetType="{x:Type DataGridRow}">
-		<Style.Resources>
-			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="#f4fef4" />
-			<SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="#f4fef4" />
-			<SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-			<SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="Black" />
-		</Style.Resources>
-	</Style>-->
 
 
 	<!-- Shared colors-->
