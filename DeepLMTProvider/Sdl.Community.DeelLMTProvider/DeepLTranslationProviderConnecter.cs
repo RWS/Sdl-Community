@@ -4,21 +4,48 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.IO;
 using Newtonsoft.Json;
 using RestSharp;
-using Sdl.Community.DeelLMTProvider;
 using Sdl.Community.DeelLMTProvider.Model;
 using Sdl.LanguagePlatform.Core;
+using System.Xml;
 
 namespace Sdl.Community.DeepLMTProvider
 {
 	public class DeepLTranslationProviderConnecter{
 
 		public string ApiKey { get; set; }
+		private readonly string _pluginVersion = "";
+		private readonly string _identifier;
 
-		public DeepLTranslationProviderConnecter(string key)
+		public DeepLTranslationProviderConnecter(string key, string identifier)
 		{
 			ApiKey = key;
+			_identifier = identifier;
+
+			try
+			{
+				// fetch the version of the plugin from the manifest deployed
+				var executingAssemblyPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				if (executingAssemblyPath == null) return;
+				executingAssemblyPath = Path.Combine(executingAssemblyPath, "pluginpackage.manifest.xml");
+				var doc = new XmlDocument();
+				doc.Load(executingAssemblyPath);
+
+				if (doc.DocumentElement == null) return;
+				foreach (XmlNode n in doc.DocumentElement.ChildNodes)
+				{
+					if (n.Name == "Version")
+					{
+						_pluginVersion = n.InnerText;
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				// broad catch here, if anything goes wrong with determining the version we don't want the user to be disturbed in any way
+			}
 		}
 
 		public string Translate(LanguagePair languageDirection, string sourcetext)
@@ -27,11 +54,15 @@ namespace Sdl.Community.DeepLMTProvider
 			var targetLanguage = languageDirection.TargetCulture.TwoLetterISOLanguageName;
 			var sourceLanguage = languageDirection.SourceCulture.TwoLetterISOLanguageName;
 			var translatedText = string.Empty;
+			
 			try
 			{
-				var client = new RestClient(@"https://api.deepl.com/v1");
+				var client = new RestClient(@"https://api.deepl.com/v1")
+				{
+					UserAgent = "SDL Trados 2017 (v" + _pluginVersion + ",id" + _identifier + ")"
+				};
 				var request = new RestRequest("translate", Method.POST);
-
+				
 				//search for words like this <word> 
 				var rgx = new Regex("(\\<\\w+[üäåëöøßşÿÄÅÆĞ]*[^\\d\\W\\\\/\\\\]+\\>)");
 				var words = rgx.Matches(sourcetext);
@@ -50,9 +81,7 @@ namespace Sdl.Community.DeepLMTProvider
 				request.AddParameter("tag_handling", tagOption);
 				//if we add this the formattiong is not right
 				//request.AddParameter("split_sentences", 0);
-				
 				request.AddParameter("auth_key", ApiKey);
-
 
 				var response = client.Execute(request).Content;
 				var translatedObject = JsonConvert.DeserializeObject<TranslationResponse>(response);

@@ -21,6 +21,8 @@ namespace Sdl.Community.DeepLMTProvider.WPF.Model
 			set => ResendDraftsParameter = value.ToString();
 		}
 
+		public string Identifier { get; set; }
+
 		private string GetStringParameter(string p)
 		{
 			var paramString = _uriBuilder[p];
