@@ -26,12 +26,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 
 		protected override void Initialize()
 		{
-			_control = new TmAnonymizerLogViewControl(_model);
+			_control = new TmAnonymizerLogViewControl(_model);			
 		}
 
 		protected override Control GetContentControl()
 		{
 			return _control;
 		}
+
+		public Control Control => _control;
+
+
 	}
 }

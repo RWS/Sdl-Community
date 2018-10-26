@@ -33,11 +33,16 @@ namespace Sdl.Community.SdlTmAnonymizer.Studio
 			_model = new MainViewModel(_settingsService, this);
 
 			_explorerControl = new TmAnonymizerExplorerControl(_model);
+			_logViewController = new SDLTMAnonymizerLogViewPart(_model);
 
 			if (_settingsService.GetSettings().Accepted)
 			{
+				_model.LogViewModel.IsEnabled = true;
 				_control = new TmAnonymizerViewControl(_model);
-				_logViewController = new SDLTMAnonymizerLogViewPart(_model);				
+			}
+			else
+			{
+				_model.LogViewModel.IsEnabled = false;
 			}
 		}
 
