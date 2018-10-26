@@ -23,7 +23,23 @@
 			<ColumnDefinition/>
 		</Grid.ColumnDefinitions>
 		<Grid Grid.Column="0" Margin="0,0,3,0">
-			<controls:SortAwareDataGrid 
+			<Grid.RowDefinitions>
+				<RowDefinition Height="26"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<Border Grid.Row="0" >
+				<StackPanel Orientation="Horizontal" Margin="2" Background="Transparent">
+					<Button Margin="5,0,5,0" ToolTip="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}" Background="Transparent" BorderThickness="0">
+						<Image Source="../Resources/Excel.ico" Height="20"/>
+					</Button>
+					<Button ToolTip="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}" Background="Transparent" BorderThickness="0">
+						<Image Source="../Resources/Folder.ico" Height="20"/>
+					</Button>
+				</StackPanel>
+			</Border>
+
+			<controls:SortAwareDataGrid Grid.Row="1"
 						DefaultColumnName="Name"
 						DefaultSortDirection="Ascending"
 						Style="{StaticResource FilesGridStyle}" 							
@@ -44,6 +60,20 @@
 					<DataGridTextColumn Header="Scope" Binding="{Binding Scope}" IsReadOnly="True" Width="80"  />
 					<DataGridTextColumn Header="Date" Binding="{Binding Created}" IsReadOnly="True" MinWidth="125" Width="1*" />
 				</DataGrid.Columns>
+				<DataGrid.ContextMenu>
+					<ContextMenu>
+						<MenuItem Header="Export selected report to excel" Command="{Binding LogViewModel.ExportToExcelCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Excel.ico" Height="20"/>
+							</MenuItem.Icon>
+						</MenuItem>
+						<MenuItem Header="Open folder containing..." Command="{Binding LogViewModel.OpenFolderContainingCommand}">
+							<MenuItem.Icon>
+								<Image Source="../Resources/Folder.ico" Height="20"/>
+							</MenuItem.Icon>
+						</MenuItem>
+					</ContextMenu>
+				</DataGrid.ContextMenu>
 			</controls:SortAwareDataGrid>
 		</Grid>
 

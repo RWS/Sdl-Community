@@ -21,7 +21,7 @@ namespace Sdl.Community.SdlTmAnonymizer.ViewModel
 			SystemFieldsViewModel = new SystemFieldsViewModel(_translationMemoryViewModel, systemFieldsService, excelImportExportService, serializerService);
 			CustomFieldsViewModel = new CustomFieldsViewModel(_translationMemoryViewModel, customFieldsService, excelImportExportService, serializerService);
 			
-			LogViewModel = new LogViewModel(_translationMemoryViewModel, serializerService);
+			LogViewModel = new LogViewModel(_translationMemoryViewModel, serializerService, excelImportExportService);
 		}
 
 		public TranslationMemoryViewModel TranslationMemoryViewModel

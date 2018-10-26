@@ -303,8 +303,10 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Excel.ico" />
+    <Resource Include="Resources\Folder.ico" />
     <Content Include="Resources\ReportsView.ico" />
-    <None Include="Resources\Report.ico" />
+    <Resource Include="Resources\Report.ico" />
     <Resource Include="Resources\information.ico" />
     <Resource Include="Resources\Settings.ico" />
     <Resource Include="Resources\RemoveCache.ico" />
