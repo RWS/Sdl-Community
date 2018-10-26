@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Threading;
 using Sdl.Community.SdlTmAnonymizer.Controls.ProgressDialog;
 using Sdl.Community.SdlTmAnonymizer.Extensions;
 using Sdl.Community.SdlTmAnonymizer.Model;
@@ -711,37 +712,50 @@ namespace Sdl.Community.SdlTmAnonymizer.Services
 
 		public void BackupFileBasedTms(ProgressDialogContext context, IEnumerable<TmFile> tmsCollection)
 		{
-			var settings = _settingsService.GetSettings();
-			if (!settings.Backup)
+			context.ProgressBarIsIndeterminate = true;
+
+			try
 			{
-				return;
-			}
+				var settings = _settingsService.GetSettings();
+				if (!settings.Backup)
+				{
+					return;
+				}
 
-			foreach (var tm in tmsCollection)
+				foreach (var tm in tmsCollection)
+				{
+					if (tm == null)
+					{
+						continue;
+					}
+
+					context.Report(0, "Backup " + tm.Path);
+
+					var tmInfo = new FileInfo(tm.Path);
+
+					var extension = Path.GetExtension(tm.Name);
+					var tmName = tm.Name;
+					if (extension?.Length > 0)
+					{
+						tmName = tmName.Substring(0, tmName.Length - extension.Length);
+					}
+
+					var backupFilePath = Path.Combine(settings.BackupFullPath,
+						tmName + "." + _settingsService.GetDateTimeToString() + extension);
+
+					Dispatcher.CurrentDispatcher.Invoke(DispatcherPriority.ContextIdle, new System.Action(
+						delegate { tmInfo.CopyTo(backupFilePath, true); }));
+				}
+			}
+			catch (Exception ex)
 			{
-				if (tm == null)
-				{
-					continue;
-				}
-
-				context.Report(0, "Backup " + tm.Path);
-
-				var tmInfo = new FileInfo(tm.Path);
-
-				var extension = Path.GetExtension(tm.Name);
-				var tmName = tm.Name;
-				if (extension?.Length > 0)
-				{
-					tmName = tmName.Substring(0, tmName.Length - extension.Length);
-				}
-
-				var backupFilePath = Path.Combine(settings.BackupFullPath, tmName + "." + _settingsService.GetDateTimeToString() + extension);
-
-				if (!File.Exists(backupFilePath))
-				{
-					tmInfo.CopyTo(backupFilePath, false);
-				}
+				throw ex;
 			}
+			finally
+			{
+				context.ProgressBarIsIndeterminate = false;
+			}
+		
 		}
 
 		private static List<TmTranslationUnit> GetTranslationUnitsFromLocalTm(ProgressDialogContext context, TmFile tmFile)
